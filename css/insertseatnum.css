@@ -1,0 +1,42 @@
+.form-group{
+	width:93.75%;
+	height:auto;
+	padding:20px 20px 0;
+}
+.left-text{
+	width:70%;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	font-size:18px;
+	margin:0 auto;
+}
+.right-ipt{
+	width:50%;
+	height:auto;
+	line-height:30px;
+	margin:20px auto 0;
+}
+.inpt{
+	width:90%;
+	height:25px;
+	line-height:25px;
+	margin:20px auto;
+}
+.submitbtn{
+	height:30px;
+	width:100px;
+	background:rgb(41,130,198);
+	border-radius:5px;
+}
+.subdiv{
+	width:100px;
+	height:30px;
+	margin:0 auto;
+}
+.error{
+	width:100%;
+	height:20px;
+	color:red;
+	margin:30px auto 0;
+}

@@ -1,0 +1,25 @@
+/* here you can put your own css to customize and override the theme */
+.mymodel{
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1050;
+}
+.mymodel .alert {
+	right: auto;
+	top:50%;
+	left: 30%;
+	width: 600px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	z-index: 1050;
+	padding: 10px;
+	margin-right: auto;
+	margin-left: auto;
+	position:absolute;
+}
+.mymodel .text{
+	text-align:center;
+}

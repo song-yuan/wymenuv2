@@ -1,0 +1,17 @@
+body{
+	margin:0;
+	padding:0;
+}
+a{
+	text-decoration:none;
+}
+.page{
+    width: 100%;
+    margin:0 auto;
+    min-height: 500px;
+    height: auto !important;
+    overflow:hidden;
+}
+.clear{
+	clear:both;
+}

@@ -1,0 +1,138 @@
+body{
+	margin:0;
+	padding:0;
+}
+.page{
+    width: 100%;
+    margin:0 auto;
+    min-height: 500px;
+    height: auto !important;
+}
+.up{
+	width:300px;
+	height:70px;
+	margin:20px auto;
+}
+.top{
+	width:200px;
+	height:auto;
+	margin:0 auto;
+	margin-bottom:10px;
+}
+.down{
+	width:220px;
+	height:auto;
+	margin:0 auto ;
+}
+.title{
+    width: 95px;
+    height: 30px;
+    text-align: center;
+    font-size:24px;
+    border-radius: 5px;
+    line-height: 30px;
+    border: 1px solid gray;
+    float: left;
+}
+.site-number{
+	float:left;
+	width:30px;
+	height:26px;
+	margin-left:20px;
+	text-align:center;
+	font-size:15px;
+	border-radius:5px;
+}
+.btn{
+    width: 50px;
+    background: blue;
+    height: 30px;
+    border-radius: 5px;
+    margin-left: 20px;
+    line-height: 30px;
+    text-align:center;
+    font-weight: 100;
+    border: 1px solid gray;
+    color: white;
+    float: left;
+}
+.openseat{
+    width: 50px;
+    background: green;
+    height: 30px;
+    border-radius: 5px;
+    margin-left: 20px;
+    line-height: 30px;
+    text-align:center;
+    font-weight: 100;
+    border: 1px solid gray;
+    color: white;
+    float: left;
+}
+.refresh{
+    width: 50px;
+    background: red;
+    height: 30px;
+    border-radius: 5px;
+    margin-left: 20px;
+    line-height: 30px;
+    text-align:center;
+    font-weight: 100;
+    border: 1px solid gray;
+    color: white;
+    float: left;
+}
+.sitelist{
+    width: 90%;
+    min-height: 300px;
+    height: auto !important;
+    border: 1px solid gray;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 4%;
+    text-align: center;
+    line-height: 25px;
+}
+.sitecat{
+  min-width: 50px;
+  height: 30px;
+  border: 1px solid blue;
+  margin-left: 5px;
+  margin-top: 3px;
+  float: left;
+}
+.inner{
+	width:100%;
+	height:32px;
+}
+.sitename{
+  width: 30%;
+  height: 52px;
+  font-size:15px;
+  border: 1px solid gray;
+  margin-left: 2px;
+  margin-top: 3px;
+  float: left;
+}
+.siteup{
+    width: 90%;
+    padding: 15px;
+    min-height: 32px; 
+    overflow:hidden;
+    height:auto !important;
+}
+.sitedown{
+    width: 90%;
+    padding: 20px;
+    height: 100%;
+}
+.active{
+    background: rgb(153,214,255);
+    color: rgb(255,255,255);
+}
+.hascode{
+	background: rgb(255,0,0);
+}
+.clear{
+    clear: both;
+}

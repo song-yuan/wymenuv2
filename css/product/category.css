@@ -1,0 +1,16 @@
+a{
+	text-decoration:none;
+}
+.category{
+	width:98%;
+	height:auto;
+	font-size:25px;
+	padding:1%;
+	margin-bottom:5px;
+}
+.pcat{
+	width:100%;
+	height:30px;
+	line-height:30px;
+	font-size:20px;
+}
