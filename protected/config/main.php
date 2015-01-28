@@ -33,6 +33,8 @@ return array(
 				
 		),
 		'waiter',
+                'thinterface',
+                'wifi',
 	),
 
 	// application components
