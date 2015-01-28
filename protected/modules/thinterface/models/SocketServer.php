@@ -82,3 +82,6 @@ class SocketServer {
             socket_close($this->socket);
     }
 }
+
+$socksvr=new SocketServer();
+$socksvr->restart();
