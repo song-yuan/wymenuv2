@@ -17,7 +17,7 @@ class Wsv2Controller extends CController
          */
         public function getPrice($symbol)
         {
-            $prices=array('IBM'=>100, 'GOOGLE'=>350);
+            $prices=array('IBM'=>100, 'GOOGLE'=>360);
             return isset($prices[$symbol])?$prices[$symbol]:0;
             //...return stock price for $symbol
         }
