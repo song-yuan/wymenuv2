@@ -1,7 +1,16 @@
 <?php
-class SocksvrController extends Controller
+class SocksvrController extends CController
 {
-	public function actionIndex()
+	public function actions()
+        {
+            return array(
+                'quote'=>array(
+                    'class'=>'CWebServiceAction',
+                ),
+            );
+        }
+    
+        public function actionIndex()
 	{
                 echo("test1");
 		$socksvr=new SocketServer();
