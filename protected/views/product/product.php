@@ -1,17 +1,17 @@
 <?php
 /* @var $this ProductController */
-	Yii::app()->clientScript->registerCssFile('css/product.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-btn.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-img.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-list.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-base.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-box.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-color.css');
-	Yii::app()->clientScript->registerCssFile('css/product/pic.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-media.css'); 
-	Yii::app()->clientScript->registerScriptFile('js/product/zepto.js');
-	Yii::app()->clientScript->registerScriptFile('js/product/base64.js'); 
-	Yii::app()->clientScript->registerScriptFile('js/product/pic.js');  		 	
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-btn.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-img.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-list.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-base.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-box.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-color.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/pic.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-media.css'); 
+	Yii::app()->clientScript->registerCssFile('../css/product.css');
+	Yii::app()->clientScript->registerScriptFile('../js/product/zepto.js');
+	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
+	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');  		 	
 ?>
    <div class="top">
 	<div class="productcate">
@@ -32,14 +32,14 @@
 			
 		</div>
 		<!--列表结束-->
-		<button class="foot" id="nextpage" ontouchstart="zy_touch('btn-newact')" onclick="getMorePic(1,<?php echo $child['category_id'];?>);">查看下8条</button>
-		<div style="text-align:center;height:0.5em;">&nbsp;</div>
+		<!--<button class="foot" id="nextpage" ontouchstart="zy_touch('btn-newact')" onclick="getMorePic(1,<?php echo $child['category_id'];?>);">查看下8条</button>
+		<div style="text-align:center;height:0.5em;">&nbsp;</div>-->
 
     </div>
     <!--content结束-->
 </div>
 <script type="text/javascript">
-	var cat =<?php echo $child['category_id'];?>;
+	var cat =<?php $cat = $child['category_id']?$child['category_id']:0; echo $cat;?>;
 	
 	window.onload=function(type,catgory)
 	{
@@ -56,51 +56,51 @@
     		$('.category').css('display','none');
     		$(this).css('background','url(img/product/down.png) no-repeat 52px 10px');
     	}
-    	
     });
-    $('#forum_list').on('click','.numplus',function(){
-    	var id = $(this).attr('product-id');
- 		var numObj = $(this).siblings('.num');
- 		var numVal = parseInt(numObj.val());
+    $('#forum_list').on('click','#addCart',function(){
+    	var _this = $(this);
+    	var isAddOrder = 1;
+    	var productId = _this.attr('product-id');
+    	var type = _this.attr('type');
+    	if(_this.hasClass('hasorder')){
+    		isAddOrder = 0;
+    	}
  		$.ajax({
- 			url:'<?php echo $this->createUrl('/product/createCart');?>&id='+id,
+ 			url:'<?php echo $this->createUrl('/product/createCart');?>',
+ 			data:{
+ 					isAddOrder:isAddOrder,
+					productId:productId,
+					type:type
+				},
+ 			type:'POST',
  			success:function(msg){
  				if(msg){
- 					numVal += 1;
- 					numObj.val(numVal); 
- 				    $('.float-trigger').addClass('trigger-shake');
- 				    setTimeout(function(){$('.float-trigger').removeClass('trigger-shake');},1500);
+					if(msg){
+						if(isAddOrder){
+							_this.addClass('hasorder');
+						}else{
+							_this.removeClass('hasorder');
+						}
+					}
  				}
- 			},
+ 			}
  		});
     });
- 	
-     $('#forum_list').on('click','.numminus',function(){
-     	var id = $(this).attr('product-id');
- 		var numObj = $(this).siblings('.num');
- 		var numVal = parseInt(numObj.val());
- 		if(numVal>0){
- 			$.ajax({
- 			url:'<?php echo $this->createUrl('/product/deleteCartProduct');?>&id='+id,
+     $('#forum_list').on('click','#favorite',function(){
+     	var _this = $(this);
+     	var productId = _this.attr('product-id');
+     	var lebalObj = _this.find('lebal').eq(1);
+     	$.ajax({
+ 			url:'<?php echo $this->createUrl('/product/favorite');?>/id/'+productId,
  			success:function(msg){
  				if(msg){
- 					numVal -= 1;
- 					numObj.val(numVal);
+					if(msg){
+						var num = parseInt(lebalObj.html());
+						lebalObj.html(num + 1);
+					}
  				}
- 			},
- 		});
- 		}
+ 			}
+       });
      });
- 	$(window).on('touchend',function(e){
-		var a = document.body.scrollHeight;
-		var b = document.documentElement.clientHeight;
-		var c = document.documentElement.scrollTop + document.body.scrollTop;
-		//var c = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-		var totalHeight = c+b+30;
-		if(totalHeight >= a ){
-			$('#nextpage').text('数据加载中……');
-			getMorePic(1,cat);
-		} 
-	})
  });
 </script>

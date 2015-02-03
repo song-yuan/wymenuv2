@@ -14,8 +14,8 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>我要点单</title>
-    <link rel="stylesheet" type="text/css" href="css/productmain.css"/>
-    <script type="text/javascript" src="plugins/jquery-1.10.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/productmain.css"/>
+    <script type="text/javascript" src="../plugins/jquery-1.10.2.min.js"></script>
     <script type="text/javascript">
     var mobilemac='nil';
 	var localgwip='nil';
