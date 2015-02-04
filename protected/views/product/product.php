@@ -68,12 +68,10 @@
  			type:'POST',
  			success:function(msg){
  				if(msg){
-					if(msg){
-						if(isAddOrder){
-							_this.addClass('hasorder');
-						}else{
-							_this.removeClass('hasorder');
-						}
+					if(isAddOrder){
+						_this.addClass('hasorder');
+					}else{
+						_this.removeClass('hasorder');
 					}
  				}
  			}
@@ -82,15 +80,13 @@
      $('#forum_list').on('click','#favorite',function(){
      	var _this = $(this);
      	var productId = _this.attr('product-id');
-     	var lebalObj = _this.find('lebal').eq(1);
+     	var lebalObj = _this.find('.favorite-num-right');
      	$.ajax({
  			url:'<?php echo $this->createUrl('/product/favorite');?>/id/'+productId,
  			success:function(msg){
  				if(msg){
-					if(msg){
 						var num = parseInt(lebalObj.html());
 						lebalObj.html(num + 1);
-					}
  				}
  			}
        });
