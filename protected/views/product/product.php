@@ -13,14 +13,7 @@
 	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
 	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');  		 	
 ?>
-   <div class="top">
-	<div class="productcate">
-		<?php echo $parent['category_name'];?> >> <?php echo $child['category_name'];?><div class="moreCate"> &nbsp;&nbsp;其它 </div>
-	</div>
-	<div class="allCate">
-			<?php $this->renderPartial('parentcategory');?>
-	</div>
-	</div>
+	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId));?>
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
@@ -32,14 +25,14 @@
 			
 		</div>
 		<!--列表结束-->
-		<!--<button class="foot" id="nextpage" ontouchstart="zy_touch('btn-newact')" onclick="getMorePic(1,<?php echo $child['category_id'];?>);">查看下8条</button>
+		<!--<button class="foot" id="nextpage" ontouchstart="zy_touch('btn-newact')" onclick="getMorePic(1,<?php echo $categoryId;?>);">查看下8条</button>
 		<div style="text-align:center;height:0.5em;">&nbsp;</div>-->
 
     </div>
     <!--content结束-->
 </div>
 <script type="text/javascript">
-	var cat =<?php $cat = $child['category_id']?$child['category_id']:0; echo $cat;?>;
+	var cat =<?php $cat = $categoryId?$categoryId:0; echo $cat;?>;
 	
 	window.onload=function(type,catgory)
 	{

@@ -126,7 +126,7 @@ class ProductCategory extends CActiveRecord
 		$sql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0';
 		$parentCategorys = $command->createCommand($sql)->bindValue(':companyId',$companyId)->queryAll();
 		foreach($parentCategorys as $category){
-			$csql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0';
+			$csql = 'select lid, pid, category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0';
 			$categorys = $command->createCommand($csql)->bindValue(':companyId',$companyId)->bindValue(':pid',$category['lid'])->queryAll();
 			$category['children'] = $categorys;
 			array_push($totalCatgorys,$category);

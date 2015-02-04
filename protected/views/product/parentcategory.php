@@ -2,16 +2,29 @@
 /* @var $this ProductController */
 	$parentCategorys = ProductCategory::getCategorys($this->companyId);	
 ?>
+
+<link rel="stylesheet" type="text/css"  href="../css/product/category.css" />
+<script type="text/javascript" src="../js/product/category.js"></script>
 <?php if($parentCategorys):?>
-<div class="category">
-<?php foreach($parentCategorys as $categorys):?>
-	<div >
-    <div class="pcat"><?php echo $categorys['category_name'];?></div>
-	<?php foreach($categorys['children'] as $category):?>
-	<a href="<?php echo $this->createUrl('/product/index',array('pid'=>$categorys['category_id'],'category'=>$category['category_id']));?>"><div class="catename"><?php echo $category['category_name'];?></div></a>
+<ul class="promptu-menu">
+	<?php foreach($parentCategorys as $categorys):?>
+	<li>
+		<ul>
+		<li class="parents"><?php echo $categorys['category_name'];?></li>
+		<?php foreach($categorys['children'] as $category):?>
+			<a href="<?php echo $this->createUrl('/product/index',array('pid'=>$category['pid'],'categoryId'=>$category['lid']));?>">
+			   <li class="child <?php if($category['lid']==$categoryId) echo 'active';?>">
+			   <?php echo $category['category_name'];?>
+			   </li>
+			 </a>
+		<?php endforeach;?>
+		</ul>
+	</li>	
 	<?php endforeach;?>
-	<div class="clear"></div>
-	</div>
-<?php endforeach;?>
-</div>
+</ul>
 <?php endif;?>
+<script>
+	$(function(){
+		$('ul.promptu-menu').promptumenu({height:200, rows: 1, columns: 4, direction: 'horizontal', pages: false});
+	});
+</script>

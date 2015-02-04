@@ -61,19 +61,15 @@ class ProductController extends Controller
 		$categoryId = Yii::app()->request->getParam('category',0);
 		
 		$command = Yii::app()->db;
-		if($pid&&$categoryId){
-			$sql = 'select lid,category_name from nb_product_category where lid=:cateId and dpid=:companyId and pid=0 and delete_flag=0';
-			$parentCategorys = $command->createCommand($sql)->bindValue(':companyId',$this->companyId)->bindValue(':cateId',$pid)->queryRow();
-			$csql = 'select lid,category_name from nb_product_category where lid=:cateId and dpid=:companyId and pid=:pid and delete_flag=0';
-			$categorys = $command->createCommand($csql)->bindValue(':companyId',$this->companyId)->bindValue(':cateId',$categoryId)->bindValue(':pid',$pid)->queryRow();
-		}else{
-			$sql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0';
+		if(!$categoryId){
+			$sql = 'select lid, pid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0';
 			$parentCategorys = $command->createCommand($sql)->bindValue(':companyId',$this->companyId)->queryRow();
-			$csql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0';
-			$categorys = $command->createCommand($csql)->bindValue(':companyId',$this->companyId)->bindValue(':pid',$parentCategorys['category_id'])->queryRow();
+			$csql = 'select lid, pid, category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0';
+			$categorys = $command->createCommand($csql)->bindValue(':companyId',$this->companyId)->bindValue(':pid',$parentCategorys['lid'])->queryRow();
+			$pid = $categorys['pid'];
+			$categoryId = $categorys['lid'];
 		}
-		
-		$this->render('product',array('parent'=>$parentCategorys,'child'=>$categorys));
+		$this->render('product',array('pid'=>$pid,'categoryId'=>$categoryId));
 	}
 	/**
 	 * 

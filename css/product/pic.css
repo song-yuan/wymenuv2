@@ -74,17 +74,17 @@
 .outDiv .blockLeft{
 	width:91%;
 	background-color:#FFF;
-	margin:1em 3% 1em 6%;
+	margin:0 3% 1em 6%;
 	height:auto;
-	border:1px solid rgb(240,238,239)
+	border:0 1px 1px 1px solid rgb(240,238,239);
 }
 
 .outDiv .blockRight{
 	width:91%;
 	background-color:#FFF;
-	margin:1em 6% 1em 3%;
+	margin:0 6% 1em 3%;
 	height:auto;
-	border:1px solid #BBB;
+	border:0 1px 1px 1px solid rgb(240,238,239)
 }
 
 .outDiv div img{
