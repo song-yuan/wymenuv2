@@ -24,12 +24,20 @@
 			</div>
 			
 		</div>
-		<!--列表结束-->
-		<!--<button class="foot" id="nextpage" ontouchstart="zy_touch('btn-newact')" onclick="getMorePic(1,<?php echo $categoryId;?>);">查看下8条</button>
-		<div style="text-align:center;height:0.5em;">&nbsp;</div>-->
-
     </div>
     <!--content结束-->
+    <div class="bottom">
+    	<div class="bottom-left">
+    		<span>总价 :<span><span class="total-price">45.00<span>
+    	</div>
+    	<div class="bottom-middle">
+    		<div class="product-nums">2</div>
+    	</div>
+    	<div class="bottom-right">
+    		<button class="see-order">查看订单</button>
+    	</div>
+    	<div class="clear"></div>
+    </div>
 </div>
 <script type="text/javascript">
 	var cat =<?php $cat = $categoryId?$categoryId:0; echo $cat;?>;

@@ -17,7 +17,6 @@
 		'width': 'auto',
 		'height': 'auto',
 		'duration': 500,
-		'min-with':'auto',
 		'pages': true,
 		'inertia': 200
 	}, options);
@@ -171,10 +170,8 @@
 				  
 					//Lay the pages in a horizontal order
 					$li.css({
-//						'top': Math.round((cursor.y * cells.height - cells.height/2) - ($li.height()/2)),
-						'top': 0,
-//						'left': Math.round((cursor.x * cells.width - cells.width/2) - ($li.width()/2) + (cursor.page - 1) * properties.width)
-						'left':Math.round((cursor.x * cells.width - cells.width/2) - ($li.width()/2) + (cursor.page - 1) * properties.width - 160) ,
+						'top': Math.round((cursor.y * cells.height - cells.height/2) - ($li.height()/2)),
+						'left': Math.round((cursor.x * cells.width - cells.width/2) - ($li.width()/2) + (cursor.page - 1) * properties.width)
 					});
 					
 					//the same approach for images for the horizontal order

@@ -240,6 +240,64 @@
 	float:left;
 	line-height:2.0;
 }
+#content{
+	margin-bottom:100px;
+}
+.bottom{
+	position:fixed;
+	width:100%;
+	height:100px;
+	background:rgb(46,46,46);
+	left:0;
+	bottom:0;
+	color:white;
+	font-size:30px;
+}
+
+.bottom >span{
+	margin-left:20px;
+}
+.bottom .total-price{
+	margin-left:0px;
+}
+
+.bottom-left{
+	float:left;
+	width:45%;
+	height:100%;
+	line-height:100px;
+}
+.bottom-middle{
+	text-align:center;
+	float:left;
+	width:10%;
+	height:100%;
+}
+.product-nums{
+	width:50px;
+	height:50px;
+	border-radius:25px;
+	background:rgb(255,255,255);
+	color:rgb(46,46,46);
+	margin:25px auto;
+	line-height:50px;
+}
+.bottom-right{
+	float:left;
+	width:45%;
+	height:100%;
+	line-height:100px;
+}
+.see-order{
+	background:rgb(239,68,77);
+	height:50px;
+	width:50%;
+	font-size:26px;
+	color:white; 
+	border:none;
+	border-radius:10px;
+	margin-left:45%;	
+}
 a{
 	text-decoration:none;
 	color:black;

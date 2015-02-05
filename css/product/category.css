@@ -26,9 +26,9 @@
 .promptumenu_nav a.active{
 	background: url(pagelink.png) 0 0 no-repeat;
 }
-.promptu-menu li {
-	min-width:25%;
-	width:auto;
+.promptu-menu >li {
+	min-width:200px;
+	max-width:500px;
 	padding-left:10px;
 	padding-right:10px;
 }
@@ -38,10 +38,11 @@ ul .parents{
 	padding-top:10px;
 	padding-bottom:10px;
 }
+
 li ul{
 	border-right:2px dashed rgb(191,191,191);
 	height:200px;
 	margin-left:10px;
 }
-.child{float:left;font-size:24px;}
+ul .child{width:30%;with:auto;float:left;font-size:24px;text-align:left;padding:0 10px 0 0;margin-bottom:10px;}
 li .active{background:rgb(240,201,82);}
