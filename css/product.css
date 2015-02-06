@@ -218,7 +218,7 @@
 }
 .order-num{
 	height:100%;
-	width:30%;
+	width:25px;
 	float:left;
 	background:url(../img/ordernum.png)  center center no-repeat;
 }
@@ -231,7 +231,7 @@
 }
 .favorite-num{
 	height:100%;
-	width:30%;
+	width:30px;
 	float:left;
 	background:url(../img/favorite.png)  center center no-repeat;
 }
