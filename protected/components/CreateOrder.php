@@ -151,7 +151,7 @@ class CreateOrder
 		$sql = 'delete from nb_order_product where dpid=:dpid and product_id=:productId';
 		$connect = Yii::app()->db->createCommand($sql);
 		$connect->bindValue(':productId',$productId);
-		$connect->bindValue(':dpid',$this->companyId);
+		$connect->bindValue(':dpid',$dpid);
 		$result = $connect->execute();
 		if($result){
 			return true;

@@ -194,12 +194,12 @@
 	line-height:30px;
 }
 .price-down{
-	padding:5px 10px;
 	height:30px;
 	line-height:30px;
+	margin-top:20px;
 }
 .addinfo .view{
-	width:30%;
+	width:40%;
 	height:80px;
 	border-top:1px dashed rgb(246,246,246);
 	background:url(../img/addcart.png) center center no-repeat;
@@ -208,11 +208,11 @@
 	background:url();
 }
 .addinfo .author{
-	width:69%;
+	width:58%;
 	height:80px;
 	color:black;
 	line-height:2.5;
-	font-size:18px;
+	font-size:15px;
 	border-top:1px dashed rgb(246,246,246);
 	border-right:1px solid rgb(246,246,246);
 }
@@ -224,9 +224,10 @@
 }
 .order-num-right{
 	height:100%;
-	widht:70%;
+	widht:68%;
 	float:left;
-	line-height:2.0;
+	line-height:50px;
+	padding-left:2%;
 }
 .favorite-num{
 	height:100%;
@@ -236,9 +237,10 @@
 }
 .favorite-num-right{
 	height:100%;
-	widht:70%;
+	widht:68%;
 	float:left;
-	line-height:2.0;
+	line-height:50px;
+	padding-left:2%;
 }
 #content{
 	margin-bottom:100px;
@@ -251,7 +253,7 @@
 	left:0;
 	bottom:0;
 	color:white;
-	font-size:30px;
+	font-size:20px;
 }
 
 .bottom >span{
@@ -291,12 +293,12 @@
 .see-order{
 	background:rgb(239,68,77);
 	height:50px;
-	width:50%;
-	font-size:26px;
+	width:80%;
+	font-size:20px;
 	color:white; 
 	border:none;
-	border-radius:10px;
-	margin-left:45%;	
+	border-radius:10px;	
+	margin-left:20%;
 }
 a{
 	text-decoration:none;

@@ -111,7 +111,6 @@ class ProductController extends Controller
 		$isAddOrder = Yii::app()->request->getPost('isAddOrder');
 		$productId = Yii::app()->request->getPost('productId');
 		$type = Yii::app()->request->getPost('type');
-		
 		$product = array('lid'=>$productId,'type'=>$type);
 		if($isAddOrder){
 			//增加

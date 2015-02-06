@@ -93,8 +93,8 @@ function showList(items){
 			var trHead = '<div class="blockRight">';
 			var trPic = '<a href="/wymenuv2/product/productInfo/id/'+item.lid+'"><img style="min-height:'+item.picHeight+'em;width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
-			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div class="order-num-right">'+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right">'+item.favourite_number+'</div></div><div class="clear"></div></div>';
-			var trAddinfo = '<div class="addinfo" style="padding:0"><div class="author" style="width:69%;height:80px;color:black;line-height:2.5;font-size:18px;border-top:1px dashed rgb(246,246,246);border-right:1px solid rgb(246,246,246);"><div class="price-up">原价 : <strike>￥'+item.original_price+'</strike></div><div  class="price-down">现价 : ￥'+item.original_price+'</div></div>';
+			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div class="order-num-right"> '+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="clear"></div></div>';
+			var trAddinfo = '<div class="addinfo" style="padding:0"><div class="author" ><div  class="price-down">现价:￥'+item.original_price+'</div></div>';
 				if(item.order_id)
 					 trAddinfo +='<div id="addCart" class="view hasorder" product-id="'+item.lid+'" type="'+item.type+'"></div> <div class="clear"></div></div></div></div>';
 				else
@@ -106,8 +106,8 @@ function showList(items){
 			var trHead = '<div class="blockLeft">';
 			var trPic = '<a href="/wymenuv2/product/productInfo/id/'+item.lid+'"><img style="min-height:'+item.picHeight+'em;width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
-			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right">'+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right">'+item.favourite_number+'</div></div><div class="clear"></div></div>';
-			var trAddinfo = '<div class="addinfo" style="padding:0"><div class="author"><div class="price-up">原价 : <strike>￥'+item.original_price+'</strike></div><div  class="price-down">现价 : ￥'+item.original_price+'</div></div>';
+			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="clear"></div></div>';
+			var trAddinfo = '<div class="addinfo" style="padding:0"><div class="author"><div  class="price-down">现价:￥'+item.original_price+'</div></div>';
 			if(item.order_id)
 				 trAddinfo +='<div id="addCart" class="view hasorder" product-id="'+item.lid+'" type="'+item.type+'"></div> <div class="clear"></div></div></div></div>';
 			else

@@ -32,6 +32,9 @@
 	padding-left:10px;
 	padding-right:10px;
 }
+.promptu-menu >li:first-child {
+	min-width:180px;
+}
 ul .parents{
 	color:rgb(217,217,217);
 	font-size:30px;
@@ -44,5 +47,6 @@ li ul{
 	height:200px;
 	margin-left:10px;
 }
-ul .child{width:30%;with:auto;float:left;font-size:24px;text-align:left;padding:0 10px 0 0;margin-bottom:10px;}
+ul .child.float{width:30%;with:auto;float:left;font-size:20px;text-align:left;padding:0 10px 0 0;margin-bottom:10px;}
+ul .child{width:100%;font-size:20px;text-align:left;padding:0 10px 0 0;margin-bottom:10px;}
 li .active{background:rgb(240,201,82);}
