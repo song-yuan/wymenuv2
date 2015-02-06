@@ -14,7 +14,7 @@
 class Sequence {
     //put your code here
     private $table;
-    private function __construct($tab){
+    public function __construct($tab){
         $this->table = $tab;
     }    
     

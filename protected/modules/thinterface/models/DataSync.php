@@ -103,4 +103,11 @@ class DataSync extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+        
+        public function primaryKey()
+        {
+            //return 'id';
+            // 对于复合主键，要返回一个类似如下的数组
+            return array('lid', 'dpid','cmd_code');
+        }
 }

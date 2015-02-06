@@ -14,8 +14,8 @@ class WMsg {
     
     private $dpid;
     private $lid;
-    private function __construct($tdpid){
-        $this->dpid = $tdpid;
+    public function __construct($tdpid){
+        $this->dpid = intval($tdpid);
     }
     
     //put your code here
@@ -66,7 +66,20 @@ class WMsg {
      */
     protected function saveMsg($cmd,$data)
    {
-        $ds=new DataSync;
+        $db = Yii::app()->db;
+        $se=new Sequence("data_sync");
+        $this->lid = $se->nextval();
+        $sql='insert into nb_data_sync(lid,dpid,cmd_code,cmd_data,create_at,is_interface,sync_result) values(:lid,:dpid,:cmd_code,:cmd_data,sysdate(),:is_interface,:sync_result)';
+        $command=$db->createCommand($sql);
+        $command->bindValue(":lid" , $this->lid);
+        $command->bindValue(":dpid" , $this->dpid);
+        $command->bindValue(":cmd_code" , $cmd);
+        $command->bindValue(":cmd_data" , $data);
+        $command->bindValue(":is_interface" , '1');
+        $command->bindValue(":sync_result" , '0');
+        $command->execute();
+        
+        /*$ds=new DataSync;
         $se=new Sequence("data_sync");
         $this->lid = $se->nextval();
         $ds->dpid =  $this->dpid;
@@ -76,7 +89,7 @@ class WMsg {
         $ds->create_at = date('y-m-d h:i:s',time());
         $ds->is_interface = '1';
         $ds->sync_result = '0';
-        $ds->save();
+        $ds->save();*/
    }
    
    /**
@@ -84,16 +97,16 @@ class WMsg {
      * 返回格式参见接口文档
      * 没有消息就返回字符串"no"
      */
-   public function getMsg($lid)
+   public function getMsg()
    {
            //select top 1 cmd in ('XD','JC','ZXZF','XXFK') and lid >$lid orde by create_time
-       $sql="select lid,cmd_code,cmd_data from nb_data_sync where cmd_code in ('XD','JC','ZXZF','XXFK') and dpid=:dpid and lid >:lid and sync_result=0 order by create_time";
+       $sql="select lid,cmd_code,cmd_data from nb_data_sync where cmd_code in ('XD','JC','ZXZF','XXFK') and dpid=:dpid and sync_result=0 order by create_at";
        $db = Yii::app()->db;
        $command=$db->createCommand($sql);
-       $command->bindValue(":lid" , $lid);
-       $command->bindValue(":lid" , $this->dpid);
+       //$command->bindValue(":lid" , $lid);
+       $command->bindValue(":dpid" , $this->dpid);
        $row=$command->queryRow();
-       return $row['cmd_code'].'$#S#$'.$row['lid'].'$#C#$'.$row[cmd_data];
+       return $row['cmd_code'].'$#S#$'.$row['lid'].'$#C#$'.$row['cmd_data'];
    }
    
    /**
@@ -102,7 +115,7 @@ class WMsg {
      */
    public function updateResult($cmd,$lid,$resu)
    {
-        $ds=DataSync::model()->findByPk(array('dpid'=>  $this->dpid ,'lid'=>  $this->lid,'cmd_code'=>$cmd));
+        $ds=DataSync::model()->findByPk(array('dpid'=>  $this->dpid ,'lid'=>  intval($lid),'cmd_code'=>$cmd));
         $ds->sync_result = $resu;
         $ds->update();
    }

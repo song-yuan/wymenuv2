@@ -14,13 +14,26 @@ class SMsg {
     
     private $dpid;
     private $lid;
-    private function __construct($tdpid){
-        $this->dpid = $tdpid;
+    public function __construct($tdpid){
+        $this->dpid = intval($tdpid);
     }
     
     //put your code here
     public function saveCmdData($cmd,$data)
    {
+        $db = Yii::app()->db;
+        $se=new Sequence("data_sync");
+        $this->lid = $se->nextval();
+        $sql='insert into nb_data_sync(lid,dpid,cmd_code,cmd_data,create_at,is_interface,sync_result) values(:lid,:dpid,:cmd_code,:cmd_data,sysdate(),:is_interface,:sync_result)';
+        $command=$db->createCommand($sql);
+        $command->bindValue(":lid" , $this->lid);
+        $command->bindValue(":dpid" , $this->dpid);
+        $command->bindValue(":cmd_code" , $cmd);
+        $command->bindValue(":cmd_data" , $data);
+        $command->bindValue(":is_interface" , '1');
+        $command->bindValue(":sync_result" , '0');
+        $command->execute();
+        /*
         $ds=new DataSync;
         $se=new Sequence("data_sync");
         $this->lid = $se->nextval();
@@ -31,10 +44,10 @@ class SMsg {
         $ds->create_at = date('y-m-d h:i:s',time());
         $ds->is_interface = '1';
         $ds->sync_result = '0';
-        $ds->save();
+        $ds->save();*/
    }
    
-   public function updateResult($resu,$cmd)
+   public function updateResult($cmd,$resu)
    {
         $ds=DataSync::model()->findByPk(array('dpid'=>  $this->dpid ,'lid'=>  $this->lid,'cmd_code'=>$cmd));
         $ds->sync_result = $resu;
@@ -59,7 +72,7 @@ class SMsg {
      */
     public function HT($datalist)
    {
-           return 1;
+           return 2;
    }
    
    /**

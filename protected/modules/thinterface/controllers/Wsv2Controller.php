@@ -23,7 +23,7 @@ class Wsv2Controller extends CController
         }
         
         /**
-         * @param string the dpid for table
+         * @param string the dpid for table number length 10
          * @param string the cmd for table
          * @param string the data detail
          * @return int success 1 or fail 0
@@ -32,7 +32,7 @@ class Wsv2Controller extends CController
         public function baseDataDown($dpid,$cmd,$strdata)
         {
             $bd=new BaseDataMsg($dpid);
-            $res='0';
+            $res=0;
             switch ($cmd)
             {
                 case 'CPLB':
@@ -117,7 +117,7 @@ class Wsv2Controller extends CController
                     return 0;//fail
             }
             
-            if($res==1)
+            if($res===1)
             {
                 $bd->updateResult($cmd,'1');
                 return 1;
@@ -127,10 +127,11 @@ class Wsv2Controller extends CController
                 $bd->updateResult($cmd,'2');
                 return 0;
             }
+            return 0;
         }
         
         /**
-         * @param string the dpid for Sn
+         * @param string the dpid for Sn number length 10
          * @param string the cmd for Sn
          * @param string the data of Sn
          * @return int success or fail
@@ -200,14 +201,14 @@ class Wsv2Controller extends CController
                     return 1;//fail
             }
             
-            if($res==1)
+            if($res===1)
             {
-                $bd->updateResult('1');
+                $sm->updateResult($cmd,'1');
                 return 1;
             }
             else
             {
-                $bd->updateResult('2');
+                $sm->updateResult($cmd,'2');
                 return 0;
             }
         }
@@ -217,16 +218,17 @@ class Wsv2Controller extends CController
          * @return string Wn cmd and data
          * @soap
          */
-        public function getNewWn($dpid,$lastlid)
+        public function getNewWn($dpid)
         {
             $wm=new WMsg($dpid);
             //if no more wn message return "no"
-            return $wm->getMsg($lastlid);
+            return $wm->getMsg();
             //...return stock price for $symbol
         }
         
         /**
-         * @param string the current cmd_cod for Wn
+         * @param string the current dpid for Wn
+         * @param string the current cmd for Wn
          * @param string the current lid for Wn
          * @param int the deal result of the currentWn success 1 or fail 0
          * @return int success 1 or fail 0
@@ -236,10 +238,14 @@ class Wsv2Controller extends CController
         {
             $wm=new WMsg($dpid);
             $res=0;
-            if($result==1)
+            if($result===1)
+            {
                 $res=1;
+            }
             else
-                $res=0;
+            {
+                $res=2;
+            }
             return $wm->updateResult($cmd, $currentlid, $res);
             //...return stock price for $symbol
         }

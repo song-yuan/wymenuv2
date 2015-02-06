@@ -14,16 +14,27 @@ class BaseDataMsg {
     //put your code here
     private $dpid;
     private $lid;
-    private function __construct($tdpid){
-        $this->dpid = $tdpid;
+    public function __construct($tdpid){
+        $this->dpid = intval($tdpid);
         $this->lid=0;
     }
     
     public function saveCmd($cmd)
    {
-        $ds=new DataSync;
+        //$ds=new DataSync();
+        $db = Yii::app()->db;
         $se=new Sequence("data_sync");
         $this->lid = $se->nextval();
+        $sql='insert into nb_data_sync(lid,dpid,cmd_code,cmd_data,create_at,is_interface,sync_result) values(:lid,:dpid,:cmd_code,:cmd_data,sysdate(),:is_interface,:sync_result)';
+        $command=$db->createCommand($sql);
+        $command->bindValue(":lid" , $this->lid);
+        $command->bindValue(":dpid" , $this->dpid);
+        $command->bindValue(":cmd_code" , $cmd);
+        $command->bindValue(":cmd_data" , '');
+        $command->bindValue(":is_interface" , '1');
+        $command->bindValue(":sync_result" , '0');
+        $command->execute();
+        /*
         $ds->dpid =  $this->dpid;
         $ds->lid = $this->lid;
         $ds->cmd_code = $cmd;
@@ -31,10 +42,15 @@ class BaseDataMsg {
         $ds->create_at = date('y-m-d h:i:s',time());
         $ds->is_interface = '1';
         $ds->sync_result = '0';
-        $ds->save();
+        //var_dump($ds);
+        if(!$ds->save())
+        {
+            var_dump($ds->getErrors());
+            echo 'insert error!!!!';
+        }*/
    }
    
-   public function updateResult($resu,$cmd)
+   public function updateResult($cmd,$resu)
    {
         $ds=DataSync::model()->findByPk(array('dpid'=>  $this->dpid ,'lid'=>  $this->lid,'cmd_code'=>$cmd));
         $ds->sync_result = $resu;
