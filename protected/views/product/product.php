@@ -1,26 +1,19 @@
 <?php
 /* @var $this ProductController */
-	Yii::app()->clientScript->registerCssFile('css/product.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-btn.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-img.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-list.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-base.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-box.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-color.css');
-	Yii::app()->clientScript->registerCssFile('css/product/pic.css');
-	Yii::app()->clientScript->registerCssFile('css/product/ui-media.css'); 
-	Yii::app()->clientScript->registerScriptFile('js/product/zepto.js');
-	Yii::app()->clientScript->registerScriptFile('js/product/base64.js'); 
-	Yii::app()->clientScript->registerScriptFile('js/product/pic.js');  		 	
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-btn.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-img.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-list.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-base.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-box.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-color.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/pic.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/ui-media.css'); 
+	Yii::app()->clientScript->registerCssFile('../css/product.css');
+	Yii::app()->clientScript->registerScriptFile('../js/product/zepto.js');
+	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
+	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');  		 	
 ?>
-   <div class="top">
-	<div class="productcate">
-		<?php echo $parent['category_name'];?> >> <?php echo $child['category_name'];?><div class="moreCate"> &nbsp;&nbsp;其它 </div>
-	</div>
-	<div class="allCate">
-			<?php $this->renderPartial('parentcategory');?>
-	</div>
-	</div>
+	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId));?>
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
@@ -31,15 +24,23 @@
 			</div>
 			
 		</div>
-		<!--列表结束-->
-		<button class="foot" id="nextpage" ontouchstart="zy_touch('btn-newact')" onclick="getMorePic(1,<?php echo $child['category_id'];?>);">查看下8条</button>
-		<div style="text-align:center;height:0.5em;">&nbsp;</div>
-
     </div>
     <!--content结束-->
+    <div class="bottom">
+    	<div class="bottom-left">
+    		<span>总价 :<span><span class="total-price">45.00<span>
+    	</div>
+    	<div class="bottom-middle">
+    		<div class="product-nums">2</div>
+    	</div>
+    	<div class="bottom-right">
+    		<button class="see-order">查看订单</button>
+    	</div>
+    	<div class="clear"></div>
+    </div>
 </div>
 <script type="text/javascript">
-	var cat =<?php echo $child['category_id'];?>;
+	var cat =<?php $cat = $categoryId?$categoryId:0; echo $cat;?>;
 	
 	window.onload=function(type,catgory)
 	{
@@ -56,51 +57,47 @@
     		$('.category').css('display','none');
     		$(this).css('background','url(img/product/down.png) no-repeat 52px 10px');
     	}
-    	
     });
-    $('#forum_list').on('click','.numplus',function(){
-    	var id = $(this).attr('product-id');
- 		var numObj = $(this).siblings('.num');
- 		var numVal = parseInt(numObj.val());
+    $('#forum_list').on('click','#addCart',function(){
+    	var _this = $(this);
+    	var isAddOrder = 1;
+    	var productId = _this.attr('product-id');
+    	var type = _this.attr('type');
+    	if(_this.hasClass('hasorder')){
+    		isAddOrder = 0;
+    	}
  		$.ajax({
- 			url:'<?php echo $this->createUrl('/product/createCart');?>&id='+id,
+ 			url:'<?php echo $this->createUrl('/product/createCart');?>',
+ 			data:{
+ 					isAddOrder:isAddOrder,
+					productId:productId,
+					type:type
+				},
+ 			type:'POST',
  			success:function(msg){
  				if(msg){
- 					numVal += 1;
- 					numObj.val(numVal); 
- 				    $('.float-trigger').addClass('trigger-shake');
- 				    setTimeout(function(){$('.float-trigger').removeClass('trigger-shake');},1500);
+					if(isAddOrder){
+						_this.addClass('hasorder');
+					}else{
+						_this.removeClass('hasorder');
+					}
  				}
- 			},
+ 			}
  		});
     });
- 	
-     $('#forum_list').on('click','.numminus',function(){
-     	var id = $(this).attr('product-id');
- 		var numObj = $(this).siblings('.num');
- 		var numVal = parseInt(numObj.val());
- 		if(numVal>0){
- 			$.ajax({
- 			url:'<?php echo $this->createUrl('/product/deleteCartProduct');?>&id='+id,
+     $('#forum_list').on('click','#favorite',function(){
+     	var _this = $(this);
+     	var productId = _this.attr('product-id');
+     	var lebalObj = _this.find('.favorite-num-right');
+     	$.ajax({
+ 			url:'<?php echo $this->createUrl('/product/favorite');?>/id/'+productId,
  			success:function(msg){
  				if(msg){
- 					numVal -= 1;
- 					numObj.val(numVal);
+						var num = parseInt(lebalObj.html());
+						lebalObj.html(num + 1);
  				}
- 			},
- 		});
- 		}
+ 			}
+       });
      });
- 	$(window).on('touchend',function(e){
-		var a = document.body.scrollHeight;
-		var b = document.documentElement.clientHeight;
-		var c = document.documentElement.scrollTop + document.body.scrollTop;
-		//var c = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
-		var totalHeight = c+b+30;
-		if(totalHeight >= a ){
-			$('#nextpage').text('数据加载中……');
-			getMorePic(1,cat);
-		} 
-	})
  });
 </script>
