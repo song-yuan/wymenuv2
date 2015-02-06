@@ -26,4 +26,20 @@ $(document).ready(function(){
  			}
  		});
     });
+    var prevTop = 0,
+    	currTop = 0;
+	$(window).scroll(function() {
+	    currTop = $(window).scrollTop();
+	    if (currTop < prevTop) { //判断小于则为向上滚动
+	    	$(".promptumenu_window").show();
+	        $(".promptumenu_window").addClass('float');
+	        $('#page_0').css('margin-top',200);
+	    } else {
+	        $(".promptumenu_window").hide();
+	        $(".promptumenu_window").removeClass('float');
+	        $('#page_0').css('margin-top',0);
+	    }
+	    //prevTop = currTop; //IE下有BUG，所以用以下方式
+	    setTimeout(function(){prevTop = currTop},0);
+	});
  });

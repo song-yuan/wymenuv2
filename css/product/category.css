@@ -1,3 +1,11 @@
+.promptumenu_window.float {
+	width: 100%;
+	 position: fixed;
+	  z-index: 999; 
+	  top: 0; 
+	  left: 0;
+	  background:rgb(255,255,255);
+	}	
 .promptumenu_nav{
 	z-index: 5;
 	position: absolute;

@@ -5,7 +5,6 @@
 
 <link rel="stylesheet" type="text/css"  href="../css/product/category.css" />
 <script type="text/javascript" src="../js/product/category.js"></script>
-<?php if($parentCategorys):?>
 <ul class="promptu-menu">
 	<li>
 		<ul>
@@ -16,6 +15,7 @@
 			<li class="child">点单TOP10</li>
 		</ul>
 	</li>
+	<?php if($parentCategorys):?>
 	<?php foreach($parentCategorys as $categorys):?>
 	<li>
 		<ul>
@@ -30,8 +30,9 @@
 		</ul>
 	</li>	
 	<?php endforeach;?>
+	<?php endif;?>
 </ul>
-<?php endif;?>
+
 <script>
 	$(document).ready(function(){
 		$('ul.promptu-menu').promptumenu({height:200, rows: 1, columns: 1, direction: 'horizontal', pages: false});
