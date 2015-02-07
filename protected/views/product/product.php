@@ -29,10 +29,10 @@
     <!--content结束-->
     <div class="bottom">
     	<div class="bottom-left">
-    		<span>总价 :<span><span class="total-price">45.00<span>
+    		<span>总价 :</span><span class="total-price">0.00</span>
     	</div>
     	<div class="bottom-middle">
-    		<div class="product-nums">2</div>
+    		<div class="product-nums">0</div>
     	</div>
     	<div class="bottom-right">
     		<button class="see-order">查看订单</button>

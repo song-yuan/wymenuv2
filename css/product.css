@@ -204,9 +204,7 @@
 	border-top:1px dashed rgb(246,246,246);
 	background:url(../img/addcart.png) center center no-repeat;
 }
-.addinfo .hasorder{
-	background:url();
-}
+
 .addinfo .author{
 	width:58%;
 	height:80px;
@@ -215,6 +213,14 @@
 	font-size:15px;
 	border-top:1px dashed rgb(246,246,246);
 	border-right:1px solid rgb(246,246,246);
+}
+
+.hasorder{
+	transform: rotate(40deg);
+	-o-transform: rotate(40deg);
+	-webkit-transform: rotate(40deg);
+	-moz-transform: rotate(40deg);
+	filter: progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=0.7660444431189777, M12=-0.6427876096865394, M21=0.6427876096865398, M22=0.7660444431189779)";
 }
 .order-num{
 	height:100%;

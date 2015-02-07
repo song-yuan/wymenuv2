@@ -30,7 +30,7 @@ class ProductController extends Controller
 			$_SESSION['siteNoId'] = $siteNo['lid'];
 		}
 		if(!$this->siteNoId){
-			$this->siteNoId = isset($_SESSION['siteNoId'])?$_SESSION['siteNoId']:0;
+			$this->siteNoId = isset($_SESSION['siteNoId'])?$_SESSION['siteNoId']:1;
 		}
 		$this->moMac = isset($_SESSION['momac'])?$_SESSION['momac']:0;
 	}
@@ -110,8 +110,9 @@ class ProductController extends Controller
 	public function actionCreateCart(){
 		$isAddOrder = Yii::app()->request->getPost('isAddOrder');
 		$productId = Yii::app()->request->getPost('productId');
-		$type = Yii::app()->request->getPost('type');
+		$type = Yii::app()->request->getPost('type');//是否是套餐
 		$product = array('lid'=>$productId,'type'=>$type);
+		echo 1;exit;
 		if($isAddOrder){
 			//增加
 			$createOrder = new CreateOrder($this->siteNoId,$product);
