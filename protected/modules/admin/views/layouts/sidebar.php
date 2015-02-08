@@ -13,6 +13,103 @@
 					<span class="title">首页</span>					
 					</a>
 				</li>
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-map-marker"></i> 
+					<span class="title">基础信息</span>					
+					</a>
+					<ul class="sub-menu">
+						<li class=""><a href="">店铺管理</a></li>
+						<li class=""><a href="">店铺WIFI设定</a></li>
+						<li class=""><a href="">支付方式设定</a></li>
+						<li class=""><a href="">操作员管理</a></li>
+						<li class=""><a href="">基础数据同步设定</a></li>
+					</ul>
+				</li>
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-map-marker"></i> 
+					<span class="title">产品管理</span>					
+					</a>
+					<ul class="sub-menu">
+						<li class=""><a href="">产品分类</a></li>
+						<li class=""><a href="">单品管理</a></li>
+						<li class=""><a href="">套餐管理</a></li>
+						<li class=""><a href="">时价菜管理</a></li>
+						<li class=""><a href="">特价菜管理</a></li>
+						<li class=""><a href="">优惠活动管理</a></li>
+						<li class=""><a href="">沽清列表</a></li>
+						<li class=""><a href="">产品图片管理</a></li>
+						<li class=""><a href="">单品打印方式管理</a></li>
+						<li class=""><a href="">退菜理由选项设定</a></li>
+					</ul>
+				</li>
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-map-marker"></i> 
+					<span class="title">口味设定</span>					
+					</a>
+					<ul class="sub-menu">
+						<li class=""><a href="">整单口味选项</a></li>
+						<li class=""><a href="">单品口味选项</a></li>
+						<li class=""><a href="">套餐管理</a></li>
+						<li class=""><a href="">单品口味对应</a></li>
+					</ul>
+				</li>
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-map-marker"></i> 
+					<span class="title">反馈信息</span>					
+					</a>
+					<ul class="sub-menu">
+						<li class=""><a href="">整单反馈选项</a></li>
+						<li class=""><a href="">单品反馈选项</a></li>
+					</ul>
+				</li>
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-map-marker"></i> 
+					<span class="title">订单管理</span>					
+					</a>
+					<ul class="sub-menu">
+						<li class=""><a href="">订单列表</a></li>
+						<li class=""><a href="">订单明细列表</a></li>
+						<li class=""><a href="">订单口味列表</a></li>
+						<li class=""><a href="">订单反馈列表</a></li>
+					</ul>
+				</li>
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-map-marker"></i> 
+					<span class="title">餐桌包厢管理</span>					
+					</a>
+					<ul class="sub-menu">
+						<li class=""><a href="">楼层管理</a></li>
+						<li class=""><a href="">餐桌种类</a></li>
+						<li class=""><a href="">餐桌包厢明细</a></li>
+					</ul>
+				</li>
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-map-marker"></i> 
+					<span class="title">打印</span>					
+					</a>
+					<ul class="sub-menu">
+						<li class=""><a href="">打印机管理</a></li>
+						<li class=""><a href="">打印方案</a></li>
+						<li class=""><a href="">清单打印机</a></li>
+					</ul>
+				</li>
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-map-marker"></i> 
+					<span class="title">日常统计</span>					
+					</a>
+					<ul class="sub-menu">
+						<li class=""><a href="">账单日结</a></li>
+						<li class=""><a href="">账单查询</a></li>
+					</ul>
+				</li>
 				<li class="<?php if(Yii::app()->controller->id == 'order') echo 'active';?>">
 					<a href="<?php echo $this->createUrl('order/index' , array('companyId' =>$this->companyId));?>">
 					<i class="fa fa-list-alt"></i> 

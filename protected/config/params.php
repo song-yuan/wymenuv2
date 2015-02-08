@@ -2,7 +2,7 @@
 return array(
 		'adminEmail'=>'webmaster@example.com',
 		
-		'admin_home_url' => 'index.php?r=admin/default',
+		'admin_home_url' => 'default',
 		'admin_return_url' => 'index.php?r=admin/login',
 		'waiter_return_url' => 'index.php?r=waiter/user/index',
 		'waiter_home_url' => 'index.php?r=waiter/seat/index',

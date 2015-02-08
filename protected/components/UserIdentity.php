@@ -32,10 +32,10 @@ class UserIdentity extends CUserIdentity
 			$field = 'password';
 			$this->errorCode =  self::ERROR_PASSWORD_INVALID;
 		}else {
-			$this->userId = $user->id ;
+			$this->userId = $user->lid.'_'.$user->dpid ;
 			$this->role = $user->role ;
 			$this->mobile = $user->mobile;
-			$this->companyId = $user->company_id;
+			$this->companyId = $user->dpid;
 			$this->email = $user->email;
 			$this->staffNo = $user->staff_no;
 			$this->status = $user->status;

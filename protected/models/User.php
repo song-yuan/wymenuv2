@@ -30,7 +30,9 @@ class User extends CActiveRecord
 	{
 		return 'nb_user';
 	}
-
+	public function getPrimaryKey() {
+		return array('lid' => 'lid','dpid' => 'dpid');
+	}
 	/**
 	 * @return array validation rules for model attributes.
 	 */
@@ -71,13 +73,13 @@ class User extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'lid' => 'lid',
+			'dpid' => 'dpid',
 			'username' => '用户名',
 			'mobile' => '手机',
 			'password_hash' => '密码',
 			'password_reset_token' => 'Password Reset Token',
 			'staff_no' => '员工号',
-			'company_id' => '公司',
 			'email' => '电子邮箱',
 			'auth_key' => 'Auth Key',
 			'role' => '管理员类型',
