@@ -248,47 +248,7 @@ class ProductController extends Controller
 	 	$this->redirect(array('/product/cartList','code'=>$seatnum));
 	 }
 	public function actionOrderList(){
-       	$isCode = 0;
-       	$orderId = 0;
-       	$seatnum = Yii::app()->request->getParam('code');
-       	if($seatnum!=$this->seatNum){
-       		$isCodeModel = SiteNo::model()->find('code=:code and delete_flag=0',array(':code'=>$seatnum));//判断是否是正式开台号
-       		if($isCodeModel){
-       			$isCode = 1;
-       			Cart::model()->updateAll(array('code'=>$seatnum),'code=:code',array(':code'=>$this->seatNum));
-       			$this->seatNum = $seatnum;
-       		}
-       	}else{//输入的和开台号相等  判断是否是真的座次号（可能输入临时的座次号）
-       		$isCodeModel = SiteNo::model()->find('code=:code and delete_flag=0',array(':code'=>$seatnum));//判断是否是正式开台号
-       		if($isCodeModel){
-       			$isCode = 1;
-       			$this->seatNum = $seatnum;
-       		}
-       	}
-       	
-		$model = Order::model()->with('siteNo')->find('t.order_status=0 and t.company_id=:companyId and code=:code and delete_flag=0',array(':code'=>$this->seatNum,':companyId'=>$this->companyId));
 		
-		
-		if($model){
-			$orderId = $model->order_id;
-		}
-		
-		$time = $model?$model->create_time:0;
-		$orderProducts = OrderProduct::getOrderProducts($orderId);
-		
-		$totalPrice = OrderProduct::getTotal($orderId);
-		if($model){
-			$priceInfo = Helper::calOrderConsume($model,$totalPrice);
-		}else{
-			if($isCodeModel){
-				$priceInfo = Helper::lowConsumeInfo($isCodeModel->site_id);
-			}else{
-				$priceInfo['total'] = 0;
-				$priceInfo['remark'] = "";
-			}
-			
-		}
-		
-	 	$this->render('orderlist',array('id'=>$orderId,'orderProducts'=>$orderProducts,'totalPrice'=>$priceInfo,'time'=>$time,'seatNum'=>$this->seatNum,'isCode'=>$isCode));
+	 	$this->render('orderlist');
 	}
 }

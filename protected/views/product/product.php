@@ -35,7 +35,7 @@
     		<div class="product-nums">0</div>
     	</div>
     	<div class="bottom-right">
-    		<button class="see-order">查看订单</button>
+    		<a href="orderList"><button class="see-order">查看订单</button></a>
     	</div>
     	<div class="clear"></div>
     </div>
