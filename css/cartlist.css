@@ -1,157 +1,153 @@
-
-.waiter{
+.top{
 	width:100%;
-	height:50px;
-	line-height:30px;
-	text-align:center;
-	border-bottom:1px solid rgb(102,191,237);
+	height:80px;
+	line-height:80px;
+	background:rgb(240,201,82) url(../img/product/back.png) no-repeat 20px 15px;
 }
-.waiter-back{
-	width:40%;
-	height:30px;
-	padding:10px;
-	line-height:30px;
-	border-radius:5px;
-	color:white;
-	font-size:18px;
-	background:rgb(255,0,0);
-}
-.waiter-product{
-	width:30%;
-	height:30px;
-	float:left;
-}
-.addproduct{
-	width:100px;
-	height:40px;
-	color:white;
-	line-height:40px;
-	text-align:center;
-	border-radius:5px;
-	margin-top:30px;
-	margin-right:10px;
-	float:right;
-	background:rgb(44,120,228);
-}
-.orderup{
-	width:100%;
-	height:40px;
-	padding:15px 0;
-	text-align:center;
-}
-.ordercart{
-	min-width:50px;
-	height:40px;
-	line-height:40px;
-	font-size:20px;
-	float:left;
-	padding:0 10px;
-	margin-left:10px;
-	background:rgb(102,191,237);
-	border-radius:5px;
-}
-.active{
-	color:white;
-	background:blue;
-}
-.title{
-	width:95%;
-	heigth:30px;
-	text-align:center;
-	font-size:22px;
-	margin:20px auto 0;
-}
-.seatnum{
-	width:40%;
-	height:30px;
-	margin-left:1%;
-	float:left;
-}
-.code{
-	width:100%;
-	border:1px solid #ccc;
-	text-align:center;
-	height:26px;
-	font-size:20px;
-}
-.orderbtn{
-	width:100px;
-	height:40px;
-	color:white;
-	line-height:40px;
-	text-align:center;
-	border-radius:5px;
-	margin-top:30px;
-	margin-right:10px;
-	float:right;
-	background:rgb(44,120,228);
-}
-.orderlist{
-	width:100%;
-	min-height:600px;
-	margin-top:20px;
-	height:auto !important;
-}
-.order-cat{
-    width:100%;
-    height:30px;
-    line-height:30px;
-    font-size:22px;
-    background:rgb(151,179,206);	
-}
-.cat-left{
-	width:40%;
-    height:30px;
-    float:left;
-    padding-left:30px;
-}
-.cat-right{
-	width:40%;
-    height:30px;
-    float:right;
-    text-align:right;
-    padding-right:30px;
-}
-.order{
-	width:100%;
-	height:90px;
-	font-size:18px;
-	margin-top:5px;
-	padding-bottom:5px;
-	border-bottom:1px solid black;
-}
-.order-left{
+.back{
+	margin-left:50px;
 	width:25%;
-	height:100%;
-	float:left;
-	overflow:hidden;
-	margin-left:3%;
-}
-.order-middle{
-	width:50%;
-	height:100%;
-	float:left;
-	margin-left:4%;
-}
-.order-right{
-	width:15%;
-	height:100%;
-	float:left;
-	margin-left:3%;
-}
-.delete{
-	width:38px;
-	height:50px;
-	margin-top:40px;
-	background:url(../img/product/u83.png);
-}
-.low-cost{
-	margin-top:20px;
 	font-size:20px;
 }
-.cost-left{
-	margin-left:30px;
+.order-top{
+	width:100%;
+	height:80px;
+	line-height:80px;
+	font-size:18px;
+	border-bottom:2px solid rgb(205,202,202);
 }
-.cost-right{
+.order-top-left{
+	width:75%;
+	margin-left:5%;
+	float:left;
+}
+.order-top-right{
+	width:20%;
+	float:left;
 	
 }
+.order-time{
+	width:100%;
+	height:80px;
+	line-height:80px;
+	font-size:15px;
+	border-bottom:1px solid rgb(54,53,53);
+}
+.order-time-left{
+	width:45%;
+	margin-left:5%;
+	float:left;
+}
+.order-time-right{
+	width:50%;
+	text-align:center;
+	float:left;
+	
+}
+.order-category{
+	padding:10px 20px;
+	font-size:16px;
+	border-bottom:1px dashed rgb(149,149,149);
+}
+
+.order-product{
+	padding:10px 20px;
+	font-size:16px;
+	border-bottom:1px dashed rgb(149,149,149);
+}
+.order-product-left{
+	float:left;
+	width:35%;
+	height:140px;
+	overflow:hidden;
+}
+.order-product-right{
+	float:left;
+	width:65%;
+	height:140px;
+}
+
+.right-up{
+	width:100%;
+	height:50%;
+}
+
+.right-up-left{
+	float:left;
+	width:40%;
+	height:100%;
+	text-align:center;
+	font-size:18px;
+}
+
+.right-up-right{
+	float:left;
+	width:60%;
+	height:100%;
+	text-align:right;
+	font-size:16px;
+}
+
+
+.right-down{
+	width:100%;
+	height:50%;
+}
+
+.right-down-left{
+	float:left;
+	width:60%;
+	height:100%;
+	text-align:center;
+	font-size:16px;
+}
+
+.right-down-right{
+	float:left;
+	width:40%;
+	height:50%;
+	text-align:right;
+	font-size:16px;
+	padding-top:15px;
+}
+
+.right-down-left input{
+	width: 30px;
+	height: 15px;
+	padding: 10px;
+	border: 0px !important;
+	border-top: #e5e5e5 1px solid !important;
+	border-bottom: #e5e5e5 1px solid !important;
+	line-height: 15px;
+	font-size: 1.1em !important;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.right-down-left span{
+	text-align:center;
+	width:15px;
+	height:15px;
+	font-size:18px;
+	padding: 10px 10px 10px;
+	display:inline-block;
+	vertical-align: middle;
+	background-color: #eeeeee;
+	border: #e5e5e5 1px solid;
+}
+
+a:link{
+	color:rgb(0,0,0);
+}
+a:hover{
+	color:rgb(0,0,0);
+}
+
+a:visited{
+	color:rgb(0,0,0);
+}
+
+
+
+
+
