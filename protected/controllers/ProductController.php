@@ -251,4 +251,12 @@ class ProductController extends Controller
 		
 	 	$this->render('orderlist');
 	}
+	public function actionConfirmOrder(){
+		
+	 	$this->render('confirmOrder');
+	}
+	public function actionOrder(){
+		
+	 	$this->render('order');
+	}
 }

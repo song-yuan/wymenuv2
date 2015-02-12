@@ -1,9 +1,9 @@
 <?php
 /* @var $this ProductController */
-	Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
+	Yii::app()->clientScript->registerCssFile('../css/confirmorder.css');
 ?>
-<div class="top"><a href="index"><div class="back">返回</div></a><a href="confirmOrder"><button class="create-order">下单</button></a></div>
-<div class="order-top"><div class="order-top-left">当前订单总额 :<span> 36.00</span></div><div class="order-top-right">2份</div></div>
+<!--<div class="top"><a href="index"><div class="back">返回</div></a></div>-->
+<div class="order-top"><div class="order-top-left">下单总额 :<span> 36.00</span></div><div class="order-top-right"><a href="order"><div class="pay-order">支付宝付款</div></a></div></div>
 <div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right">全单做法口味选择<img src="../img/product/down-arrow.png" /></div></div>
 
 <div class="order-category">红烧类</div>

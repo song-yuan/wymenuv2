@@ -13,7 +13,7 @@
 .create-order{
 	width:128px;
 	height:48px;
-	margin-right:20px;
+	margin-right:50px;
 	margin-top:15px;
 	font-size:20px;
 	float:right;
@@ -29,14 +29,24 @@
 	border-bottom:2px solid rgb(205,202,202);
 }
 .order-top-left{
-	width:75%;
+	width:55%;
 	margin-left:5%;
 	float:left;
 }
 .order-top-right{
-	width:20%;
+	width:40%;
 	float:left;
-	
+}
+
+.pay-order{
+	width:90%;
+	height:50px;
+	line-height:50px;
+	background:rgb(240,201,82);
+	border-radius:5px;
+	font-size:18px;
+	margin-top:15px;
+	text-align:center;
 }
 .order-time{
 	width:100%;
