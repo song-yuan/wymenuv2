@@ -69,14 +69,18 @@
 }
 .order-product-left{
 	float:left;
-	width:35%;
+	width:140px;
 	height:140px;
 	overflow:hidden;
 }
 .order-product-right{
 	float:left;
-	width:65%;
+	width:-moz-calc(100% - 140px - 20px);
+	width:-webkit-calc(100% - 140px - 20px);
+	width:-o-calc(100% - 140px - 20px);
+	width:calc(100% - 140px - 20px);
 	height:140px;
+	padding:0 10px;
 }
 
 .right-up{
@@ -86,15 +90,15 @@
 
 .right-up-left{
 	float:left;
-	width:40%;
+	width:auto;
 	height:100%;
 	text-align:center;
 	font-size:18px;
 }
 
 .right-up-right{
-	float:left;
-	width:60%;
+	float:right;
+	width:auto;
 	height:100%;
 	text-align:right;
 	font-size:16px;
@@ -108,15 +112,15 @@
 
 .right-down-left{
 	float:left;
-	width:60%;
+	width:auto;
 	height:100%;
 	text-align:center;
 	font-size:16px;
 }
 
 .right-down-right{
-	float:left;
-	width:40%;
+	float:right;
+	width:auto;
 	height:50%;
 	text-align:right;
 	font-size:16px;
