@@ -9,7 +9,7 @@
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $staff_no
- * @property string $company_id
+ * @property string $dpid
  * @property string $email
  * @property string $auth_key
  * @property string $role
@@ -48,10 +48,10 @@ class User extends CActiveRecord
 			array('password_hash', 'length','min'=>6, 'max'=>60),
 			array('password_reset_token, email, auth_key', 'length', 'max'=>255),
 			array('staff_no', 'length', 'max'=>20),
-			array('company_id, role, status, create_at', 'length', 'max'=>10),
+			array('dpid, role, status, create_at', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, username, password_hash, password_reset_token, staff_no, company_id, email, auth_key, role, status, create_at, update_at', 'safe', 'on'=>'search'),
+			array('lid, username, password_hash, password_reset_token, staff_no, dpid, email, auth_key, role, status, create_at, update_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,7 +63,7 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'company' => array(self::BELONGS_TO , 'Company' , 'company_id'),
+				'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 		);
 	}
 
@@ -107,12 +107,12 @@ class User extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
+		$criteria->compare('lid',$this->lid,true);
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password_hash',$this->password_hash,true);
 		$criteria->compare('password_reset_token',$this->password_reset_token,true);
 		$criteria->compare('staff_no',$this->staff_no,true);
-		$criteria->compare('company_id',$this->company_id,true);
+		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('auth_key',$this->auth_key,true);
 		$criteria->compare('role',$this->role,true);

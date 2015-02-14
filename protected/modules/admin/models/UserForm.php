@@ -5,7 +5,7 @@ class UserForm extends CFormModel
 	public $username ;
 	public $password_old ;
 	public $password ;
-	public $company_id ;
+	public $dpid ;
 	public $mobile ;
 	public $staff_no ;
 	public $email ;
@@ -19,8 +19,8 @@ class UserForm extends CFormModel
 				array('username, password , mobile , role', 'required'),
 				array('username' , 'length' , 'min' => 5 , 'max' => 20),
 				array('password' , 'length' , 'min' => 6 , 'max' => 16),
-				array('company_id' , 'numerical'),
-				array('id , staff_no , email , password_old' , 'safe'),
+				array('dpid' , 'numerical'),
+				array('lid , staff_no , email , password_old' , 'safe'),
 		);
 	}
 	/**
@@ -32,7 +32,7 @@ class UserForm extends CFormModel
 				'id' => 'ID',
 				'username' => '用户名',
 				'password' => '密码',
-				'company_id'=>'公司名称',
+				'dpid'=>'公司名称',
 				'mobile' => '手机号',
 				'staff_no' => '员工号',
 				'email' => '电子邮箱',
@@ -42,28 +42,28 @@ class UserForm extends CFormModel
 	public function find($condition , $params) {
 		$model = User::model()->find($condition , $params) ;
 		
-		$this->id = $model->id ;
+		$this->id = $model->lid ;
 		$this->username = $model->username;
 		$this->mobile= $model->mobile;
 		$this->staff_no = $model->staff_no ;
 		$this->email = $model->email ;
 		$this->role = $model->role ;
-		$this->company_id = $model->company_id ;
+		$this->dpid = $model->dpid ;
 		$this->password = $this->password_old = $model->password_hash ;
 	}
 	public function save() {
 		if($this->id) {
-			$model = User::model()->find('id=:id' , array(':id' => $this->id));
+			$model = User::model()->find('lid=:id' , array(':id' => $this->id));
 		} else {
 			$model = new User() ;
 		}
-		$model->id = $this->id;
+		$model->lid = $this->id;
 		$model->username = $this->username;
 		$model->mobile = $this->mobile ;
 		$model->staff_no = $this->staff_no;
 		$model->email = $this->email;
 		$model->role = $this->role ;
-		$model->company_id = $this->company_id ;
+		$model->dpid = $this->dpid ;
 		$model->status = 1;
 		if($this->password_old != $this->password) {
 			$model->password_hash = $this->password ;

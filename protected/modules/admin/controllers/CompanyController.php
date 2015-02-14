@@ -3,17 +3,17 @@ class CompanyController extends BackendController
 {
 	public function actions() {
 		return array(
-				'upload'=>array(
-						'class'=>'application.extensions.swfupload.SWFUploadAction',
-						//注意这里是绝对路径,.EXT是文件后缀名替代符号
-						'filepath'=>Helper::genFileName().'.EXT',
-						//'onAfterUpload'=>array($this,'saveFile'),
-				)
+			'upload'=>array(
+				'class'=>'application.extensions.swfupload.SWFUploadAction',
+				//注意这里是绝对路径,.EXT是文件后缀名替代符号
+				'filepath'=>Helper::genFileName().'.EXT',
+				//'onAfterUpload'=>array($this,'saveFile'),
+			)
 		);
 	}
 	public function actionIndex(){
 		$criteria = new CDbCriteria;
-		$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? : 'company_id='.Yii::app()->user->companyId ;
+		$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? '' : 'company_id='.Yii::app()->user->companyId ;
 		
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -30,7 +30,7 @@ class CompanyController extends BackendController
 			$this->redirect(array('company/index'));
 		}
 		$model = new Company();
-		$model->create_time = time();
+		$model->create_at = time();
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Company');
 			if($model->save()){
@@ -69,7 +69,7 @@ class CompanyController extends BackendController
 		
 	}
 	private function getPrinterList(){
-		$printers = Printer::model()->findAll('company_id=:companyId',array(':companyId'=>$this->companyId)) ;
+		$printers = Printer::model()->findAll('dpid=:dpid',array(':dpid'=>$this->companyId)) ;
 		return CHtml::listData($printers, 'printer_id', 'name');
 	}
 	

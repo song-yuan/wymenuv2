@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'企业WIFI管理','subhead'=>'企业WIFI列表','breadcrumbs'=>array(array('word'=>'企业管理','url'=>$this->createUrl('company/index')),array('word'=>'添加企业WIFI','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'店铺WIFI管理','subhead'=>'店铺WIFI列表','breadcrumbs'=>array(array('word'=>'店铺管理','url'=>$this->createUrl('company/index')),array('word'=>'添加店铺WIFI','url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>公司WIFI列表</div>
+					<div class="caption"><i class="fa fa-globe"></i>店铺WIFI列表</div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('companyWifi/create' , array('companyId' => $companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<div class="btn-group">
@@ -53,8 +53,11 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>公司名称</th>
+								<th>店铺名称</th>
 								<th>macId</th>
+								<th>wifi名称</th>
+								<th>最大接入数</th>
+								<th>当前接入数</th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -64,6 +67,9 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->id;?>" name="ids[]" /></td>
 								<td><?php echo $model->company->company_name;?></td>
 								<td><?php echo $model->macid;?></td>
+								<td><?php echo $model->wifi_name;?></td>
+								<td><?php echo $model->max_num;?></td>
+								<td><?php echo $model->current_num;?></td>
 																
 								<td class="center">
 									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('companyWifi/update' , array('id' => $model->id , 'companyId' => $model->company_id));?>">编辑</a>

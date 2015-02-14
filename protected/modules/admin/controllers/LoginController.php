@@ -19,7 +19,7 @@ class LoginController extends BackendController
 			//var_dump($model);exit;
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login()) {
-				$this->redirect('default/index');
+				$this->redirect(array('default/index'));
 			}
 		}
 		$this->render('index',array('model' => $model));

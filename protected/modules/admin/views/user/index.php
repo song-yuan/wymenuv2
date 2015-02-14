@@ -66,15 +66,15 @@
 						<?php if($models):?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->id;?>" name="ids[]" /></td>
-								<td><a href="<?php echo $this->createUrl('user/update',array('id' => $model->id , 'company_id' => $model->company_id));?>" ><?php echo $model->username;?></a></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
+								<td><a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid , 'company_id' => $model->dpid));?>" ><?php echo $model->username;?></a></td>
 								<td ><?php echo $model->company ? $model->company->company_name : '' ;?></td>
 								<td ><?php echo $this->roles[$model->role];?></td>
 								<td ><?php echo $model->staff_no;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->email;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('user/update',array('id' => $model->id));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>

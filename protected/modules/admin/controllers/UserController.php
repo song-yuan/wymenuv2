@@ -18,8 +18,8 @@ class UserController extends BackendController
 	public function actionIndex() {
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
-		$criteria->with = 'company' ;
-		$criteria->condition = (Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.company_id='.Yii::app()->user->companyId.' and ').'t.status=1' ;
+		//$criteria->with = 'company' ;
+		$criteria->condition = (Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->dpid.' and ').'t.status=1' ;
 		
 		$pages = new CPagination(User::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -54,7 +54,7 @@ class UserController extends BackendController
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 		$model = new UserForm();
-		$model->find('id=:id and status=1', array(':id' => $id));
+		$model->find('lid=:id and status=1', array(':id' => $id));
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');

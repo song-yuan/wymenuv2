@@ -11,15 +11,15 @@
 									<div class="form-group  <?php if($model->hasErrors('company_id')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'company_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'company_id', array('0' => '-- 请选择 --') + Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('company_id')));?>
-											<?php echo $form->error($model, 'company_id' )?>
+											<?php echo $form->dropDownList($model, 'dpid', array('0' => '-- 请选择 --') + Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->error($model, 'dpid' )?>
 										</div>
 									</div>
 								<?php endif;?>
 									<div class="form-group <?php if($model->hasErrors('role')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'role',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'role', $this->roles ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('company_id')));?>
+											<?php echo $form->dropDownList($model, 'role', $this->roles ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
 											<?php echo $form->error($model, 'role' )?>
 										</div>
 									</div>

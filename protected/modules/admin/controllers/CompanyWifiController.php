@@ -4,7 +4,7 @@ class CompanyWifiController extends BackendController
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
-		$criteria->with = 'company' ;
+		//$criteria->with = 'company' ;
 		$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.company_id='.Yii::app()->user->companyId ;
 		
 		$pages = new CPagination(CompanyWifi::model()->count($criteria));
@@ -21,7 +21,7 @@ class CompanyWifiController extends BackendController
 	public function actionCreate(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$model = new CompanyWifi() ;
-		$model->company_id = $companyId ;
+		$model->dpid = $companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('CompanyWifi');
 			if($model->save()){
