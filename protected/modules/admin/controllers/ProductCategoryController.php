@@ -2,24 +2,24 @@
 class ProductCategoryController extends BackendController
 {
 	public function beforeAction($action) {
-		parent::beforeAction($action);
-		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
-			$this->redirect(array('company/index'));
-		}
-		return true;
+//		parent::beforeAction($action);
+//		if(!$this->companyId) {
+//			Yii::app()->user->setFlash('error' , '请选择公司');
+//			$this->redirect(array('company/index'));
+//		}
+//		return true;
 	}
 	public function actionIndex(){
-		//$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
-		$criteria->condition =  't.delete_flag=0 and t.company_id='.$this->companyId ;
-		$criteria->order = ' tree,category_id asc ';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
+		$criteria->order = ' tree,dpid asc ';
 		
 		$models = ProductCategory::model()->findAll($criteria);
 		
 		$id = Yii::app()->request->getParam('id',0);
-		$expandModel = ProductCategory::model()->find('category_id=:id and delete_flag=0',array(':id'=>$id));
+		$expandModel = ProductCategory::model()->find('lid=:id and delete_flag=0',array(':id'=>$id));
 		$expandNode = $expandModel?explode(',',$expandModel->tree):array(0);
 		
 		$this->render('index',array(

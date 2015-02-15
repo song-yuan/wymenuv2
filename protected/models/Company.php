@@ -13,7 +13,7 @@
  * @property string $email
  * @property string $address
  * @property string $homepage
- * @property integer $create_time
+ * @property integer $create_at
  * @property integer $delete_flag
  * @property string $description
  * @property string $printer_id
@@ -36,7 +36,7 @@ class Company extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('create_time,printer_id, delete_flag', 'numerical', 'integerOnly'=>true),
+			array('create_at,printer_id, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('company_name, email', 'length', 'max'=>50),
 			array('logo, homepage', 'length', 'max'=>255),
 			array('contact_name, mobile, telephone', 'length', 'max'=>20),
@@ -50,7 +50,7 @@ class Company extends CActiveRecord
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('company_id, company_name, logo, contact_name, mobile, telephone, email, homepage, create_time, delete_flag, description', 'safe', 'on'=>'search'),
+			array('company_id, company_name, logo, contact_name, mobile, telephone, email, homepage, create_at, delete_flag, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,7 +80,7 @@ class Company extends CActiveRecord
 			'email' => '电子邮箱',
 			'address'=>'公司地址',
 			'homepage' => '公司主页',
-			'create_time' => '创建时间',
+			'create_at' => '创建时间',
 			'delete_flag' => '状态',
 			'description' => '公司描述',
 			'printer_id' => '打印机ID',
@@ -113,7 +113,7 @@ class Company extends CActiveRecord
 		$criteria->compare('telephone',$this->telephone,true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('homepage',$this->homepage,true);
-		$criteria->compare('create_time',$this->create_time);
+		$criteria->compare('create_at',$this->create_at);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('printer_id',$this->printer_id,true);

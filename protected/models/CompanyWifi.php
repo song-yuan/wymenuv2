@@ -43,7 +43,7 @@ class CompanyWifi extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'company' => array(self::BELONGS_TO , 'Company' , 'company_id'),
+			'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 		);
 	}
 
@@ -53,9 +53,12 @@ class CompanyWifi extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
-			'company_id' => 'Company',
+			'lid' => 'ID',
+			'dpid' => 'Company',
 			'macid' => '公司WIFI MAC ID',
+			'wifi_name' => 'wifi名称',
+			'max_num' => '最大接入数',
+			'current_num' => '现接入数'
 		);
 	}
 

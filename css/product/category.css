@@ -1,3 +1,11 @@
+.promptumenu_window.float {
+	width: 100%;
+	 position: fixed;
+	  z-index: 999; 
+	  top: 0; 
+	  left: 0;
+	  background:rgb(255,255,255);
+	}	
 .promptumenu_nav{
 	z-index: 5;
 	position: absolute;
@@ -32,6 +40,9 @@
 	padding-left:10px;
 	padding-right:10px;
 }
+.promptu-menu >li:first-child {
+	min-width:180px;
+}
 ul .parents{
 	color:rgb(217,217,217);
 	font-size:30px;
@@ -44,5 +55,6 @@ li ul{
 	height:200px;
 	margin-left:10px;
 }
-ul .child{width:30%;with:auto;float:left;font-size:24px;text-align:left;padding:0 10px 0 0;margin-bottom:10px;}
+ul .child.float{width:30%;with:auto;float:left;font-size:20px;text-align:left;padding:0 10px 0 0;margin-bottom:10px;}
+ul .child{width:100%;font-size:20px;text-align:left;padding:0 10px 0 0;margin-bottom:10px;}
 li .active{background:rgb(240,201,82);}

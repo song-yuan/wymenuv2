@@ -14,6 +14,7 @@
 	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');  		 	
 ?>
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId));?>
+	<script type="text/javascript" src="../js/product/product.js"></script>
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
@@ -28,13 +29,13 @@
     <!--content结束-->
     <div class="bottom">
     	<div class="bottom-left">
-    		<span>总价 :<span><span class="total-price">45.00<span>
+    		<span>总价 :</span><span class="total-price">0.00</span>
     	</div>
     	<div class="bottom-middle">
-    		<div class="product-nums">2</div>
+    		<div class="product-nums">0</div>
     	</div>
     	<div class="bottom-right">
-    		<button class="see-order">查看订单</button>
+    		<a href="orderList"><button class="see-order">查看订单</button></a>
     	</div>
     	<div class="clear"></div>
     </div>
@@ -48,56 +49,4 @@
 		catgory = cat;
 		getPicList(type,catgory);
 	}	
- $(document).ready(function(){
-    $('.moreCate').click(function(){
-    	if($('.category').is(":hidden")){
-    		$('.category').css('display','block');
-    		$(this).css('background','url(img/product/up.png) no-repeat 55px 10px');
-    	}else{
-    		$('.category').css('display','none');
-    		$(this).css('background','url(img/product/down.png) no-repeat 52px 10px');
-    	}
-    });
-    $('#forum_list').on('click','#addCart',function(){
-    	var _this = $(this);
-    	var isAddOrder = 1;
-    	var productId = _this.attr('product-id');
-    	var type = _this.attr('type');
-    	if(_this.hasClass('hasorder')){
-    		isAddOrder = 0;
-    	}
- 		$.ajax({
- 			url:'<?php echo $this->createUrl('/product/createCart');?>',
- 			data:{
- 					isAddOrder:isAddOrder,
-					productId:productId,
-					type:type
-				},
- 			type:'POST',
- 			success:function(msg){
- 				if(msg){
-					if(isAddOrder){
-						_this.addClass('hasorder');
-					}else{
-						_this.removeClass('hasorder');
-					}
- 				}
- 			}
- 		});
-    });
-     $('#forum_list').on('click','#favorite',function(){
-     	var _this = $(this);
-     	var productId = _this.attr('product-id');
-     	var lebalObj = _this.find('.favorite-num-right');
-     	$.ajax({
- 			url:'<?php echo $this->createUrl('/product/favorite');?>/id/'+productId,
- 			success:function(msg){
- 				if(msg){
-						var num = parseInt(lebalObj.html());
-						lebalObj.html(num + 1);
- 				}
- 			}
-       });
-     });
- });
 </script>

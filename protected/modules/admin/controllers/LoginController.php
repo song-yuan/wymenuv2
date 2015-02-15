@@ -19,7 +19,7 @@ class LoginController extends BackendController
 			//var_dump($model);exit;
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login()) {
-				$this->redirect(Yii::app()->params['admin_home_url']);
+				$this->redirect(array('default/index'));
 			}
 		}
 		$this->render('index',array('model' => $model));
@@ -27,7 +27,7 @@ class LoginController extends BackendController
 	public function actionLogout()
 	{
 		Yii::app()->user->logout();
-		$this->redirect(Yii::app()->params['admin_return_url']);
+		$this->redirect('index');
 	}
 	
 	

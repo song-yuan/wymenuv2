@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'企业管理','subhead'=>'企业列表','breadcrumbs'=>array(array('word'=>'企业管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'店铺管理','subhead'=>'店铺列表','breadcrumbs'=>array(array('word'=>'店铺管理','url'=>''))));?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -30,7 +30,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>公司列表</div>
+					<div class="caption"><i class="fa fa-globe"></i>店铺列表</div>
 					<div class="actions">
 						<?php if(Yii::app()->user->role == User::POWER_ADMIN):?>
 						<a href="<?php echo $this->createUrl('company/create');?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
@@ -52,7 +52,7 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th>ID</th>
-								<th>公司名称</th>
+								<th>店铺名称</th>
 								<th >logo</th>
 								<th>联系人</th>
 								<th >手机</th>
