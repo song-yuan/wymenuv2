@@ -112,20 +112,21 @@
 }
 .productbuy{
 	width:100%;
-	height:50px;
+	height:30px;
 	top:0;
 	left:0;
 	position:absolute;
 	background:rgb(46,46,46);
 	color:white;
-	font-size:30px;
+	font-size:16px;
 	text-align:left;
 	opacity:0.3;
 }
 .inmiddle{
 	width:115px;
-	height:30px;
-	padding:10px 20px;
+	height:20px;
+	padding:5px 5px;
+        text-align: center;
 }
 .num{
 	width:48px;
@@ -179,14 +180,10 @@
 	font-weight:800;
 }
 .subject-left{
-	width:50%;
-	height:50px;
-	float:left;
+	height:30px;
 }
 .subject-right{
-	width:50%;
-	height:50px;
-	float:left;
+	height:30px;
 }
 .price-up{
 	padding:5px 10px;
@@ -196,9 +193,9 @@
 .price-down{
 	height:30px;
 	line-height:30px;
-	margin-top:20px;
+        font-size:18px;
 }
-.addinfo .view{
+ .view{
 	width:40%;
 	height:80px;
 	border-top:1px dashed rgb(246,246,246);
@@ -224,7 +221,7 @@
 }
 .order-num{
 	height:100%;
-	width:25px;
+	width:30px;
 	float:left;
 	background:url(../img/ordernum.png)  center center no-repeat;
 }
@@ -232,7 +229,7 @@
 	height:100%;
 	widht:68%;
 	float:left;
-	line-height:50px;
+	line-height:30px;
 	padding-left:2%;
 }
 .favorite-num{
@@ -245,7 +242,7 @@
 	height:100%;
 	widht:68%;
 	float:left;
-	line-height:50px;
+	line-height:30px;
 	padding-left:2%;
 }
 #content{
@@ -254,12 +251,12 @@
 .bottom{
 	position:fixed;
 	width:100%;
-	height:100px;
+	height:50px;
 	background:rgb(46,46,46);
 	left:0;
 	bottom:0;
 	color:white;
-	font-size:20px;
+	font-size:16px;
 }
 
 .bottom >span{
@@ -271,9 +268,9 @@
 
 .bottom-left{
 	float:left;
-	width:45%;
+	width:40%;
 	height:100%;
-	line-height:100px;
+	line-height:50px;
 }
 .bottom-middle{
 	text-align:center;
@@ -282,28 +279,28 @@
 	height:100%;
 }
 .product-nums{
-	width:50px;
-	height:50px;
-	border-radius:25px;
+	width:40px;
+	height:40px;
+	border-radius:20px;
 	background:rgb(255,255,255);
 	color:rgb(46,46,46);
-	margin:25px auto;
-	line-height:50px;
+	margin:5px auto;
+	line-height:40px;
 }
 .bottom-right{
 	float:left;
-	width:45%;
+	width:50%;
 	height:100%;
-	line-height:100px;
+	line-height:50px;
 }
 .see-order{
 	background:rgb(239,68,77);
-	height:50px;
+	height:30px;
 	width:80%;
-	font-size:20px;
+	font-size:16px;
 	color:white; 
 	border:none;
-	border-radius:10px;	
+	border-radius:8px;	
 	margin-left:20%;
 }
 a{

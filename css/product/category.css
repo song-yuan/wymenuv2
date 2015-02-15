@@ -35,26 +35,26 @@
 	background: url(pagelink.png) 0 0 no-repeat;
 }
 .promptu-menu >li {
-	min-width:200px;
+	min-width:150px;
 	max-width:500px;
-	padding-left:10px;
-	padding-right:10px;
+	padding-left:5px;
+	padding-right:5px;
 }
 .promptu-menu >li:first-child {
-	min-width:180px;
+	min-width:140px;
 }
 ul .parents{
 	color:rgb(217,217,217);
-	font-size:30px;
-	padding-top:10px;
-	padding-bottom:10px;
+	font-size:15px;
+	padding-top:3px;
+	padding-bottom:3px;
 }
 
 li ul{
 	border-right:2px dashed rgb(191,191,191);
-	height:200px;
-	margin-left:10px;
+	height:140px;
+	margin-left:5px;
 }
-ul .child.float{width:30%;with:auto;float:left;font-size:20px;text-align:left;padding:0 10px 0 0;margin-bottom:10px;}
-ul .child{width:100%;font-size:20px;text-align:left;padding:0 10px 0 0;margin-bottom:10px;}
+ul .child.float{width:30%;with:auto;float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
+ul .child{width:100%;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
 li .active{background:rgb(240,201,82);}

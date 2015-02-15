@@ -2955,3 +2955,92 @@ Stack trace:
 REQUEST_URI=/wymenuv2/admin/img/bg/4.jpg
 HTTP_REFERER=http://192.168.123.85/wymenuv2/admin/login
 ---
+2015/02/15 05:12:29 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "css/product/hand.ico"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('css/product/han...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/css/product/hand.ico
+HTTP_REFERER=http://192.168.63.111/wymenuv2/product/index
+---
+2015/02/15 05:12:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "css/product/hand.ico"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('css/product/han...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/css/product/hand.ico
+HTTP_REFERER=http://localhost/wymenuv2/css/product/category.css
+---
+2015/02/15 05:31:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "authTpc/WebAuth/MenuAuth/portal"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('authTpc/WebAuth...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/authTpc/WebAuth/MenuAuth/portal
+---
+2015/02/15 13:08:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "css/product/hand.ico"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('css/product/han...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/css/product/hand.ico
+HTTP_REFERER=http://localhost/wymenuv2/css/product/category.css
+---
+2015/02/15 13:17:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "css/product/hand.ico"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('css/product/han...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/css/product/hand.ico
+HTTP_REFERER=http://localhost/wymenuv2/css/product/category.css
+---
+2015/02/15 13:19:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "css/product/hand.ico"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('css/product/han...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/css/product/hand.ico
+HTTP_REFERER=http://localhost/wymenuv2/css/product/category.css
+---
+2015/02/15 13:21:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "css/product/hand.ico"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('css/product/han...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/css/product/hand.ico
+HTTP_REFERER=http://localhost/wymenuv2/css/product/category.css
+---
+2015/02/15 13:23:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "css/product/hand.ico"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('css/product/han...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/css/product/hand.ico
+HTTP_REFERER=http://localhost/wymenuv2/css/product/category.css
+---
+2015/02/15 13:24:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "css/product/hand.ico"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('css/product/han...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/css/product/hand.ico
+HTTP_REFERER=http://localhost/wymenuv2/css/product/category.css
+---
+2015/02/15 13:26:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message '无法解析请求 "css/product/hand.ico"。' in C:\wamp\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 C:\wamp\www\framework\web\CWebApplication.php(141): CWebApplication->runController('css/product/han...')
+#1 C:\wamp\www\framework\base\CApplication.php(169): CWebApplication->processRequest()
+#2 C:\wamp\www\wymenuv2\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/wymenuv2/css/product/hand.ico
+HTTP_REFERER=http://localhost/wymenuv2/css/product/category.css
+---

@@ -1,8 +1,8 @@
 .top{
 	width:100%;
-	height:80px;
-	line-height:80px;
-	background:rgb(240,201,82) url(../img/product/back.png) no-repeat 20px 15px;
+	height:50px;
+	line-height:50px;
+	background:rgb(240,201,82) url(../img/product/back.png) no-repeat 20px 2px;
 }
 .back{
 	margin-left:50px;
@@ -11,10 +11,10 @@
 	font-size:20px;
 }
 .create-order{
-	width:128px;
-	height:48px;
+	width:100px;
+	height:40px;
 	margin-right:20px;
-	margin-top:15px;
+	margin-top:5px;
 	font-size:20px;
 	float:right;
 	border-radius:10px;
@@ -23,8 +23,8 @@
 }
 .order-top{
 	width:100%;
-	height:80px;
-	line-height:80px;
+	height:40px;
+	line-height:40px;
 	font-size:18px;
 	border-bottom:2px solid rgb(205,202,202);
 }
@@ -40,8 +40,8 @@
 }
 .order-time{
 	width:100%;
-	height:80px;
-	line-height:80px;
+	height:30px;
+	line-height:30px;
 	font-size:15px;
 	border-bottom:1px solid rgb(54,53,53);
 }
@@ -63,7 +63,7 @@
 }
 
 .order-product{
-	padding:10px 20px;
+	padding:10px 5px;
 	font-size:16px;
 	border-bottom:1px dashed rgb(149,149,149);
 }
@@ -85,7 +85,7 @@
 
 .right-up{
 	width:100%;
-	height:50%;
+	height:30%;
 }
 
 .right-up-left{
@@ -107,7 +107,7 @@
 
 .right-down{
 	width:100%;
-	height:50%;
+	height:30%;
 }
 
 .right-down-left{
@@ -124,10 +124,13 @@
 	height:50%;
 	text-align:right;
 	font-size:16px;
-	padding-top:15px;
+}
+.right-middle{
+    padding: 0 5px;
+    height:40%;
 }
 
-.right-down-left input{
+.right-middle input{
 	width: 30px;
 	height: 15px;
 	padding: 10px;
@@ -140,7 +143,7 @@
 	vertical-align: middle;
 }
 
-.right-down-left span{
+.right-middle span{
 	text-align:center;
 	width:15px;
 	height:15px;
