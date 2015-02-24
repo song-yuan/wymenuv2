@@ -12,6 +12,9 @@ class UserForm extends CFormModel
 	public $role ;
 	public $status = 1;
 	
+	public function tableName() {
+		return 'nb_user';
+	}
 	public function rules()
 	{
 		return array(
@@ -56,8 +59,8 @@ class UserForm extends CFormModel
 			$model = User::model()->find('lid=:id' , array(':id' => $this->id));
 		} else {
 			$model = new User() ;
+			$model->lid = $this->getPkValue();
 		}
-		$model->lid = $this->id;
 		$model->username = $this->username;
 		$model->mobile = $this->mobile ;
 		$model->staff_no = $this->staff_no;
@@ -81,6 +84,11 @@ class UserForm extends CFormModel
 			}
 			return false;
 		}
+	}
+	public function getPkValue() {
+		$sql = 'SELECT NEXTVAL("'.$this->tableName().'") AS id';
+		$row = Yii::app()->db->createCommand($sql)->queryRow();
+		return $row ? $row['id'] : 1 ;
 	}
 	
 }

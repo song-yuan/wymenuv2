@@ -35,7 +35,7 @@ class UserController extends BackendController
 	public function actionCreate() {
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$model = new UserForm() ;
-		$model->company_id = $companyId ;
+		$model->dpid = $companyId ;
 		$model->status = 1;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
@@ -73,13 +73,13 @@ class UserController extends BackendController
 		}
 		$ids = Yii::app()->request->getPost('ids');
 		if(!empty($ids)) {
-				foreach ($ids as $id) {
-					$model = User::model()->find('id=:id' , array(':id' => $id)) ;
-					if($model) {
-						$model->saveAttributes(array('status'=>0));
-					}
+			foreach ($ids as $id) {
+				$model = User::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id,':companyId'=>$companyId)) ;
+				if($model) {
+					$model->saveAttributes(array('status'=>0));
 				}
-				$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
+			}
+			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
