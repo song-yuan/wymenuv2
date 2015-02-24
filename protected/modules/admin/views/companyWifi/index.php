@@ -64,7 +64,7 @@
 						<tbody>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->id;?>" name="ids[]" /></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td><?php echo $model->company->company_name;?></td>
 								<td><?php echo $model->macid;?></td>
 								<td><?php echo $model->wifi_name;?></td>
@@ -72,7 +72,7 @@
 								<td><?php echo $model->current_num;?></td>
 																
 								<td class="center">
-									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('companyWifi/update' , array('id' => $model->id , 'companyId' => $model->company_id));?>">编辑</a>
+									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('companyWifi/update' , array('id' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>
