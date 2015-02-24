@@ -99,4 +99,10 @@ class CompanyWifi extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	public function getPkValue() {
+		$sql = 'SELECT NEXTVAL("'.$this->tableName().'") AS id';
+		$row = Yii::app()->db->createCommand($sql)->queryRow();
+		return $row ? $row['id'] : 1 ;
+	}
+	
 }

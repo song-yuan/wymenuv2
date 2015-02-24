@@ -30,7 +30,7 @@ class CompanyController extends BackendController
 			$this->redirect(array('company/index'));
 		}
 		$model = new Company();
-		$model->create_at = time();
+		$model->create_at = date('Y-m-d H:i:s');
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Company');
 			if($model->save()){
@@ -48,7 +48,7 @@ class CompanyController extends BackendController
 	}
 	public function actionUpdate(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$model = Company::model()->find('company_id=:companyId' , array(':companyId' => $companyId)) ;
+		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $companyId)) ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Company');
 			//var_dump($model->attributes);exit;

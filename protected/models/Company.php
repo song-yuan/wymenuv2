@@ -4,7 +4,7 @@
  * This is the model class for table "nb_company".
  *
  * The followings are the available columns in table 'nb_company':
- * @property string $company_id
+ * @property string $dpid
  * @property string $company_name
  * @property string $logo
  * @property string $contact_name
@@ -36,7 +36,7 @@ class Company extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('create_at,printer_id, delete_flag', 'numerical', 'integerOnly'=>true),
+			array('printer_id, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('company_name, email', 'length', 'max'=>50),
 			array('logo, homepage', 'length', 'max'=>255),
 			array('contact_name, mobile, telephone', 'length', 'max'=>20),
@@ -50,7 +50,7 @@ class Company extends CActiveRecord
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('company_id, company_name, logo, contact_name, mobile, telephone, email, homepage, create_at, delete_flag, description', 'safe', 'on'=>'search'),
+			array('dpid, company_name, logo,token, contact_name, mobile, telephone, email, homepage, create_at, delete_flag, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,7 +71,7 @@ class Company extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'company_id' => 'Company',
+			'dpid' => 'Company',
 			'company_name' => '公司名称',
 			'logo' => 'Logo',
 			'contact_name' => '联系人',
@@ -105,7 +105,7 @@ class Company extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('company_id',$this->company_id,true);
+		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('company_name',$this->company_name,true);
 		$criteria->compare('logo',$this->logo,true);
 		$criteria->compare('contact_name',$this->contact_name,true);

@@ -20,10 +20,13 @@ class CompanyWifiController extends BackendController
 	}
 	public function actionCreate(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		
 		$model = new CompanyWifi() ;
 		$model->dpid = $companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('CompanyWifi');
+			$model->create_at = date('Y-m-d H:i:s');
+			$model->lid = $model->getPkValue();
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '添加成功');
 				$this->redirect(array('companyWifi/index' , 'companyId' => $companyId));
@@ -34,7 +37,7 @@ class CompanyWifiController extends BackendController
 	public function actionUpdate(){
 		$id = Yii::app()->request->getParam('id');
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$model = CompanyWifi::model()->find('id=:id and company_id=:companyId' , array(':id' => $id , ':companyId' => $companyId));
+		$model = CompanyWifi::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId));
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('CompanyWifi');
 			if($model->save()){
@@ -49,7 +52,7 @@ class CompanyWifiController extends BackendController
 		$ids = Yii::app()->request->getPost('ids');
 		if(!empty($ids)) {
 				foreach ($ids as $id) {
-					$model = CompanyWifi::model()->find('id=:id and company_id=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
+					$model = CompanyWifi::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 					if($model) {
 						$model->delete();
 					}
