@@ -52,6 +52,7 @@ class SWFUploadAction extends CAction
 	         throw new Exception('文件路径没有指定');
 	    }
 	    $this->filepath = $this->genDir().'/'.$this->filepath;
+//	    var_dump($this->filepath);exit;
 	    //删除上一个临时文件
 	    /*if(isset($_SESSION['temp_file'])&&is_file($_SESSION['temp_file'])&&(intval($_POST['fileQuenueLimit']) == 1))
         {
@@ -88,7 +89,7 @@ class SWFUploadAction extends CAction
 	     {
 	           mkdir(Yii::app()->params['uploadDir'].$filedir, 0777,true); 
 	     }
-	     $relativePath = substr($filedir,strpos($filedir,'../')+1).'/'.$filename;
+	     $relativePath = Yii::app()->request->baseUrl.'/'.substr($filedir,strpos($filedir,'../')+1).'/'.$filename;
 	     
 	     $file->saveAs($this->filepath);
 	     

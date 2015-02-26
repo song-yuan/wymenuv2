@@ -26,12 +26,12 @@ class CompanyWifi extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('company_id,macid' , 'required'),
-			array('company_id', 'length', 'max'=>10),
+			array('dpid,macid' , 'required'),
+			array('dpid', 'length', 'max'=>10),
 			array('macid', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, company_id, macid', 'safe', 'on'=>'search'),
+			array('id, dpid, macid', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,7 +81,7 @@ class CompanyWifi extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('company_id',$this->company_id,true);
+		$criteria->compare('company_id',$this->dpid,true);
 		$criteria->compare('macid',$this->macid,true);
 
 		return new CActiveDataProvider($this, array(
@@ -99,4 +99,10 @@ class CompanyWifi extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	public function getPkValue() {
+		$sql = 'SELECT NEXTVAL("'.$this->tableName().'") AS id';
+		$row = Yii::app()->db->createCommand($sql)->queryRow();
+		return $row ? $row['id'] : 1 ;
+	}
+	
 }

@@ -66,15 +66,15 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->company_id;?>" name="companyIds[]" /></td>
-								<td ><?php echo $model->company_id;?></td>
-								<td><a href="<?php echo $this->createUrl('company/update',array('companyId' => $model->company_id));?>" ><?php echo $model->company_name;?></a></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /></td>
+								<td ><?php echo $model->dpid;?></td>
+								<td><a href="<?php echo $this->createUrl('company/update',array('companyId' => $model->dpid));?>" ><?php echo $model->company_name;?></a></td>
 								<td ><img width="100" src="<?php echo $model->logo;?>" /></td>
 								<td ><?php echo $model->contact_name;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->telephone;?></td>
 								<td ><?php echo $model->email;?></td>
-								<td><?php echo date('Y-m-d H:i:s',$model->create_time);?></td>
+								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<div class="btn-group">
 										<a class="btn green" href="#" data-toggle="dropdown">
@@ -82,12 +82,12 @@
 										<i class="fa fa-angle-down"></i>
 										</a>
 										<ul class="dropdown-menu pull-right">
-											<li><a href="<?php echo $this->createUrl('company/update',array('companyId' => $model->company_id));?>">编辑</a></li>
-											<li><a href="<?php echo $this->createUrl('companyWifi/index' , array('companyId' => $model->company_id));?>">WIFI</a></li>
-											<li><a href="<?php echo $this->createUrl('site/index',array('companyId' => $model->company_id));?>">位置</a></li>
-											<li><a href="<?php echo $this->createUrl('order/index',array('companyId' => $model->company_id));?>">订单</a></li>
-											<li><a href="<?php echo $this->createUrl('product/index',array('companyId' => $model->company_id));?>">产品</a></li>
-											<li><a href="<?php echo $this->createUrl('user/index',array('companyId' => $model->company_id));?>">管理员</a></li>
+											<li><a href="<?php echo $this->createUrl('company/update',array('companyId' => $model->dpid));?>">编辑</a></li>
+											<li><a href="<?php echo $this->createUrl('companyWifi/index' , array('companyId' => $model->dpid));?>">WIFI</a></li>
+											<li><a href="<?php echo $this->createUrl('site/index',array('companyId' => $model->dpid));?>">位置</a></li>
+											<li><a href="<?php echo $this->createUrl('order/index',array('companyId' => $model->dpid));?>">订单</a></li>
+											<li><a href="<?php echo $this->createUrl('product/index',array('companyId' => $model->dpid));?>">产品</a></li>
+											<li><a href="<?php echo $this->createUrl('user/index',array('companyId' => $model->dpid));?>">管理员</a></li>
 										</ul>
 									</div>
 									

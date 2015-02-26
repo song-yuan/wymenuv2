@@ -10,7 +10,7 @@ class Helper
 	}
 	static public function genCompanyOptions() {
 		$companies = Company::model()->findAll('delete_flag=0') ;
-		return CHtml::listData($companies, 'company_id', 'company_name');
+		return CHtml::listData($companies, 'dpid', 'company_name');
 	}
 	//生成文件名字
 	static public function genFileName(){
