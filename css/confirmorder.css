@@ -1,8 +1,8 @@
 .top{
 	width:100%;
-	height:80px;
-	line-height:80px;
-	background:rgb(240,201,82) url(../img/product/back.png) no-repeat 20px 15px;
+	height:50px;
+	line-height:50px;
+	background:rgb(240,201,82) url(../img/product/back.png) no-repeat 20px 2px;
 }
 .back{
 	margin-left:50px;
@@ -11,10 +11,10 @@
 	font-size:20px;
 }
 .create-order{
-	width:128px;
-	height:48px;
-	margin-right:50px;
-	margin-top:15px;
+	width:100px;
+	height:40px;
+	margin-right:20px;
+	margin-top:5px;
 	font-size:20px;
 	float:right;
 	border-radius:10px;
@@ -23,35 +23,25 @@
 }
 .order-top{
 	width:100%;
-	height:80px;
-	line-height:80px;
+	height:40px;
+	line-height:40px;
 	font-size:18px;
 	border-bottom:2px solid rgb(205,202,202);
 }
 .order-top-left{
-	width:55%;
+	width:75%;
 	margin-left:5%;
 	float:left;
 }
 .order-top-right{
-	width:40%;
+	width:20%;
 	float:left;
-}
-
-.pay-order{
-	width:90%;
-	height:50px;
-	line-height:50px;
-	background:rgb(240,201,82);
-	border-radius:5px;
-	font-size:18px;
-	margin-top:15px;
-	text-align:center;
+	
 }
 .order-time{
 	width:100%;
-	height:80px;
-	line-height:80px;
+	height:30px;
+	line-height:30px;
 	font-size:15px;
 	border-bottom:1px solid rgb(54,53,53);
 }
@@ -73,38 +63,51 @@
 }
 
 .order-product{
-	padding:10px 20px;
+	padding:10px 5px;
 	font-size:16px;
 	border-bottom:1px dashed rgb(149,149,149);
 }
 .order-product-left{
 	float:left;
-	width:35%;
+	width:140px;
 	height:140px;
 	overflow:hidden;
 }
 .order-product-right{
 	float:left;
-	width:65%;
+	width:-moz-calc(100% - 140px - 20px);
+	width:-webkit-calc(100% - 140px - 20px);
+	width:-o-calc(100% - 140px - 20px);
+	width:calc(100% - 140px - 20px);
 	height:140px;
+	padding:0 10px;
 }
-
+.online-pay{
+	width:100px;
+	height:30px;
+	margin-right:20px;
+	margin-top:5px;
+	font-size:16px;
+	float:right;
+	border-radius:10px;
+	background:rgb(240,201,82);
+}
 .right-up{
 	width:100%;
-	height:50%;
+	height:30%;
 }
 
 .right-up-left{
 	float:left;
-	width:40%;
+	width:auto;
 	height:100%;
 	text-align:center;
 	font-size:18px;
 }
 
 .right-up-right{
-	float:left;
-	width:60%;
+	float:right;
+	width:auto;
 	height:100%;
 	text-align:right;
 	font-size:16px;
@@ -113,27 +116,30 @@
 
 .right-down{
 	width:100%;
-	height:50%;
+	height:30%;
 }
 
 .right-down-left{
 	float:left;
-	width:60%;
+	width:auto;
 	height:100%;
 	text-align:center;
 	font-size:16px;
 }
 
 .right-down-right{
-	float:left;
-	width:40%;
+	float:right;
+	width:auto;
 	height:50%;
 	text-align:right;
 	font-size:16px;
-	padding-top:15px;
+}
+.right-middle{
+    padding: 0 5px;
+    height:40%;
 }
 
-.right-down-left input{
+.right-middle input{
 	width: 30px;
 	height: 15px;
 	padding: 10px;
@@ -146,7 +152,7 @@
 	vertical-align: middle;
 }
 
-.right-down-left span{
+.right-middle span{
 	text-align:center;
 	width:15px;
 	height:15px;

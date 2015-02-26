@@ -1,18 +1,19 @@
 .top{
 	width:100%;
-	height:50px;
-	line-height:50px;
-	background:rgb(240,201,82) url(../img/product/back.png) no-repeat 20px 2px;
+	height:40px;
+	line-height:40px;
+	background:rgb(240,201,82);
 }
 .back{
-	margin-left:50px;
+	margin-left:20px;
 	float:left;
 	width:25%;
 	font-size:20px;
+        //background:url(../img/product/back.png) no-repeat 20px 8px;
 }
 .create-order{
 	width:100px;
-	height:40px;
+	height:30px;
 	margin-right:20px;
 	margin-top:5px;
 	font-size:20px;
@@ -29,12 +30,12 @@
 	border-bottom:2px solid rgb(205,202,202);
 }
 .order-top-left{
-	width:75%;
-	margin-left:5%;
+	width:65%;
+	margin-left:2%;
 	float:left;
 }
 .order-top-right{
-	width:20%;
+	width:32%;
 	float:left;
 	
 }
@@ -57,7 +58,7 @@
 	
 }
 .order-category{
-	padding:10px 20px;
+	padding:2px 20px;
 	font-size:16px;
 	border-bottom:1px dashed rgb(149,149,149);
 }
@@ -70,19 +71,44 @@
 .order-product-left{
 	float:left;
 	width:140px;
-	height:140px;
+	height:120px;
 	overflow:hidden;
 }
+
 .order-product-right{
 	float:left;
 	width:-moz-calc(100% - 140px - 20px);
 	width:-webkit-calc(100% - 140px - 20px);
 	width:-o-calc(100% - 140px - 20px);
 	width:calc(100% - 140px - 20px);
-	height:140px;
+	height:120px;
 	padding:0 10px;
 }
-
+.ordered-product-left{
+	float:left;
+	width:100px;
+	height:100px;
+	overflow:hidden;
+}
+.ordered-product-right{
+	float:left;
+	width:-moz-calc(100% - 100px - 20px);
+	width:-webkit-calc(100% - 100px - 20px);
+	width:-o-calc(100% - 100px - 20px);
+	width:calc(100% - 100px - 20px);
+	height:100px;
+	padding:0 10px;
+}
+.online-pay{
+	width:100px;
+	height:30px;
+	margin-right:20px;
+	margin-top:5px;
+	font-size:16px;
+	float:right;
+	border-radius:10px;
+	background:rgb(240,201,82);
+}
 .right-up{
 	width:100%;
 	height:30%;

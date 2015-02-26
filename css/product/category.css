@@ -35,13 +35,14 @@
 	background: url(pagelink.png) 0 0 no-repeat;
 }
 .promptu-menu >li {
-	min-width:150px;
+	min-width:100px;
 	max-width:500px;
 	padding-left:5px;
 	padding-right:5px;
 }
 .promptu-menu >li:first-child {
-	min-width:140px;
+	min-width:100px;
+        left:5px;
 }
 ul .parents{
 	color:rgb(217,217,217);

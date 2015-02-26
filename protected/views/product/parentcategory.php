@@ -11,8 +11,8 @@
 			<li class="parents">热点</li>
 			<li class="child">推荐品</li>
 			<li class="child">套餐</li>
-			<li class="child">点赞TOP10</li>
-			<li class="child">点单TOP10</li>
+			<li class="child"><img src="/wymenuv2/img/favorite.png">Top10</li>
+			<li class="child"><img src="/wymenuv2/img/ordernum.png">Top10</li>
 		</ul>
 	</li>
 	<?php if($parentCategorys):?>

@@ -2,17 +2,23 @@ body{
 	color:#555da8;
 }
 .top{
-	padding:10px;
-	height:80px;
-	line-height:80px;
+	padding:5px;
+	height:40px;
+	line-height:40px;
 	text-align:center;
-	font-size:30px;
+	font-size:24px;
 	border-top:1px solid #555da8;
 	border-bottom:2px solid #555da8;
 }
 .product{
-	padding:20px;
-	height:200px;
+	padding:10px;
+	height:80px;
+	border-bottom:1px dashed #555da8;
+}
+.product-title{
+	padding:10px;
+	height:35px;
+        color: #C97626;
 	border-bottom:1px dashed #555da8;
 }
 div .product:last-child{
@@ -20,38 +26,45 @@ div .product:last-child{
 }
 .product-up{
 	width:100%;
-	min-height:80px;
+	min-height:20px;
 	height:auto;
 }
 .product-up-left{
-	width:50%;
+	width:90%;
 	height:100%;
 	float:left;
-	font-size:30px;
+	font-size:20px;
 }
 .product-up-right{
-	width:50%;
+	width:10%;
 	height:100%;
 	float:left;
+}
+.product-middle{
+	width:100%;
+	min-height:20px;
+        margin:10px 10px 10px 10px;
 }
 .product-down{
 	width:100%;
-	height:80px;
+	min-height:20px;
+        text-align: right;
+        margin:0px 20px 10px -20px;
 }
 
 .order-info{
-	padding:20px;
-	height:170px;
+	padding:10px;
+	height:50px;
 	text-align:right;
 	border-bottom:1px dashed #555da8;	
 }
 .order-time{
 	width:100%;
-	height:25%;
+	height:50%;
 }
 .order-price{
 	width:100%;
-	height:25%;
+	height:50%;
 }
 .order-discount{
 	width:100%;
@@ -62,18 +75,18 @@ div .product:last-child{
 	height:25%;
 }
 .order-taste{
-	padding:20px;
-	min-height:350px;
+	padding:10px;
+	min-height:50px;
 }
 .btn{
-	width:460px;
-	height:70px;
+	width:260px;
+	height:40px;
 	border-radius:10px;
 	margin:0 auto;
 	text-align:center;
-	font-size:30px;
+	font-size:24px;
 	border:1px solid #f0c952;
-	line-height:70px;
+	line-height:40px;
 }
 .confirm{
 	background:#f0c952;

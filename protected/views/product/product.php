@@ -18,12 +18,12 @@
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
+        <div class="product-category">热点 >>> 推荐品</div>
 		<div id="forum_list">
 			<div class="outDiv" id="leftPic">
 			</div>
 			<div class="outDiv" id="rightPic">
 			</div>
-			
 		</div>
     </div>
     <!--content结束-->
@@ -35,7 +35,7 @@
     		<div class="product-nums">0</div>
     	</div>
     	<div class="bottom-right">
-    		<a href="orderList"><button class="see-order">查看订单</button></a>
+    		<a href="orderList"><button class="see-order">订单>></button></a>
     	</div>
     	<div class="clear"></div>
     </div>
