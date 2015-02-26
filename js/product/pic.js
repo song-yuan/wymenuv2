@@ -136,7 +136,7 @@ function  getMorePic(type,cat){
 		url = apiHost + '&rec='+1+'&page='+page;
 	}
  
-	$("#nextpage").text("鏁版嵁鍔犺浇涓�鈥�);
+	$("#nextpage").text("点击获取下一页");
 	xmlHttp(url,showMoreList);
 }
 
@@ -163,7 +163,7 @@ function showMoreList(items){
 			var trBuy = ' <div class="productbuy"><div class="inmiddle"><a class="numminus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">-</a>'+
 						' <input type="text" class="num" name="product_num" maxlength="8" value="0"/><a class="numplus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">+</a></div></div>';
 			var trTitle = '<div class="pictitle"><div class="subject">'+item.product_name+'</div>';
-			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">浠锋牸: 锟�+item.price+'</div><div class="view">鍘熶环: 锟�strike>'+item.origin_price+'</strike></div> </div></div></div>';
+			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">'+item.price+'</div><div class="view"><strike>'+item.origin_price+'</strike></div> </div></div></div>';
 			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			rightPicObj.append(tr);
 		}else{
@@ -173,10 +173,10 @@ function showMoreList(items){
 			var trBuy = ' <div class="productbuy"><div class="inmiddle"><a class="numminus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">-</a>'+
 			' <input type="text" class="num" name="product_num" maxlength="8" value="0"/><a class="numplus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">+</a></div></div>';
 			var trTitle = '<div class="pictitle"><div class="subject">'+item.product_name+'</div>';
-			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">浠锋牸: 锟�+item.price+'</div><div class="view">鍘熶环: 锟�strike>'+item.origin_price+'</strike></div> </div></div></div>';
+			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">'+item.price+'</div><div class="view"><strike>'+item.origin_price+'</strike></div> </div></div></div>';
 			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			leftPicObj.append(tr);
 		}
 	}
-	$("#nextpage").text("鏌ョ湅涓�鏉�);
+	$("#nextpage").text("点击获取下一页");
 }
