@@ -1,20 +1,20 @@
 /**
- * 亿忆网图秀功能JS
+ * 浜垮繂缃戝浘绉�姛鑳絁S
  * 
- * 设计思路：
+ * 璁捐鎬濊矾锛�
  * 		
- *  相对于电脑网页版瀑布流功能，手机版的不同在于手机屏幕较小，基本只能在水平方向
- * 	排两列！同时，网页版多使用绝对定位来计算各个图片块的问题，使用的是px为单位！
- *  在手机端如果考虑到手机分辨率兼容性的问题，则需要用em做单位，显然在绝对定位时会有麻烦，
- *  因为js获取的都是px单位的值（当然，appcan页面初始化时已经设定了px和em的比例值，如果不嫌麻烦，也可以每次去转换）！
+ *  鐩稿浜庣數鑴戠綉椤电増鐎戝竷娴佸姛鑳斤紝鎵嬫満鐗堢殑涓嶅悓鍦ㄤ簬鎵嬫満灞忓箷杈冨皬锛屽熀鏈彧鑳藉湪姘村钩鏂瑰悜
+ * 	鎺掍袱鍒楋紒鍚屾椂锛岀綉椤电増澶氫娇鐢ㄧ粷瀵瑰畾浣嶆潵璁＄畻鍚勪釜鍥剧墖鍧楃殑闂锛屼娇鐢ㄧ殑鏄痯x涓哄崟浣嶏紒
+ *  鍦ㄦ墜鏈虹濡傛灉鑰冭檻鍒版墜鏈哄垎杈ㄧ巼鍏煎鎬х殑闂锛屽垯闇�鐢╡m鍋氬崟浣嶏紝鏄剧劧鍦ㄧ粷瀵瑰畾浣嶆椂浼氭湁楹荤儲锛�
+ *  鍥犱负js鑾峰彇鐨勯兘鏄痯x鍗曚綅鐨勫�锛堝綋鐒讹紝appcan椤甸潰鍒濆鍖栨椂宸茬粡璁惧畾浜唒x鍜宔m鐨勬瘮渚嬪�锛屽鏋滀笉瀚岄夯鐑︼紝涔熷彲浠ユ瘡娆″幓杞崲锛夛紒
  *  
- *  基于手机浏览的特性和局限，在此使用另外一种设计思路如下：
+ *  鍩轰簬鎵嬫満娴忚鐨勭壒鎬у拰灞�檺锛屽湪姝や娇鐢ㄥ彟澶栦竴绉嶈璁℃�璺涓嬶細
  *  
- *  将屏幕划分为两栏，各占50%宽，那么在追加图片块时就不用考虑绝对定位的问题，直接在左右每个div里面追加图片块即可！
- *  然后在追加图片块时，首先获取左右两个div的高度，将最近一个图片块追加到高度小的那个即可！
+ *  灏嗗睆骞曞垝鍒嗕负涓ゆ爮锛屽悇鍗�0%瀹斤紝閭ｄ箞鍦ㄨ拷鍔犲浘鐗囧潡鏃跺氨涓嶇敤鑰冭檻缁濆瀹氫綅鐨勯棶棰橈紝鐩存帴鍦ㄥ乏鍙虫瘡涓猟iv閲岄潰杩藉姞鍥剧墖鍧楀嵆鍙紒
+ *  鐒跺悗鍦ㄨ拷鍔犲浘鐗囧潡鏃讹紝棣栧厛鑾峰彇宸﹀彸涓や釜div鐨勯珮搴︼紝灏嗘渶杩戜竴涓浘鐗囧潡杩藉姞鍒伴珮搴﹀皬鐨勯偅涓嵆鍙紒
  *  
  * 
- * @author		布衣才子
+ * @author		甯冭。鎵嶅瓙
  * @date		2012-09-20
  * @email		work.jerryliu@gmail.com
  * @qq			394969553
@@ -25,32 +25,32 @@
 
 /**
  * 
- * 服务器访问地址
+ * 鏈嶅姟鍣ㄨ闂湴鍧�
  */
 var apiHost = "/wymenuv2/product/getJson";
 
 var page = 1;
 
 /**
- * base64 加密对象初始化
+ * base64 鍔犲瘑瀵硅薄鍒濆鍖�
  */
 var b64 = new Base64();
 
 /**
- * 网络请求函数
- * @param {Object} url  请求地址
- * @param {Object} callback	  回调函数
+ * 缃戠粶璇锋眰鍑芥暟
+ * @param {Object} url  璇锋眰鍦板潃
+ * @param {Object} callback	  鍥炶皟鍑芥暟
  */
 function xmlHttp(url,callback){
 	if(url == ''){
-		alert('请求地址不能为空！');
+		alert('璇锋眰鍦板潃涓嶈兘涓虹┖锛�);
 	}else{
 		$.getJSON(url,callback);
 	}
 }
 
 /**
- * 获取活动列表
+ * 鑾峰彇娲诲姩鍒楄〃
  */
 function  getPicList(type,cat){
 	var url = '';
@@ -64,7 +64,7 @@ function  getPicList(type,cat){
 }
 
 /**
- * 活动列表回调函数，处理返回的数据，显示在界面上
+ * 娲诲姩鍒楄〃鍥炶皟鍑芥暟锛屽鐞嗚繑鍥炵殑鏁版嵁锛屾樉绀哄湪鐣岄潰涓�
  * @param {Object} items
  */
 function showList(items){
@@ -81,7 +81,7 @@ function showList(items){
 		var item = items[i];
 		var thumb = item.main_picture;
 		
-		//可以使用图片缓存
+		//鍙互浣跨敤鍥剧墖缂撳瓨
 		//imgCache('p'+item.tid,thumb);
 		
 		
@@ -89,37 +89,44 @@ function showList(items){
 		rightHeight = $("#rightPic").height();	
 		
 		if(leftHeight > rightHeight){
-			//如果右侧高度小，则追加到右侧
+			//濡傛灉鍙充晶楂樺害灏忥紝鍒欒拷鍔犲埌鍙充晶
 			var trHead = '<div class="blockRight">';
 			var trPic = '<a href="javascript:;"><img style="min-height:'+item.picHeight+'em;width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			/*var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div class="order-num-right"> '+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="clear"></div></div>';
-			var trAddinfo = '<div class="addinfo" style="padding:0"><div class="author" ><div  class="price-down">￥'+item.original_price+'</div></div>';
+			var trAddinfo = '<div class="addinfo" style="padding:0"><div class="author" ><div  class="price-down">锟�+item.original_price+'</div></div>';
 				if(item.order_id)
 					 trAddinfo +='<div id="addCart" class="view hasorder" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div> <div class="clear"></div></div></div></div>';
 				else
 					 trAddinfo +='<div id="addCart" class="view" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div> <div class="clear"></div></div></div></div>';
 			*/
-                       var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
+                       var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">锟�+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '';
 			if(item.order_id)
-				 trAddinfo +='<div class="clear"></div></div><div id="addCart" class="view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div id="addCart" class="view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			else
-				 trAddinfo +='<div class="clear"></div></div><div id="addCart" class="view" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div id="addCart" class="view" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			
                         tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			rightPicObj.append(tr);
 		}else{
-			//反之，如果右侧高度大，则追加到左侧
+			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
 			var trHead = '<div class="blockLeft">';
 			var trPic = '<a href="javascript:;"><img style="min-height:'+item.picHeight+'em;width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
-			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
+			/*var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div class="order-num-right"> '+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="clear"></div></div>';
+			var trAddinfo = '<div class="addinfo" style="padding:0"><div class="author" ><div  class="price-down">锟�+item.original_price+'</div></div>';
+				if(item.order_id)
+					 trAddinfo +='<div id="addCart" class="view hasorder" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div> <div class="clear"></div></div></div></div>';
+				else
+					 trAddinfo +='<div id="addCart" class="view" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div> <div class="clear"></div></div></div></div>';
+			*/
+                       var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div></div><div id="favorite" class="subject-right" product-id="'+item.lid+'"><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">锟�+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '';
 			if(item.order_id)
-				 trAddinfo +='<div class="clear"></div></div><div id="addCart" class="view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div id="addCart" class="view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			else
-				 trAddinfo +='<div class="clear"></div></div><div id="addCart" class="view" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div id="addCart" class="view" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			leftPicObj.append(tr);
 		}
@@ -130,7 +137,7 @@ function showList(items){
 
 
 /**
- * 获取下一页活动
+ * 鑾峰彇涓嬩竴椤垫椿鍔�
  */
 function  getMorePic(type,cat){
 	page = page + 1;
@@ -141,12 +148,12 @@ function  getMorePic(type,cat){
 		url = apiHost + '&rec='+1+'&page='+page;
 	}
  
-	$("#nextpage").text("数据加载中……");
+	$("#nextpage").text("鏁版嵁鍔犺浇涓�鈥�);
 	xmlHttp(url,showMoreList);
 }
 
 /**
- * 下一页活动列表回调函数
+ * 涓嬩竴椤垫椿鍔ㄥ垪琛ㄥ洖璋冨嚱鏁�
  * @param {Object} items
  */
 function showMoreList(items){
@@ -162,26 +169,26 @@ function showMoreList(items){
 		var leftHeight = $("#leftPic").height();
 		var rightHeight = $("#rightPic").height();	
 		if(leftHeight > rightHeight){
-			//如果右侧高度小，则追加到右侧
+			//濡傛灉鍙充晶楂樺害灏忥紝鍒欒拷鍔犲埌鍙充晶
 			var trHead = '<div class="blockRight">';
 			var trPic = '<a href="/wymenuv2/product/productInfo/id/'+item.lid+'"><img style="min-height:'+item.picHeight+'em" src="'+thumb+'" id="p'+item.lid+'"></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle"><a class="numminus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">-</a>'+
 						' <input type="text" class="num" name="product_num" maxlength="8" value="0"/><a class="numplus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">+</a></div></div>';
 			var trTitle = '<div class="pictitle"><div class="subject">'+item.product_name+'</div>';
-			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">价格: ￥'+item.price+'</div><div class="view">原价: ￥<strike>'+item.origin_price+'</strike></div> </div></div></div>';
+			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">浠锋牸: 锟�+item.price+'</div><div class="view">鍘熶环: 锟�strike>'+item.origin_price+'</strike></div> </div></div></div>';
 			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			rightPicObj.append(tr);
 		}else{
-			//反之，如果右侧高度大，则追加到左侧
+			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
 			var trHead = '<div class="blockLeft">';
 			var trPic = '<a href="/wymenuv2/product/productInfo/id/'+item.lid+'"><img style="min-height:'+item.picHeight+'em" src="'+thumb+'" id="p'+item.lid+'"></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle"><a class="numminus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">-</a>'+
 			' <input type="text" class="num" name="product_num" maxlength="8" value="0"/><a class="numplus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">+</a></div></div>';
 			var trTitle = '<div class="pictitle"><div class="subject">'+item.product_name+'</div>';
-			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">价格: ￥'+item.price+'</div><div class="view">原价: ￥<strike>'+item.origin_price+'</strike></div> </div></div></div>';
+			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">浠锋牸: 锟�+item.price+'</div><div class="view">鍘熶环: 锟�strike>'+item.origin_price+'</strike></div> </div></div></div>';
 			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			leftPicObj.append(tr);
 		}
 	}
-	$("#nextpage").text("查看下8条");
+	$("#nextpage").text("鏌ョ湅涓�鏉�);
 }
