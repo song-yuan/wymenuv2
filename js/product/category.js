@@ -171,7 +171,7 @@
 					//Lay the pages in a horizontal order
 					$li.css({
 						'top': Math.round((cursor.y * cells.height - cells.height/2) - ($li.height()/2)),
-						'left': Math.round((cursor.x * cells.width - cells.width/2) - ($li.width()/2) + (cursor.page - 1) * properties.width)
+						//'left': Math.round((cursor.x * cells.width - cells.width/2) - ($li.width()/2) + (cursor.page - 1) * properties.width)
 					});
 					
 					//the same approach for images for the horizontal order
@@ -180,7 +180,7 @@
 						
 						$li.css({
 							'top': Math.round((cursor.y * cells.height - cells.height/2) - ($li.height()/2)),
-							'left': Math.round((cursor.x * cells.width - cells.width/2) - ($li.width()/2) + (cursor.page - 1) * properties.width)
+							//'left': Math.round((cursor.x * cells.width - cells.width/2) - ($li.width()/2) + (cursor.page - 1) * properties.width)
 						});
 					});
 				  

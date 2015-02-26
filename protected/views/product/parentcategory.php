@@ -34,8 +34,8 @@
 </ul>
 
 <script>
+	$('ul.promptu-menu').promptumenu({height:140, rows: 1, columns: 1, direction: 'horizontal', pages: false});
 	$(document).ready(function(){
-		$('ul.promptu-menu').promptumenu({height:140, rows: 1, columns: 1, direction: 'horizontal', pages: false});
 		var liWidth = 0;
 		$('.promptu-menu').children('li').each(function(){
 			$(this).css({'left':liWidth,'top':5});
