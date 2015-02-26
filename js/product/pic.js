@@ -43,7 +43,7 @@ var b64 = new Base64();
  */
 function xmlHttp(url,callback){
 	if(url == ''){
-		alert('璇锋眰鍦板潃涓嶈兘涓虹┖锛�);
+		alert('地址不能为空');
 	}else{
 		$.getJSON(url,callback);
 	}
