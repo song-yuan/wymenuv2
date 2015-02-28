@@ -74,7 +74,7 @@
 .outDiv .blockLeft{
 	width:91%;
 	background-color:#FFF;
-	margin:0 3% 1em 6%;
+	margin:0 3% 0em 6%;
 	height:auto;
 	border:0 1px 1px 1px solid rgb(240,238,239);
 }
@@ -82,7 +82,7 @@
 .outDiv .blockRight{
 	width:91%;
 	background-color:#FFF;
-	margin:0 6% 1em 3%;
+	margin:0 6% 0em 3%;
 	height:auto;
 	border:0 1px 1px 1px solid rgb(240,238,239)
 }
@@ -100,10 +100,10 @@
 
 .subject{
 	text-align: left;
-	padding: 0.5em 0.3em 0em 0.3em;
+	padding: 0em 0em 0em 0em;
 	font-size: 0.8em;
-	line-height:1.3em;
-        width:50%;
+	line-height:1.0em;
+        width:70%;
 }
 
 .addinfo{
