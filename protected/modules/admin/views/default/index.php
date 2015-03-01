@@ -64,11 +64,11 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i>餐桌示意图</div>
-					<div class="actions">
+					<!--<div class="actions">
 						<?php if(Yii::app()->user->role == User::POWER_ADMIN):?>
 						<a href="<?php echo $this->createUrl('company/create');?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<?php endif;?>
-						<!-- <div class="btn-group">
+						<div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
 							<i class="fa fa-angle-down"></i>
@@ -76,8 +76,8 @@
 							<ul class="dropdown-menu pull-right">
 								<li><a href="#"><i class="fa fa-ban"></i> 冻结</a></li>
 							</ul>
-						</div> -->
-					</div>
+						</div>
+					</div> -->
 				</div>
 				<div class="portlet-body site_list">
 					<ul>
@@ -106,11 +106,11 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i>消息列表</div>
-					<div class="actions">
+					<!-- <div class="actions">
 						<?php if(Yii::app()->user->role == User::POWER_ADMIN):?>
 						<a href="<?php echo $this->createUrl('company/create');?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<?php endif;?>
-						<!-- <div class="btn-group">
+						<div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
 							<i class="fa fa-angle-down"></i>
@@ -118,12 +118,14 @@
 							<ul class="dropdown-menu pull-right">
 								<li><a href="#"><i class="fa fa-ban"></i> 冻结</a></li>
 							</ul>
-						</div> -->
-					</div>
+						</div>
+					</div> -->
 				</div>
 				<div class="portlet-body message_list">
 					<ul>
-						<li></li>
+						<li>[001] 发表了评论</li>
+						<li>[002] 发表了评论</li>
+						<li>[003] 发表了评论：味道还不错, 量有点少 。</li>
 					</ul>
 				</div>
 			</div>
