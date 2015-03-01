@@ -21,7 +21,7 @@
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'company') echo 'active';?>"><a href="<?php echo $this->createUrl('company/index');?>">店铺管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'companyWifi') echo 'active';?>"><a href="<?php echo $this->createUrl('companyWifi/index');?>">店铺WIFI设定</a></li>
-						<li class=""><a href="">支付方式设定</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'payMethod') echo 'active';?>""><a href="<?php echo $this->createUrl('payMethod/index');?>">支付方式设定</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'user') echo 'active';?>"><a href="<?php echo $this->createUrl('user/index' , array('companyId' =>$this->companyId));?>">操作员管理</a></li>
 						<li class=""><a href="">基础数据同步设定</a></li>
 					</ul>
