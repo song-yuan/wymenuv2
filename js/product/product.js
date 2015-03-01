@@ -45,14 +45,14 @@ $(document).ready(function(){
 	    currTop = $(window).scrollTop();
 	    if (currTop < prevTop) { //判断小于则为向上滚动
 	    	if($(".promptumenu_window").is(':hidden')){
-	    		$(".promptumenu_window").show(800);
+	    		$(".promptumenu_window").slideDown(800);
 		        $(".promptumenu_window").addClass('float');
 		        $('#page_0').css('margin-top',140);
                        // $(".bottom").show(1500);
 	    	}
 	    } else {
 	    	if($(".promptumenu_window").is(':visible')){
-	    		$(".promptumenu_window").hide(800);
+	    		$(".promptumenu_window").slideUp(800);
 	 	        $(".promptumenu_window").removeClass('float');
 	 	        $('#page_0').css('margin-top',0);
                         //$(".bottom").hide(1500);

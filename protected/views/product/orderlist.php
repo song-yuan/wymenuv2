@@ -113,5 +113,23 @@
 			num = num + 1;
 			input.val(num);			
 		});
+		 var prevTop = 0,
+    	currTop = 0;
+		$(window).scroll(function() {
+		    currTop = $(window).scrollTop();
+		    if (currTop < prevTop) { 
+		    //判断小于则为向上滚动
+		    	if($(".top").is(':hidden')){
+		    		$(".top").slideDown(800);
+		    	}
+		    } else {
+		    	if($(".top").is(':visible')){
+		    		$(".top").slideUp(800);
+		    	}
+		    }
+		    //prevTop = currTop; 
+		    //IE下有BUG，所以用以下方式
+		    setTimeout(function(){prevTop = currTop},0);
+		});
 	});
 </script>

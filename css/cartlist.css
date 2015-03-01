@@ -1,4 +1,6 @@
 .top{
+	position:fixed;
+	top:0;
 	width:100%;
 	height:40px;
 	line-height:40px;
@@ -27,6 +29,7 @@
 	height:40px;
 	line-height:40px;
 	font-size:18px;
+	margin-top:40px;
 	border-bottom:2px solid rgb(205,202,202);
 }
 .order-top-left{
