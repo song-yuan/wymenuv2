@@ -112,7 +112,6 @@ class ProductController extends Controller
 		$productId = Yii::app()->request->getPost('productId');
 		$type = Yii::app()->request->getPost('type');//是否是套餐
 		$product = array('lid'=>$productId,'type'=>$type);
-		echo 1;exit;
 		if($isAddOrder){
 			//增加
 			$createOrder = new CreateOrder($this->siteNoId,$product);
@@ -146,117 +145,25 @@ class ProductController extends Controller
 		}
 		exit;
 	}
-	/**
-	 * 
-	 * 购物车列表
-	 */
-	public function actionCartList(){
-		$isCode = 0;//判断是否是服务生成的开台号 是1 否0
-		$cartLists = array();
-		$seatnum = Yii::app()->request->getParam('code',0);
-		if(!$seatnum){
-			$seatnum = $this->seatNum;//如果没有开台号 设置为临时座次号
-		}
-		$model = SiteNo::model()->find('code=:code and delete_flag=0',array(':code'=>$seatnum));
-		if($model){
-			$isCode = 1;
-			if($this->seatNum > 1000000){
-				Cart::model()->updateAll(array('code'=>$seatnum),'code=:code',array(':code'=>$this->seatNum));
-			}
-			$cartLists = Cart::model()->with('product')->findAll('t.company_id=:companyId and t.code=:code',array(':companyId'=>$this->companyId,':code'=>$seatnum));
-			
-			$_SESSION['seatnum'] = $seatnum;//正式座次号放session
-			$this->seatNum = $seatnum;
-		}
-		$this->render('cartlist',array('cartLists'=>$cartLists,'seatnum'=>$this->seatNum,'isCode'=>$isCode));
-	}
-	/**
-	 * 
-	 * 点击减号减少购物车商品
-	 */
-	public function actionDeleteCartProduct(){
-		$id = Yii::app()->request->getParam('id');
-		$cartproduct= Cart::model()->find('company_id=:companyId and product_id=:productId and code=:code',array(':companyId'=>$this->companyId,':productId'=>$id,':code'=>$this->seatNum));
-		if($cartproduct->delete()){
-			echo 1;
-		}else{
-			echo 0;
-		}
-		Yii::app()->end();
-	}
-	public function actionDeleteCart(){
-		$id = Yii::app()->request->getParam('id');
-		$cart= Cart::model()->findByPk($id);
-		$cart->delete();
-		$this->redirect(array('/product/cartList','code'=>$this->seatNum));
-	}
-	/**
-	 * 生成订单
-	 * $products = array(array(2,1,18),array(3,1,29)) ==>array(product_id,product_num,price)
-	 */
-	 
-	 public function actionCreateOrder(){
-	 	$seatnum = Yii::app()->request->getParam('code');
-	 	
-	 	$siteNo = SiteNo::model()->find('company_id=:companyId and code=:code and delete_flag=0',array(':companyId'=>$this->companyId,':code'=>$seatnum));
-	 	if(!$siteNo){
-	 		echo 0;exit;
-	 	}
-	 
-	 	if(Yii::app()->request->isPostRequest){
-	 		$now = time();
-	 		$site_no_id = $siteNo->id;
-	 		$waiter_id = $siteNo->waiter_id;
-	 		$number = $siteNo->number;
-	 		$products = Yii::app()->request->getPost('products');
-	 		
-	 		$transaction=Yii::app()->db->beginTransaction();
-	 		try{
-	 			$order = Order::model()->with('siteNo')->find('t.company_id=:companyId and siteNo.code=:code and delete_flag=0',array(':companyId'=>$this->companyId,':code'=>$seatnum));
-		 		if(!$order){
-		 			$order = new Order;
-			 		$orderData = array(
-			 							'company_id'=>$this->companyId,
-			 							'site_no_id'=>$site_no_id,
-			 							'waiter_id'=>$waiter_id,
-			 							'number'=>$number,
-			 							'create_time'=>$now,
-			 							);
-			 		$order->attributes = $orderData;
-			 		$order->save();
-		 		}
-		 		$orderId = $order->order_id;
-		 		foreach($products as $product){
-		 			$orderProduct = new OrderProduct;
-		 				$productData = array(
-		 									'order_id'=>$orderId,
-		 									'product_id'=>$product[0],
-		 									'price'=>$product[2],
-		 									'amount'=>$product[1],
-		 									);
-		 			$orderProduct->attributes = $productData;
-		 			$orderProduct->save();
-		 		}
-		 		$transaction->commit();
-		 		$res = Helper::printCartGoods($this->companyId,$this->seatNum);
-		 		
-		 		//setcookie('orderId',$orderId);
-	 		}catch (Exception $e) {
-            	$transaction->rollback();//回滚函数
-        	}
-	 	}
-	 	$this->redirect(array('/product/cartList','code'=>$seatnum));
-	 }
+	 //订单列表
 	public function actionOrderList(){
-		
-	 	$this->render('orderlist');
+		$orderList = new OrderList($this->siteNoId);
+	 	$this->render('orderlist',array('orderList'=>$orderList));
 	}
+	//确认订单
 	public function actionConfirmOrder(){
 		
 	 	$this->render('confirmOrder');
 	}
+	//订单
 	public function actionOrder(){
+		$orderId = Yii::app()->request->getParam('orderId');
+		$goodsIds = isset($_POST) ?$_POST :array();
+		if(!OrderList::UpdateOrder($orderId,$goodsIds)){
+//			$this->redirect(array('/product/orderList'));
+		}
+		$orderList = new OrderList($this->siteNoId);
 		
-	 	$this->render('order');
+	 	$this->render('order',array('orderList'=>$orderList));
 	}
 }

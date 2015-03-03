@@ -43,15 +43,21 @@ div .product:last-child{
 .product-middle{
 	width:100%;
 	min-height:20px;
-        margin:10px 10px 10px 10px;
+    margin:10px 10px 10px 10px;
 }
 .product-down{
 	width:100%;
 	min-height:20px;
-        text-align: right;
-        margin:0px 20px 10px -20px;
+    text-align: right;
+    margin:0px 20px 10px -20px;
 }
 
+.order-category{
+	padding:10px;
+	font-size: 20px;
+	color:#C97626;
+	border-bottom:1px solid #555da8;	
+}
 .order-info{
 	padding:10px;
 	height:50px;
