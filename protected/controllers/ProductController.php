@@ -147,7 +147,17 @@ class ProductController extends Controller
 	}
 	 //订单列表
 	public function actionOrderList(){
+		$confirm = Yii::app()->request->getParam('confirm',0);
+		$goodsIds = isset($_POST) ?$_POST :array();
+		
+		if($confirm){
+			$orderId = Yii::app()->request->getParam('orderId',0);
+			if(!OrderList::UpdateOrder($orderId,$goodsIds)){
+			   $this->redirect(array('/product/order','orderId'=>$orderId));
+			}
+		}
 		$orderList = new OrderList($this->siteNoId);
+		
 	 	$this->render('orderlist',array('orderList'=>$orderList));
 	}
 	//确认订单
@@ -159,8 +169,8 @@ class ProductController extends Controller
 	public function actionOrder(){
 		$orderId = Yii::app()->request->getParam('orderId');
 		$goodsIds = isset($_POST) ?$_POST :array();
-		if(!OrderList::UpdateOrder($orderId,$goodsIds)){
-//			$this->redirect(array('/product/orderList'));
+		if(!$goodsIds && !OrderList::UpdateOrder($orderId,$goodsIds)){
+			$this->redirect(array('/product/orderList'));
 		}
 		$orderList = new OrderList($this->siteNoId);
 		
