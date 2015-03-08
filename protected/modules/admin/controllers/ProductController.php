@@ -23,9 +23,9 @@ class ProductController extends BackendController
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
 		$criteria->with = array('company','category');
-		$criteria->condition =  't.delete_flag=0 and t.company_id='.$this->companyId ;
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
 		if($categoryId){
-			$criteria->condition.=' and t.category_id = '.$categoryId;
+			$criteria->condition.=' and t.lid = '.$categoryId;
 		}
 		
 		$pages = new CPagination(Product::model()->count($criteria));
@@ -41,7 +41,9 @@ class ProductController extends BackendController
 				'categoryId'=>$categoryId
 		));
 	}
-	
+	public function actionSetMealList() {
+		
+	}
 	public function actionCreate(){
 		$model = new Product();
 		$model->company_id = $this->companyId ;
@@ -65,7 +67,7 @@ class ProductController extends BackendController
 	
 	public function actionUpdate(){
 		$id = Yii::app()->request->getParam('id');
-		$model = Product::model()->find('product_id=:productId' , array(':productId' => $id));
+		$model = Product::model()->find('lid=:productId' , array(':productId' => $id));
 		$model->company_id = $this->companyId ;
 		
 		if(Yii::app()->request->isPostRequest) {
@@ -89,7 +91,7 @@ class ProductController extends BackendController
 		$ids = Yii::app()->request->getPost('ids');
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
-				$model = Product::model()->find('product_id=:id and company_id=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
+				$model = Product::model()->find('lid=:id and company_id=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 				if($model) {
 					$model->saveAttributes(array('delete_flag'=>1));
 				}
@@ -102,7 +104,7 @@ class ProductController extends BackendController
 	}
 	public function actionStatus(){
 		$id = Yii::app()->request->getParam('id');
-		$product = Product::model()->find('product_id=:id and company_id=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
+		$product = Product::model()->find('lid=:id and company_id=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		var_dump($product->status);
 		if($product){
 			$product->saveAttributes(array('status'=>$product->status?0:1));
@@ -111,7 +113,7 @@ class ProductController extends BackendController
 	}
 	public function actionRecommend(){
 		$id = Yii::app()->request->getParam('id');
-		$product = Product::model()->find('product_id=:id and company_id=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
+		$product = Product::model()->find('lid=:id and company_id=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		
 		if($product){
 			$product->saveAttributes(array('recommend'=>$product->recommend==0?1:0));
@@ -121,7 +123,7 @@ class ProductController extends BackendController
 	private function getCategoryList(){
 		$categories = ProductCategory::model()->findAll('delete_flag=0 and company_id=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
-		return CHtml::listData($categories, 'category_id', 'category_name');
+		return CHtml::listData($categories, 'lid', 'category_name');
 	}
 	public function actionGetChildren(){
 		$pid = Yii::app()->request->getParam('pid',0);
@@ -133,7 +135,7 @@ class ProductController extends BackendController
 	
 		foreach($categories as $c){
 			$tmp['name'] = $c['category_name'];
-			$tmp['id'] = $c['category_id'];
+			$tmp['id'] = $c['lid'];
 			$treeDataSource['data'][] = $tmp;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
@@ -141,19 +143,19 @@ class ProductController extends BackendController
 	private function getCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
-		$criteria->condition =  't.delete_flag=0 and t.company_id='.$this->companyId ;
-		$criteria->order = ' tree,category_id asc ';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' tree,t.lid asc ';
 		
 		$models = ProductCategory::model()->findAll($criteria);
-		//return CHtml::listData($models, 'category_id', 'category_name','pid');
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array('--请选择分类--');
 		if($models) {
 			foreach ($models as $model) {
 				if($model->pid == 0) {
-					$options[$model->category_id] = array();
+					$options[$model->lid] = array();
 				} else {
-					$options[$model->pid][$model->category_id] = $model->category_name;
+					$options[$model->pid][$model->lid] = $model->category_name;
 				}
 			}
 		}

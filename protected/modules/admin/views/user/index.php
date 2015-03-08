@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'user-form',
-				'action' => $this->createUrl('user/delete' , array('companyId' => $companyId)),
+				'action' => $this->createUrl('user/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -42,7 +42,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i>服务员列表</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('user/create' , array('companyId' => $companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('user/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red"><i class="fa fa-ban"></i> 删除</button>
 						</div>
@@ -67,14 +67,14 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td><a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid , 'company_id' => $model->dpid));?>" ><?php echo $model->username;?></a></td>
+								<td><a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid , 'companyId' => $this->companyId));?>" ><?php echo $model->username;?></a></td>
 								<td ><?php echo $model->company ? $model->company->company_name : '' ;?></td>
 								<td ><?php echo $this->roles[$model->role];?></td>
 								<td ><?php echo $model->staff_no;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->email;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid,'companyId'=>$this->companyId));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>

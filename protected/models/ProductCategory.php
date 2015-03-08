@@ -8,7 +8,7 @@
  * @property integer $pid
  * @property string $tree
  * @property string $category_name
- * @property string $company_id
+ * @property string $dpid
  * @property integer $delete_flag
  */
 class ProductCategory extends CActiveRecord

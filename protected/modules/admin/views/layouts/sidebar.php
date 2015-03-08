@@ -8,7 +8,7 @@
 					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
 				</li>
 				<li class="<?php if(Yii::app()->controller->id == 'default') echo 'active';?>">
-					<a href="<?php echo $this->createUrl('default/index');?>">
+					<a href="<?php echo $this->createUrl('default/index',array('companyId' => $this->companyId));?>">
 					<i class="fa fa-home"></i> 
 					<span class="title">首页</span>					
 					</a>
@@ -19,9 +19,9 @@
 					<span class="title">基础信息</span>					
 					</a>
 					<ul class="sub-menu">
-						<li class="<?php if(Yii::app()->controller->id == 'company') echo 'active';?>"><a href="<?php echo $this->createUrl('company/index');?>">店铺管理</a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'companyWifi') echo 'active';?>"><a href="<?php echo $this->createUrl('companyWifi/index');?>">店铺WIFI设定</a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'payMethod') echo 'active';?>""><a href="<?php echo $this->createUrl('payMethod/index');?>">支付方式设定</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'company') echo 'active';?>"><a href="<?php echo $this->createUrl('company/index',array('companyId' => $this->companyId));?>">店铺管理</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'companyWifi') echo 'active';?>"><a href="<?php echo $this->createUrl('companyWifi/index',array('companyId' => $this->companyId));?>">店铺WIFI设定</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'payMethod') echo 'active';?>""><a href="<?php echo $this->createUrl('payMethod/index',array('companyId' => $this->companyId));?>">支付方式设定</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'user') echo 'active';?>"><a href="<?php echo $this->createUrl('user/index' , array('companyId' =>$this->companyId));?>">操作员管理</a></li>
 						<li class=""><a href="">基础数据同步设定</a></li>
 					</ul>
@@ -32,8 +32,8 @@
 					<span class="title">产品管理</span>					
 					</a>
 					<ul class="sub-menu">
-						<li class="<?php if(Yii::app()->controller->id == 'productCategory') echo 'active';?>"><a href="<?php echo $this->createUrl('productCategory/index');?>">产品分类</a></li>
-						<li class=""><a href="">单品管理</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productCategory') echo 'active';?>"><a href="<?php echo $this->createUrl('productCategory/index',array('companyId' => $this->companyId));?>">产品分类</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'product') echo 'active';?>"><a href="<?php echo $this->createUrl('product/index',array('companyId' => $this->companyId));?>">单品管理</a></li>
 						<li class=""><a href="">套餐管理</a></li>
 						<li class=""><a href="">时价菜管理</a></li>
 						<li class=""><a href="">特价菜管理</a></li>

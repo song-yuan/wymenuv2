@@ -2,15 +2,16 @@
 class ProductCategoryController extends BackendController
 {
 	public function beforeAction($action) {
-//		parent::beforeAction($action);
-//		if(!$this->companyId) {
-//			Yii::app()->user->setFlash('error' , '请选择公司');
-//			$this->redirect(array('company/index'));
-//		}
+		parent::beforeAction($action);
+		if(!$this->companyId) {
+			Yii::app()->user->setFlash('error' , '请选择公司');
+			$this->redirect(array('company/index'));
+		}
 		return true;
 	}
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;

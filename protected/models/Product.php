@@ -9,7 +9,7 @@
  * @property string $product_name
  * @property string $main_picture
  * @property string $description
- * @property string $company_id
+ * @property string $dpid
  * @property string $create_time
  * @property integer $delete_flag
  * @property string $origin_price
@@ -36,13 +36,13 @@ class Product extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('delete_flag, recommend', 'numerical', 'integerOnly'=>true),
-			array('category_id , company_id , product_name , main_picture , origin_price , price ,department_id,description' , 'required'),
-			array('category_id, company_id, create_time', 'length', 'max'=>10),
+			array('category_id , dpid , product_name , main_picture , origin_price , price ,department_id,description' , 'required'),
+			array('category_id, dpid, create_time', 'length', 'max'=>10),
 			array('product_name, main_picture', 'length', 'max'=>255),
 			array('origin_price, price', 'length', 'max'=>12),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('product_id, category_id, product_name, main_picture, company_id, create_time, delete_flag, origin_price, price, recommend', 'safe', 'on'=>'search'),
+			array('product_id, category_id, product_name, main_picture, dpid, create_time, delete_flag, origin_price, price, recommend', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -54,7 +54,7 @@ class Product extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'company' => array(self::BELONGS_TO , 'Company' , 'company_id'),
+				'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 				'category' => array(self::BELONGS_TO , 'ProductCategory' , 'category_id'),
 		);
 	}
@@ -70,7 +70,7 @@ class Product extends CActiveRecord
 			'product_name' => '产品名称',
 			'main_picture' => '主图片',
 			'description' => '描述',
-			'company_id' => '公司',
+			'dpid' => '公司',
 			'create_time' => '创建时间',
 			'delete_flag' => '状态',
 			'origin_price' => '原价',
@@ -102,7 +102,7 @@ class Product extends CActiveRecord
 		$criteria->compare('category_id',$this->category_id,true);
 		$criteria->compare('product_name',$this->product_name,true);
 		$criteria->compare('main_picture',$this->main_picture,true);
-		$criteria->compare('company_id',$this->company_id,true);
+		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_time',$this->create_time,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('origin_price',$this->origin_price,true);

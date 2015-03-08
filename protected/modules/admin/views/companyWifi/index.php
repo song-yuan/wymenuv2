@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'companywifi-form',
-				'action' => $this->createUrl('companyWifi/delete' , array('companyId' => $companyId)),
+				'action' => $this->createUrl('companyWifi/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -42,7 +42,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i>店铺WIFI列表</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('companyWifi/create' , array('companyId' => $companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('companyWifi/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red"><i class="fa fa-ban"></i> 删除</button>
 						</div>
@@ -72,7 +72,7 @@
 								<td><?php echo $model->current_number;?></td>
 																
 								<td class="center">
-									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('companyWifi/update' , array('id' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('companyWifi/update' , array('id' => $model->lid , 'companyId' => $this->companyId));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>

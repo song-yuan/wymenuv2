@@ -12,6 +12,7 @@ class CompanyController extends BackendController
 		);
 	}
 	public function actionIndex(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
 		$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? '' : 'company_id='.Yii::app()->user->companyId ;
 		

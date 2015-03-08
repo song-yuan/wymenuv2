@@ -83,11 +83,7 @@
 										</a>
 										<ul class="dropdown-menu pull-right">
 											<li><a href="<?php echo $this->createUrl('company/update',array('companyId' => $model->dpid));?>">编辑</a></li>
-											<li><a href="<?php echo $this->createUrl('companyWifi/index' , array('companyId' => $model->dpid));?>">WIFI</a></li>
-											<li><a href="<?php echo $this->createUrl('site/index',array('companyId' => $model->dpid));?>">位置</a></li>
-											<li><a href="<?php echo $this->createUrl('order/index',array('companyId' => $model->dpid));?>">订单</a></li>
-											<li><a href="<?php echo $this->createUrl('product/index',array('companyId' => $model->dpid));?>">产品</a></li>
-											<li><a href="<?php echo $this->createUrl('user/index',array('companyId' => $model->dpid));?>">管理员</a></li>
+											<li><a href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>">选择</a></li>
 										</ul>
 									</div>
 									
