@@ -21,7 +21,7 @@ $(document).ready(function(){
 				},
  			type:'POST',
  			success:function(msg){
- 				if(msg){
+ 				if(parseInt(msg)){
 					if(isAddOrder){
 						_this.addClass('hasorder');
 						total += price;
