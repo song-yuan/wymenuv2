@@ -52,14 +52,13 @@
 					<ul class="sub-menu">
 						<li class=""><a href="">整单口味选项</a></li>
 						<li class=""><a href="">单品口味选项</a></li>
-						<li class=""><a href="">套餐管理</a></li>
 						<li class=""><a href="">单品口味对应</a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
-					<span class="title">反馈信息</span>					
+					<span class="title">反馈选项</span>					
 					</a>
 					<ul class="sub-menu">
 						<li class=""><a href="">整单反馈选项</a></li>
@@ -73,9 +72,6 @@
 					</a>
 					<ul class="sub-menu">
 						<li class=""><a href="">订单列表</a></li>
-						<li class=""><a href="">订单明细列表</a></li>
-						<li class=""><a href="">订单口味列表</a></li>
-						<li class=""><a href="">订单反馈列表</a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
