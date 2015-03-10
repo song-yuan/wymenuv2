@@ -42,6 +42,9 @@ class CreateOrder
 									'product_id'=>$this->product['lid'],
 									'price'=>$this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']),
 									);
+			$orderProduct->attributes = $orderProductData;
+			$orderProduct->save();
+			
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			return true;
 		} catch (Exception $e) {
