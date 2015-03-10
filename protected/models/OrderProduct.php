@@ -4,11 +4,24 @@
  * This is the model class for table "nb_order_product".
  *
  * The followings are the available columns in table 'nb_order_product':
- * @property string $item_id
+ * @property string $lid
+ * @property string $dpid
+ * @property string $create_at
+ * @property string $update_at
  * @property string $order_id
+ * @property string $set_id
  * @property string $product_id
+ * @property string $is_retreat
  * @property string $price
- * @property string $amount
+ * @property integer $amount
+ * @property integer $zhiamount
+ * @property string $is_waiting
+ * @property string $weight
+ * @property string $taste_memo
+ * @property string $retreat_memo
+ * @property string $is_giving
+ * @property string $delete_flag
+ * @property string $product_order_status
  */
 class OrderProduct extends CActiveRecord
 {
@@ -28,11 +41,15 @@ class OrderProduct extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('order_id, product_id, amount', 'length', 'max'=>10),
-			array('price', 'length', 'max'=>12),
+			array('lid, dpid, order_id, update_at, taste_memo, retreat_memo', 'required'),
+			array('lid, dpid, order_id, amount, zhiamount', 'numerical', 'integerOnly'=>true),
+			array('set_id, product_id, price, weight', 'length', 'max'=>10),
+			array('is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
+			array('taste_memo, retreat_memo', 'length', 'max'=>50),
+			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('item_id, order_id, product_id, price, amount', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, order_id, set_id, product_id, is_retreat, price, amount, zhiamount, is_waiting, weight, taste_memo, retreat_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -44,7 +61,6 @@ class OrderProduct extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		 'prodcut'=>array(self::HAS_ONE,'Product','product_id'),
 		);
 	}
 
@@ -54,11 +70,24 @@ class OrderProduct extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'item_id' => 'Item',
+			'lid' => '自身id，统一dpid下递增',
+			'dpid' => '店铺id',
+			'create_at' => 'Create At',
+			'update_at' => '更新时间',
 			'order_id' => 'Order',
+			'set_id' => '0000000000表示下面的product是单品，否则是套餐内的产品',
 			'product_id' => 'Product',
-			'price' => '价格',
-			'amount' => '数量',
+			'is_retreat' => '0非退菜，1退菜',
+			'price' => '下单时价格',
+			'amount' => '下单数量',
+			'zhiamount' => '下单只数',
+			'is_waiting' => '0不等叫，1等叫，2已上菜',
+			'weight' => 'Weight',
+			'taste_memo' => 'Taste Memo',
+			'retreat_memo' => 'Retreat Memo',
+			'is_giving' => '0非赠送，1赠送',
+			'delete_flag' => '1删除，0未删除',
+			'product_order_status' => '0未下单、1已下单',
 		);
 	}
 
@@ -80,11 +109,24 @@ class OrderProduct extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('item_id',$this->item_id,true);
+		$criteria->compare('lid',$this->lid,true);
+		$criteria->compare('dpid',$this->dpid,true);
+		$criteria->compare('create_at',$this->create_at,true);
+		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('order_id',$this->order_id,true);
+		$criteria->compare('set_id',$this->set_id,true);
 		$criteria->compare('product_id',$this->product_id,true);
+		$criteria->compare('is_retreat',$this->is_retreat,true);
 		$criteria->compare('price',$this->price,true);
-		$criteria->compare('amount',$this->amount,true);
+		$criteria->compare('amount',$this->amount);
+		$criteria->compare('zhiamount',$this->zhiamount);
+		$criteria->compare('is_waiting',$this->is_waiting,true);
+		$criteria->compare('weight',$this->weight,true);
+		$criteria->compare('taste_memo',$this->taste_memo,true);
+		$criteria->compare('retreat_memo',$this->retreat_memo,true);
+		$criteria->compare('is_giving',$this->is_giving,true);
+		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('product_order_status',$this->product_order_status,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -101,18 +143,4 @@ class OrderProduct extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-	static public function getOrderProducts($orderId){
-		$db = Yii::app()->db;
-		$sql = "select t.*,t1.*,t2.category_name from nb_order_product t
-				left join nb_product t1 on t.product_id = t1.product_id
-				left join nb_product_category t2 on t1.category_id = t2.category_id
-				where t.order_id=:orderId";
-		return $db->createCommand($sql)->bindValue(':orderId' , $orderId)->queryAll();
-	}
-	static public function getTotal($orderId){
-		$db = Yii::app()->db;
-		$sql = "select sum(price*amount) as total from nb_order_product where order_id=:orderId";
-		return $db->createCommand($sql)->bindValue(":orderId" , $orderId)->queryScalar();
-	}
-	
 }

@@ -6,8 +6,8 @@ class CreateOrder
 	public $product = array();
 	public function __construct($siteNoId = 0,$product = array()){
 		$this->siteNo = SiteNo::model()->find('lid=:lid',array(':lid'=>$siteNoId));
-		$this->companyId = $this->siteNo['dpid'];
-		$this->siteId = $this->siteNo['site_id'];
+		$this->companyId = $this->siteNo->dpid;
+		$this->siteId = $this->siteNo->site_id;
 		$this->product = $product;
 		$this->db = Yii::app()->db;
 	}
@@ -15,15 +15,18 @@ class CreateOrder
 		$time = date('Y-m-d H:i:s',time());
 		$transaction = $this->db->beginTransaction();
 		try {
-			if(!$this->siteNo['status']){
+			if(!$this->siteNo->status){
 				$order = new Order;
 				$data = array(
 							'lid'=>$this->getMaxOrderId(),
 							'dpid'=>$this->companyId,
 							'site_id'=>$this->siteId,
 							'create_at'=>$time,
-							'is_temp'=>$this->siteNo['is_temp'],
-							'number'=>$this->siteNo['number'],
+							'is_temp'=>$this->siteNo->is_temp,
+							'number'=>$this->siteNo->number,
+							'update_at'=>$time,
+							'remark'=>'无',
+							'taste_memo'=>'无',
 							);
 				$order->attributes = $data;
 				$order->save();
@@ -41,10 +44,15 @@ class CreateOrder
 									'set_id'=>$setId,
 									'product_id'=>$this->product['lid'],
 									'price'=>$this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']),
+									'update_at'=>$time,
+									'amount'=>1,
+									'taste_memo'=>'无',
+									'retreat_memo'=>'无',
 									);
 			$orderProduct->attributes = $orderProductData;
 			$orderProduct->save();
-			
+			$this->siteNo->status = 1;
+			$this->siteNo->save();
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			return true;
 		} catch (Exception $e) {
@@ -57,7 +65,7 @@ class CreateOrder
 		$sql = 'SELECT NEXTVAL("nb_order") AS id';
 		$order = $this->db->createCommand($sql)->queryRow();
 		if($order){
-			$maxOrderId = $order['id'];
+			$maxOrderId = $order['id']?$order['id']:1;
 		}
 		return $maxOrderId;
 	}
@@ -66,7 +74,7 @@ class CreateOrder
 		$sql = 'SELECT NEXTVAL("nb_order_product") AS id';
 		$order = $this->db->createCommand($sql)->queryRow();
 		if($order){
-			$maxOrderId = $order['id'];
+			$maxOrderId = $order['id']?$order['id']:1;
 		}
 		return $maxOrderId;
 	}
