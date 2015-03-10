@@ -18,7 +18,7 @@ class ProductController extends Controller
 		$mac = Yii::app()->request->getParam('wuyimenusysosyoyhmac',0);
 		if($mac){
 			$companyWifi = CompanyWifi::model()->find('macid=:macId',array(':macId'=>$mac));
-			$this->companyId = $companyWifi?$companyWifi->company_id:0;
+			$this->companyId = $companyWifi?$companyWifi->dpid:0;
 			$_SESSION['companyId'] = $this->companyId;
 		}
 		if(!$this->companyId){
