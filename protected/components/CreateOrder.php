@@ -62,7 +62,7 @@ class CreateOrder
 	}
 	public function getMaxOrderId(){
 		$maxOrderId = 1;
-		$sql = 'SELECT NEXTVAL("nb_order") AS id';
+		$sql = 'SELECT NEXTVAL("order") AS id';
 		$order = $this->db->createCommand($sql)->queryRow();
 		if($order){
 			$maxOrderId = $order['id']?$order['id']:1;
@@ -71,7 +71,7 @@ class CreateOrder
 	}
 	public function getMaxOrderProductId(){
 		$maxOrderId = 1;
-		$sql = 'SELECT NEXTVAL("nb_order_product") AS id';
+		$sql = 'SELECT NEXTVAL("order_product") AS id';
 		$order = $this->db->createCommand($sql)->queryRow();
 		if($order){
 			$maxOrderId = $order['id']?$order['id']:1;
