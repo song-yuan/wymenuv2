@@ -60,16 +60,12 @@ class ProductController extends Controller
 		$pid = Yii::app()->request->getParam('pid',0);
 		$categoryId = Yii::app()->request->getParam('category',0);
 		
-		$command = Yii::app()->db;
 		if(!$categoryId){
-			$sql = 'select lid, pid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0';
-			$parentCategorys = $command->createCommand($sql)->bindValue(':companyId',$this->companyId)->queryRow();
-			$csql = 'select lid, pid, category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0';
-			$categorys = $command->createCommand($csql)->bindValue(':companyId',$this->companyId)->bindValue(':pid',$parentCategorys['lid'])->queryRow();
+			$categorys = ProductClass::getFirstCategoryId($this->companyId);
 			$pid = $categorys['pid'];
 			$categoryId = $categorys['lid'];
 		}
-		$this->render('product',array('pid'=>$pid,'categoryId'=>$categoryId));
+		$this->render('product',array('pid'=>$pid,'categoryId'=>$categoryId,'siteNoId'=>$this->siteNoId));
 	}
 	/**
 	 * 
@@ -98,7 +94,7 @@ class ProductController extends Controller
 			$product = $connect->queryAll();
 		}else{
 			$categoryId = Yii::app()->request->getParam('cat',0);
-			$product = Product::getCategoryProducts($this->companyId,$this->siteNoId);
+			$product = ProductClass::getCategoryProducts($this->companyId,$this->siteNoId);
 		}
 		Yii::app()->end(json_encode($product));
 	}

@@ -11,7 +11,11 @@
 	Yii::app()->clientScript->registerCssFile('../css/product.css');
 	Yii::app()->clientScript->registerScriptFile('../js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
-	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');  		 	
+	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');  
+	$result = ProductClass::getCartInfo($siteNoId);	
+	$resArr = explode(':',$result);
+	$price = $resArr[0];
+	$nums = $resArr[1];
 ?>
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId));?>
 	<script type="text/javascript" src="../js/product/product.js"></script>
@@ -29,10 +33,10 @@
     <!--content结束-->
     <div class="bottom">
     	<div class="bottom-left">
-    		<span>总价 :</span><span class="total-price">0.00</span>
+    		<span>总价: </span><span class="total-price"><?php echo Money::priceFormat($price);?></span>
     	</div>
     	<div class="bottom-middle">
-    		<div class="product-nums">0</div>
+    		<div class="product-nums"><?php echo $nums;?></div>
     	</div>
     	<div class="bottom-right">
     		<a href="orderList"><button class="see-order">订单>></button></a>

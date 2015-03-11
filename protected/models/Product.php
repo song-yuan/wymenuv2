@@ -124,21 +124,4 @@ class Product extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-	public static function getCategoryProducts($dpid=0,$siteNoId=0)
-	{
-		$siteId = 0;
-		$siteNo = SiteNo::model()->find('lid=:lid',array(':lid'=>$siteNoId));
-		if($siteNo){
-			$siteId = $siteNo['site_id'];
-		}
-		//type 0 普通商品 1 套餐
-		$sql = 'select t.*,t1.order_id from ' .
-			   '(select lid,product_name, original_price, main_picture, rank, order_number, favourite_number,0 as type from nb_product where dpid=:companyId and status=0 and delete_flag=0 and is_show = 1 union select  lid,set_name as product_name, 0 as original_price, main_picture, rank, order_number, favourite_number, 1 as type from nb_product_set where delete_flag=0)t ' .
-			   'LEFT JOIN (select order_id,product_id from nb_order_product t2 LEFT JOIN nb_order t3 on t2.order_id=t3.lid where t3.site_id=:siteId )t1 on t.lid=t1.product_id';
-		$connect = Yii::app()->db->createCommand($sql);
-		$connect->bindValue(':companyId',$dpid);
-		$connect->bindValue(':siteId',$siteId);
-		$product = $connect->queryAll();
-		return $product;
-	}
 }
