@@ -5,6 +5,7 @@
 	$orderNum = 0;
 	$orderPricePay = 0;
 	$orderPayNum = 0;
+	$orderList = new OrderList($this->siteNoId);
 	if($orderList->order){
 		$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0);
 		$orderProductListPay = $orderList->OrderProductList($orderList->order['lid'],1);

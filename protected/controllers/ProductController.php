@@ -152,9 +152,8 @@ class ProductController extends Controller
 			   $this->redirect(array('/product/order','orderId'=>$orderId));
 			}
 		}
-		$orderList = new OrderList($this->siteNoId);
 		
-	 	$this->render('orderlist',array('orderList'=>$orderList));
+	 	$this->render('orderlist');
 	}
 	//确认订单
 	public function actionConfirmOrder(){
