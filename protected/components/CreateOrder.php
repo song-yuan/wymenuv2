@@ -15,7 +15,12 @@ class CreateOrder
 		$time = date('Y-m-d H:i:s',time());
 		$transaction = $this->db->beginTransaction();
 		try {
-			if(!$this->siteNo->status){
+			$criteria = new CDbCriteria;
+			$criteria->addCondition('dpid=:dpid and site_id=:siteId and is_temp=:isTemp');
+			$criteria->params = array(':dpid'=>$this->siteNo->dpid,':siteId'=>$this->siteNo->site_id,':isTemp'=>$this->siteNo->is_temp); 
+			$criteria->order =  'lid desc';
+			$order = Order::model()->find($criteria);
+			if(!$order){
 				$order = new Order;
 				$data = array(
 							'lid'=>$this->getMaxOrderId(),
