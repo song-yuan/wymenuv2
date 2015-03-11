@@ -118,7 +118,8 @@ class ProductController extends Controller
 			}
 		}else{
 			//删除
-			if(CreateOrder::deleteOrderProduct($this->companyId,$productId)){
+			$createOrder = new CreateOrder($this->siteNoId,$product);
+			if($createOrder->deleteOrderProduct()){
 				echo 1;
 			}else{
 				echo 0;

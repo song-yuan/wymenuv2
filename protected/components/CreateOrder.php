@@ -36,28 +36,32 @@ class CreateOrder
 				$order->attributes = $data;
 				$order->save();
 			}
-			$orderProduct = new OrderProduct;
-			$setId = 0;
-			if($this->product['type']){
-				$setId = $this->product['lid'];
+			$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
+			if($orderProduct){
+				$orderProduct->delete_flag = 0;
+				$orderProduct->update();
+			}else{
+				$orderProduct = new OrderProduct;
+				$setId = 0;
+				if($this->product['type']){
+					$setId = $this->product['lid'];
+				}
+				$orderProductData = array(
+										'lid'=>$this->getMaxOrderProductId(),
+										'dpid'=>$this->companyId,
+										'create_at'=>$time,
+										'order_id'=>$order->lid,
+										'set_id'=>$setId,
+										'product_id'=>$this->product['lid'],
+										'price'=>$this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']),
+										'update_at'=>$time,
+										'amount'=>1,
+										'taste_memo'=>'无',
+										'retreat_memo'=>'无',
+										);
+				$orderProduct->attributes = $orderProductData;
+				$orderProduct->save();
 			}
-			$orderProductData = array(
-									'lid'=>$this->getMaxOrderProductId(),
-									'dpid'=>$this->companyId,
-									'create_at'=>$time,
-									'order_id'=>$order->lid,
-									'set_id'=>$setId,
-									'product_id'=>$this->product['lid'],
-									'price'=>$this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']),
-									'update_at'=>$time,
-									'amount'=>1,
-									'taste_memo'=>'无',
-									'retreat_memo'=>'无',
-									);
-			$orderProduct->attributes = $orderProductData;
-			$orderProduct->save();
-			$this->siteNo->status = 1;
-			$this->siteNo->save();
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			return true;
 		} catch (Exception $e) {
@@ -163,13 +167,16 @@ class CreateOrder
 		
 		return $price?$price:0;
 	}
-	public static function deleteOrderProduct($dpid = 0,$productId = 0){
-		$sql = 'delete from nb_order_product where dpid=:dpid and product_id=:productId';
-		$connect = Yii::app()->db->createCommand($sql);
-		$connect->bindValue(':productId',$productId);
-		$connect->bindValue(':dpid',$dpid);
-		$result = $connect->execute();
-		if($result){
+	public function deleteOrderProduct(){
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('dpid=:dpid and site_id=:siteId and is_temp=:isTemp');
+		$criteria->params = array(':dpid'=>$this->siteNo->dpid,':siteId'=>$this->siteNo->site_id,':isTemp'=>$this->siteNo->is_temp); 
+		$criteria->order =  'lid desc';
+		$order = Order::model()->find($criteria);
+			
+		$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
+		$orderProduct->delete_flag = 1;
+		if($orderProduct->update()){
 			return true;
 		}else{
 			return false;
