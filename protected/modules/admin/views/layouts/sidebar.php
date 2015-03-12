@@ -71,18 +71,18 @@
 					<span class="title">订单管理</span>					
 					</a>
 					<ul class="sub-menu">
-						<li class=""><a href="">订单列表</a></li>
+						<li class=""><a href="">历史订单查询</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType', 'floor'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">餐桌包厢管理</span>					
 					</a>
 					<ul class="sub-menu">
-						<li class=""><a href="">楼层管理</a></li>
-						<li class=""><a href="">餐桌种类</a></li>
-						<li class=""><a href="">餐桌包厢明细</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'floor') echo 'active';?>"><a href="<?php echo $this->createUrl('floor/index',array('companyId' => $this->companyId));?>">楼层管理</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'siteType') echo 'active';?>"><a href="<?php echo $this->createUrl('siteType/index',array('companyId' => $this->companyId));?>">餐桌种类</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'site') echo 'active';?>"><a href="<?php echo $this->createUrl('site/index',array('companyId' => $this->companyId));?>">餐桌包厢明细</a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">

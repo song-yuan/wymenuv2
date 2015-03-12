@@ -52,6 +52,7 @@
 								<li><a href="#"><i class="fa fa-ban"></i> 删除</a></li>
 							</ul>
 						</div> -->
+                                                <a href="javascript:void(0)" class="btn purple" onclick="document.getElementById('siteType-form').submit();"><i class="fa fa-times"></i> 删除</a>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -68,11 +69,11 @@
 						<?php if($models):?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->type_id;?>" name="type_id[]" /></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="type_id[]" /></td>
 								<td ><?php echo $model->company ? $model->company->company_name : '' ;?></td>
 								<td><a href="" ><?php echo $model->name;?></a></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('siteType/update',array('id' => $model->type_id , 'companyId' => $model->company_id));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('siteType/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>
