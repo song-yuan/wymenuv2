@@ -59,9 +59,11 @@
 			<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
 			<div class="order-product-right">
 				<div class="right-up"><?php echo $order['product_name'];?></div>
-				<div class="right-down">
+				<div class="right-middle">
 		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
-				 <div class="right-down-right" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>	
+				</div>
+				<div class="right-down">
+				<font color="#ff8c00">口味要求</font>:少油  少盐
 				</div>
 			</div>
 			<div class="clear"></div>
