@@ -4,9 +4,9 @@
  * This is the model class for table "nb_site_type".
  *
  * The followings are the available columns in table 'nb_site_type':
- * @property integer $type_id
+ * @property integer $lid
+ * @property integer $dpid
  * @property string $name
- * @property integer $company_id
  */
 class SiteType extends CActiveRecord
 {
@@ -26,12 +26,12 @@ class SiteType extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name , company_id', 'required'),
-			array('type_id, company_id', 'numerical', 'integerOnly'=>true),
+			array('name , dpid', 'required'),
+			array('lid, dpid', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>45),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('type_id, name, company_id', 'safe', 'on'=>'search'),
+			array('lid, name, dpid', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -43,8 +43,8 @@ class SiteType extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'site' => array(self::HAS_MANY , 'Site' , 'type_id','condition'=>'site.delete_flag=0') ,
-				'company' => array(self::BELONGS_TO , 'Company' , 'company_id') ,
+				'site' => array(self::HAS_MANY , 'Site' ,'' ,'on'=>'t.lid=site.type_id and t.dpid=site.dpid') ,
+				'company' => array(self::BELONGS_TO , 'Company' ,'' ,'on'=>'t.dpid=company.dpid') ,
 		);
 	}
 
@@ -54,9 +54,9 @@ class SiteType extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'type_id' => '位置类型ID',
+			'lid' => '位置类型ID',
 			'name' => '类型名称',
-			'company_id' => '公司',
+			'dpid' => '公司',
 		);
 	}
 
@@ -78,9 +78,9 @@ class SiteType extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('type_id',$this->type_id);
+		$criteria->compare('lid',$this->lid);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('company_id',$this->company_id);
+		$criteria->compare('dpid',$this->dpid);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

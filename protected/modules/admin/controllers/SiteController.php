@@ -88,7 +88,7 @@ class SiteController extends BackendController
 		}
 	}
 	private function getTypes(){
-		$types = SiteType::model()->findAll('company_id=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
+		$types = SiteType::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
 		$types = $types ? $types : array();
 		return CHtml::listData($types, 'type_id', 'name');
 	}
