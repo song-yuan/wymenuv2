@@ -149,7 +149,7 @@ class ProductController extends Controller
 		
 		if($confirm){
 			$orderId = Yii::app()->request->getParam('orderId',0);
-			if(!OrderList::UpdateOrder($orderId,$goodsIds)){
+			if(!OrderList::ConfirmOrder($orderId,$goodsIds)){
 			   $this->redirect(array('/product/order','orderId'=>$orderId));
 			}
 		}
@@ -165,11 +165,10 @@ class ProductController extends Controller
 	public function actionOrder(){
 		$orderId = Yii::app()->request->getParam('orderId');
 		$goodsIds = isset($_POST) ?$_POST :array();
-		if(!$goodsIds && !OrderList::UpdateOrder($orderId,$goodsIds)){
+		if(!($goodsIds && OrderList::UpdateOrder($orderId,$goodsIds))){
 			$this->redirect(array('/product/orderList'));
 		}
-		$orderList = new OrderList($this->siteNoId);
 		
-	 	$this->render('order',array('orderList'=>$orderList));
+	 	$this->render('order');
 	}
 }

@@ -83,7 +83,7 @@ class OrderList
 				$conn->execute();
 			}
 				$sql = 'update nb_order set lock_status=1 where lid = :orderId';
-				$conn = $this->db->createCommand($sql);
+				$conn = Yii::app()->db->createCommand($sql);
 				$conn->bindValue(':orderId',$orderId);
 				$conn->execute();
 			return true;

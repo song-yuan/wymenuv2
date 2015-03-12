@@ -56,6 +56,6 @@ li ul{
 	height:140px;
 	margin-left:5px;
 }
-ul .child.float{width:100%;float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
+ul .child.float{width:90%;float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
 ul .child{width:100%;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
 li .active{background:rgb(240,201,82);}

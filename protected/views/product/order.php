@@ -3,6 +3,7 @@
 	Yii::app()->clientScript->registerCssFile('../css/order.css');
 	$orderPrice = 0;
 	$orderNum = 0;
+	$orderList = new OrderList($this->siteNoId);
 	if($orderList->order){
 		$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0);
 		$price = $orderList->OrderPrice(0);
@@ -32,7 +33,7 @@
 <?php endforeach;?>
 	<div class="order-info">
 		<div class="order-time"><?php echo date('Y-m-d H:i',time()); ?></div>
-		<div class="order-price">订单总额:<?php echo $orderPrice; ?></div>
+		<div class="order-price">订单总额:<?php echo Money::priceFormat($orderPrice); ?></div>
 	</div>
 	<div class="order-taste"><font color="#ff8c00">全单口味要求</font><img src="../img/product/down-arrow.png" />:不放辣</div>
 </form>
