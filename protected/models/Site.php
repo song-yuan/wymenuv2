@@ -4,11 +4,11 @@
  * This is the model class for table "nb_site".
  *
  * The followings are the available columns in table 'nb_site':
- * @property string $site_id
+ * @property string $lid
  * @property string $serial
  * @property integer $type_id
  * @property string $site_level
- * @property string $company_id
+ * @property string $dpid
  * @property integer $delete_flag
  * @property integer $has_minimum_consumption
  * @property integer $minimum_consumption_type
@@ -37,15 +37,15 @@ class Site extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('serial , type_id , company_id , site_level' , 'required'),
+			array('serial , type_id ,lid, dpid , site_level' , 'required'),
 			array('type_id, delete_flag, has_minimum_consumption, minimum_consumption_type', 'numerical', 'integerOnly'=>true),
 			array('period, overtime,buffer', 'numerical'),
 			array('serial', 'length', 'max'=>50),
 			array('site_level', 'length', 'max'=>20),
-			array('company_id, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
+			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('site_id, serial, type_id, site_level, company_id, delete_flag, has_minimum_consumption, minimum_consumption_type, minimum_consumption, number, period, overtime, buffer, overtime_fee', 'safe', 'on'=>'search'),
+			array('site_id, serial, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type, minimum_consumption, number, period, overtime, buffer, overtime_fee', 'safe', 'on'=>'search'),
 		);
 	}
 	public function validate($attributes = NULL, $clearErrors = true){
@@ -54,7 +54,7 @@ class Site extends CActiveRecord
 		if(!$this->company_id){
 			return false;
 		}
-		$site = Site::model()->find('site_id<>:siteId and type_id=:typeId and company_id=:companyId and serial=:serial and delete_flag=0' , array(':serial'=>$this->serial,':siteId'=>$this->site_id?$this->site_id:'',':typeId'=>$this->type_id,':companyId'=>$this->company_id));
+		$site = Site::model()->find('site_id<>:siteId and type_id=:typeId and dpid=:companyId and serial=:serial and delete_flag=0' , array(':serial'=>$this->serial,':siteId'=>$this->site_id?$this->site_id:'',':typeId'=>$this->type_id,':companyId'=>$this->company_id));
 		if($site) {
 			$this->addError('serial', '座位号已经存在');
 			return false;
@@ -119,7 +119,7 @@ class Site extends CActiveRecord
 		$criteria->compare('serial',$this->serial,true);
 		$criteria->compare('type_id',$this->type_id);
 		$criteria->compare('site_level',$this->site_level,true);
-		$criteria->compare('company_id',$this->company_id,true);
+		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('has_minimum_consumption',$this->has_minimum_consumption);
 		$criteria->compare('minimum_consumption_type',$this->minimum_consumption_type);
