@@ -95,8 +95,8 @@ class OrderList
 	public static function ConfirmOrder($orderId,$goodsIds){
 		if($goodsIds){
 			foreach($goodsIds as $key=>$val){
-				$sql = 'update nb_order_product set amount = :amount where order_id = :orderId and product_id = :productId and product_order_status=1';
-				$conn = $this->db->createCommand($sql);
+				$sql = 'update nb_order_product set amount = :amount , product_order_status=1 where order_id = :orderId and product_id = :productId';
+				$conn = Yii::app()->db->createCommand($sql);
 				$conn->bindValue(':amount',$val);
 				$conn->bindValue(':orderId',$orderId);
 				$conn->bindValue(':productId',$key);

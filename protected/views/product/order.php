@@ -28,6 +28,7 @@
 			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:少油  少盐
 		</div>
 	        <div class="product-down">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font><img src="../img/product/down-arrow.png" /></div>
+	        <input type="hidden" name="<?php echo $order['product_id'];?>" value="<?php echo $order['amount'];?>"/>
 		</div>
 	<?php endforeach;?>
 <?php endforeach;?>
