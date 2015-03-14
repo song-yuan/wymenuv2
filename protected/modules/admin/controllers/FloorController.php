@@ -13,10 +13,10 @@ class FloorController extends BackendController
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
 		$criteria->condition = 't.dpid='.$this->companyId .' and t.delete_flag=0';
-		$pages = new CPagination(SiteType::model()->count($criteria));
+		$pages = new CPagination(Floor::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
-		$models = SiteType::model()->findAll($criteria);
+		$models = Floor::model()->findAll($criteria);
 		//var_dump($models);
                 //exit;
 		$this->render('index',array(

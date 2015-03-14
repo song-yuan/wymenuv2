@@ -51,9 +51,13 @@
 							<ul class="dropdown-menu pull-right">
 								<li><a href="#"><i class="fa fa-ban"></i> 删除</a></li>
 							</ul>
-						</div> -->
+						</div>
                                                 <a href="javascript:void(0)" class="btn purple" onclick="document.getElementById('siteType-form').submit();"><i class="fa fa-times"></i> 删除</a>
-					</div>
+                                                 -->
+                                                 <div class="btn-group">
+                                                        <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 删除</button>
+                                                </div>
+                                        </div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -62,6 +66,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th>公司</th>
 								<th>名字</th>
+                                                                <th>负责人</th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -72,6 +77,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="floor_id[]" /></td>
 								<td ><?php echo $model->company ? $model->company->company_name : '' ;?></td>
 								<td><a href="" ><?php echo $model->name;?></a></td>
+                                                                <td><a href="" ><?php echo $model->manager;?></a></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('siteType/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>

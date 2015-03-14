@@ -51,9 +51,13 @@
 							<ul class="dropdown-menu pull-right">
 								<li><a href="#"><i class="fa fa-ban"></i> 删除</a></li>
 							</ul>
-						</div> -->
+						</div> 
                                                 <a href="javascript:void(0)" class="btn purple" onclick="document.getElementById('siteType-form').submit();"><i class="fa fa-times"></i> 删除</a>
-					</div>
+                                                -->
+                                                <div class="btn-group">
+                                                        <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 删除</button>
+                                                </div>
+                                        </div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
