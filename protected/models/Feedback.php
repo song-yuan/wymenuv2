@@ -1,25 +1,26 @@
 <?php
 
 /**
- * This is the model class for table "nb_printer".
+ * This is the model class for table "nb_feedback".
  *
- * The followings are the available columns in table 'nb_printer':
- * @property string $printer_id
- * @property string $company_id
+ * The followings are the available columns in table 'nb_feedback':
+ * @property string $lid
+ * @property string $dpid
+ * @property string $create_at
+ * @property string $update_at
  * @property string $name
- * @property string $ip_address
- * @property string $department_id
- * @property string $brand
- * @property string $remark
+ * @property string $tip
+ * @property string $allflag
+ * @property string $delete_flag
  */
-class Printer extends CActiveRecord
+class Feedback extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_printer';
+		return 'nb_feedback';
 	}
 
 	/**
@@ -30,13 +31,14 @@ class Printer extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name,dpid,lid', 'required'),
-			array('lid, dpid,baud_rate', 'length', 'max'=>10),
-			array('name, remark, brand', 'length', 'max'=>45),
-                        array('com_name', 'length', 'max'=>10),
+			array('name, tip', 'required'),
+			array('lid, dpid', 'length', 'max'=>10),
+			array('name, tip', 'length', 'max'=>50),
+			array('allflag, delete_flag', 'length', 'max'=>1),
+			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, name, create_at,com_name,baud_rate, ip_address, printer_type,delete_flag, brand, remark', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, name, tip, allflag, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -48,6 +50,7 @@ class Printer extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    
 		);
 	}
 
@@ -57,13 +60,14 @@ class Printer extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'printer_id' => 'Printer',
-			'dpid' => 'Company',
-			'name' => '打印机名称',
-			'ip_address' => 'IP地址',
-			'department_id' => 'Department',
-			'brand' => '品牌',
-			'remark' => '备注',
+			'lid' => '自身id',
+			'dpid' => '店铺id',
+			'create_at' => 'Create At',
+			'update_at' => '更新时间',
+			'name' => '反馈名称',
+			'tip' => '提示客户',
+			'allflag' => '1整单反馈，0不是',
+			'delete_flag' => 'Delete Flag',
 		);
 	}
 
@@ -87,11 +91,12 @@ class Printer extends CActiveRecord
 
 		$criteria->compare('lid',$this->lid,true);
 		$criteria->compare('dpid',$this->dpid,true);
+		$criteria->compare('create_at',$this->create_at,true);
+		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('ip_address',$this->ip_address,true);
-		$criteria->compare('printer_type',$this->printer_type,true);
-		$criteria->compare('brand',$this->brand,true);
-		$criteria->compare('remark',$this->remark,true);
+		$criteria->compare('tip',$this->tip,true);
+		$criteria->compare('allflag',$this->allflag,true);
+		$criteria->compare('delete_flag',$this->delete_flag,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -102,7 +107,7 @@ class Printer extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Printer the static model class
+	 * @return Feedback the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

@@ -11,7 +11,7 @@ class PrinterController extends BackendController
 	}
 	public function actionIndex(){
 		$criteria = new CDbCriteria;
-		$criteria->condition =  't.company_id='.$this->companyId ;
+		$criteria->condition =  't.dpid='.$this->companyId ;
 		$pages = new CPagination(Printer::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -25,7 +25,7 @@ class PrinterController extends BackendController
 	}
 	public function actionCreate(){
 		$model = new Printer() ;
-		$model->company_id = $this->companyId ;
+		$model->dpid = $this->companyId ;
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Printer');
@@ -53,10 +53,36 @@ class PrinterController extends BackendController
 				'model'=>$model,
 		));
 	}
+        public function actionList(){
+		$model = Company::model()->findByPk($this->companyId);
+		$printer = $this->getPrinters();
+		if(Yii::app()->request->isPostRequest) {
+			$model->attributes = Yii::app()->request->getPost('Company');
+			if($model->save()){
+				Yii::app()->user->setFlash('success' , '修改成功');
+				//$this->redirect(array('printer/index' , 'companyId' => $this->companyId));
+			}
+		}
+		$this->render('list' , array(
+				'model'=>$model,
+                                'printers'=>$printer
+		));
+	}
 	public function actionDelete(){
-		
-		
-		
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$ids = Yii::app()->request->getPost('ids');
+		if(!empty($ids)) {
+			foreach ($ids as $id) {
+				$model = Printer::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
+				if($model) {
+					$model->saveAttributes(array('delete_flag'=>1));
+				}
+			}
+			$this->redirect(array('printer/index' , 'companyId' => $companyId)) ;
+		} else {
+			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
+			$this->redirect(array('printer/index' , 'companyId' => $companyId)) ;
+		}
 	}
 	public function actionRefresh(){
 		$printers = Yii::app()->db->createCommand('select * from nb_printer where company_id=:companyId')
@@ -74,5 +100,9 @@ class PrinterController extends BackendController
 		}
 		exit;
 	}
-	
+	private function getPrinters(){
+		$printers = Printer::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
+		$printers = $printers ? $printers : array();
+		return CHtml::listData($printers, 'lid', 'name');
+	}
 }

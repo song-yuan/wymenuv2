@@ -55,14 +55,14 @@
 						<li class="<?php if(Yii::app()->controller->id == 'taste' && $this->getAction()->getId() == 'productTaste') echo 'active';?>"><a href="<?php echo $this->createUrl('taste/productTaste',array('companyId' => $this->companyId));?>">单品口味对应</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('feedback'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">反馈选项</span>					
 					</a>
 					<ul class="sub-menu">
-						<li class=""><a href="">整单反馈选项</a></li>
-						<li class=""><a href="">单品反馈选项</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'feedback' &&(isset($_GET['allflag'])&&$_GET['allflag']==1)) echo 'active';?>"><a href="<?php echo $this->createUrl('feedback/index',array('companyId' => $this->companyId,'allflag'=>1));?>">整单反馈选项</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'feedback' &&(!isset($_GET['allflag'])||(isset($_GET['allflag'])&&$_GET['allflag']==0))) echo 'active';?>"><a href="<?php echo $this->createUrl('feedback/index',array('companyId' => $this->companyId));?>">单品反馈选项</a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
@@ -85,15 +85,15 @@
 						<li class="<?php if(Yii::app()->controller->id == 'site') echo 'active';?>"><a href="<?php echo $this->createUrl('site/index',array('companyId' => $this->companyId));?>">餐桌包厢明细</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('printer' , 'printerway'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
-					<span class="title">打印</span>					
+					<span class="title">打印机管理</span>					
 					</a>
 					<ul class="sub-menu">
-						<li class=""><a href="">打印机管理</a></li>
-						<li class=""><a href="">打印方案</a></li>
-						<li class=""><a href="">清单打印机</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'printer' && $this->getAction()->getId() == 'index') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/index',array('companyId' => $this->companyId));?>">打印机管理</a></li>
+						<li class=""><a href="<?php if(Yii::app()->controller->id == 'printerway') echo 'active';?>">打印方案</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'printer' && $this->getAction()->getId() == 'list') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/list',array('companyId' => $this->companyId));?>">清单打印机</a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
