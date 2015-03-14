@@ -17,6 +17,7 @@
 	$price = $resArr[0];
 	$nums = $resArr[1];
 ?>
+
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId));?>
 	<script type="text/javascript" src="../js/product/product.js"></script>
 	<div id="page_0" class="up ub ub-ver" tabindex="0">

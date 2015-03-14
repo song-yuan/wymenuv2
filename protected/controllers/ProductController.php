@@ -171,4 +171,23 @@ class ProductController extends Controller
 		
 	 	$this->render('order');
 	}
+	//获取商品口味
+	public function actionGetTasteJson()
+	{
+		$type = Yii::app()->request->getParam('type');
+		$id = Yii::app()->request->getParam('id');
+		if($type==1){ //全单口味
+			$allOrderTastes = TasteClass::getAllOrderTaste($this->companyId);
+		}elseif($type==2){ //产品口味
+			$productId = Yii::app()->request->getParam('productId');
+			$allOrderTastes = TasteClass::getProductTaste($productId);
+		}
+		$orderTastes = TasteClass::getOrderTaste($id,$type);
+		foreach($allOrderTastes as $key=>$val){
+			if(in_array($val['lid'],$orderTastes)){
+				$allOrderTastes[$key]['lid'] = $val['lid'].'-1';
+			}
+		}
+		Yii::app()->end(json_encode($allOrderTastes));
+	}
 }
