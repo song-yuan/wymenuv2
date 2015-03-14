@@ -45,16 +45,16 @@ class Site extends CActiveRecord
 			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('site_id, serial, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type, minimum_consumption, number, period, overtime, buffer, overtime_fee', 'safe', 'on'=>'search'),
+			array('lid, serial, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type, minimum_consumption, number, period, overtime, buffer, overtime_fee', 'safe', 'on'=>'search'),
 		);
 	}
 	public function validate($attributes = NULL, $clearErrors = true){
 		
 		$valid = parent::validate();
-		if(!$this->company_id){
+		if(!$this->dpid){
 			return false;
 		}
-		$site = Site::model()->find('site_id<>:siteId and type_id=:typeId and dpid=:companyId and serial=:serial and delete_flag=0' , array(':serial'=>$this->serial,':siteId'=>$this->site_id?$this->site_id:'',':typeId'=>$this->type_id,':companyId'=>$this->company_id));
+		$site = Site::model()->find('lid<>:siteId and type_id=:typeId and dpid=:companyId and serial=:serial and delete_flag=0' , array(':serial'=>$this->serial,':siteId'=>$this->lid?$this->lid:'',':typeId'=>$this->type_id,':companyId'=>$this->dpid));
 		if($site) {
 			$this->addError('serial', '座位号已经存在');
 			return false;
@@ -69,8 +69,8 @@ class Site extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'isfree' => array(self::HAS_ONE , 'SiteNo' , 'site_id' , 'on' => 'isfree.delete_flag=0'),
-				'siteType' => array(self::BELONGS_TO , 'SiteType' ,'type_id')
+				'isfree' => array(self::HAS_ONE , 'SiteNo' , '' , 'on' => 't.lid=isfree.site_id and t.dpid=isfree.dpid and isfree.status in(2,3,4,5)'),
+				'siteType' => array(self::BELONGS_TO , 'SiteType' ,'','on' =>'t.type_id=siteType.lid and t.dpid=siteType.dpid')
 		);
 	}
 	
@@ -80,11 +80,11 @@ class Site extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'site_id' => 'Site',
+			'lid' => 'Site',
 			'serial' => '座位编号',
 			'type_id' => '座位类型',
 			'site_level' => '座位等级',
-			'company_id' => 'Company',
+			'dpid' => 'Company',
 			'delete_flag' => '删除',
 			'has_minimum_consumption' => '是否有最低消费',
 			'minimum_consumption_type' => '最低消费类型',
@@ -94,6 +94,8 @@ class Site extends CActiveRecord
 			'overtime' => '超时单位（分钟）',
 			'buffer' => '超时计算点（分钟）',
 			'overtime_fee' => '超时费（元）',
+                        'floor_id' => '楼层',
+                        'Status' => '座位状态',
 		);
 	}
 
@@ -115,7 +117,7 @@ class Site extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('site_id',$this->site_id,true);
+		$criteria->compare('lid',$this->lid,true);
 		$criteria->compare('serial',$this->serial,true);
 		$criteria->compare('type_id',$this->type_id);
 		$criteria->compare('site_level',$this->site_level,true);
@@ -129,7 +131,9 @@ class Site extends CActiveRecord
 		$criteria->compare('overtime',$this->overtime,true);
 		$criteria->compare('buffer',$this->buffer);
 		$criteria->compare('overtime_fee',$this->overtime_fee,true);
-
+                $criteria->compare('floor_id',$this->floor_id,true);
+                $criteria->compare('status',$this->status,true);
+                
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));

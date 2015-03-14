@@ -44,7 +44,7 @@
 						<li class=""><a href="">退菜理由选项设定</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">口味设定</span>					
@@ -55,7 +55,7 @@
 						<li class=""><a href="">单品口味对应</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">反馈选项</span>					
@@ -65,7 +65,7 @@
 						<li class=""><a href="">单品反馈选项</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">订单管理</span>					
@@ -85,7 +85,7 @@
 						<li class="<?php if(Yii::app()->controller->id == 'site') echo 'active';?>"><a href="<?php echo $this->createUrl('site/index',array('companyId' => $this->companyId));?>">餐桌包厢明细</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">打印</span>					
@@ -96,7 +96,7 @@
 						<li class=""><a href="">清单打印机</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">日常统计</span>					

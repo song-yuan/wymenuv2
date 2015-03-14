@@ -69,12 +69,12 @@
 										<?php if($models):?>
 										<?php foreach ($models as $model):?>
 											<tr class="odd gradeX">
-												<td><input type="checkbox" class="checkboxes"  value="<?php echo $model->site_id;?>" name="ids[]" /></td>
+												<td><input type="checkbox" class="checkboxes"  value="<?php echo $model->lid;?>" name="ids[]" /></td>
 												<td ><?php echo $model->serial ;?></td>
 												<td ><?php echo $model->siteType->name ;?></td>
 												<td><?php echo $model->site_level;?></td>
 												<td class="center">
-												<a href="<?php echo $this->createUrl('site/update',array('id' => $model->site_id , 'companyId' => $model->company_id));?>">编辑</a>
+												<a href="<?php echo $this->createUrl('site/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 												</td>
 											</tr>
 										<?php endforeach;?>

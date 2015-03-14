@@ -11,6 +11,7 @@ class SiteController extends BackendController
 	}
 	public function actionIndex() {
 		$typeId = Yii::app()->request->getParam('typeId');
+                
 		$siteTypes = $this->getTypes();
 		if(empty($siteTypes)) {
 			$models = false;
@@ -20,7 +21,12 @@ class SiteController extends BackendController
 		
 		$criteria = new CDbCriteria;
 		$criteria->with = 'siteType';
-		$criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.company_id='.$this->companyId ;
+                //echo $typeId; exit;
+                if(empty($typeId)) {
+			$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId ;
+		}else{
+                        $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$this->companyId ;
+                }
 		$criteria->order = ' t.type_id asc ';
 		
 		$pages = new CPagination(Site::model()->count($criteria));
@@ -38,25 +44,31 @@ class SiteController extends BackendController
 	public function actionCreate() {
 		$typeId = Yii::app()->request->getParam('typeId',0);
 		$model = new Site() ;
-		$model->company_id = $this->companyId ;
+		$model->dpid = $this->companyId ;
 		$model->type_id = $typeId;
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Site');
+                        $se=new Sequence("site");
+                        $model->lid = $se->nextval();
+                        $model->create_at = time();
+                        $model->delete_flag = '0';
+                        //var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , '添加成功');
 				$this->redirect(array('site/index' , 'typeId'=>$typeId,'companyId' => $this->companyId));
 			}
 		}
 		$types = $this->getTypes();
+                //var_dump($types);exit;
 		$this->render('create' , array(
 				'model' => $model , 
 				'types' => $types
 		));
 	}
 	public function actionUpdate(){
-		$id = Yii::app()->request->getParam('id');
-		$model = Site::model()->find('site_id=:id', array(':id' => $id));
+		$lid = Yii::app()->request->getParam('lid');
+		$model = Site::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Site');
@@ -76,7 +88,7 @@ class SiteController extends BackendController
 		$ids = Yii::app()->request->getPost('ids');
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
-				$model = Site::model()->find('site_id=:id and company_id=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
+				$model = Site::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 				if($model) {
 					$model->saveAttributes(array('delete_flag'=>1));
 				}
@@ -90,6 +102,6 @@ class SiteController extends BackendController
 	private function getTypes(){
 		$types = SiteType::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
 		$types = $types ? $types : array();
-		return CHtml::listData($types, 'type_id', 'name');
+		return CHtml::listData($types, 'lid', 'name');
 	}
 }
