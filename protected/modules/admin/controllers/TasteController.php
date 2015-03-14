@@ -86,6 +86,44 @@ class TasteController extends BackendController
 		}
 	}
 	public function actionProductTaste(){
-		var_dump(111);exit;
+		$criteria = new CDbCriteria;
+		$criteria->with = 'productTaste';
+		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0 ');
+		$criteria->order = ' lid desc ';
+		$criteria->params[':dpid']=$this->companyId;
+		
+		$pages = new CPagination(Product::model()->count($criteria));
+		//$pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		$models = Product::model()->findAll($criteria);
+//		var_dump($models[0]);exit;
+		$this->render('productTaste',array(
+				'models'=>$models,
+				'pages' => $pages,
+		));
+	}
+	public function actionUpdateProductTaste(){
+		$tasteArr = array();
+		$lid = Yii::app()->request->getParam('lid');
+		$model = Product::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
+		
+		if(Yii::app()->request->isPostRequest) {
+			$postData = Yii::app()->request->getPost('Taste');
+			if(TasteClass::save($this->companyId,$lid,$postData)){
+				Yii::app()->user->setFlash('success' , '修改成功');
+				$this->redirect(array('taste/productTaste' , 'companyId' => $this->companyId));
+			}
+		}
+		$tastes = TasteClass::getAllOrderTaste($this->companyId,0);
+		$productTastes = TasteClass::getProductTaste($lid);
+		
+		foreach($productTastes as $taste){
+			array_push($tasteArr,$taste['lid']);
+		}
+		$this->render('updateProductTaste' , array(
+			'model'=>$model,
+			'tastes'=>$tastes,
+			'productTastes'=>$tasteArr,
+		));
 	}
 }

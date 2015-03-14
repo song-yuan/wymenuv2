@@ -56,6 +56,7 @@ class Product extends CActiveRecord
 		return array(
 				'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 				'category' => array(self::BELONGS_TO , 'ProductCategory' , 'category_id'),
+				'productTaste' => array(self::HAS_MANY , 'ProductTaste' ,'','on'=>'t.lid=productTaste.product_id and productTaste.delete_flag=0'),
 		);
 	}
 

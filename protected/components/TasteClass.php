@@ -10,11 +10,12 @@ class TasteClass
 		return $result;
 	}
 	
-	//全订单口味列表
-	public static function getAllOrderTaste($dpid){
-		$sql = 'select lid,name from nb_taste where dpid=:dpid and delete_flag=0';
+	//全订单口味列表 1 整单 0 非整单
+	public static function getAllOrderTaste($dpid,$type){
+		$sql = 'select lid,name from nb_taste where dpid=:dpid and allflae=:allflae and delete_flag=0';
 		$conn = Yii::app()->db->createCommand($sql);
 		$conn->bindValue(':dpid',$dpid);
+		$conn->bindValue(':allflae',$type);
 		$result = $conn->queryAll();
 		return $result;
 	}
@@ -32,5 +33,32 @@ class TasteClass
 		}
 		$result = $conn->queryAll();
 		return $result;
+	}
+	
+	public static function save($dpid,$productId,$tastesIds = array()){
+		$sql = 'delete from nb_product_taste where dpid=:dpid and product_id=:productId';
+		$conn = Yii::app()->db->createCommand($sql);
+		$conn->bindValue(':dpid',$dpid);
+		$conn->bindValue(':productId',$productId);
+		$conn->execute();
+		
+		foreach($tastesIds as $taste){
+			$sql = 'SELECT NEXTVAL("product_taste") AS id';
+			$maxId = Yii::app()->db->createCommand($sql)->queryRow();
+			$data = array(
+			 'lid'=>$maxId['id'],
+			 'dpid'=>$dpid,
+			 'create_at'=>date('Y-m-d H:i:s',time()),
+			 'taste_id'=>$taste,
+			 'product_id'=>$productId,
+			);
+			Yii::app()->db->createCommand()->insert('nb_product_taste',$data);
+		}
+		return true;
+	}
+	public static function getTasteName($tasteId){
+		$sql = 'SELECT name from nb_taste where lid=:lid';
+		$taste = Yii::app()->db->createCommand($sql)->bindValue(':lid',$tasteId)->queryRow();
+		return $taste['name'];
 	}
 }
