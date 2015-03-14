@@ -79,7 +79,7 @@
 								<td><a href="" ><?php echo $model->name;?></a></td>
                                                                 <td><a href="" ><?php echo $model->manager;?></a></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('siteType/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('floor/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>

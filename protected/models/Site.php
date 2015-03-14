@@ -37,15 +37,15 @@ class Site extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('serial , type_id ,lid, dpid , site_level' , 'required'),
-			array('type_id, delete_flag, has_minimum_consumption, minimum_consumption_type', 'numerical', 'integerOnly'=>true),
+			array('serial , type_id ,lid,floor_id, dpid , site_level' , 'required'),
+			array('floor_id,type_id, delete_flag, has_minimum_consumption, minimum_consumption_type', 'numerical', 'integerOnly'=>true),
 			array('period, overtime,buffer', 'numerical'),
 			array('serial', 'length', 'max'=>50),
 			array('site_level', 'length', 'max'=>20),
 			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, serial, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type, minimum_consumption, number, period, overtime, buffer, overtime_fee', 'safe', 'on'=>'search'),
+			array('lid, serial, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type, minimum_consumption, number, period, overtime, buffer, overtime_fee, floor_id', 'safe', 'on'=>'search'),
 		);
 	}
 	public function validate($attributes = NULL, $clearErrors = true){

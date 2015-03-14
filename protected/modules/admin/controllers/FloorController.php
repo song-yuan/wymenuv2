@@ -25,19 +25,19 @@ class FloorController extends BackendController
 		));
 	}
 	public function actionCreate() {
-		$model = new SiteType() ;
+		$model = new Floor() ;
 		$model->dpid = $this->companyId ;
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Floor');
                         $se=new Sequence("floor");
                         $model->lid = $se->nextval();
-                        $model->create_at = time();
+                        $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '添加成功');
-				$this->redirect(array('siteType/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('floor/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('create' , array(
@@ -47,13 +47,14 @@ class FloorController extends BackendController
 	public function actionUpdate() {
 		$lid = Yii::app()->request->getParam('lid');
                 $dpid = Yii::app()->request->getParam('companyId');
-		$model = SiteType::model()->find('t.lid=:lid and t.dpid=:dpid', array(':lid' => $lid,':dpid'=>$dpid));
+		$model = floor::model()->find('t.lid=:lid and t.dpid=:dpid', array(':lid' => $lid,':dpid'=>$dpid));
 		//var_dump($model);
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('SiteType');
+			$model->attributes = Yii::app()->request->getPost('Floor');
+                        //var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
-				$this->redirect(array('siteType/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('floor/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('update' , array(
@@ -61,7 +62,7 @@ class FloorController extends BackendController
 		));
 	}
 	public function actionDelete() {
-		$ids = $_POST['type_id'] ;
+		$ids = $_POST['floor_id'] ;
 		//var_dump(implode(',' , $ids),$this->companyId);exit;
                 //$sql='update nb_site_type set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId';
                 //$command=Yii::app()->db->createCommand($sql);
@@ -75,6 +76,6 @@ class FloorController extends BackendController
 			Yii::app()->db->createCommand('update nb_site set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 		}
-		$this->redirect(array('siteType/index' , 'companyId' => $this->companyId));
+		$this->redirect(array('floor/index' , 'companyId' => $this->companyId));
 	}
 }

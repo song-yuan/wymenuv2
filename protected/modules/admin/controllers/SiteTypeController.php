@@ -34,7 +34,7 @@ class SiteTypeController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('SiteType');
                         $se=new Sequence("site_type");
                         $model->lid = $se->nextval();
-                        $model->create_at = time();
+                        $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()){

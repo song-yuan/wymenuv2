@@ -55,8 +55,8 @@ class Floor extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'lid' => '位置类型ID',
-			'name' => '类型名称',
+			'lid' => '楼层ID',
+			'name' => '楼层名称',
                         'manager' => '负责人',
 			'dpid' => '公司',
 		);

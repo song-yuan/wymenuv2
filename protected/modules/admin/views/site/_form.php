@@ -24,6 +24,13 @@
 											<?php echo $form->error($model, 'type_id' )?>
 										</div>
 									</div>
+                                                                         <div class="form-group">
+										<?php echo $form->label($model, 'floor_id',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'floor_id', array('0' => '-- 请选择 --') +$floors ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('floor_id')));?>
+											<?php echo $form->error($model, 'floor_id' )?>
+										</div>
+									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'site_level',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">

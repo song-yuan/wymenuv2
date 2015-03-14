@@ -51,7 +51,7 @@ class SiteController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('Site');
                         $se=new Sequence("site");
                         $model->lid = $se->nextval();
-                        $model->create_at = time();
+                        $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()) {
@@ -60,10 +60,13 @@ class SiteController extends BackendController
 			}
 		}
 		$types = $this->getTypes();
+                $floors = $this->getFloors();
+                //var_dump($floors);
                 //var_dump($types);exit;
 		$this->render('create' , array(
 				'model' => $model , 
-				'types' => $types
+				'types' => $types ,
+                                'floors'=> $floors
 		));
 	}
 	public function actionUpdate(){
@@ -72,15 +75,18 @@ class SiteController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Site');
+                        //var_dump(Yii::app()->request->getPost('Site'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
 				$this->redirect(array('site/index' , 'typeId'=>$model->type_id, 'companyId' => $this->companyId));
 			}
 		}
 		$types = $this->getTypes();
+                $floors = $this->getFloors();
 		$this->render('update' , array(
 			'model'=>$model,
-			'types' => $types
+			'types' => $types,
+                        'floors'=> $floors
 		));
 	}
 	public function actionDelete(){
@@ -103,5 +109,10 @@ class SiteController extends BackendController
 		$types = SiteType::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
 		$types = $types ? $types : array();
 		return CHtml::listData($types, 'lid', 'name');
+	}
+        private function getFloors(){
+		$floors = Floor::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
+		$floors = $floors ? $floors : array();
+		return CHtml::listData($floors, 'lid', 'name');
 	}
 }

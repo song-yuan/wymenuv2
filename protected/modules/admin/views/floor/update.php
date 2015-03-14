@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'座位类型管理','subhead'=>'修改座位类型','breadcrumbs'=>array(array('word'=>'座位类型管理','url'=>$this->createUrl('siteType/index' , array('companyId'=>$this->companyId))),array('word'=>'修改座位类型','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'楼层管理','subhead'=>'修改楼层','breadcrumbs'=>array(array('word'=>'楼层管理','url'=>$this->createUrl('floor/index' , array('companyId'=>$this->companyId))),array('word'=>'修改楼层','url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>修改座位类型</div>
+							<div class="caption"><i class="fa fa-reorder"></i>修改楼层</div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
