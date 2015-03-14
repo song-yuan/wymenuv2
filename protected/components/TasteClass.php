@@ -24,11 +24,11 @@ class TasteClass
 		if($type==1){
 			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and t.is_order=1';
 			$conn = Yii::app()->db->createCommand($sql);
-			$conn->bindValue(':productId',$orderId);
+			$conn->bindValue(':orderId',$orderId);
 		}elseif($type==2){
 			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and t.is_order=0';
 			$conn = Yii::app()->db->createCommand($sql);
-			$conn->bindValue(':productId',$orderId);
+			$conn->bindValue(':orderId',$orderId);
 		}
 		$result = $conn->queryAll();
 		return $result;
