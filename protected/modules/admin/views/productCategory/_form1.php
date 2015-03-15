@@ -18,7 +18,7 @@
 				<div class="form-group">
 					<?php echo $form->label($model,'category_name',array('class'=>'col-md-3 control-label')); ?>
 					<div class="col-md-9">
-						<?php echo $form->hiddenField($model,'pid'); ?>
+						<?php echo $form->hiddenField($model,'parent_id'); ?>
 						<?php echo $form->hiddenField($model,'dpid'); ?>
 						<?php echo $form->textField($model,'category_name',array('class'=>'form-control','placeholder'=>$model->getAttributeLabel('category_name'))); ?>
 						<?php echo $form->error($model,'category_name',array('class'=>'errorMessage')); ?>

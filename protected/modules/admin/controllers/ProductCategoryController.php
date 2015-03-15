@@ -29,22 +29,22 @@ class ProductCategoryController extends BackendController
 		));
 	}
 	public function actionCreate() {
-		$pid = Yii::app()->request->getParam('pid',0);
+		$parentId = Yii::app()->request->getParam('parentId',0);
 		$model = new ProductCategory() ;
 		$model->dpid = $this->companyId ;
 		
-		if($pid) {
-			$model->pid = intval($pid) ? $pid : 0 ;
+		if($parentId) {
+			$model->parent_id = $parentId;
 		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
 			$model->lid = $model->getPkValue();
 			if($model->save()){
-				if($model->pid){
-					$parent = ProductCategory::model()->find('lid=:pid' , array(':pid'=>$model->pid));
-					$model->tree = $parent->tree.','.$model->category_id;
+				if($model->parent_id){
+					$parent = ProductCategory::model()->find('lid=:parentId' , array(':parentId'=>$model->parent_id));
+					$model->tree = $parent->tree.','.$model->lid;
 				} else {
-					$model->tree = $model->tree.','.$model->category_id;
+					$model->tree = '0,'.$model->lid;
 				}
 				$model->save();
 				Yii::app()->user->setFlash('success' , '添加成功');
@@ -75,19 +75,19 @@ class ProductCategoryController extends BackendController
 				'model' => $model,
 				'action' => $this->createUrl('productCategory/update' , array(
 						'companyId'=>$this->companyId,
-						'lid'=>$model->lid
+						'id'=>$model->lid
 				))
 		));
 	}
 	public function actionDelete(){
-		$id = Yii::app()->request->getParam('lid');
+		$id = Yii::app()->request->getParam('id');
 		$model = ProductCategory::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		//var_dump($model);exit;
 		if($model) {
 			$model->deleteCategory();
 			Yii::app()->user->setFlash('success','删除成功！');
 		}
-		$this->redirect(array('productCategory/index','companyId'=>$this->companyId,'id'=>$model->pid));
+		$this->redirect(array('productCategory/index','companyId'=>$this->companyId,'id'=>$model->parent_id));
 	}
 	
 	
