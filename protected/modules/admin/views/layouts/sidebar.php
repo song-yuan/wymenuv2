@@ -26,7 +26,11 @@
 						<li class=""><a href="">基础数据同步设定</a></li>
 					</ul>
 				</li>
+<<<<<<< HEAD
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('product' , 'productCategory','productClean'))) echo 'active';?>">
+=======
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('product' , 'productCategory','retreat','productPrinter'))) echo 'active';?>">
+>>>>>>> e47133cc4f84d532a2835cb6239736eeb6519d66
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">产品管理</span>					
@@ -40,8 +44,8 @@
 						<li class=""><a href="">优惠活动管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productClean') echo 'active';?>"><a href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId));?>">沽清列表</a></li>
 						<li class=""><a href="">产品图片管理</a></li>
-						<li class=""><a href="">单品打印方式管理</a></li>
-						<li class=""><a href="">退菜理由选项设定</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productPrinter') echo 'active';?>"><a href="<?php echo $this->createUrl('productPrinter/index',array('companyId' => $this->companyId));?>">单品打印方式管理</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'retreat') echo 'active';?>"><a href="<?php echo $this->createUrl('retreat/index',array('companyId' => $this->companyId));?>">退菜理由选项设定</a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('taste'))) echo 'active';?>">

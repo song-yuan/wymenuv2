@@ -29,7 +29,7 @@ class ProductCategory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('dpid, tree , category_name', 'required'),
+			array('dpid , category_name', 'required'),
 			array('pid,delete_flag', 'numerical', 'integerOnly'=>true),
 			array('category_name', 'length','min'=>2, 'max'=>45),
 			array('dpid', 'length', 'max'=>10),
@@ -104,6 +104,11 @@ class ProductCategory extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+	public function getPkValue() {
+		$sql = 'SELECT NEXTVAL("'.$this->tableName().'") AS id';
+		$row = Yii::app()->db->createCommand($sql)->queryRow();
+		return $row ? $row['id'] : 1 ;
 	}
 	public function deleteCategory(){
 		$db = Yii::app()->db;

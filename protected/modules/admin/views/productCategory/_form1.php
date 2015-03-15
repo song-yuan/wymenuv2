@@ -19,6 +19,7 @@
 					<?php echo $form->label($model,'category_name',array('class'=>'col-md-3 control-label')); ?>
 					<div class="col-md-9">
 						<?php echo $form->hiddenField($model,'pid'); ?>
+						<?php echo $form->hiddenField($model,'dpid'); ?>
 						<?php echo $form->textField($model,'category_name',array('class'=>'form-control','placeholder'=>$model->getAttributeLabel('category_name'))); ?>
 						<?php echo $form->error($model,'category_name',array('class'=>'errorMessage')); ?>
 					</div>
@@ -29,3 +30,24 @@
 				<input type="submit" class="btn green" id="create_btn" value="确 定">
 			</div>
 			<?php $this->endWidget(); ?>
+			<script>
+			$('#GoodsCategory').on('submit',function(){
+				$.ajax({
+					'type':'POST',
+					'dataType':'json',
+					'data':$('#GoodsCategory').serialize(),
+					'url':$('#GoodsCategory').attr('action'),
+					'success':function(data){
+						if(data.status == 0) {
+							alert(data.message);
+						} else {
+							alert(data.message);
+							location.href='<?php echo $this->createUrl('productCategory/index',array('companyId'=>$this->companyId));?>';
+						}
+					}
+				});
+				return false;
+			});
+			</script>
+			
+			
