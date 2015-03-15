@@ -38,7 +38,7 @@
 						<li class=""><a href="">时价菜管理</a></li>
 						<li class=""><a href="">特价菜管理</a></li>
 						<li class=""><a href="">优惠活动管理</a></li>
-						<li class=""><a href="">沽清列表</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productClean') echo 'active';?>"><a href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId));?>">沽清列表</a></li>
 						<li class=""><a href="">产品图片管理</a></li>
 						<li class=""><a href="">单品打印方式管理</a></li>
 						<li class=""><a href="">退菜理由选项设定</a></li>
