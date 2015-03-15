@@ -1,25 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "nb_printer_way".
+ * This is the model class for table "nb_retreat".
  *
- * The followings are the available columns in table 'nb_printer_way':
+ * The followings are the available columns in table 'nb_retreat':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
  * @property string $name
- * @property string $memo
+ * @property string $tip
  * @property string $delete_flag
  */
-class PrinterWay extends CActiveRecord
+class Retreat extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_printer_way';
+		return 'nb_retreat';
 	}
 
 	/**
@@ -30,15 +30,14 @@ class PrinterWay extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, memo', 'required'),
+			array('name', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('name', 'length', 'max'=>50),
-			array('memo', 'length', 'max'=>100),
+			array('name, tip', 'length', 'max'=>50),
 			array('delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, name, memo, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, name, tip, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,8 +62,8 @@ class PrinterWay extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'name' => '名称',
-			'memo' => '说明',
+			'name' => '退菜理由',
+			'tip' => '如：理由name是有异物，这里tip提示输入物品名称',
 			'delete_flag' => 'Delete Flag',
 		);
 	}
@@ -92,7 +91,7 @@ class PrinterWay extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('memo',$this->memo,true);
+		$criteria->compare('tip',$this->tip,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 
 		return new CActiveDataProvider($this, array(
@@ -104,16 +103,10 @@ class PrinterWay extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return PrinterWay the static model class
+	 * @return Retreat the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
-	}
-	public static function getPrinterWay($companyId)
-	{
-		$sql = 'select lid,name from nb_printer_way where dpid='.$companyId.' and delete_flag=0';
-		$result = Yii::app()->db->createCommand($sql)->queryAll();
-		return $result;
 	}
 }
