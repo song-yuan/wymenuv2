@@ -10,34 +10,49 @@ class ProductCleanController extends BackendController
 		return true;
 	}
 	public function actionIndex(){
-		$categoryId = Yii::app()->request->getParam('cid',0);
-		$criteria = new CDbCriteria;
-		$criteria->with = array('company','category');
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-		if($categoryId){
-			$criteria->condition.=' and t.lid = '.$categoryId;
-		}
-		
-		$pages = new CPagination(Product::model()->count($criteria));
+		$sc = Yii::app()->request->getPost('csinquery');
+                //var_dump($sc);exit;
+		$db = Yii::app()->db;
+                if(empty($sc))
+                {
+                    $sql = "SELECT 0 as isset,lid,dpid,product_name as name,simple_code as cs,main_picture as pic , status from nb_product where delete_flag=0 and is_show=1 and dpid=".$this->companyId
+                            . " union ".
+                            "SELECT 1 as isset,lid,dpid,set_name as name,simple_code as cs,main_picture as pic ,status from nb_product_set where delete_flag=0 and dpid=".$this->companyId
+                           ;
+                }else{
+                    $sql = "SELECT 0 as isset,lid,dpid,product_name as name,simple_code as cs,main_picture as pic , status from nb_product where delete_flag=0 and is_show=1 and dpid=".$this->companyId." and simple_code like '%".$sc."%'"
+                            . " union ".
+                            "SELECT 1 as isset,lid,dpid,set_name as name,simple_code as cs,main_picture as pic ,status from nb_product_set where delete_flag=0 and dpid=".$this->companyId." and simple_code like '%".$sc."%'"
+                           ;
+                }
+                $command=$db->createCommand($sql);
+                //$command->bindValue(":table" , $this->table);
+                $models= $command->queryAll();
+		//var_dump($models);exit;
+                $criteria = new CDbCriteria;
+		$pages = new CPagination(count($models));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
-		$models = Product::model()->findAll($criteria);
-		
-		$categories = $this->getCategories();
 		$this->render('index',array(
 				'models'=>$models,
-				'pages'=>$pages,
-				'categories'=>$categories,
-				'categoryId'=>$categoryId
+				'pages'=>$pages
 		));
 	}
 	public function actionStatus(){
 		$id = Yii::app()->request->getParam('id');
-		$product = Product::model()->find('lid=:id and company_id=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
-		var_dump($product->status);
-		if($product){
-			$product->saveAttributes(array('status'=>$product->status?0:1));
-		}
+                $isset = Yii::app()->request->getParam('isset');
+                $db = Yii::app()->db;
+                $sql='';
+                if($isset==0)
+                {
+                    $sql='update nb_product set status = not status where lid='.$id.' and dpid='.$this->companyId;
+                }else{
+                    $sql='update nb_product_set set status = not status where lid='.$id.' and dpid='.$this->companyId;
+                }
+                //var_dump($sql);exit;
+		$command=$db->createCommand($sql);
+                $command->execute();
+                //save to product_out
 		exit;
 	}
 	

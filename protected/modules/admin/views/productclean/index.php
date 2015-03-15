@@ -41,12 +41,16 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i>产品沽清列表</div>
-					<div class="actions">
-						<div class="btn-group">
-							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
-						</div>
-						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
-					</div>
+					
+                                            <div class="col-md-3 pull-right">
+						<div class="input-group">
+                                                    <input type="text" name="csinquery" class="form-control" placeholder="输入助记符查询">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn blue" type="submit">查询!</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -63,13 +67,13 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->product_id;?>" name="ids[]" /></td>
-								<td style="width:20%"><?php echo $model->product_name;?></td>
-								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
-								<td><?php echo $model->category->category_name;?></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
+								<td style="width:20%"><?php echo $model['name'];?></td>
+								<td ><img width="100" src="<?php echo $model['pic'];?>" /></td>
+                                                                <td><?php if($model['isset']==0) {echo '单品';} else {echo '套餐';}; ?></td>
 								<td>
 									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="在售" data-off-label="售罄">
-										<input pid="<?php echo $model->product_id;?>" <?php if(!$model->status) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+										<input isset="<?php echo $model['isset'];?>" pid="<?php echo $model['lid'];?>" <?php if(!$model['status']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
 									</div>
 								</td>
 							</tr>
@@ -107,7 +111,7 @@
 								</div>
 							</div>
 						</div>
-						<?php endif;?>					
+						<?php endif;?>				
 					
 				</div>
 			</div>
@@ -118,20 +122,15 @@
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$('#product-form').submit(function(){
-			if(!$('.checkboxes:checked').length){
-				alert('请选择要删除的项');
-				return false;
-			}
-			return true;
-		});
+		
 		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('product/status',array('companyId'=>$this->companyId));?>&id='+id);
+                    var inp = $(this).find('input');
+                        var id=inp.attr('pid');
+                        var isset=inp.attr('isset');
+                        var url='<?php echo $this->createUrl('productClean/status',array('companyId'=>$this->companyId));?>/id/'+id+'/isset/'+isset;
+                        //alert(url);
+                        $.get(url);
 		});
-		$('#selectCategory').change(function(){
-			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('product/index' , array('companyId'=>$this->companyId));?>&cid="+cid;
-		});
+		
 	});
 	</script>	
