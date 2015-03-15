@@ -92,7 +92,7 @@
 					</a>
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'printer' && $this->getAction()->getId() == 'index') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/index',array('companyId' => $this->companyId));?>">打印机管理</a></li>
-						<li class=""><a href="<?php if(Yii::app()->controller->id == 'printerway') echo 'active';?>">打印方案</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'printerway') echo 'active';?>"><a href="<?php echo $this->createUrl('printerway/index',array('companyId' => $this->companyId));?>">打印方案</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'printer' && $this->getAction()->getId() == 'list') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/list',array('companyId' => $this->companyId));?>">清单打印机</a></li>
 					</ul>
 				</li>

@@ -11,7 +11,7 @@ class PrinterController extends BackendController
 	}
 	public function actionIndex(){
 		$criteria = new CDbCriteria;
-		$criteria->condition =  't.dpid='.$this->companyId ;
+		$criteria->condition =  't.dpid='.$this->companyId .' and delete_flag=0';
 		$pages = new CPagination(Printer::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -29,21 +29,27 @@ class PrinterController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Printer');
+                        $se=new Sequence("printer");
+                        $model->lid = $se->nextval();
+                        $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->delete_flag = '0';
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , '添加成功');
 				$this->redirect(array('printer/index','companyId' => $this->companyId));
 			}
 		}
 		$this->render('create' , array(
-				'model' => $model ,
+				'model' => $model 
 		));
 	}
 	public function actionUpdate(){
-		$id = Yii::app()->request->getParam('id');
-		$model = Printer::model()->findByPk($id);
-		
+		$lid = Yii::app()->request->getParam('lid');
+                //echo 'ddd';
+		$model = Printer::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
+		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Printer');
+                        //($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
 				$this->redirect(array('printer/index' , 'companyId' => $this->companyId));
@@ -71,6 +77,7 @@ class PrinterController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+                //var_dump($ids);exit;
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = Printer::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;

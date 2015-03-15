@@ -7,12 +7,12 @@
 									),
 							)); ?>
 								<div class="form-body">
-								<?php if(!$model->company_id):?>
+								<?php if(!$model->dpid):?>
 									<div class="form-group">
-										<?php echo $form->label($model, 'company_id',array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'company_id', array('0' => '-- 请选择 --') +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('company_id')));?>
-											<?php echo $form->error($model, 'company_id' )?>
+											<?php echo $form->dropDownList($model, 'dpid', array('0' => '-- 请选择 --') +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->error($model, 'dpid' )?>
 										</div>
 									</div>
 								<?php endif;?>
@@ -23,7 +23,7 @@
 										<?php echo $form->error($model, 'name' )?>
 									</div>
 								</div>
-								<div class="form-group">
+                                                                        <div class="form-group">
 										<?php echo $form->label($model, 'ip_address',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'ip_address',array('class' => 'form-control','placeholder'=>'例如：192.168.1.100'));?>
@@ -37,6 +37,20 @@
 											<?php echo $form->error($model, 'brand' )?>
 										</div>
 									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'com_name',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'com_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('com_name')));?>
+											<?php echo $form->error($model, 'com_name' )?>
+										</div>
+									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'baud_rate',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'baud_rate',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('baud_rate')));?>
+											<?php echo $form->error($model, 'baud_rate' )?>
+										</div>
+									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'remark',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -47,7 +61,7 @@
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('printer/index' , array('companyId' => $model->company_id));?>" class="btn default">返回</a>                              
+											<a href="<?php echo $this->createUrl('printer/index' , array('companyId' => $model->dpid));?>" class="btn default">返回</a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
