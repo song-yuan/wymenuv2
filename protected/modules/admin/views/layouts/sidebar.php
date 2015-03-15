@@ -26,7 +26,7 @@
 						<li class=""><a href="">基础数据同步设定</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('product' , 'productCategory'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('product' , 'productCategory','retreat'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">产品管理</span>					
@@ -41,7 +41,7 @@
 						<li class=""><a href="">沽清列表</a></li>
 						<li class=""><a href="">产品图片管理</a></li>
 						<li class=""><a href="">单品打印方式管理</a></li>
-						<li class=""><a href="">退菜理由选项设定</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'retreat') echo 'active';?>"><a href="<?php echo $this->createUrl('retreat/index',array('companyId' => $this->companyId));?>">退菜理由选项设定</a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('taste'))) echo 'active';?>">
