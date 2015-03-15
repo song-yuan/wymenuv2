@@ -36,7 +36,7 @@ class PrinterWayController extends BackendController
                         //var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , '添加成功');
-				$this->redirect(array('printerway/index','companyId' => $this->companyId));
+				$this->redirect(array('printerWay/index','companyId' => $this->companyId));
 			}
 		}
 		$this->render('create' , array(
@@ -53,7 +53,7 @@ class PrinterWayController extends BackendController
                         //($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
-				$this->redirect(array('printerway/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('printerWay/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('update' , array(
@@ -71,10 +71,10 @@ class PrinterWayController extends BackendController
 			
 			Yii::app()->db->createCommand('update nb_printer_way_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('printerway/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('printerWay/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
-			$this->redirect(array('printerway/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('printerWay/index' , 'companyId' => $companyId)) ;
 		}
 	}
         
@@ -112,7 +112,7 @@ class PrinterWayController extends BackendController
                         //var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , '添加成功');
-				$this->redirect(array('printerway/detailindex','companyId' => $this->companyId,'lid'=>$model->print_way_id));
+				$this->redirect(array('printerWay/detailindex','companyId' => $this->companyId,'lid'=>$model->print_way_id));
 			}
 		}
                 $printers = $this->getPrinters();
@@ -133,7 +133,7 @@ class PrinterWayController extends BackendController
                         //var_dump($model);var_dump(Yii::app()->request->getPost('PrinterWayDetail'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
-				$this->redirect(array('printerway/detailindex' , 'companyId' => $this->companyId,'lid' => $model->print_way_id));
+				$this->redirect(array('printerWay/detailindex' , 'companyId' => $this->companyId,'lid' => $model->print_way_id));
 			}
 		}
                 $printers = $this->getPrinters();
@@ -153,10 +153,10 @@ class PrinterWayController extends BackendController
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_printer_way_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('printerway/detailindex' , 'companyId' => $companyId,'lid'=>$printway)) ;
+			$this->redirect(array('printerWay/detailindex' , 'companyId' => $companyId,'lid'=>$printway)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
-			$this->redirect(array('printerway/detailindex' , 'companyId' => $companyId,'lid'=>$printway)) ;
+			$this->redirect(array('printerWay/detailindex' , 'companyId' => $companyId,'lid'=>$printway)) ;
 		}
 	}
 	
