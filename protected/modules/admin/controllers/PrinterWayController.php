@@ -36,7 +36,7 @@ class PrinterWayController extends BackendController
                         //var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , '添加成功');
-				$this->redirect(array('printerway/index','companyId' => $this->companyId));
+				$this->redirect(array('printerWay/index','companyId' => $this->companyId));
 			}
 		}
 		$this->render('create' , array(
@@ -53,7 +53,7 @@ class PrinterWayController extends BackendController
                         //($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
-				$this->redirect(array('printerway/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('printerWay/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('update' , array(
@@ -71,25 +71,30 @@ class PrinterWayController extends BackendController
 			
 			Yii::app()->db->createCommand('update nb_printer_way_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('printerway/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('printerWay/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
-			$this->redirect(array('printerway/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('printerWay/index' , 'companyId' => $companyId)) ;
 		}
 	}
         
         public function actionDetailIndex(){
 		$pwlid = Yii::app()->request->getParam('lid');
                 $criteria = new CDbCriteria;
-		$criteria->condition =  't.dpid='.$this->companyId .'and print_way_id='.$pwlid.' and delete_flag=0';
+                $criteria->with = array('floor','printer');
+                //$criteria->with = 'printer';
+		$criteria->condition =  't.dpid='.$this->companyId .' and t.print_way_id='.$pwlid.' and t.delete_flag=0';
+                $criteria2 = new CDbCriteria;
+		$criteria2->condition =  't.dpid='.$this->companyId .' and t.lid='.$pwlid.' and t.delete_flag=0';
 		$pages = new CPagination(PrinterWayDetail::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		
 		$models = PrinterWayDetail::model()->findAll($criteria);
-		
+		$pwmodel = PrinterWay::model()->find($criteria2);
 		$this->render('detailindex',array(
 			'models'=>$models,
+                        'pwmodel'=>$pwmodel,
 			'pages'=>$pages
 		));
 	}
@@ -99,7 +104,7 @@ class PrinterWayController extends BackendController
 		$pwlid = Yii::app()->request->getParam('pwid');
                 $model->print_way_id=$pwlid;
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('PrinterWay');
+			$model->attributes = Yii::app()->request->getPost('PrinterWayDetail');
                         $se=new Sequence("print_way_detail");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
@@ -107,12 +112,12 @@ class PrinterWayController extends BackendController
                         //var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , '添加成功');
-				$this->redirect(array('printerway/detailindex','companyId' => $this->companyId));
+				$this->redirect(array('printerWay/detailindex','companyId' => $this->companyId,'lid'=>$model->print_way_id));
 			}
 		}
                 $printers = $this->getPrinters();
                 $floors = $this->getFloors();
-		$this->render('create' , array(
+		$this->render('detailcreate' , array(
 				'model' => $model,
                                 'printers' => $printers,
                                 'floors' => $floors
@@ -125,15 +130,15 @@ class PrinterWayController extends BackendController
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PrinterWayDetail');
-                        //($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
+                        //var_dump($model);var_dump(Yii::app()->request->getPost('PrinterWayDetail'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
-				$this->redirect(array('printerway/detailindex' , 'companyId' => $this->companyId));
+				$this->redirect(array('printerWay/detailindex' , 'companyId' => $this->companyId,'lid' => $model->print_way_id));
 			}
 		}
                 $printers = $this->getPrinters();
                 $floors = $this->getFloors();
-		$this->render('update' , array(
+		$this->render('detailupdate' , array(
 				'model'=>$model,
                                 'printers' => $printers,
                                 'floors' => $floors
@@ -142,15 +147,16 @@ class PrinterWayController extends BackendController
         
 	public function actionDetailDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+                $printway = Yii::app()->request->getParam('pwid');
 		$ids = Yii::app()->request->getPost('ids');
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_printer_way_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('printerway/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('printerWay/detailindex' , 'companyId' => $companyId,'lid'=>$printway)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
-			$this->redirect(array('printerway/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('printerWay/detailindex' , 'companyId' => $companyId,'lid'=>$printway)) ;
 		}
 	}
 	

@@ -26,8 +26,8 @@
 						<li class=""><a href="">基础数据同步设定</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('product' , 'productCategory','retreat','productPrinter'))) echo 'active';?>">
-					<a href="">
+                                        <li class="<?php if(in_array(Yii::app()->controller->id , array('product' , 'productCategory','retreat','productPrinter','productClean'))) echo 'active';?>">
+                                        <a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">产品管理</span>					
 					</a>
@@ -38,7 +38,7 @@
 						<li class=""><a href="">时价菜管理</a></li>
 						<li class=""><a href="">特价菜管理</a></li>
 						<li class=""><a href="">优惠活动管理</a></li>
-						<li class=""><a href="">沽清列表</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productClean') echo 'active';?>"><a href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId));?>">沽清列表</a></li>
 						<li class=""><a href="">产品图片管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productPrinter') echo 'active';?>"><a href="<?php echo $this->createUrl('productPrinter/index',array('companyId' => $this->companyId));?>">单品打印方式管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'retreat') echo 'active';?>"><a href="<?php echo $this->createUrl('retreat/index',array('companyId' => $this->companyId));?>">退菜理由选项设定</a></li>
@@ -85,14 +85,14 @@
 						<li class="<?php if(Yii::app()->controller->id == 'site') echo 'active';?>"><a href="<?php echo $this->createUrl('site/index',array('companyId' => $this->companyId));?>">餐桌包厢明细</a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('printer' , 'printerway'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('printer' , 'printerWay'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">打印机管理</span>					
 					</a>
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'printer' && $this->getAction()->getId() == 'index') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/index',array('companyId' => $this->companyId));?>">打印机管理</a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'printerway') echo 'active';?>"><a href="<?php echo $this->createUrl('printerway/index',array('companyId' => $this->companyId));?>">打印方案</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'printerWay') echo 'active';?>"><a href="<?php echo $this->createUrl('printerWay/index',array('companyId' => $this->companyId));?>">打印方案</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'printer' && $this->getAction()->getId() == 'list') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/list',array('companyId' => $this->companyId));?>">清单打印机</a></li>
 					</ul>
 				</li>

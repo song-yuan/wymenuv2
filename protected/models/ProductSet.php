@@ -1,27 +1,34 @@
 <?php
 
 /**
- * This is the model class for table "nb_printer_way_detail".
+ * This is the model class for table "nb_product_set".
  *
- * The followings are the available columns in table 'nb_printer_way_detail':
+ * The followings are the available columns in table 'nb_product_set':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $print_way_id
- * @property string $floor_id
- * @property string $printer_id
- * @property integer $list_no
+ * @property string $set_name
+ * @property string $simple_code
+ * @property string $main_picture
+ * @property string $description
+ * @property integer $rank
+ * @property string $is_member_discount
+ * @property string $is_special
+ * @property string $is_discount
+ * @property string $status
+ * @property integer $order_number
+ * @property integer $favourite_number
  * @property string $delete_flag
  */
-class PrinterWayDetail extends CActiveRecord
+class ProductSet extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_printer_way_detail';
+		return 'nb_product_set';
 	}
 
 	/**
@@ -32,14 +39,17 @@ class PrinterWayDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid', 'required'),
-			array('list_no', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid, print_way_id, floor_id, printer_id', 'length', 'max'=>10),
-			array('delete_flag', 'length', 'max'=>1),
+			array('set_name, simple_code, main_picture', 'required'),
+			array('rank, order_number, favourite_number', 'numerical', 'integerOnly'=>true),
+			array('lid, dpid', 'length', 'max'=>10),
+			array('set_name', 'length', 'max'=>50),
+			array('simple_code', 'length', 'max'=>25),
+			array('main_picture', 'length', 'max'=>255),
+			array('is_member_discount, is_special, is_discount, status, delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, print_way_id, floor_id, printer_id, list_no, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status, order_number, favourite_number, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,8 +61,6 @@ class PrinterWayDetail extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                        'floor' => array(self::BELONGS_TO , 'Floor' , '' , 'on' => 't.floor_id=floor.lid and t.dpid=floor.dpid'),
-			'printer' => array(self::BELONGS_TO , 'Printer' ,'','on' =>'t.printer_id=printer.lid and t.dpid=printer.dpid')
 		);
 	}
 
@@ -66,10 +74,17 @@ class PrinterWayDetail extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'print_way_id' => '打印方式id',
-			'floor_id' => '楼层',
-			'printer_id' => '打印机',
-			'list_no' => '打印份数',
+			'set_name' => 'Set Name',
+			'simple_code' => 'Simple Code',
+			'main_picture' => 'Main Picture',
+			'description' => 'Description',
+			'rank' => '产品星级，商家自己从1-5评星',
+			'is_member_discount' => '是否参与会员折扣',
+			'is_special' => '是否特价菜',
+			'is_discount' => '是否参与优惠活动',
+			'status' => '0正常，1沽清',
+			'order_number' => '总下单次数',
+			'favourite_number' => '总点赞次数',
 			'delete_flag' => 'Delete Flag',
 		);
 	}
@@ -96,10 +111,17 @@ class PrinterWayDetail extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('print_way_id',$this->print_way_id,true);
-		$criteria->compare('floor_id',$this->floor_id,true);
-		$criteria->compare('printer_id',$this->printer_id,true);
-		$criteria->compare('list_no',$this->list_no);
+		$criteria->compare('set_name',$this->set_name,true);
+		$criteria->compare('simple_code',$this->simple_code,true);
+		$criteria->compare('main_picture',$this->main_picture,true);
+		$criteria->compare('description',$this->description,true);
+		$criteria->compare('rank',$this->rank);
+		$criteria->compare('is_member_discount',$this->is_member_discount,true);
+		$criteria->compare('is_special',$this->is_special,true);
+		$criteria->compare('is_discount',$this->is_discount,true);
+		$criteria->compare('status',$this->status,true);
+		$criteria->compare('order_number',$this->order_number);
+		$criteria->compare('favourite_number',$this->favourite_number);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 
 		return new CActiveDataProvider($this, array(
@@ -111,7 +133,7 @@ class PrinterWayDetail extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return PrinterWayDetail the static model class
+	 * @return ProductSet the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
