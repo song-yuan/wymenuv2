@@ -29,7 +29,7 @@ class ProductCategory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('dpid, tree , category_name', 'required'),
+			array('dpid , category_name', 'required'),
 			array('pid,delete_flag', 'numerical', 'integerOnly'=>true),
 			array('category_name', 'length','min'=>2, 'max'=>45),
 			array('dpid', 'length', 'max'=>10),
@@ -105,6 +105,11 @@ class ProductCategory extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	public function getPkValue() {
+		$sql = 'SELECT NEXTVAL("'.$this->tableName().'") AS id';
+		$row = Yii::app()->db->createCommand($sql)->queryRow();
+		return $row ? $row['id'] : 1 ;
+	}
 	public function deleteCategory(){
 		$db = Yii::app()->db;
 		$categoryIds = $db->createCommand('select lid from '.$this->tableName().' where tree like :categoryTree')->bindValue(':categoryTree',$this->tree.','.'%')->queryColumn();
@@ -123,11 +128,11 @@ class ProductCategory extends CActiveRecord
 	public static function getCategorys($companyId = 0){
 		$totalCatgorys = array();
 		$command = Yii::app()->db;
-		$sql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0';
+		$sql = 'select lid,category_name from nb_product_category where dpid=:companyId and parent_id=0 and delete_flag=0';
 		$parentCategorys = $command->createCommand($sql)->bindValue(':companyId',$companyId)->queryAll();
 		foreach($parentCategorys as $category){
-			$csql = 'select lid, pid, category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0';
-			$categorys = $command->createCommand($csql)->bindValue(':companyId',$companyId)->bindValue(':pid',$category['lid'])->queryAll();
+			$csql = 'select lid, parent_id, category_name from nb_product_category where dpid=:companyId and parent_id=:parent_id and delete_flag=0';
+			$categorys = $command->createCommand($csql)->bindValue(':companyId',$companyId)->bindValue(':parent_id',$category['lid'])->queryAll();
 			$category['children'] = $categorys;
 			array_push($totalCatgorys,$category);
 		}

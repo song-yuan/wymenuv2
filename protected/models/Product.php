@@ -73,7 +73,7 @@ class Product extends CActiveRecord
 			'category' => array(self::BELONGS_TO , 'ProductCategory' , 'category_id'),
 			'productTaste' => array(self::HAS_MANY , 'ProductTaste' ,'','on'=>'t.lid=productTaste.product_id and productTaste.delete_flag=0'),
 			'printerWay' => array(self::HAS_ONE , 'PrinterWay' ,'','on'=>'t.printer_way_id=printerWay.lid and printerWay.delete_flag=0'),
-			'productImg' => array(self::BELONGS_TO , 'ProductPicture' ,'','on'=>'t.lid=productImg.product_id and productImg.delete_flag=0'),
+			'productImg' => array(self::HAS_MANY , 'ProductPicture' ,'','on'=>'t.lid=productImg.product_id and productImg.delete_flag=0'),
 		);
 	}
 

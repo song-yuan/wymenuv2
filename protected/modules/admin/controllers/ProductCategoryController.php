@@ -29,26 +29,28 @@ class ProductCategoryController extends BackendController
 		));
 	}
 	public function actionCreate() {
-		$pid = Yii::app()->request->getParam('pid',0);
+		$parentId = Yii::app()->request->getParam('parentId',0);
 		$model = new ProductCategory() ;
-		$model->company_id = $this->companyId ;
-		if($pid) {
-			$model->pid = $pid;
+		$model->dpid = $this->companyId ;
+		
+		if($parentId) {
+			$model->parent_id = $parentId;
 		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
-			//var_dump($_POST['ProductCategory'],$model->attributes);exit;
-		
+			$model->lid = $model->getPkValue();
 			if($model->save()){
-				if($model->pid){
-					$parent = ProductCategory::model()->find('category_id=:pid' , array(':pid'=>$model->pid));
-					$model->tree = $parent->tree.','.$model->category_id;
+				if($model->parent_id){
+					$parent = ProductCategory::model()->find('lid=:parentId' , array(':parentId'=>$model->parent_id));
+					$model->tree = $parent->tree.','.$model->lid;
 				} else {
-					$model->tree = $model->tree.','.$model->category_id;
+					$model->tree = '0,'.$model->lid;
 				}
 				$model->save();
 				Yii::app()->user->setFlash('success' , '添加成功');
-				$this->redirect(array('productCategory/index' , 'id'=>$model->category_id,'companyId' => $this->companyId));
+				echo json_encode(array('status'=>1,'message'=>'添加成功'));exit;
+			} else {
+				echo json_encode(array('status'=>0,'message'=>'添加失败'));exit;
 			}
 		}
 		$this->renderPartial('_form1' , array(
@@ -58,32 +60,34 @@ class ProductCategoryController extends BackendController
 	}
 	public function actionUpdate() {
 		$id = Yii::app()->request->getParam('id');
-		$model = ProductCategory::model()->find('category_id=:id', array(':id' => $id));
+		$model = ProductCategory::model()->find('lid=:id', array(':id' => $id));
 	
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
-				$this->redirect(array('productCategory/index' , 'id'=>$model->category_id,'companyId' => $this->companyId));
+				echo json_encode(array('status'=>1,'message'=>'修改成功'));exit;
+			} else {
+				echo json_encode(array('status'=>0,'message'=>'修改失败'));exit;
 			}
 		}
 		$this->renderPartial('_form1' , array(
 				'model' => $model,
 				'action' => $this->createUrl('productCategory/update' , array(
 						'companyId'=>$this->companyId,
-						'id'=>$model->category_id
+						'id'=>$model->lid
 				))
 		));
 	}
 	public function actionDelete(){
 		$id = Yii::app()->request->getParam('id');
-		$model = ProductCategory::model()->find('category_id=:id and company_id=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
+		$model = ProductCategory::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		//var_dump($model);exit;
 		if($model) {
 			$model->deleteCategory();
 			Yii::app()->user->setFlash('success','删除成功！');
 		}
-		$this->redirect(array('productCategory/index','companyId'=>$this->companyId,'id'=>$model->pid));
+		$this->redirect(array('productCategory/index','companyId'=>$this->companyId,'id'=>$model->parent_id));
 	}
 	
 	

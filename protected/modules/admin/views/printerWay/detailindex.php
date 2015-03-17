@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印机管理','subhead'=>'打印机方式列表','breadcrumbs'=>array(array('word'=>'打印机方式管理','url'=>''),array('word'=>'打印机方式管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印机管理','subhead'=>'打印机方式明细列表','breadcrumbs'=>array(array('word'=>'打印机方式管理','url'=>''),array('word'=>'打印机方式明细管理','url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('printerway/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('printerWay/detaildelete' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,9 +40,9 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>打印方式列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo $pwmodel->name ;?>->打印方式明细列表</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('printerway/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('printerWay/detailcreate' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -63,10 +63,10 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>打印机方式名称</th>
-                                                                <th>备注</th>
-								<th>&nbsp;</th>
-                                                                <th>&nbsp;</th>
+								<th>楼层区域</th>
+                                                                <th>打印机</th>
+                                                                <th>打印份数</th>
+								<th>&nbsp;</th>                                                                
 							</tr>
 						</thead>
 						<tbody>
@@ -74,19 +74,17 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php echo $model->name ;?></td>
-								<td><?php echo $model->memo;?></td>
+								<td ><?php echo $model->floor->name ;?></td>
+								<td><?php echo $model->printer->name;?></td>
+                                                                <td><?php echo $model->list_no;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('printerway/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
-								</td>
-                                                                <td class="center">
-								<a href="<?php echo $this->createUrl('printerway/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑明细</a>
-								</td>
+								<a href="<?php echo $this->createUrl('printerWay/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								</td>             
 							</tr>
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td>还没有添加打印方案</td></tr>
+						<tr><td>还没有添加详细打印方案</td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>
