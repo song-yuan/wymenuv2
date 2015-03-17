@@ -26,7 +26,7 @@
 						<li class=""><a href="">基础数据同步设定</a></li>
 					</ul>
 				</li>
-                                        <li class="<?php if(in_array(Yii::app()->controller->id , array('product' , 'productCategory','retreat','productPrinter','productClean'))) echo 'active';?>">
+                                        <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productSet','productCategory','retreat','productPrinter','productClean'))) echo 'active';?>">
                                         <a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">产品管理</span>					
@@ -34,7 +34,7 @@
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'productCategory') echo 'active';?>"><a href="<?php echo $this->createUrl('productCategory/index',array('companyId' => $this->companyId));?>">产品分类</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'product') echo 'active';?>"><a href="<?php echo $this->createUrl('product/index',array('companyId' => $this->companyId));?>">单品管理</a></li>
-						<li class=""><a href="">套餐管理</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>">套餐管理</a></li>
 						<li class=""><a href="">时价菜管理</a></li>
 						<li class=""><a href="">特价菜管理</a></li>
 						<li class=""><a href="">优惠活动管理</a></li>

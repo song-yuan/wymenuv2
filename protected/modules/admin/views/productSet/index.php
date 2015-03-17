@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印机管理','subhead'=>'打印机方式明细列表','breadcrumbs'=>array(array('word'=>'打印机方式管理','url'=>''),array('word'=>'打印机方式明细管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐管理','subhead'=>'套餐列表','breadcrumbs'=>array(array('word'=>'套餐管理','url'=>''),array('word'=>'套餐列表','url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('printerWay/detaildelete' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid)),
+				'action' => $this->createUrl('productSet/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,9 +40,9 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo $pwmodel->name ;?>->打印方式明细列表</div>
+					<div class="caption"><i class="fa fa-globe"></i>打印方式列表</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('printerWay/detailcreate' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('printerSet/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -63,10 +63,17 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>楼层区域</th>
-                                                                <th>打印机</th>
-                                                                <th>打印份数</th>
-								<th>&nbsp;</th>                                                                
+								<th>套餐名称</th>
+                                                                <th>主图片</th>
+                                                                <th>星级</th>
+                                                                <th>会员打折</th>
+								<th>特价</th>
+								<th>优惠</th>
+								<th>沽清</th>
+								<th>下单数</th>
+								<th>点赞数</th>
+								<th>&nbsp;</th>
+                                                                <th>&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -74,17 +81,42 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php echo $model->floor->name ;?></td>
-								<td><?php echo $model->printer->name;?></td>
-                                                                <td><?php echo $model->list_no;?></td>
+								<td ><?php echo $model->set_name ;?></td>
+								<td><?php echo $model->main_picture;?></td>
+								<td><?php echo $model->rank;?></td>
+								<td>
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
+										<input pid="<?php echo $model['lid'];?>" <?php if(!$model['is_member_discount']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+									</div>
+								</td>
+                                                                <td>
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
+										<input pid="<?php echo $model['lid'];?>" <?php if(!$model['is_special']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+									</div>
+								</td>
+                                                                <td>
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
+										<input pid="<?php echo $model['lid'];?>" <?php if(!$model['is_discount']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+									</div>
+								</td>
+                                                                <td>
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
+										<input pid="<?php echo $model['lid'];?>" <?php if(!$model['status']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+									</div>
+								</td>
+                                                                <td ><?php echo $model->order_number ;?></td>
+								<td><?php echo $model->favourite_number;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('printerWay/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
-								</td>             
+								<a href="<?php echo $this->createUrl('printerSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								</td>
+                                                                <td class="center">
+								<a href="<?php echo $this->createUrl('printerSet/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑明细</a>
+								</td>
 							</tr>
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td>还没有添加详细打印方案</td></tr>
+						<tr><td>还没有添加套餐</td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>

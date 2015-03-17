@@ -29,7 +29,7 @@
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('printerWay/detaildelete' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid)),
+				'action' => $this->createUrl('printerway/detaildelete' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -42,7 +42,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $pwmodel->name ;?>->打印方式明细列表</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('printerWay/detailcreate' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('printerway/detailcreate' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -78,7 +78,7 @@
 								<td><?php echo $model->printer->name;?></td>
                                                                 <td><?php echo $model->list_no;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('printerWay/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('printerway/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>             
 							</tr>
 						<?php endforeach;?>

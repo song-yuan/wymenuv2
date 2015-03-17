@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印方式管理','subhead'=>'添加打印方式','breadcrumbs'=>array(array('word'=>'打印方式管理','url'=>$this->createUrl('printerway/index' , array('companyId'=>$this->companyId))),array('word'=>'添加打印方式','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印方式管理','subhead'=>'添加打印方式','breadcrumbs'=>array(array('word'=>'打印方式管理','url'=>$this->createUrl('printerWay/index' , array('companyId'=>$this->companyId))),array('word'=>'添加打印方式','url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->

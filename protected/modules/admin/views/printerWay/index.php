@@ -29,7 +29,7 @@
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('printerway/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('printerWay/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -42,7 +42,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i>打印方式列表</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('printerway/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('printerWay/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -77,10 +77,10 @@
 								<td ><?php echo $model->name ;?></td>
 								<td><?php echo $model->memo;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('printerway/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('printerWay/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>
                                                                 <td class="center">
-								<a href="<?php echo $this->createUrl('printerway/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑明细</a>
+								<a href="<?php echo $this->createUrl('printerWay/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑明细</a>
 								</td>
 							</tr>
 						<?php endforeach;?>
