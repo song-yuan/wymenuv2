@@ -1,34 +1,32 @@
 <?php
 
 /**
- * This is the model class for table "nb_product_set".
+ * This is the model class for table "nb_product_discount".
  *
- * The followings are the available columns in table 'nb_product_set':
+ * The followings are the available columns in table 'nb_product_discount':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $set_name
- * @property string $simple_code
- * @property string $main_picture
- * @property string $description
- * @property integer $rank
- * @property string $is_member_discount
- * @property string $is_special
+ * @property string $product_id
+ * @property string $is_set
+ * @property string $price_discount
  * @property string $is_discount
- * @property string $status
  * @property integer $order_number
  * @property integer $favourite_number
- * @property string $delete_flag
+ * @property integer $all_count
+ * @property string $reason
+ * @property string $begin_time
+ * @property string $end_time
  */
-class ProductSet extends CActiveRecord
+class ProductDiscount extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_product_set';
+		return 'nb_product_discount';
 	}
 
 	/**
@@ -39,21 +37,15 @@ class ProductSet extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('set_name, lid', 'required'),
-			array('rank, order_number, favourite_number', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid', 'length', 'max'=>10),
-			array('set_name', 'length', 'max'=>50),
-			array('simple_code', 'length', 'max'=>25),
-			array('main_picture', 'length', 'max'=>255),
-			array('is_member_discount, is_special, is_discount, status, delete_flag', 'length', 'max'=>1),
-			array('description', 'safe'),
+			array('reason', 'required'),
+			array('order_number, favourite_number, all_count', 'numerical', 'integerOnly'=>true),
+			array('lid, dpid, product_id, price_discount', 'length', 'max'=>10),
+			array('is_set, is_discount', 'length', 'max'=>1),
+			array('reason', 'length', 'max'=>50),
+			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-<<<<<<< HEAD
-			array('lid, dpid, create_at, update_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status, order_number, favourite_number, delete_flag', 'safe', 'on'=>'search'),
-=======
-			array('lid, dpid, create_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status, order_number, favourite_number, delete_flag', 'safe', 'on'=>'search'),
->>>>>>> 8ba27a64c81d022eecf305e25151a362e87860f4
+			array('lid, dpid, create_at, update_at, product_id, is_set, price_discount, is_discount, order_number, favourite_number, all_count, reason, begin_time, end_time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,6 +57,8 @@ class ProductSet extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'product'=>array(self::HAS_ONE, 'Product', '', 'on'=>'t.product_id=product.lid and t.is_set=0'),
+			'productSet'=>array(self::HAS_ONE, 'ProductSet', '', 'on'=>'t.product_id=productSet.lid and t.is_set=1'),
 		);
 	}
 
@@ -78,18 +72,16 @@ class ProductSet extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'set_name' => '套餐名称',
-			'simple_code' => 'Simple Code',
-			'main_picture' => '主图片',
-			'description' => '描述',
-			'rank' => '推荐星级',
-			'is_member_discount' => '会员折扣',
-			'is_special' => '是否特价菜',
-			'is_discount' => '是否参与优惠活动',
-			'status' => '是否沽清',
-			'order_number' => '总下单次数',
-			'favourite_number' => '总点赞次数',
-			'delete_flag' => 'Delete Flag',
+			'product_id' => 'Product',
+			'is_set' => '是否是套餐',
+			'price_discount' => '优惠价格或折扣比例',
+			'is_discount' => '类型',
+			'order_number' => '优惠期间的点单数量，不大于all_count',
+			'favourite_number' => '优惠期间的点赞数量',
+			'all_count' => '0代表不限数量',
+			'reason' => 'Reason',
+			'begin_time' => 'Begin Time',
+			'end_time' => 'End Time',
 		);
 	}
 
@@ -115,18 +107,16 @@ class ProductSet extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('set_name',$this->set_name,true);
-		$criteria->compare('simple_code',$this->simple_code,true);
-		$criteria->compare('main_picture',$this->main_picture,true);
-		$criteria->compare('description',$this->description,true);
-		$criteria->compare('rank',$this->rank);
-		$criteria->compare('is_member_discount',$this->is_member_discount,true);
-		$criteria->compare('is_special',$this->is_special,true);
+		$criteria->compare('product_id',$this->product_id,true);
+		$criteria->compare('is_set',$this->is_set,true);
+		$criteria->compare('price_discount',$this->price_discount,true);
 		$criteria->compare('is_discount',$this->is_discount,true);
-		$criteria->compare('status',$this->status,true);
 		$criteria->compare('order_number',$this->order_number);
 		$criteria->compare('favourite_number',$this->favourite_number);
-		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('all_count',$this->all_count);
+		$criteria->compare('reason',$this->reason,true);
+		$criteria->compare('begin_time',$this->begin_time,true);
+		$criteria->compare('end_time',$this->end_time,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -137,7 +127,7 @@ class ProductSet extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ProductSet the static model class
+	 * @return ProductDiscount the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

@@ -5,6 +5,6 @@ return array (
   'tablePrefix' => 'nb_',
   'modelPath' => 'application.models',
   'baseClass' => 'CActiveRecord',
-  'buildRelations' => '1',
+  'buildRelations' => '0',
   'commentsAsLabels' => '1',
 );
