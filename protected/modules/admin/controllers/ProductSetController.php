@@ -1,6 +1,17 @@
 <?php
 class ProductSetController extends BackendController
 {
+        public function actions() {
+		return array(
+				'upload'=>array(
+						'class'=>'application.extensions.swfupload.SWFUploadAction',
+						//注意这里是绝对路径,.EXT是文件后缀名替代符号
+						'filepath'=>Helper::genFileName().'.EXT',
+						//'onAfterUpload'=>array($this,'saveFile'),
+				)
+		);
+	}
+    
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
@@ -29,10 +40,12 @@ class ProductSetController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
-                        $se=new Sequence("product_set");
+                        $se=new Sequence("porduct_set");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
+                        $py=new Pinyin();
+                        $model->simple_code = $py->py($model->set_name);
                         //var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , '添加成功');
@@ -50,7 +63,9 @@ class ProductSetController extends BackendController
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
-                        //($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
+                        $py=new Pinyin();
+                        $model->simple_code = $py->py($model->set_name);
+                        //var_dump($model->attributes);var_dump(Yii::app()->request->getPost('ProductSet'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
 				$this->redirect(array('productSet/index' , 'companyId' => $this->companyId));

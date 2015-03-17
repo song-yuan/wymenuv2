@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐管理','subhead'=>'添加套餐明细','breadcrumbs'=>array(array('word'=>'套餐管理','url'=>$this->createUrl('productSet/detailindex' , array('companyId'=>$this->companyId))),array('word'=>'添加套餐明细','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品类型管理','subhead'=>'修改产品类型','breadcrumbs'=>array(array('word'=>'产品类型管理','url'=>$this->createUrl('productCategory/index' , array('companyId'=>$this->companyId))),array('word'=>'修改产品类型','url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,14 +31,14 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>添加套餐明细</div>
+							<div class="caption"><i class="fa fa-reorder"></i>修改产品类型</div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_detailform', array('model'=>$model,'fcs'=>$fcs,'scs'=>$scs,'products'=>$products)); ?>
+							<?php echo $this->renderPartial('_form1', array('model'=>$model)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

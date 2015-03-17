@@ -67,12 +67,12 @@ class ProductSetDetail extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'set_id' => 'Set',
-			'product_id' => 'Product',
-			'price' => '菜品在套餐中的价格，可能是打折过的，总价根据这个价格累加计算而得，但是这个明细价格前台不显示，前台只显示套餐总价，所以可以随便设定，比如把第一个固定菜品价格设定成菜单总价，其他设定成0也可以。当套餐中有可选项且价格不一致时，可选项变化套餐总价也变化',
-			'group_no' => '一个套餐中有多组产品，如：主食一组、饮料一组，一般一组就一个，也有一组中有多个可供客户选择的。',
-			'number' => '套餐中默认数量',
-			'is_select' => '同一组中有多个选择时，那个产品时默认选中的这个字段为1，否则为0',
+			'set_id' => '套餐名称',
+			'product_id' => '产品名称',
+			'price' => '套餐价格',
+			'group_no' => '分组号',
+			'number' => '数量',
+			'is_select' => '组中默认项',
 			'delete_flag' => 'Delete Flag',
 		);
 	}

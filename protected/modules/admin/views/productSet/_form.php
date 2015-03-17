@@ -16,25 +16,96 @@
 										</div>
 									</div>
 								<?php endif;?>
-								<div class="form-group">
-									<?php echo $form->label($model, 'name',array('class' => 'col-md-3 control-label'));?>
-									<div class="col-md-4">
-										<?php echo $form->textField($model, 'name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('name')));?>
-										<?php echo $form->error($model, 'name' )?>
-									</div>
-								</div>
-                                                                        
-									<div class="form-group">
-										<?php echo $form->label($model, 'memo',array('class' => 'col-md-3 control-label'));?>
+                                                                        <div class="form-group">
+                                                                                <?php echo $form->label($model, 'set_name',array('class' => 'col-md-3 control-label'));?>
+                                                                                <div class="col-md-4">
+                                                                                        <?php echo $form->textField($model, 'set_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('set_name')));?>
+                                                                                        <?php echo $form->error($model, 'set_name' )?>
+                                                                                </div>
+                                                                        </div>
+                                                                       <div class="form-group">
+										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textArea($model, 'memo',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('memo')));?>
-											<?php echo $form->error($model, 'memo' )?>
+											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2', '3' => '3', '4' => '4', '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rank')));?>
+											<?php echo $form->error($model, 'rank' )?>
+										</div>
+									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'is_member_discount',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_member_discount', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount')));?>
+											<?php echo $form->error($model, 'is_member_discount' )?>
+										</div>
+									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'is_special',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_special', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_special')));?>
+											<?php echo $form->error($model, 'is_special' )?>
+										</div>
+									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'is_discount',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_discount', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_discount')));?>
+											<?php echo $form->error($model, 'is_discount' )?>
+										</div>
+									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'status',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'status', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('status')));?>
+											<?php echo $form->error($model, 'status' )?>
+										</div>
+									</div>
+									<div class="form-group <?php if($model->hasErrors('main_picture')) echo 'has-error';?>">
+										<?php echo $form->label($model,'main_picture',array('class'=>'control-label col-md-3')); ?>
+										<div class="col-md-9">
+										<?php
+										$this->widget('application.extensions.swfupload.SWFUpload',array(
+											'callbackJS'=>'swfupload_callback',
+											'fileTypes'=> '*.jpg',
+											'buttonText'=> '上传产品图片',
+											'companyId' => $model->dpid,
+											'imgUrlList' => array($model->main_picture),
+										));
+										?>
+										<?php echo $form->hiddenField($model,'main_picture'); ?>
+										<?php echo $form->error($model,'main_picture'); ?>
+										</div>
+									</div>                                                                        
+									<div class="form-group">
+										<?php echo $form->label($model, 'description',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-8">
+											<?php echo $form->textArea($model, 'description' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('description')));?>
+											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('printerway/index' , array('companyId' => $model->dpid));?>" class="btn default">返回</a>                              
+											<a href="<?php echo $this->createUrl('productSet/index' , array('companyId' => $model->dpid));?>" class="btn default">返回</a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
+                                                        <?php $this->widget('ext.kindeditor.KindEditorWidget',array(
+								'id'=>'ProductSet_description',	//Textarea id
+								'language'=>'zh_CN',
+								// Additional Parameters (Check http://www.kindsoft.net/docs/option.html)
+								'items' => array(
+									'height'=>'200px',
+									'width'=>'100%',
+									'themeType'=>'simple',
+									'resizeType'=>1,
+									'allowImageUpload'=>true,
+									'allowFileManager'=>true,
+								),
+							)); ?>
+           <script>
+	   
+	
+		function swfupload_callback(name,path,oldname)  {
+			$("#ProductSet_main_picture").val(name);
+			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
+		}
+	</script>

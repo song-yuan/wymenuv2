@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印机管理','subhead'=>'打印机方式明细列表','breadcrumbs'=>array(array('word'=>'打印机方式管理','url'=>''),array('word'=>'打印机方式明细管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐管理','subhead'=>'套餐明细列表','breadcrumbs'=>array(array('word'=>'套餐管理','url'=>''),array('word'=>'套餐明细管理','url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('printerway/detaildelete' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid)),
+				'action' => $this->createUrl('productSet/detaildelete' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,9 +40,9 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo $pwmodel->name ;?>->打印方式明细列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->set_name ;?>->套餐明细列表</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('printerway/detailcreate' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('productSet/detailcreate' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -63,9 +63,11 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>楼层区域</th>
-                                                                <th>打印机</th>
-                                                                <th>打印份数</th>
+								<th>产品名称</th>
+                                                                <th>套餐价格</th>
+                                                                <th>分组号</th>
+                                                                <th>数量</th>
+                                                                <th>默认</th>
 								<th>&nbsp;</th>                                                                
 							</tr>
 						</thead>
@@ -74,17 +76,23 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php echo $model->floor->name ;?></td>
-								<td><?php echo $model->printer->name;?></td>
-                                                                <td><?php echo $model->list_no;?></td>
+								<td ><?php echo $model->product->product_name ;?></td>
+								<td><?php echo $model->price;?></td>
+                                                                <td><?php echo $model->group_no;?></td>
+                                                                <td><?php echo $model->number;?></td>
+                                                                <td>
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
+										<input pid="<?php echo $model->lid;?>" <?php if($model->is_select) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+									</div>
+								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('printerway/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('productSet/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>             
 							</tr>
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td>还没有添加详细打印方案</td></tr>
+						<tr><td>还没有添加详细产品</td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>
