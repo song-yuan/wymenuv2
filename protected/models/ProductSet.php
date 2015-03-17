@@ -49,11 +49,8 @@ class ProductSet extends CActiveRecord
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-<<<<<<< HEAD
-			array('lid, dpid, create_at, update_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status, order_number, favourite_number, delete_flag', 'safe', 'on'=>'search'),
-=======
 			array('lid, dpid, create_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status, order_number, favourite_number, delete_flag', 'safe', 'on'=>'search'),
->>>>>>> 8ba27a64c81d022eecf305e25151a362e87860f4
+
 		);
 	}
 

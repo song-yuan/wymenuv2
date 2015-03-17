@@ -70,17 +70,10 @@ class Product extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
-<<<<<<< HEAD
 			'category' => array(self::BELONGS_TO , 'ProductCategory' ,'','on'=> 't.category_id=category.lid and category.dpid=t.dpid'),
 			'productTaste' => array(self::HAS_MANY , 'ProductTaste' ,'','on'=>'t.lid=productTaste.product_id and t.dpid=productTaste.dpid and productTaste.delete_flag=0'),
 			'printerWay' => array(self::HAS_ONE , 'PrinterWay' ,'','on'=>'t.printer_way_id=printerWay.lid and t.dpid=printerWay.dpid and printerWay.delete_flag=0'),
 			'productImg' => array(self::BELONGS_TO , 'ProductPicture' ,'','on'=>'t.lid=productImg.product_id and t.dpid=productImg.dpid and productImg.delete_flag=0'),
-=======
-			'category' => array(self::BELONGS_TO , 'ProductCategory' , 'category_id'),
-			'productTaste' => array(self::HAS_MANY , 'ProductTaste' ,'','on'=>'t.lid=productTaste.product_id and productTaste.delete_flag=0'),
-			'printerWay' => array(self::HAS_ONE , 'PrinterWay' ,'','on'=>'t.printer_way_id=printerWay.lid and printerWay.delete_flag=0'),
-			'productImg' => array(self::HAS_MANY , 'ProductPicture' ,'','on'=>'t.lid=productImg.product_id and productImg.delete_flag=0'),
->>>>>>> 10cdb4fd2d24d4a068430a0b86d2be5040216b78
 		);
 	}
 
