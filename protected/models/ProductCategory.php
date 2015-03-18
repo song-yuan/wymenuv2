@@ -115,7 +115,6 @@ class ProductCategory extends CActiveRecord
 		
 		$str = implode(',',$categoryIds);
 		
-<<<<<<< HEAD
 		Yii::app()->db->createCommand('update '.$this->tableName().' set delete_flag=1 where lid in ('.$str.')')->execute();
 		Yii::app()->db->createCommand('update nb_product set delete_flag=1 where lid in ('.$str.')')->execute();
 	}
@@ -136,9 +135,5 @@ class ProductCategory extends CActiveRecord
 			array_push($totalCatgorys,$category);
 		}
 		return $totalCatgorys;
-=======
-		Yii::app()->db->createCommand('update '.$this->tableName().' set delete_flag=1 where dpid='.$this->dpid.' and lid in ('.$str.')')->execute();
-		Yii::app()->db->createCommand('update nb_product set delete_flag=1 where dpid='.$this->dpid.' and category_id in ('.$str.')')->execute();
->>>>>>> 1dd09eb5b62934929aba75c32c0ead5611778fe1
 	}
 }
