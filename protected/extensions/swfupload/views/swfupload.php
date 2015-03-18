@@ -57,15 +57,17 @@
 	<div class="cl"></div>
 	<div <?php if(!$showMessage):?>style="display:none;"<?php endif;?> id="fileProgressContainer_<?php echo $threadId?>"></div>
 	<div class="fileupload">
-		<div id="thumbnails_<?php echo $threadId?>" class="thumbnail" >
 		<?php if(empty($imgUrlList)):?>
+		<div id="thumbnails_<?php echo $threadId?>" class="thumbnail" >
 		<img style="display: inline-block;max-height: 100%;vertical-align: middle;margin-left:auto:margin-right:auto;max-width: 100%;" src="./images/200x150.gif" alt="">
+		</div>
 		<?php else:?>
 		<?php foreach ($imgUrlList as $img):?>
-			<img style="margin:5px;opacity:1;" src="<?php echo $img?>">
+		<div id="thumbnails_<?php echo $threadId?>" class="thumbnail" >
+		<img style="margin:5px;opacity:1;" src="<?php echo $img?>">
+		</div>
 		<?php endforeach;?>
 		<?php endif;?>
-		</div>
 	</div>
 	<div class="swfupload_button form-control" <?php if(!$showButton):?>style="display:none;"<?php endif;?>>
 			<div id="button_placeholder_<?php echo $threadId?>">&nbsp;</div>
