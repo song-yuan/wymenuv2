@@ -42,7 +42,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i>打印方式列表</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('printerSet/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('productSet/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -82,35 +82,35 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->set_name ;?></td>
-								<td><?php echo $model->main_picture;?></td>
-								<td><?php echo $model->rank;?></td>
+								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
+                                                                <td><?php echo $model->rank;?></td>
 								<td>
 									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
-										<input pid="<?php echo $model['lid'];?>" <?php if(!$model['is_member_discount']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+										<input pid="<?php echo $model->lid;?>" <?php if($model->is_member_discount) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
 									</div>
 								</td>
                                                                 <td>
 									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
-										<input pid="<?php echo $model['lid'];?>" <?php if(!$model['is_special']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+										<input pid="<?php echo $model->lid;?>" <?php if($model->is_special) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
 									</div>
 								</td>
                                                                 <td>
 									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
-										<input pid="<?php echo $model['lid'];?>" <?php if(!$model['is_discount']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+										<input pid="<?php echo $model->lid;?>" <?php if($model->is_discount) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
 									</div>
 								</td>
                                                                 <td>
 									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
-										<input pid="<?php echo $model['lid'];?>" <?php if(!$model['status']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+										<input pid="<?php echo $model->lid;?>" <?php if($model->status) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
 									</div>
 								</td>
                                                                 <td ><?php echo $model->order_number ;?></td>
 								<td><?php echo $model->favourite_number;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('printerSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('productSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>
                                                                 <td class="center">
-								<a href="<?php echo $this->createUrl('printerSet/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑明细</a>
+								<a href="<?php echo $this->createUrl('productSet/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑明细</a>
 								</td>
 							</tr>
 						<?php endforeach;?>

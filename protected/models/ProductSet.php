@@ -39,21 +39,18 @@ class ProductSet extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('set_name, simple_code, main_picture', 'required'),
+			array('set_name, lid', 'required'),
 			array('rank, order_number, favourite_number', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('set_name', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
 			array('is_member_discount, is_special, is_discount, status, delete_flag', 'length', 'max'=>1),
-			array('create_at', 'safe'),
+			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-<<<<<<< HEAD
-			array('lid, dpid, create_at, update_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status, order_number, favourite_number, delete_flag', 'safe', 'on'=>'search'),
-=======
 			array('lid, dpid, create_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status, order_number, favourite_number, delete_flag', 'safe', 'on'=>'search'),
->>>>>>> 8ba27a64c81d022eecf305e25151a362e87860f4
+
 		);
 	}
 
@@ -78,15 +75,15 @@ class ProductSet extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'set_name' => 'Set Name',
+			'set_name' => '套餐名称',
 			'simple_code' => 'Simple Code',
-			'main_picture' => 'Main Picture',
-			'description' => 'Description',
-			'rank' => '产品星级，商家自己从1-5评星',
-			'is_member_discount' => '是否参与会员折扣',
+			'main_picture' => '主图片',
+			'description' => '描述',
+			'rank' => '推荐星级',
+			'is_member_discount' => '会员折扣',
 			'is_special' => '是否特价菜',
 			'is_discount' => '是否参与优惠活动',
-			'status' => '0正常，1沽清',
+			'status' => '是否沽清',
 			'order_number' => '总下单次数',
 			'favourite_number' => '总点赞次数',
 			'delete_flag' => 'Delete Flag',

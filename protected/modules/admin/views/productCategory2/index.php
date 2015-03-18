@@ -41,21 +41,21 @@
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-cogs"></i>商品类目管理</div>
 							<div class="actions">
-								<a class="btn blue add_btn" pid="0" data-toggle="modal"><i class="fa fa-plus"></i> 添加一级类目</a>
+								<a class="btn blue add_btn" parentId="0" data-toggle="modal"><i class="fa fa-plus"></i> 添加一级类目</a>
 							</div>
 						</div>
 						<div class="portlet-body">
 							<div class="table-responsive">
 								<table class="tree table table-striped table-hover table-bordered dataTable">
 									<?php foreach($models as $model):?>
-									<tr class="treegrid-<?php echo $model->lid?> <?php if($model->pid!='0') echo 'treegrid-parent-'.$model->pid;?>">
+									<tr class="treegrid-<?php echo $model->lid?> <?php if($model->parent_id!='0') echo 'treegrid-parent-'.$model->parent_id;?>">
 										<td width="70%"><?php echo $model->category_name;?></td>
 										<td>
-										<?php if($model->pid=='0'):?>
-										<a class="btn btn-xs green add_btn" pid="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-plus"></i></a>
+                                                                                <?php if($model->parent_id=='0'):?>
+										<a class="btn btn-xs green add_btn" parentId="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-plus"></i></a>
 										<?php endif;?>
-										<a class="btn btn-xs blue edit_btn" id="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-edit"></i></a>
-										<a href="javascript:;" cid="<?php echo $model->lid;?>" class="btn btn-xs red btn_delete"><i class="fa fa-times"></i></a>										
+                                                                                <a class="btn btn-xs blue edit_btn" id="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-edit"></i></a>
+										<a cid="<?php echo $model->lid;?>" class="btn btn-xs red btn_delete"><i class="fa fa-times"></i></a>										
 										</td>
 									</tr>
 									<?php endforeach;?>
@@ -72,13 +72,13 @@
     $(document).ready(function() {
         $('.tree').treegrid({'initialState':'collapsed'});
         <?php foreach($expandNode as $node):?>
-        $('.treegrid-<?php echo substr('0000000000'.$node,-10,10);?>').treegrid('expand');
+        $('.treegrid-<?php echo $node;?>').treegrid('expand');
         <?php endforeach;?>
 	});
     var $modal = $('.modal');
     $('.add_btn').on('click', function(){
-    	pid = $(this).attr('pid');
-        $modal.find('.modal-content').load('<?php echo $this->createUrl('productCategory/create',array('companyId'=>$this->companyId));?>/pid/'+pid, '', function(){
+    	parentId = $(this).attr('parentId');
+        $modal.find('.modal-content').load('<?php echo $this->createUrl('productCategory/create',array('companyId'=>$this->companyId));?>/parentId/'+parentId, '', function(){
           $modal.modal();
         });
     });
