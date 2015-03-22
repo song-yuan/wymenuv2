@@ -61,6 +61,8 @@
 								<th>类别</th>
 								<th>现价</th>
                                                                 <th>单位</th>
+                                                                <th>称重</th>
+                                                                <th>重量单位</th>                                                                
                                                                 <th>星级</th>
                                                                 <th>点单数</th>
                                                                 <th>点赞数</th>
@@ -79,19 +81,14 @@
 								<td><?php echo $model->category->category_name;?></td>
 								<td ><?php echo $model->original_price;?></td>
                                                                 <td ><?php echo $model->product_unit;?></td>
+                                                                <td ><?php echo $model->is_weight_confirm=='0'?'否':'是';?></td>
+                                                                <td ><?php echo $model->weight_unit;?></td>
                                                                 <td ><?php echo $model->rank;?></td>
                                                                 <td ><?php echo $model->order_number;?></td>
                                                                 <td ><?php echo $model->favourite_number;?></td>
-								<td >
-									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
-										<input  pid="<?php echo $model->lid;?>" type="checkbox" <?php if($model->is_member_discount) echo 'checked="checked"';?> class="toggle"/>
-									</div>
-								</td>
-                                                                <td >
-									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
-										<input  pid="<?php echo $model->lid;?>" type="checkbox" <?php if($model->is_show) echo 'checked="checked"';?> class="toggle"/>
-									</div>
-								</td>
+								<td ><?php echo $model->is_member_discount=='0'?'否':'是';?></td>
+                                                                <td ><?php echo $model->is_show=='0'?'否':'是';?></td>
+                                                                
 								<td class="center">
 								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>

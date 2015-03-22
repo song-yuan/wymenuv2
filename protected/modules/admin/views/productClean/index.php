@@ -48,16 +48,20 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
+                                    <?php if($typeId=='product') :?>
 					<div class="caption"><i class="fa fa-globe"></i>产品沽清列表</div>
 					<div class="actions">						
                                                 <div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
-						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 历史记录</button>
-						</div>
+						</div>-->
 					</div>
+                                        <?php else :?>
+                                        <div class="caption"><i class="fa fa-globe"></i>套餐沽清列表</div>
+                                        <?php endif;?>
                                         <!--    <div class="col-md-3 pull-right">
 						<div class="input-group">
                                                     <input type="text" name="csinquery" class="form-control" placeholder="输入助记符查询">
@@ -143,11 +147,14 @@
 		$('.s-btn').on('switch-change', function () {
                     var inp = $(this).find('input');
                         var id=inp.attr('pid');
-                        var isset=inp.attr('isset');
-                        var url='<?php echo $this->createUrl('productClean/status',array('companyId'=>$this->companyId));?>/id/'+id+'/isset/'+isset;
+                        var typeid=inp.attr('typeid');
+                        var url='<?php echo $this->createUrl('productClean/status',array('companyId'=>$this->companyId));?>/id/'+id+'/typeId/'+typeid;
                         //alert(url);
                         $.get(url);
 		});
-		
+		$('#selectCategory').change(function(){
+			var cid = $(this).val();
+			location.href="<?php echo $this->createUrl('productClean/index' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid;
+		});
 	});
 	</script>	

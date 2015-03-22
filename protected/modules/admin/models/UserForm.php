@@ -1,7 +1,7 @@
 <?php
 class UserForm extends CFormModel
 {
-	public $id ;
+	public $lid ;
 	public $username ;
 	public $password_old ;
 	public $password ;
@@ -19,7 +19,7 @@ class UserForm extends CFormModel
 	{
 		return array(
 				// username and password are required
-				array('username, password , mobile , role', 'required'),
+				array('lid,dpid,username, password , mobile , role', 'required'),
 				array('username' , 'length' , 'min' => 5 , 'max' => 20),
 				array('password' , 'length' , 'min' => 6 , 'max' => 16),
 				array('dpid' , 'numerical'),
@@ -32,7 +32,7 @@ class UserForm extends CFormModel
 	public function attributeLabels()
 	{
 		return array(
-				'id' => 'ID',
+				'lid' => 'ID',
 				'username' => '用户名',
 				'password' => '密码',
 				'dpid'=>'公司名称',
@@ -45,7 +45,7 @@ class UserForm extends CFormModel
 	public function find($condition , $params) {
 		$model = User::model()->find($condition , $params) ;
 		
-		$this->id = $model->lid ;
+		$this->lid = $model->lid ;
 		$this->username = $model->username;
 		$this->mobile= $model->mobile;
 		$this->staff_no = $model->staff_no ;
@@ -55,11 +55,15 @@ class UserForm extends CFormModel
 		$this->password = $this->password_old = $model->password_hash ;
 	}
 	public function save() {
-		if($this->id) {
-			$model = User::model()->find('lid=:id' , array(':id' => $this->id));
+		if($this->lid) {
+			$model = User::model()->find('lid=:id' , array(':id' => $this->lid));
 		} else {
 			$model = new User() ;
-			$model->lid = $this->getPkValue();
+                        $se=new Sequence("user");
+                        $model->lid = $se->nextval();
+                        $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->delete_flag = '0';
+			//$model->lid = $this->getPkValue();
 		}
 		$model->username = $this->username;
 		$model->mobile = $this->mobile ;

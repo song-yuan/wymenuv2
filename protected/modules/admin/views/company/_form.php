@@ -79,6 +79,7 @@
 											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
+                                                                        <!--
 									<div class="form-group">
 										<?php echo $form->label($model, 'printer_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -86,7 +87,7 @@
 											<?php echo $form->error($model, 'printer_id' )?>
 										</div>
 									</div>
-																		
+									-->									
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue">确定</button>
