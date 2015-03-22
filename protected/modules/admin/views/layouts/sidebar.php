@@ -26,7 +26,7 @@
 						<li class=""><a href="">基础数据同步设定</a></li>
 					</ul>
 				</li>
-                                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productSet','productImg','productCategory','retreat','productPrinter','productClean'))) echo 'active';?>">
+                                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productSet','productImg','productCategory','retreat','productPrinter','productClean','productSales'))) echo 'active';?>">
                                         <a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">产品管理</span>					
