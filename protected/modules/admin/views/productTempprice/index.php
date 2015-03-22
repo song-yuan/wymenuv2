@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品管理','subhead'=>'产品列表','breadcrumbs'=>array(array('word'=>'产品管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'时价产品管理','subhead'=>'产品列表','breadcrumbs'=>array(array('word'=>'时价产品管理','url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -47,7 +47,7 @@
 								<th>类别</th>
 								<th>现价</th>
                                 <th>单位</th>
-                                <th>是否优惠</th>
+                                <th>是否时价</th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -61,8 +61,8 @@
 								<td ><?php echo $model->original_price;?></td>
                                 <td ><?php echo $model->product_unit;?></td>
                                 <td >
-									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否" is-special="<?php echo $model->is_special;?>">
-										<input  pid="<?php echo $model->lid;?>" type="checkbox" <?php if($model->is_discount) echo 'checked="checked"';?> class="toggle"/>
+									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否" is-discount="<?php echo $model->is_discount;?>">
+										<input  pid="<?php echo $model->lid;?>" type="checkbox" <?php if($model->is_temp_price) echo 'checked="checked"';?> class="toggle"/>
 									</div>
 								</td>
 								<td class="center">
@@ -114,27 +114,27 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$('.r-btn').on('switch-change', function () {
-			var isSpecial = $(this).attr('is-special');
-			if(parseInt(isSpecial)){
-				alert('该单品正在特价,不能参与优惠!');
+			var isDiscount = $(this).attr('is-discount');
+			if(parseInt(isDiscount)){
+				alert('该单品正在优惠,不能参与特价!');
 				$(this).find('div').removeClass('switch-on').addClass('switch-off');
 				return;
 			}
 			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('productSales/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
+		    $.get('<?php echo $this->createUrl('productTempprice/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
 		});
 		$('.edit').click(function(){
 			var id = $(this).attr('data-id');
 			if($(this).parents('.odd').find('.toggle').is(':checked')){
-				location.href = '<?php echo $this->createUrl('productSales/updatedetail',array('companyId' => $this->companyId));?>/id/'+id;
+				location.href = '<?php echo $this->createUrl('productTempprice/updatedetail',array('companyId' => $this->companyId));?>/id/'+id;
 			}else{
-				alert('请开启该单品优惠');
+				alert('请开启该单品时价');
 			}
 			
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('productSales/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+			location.href="<?php echo $this->createUrl('productTempprice/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
 	</script>	

@@ -1,4 +1,3 @@
-	
 	<script type="text/javascript" src="../../../../../../plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 	<script type="text/javascript" src="../../../../../../plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
 	<!-- BEGIN PAGE -->  
@@ -26,7 +25,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品管理','subhead'=>'添加优惠活动','breadcrumbs'=>array(array('word'=>'产品管理','url'=>$this->createUrl('productSales/index' , array('companyId'=>$this->companyId))),array('word'=>'添加优惠活动','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'时价产品管理','subhead'=>'修改时价产品','breadcrumbs'=>array(array('word'=>'时价产品管理','url'=>$this->createUrl('productTempprice/index' , array('companyId'=>$this->companyId))),array('word'=>'修改时价产品','url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -34,7 +33,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>添加优惠活动</div>
+							<div class="caption"><i class="fa fa-reorder"></i>修改时价产品</div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
@@ -49,25 +48,9 @@
 			</div>
 			<!-- END PAGE CONTENT-->    
 		</div>
-		<!-- END PAGE -->  
+		<!-- END PAGE --> 
 		<script>
 		jQuery(document).ready(function(){
-		    if(parseInt($('input:radio[name="ProductDiscount[is_discount]"]:checked').val())) {
-				$('.discount').find('label').html('折扣比例');
-				$('.discount').find('.input-group-addon').html('折');
-			} else {
-				$('.discount').find('label').html('优惠价格');
-				$('.discount').find('.input-group-addon').html('元');
-			}
-			$('input:radio[name="ProductDiscount[is_discount]"]').change(function(){
-				if(parseInt($(this).val())) {
-					$('.discount').find('label').html('折扣比例');
-					$('.discount').find('.input-group-addon').html('折');
-				} else {
-				  $('.discount').find('label').html('优惠价格');
-				  $('.discount').find('.input-group-addon').html('元');
-				}
-		    })
 		    if (jQuery().datepicker) {
 	            $('.date-picker').datepicker({
 	            	format: 'yyyy-mm-dd',
@@ -78,4 +61,4 @@
 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
            }
 		});
-		</script>
+		</script> 

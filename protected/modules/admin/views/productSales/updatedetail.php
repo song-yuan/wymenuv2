@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品管理','subhead'=>'产品列表','breadcrumbs'=>array(array('word'=>'产品管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'优惠活动管理','subhead'=>'优惠活动列表','breadcrumbs'=>array(array('word'=>'优惠活动管理','url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -31,23 +31,19 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>产品列表</div>
+					<div class="caption"><i class="fa fa-globe"></i>产品优惠活动列表</div>
 					<div class="actions">
-						<div class="btn-group">
-							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
-						</div>
+						<a href="<?php echo $this->createUrl('productSales/create',array('companyId'=>$this->companyId,'productId'=>$productId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th style="width:20%">名称</th>
-								<th >图片</th>
-								<th>类别</th>
-								<th>现价</th>
-                                <th>单位</th>
-                                <th>是否优惠</th>
+								<th style="width:30%">活动时间</th>
+								<th>优惠类别</th>
+								<th>优惠内容</th>
+								<th>优惠原因</th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -55,18 +51,12 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td style="width:20%"><?php echo $model->product_name;?></td>
-								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
-								<td><?php echo $model->category->category_name;?></td>
-								<td ><?php echo $model->original_price;?></td>
-                                <td ><?php echo $model->product_unit;?></td>
-                                <td >
-									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否" is-special="<?php echo $model->is_special;?>">
-										<input  pid="<?php echo $model->lid;?>" type="checkbox" <?php if($model->is_discount) echo 'checked="checked"';?> class="toggle"/>
-									</div>
-								</td>
+								<td><?php echo $model->begin_time.' - '.$model->end_time;?></td>
+								<td ><?php if($model->is_discount) echo '折扣';else echo '优惠';?></td>
+								<td><?php if($model->is_discount) echo $model->price_discount.'折';else echo $model->price_discount.'元';?></td>
+								<td><?php echo $model->reason;?></td>
 								<td class="center">
-								<a href="javascript:;" class="edit" data-id="<?php echo $model->lid;?>">编辑明细</a>
+								<a href="<?php echo $this->createUrl('productSales/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -114,23 +104,8 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$('.r-btn').on('switch-change', function () {
-			var isSpecial = $(this).attr('is-special');
-			if(parseInt(isSpecial)){
-				alert('该单品正在特价,不能参与优惠!');
-				$(this).find('div').removeClass('switch-on').addClass('switch-off');
-				return;
-			}
 			var id = $(this).find('input').attr('pid');
 		    $.get('<?php echo $this->createUrl('productSales/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.edit').click(function(){
-			var id = $(this).attr('data-id');
-			if($(this).parents('.odd').find('.toggle').is(':checked')){
-				location.href = '<?php echo $this->createUrl('productSales/updatedetail',array('companyId' => $this->companyId));?>/id/'+id;
-			}else{
-				alert('请开启该单品优惠');
-			}
-			
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();

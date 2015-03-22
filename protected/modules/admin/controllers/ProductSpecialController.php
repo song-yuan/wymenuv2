@@ -1,5 +1,5 @@
 <?php
-class ProductSalesController extends BackendController
+class ProductSpecialController extends BackendController
 {
 	
 	public function beforeAction($action) {
@@ -45,10 +45,10 @@ class ProductSalesController extends BackendController
 		$criteria->params[':dpid']=$this->companyId;
 		$criteria->params[':productId']=$productId;
 		
-		$pages = new CPagination(ProductDiscount::model()->count($criteria));
+		$pages = new CPagination(ProductSpecial::model()->count($criteria));
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
-		$models = ProductDiscount::model()->findAll($criteria);
+		$models = ProductSpecial::model()->findAll($criteria);
 //		var_dump($models[0]);exit;
 		$this->render('updatedetail',array(
 				'models'=>$models,
@@ -58,20 +58,20 @@ class ProductSalesController extends BackendController
 	}
 	public function actionCreate() {
 		$productId = Yii::app()->request->getParam('productId');
-		$model = new ProductDiscount ;
+		$model = new ProductSpecial ;
 		$model->dpid = $this->companyId ;
 		
 		$product = Product::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$productId,':dpid'=>  $this->companyId));
 //		$productSets = ProductSet::model()->findAll('dpid=:dpid and delete_flag=0 and is_discount=1 and status=0',array(':dpid'=>$this->companyId));
 		if(Yii::app()->request->isPostRequest) {
-			$postData = Yii::app()->request->getPost('ProductDiscount');
+			$postData = Yii::app()->request->getPost('ProductSpecial');
 			 $model->attributes = $postData;
                         $se=new Sequence("retreat");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , '添加成功');
-				$this->redirect(array('productSales/updatedetail' , 'companyId' => $this->companyId,'id'=>$productId));
+				$this->redirect(array('productSpecial/updatedetail' , 'companyId' => $this->companyId,'id'=>$productId));
 			}
 		}
 //		var_dump($products);exit;
@@ -82,13 +82,13 @@ class ProductSalesController extends BackendController
 	}
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('id');
-		$model = ProductDiscount::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
+		$model = ProductSpecial::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		$product = Product::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$model->product_id,':dpid'=>  $this->companyId));
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('ProductDiscount');
+			$model->attributes = Yii::app()->request->getPost('ProductSpecial');
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
-				$this->redirect(array('productSales/updatedetail' , 'companyId' => $this->companyId,'id'=>$model->product_id));
+				$this->redirect(array('productSpecial/updatedetail' , 'companyId' => $this->companyId,'id'=>$model->product_id));
 			}
 		}
 		$this->render('update' , array(
@@ -101,7 +101,7 @@ class ProductSalesController extends BackendController
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		
 		if($product){
-			$product->saveAttributes(array('is_discount'=>$product->is_discount==0?1:0));
+			$product->saveAttributes(array('is_special'=>$product->is_special==0?1:0));
 		}
 		exit;
 	}
