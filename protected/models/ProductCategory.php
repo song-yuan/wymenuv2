@@ -116,7 +116,25 @@ class ProductCategory extends CActiveRecord
 		
 		$str = implode(',',$categoryIds);
 		
-		Yii::app()->db->createCommand('update '.$this->tableName().' set delete_flag=1 where dpid='.$this->dpid.' and lid in ('.$str.')')->execute();
-		Yii::app()->db->createCommand('update nb_product set delete_flag=1 where dpid='.$this->dpid.' and category_id in ('.$str.')')->execute();
+		Yii::app()->db->createCommand('update '.$this->tableName().' set delete_flag=1 where lid in ('.$str.')')->execute();
+		Yii::app()->db->createCommand('update nb_product set delete_flag=1 where lid in ('.$str.')')->execute();
+	}
+	/**
+	 * 
+	 * 获取 商品分类 一级及多级
+	 * 
+	 */
+	public static function getCategorys($companyId = 0){
+		$totalCatgorys = array();
+		$command = Yii::app()->db;
+		$sql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0';
+		$parentCategorys = $command->createCommand($sql)->bindValue(':companyId',$companyId)->queryAll();
+		foreach($parentCategorys as $category){
+			$csql = 'select lid, pid, category_name from nb_product_category where dpid=:companyId and pid=:parent_id and delete_flag=0';
+			$categorys = $command->createCommand($csql)->bindValue(':companyId',$companyId)->bindValue(':parent_id',$category['lid'])->queryAll();
+			$category['children'] = $categorys;
+			array_push($totalCatgorys,$category);
+		}
+		return $totalCatgorys;
 	}
 }
