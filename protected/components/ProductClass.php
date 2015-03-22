@@ -56,4 +56,14 @@ class ProductClass
 		$result = join(':',array($price,$nums));
 		return $result;
 	}
+	public static function getCategoryName($categoryId = 0){
+		$command = Yii::app()->db;
+		
+		$sql = 'select * from nb_product_category where lid=:lid';
+		$conn = $command->createCommand($sql);
+		$conn->bindValue(':lid',$categoryId);
+		$result = $conn->queryRow();
+		
+		return $result['category_name'];
+	}
 }
