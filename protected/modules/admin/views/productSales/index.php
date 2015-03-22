@@ -70,7 +70,7 @@
 									</div>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productSales/updatedetail',array('id' => $model->lid , 'companyId' => $model->dpid));?>">编辑明细</a>
+								<a href="javascript:;" class="edit" data-id="<?php echo $model->lid;?>">编辑明细</a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -120,6 +120,15 @@
 		$('.r-btn').on('switch-change', function () {
 			var id = $(this).find('input').attr('pid');
 		    $.get('<?php echo $this->createUrl('productSales/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
+		});
+		$('.edit').click(function(){
+			var id = $(this).attr('data-id');
+			if($(this).parents('.odd').find('.toggle').is(':checked')){
+				location.href = '<?php echo $this->createUrl('productSales/updatedetail',array('companyId' => $this->companyId));?>/id/'+id;
+			}else{
+				alert('请开启该单品优惠');
+			}
+			
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();

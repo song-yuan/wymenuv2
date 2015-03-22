@@ -61,7 +61,7 @@ class ProductSalesController extends BackendController
 		$model = new ProductDiscount ;
 		$model->dpid = $this->companyId ;
 		
-		$product = Product::model()->find('lid=:lid',array(':lid'=>$productId));
+		$product = Product::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$productId,':dpid'=>  $this->companyId));
 //		$productSets = ProductSet::model()->findAll('dpid=:dpid and delete_flag=0 and is_discount=1 and status=0',array(':dpid'=>$this->companyId));
 		if(Yii::app()->request->isPostRequest) {
 			$postData = Yii::app()->request->getPost('ProductDiscount');
@@ -83,7 +83,7 @@ class ProductSalesController extends BackendController
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('id');
 		$model = ProductDiscount::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
-		$product = Product::model()->find('lid=:lid',array(':lid'=>$model->product_id));
+		$product = Product::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$model->product_id,':dpid'=>  $this->companyId));
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductDiscount');
 			if($model->save()){
