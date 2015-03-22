@@ -75,8 +75,8 @@ class ProductController extends BackendController
 	
 	public function actionUpdate(){
 		$id = Yii::app()->request->getParam('id');
-		$model = Product::model()->find('lid=:productId' , array(':productId' => $id));
-		$model->dpid = $this->companyId ;
+		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
+		$model->dpid = $this->companyId;
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');

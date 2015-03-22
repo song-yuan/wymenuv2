@@ -19,7 +19,7 @@ class UserController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
 		//$criteria->with = 'company' ;
-		$criteria->condition = (Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->dpid.' and ').'t.status=1' ;
+		$criteria->condition = (Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->dpid.' and ').'t.status=1 ' ;
 		
 		$pages = new CPagination(User::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -39,6 +39,7 @@ class UserController extends BackendController
 		$model->status = 1;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
+                        
 			if($model->save()){
 				Yii::app()->user->setFlash('success','添加成功');
 				$this->redirect(array('user/index' , 'companyId' => $companyId));
@@ -54,7 +55,7 @@ class UserController extends BackendController
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 		$model = new UserForm();
-		$model->find('lid=:id and status=1', array(':id' => $id));
+		$model->find('lid=:id and dpid=:dpid and status=1', array(':id' => $id,':dpid'=>$companyId));
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
@@ -72,6 +73,7 @@ class UserController extends BackendController
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 		$ids = Yii::app()->request->getPost('ids');
+                var_dump($companyId);exit;
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = User::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id,':companyId'=>$companyId)) ;

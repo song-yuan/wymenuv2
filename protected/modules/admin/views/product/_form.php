@@ -64,7 +64,6 @@
 											<?php echo $form->error($model, 'is_member_discount' )?>
 										</div>
 									</div>
-                                                                    <a href="../../controllers/ProductController.php"></a>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'is_show',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -77,6 +76,20 @@
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'product_unit',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('product_unit')));?>
 											<?php echo $form->error($model, 'product_unit' )?>
+										</div>
+									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'is_weight_confirm',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_weight_confirm', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_weight_confirm')));?>
+											<?php echo $form->error($model, 'is_weight_confirm' )?>
+										</div>
+									</div>
+                                                                        <div class="form-group" <?php if($model->hasErrors('weight_unit')) echo 'has-error';?>>
+										<?php echo $form->label($model, 'weight_unit',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'weight_unit',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('weight_unit')));?>
+											<?php echo $form->error($model, 'weight_unit' )?>
 										</div>
 									</div>
 									<div class="form-group">

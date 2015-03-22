@@ -13,27 +13,44 @@ class ProductCleanController extends BackendController
 		//$sc = Yii::app()->request->getPost('csinquery');
                 $typeId = Yii::app()->request->getParam('typeId');
                 $categoryId = Yii::app()->request->getParam('cid',0);
-		$criteria = new CDbCriteria;
-		$criteria->with = array('company','category');
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-		if($categoryId){
-			$criteria->condition.=' and t.category_id = '.$categoryId;
-		}
-		
-		$pages = new CPagination(Product::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$models = Product::model()->findAll($criteria);
-		
-		$categories = $this->getCategories();
-                
-		$this->render('index',array(
-				'models'=>$models,
-				'pages'=>$pages,
-				'categories'=>$categories,
-				'categoryId'=>$categoryId,
-                                'typeId' => $typeId
-		));
+                if($typeId=='product')
+                {
+                    
+                    $criteria = new CDbCriteria;
+                    $criteria->with = array('company','category');
+                    $criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+                    if($categoryId){
+                            $criteria->condition.=' and t.category_id = '.$categoryId;
+                    }
+
+                    $pages = new CPagination(Product::model()->count($criteria));
+                    //	    $pages->setPageSize(1);
+                    $pages->applyLimit($criteria);
+                    $models = Product::model()->findAll($criteria);
+
+                    $categories = $this->getCategories();
+
+                    $this->render('index',array(
+                                    'models'=>$models,
+                                    'pages'=>$pages,
+                                    'categories'=>$categories,
+                                    'categoryId'=>$categoryId,
+                                    'typeId' => $typeId
+                    ));
+                }else{
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+                    $pages = new CPagination(ProductSet::model()->count($criteria));
+                    $pages->applyLimit($criteria);
+                    $models = ProductSet::model()->findAll($criteria);
+                    //var_dump($typeId);exit;
+                    $this->render('index',array(
+                                    'models'=>$models,
+                                    'pages'=>$pages,
+                                    'typeId' => $typeId
+                    ));
+                }
+                 
                 //var_dump($sc);exit;
 		//$db = Yii::app()->db;
                 /*if(empty($sc))
@@ -63,10 +80,10 @@ class ProductCleanController extends BackendController
 	}
 	public function actionStatus(){
 		$id = Yii::app()->request->getParam('id');
-                $isset = Yii::app()->request->getParam('isset');
+                $typeId = Yii::app()->request->getParam('typeId');
                 $db = Yii::app()->db;
                 $sql='';
-                if($isset==0)
+                if($typeId=='product')
                 {
                     $sql='update nb_product set status = not status where lid='.$id.' and dpid='.$this->companyId;
                 }else{
