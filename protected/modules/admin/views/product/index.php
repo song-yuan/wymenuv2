@@ -64,7 +64,7 @@
                                                                 <th>星级</th>
                                                                 <th>点单数</th>
                                                                 <th>点赞数</th>
-								<th>是否折扣</th>
+								<th>会员折扣</th>
                                                                 <th>是否配菜</th>
 								<th>&nbsp;</th>
 							</tr>

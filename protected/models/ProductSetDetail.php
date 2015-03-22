@@ -63,6 +63,7 @@ class ProductSetDetail extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+                        'category_id' => '产品种类',
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',

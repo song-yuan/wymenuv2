@@ -37,22 +37,19 @@
 				),
 		)); ?>
 	<div class="col-md-12">
-              <?php if($siteTypes):?>
+              
                     <div class="tabbable tabbable-custom">
                             <ul class="nav nav-tabs">
-                            <?php foreach ($siteTypes as $key=>$siteType):?>
-                                    <li class="<?php if($key == $typeId) echo 'active' ; ?>"><a href="#tab_1_<?php echo $key;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('site/index' , array('typeId'=>$key , 'companyId'=>$this->companyId));?>'"><?php echo $siteType ;?></a></li>
-                            <?php endforeach;?>	
+                                    <li class="<?php if($typeId == 'product') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'product' , 'companyId'=>$this->companyId));?>'">单品</a></li>
+                                    <li class="<?php if($typeId == 'set') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'set' , 'companyId'=>$this->companyId));?>'">套餐</a></li>
+                            
                             </ul>
                             <div class="tab-content">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i>产品沽清列表</div>
-					<div class="actions">
-						<div class="btn-group">
-							<?php echo CHtml::dropDownList('selectClean', 'isClean', array('0'=>'全部','1'=>'已沽清','2'=>'未沽清') , array('class'=>'form-control'));?>
-						</div>
+					<div class="actions">						
                                                 <div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
@@ -78,7 +75,6 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:20%">名称</th>
 								<th >图片</th>
-								<th>类别</th>
 								<th>状态</th>
 							</tr>
 						</thead>
@@ -86,13 +82,12 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
-								<td style="width:20%"><?php echo $model['name'];?></td>
-								<td ><img width="100" src="<?php echo $model['pic'];?>" /></td>
-                                                                <td><?php if($model['isset']==0) {echo '单品';} else {echo '套餐';}; ?></td>
-								<td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
+								<td style="width:20%"><?php if($typeId=='product') echo $model->product_name; else echo $model->set_name;?></td>
+								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
+                                                                <td>
 									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="在售" data-off-label="售罄">
-										<input isset="<?php echo $model['isset'];?>" pid="<?php echo $model['lid'];?>" <?php if(!$model['status']) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+										<input typeId="<?php echo $typeId;?>" pid="<?php echo $model->lid;?>" <?php if(!$model->status) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
 									</div>
 								</td>
 							</tr>
@@ -137,7 +132,7 @@
 			<!-- END EXAMPLE TABLE PORTLET-->
                         </div>
                         </div>
-                <?php endif;?>
+                
 		</div>
 		<?php $this->endWidget(); ?>
 	</div>
