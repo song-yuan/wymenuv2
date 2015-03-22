@@ -26,7 +26,7 @@
 						<li class=""><a href="">基础数据同步设定</a></li>
 					</ul>
 				</li>
-                                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productSet','productImg','productCategory','retreat','productPrinter','productClean','productSales'))) echo 'active';?>">
+                                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productSet','productImg','productCategory','retreat','productPrinter','productClean','productSales','productSpecial', 'productTempprice'))) echo 'active';?>">
                                         <a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">产品管理</span>					
@@ -35,8 +35,8 @@
 						<li class="<?php if(Yii::app()->controller->id == 'productCategory') echo 'active';?>"><a href="<?php echo $this->createUrl('productCategory/index',array('companyId' => $this->companyId));?>">产品分类</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'product') echo 'active';?>"><a href="<?php echo $this->createUrl('product/index',array('companyId' => $this->companyId));?>">单品管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>">套餐管理</a></li>
-						<li class=""><a href="">时价菜管理</a></li>
-						<li class=""><a href="">特价菜管理</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productTempprice') echo 'active';?>"><a href="<?php echo $this->createUrl('productTempprice/index',array('companyId' => $this->companyId));?>">时价菜管理</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productSpecial') echo 'active';?>"><a href="<?php echo $this->createUrl('productSpecial/index',array('companyId' => $this->companyId));?>">特价菜管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSales') echo 'active';?>"><a href="<?php echo $this->createUrl('productSales/index',array('companyId' => $this->companyId));?>">优惠活动管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productClean') echo 'active';?>"><a href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId));?>">沽清列表</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productClean') echo 'active';?>"><a href="<?php echo $this->createUrl('productWeight/index',array('companyId' => $this->companyId));?>">称重产品</a></li>
