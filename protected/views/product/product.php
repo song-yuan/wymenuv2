@@ -9,9 +9,12 @@
 	Yii::app()->clientScript->registerCssFile('../css/product/pic.css');
 	Yii::app()->clientScript->registerCssFile('../css/product/ui-media.css'); 
 	Yii::app()->clientScript->registerCssFile('../css/product.css');
+
 	Yii::app()->clientScript->registerScriptFile('../js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
-	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');  
+	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');
+	Yii::app()->clientScript->registerScriptFile('../js/product/jquery.js'); 
+	Yii::app()->clientScript->registerScriptFile('../js/product/jquery.lazyload.js');  
 	$result = ProductClass::getCartInfo($siteNoId);	
 	$resArr = explode(':',$result);
 	$price = $resArr[0];
