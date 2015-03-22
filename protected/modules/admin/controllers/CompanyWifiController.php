@@ -25,8 +25,9 @@ class CompanyWifiController extends BackendController
 		$model->dpid = $companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('CompanyWifi');
+			$se=new Sequence("company_wifi");
+            $model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s');
-			$model->lid = $model->getPkValue();
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '添加成功');
 				$this->redirect(array('companyWifi/index' , 'companyId' => $companyId));

@@ -4,8 +4,12 @@
  * This is the model class for table "nb_payment_method".
  *
  * The followings are the available columns in table 'nb_payment_method':
- * @property integer $payment_method_id
+ * @property string $lid
+ * @property string $dpid
+ * @property string $create_at
+ * @property string $update_at
  * @property string $name
+ * @property string $delete_flag
  */
 class PaymentMethod extends CActiveRecord
 {
@@ -25,10 +29,14 @@ class PaymentMethod extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'length', 'max'=>45),
+			array('name', 'required'),
+			array('lid, dpid', 'length', 'max'=>10),
+			array('name', 'length', 'max'=>50),
+			array('delete_flag', 'length', 'max'=>1),
+			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('payment_method_id, name', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, name, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,8 +57,12 @@ class PaymentMethod extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'payment_method_id' => 'Payment Method',
-			'name' => 'Name',
+			'lid' => '自身id，统一dpid下递增',
+			'dpid' => '店铺id',
+			'create_at' => 'Create At',
+			'update_at' => '更新时间',
+			'name' => '支付方式名称',
+			'delete_flag' => 'Delete Flag',
 		);
 	}
 
@@ -72,8 +84,12 @@ class PaymentMethod extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('payment_method_id',$this->payment_method_id);
+		$criteria->compare('lid',$this->lid,true);
+		$criteria->compare('dpid',$this->dpid,true);
+		$criteria->compare('create_at',$this->create_at,true);
+		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('delete_flag',$this->delete_flag,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

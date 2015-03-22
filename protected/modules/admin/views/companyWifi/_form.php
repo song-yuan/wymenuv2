@@ -16,11 +16,25 @@
 										</div>
 									</div>
 								<?php endif;?>
+								   <div class="form-group">
+										<?php echo $form->label($model, 'wifi_name',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'wifi_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('wifi_name')));?>
+											<?php echo $form->error($model, 'wifi_name' )?>
+										</div>
+									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'macid',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'macid',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('macid')));?>
 											<?php echo $form->error($model, 'macid' )?>
+										</div>
+									</div>
+									<div class="form-group">
+										<?php echo $form->label($model, 'max_number',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'max_number',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('max_number')));?>
+											<?php echo $form->error($model, 'max_number' )?>
 										</div>
 									</div>
 									<div class="form-actions fluid">

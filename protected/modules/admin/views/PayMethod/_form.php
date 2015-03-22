@@ -10,7 +10,8 @@
 									<div class="form-group">
 										<label class="col-md-3 control-label" >支付方式名称</label>
 										<div class="col-md-4">
-											<input type="text" class='form-control' />
+											<?php echo $form->textField($model, 'name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('name')));?>
+											<?php echo $form->error($model, 'name' )?>
 										</div>
 									</div>
 																		
