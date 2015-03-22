@@ -26,12 +26,12 @@ class CompanyWifi extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('dpid,macid' , 'required'),
+			array('dpid,macid,wifi_name,max_number' , 'required'),
 			array('dpid', 'length', 'max'=>10),
-			array('macid', 'length', 'max'=>50),
+			array('macid, wifi_name', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, dpid, macid', 'safe', 'on'=>'search'),
+			array('id, dpid, wifi_name, macid, max_number', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,7 +57,7 @@ class CompanyWifi extends CActiveRecord
 			'dpid' => 'Company',
 			'macid' => '公司WIFI MAC ID',
 			'wifi_name' => 'wifi名称',
-			'max_num' => '最大接入数',
+			'max_number' => '最大接入数',
 			'current_num' => '现接入数'
 		);
 	}

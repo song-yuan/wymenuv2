@@ -26,6 +26,15 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
+		<?php $form=$this->beginWidget('CActiveForm', array(
+				'id' => 'companywifi-form',
+				'action' => $this->createUrl('payMethod/delete' , array('companyId' => $this->companyId)),
+				'errorMessageCssClass' => 'help-block',
+				'htmlOptions' => array(
+					'class' => 'form-horizontal',
+					'enctype' => 'multipart/form-data'
+				),
+		)); ?>
 		<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
@@ -33,7 +42,10 @@
 					<div class="caption"><i class="fa fa-globe"></i>支付方式列表</div>
 					<div class="actions">
 						<?php if(Yii::app()->user->role == User::POWER_ADMIN):?>
-						<a href="<?php echo $this->createUrl('payMethod/create');?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('payMethod/create', array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<div class="btn-group">
+							<button type="submit"  class="btn red"><i class="fa fa-ban"></i> 删除</button>
+						</div>
 						<?php endif;?>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
@@ -54,21 +66,71 @@
 								<th>ID</th>
 								<th>支付方式名称</th>
 								<th>创建时间</th>
+								<th>&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
+						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="companyIds[]" /></td>
-								<td>000000001</td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
+								<td><?php echo $model->lid;?></td>
 								
-								<td>支付宝</td>
-								<td>2015-03-01</td>
+								<td><?php echo $model->name;?></td>
+								<td><?php echo $model->create_at;?></td>
+								<td class="center">
+									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('payMethod/update' , array('id' => $model->lid , 'companyId' => $this->companyId));?>">编辑</a>
+								</td>
 							</tr>
+							<?php endforeach;?>
 						</tbody>
 					</table>
+				<?php if($pages->getItemCount()):?>
+						<div class="row">
+							<div class="col-md-5 col-sm-12">
+								<div class="dataTables_info">
+									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+								</div>
+							</div>
+							<div class="col-md-7 col-sm-12">
+								<div class="dataTables_paginate paging_bootstrap">
+								<?php $this->widget('CLinkPager', array(
+									'pages' => $pages,
+									'header'=>'',
+									'firstPageLabel' => '<<',
+									'lastPageLabel' => '>>',
+									'firstPageCssClass' => '',
+									'lastPageCssClass' => '',
+									'maxButtonCount' => 8,
+									'nextPageCssClass' => '',
+									'previousPageCssClass' => '',
+									'prevPageLabel' => '<',
+									'nextPageLabel' => '>',
+									'selectedPageCssClass' => 'active',
+									'internalPageCssClass' => '',
+									'hiddenPageCssClass' => 'disabled',
+									'htmlOptions'=>array('class'=>'pagination pull-right')
+								));
+								?>
+								</div>
+							</div>
+						</div>
+						<?php endif;?>					
+					
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
+	<?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#companywifi-form').submit(function(){
+			if(!$('.checkboxes:checked').length){
+				alert('请选择要删除的项');
+				return false;
+			}
+			return true;
+		});
+	});
+	</script>
