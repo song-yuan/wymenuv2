@@ -34,7 +34,7 @@
 											'callbackJS'=>'swfupload_callback',
 											'fileTypes'=> '*.jpg',
 											'buttonText'=> '上传产品图片',
-											'companyId' => $model->company_id,
+											'companyId' => $model->dpid,
 											'imgUrlList' => array($model->main_picture),
 										));
 										?>
@@ -43,32 +43,40 @@
 										</div>
 									</div>
 						
-									<div class="form-group" <?php if($model->hasErrors('origin_price')) echo 'has-error';?>>
-										<?php echo $form->label($model, 'origin_price',array('class' => 'col-md-3 control-label'));?>
+									<div class="form-group" <?php if($model->hasErrors('original_price')) echo 'has-error';?>>
+										<?php echo $form->label($model, 'original_price',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'origin_price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('origin_price')));?>
-											<?php echo $form->error($model, 'origin_price' )?>
+											<?php echo $form->textField($model, 'original_price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('original_price')));?>
+											<?php echo $form->error($model, 'original_price' )?>
 										</div>
 									</div>
-									<div class="form-group" <?php if($model->hasErrors('price')) echo 'has-error';?>>
-										<?php echo $form->label($model, 'price',array('class' => 'col-md-3 control-label'));?>
+									<div class="form-group" <?php if($model->hasErrors('rank')) echo 'has-error';?>>
+										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('price')));?>
-											<?php echo $form->error($model, 'price' )?>
+											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2' , '3' => '3' , '4' => '4' , '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount')));?>
+											<?php echo $form->error($model, 'rank' )?>
 										</div>
 									</div>
-									<div class="form-group" <?php if($model->hasErrors('department_id')) echo 'has-error';?>>
-										<?php echo $form->label($model, 'department_id',array('class' => 'col-md-3 control-label'));?>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'is_member_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'department_id',array('-- 请选择 --') + $departments ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('department_id')));?>
-											<?php echo $form->error($model, 'department_id' )?>
+											<?php echo $form->dropDownList($model, 'is_member_discount', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount')));?>
+											<?php echo $form->error($model, 'is_member_discount' )?>
 										</div>
 									</div>
-									<div class="form-group">
-										<?php echo $form->label($model, 'recommend',array('class' => 'col-md-3 control-label'));?>
+                                                                    <a href="../../controllers/ProductController.php"></a>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'is_show',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'recommend', array('0' => '默认不推荐' , '1' => '推荐') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('category_id')));?>
-											<?php echo $form->error($model, 'recommend' )?>
+											<?php echo $form->dropDownList($model, 'is_show', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show')));?>
+											<?php echo $form->error($model, 'is_show' )?>
+										</div>
+									</div>
+									<div class="form-group" <?php if($model->hasErrors('product_unit')) echo 'has-error';?>>
+										<?php echo $form->label($model, 'product_unit',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'product_unit',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('product_unit')));?>
+											<?php echo $form->error($model, 'product_unit' )?>
 										</div>
 									</div>
 									<div class="form-group">
@@ -81,7 +89,7 @@
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('product/index' , array('companyId' => $model->company_id));?>" class="btn default">返回</a>                              
+											<a href="<?php echo $this->createUrl('product/index' , array('companyId' => $model->dpid));?>" class="btn default">返回</a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
@@ -105,7 +113,7 @@
 	   		var $parent = $(this).parent();
 	   		$(this).nextAll().remove();
 	   		$.ajax({
-	   			url:'<?php echo $this->createUrl('product/getChildren',array('companyId'=>$this->companyId));?>&pid='+id,
+	   			url:'<?php echo $this->createUrl('product/getChildren',array('companyId'=>$this->companyId));?>/pid/'+id,
 	   			type:'GET',
 	   			dataType:'json',
 	   			success:function(result){

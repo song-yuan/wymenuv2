@@ -59,10 +59,13 @@
 								<th style="width:20%">名称</th>
 								<th >图片</th>
 								<th>类别</th>
-								<th>原价</th>
-								<th >现价</th>
-								<th>状态</th>
-								<th >推荐</th>
+								<th>现价</th>
+                                                                <th>单位</th>
+                                                                <th>星级</th>
+                                                                <th>点单数</th>
+                                                                <th>点赞数</th>
+								<th>是否折扣</th>
+                                                                <th>是否配菜</th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -70,24 +73,27 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->product_id;?>" name="ids[]" /></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:20%"><?php echo $model->product_name;?></td>
 								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
 								<td><?php echo $model->category->category_name;?></td>
-								<td ><?php echo $model->origin_price;?></td>
-								<td ><?php echo $model->price;?></td>
-								<td>
-									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="在售" data-off-label="售罄">
-										<input pid="<?php echo $model->product_id;?>" <?php if(!$model->status) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+								<td ><?php echo $model->original_price;?></td>
+                                                                <td ><?php echo $model->product_unit;?></td>
+                                                                <td ><?php echo $model->rank;?></td>
+                                                                <td ><?php echo $model->order_number;?></td>
+                                                                <td ><?php echo $model->favourite_number;?></td>
+								<td >
+									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
+										<input  pid="<?php echo $model->lid;?>" type="checkbox" <?php if($model->is_member_discount) echo 'checked="checked"';?> class="toggle"/>
 									</div>
 								</td>
-								<td >
-									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="推荐" data-off-label="不推荐">
-										<input  pid="<?php echo $model->product_id;?>" type="checkbox" <?php if($model->recommend) echo 'checked="checked"';?> class="toggle"/>
+                                                                <td >
+									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否">
+										<input  pid="<?php echo $model->lid;?>" type="checkbox" <?php if($model->is_show) echo 'checked="checked"';?> class="toggle"/>
 									</div>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->product_id , 'companyId' => $model->company_id));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -144,15 +150,15 @@
 		});
 		$('.s-btn').on('switch-change', function () {
 			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('product/status',array('companyId'=>$this->companyId));?>&id='+id);
+		    $.get('<?php echo $this->createUrl('product/status',array('companyId'=>$this->companyId));?>/id/'+id);
 		});
 		$('.r-btn').on('switch-change', function () {
 			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('product/recommend',array('companyId'=>$this->companyId));?>&id='+id);
+		    $.get('<?php echo $this->createUrl('product/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('product/index' , array('companyId'=>$this->companyId));?>&cid="+cid;
+			location.href="<?php echo $this->createUrl('product/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
 	</script>	

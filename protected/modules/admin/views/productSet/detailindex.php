@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐管理','subhead'=>'套餐明细列表','breadcrumbs'=>array(array('word'=>'套餐管理','url'=>''),array('word'=>'套餐明细管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐管理','subhead'=>'套餐明细列表','breadcrumbs'=>array(array('word'=>'套餐管理','url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>'套餐明细管理','url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -63,11 +63,12 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>产品名称</th>
-                                                                <th>套餐价格</th>
+								<th>单品名称</th>
+                                                                <th>图片</th>
+                                                                <th>套餐内价格</th>
                                                                 <th>分组号</th>
                                                                 <th>数量</th>
-                                                                <th>默认</th>
+                                                                <th>默认选择</th>
 								<th>&nbsp;</th>                                                                
 							</tr>
 						</thead>
@@ -77,7 +78,8 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->product->product_name ;?></td>
-								<td><?php echo $model->price;?></td>
+								<td ><img width="100" src="<?php echo $model->product->main_picture ;?>" /></td>
+                                                                <td><?php echo $model->price;?></td>
                                                                 <td><?php echo $model->group_no;?></td>
                                                                 <td><?php echo $model->number;?></td>
                                                                 <td>

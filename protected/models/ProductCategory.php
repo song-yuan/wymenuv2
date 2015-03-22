@@ -29,10 +29,11 @@ class ProductCategory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('dpid , category_name', 'required'),
+			array('lid,dpid , category_name', 'required'),
 			array('pid,delete_flag', 'numerical', 'integerOnly'=>true),
 			array('category_name', 'length','min'=>2, 'max'=>45),
 			array('dpid', 'length', 'max'=>10),
+                        array('tree', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, create_at,tree, category_name, dpid, delete_flag', 'safe', 'on'=>'search'),

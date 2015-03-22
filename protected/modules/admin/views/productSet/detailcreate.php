@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐管理','subhead'=>'添加套餐明细','breadcrumbs'=>array(array('word'=>'套餐管理','url'=>$this->createUrl('productSet/detailindex' , array('companyId'=>$this->companyId))),array('word'=>'添加套餐明细','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐管理','subhead'=>'添加套餐明细','breadcrumbs'=>array(array('word'=>'套餐管理','url'=>$this->createUrl('productSet/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->lid))),array('word'=>'添加套餐明细','url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->

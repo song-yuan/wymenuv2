@@ -25,7 +25,7 @@ class ProductController extends BackendController
 		$criteria->with = array('company','category');
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
 		if($categoryId){
-			$criteria->condition.=' and t.lid = '.$categoryId;
+			$criteria->condition.=' and t.category_id = '.$categoryId;
 		}
 		
 		$pages = new CPagination(Product::model()->count($criteria));
@@ -34,6 +34,7 @@ class ProductController extends BackendController
 		$models = Product::model()->findAll($criteria);
 		
 		$categories = $this->getCategories();
+                
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
@@ -46,32 +47,41 @@ class ProductController extends BackendController
 	}
 	public function actionCreate(){
 		$model = new Product();
-		$model->company_id = $this->companyId ;
-		$model->create_time = time();
+		$model->dpid = $this->companyId ;
+		//$model->create_time = time();
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
+                        $se=new Sequence("product");
+                        $model->lid = $se->nextval();
+                        $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->delete_flag = '0';
+                        $py=new Pinyin();
+                        $model->simple_code = $py->py($model->product_name);
+                        //var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success','添加成功！');
 				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
 			}
 		}
 		$categories = $this->getCategoryList();
-		$departments = $this->getDepartments();
+		//$departments = $this->getDepartments();
+                //echo 'ss';exit;
 		$this->render('create' , array(
 			'model' => $model ,
-			'categories' => $categories,
-			'departments' => $departments
+			'categories' => $categories
 		));
 	}
 	
 	public function actionUpdate(){
 		$id = Yii::app()->request->getParam('id');
 		$model = Product::model()->find('lid=:productId' , array(':productId' => $id));
-		$model->company_id = $this->companyId ;
+		$model->dpid = $this->companyId ;
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
+                        $py=new Pinyin();
+                        $model->simple_code = $py->py($model->product_name);
 			//var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success','修改成功！');
@@ -79,23 +89,18 @@ class ProductController extends BackendController
 			}
 		}
 		$categories = $this->getCategoryList();
-		$departments = $this->getDepartments();
-		$this->render('create' , array(
+		//$departments = $this->getDepartments();
+		$this->render('update' , array(
 				'model' => $model ,
-				'categories' => $categories,
-				'departments' => $departments
+				'categories' => $categories
 		));
 	}
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
 		if(!empty($ids)) {
-			foreach ($ids as $id) {
-				$model = Product::model()->find('lid=:id and company_id=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
-				if($model) {
-					$model->saveAttributes(array('delete_flag'=>1));
-				}
-			}
+			Yii::app()->db->createCommand('update nb_product set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
@@ -104,7 +109,7 @@ class ProductController extends BackendController
 	}
 	public function actionStatus(){
 		$id = Yii::app()->request->getParam('id');
-		$product = Product::model()->find('lid=:id and company_id=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
+		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		var_dump($product->status);
 		if($product){
 			$product->saveAttributes(array('status'=>$product->status?0:1));
@@ -113,7 +118,7 @@ class ProductController extends BackendController
 	}
 	public function actionRecommend(){
 		$id = Yii::app()->request->getParam('id');
-		$product = Product::model()->find('lid=:id and company_id=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
+		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		
 		if($product){
 			$product->saveAttributes(array('recommend'=>$product->recommend==0?1:0));
@@ -121,7 +126,7 @@ class ProductController extends BackendController
 		exit;
 	}
 	private function getCategoryList(){
-		$categories = ProductCategory::model()->findAll('delete_flag=0 and company_id=:companyId' , array(':companyId' => $this->companyId)) ;
+		$categories = ProductCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
 		return CHtml::listData($categories, 'lid', 'category_name');
 	}
@@ -147,20 +152,23 @@ class ProductController extends BackendController
 		$criteria->order = ' tree,t.lid asc ';
 		
 		$models = ProductCategory::model()->findAll($criteria);
+                
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
 		$optionsReturn = array('--请选择分类--');
 		if($models) {
 			foreach ($models as $model) {
-				if($model->pid == 0) {
+				if($model->pid == '0') {
 					$options[$model->lid] = array();
 				} else {
 					$options[$model->pid][$model->lid] = $model->category_name;
 				}
 			}
+                        //var_dump($options);exit;
 		}
 		foreach ($options as $k=>$v) {
-			$model = ProductCategory::model()->findByPk($k);
+                    //var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
 			$optionsReturn[$model->category_name] = $v;
 		}
 		return $optionsReturn;

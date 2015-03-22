@@ -80,7 +80,7 @@ class ProductSet extends CActiveRecord
 			'main_picture' => '主图片',
 			'description' => '描述',
 			'rank' => '推荐星级',
-			'is_member_discount' => '会员折扣',
+			'is_member_discount' => '是否参与会员折扣',
 			'is_special' => '是否特价菜',
 			'is_discount' => '是否参与优惠活动',
 			'status' => '是否沽清',

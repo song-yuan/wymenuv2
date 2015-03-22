@@ -13,15 +13,19 @@ class ProductCategorySelecter extends CWidget {
 	}
 	public function run(){
 		$selecter = '';
+                
 		$rootCategoties = Helper::getCategories($this->companyId);
-		if($category = ProductCategory::model()->findByPk($this->categoryId)){
-			$categoryTree = explode(',',$category->tree);
-			echo $this->getSelecter($categoryTree);
+                //var_dump($this->categoryId,$rootCategoties);exit;
+		if($this->categoryId!=0 && $category = ProductCategory::model()->find('t.lid = :cid and t.dpid=:dpid',array(':cid'=>$this->categoryId,':dpid'=>$this->companyId))){
+			//var_dump($category->tree);exit;
+                        $categoryTree = explode(',',$category['tree']);
+                        echo $this->getSelecter($categoryTree);
 		}else{
+                   // var_dump($rootCategoties);exit;
 			$selecter = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter">';
 			$selecter .= '<option value="">--请选择--</option>';
 			foreach($rootCategoties as $c1){
-				$selecter .= '<option value="'.$c1['category_id'].'">'.$c1['category_name'].'</option>';
+				$selecter .= '<option value="'.$c1['lid'].'">'.$c1['category_name'].'</option>';
 			}
 			$selecter .= '</select>';
 		}
@@ -35,7 +39,7 @@ class ProductCategorySelecter extends CWidget {
 			$selecter .= '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter">';
 			$selecter .= '<option value="">--请选择--</option>';
 			foreach($categoties as $c){
-				$selecter .= '<option value="'.$c['category_id'].'" '.(in_array($c['category_id'],$categoryTree)?'selected':'').'>'.$c['category_name'].'</option>';
+				$selecter .= '<option value="'.$c['lid'].'" '.(in_array($c['lid'],$categoryTree)?'selected':'').'>'.$c['category_name'].'</option>';
 			}
 			$selecter .= '</select>';
 		}

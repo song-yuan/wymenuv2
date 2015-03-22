@@ -21,7 +21,7 @@ class Helper
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
 	static public function getCategories($companyId,$pid=0){
-		$command = Yii::app()->db->createCommand('select * from nb_product_category where company_id=:companyId and pid=:pid and delete_flag=0');
+		$command = Yii::app()->db->createCommand('select * from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0');
 		$command->bindValue(':companyId',$companyId);
 		$command->bindValue(':pid',$pid);
 		return $command->queryAll();
@@ -107,7 +107,7 @@ class Helper
 		$site = Site::model()->findByPk($siteNo->site_id);
 		$siteType = SiteType::model()->findByPk($site->type_id);
 		
-		$listKey = $order->company_id.'_'.$printer->ip_address;
+		$listKey = $order->dpid.'_'.$printer->ip_address;
 		$list = new ARedisList($listKey);
 		
 		$listData = str_pad($order->company->company_name, 48 , ' ' ,STR_PAD_BOTH).'<br>';
@@ -134,7 +134,7 @@ class Helper
 			}
 		}
 		
-		$channel = new ARedisChannel($order->company_id.'_PD');
+		$channel = new ARedisChannel($order->dpid.'_PD');
 		$channel->publish($listKey);
 		if((Yii::app()->request->isAjaxRequest)) {
 			echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>'')));
@@ -173,7 +173,7 @@ class Helper
 				}
 			}
 			$printer = Printer::model()->findByPk($department->printer_id);
-			$listKey = $order->company_id.'_'.$printer->ip_address;
+			$listKey = $order->dpid.'_'.$printer->ip_address;
 			$listString .=str_pad('打印机：'.$department->name,48,' ').'<br>';
 			
 			//$listString .=str_pad('点菜员：'.$);
@@ -185,7 +185,7 @@ class Helper
 					} else {
 						$list->unshift($listString);
 					}
-					$channel = new ARedisChannel($order->company_id.'_PD');
+					$channel = new ARedisChannel($order->dpid.'_PD');
 					$channel->publish($listKey);
 				}
 			}
@@ -198,7 +198,7 @@ class Helper
 	}
 	static public function printCartGoods($companyId , $code,$reprint = false){
 		$orderProducts = Cart::getCartProducts($companyId,$code);
-		$siteNo = SiteNo::model()->find('company_id=:companyId and code=:code and delete_flag=0',array(':companyId'=>$companyId,':code'=>$code));
+		$siteNo = SiteNo::model()->find('dpid=:companyId and code=:code and delete_flag=0',array(':companyId'=>$companyId,':code'=>$code));
 		$site = Site::model()->findByPk($siteNo->site_id);
 		$siteType = SiteType::model()->findByPk($site->type_id);
 		$listData = array();
@@ -243,7 +243,7 @@ class Helper
 				}
 			}
 		}
-		$cart = Cart::model()->deleteAll('company_id=:companyId and code=:code',array(':companyId'=>$companyId,':code'=>$code));
+		$cart = Cart::model()->deleteAll('dpid=:companyId and code=:code',array(':companyId'=>$companyId,':code'=>$code));
 		if((Yii::app()->request->isAjaxRequest)) {
 			echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>'')));
 		} else {

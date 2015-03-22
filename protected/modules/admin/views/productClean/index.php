@@ -37,12 +37,31 @@
 				),
 		)); ?>
 	<div class="col-md-12">
+              <?php if($siteTypes):?>
+                    <div class="tabbable tabbable-custom">
+                            <ul class="nav nav-tabs">
+                            <?php foreach ($siteTypes as $key=>$siteType):?>
+                                    <li class="<?php if($key == $typeId) echo 'active' ; ?>"><a href="#tab_1_<?php echo $key;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('site/index' , array('typeId'=>$key , 'companyId'=>$this->companyId));?>'"><?php echo $siteType ;?></a></li>
+                            <?php endforeach;?>	
+                            </ul>
+                            <div class="tab-content">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i>产品沽清列表</div>
-					
-                                            <div class="col-md-3 pull-right">
+					<div class="actions">
+						<div class="btn-group">
+							<?php echo CHtml::dropDownList('selectClean', 'isClean', array('0'=>'全部','1'=>'已沽清','2'=>'未沽清') , array('class'=>'form-control'));?>
+						</div>
+                                                <div class="btn-group">
+							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+						</div>
+						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<div class="btn-group">
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 历史记录</button>
+						</div>
+					</div>
+                                        <!--    <div class="col-md-3 pull-right">
 						<div class="input-group">
                                                     <input type="text" name="csinquery" class="form-control" placeholder="输入助记符查询">
                                                     <span class="input-group-btn">
@@ -50,7 +69,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                        
+                                        -->
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -116,6 +135,9 @@
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
+                        </div>
+                        </div>
+                <?php endif;?>
 		</div>
 		<?php $this->endWidget(); ?>
 	</div>
