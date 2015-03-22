@@ -13,7 +13,7 @@
 					<span class="title">首页</span>					
 					</a>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' , 'companyWifi', 'user'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' ,'payMethod', 'companyWifi', 'user'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-map-marker"></i> 
 					<span class="title">基础信息</span>					

@@ -72,6 +72,7 @@ class UserForm extends CFormModel
 		$model->role = $this->role ;
 		$model->dpid = $this->dpid ;
 		$model->status = 1;
+                
 		if($this->password_old != $this->password) {
 			$model->password_hash = $this->password ;
 		}
@@ -79,6 +80,7 @@ class UserForm extends CFormModel
 			if($this->password_old != $this->password) {
 				$model->password_hash = Helper::genPassword($this->password) ;
 			}
+                        //var_dump($model);exit;
 			$model->save();
 			return true;
 		} else {

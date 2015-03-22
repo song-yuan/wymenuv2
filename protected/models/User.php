@@ -30,9 +30,9 @@ class User extends CActiveRecord
 	{
 		return 'nb_user';
 	}
-	public function getPrimaryKey() {
+	/*public function getPrimaryKey() {
 		return array('lid' => 'lid','dpid' => 'dpid');
-	}
+	}*/
 	/**
 	 * @return array validation rules for model attributes.
 	 */

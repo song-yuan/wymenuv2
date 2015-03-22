@@ -244,10 +244,21 @@
 				</li> -->
 				<!-- END TODO DROPDOWN -->
 				<!-- BEGIN USER LOGIN DROPDOWN -->
+                                <li class="dropdown user">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+					<img alt="" src="<?php echo Yii::app()->request->baseUrl;?>/img/house_small.jpg"/>
+					<span class="username"><?php echo Helper::getCompanyName($this->companyId);?></span>
+					<i class="fa fa-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu">
+                                                <li><a href="<?php echo $this->createUrl('company/index').'/companyId/'.$this->companyId;?>" data-method='get'><i class="fa fa-key"></i> 选择其他店铺</a>
+						</li>
+					</ul>
+				</li>
 				<li class="dropdown user">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 					<img alt="" src="<?php echo Yii::app()->request->baseUrl;?>/img/avatar1_small.jpg"/>
-					<span class="username"><?php echo Yii::app()->user->name;?></span>
+                                        <span class="username"><?php echo Yii::app()->user->name; ?></span>
 					<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">

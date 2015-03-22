@@ -12,20 +12,26 @@ class UserController extends BackendController
 		}
 		$this->roles = array('' => '-- 请选择 --' ) +$this->roles;
 	}
-	public function beforeAction($action) {
-		return parent::beforeAction($action);
+	
+        public function beforeAction($action) {
+		parent::beforeAction($action);
+		if(!$this->companyId && $this->getAction()->getId() != 'upload') {
+			Yii::app()->user->setFlash('error' , '请选择公司');
+			$this->redirect(array('company/index'));
+		}
+		return true;
 	}
 	public function actionIndex() {
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
 		//$criteria->with = 'company' ;
-		$criteria->condition = (Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->dpid.' and ').'t.status=1 ' ;
-		
+		//$criteria->condition = (Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->companyId.' and ').'t.status=1 and t.role >='.Yii::app()->user->role ;
+		$criteria->condition = 't.dpid='.$this->companyId.' and t.status=1 and t.role >='.Yii::app()->user->role ;
 		$pages = new CPagination(User::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = User::model()->findAll($criteria);
-		
+		//var_dump($models);exit;
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
@@ -51,7 +57,7 @@ class UserController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));		
 		$id = Yii::app()->request->getParam('id');
 		if(Yii::app()->user->role > User::ADMIN && Yii::app()->user->userId != $id) {
-			Yii::app()->user->setFlash('error' , '你没有删除权限');
+			Yii::app()->user->setFlash('error' , '你没有权限修改');
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 		$model = new UserForm();
@@ -59,6 +65,7 @@ class UserController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
+                        //var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success','修改成功');
 				$this->redirect(array('user/index' , 'companyId' => $companyId));
@@ -73,7 +80,7 @@ class UserController extends BackendController
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 		$ids = Yii::app()->request->getPost('ids');
-                var_dump($companyId);exit;
+                //var_dump($companyId);exit;
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = User::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id,':companyId'=>$companyId)) ;

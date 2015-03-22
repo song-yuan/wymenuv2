@@ -1,11 +1,22 @@
 <?php
 class CompanyWifiController extends BackendController
 {
+    
+        public function beforeAction($action) {
+		parent::beforeAction($action);
+		if(!$this->companyId && $this->getAction()->getId() != 'upload') {
+			Yii::app()->user->setFlash('error' , '请选择公司');
+			$this->redirect(array('company/index'));
+		}
+		return true;
+	}
+    
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
 		//$criteria->with = 'company' ;
-		$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.company_id='.Yii::app()->user->companyId ;
+		//$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->companyId ;
+		$criteria->condition = 't.dpid='.$this->companyId ;
 		
 		$pages = new CPagination(CompanyWifi::model()->count($criteria));
 		//	    $pages->setPageSize(1);

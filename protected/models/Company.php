@@ -28,6 +28,7 @@ class Company extends CActiveRecord
 		return 'nb_company';
 	}
 
+                
 	/**
 	 * @return array validation rules for model attributes.
 	 */

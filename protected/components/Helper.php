@@ -8,6 +8,20 @@ class Helper
 	static public function getCompanyId($companyId) {
 		return Yii::app()->user->role == User::POWER_ADMIN ? $companyId : Yii::app()->user->companyId ;
 	}
+        
+        static public function getCompanyName($companyId) {
+            if($companyId)
+            {
+		$models = Company::model()->find('t.dpid = '.$companyId);
+                //var_dump($models);exit;
+                //return Yii::app()->user->role == User::POWER_ADMIN ? $companyId : Yii::app()->user->companyId ;
+               
+            }else{
+                $models = Company::model()->find('t.dpid = '.Yii::app()->user->companyId); 
+            }
+             return $models->company_name;
+	}
+        
 	static public function genCompanyOptions() {
 		$companies = Company::model()->findAll('delete_flag=0') ;
 		return CHtml::listData($companies, 'dpid', 'company_name');

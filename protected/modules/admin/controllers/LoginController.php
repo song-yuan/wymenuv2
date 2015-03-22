@@ -19,7 +19,7 @@ class LoginController extends BackendController
 			//var_dump($model);exit;
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login()) {
-				$this->redirect(array('default/index'));
+				$this->redirect(array('default/index/companyId/'.Yii::app()->user->companyId));
 			}
 		}
 		$this->render('index',array('model' => $model));
