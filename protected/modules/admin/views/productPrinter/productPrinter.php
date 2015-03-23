@@ -48,7 +48,7 @@
 							<tr class="odd gradeX">
 								<td ><?php echo $model->product_name;?></td>
 								<td>
-									 <?php echo $model->printerWay->name;?>
+									 <?php if($model->printerWay) echo $model->printerWay->name; else echo '';?>
 								</td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('productPrinter/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>

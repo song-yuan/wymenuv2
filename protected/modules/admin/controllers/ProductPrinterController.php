@@ -20,7 +20,7 @@ class ProductPrinterController extends BackendController
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Product::model()->findAll($criteria);
-//		var_dump($models[0]);exit;
+		//var_dump($models[0]);exit;
 		$this->render('productPrinter',array(
 				'models'=>$models,
 				'pages' => $pages,
