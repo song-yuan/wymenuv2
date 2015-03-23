@@ -48,11 +48,12 @@ class Product extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('product_name, simple_code, main_picture', 'required'),
-			array('rank, order_number, favourite_number', 'numerical', 'integerOnly'=>true),
+			array('rank, order_number,category_id, favourite_number', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, category_id, original_price, product_unit, weight_unit, printer_way_id', 'length', 'max'=>10),
 			array('product_name', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
+                       array('category_id','compare','compareValue'=>'0','operator'=>'>','message'=>'必须选择二级产品分类'),
 			array('is_temp_price, is_member_discount, is_special, is_discount, status, is_weight_confirm, is_show, delete_flag', 'length', 'max'=>1),
 			array('create_at,description', 'safe'),
 			// The following rule is used by search().

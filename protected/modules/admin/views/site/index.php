@@ -40,7 +40,7 @@
 					<div class="tabbable tabbable-custom">
 						<ul class="nav nav-tabs">
 						<?php foreach ($siteTypes as $key=>$siteType):?>
-							<li class="<?php if($key == $typeId) echo 'active' ; ?>"><a href="#tab_1_<?php echo $key;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('site/index' , array('typeId'=>$key , 'companyId'=>$this->companyId));?>'"><?php echo $siteType ;?></a></li>
+							<li class="<?php if($key == $typeId) echo 'active';?>"><a href="#tab_1_<?php echo $key;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('site/index' , array('typeId'=>$key , 'companyId'=>$this->companyId));?>'"><?php echo $siteType ;?></a></li>
 						<?php endforeach;?>	
 						</ul>
 						<div class="tab-content">

@@ -29,16 +29,12 @@ class SiteController extends BackendController
                 }
 		$criteria->order = ' t.type_id asc ';
 		
-		$pages = new CPagination(Site::model()->count($criteria));
-		//$pages->setPageSize(1);
-		$pages->applyLimit($criteria);
 		$models = Site::model()->findAll($criteria);
 		
 		$this->render('index',array(
 				'siteTypes' => $siteTypes,
 				'models'=>$models,
-				'typeId' => $typeId,
-				'pages' => $pages
+				'typeId' => $typeId
 		));
 	}
 	public function actionCreate() {

@@ -47,7 +47,7 @@ class FloorController extends BackendController
 	public function actionUpdate() {
 		$lid = Yii::app()->request->getParam('lid');
                 $dpid = Yii::app()->request->getParam('companyId');
-		$model = floor::model()->find('t.lid=:lid and t.dpid=:dpid', array(':lid' => $lid,':dpid'=>$dpid));
+		$model = Floor::model()->find('t.lid=:lid and t.dpid=:dpid', array(':lid' => $lid,':dpid'=>$dpid));
 		//var_dump($model);
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Floor');
