@@ -65,18 +65,23 @@
 					<div class="tabbable tabbable-custom">
 						<ul class="nav nav-tabs">
 						<?php foreach ($siteTypes as $key=>$siteType):?>
-							<li class="<?php if($key == $typeId) echo 'active';?>"><a href="#tab_1_<?php echo $key;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('site/index' , array('typeId'=>$key , 'companyId'=>$this->companyId));?>'"><?php echo $siteType ;?></a></li>
-						<?php endforeach;?>	
+							<li class="<?php if($key == $typeId) echo 'active';?>"><a href="#tab_1_<?php echo $key;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('default/index' , array('typeId'=>$key , 'companyId'=>$this->companyId));?>'"><?php echo $siteType ;?></a></li>
+						<?php endforeach;?>
+                                                        <li class="<?php if($typeId == 'tempsite') echo 'active';?>"><a href="#tab_1_tempsite" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('default/index' , array('typeId'=>'tempsite' , 'companyId'=>$this->companyId));?>'">临时座位</a></li>
 						</ul>
 						<div class="tab-content">
 							<div class="portlet box purple">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-globe"></i>座位列表</div>
+									<div class="actions pull-left">
+                                                                                <a href="<?php echo $this->createUrl('site/create' , array('typeId'=>$typeId , 'companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 开台</a>
+                                                                                <a href="<?php echo $this->createUrl('site/create' , array('typeId'=>$typeId , 'companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 撤台</a>
+                                                                                <?php if($typeId != 'tempsite') :?>
+                                                                                <a href="<?php echo $this->createUrl('site/create' , array('typeId'=>$typeId , 'companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 换台</a>
+                                                                                <?php endif;?>
+                                                                                <a href="<?php echo $this->createUrl('site/create' , array('typeId'=>$typeId , 'companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 并台</a>
+									</div>
 									<div class="actions">
-										<a href="<?php echo $this->createUrl('site/create' , array('typeId'=>$typeId , 'companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
-										<div class="btn-group">
-											<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 删除</button>
-										</div>
+										<a href="<?php echo $this->createUrl('site/create' , array('typeId'=>$typeId , 'companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 当前订单</a>
 									</div>
 								</div>
 								<div class="portlet-body" id="table-manage">

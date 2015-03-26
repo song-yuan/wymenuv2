@@ -14,26 +14,35 @@ class DefaultController extends BackendController
 	public function actionIndex()
 	{
 		$typeId = Yii::app()->request->getParam('typeId');
-                
+                //echo $typeId; exit;
 		$siteTypes = $this->getTypes();
 		if(empty($siteTypes)) {
 			$models = false;
 		}
 		$typeKeys = array_keys($siteTypes);
-		$typeId = array_search($typeId, $typeKeys) ? $typeId : $typeKeys[0] ;
+                if($typeId!='tempsite')
+                    $typeId = array_search($typeId, $typeKeys) ? $typeId : $typeKeys[0] ;
 		
 		$criteria = new CDbCriteria;
-		$criteria->with = 'siteType';
+		$models=array();
                 //echo $typeId; exit;
                 if(empty($typeId)) {
+                        $criteria->with = 'siteType';
 			$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId ;
-		}else{
+                        $criteria->order = ' t.type_id asc ';
+                        $models = Site::model()->findAll($criteria);
+		}else if($typeId == 'tempsite'){
+                        $criteria->condition =  't.delete_flag = 0 and t.is_temp = 1 and t.dpid='.$this->companyId ;
+                        $criteria->order = ' t.site_id asc ';
+                        //echo '22';exit;
+                        $models = SiteNo::model()->findAll($criteria);
+                }else{
+                        $criteria->with = 'siteType';
                         $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$this->companyId ;
+                        $criteria->order = ' t.type_id asc ';
+                        $models = Site::model()->findAll($criteria);
                 }
-		$criteria->order = ' t.type_id asc ';
-		
-		
-		$models = Site::model()->findAll($criteria);
+                //var_dump($models);exit;
 		$this->render('index',array(
 				'siteTypes' => $siteTypes,
 				'models'=>$models,
