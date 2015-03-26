@@ -58,7 +58,7 @@ class ProductController extends Controller
 	public function actionIndex()
 	{
 		$pid = Yii::app()->request->getParam('pid',0);
-		$categoryId = Yii::app()->request->getParam('category',0);
+		$categoryId = Yii::app()->request->getParam('categoryId',0);
 		
 		if(!$categoryId){
 			$categorys = ProductClass::getFirstCategoryId($this->companyId);
