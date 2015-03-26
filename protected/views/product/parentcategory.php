@@ -20,10 +20,9 @@
 	<li>
 		<ul>
 		<li class="parents"><?php echo $categorys['category_name'];?></li>
-		<li class="child float 
+		<li class="child float <?php if($category['lid']==$categoryId) echo 'active';?>">
 		<?php foreach($categorys['children'] as $category):?>
 			<a href="<?php echo $this->createUrl('/product/index',array('pid'=>$category['pid'],'categoryId'=>$category['lid']));?>">
-			   <?php if($category['lid']==$categoryId) echo 'active';?>">
 			    <?php echo $category['category_name'];?>
 			 </a>
 		</li>
