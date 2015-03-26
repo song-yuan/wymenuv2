@@ -10,7 +10,6 @@ class ProductController extends Controller
 	public $layout = '/layouts/productmain';
 	public function init(){
 		session_start();
-		$this->companyId = 1;
 		$moMac = Yii::app()->request->getParam('momac',0);
 		if($moMac){
 			$_SESSION['momac'] = $moMac;
