@@ -10,7 +10,6 @@ class ProductController extends Controller
 	public $layout = '/layouts/productmain';
 	public function init(){
 		session_start();
-		$this->companyId = 1;
 		$moMac = Yii::app()->request->getParam('momac',0);
 		if($moMac){
 			$_SESSION['momac'] = $moMac;
@@ -58,7 +57,7 @@ class ProductController extends Controller
 	public function actionIndex()
 	{
 		$pid = Yii::app()->request->getParam('pid',0);
-		$categoryId = Yii::app()->request->getParam('category',0);
+		$categoryId = Yii::app()->request->getParam('categoryId',0);
 		
 		if(!$categoryId){
 			$categorys = ProductClass::getFirstCategoryId($this->companyId);
