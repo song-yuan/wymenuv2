@@ -18,14 +18,14 @@
 	<?php if($parentCategorys):?>
 	<?php foreach($parentCategorys as $categorys):?>
 	<li>
-		<ul>
+		<ol>
 		<li class="parents"><?php echo $categorys['category_name'];?></li>
 		<?php foreach($categorys['children'] as $category):?>
 		<a href="<?php echo $this->createUrl('/product/index',array('pid'=>$category['pid'],'categoryId'=>$category['lid']));?>">
 			<li class="child float <?php if($category['lid']==$categoryId) echo 'active';?>"><?php echo $category['category_name'];?></li>
 		</a>
 		<?php endforeach;?>
-		</ul>
+		</ol>
 	</li>	
 	<?php endforeach;?>
 	<?php endif;?>
