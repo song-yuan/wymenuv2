@@ -135,4 +135,44 @@ $(document).ready(function(){
     $('.mask-bottom').on('click','.cancel',function(){
     	$('.mask').css('display','none');  
     });
- });
+    
+    $('.edit-num').click(function(){
+    	 var productId = $(this).attr('product-id');
+    	 $('.product-id').val(productId);
+    	 
+    	 var num = $('input[name="'+productId+'"]').val();
+    	 $('input[name="order-product-num"]').val(num);
+    	 $('textarea[name="taste-memo"]').css('display','none');
+    	 $('.order-num').css('display','block');
+    	 
+    	 $('.submit').css('display','none');
+    	 $('.submit-order-num').css('display','block');
+    	 
+    	 $('.cancel').css('display','none');
+    	 $('.cancel-order-num').css('display','block');
+    	 $('.area-top').html('修改产品数量:');
+    	 $('.mask').css('display','block');
+    });
+    $('.cancel-order-num').click(function(){
+    	$('textarea[name="taste-memo"]').css('display','block');
+   	    $('.order-num').css('display','none');
+   	 
+    	 $('.submit').css('display','block');
+    	 $('.submit-order-num').css('display','none');
+    	 
+    	 $('.cancel').css('display','block');
+    	 $('.cancel-order-num').css('display','none');
+    	 
+    	 $('.area-top').html('做法口味选择:');
+    	 $('.mask').css('display','none');
+    });
+   
+	$('.submit-order-num').click(function(){
+		var productId =  $('.product-id').val();
+		var num = $('input[name="order-product-num"]').val();
+		var inputObj = $('input[name="'+productId+'"]');
+		inputObj.val(num);
+		inputObj.parents('.product').find('.num').html(num);
+		$('.cancel-order-num').click();
+	});
+});

@@ -103,4 +103,63 @@ div .product:last-child{
 	color:#f0c952;
 	margin-bottom:50px;
 }
+.area-top{text-align:center;}
+.submit-order-num{
+	width:50px;
+	height:30px;
+	border-radius:5px;
+	line-height:30px;
+	padding:0 10px;
+	text-align:center;
+	background:rgb(240,201,82);
+	float:right;
+	display:none;
+}
+.cancel-order-num{
+	width:48px;
+	height:28px;
+	border-radius:5px;
+	line-height:28px;
+	padding:0 10px;
+	text-align:center;
+	border:1px solid rgb(48,48,48);
+	margin-left:10px;
+	float:right;
+	display:none;
+}
+
+.order-num{
+	display:none;
+	text-align:center;
+}
+.right-middle{
+    padding: 0 5px;
+    height:40%;
+}
+
+.right-middle input{
+	width: 30px;
+	height: 15px;
+	padding: 10px;
+	border: 0px !important;
+	border-top: #e5e5e5 1px solid !important;
+	border-bottom: #e5e5e5 1px solid !important;
+	line-height: 15px;
+	font-size: 1.1em !important;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.right-middle span{
+	text-align:center;
+	width:15px;
+	height:15px;
+	font-size:18px;
+	padding: 10px 10px 10px;
+	display:inline-block;
+	vertical-align: middle;
+	background-color: #eeeeee;
+	border: #e5e5e5 1px solid;
+}
+
 
