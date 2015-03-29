@@ -25,6 +25,7 @@
 			<li class="child float <?php if($category['lid']==$categoryId) echo 'active';?>"><?php echo $category['category_name'];?></li>
 		</a>
 		<?php endforeach;?>
+		<div class="clear"></div>
 		</ol>
 	</li>	
 	<?php endforeach;?>
