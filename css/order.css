@@ -12,7 +12,7 @@ body{
 }
 .product{
 	padding:10px;
-	height:80px;
+	min-height:80px;
 	border-bottom:1px dashed #555da8;
 }
 .product-title{

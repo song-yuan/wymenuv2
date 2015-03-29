@@ -173,20 +173,65 @@ class ProductController extends Controller
 	//获取商品口味
 	public function actionGetTasteJson()
 	{
+		$tasteArr = array();
 		$type = Yii::app()->request->getParam('type');
 		$id = Yii::app()->request->getParam('id');
 		if($type==1){ //全单口味
-			$allOrderTastes = TasteClass::getAllOrderTaste($this->companyId);
+			$allOrderTastes = TasteClass::getAllOrderTaste($this->companyId,$type);
 		}elseif($type==2){ //产品口味
 			$productId = Yii::app()->request->getParam('productId');
 			$allOrderTastes = TasteClass::getProductTaste($productId);
 		}
+		$tasteMemo = TasteClass::getOrderTasteMemo($id,$type);
 		$orderTastes = TasteClass::getOrderTaste($id,$type);
+		$tasteArr['taste'] = $allOrderTastes;
 		foreach($allOrderTastes as $key=>$val){
 			if(in_array($val['lid'],$orderTastes)){
-				$allOrderTastes[$key]['lid'] = $val['lid'].'-1';
+				$tasteArr['taste'][$key]['has'] = 1;
+			}else{
+				$tasteArr['taste'][$key]['has'] = 0;
 			}
 		}
-		Yii::app()->end(json_encode($allOrderTastes));
+		$tasteArr['taste_memo'] = $tasteMemo;
+		Yii::app()->end(json_encode($tasteArr));
+	}
+	public function actionSetOrderTaste(){
+		$type = Yii::app()->request->getPost('type');
+		$id = Yii::app()->request->getPost('id');
+		$tasteMemo = Yii::app()->request->getPost('tasteMemo');
+		$tasteIds = Yii::app()->request->getPost('tasteIds');
+		if($type==1){ //全单口味
+			$result = TasteClass::save($this->companyId, 1, $id, $tasteIds, $tasteMemo);
+		}elseif($type==2){ //产品口味
+			$result = TasteClass::save($this->companyId, 0, $id, $tasteIds, $tasteMemo);
+		}elseif($type==3){
+			$result = FeedBack::save($this->companyId, 1, $id, $tasteIds, $tasteMemo);
+		}
+		if($result){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+	}
+	//获取商品口味 array('feeback_id'=>feeback_mome,)
+	public function actionGetFeebackJson()
+	{
+		$type = Yii::app()->request->getParam('type');
+		$id = Yii::app()->request->getParam('id');
+		if($type==3){ //全单口味
+			$orderFeeback = FeedBack::getOrderFeeBack($id,1);
+			$allOrderFeeback = FeedBack::getAllFeeBack($this->companyId,1);
+			if(!empty($orderFeeback)){
+				foreach($allOrderFeeback as $key=>$feeback){
+					foreach($orderFeeback as $ofeeback){
+						if($feeback['lid']==$ofeeback['feedback_id']){
+							$allOrderFeeback[$key]['feedback_memo'] = $ofeeback['feedback_memo'];
+						}
+					}
+				}
+			}
+		}
+		Yii::app()->end(json_encode($allOrderFeeback));
 	}
 }

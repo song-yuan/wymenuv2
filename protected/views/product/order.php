@@ -13,6 +13,8 @@
 	}else{
 		$orderProductList = array();
 	}
+	//全单口味
+	$tasteIds = TasteClass::getOrderTaste($orderList->order['lid'],1);
 ?>
 <form action="orderList?confirm=1&orderId=<?php echo $orderList->order['lid'];?>" method="post">
 <div class="top">我的订单</div>
@@ -25,9 +27,9 @@
 			<div class="product-up-left"><?php echo $order['product_name'];?></div>
 		</div>
 		<div class="product-middle">
-			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:少油  少盐
+			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2);?>
 		</div>
-	        <div class="product-down">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font><img src="../img/product/down-arrow.png" /></div>
+	        <div class="product-down">￥<?php echo $order['price'];?>/ <?php echo $order['product_unit']?$order['product_unit']:'例';?> X <font color="#ff8c00"><?php echo $order['amount'];?><?php echo $order['product_unit']?$order['product_unit']:'例';?></font><img src="../img/product/down-arrow.png" /></div>
 	        <input type="hidden" name="<?php echo $order['product_id'];?>" value="<?php echo $order['amount'];?>"/>
 		</div>
 	<?php endforeach;?>
@@ -36,7 +38,7 @@
 		<div class="order-time"><?php echo date('Y-m-d H:i',time()); ?></div>
 		<div class="order-price">订单总额:<?php echo Money::priceFormat($orderPrice); ?></div>
 	</div>
-	<div class="order-taste"><font color="#ff8c00">全单口味要求</font><img src="../img/product/down-arrow.png" />:不放辣</div>
+	<div class="order-taste"><font color="#ff8c00">全单口味要求</font><img src="../img/product/down-arrow.png" />:<?php  if($tasteIds){ foreach($tasteIds as $id){ echo TasteClass::getTasteName($id).' ';}} ?> 备注:<?php echo TasteClass::getOrderTasteMemo($orderList->order['lid'],1);?></div>
 </form>
 
 <a id="comfirm-order" href="javascript:;"><div class="btn confirm">确认</div></a>

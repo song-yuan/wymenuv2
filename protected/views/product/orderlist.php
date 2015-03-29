@@ -51,7 +51,7 @@
 	<?php if($orderProductListPay):?>
 	<div style="color:#555da8;border-top:2px solid;margin-top: 5px">
 	<div class="order-top"><div class="order-top-left">下单总额 :<span> <?php echo Money::priceFormat($orderPricePay);?></span></div><div class="order-top-right"><button class="online-pay">在线支付</button></div></div>
-	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right" style="color:#ff8c00">全单有话要说<img src="../img/product/down-arrow.png" /></div></div>
+	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="3" product-id="0" style="color:#ff8c00">全单有话要说<img src="../img/product/down-arrow.png" /></div></div>
 	<?php foreach($orderProductListPay as $key=>$orderProduct):?>
 		<div class="order-category"><?php echo OrderList::GetCatoryName($key);?></div>
 	   <?php foreach($orderProduct as $order):?>
@@ -63,7 +63,7 @@
 		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
 				</div>
 				<div class="right-down">
-				<font color="#ff8c00">口味要求</font>:少油  少盐
+				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2);?>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -76,18 +76,19 @@
 		<div class="mask-bottom">
 			<div class="area-top">做法口味选择:</div>
 			<div class="mask-taste">
-				<div class="taste">微辣</div><div class="taste taste-active">少油</div>
-				<div class="clear"></div>
+				<!--<div class="taste"></div><div class="taste taste-active"></div>
+				<div class="clear"></div>-->
 			</div>
 			<div class="mask-area">
-				<textarea></textarea>
+				<textarea name="taste-memo"></textarea>
 				<div class="mask-button">
-				  <div class="submit">发送</div>
+				  <div class="cancel">取消</div>
+				  <div class="submit">确定</div>
 				  <div class="clear"></div>
 				</div>
 			</div>
 			<input type="hidden" class="mask-type" value="0" />
-			<input type="hidden" class="mask-id" value="0" />
+			<input type="hidden" class="mask-id" value="0" /><!-- orderproductId or orderId-->
 			<input type="hidden" class="product-id" value="0" />
 		</div>
 	</div>
