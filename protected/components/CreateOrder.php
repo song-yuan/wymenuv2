@@ -127,9 +127,9 @@ class CreateOrder
 				$connect->bindValue(':dpid',$this->companyId);
 				$productDiscount = $connect->queryRow();
 				if($productDiscount['is_discount']){
-					$price = $product['original_price']*$productDiscount['price_discount'];
+					$price = $product['original_price']*$productDiscount['price_discount']/100;
 				}else{
-					$price = $productDiscount['price_discount'];
+					$price = $product['original_price'] - $productDiscount['price_discount'];
 				}
 			}
 		}else{

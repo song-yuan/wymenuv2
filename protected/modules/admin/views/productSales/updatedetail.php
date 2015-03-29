@@ -66,7 +66,6 @@
 					 <!--缺少确认和返回键DIV  -->
 					    <div class="form-actions fluid">
 						        <div class="col-md-offset-3 col-md-9">
-									<button type="submit" class="btn blue">确定</button>
 									<a href="<?php echo $this->createUrl('productSales/index' , array('companyId' => $this->companyId));?>" class="btn default">返回</a>                              
 								</div>
 						</div>

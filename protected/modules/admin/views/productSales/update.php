@@ -54,17 +54,21 @@
 		    if(parseInt($('input:radio[name="ProductDiscount[is_discount]"]:checked').val())) {
 				$('.discount').find('label').html('折扣比例');
 				$('.discount').find('.input-group-addon').html('折');
+				$('.discount').find('.input-group').after('<span class="help-block">70即七折</span>');
 			} else {
 				$('.discount').find('label').html('优惠价格');
 				$('.discount').find('.input-group-addon').html('元');
+				$('.discount').find('.input-group').after('<span class="help-block">实际价格=原价-优惠价格</span>');
 			}
 			$('input:radio[name="ProductDiscount[is_discount]"]').change(function(){
 				if(parseInt($(this).val())) {
 					$('.discount').find('label').html('折扣比例');
 					$('.discount').find('.input-group-addon').html('折');
+					$('.discount').find('.input-group').after('<span class="help-block">70即七折</span>');
 				} else {
 				  $('.discount').find('label').html('优惠价格');
 				  $('.discount').find('.input-group-addon').html('元');
+				  $('.discount').find('.input-group').after('<span class="help-block">实际价格=原价-优惠价格</span>');
 				}
 		    })
 		    if (jQuery().datepicker) {
