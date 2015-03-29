@@ -7,13 +7,13 @@
 <script type="text/javascript" src="../js/product/category.js"></script>
 <ul class="promptu-menu">
 	<li>
-		<ul>
+		<ol>
 			<li class="parents">热点</li>
 			<li class="child">推荐品</li>
 			<li class="child">套餐</li>
 			<li class="child"><img src="/wymenuv2/img/favorite.png">Top10</li>
 			<li class="child"><img src="/wymenuv2/img/ordernum.png">Top10</li>
-		</ul>
+		</ol>
 	</li>
 	<?php if($parentCategorys):?>
 	<?php foreach($parentCategorys as $categorys):?>
