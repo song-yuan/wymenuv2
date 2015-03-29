@@ -117,6 +117,7 @@
 			var isSpecial = $(this).attr('is-special');
 			if(parseInt(isSpecial)){
 				alert('该单品正在特价,不能参与优惠!');
+				$(this).find('input[type="checked"]').checked = false;
 				$(this).find('div').removeClass('switch-on').addClass('switch-off');
 				return;
 			}
