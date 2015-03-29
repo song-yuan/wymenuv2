@@ -107,8 +107,9 @@ class CreateOrder
 				$connect->bindValue(':dpid',$this->companyId);
 				$connect->bindValue(':time',$time);
 				$productTempPrice = $connect->queryRow();
-				
-				$price = $productTempPrice['price'];
+				if($productTempPrice){
+					$price = $productTempPrice['price'];
+				}
 			}
 			if($product['is_special']){
 				$sql = 'select * from nb_product_special where product_id=:productId and dpid=:dpid and begain_time < :time and end_time > :time';
@@ -117,8 +118,9 @@ class CreateOrder
 				$connect->bindValue(':dpid',$this->companyId);
 				$connect->bindValue(':time',$time);
 				$productTempPrice = $connect->queryRow();
-				
-				$price = $productTempPrice['price'];
+				if($productTempPrice){
+					$price = $productTempPrice['price'];
+				}
 			}
 			if($product['is_discount']){
 				$sql = 'select * from nb_product_discount where product_id=:productId and dpid=:dpid';
@@ -126,10 +128,12 @@ class CreateOrder
 				$connect->bindValue(':productId',$product['lid']);
 				$connect->bindValue(':dpid',$this->companyId);
 				$productDiscount = $connect->queryRow();
-				if($productDiscount['is_discount']){
-					$price = $product['original_price']*$productDiscount['price_discount']/100;
-				}else{
-					$price = $product['original_price'] - $productDiscount['price_discount'];
+				if($productDiscount){
+					if($productDiscount['is_discount']){
+						$price = $product['original_price']*$productDiscount['price_discount']/100;
+					}else{
+						$price = $product['original_price'] - $productDiscount['price_discount'];
+					}
 				}
 			}
 		}else{
@@ -148,8 +152,9 @@ class CreateOrder
 				$connect->bindValue(':dpid',$this->companyId);
 				$connect->bindValue(':time',$time);
 				$productTempPrice = $connect->queryRow();
-				
-				$price = $productTempPrice['price'];
+				if($productTempPrice){
+					$price = $productTempPrice['price'];
+				}
 			}
 			if($product['is_discount']){
 				$sql = 'select * from nb_product_discount where product_id=:productId and dpid=:dpid';
@@ -157,10 +162,12 @@ class CreateOrder
 				$connect->bindValue(':productId',$product['lid']);
 				$connect->bindValue(':dpid',$this->companyId);
 				$productDiscount = $connect->queryRow();
-				if($productDiscount['is_discount']){
-					$price = $product['original_price']*$productDiscount['price_discount'];
-				}else{
-					$price = $product['original_price']-$productDiscount['price_discount'];
+				if($productDiscount){
+					if($productDiscount['is_discount']){
+						$price = $product['original_price']*$productDiscount['price_discount'];
+					}else{
+						$price = $product['original_price']-$productDiscount['price_discount'];
+					}
 				}
 			}
 		}
