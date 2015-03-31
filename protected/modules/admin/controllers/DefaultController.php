@@ -78,15 +78,7 @@ class DefaultController extends BackendController
                 $status = Yii::app()->request->getParam('status','0');
                 $istemp = Yii::app()->request->getParam('istemp','0');
                 $typeId = Yii::app()->request->getParam('typeId','0');
-                /*$stypeId = Yii::app()->request->getParam('stypeId','0');
-                $sistemp = Yii::app()->request->getParam('sistemp','0');
-                $ssid = Yii::app()->request->getParam('ssid','0');
-                $op = Yii::app()->request->getParam('op','0');
-                ,
-                                'op' => $op,
-                                'ssid' => $ssid,
-                                'sistemp' => $sistemp,
-                                'stypeId' => $stypeId*/
+               
 		$model=array();
 		$this->renderPartial('button' , array(
 				'model' => $model,
@@ -120,7 +112,7 @@ class DefaultController extends BackendController
                 apc_store($companyId.$code,'1',0);//永久存储用apc_delete($key)删除
                 return $code;
 	}
-        /*
+        
         public function actionOpensite() {
 		if(Yii::app()->request->isPostRequest) {
 			$sid = Yii::app()->request->getPost('sid');
@@ -488,5 +480,5 @@ class DefaultController extends BackendController
                                 Yii::app()->user->setFlash('success' , '修改失败');
                         }
                 }
-	}*/
+	}
 }
