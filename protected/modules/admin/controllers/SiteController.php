@@ -10,31 +10,33 @@ class SiteController extends BackendController
 		return true;
 	}
 	public function actionIndex() {
-		$typeId = Yii::app()->request->getParam('typeId');
-                
-		$siteTypes = $this->getTypes();
-		if(empty($siteTypes)) {
-			$models = false;
-		}
-		$typeKeys = array_keys($siteTypes);
-		$typeId = array_search($typeId, $typeKeys) ? $typeId : $typeKeys[0] ;
-		
-		$criteria = new CDbCriteria;
-		$criteria->with = 'siteType';
+               
+		$typeId = Yii::app()->request->getParam('typeId',0);
                 //echo $typeId; exit;
-                if(empty($typeId)) {
-			$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId ;
-		}else{
-                        $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$this->companyId ;
+		$siteTypes = $this->getTypes();
+                
+		if(!empty($siteTypes)) {
+			
+                        $typeKeys = array_keys($siteTypes);
+                        $typeId = array_search($typeId, $typeKeys) ? $typeId : $typeKeys[0] ;
+
+                        
                 }
-		$criteria->order = ' t.type_id asc ';
-		
-		$models = Site::model()->findAll($criteria);
-		
+		$criteria = new CDbCriteria;
+                $criteria->with = 'siteType';
+                
+                $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$this->companyId ;
+                $criteria->order = ' t.type_id asc ';		
+                $models = Site::model()->findAll($criteria);
+                $pages = new CPagination(Site::model()->count($criteria));
+                $pages->applyLimit($criteria);
+                
+		//var_dump($models);exit;
 		$this->render('index',array(
 				'siteTypes' => $siteTypes,
 				'models'=>$models,
-				'typeId' => $typeId
+				'typeId' => $typeId,
+                                'pages' => $pages
 		));
 	}
 	public function actionCreate() {

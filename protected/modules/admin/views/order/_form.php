@@ -28,11 +28,25 @@
 														<tr>
 															<td><a href="<?php echo $this->createUrl('product/update' , array('id'=>$orderProduct['product_id'],'companyId'=>$this->companyId));?>"><?php echo $orderProduct['product_name'];?></a></td>
 															<td class="hidden-xs"><?php echo $orderProduct['category_name'];?></td>
-															<td><?php echo $orderProduct['origin_price'];?></td>
+															<td><?php echo $orderProduct['original_price'];?></td>
 															<td><?php echo $orderProduct['price'];?></td>
 															<td><?php echo $orderProduct['amount'];?></td>
 															<td><?php echo $orderProduct['amount']*$orderProduct['price'];?></td>
-															<th><a href="javascript:;" class="del-btn"  item="<?php echo $orderProduct['item_id'];?>">删除</a></th>
+                                                                                                                        <td class="center">
+                                                                                                                            <div class="btn-group">
+                                                                                                                                    <a class="btn green" href="#" data-toggle="dropdown">
+                                                                                                                                    操作
+                                                                                                                                    <i class="fa fa-angle-down"></i>
+                                                                                                                                    </a>
+                                                                                                                                    <ul class="dropdown-menu pull-right">
+                                                                                                                                            <li><a href="javascript:;" class="del-btn"  item="<?php echo $orderProduct['item_id'];?>">勾挑</a></li>
+                                                                                                                                            <li><a href="javascript:;" class="del-btn"  item="<?php echo $orderProduct['item_id'];?>">优惠</a></li>
+                                                                                                                                            <li><a href="javascript:;" class="del-btn"  item="<?php echo $orderProduct['item_id'];?>">退菜</a></li>
+                                                                                                                                            <li><a href="javascript:;" class="del-btn"  item="<?php echo $orderProduct['item_id'];?>">称重</a></li>
+                                                                                                                                            <li><a href="javascript:;" class="del-btn"  item="<?php echo $orderProduct['item_id'];?>">重新厨打</a></li>
+                                                                                                                                    </ul>
+                                                                                                                            </div>
+                                                                                                                        </td>
 														</tr>
 													<?php endforeach;?>
 													</tbody>
@@ -42,8 +56,8 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<?php echo $form->label($model, 'create_time',array('class' => 'col-md-3 control-label'));?>
-										<label class="col-md-4 control-label" style="text-align:left;"><?php echo date('Y-m-d H:i:s' , $model->create_time);?></label>
+										<?php echo $form->label($model, 'create_at',array('class' => 'col-md-3 control-label'));?>
+										<label class="col-md-4 control-label" style="text-align:left;"><?php echo date('Y-m-d H:i:s' , $model->create_at);?></label>
 									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'pay_time',array('class' => 'col-md-3 control-label'));?>
@@ -78,7 +92,7 @@
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<a href="javascript:;"  id="submit-btn" class="btn blue">结单</a>
-											<a href="javascript:;"  id="reprint-btn" class="btn blue">丢单重打</a>
+											<a href="javascript:;"  id="reprint-btn" class="btn blue">厨打</a>
 											<a href="<?php echo $this->createUrl('order/index' , array('companyId' => $model->company_id));?>" class="btn default">返回</a>                              
 										</div>
 									</div>

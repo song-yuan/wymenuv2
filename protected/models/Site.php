@@ -40,7 +40,7 @@ class Site extends CActiveRecord
 			array('serial , type_id ,lid,floor_id, dpid , site_level' , 'required'),
 			array('floor_id,type_id, delete_flag, has_minimum_consumption, minimum_consumption_type', 'numerical', 'integerOnly'=>true),
 			array('period, overtime,buffer', 'numerical'),
-			array('serial', 'length', 'max'=>50),
+			array('serial', 'length', 'max'=>20),
 			array('site_level', 'length', 'max'=>20),
 			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().

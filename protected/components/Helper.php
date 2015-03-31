@@ -41,9 +41,9 @@ class Helper
 		return $command->queryAll();
 	}
 	//计算order的总价array('total'=>'总价','miniConsumeType'=>'最低消费类型','miniConsume'=>'最低消费','overTime'=>'超时时间','siteOverTime'=>'超时计算单位','buffer'=>'超时计算点','number'=>'人数')
-	static public function calOrderConsume(Order $order , $total){
-		$siteNo = SiteNo::model()->findByPk($order->site_no_id);
-		$site = Site::model()->findByPk($siteNo->site_id);
+	static public function calOrderConsume(Order $order, SiteNo $siteNo , $total){
+		//$siteNo = SiteNo::model()->find('$order->site_no_id');
+		$site = Site::model()->find('lid=:siteid and dpid=:dpid',array('siteid'=>$siteNo->site_id,':dpid'=>$siteNo->dpid));
 		$result = array('total'=>$total,'remark'=>'');
 		if(!$site->has_minimum_consumption) {
 			return $result;

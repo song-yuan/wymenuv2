@@ -37,7 +37,7 @@ class Order extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, site_id, update_at, remark, taste_memo', 'required'),
+			array('lid, dpid, site_id, remark, taste_memo', 'required'),
 			array('lid, dpid, site_id, number', 'numerical', 'integerOnly'=>true),
 			array('reality_total', 'length', 'max'=>10),
 			array('is_temp, order_status, lock_status', 'length', 'max'=>1),
@@ -68,17 +68,17 @@ class Order extends CActiveRecord
 		return array(
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
-			'create_at' => 'Create At',
+			'create_at' => '下单时间',
 			'update_at' => '更新时间',
-			'site_id' => '台子的编号，前台session存储site_no_id,根据site_no_id在site_no表中找到site_id和is_temp,然后找到对应订单。换台时被换对应该表中site_id和is_temp要更新；并台时被并的人数要加到并到的台；撤台改变状态就行。',
+			'site_id' => '餐桌',
 			'is_temp' => '0固定台 1临时台',
 			'number' => '人数，和开台中的人数保持一致',
 			'order_status' => '0未结算、1结单、2被并台、3被撤台、4被换台的标志',
 			'lock_status' => '0未锁定，1锁定',
-			'pay_time' => 'Pay Time',
-			'reality_total' => 'Reality Total',
-			'payment_method_id' => 'Payment Method',
-			'remark' => 'Remark',
+			'pay_time' => '支付时间',
+			'reality_total' => '实付金额',
+			'payment_method_id' => '支付方式',
+			'remark' => '支付说明',
 			'taste_memo' => 'Taste Memo',
 		);
 	}

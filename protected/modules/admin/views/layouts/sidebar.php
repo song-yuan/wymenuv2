@@ -15,7 +15,7 @@
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' ,'payMethod', 'companyWifi', 'user'))) echo 'active';?>">
 					<a href="">
-					<i class="fa fa-map-marker"></i> 
+					<i class="fa fa-cog"></i> 
 					<span class="title">基础信息</span>					
 					</a>
 					<ul class="sub-menu">
@@ -28,7 +28,7 @@
 				</li>
                                 <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productSet','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice'))) echo 'active';?>">
                                         <a href="">
-					<i class="fa fa-map-marker"></i> 
+					<i class="fa fa-coffee"></i> 
 					<span class="title">产品管理</span>					
 					</a>
 					<ul class="sub-menu">
@@ -46,7 +46,7 @@
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('taste'))) echo 'active';?>">
 					<a href="">
-					<i class="fa fa-map-marker"></i> 
+					<i class="fa fa-cutlery"></i> 
 					<span class="title">口味设定</span>					
 					</a>
 					<ul class="sub-menu">
@@ -57,7 +57,7 @@
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('feedback'))) echo 'active';?>">
 					<a href="">
-					<i class="fa fa-map-marker"></i> 
+					<i class="fa fa-bullhorn"></i> 
 					<span class="title">反馈选项</span>					
 					</a>
 					<ul class="sub-menu">
@@ -67,7 +67,7 @@
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
-					<i class="fa fa-map-marker"></i> 
+					<i class="fa  fa-file-o"></i> 
 					<span class="title">订单管理</span>					
 					</a>
 					<ul class="sub-menu">
@@ -76,7 +76,7 @@
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType', 'floor'))) echo 'active';?>">
 					<a href="">
-					<i class="fa fa-map-marker"></i> 
+					<i class="fa fa-building"></i> 
 					<span class="title">餐桌包厢管理</span>					
 					</a>
 					<ul class="sub-menu">
@@ -87,7 +87,7 @@
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('printer' , 'printerWay'))) echo 'active';?>">
 					<a href="">
-					<i class="fa fa-map-marker"></i> 
+					<i class="fa fa-print"></i> 
 					<span class="title">打印机管理</span>					
 					</a>
 					<ul class="sub-menu">
@@ -98,7 +98,7 @@
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
-					<i class="fa fa-map-marker"></i> 
+					<i class="fa fa-bar-chart-o"></i> 
 					<span class="title">日常统计</span>					
 					</a>
 					<ul class="sub-menu">

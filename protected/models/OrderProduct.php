@@ -41,7 +41,7 @@ class OrderProduct extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, order_id, update_at, taste_memo, retreat_memo', 'required'),
+			array('lid, dpid, order_id, taste_memo, retreat_memo', 'required'),
 			array('lid, dpid, order_id, amount, zhiamount', 'numerical', 'integerOnly'=>true),
 			array('set_id, product_id, price, weight', 'length', 'max'=>10),
 			array('is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
@@ -72,20 +72,21 @@ class OrderProduct extends CActiveRecord
 		return array(
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
-			'create_at' => 'Create At',
+                        'category_id' => '分类',
+			'create_at' => '创建时间',
 			'update_at' => '更新时间',
-			'order_id' => 'Order',
-			'set_id' => '0000000000表示下面的product是单品，否则是套餐内的产品',
-			'product_id' => 'Product',
+			'order_id' => '订单',
+			'set_id' => '套餐编号',
+			'product_id' => '产品编号',
 			'is_retreat' => '0非退菜，1退菜',
 			'price' => '下单时价格',
 			'amount' => '下单数量',
 			'zhiamount' => '下单只数',
 			'is_waiting' => '0不等叫，1等叫，2已上菜',
-			'weight' => 'Weight',
-			'taste_memo' => 'Taste Memo',
-			'retreat_memo' => 'Retreat Memo',
-			'is_giving' => '0非赠送，1赠送',
+			'weight' => '重量',
+			'taste_memo' => '口味说明',
+			'retreat_memo' => '退菜理由',
+			'is_giving' => '是否赠送',
 			'delete_flag' => '1删除，0未删除',
 			'product_order_status' => '0未下单、1已下单',
 		);
@@ -142,5 +143,20 @@ class OrderProduct extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+        
+        static public function getOrderProducts($orderId,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select t.*,t1.*,t2.category_name from nb_order_product t
+				left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid
+				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
+				where t.order_id=".$orderId." and t.dpid=".$dpid;
+		return $db->createCommand($sql)->queryAll();
+	}
+	static public function getTotal($orderId,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select sum(price*amount) as total from nb_order_product where order_id=".$orderId." and dpid=".$dpid;
+		$ret= $db->createCommand($sql)->queryScalar();
+                return empty($ret)?0:$ret;
 	}
 }

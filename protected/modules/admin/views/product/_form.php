@@ -124,6 +124,14 @@
 	   $('#category_container').on('change','.category_selecter',function(){
 	   		var id = $(this).val();
 	   		var $parent = $(this).parent();
+                        var sid ='0000000000';
+                        var len=$('.category_selecter').eq(1).length;
+                        if(len > 0)
+                        {
+                            sid=$('.category_selecter').eq(1).val();
+                            //alert(sid);
+                        }
+                       
 	   		$(this).nextAll().remove();
 	   		$.ajax({
 	   			url:'<?php echo $this->createUrl('product/getChildren',array('companyId'=>$this->companyId));?>/pid/'+id,
@@ -141,7 +149,8 @@
 	   					$('#Product_category_id').val('');
 	   					$parent.find('span').remove();
 	   				}else{
-	   					$('#Product_category_id').val(id);
+                                                //if(selname == 'category_id_selecter2')
+                                                    $('#Product_category_id').val(sid);                                                
 	   				}
 	   			}
 	   		});
