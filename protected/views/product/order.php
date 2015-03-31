@@ -13,7 +13,10 @@
 	}else{
 		$orderProductList = array();
 	}
+	//全单口味
+	$tasteIds = TasteClass::getOrderTaste($orderList->order['lid'],1);
 ?>
+<script type="text/javascript" src="../js/product/taste.js"></script>
 <form action="orderList?confirm=1&orderId=<?php echo $orderList->order['lid'];?>" method="post">
 <div class="top">我的订单</div>
 <div class="product-title">订单已经被锁定，其他人不能修改，需要最终修改数量和口味点击<img src="../img/product/down-arrow.png" /></div>
@@ -24,10 +27,10 @@
 		<div class="product-up">
 			<div class="product-up-left"><?php echo $order['product_name'];?></div>
 		</div>
-		<div class="product-middle">
-			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:少油  少盐
+		<div class="product-middle select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>">
+			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2);?>
 		</div>
-	        <div class="product-down">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font><img src="../img/product/down-arrow.png" /></div>
+	        <div class="product-down edit-num" product-id="<?php echo $order['product_id'];?>">￥<?php echo $order['price'];?>/ <?php echo $order['product_unit']?$order['product_unit']:'例';?> X <font color="#ff8c00"><span class="num"><?php echo $order['amount'];?></span><?php echo $order['product_unit']?$order['product_unit']:'例';?></font><img src="../img/product/down-arrow.png" /></div>
 	        <input type="hidden" name="<?php echo $order['product_id'];?>" value="<?php echo $order['amount'];?>"/>
 		</div>
 	<?php endforeach;?>
@@ -36,13 +39,54 @@
 		<div class="order-time"><?php echo date('Y-m-d H:i',time()); ?></div>
 		<div class="order-price">订单总额:<?php echo Money::priceFormat($orderPrice); ?></div>
 	</div>
-	<div class="order-taste"><font color="#ff8c00">全单口味要求</font><img src="../img/product/down-arrow.png" />:不放辣</div>
+	<div class="order-taste select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="1"><font color="#ff8c00">全单口味要求</font><img src="../img/product/down-arrow.png" />:<?php  if($tasteIds){ foreach($tasteIds as $id){ echo TasteClass::getTasteName($id).' ';}} ?> 备注:<?php echo TasteClass::getOrderTasteMemo($orderList->order['lid'],1);?></div>
 </form>
 
 <a id="comfirm-order" href="javascript:;"><div class="btn confirm">确认</div></a>
 <a href="orderList"><div class="btn back">返回</div></a>
+<div class="mask">
+	<div class="mask-bottom">
+		<div class="area-top">做法口味选择:</div>
+		<div class="mask-taste">
+			<!--<div class="taste"></div><div class="taste taste-active"></div>
+			<div class="clear"></div>-->
+		</div>
+		<div class="mask-area">
+			<div class="right-middle order-num"><span class="minus" >-</span><input type="text" name="order-product-num" value="1" readonly="true"/><span class="plus">+</span></div>
+			<textarea name="taste-memo"></textarea>
+			<div class="mask-button">
+			  <div class="cancel">取消</div>
+			  <div class="cancel-order-num">取消</div>
+			  <div class="submit">确定</div>
+			  <div class="submit-order-num">确定</div>
+			  <div class="clear"></div>
+			</div>
+		</div>
+		<input type="hidden" class="mask-type" value="0" />
+		<input type="hidden" class="mask-id" value="0" /><!-- orderproductId or orderId-->
+		<input type="hidden" class="product-id" value="0" />
+	</div>
+</div>
+
 <script type="text/javascript">
+$(document).ready(function(){
+	 $('.minus').click(function(){
+		var input = $(this).siblings('input');
+		var num = input.val();
+		if(num > 0){
+			num = num - 1;
+		}
+		input.val(num);			
+	});
+	$('.plus').click(function(){
+		var input = $(this).siblings('input');
+		var num = parseInt(input.val());
+		num = num + 1;
+		input.val(num);			
+	});
 	$('#comfirm-order').click(function(){
 		$('form').submit();
-	})
+	});
+});
+	
 </script>

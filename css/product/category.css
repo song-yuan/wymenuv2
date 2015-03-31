@@ -1,7 +1,7 @@
 .promptumenu_window.float {
 	width: 100%;
 	 position: fixed;
-	  z-index: 999; 
+	  z-index: 99; 
 	  top: 0; 
 	  left: 0;
 	  background:rgb(255,255,255);
@@ -33,29 +33,31 @@
 }
 .promptumenu_nav a.active{
 	background: url(pagelink.png) 0 0 no-repeat;
-}
+}.promptu-menu{z-index:1000;}
 .promptu-menu >li {
 	min-width:100px;
 	max-width:500px;
 	padding-left:5px;
 	padding-right:5px;
+	z-index:9999;
 }
 .promptu-menu >li:first-child {
 	min-width:100px;
         left:5px;
 }
-ul .parents{
+ol .parents{
 	color:rgb(217,217,217);
 	font-size:15px;
 	padding-top:3px;
 	padding-bottom:3px;
 }
 
-li ul{
+li ol{
 	border-right:2px dashed rgb(191,191,191);
 	height:140px;
 	margin-left:5px;
 }
-ul .child.float{width:90%;float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
-ul .child{width:100%;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
+ol .child.float{width:90%;float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
+ol .child{width:100%;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
+li ol a{display:block;float:none;height:23px;}
 li .active{background:rgb(240,201,82);}
