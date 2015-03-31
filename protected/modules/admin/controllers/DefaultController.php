@@ -78,7 +78,7 @@ class DefaultController extends BackendController
                 $status = Yii::app()->request->getParam('status','0');
                 $istemp = Yii::app()->request->getParam('istemp','0');
                 $typeId = Yii::app()->request->getParam('typeId','0');
-               
+              
 		$model=array();
 		$this->renderPartial('button' , array(
 				'model' => $model,
@@ -105,9 +105,11 @@ class DefaultController extends BackendController
 		$code=  $this->getRandChar(6);
                 //var_dump($code);exit;
                 return $code;/*apc should be deleted*/
-                while(!empty(apc_fetch($companyId.$code)))
+                $ccode = apc_fetch($companyId.$code);
+                while(!empty($ccode))
                 {
                     $code= $this->getRandChar(6);                    
+                    $ccode = apc_fetch($companyId.$code);
                 }
                 apc_store($companyId.$code,'1',0);//永久存储用apc_delete($key)删除
                 return $code;
