@@ -112,7 +112,7 @@ class DefaultController extends BackendController
         private function getCode($companyId){
 		$code=  $this->getRandChar(6);
                 //var_dump($code);exit;
-                return $code;
+                return $code;/*apc should be deleted*/
                 while(!empty(apc_fetch($companyId.$code)))
                 {
                     $code= $this->getRandChar(6);                    
@@ -120,7 +120,7 @@ class DefaultController extends BackendController
                 apc_store($companyId.$code,'1',0);//永久存储用apc_delete($key)删除
                 return $code;
 	}
-        
+        /*
         public function actionOpensite() {
 		if(Yii::app()->request->isPostRequest) {
 			$sid = Yii::app()->request->getPost('sid');
@@ -488,5 +488,5 @@ class DefaultController extends BackendController
                                 Yii::app()->user->setFlash('success' , '修改失败');
                         }
                 }
-	}
+	}*/
 }
