@@ -77,10 +77,13 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title">点菜</h4>
+                                                        <div class="actions">
+                                                                <a class="btn purple" id="btn_product"><i class="fa fa-pencil"></i> 单品</a> 
+                                                                <a class="btn grey" id="btn_set"><i class="fa fa-pencil"></i> 套餐</a>
+                                                        </div>
                                                 </div>
                                                 <div class="modal-body">
-                                                        <div class="form-actions fluid">
+                                                        <div class="form-actions fluid hidden" id="product_panel">
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderProduct, 'category_id',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
@@ -94,7 +97,7 @@
                                                                                 <?php echo $form->dropDownList($orderProduct, 'product_id', array('0' => '-- 请选择 --') +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
                                                                                 <?php echo $form->error($orderProduct, 'product_id' )?>
                                                                         </div>
-                                                                </div>                                                       
+                                                                </div>                                                      
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderProduct, 'amount',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
@@ -116,9 +119,19 @@
                                                                                 <?php echo $form->error($orderProduct, 'is_giving' )?>
                                                                         </div>
                                                                 </div>
-                                                                <?php echo $form->hiddenField($orderProduct,'order_id',array('class'=>'form-control')); ?>
+                                                                
                                                         </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
                                                 </div>
+                                                <div class="form-actions fluid" id="set_panel">
+                                                                <div class="form-group">
+                                                                        <?php echo $form->label($orderProduct, 'set_id',array('class' => 'col-md-4 control-label'));?>
+                                                                        <div class="col-md-6">
+                                                                                <?php echo CHtml::dropDownList('setlist', '0', $setlist , array('class'=>'form-control'));?>
+                                                                        </div>
+                                                                </div>
+                                                                <!--list-->                                                             
+                                                </div>
+                                                <?php echo $form->hiddenField($orderProduct,'order_id',array('class'=>'form-control')); ?>
                                                 <div class="modal-footer">
                                                         <button type="button" data-dismiss="modal" class="btn default">取 消</button>
                                                         <input type="submit" class="btn green" id="create_btn" value="确 定">

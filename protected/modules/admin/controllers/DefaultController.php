@@ -343,6 +343,8 @@ class DefaultController extends BackendController
                 $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
 		$total = Helper::calOrderConsume($order,$siteNo, $productTotal);
                 $categories = $this->getCategories();
+                //var_dump($categories);exit;
+                $setlist = $this->getSetlist();
                 $categoryId=0;
                 $products = $this->getProducts($categoryId);
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
@@ -388,7 +390,8 @@ class DefaultController extends BackendController
 				'paymentMethods'=>$paymentMethods,
                                 'typeId' => $typeId,
                                 'categories' => $categories,
-                                'products' => $productslist
+                                'products' => $productslist,
+                                'setlist' => $setlist
 		));
 	}
         
@@ -437,6 +440,25 @@ class DefaultController extends BackendController
 			$optionsReturn[$model->category_name] = $v;
 		}
 		return $optionsReturn;
+	}
+        
+        private function getSetlist(){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		
+		$models = ProductSet::model()->findAll($criteria);
+                
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		$options = array();
+		$optionsReturn = array('--请选择分类--');
+		if($models) {
+			foreach ($models as $model) {
+                                    $options[$model->lid] = $model->set_name;
+                        }
+		 //var_dump($options);exit;
+		}
+		return $options;
 	}
         
         private function getProducts($categoryId){

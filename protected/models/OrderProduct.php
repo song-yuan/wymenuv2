@@ -72,7 +72,8 @@ class OrderProduct extends CActiveRecord
 		return array(
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
-                        'category_id' => '分类',
+                        'category_id' => '单品分类',
+                        'set_id' => '套餐列表',
 			'create_at' => '创建时间',
 			'update_at' => '更新时间',
 			'order_id' => '订单',

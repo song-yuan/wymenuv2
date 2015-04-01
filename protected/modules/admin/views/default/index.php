@@ -93,7 +93,10 @@
 							<div class="portlet box purple">
 								<div class="portlet-title">
 									<div class="caption"><i class="fa fa-cogs"></i><?php echo $title; ?></div>
-							
+                                                                        <div class="col-md-3 pull-right">
+                                                                                <input type="text" class="form-control" placeholder="条码枪扫描">
+                                                                        </div>
+
 								</div>
 								<div class="portlet-body" id="table-manage">
 				
