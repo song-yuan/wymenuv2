@@ -40,7 +40,7 @@ class ProductTemppriceController extends BackendController
 		$productId = Yii::app()->request->getParam('id');
 		$criteria = new CDbCriteria;
 		$criteria->with = 'product';
-		$criteria->addCondition('t.dpid=:dpid and t.product_id=:productId ');
+		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0 and t.product_id=:productId');
 		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		$criteria->params[':productId']=$productId;
@@ -80,6 +80,24 @@ class ProductTemppriceController extends BackendController
 				'product'=>$product,
 		));
 	}
+	//新加delate方法
+	public function actionDetailDelete(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+                $printset = Yii::app()->request->getParam('psid');
+				//var_dump($printset);exit;
+		$ids = Yii::app()->request->getPost('ids');
+                //var_dump($ids);exit;
+		if(!empty($ids)) {
+			Yii::app()->db->createCommand('update nb_product_tempprice set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId));
+			$this->redirect(array('productTempprice/updatedetail' , 'companyId' => $companyId,'id'=>$printset)) ;
+		} else {
+			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
+			$this->redirect(array('productTempprice/updatedetail' , 'companyId' => $companyId,'id'=>$printset)) ;
+		}
+	}	
+        
+	//delete方法新加
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('id');
 		$model = ProductTempprice::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));

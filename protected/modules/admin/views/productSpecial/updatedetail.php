@@ -27,6 +27,15 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
+        <?php $form=$this->beginWidget('CActiveForm', array(
+				'id' => 'product-form',
+				'action' => $this->createUrl('productSpecial/Detaildelete' , array('companyId' => $this->companyId,'psid'=>$productId)),
+				'errorMessageCssClass' => 'help-block',
+				'htmlOptions' => array(
+					'class' => 'form-horizontal',
+					'enctype' => 'multipart/form-data'
+				),
+		)); ?><!-- 添加 -->
 	<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
@@ -34,12 +43,16 @@
 					<div class="caption"><i class="fa fa-globe"></i>产品特价活动列表</div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('productSpecial/create',array('companyId'=>$this->companyId,'productId'=>$productId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+					<div class="btn-group">
+							<button type="submit"  class="btn red"><i class="fa fa-ban"></i> 删除</button>
+					</div><!-- 添加 -->
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
+							    <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th><!-修改添加--->
 								<th style="width:30%">活动时间</th>
 								<th>特价价格</th>
 								<th>&nbsp;</th>
@@ -49,6 +62,7 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
+							    <td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td><!--修改添加-->
 								<td><?php echo $model->begin_time.' - '.$model->end_time;?></td>
 								<td><?php  echo $model->price;?></td>
 								<td class="center">
@@ -61,7 +75,7 @@
 					</table>
 					    <div class="form-actions fluid">
 						        <div class="col-md-offset-3 col-md-9">
-									<button type="submit" class="btn blue">确定</button>
+									<!--  <button type="submit" class="btn blue">确定</button>  -->
 									<a href="<?php echo $this->createUrl('productSpecial/index' , array('companyId' => $this->companyId));?>" class="btn default">返回</a>                              
 								</div>
 						</div>
@@ -101,6 +115,7 @@
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
+	    <?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
