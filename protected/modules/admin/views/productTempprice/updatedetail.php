@@ -50,7 +50,6 @@
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
-					<?php if($models):?>
 						<thead>
 							<tr>
 							    <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th><!-修改添加--->
@@ -78,9 +77,7 @@
 					<!--修改-->
 					    <div class="form-actions fluid">
 						        <div class="col-md-offset-3 col-md-9">
-								
-									<button type="submit" class="btn blue">确定</button>
-									<a href="<?php echo $this->createUrl('productTempprice/index' , array('companyId' => $this->companyId));?>" class="btn default">返回</a>                              
+                                                                        <a href="<?php echo $this->createUrl('productTempprice/index' , array('companyId' => $this->companyId));?>" class="btn default">返回</a>                              
 								</div>
 						</div>
 					<!--修改（确定返回按钮没有）-->
@@ -122,6 +119,7 @@
 		</div>
         <?php $this->endWidget(); ?>
 	</div>
+</div>
 	<!-- END PAGE CONTENT-->
 
 	<script type="text/javascript">

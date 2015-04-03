@@ -63,7 +63,8 @@ class SiteTypeController extends BackendController
 		));
 	}
 	public function actionDelete() {
-		$ids = $_POST['type_id'] ;
+		//$ids = $_POST['type_id'] ;
+                $ids = Yii::app()->request->getPost('type_id');
 		//var_dump(implode(',' , $ids),$this->companyId);exit;
                 //$sql='update nb_site_type set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId';
                 //$command=Yii::app()->db->createCommand($sql);

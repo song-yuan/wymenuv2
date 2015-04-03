@@ -11,4 +11,5 @@ return array(
 		'salt' => 'use this string to gen password',
 		'image_width' => 300,
 		'image_height' => 300,
+                'has_apc' => FALSE,
 );

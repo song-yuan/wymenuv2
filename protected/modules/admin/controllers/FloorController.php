@@ -62,7 +62,8 @@ class FloorController extends BackendController
 		));
 	}
 	public function actionDelete() {
-		$ids = $_POST['floor_id'] ;
+		//$ids = $_POST['floor_id'] ;
+                $ids = Yii::app()->request->getPost('floor_id');
 		//var_dump(implode(',' , $ids),$this->companyId);exit;
                 //$sql='update nb_site_type set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId';
                 //$command=Yii::app()->db->createCommand($sql);
