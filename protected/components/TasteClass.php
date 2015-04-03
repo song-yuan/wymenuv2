@@ -117,7 +117,6 @@ class TasteClass
 					 'taste_id'=>$taste,
 					 'product_id'=>$productId,
 					);
-					var_dump($data);exit;
 					Yii::app()->db->createCommand()->insert('nb_product_taste',$data);
 				}
 			}
