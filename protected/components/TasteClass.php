@@ -53,6 +53,7 @@ class TasteClass
 		$result = $conn->queryRow();
 		return $result?$result['taste_memo']:'';
 	}
+	//保存订单口味
 	public static function save($dpid, $type, $id = 0, $tastesIds = array(), $tastMemo=null){
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
@@ -88,6 +89,36 @@ class TasteClass
 				$conn->bindValue(':tastMemo',$tastMemo);
 				$conn->bindValue(':lid',$id);
 				$conn->execute();
+			}
+			$transaction->commit(); //提交事务会真正的执行数据库操作
+			return true;
+		} catch (Exception $e) {
+			$transaction->rollback(); //如果操作失败, 数据回滚
+			return false;
+		}
+	}
+	//保存产品口味
+	public static function saveProductTaste($dpid,$productId,$tasteIds=array()){
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+			$sql = 'delete from nb_product_taste where dpid=:dpid and product_id=:productId';
+			$conn = Yii::app()->db->createCommand($sql);
+			$conn->bindValue(':dpid',$dpid);
+			$conn->bindValue(':productId',$productId);
+			$conn->execute();
+			if(!empty($tastesIds)){
+				foreach($tastesIds as $taste){
+					$sql = 'SELECT NEXTVAL("product_taste") AS id';
+					$maxId = Yii::app()->db->createCommand($sql)->queryRow();
+					$data = array(
+					 'lid'=>$maxId['id'],
+					 'dpid'=>$dpid,
+					 'create_at'=>date('Y-m-d H:i:s',time()),
+					 'taste_id'=>$taste,
+					 'product_id'=>$productId,
+					);
+					Yii::app()->db->createCommand()->insert('nb_order_taste',$data);
+				}
 			}
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			return true;
