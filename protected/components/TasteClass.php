@@ -98,7 +98,7 @@ class TasteClass
 		}
 	}
 	//保存产品口味
-	public static function saveProductTaste($dpid,$productId,$tasteIds=array()){
+	public static function saveProductTaste($dpid,$productId,$tastesIds=array()){
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
 			$sql = 'delete from nb_product_taste where dpid=:dpid and product_id=:productId';
@@ -107,7 +107,6 @@ class TasteClass
 			$conn->bindValue(':productId',$productId);
 			$conn->execute();
 			if(!empty($tastesIds)){
-				var_dump($tastesIds);
 				foreach($tastesIds as $taste){
 					$sql = 'SELECT NEXTVAL("product_taste") AS id';
 					$maxId = Yii::app()->db->createCommand($sql)->queryRow();
