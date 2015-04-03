@@ -117,7 +117,7 @@ class TasteClass
 					 'taste_id'=>$taste,
 					 'product_id'=>$productId,
 					);
-					Yii::app()->db->createCommand()->insert('nb_order_taste',$data);
+					Yii::app()->db->createCommand()->insert('nb_product_taste',$data);
 				}
 			}
 			$transaction->commit(); //提交事务会真正的执行数据库操作
