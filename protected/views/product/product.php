@@ -49,7 +49,7 @@
     </div>
 </div>
 <script type="text/javascript">
-	var cat =<?php $cat = $categoryId?$categoryId:0; echo $cat;?>;
+	var cat = '<?php echo $categoryId;?>';
 	
 	window.onload=function(type,catgory)
 	{

@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" type="text/css"  href="../css/product/category.css" />
 <script type="text/javascript" src="../js/product/category.js"></script>
+<div class="promptumenu_window">
 <ul class="promptu-menu">
 	<li>
 		<ol>
@@ -31,9 +32,9 @@
 	<?php endforeach;?>
 	<?php endif;?>
 </ul>
-
+</div>
 <script>
-	$('ul.promptu-menu').promptumenu({height:140, rows: 1, columns: 1, direction: 'horizontal', pages: false});
+//	$('ul.promptu-menu').promptumenu({height:140, rows: 1, columns: 1, direction: 'horizontal', pages: false});
 	$(document).ready(function(){
 		var liWidth = 0;
 		$('.promptu-menu').children('li').each(function(){
