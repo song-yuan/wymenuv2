@@ -36,16 +36,19 @@ class CreateOrder
 				$order->attributes = $data;
 				$order->save();
 			}
-			$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
+			$setId = 0;
+			if($this->product['type']){
+				$setId = $this->product['lid'];
+				$orderProduct = OrderProduct::model()->find('order_id=:orderId and set_id=:setId',array(':orderId'=>$order->lid,':setId'=>$setId));
+			}else{
+				$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
+			}
+			
 			if($orderProduct){
 				$orderProduct->delete_flag = 0;
 				$orderProduct->update();
 			}else{
 				$orderProduct = new OrderProduct;
-				$setId = 0;
-				if($this->product['type']){
-					$setId = $this->product['lid'];
-				}
 				$orderProductData = array(
 										'lid'=>$this->getMaxOrderProductId(),
 										'dpid'=>$this->companyId,
@@ -57,7 +60,6 @@ class CreateOrder
 										'update_at'=>$time,
 										'amount'=>1,
 										'taste_memo'=>'无',
-										'retreat_memo'=>'无',
 										);
 				$orderProduct->attributes = $orderProductData;
 				$orderProduct->save();
@@ -104,7 +106,7 @@ class CreateOrder
 				$sql = 'select * from nb_product_tempprice where product_id=:productId and dpid=:dpid and begain_time < :time and end_time > :time';
 				$connect = $db->createCommand($sql);
 				$connect->bindValue(':productId',$product['lid']);
-				$connect->bindValue(':dpid',$this->companyId);
+				$connect->bindValue(':dpid',$dpid);
 				$connect->bindValue(':time',$time);
 				$productTempPrice = $connect->queryRow();
 				if($productTempPrice){
@@ -115,7 +117,7 @@ class CreateOrder
 				$sql = 'select * from nb_product_special where product_id=:productId and dpid=:dpid and begain_time < :time and end_time > :time';
 				$connect = $db->createCommand($sql);
 				$connect->bindValue(':productId',$product['lid']);
-				$connect->bindValue(':dpid',$this->companyId);
+				$connect->bindValue(':dpid',$dpid);
 				$connect->bindValue(':time',$time);
 				$productTempPrice = $connect->queryRow();
 				if($productTempPrice){
@@ -126,7 +128,7 @@ class CreateOrder
 				$sql = 'select * from nb_product_discount where product_id=:productId and dpid=:dpid';
 				$connect = $db->createCommand($sql);
 				$connect->bindValue(':productId',$product['lid']);
-				$connect->bindValue(':dpid',$this->companyId);
+				$connect->bindValue(':dpid',$dpid);
 				$productDiscount = $connect->queryRow();
 				if($productDiscount){
 					if($productDiscount['is_discount']){
@@ -138,38 +140,8 @@ class CreateOrder
 			}
 		}else{
 			//套餐
-			$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid';
-			$connect = $db->createCommand($sql);
-			$connect->bindValue(':lid',$productId);
-			$connect->bindValue(':dpid',$this->companyId);
-			$product = $connect->queryRow();
+			$price = 0;
 			
-			$price = $product['original_price'];
-			if($product['is_special']){
-				$sql = 'select * from nb_product_special where product_id=:productId and dpid=:dpid and begain_time < :time and end_time > :time';
-				$connect = $db->createCommand($sql);
-				$connect->bindValue(':productId',$product['lid']);
-				$connect->bindValue(':dpid',$this->companyId);
-				$connect->bindValue(':time',$time);
-				$productTempPrice = $connect->queryRow();
-				if($productTempPrice){
-					$price = $productTempPrice['price'];
-				}
-			}
-			if($product['is_discount']){
-				$sql = 'select * from nb_product_discount where product_id=:productId and dpid=:dpid';
-				$connect = $db->createCommand($sql);
-				$connect->bindValue(':productId',$product['lid']);
-				$connect->bindValue(':dpid',$this->companyId);
-				$productDiscount = $connect->queryRow();
-				if($productDiscount){
-					if($productDiscount['is_discount']){
-						$price = $product['original_price']*$productDiscount['price_discount'];
-					}else{
-						$price = $product['original_price']-$productDiscount['price_discount'];
-					}
-				}
-			}
 		}
 		
 		return $price?$price:0;

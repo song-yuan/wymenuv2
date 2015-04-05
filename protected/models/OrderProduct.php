@@ -159,8 +159,7 @@ class OrderProduct extends CActiveRecord
 		$ret= $db->createCommand($sql)->queryScalar();
                 return empty($ret)?0:$ret;
 	}
-        
-        static public function getTaste($orderId,$dpid,$isorder){
+       static public function getTaste($orderId,$dpid,$isorder){
 		$db = Yii::app()->db;
 		$sql = "select t.*,t1.order_id from nb_taste t"
                         . " left join nb_order_taste t1 on t.dpid=t1.dpid and t.lid=t1.taste_id"

@@ -93,7 +93,7 @@ class ProductController extends Controller
 			$product = $connect->queryAll();
 		}else{
 			$categoryId = Yii::app()->request->getParam('cat',0);
-			$product = ProductClass::getCategoryProducts($this->companyId,$this->siteNoId);
+			$product = ProductClass::getCategoryProducts($this->companyId,$categoryId,$this->siteNoId);
 		}
 		Yii::app()->end(json_encode($product));
 	}
@@ -160,7 +160,7 @@ class ProductController extends Controller
 		
 	 	$this->render('confirmOrder');
 	}
-	//订单
+	//确认订单
 	public function actionOrder(){
 		$orderId = Yii::app()->request->getParam('orderId');
 		$goodsIds = isset($_POST) ?$_POST :array();

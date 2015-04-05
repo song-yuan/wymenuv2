@@ -1,3 +1,35 @@
+#page_0{
+	margin-top:220px;
+}
+.fixed-top{
+	position:fixed;
+	width:100%;
+	top:0;
+	z-index:1000;
+	background:rgb(255,255,255);
+}
+.category-top{
+	width:40%;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	margin:20px auto;
+	border:1px solid rgb(179,137,27);
+	background:rgb(240,201,82);
+	border-radius:20px;
+	color:rgb(255,255,255);
+}
+.promptu-menu{
+	display: block;
+	position: absolute;
+	list-style: none;
+	overflow: visible;
+	height: 140px;
+	top: 0px;
+	left: 0px;
+	margin: 0px;
+	padding: 0px;
+}
 .promptumenu_window.float {
 	width: 100%;
 	 position: fixed;
@@ -14,9 +46,14 @@
 	margin-right: -50%;
 }
 .promptumenu_window{
-	cursor: url(hand.ico), move;
+	width: 100%;
+	height: 140px;
+	padding: 0px;
+	display: block;
+	overflow: scroll;
 	border-bottom:1px solid rgb(128,123,120);
 	position: relative;
+	background:rgb(255,255,255);
 }
 .promptumenu_nav a{
 	cursor: pointer;
@@ -33,13 +70,15 @@
 }
 .promptumenu_nav a.active{
 	background: url(pagelink.png) 0 0 no-repeat;
-}.promptu-menu{z-index:1000;}
+}
 .promptu-menu >li {
+	display: block;
+	float:left;
+	margin: 0px;
 	min-width:100px;
-	max-width:500px;
+	width:auto;
 	padding-left:5px;
 	padding-right:5px;
-	z-index:9999;
 }
 .promptu-menu >li:first-child {
 	min-width:100px;
@@ -57,7 +96,7 @@ li ol{
 	height:140px;
 	margin-left:5px;
 }
-ol .child.float{width:90%;float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
+ol .child.float{float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
 ol .child{width:100%;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
-li ol a{display:block;float:none;height:23px;}
+
 li .active{background:rgb(240,201,82);}

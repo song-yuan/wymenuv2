@@ -1,0 +1,53 @@
+<?php
+/* @var $this ProductController */
+	$parentCategorys = ProductCategory::getCategorys($this->companyId);	
+?>
+
+<link rel="stylesheet" type="text/css"  href="../css/product/category.css" />
+<script type="text/javascript" src="../js/product/category.js"></script>
+<div class="fixed-top">
+	<div class="category-top">全部分类</div>
+	<div class="promptumenu_window">
+	<ul class="promptu-menu">
+		<li>
+			<ol>
+				<li class="parents">热点</li>
+				<li class="child">推荐品</li>
+				<li class="child">套餐</li>
+				<li class="child"><img src="/wymenuv2/img/favorite.png">Top10</li>
+				<li class="child"><img src="/wymenuv2/img/ordernum.png">Top10</li>
+			</ol>
+		</li>
+		<?php if($parentCategorys):?>
+		<?php foreach($parentCategorys as $categorys):?>
+		<li>
+			<ol>
+			<li class="parents"><?php echo $categorys['category_name'];?></li>
+			<?php foreach($categorys['children'] as $category):?>
+			<a href="<?php echo $this->createUrl('/product/index',array('pid'=>$category['pid'],'categoryId'=>$category['lid']));?>">
+				<li class="child float <?php if($category['lid']==$categoryId) echo 'active';?>"><?php echo $category['category_name'];?></li>
+			</a>
+			<?php endforeach;?>
+			<div class="clear"></div>
+			</ol>
+		</li>	
+		<?php endforeach;?>
+		<?php endif;?>
+		<div class="clear"></div>
+	</ul>
+	</div>
+</div>
+<script>
+	$(document).ready(function(){
+		var liWidth = 0;
+		$('.promptu-menu').children('li').each(function(){
+			var len = $(this).find('.child').length;
+			var num = Math.ceil(len/4);
+			
+			$(this).find('ol').css('width',num*130);
+			$(this).find('.child').css('width',(100/num-2) +'%');
+			liWidth +=$(this).width()+10;
+			$('.promptu-menu').css('width',liWidth);
+		});
+	});
+</script>

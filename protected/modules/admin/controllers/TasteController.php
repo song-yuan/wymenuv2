@@ -109,8 +109,7 @@ class TasteController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$postData = Yii::app()->request->getPost('Taste');
-                        
-			if(TasteClass::save($this->companyId,$lid,$postData)){
+			if(TasteClass::saveProductTaste($this->companyId,$lid,$postData)){
 				Yii::app()->user->setFlash('success' , '修改成功');
 				$this->redirect(array('taste/productTaste' , 'companyId' => $this->companyId));
 			}
