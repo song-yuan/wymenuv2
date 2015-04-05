@@ -56,4 +56,3 @@
 		getPicList(type,catgory);
 	}	
 </script>
-<script type="text/javascript" src="../js/product/jquery.lazyload.js"></script>

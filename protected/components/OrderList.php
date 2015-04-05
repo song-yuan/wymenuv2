@@ -49,6 +49,19 @@ class OrderList
 			return $result;
 	}
 	
+	//获取该套餐的产品 array(1=>array(,),2=>array(,)) 1,2表示group_no
+	public function GetSetProduct($setId){
+		$result = array();
+		$sql = 'select t.*, t1.product_name, t1.main_picture from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid where t.set_id=:setId and t.dpid=:dpid and t1.dpid=:dpid and t.delete_flag=0 order by is_select desc';
+		$conn = $this->db->createCommand($sql);
+		$conn->bindValue(':setId',$setId);
+		$conn->bindValue(':dpid',$this->siteNo['dpid']);
+		$results = $conn->queryAll();
+		foreach($results as $key=>$val){
+			$result[$val['group_no']][] = $val;
+		}
+		return $result;
+	}
 	//订单状态
 	public function OrderStatus(){
 		if($this->order){

@@ -30,6 +30,8 @@
 	<div class="order-top"><div class="order-top-left"><span>￥<?php echo Money::priceFormat($orderPrice);?> 共<?php echo $orderNum;?>份</span></div><div class="order-top-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="1" style="color:#ff8c00">全单口味<img src="../img/product/down-arrow.png" /></div></div>
 	<?php if($orderProductList):?>
 	<?php foreach($orderProductList as $key=>$orderProduct):?>
+		<!--非套餐-->
+		<?php if($key):?>
 		<div class="order-category"><?php echo OrderList::GetCatoryName($key);?></div>
 		<?php foreach($orderProduct as $order):?>
 		<div class="order-product">
@@ -45,6 +47,31 @@
 			<div class="clear"></div>
 		</div>
 		<?php endforeach;?>
+		<?php else:?>
+		<!--套餐-->
+		<?php foreach($orderProduct as $order):?>
+		<div class="order-category"><?php echo $order['product_name'];?><div class="order-category-right"><span class="minus" >-</span><input class="set-num" type="text" name="<?php echo $order['set_id'];?>" value="<?php echo $order['amount'];?>" readonly="true"/><span class="plus">+</span></div></div>
+			<?php $setProducts = $orderList->GetSetProduct($order['set_id']);?>
+			<?php foreach($setProducts as $key=>$setProduct):?>
+				<?php foreach($setProduct as $k=>$product):?>
+				<div class="order-product group-<?php echo $key;?>" <?php if($product['is_select']) echo 'style="display:block;"';else echo 'style="display:none;"';?>>
+					<div class="order-product-left"><img src="<?php echo $product['main_picture'];?>" /></div>
+					<div class="order-product-right">
+						<div class="right-up"><?php echo $product['product_name'];?></div>
+				               <div class="right-middle">组<?php echo $key+1;?><input class="set-group-radio" name="group-<?php echo $key;?>" type="radio" set-id="<?php echo $order['set_id'];?>" product-id="<?php echo $product['product_id'];?>" value="<?php echo $product['product_id'];?>" <?php if($product['is_select']) echo 'checked';?>/>
+				               <?php if(count($setProduct) > 1):?><div class="right-down-right select-setproduct"  data-id="<?php echo $order['lid'];?>" product-id="<?php echo $product['product_id'];?>" style="color:#ff8c00">选择<img src="../img/product/down-arrow.png" /></div>	<?php endif;?>
+				        </div>
+						<div class="right-down">
+				                    <div class="right-down-left">￥<?php echo $product['price'];?></div>
+						 <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $product['product_id'];?>" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>	
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<?php endforeach;?>
+			<?php endforeach;?>
+		<?php endforeach;?>
+		<?php endif;?>
 	<?php endforeach;?>
 	</form>
 	<?php endif;?>
@@ -110,6 +137,28 @@
 		});
 		$('#order').click(function(){
 			$('form').submit();
+		});
+		$('.select-setproduct').click(function(){
+			var group = $(this).parents('.order-product').attr('class');
+			var groupObj= new Array();
+			groupObj=group.split(" "); 
+			$('.'+groupObj[1]).each(function(e){
+				if(!$(this).find('input[type="radio"]').is(':checked')){
+					$(this).toggle();
+				}
+			});
+		});
+		$('.set-group-radio').change(function(){
+			var setId = $(this).attr('set_id');
+			var productId = '';
+			$('input[class="set-group-radio"]:checked').each(function(){
+				
+			});
+			$(this).attr('product_id');
+			$(this).parents('.order-product').find('.select-setproduct').trigger('click');
+			var setnumObj = $(this).parents('.order-category').find('input[class="set-num"]');
+	        setnumObj.attr('name',setId+','+productId);
+	        
 		});
 	});
 </script>

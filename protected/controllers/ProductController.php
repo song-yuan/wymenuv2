@@ -160,7 +160,7 @@ class ProductController extends Controller
 		
 	 	$this->render('confirmOrder');
 	}
-	//订单
+	//确认订单
 	public function actionOrder(){
 		$orderId = Yii::app()->request->getParam('orderId');
 		$goodsIds = isset($_POST) ?$_POST :array();
