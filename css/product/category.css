@@ -1,3 +1,24 @@
+#page_0{
+	margin-top:220px;
+}
+.fixed-top{
+	position:fixed;
+	width:100%;
+	top:0;
+	z-index:1000;
+	background:rgb(255,255,255);
+}
+.category-top{
+	width:40%;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	margin:20px auto;
+	border:1px solid rgb(179,137,27);
+	background:rgb(240,201,82);
+	border-radius:20px;
+	color:rgb(255,255,255);
+}
 .promptu-menu{
 	display: block;
 	position: absolute;
@@ -32,6 +53,7 @@
 	overflow: scroll;
 	border-bottom:1px solid rgb(128,123,120);
 	position: relative;
+	background:rgb(255,255,255);
 }
 .promptumenu_nav a{
 	cursor: pointer;
@@ -51,10 +73,10 @@
 }
 .promptu-menu >li {
 	display: block;
-	position: absolute;
+	float:left;
 	margin: 0px;
 	min-width:100px;
-	max-width:500px;
+	width:auto;
 	padding-left:5px;
 	padding-right:5px;
 }
@@ -74,7 +96,7 @@ li ol{
 	height:140px;
 	margin-left:5px;
 }
-ol .child.float{width:90%;float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
+ol .child.float{float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
 ol .child{width:100%;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
-li ol a{display:block;float:none;height:23px;}
+
 li .active{background:rgb(240,201,82);}

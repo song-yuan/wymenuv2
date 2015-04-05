@@ -39,26 +39,35 @@ $(document).ready(function(){
  			}
  		});
     });
-    var prevTop = 0,
-    	currTop = 0;
-	$(window).scroll(function() {
-	    currTop = $(window).scrollTop();
-	    if (currTop < prevTop) { //判断小于则为向上滚动
-	    	if($(".promptumenu_window").is(':hidden')){
-	    		$(".promptumenu_window").slideDown(800);
-		        $(".promptumenu_window").addClass('float');
-		        $('#page_0').css('margin-top',140);
-                       // $(".bottom").show(1500);
-	    	}
-	    } else {
-	    	if($(".promptumenu_window").is(':visible')){
-	    		$(".promptumenu_window").slideUp(800);
-	 	        $(".promptumenu_window").removeClass('float');
-	 	        $('#page_0').css('margin-top',0);
-                        //$(".bottom").hide(1500);
-	    	}
-	    }
-	    //prevTop = currTop; //IE下有BUG，所以用以下方式
-	    setTimeout(function(){prevTop = currTop},0);
-	});
+//    var prevTop = 0,
+//    	currTop = 0;
+//	$(window).scroll(function() {
+//	    currTop = $(window).scrollTop();
+//	    if (currTop < prevTop) { //判断小于则为向上滚动
+//	    	if($(".promptume.nu_window").is(':hidden')){
+//	    		$(".promptumenu_window").slideDown(800);
+//		        $(".promptumenu_window").addClass('float');
+//		        $('#page_0').css('margin-top',140);
+//                       // $(".bottom").show(1500);
+//	    	}
+//	    } else {
+//	    	if($(".promptumenu_window").is(':visible')){
+//	    		$(".promptumenu_window").slideUp(800);
+//	 	        $(".promptumenu_window").removeClass('float');
+//	 	        $('#page_0').css('margin-top',0);
+//                        //$(".bottom").hide(1500);
+//	    	}
+//	    }
+//	    //prevTop = currTop; //IE下有BUG，所以用以下方式
+//	    setTimeout(function(){prevTop = currTop},0);
+//	});
+    $('.category-top').click(function(){
+    	$('.promptumenu_window').slideToggle(function(){
+    		if($(this).is(":hidden")){
+    			$('#page_0').css('margin-top','70px');
+    		}else{
+    			$('#page_0').css('margin-top','220px');
+    		}
+    	});
+    });
  });

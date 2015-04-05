@@ -13,8 +13,6 @@
 	Yii::app()->clientScript->registerScriptFile('../js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
 	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');
-	Yii::app()->clientScript->registerScriptFile('../js/product/jquery.js'); 
-	Yii::app()->clientScript->registerScriptFile('../js/product/jquery.lazyload.js');  
 	$result = ProductClass::getCartInfo($siteNoId);	
 	$resArr = explode(':',$result);
 	$price = $resArr[0];
@@ -58,3 +56,4 @@
 		getPicList(type,catgory);
 	}	
 </script>
+<script type="text/javascript" src="../js/product/jquery.lazyload.js"></script>
