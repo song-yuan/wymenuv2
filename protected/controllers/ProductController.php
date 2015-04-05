@@ -93,7 +93,7 @@ class ProductController extends Controller
 			$product = $connect->queryAll();
 		}else{
 			$categoryId = Yii::app()->request->getParam('cat',0);
-			$product = ProductClass::getCategoryProducts($this->companyId,$this->siteNoId);
+			$product = ProductClass::getCategoryProducts($this->companyId,$categoryId,$this->siteNoId);
 		}
 		Yii::app()->end(json_encode($product));
 	}
