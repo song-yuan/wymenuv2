@@ -53,7 +53,7 @@ class ProductSetDetail extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'product' => array(self::HAS_ONE , 'Product' , '' , 'on' => 't.product_id=product.lid and t.dpid=product.dpid')
+                    'product' => array(self::HAS_ONE , 'Product' , '' , 'on' => ' t.product_id=product.lid and t.dpid=product.dpid')
 		);
 	}
 

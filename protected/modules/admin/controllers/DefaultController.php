@@ -450,8 +450,8 @@ class DefaultController extends BackendController
 		$models = ProductSet::model()->findAll($criteria);
                 
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
-		$options = array();
-		$optionsReturn = array('--请选择分类--');
+		//$options = array();
+		$options = array('--请选择分类--');
 		if($models) {
 			foreach ($models as $model) {
                                     $options[$model->lid] = $model->set_name;
@@ -486,23 +486,132 @@ class DefaultController extends BackendController
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $typeId=Yii::app()->request->getParam('typeId','0');
 		if(Yii::app()->request->isPostRequest){
-                        $orderProduct = new OrderProduct();
-                        $orderProduct->dpid = $companyId;
-                        $orderProduct->create_at = date('Y-m-d H:i:s',time());
-                        $orderProduct->delete_flag = '0';
-                        $orderProduct->product_order_status = '1';
-			$orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
-                        $se=new Sequence("order_product");
-                        $orderProduct->lid = $se->nextval();
+                        $isset = Yii::app()->request->getPost('isset',0);
+                        //$setid = Yii::app()->request->getParam('setid',0);
+                        $selsetlist = Yii::app()->request->getPost('selsetlist',0);
+                        $db = Yii::app()->db;
+                        $transaction = $db->beginTransaction();
+                        try {
+                            
+                            if($isset==0)
+                            {   
+                                $orderProduct = new OrderProduct();
+                                $orderProduct->dpid = $companyId;
+                                $orderProduct->delete_flag = '0';
+                                $orderProduct->taste_memo = '无';
+                                $orderProduct->product_order_status = '0';
+                                $orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
+                                $orderProduct->create_at = date('Y-m-d H:i:s',time());
+                                $orderProduct->set_id = '0000000000';                                
+                                $se=new Sequence("order_product");
+                                $orderProduct->lid = $se->nextval();
+                                //var_dump($orderProduct);exit;
+                                $orderProduct->save();
+                            }else{
+                                if(strlen($selsetlist)<10)
+                                    return;
+                                $productIdlist=explode(',',$selsetlist);
+                                $setid=Yii::app()->request->getPost('OrderProduct');
+                                //var_dump($setid['set_id']);exit;
+                                foreach ($productIdlist as $productId){
+                                    //var_dump($productId);
+                                    $orderProduct = new OrderProduct();
+                                    $orderProduct->dpid = $companyId;
+                                    $orderProduct->delete_flag = '0';
+                                    $orderProduct->product_order_status = '0';
+                                    $orderProduct->set_id=$setid['set_id'];
+                                    $orderProduct->order_id=$setid['order_id'];
+                                    //$orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
+                                    $orderProduct->create_at = date('Y-m-d H:i:s',time());
+                                    $productUnit=explode('|',$productId);
+                                    $orderProduct->product_id = $productUnit[0];
+                                    $orderProduct->amount = $productUnit[1];
+                                    $orderProduct->price = $productUnit[2];
+                                    $orderProduct->is_giving = '0';
+                                    $orderProduct->zhiamount = 0;                                    
+                                    $se=new Sequence("order_product");
+                                    $orderProduct->lid = $se->nextval();
+                                    //var_dump($orderProduct);exit;
+                                    $orderProduct->save();                                    
+                                }                                
+                            }
+                            $transaction->commit();
+                            Yii::app()->user->setFlash('success' , '添加单品成功');
+                            $this->redirect(array('default/order' , 'companyId' => $this->companyId,'orderId' => $orderProduct->order_id,'typeId'=>$typeId));
+                        } catch (Exception $e) {
+                            $transaction->rollback(); //如果操作失败, 数据回滚
+                            //echo json_encode(array('status'=>0,'message'=>'换台失败'));
+                            Yii::app()->user->setFlash('success' , '添加失败');
+                            return false;
+                    }
                         //var_dump($orderProduct);exit;                   
                         //第一个菜需要更新订单状态。。。。
-                        //添加产品时，还可以添加套餐。。。
-                        if($orderProduct->save()){
-				Yii::app()->user->setFlash('success' , '修改成功');
-				$this->redirect(array('default/order' , 'companyId' => $this->companyId,'orderId' => $orderProduct->order_id,'typeId'=>$typeId));
-			}  else {
-                                Yii::app()->user->setFlash('success' , '修改失败');
-                        }
+                        //添加产品时，还可以添加套餐。。。                        
                 }
+	}
+        
+        public function actionSetdetail() {
+		$id = Yii::app()->request->getParam('id',0);
+                $criteria = new CDbCriteria;
+                $criteria->with = array('product');
+                //$criteria->with = 'printer';
+		$criteria->condition =  't.dpid='.$this->companyId .' and t.set_id='.$id.' and t.delete_flag=0 and product.delete_flag=0';
+                
+		$models = ProductSetDetail::model()->findAll($criteria);
+                
+		$this->renderPartial('setdetail' , array(
+				'models' => $models
+		));
+	}
+        
+        public function actionOver() {
+		$lid = Yii::app()->request->getParam('lid',0);
+                $companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getParam('orderId',0);
+                $typeId = Yii::app()->request->getParam('typeId',0);
+                $sql='update nb_order_product set is_waiting=2 where dpid='.$companyId.' and lid='.$lid;
+                //var_dump($sql);exit;
+                Yii::app()->db->createCommand($sql)->execute();
+                $this->redirect(array('default/order' , 'companyId' => $companyId,'orderId' => $orderId,'typeId'=>$typeId));
+	}
+        
+        public function actionDelproduct(){
+		$id = Yii::app()->request->getParam('id',0);
+		$setid = Yii::app()->request->getParam('setid',0);
+		$orderId = Yii::app()->request->getParam('orderId');
+		$typeId = Yii::app()->request->getParam('typeId');
+		$companyId = Yii::app()->request->getParam('companyId');
+                if($setid=='0000000000')
+                {
+                    $sql='update nb_order_product set delete_flag = 1 where lid='.$id.' and dpid='.$companyId;
+                }else{
+                    $sql='update nb_order_product set delete_flag = 1 where order_id='.$orderId.' and set_id='.$setid.' and dpid='.$companyId;
+                }
+                Yii::app()->db->createCommand($sql)->execute();
+                $this->redirect(array('default/order' , 'companyId' => $companyId,'orderId' => $orderId,'typeId'=>$typeId));
+	}
+        
+        public function actionProducttaste(){
+		$id = Yii::app()->request->getParam('id',0);
+		$setid = Yii::app()->request->getParam('setid',0);
+		$orderId = Yii::app()->request->getParam('orderId');
+		$typeId = Yii::app()->request->getParam('typeId');
+		$companyId = Yii::app()->request->getParam('companyId');
+                
+                $orderProduct = OrderProduct::model()->find('lid=:id and dpid=:dpid',array(':id'=>$id,':dpid'=>$companyId));
+                $models=OrderProduct::getTaste($id, $companyId, '0');
+                
+               if(Yii::app()->request->isPostRequest) {
+			$orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
+			
+			if($orderProduct->save()){                                
+				Yii::app()->user->setFlash('success' , '添加成功');
+				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
+			}
+		}
+		$this->renderPartial('tastedetail' , array(
+				'models' => $models,
+				'orderProduct' => $orderProduct
+		));
 	}
 }

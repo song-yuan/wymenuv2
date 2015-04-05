@@ -41,15 +41,15 @@ class OrderProduct extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, order_id, taste_memo, retreat_memo', 'required'),
+			array('lid, dpid, order_id, taste_memo', 'required'),
 			array('lid, dpid, order_id, amount, zhiamount', 'numerical', 'integerOnly'=>true),
 			array('set_id, product_id, price, weight', 'length', 'max'=>10),
 			array('is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
-			array('taste_memo, retreat_memo', 'length', 'max'=>50),
+			array('taste_memo', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, order_id, set_id, product_id, is_retreat, price, amount, zhiamount, is_waiting, weight, taste_memo, retreat_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, order_id, set_id, product_id, is_retreat, price, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,8 +72,7 @@ class OrderProduct extends CActiveRecord
 		return array(
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
-                        'category_id' => '单品分类',
-                        'set_id' => '套餐列表',
+            'category_id' => '单品分类',
 			'create_at' => '创建时间',
 			'update_at' => '更新时间',
 			'order_id' => '订单',
@@ -86,7 +85,6 @@ class OrderProduct extends CActiveRecord
 			'is_waiting' => '0不等叫，1等叫，2已上菜',
 			'weight' => '重量',
 			'taste_memo' => '口味说明',
-			'retreat_memo' => '退菜理由',
 			'is_giving' => '是否赠送',
 			'delete_flag' => '1删除，0未删除',
 			'product_order_status' => '0未下单、1已下单',
@@ -125,7 +123,6 @@ class OrderProduct extends CActiveRecord
 		$criteria->compare('is_waiting',$this->is_waiting,true);
 		$criteria->compare('weight',$this->weight,true);
 		$criteria->compare('taste_memo',$this->taste_memo,true);
-		$criteria->compare('retreat_memo',$this->retreat_memo,true);
 		$criteria->compare('is_giving',$this->is_giving,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('product_order_status',$this->product_order_status,true);
@@ -146,12 +143,14 @@ class OrderProduct extends CActiveRecord
 		return parent::model($className);
 	}
         
-        static public function getOrderProducts($orderId,$dpid){
+    static public function getOrderProducts($orderId,$dpid){
 		$db = Yii::app()->db;
-		$sql = "select t.*,t1.*,t2.category_name from nb_order_product t
+		$sql = "select t.*,t1.product_name,t1.original_price,t1.is_temp_price,t1.is_special,t1.is_discount,
+                                t1.product_unit,t1.weight_unit,t1.is_weight_confirm,t1.printer_way_id,t2.category_name,t3.set_name from nb_order_product t
 				left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid
 				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
-				where t.order_id=".$orderId." and t.dpid=".$dpid;
+                                left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
+				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.delete_flag=0 order by t.set_id,t1.category_id';
 		return $db->createCommand($sql)->queryAll();
 	}
 	static public function getTotal($orderId,$dpid){
@@ -159,5 +158,13 @@ class OrderProduct extends CActiveRecord
 		$sql = "select sum(price*amount) as total from nb_order_product where order_id=".$orderId." and dpid=".$dpid;
 		$ret= $db->createCommand($sql)->queryScalar();
                 return empty($ret)?0:$ret;
+	}
+        
+        static public function getTaste($orderId,$dpid,$isorder){
+		$db = Yii::app()->db;
+		$sql = "select t.*,t1.order_id from nb_taste t"
+                        . " left join nb_order_taste t1 on t.dpid=t1.dpid and t.lid=t1.taste_id"
+                        . " where order_id=".$orderId." and dpid=".$dpid.' and is_order='.$isorder;
+		return $db->createCommand($sql)->queryAll();
 	}
 }
