@@ -64,7 +64,7 @@ $(document).ready(function(){
     $('.category-top').click(function(){
     	$('.promptumenu_window').slideToggle(function(){
     		if($(this).is(":hidden")){
-    			$('#page_0').css('margin-top','70px');
+    			$('#page_0').css('margin-top','35px');
     		}else{
     			$('#page_0').css('margin-top','185px');
     		}
