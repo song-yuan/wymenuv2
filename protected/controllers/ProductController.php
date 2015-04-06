@@ -88,7 +88,7 @@ class ProductController extends Controller
 //		$page = Yii::app()->request->getParam('page',1);
 		$type = Yii::app()->request->getParam('type',0);// 0 普通产品  1推荐品 2套餐 3点赞 4点单
 		if($type){
-			$product = ProductClass::getHotsProduct($this->companyId,$type);
+			$product = ProductClass::getHotsProduct($this->companyId,$type,$this->siteNoId);
 		}else{
 			$categoryId = Yii::app()->request->getParam('cat',0);
 			$product = ProductClass::getCategoryProducts($this->companyId,$categoryId,$this->siteNoId);
