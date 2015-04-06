@@ -54,10 +54,16 @@ function xmlHttp(url,callback){
  */
 function  getPicList(type,cat){
 	var url = '';
-	if(type){
+	if(type==0){
 	  url = apiHost + '/cat/'+cat;
-	}else{
-	   url = apiHost + '/rec/'+1;
+	}else if(type==1){
+	   url = apiHost + '/type/'+1;
+	}else if(type==2){
+	   url = apiHost + '/type/'+2;
+	}else if(type==3){
+	   url = apiHost + '/type/'+3;
+	}else if(type==4){
+	   url = apiHost + '/type/'+4;
 	}
 	page = 1;
 	xmlHttp(url,showList);

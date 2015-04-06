@@ -19,12 +19,12 @@
 	$nums = $resArr[1];
 ?>
 
-	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId));?>
+	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type));?>
 	<script type="text/javascript" src="../js/product/product.js"></script>
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
-        <div class="product-category"><?php if($pid){ echo ProductClass::getCategoryName($pid).' >>> '.ProductClass::getCategoryName($categoryId);}else{ echo ProductClass::getCategoryName($categoryId);}?></div>
+        <div class="product-category"><?php if(!$type&&$pid){ echo ProductClass::getCategoryName($pid).' >>> '.ProductClass::getCategoryName($categoryId);}else{ if($type==1) echo '推荐品';elseif($type==2) echo '套餐';elseif($type==3) echo '点赞TOP10';else echo '点单TOP10';}?></div>
 		<div id="forum_list">
 			<div class="outDiv" id="leftPic">
 			</div>
@@ -48,11 +48,12 @@
 </div>
 <script type="text/javascript">
 	var cat = '<?php echo $categoryId;?>';
-	
+	var t = '<?php echo $type;?>';
 	window.onload=function(type,catgory)
 	{
-		type = 1;
+		type = t;
 		catgory = cat;
 		getPicList(type,catgory);
+		$('.promptumenu_window').css('display','none');
 	}	
 </script>
