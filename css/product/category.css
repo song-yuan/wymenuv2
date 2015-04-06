@@ -6,7 +6,7 @@
 	width:100%;
 	top:0;
 	z-index:1000;
-	background:rgb(255,255,255);
+	background-color:rgba(255,255,255,0.5);
 }
 .category-top{
 	width:40%;
@@ -37,7 +37,6 @@
 	  z-index: 99; 
 	  top: 0; 
 	  left: 0;
-	  background:rgb(255,255,255);
 	}	
 .promptumenu_nav{
 	z-index: 5;
@@ -54,7 +53,6 @@
 	overflow: scroll;
 	border-bottom:1px solid rgb(128,123,120);
 	position: relative;
-	background:rgb(255,255,255);
 }
 .promptumenu_nav a{
 	cursor: pointer;
