@@ -54,5 +54,6 @@
 		type = 1;
 		catgory = cat;
 		getPicList(type,catgory);
+		$('.promptumenu_window').css('display','none');
 	}	
 </script>
