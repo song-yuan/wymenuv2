@@ -302,8 +302,8 @@ class DefaultController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',0);
                 $typeId = Yii::app()->request->getParam('typeId',0);
                 $orderId = Yii::app()->request->getParam('orderId',0);
-                $order=null;
-                $siteNo=null;
+                $order=array();
+                $siteNo=array();
                 if($orderId !='0')
                 {
                     $order = Order::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderId,':dpid'=>$companyId));
@@ -313,9 +313,11 @@ class DefaultController extends BackendController
                     $siteNo = SiteNo::model()->find($criteria);
                 }else{
                     $criteria = new CDbCriteria;
-                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria->order = ' t.lid desc ';
                     $order = Order::model()->find($criteria);
+                    $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria);
                 }
                                 
@@ -708,5 +710,57 @@ class DefaultController extends BackendController
 		//var_dump($order);exit;
                 $reprint = false;
 		Yii::app()->end(json_encode(Helper::printList($order , $reprint)));
+        }
+        
+        public function actionPrintKitchen(){
+                $id = Yii::app()->request->getParam('id',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $typeId =  Yii::app()->request->getParam('typeId');
+                $db = Yii::app()->db;
+                //echo Yii::app()->has_cache;exit;
+                $transaction = $db->beginTransaction();
+                try {
+                        $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
+                        $criteria = new CDbCriteria;
+                        $criteria->condition =  't.status in ("1","2","3") and t.dpid='.$order->dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                        $criteria->order = ' t.lid desc ';
+                        $siteNo = SiteNo::model()->find($criteria);
+                        if($siteNo->is_temp=='0')
+                        {
+                            $site = Site::model()->with('siteType')->find('t.lid=:lid and t.dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
+                            $site->status = '2';
+                            $site->save();
+                        }else{
+                            $site = array();
+                        }
+                        $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id=:id and t.dpid=:dpid and t.delete_flag=0' , array(':id'=>$id,':dpid'=>$companyId));
+                        $order->order_status='2';
+                        $order->save();
+                        $siteNo->status='2';
+                        $siteNo->save();
+                        foreach($orderProducts as $orderProduct)
+                        {
+                            $reprint = false;
+                            //var_dump($orderProduct);exit;
+                            if($orderProduct->is_print=='0')
+                            {
+                                Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
+                                $orderProduct->is_print='1';
+                                $orderProduct->save();
+                            }                            
+                        }
+                        $this->redirect(array('default/order' , 'companyId' => $companyId,'orderId' => $id,'typeId'=>$typeId));
+                } catch (Exception $e) {
+                        $transaction->rollback(); //如果操作失败, 数据回滚
+                        var_dump($e);
+                        
+                        return false;
+                }
+		//var_dump($order);exit;
+                //if((Yii::app()->request->isAjaxRequest)) {
+		//	echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>'打印结束')));
+		//} else {
+		//	return array('status'=>true,'msg'=>'打印结束');
+		//}                
         }
 }

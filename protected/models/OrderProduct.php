@@ -61,6 +61,8 @@ class OrderProduct extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
+                'product'=> array(self::BELONGS_TO , 'Product' , '','on'=>'t.dpid=product.dpid and t.product_id=product.lid')
 		);
 	}
 

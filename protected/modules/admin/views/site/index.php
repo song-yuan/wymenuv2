@@ -61,6 +61,7 @@
 												<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 												<th>座位号</th>
 												<th>类型</th>
+												<th>楼层</th>
 												<th>等级</th>
 												<th>&nbsp;</th>
 											</tr>
@@ -72,6 +73,7 @@
 												<td><input type="checkbox" class="checkboxes"  value="<?php echo $model->lid;?>" name="ids[]" /></td>
 												<td ><?php echo $model->serial ;?></td>
 												<td ><?php echo $model->siteType->name ;?></td>
+												<td ><?php echo $model->floor->name ;?></td>
 												<td><?php echo $model->site_level;?></td>
 												<td class="center">
 												<a href="<?php echo $this->createUrl('site/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>

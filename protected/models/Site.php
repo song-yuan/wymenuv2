@@ -70,7 +70,8 @@ class Site extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 				'isfree' => array(self::HAS_ONE , 'SiteNo' , '' , 'on' => 't.lid=isfree.site_id and t.dpid=isfree.dpid and isfree.status in(2,3,4,5)'),
-				'siteType' => array(self::BELONGS_TO , 'SiteType' ,'','on' =>'t.type_id=siteType.lid and t.dpid=siteType.dpid')
+				'siteType' => array(self::BELONGS_TO , 'SiteType' ,'','on' =>'t.type_id=siteType.lid and t.dpid=siteType.dpid'),
+                                'floor' => array(self::BELONGS_TO , 'Floor' ,'','on' =>'t.floor_id=floor.lid and t.dpid=floor.dpid')
 		);
 	}
 	

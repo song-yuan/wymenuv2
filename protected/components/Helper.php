@@ -148,7 +148,7 @@ class Helper
 				$list->unshift($listData);
 			}
 		}
-		echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>$listData)));exit;
+		//echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>$listData)));exit;
 		$channel = new ARedisChannel($order->dpid.'_PD');
 		$channel->publish($listKey);
 		if((Yii::app()->request->isAjaxRequest)) {
@@ -302,4 +302,62 @@ class Helper
                 $appendstr=substr('                                            ',0,$len-$pl);
                 return $str.$appendstr;
 	}
+        
+        //单品厨打
+	static public function printKitchen(Order $order,OrderProduct $orderProduct,Site $site,  SiteNo $siteNo , $reprint = false){		
+                $order = Order::model()->find('lid=:orderid and dpid=:dpid',  array(':orderid'=>$orderProduct->order_id,':dpid'=>$orderProduct->dpid));
+		//orderproduct
+                $orderTastes=  OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=1',  array(':orderid'=>$orderProduct->order_id,':dpid'=>$orderProduct->dpid));
+                $orderTasteEx = $order->taste_memo;
+                $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
+                $orderProductTasteEx = $orderProduct->taste_memo;
+                //$site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
+		//$siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
+		$printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid',array(':floorid'=>$site->floor_id,':pwi'=>$orderProduct->product->printer_way_id,':dpid'=>$orderProduct->dpid));
+                	
+		foreach ($printwaydetails as $printway) {
+                        $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$printway->printer_id,':dpid'=>$order->dpid));
+                        $listKey = $order->dpid.'_'.$printer->ip_address;                
+                        $list = new ARedisList($listKey);
+                        //var_dump($list);exit;
+                        $listData = str_pad($orderProduct->company->company_name, 48 , ' ' ,STR_PAD_BOTH).'<br>';
+                        if(empty($site))
+                        {
+                            $listData.= str_pad('座号：临时座位 '.$siteNo->site_id%1000 , 20,' ').str_pad('人数：'.$order->number,20,' ').'<br>';
+                        }else{
+                            $listData.= str_pad('座号：'.$site->siteType->name.' '.$site->serial , 20,' ').str_pad('人数：'.$order->number,20,' ').'<br>';
+                        }
+                        $listData.= str_pad('',48,'-').'<br>';
+			$listData.= Helper::getPlaceholderLen($orderProduct->product->product_name,32).Helper::getPlaceholderLen($orderProduct->amount.$orderProduct->product->product_unit,16).'<br>';	
+                        $listData.= "单品口味：".$orderProductTasteEx;
+                        foreach($orderProductTastes as $orderProductTaste){
+                            $listData.= '/'.$orderProductTaste->taste->name;
+                        }
+                        $listData.= str_pad('',48,'-').'<br>';
+                        $listData.= "全单口味：".$orderTasteEx;
+                        foreach($orderTastes as $orderTaste){
+                            $listData.= '/'.$orderTaste->taste->name;
+                        }
+                        $listData.= str_pad('',48,'-').'<br>';
+                        $listData.= str_pad('收银员：'.Yii::app()->user->name,20,' ').'<br>';
+                        $listData.= str_pad('',48,'-').str_pad('打印时间：'.time(),20,' ').'<br>';
+                        //var_dump($listData);exit;
+                        if(!empty($listData)){
+                            if($printway->list_no) {
+                                for($i=0;$i<$printway->list_no;$i++){
+                                    if($reprint) {
+                                            $listData = str_pad('重新厨打', 40 , ' ',STR_PAD_BOTH).'<br>'.$listData;
+                                            //$list->add($listData);
+                                    } else {
+                                            //$list->unshift($listData);
+                                    }
+                                }
+                            }
+                        }
+                }		
+		//echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>$listData)));exit;
+		//$channel = new ARedisChannel($order->dpid.'_PD');
+		//$channel->publish($listKey);		
+	}
+        
 }

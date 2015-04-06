@@ -200,7 +200,7 @@
                                                         </div>
                                                         <div class="actions">
                                                             <a class="btn purple" id="btn_account"><i class="fa fa-pencil"></i> 结单</a>
-                                                            <a href="<?php echo $this->createUrl('default/print' , array('companyId' => $this->companyId));?>" class="btn purple"><i class="fa fa-cogs"></i> 下单&厨打</a>
+                                                            <a id="kitchen-btn" class="btn purple"><i class="fa fa-cogs"></i> 下单&厨打</a>
                                                             <a id="print-btn" class="btn purple"><i class="fa fa-print"></i> 打印清单</a>
                                                             <a href="<?php echo $this->createUrl('default/producttaste' , array('companyId' => $this->companyId,'typeId'=>$typeId,'isall'=>'1'));?>" class="btn purple"><i class="fa fa-pencil"></i> 全单口味</a>
                                                             <a href="<?php echo $this->createUrl('default/index' , array('companyId' => $model->dpid,'typeId'=>$typeId));?>" class="btn red"><i class="fa fa-times"></i> 返回</a>
@@ -326,17 +326,19 @@
                                  });
                         });
                         $('#print-btn').click(function(){
-                                alert('<?php echo $this->createUrl('default/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>');
                                 $.get('<?php echo $this->createUrl('default/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
                                         if(data.status) {
                                                 alert('操作成功');
-                                                alert(data.msg);
+                                                //alert(data.msg);
                                         } else {
                                                 alert(data.msg);
                                         }
                                 },'json');
                         });
-                        $('#reprint-btn').click(function(){
+                        $('#kitchen-btn').click(function(){
+                                location.href="<?php echo $this->createUrl('default/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'id'=>$model->lid));?>";
+                        });
+                        $('.reprint-btn').click(function(){
                                 $.get('<?php echo $this->createUrl('default/printProducts',array('companyId'=>$this->companyId,'id'=>$model->lid,'reprint'=>1));?>',function(data){
                                         if(data.status) {
                                                 alert('操作成功');

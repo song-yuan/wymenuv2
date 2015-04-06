@@ -23,8 +23,7 @@ class SiteController extends BackendController
                         
                 }
 		$criteria = new CDbCriteria;
-                $criteria->with = 'siteType';
-                
+                $criteria->with = array('siteType', 'floor');
                 $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$this->companyId ;
                 $criteria->order = ' t.type_id asc ';		
                 $models = Site::model()->findAll($criteria);
