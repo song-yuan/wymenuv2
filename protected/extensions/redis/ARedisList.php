@@ -22,6 +22,7 @@ class ARedisList extends ARedisIterableEntity {
 		if ($this->name === null) {
 			throw new CException(get_class($this)." requires a name!");
 		}
+                //var_dump($this->getConnection());exit;/////////////
 		if (!$this->getConnection()->getClient()->rpush($this->name,$item)) {
 			return false;
 		}

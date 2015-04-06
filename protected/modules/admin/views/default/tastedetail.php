@@ -1,6 +1,5 @@
 						<?php $form=$this->beginWidget('CActiveForm', array(
-                                                        'id'=>'order',
-                                                        'action' => $this->createUrl('default/producttaste',array('companyId'=>$this->companyId,'typeId'=>$typeId)),
+                                                        'id'=>'producttaste',
                                                         'enableAjaxValidation'=>true,
                                                         'enableClientValidation'=>true,
                                                         'clientOptions'=>array(
@@ -16,15 +15,17 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <table class="table table-striped table-bordered table-hover" id="sample_1">
-                                                                <?php if($models):?>
+                                                                
                                                                         <div class="clearfix">
+                                                                        <?php if($models):?>
                                                                             <div class="btn-group" data-toggle="buttons">
                                                                         <?php foreach ($models as $model):?>                                                                                       
-                                                                                        <label class="btn btn-default  <?php if(!empty($model['order_id'])) echo active; ?>">
+                                                                                        <label class="btn btn-default  <?php if(!empty($model['order_id'])) echo 'active'; ?>">
                                                                                             <input type="checkbox" class="toggle"> <?php echo $model['name'];?>
                                                                                         </label>
-                                                                         <?php endforeach;?>                                                                                        
+                                                                        <?php endforeach;?>                                                                                        
                                                                             </div>
+                                                                        <?php endif;?>
                                                                             <div class="form-group">
                                                                                     <?php echo $form->label($orderProduct, 'taste_memo',array('class' => 'col-md-4 control-label'));?>
                                                                                     <div class="col-md-6">
@@ -33,7 +34,7 @@
                                                                                     </div>
                                                                             </div>
                                                                         </div>
-                                                                        <?php endif;?>
+                                                                        
                                                                 </table>
                                                         </div>
                                                    <div class="modal-footer">

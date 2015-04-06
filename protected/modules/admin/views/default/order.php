@@ -45,7 +45,7 @@
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($model, 'reality_total',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
-                                                                                <?php echo $form->textField($model, 'reality_total' ,array('value'=>$total['total'],'class' => 'form-control','placeholder'=>$model->getAttributeLabel('reality_total')));?>
+                                                                                <?php echo $form->textField($model, 'reality_total' ,array('value'=>number_format($total['total'],2),'class' => 'form-control','placeholder'=>$model->getAttributeLabel('reality_total')));?>
                                                                                 <?php echo $form->error($model, 'reality_total' )?>
                                                                         </div>
                                                                 </div>
@@ -120,25 +120,32 @@
                                                                 </div>                                                      
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderProduct, 'amount',array('class' => 'col-md-4 control-label'));?>
-                                                                        <div class="col-md-6">
+                                                                        <div class="col-md-2">
                                                                                 <?php echo $form->textField($orderProduct, 'amount' ,array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('amount')));?>
                                                                                 <?php echo $form->error($orderProduct, 'amount' )?>
                                                                         </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                        <?php echo $form->label($orderProduct, 'zhiamount',array('class' => 'col-md-4 control-label'));?>
-                                                                        <div class="col-md-6">
+                                                                
+                                                                        <?php echo $form->label($orderProduct, 'zhiamount',array('class' => 'col-md-2 control-label'));?>
+                                                                        <div class="col-md-2">
                                                                                 <?php echo $form->textField($orderProduct, 'zhiamount' ,array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('zhiamount')));?>
                                                                                 <?php echo $form->error($orderProduct, 'zhiamount' )?>
-                                                                        </div>
-                                                                </div>
+                                                                        </div>                                                  
+                                                                        
+                                                                </div> 
                                                                 <div class="form-group">
-                                                                        <?php echo $form->label($orderProduct, 'is_giving',array('class' => 'col-md-4 control-label'));?>
-                                                                        <div class="col-md-6">
-                                                                                <?php echo $form->dropDownList($orderProduct, 'is_giving', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('is_giving')));?>
+                                                                        <?php echo $form->label($orderProduct, 'price',array('class' => 'col-md-4 control-label'));?>
+                                                                        <div class="col-md-3">
+                                                                                <?php echo $form->textField($orderProduct, 'price' ,array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('price')));?>
+                                                                                <?php echo $form->error($orderProduct, 'price' )?>
+                                                                        </div>
+                                                                        
+                                                                        <div class="col-md-3">
+                                                                                <?php echo $form->dropDownList($orderProduct, 'is_giving', array('0' => '不赠送' , '1' => '赠送') , array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('is_giving')));?>
                                                                                 <?php echo $form->error($orderProduct, 'is_giving' )?>
                                                                         </div>
-                                                                </div>                              
+                                                                        <div class="col-md-4"></div>
+                                                                        <div class="col-md-4"><span class="label label-default center">原价</span></div>
+                                                                </div>
                                                                 
                                                         </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
                                                 </div>
@@ -171,23 +178,32 @@
 			</div>
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<!-- BEGIN PAGE HEADER-->   
-			<h3 class="page-title">收银台</h3>
-
+			<!-- BEGIN PAGE HEADER-->  
+			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
+                                <div class="col-md-4">
+                                    <h3 class="page-title">收银台（"<?php switch($model->order_status) {case 1:{echo '未下单';break;} case 2:{echo '下单未支付';break;} case 3:{echo '已支付';break;} }?>"）</h3>
+                                </div>
+                                <div class="col-md-8">
+                                    <h4>
+                                       下单时间：<?php echo $model->create_at;?> 
+                                       &nbsp;&nbsp;&nbsp;&nbsp; 应付金额（元）：<?php echo number_format($total['total'], 2);?>
+                                       &nbsp;&nbsp;&nbsp;&nbsp; 实付金额（元）：<?php echo $model->reality_total;?>
+                                    </h4>    
+                                </div>
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>下单时间：<?php echo $model->create_at;?> 
-                                                            &nbsp;&nbsp;&nbsp;&nbsp; 应付金额（元）：<?php echo $total['total'];?>
-                                                            &nbsp;&nbsp;&nbsp;&nbsp; 实付金额（元）：<?php echo $model->reality_total;?>
+							<div class="caption"><i class="fa fa-reorder"></i>
                                                         </div>
                                                         <div class="actions">
-                                                                <a class="btn purple" id="btn_account"><i class="fa fa-pencil"></i> 结单</a>
-                                                                <a href="<?php echo $this->createUrl('default/print' , array('companyId' => $this->companyId));?>" class="btn purple"><i class="fa fa-pencil"></i> 下单&厨打</a>
-                                                                <a href="<?php echo $this->createUrl('default/index' , array('companyId' => $model->dpid,'typeId'=>$typeId));?>" class="btn red"><i class="fa fa-times"></i> 返回</a>
+                                                            <a class="btn purple" id="btn_account"><i class="fa fa-pencil"></i> 结单</a>
+                                                            <a href="<?php echo $this->createUrl('default/print' , array('companyId' => $this->companyId));?>" class="btn purple"><i class="fa fa-cogs"></i> 下单&厨打</a>
+                                                            <a id="print-btn" class="btn purple"><i class="fa fa-print"></i> 打印清单</a>
+                                                            <a href="<?php echo $this->createUrl('default/producttaste' , array('companyId' => $this->companyId,'typeId'=>$typeId,'isall'=>'1'));?>" class="btn purple"><i class="fa fa-pencil"></i> 全单口味</a>
+                                                            <a href="<?php echo $this->createUrl('default/index' , array('companyId' => $model->dpid,'typeId'=>$typeId));?>" class="btn red"><i class="fa fa-times"></i> 返回</a>
                                                         </div>
 						</div>
 						<div class="portlet-body form">
@@ -262,7 +278,7 @@
                                 var id = $(this).attr('lid');
                                 var setid = $(this).attr('setid');
                                 var $modal=$('#portlet-config');
-                                $modal.find('.modal-content').load('<?php echo $this->createUrl('default/producttaste',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                $modal.find('.modal-content').load('<?php echo $this->createUrl('default/producttaste',array('companyId'=>$this->companyId,'typeId'=>$typeId,'isall'=>'0','orderId'=>$model->lid));?>/id/'+id+'/setid/'+setid
                                 ,'', function(){
                                   $modal.modal();
                                 });
@@ -310,9 +326,11 @@
                                  });
                         });
                         $('#print-btn').click(function(){
+                                alert('<?php echo $this->createUrl('default/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>');
                                 $.get('<?php echo $this->createUrl('default/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
                                         if(data.status) {
                                                 alert('操作成功');
+                                                alert(data.msg);
                                         } else {
                                                 alert(data.msg);
                                         }
@@ -350,5 +368,16 @@
                             $('#OrderProduct_set_id').val(id);
                             $('#table-set-detail').load('<?php echo $this->createUrl('default/setdetail',array('companyId'=>$this->companyId));?>/id/'+id);
                             //alert('<?php echo $this->createUrl('default/setdetail',array('companyId'=>$this->companyId));?>/id/'+id);
+                        });
+                        $('#OrderProduct_product_id').change(function(){
+                            var id = $(this).val();                            
+                                $.ajax({
+                                        url:'<?php echo $this->createUrl('default/currentprice',array('companyId'=>$this->companyId));?>/id/'+id,
+                                        type:'GET',
+                                        dataType:'json',
+                                        success:function(result){                                                                                                                                       
+                                                $('#OrderProduct_price').val(result.cp); 
+                                        }
+                                });                            
                         });
                     </script>
