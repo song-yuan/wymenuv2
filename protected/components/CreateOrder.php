@@ -114,7 +114,7 @@ class CreateOrder
 				}
 			}
 			if($product['is_special']){
-				$sql = 'select * from nb_product_special where product_id=:productId and dpid=:dpid and begain_time < :time and end_time > :time';
+				$sql = 'select * from nb_product_special where product_id=:productId and dpid=:dpid and begin_time < :time and end_time > :time';
 				$connect = $db->createCommand($sql);
 				$connect->bindValue(':productId',$product['lid']);
 				$connect->bindValue(':dpid',$dpid);
