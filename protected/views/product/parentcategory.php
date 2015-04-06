@@ -4,7 +4,6 @@
 ?>
 
 <link rel="stylesheet" type="text/css"  href="../css/product/category.css" />
-<script type="text/javascript" src="../js/product/category.js"></script>
 <div class="fixed-top">
 	<div class="category-top">全部分类</div>
 	<div class="promptumenu_window">
