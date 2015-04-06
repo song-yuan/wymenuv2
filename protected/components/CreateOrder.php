@@ -39,9 +39,9 @@ class CreateOrder
 			$setId = 0;
 			if($this->product['type']){
 				$setId = $this->product['lid'];
-				$orderProduct = OrderProduct::model()->find('order_id=:orderId and set_id=:setId',array(':orderId'=>$order->lid,':setId'=>$setId));
+				$orderProduct = OrderProduct::model()->find('order_id=:orderId and set_id=:setId and product_order_status=0',array(':orderId'=>$order->lid,':setId'=>$setId));
 			}else{
-				$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
+				$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
 			}
 			
 			if($orderProduct){
@@ -89,7 +89,7 @@ class CreateOrder
 		}
 		return $maxOrderId;
 	}
-	public static function getProductPrice($dpid = 0,$productId = 0,$type = 0){
+	public static function getProductPrice($dpid = 0,$productId = 0,$type = 0,$setId = 0){
 		$price = 0;
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
@@ -140,8 +140,12 @@ class CreateOrder
 			}
 		}else{
 			//套餐
-			$price = 0;
-			
+			$sql = 'select sum(price) as price from nb_product_set_detail where set_id=:setId and dpid=:dpid and delete_flag=0';
+			$connect = $db->createCommand($sql);
+			$connect->bindValue(':setId',$setId);
+			$connect->bindValue(':dpid',$dpid);
+			$product = $connect->queryRow();
+			$price = $product['price'];
 		}
 		
 		return $price?$price:0;

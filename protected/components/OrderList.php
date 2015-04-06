@@ -36,10 +36,13 @@ class OrderList
 	}
 	
 	//订单商品类别 type 是否下单 0 未下单 1 已下单
-	public function OrderProductList($orderId,$type){
+	public function OrderProductList($orderId,$type,$groupby = 0){
 			$result = array();
 			$sql = 'select t.*, t1.category_id, t1.product_name, t1.main_picture, t1.original_price, t1.product_unit, t1.weight_unit, t1.is_weight_confirm, t1.printer_way_id from nb_order_product t,nb_product t1  where t.product_id=t1.lid and order_id=:orderId and t.delete_flag=0 and set_id=0 and product_order_status='.$type.
-				   ' union select t.*, 0 as category_id, t1.set_name as product_name, t1.main_picture,0 as original_price,0 as product_unit, 0 as weight_unit, 0 as is_weight_confirm, 0 as printer_way_id  from nb_order_product t,nb_product_set t1  where t.product_id=t1.lid and order_id=:orderId and t.delete_flag=0 and set_id > 0 and product_order_status='.$type;
+				   ' union select t.*, 0 as category_id, t1.set_name as product_name, t1.main_picture,t2.product_name as original_price,0 as product_unit, 0 as weight_unit, 0 as is_weight_confirm, 0 as printer_way_id  from nb_order_product t left join nb_product_set t1 on t.set_id=t1.lid left join nb_product t2 on t.product_id=t2.lid where order_id=:orderId and t.delete_flag=0 and t.set_id > 0 and t.product_order_status='.$type;
+			if($groupby){
+				$sql .= ' group by t.set_id';
+			}
 			$conn = $this->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
 			$orderlist = $conn->queryAll();
@@ -84,16 +87,48 @@ class OrderList
 		}
 		return $price.':'.$num;
 	}
-	//下单更新数量 锁定订单 $goodsIds = array('goods_id'=>'num','goods_id'=>'num') 如 array('102'=>2) goods_id =102 num = 2
-	public static function UpdateOrder($orderId,$goodsIds){
+	//下单更新数量 锁定订单 $goodsIds = array('goods_id'=>'num','goods_id'=>'num','set_id,goods_id1-goods_id2-goods_id3'=>num) 如 array('102'=>2) goods_id =102 num = 2
+	public static function UpdateOrder($dpid,$orderId,$goodsIds){
 		if($goodsIds){
 			foreach($goodsIds as $key=>$val){
-				$sql = 'update nb_order_product set amount = :amount where order_id = :orderId and product_id = :productId';
-				$conn = Yii::app()->db->createCommand($sql);
-				$conn->bindValue(':amount',$val);
-				$conn->bindValue(':orderId',$orderId);
-				$conn->bindValue(':productId',$key);
-				$conn->execute();
+				if(!strpos($key,'group')){
+					$goodsArr = explode(',',$key);
+					if(count($goodsArr)==2){
+						$setId = $goodsArr[0];
+						$sql = 'delete from nb_order_product where order_id=:orderId and set_id=:setId';
+						$connect = Yii::app()->db->createCommand($sql);
+						$connect->bindValue(':setId',$setId);
+						$connect->bindValue(':orderId',$orderId);
+						$connect->execute();
+						
+						$goodsData = explode('-',$goodsArr[1]);
+						foreach($goodsData as $goods){
+							$se=new Sequence("product");
+                        	$lid = $se->nextval();
+							$insertData = array(
+												'lid'=>$lid,
+												'dpid'=>$dpid,
+												'create_at'=>time(),
+												'order_id'=>$orderId,
+												'set_id'=>$setId,
+												'product_id'=>$goods,
+												'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
+												'update_at'=>time(),
+												'amount'=>$val,
+												'taste_memo'=>'无',
+												);
+							Yii::app()->db->createCommand()->insert('nb_order_product',$insertData);
+						}
+							
+					}else{
+						$sql = 'update nb_order_product set amount = :amount where order_id = :orderId and product_id = :productId';
+						$conn = Yii::app()->db->createCommand($sql);
+						$conn->bindValue(':amount',$val);
+						$conn->bindValue(':orderId',$orderId);
+						$conn->bindValue(':productId',$key);
+						$conn->execute();
+					}
+				}
 			}
 				$sql = 'update nb_order set lock_status=1 where lid = :orderId';
 				$conn = Yii::app()->db->createCommand($sql);
@@ -108,12 +143,23 @@ class OrderList
 	public static function ConfirmOrder($orderId,$goodsIds){
 		if($goodsIds){
 			foreach($goodsIds as $key=>$val){
-				$sql = 'update nb_order_product set amount = :amount , product_order_status=1 where order_id = :orderId and product_id = :productId';
-				$conn = Yii::app()->db->createCommand($sql);
-				$conn->bindValue(':amount',$val);
-				$conn->bindValue(':orderId',$orderId);
-				$conn->bindValue(':productId',$key);
-				$conn->execute();
+				$goodsArr = explode('-',$key);//如果数组元素个数是2 证明书套餐
+				if(count($goodsArr)==2){
+					$sql = 'update nb_order_product set amount = :amount , product_order_status=1 where order_id = :orderId and set_id=:setId and product_id = :productId';
+					$conn = Yii::app()->db->createCommand($sql);
+					$conn->bindValue(':amount',$val);
+					$conn->bindValue(':orderId',$orderId);
+					$conn->bindValue(':setId',$goodsArr[0]);
+					$conn->bindValue(':productId',$goodsArr[1]);
+					$conn->execute();
+				}else{
+					$sql = 'update nb_order_product set amount = :amount , product_order_status=1 where order_id = :orderId and product_id = :productId';
+					$conn = Yii::app()->db->createCommand($sql);
+					$conn->bindValue(':amount',$val);
+					$conn->bindValue(':orderId',$orderId);
+					$conn->bindValue(':productId',$key);
+					$conn->execute();
+				}
 			}
 				$sql = 'update nb_order set lock_status=0 where lid = :orderId';
 				$conn = Yii::app()->db->createCommand($sql);
@@ -124,6 +170,7 @@ class OrderList
 			return false;
 		}
 	}
+	
 	//获取种类的名称
 	public static function GetCatoryName($catoryId){
 		$sql = 'select category_name from  nb_product_category where lid = :lid';

@@ -21,6 +21,8 @@
 <div class="top">我的订单</div>
 <div class="product-title">订单已经被锁定，其他人不能修改，需要最终修改数量和口味点击<img src="../img/product/down-arrow.png" /></div>
 <?php foreach($orderProductList as $key=>$orderProduct):?>
+	<!--非套餐-->
+	<?php if($key):?>
 	<div class="order-category"><?php echo OrderList::GetCatoryName($key);?></div>
 	<?php foreach($orderProduct as $order):?>
 		<div class="product">
@@ -34,6 +36,34 @@
 	        <input type="hidden" name="<?php echo $order['product_id'];?>" value="<?php echo $order['amount'];?>"/>
 		</div>
 	<?php endforeach;?>
+	<?php else:?>
+	<!--套餐-->
+	<?php 
+		// key是set_id $order 是该套餐对应产品的数组
+		$productSets = array();
+		foreach($orderProduct as $k=>$order){
+		  $productSets[$order['set_id']][] = $order;
+		}
+	?>
+	<?php foreach($productSets as $key=>$productSet):?>
+		<div class="order-category"><?php echo ProductSetClass::GetProductSetName($key);?></div>
+		<?php foreach($productSet as $order):?>
+		<div class="product">
+		<div class="product-up">
+			<!--original_price 表示套餐产品的名称-->
+			<div class="product-up-left"><?php echo $order['original_price']; ?></div>
+		</div>
+		<div class="product-middle select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>">
+			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2);?>
+		</div>
+	        <div class="product-down edit-num" set-id="<?php echo $order['set_id'];?>" product-id="<?php echo $order['set_id'].'-'.$order['product_id'];?>">￥<?php echo $order['price'];?>/ <?php echo $order['product_unit']?$order['product_unit']:'例';?> X <font color="#ff8c00"><span class="num"><?php echo $order['amount'];?></span><?php echo $order['product_unit']?$order['product_unit']:'例';?></font><img src="../img/product/down-arrow.png" /></div>
+	        <input type="hidden" set-id="<?php echo $order['set_id'];?>" name="<?php echo $order['set_id'].'-'.$order['product_id'];?>" value="<?php echo $order['amount'];?>"/>
+		</div>
+		<?php endforeach;?>
+	<?php endforeach;?>
+	
+	<?php endif;?>
+		
 <?php endforeach;?>
 	<div class="order-info">
 		<div class="order-time"><?php echo date('Y-m-d H:i',time()); ?></div>
@@ -64,6 +94,7 @@
 		</div>
 		<input type="hidden" class="mask-type" value="0" />
 		<input type="hidden" class="mask-id" value="0" /><!-- orderproductId or orderId-->
+		<input type="hidden" class="set-id" value="0" />
 		<input type="hidden" class="product-id" value="0" />
 	</div>
 </div>

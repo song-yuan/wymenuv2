@@ -137,7 +137,13 @@ $(document).ready(function(){
     });
     
     $('.edit-num').click(function(){
+    	 $('.mask-taste').html('');
+    	 var setId = $(this).attr('set-id');
+    	 if(setId==undefined){
+    		 setId = 0;
+    	 }
     	 var productId = $(this).attr('product-id');
+    	 $('.set-id').val(setId);
     	 $('.product-id').val(productId);
     	 
     	 var num = $('input[name="'+productId+'"]').val();
@@ -168,11 +174,18 @@ $(document).ready(function(){
     });
    
 	$('.submit-order-num').click(function(){
-		var productId =  $('.product-id').val();
+		var setId = $('.set-id').val();
+		var productId = $('.product-id').val();
 		var num = $('input[name="order-product-num"]').val();
 		var inputObj = $('input[name="'+productId+'"]');
 		inputObj.val(num);
 		inputObj.parents('.product').find('.num').html(num);
+		if(parseInt(setId)>0){
+			$('input[set-id="'+setId+'"]').each(function(){
+				$(this).val(num);
+				$(this).parents('.product').find('.num').html(num);
+			});
+		}
 		$('.cancel-order-num').click();
 	});
 });
