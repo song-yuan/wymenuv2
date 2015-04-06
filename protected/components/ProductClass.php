@@ -101,7 +101,7 @@ class ProductClass
 		}
 		$conn = $command->createCommand($sql);
 		$conn->bindValue(':companyId',$dpid);
-		$connect->bindValue(':siteId',$siteId);
+		$conn->bindValue(':siteId',$siteId);
 		if($type==1){
 			$conn->bindValue(':time',date('Y-m-d H:i:s',time()));
 		}
