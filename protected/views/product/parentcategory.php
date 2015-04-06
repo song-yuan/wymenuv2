@@ -12,10 +12,18 @@
 		<li>
 			<ol>
 				<li class="parents">热点</li>
-				<li class="child">推荐品</li>
-				<li class="child">套餐</li>
-				<li class="child"><img src="/wymenuv2/img/favorite.png">Top10</li>
-				<li class="child"><img src="/wymenuv2/img/ordernum.png">Top10</li>
+				<a href="<?php echo $this->createUrl('/product/index',array('type'=>1));?>">
+				<li class="child <?php if($type==1) echo 'active';?>">推荐品</li>
+				</a>
+				<a href="<?php echo $this->createUrl('/product/index',array('type'=>2));?>">
+				<li class="child <?php if($type==2) echo 'active';?>">套餐</li>
+				</a>
+				<a href="<?php echo $this->createUrl('/product/index',array('type'=>3));?>">
+				<li class="child <?php if($type==3) echo 'active';?>"><img src="/wymenuv2/img/favorite.png">Top10</li>
+				</a>
+				<a href="<?php echo $this->createUrl('/product/index',array('type'=>4));?>">
+				<li class="child <?php if($type==4) echo 'active';?>"><img src="/wymenuv2/img/ordernum.png">Top10</li>
+				</a>
 			</ol>
 		</li>
 		<?php if($parentCategorys):?>
@@ -25,7 +33,7 @@
 			<li class="parents"><?php echo $categorys['category_name'];?></li>
 			<?php foreach($categorys['children'] as $category):?>
 			<a href="<?php echo $this->createUrl('/product/index',array('pid'=>$category['pid'],'categoryId'=>$category['lid']));?>">
-				<li class="child float <?php if($category['lid']==$categoryId) echo 'active';?>"><?php echo Helper::truncate_utf8_string($category['category_name'],6);?></li>
+				<li class="child float <?php if(!$type&&$category['lid']==$categoryId) echo 'active';?>"><?php echo Helper::truncate_utf8_string($category['category_name'],6);?></li>
 			</a>
 			<?php endforeach;?>
 			<div class="clear"></div>

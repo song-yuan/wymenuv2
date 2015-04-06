@@ -57,6 +57,7 @@ class ProductController extends Controller
 	public function actionIndex()
 	{
 		$pid = Yii::app()->request->getParam('pid',0);
+		$type = Yii::app()->request->getParam('type',0);
 		$categoryId = Yii::app()->request->getParam('categoryId',0);
 		
 		if(!$categoryId){
@@ -64,7 +65,7 @@ class ProductController extends Controller
 			$pid = $categorys['pid'];
 			$categoryId = $categorys['lid'];
 		}
-		$this->render('product',array('pid'=>$pid,'categoryId'=>$categoryId,'siteNoId'=>$this->siteNoId));
+		$this->render('product',array('pid'=>$pid,'categoryId'=>$categoryId,'siteNoId'=>$this->siteNoId,'type'=>$type));
 	}
 	/**
 	 * 
@@ -85,12 +86,9 @@ class ProductController extends Controller
 	public function actionGetJson()
 	{
 //		$page = Yii::app()->request->getParam('page',1);
-		$rec = Yii::app()->request->getParam('rec',0);
-		if($rec){
-			$sql = 'select * from nb_product where dpid=:companyId and recommend=1 and status=0 and delete_flag=0 and is_show = 1';
-			$connect = Yii::app()->db->createCommand($sql);
-			$connect->bindValue(':companyId',$this->companyId);
-			$product = $connect->queryAll();
+		$type = Yii::app()->request->getParam('type',0);// 0 普通产品  1推荐品 2套餐 3点赞 4点单
+		if($type){
+			$product = ProductClass::getHotsProduct($this->companyId,$type);
 		}else{
 			$categoryId = Yii::app()->request->getParam('cat',0);
 			$product = ProductClass::getCategoryProducts($this->companyId,$categoryId,$this->siteNoId);
