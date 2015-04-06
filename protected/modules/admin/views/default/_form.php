@@ -24,7 +24,7 @@
 															<th class="hidden-xs">退菜</th>
                                                                                                                         <th class="hidden-xs">上菜</th>
                                                                                                                         <th class="hidden-xs">口味</th>
-                                                                                                                        <th>总价<span id="total">(<?php echo $productTotal;?>)</span></th>
+                                                                                                                        <th>总价<span id="total">(<?php echo number_format($productTotal,2);?>)</span></th>
 															<th><a class="btn green add_btn" id="addproduct" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;&nbsp;加菜</a></th>
 														</tr>
 													</thead>

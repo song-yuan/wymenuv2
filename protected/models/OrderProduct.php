@@ -72,7 +72,8 @@ class OrderProduct extends CActiveRecord
 		return array(
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
-            'category_id' => '单品分类',
+                        'category_id' => '单品分类',
+                        'original_price' => '产品原价',
 			'create_at' => '创建时间',
 			'update_at' => '更新时间',
 			'order_id' => '订单',
@@ -85,7 +86,7 @@ class OrderProduct extends CActiveRecord
 			'is_waiting' => '0不等叫，1等叫，2已上菜',
 			'weight' => '重量',
 			'taste_memo' => '口味说明',
-			'is_giving' => '是否赠送',
+			'is_giving' => '赠送',
 			'delete_flag' => '1删除，0未删除',
 			'product_order_status' => '0未下单、1已下单',
 		);
@@ -155,7 +156,7 @@ class OrderProduct extends CActiveRecord
 	}
 	static public function getTotal($orderId,$dpid){
 		$db = Yii::app()->db;
-		$sql = "select sum(price*amount) as total from nb_order_product where order_id=".$orderId." and dpid=".$dpid;
+		$sql = "select sum(price*(IF(weight>0,weight,amount))) as total from nb_order_product where delete_flag=0 and order_id=".$orderId." and dpid=".$dpid;
 		$ret= $db->createCommand($sql)->queryScalar();
                 return empty($ret)?0:$ret;
 	}
@@ -163,7 +164,15 @@ class OrderProduct extends CActiveRecord
 		$db = Yii::app()->db;
 		$sql = "select t.*,t1.order_id from nb_taste t"
                         . " left join nb_order_taste t1 on t.dpid=t1.dpid and t.lid=t1.taste_id"
-                        . " where order_id=".$orderId." and dpid=".$dpid.' and is_order='.$isorder;
+                        . " where t1.order_id=".$orderId." and t.dpid=".$dpid.' and t1.is_order='.$isorder;
+		return $db->createCommand($sql)->queryAll();
+	}
+        
+        static public function getRetreat($orderId,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select t.*,t1.order_detail_id,t1.retreat_memo from nb_retreat t"
+                        . " left join nb_order_retreat t1 on t.dpid=t1.dpid and t.lid=t1.retreat_id"
+                        . " where t1.order_detail_id=".$orderId." and t.dpid=".$dpid.' and t1.delete_flag=0';
 		return $db->createCommand($sql)->queryAll();
 	}
 }
