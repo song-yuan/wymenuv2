@@ -66,7 +66,7 @@ $(document).ready(function(){
     		if($(this).is(":hidden")){
     			$('#page_0').css('margin-top','70px');
     		}else{
-    			$('#page_0').css('margin-top','220px');
+    			$('#page_0').css('margin-top','185px');
     		}
     	});
     });

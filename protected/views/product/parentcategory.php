@@ -25,7 +25,7 @@
 			<li class="parents"><?php echo $categorys['category_name'];?></li>
 			<?php foreach($categorys['children'] as $category):?>
 			<a href="<?php echo $this->createUrl('/product/index',array('pid'=>$category['pid'],'categoryId'=>$category['lid']));?>">
-				<li class="child float <?php if($category['lid']==$categoryId) echo 'active';?>"><?php echo $category['category_name'];?></li>
+				<li class="child float <?php if($category['lid']==$categoryId) echo 'active';?>"><?php echo Helper::truncate_utf8_string($category['category_name'],6);?></li>
 			</a>
 			<?php endforeach;?>
 			<div class="clear"></div>

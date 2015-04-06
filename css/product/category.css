@@ -1,5 +1,5 @@
 #page_0{
-	margin-top:220px;
+	margin-top:185px;
 }
 .fixed-top{
 	position:fixed;
@@ -10,10 +10,11 @@
 }
 .category-top{
 	width:40%;
-	height:30px;
-	line-height:30px;
+	height:20px;
+	line-height:20px;
 	text-align:center;
-	margin:20px auto;
+	margin:1px auto 0;
+	padding:5px 0;
 	border:1px solid rgb(179,137,27);
 	background:rgb(240,201,82);
 	border-radius:20px;
