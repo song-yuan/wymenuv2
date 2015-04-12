@@ -46,6 +46,11 @@
     	<div class="clear"></div>
     </div>
 </div>
+<div class="product-mask">
+	<div class="product-mask-info">点单信息</div>
+	<div class="info">
+	</div>
+</div>
 <script type="text/javascript">
 	var cat = '<?php echo $categoryId;?>';
 	var t = '<?php echo $type;?>';

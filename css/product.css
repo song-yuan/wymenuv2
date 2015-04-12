@@ -309,7 +309,37 @@
 .product-category{
 	padding:2px 20px;
 	font-size:16px;
+	margin-top:20px;
 	border-bottom:1px dashed rgb(149,149,149);
+}
+
+.product-mask{
+	position:fixed;
+	width:100%;
+	top:0;
+	left:0;
+	bottom:50px;
+	background:white;
+	z-index:1001;
+	display:none;
+}
+.product-mask-info{
+	padding:10px;
+	text-align:center;
+	font-size:18px;
+	font-weight:700;
+}
+.product-catory{
+	padding: 2px 20px;
+	font-size: 18px;
+	font-weight:700;
+	border-bottom: 1px dashed rgb(149,149,149);
+}
+.product-catory-product{
+	padding: 2px 20px;
+	font-size: 16px;
+	font-weight:500;
+	border-bottom: 1px dashed rgb(149,149,149);
 }
 a{
 	text-decoration:none;
