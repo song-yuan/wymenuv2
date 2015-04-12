@@ -59,7 +59,7 @@
 					<div class="order-product-right">
 						<div class="right-up"><?php echo $product['product_name'];?></div>
 				               <div class="right-middle">组<?php echo $key+1;?><input class="set-group-radio" name="group-<?php echo $k.'-'.$key;?>" type="radio" set-id="<?php echo $order['set_id'];?>" product-id="<?php echo $product['product_id'];?>" value="<?php echo $product['product_id'];?>" <?php if($product['is_select']) echo 'checked';?>/>
-				               <?php if(count($setProduct) > 1):?><div class="right-down-right select-setproduct"  style="color:#ff8c00">选择<img src="../img/product/down-arrow.png" /></div>	<?php endif;?>
+				               <?php if(count($setProduct) > 1):?><div class="right-down-right select-setproduct"  style="color:#ff8c00">更换<img src="../img/product/down-arrow.png" /></div>	<?php endif;?>
 				        </div>
 						<div class="right-down">
 				                    <div class="right-down-left">￥<?php echo $product['price'];?></div>

@@ -157,7 +157,7 @@ class CreateOrder
 		$criteria->order =  'lid desc';
 		$order = Order::model()->find($criteria);
 			
-		$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
+		$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
 		$orderProduct->delete_flag = 1;
 		if($orderProduct->update()){
 			return true;
