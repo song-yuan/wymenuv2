@@ -39,28 +39,7 @@ $(document).ready(function(){
  			}
  		});
     });
-//    var prevTop = 0,
-//    	currTop = 0;
-//	$(window).scroll(function() {
-//	    currTop = $(window).scrollTop();
-//	    if (currTop < prevTop) { //判断小于则为向上滚动
-//	    	if($(".promptume.nu_window").is(':hidden')){
-//	    		$(".promptumenu_window").slideDown(800);
-//		        $(".promptumenu_window").addClass('float');
-//		        $('#page_0').css('margin-top',140);
-//                       // $(".bottom").show(1500);
-//	    	}
-//	    } else {
-//	    	if($(".promptumenu_window").is(':visible')){
-//	    		$(".promptumenu_window").slideUp(800);
-//	 	        $(".promptumenu_window").removeClass('float');
-//	 	        $('#page_0').css('margin-top',0);
-//                        //$(".bottom").hide(1500);
-//	    	}
-//	    }
-//	    //prevTop = currTop; //IE下有BUG，所以用以下方式
-//	    setTimeout(function(){prevTop = currTop},0);
-//	});
+    //全部分类
     $('.category-top').click(function(){
     	$('.promptumenu_window').slideToggle(function(){
     		if($(this).is(":hidden")){
@@ -68,6 +47,30 @@ $(document).ready(function(){
     		}else{
     			$('#page_0').css('margin-top','185px');
     		}
+    	});
+    });
+    //查看菜单
+    $('.product-nums').click(function(){
+    	$('.product-mask').toggle(function(){
+    		$.ajax({
+     			url:'getOrderListJson',
+     			type:'POST',
+     			dataType:'json',
+     			success:function(msg){
+     				if(msg){
+     					var str = '';
+     					for(var o in msg){
+     							str +='<div class="product-catory">'+msg[o].category_name+'</div>'	;
+         						for(var i in msg[o]){
+         							if(!isNaN(i)){
+         								str +='<div class="product-catory-product">'+msg[o][i].product_name+'</div>';
+         							}
+         						}
+     					}
+     					$('.info').html(str);
+     				}
+     			},
+     		});
     	});
     });
  });

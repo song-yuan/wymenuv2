@@ -95,7 +95,19 @@ class ProductController extends Controller
 		}
 		Yii::app()->end(json_encode($product));
 	}
-	
+	public function actionGetOrderListJson()
+	{
+		$orderProductList = array();
+		$orderList = new OrderList($this->siteNoId);
+		if($orderList->order){
+			$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0,1);
+			foreach($orderProductList as $key=>$val){
+				$orderProductList[$key]['category_name'] = OrderList::GetCatoryName($key);	
+			}
+		}
+//		var_dump($orderProductList);exit;
+		Yii::app()->end(json_encode($orderProductList));
+	}
 	/**
 	 * 点单
 	 * 

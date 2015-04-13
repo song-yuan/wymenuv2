@@ -19,7 +19,8 @@ class ProductClass
 		}
 		//type 0 普通商品 1 套餐
 		$sql = 'select t.*,t1.order_id from ' .
-			   '(select lid,product_name, original_price, main_picture, rank, order_number, favourite_number,0 as type from nb_product where dpid=:companyId and category_id=:categoryId and status=0 and delete_flag=0 and is_show = 1 union select  lid,set_name as product_name, 0 as original_price, main_picture, rank, order_number, favourite_number, 1 as type from nb_product_set where dpid=:companyId and delete_flag=0)t ' .
+			   '(select lid,product_name, original_price, main_picture, rank, order_number, favourite_number,0 as type from nb_product where dpid=:companyId and category_id=:categoryId and status=0 and delete_flag=0 and is_show = 1 ' .
+			   'union select lid , product_name, sum(price) as original_price, main_picture, rank, order_number, favourite_number, type from(select  n.lid,n.set_name as product_name, n.main_picture, n.rank, n.order_number, n.favourite_number, n1.price,1 as type from nb_product_set n LEFT JOIN nb_product_set_detail n1 on n.lid=n1.set_id  where n.dpid=:companyId and n1.dpid=:companyId and n.delete_flag=0 and n1.delete_flag=0 and n1.is_select=1)m group by lid)t ' .
 			   'LEFT JOIN (select order_id,product_id from nb_order_product t2 LEFT JOIN nb_order t3 on t2.order_id=t3.lid where t3.site_id=:siteId and t2.delete_flag=0 and t2.product_order_status=0 )t1 on t.lid=t1.product_id';
 		$connect = Yii::app()->db->createCommand($sql);
 		$connect->bindValue(':companyId',$dpid);
@@ -83,19 +84,19 @@ class ProductClass
 				   ' LEFT JOIN (select order_id,product_id from nb_order_product t10 LEFT JOIN nb_order t11 on t10.order_id=t11.lid where t11.site_id=:siteId and  t10.delete_flag=0 and t10.product_order_status=0 )t9 on t8.lid=t9.product_id ';
 				   break;
 			case 2:
-			$sql = 'select t.*,t1.order_id from (select  lid,set_name as product_name, 0 as original_price, main_picture, rank, order_number, favourite_number, 1 as type from nb_product_set where dpid=:companyId and delete_flag=0)t' .
+			$sql = 'select t.*,t1.order_id from (select lid , product_name, sum(price) as original_price, main_picture, rank, order_number, favourite_number, type from(select  n.lid,n.set_name as product_name, n.main_picture, n.rank, n.order_number, n.favourite_number, n1.price,1 as type from nb_product_set n LEFT JOIN nb_product_set_detail n1 on n.lid=n1.set_id  where n.dpid=:companyId and n1.dpid=:companyId and n.delete_flag=0 and n1.delete_flag=0 and n1.is_select=1)m group by lid)t' .
 					' LEFT JOIN (select order_id,product_id from nb_order_product t2 LEFT JOIN nb_order t3 on t2.order_id=t3.lid where t3.site_id=:siteId and t2.delete_flag=0 and t2.product_order_status=0 )t1 on t.lid=t1.product_id';
 				   break;
 			case 3:
 			$sql = 'select t.*,t1.order_id from ' .
-			   	   ' (select lid,product_name, original_price, main_picture, rank, order_number, favourite_number,0 as type from nb_product where dpid=:companyId and status=0 and delete_flag=0 and is_show = 1 union select  lid,set_name as product_name, 0 as original_price, main_picture, rank, order_number, favourite_number, 1 as type from nb_product_set where dpid=:companyId and delete_flag=0)t ' .
+			   	   ' (select lid,product_name, original_price, main_picture, rank, order_number, favourite_number,0 as type from nb_product where dpid=:companyId and status=0 and delete_flag=0 and is_show = 1 ' .
+			   	   'union select lid , product_name, sum(price) as original_price, main_picture, rank, order_number, favourite_number, type from(select  n.lid,n.set_name as product_name, n.main_picture, n.rank, n.order_number, n.favourite_number, n1.price,1 as type from nb_product_set n LEFT JOIN nb_product_set_detail n1 on n.lid=n1.set_id  where n.dpid=:companyId and n1.dpid=:companyId and n.delete_flag=0 and n1.delete_flag=0 and n1.is_select=1)m group by lid)t ' .
 			   	   ' LEFT JOIN (select order_id,product_id from nb_order_product t2 LEFT JOIN nb_order t3 on t2.order_id=t3.lid where t3.site_id=:siteId and t2.delete_flag=0 and t2.product_order_status=0 )t1 on t.lid=t1.product_id order by favourite_number desc limit 10';
 				   break;
 			case 4:
 			$sql = 'select t.*,t1.order_id from ' .
-			   	   ' (select lid,product_name, original_price, main_picture, rank, order_number, favourite_number,0 as type from nb_product where dpid=:companyId and status=0 and delete_flag=0 and is_show = 1 union select  lid,set_name as product_name, 0 as original_price, main_picture, rank, order_number, favourite_number, 1 as type from nb_product_set where dpid=:companyId and delete_flag=0)t ' .
-			   	   ' ' .
-			   	   '' .
+			   	   ' (select lid,product_name, original_price, main_picture, rank, order_number, favourite_number,0 as type from nb_product where dpid=:companyId and status=0 and delete_flag=0 and is_show = 1 ' .
+			   	   'union select lid , product_name, sum(price) as original_price, main_picture, rank, order_number, favourite_number, type from(select  n.lid,n.set_name as product_name, n.main_picture, n.rank, n.order_number, n.favourite_number, n1.price,1 as type from nb_product_set n LEFT JOIN nb_product_set_detail n1 on n.lid=n1.set_id  where n.dpid=:companyId and n1.dpid=:companyId and n.delete_flag=0 and n1.delete_flag=0 and n1.is_select=1)m group by lid)t ' .
 			   	   'LEFT JOIN (select order_id,product_id from nb_order_product t2 LEFT JOIN nb_order t3 on t2.order_id=t3.lid where t3.site_id=:siteId and t2.delete_flag=0 and t2.product_order_status=0 )t1 on t.lid=t1.product_id order by order_number desc limit 10';
 				   break;
 		}
