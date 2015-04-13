@@ -53,12 +53,12 @@
 							<tr class="odd gradeX">
 								<td ><?php echo $model->product_name;?></td>
 								<td>
-									<?php foreach($model->productTaste as $val){
-											echo TasteClass::getTasteName($val->taste_id).' ';
+									<?php foreach($model->productAddition as $val){
+											echo ProductClass::getProductName($val->sproduct_id,$model->dpid).' ';
 									}?>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('taste/updateProductTaste',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('productAddition/detail',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>

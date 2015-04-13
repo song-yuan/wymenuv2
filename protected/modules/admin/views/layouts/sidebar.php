@@ -26,7 +26,7 @@
 						<li class=""><a href="">基础数据同步设定</a></li>
 					</ul>
 				</li>
-                                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productSet','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice'))) echo 'active';?>">
+                                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productAddition','productSet','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice'))) echo 'active';?>">
                                         <a href="">
 					<i class="fa fa-coffee"></i> 
 					<span class="title">产品管理</span>					
@@ -34,6 +34,7 @@
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'productCategory') echo 'active';?>"><a href="<?php echo $this->createUrl('productCategory/index',array('companyId' => $this->companyId));?>">产品分类</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'product') echo 'active';?>"><a href="<?php echo $this->createUrl('product/index',array('companyId' => $this->companyId));?>">单品管理</a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productAddition') echo 'active';?>"><a href="<?php echo $this->createUrl('productAddition/index',array('companyId' => $this->companyId));?>">加菜管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>">套餐管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productTempprice') echo 'active';?>"><a href="<?php echo $this->createUrl('productTempprice/index',array('companyId' => $this->companyId));?>">时价菜管理</a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSpecial') echo 'active';?>"><a href="<?php echo $this->createUrl('productSpecial/index',array('companyId' => $this->companyId));?>">特价菜管理</a></li>
