@@ -89,7 +89,7 @@ class CreateOrder
 		}
 		return $maxOrderId;
 	}
-	public static function getProductPrice($dpid = 0,$productId = 0,$type = 0,$setId = 0){
+	public static function getProductPrice($dpid = 0,$productId = 0,$type = 0){
 		$price = 0;
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
@@ -140,9 +140,9 @@ class CreateOrder
 			}
 		}else{
 			//套餐
-			$sql = 'select sum(price) as price from nb_product_set_detail where set_id=:setId and dpid=:dpid and delete_flag=0';
+			$sql = 'select sum(price) as price from nb_product_set_detail where set_id=:setId and dpid=:dpid and delete_flag=0 and is_select=1';
 			$connect = $db->createCommand($sql);
-			$connect->bindValue(':setId',$setId);
+			$connect->bindValue(':setId',$productId);
 			$connect->bindValue(':dpid',$dpid);
 			$product = $connect->queryRow();
 			$price = $product['price'];

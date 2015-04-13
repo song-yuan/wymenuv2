@@ -170,7 +170,6 @@ class OrderList
 			return false;
 		}
 	}
-	
 	//获取种类的名称
 	public static function GetCatoryName($catoryId){
 		$sql = 'select category_name from  nb_product_category where lid = :lid';
