@@ -1,3 +1,13 @@
+function addToCart() {
+	var reddot = document.querySelector('.aniele');
+	reddot.style.visibility="visible";
+	classie.add(reddot,'added');
+	setTimeout(function(){
+		reddot.style.visibility="hidden";
+		classie.remove(reddot,'added');	
+	}, 500); 
+
+}
 $(document).ready(function(){
     $('#forum_list').on('click','#addCart',function(){
     	var _this = $(this);
@@ -38,6 +48,7 @@ $(document).ready(function(){
  				}
  			}
  		});
+ 		addToCart();
     });
     //全部分类
     $('.category-top').click(function(){
