@@ -87,7 +87,7 @@
                                                                 <td ><?php echo $model->order_number;?></td>
                                                                 <td ><?php echo $model->favourite_number;?></td>
 								<td ><?php echo $model->is_member_discount=='0'?'否':'是';?></td>
-                                                                <td ><?php echo $model->is_show=='0'?'否':'是';?></td>
+                                                                <td ><?php echo $model->is_show=='0'?'是':'否';?></td>
                                                                 
 								<td class="center">
 								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>

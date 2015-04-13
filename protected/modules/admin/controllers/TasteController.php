@@ -86,12 +86,18 @@ class TasteController extends BackendController
 		}
 	}
 	public function actionProductTaste(){
+                $categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
 		$criteria->with = 'productTaste';
-		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0 ');
+                if($categoryId!=0)
+                {
+                    $criteria->addCondition('t.dpid=:dpid and t.delete_flag=0 and t.category_id ='.$categoryId);
+                }else{
+                    $criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
+                }
 		$criteria->order = ' lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
-		
+		$categories = $this->getCategories();
 		$pages = new CPagination(Product::model()->count($criteria));
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -99,6 +105,8 @@ class TasteController extends BackendController
 //		var_dump($models[0]);exit;
 		$this->render('productTaste',array(
 				'models'=>$models,
+                                'categories'=>$categories,
+                                'categoryId'=>$categoryId,
 				'pages' => $pages,
 		));
 	}
@@ -125,5 +133,34 @@ class TasteController extends BackendController
 			'tastes'=>$tastes,
 			'productTastes'=>$tasteArr,
 		));
+	}
+        
+        private function getCategories(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'company';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' tree,t.lid asc ';
+		
+		$models = ProductCategory::model()->findAll($criteria);
+                
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		$options = array();
+		$optionsReturn = array('--请选择分类--');
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->lid] = $model->category_name;
+				}
+			}
+                        //var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+                    //var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
 	}
 }
