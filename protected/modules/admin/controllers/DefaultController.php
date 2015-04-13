@@ -104,15 +104,27 @@ class DefaultController extends BackendController
         private function getCode($companyId){
 		$code=  $this->getRandChar(6);
                 //var_dump($code);exit;
-                return $code;/*apc should be deleted*/
-                $ccode = apc_fetch($companyId.$code);
-                while(!empty($ccode))
+                //return $code;/*apc should be deleted*/
+                if(Yii::app()->params->has_cache)
                 {
-                    $code= $this->getRandChar(6);                    
                     $ccode = apc_fetch($companyId.$code);
+                    while(!empty($ccode))
+                    {
+                        $code= $this->getRandChar(6);                    
+                        $ccode = apc_fetch($companyId.$code);
+                    }
+                    apc_store($companyId.$code,'1',0);//永久存储用apc_delete($key)删除
                 }
-                apc_store($companyId.$code,'1',0);//永久存储用apc_delete($key)删除
                 return $code;
+	}
+        
+        private function deleteCode($companyId,$code){
+		
+                if(Yii::app()->params->has_cache)
+                {
+                    $ccode = apc_delete($companyId.$code);                    
+                }
+                return;
 	}
         
         public function actionOpensite() {
@@ -204,6 +216,7 @@ class DefaultController extends BackendController
                             $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                             $criteria->order = ' t.lid desc ';
                             $siteNo = SiteNo::model()->find($criteria);
+                            $this->deleteCode($siteNo->dpid,$siteNo->code);
                             //apc_delete($siteNo->dpid.$siteNo->code);
                             echo json_encode(array('status'=>1,'message'=>'撤台成功'));  
                             return true;
@@ -376,6 +389,7 @@ class DefaultController extends BackendController
 						Yii::app()->user->setFlash('success','结单成功');
 					}
 				}
+                                $this->deleteCode($this->companyId,$siteNo->code);
 				$transaction->commit();
 				$this->redirect(array('order/index' , 'companyId' => $this->companyId));
 			} catch(Exception $e){
@@ -717,7 +731,7 @@ class DefaultController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId');
                 $db = Yii::app()->db;
-                //echo Yii::app()->has_cache;exit;
+                //var_dump(Yii::app()->params->has_cache);exit;
                 $transaction = $db->beginTransaction();
                 try {
                         $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));

@@ -343,13 +343,16 @@ class Helper
                         $listData.= str_pad('',48,'-').str_pad('打印时间：'.time(),20,' ').'<br>';
                         //var_dump($listData);exit;
                         if(!empty($listData)){
-                            if($printway->list_no) {
-                                for($i=0;$i<$printway->list_no;$i++){
-                                    if($reprint) {
-                                            $listData = str_pad('重新厨打', 40 , ' ',STR_PAD_BOTH).'<br>'.$listData;
-                                            //$list->add($listData);
-                                    } else {
-                                            //$list->unshift($listData);
+                            if(Yii::app()->params->has_cache)
+                            {
+                                if($printway->list_no) {
+                                    for($i=0;$i<$printway->list_no;$i++){
+                                        if($reprint) {
+                                                $listData = str_pad('重新厨打', 40 , ' ',STR_PAD_BOTH).'<br>'.$listData;
+                                                $list->add($listData);
+                                        } else {
+                                                $list->unshift($listData);
+                                        }
                                     }
                                 }
                             }

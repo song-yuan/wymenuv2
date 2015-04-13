@@ -17,7 +17,7 @@
 				<?php if($status=='1') :?>
                                 <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn grey orderaction">点 单</button>
                                 <div class="pull-right">
-                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe">并  台</button>
+                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe unionsite">并  台</button>
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe closesite">撤  台</button>
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe switchsite">换  台</button>
                                 </div>
@@ -25,7 +25,7 @@
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn green">打印清单</button>
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn yellow orderaction">订单详情</button>
                                 <div class="pull-right">
-                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe">并  台</button>
+                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe unionsite">并  台</button>
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe closesite">撤  台</button>
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe switchsite">换  台</button>
                                 </div>
@@ -117,6 +117,15 @@
                                 }  
                                 location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'switch','sistemp'=>$istemp,'ssid'=>$sid,'stypeId'=>$typeId));?>';
                            });                           
+                           
+                           $('.unionsite').on('click',function(){
+                               //var sid = $(this).attr('sid');
+                               var statu = confirm("确定并台吗？");
+                                if(!statu){
+                                    return false;
+                                }  
+                                location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'switch','sistemp'=>$istemp,'ssid'=>$sid,'stypeId'=>$typeId));?>';
+                           });
                            
                            $('.orderaction').on('click',function(){
                                var sid = $(this).attr('sid');
