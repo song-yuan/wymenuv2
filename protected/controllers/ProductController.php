@@ -180,6 +180,13 @@ class ProductController extends Controller
 	 	$this->render('order');
 	}
 	//获取商品口味
+	public function actionGetProductPicJson()
+	{
+		$id = Yii::app()->request->getParam('id');
+		$pic = ProductClass::getProductPic($this->companyId,$id);
+		Yii::app()->end(json_encode($pic));
+	}
+	//获取商品口味
 	public function actionGetTasteJson()
 	{
 		$tasteArr = array();
