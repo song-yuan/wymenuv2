@@ -111,8 +111,8 @@ class ProductClass
 	}
         
         public static function getProductName($productId,$companyId){
-		$sql = 'SELECT name from nb_product where lid='.$productId.' and dpid='.$companyId;
+		$sql = 'SELECT product_name from nb_product where lid='.$productId.' and dpid='.$companyId;
 		$product = Yii::app()->db->createCommand($sql)->queryRow();
-		return $product['name'];
+		return $product['product_name'];
 	}
 }
