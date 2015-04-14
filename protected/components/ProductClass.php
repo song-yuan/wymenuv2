@@ -77,6 +77,7 @@ class ProductClass
 		$conn->bindValue(':dpid',$dpid);
 		$conn->bindValue(':productId',$productId);
 		$result = $conn->queryAll();
+		var_dump($result);exit;
 		if($result){
 			$picArr =$result['pic_path'];
 		}
