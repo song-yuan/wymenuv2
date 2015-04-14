@@ -97,7 +97,7 @@ $(document).ready(function(){
  					var str = '';
  	 				for(var o in msg){
  	 					dotstr += '<a href="javascript:;">'+(o+1)+'</a>';
- 	 					str += '<li><img src="'+msg[o]+'" /></li>'
+ 	 					str += '<li><img src="'+msg[o].pic_path+'" /></li>'
  	 				}
  	 				$('.flicking_con .flicking_inner').html(dotstr);
  	 				$('.main_image ul').html(str);
