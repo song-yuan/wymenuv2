@@ -20,6 +20,7 @@
 ?>
 
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type));?>
+	<script type="text/javascript" src="../js/product/classie.js"></script>
 	<script type="text/javascript" src="../js/product/product.js"></script>
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
@@ -51,6 +52,8 @@
 	<div class="info">
 	</div>
 </div>
+<!-- 加入订单动画 -->
+<div class="aniele"></div>
 <script type="text/javascript">
 	var cat = '<?php echo $categoryId;?>';
 	var t = '<?php echo $type;?>';

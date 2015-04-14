@@ -3,7 +3,7 @@ class ProductSetClass
 {
 	//获取套餐某一产品的价格
 	public static function GetProductSetPrice($dpid,$setId,$productId){
-		$sql = 'select * from nb_product_set_detail where set_id=:setId and product_id=:productId and dpid=:dpid';
+		$sql = 'select * from nb_product_set_detail where set_id=:setId and product_id=:productId and dpid=:dpid and is_select=1';
 		$connect = Yii::app()->db->createCommand($sql);
 		$connect->bindValue(':setId',$setId);
 		$connect->bindValue(':productId',$productId);
