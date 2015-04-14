@@ -65,7 +65,7 @@ class ProductAdditionController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductAddition');
                         //var_dump($model->attributes);exit;
-                        $se=new Sequence("porduct_addition");
+                        $se=new Sequence("product_addition");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
@@ -89,19 +89,19 @@ class ProductAdditionController extends BackendController
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
                 //echo 'ddd';
-		$model = ProductSetDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
+		$model = ProductAddition::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
+			$model->attributes = Yii::app()->request->getPost('ProductAddition');
                         //var_dump($model);var_dump(Yii::app()->request->getPost('ProductSetDetail'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , '修改成功');
-				$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id));
+				$this->redirect(array('productAddition/detail' , 'companyId' => $this->companyId,'lid' => $model->mproduct_id));
 			}
 		}
                 //$printers = $this->getPrinters();
                 $categories = $this->getCategories();
-                $categoryId=  $this->getCategoryId($lid);
+                $categoryId=  $this->getCategoryId($model->sproduct_id,  $this->companyId);
                 $products = $this->getProducts($categoryId);
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
 		$this->render('detailupdate' , array(
@@ -118,12 +118,12 @@ class ProductAdditionController extends BackendController
 		$ids = Yii::app()->request->getPost('ids');
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_product_addition set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset)) ;
+			$this->redirect(array('productAddition/detail' , 'companyId' => $companyId,'lid'=>$printset)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
-			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset)) ;
+			$this->redirect(array('productAddition/detail' , 'companyId' => $companyId,'lid'=>$printset)) ;
 		}
 	}
         
@@ -186,5 +186,14 @@ class ProductAdditionController extends BackendController
                 //var_dump($products);exit;
                 return $products;
 		//return CHtml::listData($products, 'lid', 'product_name');
+	}
+        
+        private function getCategoryId($lid,$dpid){
+                $db = Yii::app()->db;
+                $sql = "SELECT category_id from nb_product where dpid=:dpid and lid=:lid";
+                $command=$db->createCommand($sql);
+                $command->bindValue(":lid" , $lid);
+                $command->bindValue(":dpid" , $dpid);
+                return $command->queryScalar();
 	}
 }

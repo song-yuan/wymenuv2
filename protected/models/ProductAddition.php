@@ -62,14 +62,15 @@ class ProductAddition extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+                        'category_id' => '菜品种类',
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'mproduct_id' => '主产品',
-			'sproduct_id' => '附加产品，类似于配菜',
-			'price' => '作为配菜的价格，可能和主价格不一样',
-			'number' => '作为配菜每次点单的数量',
+			'sproduct_id' => '附加菜品',
+			'price' => '附加菜价格',
+			'number' => '单词下单个数',
 			'delete_flag' => 'Delete Flag',
 		);
 	}
