@@ -117,6 +117,7 @@ $(document).ready(function(){
     $('.large-pic').click(function(){
     	$('.main_image ul').html('');
     	$(this).css('display','none');
+    	$dragBln = false;
     });
 	$dragBln = false;
 	$(".main_image").bind("mousedown", function() {
