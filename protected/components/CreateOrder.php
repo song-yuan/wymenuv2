@@ -103,7 +103,7 @@ class CreateOrder
 			
 			$price = $product['original_price'];
 			if($product['is_temp_price']){
-				$sql = 'select * from nb_product_tempprice where product_id=:productId and dpid=:dpid and begain_time < :time and end_time > :time';
+				$sql = 'select * from nb_product_tempprice where product_id=:productId and dpid=:dpid and begin_time < :time and end_time > :time';
 				$connect = $db->createCommand($sql);
 				$connect->bindValue(':productId',$product['lid']);
 				$connect->bindValue(':dpid',$dpid);
