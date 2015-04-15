@@ -250,8 +250,7 @@
                          });
                          var $modalproduct = $('#portlet-product');
                          $('#addproduct').click(function(){
-                                $modalproduct.modal();
-                                 
+                                $modalproduct.modal();                                 
                          });
                          
                          $('.btn-edit').click(function(){

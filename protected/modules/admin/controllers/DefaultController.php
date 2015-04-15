@@ -333,7 +333,7 @@ class DefaultController extends BackendController
                     $criteria->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria);
                 }
-                                
+                //var_dump($order);exit;                
                 if(empty($order))
                 {
                     $order=new Order();
@@ -507,8 +507,7 @@ class DefaultController extends BackendController
                         $selsetlist = Yii::app()->request->getPost('selsetlist',0);
                         $db = Yii::app()->db;
                         $transaction = $db->beginTransaction();
-                        try {
-                            
+                        try {                            
                             if($isset==0)
                             {   
                                 $orderProduct = new OrderProduct();

@@ -303,7 +303,8 @@ class Helper
                 return $str.$appendstr;
 	}
         
-        //单品厨打
+        //单品厨打 口味 全单口味
+        //套餐和加菜一起厨打 口味 全单口味
 	static public function printKitchen(Order $order,OrderProduct $orderProduct,Site $site,  SiteNo $siteNo , $reprint = false){		
                 $order = Order::model()->find('lid=:orderid and dpid=:dpid',  array(':orderid'=>$orderProduct->order_id,':dpid'=>$orderProduct->dpid));
 		//orderproduct
