@@ -108,6 +108,7 @@ $(document).ready(function(){
     });
     
     $('.large-pic').click(function(){
+    	$(this).html('');
     	$(this).css('display','none');
     });
  });
