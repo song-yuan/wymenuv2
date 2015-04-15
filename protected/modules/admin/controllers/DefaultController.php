@@ -353,16 +353,10 @@ class DefaultController extends BackendController
 		//$orderProducts = OrderProduct::model()->findAll('dpid=:dpid and order_id=:orderid',array(':dpid'=>$companyId,':orderid'=>$order->order_id));
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 //var_dump($orderProducts);exit;
-                $orderProduct = new OrderProduct();
-                $orderProduct->order_id = $order->lid;
+                
                 $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
 		$total = Helper::calOrderConsume($order,$siteNo, $productTotal);
-                $categories = $this->getCategories();
-                //var_dump($categories);exit;
-                $setlist = $this->getSetlist();
-                $categoryId=0;
-                $products = $this->getProducts($categoryId);
-                $productslist=CHtml::listData($products, 'lid', 'product_name');
+                
 		//var_dump($order);exit;
 		if(Yii::app()->request->isPostRequest){
 			$order->attributes = Yii::app()->request->getPost('Order');
@@ -396,18 +390,18 @@ class DefaultController extends BackendController
 				$transaction->rollback();
 			}
 		}
-		$paymentMethods = $this->getPaymentMethodList();
+		//$paymentMethods = $this->getPaymentMethodList();
 		$this->render('order' , array(
 				'model'=>$order,
 				'orderProducts' => $orderProducts,
-                                'orderProduct' => $orderProduct,
+                                //'orderProduct' => $orderProduct,
 				'productTotal' => $productTotal ,
 				'total' => $total,
-				'paymentMethods'=>$paymentMethods,
-                                'typeId' => $typeId,
-                                'categories' => $categories,
-                                'products' => $productslist,
-                                'setlist' => $setlist
+				//'paymentMethods'=>$paymentMethods,
+                                'typeId' => $typeId
+                                //'categories' => $categories
+                                //'products' => $productslist,
+                                //'setlist' => $setlist
 		));
 	}
         
@@ -501,6 +495,17 @@ class DefaultController extends BackendController
         public function actionAddProduct() {
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $typeId=Yii::app()->request->getParam('typeId','0');
+                $orderId=Yii::app()->request->getParam('orderId','0');
+                $orderProduct = new OrderProduct();
+                $orderProduct->order_id = $orderId;
+                $categories = $this->getCategories();
+                //var_dump($categories);exit;
+                $setlist = $this->getSetlist();
+                $categoryId=0;
+                $products = $this->getProducts($categoryId);
+                $productslist=CHtml::listData($products, 'lid', 'product_name');
+                
+                
 		if(Yii::app()->request->isPostRequest){
                         $isset = Yii::app()->request->getPost('isset',0);
                         //$setid = Yii::app()->request->getParam('setid',0);
@@ -530,24 +535,24 @@ class DefaultController extends BackendController
                                 //var_dump($setid['set_id']);exit;
                                 foreach ($productIdlist as $productId){
                                     //var_dump($productId);
-                                    $orderProduct = new OrderProduct();
-                                    $orderProduct->dpid = $companyId;
-                                    $orderProduct->delete_flag = '0';
-                                    $orderProduct->product_order_status = '0';
-                                    $orderProduct->set_id=$setid['set_id'];
-                                    $orderProduct->order_id=$setid['order_id'];
+                                    $sorderProduct = new OrderProduct();
+                                    $sorderProduct->dpid = $companyId;
+                                    $sorderProduct->delete_flag = '0';
+                                    $sorderProduct->product_order_status = '0';
+                                    $sorderProduct->set_id=$setid['set_id'];
+                                    $sorderProduct->order_id=$setid['order_id'];
                                     //$orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
-                                    $orderProduct->create_at = date('Y-m-d H:i:s',time());
+                                    $sorderProduct->create_at = date('Y-m-d H:i:s',time());
                                     $productUnit=explode('|',$productId);
-                                    $orderProduct->product_id = $productUnit[0];
-                                    $orderProduct->amount = $productUnit[1];
-                                    $orderProduct->price = $productUnit[2];
-                                    $orderProduct->is_giving = '0';
-                                    $orderProduct->zhiamount = 0;                                    
+                                    $sorderProduct->product_id = $productUnit[0];
+                                    $sorderProduct->amount = $productUnit[1];
+                                    $sorderProduct->price = $productUnit[2];
+                                    $sorderProduct->is_giving = '0';
+                                    $sorderProduct->zhiamount = 0;                                    
                                     $se=new Sequence("order_product");
-                                    $orderProduct->lid = $se->nextval();
+                                    $sorderProduct->lid = $se->nextval();
                                     //var_dump($orderProduct);exit;
-                                    $orderProduct->save();                                    
+                                    $sorderProduct->save();                                    
                                 }                                
                             }
                             $transaction->commit();
@@ -561,8 +566,18 @@ class DefaultController extends BackendController
                     }
                         //var_dump($orderProduct);exit;                   
                         //第一个菜需要更新订单状态。。。。
-                        //添加产品时，还可以添加套餐。。。                        
+                        //添加产品时，还可以添加套餐。。。                     
                 }
+                
+                $paymentMethods = $this->getPaymentMethodList();
+                $this->renderPartial('addproduct' , array(
+				'orderProduct' => $orderProduct,
+				'paymentMethods'=>$paymentMethods,
+                                'categories' => $categories,
+                                'products' => $productslist,
+                                'typeId'=>$typeId,
+                                'setlist' => $setlist
+		));
 	}
         
         public function actionSetdetail() {

@@ -1,7 +1,4 @@
-                       <div class="modal fade" id="portlet-product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<?php $form=$this->beginWidget('CActiveForm', array(
+                       			<?php $form=$this->beginWidget('CActiveForm', array(
                                                         'id'=>'orderProduct',
                                                         'action' => $this->createUrl('default/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId)),
                                                         'enableAjaxValidation'=>true,
@@ -32,7 +29,7 @@
                                                                 <div class="form-group" <?php if($orderProduct->hasErrors('product_id')) echo 'has-error';?>>
                                                                         <?php echo $form->label($orderProduct, 'product_id',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">											
-                                                                                <?php echo $form->dropDownList($orderProduct, 'product_id', array('0' => '-- 请选择 --') +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+                                                                                <?php echo $form->dropDownList($orderProduct, 'product_id', array('0' => '-- 请选择 --') +$products ,array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('dpid')));?>
                                                                                 <?php echo $form->error($orderProduct, 'product_id' )?>
                                                                         </div>
                                                                 </div>                                                      
@@ -88,18 +85,29 @@
                                                         <input type="submit" class="btn green" id="create_btn" value="确 定">
                                                 </div>
 
-                                                <?php $this->endWidget(); ?>
-					</div>
-					<!-- /.modal-content -->
-				</div>
-				<!-- /.modal-dialog -->
-			</div>
-			<!-- /.modal -->
-			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<!-- BEGIN PAGE HEADER-->  
-			
-                
+                                                <?php $this->endWidget(); ?>                
                     <script type="text/javascript">
+                            $('#selectCategory').change(function(){
+                                        var cid = $(this).val();
+                                        //alert('<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId));?>/pid/'+cid);
+                                        //alert($('#ProductSetDetail_product_id').html());
+                                        $.ajax({
+                                                url:'<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId));?>/pid/'+cid,
+                                                type:'GET',
+                                                dataType:'json',
+                                                success:function(result){
+                                                        //alert(result.data);
+                                                        var str = '<option value="">--请选择--</option>';                                                                                            
+                                                        if(result.data.length){
+                                                                //alert(1);
+                                                                $.each(result.data,function(index,value){
+                                                                        str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+                                                                });                                                                                                                                                                                                       
+                                                        }
+                                                        $('#OrderProduct_product_id').html(str); 
+                                                }
+                                        });
+                                });
                         $('#btn_product').click(function(){
                                 $('#btn_product').removeClass('grey');
                                 $('#btn_product').addClass('purple');
@@ -135,4 +143,6 @@
                                         }
                                 });                            
                         });
+                        
+                        
                     </script>

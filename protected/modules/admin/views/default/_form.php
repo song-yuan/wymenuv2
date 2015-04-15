@@ -25,7 +25,7 @@
                                                                                                                         <th class="hidden-xs">上菜</th>
                                                                                                                         <th class="hidden-xs">口味</th>
                                                                                                                         <th>总价<span id="total">(<?php echo number_format($productTotal,2);?>)</span></th>
-                                                                                                                        <th style="width:15%;"><a class="btn green add_btn" id="addproduct" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;&nbsp;加菜</a></th>
+                                                                                                                        <th ><a class="btn green add_btn" id="addproduct" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;&nbsp;加菜</a></th>
 														</tr>
 													</thead>
 													<tbody>
@@ -71,6 +71,91 @@
 									
 							<?php $this->endWidget(); ?>
 							<script>
-                                                                                                                           
-								
+                                                            var $modalaccount = $('#portlet-account');
+                                                            $('#btn_account').click(function(){
+                                                                   $modalaccount.modal();
+
+                                                            });
+                                                            var $modalconfig = $('#portlet-config');
+                                                            $('#addproduct').click(function(){
+                                                                   $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('default/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>', '', function(){
+                                                                            $modalconfig.modal();
+                                                                          });                                
+                                                            });
+
+                                                            $('.btn-edit').click(function(){
+                                                                   var id = $(this).attr('lid');
+                                                                   var setid = $(this).attr('setid');
+                                                                   var $modal=$('#portlet-config');
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/productedit',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                                                   ,'', function(){
+                                                                     $modal.modal();
+                                                                   });
+                                                            });
+
+                                                            $('.btn-retreat').click(function(){
+                                                                   var id = $(this).attr('lid');
+                                                                   var setid = $(this).attr('setid');
+                                                                   var $modal=$('#portlet-config');
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/productretreat',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                                                   ,'', function(){
+                                                                     $modal.modal();
+                                                                   });
+                                                            });
+
+                                                            $('.btn-taste').click(function(){
+                                                                   var id = $(this).attr('lid');
+                                                                   var setid = $(this).attr('setid');
+                                                                   var $modal=$('#portlet-config');
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/producttaste',array('companyId'=>$this->companyId,'typeId'=>$typeId,'isall'=>'0','orderId'=>$model->lid));?>/id/'+id+'/setid/'+setid
+                                                                   ,'', function(){
+                                                                     $modal.modal();
+                                                                   });
+                                                            });
+
+                                                            $('.btn-weight').click(function(){
+                                                                   var id = $(this).attr('lid');
+                                                                   var setid = $(this).attr('setid');
+                                                                   var $modal=$('#portlet-config');
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/productweight',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                                                   ,'', function(){
+                                                                     $modal.modal();
+                                                                   });
+                                                            });
+
+                                                            $('.btn-del').click(function(){
+                                                               var that = $(this);
+                                                               var id = $(this).attr('lid');
+                                                               var setid = $(this).attr('setid');
+                                                               var orderstatus="<?php echo $model->order_status;?>";
+                                                               //alert(orderstatus);
+                                                               if(orderstatus!='1')
+                                                               {
+                                                                   alert('不是未下单状态，不能删除！');
+                                                                   return;
+                                                               }
+                                                               //alert(setid);
+                                                               var tip='';
+                                                               if(setid!='0000000000')
+                                                               {
+                                                                   tip='你确定要删除整个套餐吗？';
+                                                               }else{
+                                                                   tip='你确定要删除该单品吗？';
+                                                               }
+                                                               bootbox.confirm(tip, function(result) {
+                                                               if(result){
+                                                                       location.href="<?php echo $this->createUrl('default/delproduct',array('companyId'=>$this->companyId));?>/id/"+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>";
+                                                               }});
+                                                           });                                                                  
+                                                           
+                                                           $('.reprint-btn').click(function(){
+                                                                    $.get('<?php echo $this->createUrl('default/printProducts',array('companyId'=>$this->companyId,'id'=>$model->lid,'reprint'=>1));?>',function(data){
+                                                                            if(data.status) {
+                                                                                    alert('操作成功');
+                                                                            } else {
+                                                                                    alert(data.msg);
+                                                                            }
+                                                                    },'json');
+                                                            });
+                        
 							</script>
