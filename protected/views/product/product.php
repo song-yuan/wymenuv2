@@ -9,6 +9,8 @@
 	Yii::app()->clientScript->registerCssFile('../css/product/pic.css');
 	Yii::app()->clientScript->registerCssFile('../css/product/ui-media.css'); 
 	Yii::app()->clientScript->registerCssFile('../css/product.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/reset.css');
+	Yii::app()->clientScript->registerCssFile('../css/product/slick.css');
 
 	Yii::app()->clientScript->registerScriptFile('../js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
@@ -20,10 +22,11 @@
 ?>
 
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type));?>
+	<link href='../css/product/reset.css' rel='stylesheet' type='text/css'>
+	<link href='../css/product/slick.css' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="../js/product/slick.min.js"></script>
 	<script type="text/javascript" src="../js/product/classie.js"></script>
 	<script type="text/javascript" src="../js/product/product.js"></script>
-	<script type="text/javascript" src="../js/product/jquery.event.drag-1.5.min.js"></script>
-	<script type="text/javascript" src="../js/product/jquery.touchSlider.js"></script>
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
@@ -58,30 +61,8 @@
 <div class="aniele"></div>
 
 <div class="large-pic">
-	<div class="main_visual">
-            <div class="flicking_con">
-                	<div class="flicking_inner">
-                    <a href="javascript:;">1</a>
-                    <a href="javascript:;">2</a>
-                    <a href="javascript:;">3</a>
-                    <a href="javascript:;">4</a>
-                    <a href="javascript:;">5</a>
-               	 </div>
-            </div>
-			<div class="main_image">
-				<ul>					
-					<li><img src=""/></li>
-					<li><img src=""/></li>
-					<li><img src=""/></li>
-					<li><img src=""/></li>
-					<li><img src=""/></li>
-				</ul>
-				<!--左右点击
-				<a href="javascript:;" id="btn_prev"></a>
-				<a href="javascript:;" id="btn_next"></a>
-				-->
-			</div>
-		</div>
+	<ul id="gallery">
+	 </ul>
 </div>
 <script type="text/javascript">
 	var cat = '<?php echo $categoryId;?>';
