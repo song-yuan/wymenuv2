@@ -68,6 +68,20 @@ class ProductClass
 		
 		return $result['category_name'];
 	}
+	public static function getProductPic($dpid = 0,$productId = 0){
+		$picArr =array();
+		$command = Yii::app()->db;
+		
+		$sql = 'select pic_path from nb_product_picture where dpid=:dpid and product_id=:productId and delete_flag=0';
+		$conn = $command->createCommand($sql);
+		$conn->bindValue(':dpid',$dpid);
+		$conn->bindValue(':productId',$productId);
+		$result = $conn->queryAll();
+		if($result){
+			$picArr =$result;
+		}
+		return $picArr;
+	}
 	public static function getHotsProduct($dpid = 0,$type = 1,$siteNoId = 0){
 		$command = Yii::app()->db;
 		$siteId = 0;
