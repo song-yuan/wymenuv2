@@ -71,14 +71,11 @@
 									
 							<?php $this->endWidget(); ?>
 							<script>
-                                                            var $modalaccount = $('#portlet-account');
-                                                            $('#btn_account').click(function(){
-                                                                   $modalaccount.modal();
-
-                                                            });
-                                                            var $modalconfig = $('#portlet-config');
+                                                            
+                                                            
                                                             $('#addproduct').click(function(){
-                                                                   $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('default/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>', '', function(){
+                                                                var $modalconfig = $('#portlet-config');
+                                                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('default/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>', '', function(){
                                                                             $modalconfig.modal();
                                                                           });                                
                                                             });
@@ -86,10 +83,10 @@
                                                             $('.btn-edit').click(function(){
                                                                    var id = $(this).attr('lid');
                                                                    var setid = $(this).attr('setid');
-                                                                   var $modal=$('#portlet-config');
-                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/productedit',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                                                   var $modalconfig = $('#portlet-config');
+                                                                   $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('default/editProduct',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
                                                                    ,'', function(){
-                                                                     $modal.modal();
+                                                                     $modalconfig.modal();
                                                                    });
                                                             });
 
@@ -97,7 +94,7 @@
                                                                    var id = $(this).attr('lid');
                                                                    var setid = $(this).attr('setid');
                                                                    var $modal=$('#portlet-config');
-                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/productretreat',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
                                                                    ,'', function(){
                                                                      $modal.modal();
                                                                    });
@@ -107,7 +104,7 @@
                                                                    var id = $(this).attr('lid');
                                                                    var setid = $(this).attr('setid');
                                                                    var $modal=$('#portlet-config');
-                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/producttaste',array('companyId'=>$this->companyId,'typeId'=>$typeId,'isall'=>'0','orderId'=>$model->lid));?>/id/'+id+'/setid/'+setid
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/tasteProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'isall'=>'0','orderId'=>$model->lid));?>/id/'+id+'/setid/'+setid
                                                                    ,'', function(){
                                                                      $modal.modal();
                                                                    });
@@ -115,9 +112,8 @@
 
                                                             $('.btn-weight').click(function(){
                                                                    var id = $(this).attr('lid');
-                                                                   var setid = $(this).attr('setid');
                                                                    var $modal=$('#portlet-config');
-                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/productweight',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/weightProduct',array('companyId'=>$this->companyId));?>/id/'+id+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
                                                                    ,'', function(){
                                                                      $modal.modal();
                                                                    });

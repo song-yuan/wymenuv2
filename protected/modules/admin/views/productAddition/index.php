@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品口味对应','subhead'=>'产品口味对应列表','breadcrumbs'=>array(array('word'=>'产品口味对应','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'加菜管理','subhead'=>'加菜产品列表','breadcrumbs'=>array(array('word'=>'加菜','url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>产品口味对应列表</div>
+					<div class="caption"><i class="fa fa-globe"></i>加菜管理</div>
                                         <div class="actions">						
                                                 <div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
@@ -107,7 +107,7 @@
 	$(document).ready(function(){
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('taste/productTaste' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+			location.href="<?php echo $this->createUrl('productAddition/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
 	</script>

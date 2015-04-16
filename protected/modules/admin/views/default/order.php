@@ -63,14 +63,15 @@
                                 $('body').addClass('page-sidebar-closed');
                                 
                         });
-                         
-                        $('#submit-btn').click(function(){
-                                 bootbox.confirm('你确定要结单吗？', function(result) {
-                                        if(result){
-                                                $('#order-form').submit();
-                                        }
-                                 });
+                        
+                        $('#btn_account').click(function(){
+                                var $modalconfig = $('#portlet-config');
+                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('default/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>', '', function(){
+                                            $modalconfig.modal();
+                                          }); 
                         });
+                        
+                        
                         $('#print-btn').click(function(){
                                 $.get('<?php echo $this->createUrl('default/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
                                         if(data.status) {

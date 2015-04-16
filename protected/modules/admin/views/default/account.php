@@ -45,12 +45,18 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                         <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                        <input type="submit" class="btn green" id="create_btn" value="确 定">
+                                                        <input type="button" class="btn green" id="submit-btn" value="确 定">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>
 					
 			
 			<script type="text/javascript">
-                            
+                            $('#submit-btn').click(function(){
+                                 bootbox.confirm('你确定要结单吗？', function(result) {
+                                        if(result){
+                                                $('#order-form').submit();
+                                        }
+                                 });
+                        });
                         </script>
