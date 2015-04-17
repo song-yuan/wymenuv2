@@ -12,15 +12,11 @@ class SiteController extends BackendController
 	public function actionIndex() {
                
 		$typeId = Yii::app()->request->getParam('typeId',0);
-                //echo $typeId; exit;
-		$siteTypes = $this->getTypes();
+                $siteTypes = $this->getTypes();
                 
 		if(!empty($siteTypes)) {
-			
-                        $typeKeys = array_keys($siteTypes);
-                        $typeId = array_search($typeId, $typeKeys) ? $typeId : $typeKeys[0] ;
-
-                        
+		        $typeKeys = array_keys($siteTypes);
+                        $typeId = array_search($typeId, $typeKeys) ? $typeId : $typeKeys[0] ;                      
                 }
 		$criteria = new CDbCriteria;
                 $criteria->with = array('siteType', 'floor');

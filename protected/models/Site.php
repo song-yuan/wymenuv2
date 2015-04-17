@@ -42,6 +42,7 @@ class Site extends CActiveRecord
 			array('period, overtime,buffer', 'numerical'),
 			array('serial', 'length', 'max'=>20),
 			array('site_level', 'length', 'max'=>20),
+			array('floor_id','compare','compareValue'=>'0','operator'=>'>','message'=>'楼层必须选择'),
 			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

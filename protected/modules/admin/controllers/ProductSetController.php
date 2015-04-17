@@ -161,7 +161,9 @@ class ProductSetController extends BackendController
                 //$printers = $this->getPrinters();
                 $categories = $this->getCategories();
                 $categoryId=  $this->getCategoryId($lid);
-                $products = $this->getProducts($categoryId);
+                $products= Product::model()->findAll(' dpid=:dpid and lid=:lid',array(':dpid'=>$this->companyId,':lid'=>$model->product_id));
+                //var_dump($products);exit;
+                //$this->getProducts($categoryId);
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
 		$this->render('detailupdate' , array(
 				'model'=>$model,

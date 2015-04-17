@@ -18,9 +18,9 @@
 									
 									<div class="form-group discount">
 										<label class="col-md-3 control-label">时价价格</label>
-										<div class="col-md-2">
+										<div class="col-md-4">
 											<div class="input-group">
-											<input type="text" class="form-control" name="ProductTempprice[price]" value="<?php echo $model->price;?>" /><span class="input-group-addon">元</span>
+											<input type="text" class="form-control" name="ProductTempprice[price]" value="<?php echo $model->price;?>" /><span class="input-group-addon">元</span> <?php echo '原价： '.$product->original_price;?>
 											</div>
 										</div>
 									</div>

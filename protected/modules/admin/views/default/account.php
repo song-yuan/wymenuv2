@@ -20,7 +20,7 @@
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($model, 'reality_total',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
-                                                                                <?php echo $form->textField($model, 'reality_total' ,array('value'=>number_format($total['total'],2),'class' => 'form-control','placeholder'=>$model->getAttributeLabel('reality_total')));?>
+                                                                                <?php echo $form->textField($model, 'reality_total' ,array('value'=>number_format($total,2),'class' => 'form-control','placeholder'=>$model->getAttributeLabel('reality_total')));?>
                                                                                 <?php echo $form->error($model, 'reality_total' )?>
                                                                         </div>
                                                                 </div>

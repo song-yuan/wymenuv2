@@ -45,7 +45,7 @@
 								<th style="width:20%">名称</th>
 								<th >图片</th>
 								<th>类别</th>
-								<th>现价</th>
+								<th>原价</th>
                                 <th>单位</th>
                                 <th>是否特价</th>
 								<th>&nbsp;</th>

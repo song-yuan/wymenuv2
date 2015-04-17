@@ -52,7 +52,7 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th>退菜理由</th>
-								<th>添加时间</th>
+								<th>提示信息</th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -62,7 +62,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="lid[]" /></td>
 								<td ><?php echo $model->name;?></td>
-								<td><?php echo $model->create_at;?></td>
+								<td><?php echo $model->tip;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('retreat/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>

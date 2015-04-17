@@ -14,7 +14,7 @@ class CompanyController extends BackendController
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
-		$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? '' : 'dpid='.Yii::app()->user->companyId ;
+		$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? ' delete_flag=0 ' : ' delete_flag=0 and dpid='.Yii::app()->user->companyId ;
 		
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -66,8 +66,15 @@ class CompanyController extends BackendController
 				'printers'=>$printers
 		));
 	}
-	public function actionFreaze(){
-		
+	public function actionDelete(){
+		$ids = Yii::app()->request->getPost('companyIds');
+                
+		if(!empty($ids)) {
+			Yii::app()->db->createCommand('update nb_company set delete_flag=1 where dpid in ('.implode(',' , $ids).')')
+			->execute();
+			
+		}
+		$this->redirect(array('company/index'));
 	}
 	private function getPrinterList(){
 		$printers = Printer::model()->findAll('dpid=:dpid',array(':dpid'=>$this->companyId)) ;

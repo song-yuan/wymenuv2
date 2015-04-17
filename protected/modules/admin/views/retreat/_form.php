@@ -13,6 +13,13 @@
 											<?php echo $form->textField($model, 'name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('name')));?>
 											<?php echo $form->error($model, 'name' )?>
 										</div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                                <?php echo $form->label($model, 'tip',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'tip',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('tip')));?>
+											<?php echo $form->error($model, 'tip' )?>
+										</div>
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">

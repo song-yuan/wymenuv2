@@ -63,7 +63,7 @@ class Retreat extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'name' => '退菜理由',
-			'tip' => '如：理由name是有异物，这里tip提示输入物品名称',
+			'tip' => '提示信息',
 			'delete_flag' => 'Delete Flag',
 		);
 	}

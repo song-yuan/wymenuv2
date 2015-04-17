@@ -405,21 +405,26 @@ class DefaultController extends BackendController
 		));
 	}
         
-        private function getPaymentMethodList(){
-		$paymentMethods = PaymentMethod::model()->findAll() ;
+        private function getPaymentMethodList($companyId){
+		$paymentMethods = PaymentMethod::model()->findAll(' dpid=:dpid',array(':dpid'=>$companyId)) ;
 		return CHtml::listData($paymentMethods, 'lid', 'name');
 	}
         
         public function actionAccount() {
 		$orderId = Yii::app()->request->getParam('orderId','0');
                 $companyId = Yii::app()->request->getParam('companyId','0');
+                $typeId=Yii::app()->request->getParam('typeId','0');
+                $total=Yii::app()->request->getParam('total','0');
                 $criteria = new CDbCriteria;
 		$criteria->condition =  't.dpid='.$companyId.' and t.lid='.$orderId ;
                 $criteria->order = ' t.lid desc ';
                 $model = Order::model()->find($criteria);
-                
+                $paymentMethods = $this->getPaymentMethodList($companyId);
 		$this->renderPartial('account' , array(
-				'model' => $model
+				'model' => $model,
+                                'total' => $total,
+                                'typeId'=>$typeId,
+                                'paymentMethods'=>$paymentMethods
 		));
 	}
         
@@ -657,16 +662,60 @@ class DefaultController extends BackendController
         
         public function actionRetreatProduct(){
 		$id = Yii::app()->request->getParam('id',0);
-		$setid = Yii::app()->request->getParam('setid',0);
-		$orderId = Yii::app()->request->getParam('orderId');
 		$typeId = Yii::app()->request->getParam('typeId');
 		$companyId = Yii::app()->request->getParam('companyId');                
-                //$models=OrderProduct::getRetreat($id, $companyId);
                 $models = OrderRetreat::model()->with('retreat')->findAll('t.order_detail_id=:id and t.dpid=:dpid',array(':id'=>$id,':dpid'=>$companyId));
-                //var_dump($models);exit;
-               
+                
 		$this->renderPartial('retreat' , array(
-				'models' => $models
+				'models' => $models,
+                                'orderDetailId'=>$id
+		));
+	}
+        
+        public function actionAddRetreat() {
+                $companyId=Yii::app()->request->getParam('companyId','0');
+                $orderDetailId=Yii::app()->request->getParam('orderDetailId','0');
+                $orderRetreat = new OrderRetreat();
+                $orderRetreat->order_detail_id = $orderDetailId;
+                $orderRetreat->dpid = $companyId;
+                $retreats = Retreat::model()->findAll(' dpid=:dpid and delete_flag = 0',array(':dpid'=>$companyId));                
+                $retreatslist=CHtml::listData($retreats, 'lid', 'name');                
+                
+		if(Yii::app()->request->isPostRequest){                        
+                    $orderRetreat->attributes = Yii::app()->request->getPost('OrderRetreat');
+                    $orderRetreat->create_at = date('Y-m-d H:i:s',time());
+                    $se=new Sequence("order_retreat");
+                    $orderRetreat->lid = $se->nextval();
+                    if($orderRetreat->save()){                                
+                        echo json_encode(array('msg'=>'成功'));
+                    }else{
+                        echo json_encode(array('msg'=>'失败'));
+                    }                    
+                    return;
+                }                
+                $this->renderPartial('addRetreat' , array(
+				'orderRetreat' => $orderRetreat,
+				'retreats'=>$retreatslist                                
+		));
+	}
+        
+        public function actionEditRetreat() {
+                $companyId=Yii::app()->request->getParam('companyId','0');
+                $orderRetreatId=Yii::app()->request->getParam('orderRetreatId','0');
+                $orderRetreat = OrderRetreat::model()->with('retreat')->find(' t.dpid=:dpid and t.lid=:lid and t.delete_flag=0',  array(':dpid'=>$companyId,':lid'=>$orderRetreatId));
+                
+		if(Yii::app()->request->isPostRequest){                        
+                    $orderRetreat->attributes = Yii::app()->request->getPost('OrderRetreat');
+                    
+                    if($orderRetreat->save()){                                
+                        echo json_encode(array('msg'=>'成功'));
+                    }else{
+                        echo json_encode(array('msg'=>'失败'));
+                    }                    
+                    return;
+                }                
+                $this->renderPartial('editRetreat' , array(
+				'orderRetreat' => $orderRetreat                                
 		));
 	}
         
@@ -784,6 +833,13 @@ class DefaultController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId');
                 $currentPrice=CreateOrder::getProductPrice($companyId,$id,0);
                 echo json_encode(array('cp'=>$currentPrice));
+        }
+        
+        public function actionRetreatTip(){
+                $id = Yii::app()->request->getParam('id',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $retreat=  Retreat::model()->find(' lid=:id and dpid=:dpid',  array(':id'=>$id,':dpid'=>$companyId));
+                echo json_encode(array('cp'=>$retreat->tip));
         }
         
         public function actionPrintList(){

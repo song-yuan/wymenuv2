@@ -92,9 +92,8 @@
 
                                                             $('.btn-retreat').click(function(){
                                                                    var id = $(this).attr('lid');
-                                                                   var setid = $(this).attr('setid');
                                                                    var $modal=$('#portlet-config');
-                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+id+'/setid/'+setid+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('default/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+id+'/typeId/'+"<?php echo $typeId; ?>"
                                                                    ,'', function(){
                                                                      $modal.modal();
                                                                    });

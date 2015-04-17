@@ -1,7 +1,7 @@
                        	
                                         	<?php $form=$this->beginWidget('CActiveForm', array(
                                                         'id'=>'retreat_form',
-                                                        'action' => $this->createUrl('default/addRetreat',array('companyId'=>$this->companyId,'orderDetailId'=>$orderRetreat->order_detail_id)),
+                                                        'action' => $this->createUrl('default/editRetreat',array('companyId'=>$this->companyId,'orderRetreatId'=>$orderRetreat->lid)),
                                                         'enableAjaxValidation'=>true,
                                                         'enableClientValidation'=>true,
                                                         'clientOptions'=>array(
@@ -17,13 +17,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                         <div class="form-actions fluid" id="product_panel">
-                                                                <div class="form-group" <?php if($orderRetreat->hasErrors('retreat_id')) echo 'has-error';?>>
-                                                                        <?php echo $form->label($orderRetreat, 'retreat_id',array('class' => 'col-md-4 control-label'));?>
-                                                                        <div class="col-md-6">											
-                                                                                <?php echo $form->dropDownList($orderRetreat, 'retreat_id', array('0' => '-- 请选择 --') +$retreats ,array('class' => 'form-control','placeholder'=>$orderRetreat->getAttributeLabel('retreat_id')));?>
-                                                                                <?php echo $form->error($orderRetreat, 'retreat_id' )?>
-                                                                        </div>
-                                                                </div>                                                      
+                                                                <div class="col-md-10"><span class="label label-default center">'<?php if(!empty($orderRetreat->retreat->name)) echo $orderRetreat->retreat->name;?>'</span></div>                                                     
                                                                  
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderRetreat, 'retreat_memo',array('class' => 'col-md-4 control-label'));?>
@@ -46,17 +40,7 @@
                                                 <?php $this->endWidget(); ?>
                                         
                     <script type="text/javascript">                           
-                        $('#OrderRetreat_retreat_id').change(function(){
-                            var id = $(this).val();                            
-                                $.ajax({
-                                        url:'<?php echo $this->createUrl('default/retreatTip',array('companyId'=>$this->companyId));?>/id/'+id,
-                                        type:'GET',
-                                        dataType:'json',
-                                        success:function(result){                                                                                                                                       
-                                                $('#OrderRetreat_retreat_memo').val(result.cp); 
-                                        }
-                                });                            
-                        });
+                        
                         
                         $('#create_btn_add_retreat').click(function(){                            
                            // var id = $(this).val();                            

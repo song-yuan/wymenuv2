@@ -67,13 +67,13 @@
 											</tr>
 										</thead>
 										<tbody>
-										<?php if($models):?>
+										<?php if(!empty($models)):?>
 										<?php foreach ($models as $model):?>
 											<tr class="odd gradeX">
 												<td><input type="checkbox" class="checkboxes"  value="<?php echo $model->lid;?>" name="ids[]" /></td>
 												<td ><?php echo $model->serial ;?></td>
 												<td ><?php echo $model->siteType->name ;?></td>
-												<td ><?php echo $model->floor->name ;?></td>
+												<td ><?php if(!empty($model->floor->name)) echo $model->floor->name;?></td>
 												<td><?php echo $model->site_level;?></td>
 												<td class="center">
 												<a href="<?php echo $this->createUrl('site/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
@@ -117,15 +117,13 @@
 									
 								</div>
 							</div>
-							<!-- END EXAMPLE TABLE PORTLET-->
-												
+							<!-- END EXAMPLE TABLE PORTLET-->												
 						</div>
 					</div>
 				<?php endif;?>
 			</div>
 		</div>
-		<?php $this->endWidget(); ?>
-	
+		<?php $this->endWidget(); ?>	
 </div>
 	<script type="text/javascript">
 	$(document).ready(function(){

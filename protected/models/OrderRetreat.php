@@ -31,7 +31,7 @@ class OrderRetreat extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, retreat_memo', 'required'),
+			array('retreat_memo', 'required'),
 			array('lid, dpid, retreat_id, order_detail_id', 'length', 'max'=>10),
 			array('retreat_memo', 'length', 'max'=>50),
 			array('delete_flag', 'length', 'max'=>1),
@@ -64,9 +64,9 @@ class OrderRetreat extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'retreat_id' => 'Retreat',
+			'retreat_id' => '退菜理由',
 			'order_detail_id' => 'Order Detail',
-			'retreat_memo' => '如有异物时，输入：头发',
+			'retreat_memo' => '具体原因',
 			'delete_flag' => 'Delete Flag',
 		);
 	}

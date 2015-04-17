@@ -70,7 +70,7 @@ class ProductAddition extends CActiveRecord
 			'mproduct_id' => '主产品',
 			'sproduct_id' => '附加菜品',
 			'price' => '附加菜价格',
-			'number' => '单词下单个数',
+			'number' => '单次下单个数',
 			'delete_flag' => 'Delete Flag',
 		);
 	}

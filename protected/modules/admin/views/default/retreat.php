@@ -2,8 +2,8 @@
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                                         
                                                         <div class="actions">
-                                                        <a href="<?php echo $this->createUrl('retreat/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
-                                        <a href="javascript:void(0)" class="btn red" onclick="document.getElementById('taste-form').submit();"><i class="fa fa-times"></i> 删除</a>
+                                                        <a href="javascript:void(0);" class="btn blue" id="btn-retreat-add"><i class="fa fa-pencil"></i> 添加</a>
+                                                        <a href="javascript:void(0);" class="btn red" id="btn-retreat-delete"><i class="fa fa-times"></i> 删除</a>
                                                         </div>
                                                 </div>
                                                 <div class="modal-body">
@@ -21,11 +21,10 @@
                                                                     <?php foreach ($models as $model):?>
                                                                             <tr class="odd gradeX">
                                                                                     <td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-                                                                                    <td ><?php echo $model->name ;?></td>
-                                                                                    <td ><?php   echo $form->textField($model, 'retreat_memo' ,array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('price')));
-                                                                                    ?></td>
+                                                                                    <td ><?php echo $model->retreat->name ;?></td>
+                                                                                    <td><?php echo $model->retreat_memo ;?></td>
                                                                                     <td class="center">
-                                                                                    <a href="<?php echo $this->createUrl('retreat/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+                                                                                    <a href="javascript:void(0);" class="btn-over btn green edit_retreat_btn" orderRetreatId="<?php echo $model->lid; ?>">编辑</a>
                                                                                     </td>
                                                                             </tr>
                                                                     <?php endforeach;?>
@@ -37,5 +36,22 @@
                                                         <button type="button" class="btn default" data-dismiss="modal">确定</button>
                                                 </div>
 							<script>
-                                                         	
+                                                            $('#btn-retreat-add').click(function(){
+                                                               var orderDetailId = '<?php echo $orderDetailId; ?>';
+                                                               var $modal=$('#portlet-config2');
+                                                               $modal.find('.modal-content').load('<?php echo $this->createUrl('default/addRetreat',array('companyId'=>$this->companyId));?>/orderDetailId/'+orderDetailId
+                                                               ,'', function(){
+                                                                 $modal.modal();
+                                                               });
+                                                            });
+                                                            
+                                                            $('.edit_retreat_btn').click(function(){
+                                                               var orderRetreatId = $(this).attr('orderRetreatId');
+                                                               //alert(orderRetreatId);
+                                                               var $modal=$('#portlet-config2');
+                                                               $modal.find('.modal-content').load('<?php echo $this->createUrl('default/editRetreat',array('companyId'=>$this->companyId));?>/orderRetreatId/'+orderRetreatId
+                                                               ,'', function(){
+                                                                 $modal.modal();
+                                                               });
+                                                            });
 							</script>

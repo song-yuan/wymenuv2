@@ -38,6 +38,7 @@ class ProductSetDetail extends CActiveRecord
 			array('group_no, number', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, set_id, product_id, price', 'length', 'max'=>10),
 			array('is_select, delete_flag', 'length', 'max'=>1),
+			array('product_id','compare','compareValue'=>'0','operator'=>'>','message'=>'必须选择产品'),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
