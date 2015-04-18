@@ -3,7 +3,7 @@
 	Yii::app()->clientScript->registerCssFile('../css/order.css');
 	$orderPrice = 0;
 	$orderNum = 0;
-	$orderList = new OrderList($this->siteNoId);
+	$orderList = new OrderList($this->companyId,$this->siteNoId);
 	if($orderList->order){
 		$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0);
 		$price = $orderList->OrderPrice(0);
