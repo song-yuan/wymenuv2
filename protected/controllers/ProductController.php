@@ -119,7 +119,7 @@ class ProductController extends Controller
 		$product = array('lid'=>$productId,'type'=>$type);
 		if($isAddOrder){
 			//增加
-			$createOrder = new CreateOrder($this->siteNoId,$product);
+			$createOrder = new CreateOrder($this->companyId,$this->siteNoId,$product);
 			if($createOrder->createOrder()){
 				echo 1;
 			}else{

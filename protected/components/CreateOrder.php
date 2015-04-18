@@ -4,8 +4,8 @@ class CreateOrder
 	public $siteId = 0;
 	public $companyId = 0;
 	public $product = array();
-	public function __construct($siteNoId = 0,$product = array()){
-		$this->siteNo = SiteNo::model()->find('lid=:lid',array(':lid'=>$siteNoId));
+	public function __construct($dpid = 0,$siteNoId = 0,$product = array()){
+		$this->siteNo = SiteNo::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$siteNoId,':dpid'=>$dpid));
 		$this->companyId = $this->siteNo->dpid;
 		$this->siteId = $this->siteNo->site_id;
 		$this->product = $product;
@@ -45,6 +45,7 @@ class CreateOrder
 			}
 			
 			if($orderProduct){
+				$orderProduct->price = $this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']);
 				$orderProduct->delete_flag = 0;
 				$orderProduct->update();
 			}else{
