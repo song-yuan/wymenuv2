@@ -104,8 +104,8 @@ $(document).ready(function(){
  					});
  					$("#gallery").css({
  						position: "absolute",
- 						left: ($(window).width() - $("#gallery").outerWidth())/2,
- 						top: ($(window).height() - $("#gallery").outerHeight())/2
+ 						left: ($('.large-pic').width() - $("#gallery").outerWidth())/2,
+ 						top: ($('.large-pic').height() - $("#gallery").outerHeight())/2
  					});	
  				}
  			},
