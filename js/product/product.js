@@ -79,6 +79,11 @@ $(document).ready(function(){
          						}
      					}
      					$('.info').html(str);
+     					$("#gallery").css({
+     						position: "absolute",
+     						left: ($(window).width() - $("#gallery").outerWidth())/2,
+     						top: ($(window).height() - $("#gallery").outerHeight())/2
+     					});	
      				}
      			},
      		});
