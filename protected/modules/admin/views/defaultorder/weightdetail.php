@@ -1,6 +1,6 @@
                        			<?php $form=$this->beginWidget('CActiveForm', array(
                                                         'id'=>'orderProduct',
-                                                        'action' => $this->createUrl('default/weightProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'id'=>$orderProduct->lid)),
+                                                        'action' => $this->createUrl('defaultOrder/weightProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'id'=>$orderProduct->lid)),
                                                         'enableAjaxValidation'=>true,
                                                         'enableClientValidation'=>true,
                                                         'clientOptions'=>array(

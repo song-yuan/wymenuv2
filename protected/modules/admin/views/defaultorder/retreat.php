@@ -39,7 +39,7 @@
                                                             $('#btn-retreat-add').click(function(){
                                                                var orderDetailId = '<?php echo $orderDetailId; ?>';
                                                                var $modal=$('#portlet-config2');
-                                                               $modal.find('.modal-content').load('<?php echo $this->createUrl('default/addRetreat',array('companyId'=>$this->companyId));?>/orderDetailId/'+orderDetailId
+                                                               $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addRetreat',array('companyId'=>$this->companyId));?>/orderDetailId/'+orderDetailId
                                                                ,'', function(){
                                                                  $modal.modal();
                                                                });
@@ -49,7 +49,7 @@
                                                                var orderRetreatId = $(this).attr('orderRetreatId');
                                                                //alert(orderRetreatId);
                                                                var $modal=$('#portlet-config2');
-                                                               $modal.find('.modal-content').load('<?php echo $this->createUrl('default/editRetreat',array('companyId'=>$this->companyId));?>/orderRetreatId/'+orderRetreatId
+                                                               $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/editRetreat',array('companyId'=>$this->companyId));?>/orderRetreatId/'+orderRetreatId
                                                                ,'', function(){
                                                                  $modal.modal();
                                                                });

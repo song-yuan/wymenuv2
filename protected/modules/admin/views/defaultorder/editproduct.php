@@ -1,6 +1,6 @@
                        			<?php $form=$this->beginWidget('CActiveForm', array(
                                                         'id'=>'orderProduct',
-                                                        'action' => $this->createUrl('default/editProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'id'=>$orderProduct->lid)),
+                                                        'action' => $this->createUrl('defaultOrder/editProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'id'=>$orderProduct->lid)),
                                                         'enableAjaxValidation'=>true,
                                                         'enableClientValidation'=>true,
                                                         'clientOptions'=>array(
@@ -73,7 +73,7 @@
                                         $('#product_panel').addClass('hidden');
                                         $('#set_panel').removeClass('hidden');
                                         $('#isetid').val('1');
-                                        $('#table-set-detail').load('<?php echo $this->createUrl('default/setdetail',array('companyId'=>$this->companyId));?>/id/'+set_id);
+                                        $('#table-set-detail').load('<?php echo $this->createUrl('defaultOrder/setdetail',array('companyId'=>$this->companyId));?>/id/'+set_id);
                                     }
                                 };
                               setlist();                    

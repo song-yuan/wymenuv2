@@ -1,6 +1,6 @@
                        			<?php $form=$this->beginWidget('CActiveForm', array(
                                                         'id'=>'orderProduct',
-                                                        'action' => $this->createUrl('default/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId)),
+                                                        'action' => $this->createUrl('defaultOrder/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId)),
                                                         'enableAjaxValidation'=>true,
                                                         'enableClientValidation'=>true,
                                                         'clientOptions'=>array(
@@ -129,13 +129,13 @@
                         $('#setlist').change(function(){
                             id = $(this).val();
                             $('#OrderProduct_set_id').val(id);
-                            $('#table-set-detail').load('<?php echo $this->createUrl('default/setdetail',array('companyId'=>$this->companyId));?>/id/'+id);
-                            //alert('<?php echo $this->createUrl('default/setdetail',array('companyId'=>$this->companyId));?>/id/'+id);
+                            $('#table-set-detail').load('<?php echo $this->createUrl('defaultOrder/setdetail',array('companyId'=>$this->companyId));?>/id/'+id);
+                            //alert('<?php echo $this->createUrl('defaultOrder/setdetail',array('companyId'=>$this->companyId));?>/id/'+id);
                         });
                         $('#OrderProduct_product_id').change(function(){
                             var id = $(this).val();                            
                                 $.ajax({
-                                        url:'<?php echo $this->createUrl('default/currentprice',array('companyId'=>$this->companyId));?>/id/'+id,
+                                        url:'<?php echo $this->createUrl('defaultOrder/currentprice',array('companyId'=>$this->companyId));?>/id/'+id,
                                         type:'GET',
                                         dataType:'json',
                                         success:function(result){                                                                                                                                       

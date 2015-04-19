@@ -43,7 +43,7 @@
                         <!-- BEGIN PAGE CONTENT-->
 			<div class="row">
                                 <div class="col-md-4">
-                                    <h3 class="page-title">收银台（"<?php switch($model->order_status) {case 1:{echo '未下单';break;} case 2:{echo '下单未支付';break;} case 3:{echo '已支付';break;} }?>"）</h3>
+                                    <h3 class="page-title"><?php switch($model->order_status) {case 1:{echo '未下单';break;} case 2:{echo '下单未支付';break;} case 3:{echo '已支付';break;} }?></h3>
                                 </div>
                                 <div class="col-md-8">
                                     <h4>
@@ -59,10 +59,9 @@
                                                         </div>
                                                         <div class="actions">
                                                             <a class="btn purple" id="btn_account"><i class="fa fa-pencil"></i> 结单&收银</a>
-                                                            <a class="btn purple" id="btn_pay"><i class="fa fa-pencil"></i> 收银</a>
                                                             <a id="kitchen-btn" class="btn purple"><i class="fa fa-cogs"></i> 下单&厨打</a>
                                                             <a id="print-btn" class="btn purple"><i class="fa fa-print"></i> 打印清单</a>
-                                                            <a href="<?php echo $this->createUrl('default/producttaste' , array('companyId' => $this->companyId,'typeId'=>$typeId,'isall'=>'1'));?>" class="btn purple"><i class="fa fa-pencil"></i> 全单口味</a>
+                                                            <a href="<?php echo $this->createUrl('defaultOrder/producttaste' , array('companyId' => $this->companyId,'typeId'=>$typeId,'isall'=>'1'));?>" class="btn purple"><i class="fa fa-pencil"></i> 全单口味</a>
                                                             <a href="<?php echo $this->createUrl('default/index' , array('companyId' => $model->dpid,'typeId'=>$typeId));?>" class="btn red"><i class="fa fa-times"></i> 返回</a>
                                                         </div>
 						</div>
@@ -86,20 +85,20 @@
                         
                         $('#btn_account').click(function(){
                                 var $modalconfig = $('#portlet-config');
-                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('default/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>', '', function(){
+                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>', '', function(){
                                             $modalconfig.modal();
                                           }); 
                         });
                         
                         $('#btn_pay').click(function(){
                                 var $modalconfig = $('#portlet-config');
-                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('default/pay',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>', '', function(){
+                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/pay',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>', '', function(){
                                             $modalconfig.modal();
                                           }); 
                         });
                         
                         $('#print-btn').click(function(){
-                                $.get('<?php echo $this->createUrl('default/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
+                                $.get('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
                                         if(data.status) {
                                                 alert('操作成功');
                                                 //alert(data.msg);
@@ -109,7 +108,11 @@
                                 },'json');
                         });
                         $('#kitchen-btn').click(function(){
-                                location.href="<?php echo $this->createUrl('default/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'id'=>$model->lid));?>";
+                            var statu = confirm("下单，并厨打，去顶吗？");
+                                if(!statu){
+                                    return false;
+                                } 
+                                location.href="<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>";
                         });
                         
                     </script>

@@ -1,8 +1,9 @@
 			
 						<?php $form=$this->beginWidget('CActiveForm', array(
-                                                        'id'=>'order',
-                                                        'action' => $this->createUrl('default/account',array('companyId'=>$this->companyId,'typeId'=>$typeId)),
+                                                        'id'=>'account-form',
+                                                        'action' => $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid)),
                                                         'enableAjaxValidation'=>true,
+                                                        //'method'=>'POST',
                                                         'enableClientValidation'=>true,
                                                         'clientOptions'=>array(
                                                                 'validateOnSubmit'=>false,
@@ -13,7 +14,7 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title">结单</h4>
+                                                        <h4 class="modal-title">收银 && 结单 <?php switch($model->order_status) {case 2:{echo '未支付';break;} case 3:{echo '已支付';break;} }?></h4>
                                                 </div>
                                                 <div class="modal-body">
                                                         <div class="form-actions fluid">
@@ -21,7 +22,7 @@
                                                                         <?php echo $form->label($model, 'reality_total',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
                                                                                 <?php echo $form->textField($model, 'reality_total' ,array('value'=>number_format($total,2),'class' => 'form-control','placeholder'=>$model->getAttributeLabel('reality_total')));?>
-                                                                                <?php echo $form->error($model, 'reality_total' )?>
+                                                                                应付：<?php echo number_format($total,2); ?><?php echo $form->error($model, 'reality_total' )?>
                                                                         </div>
                                                                 </div>
                                                                 <div class="form-group">
@@ -38,25 +39,37 @@
                                                                                 <?php echo $form->error($model, 'remark' )?>
                                                                         </div>
                                                                 </div>
-                                                                <?php echo $form->hiddenField($model , 'order_status' , array('value'=>1));?>
+                                                                <?php echo $form->hiddenField($model , 'order_status' , array('value'=>1,'id'=>'account_orderstatus'));?>
 
 
                                                                 </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
                                                 </div>
                                                 <div class="modal-footer">
+                                                        <input type="button" class="btn green" id="pay-btn" value="收 银">
+                                                        <input type="button" class="btn green" id="account-btn" value="结 单">
                                                         <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                        <input type="button" class="btn green" id="submit-btn" value="确 定">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>
 					
 			
 			<script type="text/javascript">
-                            $('#submit-btn').click(function(){
-                                 bootbox.confirm('你确定要结单吗？', function(result) {
+                            $('#pay-btn').click(function(){
+                                 bootbox.confirm('你确定只收银不结单吗？', function(result) {
                                         if(result){
-                                                $('#order-form').submit();
+                                                //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$model->lid)) ?>');
+                                                $('#account_orderstatus').val('3');
+                                                $('#account-form').submit();
                                         }
                                  });
-                        });
+                            });
+                            $('#account-btn').click(function(){
+                                 bootbox.confirm('确定结单吗？', function(result) {
+                                        if(result){
+                                                //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'account','orderId'=>$model->lid)) ?>');
+                                                $('#account_orderstatus').val('4');
+                                                $('#account-form').submit();
+                                        }
+                                 });
+                            });
                         </script>

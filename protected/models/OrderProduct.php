@@ -43,13 +43,13 @@ class OrderProduct extends CActiveRecord
 		return array(
 			array('lid, dpid, order_id, taste_memo', 'required'),
 			array('lid, dpid, order_id, amount, zhiamount', 'numerical', 'integerOnly'=>true),
-			array('set_id, product_id, price, weight', 'length', 'max'=>10),
+			array('main_id,set_id, product_id, price, weight', 'length', 'max'=>10),
 			array('is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
 			array('taste_memo', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, order_id, set_id, product_id, is_retreat, price, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, order_id, main_id, set_id, product_id, is_retreat, price, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,6 +81,7 @@ class OrderProduct extends CActiveRecord
 			'update_at' => '更新时间',
 			'order_id' => '订单',
 			'set_id' => '套餐编号',
+                        'main_id' => '主菜',
 			'product_id' => '产品编号',
 			'is_retreat' => '0非退菜，1退菜',
 			'price' => '下单时价格',
@@ -119,6 +120,7 @@ class OrderProduct extends CActiveRecord
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('order_id',$this->order_id,true);
 		$criteria->compare('set_id',$this->set_id,true);
+                $criteria->compare('main_id',$this->main_id,true);
 		$criteria->compare('product_id',$this->product_id,true);
 		$criteria->compare('is_retreat',$this->is_retreat,true);
 		$criteria->compare('price',$this->price,true);
@@ -154,12 +156,12 @@ class OrderProduct extends CActiveRecord
 				left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid
 				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
                                 left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
-				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.delete_flag=0 order by t.set_id,t1.category_id';
+				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id';
 		return $db->createCommand($sql)->queryAll();
 	}
 	static public function getTotal($orderId,$dpid){
 		$db = Yii::app()->db;
-		$sql = "select sum(price*(IF(weight>0,weight,amount))) as total from nb_order_product where delete_flag=0 and order_id=".$orderId." and dpid=".$dpid;
+		$sql = "select sum(price*(IF(weight>0,weight,amount))) as total from nb_order_product where delete_flag=0 and is_giving=0 and is_retreat=0 and order_id=".$orderId." and dpid=".$dpid;
 		$ret= $db->createCommand($sql)->queryScalar();
                 return empty($ret)?0:$ret;
 	}

@@ -129,4 +129,55 @@ class ProductClass
 		$product = Yii::app()->db->createCommand($sql)->queryRow();
 		return $product['product_name'];
 	}
+        
+        public static function getCategories($companyId){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'company';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
+		$criteria->order = ' tree,t.lid asc ';
+		
+		$models = ProductCategory::model()->findAll($criteria);
+                
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		$options = array();
+		$optionsReturn = array('--请选择分类--');
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->lid] = $model->category_name;
+				}
+			}
+                        //var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+                    //var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
+	}
+        
+        public static function getProducts($categoryId,$companyId){
+                if($categoryId==0)
+                {
+                    //var_dump ('2',$categoryId);exit;
+                    $products = Product::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $companyId));
+                }else{
+                    //var_dump ('3',$categoryId);exit;
+                    $products = Product::model()->findAll('dpid=:companyId and category_id=:categoryId and delete_flag=0' , array(':companyId' => $companyId,':categoryId'=>$categoryId)) ;
+                }
+                $products = $products ? $products : array();
+                //var_dump($products);exit;
+                return $products;
+		//return CHtml::listData($products, 'lid', 'product_name');
+	}
+        
+        public static function getCategoryList($companyId){
+		$categories = ProductCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $companyId)) ;
+		//var_dump($categories);exit;
+		return CHtml::listData($categories, 'lid', 'category_name');
+	}
+        
 }

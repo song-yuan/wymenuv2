@@ -74,13 +74,14 @@
 					'type':'POST',
 					'dataType':'json',
 					'data':{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php echo $istemp; ?>'},
-					'url':'<?php echo $this->createUrl('default/opensite',array());?>',
+					'url':'<?php echo $this->createUrl('defaultSite/opensite',array());?>',
 					'success':function(data){
 						if(data.status == 0) {
 							alert(data.message);
 						} else {
 							alert(data.message);
-							location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>';
+							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+                                                        $('#portlet-button').modal('hide');
 						}
 					}
                                     });
@@ -96,13 +97,14 @@
                                     'type':'POST',
                                     'dataType':'json',
                                     'data':{"sid":sid,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php echo $istemp; ?>'},
-                                    'url':'<?php echo $this->createUrl('default/closesite',array());?>',
+                                    'url':'<?php echo $this->createUrl('defaultSite/closesite',array());?>',
                                     'success':function(data){
                                             if(data.status == 0) {
                                                     alert(data.message);
                                             } else {
                                                     alert(data.message);
-                                                    location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>';
+                                                    $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+                                                    $('#portlet-button').modal('hide');
                                             }
                                     }
                                 });
@@ -115,7 +117,8 @@
                                 if(!statu){
                                     return false;
                                 }  
-                                location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'switch','sistemp'=>$istemp,'ssid'=>$sid,'stypeId'=>$typeId));?>';
+                                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'switch','sistemp'=>$istemp,'ssid'=>$sid,'stypeId'=>$typeId));?>');
+                                $('#portlet-button').modal('hide');
                            });                           
                            
                            $('.unionsite').on('click',function(){
@@ -124,13 +127,14 @@
                                 if(!statu){
                                     return false;
                                 }  
-                                location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'switch','sistemp'=>$istemp,'ssid'=>$sid,'stypeId'=>$typeId));?>';
+                                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'union','sistemp'=>$istemp,'ssid'=>$sid,'stypeId'=>$typeId));?>');
+                                $('#portlet-button').modal('hide');
                            });
                            
                            $('.orderaction').on('click',function(){
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
                                //alert(istemp);
-                               location.href='<?php echo $this->createUrl('default/order',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp;
+                               location.href='<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp;
                            });
                         </script>

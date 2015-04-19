@@ -1,0 +1,45 @@
+.bg_add {
+        background-image: url("/wymenuv2/admin/img/addtempsite.png") !important;
+        filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+        -moz-background-size:100% 100%;
+        background-size:100% 100%;                    
+        color: #fff !important;
+    }
+    .site_list {
+            padding-right:10px;
+    }
+    .site_list {
+            display:inline-block;
+    }
+    .site_list ul {
+            padding-left:5px;
+            padding-left:0px;
+    }
+    .site_list ul li {
+            float:left;
+            width:80px;
+            height: 80px;			
+            border: 1px solid #add;
+            margin:5px;
+            list-style:none;
+            text-align:center;
+            vertical-align:middle;
+    }
+    .messagepart {
+            padding-left:0px;
+    }
+    .message_list {
+            border-left:1px solid #000;
+            padding-left:2px;
+            min-height:500px;
+    }
+    .message_list ul {
+            padding-left:2px;
+    }
+    .message_list ul li {
+            list-style:none;
+            min-height: 35px;
+            line-height: 16px;
+    }
+
+

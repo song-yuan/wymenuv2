@@ -31,4 +31,23 @@ class ProductSetClass
 		$name = $productset['set_name'];
 		return $name;
 	}
+        
+        public static function getSetlist($companyId){
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
+		$criteria->order = ' t.lid asc ';
+		
+		$models = ProductSet::model()->findAll($criteria);
+                
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		//$options = array();
+		$options = array('--请选择分类--');
+		if($models) {
+			foreach ($models as $model) {
+                                    $options[$model->lid] = $model->set_name;
+                        }
+		 //var_dump($options);exit;
+		}
+		return $options;
+	}
 }
