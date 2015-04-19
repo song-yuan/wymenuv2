@@ -102,6 +102,11 @@ $(document).ready(function(){
  				  		  autoplay: true,
  						  arrows: false
  					});
+ 					$("#gallery").css({
+ 						position: "absolute",
+ 						left: ($('.large-pic').width() - $("#gallery").outerWidth())/2,
+ 						top: ($('.large-pic').height() - $("#gallery").outerHeight())/2
+ 					});	
  				}
  			},
  		});

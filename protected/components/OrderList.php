@@ -7,12 +7,14 @@ class OrderList
 	 * 
 	 */
 	public $siteNoId = 0;
+	public $dpid = 0;
 	public $orderId = 0;
 	public $orderStatus = 0;
 	public $orderLockStatus = 0;
 	public $orderList = array();
 	
-	public function __construct($siteNoId = 0){
+	public function __construct($dpid = 0,$siteNoId = 0){
+		$this->dpid = $dpid;
 		$this->siteNoId = $siteNoId;
 		$this->db = Yii::app()->db;
 		$this->SiteNo();
@@ -20,9 +22,10 @@ class OrderList
 		$this->OrderStatus();
 	}
 	public function SiteNo(){
-		$sql = 'select * from nb_site_no where lid=:lid';
+		$sql = 'select * from nb_site_no where lid=:lid and dpid=:dpid';
 		$conn = $this->db->createCommand($sql);
 		$conn->bindValue(':lid',$this->siteNoId);
+		$conn->bindValue(':dpid',$this->dpid);
 		$this->siteNo = $conn->queryRow();
 	}
 	//获取订单信息

@@ -29,12 +29,13 @@ class ProductClass
 		$product = $connect->queryAll();
 		return $product;
 	}
-	public static function getCartInfo($siteNoId = 0){
+	public static function getCartInfo($dpid = 0,$siteNoId = 0){
 		$command = Yii::app()->db;
 		
-		$sql = 'select * from nb_site_no where lid=:lid';
+		$sql = 'select * from nb_site_no where lid=:lid and dpid=:dpid';
 		$conn = $command->createCommand($sql);
 		$conn->bindValue(':lid',$siteNoId);
+		$conn->bindValue(':dpid',$dpid);
 		$siteNo = $conn->queryRow();
 		
 		$sql = 'select * from nb_order where dpid=:dpid and site_id=:siteId and is_temp=:isTemp order by lid desc';
