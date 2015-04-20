@@ -1,4 +1,17 @@
-						<div class="modal-header">
+                                            <?php $form=$this->beginWidget('CActiveForm', array(
+                                                    'id'=>'retreatProduct',
+                                                    'action' => $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'id'=>$orderDetailId)),
+                                                    'enableAjaxValidation'=>true,
+                                                    'enableClientValidation'=>true,
+                                                    'clientOptions'=>array(
+                                                            'validateOnSubmit'=>false,
+                                                    ),
+                                                    'htmlOptions'=>array(
+                                                            'class'=>'form-horizontal'
+                                                    ),
+                                            )); ?>
+                                                <div class="modal-header">
+                                                    <h4>请添加退菜理由</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                                         
                                                         <div class="actions">
@@ -33,8 +46,10 @@
                                                             </table>
                                                     </div>
                                                 <div class="modal-footer">                                                        
-                                                        <button type="button" class="btn default" data-dismiss="modal">确定</button>
+                                                        <button type="button" class="btn default" data-dismiss="modal">返 回</button>
+                                                        <input type="submit" class="btn green" id="create_btn" value="确 定">
                                                 </div>
+                                                <?php $this->endWidget(); ?> 
 							<script>
                                                             $('#btn-retreat-add').click(function(){
                                                                var orderDetailId = '<?php echo $orderDetailId; ?>';
@@ -53,5 +68,11 @@
                                                                ,'', function(){
                                                                  $modal.modal();
                                                                });
+                                                            });
+                                                            
+                                                            $('#btn_retreat_sure').click(function(){
+                                                               var orderDetailId = '<?php echo $orderDetailId; ?>';
+                                                               
+                                                               
                                                             });
 							</script>

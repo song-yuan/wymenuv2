@@ -24,10 +24,10 @@
 															<th class="hidden-xs">退菜</th>
                                                                                                                         <th class="hidden-xs">上菜</th>
                                                                                                                         <th class="hidden-xs">口味</th>
-                                                                                                                        <th>总价<span id="total">(<?php echo number_format($productTotal,2);?>)</span></th>
+                                                                                                                        <th>应付合计<br><span id="total"><?php echo number_format($productTotal,2);?></span></th>
                                                                                                                         <th >
-                                                                                                                            <a class="btn green add_btn" id="addproduct" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;单品</a>
-                                                                                                                            <a class="btn green add_btn" id="addproduct" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;套餐</a>
+                                                                                                                            <a class="btn green add_btn" id="btn-addproduct" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;单品</a>
+                                                                                                                            <a class="btn green add_btn" id="btn-addset" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;套餐</a>
                                                                                                                         </th>
 														</tr>
 													</thead>
@@ -35,7 +35,7 @@
 													<?php foreach ($orderProducts as $orderProduct):?>
 														<tr>
 															<td><?php echo $orderProduct['product_name'];?></td>
-                                                                                                                        <td class="hidden-xs"><?php if(!empty($orderProduct['set_name'])) echo $orderProduct['set_name']; elseif(!empty($orderProduct['main_id'])) echo '加菜'; else echo $orderProduct['category_name'];?></td>
+                                                                                                                        <td class="hidden-xs"><?php if(!empty($orderProduct['set_name'])) echo $orderProduct['set_name']; elseif($orderProduct['main_id']!="0000000000" && $orderProduct['main_id']!=$orderProduct['product_id']) echo '加菜'; else echo $orderProduct['category_name'];?></td>
 															<td><?php echo $orderProduct['original_price'];?></td>
 															<td><?php echo $orderProduct['price'];?></td>
 															<td><?php echo $orderProduct['amount'];?></td>
@@ -45,7 +45,7 @@
 															<td><?php echo $orderProduct['is_retreat']==1?'<span class="label label-sm label-danger">是</span>':'否';?></td>
                                                                                                                         <td class="red"><?php switch($orderProduct['is_waiting']){case '0': {echo '不等叫'; break;} case '1': {echo '等叫'; break;} case '2': { echo '<span class="label label-sm label-success">已上菜</span>'; break;}};?></td>
 															<td><?php echo $orderProduct['taste_memo'];?></td>
-                                                                                                                        <td><?php echo $orderProduct['amount']*$orderProduct['price'];?></td>
+                                                                                                                        <td><?php if($orderProduct['weight']>0) echo $orderProduct['weight']*$orderProduct['price']; else echo $orderProduct['amount']*$orderProduct['price'];?></td>
                                                                                                                         <td class="center">
                                                                                                                             <div class="btn-group dropup">
                                                                                                                                     <a class="btn green" href="#" data-toggle="dropdown">
@@ -53,13 +53,17 @@
                                                                                                                                     <i class="fa fa-angle-up"></i>
                                                                                                                                     </a>
                                                                                                                                     <ul class="dropdown-menu pull-right"><!--已厨打不能编辑-->
+                                                                                                                                        <?php if($orderProduct['product_order_status']=='0') :?>
                                                                                                                                             <li><a href="javascript:;" class='btn-edit' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>" >编辑（未下单）</a></li>
                                                                                                                                             <li><a href="javascript:;" class="btn-del"  setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>" >删除（未下单）</a></li>
-                                                                                                                                            <li><a href="javascript:;" class='btn-taste' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>" >口味设定</a></li>
-                                                                                                                                            <li><a href="javascript:;" class='btn-retreat' setid="<?php echo $orderProduct['set_id'];?>"  lid="<?php echo $orderProduct['lid'];?>">加菜</a></li>
+                                                                                                                                            <li><a href="javascript:;" class='btn-taste' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>" >口味设定（未下单）</a></li> 
+                                                                                                                                        <?php endif; ?>
+                                                                                                                                            <li><a href="javascript:;" class='btn-addition' setid="<?php echo $orderProduct['set_id'];?>"  productid="<?php echo $orderProduct['product_id'];?>"  lid="<?php echo $orderProduct['lid'];?>">附加菜</a></li>
+                                                                                                                                        <?php if($orderProduct['product_order_status']=='1') :?>
                                                                                                                                             <li><a href="javascript:;" class='btn-retreat' setid="<?php echo $orderProduct['set_id'];?>"  lid="<?php echo $orderProduct['lid'];?>">退菜（已下单）</a></li>
-                                                                                                                                            <li><a href="javascript:;" class='btn-weight' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>">称重（已下单）</a></li>
+                                                                                                                                            <li><a href="javascript:;" class='btn-weight' isweight="<?php echo $orderProduct['is_weight_confirm'];?>" setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>">称重（已下单）</a></li>
                                                                                                                                             <li><a href="javascript:;" class='btn-reprint' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>">重新厨打（已下单）</a></li>
+                                                                                                                                        <?php endif; ?>
                                                                                                                                     </ul>
                                                                                                                             </div>
                                                                                                                             <a href="<?php echo $this->createUrl('defaultOrder/over' , array('companyId' => $this->companyId,'lid'=>$orderProduct['lid'],'orderId'=>$orderProduct['order_id'],'typeId'=>$typeId)); ?>" class="btn-over btn green add_btn" ><i class="fa fa-check"></i>勾挑</a>                                                                                                                                            
@@ -69,17 +73,23 @@
 													</tbody>
 												</table>
 											</div>
-											<div><?php echo $total['remark'] ;?></div>
+											<div>全单口味：</div>
 										</div>
 									</div>
 									
 							<?php $this->endWidget(); ?>
-							<script>
+							<script>                                                      
                                                             
-                                                            
-                                                            $('#addproduct').click(function(){
+                                                            $('#btn-addproduct').click(function(){
                                                                 var $modalconfig = $('#portlet-config');
-                                                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>', '', function(){
+                                                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'isset'=>'0'));?>', '', function(){
+                                                                            $modalconfig.modal();
+                                                                          });                                
+                                                            });
+                                                            
+                                                            $('#btn-addset').click(function(){
+                                                                var $modalconfig = $('#portlet-config');
+                                                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'isset'=>'1'));?>', '', function(){
                                                                             $modalconfig.modal();
                                                                           });                                
                                                             });
@@ -102,12 +112,20 @@
                                                                      $modal.modal();
                                                                    });
                                                             });
+                                                            
+                                                            $('.btn-addition').click(function(){
+                                                                   var productid = $(this).attr('productid');
+                                                                   var $modal=$('#portlet-config');
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addAddition',array('companyId'=>$this->companyId,'orderId'=>$model->lid));?>/productId/'+productid+'/typeId/'+"<?php echo $typeId; ?>"
+                                                                   ,'', function(){
+                                                                     $modal.modal();
+                                                                   });
+                                                            });
 
                                                             $('.btn-taste').click(function(){
-                                                                   var id = $(this).attr('lid');
-                                                                   var setid = $(this).attr('setid');
+                                                                   var lid = $(this).attr('lid');
                                                                    var $modal=$('#portlet-config');
-                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/tasteProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'isall'=>'0','orderId'=>$model->lid));?>/id/'+id+'/setid/'+setid
+                                                                   $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/productTaste',array('companyId'=>$this->companyId,'typeId'=>$typeId,'isall'=>'0'));?>/lid/'+lid
                                                                    ,'', function(){
                                                                      $modal.modal();
                                                                    });
@@ -115,6 +133,12 @@
 
                                                             $('.btn-weight').click(function(){
                                                                    var id = $(this).attr('lid');
+                                                                   var isweight=$(this).attr('isweight');
+                                                                   if(isweight=='0')
+                                                                   {
+                                                                       alert('非称重菜！');
+                                                                       return;
+                                                                   }
                                                                    var $modal=$('#portlet-config');
                                                                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/weightProduct',array('companyId'=>$this->companyId));?>/id/'+id+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
                                                                    ,'', function(){

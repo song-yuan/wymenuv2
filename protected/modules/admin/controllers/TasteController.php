@@ -123,7 +123,7 @@ class TasteController extends BackendController
 			}
 		}
 		$tastes = TasteClass::getAllOrderTaste($this->companyId,0);
-		$productTastes = TasteClass::getProductTaste($lid);
+		$productTastes = TasteClass::getProductTaste($lid,  $this->companyId);
 		
 		foreach($productTastes as $taste){
 			array_push($tasteArr,$taste['lid']);

@@ -1,4 +1,4 @@
-                       			<?php $form=$this->beginWidget('CActiveForm', array(
+                                                <?php $form=$this->beginWidget('CActiveForm', array(
                                                         'id'=>'orderProduct',
                                                         'action' => $this->createUrl('defaultOrder/weightProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'id'=>$orderProduct->lid)),
                                                         'enableAjaxValidation'=>true,

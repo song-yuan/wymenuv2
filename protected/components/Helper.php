@@ -43,8 +43,8 @@ class Helper
 	//计算order的总价array('total'=>'总价','miniConsumeType'=>'最低消费类型','miniConsume'=>'最低消费','overTime'=>'超时时间','siteOverTime'=>'超时计算单位','buffer'=>'超时计算点','number'=>'人数')
 	static public function calOrderConsume(Order $order, SiteNo $siteNo , $total){
 		//$siteNo = SiteNo::model()->find('$order->site_no_id');
-		$site = Site::model()->find('lid=:siteid and dpid=:dpid',array('siteid'=>$siteNo->site_id,':dpid'=>$siteNo->dpid));
-		$result = array('total'=>$total,'remark'=>'');
+		$site = Site::model()->with('siteType')->find('t.lid=:siteid and t.dpid=:dpid',array('siteid'=>$siteNo->site_id,':dpid'=>$siteNo->dpid));
+		$result = array('total'=>$total,'remark'=>$site->siteType->name.':'.$site->serial);
 		if(!$site->has_minimum_consumption) {
 			return $result;
 		}
@@ -117,15 +117,22 @@ class Helper
 		}
 		$printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$printerId,':dpid'=>$order->dpid));
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
-		$site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
-		$siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
+                ///site error because tempsite and reserve**************
+                if($order->is_temp==0)
+                {
+                    $site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
+                    $siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
+                    $strSite=str_pad('座号：'.$siteType->name.' '.$site->serial , 20,' ');
+                }else{
+                    $strSite=str_pad('座号：临时座位 '.$order->site_id%1000 , 20,' ');
+                }
 		
 		$listKey = $order->dpid.'_'.$printer->ip_address;
                 
-		$list = new ARedisList($listKey);
+		
 		//var_dump($list);exit;
 		$listData = str_pad($order->company->company_name, 48 , ' ' ,STR_PAD_BOTH).'<br>';
-		$listData.= str_pad('座号：'.$siteType->name.' '.$site->serial , 20,' ').str_pad('人数：'.$order->number,20,' ').'<br>';
+		$listData.= $strSite.str_pad('人数：'.$order->number,20,' ').'<br>';
 		$listData.= str_pad('',48,'-').'<br>';
 		
 		foreach ($orderProducts as $product) {
@@ -141,16 +148,19 @@ class Helper
 						.str_pad('订餐电话：'.$order->company->telephone,20,' ').'<br>';
 		//echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>$listData)));exit;
 		if(!empty($listData)){
+                    if(Yii::app()->params->has_cache){
+                        $list = new ARedisList($listKey);
 			if($reprint) {
 				$listData = str_pad('丢单重打', 40 , ' ',STR_PAD_BOTH).'<br>'.$listData;
 				$list->add($listData);
 			} else {
 				$list->unshift($listData);
 			}
+                    }
 		}
 		//echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>$listData)));exit;
-		$channel = new ARedisChannel($order->dpid.'_PD');
-		$channel->publish($listKey);
+		//$channel = new ARedisChannel($order->dpid.'_PD');
+		//$channel->publish($listKey);
 		if((Yii::app()->request->isAjaxRequest)) {
 			echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>'')));
 		} else {

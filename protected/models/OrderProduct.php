@@ -161,7 +161,7 @@ class OrderProduct extends CActiveRecord
 	}
 	static public function getTotal($orderId,$dpid){
 		$db = Yii::app()->db;
-		$sql = "select sum(price*(IF(weight>0,weight,amount))) as total from nb_order_product where delete_flag=0 and is_giving=0 and is_retreat=0 and order_id=".$orderId." and dpid=".$dpid;
+		$sql = "select sum(price*(IF(weight>0,weight,amount))) as total from nb_order_product where delete_flag=0 and product_order_status=1 and is_giving=0 and is_retreat=0 and order_id=".$orderId." and dpid=".$dpid;
 		$ret= $db->createCommand($sql)->queryScalar();
                 return empty($ret)?0:$ret;
 	}

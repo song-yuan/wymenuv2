@@ -56,12 +56,13 @@
 					<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-reorder"></i>
+                                                            <?php echo $total['remark'] ;?>
                                                         </div>
                                                         <div class="actions">
                                                             <a class="btn purple" id="btn_account"><i class="fa fa-pencil"></i> 结单&收银</a>
                                                             <a id="kitchen-btn" class="btn purple"><i class="fa fa-cogs"></i> 下单&厨打</a>
                                                             <a id="print-btn" class="btn purple"><i class="fa fa-print"></i> 打印清单</a>
-                                                            <a href="<?php echo $this->createUrl('defaultOrder/producttaste' , array('companyId' => $this->companyId,'typeId'=>$typeId,'isall'=>'1'));?>" class="btn purple"><i class="fa fa-pencil"></i> 全单口味</a>
+                                                            <a id="alltaste-btn" class="btn purple"><i class="fa fa-pencil"></i> 全单口味</a>
                                                             <a href="<?php echo $this->createUrl('default/index' , array('companyId' => $model->dpid,'typeId'=>$typeId));?>" class="btn red"><i class="fa fa-times"></i> 返回</a>
                                                         </div>
 						</div>
@@ -108,11 +109,18 @@
                                 },'json');
                         });
                         $('#kitchen-btn').click(function(){
-                            var statu = confirm("下单，并厨打，去顶吗？");
+                            var statu = confirm("下单，并厨打，确定吗？");
                                 if(!statu){
                                     return false;
                                 } 
                                 location.href="<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>";
+                        });
+                        
+                        $('#alltaste-btn').click(function(){
+                                var $modalconfig = $('#portlet-config');
+                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/productTaste',array('companyId'=>$this->companyId,'typeId'=>$typeId,'lid'=>$model->lid,'isall'=>'1'));?>', '', function(){
+                                            $modalconfig.modal();
+                                          }); 
                         });
                         
                     </script>

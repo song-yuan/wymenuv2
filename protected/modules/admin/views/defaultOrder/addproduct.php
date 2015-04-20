@@ -12,13 +12,10 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <div class="actions">
-                                                                <a class="btn purple" id="btn_product"><i class="fa fa-pencil"></i> 单品</a> 
-                                                                <a class="btn grey" id="btn_set"><i class="fa fa-pencil"></i> 套餐</a>
-                                                        </div>
+                                                        
                                                 </div>
                                                 <div class="modal-body">
-                                                        <div class="form-actions fluid" id="product_panel">
+                                                        <div class="form-actions fluid <?php if($isset=='1') echo 'hidden';?>" id="product_panel">
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderProduct, 'category_id',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
@@ -64,7 +61,7 @@
                                                                 
                                                         </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
                                                 </div>
-                                                <div class="form-actions fluid hidden" id="set_panel">
+                                                <div class="form-actions fluid <?php if($isset=='0') echo 'hidden';?>" id="set_panel">
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderProduct, 'set_id',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
@@ -79,7 +76,6 @@
                                                 <?php echo $form->hiddenField($orderProduct,'order_id',array('class'=>'form-control')); ?>
                                                 <?php echo $form->hiddenField($orderProduct,'set_id',array('class'=>'form-control')); ?>
                                                 <input class="form-control" name="selsetlist" id="selsetlistid" type="hidden" value="">
-                                                <input class="form-control" name="isset" id="isetid" type="hidden" value="0">
                                                 <div class="modal-footer">
                                                         <button type="button" data-dismiss="modal" class="btn default">取 消</button>
                                                         <input type="submit" class="btn green" id="create_btn" value="确 定">

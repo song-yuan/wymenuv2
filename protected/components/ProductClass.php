@@ -175,6 +175,15 @@ class ProductClass
 		//return CHtml::listData($products, 'lid', 'product_name');
 	}
         
+        public static function getAdditionProducts($productId,$companyId){
+                $products = ProductAddition::model()->with('sproduct')->findAll('t.dpid=:companyId and t.mproduct_id=:mproductId and t.delete_flag=0' , array(':companyId' => $companyId,':mproductId'=>$productId)) ;
+                
+                $products = $products ? $products : array();
+                //var_dump($products);exit;
+                return $products;
+		//return CHtml::listData($products, 'lid', 'product_name');
+	}
+        
         public static function getCategoryList($companyId){
 		$categories = ProductCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $companyId)) ;
 		//var_dump($categories);exit;

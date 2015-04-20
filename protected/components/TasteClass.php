@@ -2,10 +2,11 @@
 class TasteClass
 {
 	//产品口味 列表
-	public static function getProductTaste($productId){
-		$sql = 'select t.taste_id as lid,t1.name from nb_product_taste t,nb_taste t1 where t.taste_id=t1.lid and t.product_id=:productId and t.delete_flag=0';
+	public static function getProductTaste($productId,$dpid){
+		$sql = 'select t.taste_id as lid,t1.name from nb_product_taste t,nb_taste t1 where t.taste_id=t1.lid and t.product_id=:productId and t.dpid=:dpid and t.delete_flag=0';
 		$conn = Yii::app()->db->createCommand($sql);
 		$conn->bindValue(':productId',$productId);
+                $conn->bindValue(':dpid',$dpid);
 		$result = $conn->queryAll();
 		return $result;
 	}
@@ -21,16 +22,18 @@ class TasteClass
 	}
 	
 	//订单口味 type = 1 全单口味 2 订单产品口味
-	public static function getOrderTaste($orderId,$type){
+	public static function getOrderTaste($orderId,$type,$dpid){
 		$result = array();
 		if($type==1){
-			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and t.is_order=1';
+			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and dpid=:dpid and t.is_order=1';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
+                        $conn->bindValue(':dpid',$dpid);
 		}elseif($type==2){
-			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and t.is_order=0';
+			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and dpid=:dpid and t.is_order=0';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
+                        $conn->bindValue(':dpid',$dpid);
 		}
 		$results = $conn->queryAll();
 		foreach($results as $val){
@@ -39,16 +42,18 @@ class TasteClass
 		return $result;
 	}
 	//订单口味 type = 1 全单口味 2 订单产品口味
-	public static function getOrderTasteMemo($orderId,$type){
+	public static function getOrderTasteMemo($orderId,$type,$dpid){
 		$result = array();
 		if($type==1){
-			$sql = 'select t.taste_memo from nb_order t where t.lid=:orderId';
+			$sql = 'select t.taste_memo from nb_order t where t.lid=:orderId and t.dpid=:dpid';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
+                        $conn->bindValue(':dpid',$dpid);
 		}elseif($type==2){
-			$sql = 'select t.taste_memo from nb_order_product t where t.lid=:orderId';
+			$sql = 'select t.taste_memo from nb_order_product t where t.lid=:orderId and t.dpid=:dpid';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
+                        $conn->bindValue(':dpid',$dpid);
 		}
 		$result = $conn->queryRow();
 		return $result?$result['taste_memo']:'';
