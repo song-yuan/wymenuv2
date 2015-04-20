@@ -193,13 +193,13 @@ class ProductController extends Controller
 		$type = Yii::app()->request->getParam('type');
 		$id = Yii::app()->request->getParam('id');
 		if($type==1){ //全单口味
-			$allOrderTastes = TasteClass::getAllOrderTaste($this->companyId,$type);
+			$allOrderTastes = TasteClass::getAllOrderTaste($this->companyId,$type,$this->companyId);
 		}elseif($type==2){ //产品口味
 			$productId = Yii::app()->request->getParam('productId');
-			$allOrderTastes = TasteClass::getProductTaste($productId);
+			$allOrderTastes = TasteClass::getProductTaste($productId,$this->companyId);
 		}
-		$tasteMemo = TasteClass::getOrderTasteMemo($id,$type);
-		$orderTastes = TasteClass::getOrderTaste($id,$type);
+		$tasteMemo = TasteClass::getOrderTasteMemo($id,$type,$this->companyId);
+		$orderTastes = TasteClass::getOrderTaste($id,$type,$this->companyId);
 		$tasteArr['taste'] = $allOrderTastes;
 		foreach($allOrderTastes as $key=>$val){
 			if(in_array($val['lid'],$orderTastes)){

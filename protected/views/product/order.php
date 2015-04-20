@@ -14,7 +14,7 @@
 		$orderProductList = array();
 	}
 	//全单口味
-	$tasteIds = TasteClass::getOrderTaste($orderList->order['lid'],1);
+	$tasteIds = TasteClass::getOrderTaste($orderList->order['lid'],1,$this->companyId);
 ?>
 <script type="text/javascript" src="../js/product/taste.js"></script>
 <form action="orderList?confirm=1&orderId=<?php echo $orderList->order['lid'];?>" method="post">
@@ -30,7 +30,7 @@
 			<div class="product-up-left"><?php echo $order['product_name'];?></div>
 		</div>
 		<div class="product-middle select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>">
-			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2);?>
+			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2);?>
 		</div>
 	        <div class="product-down edit-num" product-id="<?php echo $order['product_id'];?>">￥<?php echo $order['price'];?>/ <?php echo $order['product_unit']?$order['product_unit']:'例';?> X <font color="#ff8c00"><span class="num"><?php echo $order['amount'];?></span><?php echo $order['product_unit']?$order['product_unit']:'例';?></font><img src="../img/product/down-arrow.png" /></div>
 	        <input type="hidden" name="<?php echo $order['product_id'];?>" value="<?php echo $order['amount'];?>"/>
@@ -54,7 +54,7 @@
 			<div class="product-up-left"><?php echo $order['original_price']; ?></div>
 		</div>
 		<div class="product-middle select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>">
-			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2);?>
+			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
 		</div>
 	        <div class="product-down edit-num" set-id="<?php echo $order['set_id'];?>" product-id="<?php echo $order['set_id'].'-'.$order['product_id'];?>">￥<?php echo $order['price'];?>/ <?php echo $order['product_unit']?$order['product_unit']:'例';?> X <font color="#ff8c00"><span class="num"><?php echo $order['amount'];?></span><?php echo $order['product_unit']?$order['product_unit']:'例';?></font><img src="../img/product/down-arrow.png" /></div>
 	        <input type="hidden" set-id="<?php echo $order['set_id'];?>" name="<?php echo $order['set_id'].'-'.$order['product_id'];?>" value="<?php echo $order['amount'];?>"/>
@@ -69,7 +69,7 @@
 		<div class="order-time"><?php echo date('Y-m-d H:i',time()); ?></div>
 		<div class="order-price">订单总额:<?php echo Money::priceFormat($orderPrice); ?></div>
 	</div>
-	<div class="order-taste select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="1"><font color="#ff8c00">全单口味要求</font><img src="../img/product/down-arrow.png" />:<?php  if($tasteIds){ foreach($tasteIds as $id){ echo TasteClass::getTasteName($id).' ';}} ?> 备注:<?php echo TasteClass::getOrderTasteMemo($orderList->order['lid'],1);?></div>
+	<div class="order-taste select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="1"><font color="#ff8c00">全单口味要求</font><img src="../img/product/down-arrow.png" />:<?php  if($tasteIds){ foreach($tasteIds as $id){ echo TasteClass::getTasteName($id).' ';}} ?> 备注:<?php echo TasteClass::getOrderTasteMemo($orderList->order['lid'],1,$this->companyId);?></div>
 </form>
 
 <a id="comfirm-order" href="javascript:;"><div class="btn confirm">确认</div></a>
