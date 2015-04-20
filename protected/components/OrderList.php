@@ -95,7 +95,7 @@ class OrderList
 		if($goodsIds){
 			foreach($goodsIds as $key=>$val){
 				if(!strpos($key,'group')){
-					$goodsArr = explode(',',$key);
+					$goodsArr = explode(',',$key);//如果数组元素个数是2 证明书套餐
 					if(count($goodsArr)==2){
 						$setId = $goodsArr[0];
 						$sql = 'delete from nb_order_product where order_id=:orderId and set_id=:setId';
@@ -143,7 +143,7 @@ class OrderList
 		}
 	}
 	//下单更新数量 解除锁定订单 $goodsIds = array('goods_id'=>'num','goods_id'=>'num') 如 array('102'=>2) goods_id =102 num = 2
-	public static function ConfirmOrder($orderId,$goodsIds){
+	public function ConfirmOrder($orderId,$goodsIds){
 		if($goodsIds){
 			foreach($goodsIds as $key=>$val){
 				$goodsArr = explode('-',$key);//如果数组元素个数是2 证明书套餐
@@ -164,10 +164,22 @@ class OrderList
 					$conn->execute();
 				}
 			}
-				$sql = 'update nb_order set lock_status=0 where lid = :orderId';
-				$conn = Yii::app()->db->createCommand($sql);
-				$conn->bindValue(':orderId',$orderId);
-				$conn->execute();
+			$sql = 'update nb_order set lock_status=0, order_status=2 where lid = :orderId';
+			$conn = Yii::app()->db->createCommand($sql);
+			$conn->bindValue(':orderId',$orderId);
+			$conn->execute();
+			//siteNo 表
+			$sql = 'update nb_site_no set status=2 where lid = :siteNoId and dpid=:dpid';
+			$conn = Yii::app()->db->createCommand($sql);
+			$conn->bindValue(':siteNoId',$this->siteNo['lid']);
+			$conn->bindValue(':dpid',$this->dpid);
+			$conn->execute();
+			//site 表
+			$sql = 'update nb_site set status=2 where lid = :siteId and dpid=:dpid';
+			$conn = Yii::app()->db->createCommand($sql);
+			$conn->bindValue(':siteNoId',$this->siteNo['site_id']);
+			$conn->bindValue(':dpid',$this->dpid);
+			$conn->execute();
 			return true;
 		}else{
 			return false;

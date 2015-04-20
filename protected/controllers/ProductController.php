@@ -157,7 +157,8 @@ class ProductController extends Controller
 		$goodsIds = isset($_POST) ?$_POST :array();
 		if($confirm){
 			$orderId = Yii::app()->request->getParam('orderId',0);
-			if(!OrderList::ConfirmOrder($orderId,$goodsIds)){
+			$orderlist = new OrderList($this->companyId,$this->siteNoId);
+			if(!$orderlist->ConfirmOrder($orderId,$goodsIds)){
 			   $this->redirect(array('/product/order','orderId'=>$orderId));
 			}
 		}
