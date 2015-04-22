@@ -3,7 +3,7 @@ class TasteClass
 {
 	//产品口味 列表
 	public static function getProductTaste($productId,$dpid){
-		$sql = 'select t.taste_id as lid,t1.name from nb_product_taste t,nb_taste t1 where t.taste_id=t1.lid and t.product_id=:productId and t.dpid=:dpid and t.delete_flag=0';
+		$sql = 'select t.taste_id as lid,t1.name from nb_product_taste t,nb_taste t1 where t.taste_id=t1.lid and t.product_id=:productId and t.dpid=t1.dpid and t.dpid=:dpid and t.delete_flag=0';
 		$conn = Yii::app()->db->createCommand($sql);
 		$conn->bindValue(':productId',$productId);
                 $conn->bindValue(':dpid',$dpid);
