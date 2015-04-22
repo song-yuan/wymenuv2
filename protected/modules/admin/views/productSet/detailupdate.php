@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐明细管理','subhead'=>'修改套餐明细','breadcrumbs'=>array(array('word'=>'套餐明细管理','url'=>$this->createUrl('productSet/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->lid))),array('word'=>'修改套餐明细','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐明细管理','subhead'=>'修改套餐明细','breadcrumbs'=>array(array('word'=>'套餐明细管理','url'=>$this->createUrl('productSet/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->set_id))),array('word'=>'修改套餐明细','url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -38,7 +38,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_detailform', array('model'=>$model, 'categories' => $categories,'categoryId'=>$categoryId,'products'=>$products)); ?>
+							<?php echo $this->renderPartial('_detailform', array('model'=>$model, 'categories' => $categories,'categoryId'=>$categoryId,'products'=>$products,'maxgroupno'=>$maxgroupno)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

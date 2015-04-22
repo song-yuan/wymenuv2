@@ -51,10 +51,11 @@ class DefaultOrderController extends BackendController
                     //var_dump($order);exit;
                     $order->save();
                 }
-                
+                $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,'1',$companyId);
 		//$orderProducts = OrderProduct::model()->findAll('dpid=:dpid and order_id=:orderid',array(':dpid'=>$companyId,':orderid'=>$order->order_id));
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
-                //var_dump($orderProducts);exit;
+                $allOrderProductTastes=  TasteClass::getOrderTasteKV($order->lid,'2',$companyId);
+                //var_dump($allOrderProductTastes);exit;
                 
                 $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                 if($siteNo->is_temp=='1')
@@ -70,6 +71,8 @@ class DefaultOrderController extends BackendController
 		$this->render('order' , array(
 				'model'=>$order,
 				'orderProducts' => $orderProducts,
+                                'allOrderTastes'=>$allOrderTastes,
+                                'allOrderProductTastes'=>$allOrderProductTastes,
                                 //'orderProduct' => $orderProduct,
 				'productTotal' => $productTotal ,
 				'total' => $total,
@@ -354,6 +357,7 @@ class DefaultOrderController extends BackendController
                     $tastes= TasteClass::getAllOrderTaste($companyId, '1');
                     $orderTastes=  TasteClass::getOrderTaste($lid, '1', $companyId);
                     $tasteMemo = TasteClass::getOrderTasteMemo($lid, '1', $companyId);
+                    $orderId=$lid;
                     //var_dump($tastes,$orderTastes,$tasteMemo);exit;                   
                     
                 }else{
@@ -361,6 +365,7 @@ class DefaultOrderController extends BackendController
                     $tastes=  TasteClass::getProductTaste($orderProduct->product_id,$companyId);
                     $orderTastes=  TasteClass::getOrderTaste($lid, '2', $companyId);
                     $tasteMemo = TasteClass::getOrderTasteMemo($lid, '2', $companyId);
+                    $orderId=$orderProduct->order_id;
                     //var_dump($tastes,$orderTastes,$tasteMemo);exit;       
                                        
                 }
@@ -370,7 +375,7 @@ class DefaultOrderController extends BackendController
                         $selectTastes=explode(',',$selectTasteList);
                         if(TasteClass::save($companyId, $isall,$lid,$selectTastes,$taste_memo))
                         {
-                            $this->redirect(array('defaultOrder/order' , 'companyId' => $companyId,'orderId' => $lid,'typeId'=>$typeId));
+                            $this->redirect(array('defaultOrder/order' , 'companyId' => $companyId,'orderId' => $orderId,'typeId'=>$typeId));
                         }                        
                 } 
                 $this->renderPartial('tastedetail' , array(

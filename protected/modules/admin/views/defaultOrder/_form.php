@@ -44,7 +44,10 @@
 															<td><?php echo $orderProduct['is_print']==1?'<span class="label label-sm label-info">是</span>':'否';?></td>
 															<td><?php echo $orderProduct['is_retreat']==1?'<span class="label label-sm label-danger">是</span>':'否';?></td>
                                                                                                                         <td class="red"><?php switch($orderProduct['is_waiting']){case '0': {echo '不等叫'; break;} case '1': {echo '等叫'; break;} case '2': { echo '<span class="label label-sm label-success">已上菜</span>'; break;}};?></td>
-															<td><?php echo $orderProduct['taste_memo'];?></td>
+															<td>
+                                                                                                                            <?php foreach($allOrderProductTastes as $taste){if($taste['id']==$orderProduct['lid']) echo $taste['name'].' ';} ?>
+                                                                                                                            <?php echo $orderProduct['taste_memo'];?>
+                                                                                                                        </td>
                                                                                                                         <td><?php if($orderProduct['weight']>0) echo $orderProduct['weight']*$orderProduct['price']; else echo $orderProduct['amount']*$orderProduct['price'];?></td>
                                                                                                                         <td class="center">
                                                                                                                             <div class="btn-group dropup">
@@ -73,7 +76,10 @@
 													</tbody>
 												</table>
 											</div>
-											<div>全单口味：</div>
+											<div>全单口味：
+                                                                                            <?php foreach($allOrderTastes as $taste){echo $taste['name'].' ';} ?>
+                                                                                            <?php echo $model->taste_memo; ?>
+                                                                                        </div>
 										</div>
 									</div>
 									

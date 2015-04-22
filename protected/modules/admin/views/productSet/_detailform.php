@@ -41,21 +41,22 @@
                                                                         <div class="form-group" <?php if($model->hasErrors('group_no')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'group_no',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'group_no',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('group_no')));?>
+											<a class="btn green minus">&nbsp;<i class="fa fa-minus"></i>&nbsp;</a><input type="text" name="ProductSetDetail[group_no]" maxlength="5" size="5" class="additionnum" maxgroupno="<?php echo $maxgroupno;?>" value="<?php echo $model->group_no;?>" readonly="true"/><a class="btn green plus">&nbsp;<i class="fa fa-plus"></i></a>
+											
 											<?php echo $form->error($model, 'group_no' )?>
 										</div>
 									</div>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'is_select',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_select', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_select')));?>
+											<?php echo $form->dropDownList($model, 'is_select', array('0' => '否' , '1' => '是') , array('id'=>'isSelectId', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_select')));?>
 											<?php echo $form->error($model, 'is_select' )?>
 										</div>
 									</div>
                                                                         <div class="form-group" <?php if($model->hasErrors('number')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'number',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'number',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('number')));?>
+                                                                                        <?php echo $form->textField($model, 'number',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('number')));?>
 											<?php echo $form->error($model, 'number' )?>
 										</div>
 									</div>
@@ -70,10 +71,10 @@
                                                             $(document).ready(function(){
                                                                     $('#selectCategory').change(function(){
                                                                             var cid = $(this).val();
-                                                                            //alert('<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId));?>/pid/'+cid);
+                                                                            //alert('<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/pid/'+cid);
                                                                             //alert($('#ProductSetDetail_product_id').html());
                                                                             $.ajax({
-                                                                                    url:'<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId));?>/pid/'+cid,
+                                                                                    url:'<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/pid/'+cid,
                                                                                     type:'GET',
                                                                                     dataType:'json',
                                                                                     success:function(result){
@@ -89,5 +90,47 @@
                                                                                     }
                                                                             });
                                                                     });
+                                                                    var productVal=$('#ProductSetDetail_product_id').val();
+                                                                    $('#ProductSetDetail_product_id').change(function(){
+                                                                        var productid = $(this).val();
+                                                                        //alert(productid);
+                                                                            $.ajax({
+                                                                                    url:'<?php echo $this->createUrl('productSet/isDoubleSetDetail',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/productid/'+productid,
+                                                                                    type:'GET',
+                                                                                    dataType:'json',
+                                                                                    success:function(result){
+                                                                                            if(result.data){
+                                                                                                alert("改单品套餐内已经存在！");
+                                                                                                 $('#ProductSetDetail_product_id').val(productVal);                                                                                                                                                                                                   
+                                                                                            }else{
+                                                                                                //alert(2);
+                                                                                                productVal=$('#ProductSetDetail_product_id').val();
+                                                                                                
+                                                                                            }                                                                                             
+                                                                                    }
+                                                                            });
+                                                                                                                                                     
+                                                                    });
+                                                            });
+                                                            
+                                                            $('.minus').click(function(){
+                                                                var input = $(this).siblings('input');
+                                                                var num = parseInt(input.val());
+                                                                var maxgroupno = parseInt(input.attr('maxgroupno'));
+                                                                if(num-1 > 0){
+                                                                        num = num - 1;
+                                                                }
+                                                                input.val(num);			
+                                                            });
+                                                            $('.plus').click(function(){
+                                                                var input = $(this).siblings('input');
+                                                                var num = parseInt(input.val());
+                                                                var maxgroupno = parseInt(input.attr('maxgroupno'));
+                                                                num = num + 1;
+                                                                if(num > maxgroupno){
+                                                                        num = maxgroupno+1;
+                                                                        $("#isSelectId").val('1');
+                                                                }
+                                                                input.val(num);			
                                                             });
                                                         </script>

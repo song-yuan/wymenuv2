@@ -68,7 +68,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'orderProducts' => $orderProducts,'productTotal' => $productTotal,'total' => $total,'typeId'=>$typeId)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model,'orderProducts' => $orderProducts,'productTotal' => $productTotal,'total' => $total,'typeId'=>$typeId,'allOrderTastes'=>$allOrderTastes,'allOrderProductTastes'=>$allOrderProductTastes)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

@@ -132,8 +132,7 @@ class ProductSetController extends BackendController
 				$this->redirect(array('productSet/detailindex','companyId' => $this->companyId,'lid'=>$model->set_id));
 			}
 		}
-                //$printers = $this->getPrinters();
-                //$products = $this->getProducts();
+                $maxgroupno=$this->getMaxGroupNo($pslid);
                 $categories = $this->getCategories();
                 $categoryId=0;
                 $products = $this->getProducts($categoryId);
@@ -142,7 +141,8 @@ class ProductSetController extends BackendController
 				'model' => $model,
                                 'categories' => $categories,
                                 'categoryId' => $categoryId,
-                                'products' => $productslist
+                                'products' => $productslist,
+                                'maxgroupno'=>$maxgroupno
 		));
 	}
 	public function actionDetailUpdate(){
@@ -158,18 +158,18 @@ class ProductSetController extends BackendController
 				$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id));
 			}
 		}
+                $maxgroupno=$this->getMaxGroupNo($model->set_id);
                 //$printers = $this->getPrinters();
                 $categories = $this->getCategories();
                 $categoryId=  $this->getCategoryId($lid);
-                $products= Product::model()->findAll(' dpid=:dpid and lid=:lid',array(':dpid'=>$this->companyId,':lid'=>$model->product_id));
-                //var_dump($products);exit;
-                //$this->getProducts($categoryId);
+                $products = $this->getProducts($categoryId);
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
 		$this->render('detailupdate' , array(
 				'model'=>$model,
                                 'categories' => $categories,
                                 'categoryId' => $categoryId,
-                                'products' => $productslist
+                                'products' => $productslist,
+                                'maxgroupno' => $maxgroupno
 		));
 	}
         
@@ -190,6 +190,7 @@ class ProductSetController extends BackendController
         
         public function actionGetChildren(){
 		$categoryId = Yii::app()->request->getParam('pid',0);
+                $productSetId = Yii::app()->request->getParam('$productSetId',0);
 		if(!$categoryId){
 			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
 		}
@@ -201,6 +202,22 @@ class ProductSetController extends BackendController
 			$tmp['name'] = $c['product_name'];
 			$tmp['id'] = $c['lid'];
 			$treeDataSource['data'][] = $tmp;
+		}
+		Yii::app()->end(json_encode($treeDataSource));
+	}
+        
+        public function actionIsDoubleSetDetail(){
+		$productId = Yii::app()->request->getParam('productid',0);
+                $productSetId = Yii::app()->request->getParam('productSetId',0);
+                $companyId = Yii::app()->request->getParam('companyId',0);
+				
+                $treeDataSource = array('data'=>FALSE,'delay'=>400);
+		
+                $product= ProductSetDetail::model()->find('t.dpid = :dpid and t.set_id = :setid and t.product_id = :productid and t.delete_flag=0',array(':dpid'=>$companyId,':setid'=>$productSetId,':productid'=>$productId));
+                //var_dump($productId,$productSetId,$companyId,$product);exit;
+                if(!empty($product))
+                {
+			$treeDataSource['data'] = TRUE;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
 	}
@@ -220,11 +237,45 @@ class ProductSetController extends BackendController
 		//return CHtml::listData($products, 'lid', 'product_name');
 	}
         
+        private function getSetProducts($categoryId,$productSetId){
+                $db = Yii::app()->db;
+                
+                if($categoryId==0)
+                {
+                    $sql = "SELECT lid,product_name from nb_product where dpid=:companyId and delete_flag=0 and lid not in (select product_id from nb_product_set_detail where set_id=:productSetId and dpid=:dpid)";
+                    $command=$db->createCommand($sql);
+                    $command->bindValue(":companyId" , $this->companyId);
+                    $command->bindValue(":dpid" , $this->companyId);
+                    $command->bindValue(":productSetId" , $productSetId);
+                }else{
+                    $sql = "SELECT lid,product_name from nb_product where dpid=:companyId and category_id=:categoryId and delete_flag=0 and lid not in (select product_id from nb_product_set_detail where set_id=:productSetId and dpid=:dpid)";
+                    $command=$db->createCommand($sql);
+                    $command->bindValue(":companyId" , $this->companyId);
+                    $command->bindValue(":dpid" , $this->companyId);
+                    $command->bindValue(":productSetId" , $productSetId);
+                    $command->bindValue(":categoryId" , $categoryId);
+                }                
+                $products=$command->queryAll();
+                $products = $products ? $products : array();
+                //var_dump($sql);exit;
+                return $products;
+		//return CHtml::listData($products, 'lid', 'product_name');
+	}
+        
         private function getCategoryId($lid){
                 $db = Yii::app()->db;
                 $sql = "SELECT category_id from nb_product_set_detail sd,nb_product p where sd.dpid=p.dpid and sd.product_id=p.lid and sd.lid=:lid";
                 $command=$db->createCommand($sql);
                 $command->bindValue(":lid" , $lid);
+                return $command->queryScalar();
+	}
+        
+        private function getMaxGroupNo($psid){
+                $db = Yii::app()->db;
+                $sql = "SELECT max(group_no) from nb_product_set_detail where dpid=:dpid and set_id=:psid";
+                $command=$db->createCommand($sql);
+                $command->bindValue(":dpid" , $this->companyId);
+                $command->bindValue(":psid" , $psid);
                 return $command->queryScalar();
 	}
         

@@ -25,12 +25,12 @@ class TasteClass
 	public static function getOrderTaste($orderId,$type,$dpid){
 		$result = array();
 		if($type==1){
-			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and dpid=:dpid and t.is_order=1';
+			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and t.dpid=:dpid and t.is_order=1';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
                         $conn->bindValue(':dpid',$dpid);
 		}elseif($type==2){
-			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and dpid=:dpid and t.is_order=0';
+			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and t.dpid=:dpid and t.is_order=0';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
                         $conn->bindValue(':dpid',$dpid);
@@ -41,6 +41,30 @@ class TasteClass
 		}
 		return $result;
 	}
+        
+        //订单口味 type = 1 全单口味 2 订单产品口味
+	public static function getOrderTasteKV($orderId,$type,$dpid){
+		$result = array();
+		if($type==1){
+			$sql = 'select t.order_id as id,t1.name as name from nb_order_taste t left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid where t.order_id=:orderId and t.dpid=:dpid and t.is_order=1';
+			$conn = Yii::app()->db->createCommand($sql);
+			$conn->bindValue(':orderId',$orderId);
+                        $conn->bindValue(':dpid',$dpid);
+		}elseif($type==2){
+			$sql = 'select t.order_id as id,t1.name as name from nb_order_taste t left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid  where t.order_id in (select lid from nb_order_product where dpid=:ddpid and order_id = :orderId) and t.dpid=:dpid and t.is_order=0';
+			$conn = Yii::app()->db->createCommand($sql);
+			$conn->bindValue(':orderId',$orderId);
+                        $conn->bindValue(':dpid',$dpid);
+                        $conn->bindValue(':ddpid',$dpid);
+		}
+		$results = $conn->queryAll();
+                //$idst=array_column($results, 'id');
+		//foreach($results as $val){
+		//	array_push($result,$val['taste_id']);
+		//}
+		return $results;
+	}
+        
 	//订单口味 type = 1 全单口味 2 订单产品口味
 	public static function getOrderTasteMemo($orderId,$type,$dpid){
 		$result = array();
