@@ -14,7 +14,6 @@ class DefaultSiteController extends BackendController
                 $title='请选择餐桌';
                 $criteria = new CDbCriteria;
 		$models=array();
-                $geturl='/op/'.$op.'/sistemp/'.$sistemp.'/ssid/'.$ssid.'/stypeId/'.$stypeId;
                 if($typeId == 'tempsite'){
                         $criteria->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId ;
                         $criteria->order = ' t.create_at desc ';
@@ -29,20 +28,34 @@ class DefaultSiteController extends BackendController
                 {
                     if($sistemp=='0')
                     {
+                        $siteTypes = SiteClass::getTypes($this->companyId);
                         $title='被换餐桌：'.$siteTypes[$stypeId];
                         $modelsite = Site::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $ssid,':dpid'=>  $this->companyId));
                         $title=$title.'-->'.$modelsite->serial.'('.$modelsite->site_level.')'.'::请选择目标餐桌';
                     }else{
                         $title='被换餐桌：临时台/排队-->'.($ssid%1000).'：：请选择目标餐桌';
                     }
-                }   
+                }
+                elseif($op=='union')
+                {
+                    if($sistemp=='0')
+                    {
+                        $siteTypes = SiteClass::getTypes($this->companyId);
+                        $title='被并餐桌：'.$siteTypes[$stypeId];
+                        $modelsite = Site::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $ssid,':dpid'=>  $this->companyId));
+                        $title=$title.'-->'.$modelsite->serial.'('.$modelsite->site_level.')'.'::请选择目标餐桌';
+                    }else{
+                        $title='被并餐桌：临时台/排队-->'.($ssid%1000).'：：请选择目标餐桌';
+                    }
+                }
 		$this->renderPartial('indexsite',array(
 				'models'=>$models,
 				'typeId' => $typeId,
                                 'title' => $title,
-                                'geturl' => $geturl,
                                 'ssid' => $ssid,
-                                'sistemp' => $sistemp
+                                'sistemp' => $sistemp,
+                                'stypeId'=>$stypeId,
+                                'op'=>$op
 		));
 	}
                 
@@ -104,11 +117,11 @@ class DefaultSiteController extends BackendController
                             );
                             $db->createCommand()->insert('nb_site_no',$data);                            
                             $transaction->commit(); //提交事务会真正的执行数据库操作
-                            echo json_encode(array('status'=>1,'message'=>'开台成功'));  
+                            echo json_encode(array('status'=>1,'message'=>'开台成功','siteid'=>$site_id));  
                             return true;
                     } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
-                            echo json_encode(array('status'=>0,'message'=>'开台失败')); 
+                            echo json_encode(array('status'=>0,'message'=>'开台失败','siteid'=>$site_id)); 
                             return false;
                     }
 		}
@@ -177,16 +190,16 @@ class DefaultSiteController extends BackendController
                             $number=0;
                             $status='1';
                             
-                            $modelsn = SiteNo::model()->find('dpid=:companyId and delete_flag=0 and site_id=:lid and is_temp=:istemp and status in ("1","2","3")' , array(':companyId' => $companyId,':lid'=>$ssid,':istemp'=>$sistemp)) ;
+                            $smodelsn = SiteNo::model()->find('dpid=:companyId and delete_flag=0 and site_id=:lid and is_temp=:istemp and status in ("1","2","3")' , array(':companyId' => $companyId,':lid'=>$ssid,':istemp'=>$sistemp)) ;
                             
                             if($sistemp=='0')
                             {
-                                $model = Site::model()->find('dpid=:companyId and delete_flag=0 and lid=:lid' , array(':companyId' => $companyId,':lid'=>$ssid)) ;
-                                $number=$model->number;
-                                $status=$model->status;
+                                $smodel = Site::model()->find('dpid=:companyId and delete_flag=0 and lid=:lid' , array(':companyId' => $companyId,':lid'=>$ssid)) ;
+                                $number=$smodel->number;
+                                $status=$smodel->status;
                             }else{
-                                $number=$modelsn->number;
-                                $status=$modelsn->status;
+                                $number=$smodelsn->number;
+                                $status=$smodelsn->status;
                             }
                             //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
                             if($istemp=="0")
@@ -216,14 +229,14 @@ class DefaultSiteController extends BackendController
                                 'is_temp'=>$istemp,
                                 'site_id'=>$sid,
                                 'status'=>$status,
-                                'code'=>$modelsn->code,
-                                'number'=>$modelsn->number,
+                                'code'=>$smodelsn->code,
+                                'number'=>$smodelsn->number,
                                 'delete_flag'=>'0'
                             );
                             $db->createCommand()->insert('nb_site_no',$data);
                             
-                            $modelsn->status='6';
-                            $modelsn->save();
+                            $smodelsn->status='6';
+                            $smodelsn->save();
                             
                             $sqlorder="update nb_order set is_temp=:istemp,site_id=:sid where site_id=:ssid and is_temp=:sistemp and dpid=:companyId and order_status in ('1','2','3')";
                             $commandorder=$db->createCommand($sqlorder);
@@ -242,6 +255,89 @@ class DefaultSiteController extends BackendController
                             return false;
                     }
 		}                
-	}                        
+	}
+        
+        public function actionUnionsite() {
+		if(Yii::app()->request->isPostRequest) {
+			$sid = Yii::app()->request->getPost('sid');
+                        $companyId = Yii::app()->request->getPost('companyId');
+                        $istemp = Yii::app()->request->getPost('istemp','0');
+                        $ssid = Yii::app()->request->getPost('ssid',0);
+                        $sistemp = Yii::app()->request->getPost('sistemp','0');
+                        //echo json_encode(array('status'=>0,'message'=>$sid.'dd'.$companyId.'dd'.$istemp.'dd'.$ssid.'dd'.$sistemp));exit;
+                        $db = Yii::app()->db;
+                        $transaction = $db->beginTransaction();
+                        try {
+                            $number=0;
+                            $status='1';                            
+                            $smodelsn = SiteNo::model()->find('dpid=:companyId and delete_flag=0 and site_id=:lid and is_temp=:istemp and status in ("1","2")' , array(':companyId' => $companyId,':lid'=>$ssid,':istemp'=>$sistemp)) ;
+                            
+                            if($sistemp=='0')
+                            {
+                                $smodel = Site::model()->find('dpid=:companyId and delete_flag=0 and lid=:lid' , array(':companyId' => $companyId,':lid'=>$ssid)) ;
+                                $number=$smodel->number;
+                                $status=$smodel->status;
+                            }else{
+                                $number=$smodelsn->number;
+                                $status=$smodelsn->status;
+                            }
+                            //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
+                            if($istemp=="0")
+                            {
+                                $sqlsite="update nb_site set status=IF(:sstatus>status,:sstatus,status),number=number+:snumber where lid=:sid and dpid=:companyId";
+                                $commandsite=$db->createCommand($sqlsite);
+                                $commandsite->bindValue(":snumber" , $number);
+                                $commandsite->bindValue(":sstatus" , $status);
+                                $commandsite->bindValue(":sid" , $sid);
+                                $commandsite->bindValue(":companyId" , $companyId);
+                                $commandsite->execute();
+                            }
+                            if($sistemp=="0")
+                            {
+                                $sqlsite="update nb_site set status='5' where lid=:sid and dpid=:companyId";
+                                $commandsite=$db->createCommand($sqlsite);
+                                $commandsite->bindValue(":sid" , $ssid);
+                                $commandsite->bindValue(":companyId" , $companyId);
+                                $commandsite->execute();
+                            }
+                            //更新目标site_no人数和状态
+                            $modelsn=SiteNo::model()->find('dpid=:companyId and delete_flag=0 and site_id=:lid and is_temp=:istemp and status in ("1","2")' , array(':companyId' => $companyId,':lid'=>$sid,':istemp'=>$istemp)) ;
+                            if($status > $modelsn->status)
+                            {
+                                $modelsn->status=$status;
+                            }
+                            $modelsn->number=$modelsn->number+$number;
+                            $modelsn->save();
+                            
+                            //更新目标订单状态和人数
+                            
+                            //更新源订单状态
+                            
+                            //更新源订单明细，指向目标订单。
+                            
+                            //更新源site_no，让上网密码code 指向目标订单
+                            $smodelsn->status='5';
+                            $smodelsn->site_id=$modelsn->site_id;
+                            $smodelsn->is_temp=$modelsn->is_temp;
+                            $smodelsn->save();
+                            
+                            $sqlorder="update nb_order set is_temp=:istemp,site_id=:sid where site_id=:ssid and is_temp=:sistemp and dpid=:companyId and order_status in ('1','2','3')";
+                            $commandorder=$db->createCommand($sqlorder);
+                            $commandorder->bindValue(":sid" , $sid);
+                            $commandorder->bindValue(":istemp" , $istemp);
+                            $commandorder->bindValue(":ssid" , $ssid);
+                            $commandorder->bindValue(":sistemp" , $sistemp);
+                            $commandorder->bindValue(":companyId" , $companyId);
+                            $commandorder->execute();
+                            $transaction->commit(); //提交事务会真正的执行数据库操作
+                            echo json_encode(array('status'=>1,'message'=>'换台成功'));  
+                            return true;
+                    } catch (Exception $e) {
+                            $transaction->rollback(); //如果操作失败, 数据回滚
+                            echo json_encode(array('status'=>0,'message'=>'换台失败'));
+                            return false;
+                    }
+		}                
+	}
         
 }

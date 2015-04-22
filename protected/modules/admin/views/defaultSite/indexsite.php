@@ -18,7 +18,25 @@
                                                                 </div>
                                                                 <!-- /.modal-dialog -->
                                                         </div>
-                                                    
+                                                        <div class="modal fade" id="portlet-account-btn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                                                        <h4 class="modal-title">Modal title</h4>
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                        Widget settings form goes here
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                        <button type="button" class="btn blue">Save changes</button>
+                                                                                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                                                                                </div>
+                                                                        </div>
+                                                                        <!-- /.modal-content -->
+                                                                </div>
+                                                                <!-- /.modal-dialog -->
+                                                        </div>
 							<div class="portlet box purple">
 								<div class="portlet-title">
 									<div class="caption"><i class="fa fa-cogs"></i><?php echo $title; ?></div>
@@ -56,15 +74,18 @@
 						
 					
         <script type="text/javascript">
-            
+            gssid="<?php echo $ssid; ?>";
+            gsistemp="<?php echo $sistemp; ?>";
+            gstypeid="<?php echo $stypeId; ?>";
+            gop="<?php echo $op; ?>";
             $('.modalaction').on('click', function(){
                 var $modal = $('#portlet-button');            
                 var sid = $(this).attr('sid');
                 var status = $(this).attr('status');
                 var istemp = $(this).attr('istemp');
                 var typeId = '<?php echo $typeId; ?>';
-                var geturl = '<?php echo $geturl; ?>';
-                if((geturl.indexOf("op/switch") >= 0))
+                var op="<?php echo $op; ?>";
+                if(op=="switch")
                 {
                     if(('123'.indexOf(status) >=0))
                     {
@@ -83,7 +104,7 @@
                             'type':'POST',
                             'dataType':'json',
                             'data':{"sid":sid,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php if($typeId=='tempsite') echo '1'; else echo '0'; ?>',"ssid":'<?php echo $ssid; ?>',"sistemp":'<?php echo $sistemp; ?>'},
-                            'url':'<?php echo $this->createUrl('default/switchsite',array());?>',
+                            'url':'<?php echo $this->createUrl('defaultSite/switchsite',array());?>',
                             'success':function(data){
                                     if(data.status == 0) {
                                             alert(data.message);
@@ -97,13 +118,42 @@
                         
                     }
                 }
-                if((geturl.indexOf("op/union") >= 0) && ('04567'.indexOf(status) >=0))
+                if(op=="union")
                 {
-                    alert("正在进行并台操作，请选择已经开台、下单的餐桌");
-                    return false;
+                    //alert("正在进行并台操作，请选择已经开台、下单的餐桌");
+                    return false;//20150422休息
+                    if(('034567'.indexOf(status) >=0))
+                    {
+                        alert("正在进行并台操作，请选择已经开台、下单的餐桌");
+                        return false;
+                    }else if(istemp==1)
+                    {
+                        alert("正在进行并台操作，请选择没有开台、下单的餐桌");
+                        return false;
+                    }else{
+                        var statu = confirm("确定将该餐桌做为换台目标吗？");
+                        if(!statu){
+                            return false;
+                        }
+                        $.ajax({
+                            'type':'POST',
+                            'dataType':'json',
+                            'data':{"sid":sid,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php if($typeId=='tempsite') echo '1'; else echo '0'; ?>',"ssid":'<?php echo $ssid; ?>',"sistemp":'<?php echo $sistemp; ?>'},
+                            'url':'<?php echo $this->createUrl('defaultSite/unionsite',array());?>',
+                            'success':function(data){
+                                    if(data.status == 0) {
+                                            alert(data.message);
+                                    } else {
+                                            alert(data.message);
+                                            location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>';
+                                    }
+                            }
+                        });
+                        return false;                        
+                    }
                 }
                 $('#chatAudio')[0].play();
-                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId+'<?php echo $geturl; ?>', '', function(){
+                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){
                   $modal.modal();
                 });
             });

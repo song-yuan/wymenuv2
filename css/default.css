@@ -38,8 +38,8 @@
     }
     .message_list ul li {
             list-style:none;
-            min-height: 35px;
-            line-height: 16px;
+            min-height: 20px;
+            line-height: 20px;
     }
 
 

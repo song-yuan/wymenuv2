@@ -67,4 +67,19 @@ class DefaultController extends BackendController
                                 //'sistemp' => $sistemp
 		));
 	}
+        
+        public function actionMessage()
+	{
+		$companyId = Yii::app()->request->getParam('companyId');
+                $criteria = new CDbCriteria;
+		//$criteria->with = array('siteNo','siteNo.site') ;
+		$criteria->condition =  't.dpid='.$this->companyId ;
+		$criteria->order = 'msg_type DESC,is_deal ASC';
+                $msg=  GuestMessage::model()->findAll($criteria);
+                //var_dump($msg);exit;
+                $this->renderPartial('message',array(
+				'model' => $msg
+				//'typeId' => $typeId,                                
+		));
+        }
 }

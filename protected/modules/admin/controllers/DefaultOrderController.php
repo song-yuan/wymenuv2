@@ -88,12 +88,33 @@ class DefaultOrderController extends BackendController
 		$orderId = Yii::app()->request->getParam('orderId','0');
                 $companyId = Yii::app()->request->getParam('companyId','0');
                 $typeId=Yii::app()->request->getParam('typeId','0');
-                $op=Yii::app()->request->getParam('op','0');
-                $total=Yii::app()->request->getParam('total','0');
-                $criteria = new CDbCriteria;
-		$criteria->condition =  't.dpid='.$companyId.' and t.lid='.$orderId ;
-                $criteria->order = ' t.lid desc ';
-                $order = Order::model()->find($criteria);
+                //$op=
+                $totaldata=Yii::app()->request->getParam('total','0');
+                $sid=Yii::app()->request->getParam('sid',0);
+                $istemp=Yii::app()->request->getParam('istemp',0);
+                if($orderId==0)
+                {
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria->order = ' t.lid desc ';
+                    $order = Order::model()->find($criteria);
+                    $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                    if($istemp=='1')
+                    {
+                        $total = array('total'=>$productTotal,'remark'=>'临时座位:'.$sid%1000);                    
+                    }else{
+                        $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                        $criteria->order = ' t.lid desc ';
+                        $siteNo = SiteNo::model()->find($criteria);
+                        $total = Helper::calOrderConsume($order,$siteNo, $productTotal);                        
+                    }
+                    $totaldata=$total['total'];
+                }else{
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.lid='.$orderId ;
+                    $criteria->order = ' t.lid desc ';
+                    $order = Order::model()->find($criteria);
+                }
                 $paymentMethods = PaymentClass::getPaymentMethodList($companyId);
                 //var_dump($paymentMethods);exit;
                 if(Yii::app()->request->isPostRequest){
@@ -121,19 +142,19 @@ class DefaultOrderController extends BackendController
                             $order->save();
                             $siteNo->status=$order->order_status;
                             $siteNo->save();
-                            if($op=='4')
+                            if($order->order_status=='4')
                             {
                                 SiteClass::deleteCode($this->companyId,$siteNo->code);
                             }
                             $transaction->commit();
-                            $this->redirect(array('defaultOrder/order' , 'companyId' => $this->companyId,'orderId'=>$orderId,'typeId'=>$typeId));
+                            $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
 			} catch(Exception $e){
 				$transaction->rollback();
 			}
 		}
 		$this->renderPartial('account' , array(
 				'model' => $order,
-                                'total' => $total,
+                                'total' => $totaldata,
                                 'typeId'=>$typeId,
                                 'paymentMethods'=>$paymentMethods
 		));
@@ -155,12 +176,13 @@ class DefaultOrderController extends BackendController
                 
                 
 		if(Yii::app()->request->isPostRequest){
-                        $isset = Yii::app()->request->getPost('isset',0);
+                        //$isset = Yii::app()->request->getPost('isset',0);
                         //$setid = Yii::app()->request->getParam('setid',0);
                         $selsetlist = Yii::app()->request->getPost('selsetlist',0);
                         $db = Yii::app()->db;
                         $transaction = $db->beginTransaction();
-                        try {                            
+                        try {
+                            //var_dump($isset);exit;
                             if($isset==0)
                             {   
                                 $orderProduct = new OrderProduct();
@@ -176,8 +198,10 @@ class DefaultOrderController extends BackendController
                                 //var_dump($orderProduct);exit;
                                 $orderProduct->save();
                             }else{
+                                //var_dump($selsetlist);exit;
                                 if(strlen($selsetlist)>10)
-                                {                                   
+                                {   
+                                    
                                     $productIdlist=explode(',',$selsetlist);
                                     $setid=Yii::app()->request->getPost('OrderProduct');
                                     //var_dump($setid['set_id']);exit;
@@ -581,8 +605,17 @@ class DefaultOrderController extends BackendController
         public function actionPrintList(){
                 $id = Yii::app()->request->getParam('id',0);
 		$companyId = Yii::app()->request->getParam('companyId');
-                $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
-		
+                $sid=Yii::app()->request->getParam('sid',0);
+                $istemp=Yii::app()->request->getParam('istemp',0);
+                if($id==0)
+                {
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria->order = ' t.lid desc ';
+                    $order = Order::model()->find($criteria);
+                }else{                
+                    $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
+                }
 		//var_dump($order);exit;
                 $reprint = false;
 		Yii::app()->end(json_encode(Helper::printList($order , $reprint)));

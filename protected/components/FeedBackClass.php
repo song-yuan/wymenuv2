@@ -1,5 +1,5 @@
 <?php
-class FeedBack
+class FeedBackClass
 {
 	//全订单反馈 1 整单 0 非整单
 	public static function getAllFeeBack($dpid,$type){

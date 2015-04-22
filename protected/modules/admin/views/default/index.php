@@ -1,7 +1,28 @@
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/default.css'); ?>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
-	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="portlet-config" tabindex="-2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Modal title</h4>
+				</div>
+				<div class="modal-body">
+					Widget settings form goes here
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn blue">Save changes</button>
+					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+        <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+	<div class="modal fade" id="portlet-config3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -54,33 +75,26 @@
 				<?php endif;?>
 			
 		</div>	
-		<div class="col-md-2 messagepart">
-			<div class="portlet box purple">
-				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-volume-up"></i>2条未读消息</div>					
-				</div>
-				<div class="portlet-body message_list">
-					<ul>
-                                                <li class="bg-red">[K001-12:01]<br>开发票：上海物易网络科技有限公司</li>
-                                                <li class="bg-blue">[牡丹江厅-12:00]<br>催菜：都等了半个小时了</li>
-						<li>[牡丹江厅-12:00]<br>催菜：都等了半个小时了</li>
-						<li>[牡丹江厅-12:00]<br>催菜：都等了半个小时了</li>
-					</ul>
-				</div>
-			</div>
+		<div class="col-md-2 messagepart" id="messagepartid">
+			
 		</div>
 	</div>
         <script type="text/javascript">
+            var gssid=0;
+            var gstemp=0;
+            var gstypeid=0;
+            var gop=0;
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
                 $('<audio id="chatAudio"><source src="/wymenuv2/admin/audio/notify.ogg" type="audio/ogg"><source src="/wymenuv2/admin/audio/notify.mp3" type="audio/mpeg"><source src="/wymenuv2/admin/audio/notify.wav" type="audio/wav"></audio>').appendTo('body');
                 $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>'); 
-        });            
-        $('.tabtitle').on('click', function(){
-            var typeId=$(this).attr('typeid');
-            //alert(typeId);
-            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>'+'/typeId/'+typeId); 
-        });     
+                $('#messagepartid').load('<?php echo $this->createUrl('default/message',array('companyId'=>$this->companyId));?>'); 
+            });            
+            $('.tabtitle').on('click', function(){
+                var typeId=$(this).attr('typeid');
+                //alert(typeId);
+                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>'+'/typeId/'+typeId+'/sistemp/'+gsistemp+'/stypeId/'+gstypeid+'/ssid/'+gssid+'/op/'+gop); 
+            });     
 	</script>
 	<!-- END PAGE CONTENT-->
         
