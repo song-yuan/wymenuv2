@@ -222,7 +222,7 @@ class ProductController extends Controller
 		}elseif($type==2){ //产品口味
 			$result = TasteClass::save($this->companyId, 0, $id, $tasteIds, $tasteMemo);
 		}elseif($type==3){
-			$result = FeedBack::save($this->companyId, 1, $id, $tasteIds, $tasteMemo);
+			$result = FeedBackClass::save($this->companyId, 1, $id, $tasteIds, $tasteMemo);
 		}
 		if($result){
 			echo 1;
@@ -237,8 +237,8 @@ class ProductController extends Controller
 		$type = Yii::app()->request->getParam('type');
 		$id = Yii::app()->request->getParam('id');
 		if($type==3){ //全单口味
-			$orderFeeback = FeedBack::getOrderFeeBack($id,1);
-			$allOrderFeeback = FeedBack::getAllFeeBack($this->companyId,1);
+			$orderFeeback = FeedBackClass::getOrderFeeBack($id,1);
+			$allOrderFeeback = FeedBackClass::getAllFeeBack($this->companyId,1);
 			if(!empty($orderFeeback)){
 				foreach($allOrderFeeback as $key=>$feeback){
 					foreach($orderFeeback as $ofeeback){
