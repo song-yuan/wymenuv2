@@ -26,7 +26,12 @@ class FeedBackClass
 		return $results;
 	}
 	
-	public static function save($dpid, $type, $id = 0, $feebackIds = 0, $feebackMemo=null){
+	public static function save($dpid,$siteNoId, $type, $id = 0, $feebackIds = 0, $feebackMemo=null){
+		$sql = 'select * from nb_site_no where lid=:lid and dpid=:dpid';
+		$conn = $this->db->createCommand($sql);
+		$conn->bindValue(':lid',$siteNoId);
+		$conn->bindValue(':dpid',$dpid);
+		$siteNo = $conn->queryRow();
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
 			$sql = 'delete from nb_order_feedback where dpid=:dpid and feedback_id=:feedbackId and is_order=:type and order_id=:orderId';
@@ -44,6 +49,9 @@ class FeedBackClass
 				 'lid'=>$maxId['id'],
 				 'dpid'=>$dpid,
 				 'create_at'=>date('Y-m-d H:i:s',time()),
+				 'site_id'=>$siteNo['site_id'],
+				 'is_temp'=>$siteNo['is_temp'],
+				 'is_deal'=>0,
 				 'feedback_id'=>$feebackIds,
 				 'order_id'=>$id,
 				 'is_order'=>$type,
