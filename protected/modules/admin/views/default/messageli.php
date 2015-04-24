@@ -1,8 +1,4 @@
-			
-				
-                                    <ul class="dropdown-menu-list scroller" style="height: 420px;">
-                                            
-                                            <?php foreach ($msgs as $msg):?>
+                                           <?php foreach ($msgs as $msg):?>
                                             <li class="sitemsg" site_id="<?php echo $msg['site_id']; ?>" is_temp="<?php echo $msg['is_temp']; ?>">  
                                                     <a href="#">
                                                     <span class="badge"><?php echo $msg['lcount']; ?></span> 
@@ -10,7 +6,6 @@
                                                     <span class="time">刚刚</span>
                                                     </a>
                                             </li>
-                                            <li class="sitemsg list-group-item" site_id="<?php echo $msg['site_id']; ?>" is_temp="<?php echo $msg['is_temp']; ?>"><span class="badge badge-danger"><?php echo $msg['lcount']; ?></span><?php echo $msg['name']; ?></li>
                                             <?php endforeach;?>  
                                                 <!--
                                                 <li><span class="badge">4</span> 卡座：A123</li>  

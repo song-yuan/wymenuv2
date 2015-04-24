@@ -43,4 +43,15 @@ class SiteClass
                 }
                 return;
 	}
+        
+        public static function getSiteNmae($companyId,$id,$istemp){
+		if($istemp)
+                {
+                    return '临时座位：'.$id%1000;
+                }else{
+                    $site=Site::model()->with('siteType')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,':lid'=>$id));
+                    //var_dump($site);exit;
+                    return $site->siteType->name.': '.$site->serial;
+                }                
+	}
 }

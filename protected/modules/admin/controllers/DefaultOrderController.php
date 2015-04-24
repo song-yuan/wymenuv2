@@ -19,6 +19,8 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',0);
                 $order=array();
                 $siteNo=array();
+                ///***********insert to order feedback
+                ///*************print
                 if($orderId !='0')
                 {
                     $order = Order::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderId,':dpid'=>$companyId));
@@ -92,6 +94,8 @@ class DefaultOrderController extends BackendController
                 $totaldata=Yii::app()->request->getParam('total','0');
                 $sid=Yii::app()->request->getParam('sid',0);
                 $istemp=Yii::app()->request->getParam('istemp',0);
+                ///***********insert to order feedback
+                            ///*************print
                 if($orderId==0)
                 {
                     $criteria = new CDbCriteria;
@@ -142,6 +146,26 @@ class DefaultOrderController extends BackendController
                             $order->save();
                             $siteNo->status=$order->order_status;
                             $siteNo->save();
+                            /*if($order->order_status=='3')
+                            {
+                                ///***********insert to order feedback
+                                $sef=new Sequence("order_feedback");
+                                $lidf = $sef->nextval();
+                                $dataf = array(
+                                    'lid'=>$lidf,
+                                    'dpid'=>$companyId,
+                                    'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'is_temp'=>$istemp,
+                                    'site_id'=>$site_id,
+                                    'is_deal'=>'0',
+                                    'feedback_id'=>0,
+                                    'order_id'=>0,
+                                    'is_order'=>'1',
+                                    'feedback_memo'=>'已付款',
+                                    'delete_flag'=>'0'
+                                );
+                                $db->createCommand()->insert('nb_order_feedback',$dataf);
+                            }*/
                             if($order->order_status=='4')
                             {
                                 SiteClass::deleteCode($this->companyId,$siteNo->code);
