@@ -48,6 +48,26 @@
 			</div>
 			<div class="clear"></div>
 		</div>
+		
+		<div class="product-has-addtion">
+		<?php if(!empty($order['hasAddition'])):?>
+		<?php foreach($order['hasAddition'] as $product):?>
+			<div class="order-product">
+				<div class="order-product-left"><img src="<?php echo $product['main_picture'];?>" /></div>
+				<div class="order-product-right">
+					<div class="right-up"><?php echo $product['product_name'];?>(加菜)</div>
+			               <div class="right-middle"><span class="minus" >-</span><input type="text" name="<?php echo $product['product_id'];?>" value="<?php echo $product['amount'];?>" readonly="true"/><span class="plus">+</span></div>
+					<div class="right-down">
+			          <div class="right-down-left">￥<?php echo $product['price'];?></div>
+					   <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>						
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		<?php endforeach;?>
+		<?php endif;?>
+		</div>
+		
 		<div class="product-addtion product-addtion-<?php echo $order['product_id']?>">
 			<?php if(!empty($order['addition'])):?>
 			<?php foreach($order['addition'] as $product):?>
@@ -226,10 +246,10 @@
 		$('.add-product').click(function(){
 			var productId = $(this).attr('product-id');
 			var docHeight = $(document).height();
-			var parents = $(this).parents('.order-product');
+			var parents = $(this).parents('.order-product').next('.product-has-addtion');
 			var top = $('.product-mask-top');
 			var bottom = $('.product-mask-bottom');
-			var height = parseInt(parents.offset().top) + 141;
+			var height = parseInt(parents.offset().top) + parents.height();
 			top.css('height',height);
 			bottom.css('height',docHeight - height);
 			$('.product-addtion-'+productId).css('display','block');
@@ -281,12 +301,27 @@
 				url:'/wymenuv2/product/addProductAddition',
 				data:{orderId:orderId,id:id},
 				success:function(msg){
-					if(msg){
-						alert('加菜成功!');
+					if(msg.status){
+						var str = '';
+						str +='<div class="order-product">';
+						str +='<div class="order-product-left"><img src="'+msg.data.main_picture+'" /></div>';
+						str +='<div class="order-product-right">';
+						str +='<div class="right-up">'+msg.data.product_name+'(加菜)</div>';
+						str +='<div class="right-middle"><span class="minus" >-</span><input type="text" name="'+msg.data.sproduct_id+'" value="1" readonly="true"/><span class="plus">+</span></div>';
+						str +='<div class="right-down">';
+						str +='<div class="right-down-left">￥'+msg.data.price+'</div>';
+						str +='<div class="right-down-right select-taste"  data-id="'+msg.lastLid+'" type="2" product-id="'+msg.data.sproduct+'" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>';						
+						str +='</div></div><div class="clear"></div></div>';
+						$('.product-has-addtion').append(str);
+						var top = $('.product-mask-top');
+						var height = top.height() + 141;
+						top.css('height',height);
+						alert(msg.msg);
 					}else{
-						alert('加菜失败!');
+						alert(msg.msg);
 					}
-				}
+				},
+				'dataType':'json',
 			});
 		});
 	});

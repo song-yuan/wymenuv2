@@ -1,6 +1,7 @@
 <?php
 class ProductAdditionClass
 {
+	public $lastLid = 0;
 	public function __construct($dpid,$orderId,$productAdditionId){
 		$this->db = Yii::app()->db;
 		$this->dpid = $dpid;
@@ -10,7 +11,7 @@ class ProductAdditionClass
 	}
 	
 	public function productAddition(){
-		$sql = 'select * from nb_product_addition where lid=:lid and dpid=:dpid';
+		$sql = 'select t.*,t1.main_picture,t1.product_name from nb_product_addition t, nb_product t1 where t.sproduct_id=t1.lid and t.dpid=t1.dpid and t.lid=:lid and t.dpid=:dpid';
 		$conn = $this->db->createCommand($sql);
 		$conn->bindValue(':dpid',$this->dpid);
 		$conn->bindValue(':lid',$this->lid);
@@ -31,6 +32,7 @@ class ProductAdditionClass
     						'amount'=>1,
     						);
     	$result = $this->db->createCommand()->insert('nb_order_product',$insertData);
+    	$this->lastLid = $maxId['id'];
     	if($result){
     		return true;
     	}else{
