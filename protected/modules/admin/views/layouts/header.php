@@ -15,18 +15,25 @@
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<ul class="nav navbar-nav pull-right">
 				<!-- BEGIN NOTIFICATION DROPDOWN -->
-				<!-- <li class="dropdown" id="header_notification_bar">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+				<li class="dropdown" id="header_notification_bar">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="notification_banner_id"
 						data-close-others="true">
 					<i class="fa fa-warning"></i>
-					<span class="badge">6</span>
+					<span class="badge" id="allnotificationnum">6</span>
 					</a>
 					<ul class="dropdown-menu extended notification">
 						<li>
-							<p>You have 14 new notifications</p>
+							<p>你共有14条消息</p>
 						</li>
 						<li>
-							<ul class="dropdown-menu-list scroller" style="height: 250px;">
+							<ul id="header_notification_list" class="dropdown-menu-list scroller" style="height: 420px;">
+                                                                <li>  
+									<a href="#">
+									<span class="badge">4</span> 
+									卡座：A123 
+									<span class="time">刚刚</span>
+									</a>
+								</li>
 								<li>  
 									<a href="#">
 									<span class="label label-sm label-icon label-success"><i class="fa fa-plus"></i></span>
@@ -93,10 +100,10 @@
 							</ul>
 						</li>
 						<li class="external">   
-							<a href="#">See all notifications <i class="m-icon-swapright"></i></a>
+							<a href="#">查看全部消息 <i class="m-icon-swapright"></i></a>
 						</li>
 					</ul>
-				</li> -->
+				</li>
 				<!-- END NOTIFICATION DROPDOWN -->
 				<!-- BEGIN INBOX DROPDOWN -->
 				<!-- <li class="dropdown" id="header_inbox_bar">
@@ -287,3 +294,30 @@
 	</div>
 	<!-- END HEADER -->
 	<div class="clearfix"></div>
+        <script type="text/javascript">
+            
+            $(document).ready(function() {
+                $('<audio id="chatAudio"><source src="/wymenuv2/admin/audio/notify.ogg" type="audio/ogg"><source src="/wymenuv2/admin/audio/notify.mp3" type="audio/mpeg"><source src="/wymenuv2/admin/audio/notify.wav" type="audio/wav"></audio>').appendTo('body');
+                
+                $('#header_notification_list').load('<?php echo $this->createUrl('default/messageli',array('companyId'=>$this->companyId));?>'); 
+                
+                interval = setInterval(getnotificationnum,"15000");
+            });            
+            
+            $('#notification_banner_id').on('click', function(){
+                $('#header_notification_list').load('<?php echo $this->createUrl('default/messageli',array('companyId'=>$this->companyId));?>'); 
+            });
+            
+            function getnotificationnum(){
+                $.get('<?php echo $this->createUrl('default/msgnum',array('companyId'=>$this->companyId));?>',function(data){
+                if(data.status) {
+                      document.getElementById('allnotificationnum').innerHTML = data.num;
+                      if(data.num>0)
+                      {
+                            $('#chatAudio')[0].play();
+                      }
+                } 
+        },'json');
+            }
+            //clearTimeout(interval); 
+	</script>

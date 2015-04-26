@@ -68,18 +68,85 @@ class DefaultController extends BackendController
 		));
 	}
         
+        public function actionMsgnum()
+	{
+		$companyId = Yii::app()->request->getParam('companyId');
+                $msgnum= OrderFeedback::model()->count(' dpid=:dpid and delete_flag=0 and is_deal=0',array(':dpid'=>$companyId));                
+                Yii::app()->end(json_encode(array('status'=>true,'num'=>$msgnum)));
+        }
+        
         public function actionMessage()
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
-                $criteria = new CDbCriteria;
-		//$criteria->with = array('siteNo','siteNo.site') ;
-		$criteria->condition =  't.dpid='.$this->companyId ;
-		$criteria->order = 'msg_type DESC,is_deal ASC';
-                $msg=  GuestMessage::model()->findAll($criteria);
-                //var_dump($msg);exit;
+                $msgs=  FeedBackClass::getSiteGroupMessage($companyId);
+                $msglen=count($msgs,0);
+                //var_dump($msgs);exit;
+                for($i=0;$i<$msglen;$i++)
+                {
+                    //var_dump(SiteClass::getSiteNmae($companyId, $msg['site_id'], $msg['is_temp']));
+                    $msgs[$i]['name']= SiteClass::getSiteNmae($companyId, $msgs[$i]['site_id'], $msgs[$i]['is_temp']);
+                    //var_dump($msg);exit;
+                }
+                //var_dump($msgs);exit;
                 $this->renderPartial('message',array(
-				'model' => $msg
+				'msgs' => $msgs
 				//'typeId' => $typeId,                                
 		));
+        }
+        
+        public function actionMessageli()
+	{
+		$companyId = Yii::app()->request->getParam('companyId');
+                $msgs=  FeedBackClass::getSiteGroupMessage($companyId);
+                $msglen=count($msgs,0);
+                //var_dump($msgs);exit;
+                for($i=0;$i<$msglen;$i++)
+                {
+                    //var_dump(SiteClass::getSiteNmae($companyId, $msg['site_id'], $msg['is_temp']));
+                    $msgs[$i]['name']= SiteClass::getSiteNmae($companyId, $msgs[$i]['site_id'], $msgs[$i]['is_temp']);
+                    //var_dump($msg);exit;
+                }
+                //var_dump($msgs);exit;
+                $this->renderPartial('messageli',array(
+				'msgs' => $msgs
+				//'typeId' => $typeId,                                
+		));
+        }
+        
+        public function actionMsglist()
+	{
+		$companyId = Yii::app()->request->getParam('companyId');
+                $site_id = Yii::app()->request->getParam('site_id');
+                $is_temp = Yii::app()->request->getParam('is_temp');
+                
+                $criteria = new CDbCriteria;
+		$criteria->addCondition(' dpid=:dpid and site_id=:siteid and is_temp=:istemp and is_deal=0 and delete_flag=0');
+		$criteria->order = ' create_at ';
+		$criteria->params[':dpid']=$companyId;
+		$criteria->params[':siteid']=$site_id; 
+		$criteria->params[':istemp']=$is_temp;
+		$pages = new CPagination(OrderFeedback::model()->count($criteria));
+		$pages->applyLimit($criteria);                
+                $msgs=  OrderFeedback::model()->findAll($criteria);
+                $siteName=SiteClass::getSiteNmae($companyId, $site_id, $is_temp);
+                    //$msgs[$i]['name']= SiteClass::getSiteNmae($companyId, $msgs[$i]['site_id'], $msgs[$i]['is_temp']);
+                $this->renderPartial('msglist',array(
+                                'siteName'=>$siteName,
+				'models'=>$msgs,
+				'pages' => $pages                                
+		));
+        }
+        
+        public function actionReadfeedback(){
+                $orderfeedbackid = Yii::app()->request->getParam('orderfeedbackid',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $orderfeedback = OrderFeedback::model()->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderfeedbackid,':dpid'=>$companyId));
+                $orderfeedback->is_deal='1';
+                if($orderfeedback->save())
+                {
+                    Yii::app()->end(json_encode(array('status'=>true,'msg'=>'已读')));
+                }else{
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>'读取失败')));
+                }
         }
 }

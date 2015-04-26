@@ -23,7 +23,7 @@
 	<!-- /.modal -->
         <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-wide">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -57,7 +57,7 @@
 	<!-- BEGIN PAGE CONTENT-->
 	
 	<div class="row">
-		<div class="col-md-10">
+		<div class="col-md-12">
 			<?php if($siteTypes):?>
 					<div class="tabbable tabbable-custom">
 						<ul class="nav nav-tabs">
@@ -75,8 +75,15 @@
 				<?php endif;?>
 			
 		</div>	
-		<div class="col-md-2 messagepart" id="messagepartid">
-			
+		<div class="col-md-2 hide messagepart">
+			<div class="portlet box purple">
+				<div class="portlet-title"><i class="fa fa-volume-up"></i>
+					<div class="caption pull-right"> 历史消息>></div>					
+				</div>
+                                <div class="portlet-body message_list" id="messagepartid">
+                                    
+                                </div>
+			</div>    
 		</div>
 	</div>
         <script type="text/javascript">
@@ -86,15 +93,15 @@
             var gop=0;
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
-                $('<audio id="chatAudio"><source src="/wymenuv2/admin/audio/notify.ogg" type="audio/ogg"><source src="/wymenuv2/admin/audio/notify.mp3" type="audio/mpeg"><source src="/wymenuv2/admin/audio/notify.wav" type="audio/wav"></audio>').appendTo('body');
                 $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>'); 
-                $('#messagepartid').load('<?php echo $this->createUrl('default/message',array('companyId'=>$this->companyId));?>'); 
+                
             });            
             $('.tabtitle').on('click', function(){
                 var typeId=$(this).attr('typeid');
                 //alert(typeId);
                 $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>'+'/typeId/'+typeId+'/sistemp/'+gsistemp+'/stypeId/'+gstypeid+'/ssid/'+gssid+'/op/'+gop); 
-            });     
+            });
+            
 	</script>
 	<!-- END PAGE CONTENT-->
         

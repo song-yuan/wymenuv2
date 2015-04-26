@@ -67,4 +67,42 @@ class FeedBackClass
 		}
 	}
 	
+        public static function getSiteGroupMessage($companyId)
+	{
+		$sql = 'select site_id,is_temp,"" as name,max(create_at) as ltime,count(*) as lcount from nb_order_feedback where dpid=:dpid and is_deal=0 and delete_flag=0 group by site_id,is_temp,name having lcount>0 order by ltime';
+                $conn = Yii::app()->db->createCommand($sql);
+                $conn->bindValue(':dpid',$companyId);                
+                $results = $conn->queryAll();
+		return $results;
+	}
+        
+        public static function getFeedbackName($feedbackId,$companyId)
+	{
+            if($feedbackId=='0000000000')
+            {
+                return "系统消息";
+            }else{
+		$sql = 'select name from nb_feedback where dpid=:dpid and lid=:feedbackId';
+                $conn = Yii::app()->db->createCommand($sql);
+                $conn->bindValue(':dpid',$companyId);
+                $conn->bindValue(':feedbackId',$feedbackId);
+                $result = $conn->queryScalar();
+		return $result;
+            }
+	}
+        
+        public static function getFeedbackObject($orderId,$isOrder,$companyId)
+	{
+            if($isOrder=='1')
+            {
+                return "全单消息";
+            }else{
+                $sql = 'select t.product_name from nb_product t,nb_order_product t1 where t.dpid=t1.dpid and t.lid=t1.product_id and t1.dpid=:dpid and t1.lid=:orderId';
+                $conn = Yii::app()->db->createCommand($sql);
+                $conn->bindValue(':dpid',$companyId);
+                $conn->bindValue(':orderId',$orderId);
+                $result = $conn->queryScalar();
+		return $result;
+            }
+	}
 }

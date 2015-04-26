@@ -35,7 +35,7 @@ class OrderFeedback extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, feedback_memo', 'required'),
+			array('feedback_memo', 'required'),
 			array('lid, dpid, site_id, feedback_id, order_id', 'length', 'max'=>10),
 			array('is_temp, is_deal, is_order, delete_flag', 'length', 'max'=>1),
 			array('feedback_memo', 'length', 'max'=>50),
