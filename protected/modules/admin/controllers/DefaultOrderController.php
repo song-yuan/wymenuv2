@@ -477,7 +477,7 @@ class DefaultOrderController extends BackendController
                     }                    
                     return;
                 }                
-                $this->renderPartial('addRetreat' , array(
+                $this->renderPartial('addretreat' , array(
 				'orderRetreat' => $orderRetreat,
 				'retreats'=>$retreatslist                                
 		));
