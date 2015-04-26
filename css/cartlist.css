@@ -209,6 +209,9 @@
 	background-color: #eeeeee;
 	border: #e5e5e5 1px solid;
 }
+.product-addtion{
+	display:none;
+}
 a:link{
 	color:rgb(0,0,0);
 }

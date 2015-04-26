@@ -1,3 +1,13 @@
+function totalPrice(){
+	var totalPrice = 0;
+	$('.input-product').each(function(){
+		var price = $(this).attr('price');
+		var num = $(this).val();
+		totalPrice += parseInt(price)*parseInt(num);
+	});
+	totalPrice = totalPrice.toFixed(2);
+	$('.total-price').html(totalPrice);
+}
 $(document).ready(function(){
 	var feedback = 0;
    $('.select-taste').click(function(){
@@ -186,6 +196,7 @@ $(document).ready(function(){
 				$(this).parents('.product').find('.num').html(num);
 			});
 		}
+		totalPrice();
 		$('.cancel-order-num').click();
 	});
 });

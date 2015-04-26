@@ -11,6 +11,7 @@ a{
     min-height: 500px;
     height: auto !important;
     overflow:hidden;
+    position:relative;
 }
 .mask{
 	position:fixed;
@@ -79,6 +80,22 @@ a{
 .mask-button{
 	padding:20px;
 	margin-bottom:50px;
+}
+.product-mask-top{
+	display:none;
+	position:absolute;
+	width:100%;
+	top:0;
+	left:0;
+	background-color:rgba(0,0,0,0.75);
+}
+.product-mask-bottom{
+	display:none;
+	position:absolute;
+	width:100%;
+	bottom:0;
+	left:0;
+	background-color:rgba(0,0,0,0.75);
 }
 .submit{
 	width:50px;
