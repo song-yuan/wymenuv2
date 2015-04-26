@@ -80,7 +80,7 @@
 	<?php if($orderProductListPay):?>
 	<div style="color:#555da8;border-top:2px solid;margin-top: 5px">
 	<div class="order-top"><div class="order-top-left">下单总额 :<span> <?php echo Money::priceFormat($orderPricePay);?></span></div><div class="order-top-right"><button class="online-pay">在线支付</button></div></div>
-	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="3" product-id="0" style="color:#ff8c00">全单有话要说<img src="../img/product/down-arrow.png" /></div></div>
+	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="3" product-id="0" style="color:#ff8c00">呼叫服务员<img src="../img/product/down-arrow.png" /></div></div>
 	<?php foreach($orderProductListPay as $key=>$orderProduct):?>
 		<!--非套餐-->
 		<?php if($key):?>

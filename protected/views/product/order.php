@@ -30,7 +30,7 @@
 			<div class="product-up-left"><?php echo $order['product_name'];?></div>
 		</div>
 		<div class="product-middle select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>">
-			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2);?>
+			<font color="#ff8c00">口味要求</font><img src="../img/product/down-arrow.png" />:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
 		</div>
 	        <div class="product-down edit-num" product-id="<?php echo $order['product_id'];?>">￥<?php echo $order['price'];?>/ <?php echo $order['product_unit']?$order['product_unit']:'例';?> X <font color="#ff8c00"><span class="num"><?php echo $order['amount'];?></span><?php echo $order['product_unit']?$order['product_unit']:'例';?></font><img src="../img/product/down-arrow.png" /></div>
 	        <input type="hidden" name="<?php echo $order['product_id'];?>" value="<?php echo $order['amount'];?>"/>

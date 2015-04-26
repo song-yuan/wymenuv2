@@ -222,7 +222,7 @@ class ProductController extends Controller
 		}elseif($type==2){ //产品口味
 			$result = TasteClass::save($this->companyId, 0, $id, $tasteIds, $tasteMemo);
 		}elseif($type==3){
-			$result = FeedBackClass::save($this->companyId, 1, $id, $tasteIds, $tasteMemo);
+			$result = FeedBackClass::save($this->companyId, $this->siteNoId, 1, $id, $tasteIds, $tasteMemo);
 		}
 		if($result){
 			echo 1;

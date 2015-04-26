@@ -54,7 +54,14 @@ class OrderList
 			}
 			return $result;
 	}
-	
+	public static function GetAddProduct($dpid,$productId){
+		$sql = 'select t.*,t1.main_picture,t1.product_name from nb_product_addition t,nb_pruduct t1 where t.sproduct_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.mproduct_id=:productId';
+		$conn = $this->db->createCommand($sql);
+		$conn->bindValue(':dpid',$dpid);
+		$conn->bindValue(':productId',$productId);
+		$addProducts = $conn->queryAll();
+		return $addProducts;
+	}
 	//获取该套餐的产品 array(1=>array(,),2=>array(,)) 1,2表示group_no
 	public function GetSetProduct($setId){
 		$result = array();
