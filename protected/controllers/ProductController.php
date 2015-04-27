@@ -222,7 +222,7 @@ class ProductController extends Controller
 		}elseif($type==2){ //产品口味
 			$result = TasteClass::save($this->companyId, 0, $id, $tasteIds, $tasteMemo);
 		}elseif($type==3){
-			$result = FeedBackClass::save($this->companyId, 1, $id, $tasteIds, $tasteMemo);
+			$result = FeedBackClass::save($this->companyId, $this->siteNoId, 1, $id, $tasteIds, $tasteMemo);
 		}
 		if($result){
 			echo 1;
@@ -250,5 +250,17 @@ class ProductController extends Controller
 			}
 		}
 		Yii::app()->end(json_encode($allOrderFeeback));
+	}
+	public function actionAddProductAddition(){
+		$orderId = Yii::app()->request->getParam('orderId');
+		$lid = Yii::app()->request->getParam('id');
+		$data = array('status'=>false,'msg'=>'加菜失败!');
+		$productAddition = new ProductAdditionClass($this->companyId,$orderId,$lid);
+		if($productAddition->save()){
+			$data = array('status'=>true,'msg'=>'加菜成功!','data'=>$productAddition->productAddition,'lastLid'=>$productAddition->lastLid);
+			Yii::app()->end(json_encode($data));
+		}else{
+			Yii::app()->end(json_encode($data));
+		}
 	}
 }

@@ -39,10 +39,10 @@ class OrderList
 	}
 	
 	//订单商品类别 type 是否下单 0 未下单 1 已下单
-	public function OrderProductList($orderId,$type,$groupby = 0){
+	public function OrderProductList($orderId,$type,$groupby = 0,$isOrder = 0){
 			$result = array();
-			$sql = 'select t.*, t1.category_id, t1.product_name, t1.main_picture, t1.original_price, t1.product_unit, t1.weight_unit, t1.is_weight_confirm, t1.printer_way_id from nb_order_product t,nb_product t1  where t.product_id=t1.lid and order_id=:orderId and t.delete_flag=0 and set_id=0 and product_order_status='.$type.
-				   ' union select t.*, 0 as category_id, t1.set_name as product_name, t1.main_picture,t2.product_name as original_price,0 as product_unit, 0 as weight_unit, 0 as is_weight_confirm, 0 as printer_way_id  from nb_order_product t left join nb_product_set t1 on t.set_id=t1.lid left join nb_product t2 on t.product_id=t2.lid where order_id=:orderId and t.delete_flag=0 and t.set_id > 0 and t.product_order_status='.$type;
+			$sql = 'select t.*, t1.category_id, t1.product_name, t1.main_picture, t1.original_price, t1.product_unit, t1.weight_unit, t1.is_weight_confirm, t1.printer_way_id from nb_order_product t,nb_product t1  where t.product_id=t1.lid and order_id=:orderId and t.delete_flag=0 and main_id=0 and set_id=0 and product_order_status='.$type.
+				   ' union select t.*, 0 as category_id, t1.set_name as product_name, t1.main_picture,t2.product_name as original_price,0 as product_unit, 0 as weight_unit, 0 as is_weight_confirm, 0 as printer_way_id  from nb_order_product t left join nb_product_set t1 on t.set_id=t1.lid left join nb_product t2 on t.product_id=t2.lid where order_id=:orderId and t.delete_flag=0 and main_id=0 and t.set_id > 0 and t.product_order_status='.$type;
 			if($groupby){
 				$sql .= ' group by t.set_id';
 			}
@@ -50,11 +50,36 @@ class OrderList
 			$conn->bindValue(':orderId',$orderId);
 			$orderlist = $conn->queryAll();
 			foreach($orderlist as $key=>$val){
+				if($isOrder){
+					$val['addition'] = self::GetOrderAddProduct($val['dpid'],$orderId,$val['product_id'],$type);
+				}else{
+					$val['hasAddition'] = self::GetOrderAddProduct($val['dpid'],$orderId,$val['product_id'],$type);
+					$val['addition'] = self::GetAddProduct($val['dpid'],$val['product_id']);
+				}
 				$result[$val['category_id']][] = $val;
 			}
 			return $result;
 	}
-	
+	//该产品加菜
+	public static function GetAddProduct($dpid,$productId){
+		$sql = 'select t.*,t1.main_picture,t1.product_name from nb_product_addition t,nb_product t1 where t.sproduct_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.mproduct_id=:productId';
+		$conn = Yii::app()->db->createCommand($sql);
+		$conn->bindValue(':dpid',$dpid);
+		$conn->bindValue(':productId',$productId);
+		$addProducts = $conn->queryAll();
+		return $addProducts;
+	}
+	//订单中加菜
+	public static function GetOrderAddProduct($dpid,$orderId,$mainId,$type){
+		$sql = 'select t.*,t1.main_picture,t1.product_name,t1.product_unit from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.order_id=:orderId and t.main_id=:mainId and t.product_order_status=:status';
+		$conn = Yii::app()->db->createCommand($sql);
+		$conn->bindValue(':dpid',$dpid);
+		$conn->bindValue(':orderId',$orderId);
+		$conn->bindValue(':mainId',$mainId);
+		$conn->bindValue(':status',$type);
+		$addProducts = $conn->queryAll();
+		return $addProducts;
+	}
 	//获取该套餐的产品 array(1=>array(,),2=>array(,)) 1,2表示group_no
 	public function GetSetProduct($setId){
 		$result = array();
@@ -75,14 +100,20 @@ class OrderList
 			$this->orderLockStatus = $this->order['lock_status'];
 		}
 	}
-	//订单总额和总数量 type 已下单和为下单
-	public function OrderPrice($type){
+	//订单总额和总数量 type 已下单和为下单 isOrder 是否已加菜
+	public function OrderPrice($type,$isOrder = 0){
 		$price = 0;
 		$num = 0;
 		if($this->order){
-			$products = $this->OrderProductList($this->order['lid'],$type);
+			$products = $this->OrderProductList($this->order['lid'],$type,0,$isOrder);
 			foreach($products as $product){
 				foreach($product as $val){
+					if($isOrder&&!empty($val['addition'])){
+						foreach($val['addition'] as $v){
+							$price += $v['price']*$v['amount'];
+							$num += $v['amount'];
+						}
+					}
 					$price += $val['price']*$val['amount'];
 					$num += $val['amount'];
 				}
@@ -177,7 +208,7 @@ class OrderList
 			//site 表
 			$sql = 'update nb_site set status=2 where lid = :siteId and dpid=:dpid';
 			$conn = Yii::app()->db->createCommand($sql);
-			$conn->bindValue(':siteNoId',$this->siteNo['site_id']);
+			$conn->bindValue(':siteId',$this->siteNo['site_id']);
 			$conn->bindValue(':dpid',$this->dpid);
 			$conn->execute();
 			return true;
