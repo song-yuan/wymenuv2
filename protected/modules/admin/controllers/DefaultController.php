@@ -152,6 +152,8 @@ class DefaultController extends BackendController
         
         public function actionGateway(){
                 var_dump(Gateway::getOnlineStatus());
+                $store = Store::instance('room');
+                $ret = $store->set('0000000012','上海滩的愛している222');
                 echo "ddd";
                 //Gateway::sendToAll(json_encode(array(a=>"上海滩的愛している",b=>"ddddd11111:")));
                 Gateway::sendToAll('{"a":"上海滩的愛している","b":"ddddd11111:"}');  
