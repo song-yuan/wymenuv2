@@ -149,4 +149,12 @@ class DefaultController extends BackendController
                     Yii::app()->end(json_encode(array('status'=>false,'msg'=>'读取失败')));
                 }
         }
+        
+        public function actionGateway(){
+                var_dump(Gateway::getOnlineStatus());
+                echo "ddd";
+                //Gateway::sendToAll(json_encode(array(a=>"上海滩的愛している",b=>"ddddd11111:")));
+                Gateway::sendToAll('{"a":"上海滩的愛している","b":"ddddd11111:"}');  
+                echo "eee";
+        }
 }
