@@ -19,11 +19,11 @@
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="notification_banner_id"
 						data-close-others="true">
 					<i class="fa fa-warning"></i>
-					<span class="badge" id="allnotificationnum">6</span>
+					<span class="badge" id="allnotificationnum">0</span>
 					</a>
 					<ul class="dropdown-menu extended notification">
 						<li>
-							<p>你共有14条消息</p>
+							<p>未读消息</p>
 						</li>
 						<li>
 							<ul id="header_notification_list" class="dropdown-menu-list scroller" style="height: 420px;">
@@ -305,6 +305,7 @@
             });            
             
             $('#notification_banner_id').on('click', function(){
+                getnotificationnum();
                 $('#header_notification_list').load('<?php echo $this->createUrl('default/messageli',array('companyId'=>$this->companyId));?>'); 
             });
             
@@ -316,8 +317,8 @@
                       {
                             $('#chatAudio')[0].play();
                       }
-                } 
-        },'json');
+                    } 
+                },'json');
             }
             //clearTimeout(interval); 
 	</script>

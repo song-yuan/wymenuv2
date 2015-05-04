@@ -106,6 +106,7 @@ class Helper
 		return $result;
 	}
 	//打印清单写入到redis
+        //send by workerman encode by GBK or shift-JIS
 	static public function printList(Order $order , $reprint = false){
 		$printerId = $order->company->printer_id;
 		if(!$printerId) {
@@ -315,6 +316,7 @@ class Helper
         
         //单品厨打 口味 全单口味
         //套餐和加菜一起厨打 口味 全单口味
+        //send by workerman encode by GBK or shift-JIS
 	static public function printKitchen(Order $order,OrderProduct $orderProduct,Site $site,  SiteNo $siteNo , $reprint = false){		
                 $order = Order::model()->find('lid=:orderid and dpid=:dpid',  array(':orderid'=>$orderProduct->order_id,':dpid'=>$orderProduct->dpid));
 		//orderproduct
