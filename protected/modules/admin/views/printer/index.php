@@ -64,10 +64,13 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th>打印机名称</th>
-								<th>IP地址</th>
+                                                                <th>地址(IP/USB/COM)</th>
+                                                                <th>语言</th>
+								<!--<th>IP地址</th>
 								<th>串口名称</th>
-                                                                <th>波特率</th>
+                                                                <th>波特率</th>-->
                                                                 <th>品牌</th>
+                                                                <th>备注</th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -76,11 +79,11 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php echo $model->name ;?></td>
-								<td ><?php echo $model->ip_address ;?></td>
-                                                                <td ><?php echo $model->com_name ;?></td>
-                                                                <td ><?php echo $model->baud_rate ;?></td>
+								<td ><?php echo $model->name;?></td>
+								<td ><?php echo $model->address ;?></td>
+                                                                <td ><?php if($model->language=='1') echo '中文'; else echo '日文';?></td>
 								<td><?php echo $model->brand;?></td>
+                                                                <td><?php echo $model->remark;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('printer/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>

@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php if($allflag) echo '整单口味列表';else echo '单品口味列表';?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php if($allflag) echo '整单反馈列表';else echo '单品反馈列表';?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('feedback/create' , array('companyId' => $this->companyId,'allflag'=>$allflag));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
                         <a href="javascript:void(0)" class="btn red" onclick="document.getElementById('feedback-form').submit();"><i class="fa fa-times"></i> 删除</a>

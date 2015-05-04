@@ -53,7 +53,7 @@
 									<div class="form-group" <?php if($model->hasErrors('rank')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2' , '3' => '3' , '4' => '4' , '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount')));?>
+											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2' , '3' => '3' , '4' => '4' , '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rank')));?>
 											<?php echo $form->error($model, 'rank' )?>
 										</div>
 									</div>

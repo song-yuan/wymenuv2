@@ -7,8 +7,8 @@
  * @property string $printer_id
  * @property string $company_id
  * @property string $name
- * @property string $ip_address
- * @property string $department_id
+ * @property string $address
+ * @property string $language
  * @property string $brand
  * @property string $remark
  */
@@ -31,13 +31,13 @@ class Printer extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name,dpid,lid', 'required'),
-			array('lid, dpid,baud_rate', 'length', 'max'=>10),
-			array('name, remark, brand', 'length', 'max'=>45),
-                        array('com_name', 'length', 'max'=>10),
-                        array('ip_address', 'length', 'max'=>64),
+			array('lid, dpid', 'length', 'max'=>10),
+			array('remark, brand', 'length', 'max'=>45),
+                        array('language', 'length', 'max'=>2),
+                        array('name,address', 'length', 'max'=>64),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, name, create_at,com_name,baud_rate,ip_address,printer_type,brand,remark', 'safe', 'on'=>'search'),
+			array('lid, dpid, name, address, create_at,language,printer_type,brand,remark', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,9 +61,8 @@ class Printer extends CActiveRecord
 			'lid' => 'Printer',
 			'dpid' => 'Company',
 			'name' => '打印机名称',
-			'ip_address' => 'IP地址',
-			'com_name' => '串口名',
-                        'baud_rate' => '波特率',
+                        'address'=>'地址(IP/USB/COM)',
+			'language' => '语言',
 			'brand' => '品牌',
 			'remark' => '备注',
 		);
@@ -90,7 +89,7 @@ class Printer extends CActiveRecord
 		$criteria->compare('lid',$this->lid,true);
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('ip_address',$this->ip_address,true);
+		$criteria->compare('language',$this->language,true);
 		$criteria->compare('printer_type',$this->printer_type,true);
 		$criteria->compare('brand',$this->brand,true);
 		$criteria->compare('remark',$this->remark,true);

@@ -24,10 +24,17 @@
 									</div>
 								</div>
                                                                         <div class="form-group">
-										<?php echo $form->label($model, 'ip_address',array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, 'address',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'ip_address',array('class' => 'form-control','placeholder'=>'例如：192.168.1.100'));?>
-											<?php echo $form->error($model, 'ip_address' )?>
+											<?php echo $form->textField($model, 'address',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('address')));?>
+											<?php echo $form->error($model, 'address' )?>
+										</div>
+									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'language',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'language', array('1' => '中文' , '2' => '日文') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('language')));?>
+											<?php echo $form->error($model, 'language' )?>
 										</div>
 									</div>
 									<div class="form-group">
@@ -37,20 +44,7 @@
 											<?php echo $form->error($model, 'brand' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group">
-										<?php echo $form->label($model, 'com_name',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->textField($model, 'com_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('com_name')));?>
-											<?php echo $form->error($model, 'com_name' )?>
-										</div>
-									</div>
-                                                                        <div class="form-group">
-										<?php echo $form->label($model, 'baud_rate',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->textField($model, 'baud_rate',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('baud_rate')));?>
-											<?php echo $form->error($model, 'baud_rate' )?>
-										</div>
-									</div>
+                                                                      
 									<div class="form-group">
 										<?php echo $form->label($model, 'remark',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
