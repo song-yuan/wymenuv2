@@ -125,7 +125,7 @@ class OrderList
 	public static function UpdateOrder($dpid,$orderId,$goodsIds){
 		if($goodsIds){
 			foreach($goodsIds as $key=>$val){
-				if(!strpos($key,'group')){
+				if(!strpos($key,'group')){//去除套餐中的 checkbox
 					$goodsArr = explode(',',$key);//如果数组元素个数是2 证明书套餐
 					if(count($goodsArr)==2){
 						$setId = $goodsArr[0];
