@@ -328,7 +328,8 @@ class Helper
                 	
 		foreach ($printwaydetails as $printway) {
                         $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$printway->printer_id,':dpid'=>$order->dpid));
-                        $listKey = $order->dpid.'_'.$printer->ip_address;                
+                        $listKey = $order->dpid.'_'.$printer->ip_address;  
+                        /////////**********判断打印机是否存在******//////////////////
                         $list = new ARedisList($listKey);
                         //var_dump($list);exit;
                         $listData = str_pad($orderProduct->company->company_name, 48 , ' ' ,STR_PAD_BOTH).'<br>';
@@ -358,6 +359,7 @@ class Helper
                             {
                                 if($printway->list_no) {
                                     for($i=0;$i<$printway->list_no;$i++){
+                                        ////////////////**********判断发送数据是否成功********/////////////
                                         if($reprint) {
                                                 $listData = str_pad('重新厨打', 40 , ' ',STR_PAD_BOTH).'<br>'.$listData;
                                                 $list->add($listData);
