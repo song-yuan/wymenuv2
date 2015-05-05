@@ -98,7 +98,7 @@ class ProductController extends Controller
 	public function actionGetOrderListJson()
 	{
 		$orderProductList = array();
-		$orderList = new OrderList($this->siteNoId);
+		$orderList = new OrderList($this->companyId,$this->siteNoId);
 		if($orderList->order){
 			$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0,1);
 			foreach($orderProductList as $key=>$val){

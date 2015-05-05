@@ -45,11 +45,12 @@ class ProductClass
 		$conn->bindValue(':isTemp',$siteNo['is_temp']);
 		$order = $conn->queryRow();
 		
-		$sql = 'select * from nb_order_product where order_id=:orderId and delete_flag = 0 and product_order_status = 0';
+		$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid and delete_flag = 0 and product_order_status = 0 and set_id = 0 ' .
+			   ' union select * from nb_order_product where order_id=:orderId and dpid=:dpid and delete_flag = 0 and product_order_status = 0 and set_id > 0 group by set_id';
 		$conn = $command->createCommand($sql);
 		$conn->bindValue(':orderId',$order['lid']);
+		$conn->bindValue(':dpid',$siteNo['dpid']);
 		$orderProdcuts = $conn->queryAll();
-		
 		$nums = count($orderProdcuts);
 		$price = 0.00;
 		foreach($orderProdcuts as $orderProdcut){

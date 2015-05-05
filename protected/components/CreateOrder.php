@@ -39,9 +39,9 @@ class CreateOrder
 			$setId = 0;
 			if($this->product['type']){
 				$setId = $this->product['lid'];
-				$orderProduct = OrderProduct::model()->find('order_id=:orderId and set_id=:setId and product_order_status=0',array(':orderId'=>$order->lid,':setId'=>$setId));
+				$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid and set_id=:setId and product_order_status=0',array(':orderId'=>$order->lid,'dpid'=>$this->companyId,':setId'=>$setId));
 			}else{
-				$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
+				$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,'dpid'=>$this->companyId,':productId'=>$this->product['lid']));
 			}
 			
 			if($orderProduct){

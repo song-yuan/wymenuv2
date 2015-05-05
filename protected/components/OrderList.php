@@ -101,11 +101,11 @@ class OrderList
 		}
 	}
 	//订单总额和总数量 type 已下单和为下单 isOrder 是否已加菜
-	public function OrderPrice($type,$isOrder = 0){
+	public function OrderPrice($type,$groupby = 0,$isOrder = 0){
 		$price = 0;
 		$num = 0;
 		if($this->order){
-			$products = $this->OrderProductList($this->order['lid'],$type,0,$isOrder);
+			$products = $this->OrderProductList($this->order['lid'],$type,$groupby,$isOrder);
 			foreach($products as $product){
 				foreach($product as $val){
 					if($isOrder&&!empty($val['addition'])){

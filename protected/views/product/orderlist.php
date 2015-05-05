@@ -9,12 +9,12 @@
 	if($orderList->order){
 		$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0,1);
 		$orderProductListPay = $orderList->OrderProductList($orderList->order['lid'],1,0,1);
-		$price = $orderList->OrderPrice(0);
+		$price = $orderList->OrderPrice(0,1);
 		$priceArr = explode(':',$price);
 		$orderPrice = $priceArr[0];
 		$orderNum = $priceArr[1];
 		
-		$pricePay = $orderList->OrderPrice(1,1);
+		$pricePay = $orderList->OrderPrice(1,0,1);
 		$pricePayArr = explode(':',$pricePay);
 		$orderPricePay = $pricePayArr[0];
 		$orderPayNum = $pricePayArr[1];
