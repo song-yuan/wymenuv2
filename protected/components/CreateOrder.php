@@ -157,8 +157,12 @@ class CreateOrder
 		$criteria->params = array(':dpid'=>$this->siteNo->dpid,':siteId'=>$this->siteNo->site_id,':isTemp'=>$this->siteNo->is_temp); 
 		$criteria->order =  'lid desc';
 		$order = Order::model()->find($criteria);
-			
-		$orderProduct = OrderProduct::model()->find('order_id=:orderId and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':productId'=>$this->product['lid']));
+		
+		if($this->product['type']){
+			$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid and set_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
+		}else{
+			$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid  and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
+		}
 		$orderProduct->delete_flag = 1;
 		if($orderProduct->update()){
 			return true;
