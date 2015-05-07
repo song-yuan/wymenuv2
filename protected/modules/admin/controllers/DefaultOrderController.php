@@ -638,6 +638,7 @@ class DefaultOrderController extends BackendController
                 $se=new Sequence("printer_job_id");
                 $jobid = $se->nextval();
                 $ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
+                echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>'')));
                 exit;
                 ////////////////////////test
                 if($id==0)
@@ -673,7 +674,7 @@ class DefaultOrderController extends BackendController
                 );
                 $store = Store::instance('wymenu');
                 $clientId=$store->get("client_".$companyId);
-                echo json_encode($test_print_data);
+                echo json_encode($clientId,$test_print_data);
                 if(!empty($clientId))
                 {
                     Gateway::sendToClient($clientId,json_encode($test_print_data));
