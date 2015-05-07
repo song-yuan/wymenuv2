@@ -45,7 +45,6 @@ class FeedBackClass
 			if($feebackIds){
 				$sql = 'SELECT NEXTVAL("order_feedback") AS id';
 				$maxId = Yii::app()->db->createCommand($sql)->queryRow();
-				echo $maxId;exit;
 				$data = array(
 				 'lid'=>$maxId['id'],
 				 'dpid'=>$dpid,
