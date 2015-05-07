@@ -98,7 +98,7 @@
                         });
                         
                         $('#print-btn').click(function(){
-                            var company_id=<?php echo $this->companyId ?>                            
+                            var company_id="<?php echo $this->companyId ?>"                            
                             $.get('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
                                     if(data.status) {
                                         if(Androidwymenuprinter.printJob(company_id,data.jobid))

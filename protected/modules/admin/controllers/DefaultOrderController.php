@@ -638,7 +638,7 @@ class DefaultOrderController extends BackendController
                 $se=new Sequence("printer_job_id");
                 $jobid = $se->nextval();
                 $ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
-                echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>'')));
+                echo Yii::app()->end(json_encode(array('status'=>true,'jobid'=>$jobid)));
                 exit;
                 ////////////////////////test
                 if($id==0)
