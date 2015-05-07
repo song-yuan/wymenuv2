@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印机管理','subhead'=>'打印机列表','breadcrumbs'=>array(array('word'=>'打印机管理','url'=>''),array('word'=>'打印机管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'PAD管理','subhead'=>'PAD列表','breadcrumbs'=>array(array('word'=>'PAD管理','url'=>''),array('word'=>'PAD列表','url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
-				'id' => 'product-form',
-				'action' => $this->createUrl('printer/delete' , array('companyId' => $this->companyId)),
+				'id' => 'pad-form',
+				'action' => $this->createUrl('pad/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,9 +40,9 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>打印机列表</div>
+					<div class="caption"><i class="fa fa-globe"></i>PAD列表</div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('printer/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('pad/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -63,16 +63,14 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>打印机名称</th>
-                                                                <th>地址(IP/USB/COM)</th>
-                                                                <th>语言</th>
+								<th>PAD名称</th>
+                                                                <th>打印机</th>
+                                                                <th>网络打印机服务器地址</th>
                                                                 <th>类型</th>
 								<!--<th>IP地址</th>
 								<th>串口名称</th>
                                                                 <th>波特率</th>-->
-                                                                <th>品牌</th>
-                                                                <th>备注</th>
-								<th>&nbsp;</th>
+                                                                <th>&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -81,19 +79,17 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->name;?></td>
-								<td ><?php echo $model->address ;?></td>
-                                                                <td ><?php if($model->language=='1') echo '中文'; else echo '日文';?></td>
-								<td ><?php if($model->printer_type=='0') echo '网络'; elseif($model->printer_type=='1') echo '本地';?></td>
-								<td><?php echo $model->brand;?></td>
-                                                                <td><?php echo $model->remark;?></td>
+                                                                <td ><?php echo $model->printer->name;?></td>
+								<td ><?php echo $model->server_address ;?></td>
+                                                                <td ><?php if($model->pad_type=='0') echo '收银台'; elseif($model->pad_type=='1') echo '点单pad'; elseif($model->pad_type=='2') echo '取号PAD';?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('printer/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('pad/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
 								</td>
 							</tr>
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td>还没有添加打印机</td></tr>
+						<tr><td>还没有添加PAD</td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>

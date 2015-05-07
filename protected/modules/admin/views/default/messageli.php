@@ -50,6 +50,7 @@
                             var site_id = $(this).attr('site_id');
                             var is_temp = $(this).attr('is_temp');
                             var $modalconfig = $('#portlet-config3');
+                            //alert("aa");
                             //$modalconfig.modal('hide');
                             $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('default/msglist',array('companyId'=>$this->companyId));?>'+'/site_id/'+site_id+'/is_temp/'+is_temp, '', function(){
                                         $modalconfig.modal();                                            

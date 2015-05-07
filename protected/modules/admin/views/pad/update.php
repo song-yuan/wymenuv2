@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印机管理','subhead'=>'修改打印机','breadcrumbs'=>array(array('word'=>'打印机管理','url'=>$this->createUrl('printer/index' , array('companyId'=>$this->companyId))),array('word'=>'修改打印机','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'PAD管理','subhead'=>'修改PAD','breadcrumbs'=>array(array('word'=>'PAD管理','url'=>$this->createUrl('pad/index' , array('companyId'=>$this->companyId))),array('word'=>'修改PAD','url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -38,7 +38,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model,'printers'=>$printers)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>
