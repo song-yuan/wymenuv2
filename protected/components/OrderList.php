@@ -151,9 +151,10 @@ class OrderList
 												'amount'=>$val,
 												'taste_memo'=>'无',
 												);
-							var_dump($insertData);exit;					
-							Yii::app()->db->createCommand()->insert('nb_order_product',$insertData);
+							var_dump($insertData);					
+//							Yii::app()->db->createCommand()->insert('nb_order_product',$insertData);
 						}
+						exit;
 							
 					}else{
 						$sql = 'update nb_order_product set amount = :amount where order_id = :orderId and product_id = :productId';
