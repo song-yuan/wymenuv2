@@ -68,11 +68,31 @@ class PadController extends Controller
 	
         public function actionGetJob(){
 		$companyid = Yii::app()->request->getParam('companyid',0);
-                $jobid = Yii::app()->request->getParam('jobid',0);
+                $jobid = Yii::app()->request->getParam('jobid',0);                
+                Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
                 $printData = $store->get($companyid."_".$jobid);
                 if(empty($printData))
+                {
                     $printData="";
+                }
                 echo $printData;
+	}
+        
+        public function actionGetPadList(){
+		$companyid = Yii::app()->request->getParam('companyid',0);
+                if(!$companyid){
+			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
+		}
+		
+                $treeDataSource = array('data'=>array(),'delay'=>400);
+		$pads = Pad::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $companyid));
+	
+		foreach($pads as $c){
+			$tmp['name'] = $c['name'];
+			$tmp['id'] = $c['lid'];
+			$treeDataSource['data'][] = $tmp;
+		}
+		Yii::app()->end(json_encode($treeDataSource));
 	}
 }

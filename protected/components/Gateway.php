@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__.'/Config/Store.php';
+//require_once Yii::app()->request->baseUrl.'/protected/components/Config/Store.php';
+//C:\wamp\www\wymenuv2\protected\components\Config\Store.php
+//require_once dirname(__FILE__).'/Config/Store.php';
 
 /**
  * Gateway/Worker推送客户端
