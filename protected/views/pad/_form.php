@@ -56,7 +56,7 @@
                                                                     alert("请选择店铺和打印机！");
                                                                     return;
                                                                 }
-                                                                if(Androidwymenuprinter.padSet(companyid,padid))
+                                                                if(Androidwymenuprinter.padSet(companyId,padId))
                                                                 {
                                                                     //should deal in android.
                                                                    /* $.ajax({

@@ -23,7 +23,7 @@ class PadController extends Controller
                 {
                     //$model=  Pad::model()->
                     //收银pad
-                    
+                    $this->redirect(array('admin/login'));
                     //点餐pad
                     //detell whether this pad site is opensite!
                     //has to the site else opensite and go to the product page!
