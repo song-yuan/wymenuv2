@@ -122,6 +122,10 @@ $(document).ready(function(){
 				   tasteIds = $(this).attr('feeback-id');
 			   }
 		   });
+		   if(!tasteIds){
+			   alert('请选择呼叫类型!');
+			   return ;
+		   }
 	   }else{
 		   var tasteIds = new Array();
 		   $('.taste').each(function(){

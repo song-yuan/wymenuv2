@@ -83,7 +83,7 @@ class OrderList
 	//获取该套餐的产品 array(1=>array(,),2=>array(,)) 1,2表示group_no
 	public function GetSetProduct($setId){
 		$result = array();
-		$sql = 'select t.*, t1.product_name, t1.main_picture from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid where t.set_id=:setId and t.dpid=:dpid and t1.dpid=:dpid and t.delete_flag=0 order by is_select desc';
+		$sql = 'select t.*, t1.product_name, t1.main_picture from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid where t.set_id=:setId and t.dpid=t1.dpid and t.dpid=:dpid and t.delete_flag=0 and t1.delete_flag=0 order by is_select desc';
 		$conn = $this->db->createCommand($sql);
 		$conn->bindValue(':setId',$setId);
 		$conn->bindValue(':dpid',$this->siteNo['dpid']);
@@ -101,11 +101,11 @@ class OrderList
 		}
 	}
 	//订单总额和总数量 type 已下单和为下单 isOrder 是否已加菜
-	public function OrderPrice($type,$isOrder = 0){
+	public function OrderPrice($type,$groupby = 0,$isOrder = 0){
 		$price = 0;
 		$num = 0;
 		if($this->order){
-			$products = $this->OrderProductList($this->order['lid'],$type,0,$isOrder);
+			$products = $this->OrderProductList($this->order['lid'],$type,$groupby,$isOrder);
 			foreach($products as $product){
 				foreach($product as $val){
 					if($isOrder&&!empty($val['addition'])){
@@ -125,7 +125,7 @@ class OrderList
 	public static function UpdateOrder($dpid,$orderId,$goodsIds){
 		if($goodsIds){
 			foreach($goodsIds as $key=>$val){
-				if(!strpos($key,'group')){
+				if(!strpos($key,'group')){//去除套餐中的 checkbox
 					$goodsArr = explode(',',$key);//如果数组元素个数是2 证明书套餐
 					if(count($goodsArr)==2){
 						$setId = $goodsArr[0];

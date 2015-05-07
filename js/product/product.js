@@ -9,7 +9,7 @@ function addToCart() {
 
 }
 $(document).ready(function(){
-    $('#forum_list').on('click','#addCart',function(){
+    $('#forum_list').on('click','.addCart',function(){
     	var _this = $(this);
     	var isAddOrder = 1;
     	var productId = _this.attr('product-id');
@@ -32,6 +32,7 @@ $(document).ready(function(){
  			type:'POST',
  			success:function(msg){
  				if(parseInt(msg)){
+ 					addToCart();
 					if(isAddOrder){
 						_this.addClass('hasorder');
 						total += price;
@@ -48,7 +49,6 @@ $(document).ready(function(){
  				}
  			}
  		});
- 		addToCart();
     });
     //全部分类
     $('.category-top').click(function(){
