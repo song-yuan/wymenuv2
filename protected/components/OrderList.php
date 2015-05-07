@@ -151,6 +151,7 @@ class OrderList
 												'amount'=>$val,
 												'taste_memo'=>'无',
 												);
+							var_dump($insertData);exit;					
 							Yii::app()->db->createCommand()->insert('nb_order_product',$insertData);
 						}
 							
