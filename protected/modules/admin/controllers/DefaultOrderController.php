@@ -674,7 +674,7 @@ class DefaultOrderController extends BackendController
                 );
                 $store = Store::instance('wymenu');
                 $clientId=$store->get("client_".$companyId);
-                echo json_encode($clientId,$test_print_data);
+                var_dump($clientId,json_encode($test_print_data));
                 if(!empty($clientId))
                 {
                     Gateway::sendToClient($clientId,json_encode($test_print_data));
