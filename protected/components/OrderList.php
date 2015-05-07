@@ -137,7 +137,7 @@ class OrderList
 						
 						$goodsData = explode('-',$goodsArr[1]);
 						foreach($goodsData as $goods){
-							$se=new Sequence("product");
+							$se=new Sequence("order_product");
                         	$lid = $se->nextval();
 							$insertData = array(
 												'lid'=>$lid,
