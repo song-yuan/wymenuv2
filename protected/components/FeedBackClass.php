@@ -32,6 +32,7 @@ class FeedBackClass
 		$conn->bindValue(':lid',$siteNoId);
 		$conn->bindValue(':dpid',$dpid);
 		$siteNo = $conn->queryRow();
+		var_dump($siteNo);var_dump($feebackIds);exit;
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
 			$sql = 'delete from nb_order_feedback where dpid=:dpid and feedback_id=:feedbackId and is_order=:type and order_id=:orderId';
