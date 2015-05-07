@@ -1,25 +1,27 @@
 <?php
 
 /**
- * This is the model class for table "nb_printer".
+ * This is the model class for table "nb_pad".
  *
- * The followings are the available columns in table 'nb_printer':
- * @property string $printer_id
- * @property string $company_id
+ * The followings are the available columns in table 'nb_pad':
+ * @property string $lid
+ * @property string $dpid
+ * @property string $create_at
+ * @property string $update_at
  * @property string $name
- * @property string $address
- * @property string $language
- * @property string $brand
- * @property string $remark
+ * @property string $printer_id
+ * @property string $server_address
+ * @property string $pad_type
+ * @property string $delete_flag
  */
-class Printer extends CActiveRecord
+class Pad extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_printer';
+		return 'nb_pad';
 	}
 
 	/**
@@ -30,14 +32,15 @@ class Printer extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name,dpid,lid', 'required'),
-			array('lid, dpid', 'length', 'max'=>10),
-			array('remark, brand', 'length', 'max'=>45),
-                        array('language,printer_type', 'length', 'max'=>2),
-                        array('name,address', 'length', 'max'=>64),
+			array('lid', 'required'),
+			array('lid, dpid, printer_id', 'length', 'max'=>10),
+			array('name', 'length', 'max'=>100),
+			array('server_address', 'length', 'max'=>70),
+			array('pad_type, delete_flag,is_bind', 'length', 'max'=>1),
+			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, name, address, create_at,language,printer_type,brand,remark', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, name, printer_id, server_address, pad_type,is_bind, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -49,6 +52,7 @@ class Printer extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'printer' => array(self::HAS_ONE , 'Printer' ,'' ,'on'=>'t.printer_id=printer.lid and t.dpid=printer.dpid') 				
 		);
 	}
 
@@ -58,13 +62,16 @@ class Printer extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'lid' => 'Printer',
-			'dpid' => 'Company',
-			'name' => '打印机名称',
-                        'address'=>'地址(IP/USB/COM)',
-			'language' => '语言',
-			'brand' => '品牌',
-			'remark' => '备注',
+			'lid' => 'PAD',
+			'dpid' => '店铺',
+			'create_at' => 'Create At',
+			'update_at' => '更新时间',
+			'name' => '名称',
+			'printer_id' => '默认打印机',
+			'server_address' => '网络打印机服务器地址',
+			'pad_type' => '类型',
+                        'is_bind' => '绑定',
+			'delete_flag' => 'Delete Flag',
 		);
 	}
 
@@ -88,11 +95,13 @@ class Printer extends CActiveRecord
 
 		$criteria->compare('lid',$this->lid,true);
 		$criteria->compare('dpid',$this->dpid,true);
+		$criteria->compare('create_at',$this->create_at,true);
+		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('language',$this->language,true);
-		$criteria->compare('printer_type',$this->printer_type,true);
-		$criteria->compare('brand',$this->brand,true);
-		$criteria->compare('remark',$this->remark,true);
+		$criteria->compare('printer_id',$this->printer_id,true);
+		$criteria->compare('server_address',$this->server_address,true);
+		$criteria->compare('pad_type',$this->pad_type,true);
+		$criteria->compare('delete_flag',$this->delete_flag,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -103,7 +112,7 @@ class Printer extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Printer the static model class
+	 * @return Pad the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
