@@ -10,8 +10,8 @@ class PadController extends Controller
 	public function actionIndex()
 	{
 		session_start();
-		$companyId = Yii::app()->request->getParam('companyId',0);
-                $padId = Yii::app()->request->getParam('padId',0);
+		$companyId = Yii::app()->request->getParam('companyid',0);
+                $padId = Yii::app()->request->getParam('padid',0);
                 
 		if($companyId){
 			$_SESSION['companyId'] = $companyId;
@@ -19,6 +19,7 @@ class PadController extends Controller
                 if($padId){
 			$_SESSION['padId'] = $padId;
 		}
+                //var_dump($companyId,$padId);
                 if(!empty($companyId)&&!empty($padId))
                 {
                     //$model=  Pad::model()->
