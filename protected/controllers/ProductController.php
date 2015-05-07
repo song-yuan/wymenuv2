@@ -223,7 +223,6 @@ class ProductController extends Controller
 			$result = TasteClass::save($this->companyId, 0, $id, $tasteIds, $tasteMemo);
 		}elseif($type==3){
 			$result = FeedBackClass::save($this->companyId, $this->siteNoId, 1, $id, $tasteIds, $tasteMemo);
-			var_dump($result);exit;
 		}
 		if($result){
 			echo 1;

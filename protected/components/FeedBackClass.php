@@ -28,7 +28,7 @@ class FeedBackClass
 	
 	public static function save($dpid,$siteNoId, $type, $id = 0, $feebackIds = 0, $feebackMemo=null){
 		$sql = 'select * from nb_site_no where lid=:lid and dpid=:dpid';
-		$conn = $this->db->createCommand($sql);
+		$conn = Yii::app()->db->createCommand($sql);
 		$conn->bindValue(':lid',$siteNoId);
 		$conn->bindValue(':dpid',$dpid);
 		$siteNo = $conn->queryRow();
