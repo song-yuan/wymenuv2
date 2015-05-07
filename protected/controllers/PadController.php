@@ -38,32 +38,41 @@ class PadController extends Controller
         public function actionBind(){
 		$companyid = Yii::app()->request->getParam('companyid',0);
                 $padid = Yii::app()->request->getParam('padid',0);
-                if(!$padid){
-			Yii::app()->end(json_encode(array('result'=>false,'delay'=>400)));
-		}
-                if(!$companyid){
-			Yii::app()->end(json_encode(array('result'=>false,'delay'=>400)));
-		}
+                if(empty($companyid)||empty($padid))
+                {
+                    echo "fail";
+                }
                 $pad=Pad::model()->find(' dpid=:companyId and lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
                 $pad->is_bind='1';
                 if($pad->save())
                 {
-                    Yii::app()->end(json_encode(array('result'=>true,'delay'=>400)));
+                    echo "success";
+                }
+	}
+        
+        public function actionGetInfo(){
+		$companyid = Yii::app()->request->getParam('companyid',0);
+                $padid = Yii::app()->request->getParam('padid',0);
+                if(empty($companyid)||empty($padid))
+                {
+                    echo "0";
+                }
+                $pad=Pad::model()->find(' dpid=:companyId and lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
+                if($pad)
+                {
+                    echo $pad->server_address;
+                }else{
+                    echo "0";
                 }
 	}
 	
-        public function actionGetPadList(){
+        public function actionGetJob(){
 		$companyid = Yii::app()->request->getParam('companyid',0);
-                if(!$companyid){
-			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
-		}		
-                $treeDataSource = array('data'=>array(),'delay'=>400);
-		$pads= Pad::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $companyid));	
-		foreach($pads as $c){
-			$tmp['name'] = $c['name'];
-			$tmp['id'] = $c['lid'];
-			$treeDataSource['data'][] = $tmp;
-		}
-		Yii::app()->end(json_encode($treeDataSource));
+                $jobid = Yii::app()->request->getParam('jobid',0);
+                $store = Store::instance('wymenu');
+                $printData = $store->get($companyid."_".$jobid);
+                if(empty($printData))
+                    $printData="";
+                echo $printData;
 	}
 }

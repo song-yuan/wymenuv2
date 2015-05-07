@@ -355,6 +355,8 @@ class Helper
                         $listData.= str_pad('',48,'-').'<br>';
                         $listData.= str_pad('收银员：'.Yii::app()->user->name,20,' ').'<br>';
                         $listData.= str_pad('',48,'-').str_pad('打印时间：'.time(),20,' ').'<br>';
+                        
+                        
                         //var_dump($listData);exit;
                         if(!empty($listData)){
                             if(Yii::app()->params->has_cache)
