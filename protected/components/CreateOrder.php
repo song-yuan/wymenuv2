@@ -159,15 +159,20 @@ class CreateOrder
 		$order = Order::model()->find($criteria);
 		
 		if($this->product['type']){
-			$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid and set_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
+			$orderProduct = OrderProduct::model()->updateAll(array('delete_flag'=>1),'order_id=:orderId and dpid=:dpid and set_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
+			if($orderProduct){
+				return true;
+			}else{
+				return false;
+			}
 		}else{
 			$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid  and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
-		}
-		$orderProduct->delete_flag = 1;
-		if($orderProduct->update()){
-			return true;
-		}else{
-			return false;
+			$orderProduct->delete_flag = 1;
+			if($orderProduct->update()){
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
 }
