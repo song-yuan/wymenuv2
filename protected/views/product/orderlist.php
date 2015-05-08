@@ -56,7 +56,7 @@
 				<div class="order-product-left"><img src="<?php echo $product['main_picture'];?>" /></div>
 				<div class="order-product-right">
 					<div class="right-up"><?php echo $product['product_name'];?>(加菜)</div>
-			               <div class="right-middle"><span class="minus" >-</span><input type="text" name="<?php echo $product['product_id'];?>" addtionid="<?php echo $product['lid'];?>" value="<?php echo $product['amount'];?>" readonly="true"/><span class="plus">+</span></div>
+			               <div class="right-middle"><span class="minus" >-</span><input class="input-product" type="text" name="<?php echo $product['product_id'];?>" addtionid="<?php echo $product['lid'];?>" value="<?php echo $product['amount'];?>"  price="<?php echo $product['price'];?>" readonly="true"/><span class="plus">+</span></div>
 					<div class="right-down">
 			          <div class="right-down-left">￥<?php echo $product['price'];?></div>
 					   <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>						
@@ -317,7 +317,7 @@
 							str +='<div class="order-product-left"><img src="'+msg.data.main_picture+'" /></div>';
 							str +='<div class="order-product-right">';
 							str +='<div class="right-up">'+msg.data.product_name+'(加菜)</div>';
-							str +='<div class="right-middle"><span class="minus" >-</span><input type="text" name="'+msg.data.sproduct_id+'" addtionid="'+msg.lastLid+'" value="1" readonly="true"/><span class="plus">+</span></div>';
+							str +='<div class="right-middle"><span class="minus" >-</span><input class="input-product" type="text" name="'+msg.data.sproduct_id+'" addtionid="'+msg.lastLid+'" value="1" price="'+msg.data.price+'" readonly="true"/><span class="plus">+</span></div>';
 							str +='<div class="right-down">';
 							str +='<div class="right-down-left">￥'+msg.data.price+'</div>';
 							str +='<div class="right-down-right select-taste"  data-id="'+msg.lastLid+'" type="2" product-id="'+msg.data.sproduct+'" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>';						
