@@ -261,6 +261,7 @@
 			bottom.attr('product-id',productId);
 			top.css('display','block');
 			bottom.css('display','block');
+			$('body').scrollTop(height);
 		});
 		
 		//隐藏
