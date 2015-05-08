@@ -56,7 +56,7 @@
 				<div class="order-product-left"><img src="<?php echo $product['main_picture'];?>" /></div>
 				<div class="order-product-right">
 					<div class="right-up"><?php echo $product['product_name'];?>(加菜)</div>
-			               <div class="right-middle"><span class="minus" >-</span><input type="text" name="<?php echo $product['product_id'];?>" value="<?php echo $product['amount'];?>" readonly="true"/><span class="plus">+</span></div>
+			               <div class="right-middle"><span class="minus" >-</span><input type="text" name="<?php echo $product['product_id'];?>" addtionId="<?php echo $product['lid'];?>" value="<?php echo $product['amount'];?>" readonly="true"/><span class="plus">+</span></div>
 					<div class="right-down">
 			          <div class="right-down-left">￥<?php echo $product['price'];?></div>
 					   <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>						
@@ -304,6 +304,7 @@
 					if(msg.status){
 						var orderProductLid = msg.lastLid;
 						var addtionInput = $('input[addtionId='+orderProductLid+']');
+						alert(addtionInput);
 						if(addtionInput){
 							var val = addtionInput.val();
 							addtionInput.val(parseInt(val)+1);
