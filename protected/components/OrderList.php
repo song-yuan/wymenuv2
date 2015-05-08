@@ -117,7 +117,7 @@ class OrderList
 							$price += $v['price']*$v['amount'];
 							$num += $v['amount'];
 						}
-					}elseif(!$isOrder&&empty($val['hasAddition'])){
+					}elseif(!$isOrder&&!empty($val['hasAddition'])){
 						foreach($val['hasAddition'] as $v){
 							$price += $v['price']*$v['amount'];
 							$num += $v['amount'];
