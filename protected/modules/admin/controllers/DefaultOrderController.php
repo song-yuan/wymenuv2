@@ -627,10 +627,20 @@ class DefaultOrderController extends BackendController
         }
         
         public function actionPrintList(){
+                
                 $id = Yii::app()->request->getParam('id',0);
 		$companyId = Yii::app()->request->getParam('companyId');
                 $sid=Yii::app()->request->getParam('sid',0);
                 $istemp=Yii::app()->request->getParam('istemp',0);
+                ///////////////////////test
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $se=new Sequence("printer_job_id");
+                $jobid = $se->nextval();
+                $ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
+                echo Yii::app()->end(json_encode(array('status'=>true,'jobid'=>$jobid)));
+                exit;
+                ////////////////////////test
                 if($id==0)
                 {
                     $criteria = new CDbCriteria;
@@ -641,6 +651,7 @@ class DefaultOrderController extends BackendController
                     $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
                 }
 		//var_dump($order);exit;
+                                
                 $reprint = false;
 		Yii::app()->end(json_encode(Helper::printList($order , $reprint)));
         }
@@ -650,6 +661,26 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId');
                 $db = Yii::app()->db;
+                
+                //////////////test
+                Gateway::getOnlineStatus();
+                $se=new Sequence("printer_job_id");
+                $jobid = $se->nextval();
+                $test_print_data=array(
+                    "company_id"=>  $this->companyId,
+                    "job_id"=>$jobid,
+                    "printer"=>"192.168.63.100",
+                    "content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
+                );
+                $store = Store::instance('wymenu');
+                $clientId=$store->get("client_".$companyId);
+                var_dump($clientId,json_encode($test_print_data));
+                if(!empty($clientId))
+                {
+                    Gateway::sendToClient($clientId,json_encode($test_print_data));
+                }
+                exit;
+                ///////////test
                 //var_dump(Yii::app()->params->has_cache);exit;
                 $transaction = $db->beginTransaction();
                 try {

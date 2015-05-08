@@ -151,8 +151,12 @@ class DefaultController extends BackendController
         }
         
         public function actionGateway(){
+                //var_dump( Yii::app()->request->baseUrl.'/protected/components/Config/Store.php');exit;
+                
                 var_dump(Gateway::getOnlineStatus());
                 $store = Store::instance('wymenu');
+                $printData = $store->get('0000000012');
+                var_dump($printData);exit;
                 $ret = $store->set('0000000012','上海滩的愛している222');
                 echo "ddd";
                 //Gateway::sendToAll(json_encode(array(a=>"上海滩的愛している",b=>"ddddd11111:")));

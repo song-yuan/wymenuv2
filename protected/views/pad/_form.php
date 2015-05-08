@@ -56,9 +56,10 @@
                                                                     alert("请选择店铺和打印机！");
                                                                     return;
                                                                 }
-                                                                if(Androidwymenuprinter.padSet(companyid,padid))
+                                                                if(Androidwymenuprinter.padSet(companyId,padId))
                                                                 {
-                                                                    $.ajax({
+                                                                    //should deal in android.
+                                                                   /* $.ajax({
                                                                         url:'<?php echo $this->createUrl('pad/bind');?>/companyid/'+companyid+'/padid/'+padId,
                                                                         type:'GET',
                                                                         dataType:'json',
@@ -70,11 +71,12 @@
                                                                                     Androidwymenuprinter.padSet("0000000000","0000000000")
                                                                                 }
                                                                         }
-                                                                    });
+                                                                    });*/
+                                                                    alert("绑定成功！！");
                                                                 }
                                                                 else
                                                                 {
-                                                                    alert("打印机设置失败！，请确认打印机连接好后再试！");                                                                        
+                                                                    alert("绑定失败，请稍后再试！");                                                                        
                                                                 }
                                                             });
                                                         </script>

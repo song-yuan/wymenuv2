@@ -80,8 +80,7 @@
                 
                     <script type="text/javascript">
                         $(document).ready(function(){
-                                $('body').addClass('page-sidebar-closed');
-                                
+                                $('body').addClass('page-sidebar-closed');                                
                         });
                         
                         $('#btn_account').click(function(){
@@ -99,15 +98,23 @@
                         });
                         
                         $('#print-btn').click(function(){
-                                $.get('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
-                                        if(data.status) {
-                                                alert('操作成功');
-                                                //alert(data.msg);
-                                        } else {
-                                                alert(data.msg);
+                            var company_id="<?php echo $this->companyId ?>"                            
+                            $.get('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
+                                    if(data.status) {
+                                        if(Androidwymenuprinter.printJob(company_id,data.jobid))
+                                        {
+                                            alert("打印成功");
                                         }
-                                },'json');
+                                        else
+                                        {
+                                            alert("打印机失败！，请确认打印机连接好后再试！");                                                                        
+                                        }                                                
+                                    } else {
+                                            alert(data.msg);
+                                    }
+                            },'json');
                         });
+                        
                         $('#kitchen-btn').click(function(){
                             var statu = confirm("下单，并厨打，确定吗？");
                                 if(!statu){
