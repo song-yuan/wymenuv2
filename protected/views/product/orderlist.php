@@ -303,7 +303,7 @@
 				success:function(msg){
 					if(msg.status){
 						var orderProductLid = msg.lastLid;
-						var addtionInput = $('input[addtionid=""'+orderProductLid+'"]');
+						var addtionInput = $('input[addtionid="'+orderProductLid+'"]');
 						alert(orderProductLid);
 						alert(addtionInput);
 						if(addtionInput){
