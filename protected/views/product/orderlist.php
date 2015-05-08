@@ -309,6 +309,8 @@
 						if(addtionInput){
 							var val = addtionInput.val();
 							addtionInput.val(parseInt(val)+1);
+							alert(val);
+							alert(parseInt(val)+1);
 						}else{
 							var str = '';
 							str +='<div class="order-product">';
