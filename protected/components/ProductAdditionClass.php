@@ -21,7 +21,8 @@ class ProductAdditionClass
     
     public function save(){
     	if($this->hasAddition){
-    		$sql = 'update nb_order_product set amount=amount+1 where dpid=:dpid and order_id=:orderId and main_id=:mainId and product_id=:productId and delete_flag=0';
+    		$sql = 'update nb_order_product set amount=amount+1 where dpid=:dpid and order_id=:orderId and main_id=:mainId and product_id=:productId and product_order_status=0 and delete_flag=0';
+    		$conn = $this->db->createCommand($sql);
     		$conn->bindValue(':dpid',$this->dpid);
 			$conn->bindValue(':orderId',$this->orderId);
 			$conn->bindValue(':mainId',$this->productAddition['mproduct_id']);
