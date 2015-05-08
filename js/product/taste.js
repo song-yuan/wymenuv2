@@ -8,6 +8,14 @@ function totalPrice(){
 	totalPrice = totalPrice.toFixed(2);
 	$('.total-price').html(totalPrice);
 }
+function totalNum(){
+	var totalNum = 0;
+	$('.input-product').each(function(){
+		var num = $(this).val();
+		totalNum += parseInt(num);
+	});
+	$('.total-num').html(totalNum);
+}
 $(document).ready(function(){
 	var feedback = 0;
    $('.select-taste').click(function(){
