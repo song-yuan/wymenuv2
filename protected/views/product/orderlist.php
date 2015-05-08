@@ -302,20 +302,27 @@
 				data:{orderId:orderId,id:id},
 				success:function(msg){
 					if(msg.status){
-						var str = '';
-						str +='<div class="order-product">';
-						str +='<div class="order-product-left"><img src="'+msg.data.main_picture+'" /></div>';
-						str +='<div class="order-product-right">';
-						str +='<div class="right-up">'+msg.data.product_name+'(加菜)</div>';
-						str +='<div class="right-middle"><span class="minus" >-</span><input type="text" name="'+msg.data.sproduct_id+'" value="1" readonly="true"/><span class="plus">+</span></div>';
-						str +='<div class="right-down">';
-						str +='<div class="right-down-left">￥'+msg.data.price+'</div>';
-						str +='<div class="right-down-right select-taste"  data-id="'+msg.lastLid+'" type="2" product-id="'+msg.data.sproduct+'" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>';						
-						str +='</div></div><div class="clear"></div></div>';
-						$('.product-has-addtion').append(str);
-						var top = $('.product-mask-top');
-						var height = top.height() + 141;
-						top.css('height',height);
+						var orderProductLid = msg.lastLid;
+						var addtionInput = $('input[addtionId='+orderProductLid+']');
+						if(addtionInput){
+							var val = addtionInput.val();
+							addtionInput.val(parseInt(val)+1);
+						}else{
+							var str = '';
+							str +='<div class="order-product">';
+							str +='<div class="order-product-left"><img src="'+msg.data.main_picture+'" /></div>';
+							str +='<div class="order-product-right">';
+							str +='<div class="right-up">'+msg.data.product_name+'(加菜)</div>';
+							str +='<div class="right-middle"><span class="minus" >-</span><input type="text" name="'+msg.data.sproduct_id+'" addtionId="'+msg.lastLid+'" value="1" readonly="true"/><span class="plus">+</span></div>';
+							str +='<div class="right-down">';
+							str +='<div class="right-down-left">￥'+msg.data.price+'</div>';
+							str +='<div class="right-down-right select-taste"  data-id="'+msg.lastLid+'" type="2" product-id="'+msg.data.sproduct+'" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>';						
+							str +='</div></div><div class="clear"></div></div>';
+							$('.product-has-addtion').append(str);
+							var top = $('.product-mask-top');
+							var height = top.height() + 141;
+							top.css('height',height);
+						}
 						alert(msg.msg);
 					}else{
 						alert(msg.msg);
