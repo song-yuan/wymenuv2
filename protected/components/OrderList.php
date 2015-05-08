@@ -55,9 +55,9 @@ class OrderList
 			$orderlist = $conn->queryAll();
 			foreach($orderlist as $key=>$val){
 				if($isOrder){
-					$val['addition'] = self::GetOrderAddProduct($val['lid'],$val['dpid'],$orderId,$val['product_id'],$type);
+					$val['addition'] = self::GetOrderAddProduct($val['dpid'],$orderId,$val['product_id'],$type);
 				}else{
-					$val['hasAddition'] = self::GetOrderAddProduct($val['lid'],$val['dpid'],$orderId,$val['product_id'],$type);
+					$val['hasAddition'] = self::GetOrderAddProduct($val['dpid'],$orderId,$val['product_id'],$type);
 					$val['addition'] = self::GetAddProduct($val['dpid'],$val['product_id']);
 				}
 				$result[$val['category_id']][] = $val;
