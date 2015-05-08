@@ -261,7 +261,7 @@
 			bottom.attr('product-id',productId);
 			top.css('display','block');
 			bottom.css('display','block');
-			$('body').scrollTop(height);
+			$('body').scrollTop(parseInt(height) - 40);
 		});
 		
 		//隐藏
