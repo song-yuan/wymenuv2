@@ -22,7 +22,16 @@ class SiteClass
 		$code= SiteClass::getRandChar(6);
                 //var_dump($code);exit;
                 //return $code;/*apc should be deleted*/
-                if(Yii::app()->params->has_cache)
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $ret = $store->get($companyId.$code);
+                while(!empty($ret))
+                {
+                    $code= $this->getRandChar(6); 
+                    $ret = $store->get($companyId.$code);                    
+                }
+                $store->set($companyId.$code,'1',0,0);
+                /*if(Yii::app()->params->has_cache)
                 {
                     $ccode = apc_fetch($companyId.$code);
                     while(!empty($ccode))
@@ -31,17 +40,19 @@ class SiteClass
                         $ccode = apc_fetch($companyId.$code);
                     }
                     apc_store($companyId.$code,'1',0);//永久存储用apc_delete($key)删除
-                }
+                }*/
                 return $code;
 	}
         
-        public static function deleteCode($companyId,$code){
-		
-                if(Yii::app()->params->has_cache)
-                {
-                    $ccode = apc_delete($companyId.$code);                    
-                }
-                return;
+        public static function deleteCode($companyId,$code)
+        {		
+            Gateway::getOnlineStatus();
+            $store = Store::instance('wymenu');
+            $ret = $store->delete($companyId.$code);
+            /*if(Yii::app()->params->has_cache)
+            {
+                $ccode = apc_delete($companyId.$code);                    
+            }*/                
 	}
         
         public static function getSiteNmae($companyId,$id,$istemp){
