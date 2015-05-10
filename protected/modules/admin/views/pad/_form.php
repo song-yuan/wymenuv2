@@ -41,7 +41,7 @@
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'pad_type',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'pad_type', array('0' => '收银台' , '1' => '点单PAD','2'=>'开台PAD') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('pad_type')));?>
+											<?php echo $form->dropDownList($model, 'pad_type', array('0' => '收银台' , '1' => '日本点单PAD','2'=>'中国点单PAD') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('pad_type')));?>
 											<?php echo $form->error($model, 'pad_type' )?>
 										</div>
 									</div>

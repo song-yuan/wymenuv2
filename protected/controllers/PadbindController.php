@@ -57,14 +57,26 @@ class PadbindController extends Controller
                 //var_dump($companyId,$padId);
                 if($companyId!="0000000000" && $padId!="0000000000")
                 {
-                    //$model=  Pad::model()->
+                    $model=  Pad::model()->find(" dpid=:dpid and lid=:lid",array(":dpid"=>$companyId,":lid"=>$padId));
                     //收银pad
-                    $this->redirect(array('admin/login'));
+                    if(empty($model))
+                    {
+                        $this->redirect(array('login'));
+                    }else{
+                        if($model->pad_type=="0")
+                        {
+                            $this->redirect(array('admin/login'));
+                        }else if($model->pad_type=="1")
+                        {
+                            $this->redirect(array('product/index',"companyid"=>$companyId,"padid"=>$padId));
+                        }else{
+                            $this->redirect(array('login'));
+                        }
                     //日本点餐pad
                     //detell whether this pad site is opensite!
                     //has to the site else opensite and go to the product page!
                     //中国点餐PAD
-                    
+                    }
                 }else{
                     $this->redirect(array('login'));
                 }		
