@@ -62,16 +62,19 @@ select .partents{
 	line-height:24px;
 	margin:0;
 }
-.product-mask{
+.product-pad-mask{
+	position:fixed;
 	width:60%;
 	top:50px;
 	left:40%;
-	min-height:40%;
+	background:white;
+	z-index:1001;
+	min-height:600px;
+	height:auto;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 	border: 1px solid #ddd;
-	bottom:20%;
 }
-.product-mask .mask-trangle{
+.product-pad-mask .mask-trangle{
 	position: absolute;
 	top: -7px;
 	right: 9px;
@@ -85,11 +88,11 @@ select .partents{
 .info{
 	min-height:80%;
 }
-.product-mask .product-bottom{
+.product-pad-mask .product-bottom{
 	padding:10px;
 	height:30px;
 }
-.product-mask .product-bottom button {
+.product-pad-mask .product-bottom button {
 	background: rgb(239,68,77);
 	height: 30px;
 	padding:0 10px;
