@@ -66,7 +66,7 @@ class PadbindController extends Controller
                     //中国点餐PAD
                     
                 }else{
-                    $this->render('login');
+                    $this->redirect(array('login'));
                 }		
 	}
         
