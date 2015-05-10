@@ -141,6 +141,24 @@ class PadbindController extends Controller
 		
                 $treeDataSource = array('data'=>array(),'delay'=>400);
 		$pads = Pad::model()->findAll('dpid=:companyId and delete_flag=0 and is_bind=0' , array(':companyId' => $companyid));
+                var_dump($pads);exit;
+		foreach($pads as $c){
+			$tmp['name'] = $c['name'];
+			$tmp['id'] = $c['lid'];
+			$treeDataSource['data'][] = $tmp;
+		}
+		Yii::app()->end(json_encode($treeDataSource));
+	}
+        
+        public function actionGetOnePad(){
+		$companyid = Yii::app()->request->getParam('companyid',0);
+                $padid = Yii::app()->request->getParam('padid',0);
+                if(!$companyid){
+			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
+		}
+		
+                $treeDataSource = array('data'=>array(),'delay'=>400);
+		$pads = Pad::model()->findAll('dpid=:companyId and lid=:lid and delete_flag=0 ' , array(':companyId' => $companyid,':lid'=>$padid));
 	
 		foreach($pads as $c){
 			$tmp['name'] = $c['name'];
