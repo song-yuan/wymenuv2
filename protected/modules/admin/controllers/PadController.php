@@ -63,7 +63,23 @@ class PadController extends BackendController
                                 'printers'=>$printers
 		));
 	}
-        
+        public function actionBind(){
+		$padId = Yii::app()->request->getParam('padId',0);
+                $model = Pad::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $padId,':dpid'=> $this->companyId));
+		if(Yii::app()->request->isPostRequest) {
+			$model->attributes = Yii::app()->request->getPost('Pad');
+                        $model->is_bind="0";
+                        //($model->attributes);var_dump(Yii::app()->request->getPost('Pad'));exit;
+			if($model->save()){
+				Yii::app()->user->setFlash('success' , '修改成功');
+				$this->redirect(array('pad/index' , 'companyId' => $this->companyId));
+			}
+		}
+                $printers = $this->getPrinters();
+		$this->renderPartial('bind' , array(
+				'model'=>$model                                
+		));
+	}
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');

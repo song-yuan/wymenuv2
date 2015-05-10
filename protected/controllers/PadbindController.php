@@ -1,8 +1,42 @@
 <?php
 
-class PadController extends Controller
+class PadbindController extends Controller
 {
 	public $layout = '/layouts/padmain';
+        
+        public function actionLogin()
+	{
+		$model = new LoginForm();
+		// collect user input data
+		if(isset($_POST['LoginForm']))
+		{
+                    $loginform=$_POST['LoginForm'];
+                    $model->username=$loginform['username'];
+                    $model->password=$loginform['password'];
+                    $userexist=  User::model()->find(" username=:username and password_hash=:password and role=1 and delete_flag=0"
+                            ,array(":username"=>$model->username,"password"=>Helper::genPassword($model->password)));
+                    //var_dump($loginform);exit;
+                    if($userexist)
+                    {
+                        if($loginform["pad_info"]=="00000000000000000000")
+                        {
+                            $modelpad=new Pad();
+                        }else{
+                            $modelpad=Pad::model()->find(" dpid=:dpid and lid=:lid",array(":dpid"=>substr($loginform["pad_info"],0,10),":lid"=>substr($loginform["pad_info"],10,10)));
+                        }                 
+                        $this->render('dobind',array('model'=>$modelpad));
+                        exit;
+                    }
+		}
+                //var_dump($model);exit;
+                $this->render('login' , array('model' => $model));				
+	}
+        
+        public function actionDobind()
+	{
+				
+	}
+        
 	/**
 	 * 
 	 * setting the companyId and padId
@@ -25,14 +59,13 @@ class PadController extends Controller
                     //$model=  Pad::model()->
                     //收银pad
                     $this->redirect(array('admin/login'));
-                    //点餐pad
+                    //日本点餐pad
                     //detell whether this pad site is opensite!
                     //has to the site else opensite and go to the product page!
-                    //取密码pad
+                    //中国点餐PAD
                     
                 }else{
-                    $model = new Pad();
-                    $this->render('create' , array('model' => $model));
+                    $this->render('login');
                 }		
 	}
         
@@ -45,6 +78,25 @@ class PadController extends Controller
                 }
                 $pad=Pad::model()->find(' dpid=:companyId and lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
                 $pad->is_bind='1';
+                if($pad->save())
+                {
+                    echo "success";
+                }
+	}
+        
+        public function actionDisbind(){
+		$companyid = Yii::app()->request->getParam('companyid',0);
+                $padid = Yii::app()->request->getParam('padid',0);
+                if(empty($companyid)||empty($padid))
+                {
+                    echo "fail";
+                }
+                $pad=Pad::model()->find(' dpid=:companyId and lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
+                if(empty($pad))
+                {
+                    return "fail";
+                }
+                $pad->is_bind='0';
                 if($pad->save())
                 {
                     echo "success";
@@ -87,7 +139,7 @@ class PadController extends Controller
 		}
 		
                 $treeDataSource = array('data'=>array(),'delay'=>400);
-		$pads = Pad::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $companyid));
+		$pads = Pad::model()->findAll('dpid=:companyId and delete_flag=0 and is_bind=0' , array(':companyId' => $companyid));
 	
 		foreach($pads as $c){
 			$tmp['name'] = $c['name'];

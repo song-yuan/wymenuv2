@@ -58,20 +58,7 @@
                                                                 }
                                                                 if(Androidwymenuprinter.padSet(companyId,padId))
                                                                 {
-                                                                    //should deal in android.
-                                                                   /* $.ajax({
-                                                                        url:'<?php echo $this->createUrl('pad/bind');?>/companyid/'+companyid+'/padid/'+padId,
-                                                                        type:'GET',
-                                                                        dataType:'json',
-                                                                        success:function(result){
-                                                                                if(result.data)
-                                                                                {
-                                                                                    local.href='<?php echo $this->createUrl('pad/index');?>/companyid/'+companyId+'/padid/'+padId;
-                                                                                }else{
-                                                                                    Androidwymenuprinter.padSet("0000000000","0000000000")
-                                                                                }
-                                                                        }
-                                                                    });*/
+                                                                    
                                                                     alert("绑定成功！！");
                                                                 }
                                                                 else
