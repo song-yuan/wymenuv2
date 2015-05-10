@@ -1,29 +1,30 @@
 <?php
 /* @var $this ProductController */
-	Yii::app()->clientScript->registerCssFile('../css/product/ui-btn.css');
-	Yii::app()->clientScript->registerCssFile('../css/product/ui-img.css');
-	Yii::app()->clientScript->registerCssFile('../css/product/ui-list.css');
-	Yii::app()->clientScript->registerCssFile('../css/product/ui-base.css');
-	Yii::app()->clientScript->registerCssFile('../css/product/ui-box.css');
-	Yii::app()->clientScript->registerCssFile('../css/product/ui-color.css');
-	Yii::app()->clientScript->registerCssFile('../css/product/pic.css');
-	Yii::app()->clientScript->registerCssFile('../css/product/ui-media.css'); 
-	Yii::app()->clientScript->registerCssFile('../css/product.css');
-	Yii::app()->clientScript->registerCssFile('../css/product/reset.css');
-	Yii::app()->clientScript->registerCssFile('../css/product/slick.css');
+	$baseUrl = Yii::app()->baseUrl;
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-btn.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-img.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-list.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-base.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-box.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-color.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/pic.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-media.css'); 
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/reset.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/slick.css');
 
-	Yii::app()->clientScript->registerScriptFile('../js/product/zepto.js');
-	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
-	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');
+	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/zepto.js');
+	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/base64.js'); 
+	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/pic.js');
 ?>
 
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type,'siteNoId'=>$siteNoId));?>
-	<link href='../css/product/reset.css' rel='stylesheet' type='text/css'>
-	<link href='../css/product/slick.css' rel='stylesheet' type='text/css'>
-	<script type="text/javascript" src="../js/product/slick.min.js"></script>
-	<script type="text/javascript" src="../js/product/classie.js"></script>
-	<script type="text/javascript" src="../js/product/jquery.form.js"></script>
-	<script type="text/javascript" src="../js/product/productpad.js"></script>
+	<link href='<?php echo $baseUrl.'/css/product/reset.css';?>' rel='stylesheet' type='text/css'>
+	<link href=<?php echo $baseUrl.'/css/product/slick.css';?> rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/slick.min.js';?>"></script>
+	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/classie.js';?>"></script>
+	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/jquery.form.js';?>"></script>
+	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/productpad.js';?>"></script>
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
