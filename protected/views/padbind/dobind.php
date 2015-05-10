@@ -61,7 +61,7 @@
 										'enctype' => 'multipart/form-data'
 									),
 							)); ?>
-                                                        <?php if(empty($modelpad->lid)): ?>
+                                                        <?php if(empty($model->lid)): ?>
 								<div class="form-body">
 									<div class="form-group  <?php if($model->hasErrors('dpid')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
