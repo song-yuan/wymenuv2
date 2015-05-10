@@ -15,22 +15,18 @@
 	Yii::app()->clientScript->registerScriptFile('../js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
 	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');
-	$result = ProductClass::getCartInfo($this->companyId,$siteNoId);	
-	$resArr = explode(':',$result);
-	$price = $resArr[0];
-	$nums = $resArr[1];
 ?>
 
-	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type));?>
+	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type,'siteNoId'=>$siteNoId));?>
 	<link href='../css/product/reset.css' rel='stylesheet' type='text/css'>
 	<link href='../css/product/slick.css' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" src="../js/product/slick.min.js"></script>
 	<script type="text/javascript" src="../js/product/classie.js"></script>
-	<script type="text/javascript" src="../js/product/product.js"></script>
+	<script type="text/javascript" src="../js/product/jquery.form.js"></script>
+	<script type="text/javascript" src="../js/product/productpad.js"></script>
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
-        <div class="product-category"><?php if(!$type&&$pid){ echo ProductClass::getCategoryName($pid).' >>> '.ProductClass::getCategoryName($categoryId);}else{ if($type==1) echo '推荐品';elseif($type==2) echo '套餐';elseif($type==3) echo '点赞TOP10';else echo '点单TOP10';}?></div>
 		<div id="forum_list">
 			<div class="outDiv" id="leftPic">
 			</div>
@@ -39,24 +35,18 @@
 		</div>
     </div>
     <!--content结束-->
-    <div class="bottom">
-    	<div class="bottom-left">
-    		<span>总价: </span><span class="total-price"><?php echo Money::priceFormat($price);?></span>
-    	</div>
-    	<div class="bottom-middle">
-    		<div class="product-nums"><?php echo $nums;?></div>
-    	</div>
-    	<div class="bottom-right">
-    		<a href="orderList"><button class="see-order">订单>></button></a>
-    	</div>
-    	<div class="clear"></div>
-    </div>
 </div>
+<form id="padOrderForm" action="confirmPadOrder" method="post">
 <div class="product-mask">
+	<div class="mask-trangle"></div>
 	<div class="product-mask-info">点单信息</div>
 	<div class="info">
 	</div>
+	<div class="product-bottom">
+		<button id="updatePadOrder">下单并打印</button>
+	</div>
 </div>
+</form>
 <!-- 加入订单动画 -->
 <div class="aniele"></div>
 
@@ -71,7 +61,26 @@
 		type = t;
 		catgory = cat;
 		pad = isPad;
-		getPicList(type,catgory,pad);
-		$('.promptumenu_window').css('display','none');
+		getPicList(type,catgory,1);
 	}	
+	$(document).ready(function(){
+		$('select[name="category"]').change(function(){
+			var val = $(this).val();
+			var obj = $('div[category="'+val+'"]:first');
+			var height = obj.offset().top;
+			$('body').scrollTop(height);
+		});
+		$(window).scroll(function(){
+			$('.blockCategory').each(function(){
+				var top = $(document).scrollTop();
+				var categoryTop = $(this).offset().top;
+				var height = $(this).height();
+				if(parseInt(height)+parseInt(categoryTop) > parseInt(top)){
+					var categoryId = $(this).attr('category');
+					$('select option[value="'+categoryId+'"]').attr('selected',true);
+					return false;
+				}
+			});
+		});
+	});
 </script>
