@@ -33,7 +33,8 @@
 				</label>
 				<button type="submit" class="btn blue pull-right">
 				登录 <i class="m-icon-swapright m-icon-white"></i>
-				</button>            
+				</button> 
+                                <a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>"  id="bindbutton" class="blue" >解除绑定</a>
 			</div>
 			<!-- 
 			<div class="forget-password">
@@ -51,4 +52,13 @@
 			</div>
 			 -->
 		<?php $this->endWidget(); ?>
-		<!-- END LOGIN FORM -->        
+		<!-- END LOGIN FORM -->
+                <script language="JavaScript" type="text/JavaScript">
+                    $('#bindbutton').click(function(){
+                        if (typeof Androidwymenuprinter == "undefined") {
+                            alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                            return false;
+                        }
+                    });
+                </script>
+                

@@ -40,6 +40,16 @@
                                 </div>
                                 <!-- /.modal-dialog -->
                         </div>
+                        <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+                        <div class="modal fade" id="portlet-loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                                                                                                                   
+                                            <img  src="<?php echo Yii::app()->request->baseUrl.'/img/loading.gif';?>" >
+                                            正在打印...                                        
+                                        <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                        </div>
                         <!-- BEGIN PAGE CONTENT-->
 			<div class="row">
                                 <div class="col-md-4">
@@ -116,8 +126,13 @@
                         });
                         
                         $('#kitchen-btn').click(function(){
+                            var $modalloading = $('#portlet-loading');
+                            //alert($modalloading);return;
+                            $modalloading.modal(); 
+                            return false;
                             var statu = confirm("下单，并厨打，确定吗？");
                                 if(!statu){
+                                    $modalloading.modal("hide");
                                     return false;
                                 } 
                                 location.href="<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>";

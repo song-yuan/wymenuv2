@@ -17,23 +17,23 @@
 				<?php if($status=='1') :?>
                                 <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn grey orderaction">点 单</button>
                                 <div class="pull-right">
-                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe unionsite">并  台</button>
-                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe closesite">撤  台</button>
-                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe switchsite">换  台</button>
+                                    <button type="button" data-dismiss="modal" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe unionsite">并  台</button>
+                                    <button type="button" data-dismiss="modal" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe closesite">撤  台</button>
+                                    <button type="button" data-dismiss="modal" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe switchsite">换  台</button>
                                 </div>
                                 <?php elseif($status=='2') :?>
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn green" id="btn-print-btn">打印清单</button>
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn yellow orderaction">订单详情</button>
                                 <div class="pull-right">
-                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe unionsite">并  台</button>
-                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe closesite">撤  台</button>
-                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe switchsite">换  台</button>
+                                    <button type="button" data-dismiss="modal" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe unionsite">并  台</button>
+                                    <button type="button" data-dismiss="modal" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe closesite">撤  台</button>
+                                    <button type="button" data-dismiss="modal" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe switchsite">换  台</button>
                                 </div>
                                 <?php elseif($status=='3') :?>
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn grey" id="btn-account-btn">结 单</button>
                                     <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn yellow orderaction">订单详情</button>
                                 <div class="pull-right">
-                                    <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe switchsite">换  台</button>
+                                    <button type="button" data-dismiss="modal" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe switchsite">换  台</button>
                                 </div>
                                 <?php else :?>
                                 <label class="col-md-3 control-label">请输入人数：</label>
@@ -48,7 +48,7 @@
 				<!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
 			</div>
 			<div class="modal-footer">
-				<button type="button" data-dismiss="modal" class="btn default">取 消</button>
+				<button type="button" data-dismiss="modal" id="closemodalid" class="btn default">取 消</button>
 				<!--<input type="submit" class="btn green" id="create_btn" value="确 定">-->
 			</div>
                         
@@ -84,14 +84,19 @@
 							alert(data.message);
 						} else {
 							alert(data.message);
-							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
                                                         $('#portlet-button').modal('hide');
+							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+                                                        
 						}
-					}
+					},
+                                        'error':function(e){
+                                            return false;
+                                        }
                                     });
-                                    return false;
+                                    
                                }else{
                                    alert("输入合法人数");
+                                   return false;
                                }                               
                            });
                            
@@ -114,11 +119,15 @@
 							alert(data.message);
 							location.href='<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+data.siteid+'/istemp/'+istemp;
 						}
-					}
+					},
+                                        'error':function(e){
+                                            return false;
+                                        }
                                     });
-                                    return false;
+                                    //return false;
                                }else{
                                    alert("输入合法人数");
+                                   return false;
                                }                                                              
                            });
                            
@@ -132,14 +141,18 @@
                                     'success':function(data){
                                             if(data.status == 0) {
                                                     alert(data.message);
+                                                    return false;
                                             } else {
                                                     alert(data.message);
                                                     $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
                                                     $('#portlet-button').modal('hide');
                                             }
-                                    }
+                                    },
+                                        'error':function(e){
+                                            return false;
+                                        }
                                 });
-                                return false;                               
+                                //return false;                               
                            });
                            
                            $('.switchsite').on('click',function(){
@@ -193,5 +206,8 @@
                                          }); 
                                           
                             });
-                           
+                           $('#closemodalid').click(function(){
+                               //alert("sdf");
+                               return;                                           
+                            });
                         </script>

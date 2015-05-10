@@ -41,7 +41,7 @@
 								<div class="portlet-title">
 									<div class="caption"><i class="fa fa-cogs"></i><?php echo $title; ?></div>
                                                                         <div class="col-md-3 pull-right">
-                                                                                <input type="text" class="form-control" placeholder="条码枪扫描">
+                                                                                <input id="barscanid" type="text" class="form-control" placeholder="条码枪扫描">
                                                                         </div>
 
 								</div>
@@ -156,6 +156,18 @@
                 $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){
                   $modal.modal();
                 });
+            });
+            
+            $('#barscanid').keyup(function(){
+                if($(this).val().length==11)
+                {
+                    $(this).val("111");
+                }
+            });
+            
+            $(document).ready(function () {
+                //$('#barscanid').val("222");
+                $('#barscanid').focus();
             });
 	</script>
 	<!-- END PAGE CONTENT-->
