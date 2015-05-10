@@ -21,7 +21,7 @@ class PadbindController extends Controller
                         if($loginform["pad_info"]=="00000000000000000000")
                         {
                             $modelpad=new Pad();
-                            //var_dump($modelpad->lid);exit;
+                            //var_dump($modelpad->lid);exit;//
                         }else{
                             $modelpad=Pad::model()->find(" dpid=:dpid and lid=:lid",array(":dpid"=>substr($loginform["pad_info"],0,10),":lid"=>substr($loginform["pad_info"],10,10)));
                         }                 
