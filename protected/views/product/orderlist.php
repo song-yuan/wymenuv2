@@ -26,7 +26,7 @@
 <script type="text/javascript" src="../js/product/taste.js"></script>
 	<div class="top"><a href="index"><div class="back"><img src="../img/product/back.png" /> 返回</div></a><a id="order" href="javascript:;"><button class="create-order">下单</button></a></div>
 	<form action="order?orderId=<?php echo $orderList->order?$orderList->order['lid']:0;?>" method="post">
-	<div class="order-top"><div class="order-top-left"><span>￥<?php echo Money::priceFormat($orderPrice);?> 共<?php echo $orderNum;?>份</span></div><div class="order-top-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="1" style="color:#ff8c00">全单口味<img src="../img/product/down-arrow.png" /></div></div>
+	<div class="order-top"><div class="order-top-left"><span>￥<span class="total-price"><?php echo Money::priceFormat($orderPrice); ?></span>共<span class="total-num"><?php echo $orderNum;?></span>份</span></div><div class="order-top-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="1" style="color:#ff8c00">全单口味<img src="../img/product/down-arrow.png" /></div></div>
 	<?php if($orderProductList):?>
 	<?php foreach($orderProductList as $key=>$orderProduct):?>
 		<!--非套餐-->
@@ -37,7 +37,7 @@
 			<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
 			<div class="order-product-right">
 				<div class="right-up"><?php echo $order['product_name'];?></div>
-		               <div class="right-middle"><span class="minus" >-</span><input type="text" name="<?php echo $order['product_id'];?>" value="<?php echo $order['amount'];?>" readonly="true"/><span class="plus">+</span></div>
+		               <div class="right-middle"><span class="minus" >-</span><input class="input-product" type="text" name="<?php echo $order['product_id'];?>" value="<?php echo $order['amount'];?>" price="<?php echo $order['price'];?>" readonly="true"/><span class="plus">+</span></div>
 				<div class="right-down">
 		          <div class="right-down-left">￥<?php echo $order['price'];?></div>
 		         <?php if(!empty($order['addition'])):?>
@@ -56,7 +56,7 @@
 				<div class="order-product-left"><img src="<?php echo $product['main_picture'];?>" /></div>
 				<div class="order-product-right">
 					<div class="right-up"><?php echo $product['product_name'];?>(加菜)</div>
-			               <div class="right-middle"><span class="minus" >-</span><input type="text" name="<?php echo $product['product_id'];?>" value="<?php echo $product['amount'];?>" readonly="true"/><span class="plus">+</span></div>
+			               <div class="right-middle"><span class="minus" >-</span><input class="input-product" type="text" name="<?php echo $product['product_id'];?>" addtionid="<?php echo $product['lid'];?>" value="<?php echo $product['amount'];?>"  price="<?php echo $product['price'];?>" readonly="true"/><span class="plus">+</span></div>
 					<div class="right-down">
 			          <div class="right-down-left">￥<?php echo $product['price'];?></div>
 					   <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>						
@@ -231,13 +231,17 @@
 			if(num > 0){
 				num = num - 1;
 			}
-			input.val(num);			
+			input.val(num);	
+			totalPrice();
+			totalNum();		
 		});
 		$('.plus').click(function(){
 			var input = $(this).siblings('input');
 			var num = parseInt(input.val());
 			num = num + 1;
-			input.val(num);			
+			input.val(num);	
+			totalPrice();	
+			totalNum();	
 		});
 		$('#order').click(function(){
 			$('form').submit();
@@ -257,6 +261,7 @@
 			bottom.attr('product-id',productId);
 			top.css('display','block');
 			bottom.css('display','block');
+			$('body').scrollTop(parseInt(height) - 40);
 		});
 		
 		//隐藏
@@ -302,20 +307,29 @@
 				data:{orderId:orderId,id:id},
 				success:function(msg){
 					if(msg.status){
-						var str = '';
-						str +='<div class="order-product">';
-						str +='<div class="order-product-left"><img src="'+msg.data.main_picture+'" /></div>';
-						str +='<div class="order-product-right">';
-						str +='<div class="right-up">'+msg.data.product_name+'(加菜)</div>';
-						str +='<div class="right-middle"><span class="minus" >-</span><input type="text" name="'+msg.data.sproduct_id+'" value="1" readonly="true"/><span class="plus">+</span></div>';
-						str +='<div class="right-down">';
-						str +='<div class="right-down-left">￥'+msg.data.price+'</div>';
-						str +='<div class="right-down-right select-taste"  data-id="'+msg.lastLid+'" type="2" product-id="'+msg.data.sproduct+'" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>';						
-						str +='</div></div><div class="clear"></div></div>';
-						$('.product-has-addtion').append(str);
-						var top = $('.product-mask-top');
-						var height = top.height() + 141;
-						top.css('height',height);
+						var orderProductLid = msg.lastLid;
+						var addtionInput = $('input[addtionid="'+orderProductLid+'"]');
+						if(addtionInput.length>0){
+							var val = addtionInput.val();
+							addtionInput.val(parseInt(val)+1);
+						}else{
+							var str = '';
+							str +='<div class="order-product">';
+							str +='<div class="order-product-left"><img src="'+msg.data.main_picture+'" /></div>';
+							str +='<div class="order-product-right">';
+							str +='<div class="right-up">'+msg.data.product_name+'(加菜)</div>';
+							str +='<div class="right-middle"><span class="minus" >-</span><input class="input-product" type="text" name="'+msg.data.sproduct_id+'" addtionid="'+msg.lastLid+'" value="1" price="'+msg.data.price+'" readonly="true"/><span class="plus">+</span></div>';
+							str +='<div class="right-down">';
+							str +='<div class="right-down-left">￥'+msg.data.price+'</div>';
+							str +='<div class="right-down-right select-taste"  data-id="'+msg.lastLid+'" type="2" product-id="'+msg.data.sproduct+'" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>';						
+							str +='</div></div><div class="clear"></div></div>';
+							$('.product-has-addtion').append(str);
+							var top = $('.product-mask-top');
+							var height = top.height() + 141;
+							top.css('height',height);
+						}
+						totalPrice();
+						totalNum();
 						alert(msg.msg);
 					}else{
 						alert(msg.msg);

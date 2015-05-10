@@ -257,7 +257,7 @@ class ProductController extends Controller
 		$data = array('status'=>false,'msg'=>'加菜失败!');
 		$productAddition = new ProductAdditionClass($this->companyId,$orderId,$lid);
 		if($productAddition->save()){
-			$data = array('status'=>true,'msg'=>'加菜成功!','data'=>$productAddition->productAddition,'lastLid'=>$productAddition->lastLid);
+			$data = array('status'=>true,'msg'=>'加菜成功!','data'=>$productAddition->productAddition,'lastLid'=>sprintf("%010d",$productAddition->lastLid));
 			Yii::app()->end(json_encode($data));
 		}else{
 			Yii::app()->end(json_encode($data));
