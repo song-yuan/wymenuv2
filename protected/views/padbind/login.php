@@ -94,11 +94,11 @@
                     $('#btnAdminLogin').click(function(){
                         if (typeof Androidwymenuprinter == "undefined") {
                             alert("无法获取PAD设备信息，请在PAD中运行该程序！");
-                            //return;
+                            return;
                         }                        
-                        //var padInfo=Androidwymenuprinter.getPadInfo();
-                        //$('#pad_info_id').val(padInfo);
-                        $('#pad_info_id').val("00000000010000000001");
+                        var padInfo=Androidwymenuprinter.getPadInfo();
+                        $('#pad_info_id').val(padInfo);
+                        //$('#pad_info_id').val("00000000010000000001");
                         $('#login-form').submit();
                     });
                 </script>
