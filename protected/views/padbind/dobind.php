@@ -88,14 +88,14 @@
 									<div class="form-group  <?php if($model->hasErrors('dpid')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'dpid', array('0' => '-- 请选择 --') + Helper::genCompanyOptions() ,array('class' => 'form-control','readonly'=>'readonly','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->dropDownList($model, 'dpid', array('0' => '-- 请选择 --') + Helper::genCompanyOptions() ,array('class' => 'form-control','disabled'=>'disabled','placeholder'=>$model->getAttributeLabel('dpid')));?>
 											<?php echo $form->error($model, 'dpid' )?>
 										</div>
 									</div>
 									<div class="form-group <?php if($model->hasErrors('lid')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'lid',array('class' => 'col-md-3 control-label','id'=>'padId'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'lid', array('0'=>'-- 请选择 --') ,array('class' => 'form-control','disabled'=>'disabled','placeholder'=>$model->getAttributeLabel('lid')));?>
+											<?php echo $form->dropDownList($model, 'lid', array('0'=>'-- 请选择 --') ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('lid')));?>
 											<?php echo $form->error($model, 'lid' )?>
 										</div>
 									</div>									
@@ -116,6 +116,36 @@
 		
 		<!-- END PAGE -->  
                 <script language="JavaScript" type="text/JavaScript">
+                    $(document).ready(function() {
+                            var companyid = "<?php if(empty($model->dpid)) echo "0000000000"; else echo  $model->dpid;?>";
+                            var padid = "<?php if(empty($model->lid)) echo "0000000000"; else echo  $model->lid;?>";
+                            if(companyid=="0000000000")
+                            {
+                                return;
+                            }
+                            $.ajax({
+                                    url:'<?php echo $this->createUrl('padbind/getPadList');?>/companyid/'+companyid,
+                                    type:'GET',
+                                    dataType:'json',
+                                    success:function(result){
+                                            //alert(result.data.length);
+                                            var str = '';                                                                                            
+                                            if(result.data.length){
+                                                    $.each(result.data,function(index,value){
+                                                        //alert(value.id);
+                                                        if(value.id==padid)
+                                                        {
+                                                            //alert(value.id+"aaa"+padid);
+                                                            str = str + '<option value="'+value.id+' selected="selected">'+value.name+'</option>';
+                                                        }
+                                                    });                                                                                                                                                                                                       
+                                            }
+                                            $('#Pad_lid').html(str);
+                                            $('#Pad_lid').attr("disabled","disabled");
+                                    }
+                            });
+                    });
+                    
                     $('#Pad_dpid').change(function(){
                             var companyid = $(this).val();
                             $.ajax({
