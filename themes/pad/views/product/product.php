@@ -38,7 +38,7 @@
     <!--content结束-->
 </div>
 <form id="padOrderForm" action="confirmPadOrder" method="post">
-<div class="product-mask">
+<div class="product-pad-mask">
 	<div class="mask-trangle"></div>
 	<div class="product-mask-info">点单信息</div>
 	<div class="info">
