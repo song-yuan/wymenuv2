@@ -84,8 +84,9 @@
 							alert(data.message);
 						} else {
 							alert(data.message);
-							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
                                                         $('#portlet-button').modal('hide');
+							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+                                                        
 						}
 					}
                                     });
