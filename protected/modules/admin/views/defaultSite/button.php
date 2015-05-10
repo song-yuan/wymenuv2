@@ -48,7 +48,7 @@
 				<!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
 			</div>
 			<div class="modal-footer">
-				<button type="button" data-dismiss="modal" class="btn default">取 消</button>
+				<button type="button" data-dismiss="modal" id="closemodalid" class="btn default">取 消</button>
 				<!--<input type="submit" class="btn green" id="create_btn" value="确 定">-->
 			</div>
                         
@@ -88,11 +88,15 @@
 							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
                                                         
 						}
-					}
+					},
+                                        'error':function(e){
+                                            return false;
+                                        }
                                     });
-                                    return false;
+                                    
                                }else{
                                    alert("输入合法人数");
+                                   return false;
                                }                               
                            });
                            
@@ -115,11 +119,15 @@
 							alert(data.message);
 							location.href='<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+data.siteid+'/istemp/'+istemp;
 						}
-					}
+					},
+                                        'error':function(e){
+                                            return false;
+                                        }
                                     });
-                                    return false;
+                                    //return false;
                                }else{
                                    alert("输入合法人数");
+                                   return false;
                                }                                                              
                            });
                            
@@ -133,14 +141,18 @@
                                     'success':function(data){
                                             if(data.status == 0) {
                                                     alert(data.message);
+                                                    return false;
                                             } else {
                                                     alert(data.message);
                                                     $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
                                                     $('#portlet-button').modal('hide');
                                             }
-                                    }
+                                    },
+                                        'error':function(e){
+                                            return false;
+                                        }
                                 });
-                                return false;                               
+                                //return false;                               
                            });
                            
                            $('.switchsite').on('click',function(){
@@ -194,5 +206,8 @@
                                          }); 
                                           
                             });
-                           
+                           $('#closemodalid').click(function(){
+                               //alert("sdf");
+                               return;                                           
+                            });
                         </script>
