@@ -73,11 +73,12 @@ select .partents{
 	bottom:20px;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 	border: 1px solid #ddd;
+	display:none;
 }
 .product-pad-mask .mask-trangle{
 	position: absolute;
 	top: -7px;
-	right: 9px;
+	right: 45px;
 	display: inline-block !important;
 	border-right: 7px solid transparent;
 	border-bottom: 7px solid #ccc;
@@ -87,7 +88,7 @@ select .partents{
 }
 .info{
 	min-height:80%;
-	overflow:scroll;
+	overflow-y:scroll;
 }
 .product-pad-mask .product-bottom{
 	padding:10px;
