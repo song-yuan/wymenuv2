@@ -7,8 +7,10 @@
 	$nums = $resArr[1];
 //	var_dump($parentCategorys);exit;
 ?>
-
-<link rel="stylesheet" type="text/css"  href="../css/product/categorypad.css" />
+<?php 
+	$baseUrl = Yii::app()->baseUrl;
+?>
+<link rel="stylesheet" type="text/css"  href="<?php echo $baseUrl.'/css/product/categorypad.css';?>" />
 <div class="fixed-top">
   <div class="top-left">
   	<div class="top-left-left">选择分类:</div>
