@@ -141,7 +141,7 @@ class PadbindController extends Controller
 		
                 $treeDataSource = array('data'=>array(),'delay'=>400);
 		$pads = Pad::model()->findAll('dpid=:companyId and delete_flag=0 and is_bind=0' , array(':companyId' => $companyid));
-                var_dump($pads);exit;
+                //var_dump($pads);exit;
 		foreach($pads as $c){
 			$tmp['name'] = $c['name'];
 			$tmp['id'] = $c['lid'];
