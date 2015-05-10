@@ -44,17 +44,17 @@ select .partents{
 .shoppingCart{
 	height:35px;
 	width:35px;
-	background:url(../../img/shopping_cart2.png);
+	background:url(../../img/shopping_cart2.png) top center no-repeat;
 	margin-right:20px;
+	padding 0 20px;
 	float:right;
-	position:relation;
 }
 .num-circel{
 	position:absolute;
 	width:24px;
 	height:24px;
 	top:-10px;
-	left:-10px;
+	left:10px;
 	border-radius:12px;
 	background-color:red;
 	color:white;
