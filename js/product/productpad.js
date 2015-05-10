@@ -71,7 +71,7 @@ $(document).ready(function(){
    
     //查看菜单
     $('.shoppingCart').click(function(){
-    	$('.product-mask').toggle(function(){
+    	$('.product-pad-mask').toggle(function(){
     		$.ajax({
      			url:'getOrderListJson',
      			type:'POST',
@@ -97,7 +97,7 @@ $(document).ready(function(){
      		});
     	});
     });
-    $('.product-mask').on('click','.minus',function(){
+    $('.product-pad-mask').on('click','.minus',function(){
 		var input = $(this).siblings('input');
 		var num = input.val();
 		if(num > 0){
@@ -107,7 +107,7 @@ $(document).ready(function(){
 		totalPrice();
 		totalNum();		
 	});
-    $('.product-mask').on('click','.plus',function(){
+    $('.product-pad-mask').on('click','.plus',function(){
 		var input = $(this).siblings('input');
 		var num = parseInt(input.val());
 		num = num + 1;
