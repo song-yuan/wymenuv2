@@ -198,7 +198,7 @@
                         if(Androidwymenuprinter.padDisbind(companyId,padId))
                         {                                                                    
                             alert("解除绑定成功，请重新打开应用程序！！");
-                            //local.href="";
+                            //local.href="";//////
                         }
                         else
                         {
