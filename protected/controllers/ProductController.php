@@ -29,6 +29,7 @@ class ProductController extends Controller
 					break;
 				}
 			}
+			Yii::app()->theme = 'pad';
 		}
 		if($mac){
 			$companyWifi = CompanyWifi::model()->find('macid=:macId',array(':macId'=>$mac));
@@ -47,7 +48,6 @@ class ProductController extends Controller
 			$this->siteNoId = isset($_SESSION['siteNoId'])?$_SESSION['siteNoId']:1;
 		}
 		$this->moMac = isset($_SESSION['momac'])?$_SESSION['momac']:0;
-		Yii::app()->theme = 'pad';
 	}
 	/**
 	 * //----n---
