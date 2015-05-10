@@ -18,7 +18,7 @@ class ProductController extends Controller
 		$mac = Yii::app()->request->getParam('wuyimenusysosyoyhmac',0);
 		$padId = Yii::app()->request->getParam('pid',0);
 		if($padId){
-			$campanyId = Yii::app()->request->getParam('campanyId',0);
+			$campanyId = Yii::app()->request->getParam('campanyid',0);
 			$this->companyId = $campanyId;
 			$_SESSION['companyId'] = $this->companyId;
 			while(true){
