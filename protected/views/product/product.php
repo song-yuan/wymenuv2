@@ -61,17 +61,17 @@
 <div class="aniele"></div>
 
 <div class="large-pic">
-	<ul id="gallery">
-	 </ul>
 </div>
 <script type="text/javascript">
 	var cat = '<?php echo $categoryId;?>';
 	var t = '<?php echo $type;?>';
-	window.onload=function(type,catgory)
+	var isPad = '<?php echo $isPad;?>';
+	window.onload=function(type,catgory,pad)
 	{
 		type = t;
 		catgory = cat;
-		getPicList(type,catgory);
+		pad = isPad;
+		getPicList(type,catgory,pad);
 		$('.promptumenu_window').css('display','none');
 	}	
 </script>

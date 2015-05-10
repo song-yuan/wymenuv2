@@ -3,7 +3,7 @@ class ProductSetClass
 {
 	//获取套餐某一产品的价格
 	public static function GetProductSetPrice($dpid,$setId,$productId){
-		$sql = 'select * from nb_product_set_detail where set_id=:setId and product_id=:productId and dpid=:dpid';
+		$sql = 'select * from nb_product_set_detail where set_id=:setId and product_id=:productId and dpid=:dpid and delete_flag=0';
 		$connect = Yii::app()->db->createCommand($sql);
 		$connect->bindValue(':setId',$setId);
 		$connect->bindValue(':productId',$productId);
@@ -11,6 +11,20 @@ class ProductSetClass
 		$product = $connect->queryRow();
 		$price = $product['price'];
 		return $price;
+	}
+	//获取套餐的默认的 product_id集合 组装成product_id1-product_id2
+	public static function GetProductSetProductIds($dpid,$setId){
+		$productIds = '';
+		$sql = 'select * from nb_product_set_detail where set_id=:setId and dpid=:dpid and is_select=1 and delete_flag=0';
+		$connect = Yii::app()->db->createCommand($sql);
+		$connect->bindValue(':setId',$setId);
+		$connect->bindValue(':dpid',$dpid);
+		$productSets = $connect->queryAll();
+		foreach($productSets as $productSet){
+			$productIds .=$productSet['product_id'].'-';
+		}
+		$productIds = trim($productIds,'-');
+		return $productIds;
 	}
 	//获取套餐某一产品的价格
 	public static function GetTotalProductSetPrice($dpid,$setId){
