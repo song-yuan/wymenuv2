@@ -69,8 +69,8 @@ select .partents{
 	left:40%;
 	background:white;
 	z-index:1001;
-	min-height:600px;
 	height:auto;
+	bottom:20px;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 	border: 1px solid #ddd;
 }
@@ -87,6 +87,7 @@ select .partents{
 }
 .info{
 	min-height:80%;
+	overflow:scroll;
 }
 .product-pad-mask .product-bottom{
 	padding:10px;
