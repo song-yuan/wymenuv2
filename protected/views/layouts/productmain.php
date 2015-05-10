@@ -1,6 +1,6 @@
 <?php
 
-
+$baseUrl = Yii::app()->baseUrl;
 /* @var $this \yii\web\View */
 /* @var $content string */
 if(isset($_GET['wuyimenusysosyoyhmac']))
@@ -14,8 +14,8 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
     <meta charset="utf-8"/>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>我要点单</title>
-    <link rel="stylesheet" type="text/css" href="../css/productmain.css"/>
-    <script type="text/javascript" src="../plugins/jquery-1.10.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl.'/css/productmain.css';?>"/>
+    <script type="text/javascript" src="<?php echo $baseUrl.'/plugins/jquery-1.10.2.min.js';?>"></script>
 </head>
 <body>
     <div class="page">
