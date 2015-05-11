@@ -115,7 +115,7 @@ $(document).ready(function(){
 		totalPrice();	
 		totalNum();	
 	});
-    $('#forum_list').on('click','.product-pic',function(){
+    $('#forum_list').on('click','.view-product-pic',function(){
     	var lid = $(this).attr('lid');
     	$.ajax({
  			url:'getProductPicJson',
