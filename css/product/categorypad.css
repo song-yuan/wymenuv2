@@ -142,3 +142,38 @@ select .partents{
 	float:right;
 	margin-right:10px;
 }
+.product-pic{
+	position:relative;
+}
+.product-pic i.icon-hover-1{
+	left: -100px;
+}
+.product-pic i.icon-hover-2{
+	right: -100px;
+}
+
+.product-pic i.icon-hover-1,
+.product-pic i.icon-hover-2{
+	top: 50%;
+	color: #fff;
+	padding: 16px 30px 16px 18px;
+	font-size: 16px;
+	position: absolute;
+	margin-top: -1.5em;
+	border-radius: 50%;
+	background: url(../../img/black-opacity.png) repeat !important;
+}
+
+.product-pic:hover i.icon-hover-1,
+.product-pic:hover i.icon-hover-2{
+	transition: all 0.6s ease; 
+	-o-transition: all 0.6s ease;
+	-moz-transition: all 0.6s ease;
+	-webkit-transition: all 0.6s ease;
+}
+product-pic:hover i.icon-hover-1{
+	left: 30%;
+}
+.product-pic:hover i.icon-hover-2{
+	right: 30%;
+}
