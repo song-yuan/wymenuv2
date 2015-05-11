@@ -181,7 +181,7 @@ function showListPad(items){
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
-			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
+			tr = trHead + trBuy + trPic + trTitle ;
 			leftPicObj.append(tr);
 		}
 	}
