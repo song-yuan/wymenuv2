@@ -170,7 +170,7 @@ function showListPad(items){
 			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1"></i><i class="icon-hover-2"></i></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
-            var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
+            var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '<div class="clear"></div>';
             tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			rightPicObj.append(tr);
@@ -180,7 +180,7 @@ function showListPad(items){
 			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic"></i><i class="icon-hover-2 addCart"></i></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
-            var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
+            var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '<div class="clear"></div>';
 			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			leftPicObj.append(tr);
