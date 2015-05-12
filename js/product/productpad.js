@@ -38,7 +38,7 @@ $(document).ready(function(){
     	var nums = 0;
     		nums = parseInt($('.product-nums').html());
  		$.ajax({
- 			url:'/product/createCart',
+ 			url:'/wymenuv2/product/createCart',
  			data:{
  					isAddOrder:isAddOrder,
 					productId:productId,
