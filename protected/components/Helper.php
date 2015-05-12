@@ -405,9 +405,9 @@ class Helper
                         $strSite="";
                         if(empty($site))
                         {
-                            $strSite.= str_pad('座号：临时座位 '.$siteNo->site_id%1000 , 20,' ').str_pad('人数：'.$order->number,20,' ').'<br>';
+                            $strSite.= str_pad('座号：临时座位 '.$siteNo->site_id%1000 , 24,' ').str_pad('人数：'.$order->number,12,' ');
                         }else{
-                            $strSite.= str_pad('座号：'.$site->siteType->name.' '.$site->serial , 20,' ').str_pad('人数：'.$order->number,20,' ').'<br>';
+                            $strSite.= str_pad('座号：'.$site->siteType->name.' '.$site->serial , 24,' ').str_pad('人数：'.$order->number,12,' ');
                         }
                         //$strreprint="";
                         
@@ -419,8 +419,8 @@ class Helper
                         }
                         if(!empty($order->callno))
                         {
-                            $strcall="呼叫器号码：".$order->callno;
-                            array_push($listData,$strcall);
+                            $strSite=$strSite.str_pad('呼叫号：'.$order->callno,12,' ');
+                            //array_push($listData,$strcall);
                         }
                         array_push($listData,$strSite);                
                         array_push($listData,str_pad('',48,'-'));
@@ -438,7 +438,7 @@ class Helper
                         array_push($listData,$strAllTaste);
                         array_push($listData,str_pad('',48,'-'));
                         array_push($listData,str_pad('收银员：'.Yii::app()->user->name,24,' ')
-                                .str_pad('',48,'-').str_pad('打印时间：'.time(),24,' '));
+                                .str_pad('打印时间：'.time(),24,' '));
                         $precode="";
                         //后面加切纸
                         $sufcode="0A0A0A0A0A0A1D5601";                        
