@@ -21,14 +21,7 @@ class ProductController extends Controller
 			$campanyId = Yii::app()->request->getParam('companyid',0);
 			$this->companyId = $campanyId;
 			$_SESSION['companyId'] = $this->companyId;
-			while(true){
-				$code = SiteClass::openTempSite($campanyId);
-				if($code){
-					$siteNo = SiteNo::model()->find('dpid=:companyId and code=:code',array(':companyId'=>$this->companyId,':code'=>$code));
-					$_SESSION['siteNoId'] = $siteNo['lid'];
-					break;
-				}
-			}
+			$this->isPad = 1;
 			Yii::app()->theme = 'pad';
 		}
 		if($mac){
@@ -75,7 +68,17 @@ class ProductController extends Controller
 		$pid = Yii::app()->request->getParam('pid',0);
 		$type = Yii::app()->request->getParam('type',0);
 		$categoryId = Yii::app()->request->getParam('categoryId',0);
-		
+		if($this->isPad){
+			while(true){
+				$code = SiteClass::openTempSite($this->campanyId);
+				if($code){
+					$siteNo = SiteNo::model()->find('dpid=:companyId and code=:code',array(':companyId'=>$this->companyId,':code'=>$code));
+					$_SESSION['siteNoId'] = $siteNo['lid'];
+					$this->siteNoId = $_SESSION['siteNoId'];
+					break;
+				}
+			}
+		}
 		if(!$categoryId){
 			$categorys = ProductClass::getFirstCategoryId($this->companyId);
 			$pid = $categorys['pid'];
