@@ -62,6 +62,7 @@ $(document).ready(function(){
     //查看菜单
     $('.shoppingCart').click(function(){
     	$('.product-pad-mask').toggle(function(){
+    	  if (!$(this).is(':hidden')) {
     		$.ajax({
      			url:'/wymenuv2/product/getOrderListJson',
      			type:'POST',
@@ -85,6 +86,7 @@ $(document).ready(function(){
      				}
      			},
      		});
+     	  }
     	});
     });
     $('.product-pad-mask').on('click','.minus',function(){
