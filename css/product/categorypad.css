@@ -165,8 +165,6 @@ select .partents{
 	background: rgba(69,69,69,0.6);
 }
 
-i img {width:32px;height:32px;}
-
 .product-pic:hover i.icon-hover-1,
 .product-pic:hover i.icon-hover-2{
 	transition: all 0.6s ease; 
