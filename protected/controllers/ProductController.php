@@ -141,7 +141,6 @@ class ProductController extends Controller
 		if($isAddOrder){
 			//增加
 			$createOrder = new CreateOrder($this->companyId,$this->siteNoId,$product);
-			var_dump($createOrder);exit;
 			if($createOrder->createOrder()){
 				echo 1;
 			}else{
