@@ -18,8 +18,8 @@ class ProductController extends Controller
 		$mac = Yii::app()->request->getParam('wuyimenusysosyoyhmac',0);
 		$padId = Yii::app()->request->getParam('padid',0);
 		if($padId){
-			$campanyId = Yii::app()->request->getParam('companyid',0);
-			$this->companyId = $campanyId;
+			$companyId = Yii::app()->request->getParam('companyid',0);
+			$this->companyId = $companyId;
 			$_SESSION['companyId'] = $this->companyId;
 			$this->isPad = 1;
 			Yii::app()->theme = 'pad';
@@ -70,7 +70,7 @@ class ProductController extends Controller
 		$categoryId = Yii::app()->request->getParam('categoryId',0);
 		if($this->isPad){
 			while(true){
-				$code = SiteClass::openTempSite($this->campanyId);
+				$code = SiteClass::openTempSite($this->companyId);
 				if($code){
 					$siteNo = SiteNo::model()->find('dpid=:companyId and code=:code',array(':companyId'=>$this->companyId,':code'=>$code));
 					$_SESSION['siteNoId'] = $siteNo['lid'];
