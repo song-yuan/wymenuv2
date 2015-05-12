@@ -40,13 +40,13 @@
                                                     $("#errornumid").html(data.errornum);
                                                     $("#notsurenumid").html(data.notsurenum);
                                                     
-                                                        if(data.finish && data.errornum==0 && data.notsure==0)
-                                                        {
-                                                            //all success
-                                                            //location.href= order
-                                                            clearTimeout(interval);
-                                                            location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId));?>";
-                                                        }
+                                                    if(data.finished && data.errornum==0 && data.notsurenum==0)
+                                                    {
+                                                        //all success
+                                                        //location.href= order
+                                                        clearTimeout(interval);
+                                                        location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId));?>";
+                                                    }
                                                     
                                                 },'json');
                                                 waitingsecond--;
