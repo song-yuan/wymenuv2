@@ -41,11 +41,21 @@
                                 <!-- /.modal-dialog -->
                         </div>
                         <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
-                        <div class="modal fade" id="portlet-loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="portlet-print-loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
-                                                                                                                                   
-                                            <img  src="<?php echo Yii::app()->request->baseUrl.'/img/loading.gif';?>" >
-                                            正在打印...                                        
+                                    <div class="modal-content">
+                                                <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                        <h4 class="modal-title">Modal title2</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                        Widget settings form goes here2
+                                                </div>
+                                                <div class="modal-footer">
+                                                        <button type="button" class="btn blue">Save changes</button>
+                                                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                                                </div>
+                                        </div>                                       
                                         <!-- /.modal-content -->
                                 </div>
                                 <!-- /.modal-dialog -->
@@ -53,7 +63,7 @@
                         <!-- BEGIN PAGE CONTENT-->
 			<div class="row">
                                 <div class="col-md-4">
-                                    <h3 class="page-title"><?php switch($model->order_status) {case 1:{echo '未下单';break;} case 2:{echo '下单未支付';break;} case 3:{echo '已支付';break;} }?></h3>
+                                    <h3 class="page-title"><?php switch($model->order_status) {case 1:{echo '未下单';break;} case 2:{echo '下单未支付';break;} case 3:{echo '已支付';break;} }?></h3>                                    
                                 </div>
                                 <div class="col-md-8">
                                     <h4>
@@ -68,7 +78,13 @@
 							<div class="caption"><i class="fa fa-reorder"></i>
                                                             <?php echo $total['remark'] ;?>
                                                         </div>
+                                                        <div class="col-md-3 ">
+                                                                <input id="callbarscanid" type="text" class="form-control" placeholder="扫描呼叫器条码快速收银、结单">
+                                                        </div>
                                                         <div class="actions">
+                                                            <?php if($model->order_status=='3' || $model->order_status=='4'): ?>
+                                                                <a class="btn purple" id="btn_payback"><i class="fa fa-adjust"></i> 退款</a>
+                                                            <?php endif;?>
                                                             <a class="btn purple" id="btn_account"><i class="fa fa-pencil"></i> 结单&收银</a>
                                                             <a id="kitchen-btn" class="btn purple"><i class="fa fa-cogs"></i> 下单&厨打</a>
                                                             <a id="print-btn" class="btn purple"><i class="fa fa-print"></i> 打印清单</a>
@@ -93,21 +109,39 @@
                                 $('body').addClass('page-sidebar-closed');                                
                         });
                         
-                        $('#btn_account').click(function(){
-                                var $modalconfig = $('#portlet-config');
-                                $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>', '', function(){
-                                            $modalconfig.modal();
-                                          }); 
-                        });
+                        function openaccount(){
+                            var loadurl='<?php echo $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>';
+                            var callid= $('#callbarscanid').val();
+                            if(callid>"CA000" && callid<"CA999")
+                            {
+                                loadurl=loadurl+'/callId/'+callid;
+                            }
+                            //alert(loadurl);
+                            var $modalconfig = $('#portlet-config');
+                                $modalconfig.find('.modal-content')
+                                        .load(loadurl
+                                            , ''
+                                            , function(){
+                                                $modalconfig.modal();
+                                });
+                        }
                         
+                        $('#btn_account').click(function(){
+                                 openaccount();
+                        });
+                        /*
                         $('#btn_pay').click(function(){
                                 var $modalconfig = $('#portlet-config');
                                 $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/pay',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>', '', function(){
                                             $modalconfig.modal();
                                           }); 
                         });
-                        
+                        */
                         $('#print-btn').click(function(){
+                            if (typeof Androidwymenuprinter == "undefined") {
+                                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                                return false;
+                            }
                             var company_id="<?php echo $this->companyId ?>"                            
                             $.get('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
                                     if(data.status) {
@@ -117,7 +151,7 @@
                                         }
                                         else
                                         {
-                                            alert("打印机失败！，请确认打印机连接好后再试！");                                                                        
+                                            alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
                                         }                                                
                                     } else {
                                             alert(data.msg);
@@ -126,16 +160,16 @@
                         });
                         
                         $('#kitchen-btn').click(function(){
-                            var $modalloading = $('#portlet-loading');
-                            //alert($modalloading);return;
-                            $modalloading.modal(); 
-                            return false;
+                            var $modalloading = $('#portlet-print-loading');
                             var statu = confirm("下单，并厨打，确定吗？");
                                 if(!statu){
-                                    $modalloading.modal("hide");
                                     return false;
-                                } 
-                                location.href="<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>";
+                                }
+                                
+                                $modalloading.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>', '', function(){
+                                    $modalloading.modal();
+                                });                   
+                                  //location.href="<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>";
                         });
                         
                         $('#alltaste-btn').click(function(){
@@ -145,4 +179,22 @@
                                           }); 
                         });
                         
+                        $('#callbarscanid').keyup(function(){
+                            if($(this).val().length==5)
+                            {
+                                var callid=$(this).val();
+                                if(callid>"CA000" && callid<"CA999")
+                                {
+                                    openaccount();
+                                }else{
+                                    alert("呼叫器编码不正确！");
+                                    return false;
+                                }
+                            }
+                        });
+                        
+                        $(document).ready(function () {
+                            //$('#barscanid').val("222");
+                            $('#callbarscanid').focus();
+                        });
                     </script>

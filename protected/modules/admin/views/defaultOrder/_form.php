@@ -65,7 +65,7 @@
                                                                                                                                         <?php if($orderProduct['product_order_status']=='1') :?>
                                                                                                                                             <li><a href="javascript:;" class='btn-retreat' setid="<?php echo $orderProduct['set_id'];?>"  lid="<?php echo $orderProduct['lid'];?>">退菜（已下单）</a></li>
                                                                                                                                             <li><a href="javascript:;" class='btn-weight' isweight="<?php echo $orderProduct['is_weight_confirm'];?>" setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>">称重（已下单）</a></li>
-                                                                                                                                            <li><a href="javascript:;" class='btn-reprint' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>">重新厨打（已下单）</a></li>
+                                                                                                                                            <li><a href="javascript:;" class='btn-reprint' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>">单品厨打（已下单）</a></li>
                                                                                                                                         <?php endif; ?>
                                                                                                                                     </ul>
                                                                                                                             </div>
@@ -177,14 +177,14 @@
                                                                }});
                                                            });                                                                  
                                                            
-                                                           $('.reprint-btn').click(function(){
-                                                                    $.get('<?php echo $this->createUrl('defaultOrder/printProducts',array('companyId'=>$this->companyId,'id'=>$model->lid,'reprint'=>1));?>',function(data){
-                                                                            if(data.status) {
-                                                                                    alert('操作成功');
-                                                                            } else {
-                                                                                    alert(data.msg);
-                                                                            }
-                                                                    },'json');
+                                                           $('.btn-reprint').click(function(){
+                                                                var id = $(this).attr('lid');
+                                                                //alert(id);
+                                                                var $modal=$('#portlet-config');
+                                                                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+id+'/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                                                        ,'', function(){
+                                                                                    $modal.modal();
+                                                                            });                                                                    
                                                             });
                         
 							</script>
