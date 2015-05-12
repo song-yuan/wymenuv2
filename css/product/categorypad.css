@@ -162,7 +162,8 @@ select .partents{
 	position: absolute;
 	margin-top: -1.5em;
 	border-radius: 50%;
-	background: url(../../img/product/black-opacity.png) repeat !important;
+	background: rbg(69,69,69);
+	opacity:0.5;
 }
 
 .product-pic:hover i.icon-hover-1,

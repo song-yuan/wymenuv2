@@ -167,7 +167,7 @@ function showListPad(items){
 		if(leftHeight > rightHeight){
 			//濡傛灉鍙充晶楂樺害灏忥紝鍒欒拷鍔犲埌鍙充晶
 			var trHead = '<div class="blockRight blockCategory" category="'+pad(item.category_id,10)+'">';
-			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1"><img src="../../img/product/icon_search.png"/></i><i class="icon-hover-2"><img src="../../img/product/icon_cart.png"/></i></a>';
+			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1"><img src="../../../../../img/product/icon_search.png"/></i><i class="icon-hover-2"><img src="../../../../../img/product/icon_cart.png"/></i></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
