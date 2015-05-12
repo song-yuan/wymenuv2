@@ -68,11 +68,13 @@
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
-					<i class="fa  fa-file-o"></i> 
+					<i class="fa  fa-files-o"></i> 
 					<span class="title">订单管理</span>					
 					</a>
 					<ul class="sub-menu">
-						<li class=""><a href="">历史订单查询</a></li>
+						<li class=""><a href="">未日结订单</a></li>
+						<li class=""><a href="">付款退款记录</a></li>
+						<li class=""><a href="">日结订单</a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType', 'floor'))) echo 'active';?>">
@@ -98,14 +100,28 @@
                                                 <li class="<?php if(Yii::app()->controller->id == 'pad' && $this->getAction()->getId() == 'index') echo 'active';?>"><a href="<?php echo $this->createUrl('pad/index',array('companyId' => $this->companyId));?>">pad管理</a></li>
 					</ul>
 				</li>
+                                <!--
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-files-o"></i> 
+					<span class="title">订单管理</span>					
+					</a>
+					<ul class="sub-menu">
+						<li class=""><a href="">未日结订单</a></li>
+						<li class=""><a href="">退款记录</a></li>
+						<li class=""><a href="">日结订单</a></li>
+					</ul>
+				</li>
+                                -->
+                                <li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-bar-chart-o"></i> 
 					<span class="title">日常统计</span>					
 					</a>
 					<ul class="sub-menu">
-						<li class=""><a href="">账单日结</a></li>
-						<li class=""><a href="">账单查询</a></li>
+						<li class=""><a href="">营业额报表</a></li>
+						<li class=""><a href="">产品销售报表</a></li>
+						<li class=""><a href="">订单统计报表</a></li>
 					</ul>
 				</li>
 				<!--

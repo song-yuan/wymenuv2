@@ -1,25 +1,26 @@
 <?php
 
 /**
- * This is the model class for table "nb_printer".
+ * This is the model class for table "nb_order_pay".
  *
- * The followings are the available columns in table 'nb_printer':
- * @property string $printer_id
- * @property string $company_id
- * @property string $name
- * @property string $address
- * @property string $language
- * @property string $brand
+ * The followings are the available columns in table 'nb_order_pay':
+ * @property string $lid
+ * @property string $dpid
+ * @property string $create_at
+ * @property string $update_at
+ * @property string $order_id
+ * @property string $pay_amount
+ * @property string $payment_method_id
  * @property string $remark
  */
-class Printer extends CActiveRecord
+class OrderPay extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_printer';
+		return 'nb_order_pay';
 	}
 
 	/**
@@ -30,14 +31,13 @@ class Printer extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name,dpid,lid', 'required'),
-			array('lid, dpid', 'length', 'max'=>10),
-			array('remark, brand', 'length', 'max'=>45),
-                        array('language,printer_type', 'length', 'max'=>2),
-                        array('name,address', 'length', 'max'=>64),
+			array('lid', 'required'),
+			array('lid, dpid, order_id, pay_amount, payment_method_id', 'length', 'max'=>10),
+			array('remark', 'length', 'max'=>50),
+			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, name, address, create_at,language,printer_type,brand,remark', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, order_id, pay_amount, payment_method_id, remark', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,14 +58,14 @@ class Printer extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'lid' => 'Printer',
-			'dpid' => 'Company',
-			'name' => '打印机名称',
-                        'address'=>'地址(IP/USB/COM)',
-			'language' => '语言',
-			'brand' => '品牌',
-                        'printer_type' => '类型',
-			'remark' => '备注',
+			'lid' => '自身id，统一dpid下递增',
+			'dpid' => '店铺id',
+			'create_at' => 'Create At',
+			'update_at' => '更新时间',
+			'order_id' => '订单编号',
+			'pay_amount' => '付款金额，负数是退款',
+			'payment_method_id' => '付款方式',
+			'remark' => '备注，如退款时',
 		);
 	}
 
@@ -89,10 +89,11 @@ class Printer extends CActiveRecord
 
 		$criteria->compare('lid',$this->lid,true);
 		$criteria->compare('dpid',$this->dpid,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('language',$this->language,true);
-		$criteria->compare('printer_type',$this->printer_type,true);
-		$criteria->compare('brand',$this->brand,true);
+		$criteria->compare('create_at',$this->create_at,true);
+		$criteria->compare('update_at',$this->update_at,true);
+		$criteria->compare('order_id',$this->order_id,true);
+		$criteria->compare('pay_amount',$this->pay_amount,true);
+		$criteria->compare('payment_method_id',$this->payment_method_id,true);
 		$criteria->compare('remark',$this->remark,true);
 
 		return new CActiveDataProvider($this, array(
@@ -104,7 +105,7 @@ class Printer extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return Printer the static model class
+	 * @return OrderPay the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

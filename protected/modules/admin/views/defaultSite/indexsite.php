@@ -40,10 +40,12 @@
 							<div class="portlet box purple">
 								<div class="portlet-title">
 									<div class="caption"><i class="fa fa-cogs"></i><?php echo $title; ?></div>
-                                                                        <div class="col-md-3 pull-right">
-                                                                                <input id="barscanid" type="text" class="form-control" placeholder="条码枪扫描">
+                                                                        <div class="col-md-3">
+                                                                                <input id="barscanid" type="text" class="form-control" placeholder="扫描小票条码，快速查看订单">
                                                                         </div>
-
+                                                                        <div class="actions">
+                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> 未日结历史订单</a>
+                                                                        </div>
 								</div>
 								<div class="portlet-body" id="table-manage">
 				
@@ -161,7 +163,12 @@
             $('#barscanid').keyup(function(){
                 if($(this).val().length==11)
                 {
-                    $(this).val("111");
+                    var orderid=$(this).val().substring(1,11);
+                    //var loadurl='<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/orderId/'+orderid;
+                    var loadurl='<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>'tempsite'));?>/orderId/'+orderid;
+                    location.href=loadurl;
+                    //defaultOrder/order/companyId/0000000001/orderId/85/typeId/0000000001
+                    //$(this).val("111");
                 }
             });
             

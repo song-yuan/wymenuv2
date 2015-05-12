@@ -86,10 +86,33 @@ class DefaultOrderController extends BackendController
 		));
 	}
         
+        public function actionHistoryList(){
+		$criteria = new CDbCriteria;
+		$criteria->with = array('siteNo','siteNo.site') ;
+		$criteria->condition =  't.company_id='.$this->companyId.' and order_status=4' ;
+		$criteria->order = 'pay_time desc';
+		$pages = new CPagination(Order::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		
+		$models = Order::model()->findAll($criteria);
+		
+		$this->render('historyList',array(
+				'models'=>$models,
+				'pages'=>$pages
+		));	
+	}
+        
+        /*退款*/
+        public function actionPayback() {
+		
+	}
+        
         public function actionAccount() {
 		$orderId = Yii::app()->request->getParam('orderId','0');
                 $companyId = Yii::app()->request->getParam('companyId','0');
                 $typeId=Yii::app()->request->getParam('typeId','0');
+                $callId=Yii::app()->request->getParam('callId','0');
                 //$op=
                 $totaldata=Yii::app()->request->getParam('total','0');
                 $sid=Yii::app()->request->getParam('sid',0);
@@ -180,6 +203,7 @@ class DefaultOrderController extends BackendController
 				'model' => $order,
                                 'total' => $totaldata,
                                 'typeId'=>$typeId,
+                                'callid'=>$callId,
                                 'paymentMethods'=>$paymentMethods
 		));
 	}
@@ -626,21 +650,12 @@ class DefaultOrderController extends BackendController
                 echo json_encode(array('cp'=>$retreat->tip));
         }
         
-        public function actionPrintList(){
-                
+        public function actionPrintPadList(){                
                 $id = Yii::app()->request->getParam('id',0);
 		$companyId = Yii::app()->request->getParam('companyId');
                 $sid=Yii::app()->request->getParam('sid',0);
                 $istemp=Yii::app()->request->getParam('istemp',0);
-                ///////////////////////test
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                $se=new Sequence("printer_job_id");
-                $jobid = $se->nextval();
-                $ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
-                echo Yii::app()->end(json_encode(array('status'=>true,'jobid'=>$jobid)));
-                exit;
-                ////////////////////////test
+                $padid=Yii::app()->request->getParam('padid',0);
                 if($id==0)
                 {
                     $criteria = new CDbCriteria;
@@ -653,34 +668,43 @@ class DefaultOrderController extends BackendController
 		//var_dump($order);exit;
                                 
                 $reprint = false;
-		Yii::app()->end(json_encode(Helper::printList($order , $reprint)));
+		Yii::app()->end(json_encode(Helper::printPadList($order , $padid)));
+                
+                /*//////////////////////test
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $se=new Sequence("printer_job_id");
+                $jobid = $se->nextval();
+                $ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
+                echo Yii::app()->end(json_encode(array('status'=>true,'jobid'=>$jobid)));
+                exit;*/
+                ////////////////////////test
+        }
+        
+        public function actionPrintList(){                
+                $id = Yii::app()->request->getParam('id',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $sid=Yii::app()->request->getParam('sid',0);
+                $istemp=Yii::app()->request->getParam('istemp',0);
+                $padid=Yii::app()->request->getParam('padid',0);
+                if($id==0)
+                {
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria->order = ' t.lid desc ';
+                    $order = Order::model()->find($criteria);
+                }else{                
+                    $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
+                }
+		Yii::app()->end(json_encode(Helper::printList($order , $padid)));                
         }
         
         public function actionPrintKitchen(){
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId');
-                $db = Yii::app()->db;
+                $db = Yii::app()->db;              
                 
-                //////////////test
-                Gateway::getOnlineStatus();
-                $se=new Sequence("printer_job_id");
-                $jobid = $se->nextval();
-                $test_print_data=array(
-                    "company_id"=>  $this->companyId,
-                    "job_id"=>$jobid,
-                    "printer"=>"192.168.63.100",
-                    "content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
-                );
-                $store = Store::instance('wymenu');
-                $clientId=$store->get("client_".$companyId);
-                var_dump($clientId, json_encode($test_print_data));
-                if(!empty($clientId))
-                {
-                    Gateway::sendToClient($clientId,json_encode($test_print_data));
-                }
-                exit;
-                ///////////test
                 //var_dump(Yii::app()->params->has_cache);exit;
                 $transaction = $db->beginTransaction();
                 try {
@@ -715,20 +739,158 @@ class DefaultOrderController extends BackendController
                             }                            
                         }
                         $transaction->commit();
-                        Yii::app()->user->setFlash('success' , '修改成功');
+                        Yii::app()->user->setFlash('success' , '打印成功');
                         $this->redirect(array('defaultOrder/order' , 'companyId' => $companyId,'orderId' => $orderId,'typeId'=>$typeId));
                         
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
-                        var_dump($e);
-                        
-                        return false;
+                        $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'发生异常');
+                        Yii::app()->end(json_encode($ret));
                 }
-		//var_dump($order);exit;
-                //if((Yii::app()->request->isAjaxRequest)) {
-		//	echo Yii::app()->end(json_encode(array('status'=>true,'msg'=>'打印结束')));
-		//} else {
-		//	return array('status'=>true,'msg'=>'打印结束');
-		//}                
+                $this->renderPartial('printResultList' , array(
+                                'order'=>$order,
+				//'joblist' => $joblist, job in memcached
+                                'typeId'=>$typeId                                
+		));
+		/*/////////////test
+                Gateway::getOnlineStatus();
+                $se=new Sequence("printer_job_id");
+                $jobid = $se->nextval();
+                $test_print_data=array(
+                    "company_id"=>  $this->companyId,
+                    "job_id"=>$jobid,
+                    "printer"=>"192.168.63.100",
+                    "content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
+                );
+                $store = Store::instance('wymenu');
+                $clientId=$store->get("client_".$companyId);
+                var_dump($clientId, json_encode($test_print_data));
+                if(!empty($clientId))
+                {
+                    Gateway::sendToClient($clientId,json_encode($test_print_data));
+                }
+                exit;*/
+                ///////////test                
+        }
+        
+        public function actionPrintOneKitchen(){
+                $orderProductId = Yii::app()->request->getParam('orderProductId',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $typeId =  Yii::app()->request->getParam('typeId');
+                $db = Yii::app()->db;              
+                
+                //var_dump(Yii::app()->params->has_cache);exit;
+                //$transaction = $db->beginTransaction();
+                try {
+                        $orderProduct = OrderProduct::model()->with('product')->find('t.lid=:id and t.dpid=:dpid and t.delete_flag=0' , array(':id'=>$orderProductId,':dpid'=>$companyId));                        
+                        $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderProduct->order_id,':dpid'=>$companyId));
+                        $criteria = new CDbCriteria;
+                        $criteria->condition =  't.status in ("1","2","3") and t.dpid='.$order->dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                        $criteria->order = ' t.lid desc ';
+                        $siteNo = SiteNo::model()->find($criteria);
+                        if($siteNo->is_temp=='0')
+                        {
+                            $site = Site::model()->with('siteType')->find('t.lid=:lid and t.dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));                            
+                        }else{
+                            $site = new Site();
+                        }
+                        if($orderProduct->is_print=='0')
+                        {
+                            $reprint=false;
+                        }else{
+                            $reprint=true;
+                        }
+                        $ret=Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
+//                        if($orderProduct->is_print=='0')
+//                        {
+//                            $orderProduct->is_print='1';
+//                            $orderProduct->save();
+//                        }
+                        //$transaction->commit();
+                        //$ret=array('status'=>true,'jobid'=>"",'type'=>'none','msg'=>'发生异常');
+                } catch (Exception $e) {
+                        //$transaction->rollback(); //如果操作失败, 数据回滚
+                        //var_dump($e);exit;
+                        $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'发生异常');
+                        //Yii::app()->end(json_encode($ret));
+                }
+                //var_dump($ret);exit;
+                $this->renderPartial('printresultone' , array(
+                                'orderId'=>$order->lid,
+                                'ret'=>$ret,
+                                //'joblist' => $joblist, job in memcached
+                                'typeId'=>$typeId                                
+		));		             
+        }
+        
+        public function actionPrintKitchenResult(){
+                $orderId = Yii::app()->request->getParam('orderId',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $timenum =  Yii::app()->request->getParam('timenum');
+                $db = Yii::app()->db;
+                $finished=false;
+                $successnum=0;
+                $errornum=0;
+                $notsurenum=0;
+                
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $joblist=json_decode($store->get("kitchenjobs_".$companyId."_".$orderId),true);
+                foreach ($joblist as $jobid)
+                {
+                    $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
+                    if(empty($jobresult))
+                    {
+                        $notsurenum++;
+                    }else{
+                        if($jobresult=="success")
+                        {
+                            $successnum++;
+                        }else{
+                            $errornum++;
+                        }
+                    }
+                }
+                if($timenum==0 || $notsurenum==0)
+                {
+                    $finished=true;
+                }
+                $ret=array('finished'=>$finished,'successnum'=>$successnum,'errornum'=>$errornum,'notsurenum'=>$notsurenum);
+                Yii::app()->end(json_encode($ret));
+                //get status from memcache
+                //if error change product kitchen status in db
+                //if timenum=0 return finish or all success
+        }
+        
+        public function actionPrintKitchenResultOne(){
+                $companyId = Yii::app()->request->getParam('companyId');
+                $jobid =  Yii::app()->request->getParam('jobid');
+                $orderProductId =  Yii::app()->request->getParam('orderProductId');
+                $db = Yii::app()->db;
+                
+                //$jobstatus=false;
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                
+                $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
+                if(empty($jobresult))
+                {
+                    $ret=array('status'=>false,'msg'=>'任务未返回');
+                }else{
+                    if($jobresult=="success")
+                    {
+                        $orderProduct=  OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$orderProductId));
+                        $orderProduct->is_print='1';
+                        $orderProduct->save();
+                        $ret=array('status'=>true,'msg'=>'打印成功');
+                    }else{
+                        $ret=array('status'=>false,'msg'=>'打印失败');
+                    }
+                }        
+                
+                Yii::app()->end(json_encode($ret));
+                //get status from memcache
+                //if error change product kitchen status in db
+                //if timenum=0 return finish or all success
         }
 }

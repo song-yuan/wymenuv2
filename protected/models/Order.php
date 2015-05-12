@@ -13,9 +13,9 @@
  * @property integer $number
  * @property string $order_status
  * @property string $lock_status
- * @property string $pay_time
  * @property string $reality_total
- * @property string $payment_method_id
+ * @property string $should_total
+ * @property string $callno 
  * @property string $remark
  * @property string $taste_memo
  */
@@ -39,13 +39,13 @@ class Order extends CActiveRecord
 		return array(
 			array('lid, dpid, site_id, remark, taste_memo', 'required'),
 			array('lid, dpid, site_id, number', 'numerical', 'integerOnly'=>true),
-			array('reality_total', 'length', 'max'=>10),
+			array('should_total,reality_total,callno', 'length', 'max'=>10),
 			array('is_temp, order_status, lock_status', 'length', 'max'=>1),
 			array('remark, taste_memo', 'length', 'max'=>50),
-			array('create_at, pay_time', 'safe'),
+			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, site_id, is_temp, number, order_status, lock_status, pay_time, reality_total, payment_method_id, remark, taste_memo', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, site_id, is_temp, number, order_status, lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,6 +58,7 @@ class Order extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 		'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
+                //'siteNo' => array(self::HAS_ONE , 'SiteNo' , '','on'=>' t.dpid=siteNo.dpid and t.site'),
 		);
 	}
 
@@ -76,11 +77,11 @@ class Order extends CActiveRecord
 			'number' => '人数，和开台中的人数保持一致',
 			'order_status' => '0未结算、1结单、2被并台、3被撤台、4被换台的标志',
 			'lock_status' => '0未锁定，1锁定',
-			'pay_time' => '支付时间',
+			'callno' => '呼叫器编号',
 			'reality_total' => '实付金额',
-			'payment_method_id' => '支付方式',
+			'should_total' => '应付金额',
 			'remark' => '支付说明',
-			'taste_memo' => 'Taste Memo',
+			'taste_memo' => '口味描述',
 		);
 	}
 
@@ -111,9 +112,9 @@ class Order extends CActiveRecord
 		$criteria->compare('number',$this->number);
 		$criteria->compare('order_status',$this->order_status,true);
 		$criteria->compare('lock_status',$this->lock_status,true);
-		$criteria->compare('pay_time',$this->pay_time,true);
+		$criteria->compare('should_total',$this->should_total,true);
 		$criteria->compare('reality_total',$this->reality_total,true);
-		$criteria->compare('payment_method_id',$this->payment_method_id,true);
+		$criteria->compare('callno',$this->callno,true);
 		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('taste_memo',$this->taste_memo,true);
 
