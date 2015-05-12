@@ -36,6 +36,15 @@ var page = 1;
  */
 var b64 = new Base64();
 
+/* 质朴长存法  by lifesinger 数字补齐*/
+function pad(num, n) {
+    var len = num.toString().length;
+    while(len < n) {
+        num = "0" + num;
+        len++;
+    }
+    return num;
+}
 /**
  * 缃戠粶璇锋眰鍑芥暟
  * @param {Object} url  璇锋眰鍦板潃
@@ -52,21 +61,27 @@ function xmlHttp(url,callback){
 /**
  * 鑾峰彇娲诲姩鍒楄〃
  */
-function  getPicList(type,cat){
+function  getPicList(type,cat,pad){
 	var url = '';
-	if(type==0){
-	  url = apiHost + '/cat/'+cat;
-	}else if(type==1){
-	   url = apiHost + '/type/'+1;
-	}else if(type==2){
-	   url = apiHost + '/type/'+2;
-	}else if(type==3){
-	   url = apiHost + '/type/'+3;
-	}else if(type==4){
-	   url = apiHost + '/type/'+4;
+	if(parseInt(pad)){
+		url = apiHost + '/pad/1';
+		page = 1;
+		xmlHttp(url,showListPad);
+	}else{
+		if(type==0){
+		  url = apiHost + '/cat/'+cat;
+		}else if(type==1){
+		   url = apiHost + '/type/'+1;
+		}else if(type==2){
+		   url = apiHost + '/type/'+2;
+		}else if(type==3){
+		   url = apiHost + '/type/'+3;
+		}else if(type==4){
+		   url = apiHost + '/type/'+4;
+		}
+		page = 1;
+		xmlHttp(url,showList);
 	}
-	page = 1;
-	xmlHttp(url,showList);
 }
 
 /**
@@ -128,6 +143,51 @@ function showList(items){
 	
 }
 
+function showListPad(items){
+	var leftPicObj = $("#leftPic");
+	var rightPicObj = $("#rightPic");
+	
+	leftPicObj.html('');
+	rightPicObj.html('');
+	
+	var leftHeight = 0;
+	var rightHeight = 0;
+	
+	for(var i in items){
+		var item = items[i];
+		var thumb = item.main_picture;
+		
+		//鍙互浣跨敤鍥剧墖缂撳瓨
+		//imgCache('p'+item.tid,thumb);
+		
+		
+		leftHeight = $("#leftPic").height();
+		rightHeight = $("#rightPic").height();	
+		
+		if(leftHeight > rightHeight){
+			//濡傛灉鍙充晶楂樺害灏忥紝鍒欒拷鍔犲埌鍙充晶
+			var trHead = '<div class="blockRight blockCategory" category="'+pad(item.category_id,10)+'">';
+			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic"><img src="../../../../../img/product/icon_search.png" style="width:32px;height:32px;"/></i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="../../../../../img/product/icon_cart.png" style="width:32px;height:32px;"/></i></a>';
+			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
+			
+            var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
+			var trAddinfo = '<div class="clear"></div>';
+            tr = trHead + trBuy + trPic + trTitle + trAddinfo;
+			rightPicObj.append(tr);
+		}else{
+			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
+			var trHead = '<div class="blockLeft blockCategory" category="'+pad(item.category_id,10)+'">';
+			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic"><img src="../../../../../img/product/icon_search.png" style="width:32px;height:32px;"/></i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="../../../../../img/product/icon_cart.png" style="width:32px;height:32px;"/></i></a>';
+			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
+			
+            var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
+			var trAddinfo = '<div class="clear"></div>';
+			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
+			leftPicObj.append(tr);
+		}
+	}
+	
+}
 
 
 /**

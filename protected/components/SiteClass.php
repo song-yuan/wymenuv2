@@ -65,4 +65,50 @@ class SiteClass
                     return $site->siteType->name.': '.$site->serial;
                 }                
 	}
+	
+	public static function openTempSite($companyId = 0,$istemp = 1,$siteNumber = 1){
+		$db = Yii::app()->db;
+        $transaction = $db->beginTransaction();
+        try {  
+        	 $se=new Sequence("site_no");
+             $lid = $se->nextval();
+             $se=new Sequence("temp_site");
+             $site_id = $se->nextval();
+             $code = SiteClass::getCode($companyId);
+            $data = array(
+                'lid'=>$lid,
+                'dpid'=>$companyId,
+                'create_at'=>date('Y-m-d H:i:s',time()),
+                'is_temp'=>$istemp,
+                'site_id'=>$site_id,
+                'status'=>'1',
+                'code'=>$code,
+                'number'=>$siteNumber,
+                'delete_flag'=>'0'
+            );                            
+            $db->createCommand()->insert('nb_site_no',$data);
+            
+            $sef=new Sequence("order_feedback");
+            $lidf = $sef->nextval();
+            $dataf = array(
+                'lid'=>$lidf,
+                'dpid'=>$companyId,
+                'create_at'=>date('Y-m-d H:i:s',time()),
+                'is_temp'=>$istemp,
+                'site_id'=>$site_id,
+                'is_deal'=>'0',
+                'feedback_id'=>0,
+                'order_id'=>0,
+                'is_order'=>'1',
+                'feedback_memo'=>'开台',
+                'delete_flag'=>'0'
+            );
+            $db->createCommand()->insert('nb_order_feedback',$dataf);   
+             $transaction->commit();
+	         return $code;
+        } catch (Exception $e) {
+            $transaction->rollback(); //如果操作失败, 数据回滚
+            return false;
+        } 
+	}
 }

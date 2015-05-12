@@ -6,6 +6,7 @@ class ProductController extends Controller
 	public $wifMac = 0;
 	public $moMac = 0;
 	public $siteNoId = 0;
+	public $isPad = 0;
 	
 	public $layout = '/layouts/productmain';
 	public function init(){
@@ -15,6 +16,14 @@ class ProductController extends Controller
 			$_SESSION['momac'] = $moMac;
 		}
 		$mac = Yii::app()->request->getParam('wuyimenusysosyoyhmac',0);
+		$padId = Yii::app()->request->getParam('padid',0);
+		if($padId){
+			$companyId = Yii::app()->request->getParam('companyid',0);
+			$this->companyId = $companyId;
+			$_SESSION['companyId'] = $this->companyId;
+			$this->isPad = 1;
+			Yii::app()->theme = 'pad';
+		}
 		if($mac){
 			$companyWifi = CompanyWifi::model()->find('macid=:macId',array(':macId'=>$mac));
 			$this->companyId = $companyWifi?$companyWifi->dpid:0;
@@ -59,13 +68,23 @@ class ProductController extends Controller
 		$pid = Yii::app()->request->getParam('pid',0);
 		$type = Yii::app()->request->getParam('type',0);
 		$categoryId = Yii::app()->request->getParam('categoryId',0);
-		
+		if($this->isPad){
+			while(true){
+				$code = SiteClass::openTempSite($this->companyId);
+				if($code){
+					$siteNo = SiteNo::model()->find('dpid=:companyId and code=:code',array(':companyId'=>$this->companyId,':code'=>$code));
+					$_SESSION['siteNoId'] = $siteNo['lid'];
+					$this->siteNoId = $_SESSION['siteNoId'];
+					break;
+				}
+			}
+		}
 		if(!$categoryId){
 			$categorys = ProductClass::getFirstCategoryId($this->companyId);
 			$pid = $categorys['pid'];
 			$categoryId = $categorys['lid'];
 		}
-		$this->render('product',array('pid'=>$pid,'categoryId'=>$categoryId,'siteNoId'=>$this->siteNoId,'type'=>$type));
+		$this->render('product',array('pid'=>$pid,'categoryId'=>$categoryId,'siteNoId'=>$this->siteNoId,'type'=>$type,'isPad'=>$this->isPad));
 	}
 	/**
 	 * 
@@ -91,7 +110,8 @@ class ProductController extends Controller
 			$product = ProductClass::getHotsProduct($this->companyId,$type,$this->siteNoId);
 		}else{
 			$categoryId = Yii::app()->request->getParam('cat',0);
-			$product = ProductClass::getCategoryProducts($this->companyId,$categoryId,$this->siteNoId);
+			$pad = Yii::app()->request->getParam('pad',0);
+			$product = ProductClass::getCategoryProducts($this->companyId,$categoryId,$this->siteNoId,$pad);
 		}
 		Yii::app()->end(json_encode($product));
 	}
@@ -102,10 +122,14 @@ class ProductController extends Controller
 		if($orderList->order){
 			$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0,1);
 			foreach($orderProductList as $key=>$val){
-				$orderProductList[$key]['category_name'] = OrderList::GetCatoryName($key);	
+				$orderProductList[$key]['category_name'] = OrderList::GetCatoryName($key);
+				if(!$key){
+					foreach($val as $k=>$v){
+						$orderProductList[$key][$k]['product_id'] = ProductSetClass::GetProductSetProductIds($this->companyId,$v['set_id']);
+					}
+				}	
 			}
 		}
-//		var_dump($orderProductList);exit;
 		Yii::app()->end(json_encode($orderProductList));
 	}
 	/**
@@ -156,6 +180,7 @@ class ProductController extends Controller
 		$confirm = Yii::app()->request->getParam('confirm',0);
 		$goodsIds = isset($_POST) ?$_POST :array();
 		if($confirm){
+			//确认订单
 			$orderId = Yii::app()->request->getParam('orderId',0);
 			$orderlist = new OrderList($this->companyId,$this->siteNoId);
 			if(!$orderlist->ConfirmOrder($orderId,$goodsIds)){
@@ -166,9 +191,20 @@ class ProductController extends Controller
 	 	$this->render('orderlist');
 	}
 	//确认订单
-	public function actionConfirmOrder(){
-		
-	 	$this->render('confirmOrder');
+	public function actionConfirmPadOrder(){
+		$goodsIds = isset($_POST) ?$_POST :array();
+	 	if(!empty($goodIds)){
+	 		$orderList = new OrderList($this->companyId,$this->siteNoId);
+	 		if($orderList->order){
+	 			$result = OrderList::UpdatePadOrder($this->companyId,$orderList->order['lid'],$goodsIds);
+	 			if($result){
+	 				echo 1;
+	 			}else{
+	 				echo 0;
+	 			}
+	 		}
+	 	}
+	 	exit;
 	}
 	//确认订单
 	public function actionOrder(){
