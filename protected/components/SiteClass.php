@@ -104,6 +104,7 @@ class SiteClass
                 'delete_flag'=>'0'
             );
             $db->createCommand()->insert('nb_order_feedback',$dataf);   
+             $transaction->commit();
 	         return $code;
         } catch (Exception $e) {
             $transaction->rollback(); //如果操作失败, 数据回滚
