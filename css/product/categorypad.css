@@ -157,13 +157,15 @@ select .partents{
 .product-pic i.icon-hover-2{
 	top: 50%;
 	color: #fff;
-	padding: 16px 30px 16px 18px;
+	padding: 5px 10px;
 	font-size: 16px;
 	position: absolute;
 	margin-top: -1.5em;
 	border-radius: 50%;
 	background: rgba(69,69,69,0.6);
 }
+
+i img {width:32px;height:32px;}
 
 .product-pic:hover i.icon-hover-1,
 .product-pic:hover i.icon-hover-2{
