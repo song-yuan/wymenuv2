@@ -817,6 +817,7 @@ class DefaultOrderController extends BackendController
                 //var_dump($ret);exit;
                 $this->renderPartial('printresultone' , array(
                                 'orderId'=>$order->lid,
+                                'orderProductId'=>$orderProductId,
                                 'ret'=>$ret,
                                 //'joblist' => $joblist, job in memcached
                                 'typeId'=>$typeId                                
@@ -873,20 +874,25 @@ class DefaultOrderController extends BackendController
                 $store = Store::instance('wymenu');
                 
                 $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
+                //var_dump($jobresult);exit;
                 if(empty($jobresult))
                 {
                     $ret=array('status'=>false,'msg'=>'任务未返回');
                 }else{
                     if($jobresult=="success")
                     {
+                        //var_dump($companyId,$orderProductId);exit;
                         $orderProduct=  OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$orderProductId));
-                        $orderProduct->is_print='1';
-                        $orderProduct->save();
+                        if($orderProduct->is_print=='0')
+                        {
+                            $orderProduct->is_print='1';
+                            $orderProduct->save();
+                        }
                         $ret=array('status'=>true,'msg'=>'打印成功');
                     }else{
-                        $ret=array('status'=>false,'msg'=>'打印失败');
+                        $ret=array('status'=>false,'msg'=>'打印机执行任务失败');
                     }
-                }        
+                }     
                 
                 Yii::app()->end(json_encode($ret));
                 //get status from memcache
