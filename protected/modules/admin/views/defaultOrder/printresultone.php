@@ -40,7 +40,7 @@
                                              {
                                                 //get print result
                                                 //if has error stop
-                                                $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResultOne',array('companyId'=>$this->companyId,'jobid'=>$ret['jobid']));?>',function(data){
+                                                $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResultOne',array('companyId'=>$this->companyId,'jobid'=>$ret['jobid'],'orderProductId'=>$orderProductId));?>',function(data){
                                                     if(!data.status) {
                                                          $("#printresult").html(data.msg);                                                         
                                                     } else {                                                        
