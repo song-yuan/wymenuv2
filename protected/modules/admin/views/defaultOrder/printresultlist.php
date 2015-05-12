@@ -35,7 +35,7 @@
                                                 //if has error stop
                                                 //alert(1);
                                                 $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResult',array('companyId'=>$this->companyId,'orderId'=>$orderId));?>/timenum/'+waitingsecond,function(data){
-                                                    alert(data.notsurenum);
+                                                    //alert(data.notsurenum);
                                                     $("#successnumid").html(data.successnum);
                                                     $("#errornumid").html(data.errornum);
                                                     $("#notsurenumid").html(data.notsurenum);
