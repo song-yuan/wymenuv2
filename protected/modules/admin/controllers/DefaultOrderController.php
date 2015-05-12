@@ -704,7 +704,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId');
                 $db = Yii::app()->db;              
-                
+                $ret=array();
                 //var_dump(Yii::app()->params->has_cache);exit;
                 $transaction = $db->beginTransaction();
                 try {
@@ -726,30 +726,37 @@ class DefaultOrderController extends BackendController
                         $order->save();
                         $siteNo->status='2';
                         $siteNo->save();
+                        $jobids=array();
                         foreach($orderProducts as $orderProduct)
                         {
                             $reprint = false;
                             //var_dump($orderProduct);exit;
                             if($orderProduct->is_print=='0')
                             {
-                                Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
-                                $orderProduct->is_print='1';
+                                $tempprintret=Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
+                                //if($tempprintret['status'])
+                                //{
+                                    array_push($jobids,$tempprintret['jobid']);//如果失败jobid==0，检测时判断就行
+                                //}
+                                //$orderProduct->is_print='1';
                                 $orderProduct->product_order_status='1';
                                 $orderProduct->save();
                             }                            
                         }
                         $transaction->commit();
-                        Yii::app()->user->setFlash('success' , '打印成功');
-                        $this->redirect(array('defaultOrder/order' , 'companyId' => $companyId,'orderId' => $orderId,'typeId'=>$typeId));
-                        
+                        //var_dump(json_encode($jobids));exit;
+                        Gateway::getOnlineStatus();
+                        $store = Store::instance('wymenu');
+                        $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);                        
+                        $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布');
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
-                        $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'发生异常');
+                        $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>'打印任务发布异常');
                         Yii::app()->end(json_encode($ret));
                 }
                 $this->renderPartial('printResultList' , array(
-                                'order'=>$order,
-				//'joblist' => $joblist, job in memcached
+                                'orderId'=>$orderId,
+				'ret' => $ret,// job in memcached
                                 'typeId'=>$typeId                                
 		));
 		/*/////////////test
@@ -839,6 +846,11 @@ class DefaultOrderController extends BackendController
                 $joblist=json_decode($store->get("kitchenjobs_".$companyId."_".$orderId),true);
                 foreach ($joblist as $jobid)
                 {
+                    if($jobid=='0')
+                    {
+                        $errornum++;
+                        continue;
+                    }
                     $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
                     if(empty($jobresult))
                     {
