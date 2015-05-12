@@ -63,7 +63,7 @@ $(document).ready(function(){
     $('.shoppingCart').click(function(){
     	$('.product-pad-mask').toggle(function(){
     		$.ajax({
-     			url:'getOrderListJson',
+     			url:'/wymenuv2/product/getOrderListJson',
      			type:'POST',
      			dataType:'json',
      			success:function(msg){
@@ -108,7 +108,7 @@ $(document).ready(function(){
     $('#forum_list').on('click','.view-product-pic',function(){
     	var lid = $(this).attr('lid');
     	$.ajax({
- 			url:'getProductPicJson',
+ 			url:'/wymenuv2/product/getProductPicJson',
  			data:'id='+lid,
  			success:function(msg){
  				if(msg){
