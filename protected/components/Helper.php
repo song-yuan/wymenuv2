@@ -509,8 +509,8 @@ class Helper
                         "company_id"=>$printer->dpid,
                         "job_id"=>$jobid,
                         "printer"=>$printer->address,
-                        "content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
-                        //"content"=>$contentCode
+                        //"content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
+                        "content"=>$contentCode
                     );
                     $store = Store::instance('wymenu');
                     //echo 'ss';exit;
