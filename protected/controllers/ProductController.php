@@ -138,9 +138,9 @@ class ProductController extends Controller
 		$productId = Yii::app()->request->getPost('productId');
 		$type = Yii::app()->request->getPost('type');//是否是套餐
 		$product = array('lid'=>$productId,'type'=>$type);
-		var_dump($product);exit;
 		if($isAddOrder){
 			//增加
+			var_dump($this->companyId);var_dump($this->siteNoId);exit;
 			$createOrder = new CreateOrder($this->companyId,$this->siteNoId,$product);
 			if($createOrder->createOrder()){
 				echo 1;
