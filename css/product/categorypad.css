@@ -162,8 +162,7 @@ select .partents{
 	position: absolute;
 	margin-top: -1.5em;
 	border-radius: 50%;
-	background: rbg(69,69,69);
-	opacity:0.5;
+	background: rgba(69,69,69,0.6);
 }
 
 .product-pic:hover i.icon-hover-1,
