@@ -37,9 +37,6 @@ $(document).ready(function(){
     		total = parseFloat($('.total-price').html());
     	var nums = 0;
     		nums = parseInt($('.product-nums').html());
-    	if(_this.hasClass('hasorder')){
-    		isAddOrder = 0;
-    	}
  		$.ajax({
  			url:'createCart',
  			data:{
@@ -52,17 +49,10 @@ $(document).ready(function(){
  				if(parseInt(msg)){
  					addToCart();
 					if(isAddOrder){
-						_this.addClass('hasorder');
 						total += price;
 						total = total.toFixed(2);
 						$('.total-price').html(total);
 						$('.product-nums').html(nums+1);
-					}else{
-						_this.removeClass('hasorder');
-						total -= price;
-						total = total.toFixed(2);
-						$('.total-price').html(total);
-						$('.product-nums').html(nums-1);
 					}
  				}
  			}
