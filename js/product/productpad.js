@@ -62,7 +62,7 @@ $(document).ready(function(){
     //查看菜单
     $('.shoppingCart').click(function(){
     	$('.product-pad-mask').toggle(function(){
-    	  if (!$(this).is(':hidden')) {
+    	  if(!$('.product-pad-mask').is(':hidden')) {
     		$.ajax({
      			url:'/wymenuv2/product/getOrderListJson',
      			type:'POST',
