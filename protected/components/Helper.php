@@ -424,7 +424,7 @@ class Helper
                         }
                         array_push($listData,$strSite);                
                         array_push($listData,str_pad('',48,'-'));
-                        array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,32).Helper::getPlaceholderLen($orderProduct->amount.$orderProduct->product->product_unit,16));	
+                        array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,32).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,16));	
                         $strTaste= "单品口味：".$orderProductTasteEx;
                         foreach($orderProductTastes as $orderProductTaste){
                             $strTaste.= '/'.$orderProductTaste->taste->name;
@@ -437,8 +437,8 @@ class Helper
                         }
                         array_push($listData,$strAllTaste);
                         array_push($listData,str_pad('',48,'-'));
-                        array_push($listData,str_pad('收银员：'.Yii::app()->user->name,24,' ')
-                                .str_pad('打印时间：'.date('Y-m-d H:i:s',time()),24,' '));
+                        array_push($listData,str_pad('收银员：'.Yii::app()->user->name,20,' ')
+                                .str_pad('打印时间：'.date('Y-m-d H:i:s',time()),28,' '));
                         $precode="";
                         //后面加切纸
                         $sufcode="0A0A0A0A0A0A1D5601";                        

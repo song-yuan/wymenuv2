@@ -858,6 +858,7 @@ class DefaultOrderController extends BackendController
                     }else{
                         if($jobresult=="success")
                         {
+                            //update status//
                             $successnum++;
                         }else{
                             $errornum++;
