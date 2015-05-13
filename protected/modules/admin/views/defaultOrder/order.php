@@ -112,7 +112,7 @@
                         function openaccount(){
                             var loadurl='<?php echo $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>';
                             var callid= $('#callbarscanid').val();
-                            if(callid>"CA000" && callid<"CA999")
+                            if(callid>"Ca000" && callid<"Ca999")
                             {
                                 loadurl=loadurl+'/callId/'+callid;
                             }
@@ -200,7 +200,7 @@
                             if($(this).val().length==5)
                             {
                                 var callid=$(this).val();
-                                if(callid>"CA000" && callid<"CA999")
+                                if(callid>"Ca000" && callid<"Ca999")
                                 {
                                     openaccount();
                                 }else{
