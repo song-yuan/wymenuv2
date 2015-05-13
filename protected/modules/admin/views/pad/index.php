@@ -81,7 +81,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->name;?></td>
-                                                                <td ><?php echo $model->printer->name;?></td>
+                                                                <td ><?php if(empty($model->printer)) echo ""; else echo $model->printer->name;?></td>
 								<td ><?php echo $model->server_address ;?></td>
                                                                 <td ><?php if($model->pad_type=='0') echo '收银台'; elseif($model->pad_type=='1') echo '日本点单pad'; elseif($model->pad_type=='2') echo '中国点单PAD';?></td>
 								<td ><?php if($model->is_bind=='0') echo '未绑定'; elseif($model->is_bind=='1') echo '已绑定';?></td>

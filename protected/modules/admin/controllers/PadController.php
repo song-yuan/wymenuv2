@@ -17,7 +17,7 @@ class PadController extends BackendController
 		$pages->applyLimit($criteria);
 		
 		$models = Pad::model()->with("printer")->findAll($criteria);
-		
+		//var_dump($models);exit;
 		$this->render('index',array(
 			'models'=>$models,
 			'pages'=>$pages
