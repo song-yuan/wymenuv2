@@ -736,7 +736,7 @@ class DefaultOrderController extends BackendController
                                 $tempprintret=Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
                                 //if($tempprintret['status'])
                                 //{
-                                    array_push($jobids,$tempprintret['jobid']);//如果失败jobid==0，检测时判断就行
+                                    array_push($jobids,$tempprintret['jobid']."_".$orderProduct.lid);//如果失败jobid==0，检测时判断就行
                                 //}
                                 //$orderProduct->is_print='1';
                                 $orderProduct->product_order_status='1';
@@ -844,8 +844,10 @@ class DefaultOrderController extends BackendController
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
                 $joblist=json_decode($store->get("kitchenjobs_".$companyId."_".$orderId),true);
-                foreach ($joblist as $jobid)
+                foreach ($joblist as $job_orderproduct_id)
                 {
+                    $ids=explode('_',$job_orderproduct_id);
+                    $jobid=$ids[0];
                     if($jobid=='0')
                     {
                         $errornum++;
@@ -859,6 +861,12 @@ class DefaultOrderController extends BackendController
                         if($jobresult=="success")
                         {
                             //update status//
+                            $orderProduct=  OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$ids[1]));
+                            if($orderProduct->is_print=='0')
+                            {
+                                $orderProduct->is_print='1';
+                                $orderProduct->save();
+                            }
                             $successnum++;
                         }else{
                             $errornum++;
