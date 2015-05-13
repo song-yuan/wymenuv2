@@ -22,7 +22,7 @@
                                                 var printertype="<?php echo $ret['type'];?>";
                                                 var jobid="<?php echo $ret['jobid'];?>";
                                                 var jobmsg="<?php echo $ret['msg'];?>";
-                                                var company_id="<?php echo $companyId;?>";
+                                                var company_id="<?php echo $this->companyId;?>";
                                                 if(jobstatus=='1')
                                                 {
                                                     if(printertype=='net')
