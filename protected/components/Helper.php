@@ -486,6 +486,7 @@ class Helper
         static public function printConetent(Printer $printer,$content,$precode,$sufcode)
         {
                 Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
                 $contentCode="";
                 //内容编码
                 if($printer->language=='1')//zh-cn GBK
@@ -520,7 +521,7 @@ class Helper
                         //"content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
                         "content"=>$contentCode
                     );
-                    $store = Store::instance('wymenu');
+                    //$store = Store::instance('wymenu');
                     //echo 'ss';exit;
                     $clientId=$store->get("client_".$printer->dpid);
                     //var_dump($clientId,$print_data);exit;
@@ -535,7 +536,7 @@ class Helper
                 }elseif($printer->printer_type=='1')//local
                 {                
                     //$ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
-                    $store->set($companyId."_".$jobid,$contentCode,0,60);
+                    $store->set($printer->dpid."_".$jobid,$contentCode,0,60);
                     return array('status'=>true,'jobid'=>$jobid,'type'=>'local','msg'=>'');
                 }else{
                     return array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'打印机类型错误');

@@ -905,16 +905,17 @@ class DefaultOrderController extends BackendController
         
         public function actionPrintList(){                
                 $orderId = Yii::app()->request->getParam('orderId',0);
-		$companyId = Yii::app()->request->getParam('companyId');
+		//$companyId = Yii::app()->request->getParam('companyId');
                 $padId = Yii::app()->request->getParam('padId');
                 $typeId = Yii::app()->request->getParam('typeId');             
-                $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$companyId));
+                $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$this->companyId));
                 
 		//Yii::app()->end(json_encode(Helper::printList($order , $padid)));
                 $ret=Helper::printList($order , $padId);
+                //exit;
                 $this->renderPartial('printlist' , array(
                                 'orderId'=>$orderId,
-                                'companyId'=>$companyId,
+                                //'companyId'=>$companyId,
                                 'ret'=>$ret,
                                 'typeId'=>$typeId                                
 		));
