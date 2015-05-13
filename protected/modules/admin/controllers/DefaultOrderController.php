@@ -681,24 +681,6 @@ class DefaultOrderController extends BackendController
                 ////////////////////////test
         }
         
-        public function actionPrintList(){                
-                $id = Yii::app()->request->getParam('id',0);
-		$companyId = Yii::app()->request->getParam('companyId');
-                $sid=Yii::app()->request->getParam('sid',0);
-                $istemp=Yii::app()->request->getParam('istemp',0);
-                $padid=Yii::app()->request->getParam('padid',0);
-                if($id==0)
-                {
-                    $criteria = new CDbCriteria;
-                    $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
-                    $criteria->order = ' t.lid desc ';
-                    $order = Order::model()->find($criteria);
-                }else{                
-                    $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
-                }
-		Yii::app()->end(json_encode(Helper::printList($order , $padid)));                
-        }
-        
         public function actionPrintKitchen(){
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
@@ -919,5 +901,45 @@ class DefaultOrderController extends BackendController
                 //get status from memcache
                 //if error change product kitchen status in db
                 //if timenum=0 return finish or all success
+        }
+        
+        public function actionPrintList(){                
+                $orderId = Yii::app()->request->getParam('orderId',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $padId = Yii::app()->request->getParam('padId');
+                $typeId = Yii::app()->request->getParam('typeId');             
+                $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$companyId));
+                
+		//Yii::app()->end(json_encode(Helper::printList($order , $padid)));
+                $ret=Helper::printList($order , $padId);
+                $this->renderPartial('printlist' , array(
+                                'orderId'=>$orderId,
+                                'companyId'=>$companyId,
+                                'ret'=>$ret,
+                                'typeId'=>$typeId                                
+		));
+        }
+        
+        public function actionPrintListNetResult(){
+                $companyId = Yii::app()->request->getParam('companyId');
+                $jobid =  Yii::app()->request->getParam('jobid');
+                
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                
+                $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
+                //var_dump($jobresult);exit;
+                if(empty($jobresult))
+                {
+                    $ret=array('status'=>false,'msg'=>'任务未返回');
+                }else{
+                    if($jobresult=="success")
+                    {                        
+                        $ret=array('status'=>true,'msg'=>'打印成功');
+                    }else{
+                        $ret=array('status'=>false,'msg'=>'打印机执行任务失败');
+                    }
+                }               
+                Yii::app()->end(json_encode($ret));                
         }
 }

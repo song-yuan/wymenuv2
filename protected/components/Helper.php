@@ -311,41 +311,49 @@ class Helper
 		$pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padid));
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
-                        return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'没有关联打印机');		
+                        return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'PAD没有默认打印机');		
 		}
 		$hasData=false;
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 ///site error because tempsite and reserve**************
+                $strSite="";
                 if($order->is_temp==0)
                 {
                     $site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
                     $siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
-                    $strSite=str_pad('座号：'.$siteType->name.' '.$site->serial , 30,' ');
+                    $strSite=str_pad('座号：'.$siteType->name.' '.$site->serial , 24,' ').str_pad('人数：'.$order->number,12,' ');
                 }else{
-                    $strSite=str_pad('座号：临时座 '.$order->site_id%1000 , 30,' ');
+                    $strSite=str_pad('座号：临时座 '.$order->site_id%1000 , 24,' ').str_pad('人数：'.$order->number,12,' ');
                 }
-		
+		if(!empty($order->callno))
+                {
+                    $strSite=$strSite.str_pad('呼叫号：'.$order->callno,12,' ');
+                    //array_push($listData,$strcall);
+                }
 		//$listKey = $order->dpid.'_'.$printer->ip_address;                	
 		$listData = array(Helper::getPlaceholderLenBoth($order->company->company_name, 48));
-		array_push($listData,$strSite.str_pad('人数：'.$order->number,15,' '));                
+		array_push($listData,$strSite);                
 		array_push($listData,str_pad('',48,'-'));                
 		
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
                     $hasData=true;
-                    array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount'].$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
+                    array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
 		}
-		
 		array_push($listData,str_pad('',48,'-'));
-		array_push($listData,str_pad('合计：'.$order->reality_total , 24,' ').str_pad('打印时间：'.time(),24,' '));
-		array_push($listData,str_pad('收银员：'.Yii::app()->user->name,24,' ').str_pad('订餐电话：'.$order->company->telephone,24,' '));
+                array_push($listData,str_pad('应付金额：'.$order->should_total , 40,' '));
+                array_push($listData,str_pad('操作员：'.Yii::app()->user->name,24,' ')
+                        .str_pad('时间：'.date('Y-m-d H:i:s',time()),24,' '));
+                array_push($listData,str_pad('订餐电话：'.$order->company->telephone,44,' '));
                 $precode="";
                 //后面加切纸
-                $sufcode="0A0A0A0A0A0A1D5601";
+                $sufcode="0A0A0A0A0A0A1D5601";                        
+                //var_dump($listData);exit;
+                $printret=array();
 		if($hasData){
                     return Helper::printConetent($printer,$listData,$precode,$sufcode);
 		}else{
-                    return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'没有产品');
+                    return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'没有要打印的菜品！');
                 }
                 /*$listData.= str_pad('',48,'-').'<br>';
 		$listData.= str_pad('消费合计：'.$order->reality_total , 20,' ').'<br>';

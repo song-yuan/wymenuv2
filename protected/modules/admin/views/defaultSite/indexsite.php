@@ -44,7 +44,7 @@
                                                                                 <input id="barscanid" type="text" class="form-control" placeholder="扫描小票条码，快速查看订单">
                                                                         </div>
                                                                         <div class="actions">
-                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> 未日结历史订单</a>
+                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> 历史订单</a>
                                                                         </div>
 								</div>
 								<div class="portlet-body" id="table-manage">
