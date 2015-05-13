@@ -138,25 +138,42 @@
                         });
                         */
                         $('#print-btn').click(function(){
-                            if (typeof Androidwymenuprinter == "undefined") {
+                            /*if (typeof Androidwymenuprinter == "undefined") {
                                 alert("无法获取PAD设备信息，请在PAD中运行该程序！");
                                 return false;
                             }
-                            var company_id="<?php echo $this->companyId ?>"                            
-                            $.get('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
+                            var padinfo=Androidwymenuprinter.getPadInfo();
+                            var pad_id=padinfo.substr(10,10);*/
+                            var pad_id="0000000001";
+                            var $modal=$('#portlet-config');
+                            $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId));?>/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"+'/padId/'+pad_id
+                                    ,'', function(){
+                                                $modal.modal();
+                                        });
+                            /*
+                            $.get('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId,'orderId'=>$model->lid));?>/padId/'+pad_id,function(data){
                                     if(data.status) {
-                                        if(Androidwymenuprinter.printJob(company_id,data.jobid))
+                                        if(data.type='local')
                                         {
-                                            alert("打印成功");
+                                            if(Androidwymenuprinter.printJob(company_id,data.jobid))
+                                            {
+                                                alert("打印成功");
+                                            }
+                                            else
+                                            {
+                                                alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
+                                            }
+                                        }else{
+                                            var $modal=$('#portlet-config');
+                                            $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printListNet',array('companyId'=>$this->companyId));?>/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"
+                                                    ,'', function(){
+                                                                $modal.modal();
+                                                        });
                                         }
-                                        else
-                                        {
-                                            alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
-                                        }                                                
                                     } else {
                                             alert(data.msg);
                                     }
-                            },'json');
+                            },'json');*/
                         });
                         
                         $('#kitchen-btn').click(function(){
