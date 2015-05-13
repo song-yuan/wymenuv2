@@ -307,8 +307,8 @@ class Helper
         
         //收银台打印清单写入到redis
         //send by workerman encode by GBK or shift-JIS
-	static public function printList(Order $order , $padid, $cprecode){
-		$pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padid));
+	static public function printList(Order $order , Pad $pad, $cprecode){
+		
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
                         return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'PAD没有默认打印机');		

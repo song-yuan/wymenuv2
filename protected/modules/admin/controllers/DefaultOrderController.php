@@ -875,13 +875,18 @@ class DefaultOrderController extends BackendController
         public function actionPrintPadList(){                
                 $id = Yii::app()->request->getParam('id',0);
 		$companyId = Yii::app()->request->getParam('companyId');
+                $padId = Yii::app()->request->getParam('padId');
                 $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
-                //var_dump($order);exit;
-                //前面加 barcode
-                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                
-                Yii::app()->end(json_encode(Helper::printList($order , $padid,$precode)));
-                
+                $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padid));
+                //要判断打印机类型错误，必须是local。
+                if($pad->printer_type!='1')
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！')));
+                }else{
+                    //前面加 barcode
+                    $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                    Yii::app()->end(json_encode(Helper::printList($order , $pad,$precode)));
+                }
                 /*//////////////////////test
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
@@ -923,9 +928,13 @@ class DefaultOrderController extends BackendController
                 $padId = Yii::app()->request->getParam('padId');
                 $typeId = Yii::app()->request->getParam('typeId');             
                 $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$this->companyId));
+                $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padid));
+                //前面加 barcode
+                $precode="";
+                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 
 		//Yii::app()->end(json_encode(Helper::printList($order , $padid)));
-                $ret=Helper::printList($order , $padId,"");
+                $ret=Helper::printList($order , $pad,$precode);
                 //exit;
                 $this->renderPartial('printlist' , array(
                                 'orderId'=>$orderId,
