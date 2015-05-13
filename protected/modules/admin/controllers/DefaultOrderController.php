@@ -877,7 +877,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId');
                 $padId = Yii::app()->request->getParam('padId');
                 $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
-                $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padid));
+                $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
                 //要判断打印机类型错误，必须是local。
                 if($pad->printer_type!='1')
                 {
@@ -928,7 +928,7 @@ class DefaultOrderController extends BackendController
                 $padId = Yii::app()->request->getParam('padId');
                 $typeId = Yii::app()->request->getParam('typeId');             
                 $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$this->companyId));
-                $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padid));
+                $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
                 //前面加 barcode
                 $precode="";
                 $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
