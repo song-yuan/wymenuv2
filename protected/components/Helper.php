@@ -307,7 +307,7 @@ class Helper
         
         //收银台打印清单写入到redis
         //send by workerman encode by GBK or shift-JIS
-	static public function printList(Order $order , $padid){
+	static public function printList(Order $order , $padid, $cprecode){
 		$pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padid));
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
@@ -345,7 +345,7 @@ class Helper
                 array_push($listData,str_pad('操作员：'.Yii::app()->user->name,24,' ')
                         .str_pad('时间：'.date('Y-m-d H:i:s',time()),24,' '));
                 array_push($listData,str_pad('订餐电话：'.$order->company->telephone,44,' '));
-                $precode="";
+                $precode=$cprecode;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";                        
                 //var_dump($listData);exit;
@@ -498,6 +498,7 @@ class Helper
                     }
                 }elseif($printer->language=='2')//日文 shift-jis
                 {
+                    $contentCode.="1C43011C26";//日文前导符号
                     foreach($content as $line)
                     {
                         $strcontent=mb_convert_encoding($line,"SJIS","UTF-8");

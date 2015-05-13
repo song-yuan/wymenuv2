@@ -648,38 +648,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId');
                 $retreat=  Retreat::model()->find(' lid=:id and dpid=:dpid',  array(':id'=>$id,':dpid'=>$companyId));
                 echo json_encode(array('cp'=>$retreat->tip));
-        }
-        
-        public function actionPrintPadList(){                
-                $id = Yii::app()->request->getParam('id',0);
-		$companyId = Yii::app()->request->getParam('companyId');
-                $sid=Yii::app()->request->getParam('sid',0);
-                $istemp=Yii::app()->request->getParam('istemp',0);
-                $padid=Yii::app()->request->getParam('padid',0);
-                if($id==0)
-                {
-                    $criteria = new CDbCriteria;
-                    $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
-                    $criteria->order = ' t.lid desc ';
-                    $order = Order::model()->find($criteria);
-                }else{                
-                    $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
-                }
-		//var_dump($order);exit;
-                                
-                $reprint = false;
-		Yii::app()->end(json_encode(Helper::printPadList($order , $padid)));
-                
-                /*//////////////////////test
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                $se=new Sequence("printer_job_id");
-                $jobid = $se->nextval();
-                $ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
-                echo Yii::app()->end(json_encode(array('status'=>true,'jobid'=>$jobid)));
-                exit;*/
-                ////////////////////////test
-        }
+        }    
         
         public function actionPrintKitchen(){
                 $orderId = Yii::app()->request->getParam('orderId',0);
@@ -903,6 +872,51 @@ class DefaultOrderController extends BackendController
                 //if timenum=0 return finish or all success
         }
         
+        public function actionPrintPadList(){                
+                $id = Yii::app()->request->getParam('id',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
+                //var_dump($order);exit;
+                //前面加 barcode
+                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                
+                Yii::app()->end(json_encode(Helper::printList($order , $padid,$precode)));
+                
+                /*//////////////////////test
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $se=new Sequence("printer_job_id");
+                $jobid = $se->nextval();
+                $ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
+                echo Yii::app()->end(json_encode(array('status'=>true,'jobid'=>$jobid)));
+                exit;*/
+                /*
+                 $('#print-btn').click(function(){
+                            if (typeof Androidwymenuprinter == "undefined") {
+                                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                                return false;
+                            }
+                            var company_id="<?php echo $this->companyId ?>"                            
+                            $.get('<?php echo $this->createUrl('defaultOrder/printPadList',array('companyId'=>$this->companyId,'id'=>$model->lid));?>',function(data){
+                                    if(data.status) {
+                                        if(Androidwymenuprinter.printJob(company_id,data.jobid))
+                                        {
+                                            alert("打印成功");
+                                        }
+                                        else
+                                        {
+                                            alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
+                                        }                                                
+                                    } else {
+                                            alert(data.msg);
+                                    }
+                            },'json');
+                        }); 
+                 
+                 */
+                ////////////////////////test
+        }
+        
         public function actionPrintList(){                
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		//$companyId = Yii::app()->request->getParam('companyId');
@@ -911,7 +925,7 @@ class DefaultOrderController extends BackendController
                 $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$this->companyId));
                 
 		//Yii::app()->end(json_encode(Helper::printList($order , $padid)));
-                $ret=Helper::printList($order , $padId);
+                $ret=Helper::printList($order , $padId,"");
                 //exit;
                 $this->renderPartial('printlist' , array(
                                 'orderId'=>$orderId,
