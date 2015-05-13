@@ -736,7 +736,7 @@ class DefaultOrderController extends BackendController
                                 $tempprintret=Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
                                 //if($tempprintret['status'])
                                 //{
-                                    array_push($jobids,$tempprintret['jobid']."_".$orderProduct.lid);//如果失败jobid==0，检测时判断就行
+                                    array_push($jobids,$tempprintret['jobid']."_".$orderProduct->lid);//如果失败jobid==0，检测时判断就行
                                 //}
                                 //$orderProduct->is_print='1';
                                 $orderProduct->product_order_status='1';
