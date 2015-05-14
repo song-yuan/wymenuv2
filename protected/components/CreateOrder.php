@@ -151,6 +151,20 @@ class CreateOrder
 		
 		return $price?$price:0;
 	}
+	public function hasOrderProduct(){
+		$setId = 0;
+		if($this->product['type']){
+			$setId = $this->product['lid'];
+			$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid and set_id=:setId and product_order_status=0',array(':orderId'=>$order->lid,'dpid'=>$this->companyId,':setId'=>$setId));
+		}else{
+			$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,'dpid'=>$this->companyId,':productId'=>$this->product['lid']));
+		}
+		if($orderProduct){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	public function deleteOrderProduct(){
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('dpid=:dpid and site_id=:siteId and is_temp=:isTemp');
