@@ -36,15 +36,15 @@ select .partents{
 .top-right{
 	width:30%;
 	height:100%;
-	float:right;
+	float:left;
 }
 .shoppingCart{
 	height:35px;
 	width:35px;
 	background:url(../../img/shopping_cart2.png) top center no-repeat;
-	margin-right:20px;
-	padding: 0 20px;
-	float:right;
+	margin-right:10px;
+	padding: 0 10px;
+	float:left;
 }
 .num-circel{
 	position:absolute;
