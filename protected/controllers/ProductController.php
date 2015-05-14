@@ -197,18 +197,19 @@ class ProductController extends Controller
 	//确认订单
 	public function actionConfirmPadOrder(){
 		$goodsIds = isset($_POST) ?$_POST :array();
+		$msg = array('msg'=>false,'orderId'=>0,'dpid'=>0);
 	 	if(!empty($goodIds)){
 	 		$orderList = new OrderList($this->companyId,$this->siteNoId);
 	 		if($orderList->order){
 	 			$result = OrderList::UpdatePadOrder($this->companyId,$orderList->order['lid'],$goodsIds);
 	 			if($result){
-	 				echo 1;
+	 				$msg = array('msg'=>true,'orderId'=>$orderList->order['lid'],'dpid'=>$orderList->order['dpid']);
 	 			}else{
-	 				echo 0;
+	 				$msg = array('msg'=>false,'orderId'=>$orderList->order['lid'],'dpid'=>0);
 	 			}
 	 		}
 	 	}
-	 	exit;
+	 	Yii::app()->end(json_encode($msg));
 	}
 	//确认订单
 	public function actionOrder(){
