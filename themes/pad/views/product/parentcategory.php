@@ -13,7 +13,6 @@
 <link rel="stylesheet" type="text/css"  href="<?php echo $baseUrl.'/css/product/categorypad.css';?>" />
 <div class="fixed-top">
   <div class="top-left">
-  	<div class="top-left-left">选择分类:</div>
   	<div class="top-left-right">
 	<select name="category">
 		<?php if($parentCategorys):?>
@@ -27,6 +26,9 @@
 	</select>
 	</div>
   </div>
+   <div class="top-middle">
+   	<button id="updatePadOrder">下单并打印</button>
+   </div>
   <div class="top-right">
   <div class="shoppingCart">
      <div class="total-num num-circel"><?php echo $nums;?></div>

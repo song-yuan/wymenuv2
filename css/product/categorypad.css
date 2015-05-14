@@ -19,35 +19,32 @@ select .partents{
 	font-weight:800;
 }
 .top-left{
-	width:50%;
+	width:30%;
 	height:100%;
 	float:left;
 }
-.top-left-left{
-	float:left;
+
+.top-left-right{
+	width:100%;
+	height:100%;
+	}
+.top-middle{
 	width:30%;
 	height:100%;
-	text-align:right;
-	line-height:35px;
-	font-size:15px;
-	}
-.top-left-right{
-	float:left;
-	width:70%;
-	height:100%;
-	}
-.top-right{
-	width:50%;
-	height:100%;
 	float:right;
+}
+.top-right{
+	width:30%;
+	height:100%;
+	float:left;
 }
 .shoppingCart{
 	height:35px;
 	width:35px;
 	background:url(../../img/shopping_cart2.png) top center no-repeat;
-	margin-right:20px;
-	padding: 0 20px;
-	float:right;
+	margin-right:10px;
+	padding: 0 10px;
+	float:left;
 }
 .num-circel{
 	position:absolute;
@@ -94,7 +91,7 @@ select .partents{
 	padding:10px 10px 0;
 	height:30px;
 }
-.product-pad-mask .product-bottom button {
+.top-middle button {
 	background: rgb(239,68,77);
 	height: 30px;
 	padding:0 10px;
