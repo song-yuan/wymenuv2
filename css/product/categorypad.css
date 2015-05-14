@@ -42,7 +42,7 @@ select .partents{
 	height:35px;
 	width:35px;
 	background:url(../../img/shopping_cart2.png) top center no-repeat;
-	margin-right:10px;
+	margin-left:20px;
 	padding: 0 10px;
 	float:left;
 }
