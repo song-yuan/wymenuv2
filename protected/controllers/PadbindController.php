@@ -47,7 +47,7 @@ class PadbindController extends Controller
 		session_start();
 		$companyId = Yii::app()->request->getParam('companyid',0);
                 $padId = Yii::app()->request->getParam('padid',0);
-                
+                //var_dump($companyId,$padId);exit;
 		if($companyId){
 			$_SESSION['companyId'] = $companyId;
 		}
@@ -58,17 +58,20 @@ class PadbindController extends Controller
                 if($companyId!="0000000000" && $padId!="0000000000")
                 {
                     $model=  Pad::model()->find(" dpid=:dpid and lid=:lid",array(":dpid"=>$companyId,":lid"=>$padId));
+                    //var_dump($model);exit;
                     //收银pad
                     if(empty($model))
                     {
                         $this->redirect(array('login'));
                     }else{
-                        if($model->pad_type=="0")
+                        if($model->pad_type=="0")//收银
                         {
+                            //echo 'a';exit;
                             $this->redirect(array('admin/login'));
-                        }else if($model->pad_type=="1")
+                        }else if($model->pad_type=="1")//点餐
                         {
-                            $this->redirect(array('product/index',"companyid"=>$companyId,"padid"=>$padId));
+                            //echo 'b';exit;
+                            $this->redirect(array('product/index/companyid/'.$companyId.'/padid/'.$padId));
                         }else{
                             $this->redirect(array('login'));
                         }
