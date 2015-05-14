@@ -360,9 +360,9 @@
 	-o-transition: all 0s ease;
 }
 .aniele.added {
-	-webkit-transform:translate3d(320px, -650px, 0);
-       -moz-transform:translate3d(320px, -650px, 0);
-            transform:translate3d(320px, -650px, 0);
+	-webkit-transform:translate3d(220px, -650px, 0);
+       -moz-transform:translate3d(220px, -650px, 0);
+            transform:translate3d(220px, -650px, 0);
             -webkit-transition: all 0.5s ease;
 	  			-moz-transition: all 0.5s ease;
 	  		-ms-transition: all 0.5s ease;
