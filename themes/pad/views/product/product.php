@@ -41,10 +41,9 @@
 <div class="product-pad-mask">
 	<div class="mask-trangle"></div>
 	<div class="product-mask-info">点单信息</div>
-	<div class="product-bottom">
-		<button id="updatePadOrder">下单并打印</button>
-	</div>
 	<div class="info">
+	</div>
+	<div class="product-bottom">
 	</div>
 </div>
 </form>
