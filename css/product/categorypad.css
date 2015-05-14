@@ -136,8 +136,7 @@ select .partents{
 .total-price{
 	height:35px;
 	line-height:35px;
-	float:right;
-	margin-right:10px;
+	float:left;
 }
 .product-pic{
 	position:relative;
