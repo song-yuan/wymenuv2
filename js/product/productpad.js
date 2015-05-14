@@ -162,8 +162,6 @@ $(document).ready(function(){
                              alert(data.msg);
                      }
              },'json');
-         });
-
 
     		}else{
     			alert('下单失败,请重新下单!')
