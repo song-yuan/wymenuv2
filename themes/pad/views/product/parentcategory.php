@@ -30,9 +30,10 @@
    	<button id="updatePadOrder">下单并打印</button>
    </div>
   <div class="top-right">
-  <div class="shoppingCart">
-     <div class="total-num num-circel"><?php echo $nums;?></div>
-  </div>
-  <div class="total-price"><?php echo Money::priceFormat($price);?></div>
+	  <div class="shoppingCart">
+	     <div class="total-num num-circel"><?php echo $nums;?></div>
+	  </div>
+	  <div class="total-price"><?php echo Money::priceFormat($price);?></div>
+  	<div class="clear"></div>
   </div>
 </div>
