@@ -144,10 +144,14 @@ class ProductController extends Controller
 		if($isAddOrder){
 			//增加
 			$createOrder = new CreateOrder($this->companyId,$this->siteNoId,$product);
-			if($createOrder->createOrder()){
-				echo 1;
-			}else{
+			if($createOrder->hasOrderProduct()){
 				echo 0;
+			}else{
+				if($createOrder->createOrder()){
+					echo 1;
+				}else{
+					echo 0;
+				}
 			}
 		}else{
 			//删除
