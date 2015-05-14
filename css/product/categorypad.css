@@ -19,25 +19,22 @@ select .partents{
 	font-weight:800;
 }
 .top-left{
-	width:50%;
+	width:30%;
 	height:100%;
 	float:left;
 }
-.top-left-left{
-	float:left;
+
+.top-left-right{
+	width:100%;
+	height:100%;
+	}
+.top-middle{
 	width:30%;
 	height:100%;
-	text-align:right;
-	line-height:35px;
-	font-size:15px;
-	}
-.top-left-right{
-	float:left;
-	width:70%;
-	height:100%;
-	}
+	float:right;
+}
 .top-right{
-	width:50%;
+	width:30%;
 	height:100%;
 	float:right;
 }
