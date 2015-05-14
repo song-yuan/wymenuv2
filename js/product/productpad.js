@@ -36,7 +36,7 @@ $(document).ready(function(){
     	var total = 0;
     		total = parseFloat($('.total-price').html());
     	var nums = 0;
-    		nums = parseInt($('.product-nums').html());
+    		nums = parseInt($('.total-num').html());
  		$.ajax({
  			url:'/wymenuv2/product/createCart',
  			data:{
@@ -52,7 +52,7 @@ $(document).ready(function(){
 						total += price;
 						total = total.toFixed(2);
 						$('.total-price').html(total);
-						$('.product-nums').html(nums+1);
+						$('.total-num').html(nums+1);
 					}
  				}
  			}
@@ -60,7 +60,7 @@ $(document).ready(function(){
     });
    
     //查看菜单
-    $('.shoppingCart').click(function(){
+    $('.top-right').click(function(){
     	$('.product-pad-mask').toggle(function(){
     	  if(!$('.product-pad-mask').is(':hidden')) {
     		$.ajax({
