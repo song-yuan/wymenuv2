@@ -142,7 +142,30 @@ $(document).ready(function(){
     
     $('#updatePadOrder').click(function(){
     	$('#padOrderForm').ajaxSubmit(function(msg){
-    		alert(msg);
+    		if(msg.status){
+    			 if (typeof Androidwymenuprinter == "undefined") {
+                     alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                     return false;
+                 }
+    			 var company_id = msg.dpid;
+    			 $.get('/wymenuv2/defaultOrder/printPadList/companyId/'+msg.dpid+'/id/'+msg.orderId,function(data){
+                     if(data.status) {
+                         if(Androidwymenuprinter.printJob(company_id,data.jobid))
+                         {
+                             alert("打印成功");
+                         }
+                         else
+                         {
+                             alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
+                         }                                                
+                     } else {
+                             alert(data.msg);
+                     }
+             },'json');
+
+    		}else{
+    			alert('下单失败,请重新下单!')
+    		}
     	});
     	return false;
     });
