@@ -125,6 +125,7 @@ class PadbindController extends Controller
                 if(empty($companyid)||empty($padid))
                 {
                     echo "0";
+                    exit;
                 }
                 $pad=Pad::model()->find(' dpid=:companyId and lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
                 if($pad)
@@ -181,5 +182,21 @@ class PadbindController extends Controller
 			$treeDataSource['data'][] = $tmp;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
+	}
+        
+        public function actionDomain(){
+		$companyid = Yii::app()->request->getParam('companyid',0);
+                if(empty($companyid))
+                {
+                    echo "http://menu.wymenu.com/wymenuv2/";
+                    exit;
+                }
+                $company=Company::model()->find(' dpid=:companyId', array(':companyId'=>$companyid));
+                if($company)
+                {
+                    echo $company->domain;
+                }else{
+                    echo "http://menu.wymenu.com/wymenuv2/";
+                }
 	}
 }
