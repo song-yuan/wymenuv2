@@ -39,7 +39,7 @@ class Company extends CActiveRecord
 		return array(
 			array('printer_id, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('company_name, email', 'length', 'max'=>50),
-			array('logo, homepage', 'length', 'max'=>255),
+			array('logo, domain, homepage', 'length', 'max'=>255),
 			array('contact_name, mobile, telephone', 'length', 'max'=>20),
 			array('description','length'),
 			array('address','length'),
@@ -51,7 +51,7 @@ class Company extends CActiveRecord
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('dpid, company_name, logo,token, contact_name, mobile, telephone, email, homepage, create_at, delete_flag, description', 'safe', 'on'=>'search'),
+			array('dpid, company_name, logo,token, contact_name, mobile, telephone, email, homepage, domain, create_at, delete_flag, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,6 +81,7 @@ class Company extends CActiveRecord
 			'email' => '电子邮箱',
 			'address'=>'公司地址',
 			'homepage' => '公司主页',
+                        'domain'=>'系统服务地址',
 			'create_at' => '创建时间',
 			'delete_flag' => '状态',
 			'description' => '公司描述',
@@ -114,6 +115,7 @@ class Company extends CActiveRecord
 		$criteria->compare('telephone',$this->telephone,true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('homepage',$this->homepage,true);
+                $criteria->compare('domain',$this->domain,true);
 		$criteria->compare('create_at',$this->create_at);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('description',$this->description,true);

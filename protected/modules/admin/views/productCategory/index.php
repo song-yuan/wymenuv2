@@ -49,7 +49,7 @@
 								<table class="tree table table-striped table-hover table-bordered dataTable">
 									<?php foreach($models as $model):?>
 									<tr class="treegrid-<?php echo $model->lid?> <?php if($model->pid!='0') echo 'treegrid-parent-'.$model->pid;?>">
-										<td width="70%"><?php echo $model->category_name;?></td>
+										<td width="70%"><?php echo '('.$model->order_num.')'.$model->category_name;?></td>
 										<td>
 										<?php if($model->pid=='0'):?>
 										<a class="btn btn-xs green add_btn" pid="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-plus"></i></a>

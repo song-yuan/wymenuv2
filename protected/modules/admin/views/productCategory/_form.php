@@ -14,6 +14,13 @@
 											<?php echo $form->error($model, 'category_name' )?>
 										</div>
 									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'order_num',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'order_num',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('order_num')));?>
+											<?php echo $form->error($model, 'order_num' )?>
+										</div>
+									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue">确定</button>

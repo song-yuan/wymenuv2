@@ -14,7 +14,7 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title">收银 && 结单 <?php switch($order->order_status) {case 2:{echo '未支付';break;} case 3:{echo '已支付';break;} }?></h4>
+                                                        <h4 class="modal-title"><?php if($payback=='1') echo '退款'; else echo '收银 && 结单'; ?><?php switch($order->order_status) {case 2:{echo '未支付';break;} case 3:{echo '已支付';break;} }?></h4>
                                                         <?php if($callid!='0'): ?>
                                                         <span style="color:red;" id="timecount">20</span>...秒后自动结单，点击<input type="button" class="btn green" id="autopay_pause" value="此按钮">停止自动结单！
                                                         <?php endif;?>

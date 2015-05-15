@@ -72,6 +72,13 @@
 											<?php echo $form->error($model, 'homepage' )?>
 										</div>
 									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'domain',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'domain',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('domain')));?>
+											<?php echo $form->error($model, 'domain' )?>
+										</div>
+									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'description',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">

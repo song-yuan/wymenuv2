@@ -58,12 +58,14 @@
 	
 	<div class="row">
 		<div class="col-md-12">
-			<?php if($siteTypes):?>
+			
 					<div class="tabbable tabbable-custom">
 						<ul class="nav nav-tabs">
+                                                <?php if($siteTypes):?>
 						<?php foreach ($siteTypes as $key=>$siteType):?>
 							<li typeId="<?php echo $key ;?>" class="tabtitle <?php if($key == $typeId) echo 'active';?>"><a href="#tab_1_<?php echo $key;?>" data-toggle="tab"><?php echo $siteType ;?></a></li>
 						<?php endforeach;?>
+                                                <?php endif;?>
                                                         <li typeId="tempsite" class="tabtitle <?php if($typeId == 'tempsite') echo 'active';?>"><a href="#tab_1_tempsite" data-toggle="tab">临时座/排队</a></li>
                                                         <li typeId="reserve" class="tabtitle <?php if($typeId == 'reserve') echo 'active';?>"><a href="#tab_1_reserve" data-toggle="tab">预定/外卖</a></li>
 						</ul>
@@ -72,7 +74,7 @@
 							<!-- END EXAMPLE TABLE PORTLET-->												
 						</div>
 					</div>
-				<?php endif;?>
+				
 			
 		</div>	
 		<div class="col-md-2 hide messagepart">
