@@ -33,10 +33,11 @@ class ProductCategory extends CActiveRecord
 			array('pid,delete_flag', 'numerical', 'integerOnly'=>true),
 			array('category_name', 'length','min'=>2, 'max'=>45),
 			array('dpid', 'length', 'max'=>10),
+                        array('order_num', 'length', 'max'=>4),
                         array('tree', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, create_at,tree, category_name, dpid, delete_flag', 'safe', 'on'=>'search'),
+			array('lid,order_num, create_at,tree, category_name, dpid, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +65,7 @@ class ProductCategory extends CActiveRecord
 			'tree'=>'Tree',
 			'category_name' => '产品类别',
 			'dpid' => '公司',
+                        'order_num' => '显示顺序',
 			'delete_flag' => '状态',
                         'create_at' => '更新时间',
 		);
@@ -91,6 +93,7 @@ class ProductCategory extends CActiveRecord
 		$criteria->compare('category_name',$this->category_name,true);
 		$criteria->compare('dpid',$this->dpid,true);
                 $criteria->compare('pid',$this->pid,true);
+                $criteria->compare('order_num',$this->order_num,true);
                 $criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
 
