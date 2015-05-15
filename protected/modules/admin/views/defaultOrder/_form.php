@@ -37,7 +37,7 @@
 															<td><?php echo $orderProduct['product_name'];?></td>
                                                                                                                         <td class="hidden-xs"><?php if(!empty($orderProduct['set_name'])) echo $orderProduct['set_name']; elseif($orderProduct['main_id']!="0000000000" && $orderProduct['main_id']!=$orderProduct['product_id']) echo '加菜'; else echo $orderProduct['category_name'];?></td>
 															<td><?php echo $orderProduct['original_price'];?></td>
-															<td><?php echo $orderProduct['price'];?></td>
+															<td><?php echo number_format($orderProduct['price'],2);?></td>
 															<td><?php echo $orderProduct['amount'];?></td>
                                                                                                                         <td><?php echo $orderProduct['weight'];?></td>
                                                                                                                         <td><?php echo $orderProduct['is_giving']==1?'<span class="label label-sm label-warning">是</span>':'否';?></td>
@@ -48,7 +48,7 @@
                                                                                                                             <?php foreach($allOrderProductTastes as $taste){if($taste['id']==$orderProduct['lid']) echo $taste['name'].' ';} ?>
                                                                                                                             <?php echo $orderProduct['taste_memo'];?>
                                                                                                                         </td>
-                                                                                                                        <td><?php if($orderProduct['weight']>0) echo $orderProduct['weight']*$orderProduct['price']; else echo $orderProduct['amount']*$orderProduct['price'];?></td>
+                                                                                                                        <td><?php if($orderProduct['weight']>0) echo number_format($orderProduct['weight']*$orderProduct['price'],2); else echo number_format($orderProduct['amount']*$orderProduct['price'],2);?></td>
                                                                                                                         <td class="center">
                                                                                                                             <div class="btn-group dropup">
                                                                                                                                     <a class="btn green" href="#" data-toggle="dropdown">
@@ -56,6 +56,7 @@
                                                                                                                                     <i class="fa fa-angle-up"></i>
                                                                                                                                     </a>
                                                                                                                                     <ul class="dropdown-menu pull-right"><!--已厨打不能编辑-->
+                                                                                                                                    <?php if($model->order_status!='4'): ?>
                                                                                                                                         <?php if($orderProduct['product_order_status']=='0') :?>
                                                                                                                                             <li><a href="javascript:;" class='btn-edit' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>" >编辑（未下单）</a></li>
                                                                                                                                             <li><a href="javascript:;" class="btn-del"  setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>" >删除（未下单）</a></li>
@@ -67,6 +68,7 @@
                                                                                                                                             <li><a href="javascript:;" class='btn-weight' isweight="<?php echo $orderProduct['is_weight_confirm'];?>" setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>">称重（已下单）</a></li>
                                                                                                                                             <li><a href="javascript:;" class='btn-reprint' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>">单品厨打（已下单）</a></li>
                                                                                                                                         <?php endif; ?>
+                                                                                                                                    <?php endif; ?>
                                                                                                                                     </ul>
                                                                                                                             </div>
                                                                                                                             <a href="<?php echo $this->createUrl('defaultOrder/over' , array('companyId' => $this->companyId,'lid'=>$orderProduct['lid'],'orderId'=>$orderProduct['order_id'],'typeId'=>$typeId)); ?>" class="btn-over btn green add_btn" ><i class="fa fa-check"></i>勾挑</a>                                                                                                                                            

@@ -63,7 +63,7 @@
                         <!-- BEGIN PAGE CONTENT-->
 			<div class="row">
                                 <div class="col-md-4">
-                                    <h3 class="page-title"><?php switch($model->order_status) {case 1:{echo '未下单';break;} case 2:{echo '下单未支付';break;} case 3:{echo '已支付';break;} }?></h3>                                    
+                                    <h3 class="page-title"><?php switch($model->order_status) {case 1:{echo '未下单';break;} case 2:{echo '下单未支付';break;} case 3:{echo '已支付'.$model->reality_total;break;} }?></h3>                                    
                                 </div>
                                 <div class="col-md-8">
                                     <h4>
@@ -85,10 +85,12 @@
                                                             <?php if($model->order_status=='3' || $model->order_status=='4'): ?>
                                                                 <a class="btn purple" id="btn_payback"><i class="fa fa-adjust"></i> 退款</a>
                                                             <?php endif;?>
+                                                            <?php if($model->order_status!='4'): ?>
                                                             <a class="btn purple" id="btn_account"><i class="fa fa-pencil"></i> 结单&收银</a>
                                                             <a id="kitchen-btn" class="btn purple"><i class="fa fa-cogs"></i> 下单&厨打</a>
                                                             <a id="print-btn" class="btn purple"><i class="fa fa-print"></i> 打印清单</a>
                                                             <a id="alltaste-btn" class="btn purple"><i class="fa fa-pencil"></i> 全单口味</a>
+                                                            <?php endif; ?>
                                                             <a href="<?php echo $this->createUrl('default/index' , array('companyId' => $model->dpid,'typeId'=>$typeId));?>" class="btn red"><i class="fa fa-times"></i> 返回</a>
                                                         </div>
 						</div>
@@ -109,8 +111,12 @@
                                 $('body').addClass('page-sidebar-closed');                                
                         });
                         
-                        function openaccount(){
+                        function openaccount(payback){
                             var loadurl='<?php echo $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>';
+                            if(payback==1)
+                            {
+                                loadurl=loadurl+'/payback/1'
+                            }
                             var callid= $('#callbarscanid').val();
                             if(callid>"Ca000" && callid<"Ca999")
                             {
@@ -127,7 +133,10 @@
                         }
                         
                         $('#btn_account').click(function(){
-                                 openaccount();
+                                 openaccount('0');
+                        });
+                        $('#btn_payback').click(function(){
+                                 openaccount('1');
                         });
                         /*
                         $('#btn_pay').click(function(){
@@ -202,7 +211,7 @@
                                 var callid=$(this).val();
                                 if(callid>"Ca000" && callid<"Ca999")
                                 {
-                                    openaccount();
+                                    openaccount('0');
                                 }else{
                                     alert("呼叫器编码不正确！");
                                     return false;
