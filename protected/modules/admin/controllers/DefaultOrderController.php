@@ -66,8 +66,8 @@ class DefaultOrderController extends BackendController
                 }else{
                     $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
                 }
-                
-		//var_dump($productTotal);exit;
+                $order->should_total=$total['total'];
+		//var_dump($order);exit;
 		
 		//$paymentMethods = $this->getPaymentMethodList();
 		$this->render('order' , array(
@@ -113,41 +113,34 @@ class DefaultOrderController extends BackendController
                 $companyId = Yii::app()->request->getParam('companyId','0');
                 $typeId=Yii::app()->request->getParam('typeId','0');
                 $callId=Yii::app()->request->getParam('callId','0');
+                $ispayback=Yii::app()->request->getParam('payback','0');
                 //$op=
                 $totaldata=Yii::app()->request->getParam('total','0');
-                $sid=Yii::app()->request->getParam('sid',0);
-                $istemp=Yii::app()->request->getParam('istemp',0);
-                ///***********insert to order feedback
-                            ///*************print
-                if($orderId==0)
-                {
-                    $criteria = new CDbCriteria;
-                    $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
-                    $criteria->order = ' t.lid desc ';
-                    $order = Order::model()->find($criteria);
-                    $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
-                    if($istemp=='1')
-                    {
-                        $total = array('total'=>$productTotal,'remark'=>'临时座位:'.$sid%1000);                    
-                    }else{
-                        $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
-                        $criteria->order = ' t.lid desc ';
-                        $siteNo = SiteNo::model()->find($criteria);
-                        $total = Helper::calOrderConsume($order,$siteNo, $productTotal);                        
-                    }
-                    $totaldata=$total['total'];
-                }else{
-                    $criteria = new CDbCriteria;
-                    $criteria->condition =  't.dpid='.$companyId.' and t.lid='.$orderId ;
-                    $criteria->order = ' t.lid desc ';
-                    $order = Order::model()->find($criteria);
-                }
+                 ///*************print
+
+                $criteria = new CDbCriteria;
+                $criteria->condition =  't.dpid='.$companyId.' and t.lid='.$orderId ;
+                $criteria->order = ' t.lid desc ';
+                $order = Order::model()->find($criteria);
+
+                $order->should_total=$totaldata;
+                $orderpay=new OrderPay();
+                $orderpay->dpid=$order->dpid;
+                $orderpay->order_id=$order->lid;
+                $orderpay->create_at=date('Y-m-d H:i:s',time());
+                
                 $paymentMethods = PaymentClass::getPaymentMethodList($companyId);
                 //var_dump($paymentMethods);exit;
                 if(Yii::app()->request->isPostRequest){
                         //var_dump(Yii::app()->request->getPost('Order'));exit;
                         $order->attributes = Yii::app()->request->getPost('Order');
                         $order->pay_time = date('Y-m-d H:i:s',time());
+                        $orderpay->attributes = Yii::app()->request->getPost('OrderPay');
+                        $order->payment_method_id=$orderpay->payment_method_id;
+                        $order->reality_total+=$orderpay->pay_amount;
+                        $order->remark.=$orderpay->remark;
+                        $se=new Sequence("order_pay");
+                        $orderpay->lid = $se->nextval();
                         //var_dump($order);exit;
                         
 			$transaction = Yii::app()->db->beginTransaction();
@@ -167,28 +160,10 @@ class DefaultOrderController extends BackendController
                             }
                             //$order->order_status=$tempstatus;
                             $order->save();
+                            $orderpay->save();
                             $siteNo->status=$order->order_status;
                             $siteNo->save();
-                            /*if($order->order_status=='3')
-                            {
-                                ///***********insert to order feedback
-                                $sef=new Sequence("order_feedback");
-                                $lidf = $sef->nextval();
-                                $dataf = array(
-                                    'lid'=>$lidf,
-                                    'dpid'=>$companyId,
-                                    'create_at'=>date('Y-m-d H:i:s',time()),
-                                    'is_temp'=>$istemp,
-                                    'site_id'=>$site_id,
-                                    'is_deal'=>'0',
-                                    'feedback_id'=>0,
-                                    'order_id'=>0,
-                                    'is_order'=>'1',
-                                    'feedback_memo'=>'已付款',
-                                    'delete_flag'=>'0'
-                                );
-                                $db->createCommand()->insert('nb_order_feedback',$dataf);
-                            }*/
+                            
                             if($order->order_status=='4')
                             {
                                 SiteClass::deleteCode($this->companyId,$siteNo->code);
@@ -200,8 +175,9 @@ class DefaultOrderController extends BackendController
 			}
 		}
 		$this->renderPartial('account' , array(
-				'model' => $order,
-                                'total' => $totaldata,
+				'order' => $order,
+                                'orderpay' => $orderpay,
+                                'payback'=>$ispayback,
                                 'typeId'=>$typeId,
                                 'callid'=>$callId,
                                 'paymentMethods'=>$paymentMethods
@@ -678,6 +654,7 @@ class DefaultOrderController extends BackendController
                         $siteNo->status='2';
                         $siteNo->save();
                         $jobids=array();
+                        //var_dump($order);exit;
                         foreach($orderProducts as $orderProduct)
                         {
                             $reprint = false;

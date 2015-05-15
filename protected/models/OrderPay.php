@@ -63,9 +63,9 @@ class OrderPay extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'order_id' => '订单编号',
-			'pay_amount' => '付款金额，负数是退款',
-			'payment_method_id' => '付款方式',
-			'remark' => '备注，如退款时',
+			'pay_amount' => '付款/退款金额',
+			'payment_method_id' => '付款/退款方式',
+			'remark' => '付款/退款备注',
 		);
 	}
 
