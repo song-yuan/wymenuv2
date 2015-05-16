@@ -3,9 +3,9 @@ class ProductClass
 {
 	public static function getFirstCategoryId($dpid = 0){
 		$command = Yii::app()->db;
-		$sql = 'select lid, pid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0';
+		$sql = 'select lid, pid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0 order by order_num DESC';
 		$parentCategorys = $command->createCommand($sql)->bindValue(':companyId',$dpid)->queryRow();
-		$csql = 'select lid, pid, category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0';
+		$csql = 'select lid, pid, category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0 order by order_num DESC';
 		$categorys = $command->createCommand($csql)->bindValue(':companyId',$dpid)->bindValue(':pid',$parentCategorys['lid'])->queryRow();
 		return $categorys;
 	}
