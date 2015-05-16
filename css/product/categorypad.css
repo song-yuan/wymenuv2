@@ -17,27 +17,29 @@
 }
 select .partents{
 	font-weight:800;
+        font-size: 15px;
 }
 .top-left{
 	width:30%;
 	height:100%;
 	float:left;
-	padding-left:5%;
+	padding-left:20px;
 }
 .top-left-right{
 	width:100%;
 	height:100%;
 	}
 .top-middle{
-	width:20%;
+	width:18%;
 	height:100%;
 	float:right;
 }
 .top-right{
-	width:40%;
+	width:38%;
 	height:100%;
         //background: #00FFFF;
 	float:left;
+        padding-left:10px;
 }
 .shoppingCart{
 	height:35px;
@@ -52,8 +54,8 @@ select .partents{
 	height:35px;
 	width:20px;
 	background:url(../../img/help-small.png) top center no-repeat;
-	margin-left:10px;
-	padding: 0 15px;
+	margin-left:5px;
+	padding: 0 5px;
 	float:left;
 }
 
@@ -74,7 +76,7 @@ select .partents{
 	position:fixed;
 	width:150px;
 	top:50px;
-	left:30px;
+	left:10px;
 	background:white;
 	z-index:1001;
 	height:170px;
