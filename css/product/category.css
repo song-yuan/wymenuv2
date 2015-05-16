@@ -95,7 +95,7 @@ li ol{
 	height:140px;
 	margin-left:5px;
 }
-ol .child.float{float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
-ol .child{width:100%;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;}
+ol .child.float{float:left;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;color:#000000;}
+ol .child{width:100%;font-size:20px;text-align:left;padding:0 5px 0 0;margin-bottom:5px;color:#000000;}
 
 li .active{background:rgb(240,201,82);}
