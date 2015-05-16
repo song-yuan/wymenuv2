@@ -18,6 +18,7 @@
 select .partents{
 	font-weight:800;
         font-size: 15px;
+        color: #ccc;
 }
 .top-left{
 	width:30%;
