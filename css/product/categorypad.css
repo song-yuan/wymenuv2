@@ -29,13 +29,14 @@ select .partents{
 	height:100%;
 	}
 .top-middle{
-	width:30%;
+	width:20%;
 	height:100%;
 	float:right;
 }
 .top-right{
-	width:30%;
+	width:40%;
 	height:100%;
+        //background: #00FFFF;
 	float:left;
 }
 .shoppingCart{
@@ -46,6 +47,16 @@ select .partents{
 	padding: 0 10px;
 	float:left;
 }
+
+.padsetting{
+	height:35px;
+	width:20px;
+	background:url(../../img/help-small.png) top center no-repeat;
+	margin-left:10px;
+	padding: 0 15px;
+	float:left;
+}
+
 .num-circel{
 	position:absolute;
 	width:24px;
@@ -59,9 +70,40 @@ select .partents{
 	line-height:24px;
 	margin:0;
 }
+.setting-pad-mask{
+	position:fixed;
+	width:150px;
+	top:50px;
+	left:30px;
+	background:white;
+	z-index:1001;
+	height:170px;
+	bottom:20px;
+	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+	border: 1px solid #ddd;
+	display:none;
+}
+.setting-pad-mask .mask-trangle{
+	position: absolute;
+	top: -7px;
+	left: 5px;
+	display: inline-block !important;
+	border-right: 7px solid transparent;
+	border-bottom: 7px solid #ccc;
+	border-left: 7px solid transparent;
+	border-bottom-color: rgba(0, 0, 0, 0.2);
+	content: '';
+}
+
+.setting-pad-mask .line{
+        height:1px;
+        width:100%;
+        background:#00CCFF;
+        overflow:hidden;
+}
 .product-pad-mask{
 	position:fixed;
-	width:60%;
+	width:45%;
 	top:50px;
 	left:40%;
 	background:white;
@@ -75,7 +117,7 @@ select .partents{
 .product-pad-mask .mask-trangle{
 	position: absolute;
 	top: -7px;
-	right: 45px;
+	left: 45px;
 	display: inline-block !important;
 	border-right: 7px solid transparent;
 	border-bottom: 7px solid #ccc;

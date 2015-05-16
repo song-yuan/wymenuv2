@@ -15,7 +15,7 @@
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' ,'payMethod', 'companyWifi', 'user'))) echo 'active';?>">
 					<a href="">
-					<i class="fa fa-cog"></i> 
+                                            <i style="width:10px;" class="fa fa-cog"></i> 
 					<span class="title">基础信息</span>					
 					</a>
 					<ul class="sub-menu">

@@ -12,8 +12,10 @@
 ?>
 <link rel="stylesheet" type="text/css"  href="<?php echo $baseUrl.'/css/product/categorypad.css';?>" />
 <div class="fixed-top">
-  <div class="top-left">
-  	<div class="top-left-right">
+  <div class="padsetting"></div>
+  <div class="top-left"> 
+      
+  	<div class="top-left-right">            
 	<select name="category">
 		<?php if($parentCategorys):?>
 		<?php foreach($parentCategorys as $categorys):?>
