@@ -19,7 +19,7 @@
 	<select name="category">
 		<?php if($parentCategorys):?>
 		<?php foreach($parentCategorys as $categorys):?>
-            <optgroup class="partents" label="<?php echo $categorys['category_name'];?>" lid="<?php echo $categorys['lid'];?>"><?php echo $categorys['category_name'];?></optgroup>
+            <optgroup class="category-partents" label="<?php echo $categorys['category_name'];?>" lid="<?php echo $categorys['lid'];?>"><?php echo $categorys['category_name'];?></optgroup>
 			<?php foreach($categorys['children'] as $category):?>
                         <option class="child" value="<?php echo $category['lid'];?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo Helper::truncate_utf8_string($category['category_name'],6);?></option>
 			<?php endforeach;?>
