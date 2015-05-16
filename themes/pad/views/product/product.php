@@ -47,6 +47,18 @@
 	</div>
 </div>
 </form>
+<div class="setting-pad-mask">
+	<div class="mask-trangle"></div>
+	<div class="product-mask-info">点单帮助</div>
+        <div class="line"></div>
+        <div class="product-mask-info">中 文</div>
+        <div class="line"></div>
+        <div class="product-mask-info">日本語</div>
+        <div class="line"></div>
+        <div class="product-mask-info" id="pad-disbind-menu">解除绑定</div>
+	<div class="product-bottom">
+	</div>
+</div>
 <!-- 加入订单动画 -->
 <div class="aniele"></div>
 

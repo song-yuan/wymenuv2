@@ -59,6 +59,15 @@ $(document).ready(function(){
  		});
     });
    
+   //help
+   $('.padsetting').click(function(){
+            $(".setting-pad-mask").toggle();});
+   
+   $('#content').click(function(){
+            $(".setting-pad-mask").css('display','none');
+            $('.product-pad-mask').css('display','none');
+        });
+   
     //查看菜单
     $('.top-right').click(function(){
     	$('.product-pad-mask').toggle(function(){
@@ -107,6 +116,9 @@ $(document).ready(function(){
 		totalPrice();	
 		totalNum();	
 	});
+    $('#pad-disbind-menu').on('click',function(){
+            location.href='../../../../../padbind/login';	
+	});
     $('#forum_list').on('click','.view-product-pic',function(){
     	var lid = $(this).attr('lid');
     	$.ajax({
@@ -141,15 +153,15 @@ $(document).ready(function(){
     });
     
     $('#updatePadOrder').click(function(){
+        if (typeof Androidwymenuprinter == "undefined") {
+            alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+            return false;
+       }
     	$('#padOrderForm').ajaxSubmit(function(msg){
     		if(msg.status){
-    			 if (typeof Androidwymenuprinter == "undefined") {
-                     alert("无法获取PAD设备信息，请在PAD中运行该程序！");
-                     return false;
-                 }
-    			 var company_id = msg.dpid;
-    			 $.get('/wymenuv2/defaultOrder/printPadList/companyId/'+msg.dpid+'/id/'+msg.orderId,function(data){
-                     if(data.status) {
+                    var company_id = msg.dpid;
+                    $.get('/wymenuv2/defaultOrder/printPadList/companyId/'+msg.dpid+'/id/'+msg.orderId,function(data){
+                    if(data.status) {
                          if(Androidwymenuprinter.printJob(company_id,data.jobid))
                          {
                              alert("打印成功");
@@ -161,11 +173,10 @@ $(document).ready(function(){
                      } else {
                              alert(data.msg);
                      }
-             },'json');
-
-    		}else{
-    			alert('下单失败,请重新下单!')
-    		}
+                    },'json');
+                }else{
+                    alert('下单失败,请重新下单!')
+                }
     	});
     	return false;
     });
