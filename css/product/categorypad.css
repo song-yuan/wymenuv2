@@ -15,7 +15,7 @@
 	width:100%;
 	font-size:20px;
 }
-select .category-partents{
+.category-partents{
 	font-weight:800;
         font-size: 15px;
         color: #ccc;
@@ -153,11 +153,11 @@ select .category-partents{
 }
 .product-catory{padding:2px 10px;}
 .product-catory-product{padding:2px 10px;}
-.product-catory-product-right{float:right;}
+.product-catory-product-right{float:right;height:30px;}
 .product-catory-product-right span{
 	text-align:center;
 	width:15px;
-	height:10px;
+	height:20px;
 	font-size:18px;
 	padding: 5px 5px 5px;
 	line-height:10px;
@@ -168,7 +168,7 @@ select .category-partents{
 }
 .product-catory-product-right input{
 	width: 30px;
-	height: 10px;
+	height: 20px;
 	padding: 5px;
 	border: 0px !important;
 	border-top: #e5e5e5 1px solid !important;
