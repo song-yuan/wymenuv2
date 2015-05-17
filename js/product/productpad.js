@@ -26,7 +26,7 @@ function addToCart() {
 		reddot.style.visibility="hidden";
 		classie.remove(reddot,'added');
                 classie.remove(shcart,'rotate');
-	}, 300); 
+	}, 800); 
 
 }
 $(document).ready(function(){
@@ -57,7 +57,9 @@ $(document).ready(function(){
 						$('.total-price').html(total);
 						$('.total-num').html(nums+1);
 					}
- 				}
+ 				}else{
+                                    alert("已经添加到购物车");
+                                }
  			}
  		});
     });
@@ -124,6 +126,16 @@ $(document).ready(function(){
     $('#pad-disbind-menu').on('click',function(){
             location.href='../../../../../padbind/login';	
 	});
+    $('#pad-app-exit').on('click',function(){
+            if (typeof Androidwymenuprinter == "undefined") {
+                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                return false;
+            }
+            var statu = confirm("清除完缓存后，应用程序会自动退出，请重新打开！确定清除吗？");
+            if(statu){
+                Androidwymenuprinter.appExitClear();
+            }
+	});
     $('#forum_list').on('click','.view-product-pic',function(){
     	//var lid = $(this).attr('lid');
         var lid = $(this).attr('product-id');
@@ -166,11 +178,13 @@ $(document).ready(function(){
         if (typeof Androidwymenuprinter == "undefined") {
             alert("无法获取PAD设备信息，请在PAD中运行该程序！");
             return false;
-       }
+        }
+        var padinfo=Androidwymenuprinter.getPadInfo();
+        var pad_id=padinfo.substr(10,10);
     	$('#padOrderForm').ajaxSubmit(function(msg){
     		if(msg.status){
                     var company_id = msg.dpid;
-                    $.get('/wymenuv2/defaultOrder/printPadList/companyId/'+msg.dpid+'/id/'+msg.orderId,function(data){
+                    $.get('/wymenuv2/product/printPadList/companyId/'+msg.dpid+'/orderId/'+msg.orderId+'/padId/'+pad_id,function(data){
                     if(data.status) {
                          if(Androidwymenuprinter.printJob(company_id,data.jobid))
                          {

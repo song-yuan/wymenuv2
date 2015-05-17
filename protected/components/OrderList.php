@@ -208,19 +208,19 @@ class OrderList
 						$goodsData = explode('-',$goodsArr[1]);
 						foreach($goodsData as $goods){
 							$se=new Sequence("order_product");
-                        	$lid = $se->nextval();
+                                                        $lid = $se->nextval();
 							$insertData = array(
-												'lid'=>$lid,
-												'dpid'=>$dpid,
-												'create_at'=>time(),
-												'order_id'=>$orderId,
-												'set_id'=>$setId,
-												'product_id'=>$goods,
-												'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
-												'update_at'=>time(),
-												'amount'=>$val,
-												'taste_memo'=>'无',
-												);
+                                                                            'lid'=>$lid,
+                                                                            'dpid'=>$dpid,
+                                                                            'create_at'=>time(),
+                                                                            'order_id'=>$orderId,
+                                                                            'set_id'=>$setId,
+                                                                            'product_id'=>$goods,
+                                                                            'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
+                                                                            'update_at'=>time(),
+                                                                            'amount'=>$val,
+                                                                            'taste_memo'=>'无',
+                                                                            );
 							Yii::app()->db->createCommand()->insert('nb_order_product',$insertData);
 						}
 							

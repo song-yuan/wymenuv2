@@ -56,6 +56,8 @@
         <div class="product-mask-info">日本語</div>
         <div class="line"></div>
         <div class="product-mask-info" id="pad-disbind-menu">解除绑定</div>
+        <div class="line"></div>
+        <div class="product-mask-info" id="pad-app-exit">清除缓存</div>
 	<div class="product-bottom">
 	</div>
 </div>
