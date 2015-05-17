@@ -359,10 +359,10 @@
 	-webkit-transform:translate3d(40%, -1650px, 0);
        -moz-transform:translate3d(40%, -1650px, 0);
             transform:translate3d(40%, -1650px, 0);
-                        -webkit-transition: all 0.5s ease;
-                        -moz-transition: all 0.5s ease;
-	  		-ms-transition: all 0.5s ease;
-	  		-o-transition: all 0.5s ease;
+                        -webkit-transition: all 2.5s linear;
+                        -moz-transition: all 2.5s linear;
+	  		-ms-transition: all 2.5s linear;
+	  		-o-transition: all 2.5s linear;
 	  		/*opacity: 0;*/
 }
 
