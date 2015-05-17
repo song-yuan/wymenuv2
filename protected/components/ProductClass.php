@@ -102,7 +102,7 @@ class ProductClass
 		if($result){
 			$picArr =$result;
 		}
-		return $picArr;
+                return $picArr;
 	}
 	public static function getHotsProduct($dpid = 0,$type = 1,$siteNoId = 0){
 		$command = Yii::app()->db;

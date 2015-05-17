@@ -120,12 +120,15 @@ $(document).ready(function(){
             location.href='../../../../../padbind/login';	
 	});
     $('#forum_list').on('click','.view-product-pic',function(){
-    	var lid = $(this).attr('lid');
+    	//var lid = $(this).attr('lid');
+        var lid = $(this).attr('product-id');
+        //alert(lid);
     	$.ajax({
  			url:'/wymenuv2/product/getProductPicJson',
  			data:'id='+lid,
  			success:function(msg){
- 				if(msg){
+ 				if(msg!='nopic'){
+                                    //alert(msg);
  					$('.large-pic').css('display','block');
  					$('.large-pic').html(msg);
  					$('#gallery').slick({
@@ -142,7 +145,9 @@ $(document).ready(function(){
  						left: ($('.large-pic').width() - $("#gallery").outerWidth())/2,
  						top: ($('.large-pic').height() - $("#gallery").outerHeight())/2
  					});	
- 				}
+ 				}else{
+                                    alert('没有大图！');
+                                }
  			},
  		});
     });
