@@ -11,7 +11,7 @@
  * @property string $dpid
  * @property integer $delete_flag
  */
-class ProductCategory extends CActiveRecord
+class ProductCategory2 extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name

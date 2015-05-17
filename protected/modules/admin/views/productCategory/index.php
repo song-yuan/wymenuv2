@@ -60,13 +60,19 @@
 									</tr>
 									<?php endforeach;?>
 								</table>
-				            </div>
+                                                            说明：<br>
+                                                            1:（）内数字是各个分类的产品在前台的显示顺序，数值越大的排在最前面。<br>
+                                                            2:所有数字小于9999<br>
+                                                            3:一级分类排好顺序后，不同一级分类内的二级分类排序数值不要交叉。
+                                                            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如：三个一级分类显示顺序是1、2、3，
+                                                            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么显示顺序是2的一级分类所对应的二级分类的显示顺序数值不能比1内的二级分类显示顺序小，不能比3内的二级分类显示顺序大。
+                                                        </div>
 						</div>
 					</div>
 				</div>
 	
 		<?php $this->endWidget(); ?>
-	
+                
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
     $(document).ready(function() {

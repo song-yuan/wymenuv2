@@ -71,7 +71,7 @@
 	window.onload=function(type,catgory,pad)
 	{
 		type = t;
-		catgory = cat;
+                catgory = cat;
 		pad = isPad;
 		getPicList(type,catgory,1);
 	}	

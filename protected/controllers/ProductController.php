@@ -81,6 +81,7 @@ class ProductController extends Controller
 		}
 		if(!$categoryId){
 			$categorys = ProductClass::getFirstCategoryId($this->companyId);
+                        //var_dump($categorys);exit;
 			$pid = $categorys['pid'];
 			$categoryId = $categorys['lid'];
 		}
