@@ -212,6 +212,23 @@ class ProductController extends Controller
 	 	}
 	 	Yii::app()->end(json_encode($msg));
 	}
+        //打印清单
+        public function actionPrintPadList(){                
+                $orderId = Yii::app()->request->getParam('orderId',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $padId = Yii::app()->request->getParam('padId');
+                $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
+                $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+                //要判断打印机类型错误，必须是local。
+                if($pad->printer_type!='1')
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！')));
+                }else{
+                    //前面加 barcode
+                    $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                    Yii::app()->end(json_encode(Helper::printList($order , $pad,$precode)));
+                }
+        }
 	//确认订单
 	public function actionOrder(){
 		$orderId = Yii::app()->request->getParam('orderId');
