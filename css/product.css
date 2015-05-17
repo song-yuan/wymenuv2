@@ -356,9 +356,9 @@
 	z-index:1000;
 }
 .aniele.added {
-	-webkit-transform:translate3d(40%, -2650px, 0);
-       -moz-transform:translate3d(40%, -2650px, 0);
-            transform:translate3d(40%, -2650px, 0);
+	-webkit-transform:translate3d(40%, -3000px, 0);
+       -moz-transform:translate3d(40%, -3000px, 0);
+            transform:translate3d(40%, -3000px, 0);
                         -webkit-transition: all 2.5s linear;
                         -moz-transition: all 2.5s linear;
 	  		-ms-transition: all 2.5s linear;

@@ -51,6 +51,13 @@
 	float:left;
 }
 
+.shoppingCart.rotate {
+        -webkit-transform:scale(2,2) rotate(120deg);
+        -moz-transform:scale(2,2) rotate(120deg);
+             transform:scale(2,2) rotate(120deg);
+       //animation: 1s rainbow;     
+}
+
 .padsetting{
 	height:35px;
 	width:20px;

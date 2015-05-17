@@ -18,12 +18,15 @@ function totalNum(){
 }
 function addToCart() {
 	var reddot = document.querySelector('.aniele');
+        var shcart = document.querySelector('.shoppingCart');
 	reddot.style.visibility="visible";
 	classie.add(reddot,'added');
+        classie.add(shcart,'rotate');
 	setTimeout(function(){
 		reddot.style.visibility="hidden";
-		classie.remove(reddot,'added');	
-	}, 500); 
+		classie.remove(reddot,'added');
+                classie.remove(shcart,'rotate');
+	}, 300); 
 
 }
 $(document).ready(function(){
