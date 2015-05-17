@@ -227,7 +227,13 @@ class ProductController extends Controller
 	{
 		$id = Yii::app()->request->getParam('id');
 		$pic = ProductClass::getProductPic($this->companyId,$id);
-		$this->renderPartial('_productImg',array('pics'=>$pic));
+                //var_dump($pic);exit;
+                if(empty($pic))
+                {
+                    echo 'nopic';
+                }else{
+                    $this->renderPartial('_productImg',array('pics'=>$pic));
+                }
 	}
 	//获取商品口味
 	public function actionGetTasteJson()
