@@ -131,11 +131,11 @@ $(document).ready(function(){
                 alert("无法获取PAD设备信息，请在PAD中运行该程序！");
                 return false;
             }
-            //var statu = confirm("清除完缓存后，应用程序会自动退出，请重新打开！确定清除吗？");
-            //if(statu){
+            var statu = confirm("清除完缓存后，应用程序会自动退出，请重新打开！确定清除吗？");
+            if(statu){
                 Androidwymenuprinter.appExitClear();
-                alert("应用程序无法完整清楚所有缓存数据，请到“设置”->“应用程序”->“WebWyMenu”中手动清除！");
-            //}
+                //alert("应用程序无法完整清楚所有缓存数据，请到“设置”->“应用程序”->“WebWyMenu”中手动清除！");
+            }
 	});
     $('#forum_list').on('click','.view-product-pic',function(){
     	//var lid = $(this).attr('lid');
