@@ -153,11 +153,12 @@
 }
 .product-catory{padding:2px 10px;}
 .product-catory-product{padding:2px 10px;}
-.product-catory-product-right{float:right;height:35px;}
+.product-catory-product-right{float:right;height:40px;}
 .product-catory-product-right span{
 	text-align:center;
-	width:55px;
-	height:53px;
+	width:42px;
+	height:40px;
+        border-radius: 40%;
 	font-size:22px;
 	padding: 0px 0px 0px;
 	line-height:25px;
@@ -188,10 +189,10 @@
 	overflow:hidden;
 }
 .product-pic i.icon-hover-1{
-	left: -100px;
+	left: -50px;
 }
 .product-pic i.icon-hover-2{
-	right: -100px;
+	right: -50px;
 }
 
 .product-pic i.icon-hover-1,
@@ -215,8 +216,8 @@
 }
 .product-pic:hover i.icon-hover-1{
 	
-	left: 30%;
+	left: 20%;
 }
 .product-pic:hover i.icon-hover-2{
-	right: 30%;
+	right: 20%;
 }

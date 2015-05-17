@@ -99,24 +99,24 @@ $(document).ready(function(){
     	});
     });
     $('.product-pad-mask').on('click','.minus',function(){
-                alert('-');
-		/*var input = $(this).siblings('input');
+                //alert('-');
+		var input = $(this).siblings('input');
 		var num = input.val();
 		if(num > 0){
 			num = num - 1;
 		}
 		input.val(num);	
 		totalPrice();
-		totalNum();*/		
+		totalNum();		
 	});
     $('.product-pad-mask').on('click','.plus',function(){
-                alert('+');
-		/*var input = $(this).siblings('input');
+                //alert('+');
+		var input = $(this).siblings('input');
 		var num = parseInt(input.val());
 		num = num + 1;
 		input.val(num);	
 		totalPrice();	
-		totalNum();*/	
+		totalNum();
 	});
     $('#pad-disbind-menu').on('click',function(){
             location.href='../../../../../padbind/login';	
