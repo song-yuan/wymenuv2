@@ -345,9 +345,6 @@
 	border-bottom: 1px dashed rgb(149,149,149);
 }
 .aniele {
-	-webkit-transform: translate3d(120px, -130px, 0);
-	-moz-transform: translate3d(120px, -130px, 0);
-	transform: translate3d(120px, -130px, 0);
 	background-color: red;
 	width: 30px;
 	height: 30px;
@@ -356,18 +353,14 @@
 	bottom: 30%;
 	position: fixed;
 	visibility: hidden;
-	z-index:1000;
-	-webkit-transition: all 0s ease;
-	-moz-transition: all 0s ease;
-	-ms-transition: all 0s ease;
-	-o-transition: all 0s ease;
+	z-index:1000;	
 }
 .aniele.added {
 	-webkit-transform:translate3d(40%, -1650px, 0);
        -moz-transform:translate3d(40%, -1650px, 0);
             transform:translate3d(40%, -1650px, 0);
-            -webkit-transition: all 0.5s ease;
-	  			-moz-transition: all 0.5s ease;
+                        -webkit-transition: all 0.5s ease;
+                        -moz-transition: all 0.5s ease;
 	  		-ms-transition: all 0.5s ease;
 	  		-o-transition: all 0.5s ease;
 	  		/*opacity: 0;*/
