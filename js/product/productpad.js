@@ -21,11 +21,11 @@ function addToCart() {
         var shcart = document.querySelector('.shoppingCart');
 	reddot.style.visibility="visible";
 	classie.add(reddot,'added');
-        classie.add(shcart,'rotate');
+        //classie.add(shcart,'rotate');
 	setTimeout(function(){
 		reddot.style.visibility="hidden";
 		classie.remove(reddot,'added');
-                classie.remove(shcart,'rotate');
+                //classie.remove(shcart,'rotate');
 	}, 800); 
 
 }
