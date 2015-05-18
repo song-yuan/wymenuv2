@@ -181,7 +181,7 @@ $(document).ready(function(){
             return false;
         }
         var padinfo=Androidwymenuprinter.getPadInfo();
-        var pad_id=padinfo.substr(10,10);
+        var pad_id=padinfo.substr(10,10); //also can get from session
     	$('#padOrderForm').ajaxSubmit(function(msg){
     		if(msg.status){
                     var company_id = msg.dpid;

@@ -16,7 +16,7 @@
   <div class="top-left"> 
       
   	<div class="top-left-right">            
-	<select name="category">
+	<select name="category" id="pad_category_select">
 		<?php if($parentCategorys):?>
 		<?php foreach($parentCategorys as $categorys):?>
                         <optgroup class="category-partents" label="<?php echo '——'.$categorys['category_name'].'——';?>" lid="<?php echo $categorys['lid'];?>">

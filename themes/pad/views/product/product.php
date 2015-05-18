@@ -91,7 +91,9 @@
 				var height = $(this).height();
 				if(parseInt(height)+parseInt(categoryTop) > parseInt(top)){
 					var categoryId = $(this).attr('category');
-					$('select option[value="'+categoryId+'"]').attr('selected',true);
+                                        //alert(top);
+					//$('select option[value="'+categoryId+'"]').attr('selected',true);
+                                        $('#pad_category_select').val(categoryId);
 					return false;
 				}
 			});
