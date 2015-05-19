@@ -192,7 +192,7 @@
     height: 32px;
     border-bottom: 1px dashed rgb(0,0,0);
 }
-.product-catory-product-right{float:right;height:40px;}
+.product-catory-product-right{float:right;height:32px;}
 .product-catory-product-right span{
 	text-align:center;
 	width:30px;
@@ -254,10 +254,63 @@
 	-moz-transition: all 0.6s ease;
 	-webkit-transition: all 0.6s ease;
 }
-.product-pic:hover i.icon-hover-1{
-	
+.product-pic:hover i.icon-hover-1{	
 	left: 20%;
 }
 .product-pic:hover i.icon-hover-2{
 	right: 20%;
+}
+
+.subject-num {
+  text-align: left;
+  padding: 0em 0em 0em 0em;
+  font-size: 23px;
+  height: 50px;
+  float:left;
+  line-height: 50px;
+  width: 60%;
+}
+
+.subject-order {
+  text-align: left;
+  padding: 0em 0em 0em 0em;
+  font-size: 23px;
+  height: 50px;
+  float:right;
+  line-height: 50px;
+  width: 35%;
+}
+
+i.icon-hover-3{
+	right: 10px;
+	color: #fff;
+	padding: 0px 10px;
+	font-size: 16px;
+	position: absolute;
+	margin-top: -2px;
+	border-radius: 50%;
+	background: rgba(69,69,69,0.9);
+}
+
+i.icon-hover-3 img{
+	margin: 0;
+        height: 32px;
+        width:32px;
+}
+
+.single-num-circel{
+	//position:absolute;
+	width:50px;
+	height:40px;
+	top:5px;
+	//left:-2px;
+        float: right;
+        right:100px;
+        font-size: 30px;
+	border-radius:15px;
+	background-color:red;
+	color:white;
+	text-align:center;
+	line-height:40px;
+	margin:0;
 }
