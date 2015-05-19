@@ -113,7 +113,7 @@ function showList(items){
 			//濡傛灉鍙充晶楂樺害灏忥紝鍒欒拷鍔犲埌鍙充晶
 			var trHead = '<div class="blockRight">';
 			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"></a>';
-			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
+			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '';
@@ -128,7 +128,7 @@ function showList(items){
 			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
 			var trHead = '<div class="blockLeft">';
 			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"></a>';
-			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
+			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '';
@@ -168,7 +168,7 @@ function showListPad(items){
 			//濡傛灉鍙充晶楂樺害灏忥紝鍒欒拷鍔犲埌鍙充晶
 			var trHead = '<div class="blockRight blockCategory" category="'+pad(item.category_id,10)+'">';
 			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="../../../../../img/product/icon_search.png" style="width:48px;height:48px;"/><br>多图浏览</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="../../../../../img/product/icon_cart.png" style="width:48px;height:48px;"/><br>&nbsp;&nbsp;&nbsp;&nbsp;点&nbsp;&nbsp;菜&nbsp;&nbsp;&nbsp;&nbsp;</i></a>';
-			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
+			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '<div class="clear"></div>';
@@ -178,7 +178,7 @@ function showListPad(items){
 			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
 			var trHead = '<div class="blockLeft blockCategory" category="'+pad(item.category_id,10)+'">';
 			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="../../../../../img/product/icon_search.png" style="width:48px;height:48px;"/><br>多图浏览</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="../../../../../img/product/icon_cart.png" style="width:48px;height:48px;"/><br>&nbsp;&nbsp;&nbsp;&nbsp;点&nbsp;&nbsp;菜&nbsp;&nbsp;&nbsp;&nbsp;</i></a>';
-			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
+			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '<div class="clear"></div>';
@@ -226,7 +226,7 @@ function showMoreList(items){
 			//濡傛灉鍙充晶楂樺害灏忥紝鍒欒拷鍔犲埌鍙充晶
 			var trHead = '<div class="blockRight">';
 			var trPic = '<a href="/wymenuv2/product/productInfo/id/'+item.lid+'"><img style="min-height:'+item.picHeight+'em" src="'+thumb+'" id="p'+item.lid+'"></a>';
-			var trBuy = ' <div class="productbuy"><div class="inmiddle"><a class="numminus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">-</a>'+
+			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle"><a class="numminus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">-</a>'+
 						' <input type="text" class="num" name="product_num" maxlength="8" value="0"/><a class="numplus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">+</a></div></div>';
 			var trTitle = '<div class="pictitle"><div class="subject">'+item.product_name+'</div>';
 			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">'+item.price+'</div><div class="view"><strike>'+item.origin_price+'</strike></div> </div></div></div>';
@@ -236,7 +236,7 @@ function showMoreList(items){
 			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
 			var trHead = '<div class="blockLeft">';
 			var trPic = '<a href="/wymenuv2/product/productInfo/id/'+item.lid+'"><img style="min-height:'+item.picHeight+'em" src="'+thumb+'" id="p'+item.lid+'"></a>';
-			var trBuy = ' <div class="productbuy"><div class="inmiddle"><a class="numminus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">-</a>'+
+			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle"><a class="numminus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">-</a>'+
 			' <input type="text" class="num" name="product_num" maxlength="8" value="0"/><a class="numplus" href="javascript:;" product-id="'+item.lid+'" origin_price="'+item.origin_price+'" price="'+item.price+'">+</a></div></div>';
 			var trTitle = '<div class="pictitle"><div class="subject">'+item.product_name+'</div>';
 			var trAddinfo = '<div class="addinfo"><div class="author" style="color:red;">'+item.price+'</div><div class="view"><strike>'+item.origin_price+'</strike></div> </div></div></div>';
