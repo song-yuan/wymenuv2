@@ -18,15 +18,15 @@ function totalNum(){
 }
 function addToCart() {
 	//var reddot = document.querySelector('.aniele');
-        //var shcart = document.querySelector('.shoppingCart');
+        var shcart = document.querySelector('.shoppingCart');
 	//reddot.style.visibility="visible";
 	//classie.add(reddot,'added');
-        //classie.add(shcart,'rotate');
-	//setTimeout(function(){
+        classie.add(shcart,'rotate');
+	setTimeout(function(){
 		//reddot.style.visibility="hidden";
 		//classie.remove(reddot,'added');
-        //        classie.remove(shcart,'rotate');
-	//}, 800); 
+                classie.remove(shcart,'rotate');
+	}, 800); 
 }
 $(document).ready(function(){
     $('#forum_list').on('click','.addCart',function(){
@@ -74,8 +74,9 @@ $(document).ready(function(){
    
     //查看菜单
     $('.top-right').click(function(){
-    	$('.product-pad-mask').toggle(function(){
-    	  if(!$('.product-pad-mask').is(':hidden')) {
+    	//$('.product-pad-mask').toggle(function(){
+    	  if($('.product-pad-mask').is(':hidden')) {
+              $('.product-pad-mask').show();
     		$.ajax({
      			url:'/wymenuv2/product/getOrderListJson',
      			type:'POST',
@@ -99,8 +100,10 @@ $(document).ready(function(){
      				}
      			},
      		});
-     	  }
-    	});
+     	  }else{
+              $('.product-pad-mask').hide();
+          }
+    	//});
     });
     $('.product-pad-mask').on('click','.minus',function(){
                 //alert('-');

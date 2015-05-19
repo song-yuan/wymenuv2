@@ -40,7 +40,7 @@
 <form id="padOrderForm" action="confirmPadOrder" method="post">
 <div class="product-pad-mask">
 	<div class="mask-trangle"></div>
-	<div class="product-mask-info">点单信息</div>
+	<div class="product-mask-info">已点菜品，请调整数量！</div>
 	<div class="info">
 	</div>
 	<div class="product-bottom">
