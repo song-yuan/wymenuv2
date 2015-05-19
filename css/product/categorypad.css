@@ -1,19 +1,19 @@
 #page_0{
-	margin-top:55px;
+	margin-top:68px;
 }
 .fixed-top{
 	position:fixed;
 	width:100%;
-	height:35px;
+	height:50px;
 	padding:10px 0;
 	top:0;
 	z-index:1000;
-	background-color:rgba(255,255,255,0.5);
+	background-color:rgba(255,255,255,0.8);
 }
 .fixed-top select{
 	height:100%;
-	width:100%;
-	font-size:20px;
+	width:98%;
+	font-size:35px;
 }
 .category-partents{
 	font-weight:800;
@@ -36,15 +36,16 @@
 	float:right;
 }
 .top-right{
-	width:38%;
+	width:33%;
 	height:100%;
         //background: #00FFFF;
 	float:left;
         padding-left:10px;
 }
 .shoppingCart{
-	height:35px;
-	width:35px;
+	height:50px;
+	width:50px;
+        top:10px;
 	background:url(../../img/shopping_cart2.png) top center no-repeat;
 	margin-left:20px;
 	padding: 0 10px;
@@ -59,8 +60,8 @@
 }
 
 .padsetting{
-	height:35px;
-	width:20px;
+	height:50px;
+	width:35px;
 	background:url(../../img/help-small.png) top center no-repeat;
 	margin-left:5px;
 	padding: 0 5px;
@@ -69,15 +70,16 @@
 
 .num-circel{
 	position:absolute;
-	width:24px;
-	height:24px;
+	width:30px;
+	height:30px;
 	top:-10px;
-	left:10px;
-	border-radius:12px;
+	left:-2px;
+        font-size: 25px;
+	border-radius:15px;
 	background-color:red;
 	color:white;
 	text-align:center;
-	line-height:24px;
+	line-height:30px;
 	margin:0;
 }
 .setting-pad-mask{
@@ -113,15 +115,16 @@
 }
 .product-pad-mask{
 	position:fixed;
-	width:55%;
-	top:50px;
-	left:40%;
+	width:50%;
+	top:65px;
+	left:37%;
 	background:white;
 	z-index:1001;
-	height:auto;
+	height:40%;
 	bottom:20px;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 	border: 1px solid #ddd;
+        background-color:rgba(255,97,0,0.8);
 	display:none;
 }
 .product-pad-mask .mask-trangle{
@@ -145,28 +148,57 @@
 }
 .top-middle button {
 	background: rgb(239,68,77);
-	height: 30px;
-	padding:0 10px;
-	font-size: 16px;
+	height: 40px;
+	padding:5px 10px;
+	font-size: 25px;
 	color: white;
 	border: none;
 	border-radius: 8px;
 	margin-right: 30px;
+        margin-top: 5px;
 	float:right;
 }
 
 .product-mask-info{
 	background-color:#eee;
 }
-.product-catory{padding:2px 10px;}
-.product-catory-product{padding:2px 10px;}
+
+.pad-productbuy {
+  width: 100%;
+  height: 45px;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background: rgb(46,46,46);
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: left;
+  opacity: 0.8;
+  z-index: 10;
+}
+
+.product-catory{
+    padding:2px 10px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #ccc;
+    border-bottom: 1px dashed rgb(0,0,0);
+}
+.product-catory-product{
+    padding:2px 10px;
+    font-size: 22px;
+    font-weight: 700;
+    height: 32px;
+    border-bottom: 1px dashed rgb(0,0,0);
+}
 .product-catory-product-right{float:right;height:40px;}
 .product-catory-product-right span{
 	text-align:center;
-	width:42px;
-	height:40px;
-        border-radius: 40%;
-	font-size:22px;
+	width:30px;
+	height:30px;
+        border-radius: 5%;
+	font-size:18px;
 	padding: 0px 0px 0px;
 	line-height:25px;
 	display:inline-block;
@@ -187,8 +219,9 @@
 	vertical-align: middle;
 }
 .total-price{
-	height:35px;
-	line-height:35px;
+	height:50px;
+	line-height:50px;
+        font-size: 35px;
 	float:left;
 }
 .product-pic{
@@ -196,10 +229,10 @@
 	overflow:hidden;
 }
 .product-pic i.icon-hover-1{
-	left: -50px;
+	left: -150px;
 }
 .product-pic i.icon-hover-2{
-	right: -50px;
+	right: -150px;
 }
 
 .product-pic i.icon-hover-1,
@@ -211,7 +244,7 @@
 	position: absolute;
 	margin-top: -1.5em;
 	border-radius: 50%;
-	background: rgba(69,69,69,0.6);
+	background: rgba(69,69,69,0.9);
 }
 
 .product-pic:hover i.icon-hover-1,

@@ -15,7 +15,7 @@
 
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/base64.js'); 
-	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/pic.js');
+	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/pic-pad.js');
 ?>
 
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type,'siteNoId'=>$siteNoId));?>
