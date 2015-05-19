@@ -149,13 +149,13 @@ $(document).ready(function(){
  			success:function(msg){
  				if(msg!='nopic'){
                                     //alert(msg);
+ 					$('.large-pic').css('display','block');
  					$('.large-pic').html(msg);
                                         $("#gallery").css({
  						position: "absolute",
  						left: ($('.large-pic').width() - $("#gallery").outerWidth())/2,
  						top: ($('.large-pic').height() - $("#gallery").outerHeight())/2
  					});
-                                        $('.large-pic').css('display','block'); 					
  					$('#gallery').slick({
  						  dots: true,
  						  infinite: true,
@@ -163,8 +163,9 @@ $(document).ready(function(){
  						  slidesToShow: 1,
  				  		  slidesToScroll: 1,
  				  		  autoplay: true,
- 						  arrows: true
- 					}); 						
+ 						  arrows: false
+ 					});
+ 						
  				}else{
                                     alert('没有大图！');
                                 }
