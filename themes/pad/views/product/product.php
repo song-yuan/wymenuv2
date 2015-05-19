@@ -40,7 +40,8 @@
 <form id="padOrderForm" action="confirmPadOrder" method="post">
 <div class="product-pad-mask">
 	<div class="mask-trangle"></div>
-	<div class="product-mask-info">已点菜品，请调整数量！</div>
+        <div class="product-mask-info"><div style="padding:10px;display: inline;">确认无误后，点击“打印”按钮下单。</div><button id="updatePadOrder"> 打 印 </button></div>
+        <div class="product-mask-tip">提示：点击列表中的菜品名称能快速找到该菜品。</div>
 	<div class="info">
 	</div>
 	<div class="product-bottom">
