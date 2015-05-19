@@ -156,7 +156,7 @@ $(document).ready(function(){
  						left: 0,
  						top: 10 
  					});
- 					$('#gallery').slick({
+ 					/*$('#gallery').slick({
  						  dots: true,
  						  infinite: true,
  						  speed: 1000,
@@ -164,7 +164,7 @@ $(document).ready(function(){
  				  		  slidesToScroll: 1,
  				  		  autoplay: true,
  						  arrows: false
- 					});
+ 					});*/
  						
  				}else{
                                     alert('没有大图！');
