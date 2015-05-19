@@ -21,7 +21,7 @@
         //color: #ccc;
 }
 .top-left{
-	width:30%;
+	width:40%;
 	height:100%;
 	float:left;
 	padding-left:20px;
@@ -36,7 +36,7 @@
 	float:right;
 }
 .top-right{
-	width:33%;
+	width:50%;
 	height:100%;
         //background: #00FFFF;
 	float:left;
@@ -130,7 +130,7 @@
 .product-pad-mask .mask-trangle{
 	position: absolute;
 	top: -7px;
-	left: 45px;
+	right: 35px;
 	display: inline-block !important;
 	border-right: 7px solid transparent;
 	border-bottom: 7px solid #ccc;
@@ -159,8 +159,44 @@
 	float:right;
 }
 
+.product-mask-info button {
+	background: rgb(239,68,77);
+	height: 35px;
+	padding:5px 10px;
+	font-size: 25px;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	margin-right: 30px;
+        margin-top: 4px;
+}
+
+.top-right button {
+	background: rgb(239,68,77);
+	height: 40px;
+	padding:5px 10px;
+	font-size: 25px;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	margin-right: 30px;
+        margin-top: 5px;
+	float:right;
+}
+
 .product-mask-info{
 	background-color:#eee;
+        padding: 0px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 700;
+        height: 45px;
+}
+
+.product-mask-tip{
+	background-color:#fff;
+        color:rgb(239,68,77);
+        padding:5px;
 }
 
 .pad-productbuy {
@@ -294,7 +330,7 @@ i.icon-hover-3{
 
 i.icon-hover-3 img{
 	margin: 0;
-        height: 32px;
+        height: 16px;
         width:32px;
 }
 
