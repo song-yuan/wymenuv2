@@ -115,15 +115,14 @@
 }
 .product-pad-mask{
 	position:fixed;
-	width:50%;
+	width:auto;
 	top:65px;
-	left:37%;
+	right: 10%;
 	background:white;
 	z-index:1001;
-	min-height:23%;
-        max-height:70%;
-	bottom:20px;
-	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+	height: 40%;
+        overflow-y: scroll;
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 	border: 1px solid #ddd;
         background-color:rgba(255,97,0,0.8);
 	display:none;
