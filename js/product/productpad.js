@@ -89,9 +89,11 @@ $(document).ready(function(){
          						for(var i in msg[o]){
          							if(!isNaN(i)){
          								if(parseInt(msg[o][i].category_id)){
-         									str +='<div class="product-catory-product">'+msg[o][i].product_name+'<div class="product-catory-product-right"><span class="minus" >-</span><input class="set-num input-product" type="text" name="'+msg[o][i].product_id+'" value="'+msg[o][i].amount+'" price="'+msg[o][i].price+'" readonly="true"/><span class="plus">+</span></div></div>';
+         									//str +='<div class="product-catory-product">'+msg[o][i].product_name+'<div class="product-catory-product-right"><span class="minus" >-</span><input class="set-num input-product" type="text" name="'+msg[o][i].product_id+'" value="'+msg[o][i].amount+'" price="'+msg[o][i].price+'" readonly="true"/><span class="plus">+</span></div></div>';
+                                                                                str +='<div class="product-catory-product">'+msg[o][i].product_name+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+msg[o][i].product_id+'" value="'+msg[o][i].amount+'" price="'+msg[o][i].price+'" readonly="true"/> X '+msg[o][i].price+'</div></div>';
          								}else{
-         									str +='<div class="product-catory-product">'+msg[o][i].product_name+'<div class="product-catory-product-right"><span class="minus" >-</span><input class="set-num input-product" type="text" name="'+msg[o][i].set_id+','+msg[o][i].product_id+'" value="'+msg[o][i].amount+'" price="'+msg[o][i].price+'" readonly="true"/><span class="plus">+</span></div></div>';
+         									//str +='<div class="product-catory-product">'+msg[o][i].product_name+'<div class="product-catory-product-right"><span class="minus" >-</span><input class="set-num input-product" type="text" name="'+msg[o][i].set_id+','+msg[o][i].product_id+'" value="'+msg[o][i].amount+'" price="'+msg[o][i].price+'" readonly="true"/><span class="plus">+</span></div></div>';
+                                                                                str +='<div class="product-catory-product">'+msg[o][i].product_name+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+msg[o][i].set_id+','+msg[o][i].product_id+'" value="'+msg[o][i].amount+'" price="'+msg[o][i].price+'" readonly="true"/> X '+msg[o][i].price+'</div></div>';
          								}
          							}
          						}
