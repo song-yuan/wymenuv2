@@ -142,7 +142,7 @@ $(document).ready(function(){
     $('#forum_list').on('click','.view-product-pic',function(){
     	//var lid = $(this).attr('lid');
         var lid = $(this).attr('product-id');
-        //alert(lid);
+        //alert(lid);//($('.large-pic').width() - $("#gallery").outerWidth())/2,//($('.large-pic').height() - $("#gallery").outerHeight())/2
     	$.ajax({
  			url:'/wymenuv2/product/getProductPicJson',
  			data:'id='+lid,
@@ -153,8 +153,8 @@ $(document).ready(function(){
  					$('.large-pic').html(msg);
                                         $("#gallery").css({
  						position: "absolute",
- 						left: ($('.large-pic').width() - $("#gallery").outerWidth())/2,
- 						top: ($('.large-pic').height() - $("#gallery").outerHeight())/2
+ 						left: 0,
+ 						top: 10 
  					});
  					$('#gallery').slick({
  						  dots: true,
