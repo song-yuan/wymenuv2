@@ -19,15 +19,14 @@ function totalNum(){
 function addToCart() {
 	var reddot = document.querySelector('.aniele');
         var shcart = document.querySelector('.shoppingCart');
-	reddot.style.visibility="visible";
-	classie.add(reddot,'added');
-        classie.add(shcart,'rotate');
-	setTimeout(function(){
-		reddot.style.visibility="hidden";
-		classie.remove(reddot,'added');
-                classie.remove(shcart,'rotate');
-	}, 800); 
-
+	//reddot.style.visibility="visible";
+	//classie.add(reddot,'added');
+        //classie.add(shcart,'rotate');
+	//setTimeout(function(){
+		//reddot.style.visibility="hidden";
+		//classie.remove(reddot,'added');
+                //classie.remove(shcart,'rotate');
+	//}, 800); 
 }
 $(document).ready(function(){
     $('#forum_list').on('click','.addCart',function(){
