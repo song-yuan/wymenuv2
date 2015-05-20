@@ -68,17 +68,17 @@ class ProductController extends Controller
 		$pid = Yii::app()->request->getParam('pid',0);
 		$type = Yii::app()->request->getParam('type',0);
 		$categoryId = Yii::app()->request->getParam('categoryId',0);
-		if($this->isPad){
-			while(true){
-				$code = SiteClass::openTempSite($this->companyId);
-				if($code){
-					$siteNo = SiteNo::model()->find('dpid=:companyId and code=:code',array(':companyId'=>$this->companyId,':code'=>$code));
-					$_SESSION['siteNoId'] = $siteNo['lid'];
-					$this->siteNoId = $_SESSION['siteNoId'];
-					break;
-				}
-			}
-		}
+//		if($this->isPad){
+//			while(true){
+//				$code = SiteClass::openTempSite($this->companyId);
+//				if($code){
+//					$siteNo = SiteNo::model()->find('dpid=:companyId and code=:code',array(':companyId'=>$this->companyId,':code'=>$code));
+//					$_SESSION['siteNoId'] = $siteNo['lid'];
+//					$this->siteNoId = $_SESSION['siteNoId'];
+//					break;
+//				}
+//			}
+//		}
 		if(!$categoryId){
 			$categorys = ProductClass::getFirstCategoryId($this->companyId);
                         //var_dump($categorys);exit;
@@ -215,9 +215,9 @@ class ProductController extends Controller
         //打印清单
         public function actionPrintPadList(){                
                 $orderId = Yii::app()->request->getParam('orderId',0);
-		$companyId = Yii::app()->request->getParam('companyId');
+				$companyId = Yii::app()->request->getParam('companyId');
                 $padId = Yii::app()->request->getParam('padId');
-                $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
+                $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$companyId));
                 $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
                 //要判断打印机类型错误，必须是local。
                 if($pad->printer_type!='1')

@@ -316,6 +316,7 @@
   float:right;
   line-height: 50px;
   width: 35%;
+  display:none;
 }
 
 i.icon-hover-3{
