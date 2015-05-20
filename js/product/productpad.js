@@ -95,6 +95,7 @@ $(document).ready(function(){
     		var val = inputNumObj.val();
 			inputNumObj.val(parseInt(val)-1);
     	}else{
+    		singleNumObj.html(parseInt(singleNums) - 1);
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
     			$('.catory'+category).remove();
