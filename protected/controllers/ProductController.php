@@ -191,7 +191,6 @@ class ProductController extends Controller
 	//确认订单
 	public function actionConfirmPadOrder(){
 		$goodsIds = isset($_POST) ?$_POST :array();
-		var_dump($goodsIds);exit;
 		$padOrder = json_encode(array('status'=>false,'msg'=>'订单为空'));
 	 	if(!empty($goodIds)){
 			$padOrder = CreateOrder::createPadOrder($this->companyId,$goodsIds,$this->padId); 
