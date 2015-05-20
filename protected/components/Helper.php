@@ -311,7 +311,7 @@ class Helper
 		
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
-                        return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'PAD没有默认打印机');		
+                        return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>'PAD没有默认打印机');		
 		}
 		$hasData=false;
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
@@ -353,7 +353,7 @@ class Helper
 		if($hasData){
                     return Helper::printConetent($printer,$listData,$precode,$sufcode);
 		}else{
-                    return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'没有要打印的菜品！');
+                    return array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>'没有要打印的菜品！');
                 }
                 /*$listData.= str_pad('',48,'-').'<br>';
 		$listData.= str_pad('消费合计：'.$order->reality_total , 20,' ').'<br>';
@@ -506,7 +506,7 @@ class Helper
                     }
                 }else
                 {
-                    return array('status'=>false,'jobid'=>'0','type'=>'none','msg'=>'无法确定打印机语言！');
+                    return array('status'=>false,$order->dpid,'jobid'=>'0','type'=>'none','msg'=>'无法确定打印机语言！');
                 }
                 //加barcode和切纸
                 $contentCode=$precode.$contentCode.$sufcode;
@@ -530,17 +530,17 @@ class Helper
                     {
                         Gateway::sendToClient($clientId,json_encode($print_data));
                         //Gateway::sendToAll(json_encode($print_data));
-                        return array('status'=>true,'jobid'=>$jobid,'type'=>'net','msg'=>'');
+                        return array('status'=>true,$order->dpid,'jobid'=>$jobid,'type'=>'net','msg'=>'');
                     }else{
-                        return array('status'=>false,'jobid'=>'0','type'=>'net','msg'=>'打印服务器找不到！');
+                        return array('status'=>false,$order->dpid,'jobid'=>'0','type'=>'net','msg'=>'打印服务器找不到！');
                     }
                 }elseif($printer->printer_type=='1')//local
                 {                
                     //$ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
                     $store->set($printer->dpid."_".$jobid,$contentCode,0,60);
-                    return array('status'=>true,'jobid'=>$jobid,'type'=>'local','msg'=>'');
+                    return array('status'=>true,$order->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
                 }else{
-                    return array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'打印机类型错误');
+                    return array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'打印机类型错误');
                 }               
         }
 }

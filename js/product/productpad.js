@@ -31,6 +31,7 @@ function addToCart() {
 $(document).ready(function(){
     $('#forum_list').on('click','.addCart',function(){
     	var _this = $(this);
+    	var type = _this.attr('type');
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
     	var categoryName = parentsBlockCategory.attr('category-name');//分类 名称
@@ -46,11 +47,19 @@ $(document).ready(function(){
 		var str = '';
 		str +='<div class="catory'+category+'">';
 		str +='<div class="product-catory">'+categoryName+'</div>';
-        str +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+'" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		if(parseInt(type)){
+			str +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+',1" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		}else{
+			str +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+'" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		}
 		str +='</div>';
 		
 		var substr = '';
-		substr +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+'" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		if(parseInt(type)){
+			substr +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+',1" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		}else{
+			substr +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+'" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		}
 		if($('.catory'+category).length > 0){
 			var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
 			if(inputNumObj.length > 0){
@@ -65,9 +74,6 @@ $(document).ready(function(){
 			parentsBlockCategory.find('.subject-order').css('display','block');
 		}
 		
-    	var isAddOrder = 1;
-    	var productId = _this.attr('product-id');
-    	var type = _this.attr('type');
     	var price = parseFloat(_this.attr('price'));
     	var total = 0;
     		total = parseFloat($('.total-price').html());
@@ -217,21 +223,14 @@ $(document).ready(function(){
         var pad_id=padinfo.substr(10,10); //also can get from session
     	$('#padOrderForm').ajaxSubmit(function(msg){
     		if(msg.status){
-                    var company_id = msg.dpid;
-                    //$.get('/wymenuv2/product/printPadList/companyId/'+msg.dpid+'/orderId/'+msg.orderId+'/padId/'+pad_id,function(data){
-                    //if(data.status) {
-                         if(Androidwymenuprinter.printJob(company_id,msg.jobid))
-                         {
-                             alert("打印成功");
-                         }
-                         else
-                         {
-                             alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
-                         }                                                
-                     //} else {
-                             //alert(data.msg);
-                     //}
-                   // },'json');
+                 if(Androidwymenuprinter.printJob(msg.dpid,msg.jobid))
+                 {
+                     alert("打印成功");
+                 }
+                 else
+                 {
+                     alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
+                 }                                                
                 }else{
                     alert(data.msg);
                 }

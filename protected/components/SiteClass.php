@@ -103,7 +103,9 @@ class SiteClass
                 'feedback_memo'=>'开台',
                 'delete_flag'=>'0'
             );
-            $db->createCommand()->insert('nb_order_feedback',$dataf);   
+            $db->createCommand()->insert('nb_order_feedback',$dataf);  
+            
+             
              $transaction->commit();
 	         return $code;
         } catch (Exception $e) {
