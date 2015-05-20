@@ -81,7 +81,7 @@ $(document).ready(function(){
 		
     });
    
-    $('.subject-order').on('click','.delCart',function(){
+    $('#forum_list').on('click','.delCart',function(){
     	var parentsBlockCategory = $(this).parents('.blockCategory');
     	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
     	var singleNums = singleNumObj.html();
