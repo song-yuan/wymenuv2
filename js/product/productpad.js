@@ -31,13 +31,40 @@ function addToCart() {
 $(document).ready(function(){
     $('#forum_list').on('click','.addCart',function(){
     	var _this = $(this);
-    	var parentsBlockCategory = $(this).parents('.blockCategory');
+    	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
     	var categoryName = parentsBlockCategory.attr('category-name');//分类 名称
     	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
     	var productName = parentsBlockCategory.find('.inmiddle').html();//产品 名称
     	var productPrice = _this.attr('price');//产品 价格
     	
+    	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
+		var singleNums = 0;
+			singleNums = parseInt(singleNumObj.html());
+		singleNumObj.html(singleNums+1);
+		
+		var str = '';
+		str +='<div class="catory'+category+'">';
+		str +='<div class="product-catory">'+categoryName+'</div>';
+        str +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+'" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		str +='</div>';
+		
+		var substr = '';
+		substr +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+'" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		if($('.catory'+category).length > 0){
+			var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
+			if(inputNumObj.length > 0){
+				var val = inputNumObj.val();
+				inputNumObj.val(parseInt(val)+1);
+			}else{
+				$('.catory'+category).append(substr);
+				parentsBlockCategory.find('.subject-order').css('display','block');
+			}
+		}else{
+			$('.product-pad-mask .info').append(str);
+			parentsBlockCategory.find('.subject-order').css('display','block');
+		}
+		
     	var isAddOrder = 1;
     	var productId = _this.attr('product-id');
     	var type = _this.attr('type');
@@ -51,25 +78,6 @@ $(document).ready(function(){
 		total = total.toFixed(2);
 		$('.total-price').html(total);
 		$('.total-num').html(nums+1);
-		
-		var singleNumObj = parentsBlockCategory.find('.single-num-circel');
-		var singleNums = 0;
-			singleNums = parseInt(singleNumObj.html());
-		singleNumObj.html(singleNums+1);
-		
-		var str = '';
-		str +='<div class="catory'+category+'">';
-		str +='<div class="product-catory">'+categoryName+'</div>';
-        str +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+'" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
-		str +='</div>';
-		if($('.catory'+category).length > 0){
-			var inputNumObj = $('.catory'+category).find('.set-num');
-			var val = inputNumObj.val();
-			inputNumObj.val(parseInt(val)+1);
-		}else{
-			$('.product-pad-mask .info').append(str);
-			parentsBlockCategory.find('.subject-order').css('display','block');
-		}
 		
     });
    
