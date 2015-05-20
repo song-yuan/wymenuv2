@@ -37,7 +37,7 @@
     </div>
     <!--content结束-->
 </div>
-<form id="padOrderForm" action="/wymenuv2/product/confirmPadOrder" method="post">
+<form id="padOrderForm" action="/wymenuv2/product/confirmPadOrder/companyid/<?php $this->companyId;?>/padid/<?php $this->padId;?>" method="post">
 <div class="product-pad-mask">
 	<div class="mask-trangle"></div>
         <div class="product-mask-info"><div style="padding:10px;display: inline;">确认无误后，点击“打印”按钮下单。</div><button id="updatePadOrder"> 打 印 </button></div>
