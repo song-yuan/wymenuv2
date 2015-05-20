@@ -6,7 +6,7 @@ class ProductController extends Controller
 	public $wifMac = 0;
 	public $moMac = 0;
 	public $siteNoId = 0;
-	public $isPad = 0;
+	public $padId = 0;
 	
 	public $layout = '/layouts/productmain';
 	public function init(){
@@ -19,9 +19,10 @@ class ProductController extends Controller
 		$padId = Yii::app()->request->getParam('padid',0);
 		if($padId){
 			$companyId = Yii::app()->request->getParam('companyid',0);
+			$padId = Yii::app()->request->getParam('padid',0);
 			$this->companyId = $companyId;
 			$_SESSION['companyId'] = $this->companyId;
-			$this->isPad = 1;
+			$this->padId = $padId;
 			Yii::app()->theme = 'pad';
 		}
 		if($mac){
@@ -68,17 +69,7 @@ class ProductController extends Controller
 		$pid = Yii::app()->request->getParam('pid',0);
 		$type = Yii::app()->request->getParam('type',0);
 		$categoryId = Yii::app()->request->getParam('categoryId',0);
-//		if($this->isPad){
-//			while(true){
-//				$code = SiteClass::openTempSite($this->companyId);
-//				if($code){
-//					$siteNo = SiteNo::model()->find('dpid=:companyId and code=:code',array(':companyId'=>$this->companyId,':code'=>$code));
-//					$_SESSION['siteNoId'] = $siteNo['lid'];
-//					$this->siteNoId = $_SESSION['siteNoId'];
-//					break;
-//				}
-//			}
-//		}
+
 		if(!$categoryId){
 			$categorys = ProductClass::getFirstCategoryId($this->companyId);
                         //var_dump($categorys);exit;
@@ -198,19 +189,10 @@ class ProductController extends Controller
 	//确认订单
 	public function actionConfirmPadOrder(){
 		$goodsIds = isset($_POST) ?$_POST :array();
-		$msg = array('msg'=>false,'orderId'=>0,'dpid'=>0);
 	 	if(!empty($goodIds)){
-	 		$orderList = new OrderList($this->companyId,$this->siteNoId);
-	 		if($orderList->order){
-	 			$result = OrderList::UpdatePadOrder($this->companyId,$orderList->order['lid'],$goodsIds);
-	 			if($result){
-	 				$msg = array('msg'=>true,'orderId'=>$orderList->order['lid'],'dpid'=>$orderList->order['dpid']);
-	 			}else{
-	 				$msg = array('msg'=>false,'orderId'=>$orderList->order['lid'],'dpid'=>0);
-	 			}
-	 		}
+			$padOrder = CreateOrder::createPadOrder($this->companyId,$goodsIds,$this->padId); 
 	 	}
-	 	Yii::app()->end(json_encode($msg));
+	 	Yii::app()->end($padOrder);
 	}
         //打印清单
         public function actionPrintPadList(){                
