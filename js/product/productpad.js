@@ -82,14 +82,39 @@ $(document).ready(function(){
     });
    
     $('#forum_list').on('click','.delCart',function(){
-    	var parentsBlockCategory = $(this).parents('.blockCategory');
+    	var _this = $(this);
+    	var parentsBlockCategory = _this.parents('.blockCategory');
+    	var category = parentsBlockCategory.attr('category');//分类id
+    	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
     	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
     	var singleNums = singleNumObj.html();
+    	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
+    	
     	if(parseInt(singleNums) > 1){
     		singleNumObj.html(parseInt(singleNums) - 1);
+    		var val = inputNumObj.val();
+			inputNumObj.val(parseInt(val)-1);
     	}else{
+    		inputNumObj.parents('.product-catory-product').remove();
+    		if(!$('.catory'+category).find('.product-catory-product').length){
+    			$('.catory'+category).remove();
+    		}
     		parentsBlockCategory.find('.subject-order').css('display','none');
     	}
+    	
+    	var productId = _this.attr('product-id');
+    	var type = _this.attr('type');
+    	var price = parseFloat(_this.attr('price'));
+    	var total = 0;
+    		total = parseFloat($('.total-price').html());
+    	var nums = 0;
+    		nums = parseInt($('.total-num').html());
+ 		if(nums > 0){
+	 		total -= price;
+			total = total.toFixed(2);
+			$('.total-price').html(total);
+			$('.total-num').html(nums-1);
+ 		}
     });
    //help
    $('.padsetting').click(function(){
