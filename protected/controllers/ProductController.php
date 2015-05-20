@@ -6,6 +6,7 @@ class ProductController extends Controller
 	public $wifMac = 0;
 	public $moMac = 0;
 	public $siteNoId = 0;
+	public $isPad = 0;
 	public $padId = 0;
 	
 	public $layout = '/layouts/productmain';
@@ -22,6 +23,7 @@ class ProductController extends Controller
 			$padId = Yii::app()->request->getParam('padid',0);
 			$this->companyId = $companyId;
 			$_SESSION['companyId'] = $this->companyId;
+			$this->isPad = 1;
 			$this->padId = $padId;
 			Yii::app()->theme = 'pad';
 		}
