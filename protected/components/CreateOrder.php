@@ -314,7 +314,7 @@ class CreateOrder
                 $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $printList = Helper::printList($order , $pad,$precode);
                 if(!$printList['status']){
-                	throw new ExceptionClass(json_encode($printList));
+                	throw new ExceptionClass(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
             }		
  			$transaction->commit();	
