@@ -273,6 +273,7 @@ $(document).ready(function(){
         var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
         var category = parents.attr('category');//分类id
         $('#pad_category_select').val(category);
-        $('body').scrollTop(68);
+        var height = parents.offset().top;
+		$('body').scrollTop(height);
     });
  });
