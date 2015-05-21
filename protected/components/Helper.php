@@ -316,6 +316,7 @@ class Helper
 		}
 		$hasData=false;
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
+		var_dump($orderProducts);exit;
                 ///site error because tempsite and reserve**************
                 $strSite="";
                 if($order->is_temp==0)
