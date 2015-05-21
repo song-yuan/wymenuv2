@@ -45,7 +45,7 @@ $(document).ready(function(){
 		singleNumObj.html(singleNums+1);
 		
 		var str = '';
-		str +='<div class="catory'+category+'">';
+		str +='<div class="order-product catory'+category+'">';
 		str +='<div class="product-catory">'+categoryName+'</div>';
 		if(parseInt(type)){
 			str +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+',1" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
@@ -235,8 +235,10 @@ $(document).ready(function(){
     		if(data.status){
                  if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                  {
+                	 $('#padOrderForm').find('.order-product').children().each(function(){
+                     	
+                     });
                      alert("打印成功");
-                     $('#padOrderForm').find('.info').html('');
                  }
                  else
                  {
