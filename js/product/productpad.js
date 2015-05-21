@@ -233,7 +233,7 @@ $(document).ready(function(){
                      alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
                  }                                                
                 }else{
-                    alert(data.msg);
+                    alert(msg.msg);
                 }
     	});
     	return false;
