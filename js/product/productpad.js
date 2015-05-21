@@ -236,12 +236,18 @@ $(document).ready(function(){
                  if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                  {
                 	 $('#padOrderForm').find('.input-product').each(function(){
-                     	var productId = $(this).attr('name');
+                	    var _this = $(this);
+                     	var productId = _this.attr('name');
                      	var productIdArr = productId.split(","); //字符分割 
                      	productId = productIdArr[0];
                      	var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+                     	var category = parents.attr('category');//分类id
                      	parents.find('.subject-order').css('display','none');
                      	parents.find('.single-num-circel').html(0);
+                     	_this.parents('.product-catory-product')remove();
+                     	if(!$('.catory'+category).find('.product-catory-product').length){
+			    			$('.catory'+category).remove();
+			    		}
                      });
                      var total = 0;
                      total.toFixed(2);
