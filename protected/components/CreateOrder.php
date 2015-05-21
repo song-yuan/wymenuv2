@@ -199,4 +199,138 @@ class CreateOrder
 			}
 		}
 	}
+	/**
+	 * 
+	 * 大pad下单并打印
+	 * 
+	 */
+	public static function createPadOrder($dpid,$goodsIds,$padId){
+		$time = date('Y-m-d H:i:s',time());
+		$db = Yii::app()->db;
+        $transaction = $db->beginTransaction();
+ 		try {
+ 			 $se=new Sequence("site_no");
+             $lid = $se->nextval();
+             $se=new Sequence("temp_site");
+             $site_id = $se->nextval();
+             
+             $code = SiteClass::getCode($dpid);
+            $data = array(
+                'lid'=>$lid,
+                'dpid'=>$dpid,
+                'create_at'=>date('Y-m-d H:i:s',time()),
+                'is_temp'=>1,
+                'site_id'=>$site_id,
+                'status'=>'1',
+                'code'=>$code,
+                'number'=>1,
+                'delete_flag'=>'0'
+            );                            
+            $db->createCommand()->insert('nb_site_no',$data);
+            
+            $sef=new Sequence("order_feedback");
+            $lidf = $sef->nextval();
+            $dataf = array(
+                'lid'=>$lidf,
+                'dpid'=>$dpid,
+                'create_at'=>date('Y-m-d H:i:s',time()),
+                'is_temp'=>1,
+                'site_id'=>$site_id,
+                'is_deal'=>'0',
+                'feedback_id'=>0,
+                'order_id'=>0,
+                'is_order'=>'1',
+                'feedback_memo'=>'开台',
+                'delete_flag'=>'0'
+            );
+            $db->createCommand()->insert('nb_order_feedback',$dataf);  
+            //生成订单
+            $se=new Sequence("order");
+            $orderId = $se->nextval();
+            $data = array(
+						'lid'=>$orderId,
+						'dpid'=>$dpid,
+						'site_id'=>$site_id,
+						'create_at'=>$time,
+						'is_temp'=>1,
+						'order_status'=>2,
+						'number'=>1,
+						'update_at'=>$time,
+						'remark'=>'无',
+						'taste_memo'=>'无',
+						);
+			$db->createCommand()->insert('nb_order',$data);  
+			//订单产品 $goodsIds = array('goods_id'=>goods_num,'set_id,1'=>set_num);
+			foreach($goodsIds as $key=>$num){
+				 $se=new Sequence("order_product");
+	             $orderProductId = $se->nextval();
+	             $goodsArr = explode(',', $key);
+	             if(count($goodsArr) > 1){
+	             	// 套餐
+	             	$productSets = self::getSetProductIds($dpid,$goodsArr[0]);
+	             	foreach($productSets as $productSet){
+	             		$orderProductData = array(
+										'lid'=>$orderProductId,
+										'dpid'=>$dpid,
+										'create_at'=>$time,
+										'order_id'=>$orderId,
+										'set_id'=>$goodsArr[0],
+										'product_id'=>$productSet['product_id'],
+										'price'=>$productSet['price'],
+										'update_at'=>$time,
+										'amount'=>$num,
+										'taste_memo'=>'无',
+										'product_order_status'=>1,
+										);
+					   $db->createCommand()->insert('nb_order_product',$orderProductData);
+	             	}
+ 	             }else{
+	             	//单品
+	             	 $orderProductData = array(
+										'lid'=>$orderProductId,
+										'dpid'=>$dpid,
+										'create_at'=>$time,
+										'order_id'=>$orderId,
+										'set_id'=>0,
+										'product_id'=>$goodsArr[0],
+										'price'=>self::getProductPrice($dpid,$key,0),
+										'update_at'=>$time,
+										'amount'=>$num,
+										'taste_memo'=>'无',
+										'product_order_status'=>1,
+										);
+					 $db->createCommand()->insert('nb_order_product',$orderProductData);
+	             }
+			}	
+			
+			$order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$dpid));
+            $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+           	if(!$pad){
+           		throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'没有找到该pad！'),JSON_UNESCAPED_UNICODE));
+           	}
+            //要判断打印机类型错误，必须是local。
+            if($pad->printer_type!='1')
+            {
+                throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！'),JSON_UNESCAPED_UNICODE));
+            }else{
+                //前面加 barcode
+                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $printList = Helper::printList($order , $pad,$precode);
+                if(!$printList['status']){
+                	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
+                }
+            }		
+ 			$transaction->commit();	
+ 			return json_encode($printList,JSON_UNESCAPED_UNICODE);
+		 } catch (Exception $e) {
+            $transaction->rollback(); //如果操作失败, 数据回滚
+            return $e->getMessage();
+        } 
+	}
+	//获取套餐里选中单品的id
+	public static function getSetProductIds($dpid,$setId){
+		$sql = 'select product_id,price from nb_product_set_detail where dpid='.$dpid.' and set_id='.$setId.' and is_select=1 and delete_flag=0';
+		$results = Yii::app()->createCommand($sql)->queryAll();
+		return $results;
+	}
 }

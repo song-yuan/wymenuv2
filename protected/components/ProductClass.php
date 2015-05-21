@@ -21,11 +21,11 @@ class ProductClass
 		if($pad){
 			//type 0 普通商品 1 套餐
 			$sql = 'select tao.* from ('
-                                . ' select t.*,t1.order_id as order_id,tc.order_num as order_num from'
+                                . ' select t.*,t1.order_id as order_id,tc.order_num as order_num,category_name from'
                                 . ' (select lid,dpid,category_id,product_name, original_price, main_picture, rank, order_number, favourite_number,0 as type from nb_product where dpid=:companyId and status=0 and delete_flag=0 and is_show = 1)t'
                                 . ' LEFT JOIN (select order_id,t2.dpid as dpid,product_id from nb_order_product t2 LEFT JOIN nb_order t3 on t2.order_id=t3.lid and t2.dpid=t3.dpid where t2.dpid = :companyId and t3.site_id=:siteId and t2.delete_flag=0 and t2.product_order_status=0 and t2.set_id=0 )t1 on t.lid=t1.product_id and t.dpid=t1.dpid ' 
                                 . ' LEFT JOIN nb_product_category tc on tc.lid=t.category_id and tc.dpid=t.dpid ' 
-                                . ' union select r.*,s.order_id as order_id,10000 as order_num from(' .
+                                . ' union select r.*,s.order_id as order_id,10000 as order_num,"套餐" as category_name from(' .
 				   'select lid , dpid as dpid, category_id, product_name, sum(price) as original_price, main_picture, rank, order_number, favourite_number, type '
                                 . ' from(select n.lid,n.dpid as dpid,0 as category_id,n.set_name as product_name, n.main_picture, n.rank, n.order_number, n.favourite_number, n1.price,1 as type from nb_product_set n'
                                 . ' LEFT JOIN nb_product_set_detail n1 on n.lid=n1.set_id  where n.dpid=n1.dpid and n.dpid=:companyId  and n.delete_flag=0 and n1.delete_flag=0 and n1.is_select=1)r1 group by lid )r'
