@@ -181,40 +181,40 @@ $(document).ready(function(){
         //alert(lid);//($('.large-pic').width() - $("#gallery").outerWidth())/2,//($('.large-pic').height() - $("#gallery").outerHeight())/2
     	$.ajax({
  			url:'/wymenuv2/product/getProductPicJson',
+ 			async: false,
  			data:'id='+lid,
  			success:function(msg){
  				if(msg!='nopic'){
                                     //alert(msg);
  					$('.large-pic').css('display','block');
  					$('.large-pic').html(msg);
- 					var left = 0;
- 					if(($('.large-pic').width() - $("#gallery").outerWidth()) > 0){
- 						left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
- 					}
- 					var top = 0;
- 					if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
- 						top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
- 					}
-                    $("#gallery").css({
- 						position: "absolute",
- 						left: left,
- 						top: top
- 					});
- 					$('#gallery').slick({
- 						  dots: true,
- 						  infinite: true,
- 						  speed: 1000,
- 						  slidesToShow: 1,
- 				  		  slidesToScroll: 1,
- 				  		  autoplay: true,
- 						  arrows: false
- 					});
- 						
  				}else{
-                                    alert('没有大图！');
-                                }
+                    alert('没有大图！');
+                }
  			},
  		});
+ 		var left = 0;
+		if(($('.large-pic').width() - $("#gallery").outerWidth()) > 0){
+			left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
+		}
+		var top = 0;
+		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
+			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
+		}
+        $("#gallery").css({
+			position: "absolute",
+			left: left,
+			top: top
+		});
+		$('#gallery').slick({
+			  dots: true,
+			  infinite: true,
+			  speed: 1000,
+			  slidesToShow: 1,
+	  		  slidesToScroll: 1,
+	  		  autoplay: true,
+			  arrows: false
+		});
     });
     
     $('.large-pic').click(function(){
