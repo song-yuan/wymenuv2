@@ -223,7 +223,7 @@ $(document).ready(function(){
         //var pad_id=padinfo.substr(10,10); //also can get from session
        	//var pad_id=0000000008;
     	$('#padOrderForm').ajaxSubmit(function(msg){
-    		var data = msg.parseJSON();
+    		var data = eval('(' + msg + ')');
     		if(data.status){
                  if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                  {
