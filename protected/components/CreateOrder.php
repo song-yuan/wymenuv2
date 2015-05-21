@@ -304,6 +304,7 @@ class CreateOrder
 			}	
 			
 			$order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$dpid));
+			var_dump($order);exit;
             $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             //要判断打印机类型错误，必须是local。
             if($pad->printer_type!='1')
