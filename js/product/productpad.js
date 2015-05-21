@@ -215,12 +215,12 @@ $(document).ready(function(){
     });
     
     $('#updatePadOrder').click(function(){
-        if (typeof Androidwymenuprinter == "undefined") {
-            alert("无法获取PAD设备信息，请在PAD中运行该程序！");
-            return false;
-        }
-        var padinfo=Androidwymenuprinter.getPadInfo();
-        var pad_id=padinfo.substr(10,10); //also can get from session
+       // if (typeof Androidwymenuprinter == "undefined") {
+        //    alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+        //    return false;
+      //  }
+        //var padinfo=Androidwymenuprinter.getPadInfo();
+        //var pad_id=padinfo.substr(10,10); //also can get from session
        	//var pad_id=0000000008;
     	$('#padOrderForm').ajaxSubmit(function(msg){
     		if(msg.status){
