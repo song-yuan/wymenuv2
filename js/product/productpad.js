@@ -236,6 +236,7 @@ $(document).ready(function(){
                  if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                  {
                      alert("打印成功");
+                     $('#padOrderForm').find('.info').html('');
                  }
                  else
                  {
