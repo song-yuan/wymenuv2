@@ -265,4 +265,13 @@ $(document).ready(function(){
     	});
     	return false;
     });
+    $('#padOrderForm').on('click','.product-catory-product',function(){
+    	var input = $(this).find('input');
+    	var productId = input.attr('name');
+    	var productIdArr = productId.split(","); //字符分割 
+        productId = productIdArr[0];
+        var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+        var category = parents.attr('category');//分类id
+        $('#pad_category_select').val(category);
+    });
  });
