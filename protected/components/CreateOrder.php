@@ -305,7 +305,9 @@ class CreateOrder
 			
 			$order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$dpid));
             $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
-            var_dump($pad);exit;
+           	if(!$pad){
+           		throw new ExceptionClass(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'没有找到该pad！'),JSON_UNESCAPED_UNICODE));
+           	}
             //要判断打印机类型错误，必须是local。
             if($pad->printer_type!='1')
             {
