@@ -249,6 +249,7 @@ $(document).ready(function(){
 			    			$('.catory'+category).remove();
 			    		}
                      });
+                     $('.product-pad-mask').hide();
                      var total = 0;
                      total.toFixed(2);
                      $('.total-price').html(total);
