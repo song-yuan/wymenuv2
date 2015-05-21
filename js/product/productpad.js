@@ -187,10 +187,18 @@ $(document).ready(function(){
                                     //alert(msg);
  					$('.large-pic').css('display','block');
  					$('.large-pic').html(msg);
-                                        $("#gallery").css({
+ 					var left = 0;
+ 					if(($('.large-pic').width() - $("#gallery").outerWidth()) > 0){
+ 						left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
+ 					}
+ 					var top = 0;
+ 					if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
+ 						top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
+ 					}
+                    $("#gallery").css({
  						position: "absolute",
- 						left: ($('.large-pic').width() - $("#gallery").outerWidth())/2,
- 						top: ($('.large-pic').height() - $("#gallery").outerHeight())/2 
+ 						left: left,
+ 						top: top
  					});
  					$('#gallery').slick({
  						  dots: true,
