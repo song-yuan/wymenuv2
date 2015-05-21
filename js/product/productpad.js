@@ -274,6 +274,6 @@ $(document).ready(function(){
         var category = parents.attr('category');//分类id
         $('#pad_category_select').val(category);
         var height = parents.offset().top;
-		$('body').scrollTop(parseInt(height)+70);
+		$('body').scrollTop(parseInt(height)-70);
     });
  });
