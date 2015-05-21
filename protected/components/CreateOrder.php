@@ -207,6 +207,7 @@ class CreateOrder
 	public static function createPadOrder($dpid,$goodsIds,$padId){
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
+		var_dump($goodsIds);exit;
         $transaction = $db->beginTransaction();
  		try {
  			 $se=new Sequence("site_no");
