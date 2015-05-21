@@ -6,7 +6,8 @@ class BackendController extends CController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		$controllerId = Yii::app()->controller->getId();
-		$action = Yii::app()->controller->getAction()->getId();
+		$action = Yii::app()->controller->getAction()->getId();                
+                
 		if(Yii::app()->user->isGuest) {
 			if($controllerId != 'login' && $action != 'upload') {
 				$this->redirect(Yii::app()->params['admin_return_url']);

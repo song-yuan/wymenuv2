@@ -10,4 +10,11 @@ defined('YII_DEBUG') or define('YII_DEBUG',true);
 defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 
 require_once($yii);
-Yii::createWebApplication($config)->run();
+$application=Yii::createWebApplication($config);
+//if(isset(Yii::app()->session['language']) && !empty(Yii::app()->session['language']))
+//{
+    //echo Yii::app()->session['language'];
+ //   $application->language=Yii::app()->session['language'];
+//}
+//echo Yii::app()->language;
+$application->run();

@@ -4,6 +4,16 @@ class LoginController extends BackendController
 	public $layout = '/layouts/loginLayout';
 	public function actionIndex()
 	{
+                $language=Yii::app()->request->getParam('language','0');
+                //echo $language;
+                if($language!='0')
+                {
+                    //echo $language;
+                    Yii::app()->session['language']=$language;
+                    Yii::app()->language=$language;
+                    //Yii::$app->language=isset(Yii::$app->session['language'])?Yii::$app->session['language']:'zh_cn';
+                }
+                
 		$model = new LoginForm();
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
@@ -26,8 +36,10 @@ class LoginController extends BackendController
 	}
 	public function actionLogout()
 	{
+                //$language=Yii::app()->session['language'];
 		Yii::app()->user->logout();
-		$this->redirect('index');
+		//$this->redirect(array('index','language'=>$language));
+                $this->redirect('index');
 	}
 	
 	
