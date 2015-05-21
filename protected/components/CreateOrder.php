@@ -306,22 +306,22 @@ class CreateOrder
 			$order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$dpid));
             $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
            	if(!$pad){
-           		throw new ExceptionClass(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'没有找到该pad！'),JSON_UNESCAPED_UNICODE));
+           		throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'没有找到该pad！'),JSON_UNESCAPED_UNICODE));
            	}
             //要判断打印机类型错误，必须是local。
             if($pad->printer_type!='1')
             {
-                throw new ExceptionClass(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！'),JSON_UNESCAPED_UNICODE));
+                throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！'),JSON_UNESCAPED_UNICODE));
             }else{
                 //前面加 barcode
                 $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $printList = Helper::printList($order , $pad,$precode);
                 if(!$printList['status']){
-                	throw new ExceptionClass(json_encode($printList,JSON_UNESCAPED_UNICODE));
+                	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
             }		
  			$transaction->commit();	
- 			return json_encode($printList);
+ 			return json_encode($printList,JSON_UNESCAPED_UNICODE);
 		 } catch (Exception $e) {
             $transaction->rollback(); //如果操作失败, 数据回滚
             return $e->getMessage();
