@@ -207,7 +207,6 @@ class CreateOrder
 	public static function createPadOrder($dpid,$goodsIds,$padId){
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
-		var_dump($goodsIds);exit;
         $transaction = $db->beginTransaction();
  		try {
  			 $se=new Sequence("site_no");
@@ -309,7 +308,7 @@ class CreateOrder
             //要判断打印机类型错误，必须是local。
             if($pad->printer_type!='1')
             {
-                throw new ExceptionClass(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！')));
+                throw new ExceptionClass(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！'),JSON_UNESCAPED_UNICODE));
             }else{
                 //前面加 barcode
                 $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
