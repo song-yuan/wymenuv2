@@ -223,8 +223,9 @@ $(document).ready(function(){
         //var pad_id=padinfo.substr(10,10); //also can get from session
        	//var pad_id=0000000008;
     	$('#padOrderForm').ajaxSubmit(function(msg){
-    		if(msg.status){
-                 if(Androidwymenuprinter.printJob(msg.dpid,msg.jobid))
+    		var data = msg.parseJSON();
+    		if(data.status){
+                 if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                  {
                      alert("打印成功");
                  }
@@ -233,7 +234,7 @@ $(document).ready(function(){
                      alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
                  }                                                
                 }else{
-                    alert(msg.msg);
+                    alert(data.msg);
                 }
     	});
     	return false;
