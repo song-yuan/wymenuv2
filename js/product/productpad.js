@@ -235,9 +235,18 @@ $(document).ready(function(){
     		if(data.status){
                  if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                  {
-                	 $('#padOrderForm').find('.order-product').children().each(function(){
-                     	
+                	 $('#padOrderForm').find('.input-product').each(function(){
+                     	var productId = $(this).attr('name');
+                     	var productIdArr = productId.split(","); //字符分割 
+                     	productId = productIdArr[0];
+                     	var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+                     	parents.find('.subject-order').css('display','none');
+                     	parents.find('.single-num-circel').html(0);
                      });
+                     var total = 0;
+                     total.toFixed(2);
+                     $('.total-price').html(total);
+					 $('.total-num').html(0);
                      alert("打印成功");
                  }
                  else
