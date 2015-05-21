@@ -35,7 +35,12 @@
 <body class="login">
 	<!-- BEGIN LOGO -->
 	<div class="logo">
-		<h1 style="color:white;">我要MENU</h1>
+                <!--
+                <a style="color:red; font-size: 23px;" href="<?php echo $this->createUrl('login/index',array('language'=>'zh_cn'));?>"  id="btn_zh_cn">简体中文</a>
+                <a style="color:red; font-size: 23px;" href="<?php echo $this->createUrl('login/index',array('language'=>'jp'));?>"  id="btn_jp">日本語</a>
+                -->
+                <h1 style="color:white;">我要MENU</h1>
+                
 	</div>
 	<!-- END LOGO -->
 	<!-- BEGIN LOGIN -->

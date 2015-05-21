@@ -105,7 +105,7 @@ class Helper
 		}
 		return $result;
 	}	
-        
+        //not in use
 	static public function printOrderGoods(Order $order , $reprint = false){
 		$orderProducts = OrderProduct::getOrderProducts($order->order_id);
 		$siteNo = SiteNo::model()->findByPk($order->site_no_id);
@@ -160,6 +160,7 @@ class Helper
 			return array('status'=>true,'msg'=>'');
 		}
 	}
+        //not in use
 	static public function printCartGoods($companyId , $code,$reprint = false){
 		$orderProducts = Cart::getCartProducts($companyId,$code);
 		$siteNo = SiteNo::model()->find('dpid=:companyId and code=:code and delete_flag=0',array(':companyId'=>$companyId,':code'=>$code));
@@ -267,7 +268,7 @@ class Helper
 		$pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padid));
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
-                        return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'没有关联打印机');		
+                        return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}
 		$hasData=false;
                 $orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
@@ -276,9 +277,9 @@ class Helper
                 {
                     $site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
                     $siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
-                    $strSite=Helper::getPlaceholderLen('座号：'.$siteType->name.' '.$site->serial , 48);
+                    $strSite=Helper::getPlaceholderLen(yii::t('app','座号：').$siteType->name.' '.$site->serial , 48);
                 }else{
-                    $strSite=Helper::getPlaceholderLen('座号：临时座位 '.$order->site_id%1000 , 48);
+                    $strSite=Helper::getPlaceholderLen(yii::t('app','座号：临时座').$order->site_id%1000 , 48);
                 }
 		
 		///////$listKey = $order->dpid.'_'.$printer->ip_address;                		
@@ -293,7 +294,7 @@ class Helper
                     array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount'].$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
 		}
 		array_push($listData,str_pad('',48,'-'));
-		array_push($listData,str_pad('合计：'.$order->reality_total , 24,' ').str_pad('打印时间：'.time(),24,' '));
+		array_push($listData,str_pad(yii::t('app','合计：').$order->reality_total , 24,' ').str_pad(yii::t('app','时间：').time(),24,' '));
 		//前面加 barcode
                 $precode="1D6B450B".  strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".  strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 //后面加切纸
@@ -301,7 +302,7 @@ class Helper
 		if($hasData){
                     return Helper::printConetent($printer,$listData,$precode,$sufcode);
 		}else{
-                    return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'没有产品');
+                    return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品'));
                 }                
 	}
         
@@ -311,7 +312,7 @@ class Helper
 		
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
-                        return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'PAD没有默认打印机');		
+                        return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}
 		$hasData=false;
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
@@ -321,13 +322,13 @@ class Helper
                 {
                     $site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
                     $siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
-                    $strSite=str_pad('座号：'.$siteType->name.' '.$site->serial , 24,' ').str_pad('人数：'.$order->number,12,' ');
+                    $strSite=str_pad(yii::t('app','座号：').$siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                 }else{
-                    $strSite=str_pad('座号：临时座 '.$order->site_id%1000 , 24,' ').str_pad('人数：'.$order->number,12,' ');
+                    $strSite=str_pad(yii::t('app','座号：临时座').$order->site_id%1000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                 }
 		if(!empty($order->callno))
                 {
-                    $strSite=$strSite.str_pad('呼叫号：'.$order->callno,12,' ');
+                    $strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
                     //array_push($listData,$strcall);
                 }
 		//$listKey = $order->dpid.'_'.$printer->ip_address;                	
@@ -341,10 +342,10 @@ class Helper
                     array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
 		}
 		array_push($listData,str_pad('',48,'-'));
-                array_push($listData,str_pad('应付金额：'.$order->should_total , 40,' '));
-                array_push($listData,str_pad('操作员：'.Yii::app()->user->name,24,' ')
-                        .str_pad('时间：'.date('Y-m-d H:i:s',time()),24,' '));
-                array_push($listData,str_pad('订餐电话：'.$order->company->telephone,44,' '));
+                array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
+                array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
+                        .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
+                array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
                 $precode=$cprecode;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";                        
@@ -353,7 +354,7 @@ class Helper
 		if($hasData){
                     return Helper::printConetent($printer,$listData,$precode,$sufcode);
 		}else{
-                    return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'没有要打印的菜品！');
+                    return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
                 }
                 /*$listData.= str_pad('',48,'-').'<br>';
 		$listData.= str_pad('消费合计：'.$order->reality_total , 20,' ').'<br>';
@@ -401,10 +402,10 @@ class Helper
 		foreach ($printwaydetails as $printway) {
                         $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$printway->printer_id,':dpid'=>$order->dpid));
                         if(empty($printer)) {
-                                return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'没有打印机');		
+                                return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有设置厨房打印机'));		
                         }
                         if($printer->printer_type!='0') {
-                                return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'厨打必须是网络打印机');		
+                                return array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','厨打打印机必须是网络打印机'));		
                         }
                         //$listKey = $order->dpid.'_'.$printer->ip_address;  
                         /////////**********判断打印机是否存在******//////////////////
@@ -413,40 +414,40 @@ class Helper
                         $strSite="";
                         if(empty($site))
                         {
-                            $strSite.= str_pad('座号：临时座位 '.$siteNo->site_id%1000 , 24,' ').str_pad('人数：'.$order->number,12,' ');
+                            $strSite.= str_pad(yii::t('app','座号：临时座').$siteNo->site_id%1000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                         }else{
-                            $strSite.= str_pad('座号：'.$site->siteType->name.' '.$site->serial , 24,' ').str_pad('人数：'.$order->number,12,' ');
+                            $strSite.= str_pad(yii::t('app','座号：').$site->siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                         }
                         //$strreprint="";
                         
                         $listData = array(Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 48));
                         if($reprint)
                         {
-                            $strreprint="*********重复厨打，请留意！！！";
+                            $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
                             array_push($listData,$strreprint);
                         }
                         if(!empty($order->callno))
                         {
-                            $strSite=$strSite.str_pad('呼叫号：'.$order->callno,12,' ');
+                            $strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
                             //array_push($listData,$strcall);
                         }
                         array_push($listData,$strSite);                
                         array_push($listData,str_pad('',48,'-'));
                         array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,32).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,16));	
-                        $strTaste= "单品口味：".$orderProductTasteEx;
+                        $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                         foreach($orderProductTastes as $orderProductTaste){
                             $strTaste.= '/'.$orderProductTaste->taste->name;
                         }
                         array_push($listData,$strTaste);
                         array_push($listData,str_pad('',48,'-'));
-                        $strAllTaste= "全单口味：".$orderTasteEx;
+                        $strAllTaste= yii::t('app',"全单口味：").$orderTasteEx;
                         foreach($orderTastes as $orderTaste){
                             $strAllTaste.= '/'.$orderTaste->taste->name;
                         }
                         array_push($listData,$strAllTaste);
                         array_push($listData,str_pad('',48,'-'));
-                        array_push($listData,str_pad('收银员：'.Yii::app()->user->name,20,' ')
-                                .str_pad('打印时间：'.date('Y-m-d H:i:s',time()),28,' '));
+                        array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,20,' ')
+                                .str_pad(yii::t('app','打印时间：').date('Y-m-d H:i:s',time()),28,' '));
                         $precode="";
                         //后面加切纸
                         $sufcode="0A0A0A0A0A0A1D5601";                        
@@ -506,7 +507,7 @@ class Helper
                     }
                 }else
                 {
-                    return array('status'=>false,'jobid'=>'0','type'=>'none','msg'=>'无法确定打印机语言！');
+                    return array('status'=>false,'jobid'=>'0','type'=>'none','msg'=>yii::t('app','无法确定打印机语言！'));
                 }
                 //加barcode和切纸
                 $contentCode=$precode.$contentCode.$sufcode;
@@ -532,7 +533,7 @@ class Helper
                         //Gateway::sendToAll(json_encode($print_data));
                         return array('status'=>true,'jobid'=>$jobid,'type'=>'net','msg'=>'');
                     }else{
-                        return array('status'=>false,'jobid'=>'0','type'=>'net','msg'=>'打印服务器找不到！');
+                        return array('status'=>false,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','打印服务器找不到！'));
                     }
                 }elseif($printer->printer_type=='1')//local
                 {                
@@ -540,7 +541,7 @@ class Helper
                     $store->set($printer->dpid."_".$jobid,$contentCode,0,60);
                     return array('status'=>true,'jobid'=>$jobid,'type'=>'local','msg'=>'');
                 }else{
-                    return array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'打印机类型错误');
+                    return array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','打印机类型错误！'));
                 }               
         }
 }

@@ -5,7 +5,7 @@
 					
 				),
 		)); ?>
-			<h3 class="form-title">管理员系统</h3>
+			<h3 class="form-title"><?php echo yii::t('app','管理员系统')?></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span>输入用户名和密码</span>

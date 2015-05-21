@@ -8,8 +8,10 @@
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'My Web Application',
-	'language'=>'zh_cn',
-	'sourceLanguage'=>'en',
+	//'language'=>'zh_cn',
+        //'language'=>'jp',
+	//'sourceLanguage'=>'en',
+        'sourceLanguage'=>'zh_cn',
 		
 	// preloading 'log' component
 	'preload'=>array('log'),
@@ -105,6 +107,10 @@ return array(
 				*/
 			),
 		),
+            
+                'coreMessages'=>array(  
+                    'basePath'=>'protected/messages',  
+                    ),
 
 	),
 

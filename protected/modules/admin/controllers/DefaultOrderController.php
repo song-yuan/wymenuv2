@@ -749,7 +749,7 @@ class DefaultOrderController extends BackendController
                         $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'发生异常');
                         //Yii::app()->end(json_encode($ret));
                 }
-                //var_dump($ret);exit;
+                var_dump($ret);exit;
                 $this->renderPartial('printresultone' , array(
                                 'orderId'=>$order->lid,
                                 'orderProductId'=>$orderProductId,

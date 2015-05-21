@@ -4,7 +4,7 @@
 		<div class="header-inner">
 			<!-- BEGIN LOGO -->  
 			<a class="navbar-brand" href="<?php echo $this->createUrl('default/index');?>">
-			<span style="margin-left:20px;">我要MENU</span>
+			<span style="margin-left:20px;"><?php echo yii::t('app','我要MENU')?></span>
 			</a>
 			<!-- END LOGO -->
 			<!-- BEGIN RESPONSIVE MENU TOGGLER --> 
