@@ -196,8 +196,21 @@ $(document).ready(function(){
                 }
  			},
  		});
- 		alert($(".slick-list").height());
- 		var left = 0;
+        $("#gallery").css({
+			position: "absolute",
+			left: 0,
+			top: 0
+		});
+		$('#gallery').slick({
+			  dots: true,
+			  infinite: true,
+			  speed: 1000,
+			  slidesToShow: 1,
+	  		  slidesToScroll: 1,
+	  		  autoplay: true,
+			  arrows: false
+		});
+		var left = 0;
 		if(($('.large-pic').width() - $("#gallery").outerWidth()) > 0){
 			left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
 		}
@@ -209,15 +222,6 @@ $(document).ready(function(){
 			position: "absolute",
 			left: left,
 			top: top
-		});
-		$('#gallery').slick({
-			  dots: true,
-			  infinite: true,
-			  speed: 1000,
-			  slidesToShow: 1,
-	  		  slidesToScroll: 1,
-	  		  autoplay: true,
-			  arrows: false
 		});
     });
     
