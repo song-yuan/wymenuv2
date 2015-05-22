@@ -175,6 +175,9 @@ $(document).ready(function(){
                 //alert("应用程序无法完整清楚所有缓存数据，请到“设置”->“应用程序”->“WebWyMenu”中手动清除！");
             }
 	});
+	 $('#forum_list').on('click','.product-pic',function(){
+	 	
+	 });
     $('#forum_list').on('click','.view-product-pic',function(){
     	//var lid = $(this).attr('lid');
         var lid = $(this).attr('product-id');
@@ -218,7 +221,9 @@ $(document).ready(function(){
     });
     
     $('.large-pic').click(function(){
+    	alert($("#gallery").outerHeight());
     	$(this).html('');
+    	alert($("#gallery").outerHeight());
     	$(this).css('display','none');
     });
     
