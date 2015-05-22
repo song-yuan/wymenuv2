@@ -210,17 +210,12 @@ $(document).ready(function(){
 	  		  autoplay: true,
 			  arrows: false
 		});
-		var left = 0;
-		if(($('.large-pic').width() - $("#gallery").outerWidth()) > 0){
-			left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
-		}
+		alert($("#gallery").outerHeight());
 		var top = 0;
 		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
 			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
 		}
         $("#gallery").css({
-			position: "absolute",
-			left: left,
 			top: top
 		});
     });
