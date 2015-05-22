@@ -235,9 +235,25 @@ $(document).ready(function(){
     		if(data.status){
                  if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                  {
-                	 $('#padOrderForm').find('.order-product').children().each(function(){
-                     	
+                	 $('#padOrderForm').find('.input-product').each(function(){
+                	    var _this = $(this);
+                     	var productId = _this.attr('name');
+                     	var productIdArr = productId.split(","); //字符分割 
+                     	productId = productIdArr[0];
+                     	var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+                     	var category = parents.attr('category');//分类id
+                     	parents.find('.subject-order').css('display','none');
+                     	parents.find('.single-num-circel').html(0);
+                     	_this.parents('.product-catory-product').remove();
+                     	if(!$('.catory'+category).find('.product-catory-product').length){
+			    			$('.catory'+category).remove();
+			    		}
                      });
+                     $('.product-pad-mask').hide();
+                     var total = 0;
+                     total.toFixed(2);
+                     $('.total-price').html(total);
+					 $('.total-num').html(0);
                      alert("打印成功");
                  }
                  else
@@ -249,5 +265,16 @@ $(document).ready(function(){
                 }
     	});
     	return false;
+    });
+    $('#padOrderForm').on('click','.product-catory-product',function(){
+    	var input = $(this).find('input');
+    	var productId = input.attr('name');
+    	var productIdArr = productId.split(","); //字符分割 
+        productId = productIdArr[0];
+        var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+        var category = parents.attr('category');//分类id
+        $('#pad_category_select').val(category);
+        var height = parents.offset().top;
+		$('body').scrollTop(parseInt(height)-70);
     });
  });
