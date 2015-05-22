@@ -17,6 +17,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',0);
                 $typeId = Yii::app()->request->getParam('typeId',0);
                 $orderId = Yii::app()->request->getParam('orderId',0);
+                $syscallId = Yii::app()->request->getParam('syscallId',0);
                 $order=array();
                 $siteNo=array();
                 ///***********insert to order feedback
@@ -24,9 +25,17 @@ class DefaultOrderController extends BackendController
                 if($orderId !='0')
                 {
                     $order = Order::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    if(empty($order))
+                    {
+                        $title="该订单不存在，请输入合法订单！";
+                        $backurl=$this->createUrl('default/index',array('companyId'=>$this->companyId));
+                        $this->render('error' , 
+                                array('backurl'=>$backurl,
+                                    'title'=>$title));
+                    }
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
-                    $criteria->order = ' t.lid desc ';
+                    $criteria->order = ' t.lid desc ';                    
                     $siteNo = SiteNo::model()->find($criteria);
                 }else{
                     $criteria = new CDbCriteria;
@@ -37,7 +46,7 @@ class DefaultOrderController extends BackendController
                     $criteria->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria);
                 }
-                //var_dump($order);exit;                
+                
                 if(empty($order))
                 {
                     $order=new Order();
@@ -79,7 +88,8 @@ class DefaultOrderController extends BackendController
 				'productTotal' => $productTotal ,
 				'total' => $total,
 				//'paymentMethods'=>$paymentMethods,
-                                'typeId' => $typeId
+                                'typeId' => $typeId,
+                                'syscallId'=>$syscallId
                                 //'categories' => $categories
                                 //'products' => $productslist,
                                 //'setlist' => $setlist
@@ -163,7 +173,7 @@ class DefaultOrderController extends BackendController
                             $orderpay->save();
                             $siteNo->status=$order->order_status;
                             $siteNo->save();
-                            
+                               
                             if($order->order_status=='4')
                             {
                                 SiteClass::deleteCode($this->companyId,$siteNo->code);
@@ -178,6 +188,76 @@ class DefaultOrderController extends BackendController
 				'order' => $order,
                                 'orderpay' => $orderpay,
                                 'payback'=>$ispayback,
+                                'typeId'=>$typeId,
+                                'callid'=>$callId,
+                                'paymentMethods'=>$paymentMethods
+		));
+	}
+        
+        public function actionAccountAuto() {
+		$orderId = Yii::app()->request->getParam('orderId','0');
+                $companyId = Yii::app()->request->getParam('companyId','0');
+                $typeId=Yii::app()->request->getParam('typeId','0');
+                $callId=Yii::app()->request->getParam('callId','0');
+                
+                $totaldata=Yii::app()->request->getParam('total','0');
+                 ///*************print
+
+                $criteria = new CDbCriteria;
+                $criteria->condition =  't.dpid='.$companyId.' and t.lid='.$orderId ;
+                $criteria->order = ' t.lid desc ';
+                $order = Order::model()->find($criteria);
+
+                $order->should_total=$totaldata;
+                $orderpay=new OrderPay();
+                $orderpay->dpid=$order->dpid;
+                $orderpay->order_id=$order->lid;
+                $orderpay->create_at=date('Y-m-d H:i:s',time());
+                
+                $paymentMethods = PaymentClass::getPaymentMethodList($companyId);
+                //var_dump($paymentMethods);exit;
+                if(Yii::app()->request->isPostRequest){
+                        //var_dump(Yii::app()->request->getPost('Order'));exit;
+                        $order->attributes = Yii::app()->request->getPost('Order');
+                        $order->pay_time = date('Y-m-d H:i:s',time());
+                        $orderpay->attributes = Yii::app()->request->getPost('OrderPay');
+                        $order->payment_method_id=$orderpay->payment_method_id;
+                        $order->reality_total+=$orderpay->pay_amount;
+                        $order->remark.=$orderpay->remark;
+                        $se=new Sequence("order_pay");
+                        $orderpay->lid = $se->nextval();
+                        //var_dump($order);exit;
+                        
+			$transaction = Yii::app()->db->beginTransaction();
+			try{
+                            
+                            $criteria2 = new CDbCriteria;
+                            $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$order->dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                            $criteria2->order = ' t.lid desc ';
+                            $siteNo = SiteNo::model()->find($criteria2);
+                            if($siteNo->is_temp=='0')
+                            {
+                                $site = Site::model()->with('siteType')->find('t.lid=:lid and t.dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
+                                $site->status = $order->order_status;
+                                $site->save();
+                            }else{
+                                $site = array();
+                            }
+                            //$order->order_status=$tempstatus;
+                            $order->save();
+                            $orderpay->save();
+                            $siteNo->status=$order->order_status;
+                            $siteNo->save();                               
+                            
+                            $transaction->commit();
+                            $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
+			} catch(Exception $e){
+				$transaction->rollback();
+			}
+		}
+		$this->renderPartial('accountauto' , array(
+				'order' => $order,
+                                'orderpay' => $orderpay,
                                 'typeId'=>$typeId,
                                 'callid'=>$callId,
                                 'paymentMethods'=>$paymentMethods
@@ -630,6 +710,7 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId');
+                $callId =  Yii::app()->request->getParam('callId');
                 $db = Yii::app()->db;              
                 $ret=array();
                 //var_dump(Yii::app()->params->has_cache);exit;
@@ -650,6 +731,7 @@ class DefaultOrderController extends BackendController
                         }
                         $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id=:id and t.dpid=:dpid and t.delete_flag=0' , array(':id'=>$orderId,':dpid'=>$companyId));
                         $order->order_status='2';
+                        $order->callno=$callId;
                         $order->save();
                         $siteNo->status='2';
                         $siteNo->save();
@@ -685,7 +767,8 @@ class DefaultOrderController extends BackendController
                 $this->renderPartial('printresultlist' , array(
                                 'orderId'=>$orderId,
 				'ret' => $ret,// job in memcached
-                                'typeId'=>$typeId                                
+                                'typeId'=>$typeId,
+                                'callId'=>$callId
 		));
 		/*/////////////test
                 Gateway::getOnlineStatus();

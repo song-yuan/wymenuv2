@@ -22,7 +22,8 @@
                                             var waitingsecond=10;
                                             $(document).ready(function() {
                                                 clearTimeout(interval);
-                                                interval = setInterval(printStatus,"1000");                                                
+                                                interval = setInterval(printStatus,"1000"); 
+                                                
                                             });
                                             //全部成功自动刷新，有失败任务，停止刷新页面， 
                                             //点击确定，回滚失败的任务单品打印状态，提示逐个重新厨打。
@@ -31,9 +32,7 @@
                                                  location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId));?>";
                                              });
                                              function printStatus(){
-                                                //get print result
-                                                //if has error stop
-                                                //alert(1);
+                                                                                                
                                                 $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResult',array('companyId'=>$this->companyId,'orderId'=>$orderId));?>/timenum/'+waitingsecond,function(data){
                                                     //alert(data.notsurenum);
                                                     $("#successnumid").html(data.successnum);
@@ -45,16 +44,23 @@
                                                         //all success
                                                         //location.href= order
                                                         clearTimeout(interval);
-                                                        location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId));?>";
+                                                        location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId,'syscallId'=>$callId));?>";
+                                                    }
+                                                    
+                                                    if(waitingsecond<0)
+                                                    {                                                       
+                                                        $("#notsurenumid").html(0);
+                                                        $("#errornumid").html(data.errornum+data.notsurenum);
                                                     }
                                                     
                                                 },'json');
                                                 waitingsecond--;
+                                                //alert(waitingsecond);
                                                 //10s后还有任务没有返回，就作为失败处理。
                                                 if(waitingsecond<0)
                                                 {
                                                     clearTimeout(interval);
-                                                    //stop;
+                                                    
                                                 }                                                
                                             }
                                             </script>
