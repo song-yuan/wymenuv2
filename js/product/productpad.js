@@ -196,7 +196,7 @@ $(document).ready(function(){
                 }
  			},
  		});
- 		alert($("#gallery").height());
+ 		alert($(".slick-list").height());
  		var left = 0;
 		if(($('.large-pic').width() - $("#gallery").outerWidth()) > 0){
 			left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
