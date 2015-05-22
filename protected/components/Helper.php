@@ -399,7 +399,12 @@ class Helper
                 //$site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
 		//$siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
 		//var_dump($site->floor_id,$orderProduct->product->printer_way_id);exit;
-                $printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid',array(':floorid'=>$site->floor_id,':pwi'=>$orderProduct->product->printer_way_id,':dpid'=>$orderProduct->dpid));
+                $floor_id='0';
+                if($siteNo->is_temp=='0')
+                {
+                    $floor_id=$site->floor_id;
+                }
+                $printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid',array(':floorid'=>$floor_id,':pwi'=>$orderProduct->product->printer_way_id,':dpid'=>$orderProduct->dpid));
                 //var_dump($printwaydetails);exit;	
 		foreach ($printwaydetails as $printway) {
                         $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$printway->printer_id,':dpid'=>$order->dpid));
