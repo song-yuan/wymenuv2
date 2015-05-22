@@ -201,6 +201,7 @@ $(document).ready(function(){
 							  arrows: false
 						});
 					var top = 0;
+					alert($("#gallery").outerHeight());
 					if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
 						top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
 					}
