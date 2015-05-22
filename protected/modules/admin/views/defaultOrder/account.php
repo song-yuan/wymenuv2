@@ -60,7 +60,7 @@
                                                         <input type="button" class="btn green" id="pay-btn" value="收 银">
                                                         <input type="button" class="btn green" id="account-btn" value="结 单">
                                                     <?php endif; ?>
-                                                        <button type="button" data-dismiss="modal" class="btn default">取 消</button>
+                                                        <button type="button" data-dismiss="modal" class="btn default" id="btn-account-cancle">取 消</button>
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>
@@ -123,4 +123,9 @@
                                     $("#timecount").html(curtime);
                                 }
                             }
+                            $('#btn-account-cancle').click(function(){
+                                 clearTimeout(interval);
+                                 scanon=false;
+                                 location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$order->lid,'syscallId'=>$callid));?>";
+                            });
                         </script>

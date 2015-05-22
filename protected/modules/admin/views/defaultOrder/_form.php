@@ -155,16 +155,15 @@
                                                             });
 
                                                             $('.btn-del').click(function(){
-                                                               var that = $(this);
                                                                var id = $(this).attr('lid');
                                                                var setid = $(this).attr('setid');
-                                                               var orderstatus="<?php echo $model->order_status;?>";
+                                                               //var orderstatus="<?php echo $model->order_status;?>";
                                                                //alert(orderstatus);
-                                                               if(orderstatus!='1')
-                                                               {
-                                                                   alert('不是未下单状态，不能删除！');
-                                                                   return;
-                                                               }
+                                                               //if(orderstatus!='1')
+                                                               //{
+                                                               //    alert('不是未下单状态，不能删除！');
+                                                               //    return;
+                                                               //}
                                                                //alert(setid);
                                                                var tip='';
                                                                if(setid!='0000000000')

@@ -737,14 +737,16 @@ class DefaultOrderController extends BackendController
                         $siteNo->status='2';
                         $siteNo->save();
                         $jobids=array();
-                        //var_dump($order);exit;
+                        //var_dump($orderProducts);exit;
                         foreach($orderProducts as $orderProduct)
                         {
                             $reprint = false;
                             //var_dump($orderProduct);exit;
                             if($orderProduct->is_print=='0')
                             {
+                                //echo $orderProduct->is_print; exit;
                                 $tempprintret=Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
+                                //echo $tempprintret;exit;
                                 //if($tempprintret['status'])
                                 //{
                                     array_push($jobids,$tempprintret['jobid']."_".$orderProduct->lid);//如果失败jobid==0，检测时判断就行
