@@ -32,6 +32,7 @@ class DefaultOrderController extends BackendController
                         $this->render('error' , 
                                 array('backurl'=>$backurl,
                                     'title'=>$title));
+                        exit;
                     }
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;

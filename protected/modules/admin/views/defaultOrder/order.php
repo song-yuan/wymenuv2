@@ -107,7 +107,7 @@
 		<!-- END PAGE -->  
                 
                     <script type="text/javascript">
-                        syscallid=<?php echo $syscallId; ?>;
+                        syscallid='<?php echo $syscallId; ?>';
                         $(document).ready(function(){
                                 $('body').addClass('page-sidebar-closed');                                
                         });

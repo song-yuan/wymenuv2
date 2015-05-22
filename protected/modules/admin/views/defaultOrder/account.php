@@ -16,14 +16,8 @@
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                                         <h4 class="modal-title"><?php if($payback=='1') echo '退款'; else echo '收银 && 结单'; ?><?php switch($order->order_status) {case 2:{echo '未支付';break;} case 3:{echo '已支付';break;} }?></h4>
                                                         <?php if($callid!='0'): ?>
-                                                        <span style="color:red;" id="timecount">20</span>...秒后自动完成厨打收银，点击<input type="button" class="btn green" id="autopay_pause" value="此按钮">停止自动厨打收银！
-                                                        <div class="form-actions fluid" id="product_panel">
-                                                            <span style="color:red;" id="successnumid">0</span>...个菜品厨打已经成功</br></br>
-                                                            <span style="color:red;" id="notsurenumid">0</span>...个菜品正在打印</br></br>
-                                                            <span style="color:red;" id="errornumid">0</span>...个菜品厨打失败，</br>
-                                                            请点击“确定”按钮，去订单页面查看厨打失败产品，</br>
-                                                            确认打印机无故障后，点击打印失败菜品后面的“操作”按钮下的“重新厨打”按钮。
-                                                        </div>
+                                                        <span style="color:red;" id="timecount">20</span>...秒后自动完成结单，点击<input type="button" class="btn green" id="autopay_pause" value="此按钮">停止结单！
+                                                        
                                                         <?php endif;?>
                                                 </div>
                                                 <div class="modal-body">
