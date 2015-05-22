@@ -84,12 +84,12 @@
 }
 .setting-pad-mask{
 	position:fixed;
-	width:185px;
+	width:auto;
 	top:50px;
 	left:10px;
 	background:white;
 	z-index:1001;
-	height:170px;
+	height:140px;
 	bottom:20px;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 	border: 1px solid #ddd;
