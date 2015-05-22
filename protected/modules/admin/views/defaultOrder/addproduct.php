@@ -83,6 +83,7 @@
 
                                                 <?php $this->endWidget(); ?>                
                     <script type="text/javascript">
+                            var isset='<?php echo $isset; ?>';
                             $('#selectCategory').change(function(){
                                         var cid = $(this).val();
                                         //alert('<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId));?>/pid/'+cid);
@@ -104,6 +105,19 @@
                                                 }
                                         });
                                 });
+                        $('#create_btn').click(function(){
+                            //alert($('#setlist').val());
+                            if(isset=='0' && $('#OrderProduct_product_id').val()=='0')
+                            {
+                                alert("请选择产品！");
+                                return false;
+                            }
+                            if(isset=='1' && $('#setlist').val()=='0')
+                            {
+                                alert("请选择套餐！");
+                                return false;
+                            }
+                        });
                         $('#btn_product').click(function(){
                                 $('#btn_product').removeClass('grey');
                                 $('#btn_product').addClass('purple');

@@ -79,7 +79,7 @@
                                                             <?php echo $total['remark'] ;?>
                                                         </div>
                                                         <div class="col-md-3 ">
-                                                                <input id="callbarscanid" type="text" class="form-control" placeholder="扫描呼叫器条码快速收银、结单">
+                                                                <input id="callbarscanid" type="text" class="form-control" placeholder='<?php if($syscallId!='0') echo "扫描呼叫器条码快速收银、结算"; else echo "扫描呼叫器条码快速下单、厨打"; ?>'>
                                                         </div>
                                                         <div class="actions">
                                                             <?php if($model->order_status=='3' || $model->order_status=='4'): ?>
@@ -107,7 +107,8 @@
 		<!-- END PAGE -->  
                 
                     <script type="text/javascript">
-                        syscallid='<?php echo $syscallId; ?>';
+                        var syscallid='<?php echo $syscallId; ?>';
+                        var scanon=false;
                         $(document).ready(function(){
                                 $('body').addClass('page-sidebar-closed');                                
                         });
@@ -188,7 +189,7 @@
                         
                         function printKiten(callid){
                             var $modalloading = $('#portlet-print-loading');                                
-                            $modalloading.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>/callId/'+callid, '', function(){
+                           $modalloading.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>/callId/'+callid, '', function(){
                                 $modalloading.modal();
                             });
                         }
@@ -209,19 +210,32 @@
                         });
                         
                         $('#callbarscanid').keyup(function(){
-                            if($(this).val().length==5)
+                            if($(this).val().length==5 && scanon==false)
                             {
+                                scanon=true;
                                 var callid=$(this).val();
+                                //alert(callid);
                                 if(callid>"Ca000" && callid<"Ca999")
                                 {
-                                    if(syscallid!='0' && syscallid==callid)
+                                    
+                                    if(syscallid!='0')
                                     {
-                                        openaccount('0');
+                                        if(syscallid==callid)
+                                        {
+                                            openaccount('0');
+                                        }else{
+                                            alert("请再次扫描呼叫器："+syscallid+"，系统自动结单！");
+                                            $('#callbarscanid').val("");
+                                            scanon=false;
+                                            return false;
+                                        }
                                     }else{                                        
                                         printKiten(callid);
                                     }
                                 }else{
                                     alert("呼叫器编码不正确！");
+                                    $('#callbarscanid').val("");
+                                    scanon=false;
                                     return false;
                                 }
                             }
