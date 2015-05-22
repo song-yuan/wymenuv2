@@ -190,12 +190,6 @@ $(document).ready(function(){
  				if(msg!='nopic'){
                                     //alert(msg);
  					$('.large-pic').html(msg);
- 					$('.large-pic').css('display','block');
- 					 $("#gallery").css({
-							position: "fixed",
-							left: 0,
-							top: 0
-						});
 						$('#gallery').slick({
 							  dots: true,
 							  infinite: true,
@@ -205,6 +199,7 @@ $(document).ready(function(){
 					  		  autoplay: true,
 							  arrows: false
 						});
+					$('.large-pic').css('display','block');	
  				}else{
                     alert('没有大图！');
                 }
