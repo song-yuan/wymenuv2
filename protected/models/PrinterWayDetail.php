@@ -67,7 +67,7 @@ class PrinterWayDetail extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'print_way_id' => '打印方式id',
-			'floor_id' => '楼层',
+			'floor_id' => '楼层/区域',
 			'printer_id' => '打印机',
 			'list_no' => '打印份数',
 			'delete_flag' => 'Delete Flag',
