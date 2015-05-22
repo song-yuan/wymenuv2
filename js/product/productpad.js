@@ -198,8 +198,8 @@ $(document).ready(function(){
  			success:function(msg){
  				if(msg!='nopic'){
                                     //alert(msg);
- 					$('.large-pic').css('display','block');
  					$('.large-pic').html(msg);
+ 					$('.large-pic').css('display','block');
  					 $("#gallery").css({
 							position: "absolute",
 							left: 0,
@@ -220,7 +220,6 @@ $(document).ready(function(){
  			},
  		});
  		sleep(1);
- 		alert($('.large-pic').height());alert($("#gallery").outerHeight());
 		var top = 0;
 		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
 			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
