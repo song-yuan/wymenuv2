@@ -199,7 +199,6 @@ $(document).ready(function(){
 					  		  autoplay: true,
 							  arrows: false
 						});
-					$('.large-pic').css('display','block');	
  				}else{
                     alert('没有大图！');
                 }
@@ -212,6 +211,7 @@ $(document).ready(function(){
         $("#gallery").css({
 			top: top
 		});
+		$('.large-pic').css('display','block');	
     });
     
     $('.large-pic').click(function(){
