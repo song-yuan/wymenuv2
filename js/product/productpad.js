@@ -192,7 +192,7 @@ $(document).ready(function(){
  					$('.large-pic').html(msg);
  					$('.large-pic').css('display','block');
  					 $("#gallery").css({
-							position: "absolute",
+							position: "fixed",
 							left: 0,
 							top: 0
 						});
@@ -210,7 +210,6 @@ $(document).ready(function(){
                 }
  			},
  		});
- 		alert($("#gallery").outerHeight());
 		var top = 0;
 		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
 			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
