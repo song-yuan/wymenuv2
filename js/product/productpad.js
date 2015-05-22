@@ -200,19 +200,18 @@ $(document).ready(function(){
 							  arrows: false
 						});
 					$('.large-pic').css('display','block');	
+					var top = 0;
+					if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
+						top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
+					}
+			        $("#gallery").css({
+						top: top
+					});
  				}else{
                     alert('没有大图！');
                 }
  			},
  		});
-		var top = 0;
-		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
-			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
-		}
-        $("#gallery").css({
-			top: top
-		});
-		alert($("#gallery").outerHeight());
     });
     
     $('.large-pic').click(function(){
