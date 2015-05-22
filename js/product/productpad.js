@@ -175,6 +175,9 @@ $(document).ready(function(){
                 //alert("应用程序无法完整清楚所有缓存数据，请到“设置”->“应用程序”->“WebWyMenu”中手动清除！");
             }
 	});
+	 $('#forum_list').on('click','.product-pic',function(){
+	 	
+	 });
     $('#forum_list').on('click','.view-product-pic',function(){
     	//var lid = $(this).attr('lid');
         var lid = $(this).attr('product-id');
@@ -193,18 +196,10 @@ $(document).ready(function(){
                 }
  			},
  		});
- 		var left = 0;
-		if(($('.large-pic').width() - $("#gallery").outerWidth()) > 0){
-			left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
-		}
-		var top = 0;
-		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
-			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
-		}
         $("#gallery").css({
 			position: "absolute",
-			left: left,
-			top: top
+			left: 0,
+			top: 0
 		});
 		$('#gallery').slick({
 			  dots: true,
@@ -214,6 +209,13 @@ $(document).ready(function(){
 	  		  slidesToScroll: 1,
 	  		  autoplay: true,
 			  arrows: false
+		});
+		var top = 0;
+		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
+			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
+		}
+        $("#gallery").css({
+			top: top
 		});
     });
     
