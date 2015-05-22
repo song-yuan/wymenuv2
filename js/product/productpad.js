@@ -190,6 +190,7 @@ $(document).ready(function(){
  				if(msg!='nopic'){
                                     //alert(msg);
  					$('.large-pic').html(msg);
+ 					$('.large-pic').css('display','block');
 						$('#gallery').slick({
 							  dots: true,
 							  infinite: true,
@@ -199,7 +200,6 @@ $(document).ready(function(){
 					  		  autoplay: true,
 							  arrows: false
 						});
-					$('.large-pic').css('display','block');	
 					var top = 0;
 					if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
 						top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
