@@ -196,7 +196,7 @@ $(document).ready(function(){
                 }
  			},
  		});
- 		alert($("#gallery").outerHeight());
+ 		alert($("#gallery").height());
  		var left = 0;
 		if(($('.large-pic').width() - $("#gallery").outerWidth()) > 0){
 			left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
