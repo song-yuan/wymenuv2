@@ -210,7 +210,6 @@ $(document).ready(function(){
 	  		  autoplay: true,
 			  arrows: false
 		});
-		alert($("#gallery").outerHeight());
 		var top = 0;
 		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
 			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
