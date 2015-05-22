@@ -400,7 +400,7 @@ class Helper
 		//$siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
 		//var_dump($site->floor_id,$orderProduct->product->printer_way_id);exit;
                 $floor_id='0';
-                if($siteNo->is_temp=='0')
+                if($order->is_temp=='0')
                 {
                     $floor_id=$site->floor_id;
                 }
@@ -419,15 +419,16 @@ class Helper
                         //$list = new ARedisList($listKey);
                         //var_dump($list);exit;
                         $strSite="";
-                        if(empty($site))
+                        if($order->is_temp=='1')
                         {
-                            $strSite.= str_pad(yii::t('app','座号：临时座').$siteNo->site_id%1000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                            $strSite.= str_pad(yii::t('app','临时座:').$siteNo->site_id%1000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                         }else{
                             $strSite.= str_pad(yii::t('app','座号：').$site->siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                         }
                         //$strreprint="";
-                        
+                        //var_dump($strSite);exit;
                         $listData = array(Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 48));
+                        //var_dump($listData);exit;
                         if($reprint)
                         {
                             $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
@@ -438,6 +439,7 @@ class Helper
                             $strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
                             //array_push($listData,$strcall);
                         }
+                        //var_dump($listData);exit;
                         array_push($listData,$strSite);                
                         array_push($listData,str_pad('',48,'-'));
                         array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,32).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,16));	
