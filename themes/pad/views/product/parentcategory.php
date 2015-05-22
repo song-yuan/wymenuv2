@@ -38,7 +38,7 @@
 	  </div>
 	  <div class="total-price"><?php echo Money::priceFormat($price);?></div>
           <div class="top-right-button">
-                <button id="infoPadOrder">订单详情...</button>
+                <button id="infoPadOrder"><?php echo yii::t('app','订单详情...');?></button>
            </div>
   	<div class="clear"></div>
   </div>

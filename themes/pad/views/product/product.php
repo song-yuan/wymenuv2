@@ -40,8 +40,8 @@
 <form id="padOrderForm" action="/wymenuv2/product/confirmPadOrder/companyid/<?php echo $this->companyId;?>/padid/<?php echo $this->padId;?>" method="post">
 <div class="product-pad-mask">
 	<div class="mask-trangle"></div>
-        <div class="product-mask-info"><div style="padding:10px;display: inline;">确认无误后，点击“打印”按钮下单。</div><button id="updatePadOrder"> 打 印 </button></div>
-        <div class="product-mask-tip">提示：点击列表中的菜品名称能快速找到该菜品。</div>
+        <div class="product-mask-info"><div style="padding:10px;display: inline;"><?php echo yii::t('app','确认无误后，点击“确认”按钮下单。');?></div><button id="updatePadOrder"><?php echo yii::t('app','确认');?></button></div>
+        <div class="product-mask-tip"><?php echo yii::t('app','提示：点击列表中的菜品名称能快速找到该菜品。');?></div>
 	<div class="info">
 	</div>
 	<div class="product-bottom">
@@ -50,15 +50,15 @@
 </form>
 <div class="setting-pad-mask">
 	<div class="mask-trangle"></div>
-	<div class="product-mask-info">点单帮助</div>
+	<div class="product-mask-info"><?php echo yii::t('app','点单帮助');?></div>
         <div class="line"></div>
-        <div class="product-mask-info">中 文</div>
+        <!--<div class="product-mask-info">中 文</div>
         <div class="line"></div>
         <div class="product-mask-info">日本語</div>
+        <div class="line"></div>-->
+        <div class="product-mask-info" id="pad-disbind-menu"><?php echo yii::t('app','解除绑定'); ?></div>
         <div class="line"></div>
-        <div class="product-mask-info" id="pad-disbind-menu">解除绑定</div>
-        <div class="line"></div>
-        <div class="product-mask-info" id="pad-app-exit">清除缓存</div>
+        <div class="product-mask-info" id="pad-app-exit"><?php echo yii::t('app','清除缓存');?></div>
 	<div class="product-bottom">
 	</div>
 </div>
