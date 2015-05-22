@@ -196,6 +196,7 @@ $(document).ready(function(){
                 }
  			},
  		});
+ 		alert($("#gallery").outerHeight());
  		var left = 0;
 		if(($('.large-pic').width() - $("#gallery").outerWidth()) > 0){
 			left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
@@ -221,9 +222,7 @@ $(document).ready(function(){
     });
     
     $('.large-pic').click(function(){
-    	alert($("#gallery").outerHeight());
     	$(this).html('');
-    	alert($("#gallery").outerHeight());
     	$(this).css('display','none');
     });
     
