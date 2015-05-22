@@ -107,6 +107,7 @@
 		<!-- END PAGE -->  
                 
                     <script type="text/javascript">
+                        syscallid=<?php echo $syscallId; ?>;
                         $(document).ready(function(){
                                 $('body').addClass('page-sidebar-closed');                                
                         });
@@ -185,17 +186,19 @@
                             },'json');*/
                         });
                         
+                        function printKiten(callid){
+                            var $modalloading = $('#portlet-print-loading');                                
+                            $modalloading.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>/callId/'+callid, '', function(){
+                                $modalloading.modal();
+                            });
+                        }
+                        
                         $('#kitchen-btn').click(function(){
-                            var $modalloading = $('#portlet-print-loading');
                             var statu = confirm("下单，并厨打，确定吗？");
                                 if(!statu){
                                     return false;
                                 }
-                                
-                                $modalloading.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>', '', function(){
-                                    $modalloading.modal();
-                                });                   
-                                  //location.href="<?php echo $this->createUrl('defaultOrder/printKitchen',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>";
+                            printKiten('0');                          
                         });
                         
                         $('#alltaste-btn').click(function(){
@@ -211,7 +214,12 @@
                                 var callid=$(this).val();
                                 if(callid>"Ca000" && callid<"Ca999")
                                 {
-                                    openaccount('0');
+                                    if(syscallid!='0' && syscallid==callid)
+                                    {
+                                        openaccount('0');
+                                    }else{                                        
+                                        printKiten(callid);
+                                    }
                                 }else{
                                     alert("呼叫器编码不正确！");
                                     return false;
