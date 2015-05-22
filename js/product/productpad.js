@@ -1,3 +1,12 @@
+function sleep(numberMillis) { 
+	var now = new Date(); 
+	var exitTime = now.getTime() + numberMillis; 
+	while (true) { 
+	now = new Date(); 
+	if (now.getTime() > exitTime) 
+	return; 
+	} 
+}
 function totalPrice(){
 	var totalPrice = 0;
 	$('.input-product').each(function(){
@@ -210,7 +219,8 @@ $(document).ready(function(){
                 }
  			},
  		});
- 		alert($("#gallery").outerHeight());
+ 		sleep(1);
+ 		alert($('.large-pic').height());alert($("#gallery").outerHeight());
 		var top = 0;
 		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
 			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
