@@ -189,8 +189,8 @@ $(document).ready(function(){
  			success:function(msg){
  				if(msg!='nopic'){
                                     //alert(msg);
+                    $('.large-pic').css('display','block');
  					$('.large-pic').html(msg);
- 					$('.large-pic').css('display','block');
 						$('#gallery').slick({
 							  dots: true,
 							  infinite: true,
