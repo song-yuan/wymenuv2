@@ -212,6 +212,7 @@ $(document).ready(function(){
         $("#gallery").css({
 			top: top
 		});
+		alert($("#gallery").outerHeight());
     });
     
     $('.large-pic').click(function(){
