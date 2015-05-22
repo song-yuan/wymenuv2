@@ -162,9 +162,9 @@
 
 .product-mask-info button {
 	background: rgb(239,68,77);
-	height: 35px;
+	height: 40px;
 	padding:5px 10px;
-	font-size: 25px;
+	font-size: 30px;
 	color: white;
 	border: none;
 	border-radius: 4px;
@@ -189,7 +189,7 @@
 	background-color:#eee;
         padding: 0px;
         text-align: center;
-        font-size: 20px;
+        font-size: 30px;
         font-weight: 700;
         height: 45px;
 }
@@ -197,6 +197,7 @@
 .product-mask-tip{
 	background-color:#fff;
         color:rgb(239,68,77);
+        font-size: 30px;
         padding:5px;
 }
 
@@ -217,16 +218,16 @@
 
 .product-catory{
     padding:2px 10px;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: 500;
     color: #ccc;
     border-bottom: 1px dashed rgb(0,0,0);
 }
 .product-catory-product{
     padding:2px 10px;
-    font-size: 22px;
+    font-size: 30px;
     font-weight: 700;
-    height: 32px;
+    //height: 32px;
     border-bottom: 1px dashed rgb(0,0,0);
 }
 .product-catory-product-right{float:right;height:32px;}
@@ -245,7 +246,7 @@
 }
 .product-catory-product-right input{
 	width: 30px;
-	height: 20px;
+	height: 30px;
 	padding: 5px;
 	border: 0px !important;
 	border-top: #e5e5e5 1px solid !important;
