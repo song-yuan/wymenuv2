@@ -12,7 +12,7 @@
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product.css');
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/reset.css');
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/slick.css');
-
+        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/language/'.Yii::app()->language.'.js');
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/base64.js'); 
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/pic-pad.js');
@@ -25,7 +25,7 @@
 	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/classie.js';?>"></script>
 	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/jquery.form.js';?>"></script>
 	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/productpad.js';?>"></script>
-	<div id="page_0" class="up ub ub-ver" tabindex="0">
+        <div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
 		<div id="forum_list">
