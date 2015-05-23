@@ -16,7 +16,7 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
     <title>我要点单</title>
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl.'/css/productmain.css';?>"/>
     <script type="text/javascript" src="<?php echo $baseUrl.'/plugins/jquery-1.10.2.min.js';?>"></script>
-    <?php if(Yii::app()->language=='jp'): ?>
+    <?php if(Yii::app()->language=='jp'): $language = 1;?>
     <script type="text/javascript" src="<?php echo $baseUrl.'/js/language/jp.js';?>"></script>
     <?php else:?>
     <script type="text/javascript" src="<?php echo $baseUrl.'/js/language/zh_cn.js';?>"></script>
@@ -26,6 +26,6 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
     <div class="page">
     <?php echo $content ?>
     </div>
-    <input type="hedden" name="language" value="<?php echo $$language;?>" />
+    <input type="hedden" name="language" value="<?php echo $language;?>" />
 </body>
 </html>
