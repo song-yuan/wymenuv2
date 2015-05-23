@@ -261,6 +261,8 @@ class CreateOrder
 						);
 			$db->createCommand()->insert('nb_order',$data);  
 			//订单产品 $goodsIds = array('goods_id'=>goods_num,'set_id,1'=>set_num);
+			$orderPrice = 0;
+			
 			foreach($goodsIds as $key=>$num){
 				 $se=new Sequence("order_product");
 	             $orderProductId = $se->nextval();
@@ -283,9 +285,11 @@ class CreateOrder
 										'product_order_status'=>1,
 										);
 					   $db->createCommand()->insert('nb_order_product',$orderProductData);
+					   $orderPrice +=$productSet['price']*$num;
 	             	}
  	             }else{
 	             	//单品
+	             	$productPrice = self::getProductPrice($dpid,$key,0);
 	             	 $orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
@@ -293,16 +297,18 @@ class CreateOrder
 										'order_id'=>$orderId,
 										'set_id'=>0,
 										'product_id'=>$goodsArr[0],
-										'price'=>self::getProductPrice($dpid,$key,0),
+										'price'=>$productPrice,
 										'update_at'=>$time,
 										'amount'=>$num,
 										'taste_memo'=>'无',
 										'product_order_status'=>1,
 										);
 					 $db->createCommand()->insert('nb_order_product',$orderProductData);
+					  $orderPrice +=$productPrice*$num;
 	             }
 			}	
-			
+			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
+			$db->createCommand($sql)->execute();
 			$order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$dpid));
             $pad=Pad::model()->with('printer')->find('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
            	if(!$pad){
