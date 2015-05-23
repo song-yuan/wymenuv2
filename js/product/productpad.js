@@ -205,9 +205,8 @@ $(document).ready(function(){
 					  		  autoplay: true,
 							  arrows: false
 						});
-					var top = 15%;
 			        $("#gallery").css({
-						top: top
+						top: 15%
 					});
  				}else{
                     alert('没有大图！');
