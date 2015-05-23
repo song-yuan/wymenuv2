@@ -13,7 +13,7 @@ return array (
     
     //打印相关的四个方法里面component helper printlist printpadlist printkitchen printcontent
     '座号：'=>'席番号',
-    '座号：临时座'=>'臨時番号'
+    '座号：临时座'=>'臨時番号：'
 ,
     '合计'=>'合計',
     '时间'=>'時間',
