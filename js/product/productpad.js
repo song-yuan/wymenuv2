@@ -206,6 +206,7 @@ $(document).ready(function(){
 							  arrows: false
 						});
 			        $("#gallery").css({
+			        	position:absolut,
 						top: '15%'
 					});
  				}else{
