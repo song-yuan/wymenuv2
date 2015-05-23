@@ -19,7 +19,7 @@
 
                                             <script>
                                             var interval;
-                                            var waitingsecond=30;
+                                            var waitingsecond=10;
                                             $(document).ready(function() {
                                                 clearTimeout(interval);
                                                 interval = setInterval(printStatus,"1000"); 

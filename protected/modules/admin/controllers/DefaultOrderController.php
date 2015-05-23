@@ -746,7 +746,6 @@ class DefaultOrderController extends BackendController
                             {
                                 //echo $orderProduct->is_print; exit;
                                 $tempprintret=Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
-                                sleep(3);
                                 //echo $tempprintret;exit;
                                 //if($tempprintret['status'])
                                 //{
