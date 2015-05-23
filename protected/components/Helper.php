@@ -291,7 +291,12 @@ class Helper
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
                     $hasData=true;
-                    array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount'].$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
+                    if(Yii::app()->language=='jp')
+                    {
+                        array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
+                    }else{
+                        array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount'].$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
+                    }
 		}
 		array_push($listData,str_pad('',48,'-'));
 		array_push($listData,str_pad(yii::t('app','合计：').$order->reality_total , 24,' ').str_pad(yii::t('app','时间：').time(),24,' '));
@@ -339,7 +344,12 @@ class Helper
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
                     $hasData=true;
-                    array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
+                    if(Yii::app()->language=='jp')
+                    {
+                        array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
+                    }else{
+                        array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
+                    }
 		}
 		array_push($listData,str_pad('',48,'-'));
                 array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
@@ -442,7 +452,7 @@ class Helper
                         //var_dump($listData);exit;
                         array_push($listData,$strSite);                
                         array_push($listData,str_pad('',48,'-'));
-                        array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,32).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,16));	
+                        array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,34).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,14));	
                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                         foreach($orderProductTastes as $orderProductTaste){
                             $strTaste.= '/'.$orderProductTaste->taste->name;

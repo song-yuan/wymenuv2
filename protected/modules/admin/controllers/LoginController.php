@@ -5,7 +5,7 @@ class LoginController extends BackendController
 	public function actionIndex()
 	{
                 $language=Yii::app()->request->getParam('language','0');
-                //echo $language;
+                //echo Yii::app()->language;
                 if($language!='0')
                 {
                     //echo $language;
