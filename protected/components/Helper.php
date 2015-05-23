@@ -437,7 +437,7 @@ class Helper
                         $strSite="";
                         if($order->is_temp=='1')
                         {
-                            $strSite.= str_pad(yii::t('app','临时座:').$siteNo->site_id%1000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                            $strSite.= str_pad(yii::t('app','临时座：').$siteNo->site_id%1000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                         }else{
                             $strSite.= str_pad(yii::t('app','座号：').$site->siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                         }
