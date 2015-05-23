@@ -471,8 +471,8 @@ class Helper
                         }
                         array_push($listData,$strAllTaste);
                         array_push($listData,str_pad('',48,'-'));
-                        array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,20,' ')
-                                .str_pad(yii::t('app','打印时间：').date('Y-m-d H:i:s',time()),28,' '));
+                        array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,28,' ')
+                                .str_pad(yii::t('app','').date('Y-m-d H:i:s',time()),20,' '));
                         $precode="";
                         //后面加切纸
                         $sufcode="0A0A0A0A0A0A1D5601";                        
