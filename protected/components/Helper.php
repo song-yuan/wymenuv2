@@ -329,7 +329,7 @@ class Helper
                     $siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
                     $strSite=str_pad(yii::t('app','座号：').$siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                 }else{
-                    $strSite=str_pad(yii::t('app','座号：临时座').$order->site_id%1000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                    $strSite=str_pad(yii::t('app','座号：临时座').$order->site_id%10000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                 }
 		if(!empty($order->callno))
                 {
