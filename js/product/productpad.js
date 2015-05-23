@@ -29,6 +29,7 @@ function addToCart() {
 	}, 800); 
 }
 $(document).ready(function(){
+	var language = $('input[name="language']).val();
     $('#forum_list').on('click','.addCart',function(){
     	var _this = $(this);
     	var type = _this.attr('type');
@@ -81,7 +82,9 @@ $(document).ready(function(){
     		nums = parseInt($('.total-num').html());
  		
 		total += price;
-		total = total.toFixed(2);
+		if(!parseInt(language)){
+			total = total.toFixed(2);
+		}
 		$('.total-price').html(total);
 		$('.total-num').html(nums+1);
 		
@@ -118,7 +121,9 @@ $(document).ready(function(){
     		nums = parseInt($('.total-num').html());
  		if(nums > 0){
 	 		total -= price;
-			total = total.toFixed(2);
+	 		if(!parseInt(language)){
+				total = total.toFixed(2);
+			}
 			$('.total-price').html(total);
 			$('.total-num').html(nums-1);
  		}
@@ -200,10 +205,7 @@ $(document).ready(function(){
 					  		  autoplay: true,
 							  arrows: false
 						});
-					var top = 0;
-					if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
-						top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
-					}
+					var top = 15%;
 			        $("#gallery").css({
 						top: top
 					});
@@ -212,13 +214,6 @@ $(document).ready(function(){
                 }
  			},
  		});
- 		var top = 0;
-		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
-			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
-		}
-        $("#gallery").css({
-			top: top
-		});
     });
     
     $('.large-pic').click(function(){
@@ -255,7 +250,9 @@ $(document).ready(function(){
                      });
                      $('.product-pad-mask').hide();
                      var total = 0;
-                     total.toFixed(2);
+                     if(!parseInt(language)){
+             			total = total.toFixed(2);
+             		}
                      $('.total-price').html(total);
 					 $('.total-num').html(0);
                      alert("打印成功");

@@ -36,7 +36,7 @@
 	  <div class="shoppingCart">
 	     <div class="total-num num-circel"><?php echo $nums;?></div>
 	  </div>
-	  <div class="total-price"><?php echo Money::priceFormat($price);?></div>
+	  <div class="total-price"><?php if(Yii::app()->language=='jp') echo (int)Money::priceFormat($price); else echo Money::priceFormat($price);?></div>
           <div class="top-right-button">
                 <button id="infoPadOrder"><?php echo yii::t('app','订单详情...');?></button>
            </div>
