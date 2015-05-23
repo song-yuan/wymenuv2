@@ -144,6 +144,8 @@ function showList(items){
 }
 
 function showListPad(items){
+	var language = $('input[name="language"]').val();
+	alert(language);
 	var leftPicObj = $("#leftPic");
 	var rightPicObj = $("#rightPic");
 	
