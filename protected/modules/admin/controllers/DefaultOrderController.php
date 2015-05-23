@@ -24,7 +24,7 @@ class DefaultOrderController extends BackendController
                 ///*************print
                 if($orderId !='0')
                 {
-                    $order = Order::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    $order = Order::model()->find('lid=:lid and dpid=:dpid and order_status in("1","2","3")' , array(':lid'=>$orderId,':dpid'=>$companyId));
                     if(empty($order))
                     {
                         $title="该订单不存在，请输入合法订单！";
@@ -718,10 +718,12 @@ class DefaultOrderController extends BackendController
                 $transaction = $db->beginTransaction();
                 try {
                         $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$companyId));
+                        //var_dump($order);exit;
                         $criteria = new CDbCriteria;
                         $criteria->condition =  't.status in ("1","2","3") and t.dpid='.$order->dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                         $criteria->order = ' t.lid desc ';
                         $siteNo = SiteNo::model()->find($criteria);
+                        //var_dump($siteNo);exit;
                         if($siteNo->is_temp=='0')
                         {
                             $site = Site::model()->with('siteType')->find('t.lid=:lid and t.dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
@@ -730,6 +732,7 @@ class DefaultOrderController extends BackendController
                         }else{
                             $site = new Site();
                         }
+                        
                         $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id=:id and t.dpid=:dpid and t.delete_flag=0' , array(':id'=>$orderId,':dpid'=>$companyId));
                         $order->order_status='2';
                         $order->callno=$callId;
@@ -737,7 +740,7 @@ class DefaultOrderController extends BackendController
                         $siteNo->status='2';
                         $siteNo->save();
                         $jobids=array();
-                        //var_dump($orderProducts);exit;
+                        var_dump($orderProducts);exit;
                         foreach($orderProducts as $orderProduct)
                         {
                             $reprint = false;
