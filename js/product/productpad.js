@@ -189,28 +189,30 @@ $(document).ready(function(){
  			success:function(msg){
  				if(msg!='nopic'){
                                     //alert(msg);
- 					$('.large-pic').css('display','block');
+                    $('.large-pic').css('display','block');
  					$('.large-pic').html(msg);
+						$('#gallery').slick({
+							  dots: true,
+							  infinite: true,
+							  speed: 1000,
+							  slidesToShow: 1,
+					  		  slidesToScroll: 1,
+					  		  autoplay: true,
+							  arrows: false
+						});
+					var top = 0;
+					if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
+						top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
+					}
+			        $("#gallery").css({
+						top: top
+					});
  				}else{
                     alert('没有大图！');
                 }
  			},
  		});
-        $("#gallery").css({
-			position: "absolute",
-			left: 0,
-			top: 0
-		});
-		$('#gallery').slick({
-			  dots: true,
-			  infinite: true,
-			  speed: 1000,
-			  slidesToShow: 1,
-	  		  slidesToScroll: 1,
-	  		  autoplay: true,
-			  arrows: false
-		});
-		var top = 0;
+ 		var top = 0;
 		if( ($('.large-pic').height() - $("#gallery").outerHeight()) > 0){
 			top = ($('.large-pic').height() - $("#gallery").outerHeight())/2 ;
 		}
