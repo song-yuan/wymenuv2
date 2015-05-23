@@ -354,9 +354,8 @@ class Helper
 		array_push($listData,str_pad('',48,'-'));
                 if(Yii::app()->language=='jp')
                 {
-                    array_push($listData,str_pad(yii::t('app','应付：').number_format($order->should_total,0) , 24,' ')
-                            .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
-                    array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,44,' '));
+                    array_push($listData,str_pad(yii::t('app','应付：').number_format($order->should_total,0) , 40,' '));
+                    array_push($listData,str_pad(str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),40,' ')));
                     array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
                 }else{
                     array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
