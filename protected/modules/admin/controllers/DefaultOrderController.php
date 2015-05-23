@@ -740,7 +740,7 @@ class DefaultOrderController extends BackendController
                         $siteNo->status='2';
                         $siteNo->save();
                         $jobids=array();
-                        var_dump($orderProducts);exit;
+                        //var_dump($orderProducts);exit;
                         foreach($orderProducts as $orderProduct)
                         {
                             $reprint = false;
