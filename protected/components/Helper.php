@@ -568,14 +568,14 @@ class Helper
                         array_push($listData,str_pad('',48,'-'));
                         foreach($orderProducts as $orderProduct)
                         {
-                            array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,34).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,14));	
+                            array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,10));	
                         }
                         //$strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                         //foreach($orderProductTastes as $orderProductTaste){
                         //    $strTaste.= '/'.$orderProductTaste->taste->name;
                         //}
                         //array_push($listData,$strTaste);
-                        array_push($listData,str_pad('',48,'-'));
+                        //array_push($listData,str_pad('',48,'-'));
                        // $strAllTaste= yii::t('app',"全单口味：").$orderTasteEx;
                        // foreach($orderTastes as $orderTaste){
                        //     $strAllTaste.= '/'.$orderTaste->taste->name;
