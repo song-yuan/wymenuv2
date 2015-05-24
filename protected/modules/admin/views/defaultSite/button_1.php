@@ -9,7 +9,10 @@
 					'class'=>'form-horizontal'
 				),
 			)); ?>
-			
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title">请点击相应操作</h4>
+			</div>
 			<div class="modal-body">
 				<?php if($status=='1') :?>
                                 <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn grey orderaction">点 单</button>
@@ -44,7 +47,11 @@
                                 <?php endif; ?>
 				<!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
 			</div>
-			
+			<div class="modal-footer">
+				<button type="button" data-dismiss="modal" id="closemodalid" class="btn default">取 消</button>
+				<!--<input type="submit" class="btn green" id="create_btn" value="确 定">-->
+			</div>
+                        
 			<?php $this->endWidget(); ?>
                         <script type="text/javascript">
                             $(document).ready(function() {
@@ -79,7 +86,7 @@
 							alert(data.message);
                                                         $('#portlet-button').modal('hide');
 							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
-                                                        //$("#tab_sitelist").hide();
+                                                        
 						}
 					},
                                         'error':function(e){
@@ -138,8 +145,7 @@
                                             } else {
                                                     alert(data.message);
                                                     $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
-                                                    //$('#portlet-button').modal('hide');
-                                                    //$("#tab_sitelist").hide();
+                                                    $('#portlet-button').modal('hide');
                                             }
                                     },
                                         'error':function(e){
