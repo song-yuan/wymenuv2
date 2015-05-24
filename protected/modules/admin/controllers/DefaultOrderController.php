@@ -977,6 +977,66 @@ class DefaultOrderController extends BackendController
                 //if timenum=0 return finish or all success
         }
         
+        //同一个厨打菜品在同一个单子上打印时的结果查询
+        //目前没有完善的很仔细，都在一张默认的单子上打印的
+        public function actionPrintKitchenResultAll(){
+                $orderId = Yii::app()->request->getParam('orderId',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $timenum =  Yii::app()->request->getParam('timenum');
+                $db = Yii::app()->db;
+                $finished=false;
+                $successnum=0;
+                $errornum=0;
+                $notsurenum=0;
+                
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $joblist=json_decode($store->get("kitchenjobs_".$companyId."_".$orderId),true);
+                foreach ($joblist as $job_orderproduct_id)
+                {
+                    $ids=explode('_',$job_orderproduct_id);
+                    $jobid=$ids[0];
+                    if($jobid=='0')
+                    {
+                        $errornum++;
+                        continue;
+                    }
+                    $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
+                    if(empty($jobresult))
+                    {
+                        $notsurenum++;
+                    }else{
+                        if($jobresult=="success")
+                        {
+                            $sqlorderproduct="update nb_order_product set is_print='1' where dpid=:companyId and order_id=:orderId";
+                            $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
+                            $commandorderproduct->bindValue(":orderId" , $orderId);
+                            $commandorderproduct->bindValue(":companyId" , $companyId);
+                            $commandorderproduct->execute();
+                            //update status//
+                            //$orderProduct=  OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$ids[1]));
+                            //if($orderProduct->is_print=='0')
+                            //{
+                            //    $orderProduct->is_print='1';
+                            //    $orderProduct->save();
+                            //}
+                            $successnum++;
+                        }else{
+                            $errornum++;
+                        }
+                    }
+                }
+                if($timenum==0 || $notsurenum==0)
+                {
+                    $finished=true;
+                }
+                $ret=array('finished'=>$finished,'successnum'=>$successnum,'errornum'=>$errornum,'notsurenum'=>$notsurenum);
+                Yii::app()->end(json_encode($ret));
+                //get status from memcache
+                //if error change product kitchen status in db
+                //if timenum=0 return finish or all success
+        }
+        
         public function actionPrintKitchenResultOne(){
                 $companyId = Yii::app()->request->getParam('companyId');
                 $jobid =  Yii::app()->request->getParam('jobid');
