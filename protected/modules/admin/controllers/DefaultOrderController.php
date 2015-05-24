@@ -865,7 +865,7 @@ class DefaultOrderController extends BackendController
                         $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>'打印任务发布异常');
                         Yii::app()->end(json_encode($ret));
                 }
-                $this->renderPartial('printresultlist' , array(
+                $this->renderPartial('printresultlistall' , array(
                                 'orderId'=>$orderId,
 				'ret' => $ret,// job in memcached
                                 'typeId'=>$typeId,

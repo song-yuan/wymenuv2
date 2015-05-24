@@ -33,7 +33,7 @@
                                              });
                                              function printStatus(){
                                                                                                 
-                                                $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResult',array('companyId'=>$this->companyId,'orderId'=>$orderId));?>/timenum/'+waitingsecond,function(data){
+                                                $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResultAll',array('companyId'=>$this->companyId,'orderId'=>$orderId));?>/timenum/'+waitingsecond,function(data){
                                                     //alert(data.notsurenum);
                                                     $("#successnumid").html(data.successnum);
                                                     $("#errornumid").html(data.errornum);
