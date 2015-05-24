@@ -178,6 +178,17 @@ class DefaultSiteController extends BackendController
                             $commandorder->bindValue(":istemp" , $istemp);
                             $commandorder->bindValue(":companyId" , $companyId);
                             $commandorder->execute();
+                            
+                            $sqlfeedback = "update nb_order_feedback set is_deal='1' where dpid=:companyId and site_id=:siteId and is_temp=:istemp";
+                            $commandfeedback = $db->createCommand($sqlfeedback);
+                            $commandfeedback->bindValue(":companyId",$companyId);
+                            $commandfeedback->bindValue(":siteId",$sid);
+                            $commandfeedback->bindValue(":istemp",$istemp);
+                            //var_dump($sqlsite);exit;
+                            $commandfeedback->execute();
+                            
+                            //FeedBackClass::cancelAllOrderMsg($sid,$istemp,"0000000000",$companyId);
+                            
                             $transaction->commit(); //提交事务会真正的执行数据库操作
                             //
                             $criteria = new CDbCriteria;
@@ -185,6 +196,8 @@ class DefaultSiteController extends BackendController
                             $criteria->order = ' t.lid desc ';
                             $siteNo = SiteNo::model()->find($criteria);
                             SiteClass::deleteCode($siteNo->dpid,$siteNo->code);
+                            //var_dump($sid);exit;
+                            
                             //apc_delete($siteNo->dpid.$siteNo->code);
                             echo json_encode(array('status'=>1,'message'=>'撤台成功'));  
                             return true;

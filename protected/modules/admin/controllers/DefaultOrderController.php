@@ -179,6 +179,29 @@ class DefaultOrderController extends BackendController
                             {
                                 SiteClass::deleteCode($this->companyId,$siteNo->code);
                             }
+                            //FeedBackClass::cancelAllOrderMsg("0000000000","0",$order->lid,$companyId);
+                            $sqlfeedback = "update nb_order_feedback set is_deal='1' where dpid=:companyId and site_id=:siteId and is_temp=:istemp";
+                            $commandfeedback = Yii::app()->db->createCommand($sqlfeedback);
+                            $commandfeedback->bindValue(":companyId",$companyId);
+                            $commandfeedback->bindValue(":siteId",$order->site_id);
+                            $commandfeedback->bindValue(":istemp",$order->is_temp);
+                            //var_dump($sqlsite);exit;
+                            $commandfeedback->execute();
+                            
+                            $sqlall = "update nb_order_feedback set is_deal='1'where dpid=:dpid and order_id=:orderId and is_order='1'";
+                            $connorder = Yii::app()->db->createCommand($sqlall);
+                            $connorder->bindValue(':dpid',$companyId);
+                            $connorder->bindValue(':orderId',$orderId);
+                            
+                            $connorder->execute();
+
+                            $sql = 'update nb_order_feedback set is_deal=1 where dpid=:dpid and order_id in (select lid from nb_order_product where dpid=:sdpid and order_id=:sorderId) and is_order=0';
+                            $connorderproduct = Yii::app()->db->createCommand($sql);
+                            $connorderproduct->bindValue(':dpid',$companyId);
+                            $connorderproduct->bindValue(':sdpid',$companyId);
+                            $connorderproduct->bindValue(':sorderId',$orderId);
+                            $connorderproduct->execute();
+                            //var_dump($connorderproduct);exit;
                             $transaction->commit();
                             $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
 			} catch(Exception $e){
@@ -796,6 +819,57 @@ class DefaultOrderController extends BackendController
                 }
                 exit;*/
                 ///////////test                
+        }
+        
+        public function actionPrintKitchenAll(){
+                $orderId = Yii::app()->request->getParam('orderId',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $typeId =  Yii::app()->request->getParam('typeId');
+                $callId =  Yii::app()->request->getParam('callId');
+                $db = Yii::app()->db;              
+                $ret=array();
+                //var_dump(Yii::app()->params->has_cache);exit;
+                $transaction = $db->beginTransaction();
+                try {
+                        $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$companyId));
+                        //var_dump($order);exit;
+                        $criteria = new CDbCriteria;
+                        $criteria->condition =  't.status in ("1","2","3") and t.dpid='.$order->dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                        $criteria->order = ' t.lid desc ';
+                        $siteNo = SiteNo::model()->find($criteria);
+                        //var_dump($siteNo);exit;
+                        if($siteNo->is_temp=='0')
+                        {
+                            $site = Site::model()->with('siteType')->find('t.lid=:lid and t.dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
+                            $site->status = '2';
+                            $site->save();
+                        }else{
+                            $site = new Site();
+                        }                        
+                        $order->order_status='2';
+                        $order->callno=$callId;
+                        $order->save();
+                        $siteNo->status='2';
+                        $siteNo->save();
+                        $transaction->commit();
+                        
+                        $precode="";
+                        $ret=Helper::printList($order , $pad,$precode);                
+                        //var_dump(json_encode($jobids));exit;
+                        Gateway::getOnlineStatus();
+                        $store = Store::instance('wymenu');
+                        $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布');
+                } catch (Exception $e) {
+                        $transaction->rollback(); //如果操作失败, 数据回滚
+                        $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>'打印任务发布异常');
+                        Yii::app()->end(json_encode($ret));
+                }
+                $this->renderPartial('printresultlist' , array(
+                                'orderId'=>$orderId,
+				'ret' => $ret,// job in memcached
+                                'typeId'=>$typeId,
+                                'callId'=>$callId
+		));                
         }
         
         public function actionPrintOneKitchen(){

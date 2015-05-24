@@ -137,6 +137,29 @@ class DefaultController extends BackendController
 		));
         }
         
+        /*
+         * 2015/5/24消息列表更改，取消messageli和msglist方法
+         */
+        public function actionMessageliall()
+	{
+		$companyId = Yii::app()->request->getParam('companyId');
+                
+                $criteria = new CDbCriteria;
+		$criteria->addCondition(' dpid=:dpid and is_deal=0 and delete_flag=0');
+		$criteria->order = ' create_at ';
+		$criteria->params[':dpid']=$companyId;
+		$pages = new CPagination(OrderFeedback::model()->count($criteria));
+		$pages->applyLimit($criteria);                
+                $msgs=  OrderFeedback::model()->findAll($criteria);
+                $siteName=SiteClass::getSiteNmae($companyId, $site_id, $is_temp);
+                    //$msgs[$i]['name']= SiteClass::getSiteNmae($companyId, $msgs[$i]['site_id'], $msgs[$i]['is_temp']);
+                $this->renderPartial('msglist',array(
+                                'siteName'=>$siteName,
+				'models'=>$msgs,
+				'pages' => $pages                                
+		));
+        }
+        
         public function actionReadfeedback(){
                 $orderfeedbackid = Yii::app()->request->getParam('orderfeedbackid',0);
 		$companyId = Yii::app()->request->getParam('companyId');

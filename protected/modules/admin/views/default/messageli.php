@@ -5,6 +5,7 @@
                                                     <?php echo $msg['name']; ?> 
                                                     <span class="time">刚刚</span>
                                                     </a>
+                                                    	
                                             </li>
                                             <?php endforeach;?>  
                                                 <!--
@@ -47,6 +48,7 @@
                             }else alert("您的浏览器不支持桌面通知特性，请下载谷歌浏览器试用该功能");
                         };*/
                         $('.sitemsg').on('click',function(){
+                            //return true;
                             var site_id = $(this).attr('site_id');
                             var is_temp = $(this).attr('is_temp');
                             var $modalconfig = $('#portlet-config3');
