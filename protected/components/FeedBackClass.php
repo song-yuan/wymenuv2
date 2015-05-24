@@ -76,6 +76,45 @@ class FeedBackClass
 		return $results;
 	}
         
+        public static function cancelAllOrderMsg($siteId,$istemp,$orderId,$companyId)
+	{
+            $transaction = Yii::app()->db->beginTransaction();
+            try {
+                    if($siteId!="0000000000")
+                    {
+                        $sqlsite = 'update nb_order_feedback set is_deal=1 where dpid=:dpid and site_id=:siteId and is_temp=:istemp and is_order=1';
+                        $conn = Yii::app()->db->createCommand($sqlsite);
+                        $conn->bindValue(':dpid',$companyId);
+                        $conn->bindValue(':siteId',$siteId);
+                        $conn->bindValue(':istemp',$istemp);
+                        //var_dump($sqlsite);exit;
+                        $result = $conn->excute();
+                    }
+                    if($orderId!="0000000000")
+                    {
+                        $sqlall = 'update nb_order_feedback set is_deal=1 where dpid=:dpid and order_id=:orderId and is_order=1';
+                        $conn = Yii::app()->db->createCommand($sqlall);
+                        $conn->bindValue(':dpid',$companyId);
+                        $conn->bindValue(':orderId',$orderId);
+                        $result = $conn->execute();
+
+                        $sql = 'update nb_order_feedback set is_deal=1 where dpid=:dpid and order_id in (select lid from nb_order_product where dpid=:sdpid and order_id=:sorderId) and is_order=0';
+                        $conn = Yii::app()->db->createCommand($sql);
+                        $conn->bindValue(':dpid',$companyId);
+                        $conn->bindValue(':sdpid',$companyId);
+                        $conn->bindValue(':sorderId',$orderId);
+                        $result = $conn->execute();
+                    }
+                    $transaction->commit(); //提交事务会真正的执行数据库操作
+                    
+                    //return true;
+		} catch (Exception $e) {
+                    $transaction->rollback(); //如果操作失败, 数据回滚
+                    throw $e;
+                    //return false;
+		}            
+	}
+        
         public static function getFeedbackName($feedbackId,$companyId)
 	{
             if($feedbackId=='0000000000')

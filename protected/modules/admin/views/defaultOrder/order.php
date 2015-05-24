@@ -194,6 +194,13 @@
                             });
                         }
                         
+                        function printKitenAll(callid){
+                            var $modalloading = $('#portlet-print-loading');                                
+                           $modalloading.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printKitchenAll',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid));?>/callId/'+callid, '', function(){
+                                $modalloading.modal();
+                            });
+                        }
+                        
                         $('#kitchen-btn').click(function(){
                             var statu = confirm("下单，并厨打，确定吗？");
                                 if(!statu){
@@ -229,8 +236,11 @@
                                             scanon=false;
                                             return false;
                                         }
-                                    }else{                                        
-                                        printKiten(callid);
+                                    }else{   
+                                        //菜品分单子打印时调用此函数
+                                        //printKiten(callid);
+                                        //由于打印机问题厨打，暂时用清单，调用以下函数
+                                        printKitenAll(callid);
                                     }
                                 }else{
                                     alert("呼叫器编码不正确！");

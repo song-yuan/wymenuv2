@@ -8,7 +8,7 @@
                                                     <span class="badge"><?php echo $msg['lcount']; ?></span> 
                                                     <?php echo $msg['name']; ?> 
                                                     <span class="time">刚刚</span>
-                                                    </a>
+                                                    </a>                                                    
                                             </li>
                                             <li class="sitemsg list-group-item" site_id="<?php echo $msg['site_id']; ?>" is_temp="<?php echo $msg['is_temp']; ?>"><span class="badge badge-danger"><?php echo $msg['lcount']; ?></span><?php echo $msg['name']; ?></li>
                                             <?php endforeach;?>  

@@ -21,7 +21,7 @@
 					<i class="fa fa-warning"></i>
 					<span class="badge" id="allnotificationnum">0</span>
 					</a>
-					<ul class="dropdown-menu extended notification">
+                                    <ul class="dropdown-menu extended notification" style="max-width: 800px !important; width:600px !important;">
 						<li>
 							<p>未读消息</p>
 						</li>
@@ -298,7 +298,7 @@
             
             $(document).ready(function() {
                 $('<audio id="chatAudio"><source src="/wymenuv2/admin/audio/notify.ogg" type="audio/ogg"><source src="/wymenuv2/admin/audio/notify.mp3" type="audio/mpeg"><source src="/wymenuv2/admin/audio/notify.wav" type="audio/wav"></audio>').appendTo('body');
-                
+                getnotificationnum();
                 $('#header_notification_list').load('<?php echo $this->createUrl('default/messageli',array('companyId'=>$this->companyId));?>'); 
                 
                 interval = setInterval(getnotificationnum,"15000");
