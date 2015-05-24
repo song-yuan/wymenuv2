@@ -206,7 +206,10 @@
                                 if(!statu){
                                     return false;
                                 }
-                            printKiten('0');                          
+                             //由于打印机不能连续厨打，
+                            //printKiten('0');       
+                            //采用以下函数
+                            printKitenAll('0'); 
                         });
                         
                         $('#alltaste-btn').click(function(){

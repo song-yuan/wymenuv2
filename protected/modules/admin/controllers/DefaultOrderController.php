@@ -852,12 +852,13 @@ class DefaultOrderController extends BackendController
                         $siteNo->status='2';
                         $siteNo->save();
                         $transaction->commit();
-                        
-                        $precode="";
-                        $ret=Helper::printList($order , $pad,$precode);                
+                        $jobids=array();
+                        $tempret=Helper::printKitchenAll($order , $site,$siteNo,false); 
+                        array_push($jobids,$tempret['jobid']."_".$order->lid);
                         //var_dump(json_encode($jobids));exit;
                         Gateway::getOnlineStatus();
                         $store = Store::instance('wymenu');
+                        $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);                        
                         $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布');
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
