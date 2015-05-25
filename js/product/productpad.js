@@ -169,6 +169,41 @@ $(document).ready(function(){
     $('#pad-disbind-menu').on('click',function(){
             location.href='../../../../../padbind/login';	
 	});
+     //打印测试关闭
+    $('#printerClose').on('click',function(){
+        $('#print_check').hide();
+    });
+    //打印测试关闭
+    $('#printerShow').on('click',function(){
+        $('#print_check').show();
+    });
+    //打印校正
+    $('#printerCheck').on('click',function(){
+        if (typeof Androidwymenuprinter == "undefined") {
+                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                return false;
+         }
+         $.ajax({
+ 			url:'/wymenuv2/product/printCheck',
+ 			async: false,
+ 			data:'companyId='+lid,
+ 			success:function(data){
+ 				if(Androidwymenuprinter.printJob(data.compay_id,data.jobid))
+                                {
+                                    alert("打印机校正成功！");
+                                    isPrintChecked=true;
+                                    $('#print_check').hide();
+                                }else{
+                                    alert("打印机校正失败，请重试！");
+                                }
+ 			},
+                        error:function(){
+ 				alert("打印机校正失败，请重试！");
+ 			},
+ 		});
+                 
+    });
+    
     $('#pad-app-exit').on('click',function(){
             if (typeof Androidwymenuprinter == "undefined") {
                 alert("无法获取PAD设备信息，请在PAD中运行该程序！");
@@ -194,24 +229,24 @@ $(document).ready(function(){
  			success:function(msg){
  				if(msg!='nopic'){
                                     //alert(msg);
-                    $('.large-pic').css('display','block');
- 					$('.large-pic').html(msg);
-						$('#gallery').slick({
-							  dots: true,
-							  infinite: true,
-							  speed: 1000,
-							  slidesToShow: 1,
-					  		  slidesToScroll: 1,
-					  		  autoplay: true,
-							  arrows: false
-						});
-			        $("#gallery").css({
-			        	position:'absolute',
-						top: '15%'
-					});
- 				}else{
-                    alert('没有大图！');
-                }
+                                    $('.large-pic').css('display','block');
+                                                        $('.large-pic').html(msg);
+                                                                $('#gallery').slick({
+                                                                          dots: true,
+                                                                          infinite: true,
+                                                                          speed: 1000,
+                                                                          slidesToShow: 1,
+                                                                          slidesToScroll: 1,
+                                                                          autoplay: true,
+                                                                          arrows: false
+                                                                });
+                                                $("#gallery").css({
+                                                        position:'absolute',
+                                                                top: '15%'
+                                                        });
+                                                }else{
+                                                        alert('没有大图！');
+                                                }
  			},
  		});
     });
@@ -222,12 +257,17 @@ $(document).ready(function(){
     });
     
     $('#updatePadOrder').click(function(){
+        if(!isPrintChecked)
+        {
+            alert("请先进行打印机校正！");
+            return false;
+        }
         if (typeof Androidwymenuprinter == "undefined") {
             alert("无法获取PAD设备信息，请在PAD中运行该程序！");
             return false;
         }
-        var padinfo=Androidwymenuprinter.getPadInfo();
-        var pad_id=padinfo.substr(10,10); //also can get from session
+        //var padinfo=Androidwymenuprinter.getPadInfo();
+        //var pad_id=padinfo.substr(10,10); //also can get from session
        	//var pad_id=0000000008;
     	$('#padOrderForm').ajaxSubmit(function(msg){
     		var data = eval('(' + msg + ')');

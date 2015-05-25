@@ -90,12 +90,51 @@
 	left:10px;
 	background:white;
 	z-index:1001;
-	height:140px;
+	height:183px;
 	bottom:20px;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 	border: 1px solid #ddd;
 	display:none;
 }
+.setting-pad-print{
+	position:fixed;
+	width:auto;
+	top:10px;
+	left:10px;
+	background:white;
+	z-index:1002;
+	height:auto;
+	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+	border: 1px solid #ddd;
+	display:block;
+}
+
+.setting-print-info{
+	background-color:#eee;
+        padding: 0px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 700;
+        height: 45px;
+}
+.setting-print-tip{
+	background-color:#fff;
+        color:rgb(239,68,77);
+        font-size: 30px;
+        padding:5px;
+}
+.setting-pad-print button {
+	background: rgb(239,68,77);
+	height: 40px;
+	padding:5px 10px;
+	font-size: 30px;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	margin-right: 30px;
+        margin-top: 4px;
+}
+
 .setting-pad-mask .mask-trangle{
 	position: absolute;
 	top: -7px;
