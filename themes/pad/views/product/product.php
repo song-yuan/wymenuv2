@@ -28,6 +28,7 @@
         <div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
+                
 		<div id="forum_list">
 			<div class="outDiv" id="leftPic">
 			</div>
@@ -52,6 +53,8 @@
 	<div class="mask-trangle"></div>
 	<div class="product-mask-info"><?php echo yii::t('app','点单帮助');?></div>
         <div class="line"></div>
+        <div class="product-mask-info" id="printerShow"><?php echo yii::t('app','打印机校正');?></div>
+	<div class="line"></div>
         <!--<div class="product-mask-info">中 文</div>
         <div class="line"></div>
         <div class="product-mask-info">日本語</div>
@@ -62,6 +65,13 @@
 	<div class="product-bottom">
 	</div>
 </div>
+<div id="print_check" class="setting-pad-print">
+    <div class="setting-print-info"><?php echo yii::t('app','打印机未校正，请校正');?><button style="background-color: grey" id="printerClose"><?php echo yii::t('app','关闭');?></button></div>
+        <div class="setting-print-tip"><?php echo yii::t('app','第一步、点击“开始校正”按钮；');?></div>
+        <div class="setting-print-tip"><?php echo yii::t('app','第二步、弹出对话框中点“确定”，对话框中有“复选框”，请点击打勾；');?><br><img src="../../../../../img/print/1_<?php echo Yii::app()->language; ?>.jpg" /></div>
+        <div class="setting-print-tip"><?php echo yii::t('app','第三步、如果打印失败，请再次重复上述过程，直到提示打印成功，并且打印机正常输出“打印校正成功”字样。');?></div>
+        <div class="setting-print-tip"><div style="padding:10px;display: inline;"><?php echo yii::t('app','请点击“开始校正”按钮，开始校正吧...');?></div><button id="printerCheck"><?php echo yii::t('app','开始校正');?></button></div>
+</div>
 <!-- 加入订单动画 -->
 <div class="aniele"></div>
 
@@ -71,6 +81,7 @@
 	var cat = '<?php echo $categoryId;?>';
 	var t = '<?php echo $type;?>';
 	var isPad = '<?php echo $isPad;?>';
+        var isPrintChecked=false;
 	window.onload=function(type,catgory,pad)
 	{
 		type = t;
@@ -100,4 +111,7 @@
 			});
 		});
 	});
+        
+       
+        
 </script>

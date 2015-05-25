@@ -80,6 +80,20 @@ class ProductController extends Controller
 		}
 		$this->render('product',array('pid'=>$pid,'categoryId'=>$categoryId,'siteNoId'=>$this->siteNoId,'type'=>$type,'isPad'=>$this->isPad));
 	}
+        
+        public function actionPrintCheck(){                
+                $companyId = Yii::app()->request->getParam('companyId');
+                $padId = Yii::app()->request->getParam('padId');
+                $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$companyId,'lid'=>$padId));
+                //要判断打印机类型错误，必须是local。
+                if($pad->printer_type!='1')
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！')));
+                }else{
+                    Yii::app()->end(json_encode(Helper::printCheck($pad)));
+                }
+        }
+        
 	/**
 	 * 
 	 * 商品详情

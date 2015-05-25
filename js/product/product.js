@@ -50,6 +50,7 @@ $(document).ready(function(){
  			}
  		});
     });
+    
     //全部分类
     $('.category-top').click(function(){
     	$('.promptumenu_window').slideToggle(function(){
@@ -84,6 +85,8 @@ $(document).ready(function(){
      		});
     	});
     });
+        
+    
     $('#forum_list').on('click','.product-pic',function(){
     	var lid = $(this).attr('lid');
     	$.ajax({
