@@ -183,11 +183,16 @@ $(document).ready(function(){
                 alert("无法获取PAD设备信息，请在PAD中运行该程序！");
                 return false;
          }
+        var padinfo=Androidwymenuprinter.getPadInfo();
+        var pad_id=padinfo.substr(10,10); //also can get from session
+       	var company_id=padinfo.substr(0,10);;
          $.ajax({
  			url:'/wymenuv2/product/printCheck',
  			async: false,
- 			data:'companyId='+lid,
+ 			data:{'companyId':company_id,'padId':pad_id},
  			success:function(data){
+                            if(data.status)
+                            {
  				if(Androidwymenuprinter.printJob(data.compay_id,data.jobid))
                                 {
                                     alert("打印机校正成功！");
@@ -196,6 +201,9 @@ $(document).ready(function(){
                                 }else{
                                     alert("打印机校正失败，请重试！");
                                 }
+                            }else{
+                                alert("打印机校正失败，请重试！");
+                            }
  			},
                         error:function(){
  				alert("打印机校正失败，请重试！");
