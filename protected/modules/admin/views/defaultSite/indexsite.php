@@ -84,6 +84,20 @@
                                                                                 <input id="barscanid" type="text" class="form-control" placeholder="扫描小票条码，快速查看订单">
                                                                         </div>
                                                                         <div class="actions">
+                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-chain-broken"></i> 快速沽清</a>
+                                                                            <div class="btn-group">
+                                                                                    <a class="btn green" href="#" data-toggle="dropdown">
+                                                                                    <i class="fa fa-archive"></i>订单操作
+                                                                                    <i class="fa fa-angle-down"></i>
+                                                                                    </a>
+                                                                                    <ul class="dropdown-menu pull-right"><!--已厨打不能编辑-->
+                                                                                    
+                                                                                            <li><a href="javascript:;" class='btn-edit'  >历史订单</a></li>
+                                                                                            <li><a href="javascript:;" class="btn-del"   >支付记录</a></li>
+                                                                                            <li><a href="javascript:;" class='btn-taste'  >订单日结</a></li> 
+                                                                                        
+                                                                                    </ul>
+                                                                            </div>
                                                                             <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> 历史订单</a>
                                                                         </div>
 								</div>

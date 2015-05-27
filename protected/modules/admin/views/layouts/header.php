@@ -23,7 +23,7 @@
 					</a>
                                     <ul class="dropdown-menu extended notification" style="max-width: 800px !important; width:600px !important;">
 						<li>
-							<p>未读消息</p>
+							<p>未读消息(一次最多显示20条),点击消除消息</p>
 						</li>
 						<li>
 							<ul id="header_notification_list" class="dropdown-menu-list scroller" style="height: 420px;">
@@ -299,14 +299,14 @@
             $(document).ready(function() {
                 $('<audio id="chatAudio"><source src="/wymenuv2/admin/audio/notify.ogg" type="audio/ogg"><source src="/wymenuv2/admin/audio/notify.mp3" type="audio/mpeg"><source src="/wymenuv2/admin/audio/notify.wav" type="audio/wav"></audio>').appendTo('body');
                 getnotificationnum();
-                $('#header_notification_list').load('<?php echo $this->createUrl('default/messageli',array('companyId'=>$this->companyId));?>'); 
+                $('#header_notification_list').load('<?php echo $this->createUrl('default/messageliall',array('companyId'=>$this->companyId));?>'); 
                 
                 interval = setInterval(getnotificationnum,"15000");
             });            
             
             $('#notification_banner_id').on('click', function(){
                 getnotificationnum();
-                $('#header_notification_list').load('<?php echo $this->createUrl('default/messageli',array('companyId'=>$this->companyId));?>'); 
+                $('#header_notification_list').load('<?php echo $this->createUrl('default/messageliall',array('companyId'=>$this->companyId));?>'); 
             });
             
             function getnotificationnum(){
