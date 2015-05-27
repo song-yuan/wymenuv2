@@ -143,20 +143,23 @@ class DefaultController extends BackendController
         public function actionMessageliall()
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
-                
-                $criteria = new CDbCriteria;
+                //SELECT TIMESTAMPDIFF(SECOND,update_at,now()) from nb_pad
+                /*$criteria = new CDbCriteria;
+                $criteria->select='* , TIMESTAMPDIFF(SECOND,update_at,now()) timediff';
+		$criteria->order = ' update_at ';
+                $criteria->limit = 20;
 		$criteria->addCondition(' dpid=:dpid and is_deal=0 and delete_flag=0');
-		$criteria->order = ' create_at ';
 		$criteria->params[':dpid']=$companyId;
-		$pages = new CPagination(OrderFeedback::model()->count($criteria));
-		$pages->applyLimit($criteria);                
-                $msgs=  OrderFeedback::model()->findAll($criteria);
-                $siteName=SiteClass::getSiteNmae($companyId, $site_id, $is_temp);
-                    //$msgs[$i]['name']= SiteClass::getSiteNmae($companyId, $msgs[$i]['site_id'], $msgs[$i]['is_temp']);
-                $this->renderPartial('msglist',array(
-                                'siteName'=>$siteName,
-				'models'=>$msgs,
-				'pages' => $pages                                
+                $msgs=  OrderFeedback::model()->findAll($criteria);*/
+                $db = Yii::app()->db;
+		$sql = "select *, TIMESTAMPDIFF(SECOND,update_at,now()) timediff"
+                        . " from nb_order_feedback"
+                        . " where dpid=".$companyId.' and is_deal=0 and delete_flag=0';
+		$msgs= $db->createCommand($sql)->queryAll();
+                //var_dump($msgs);exit;
+		    //$msgs[$i]['name']= SiteClass::getSiteNmae($companyId, $msgs[$i]['site_id'], $msgs[$i]['is_temp']);
+                $this->renderPartial('messageliall',array(
+                                'msgs'=>$msgs                                
 		));
         }
         

@@ -115,6 +115,26 @@ class FeedBackClass
 		}            
 	}
         
+        public static function getFeedbackSite($companyId,$siteId,$istemp,$orderId,$isOrder)
+	{
+            if($siteId!=='0000000000')
+            {
+               return SiteClass::getSiteNmae($companyId, $siteId, $istemp);
+            }
+            if($orderId!=='0000000000')
+            {
+                if($isOrder=='1')
+                {
+                    $order=Order::model()->find(" dpid=:dpid and lid=:orderid",array(':dpid'=>$companyId,':orderid'=>$orderId));
+                    return SiteClass::getSiteNmae($companyId, $order->site_id, $order->istemp);
+                }else{
+                    $orderProduct=  OrderProduct::model()->with("order")->find(" dpid=:dpid and lid=:orderid",array(':dpid'=>$companyId,':orderid'=>$orderId));
+                    return SiteClass::getSiteNmae($companyId, $orderProduct->order->site_id, $orderProduct->order->istemp);
+                }
+            }
+            
+	}
+        
         public static function getFeedbackName($feedbackId,$companyId)
 	{
             if($feedbackId=='0000000000')
