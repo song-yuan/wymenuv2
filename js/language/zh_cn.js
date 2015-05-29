@@ -8,3 +8,6 @@ var language_jiancai="减菜";
 var language_renqi="人气：";
 var language_duotuliulan="多图浏览";
 
+//productpad.js
+var language_printer_check_success="打印机校正成功！";
+
