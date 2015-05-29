@@ -179,17 +179,19 @@ $(document).ready(function(){
     });
     //打印校正
     $('#printerCheck').on('click',function(){
-        if (typeof Androidwymenuprinter == "undefined") {
-                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
-                return false;
-         }
-        var padinfo=Androidwymenuprinter.getPadInfo();
-        var pad_id=padinfo.substr(10,10); //also can get from session
-       	var company_id=padinfo.substr(0,10);;
+//        if (typeof Androidwymenuprinter == "undefined") {
+//                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+//                return false;
+//         }
+//        var padinfo=Androidwymenuprinter.getPadInfo();
+//        var pad_id=padinfo.substr(10,10); //also can get from session
+//       	var company_id=padinfo.substr(0,10);
+        var pad_id='0000000010';
+        var company_id='0000000007';
          $.ajax({
  			url:'/wymenuv2/product/printCheck',
  			async: false,
- 			data:{'companyId':company_id,'padId':pad_id},
+ 			data:"companyId="+company_id+'&padId='+pad_id,
  			success:function(data){
                             if(data.status)
                             {
@@ -199,14 +201,14 @@ $(document).ready(function(){
                                     isPrintChecked=true;
                                     $('#print_check').hide();
                                 }else{
-                                    alert("打印机校正失败，请重试！");
+                                    alert("打印机校正失败1，请重试！");
                                 }
                             }else{
-                                alert("打印机校正失败，请重试！");
+                                alert("打印机校正失败2，请重试！");
                             }
  			},
                         error:function(){
- 				alert("打印机校正失败，请重试！");
+ 				alert("打印机校正失败3，请重试！");
  			},
  		});
                  
