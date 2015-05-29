@@ -407,8 +407,10 @@ class Helper
                         return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}
 		$listData = array(Helper::getPlaceholderLenBoth(yii::t('app','打印机校正成功！'), 48));
-		array_push($listData,str_pad('',48,'-'));           
-		return Helper::printConetent($printer,$listData,"","");		
+		array_push($listData,str_pad('',48,'-'));
+                //后面加切纸
+                $sufcode="0A0A0A0A0A0A1D5601";     
+		return Helper::printConetent($printer,$listData,"",$sufcode);		
 	}
         
         //单品厨打 口味 全单口味

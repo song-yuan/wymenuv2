@@ -198,7 +198,7 @@ $(document).ready(function(){
                             {
  				if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                                 {
-                                    alert("打印机校正成功！");
+                                    alert(language_printer_check_success);
                                     isPrintChecked=true;
                                     $('#print_check').hide();
                                 }else{

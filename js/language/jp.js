@@ -8,3 +8,5 @@ var language_jiancai="減らす";
 var language_renqi="人気：";
 var language_duotuliulan="&nbsp;&nbsp;画面大&nbsp;&nbsp;";
 
+//productpad.js
+var language_printer_check_success="プリンターは矯正することに成功します";
