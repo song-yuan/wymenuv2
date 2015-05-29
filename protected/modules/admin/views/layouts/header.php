@@ -23,7 +23,7 @@
 					</a>
                                     <ul class="dropdown-menu extended notification" style="max-width: 800px !important; width:600px !important;">
 						<li>
-							<p>未读消息(一次最多显示20条),点击消除消息</p>
+							<p>未读消息,点击消除消息</p>
 						</li>
 						<li>
 							<ul id="header_notification_list" class="dropdown-menu-list scroller" style="height: 420px;">
@@ -100,7 +100,7 @@
 							</ul>
 						</li>
 						<li class="external">   
-							<a href="#">查看全部消息 <i class="m-icon-swapright"></i></a>
+							<a href="#"><!-- <i class="m-icon-swapright"></i>--></a>
 						</li>
 					</ul>
 				</li>
