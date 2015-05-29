@@ -179,23 +179,24 @@ $(document).ready(function(){
     });
     //打印校正
     $('#printerCheck').on('click',function(){
-//        if (typeof Androidwymenuprinter == "undefined") {
-//                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
-//                return false;
-//         }
-//        var padinfo=Androidwymenuprinter.getPadInfo();
-//        var pad_id=padinfo.substr(10,10); //also can get from session
-//       	var company_id=padinfo.substr(0,10);
-        var pad_id='0000000010';
-        var company_id='0000000007';
+        if (typeof Androidwymenuprinter == "undefined") {
+                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                return false;
+         }
+        var padinfo=Androidwymenuprinter.getPadInfo();
+        var pad_id=padinfo.substr(10,10); //also can get from session
+       	var company_id=padinfo.substr(0,10);
+//        var pad_id='0000000010';
+//        var company_id='0000000007';
          $.ajax({
  			url:'/wymenuv2/product/printCheck',
  			async: false,
  			data:"companyId="+company_id+'&padId='+pad_id,
- 			success:function(data){
+ 			success:function(msg){
+                            var data = eval('(' + msg + ')');
                             if(data.status)
                             {
- 				if(Androidwymenuprinter.printJob(data.compay_id,data.jobid))
+ 				if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                                 {
                                     alert("打印机校正成功！");
                                     isPrintChecked=true;
