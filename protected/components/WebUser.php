@@ -4,7 +4,13 @@ class WebUser extends CWebUser
 	public $role2ModuleId = array(
 		'1' => array('admin','waiter',''),
 		'2' => array('admin' , 'waiter',''),
-		'3' => array('waiter'),
+		'3' => array('admin' , 'waiter'),//waiter 服务员
+		'4' => array(),
+	);
+        public $role2ControllerId = array(
+		'1' => array('','',''),// system admin all
+		'2' => array('' , '',''),// admin all
+		'3' => array('login','default' , 'defaultSite','defaultController','order'),//waiter 服务员 //
 		'4' => array(),
 	);
 	public function login($identity,$duration=0)
@@ -13,6 +19,7 @@ class WebUser extends CWebUser
 			return false ;
 		}
 		$id=$identity->getId();
+                
 		$states=$identity->getPersistentStates();
 		if($this->beforeLogin($id,$states,false)) {
 			$this->changeIdentity($id,$identity->getName(),get_object_vars($identity));
@@ -34,7 +41,13 @@ class WebUser extends CWebUser
 	private function _checkMod($role){
 		$module = Yii::app()->controller->module;
 		if(!$module) return true ;
-		
-		return in_array(Yii::app()->controller->module->getId() , $this->role2ModuleId[$role]);
+                //echo Yii::app()->controller->id;exit;
+		if($role==3)
+                {
+                    return true;
+                    return in_array(Yii::app()->controller->id , $this->role2ControllerId[$role]);
+                }else{
+                    return in_array(Yii::app()->controller->module->getId() , $this->role2ModuleId[$role]);
+                }
 	}
 }
