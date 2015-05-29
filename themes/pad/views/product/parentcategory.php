@@ -43,3 +43,8 @@
   	<div class="clear"></div>
   </div>
 </div>
+<?php if(Yii::app()->language=='jp'):?>
+<input type="hidden"  name="language" value="1"  />
+<?php else:?>
+<input type="hidden"  name="language" value="0"  />
+<?php endif;?>
