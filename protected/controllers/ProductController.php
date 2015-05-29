@@ -84,9 +84,9 @@ class ProductController extends Controller
         public function actionPrintCheck(){                
                 $companyId = Yii::app()->request->getParam('companyId');
                 $padId = Yii::app()->request->getParam('padId');
-                $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$companyId,'lid'=>$padId));
+                $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,'lid'=>$padId));
                 //要判断打印机类型错误，必须是local。
-                if($pad->printer_type!='1')
+                if($pad->printer->printer_type!='1')
                 {
                     Yii::app()->end(json_encode(array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！')));
                 }else{
@@ -219,7 +219,7 @@ class ProductController extends Controller
                 $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$companyId));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
                 //要判断打印机类型错误，必须是local。
-                if($pad->printer_type!='1')
+                if($pad->printer->printer_type!='1')
                 {
                     Yii::app()->end(json_encode(array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！')));
                 }else{
