@@ -11,7 +11,7 @@ class DefaultSiteController extends BackendController
                 $sistemp = Yii::app()->request->getParam('sistemp','0');
                 $ssid = Yii::app()->request->getParam('ssid','0');
                 $op = Yii::app()->request->getParam('op','0');
-                $title='请选择餐桌';
+                $title=yii::t('app','请选择餐桌');
                 $criteria = new CDbCriteria;
 		$models=array();
                 if($typeId == 'tempsite'){
@@ -29,11 +29,11 @@ class DefaultSiteController extends BackendController
                     if($sistemp=='0')
                     {
                         $siteTypes = SiteClass::getTypes($this->companyId);
-                        $title='被换餐桌：'.$siteTypes[$stypeId];
+                        $title=yii::t('app','被换餐桌：').$siteTypes[$stypeId];
                         $modelsite = Site::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $ssid,':dpid'=>  $this->companyId));
-                        $title=$title.'-->'.$modelsite->serial.'('.$modelsite->site_level.')'.'::请选择目标餐桌';
+                        $title=$title.'-->'.$modelsite->serial.'('.$modelsite->site_level.')'.yii::t('app','::请选择目标餐桌');
                     }else{
-                        $title='被换餐桌：临时台/排队-->'.($ssid%1000).'：：请选择目标餐桌';
+                        $title=yii::t('app','被换餐桌：临时台/排队-->').($ssid%1000).yii::t('app','：：请选择目标餐桌');
                     }
                 }
                 elseif($op=='union')
@@ -41,11 +41,11 @@ class DefaultSiteController extends BackendController
                     if($sistemp=='0')
                     {
                         $siteTypes = SiteClass::getTypes($this->companyId);
-                        $title='被并餐桌：'.$siteTypes[$stypeId];
+                        $title=yii::t('app','被并餐桌：').$siteTypes[$stypeId];
                         $modelsite = Site::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $ssid,':dpid'=>  $this->companyId));
-                        $title=$title.'-->'.$modelsite->serial.'('.$modelsite->site_level.')'.'::请选择目标餐桌';
+                        $title=$title.'-->'.$modelsite->serial.'('.$modelsite->site_level.')'.yii::t('app','：：请选择目标餐桌');
                     }else{
-                        $title='被并餐桌：临时台/排队-->'.($ssid%1000).'：：请选择目标餐桌';
+                        $title=yii::t('app','被并餐桌：临时台/排队-->').($ssid%1000).yii::t('app','：：请选择目标餐桌');
                     }
                 }
 		$this->renderPartial('indexsite',array(
@@ -137,11 +137,11 @@ class DefaultSiteController extends BackendController
                             ///*************print
                             $transaction->commit(); //提交事务会真正的执行数据库操作
                             
-                            echo json_encode(array('status'=>1,'message'=>'开台成功','siteid'=>$site_id));  
+                            echo json_encode(array('status'=>1,'message'=>yii::t('app','开台成功'),'siteid'=>$site_id));  
                             return true;
                     } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
-                            echo json_encode(array('status'=>0,'message'=>'开台失败','siteid'=>$site_id)); 
+                            echo json_encode(array('status'=>0,'message'=>yii::t('app','开台失败'),'siteid'=>$site_id)); 
                             return false;
                     }
 		}
@@ -199,11 +199,11 @@ class DefaultSiteController extends BackendController
                             //var_dump($sid);exit;
                             
                             //apc_delete($siteNo->dpid.$siteNo->code);
-                            echo json_encode(array('status'=>1,'message'=>'撤台成功'));  
+                            echo json_encode(array('status'=>1,'message'=>yii::t('app','撤台成功')));  
                             return true;
                     } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
-                            echo json_encode(array('status'=>0,'message'=>'撤台失败'));
+                            echo json_encode(array('status'=>0,'message'=>yii::t('app','撤台失败')));
                             return false;
                     }
 		}
@@ -282,11 +282,11 @@ class DefaultSiteController extends BackendController
                                                  
                             
                             $transaction->commit(); //提交事务会真正的执行数据库操作
-                            echo json_encode(array('status'=>1,'message'=>'换台成功'));  
+                            echo json_encode(array('status'=>1,'message'=>yii::t('app','换台成功')));  
                             return true;
                     } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
-                            echo json_encode(array('status'=>0,'message'=>'换台失败'));
+                            echo json_encode(array('status'=>0,'message'=>yii::t('app','换台失败')));
                             return false;
                     }
 		}                
@@ -365,11 +365,11 @@ class DefaultSiteController extends BackendController
                             $commandorder->bindValue(":companyId" , $companyId);
                             $commandorder->execute();
                             $transaction->commit(); //提交事务会真正的执行数据库操作
-                            echo json_encode(array('status'=>1,'message'=>'换台成功'));  
+                            echo json_encode(array('status'=>1,'message'=>yii::t('app','换台成功')));  
                             return true;
                     } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
-                            echo json_encode(array('status'=>0,'message'=>'换台失败'));
+                            echo json_encode(array('status'=>0,'message'=>yii::t('app','换台失败')));
                             return false;
                     }
 		}                

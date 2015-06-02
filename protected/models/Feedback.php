@@ -59,13 +59,13 @@ class Feedback extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'lid' => '自身id，统一dpid下递增',
-			'dpid' => '店铺id',
+			'lid' => yii::t('app','自身id，统一dpid下递增'),
+			'dpid' => yii::t('app','店铺id'),
 			'create_at' => 'Create At',
-			'update_at' => '更新时间',
-			'name' => '名称',
-			'tip' => '提示信息',
-			'allflag' => '1整单反馈，0不是',
+			'update_at' => yii::t('app','更新时间'),
+			'name' => yii::t('app','名称'),
+			'tip' => yii::t('app','提示信息'),
+			'allflag' => yii::t('app','1整单反馈，0不是'),
 			'delete_flag' => 'Delete Flag',
 		);
 	}

@@ -14,7 +14,7 @@ class ProductImgController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -49,7 +49,7 @@ class ProductImgController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$postData = Yii::app()->request->getPost('productImg');
 			if(ProductPicture::saveImg($this->companyId,$lid,$postData)){
-				Yii::app()->user->setFlash('success' , '修改成功');
+				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('productImg/index' , 'companyId' => $this->companyId));
 			}
 		}

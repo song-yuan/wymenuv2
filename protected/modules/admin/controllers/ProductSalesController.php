@@ -5,7 +5,7 @@ class ProductSalesController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -70,7 +70,7 @@ class ProductSalesController extends BackendController
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
 			if($model->save()) {
-				Yii::app()->user->setFlash('success' , '添加成功');
+				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productSales/updatedetail' , 'companyId' => $this->companyId,'id'=>$productId));
 			}
 		}
@@ -93,7 +93,7 @@ class ProductSalesController extends BackendController
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('productSales/updatedetail' , 'companyId' => $companyId,'id'=>$printset)) ;
 		} else {
-			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
+			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
 			$this->redirect(array('productSales/updatedetail' , 'companyId' => $companyId,'id'=>$printset)) ;
 		}
 	}	
@@ -106,7 +106,7 @@ class ProductSalesController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductDiscount');
 			if($model->save()){
-				Yii::app()->user->setFlash('success' , '修改成功');
+				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productSales/updatedetail' , 'companyId' => $this->companyId,'id'=>$model->product_id));
 			}
 		}
@@ -134,7 +134,7 @@ class ProductSalesController extends BackendController
                 
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
-		$optionsReturn = array('--请选择分类--');
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
 			foreach ($models as $model) {
 				if($model->pid == '0') {

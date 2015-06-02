@@ -3,7 +3,7 @@
                                                     <a href="#">
                                                     <span class="badge"><?php echo $msg['lcount']; ?></span> 
                                                     <?php echo $msg['name']; ?> 
-                                                    <span class="time">刚刚</span>
+                                                    <span class="time"><?php echo yii::t('app','刚刚');?></span>
                                                     </a>
                                                     	
                                             </li>
@@ -45,7 +45,7 @@
                                         webkitNotifications.requestPermission();
                                     };
                                 }
-                            }else alert("您的浏览器不支持桌面通知特性，请下载谷歌浏览器试用该功能");
+                            }else alert("<?php echo yii::t('app','您的浏览器不支持桌面通知特性，请下载谷歌浏览器试用该功能');?>");
                         };*/
                         $('.sitemsg').on('click',function(){
                             //return true;

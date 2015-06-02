@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'座位管理','subhead'=>'添加座位','breadcrumbs'=>array(array('word'=>'座位管理','url'=>$this->createUrl('site/index' , array('companyId'=>$this->companyId))),array('word'=>'添加座位','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','座位管理'),'subhead'=>yii::t('app','添加座位'),'breadcrumbs'=>array(array('word'=>yii::t('app','座位管理'),'url'=>$this->createUrl('site/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加座位'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>添加座位</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加座位');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

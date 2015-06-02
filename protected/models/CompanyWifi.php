@@ -55,10 +55,10 @@ class CompanyWifi extends CActiveRecord
 		return array(
 			'lid' => 'ID',
 			'dpid' => 'Company',
-			'macid' => '公司WIFI MAC ID',
-			'wifi_name' => 'wifi名称',
-			'max_number' => '最大接入数',
-			'current_num' => '现接入数'
+			'macid' => yii::t('app','公司WIFI MAC ID'),
+			'wifi_name' => yii::t('app','wifi名称'),
+			'max_number' => yii::t('app','最大接入数'),
+			'current_num' => yii::t('app','现接入数')
 		);
 	}
 

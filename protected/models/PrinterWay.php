@@ -63,8 +63,8 @@ class PrinterWay extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'name' => '名称',
-			'memo' => '说明',
+			'name' => yii::t('app','名称'),
+			'memo' => yii::t('app','说明'),
 			'delete_flag' => 'Delete Flag',
 		);
 	}

@@ -4,7 +4,7 @@ class DepartmentController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -30,7 +30,7 @@ class DepartmentController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Department');
 			if($model->save()) {
-				Yii::app()->user->setFlash('success' , '添加成功');
+				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
 				$this->redirect(array('department/index','companyId' => $this->companyId));
 			}
 		}
@@ -47,7 +47,7 @@ class DepartmentController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Department');
 			if($model->save()){
-				Yii::app()->user->setFlash('success' , '修改成功');
+				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('department/index' , 'companyId' => $this->companyId));
 			}
 		}

@@ -32,11 +32,11 @@
     </style>
    
                                                         <div class="popBox1" id="pxbox_button">
-                                                            <h4>确定要干掉</h4>
+                                                            <h4><?php echo yii::t('app','确定要干掉');?></h4>
                                                             <div class="button-content">
 
                                                             </div>
-                                                            <span onclick="button_cancel(this)">关 闭</span>
+                                                            <span onclick="button_cancel(this)"><?php echo yii::t('app','关 闭');?></span>
                                                         </div>
                                                         <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
                                                         <div class="modal fade" id="portlet-button" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -81,24 +81,24 @@
 								<div class="portlet-title">
 									<div class="caption"><i class="fa fa-cogs"></i><?php echo $title; ?></div>
                                                                         <div class="col-md-3">
-                                                                                <input id="barscanid" type="text" class="form-control" placeholder="扫描小票条码，快速查看订单">
+                                                                                <input id="barscanid" type="text" class="form-control" placeholder="<?php echo yii::t('app','扫描小票条码，快速查看订单');?>">
                                                                         </div>
                                                                         <div class="actions">
-                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-chain-broken"></i> 快速沽清</a>
+                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','快速沽清');?></a>
                                                                             <div class="btn-group">
                                                                                     <a class="btn green" href="#" data-toggle="dropdown">
-                                                                                    <i class="fa fa-archive"></i>订单操作
+                                                                                    <i class="fa fa-archive"></i><?php echo yii::t('app','订单操作');?>
                                                                                     <i class="fa fa-angle-down"></i>
                                                                                     </a>
-                                                                                    <ul class="dropdown-menu pull-right"><!--已厨打不能编辑-->
+                                                                                    <ul class="dropdown-menu pull-right"><<?php echo yii::t('app','!--已厨打不能编辑--');?>>
                                                                                     
-                                                                                            <li><a href="javascript:;" class='btn-edit'  >历史订单</a></li>
-                                                                                            <li><a href="javascript:;" class="btn-del"   >支付记录</a></li>
-                                                                                            <li><a href="javascript:;" class='btn-taste'  >订单日结</a></li> 
+                                                                                            <li><a href="javascript:;" class='btn-edit'  ><?php echo yii::t('app','历史订单');?></a></li>
+                                                                                            <li><a href="javascript:;" class="btn-del"   ><?php echo yii::t('app','支付记录');?></a></li>
+                                                                                            <li><a href="javascript:;" class='btn-taste'  ><?php echo yii::t('app','订单日结');?></a></li> 
                                                                                         
                                                                                     </ul>
                                                                             </div>
-                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> 历史订单</a>
+                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','历史订单');?></a>
                                                                         </div>
 								</div>
 								<div class="portlet-body" id="table-manage">
@@ -122,7 +122,7 @@
                                                                                         <li class="modalaction bg-green" istemp="0" status="3" sid="3"> 003 </li>
                                                                                         <li class="modalaction" istemp="0" status="0" sid="4"> 004 </li>
                                                                                         <li class="modalaction" istemp="0" status="0" sid="5"> 005 </li>
-                                                                                        <li class="modalaction" istemp="0" status="0" sid="21">021<br>普通包厢普通包厢</li>-->
+                                                                                        <li class="modalaction" istemp="0" status="0" sid="21">021<br><?php echo yii::t('app','普通包厢普通包厢');?></li>-->
                                                                                                                                                                                
                                                                                 </ul>
                                                                         </div>
@@ -149,14 +149,14 @@
                 {
                     if(('123'.indexOf(status) >=0))
                     {
-                        alert("正在进行换台操作，请选择没有开台、下单的餐桌");
+                        alert("<?php echo yii::t('app','正在进行换台操作，请选择没有开台、下单的餐桌');?>");
                         return false;
                     }else if(istemp==1)
                     {
-                        alert("正在进行换台操作，请选择没有开台、下单的餐桌");
+                        alert("<?php echo yii::t('app','正在进行换台操作，请选择没有开台、下单的餐桌');?>");
                         return false;
                     }else{
-                        var statu = confirm("确定将该餐桌做为换台目标吗？");
+                        var statu = confirm("<?php echo yii::t('app','确定将该餐桌做为换台目标吗？');?>");
                         if(!statu){
                             return false;
                         }
@@ -180,18 +180,18 @@
                 }
                 if(op=="union")
                 {
-                    //alert("正在进行并台操作，请选择已经开台、下单的餐桌");
+                    //alert("<?php echo yii::t('app','正在进行并台操作，请选择已经开台、下单的餐桌');?>");
                     return false;//20150422休息
                     if(('034567'.indexOf(status) >=0))
                     {
-                        alert("正在进行并台操作，请选择已经开台、下单的餐桌");
+                        alert("<?php echo yii::t('app','正在进行并台操作，请选择已经开台、下单的餐桌');?>");
                         return false;
                     }else if(istemp==1)
                     {
-                        alert("正在进行并台操作，请选择没有开台、下单的餐桌");
+                        alert("<?php echo yii::t('app','正在进行并台操作，请选择没有开台、下单的餐桌');?>");
                         return false;
                     }else{
-                        var statu = confirm("确定将该餐桌做为换台目标吗？");
+                        var statu = confirm("<?php echo yii::t('app','确定将该餐桌做为换台目标吗？');?>");
                         if(!statu){
                             return false;
                         }

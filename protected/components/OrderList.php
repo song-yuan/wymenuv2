@@ -159,7 +159,7 @@ class OrderList
 												'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
 												'update_at'=>time(),
 												'amount'=>$val,
-												'taste_memo'=>'无',
+												'taste_memo'=>yii::t('app','无'),
 												);
 							Yii::app()->db->createCommand()->insert('nb_order_product',$insertData);
 						}
@@ -219,7 +219,7 @@ class OrderList
                                                                             'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
                                                                             'update_at'=>time(),
                                                                             'amount'=>$val,
-                                                                            'taste_memo'=>'无',
+                                                                            'taste_memo'=>yii::t('app','无'),
                                                                             );
 							Yii::app()->db->createCommand()->insert('nb_order_product',$insertData);
 						}

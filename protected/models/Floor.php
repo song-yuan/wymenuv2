@@ -55,10 +55,10 @@ class Floor extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'lid' => '楼层ID',
-			'name' => '楼层名称',
-                        'manager' => '负责人',
-			'dpid' => '公司',
+			'lid' => yii::t('app','楼层ID'),
+			'name' => yii::t('app','楼层名称'),
+                        'manager' => yii::t('app','负责人'),
+			'dpid' => yii::t('app','公司'),
 		);
 	}
 

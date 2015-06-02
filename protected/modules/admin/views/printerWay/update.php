@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印机方式管理','subhead'=>'修改打印方式','breadcrumbs'=>array(array('word'=>'打印机方式管理','url'=>$this->createUrl('printer/index' , array('companyId'=>$this->companyId))),array('word'=>'修改打印方式','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','打印机方式管理'),'subhead'=>yii::t('app','修改打印方式'),'breadcrumbs'=>array(array('word'=>yii::t('app','打印机方式管理'),'url'=>$this->createUrl('printer/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改打印方式'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>修改打印方案</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改打印方案');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

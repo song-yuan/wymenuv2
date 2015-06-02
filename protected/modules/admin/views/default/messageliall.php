@@ -5,7 +5,7 @@
                                                             ."-->".FeedBackClass::getFeedbackObject($msg['order_id'],$msg['is_order'],$msg['dpid'])
                                                             ."-->".FeedBackClass::getFeedbackName($msg['feedback_id'],$msg['dpid'])
                                                             ."-->".$msg['feedback_memo']; ?> 
-                                                    <span class="time"><?php echo $msg['timediff']; ?>秒</span>
+                                                    <span class="time"><?php echo $msg['timediff']; ?><?php echo yii::t('app','秒');?></span>
                                                     </a>
                                                     	
                                             </li>
@@ -30,7 +30,7 @@
                                                 -->
 					</ul>
 				
-                        <!--<button type="button" id="notifyButton" class="btn default">取 消</button>-->
+                        <!--<button type="button" id="notifyButton" class="btn default"><?php echo yii::t('app','取 消');?></button>-->
                         <script type="text/javascript">
                         /*document.getElementById('notifyButton').onclick = function(){
                             //判断浏览器是否支持notification
@@ -47,17 +47,17 @@
                                         webkitNotifications.requestPermission();
                                     };
                                 }
-                            }else alert("您的浏览器不支持桌面通知特性，请下载谷歌浏览器试用该功能");
+                            }else alert("<?php echo yii::t('app','您的浏览器不支持桌面通知特性，请下载谷歌浏览器试用该功能');?>");
                         };*/
                         $('.sitemsg').on('click',function(){
                             //return true;
                             var order_feed_id = $(this).attr('order_feed_id');
                             
-                            if(confirm("你确定要消除这条消息吗？"))
+                            if(confirm("<?php echo yii::t('app','你确定要消除这条消息吗？');?>"))
                             {
                                 $.get('<?php echo $this->createUrl('default/readfeedback',array('companyId'=>$this->companyId));?>/orderfeedbackid/'+order_feed_id,function(data){
                                         if(data.status) {
-                                                alert('消除成功');
+                                                alert("<?php echo yii::t('app','消除成功');?>");
                                                 getnotificationnum();
                                                 $('#header_notification_list').load('<?php echo $this->createUrl('default/messageliall',array('companyId'=>$this->companyId));?>'); 
                                         } else {

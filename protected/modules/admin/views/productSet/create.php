@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐管理','subhead'=>'添加套餐','breadcrumbs'=>array(array('word'=>'套餐管理','url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>'添加套餐','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','套餐管理'),'subhead'=>yii::t('app','添加套餐'),'breadcrumbs'=>array(array('word'=>yii::t('app','套餐管理'),'url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加套餐'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>添加套餐</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加套餐');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

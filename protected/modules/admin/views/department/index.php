@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'操作间管理','subhead'=>'操作间列表','breadcrumbs'=>array(array('word'=>'操作间管理','url'=>''),array('word'=>'操作间管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','操作间管理'),'subhead'=>yii::t('app','操作间列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','操作间管理'),'url'=>''),array('word'=>yii::t('app','操作间管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -31,16 +31,16 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>操作间列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','操作间列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('department/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('department/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
 							<i class="fa fa-angle-down"></i>
 							</a>
 							<ul class="dropdown-menu pull-right">
-								<li><a href="#"><i class="fa fa-ban"></i> 删除</a></li>
+								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></a></li>
 							</ul>
 						</div> -->
 					</div>
@@ -51,10 +51,10 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>名称</th>
-								<th>负责人</th>
-								<th>操作间</th>
-								<th>打印份数</th>
+								<th><?php echo yii::t('app','名称');?></th>
+								<th><?php echo yii::t('app','负责人');?></th>
+								<th><?php echo yii::t('app','操作间');?></th>
+								<th><?php echo yii::t('app','打印份数');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -68,20 +68,20 @@
 								<td><?php echo $model->printer_id;?></td>
 								<td><?php echo $model->list_no;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('department/update',array('id' => $model->department_id , 'companyId' => $model->company_id));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('department/update',array('id' => $model->department_id , 'companyId' => $model->company_id));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td>还没有添加操作间</td></tr>
+						<tr><td><?php echo yii::t('app','还没有添加操作间');?></td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?> , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

@@ -205,7 +205,7 @@ class ProductController extends Controller
 	//确认订单
 	public function actionConfirmPadOrder(){
 		$goodsIds = isset($_POST) ?$_POST :array();
-		$padOrder = json_encode(array('status'=>false,'msg'=>'订单为空'),JSON_UNESCAPED_UNICODE);
+		$padOrder = json_encode(array('status'=>false,'msg'=>yii::t('app','订单为空')),JSON_UNESCAPED_UNICODE);
 	 	if(!empty($goodsIds)){
 			$padOrder = CreateOrder::createPadOrder($this->companyId,$goodsIds,$this->padId); 
 	 	}
@@ -221,7 +221,7 @@ class ProductController extends Controller
                 //要判断打印机类型错误，必须是local。
                 if($pad->printer->printer_type!='1')
                 {
-                    Yii::app()->end(json_encode(array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！')));
+                    Yii::app()->end(json_encode(array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','必须是本地打印机！'))));
                 }else{
                     //前面加 barcode
                     $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
@@ -318,10 +318,10 @@ class ProductController extends Controller
 	public function actionAddProductAddition(){
 		$orderId = Yii::app()->request->getParam('orderId');
 		$lid = Yii::app()->request->getParam('id');
-		$data = array('status'=>false,'msg'=>'加菜失败!');
+		$data = array('status'=>false,'msg'=>yii::t('app','加菜失败!'));
 		$productAddition = new ProductAdditionClass($this->companyId,$orderId,$lid);
 		if($productAddition->save()){
-			$data = array('status'=>true,'msg'=>'加菜成功!','data'=>$productAddition->productAddition,'lastLid'=>sprintf("%010d",$productAddition->lastLid));
+			$data = array('status'=>true,'msg'=>yii::t('app','加菜成功!'),'data'=>$productAddition->productAddition,'lastLid'=>sprintf("%010d",$productAddition->lastLid));
 			Yii::app()->end(json_encode($data));
 		}else{
 			Yii::app()->end(json_encode($data));

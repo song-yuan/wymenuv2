@@ -5,7 +5,7 @@ class DefaultController extends BackendController
         public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -170,9 +170,9 @@ class DefaultController extends BackendController
                 $orderfeedback->is_deal='1';
                 if($orderfeedback->save())
                 {
-                    Yii::app()->end(json_encode(array('status'=>true,'msg'=>'已读')));
+                    Yii::app()->end(json_encode(array('status'=>true,'msg'=>yii::t('app','已读'))));
                 }else{
-                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>'读取失败')));
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>yii::t('app','读取失败'))));
                 }
         }
         

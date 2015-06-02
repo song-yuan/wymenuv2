@@ -4,7 +4,7 @@ class OrderController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' ,yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -45,9 +45,9 @@ class OrderController extends BackendController
 					}
 					if(!$status['status']) {
 						Yii::app()->user->setFlash('error',$status['msg']);
-						throw new CException('请选择打印机');
+						throw new CException(yii::t('app','请选择打印机'));
 					} else {
-						Yii::app()->user->setFlash('success','结单成功');
+						Yii::app()->user->setFlash('success',yii::t('app','结单成功'));
 					}
 				}
 				$transaction->commit();

@@ -15,10 +15,10 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-                                                            <th>时间</th>
-                                                            <th>消息</th>
-                                                            <th>消息对象</th>
-                                                            <th>消息备注</th>
+                                                            <th><?php echo yii::t('app','时间');?></th>
+                                                            <th><?php echo yii::t('app','消息');?></th>
+                                                            <th><?php echo yii::t('app','消息对象');?></th>
+                                                            <th><?php echo yii::t('app','消息备注');?></th>
                                                             <th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -31,7 +31,7 @@
 								<td><?php echo FeedBackClass::getFeedbackObject($model->order_id,$model->is_order,$this->companyId);?></td>
                                                                 <td ><?php echo $model->feedback_memo;?></td>
                                                                 <td class="center">
-								<a href="#" orderfeedbackid="<?php echo $model->lid; ?>" class="btn-over btn green msg_sure_btn" ><i class="fa fa-check"></i>确认</a>
+								<a href="#" orderfeedbackid="<?php echo $model->lid; ?>" class="btn-over btn green msg_sure_btn" ><i class="fa fa-check"></i><?php echo yii::t('app','确定');?></a>
                                                                 </td>
 							</tr>
 						<?php endforeach;?>
@@ -42,7 +42,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">
@@ -78,7 +78,7 @@
 	</div>
 </div>
 <div class="modal-footer">
-        <button type="button" class="btn blue" id="msgmodalsure"> 确 定 </button>
+        <button type="button" class="btn blue" id="msgmodalsure"> <?php echo yii::t('app','确 定');?> </button>
 </div>
 	<!-- END PAGE CONTENT-->
 <script type="text/javascript">
@@ -94,7 +94,7 @@
                 if(data.status) {
                         thisbtn.attr('orderfeedbackid','0000000000');
                         thisbtn.removeClass('green');
-                        alert('操作成功');                        
+                        alert(<?php echo yii::t('app','操作成功');?>);                        
                 } else {
                         alert(data.msg);
                 }

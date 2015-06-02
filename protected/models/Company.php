@@ -44,9 +44,9 @@ class Company extends CActiveRecord
 			array('description','length'),
 			array('address','length'),
 			array('company_name, logo, contact_name, mobile' , 'required'),
-			array('email', 'length', 'min'=>6, 'max'=>40,'message'=>'请输入4到20的电子邮件'),
-			array('mobile','match','pattern'=>'/^[1][358]\d{9}$/','message'=>'请填写有效的手机号码'),
-			array('telephone', 'match','pattern'=>'/(^[0-9]{3,4}[0-9]{7,8}$)|(^400\-[0-9]{3}\-[0-9]{4}$)|(^[0-9]{3,4}\-[0-9]{7,8}$)|(^0{0,1}13[0-9]{9}$)/' ,'message'=>'请填写有效的电话号码'),
+			array('email', 'length', 'min'=>6, 'max'=>40,'message'=>yii::t('app','请输入4到20的电子邮件')),
+			//array('mobile','match','pattern'=>'/^[1][358]\d{9}$/','message'=>yii::t('app','请填写有效的手机号码')),
+			//array('telephone', 'match','pattern'=>'/(^[0-9]{3,4}[0-9]{7,8}$)|(^400\-[0-9]{3}\-[0-9]{4}$)|(^[0-9]{3,4}\-[0-9]{7,8}$)|(^0{0,1}13[0-9]{9}$)/' ,'message'=>yii::t('app','请填写有效的电话号码')),
 			
 				
 			// The following rule is used by search().
@@ -73,19 +73,19 @@ class Company extends CActiveRecord
 	{
 		return array(
 			'dpid' => 'Company',
-			'company_name' => '公司名称',
+			'company_name' => yii::t('app','公司名称'),
 			'logo' => 'Logo',
-			'contact_name' => '联系人',
-			'mobile' => '联系人手机',
-			'telephone' => '电话',
-			'email' => '电子邮箱',
-			'address'=>'公司地址',
-			'homepage' => '公司主页',
-                        'domain'=>'系统服务地址',
-			'create_at' => '创建时间',
-			'delete_flag' => '状态',
-			'description' => '公司描述',
-			'printer_id' => '打印机ID',
+			'contact_name' => yii::t('app','联系人'),
+			'mobile' =>yii::t('app', '联系人手机'),
+			'telephone' => yii::t('app','电话'),
+			'email' => yii::t('app','电子邮箱'),
+			'address'=>yii::t('app','公司地址'),
+			'homepage' => yii::t('app','公司主页'),
+                        'domain'=>yii::t('app','系统服务地址'),
+			'create_at' => yii::t('app','创建时间'),
+			'delete_flag' => yii::t('app','状态'),
+			'description' => yii::t('app','公司描述'),
+			'printer_id' => yii::t('app','打印机ID'),
 		);
 	}
 

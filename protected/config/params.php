@@ -12,4 +12,5 @@ return array(
 		'image_width' => 300,
 		'image_height' => 300,
                 'has_cache' => FALSE,
+                'master_slave'=>'m',//m is master can add company s only can import company data from master
 );

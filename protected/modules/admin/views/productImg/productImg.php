@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品图片管理','subhead'=>'产品图片列表','breadcrumbs'=>array(array('word'=>'产品图片列表','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','产品图片管理'),'subhead'=>yii::t('app','产品图片列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','产品图片列表'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -31,14 +31,14 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>产品图片列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品图片列表');?></div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th>产品名称</th>
-								<th>产品主图</th>
+								<th><?php echo yii::t('app','产品名称');?></th>
+								<th><?php echo yii::t('app','产品主图');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -51,7 +51,7 @@
 									<img src="<?php echo $model->main_picture;?>" />
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productImg/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('productImg/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -62,7 +62,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

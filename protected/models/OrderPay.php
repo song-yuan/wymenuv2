@@ -61,11 +61,11 @@ class OrderPay extends CActiveRecord
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
-			'update_at' => '更新时间',
-			'order_id' => '订单编号',
-			'pay_amount' => '付款/退款金额',
-			'payment_method_id' => '付款/退款方式',
-			'remark' => '付款/退款备注',
+			'update_at' => yii::t('app','更新时间'),
+			'order_id' =>yii::t('app', '订单编号'),
+			'pay_amount' => yii::t('app','金额'),
+			'payment_method_id' =>yii::t('app', '方式'),
+			'remark' => yii::t('app','备注'),
 		);
 	}
 

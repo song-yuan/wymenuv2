@@ -11,7 +11,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'dpid', array('0' => '-- 请选择 --') +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->dropDownList($model, 'dpid', array('0' => yii::t('app','-- 请选择 --')) +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
 											<?php echo $form->error($model, 'dpid' )?>
 										</div>
 									</div>
@@ -20,14 +20,14 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'type_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'type_id', array('0' => '-- 请选择 --') +$types ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type_id')));?>
+											<?php echo $form->dropDownList($model, 'type_id', array('0' => yii::t('app','-- 请选择 --')) +$types ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type_id')));?>
 											<?php echo $form->error($model, 'type_id' )?>
 										</div>
 									</div>
                                                                          <div class="form-group">
 										<?php echo $form->label($model, 'floor_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'floor_id', array('0' => '-- 请选择 --') +$floors ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('floor_id')));?>
+											<?php echo $form->dropDownList($model, 'floor_id', array('0' => yii::t('app','-- 请选择 --')) +$floors ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('floor_id')));?>
 											<?php echo $form->error($model, 'floor_id' )?>
 										</div>
 									</div>
@@ -51,10 +51,10 @@
 										<div class="col-md-4">
 											<div class="radio-list">                                                
 												<label class="radio-inline">
-													<input type="radio" name="Site[has_minimum_consumption]" value="0"  <?php echo $model->has_minimum_consumption ? '' : 'checked' ;?>/>无
+													<input type="radio" name="Site[has_minimum_consumption]" value="0"  <?php echo $model->has_minimum_consumption ? '' : 'checked' ;?>/><?php echo yii::t('app','无');?>
 												</label>
 												<label class="radio-inline">
-													<input type="radio" name="Site[has_minimum_consumption]" value="1"  <?php echo $model->has_minimum_consumption ? 'checked' : '' ;?>/>有
+													<input type="radio" name="Site[has_minimum_consumption]" value="1"  <?php echo $model->has_minimum_consumption ? 'checked' : '' ;?>/><?php echo yii::t('app','有');?>
 												</label>  
 											</div>
 										</div>
@@ -64,10 +64,10 @@
 										<div class="col-md-4">
 											<div class="radio-list">
 												<label class="radio-inline">
-													<input type="radio" name="Site[minimum_consumption_type]" value="0"  <?php echo $model->minimum_consumption_type ? '' : 'checked' ;?>/>按时间计费
+													<input type="radio" name="Site[minimum_consumption_type]" value="0"  <?php echo $model->minimum_consumption_type ? '' : 'checked' ;?>/><?php echo yii::t('app','按时间计费');?>
 												</label>  
 												<label class="radio-inline">
-													<input type="radio" name="Site[minimum_consumption_type]" value="1"  <?php echo $model->minimum_consumption_type ? 'checked' : '' ;?>/>按人数计费
+													<input type="radio" name="Site[minimum_consumption_type]" value="1"  <?php echo $model->minimum_consumption_type ? 'checked' : '' ;?>/><?php echo yii::t('app','按人数计费');?>
 												</label> 
 											</div>
 										</div>
@@ -109,8 +109,8 @@
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('site/index' , array('companyId' => $model->dpid));?>" class="btn default">返回</a>                              
+											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<a href="<?php echo $this->createUrl('site/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>

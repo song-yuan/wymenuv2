@@ -12,7 +12,7 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title">口味选择</h4>
+                                                        <h4 class="modal-title"><?php echo yii::t('app','口味选择');?></h4>
                                                 </div>
                                                 <div class="modal-body">
                                                         <div class="clearfix col-md-12">
@@ -27,7 +27,7 @@
                                                         <?php endif;?>                                                            
                                                         </div>                                             
                                                         <div class="form-group">
-                                                            <label class ='col-md-6 control-label'>其他口味</label><br>
+                                                            <label class ='col-md-6 control-label'><?php echo yii::t('app','其他口味');?></label><br>
                                                             <div class="col-md-12">
                                                                 <textarea class="form-control" name="taste_memo" id="Order_remark"><?php echo $tasteMemo; ?></textarea>                                                                                                                                                   
                                                             </div>
@@ -35,8 +35,8 @@
                                                         <input class="form-control" name="selectTasteList" id="selectTasteListId" type="hidden" value="">                                                        
                                                     </div>
                                                 <div class="modal-footer">
-                                                        <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                        <input type="button" class="btn green" id="addtaste-btn" value="确 定">
+                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                        <input type="button" class="btn green" id="addtaste-btn" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                         <?php $this->endWidget(); ?>

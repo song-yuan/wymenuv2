@@ -6,7 +6,7 @@
 		<div class="col-md-12">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
 			<h3 class="page-title">
-				<small>订单编号错误！！</small>
+				<small><?php echo yii::t('app','订单编号错误！！');?></small>
 			</h3>
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
@@ -18,7 +18,7 @@
 		<div class="col-md-12">			
                     <div class="">
                         <div class="tabbable tabbable-custom">
-                            <input type="button" class="btn green" id="errorback" value=" 返 回 ">
+                            <input type="button" class="btn green" id="errorback" value="<?php echo yii::t('app',' 返 回 ');?>">
                         </div>
                     </div>	
 		</div>	

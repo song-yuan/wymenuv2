@@ -21,7 +21,7 @@
 										$this->widget('application.extensions.swfupload.SWFUpload',array(
 											'callbackJS'=>'swfupload_callback',
 											'fileTypes'=> '*.jpg',
-											'buttonText'=> '上传产品图片',
+											'buttonText'=> "<?php echo yii::t('app','上传产品图片');?>",
 											'imgUrlList' => array($model->logo),
 										));
 										?>
@@ -90,15 +90,15 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'printer_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'printer_id', array('0' => '-- 请选择 --') +$printers ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('printer_id')));?>
+											<?php echo $form->dropDownList($model, 'printer_id', array('0' => yii::t('app','-- 请选择 --')) +$printers ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('printer_id')));?>
 											<?php echo $form->error($model, 'printer_id' )?>
 										</div>
 									</div>
 									-->									
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('company/index');?>" class="btn default">返回</a>                              
+											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<a href="<?php echo $this->createUrl('company/index');?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>

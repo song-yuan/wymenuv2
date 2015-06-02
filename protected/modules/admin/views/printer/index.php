@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'打印机管理','subhead'=>'打印机列表','breadcrumbs'=>array(array('word'=>'打印机管理','url'=>''),array('word'=>'打印机管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','打印机管理'),'subhead'=>yii::t('app','打印机列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','打印机管理'),'url'=>''),array('word'=>yii::t('app','打印机管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,20 +40,20 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>打印机列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','打印机列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('printer/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('printer/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
 							<i class="fa fa-angle-down"></i>
 							</a>
 							<ul class="dropdown-menu pull-right">
-								<li><a href="#"><i class="fa fa-ban"></i> 删除</a></li>
+								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></a></li>
 							</ul>
 						</div> -->
                                                 <div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 删除</button>
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
 					</div>
 				</div>
@@ -63,15 +63,15 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>打印机名称</th>
-                                                                <th>地址(IP/USB/COM)</th>
-                                                                <th>语言</th>
-                                                                <th>类型</th>
-								<!--<th>IP地址</th>
-								<th>串口名称</th>
-                                                                <th>波特率</th>-->
-                                                                <th>品牌</th>
-                                                                <th>备注</th>
+								<th><?php echo yii::t('app','打印机名称');?></th>
+                                                                <th><?php echo yii::t('app','地址(IP/USB/COM)');?></th>
+                                                                <th><?php echo yii::t('app','语言');?></th>
+                                                                <th><?php echo yii::t('app','确定');?>类型</th>
+								<!--<th><?php echo yii::t('app','IP地址');?></th>
+								<th><?php echo yii::t('app','串口名称');?></th>
+                                                                <th><?php echo yii::t('app','波特率');?></th>-->
+                                                                <th><?php echo yii::t('app','品牌');?></th>
+                                                                <th><?php echo yii::t('app','备注');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -82,25 +82,25 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->name;?></td>
 								<td ><?php echo $model->address ;?></td>
-                                                                <td ><?php if($model->language=='1') echo '中文'; else echo '日文';?></td>
-								<td ><?php if($model->printer_type=='0') echo '网络'; elseif($model->printer_type=='1') echo '本地';?></td>
+                                                                <td ><?php if($model->language=='1') echo "<?php echo yii::t('app','中文');?>"; else echo "<?php echo yii::t('app','日文');?>";?></td>
+								<td ><?php if($model->printer_type=='0') echo "<?php echo yii::t('app','网络');?>"; elseif($model->printer_type=='1') echo "<?php echo yii::t('app','本地');?>";?></td>
 								<td><?php echo $model->brand;?></td>
                                                                 <td><?php echo $model->remark;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('printer/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('printer/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td>还没有添加打印机</td></tr>
+						<tr><td><?php echo yii::t('app','还没有添加打印机');?></td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页 ');?> , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据 ');?>, <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

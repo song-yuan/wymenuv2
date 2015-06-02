@@ -35,10 +35,10 @@ class CompanyController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Company');
 			if($model->save()){
-				Yii::app()->user->setFlash('success','创建成功');
+				Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
 				$this->redirect(array('company/index'));
 			} else {
-				Yii::app()->user->setFlash('error','创建失败');
+				Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
 			}
 		}
 		$printers = $this->getPrinterList();
@@ -54,10 +54,10 @@ class CompanyController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('Company');
 			//var_dump($model->attributes);exit;
 			if($model->save()){
-				Yii::app()->user->setFlash('success','修改成功');
+				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
 				$this->redirect(array('company/index'));
 			} else {
-				Yii::app()->user->setFlash('error','修改失败');
+				Yii::app()->user->setFlash('error',yii::t('app','修改失败'));
 			}
 		}
 		$printers = $this->getPrinterList();

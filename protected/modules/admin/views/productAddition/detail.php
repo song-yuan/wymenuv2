@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'加菜管理','subhead'=>'加菜明细列表','breadcrumbs'=>array(array('word'=>'加菜管理','url'=>$this->createUrl('productAddition/index' , array('companyId'=>$this->companyId))),array('word'=>'加菜明细列表','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','加菜管理'),'subhead'=>yii::t('app','加菜明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','加菜管理'),'url'=>$this->createUrl('productAddition/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','加菜明细列表'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,20 +40,20 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->product_name ;?>->加菜明细列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->product_name ;?>-><?php echo yii::t('app','加菜明细列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('productAddition/create' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('productAddition/create' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
 							<i class="fa fa-angle-down"></i>
 							</a>
 							<ul class="dropdown-menu pull-right">
-								<li><a href="#"><i class="fa fa-ban"></i> 删除</a></li>
+								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></a></li>
 							</ul>
 						</div> -->
                                                 <div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 删除</button>
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i><?php echo yii::t('app','删除');?></button>
 						</div>
 					</div>
 				</div>
@@ -63,10 +63,10 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>单品名称</th>
-                                                                <th>图片</th>
-                                                                <th>加菜价格</th>
-                                                                <th>数量</th>
+								<th><?php echo yii::t('app','单品名称');?></th>
+                                                                <th><?php echo yii::t('app','图片');?></th>
+                                                                <th><?php echo yii::t('app','加菜价格');?></th>
+                                                                <th><?php echo yii::t('app','数量');?></th>
                                                                 <th>&nbsp;</th>                                                                
 							</tr>
 						</thead>
@@ -80,20 +80,20 @@
                                                                 <td><?php echo $model->price;?></td>
                                                                 <td><?php echo $model->number;?></td>
                                                                 <td class="center">
-								<a href="<?php echo $this->createUrl('productAddition/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('productAddition/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>             
 							</tr>
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td>还没有添加加菜明细</td></tr>
+						<tr><td><?php echo yii::t('app','还没有添加加菜明细');?></td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?><?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

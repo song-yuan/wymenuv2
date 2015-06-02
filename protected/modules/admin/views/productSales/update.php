@@ -25,7 +25,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'优惠活动管理','subhead'=>'修改优惠活动','breadcrumbs'=>array(array('word'=>'优惠活动管理','url'=>$this->createUrl('productSales/index' , array('companyId'=>$this->companyId))),array('word'=>'修改优惠活动','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','优惠活动管理'),'subhead'=>yii::t('app','修改优惠活动'),'breadcrumbs'=>array(array('word'=>yii::t('app','优惠活动管理'),'url'=>$this->createUrl('productSales/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改优惠活动'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -33,7 +33,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>修改优惠活动</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改优惠活动');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
@@ -52,23 +52,23 @@
 		<script>
 		jQuery(document).ready(function(){
 		    if(parseInt($('input:radio[name="ProductDiscount[is_discount]"]:checked').val())) {
-				$('.discount').find('label').html('折扣比例');
-				$('.discount').find('.input-group-addon').html('折');
+				$('.discount').find('label').html("<?php echo yii::t('app','折扣比例');?>");
+				$('.discount').find('.input-group-addon').html("<?php echo yii::t('app','折');?>");
 				$('.discount').find('.input-group').after('<span class="help-block">70即七折</span>');
 			} else {
-				$('.discount').find('label').html('优惠价格');
+				$('.discount').find('label').html("<?php echo yii::t('app','优惠价格');?>");
 				$('.discount').find('.input-group-addon').html('元');
-				$('.discount').find('.input-group').after('<span class="help-block">实际价格=原价-优惠价格</span>');
+				$('.discount').find('.input-group').after("<?php echo yii::t('app','<span class="help-block">实际价格=原价-优惠价格</span>');?>");
 			}
 			$('input:radio[name="ProductDiscount[is_discount]"]').change(function(){
 				if(parseInt($(this).val())) {
-					$('.discount').find('label').html('折扣比例');
-					$('.discount').find('.input-group-addon').html('折');
-					$('.discount').find('.input-group').after('<span class="help-block">70即七折</span>');
+					$('.discount').find('label').html("<?php echo yii::t('app','折扣比例');?>");
+					$('.discount').find('.input-group-addon').html("<?php echo yii::t('app','折');?>");
+					$('.discount').find('.input-group').after("<?php echo yii::t('app','<span class="help-block">70即七折</span>');?>");
 				} else {
-				  $('.discount').find('label').html('优惠价格');
-				  $('.discount').find('.input-group-addon').html('元');
-				  $('.discount').find('.input-group').after('<span class="help-block">实际价格=原价-优惠价格</span>');
+				  $('.discount').find('label').html("<?php echo yii::t('app','优惠价格');?>");
+				  $('.discount').find('.input-group-addon').html("<?php echo yii::t('app','元');?>");
+				  $('.discount').find('.input-group').after("<?php echo yii::t('app','<span class="help-block">实际价格=原价-优惠价格</span>');?>");
 				}
 		    })
 		    if (jQuery().datepicker) {

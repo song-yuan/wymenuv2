@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品图片管理','subhead'=>'修改产品图片','breadcrumbs'=>array(array('word'=>'产品图片管理','url'=>$this->createUrl('productImg/index' , array('companyId'=>$this->companyId))),array('word'=>'修改产品图片','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','产品图片管理'),'subhead'=>yii::t('app','修改产品图片'),'breadcrumbs'=>array(array('word'=>yii::t('app','产品图片管理'),'url'=>$this->createUrl('productImg/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改产品图片'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>修改产品图片</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改产品图片');?></div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
@@ -52,13 +52,13 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label  class="col-md-3 control-label">上传产品图片</label>
+										<label  class="col-md-3 control-label"><?php echo yii::t('app','上传产品图片');?></label>
 										<div class="col-md-9 productImg">
 										<?php
 										$this->widget('application.extensions.swfupload.SWFUpload',array(
 											'callbackJS'=>'swfupload_callback',
 											'fileTypes'=> '*.jpg',
-											'buttonText'=> '上传产品图片',
+											'buttonText'=> "<?php echo yii::t('app','上传产品图片');?>",
 											'companyId' => $model->dpid,
 											'imgUrlList' => $pictures,
 										));
@@ -72,8 +72,8 @@
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('productImg/index' , array('companyId' => $model->dpid));?>" class="btn default">返回</a>                              
+											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<a href="<?php echo $this->createUrl('productImg/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>

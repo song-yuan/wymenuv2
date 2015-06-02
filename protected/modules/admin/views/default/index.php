@@ -66,8 +66,8 @@
 							<li typeId="<?php echo $key ;?>" class="tabtitle <?php if($key == $typeId) echo 'active';?>"><a href="#tab_1_<?php echo $key;?>" data-toggle="tab"><?php echo $siteType ;?></a></li>
 						<?php endforeach;?>
                                                 <?php endif;?>
-                                                        <li typeId="tempsite" class="tabtitle <?php if($typeId == 'tempsite') echo 'active';?>"><a href="#tab_1_tempsite" data-toggle="tab">临时座/排队</a></li>
-                                                        <li typeId="reserve" class="tabtitle <?php if($typeId == 'reserve') echo 'active';?>"><a href="#tab_1_reserve" data-toggle="tab">预定/外卖</a></li>
+                                                        <li typeId="tempsite" class="tabtitle <?php if($typeId == 'tempsite') echo 'active';?>"><a href="#tab_1_tempsite" data-toggle="tab"><?php echo yii::t('app','临时座/排队');?></a></li>
+                                                        <li typeId="reserve" class="tabtitle <?php if($typeId == 'reserve') echo 'active';?>"><a href="#tab_1_reserve" data-toggle="tab"><?php echo yii::t('app','预定/外卖');?></a></li>
 						</ul>
 						<div class="tab-content" id="tabsiteindex">
 							
@@ -80,7 +80,7 @@
 		<div class="col-md-2 hide messagepart">
 			<div class="portlet box purple">
 				<div class="portlet-title"><i class="fa fa-volume-up"></i>
-					<div class="caption pull-right"> 历史消息>></div>					
+					<div class="caption pull-right"> <?php echo yii::t('app','历史消息>>');?></div>					
 				</div>
                                 <div class="portlet-body message_list" id="messagepartid">
                                     

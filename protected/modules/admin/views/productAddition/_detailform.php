@@ -11,7 +11,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'dpid', array('0' => '-- 请选择 --') +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->dropDownList($model, 'dpid', array('0' => yii::t('app','-- 请选择 --')) +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
 											<?php echo $form->error($model, 'dpid' )?>
 										</div>
 									</div>
@@ -27,7 +27,7 @@
                                                                         <div class="form-group" <?php if($model->hasErrors('sproduct_id')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'sproduct_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">											
-                                                                                        <?php echo $form->dropDownList($model, 'sproduct_id', array('0' => '-- 请选择 --') +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sproduct_id')));?>
+                                                                                        <?php echo $form->dropDownList($model, 'sproduct_id', array('0' => yii::t('app','-- 请选择 --')) +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sproduct_id')));?>
 											<?php echo $form->error($model, 'sproduct_id' )?>
 										</div>
 									</div>
@@ -48,8 +48,8 @@
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('productAddition/detail' , array('companyId' => $model->dpid,'lid' => $model->mproduct_id));?>" class="btn default">返回</a>                              
+											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<a href="<?php echo $this->createUrl('productAddition/detail' , array('companyId' => $model->dpid,'lid' => $model->mproduct_id));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
@@ -65,7 +65,7 @@
                                                                                     dataType:'json',
                                                                                     success:function(result){
                                                                                             //alert(result.data);
-                                                                                            var str = '<option value="">--请选择--</option>';                                                                                            
+                                                                                            var str = '<option value="">--<?php echo yii::t('app','请选择');?>--</option>';                                                                                            
                                                                                             if(result.data.length){
                                                                                                     //alert(1);
                                                                                                     $.each(result.data,function(index,value){

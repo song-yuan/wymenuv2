@@ -16,6 +16,7 @@
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/base64.js'); 
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/pic-pad.js');
+       
 ?>
 
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type,'siteNoId'=>$siteNoId));?>
@@ -61,7 +62,7 @@
         <div class="line"></div>-->
         <div class="product-mask-info" id="pad-disbind-menu"><?php echo yii::t('app','解除绑定'); ?></div>
         <div class="line"></div>
-        <div class="product-mask-info" id="pad-app-exit"><?php echo yii::t('app','清除缓存');?></div>
+        <div class="product-mask-info" id="pad-app-exit"><?php echo yii::t('app',"清除缓存");?></div>
 	<div class="product-bottom">
 	</div>
 </div>

@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'座位管理','subhead'=>'座位列表','breadcrumbs'=>array(array('word'=>'座位管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','座位管理'),'subhead'=>yii::t('app','座位列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','座位管理'),'url'=>''))));?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
@@ -46,11 +46,11 @@
 						<div class="tab-content">
 							<div class="portlet box purple">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-globe"></i>座位列表</div>
+									<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','座位列表');?></div>
 									<div class="actions">
-										<a href="<?php echo $this->createUrl('site/create' , array('typeId'=>$typeId , 'companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+										<a href="<?php echo $this->createUrl('site/create' , array('typeId'=>$typeId , 'companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 										<div class="btn-group">
-											<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 删除</button>
+											<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 										</div>
 									</div>
 								</div>
@@ -59,10 +59,10 @@
 										<thead>
 											<tr>
 												<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-												<th>座位号</th>
-												<th>类型</th>
-												<th>楼层</th>
-												<th>等级</th>
+												<th><?php echo yii::t('app','座位号');?></th>
+												<th><?php echo yii::t('app','类型');?></th>
+												<th><?php echo yii::t('app','楼层');?></th>
+												<th><?php echo yii::t('app','等级');?></th>
 												<th>&nbsp;</th>
 											</tr>
 										</thead>
@@ -76,7 +76,7 @@
 												<td ><?php if(!empty($model->floor->name)) echo $model->floor->name;?></td>
 												<td><?php echo $model->site_level;?></td>
 												<td class="center">
-												<a href="<?php echo $this->createUrl('site/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+												<a href="<?php echo $this->createUrl('site/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 												</td>
 											</tr>
 										<?php endforeach;?>
@@ -87,7 +87,7 @@
 										<div class="row">
 											<div class="col-md-5 col-sm-12">
 												<div class="dataTables_info">
-													共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+													<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 												</div>
 											</div>
 											<div class="col-md-7 col-sm-12">
@@ -129,7 +129,7 @@
 	$(document).ready(function(){
 		$('#site-form').submit(function(){
 			if(!$('.checkboxes:checked').length){
-				alert('请选择要删除的项');
+				alert("<?php echo yii::t('app','请选择要删除的项');?>");
 				return false;
 			}
 			return true;

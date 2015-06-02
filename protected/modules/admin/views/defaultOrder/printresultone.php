@@ -1,16 +1,16 @@
 							
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title">正在厨打...</h4>
+                                                        <h4 class="modal-title"><?php echo yii::t('app','正在厨打...');?></h4>
                                                 </div>
                                                 <div class="modal-body">
                                                         <div class="form-actions fluid" id="product_panel">
-                                                            <span style="color:red;" id="printresult">检测打印状态...</span>
-                                                        </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
+                                                            <span style="color:red;" id="printresult"><?php echo yii::t('app','检测打印状态...');?></span>
+                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
                                                 </div>
                                                 <input class="form-control" name="additionnames" id="additionids" type="hidden" value="">
                                                 <div class="modal-footer">
-                                                        <input type="button" class="btn green" id="btn-print-roll" value="确 定">
+                                                        <input type="button" class="btn green" id="btn-print-roll" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                             <script>

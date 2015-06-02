@@ -75,17 +75,17 @@ class User extends CActiveRecord
 		return array(
 			'lid' => 'lid',
 			'dpid' => 'dpid',
-			'username' => '用户名',
-			'mobile' => '手机',
-			'password_hash' => '密码',
+			'username' => yii::t('app','用户名'),
+			'mobile' => yii::t('app','手机'),
+			'password_hash' => yii::t('app','密码'),
 			'password_reset_token' => 'Password Reset Token',
-			'staff_no' => '员工号',
-			'email' => '电子邮箱',
+			'staff_no' => yii::t('app','员工号'),
+			'email' => yii::t('app','电子邮箱'),
 			'auth_key' => 'Auth Key',
-			'role' => '管理员类型',
-			'status' => '状态',
-			'create_at' => '创建时间',
-			'update_at' => '修改时间',
+			'role' => yii::t('app','管理员类型'),
+			'status' => yii::t('app','状态'),
+			'create_at' => yii::t('app','创建时间'),
+			'update_at' => yii::t('app','修改时间'),
 		);
 	}
 

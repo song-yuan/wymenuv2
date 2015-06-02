@@ -4,7 +4,7 @@ class FloorController extends BackendController
 	public function beforeAction($action){
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index')) ;
 		}
 		return true;
@@ -36,7 +36,7 @@ class FloorController extends BackendController
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()){
-				Yii::app()->user->setFlash('success' , '添加成功');
+				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
 				$this->redirect(array('floor/index' , 'companyId' => $this->companyId));
 			}
 		}
@@ -53,7 +53,7 @@ class FloorController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('Floor');
                         //var_dump($model);exit;
 			if($model->save()){
-				Yii::app()->user->setFlash('success' , '修改成功');
+				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('floor/index' , 'companyId' => $this->companyId));
 			}
 		}

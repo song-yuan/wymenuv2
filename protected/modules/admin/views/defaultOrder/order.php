@@ -63,13 +63,13 @@
                         <!-- BEGIN PAGE CONTENT-->
 			<div class="row">
                                 <div class="col-md-4">
-                                    <h3 class="page-title"><?php switch($model->order_status) {case 1:{echo '未下单';break;} case 2:{echo '下单未支付';break;} case 3:{echo '已支付'.$model->reality_total;break;} }?></h3>                                    
+                                    <h3 class="page-title"><?php switch($model->order_status) {case 1:{echo "<?php echo yii::t('app','未下单');?>";break;} case 2:{echo "<?php echo yii::t('app','下单未支付');?>";break;} case 3:{echo "<?php echo yii::t('app','已支付');?>".$model->reality_total;break;} }?></h3>                                    
                                 </div>
                                 <div class="col-md-8">
                                     <h4>
-                                       下单时间：<?php echo $model->create_at;?> 
-                                       &nbsp;&nbsp;&nbsp;&nbsp; 应付金额（元）：<?php echo number_format($total['total'], 2);?>
-                                       &nbsp;&nbsp;&nbsp;&nbsp; 实付金额（元）：<?php echo $model->reality_total;?>
+                                       <?php echo yii::t('app',);?><?php echo $model->create_at;?> 
+                                       &nbsp;&nbsp;&nbsp;&nbsp; <?php echo yii::t('app','应付金额（元）：');?><?php echo number_format($total['total'], 2);?>
+                                       &nbsp;&nbsp;&nbsp;&nbsp; <?php echo yii::t('app','实付金额（元）：');?><?php echo $model->reality_total;?>
                                     </h4>    
                                 </div>
 				<div class="col-md-12">
@@ -79,19 +79,19 @@
                                                             <?php echo $total['remark'] ;?>
                                                         </div>
                                                         <div class="col-md-3 ">
-                                                                <input id="callbarscanid" type="text" class="form-control" placeholder='<?php if($syscallId!='0') echo "扫描呼叫器条码快速收银、结算"; else echo "扫描呼叫器条码快速下单、厨打"; ?>'>
+                                                                <input id="callbarscanid" type="text" class="form-control" placeholder='<?php if($syscallId!='0') echo <?php echo yii::t('app','扫描呼叫器条码快速收银、结算');?>; else echo <?php echo yii::t('app','扫描呼叫器条码快速下单、厨打');?>; ?>'>
                                                         </div>
                                                         <div class="actions">
                                                             <?php if($model->order_status=='3' || $model->order_status=='4'): ?>
-                                                                <a class="btn purple" id="btn_payback"><i class="fa fa-adjust"></i> 退款</a>
+                                                                <a class="btn purple" id="btn_payback"><i class="fa fa-adjust"></i> <?php echo yii::t('app','退款');?></a>
                                                             <?php endif;?>
                                                             <?php if($model->order_status!='4'): ?>
-                                                            <a class="btn purple" id="btn_account"><i class="fa fa-pencil"></i> 结单&收银</a>
-                                                            <a id="kitchen-btn" class="btn purple"><i class="fa fa-cogs"></i> 下单&厨打</a>
-                                                            <a id="print-btn" class="btn purple"><i class="fa fa-print"></i> 打印清单</a>
-                                                            <a id="alltaste-btn" class="btn purple"><i class="fa fa-pencil"></i> 全单口味</a>
+                                                            <a class="btn purple" id="btn_account"><i class="fa fa-pencil"></i> <?php echo yii::t('app','结单&收银');?></a>
+                                                            <a id="kitchen-btn" class="btn purple"><i class="fa fa-cogs"></i> <?php echo yii::t('app','下单&厨打');?></a>
+                                                            <a id="print-btn" class="btn purple"><i class="fa fa-print"></i> <?php echo yii::t('app','打印清单');?></a>
+                                                            <a id="alltaste-btn" class="btn purple"><i class="fa fa-pencil"></i> <?php echo yii::t('app','全单口味');?></a>
                                                             <?php endif; ?>
-                                                            <a href="<?php echo $this->createUrl('default/index' , array('companyId' => $model->dpid,'typeId'=>$typeId));?>" class="btn red"><i class="fa fa-times"></i> 返回</a>
+                                                            <a href="<?php echo $this->createUrl('default/index' , array('companyId' => $model->dpid,'typeId'=>$typeId));?>" class="btn red"><i class="fa fa-times"></i> <?php echo yii::t('app','返回');?></a>
                                                         </div>
 						</div>
 						<div class="portlet-body form">
@@ -150,7 +150,7 @@
                         */
                         $('#print-btn').click(function(){
                             if (typeof Androidwymenuprinter == "undefined") {
-                                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                                alert(""<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>);
                                 return false;
                             }
                             var padinfo=Androidwymenuprinter.getPadInfo();
@@ -168,11 +168,11 @@
                                         {
                                             if(Androidwymenuprinter.printJob(company_id,data.jobid))
                                             {
-                                                alert("打印成功");
+                                                alert("<?php echo yii::t('app','打印成功');?>");
                                             }
                                             else
                                             {
-                                                alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
+                                                alert("<?php echo yii::t('app','PAD打印失败！，请确认打印机连接好后再试！');?>");                                                                        
                                             }
                                         }else{
                                             var $modal=$('#portlet-config');
@@ -202,7 +202,7 @@
                         }
                         
                         $('#kitchen-btn').click(function(){
-                            var statu = confirm("下单，并厨打，确定吗？");
+                            var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
                                 if(!statu){
                                     return false;
                                 }
@@ -234,7 +234,7 @@
                                         {
                                             openaccount('0');
                                         }else{
-                                            alert("请再次扫描呼叫器："+syscallid+"，系统自动结单！");
+                                            alert("<?php echo yii::t('app','请再次扫描呼叫器：');?>"+syscallid+"<?php echo yii::t('app','，系统自动结单！');?>");
                                             $('#callbarscanid').val("");
                                             scanon=false;
                                             return false;
@@ -246,7 +246,7 @@
                                         printKitenAll(callid);
                                     }
                                 }else{
-                                    alert("呼叫器编码不正确！");
+                                    alert("<?php echo yii::t('app','呼叫器编码不正确！');?>");
                                     $('#callbarscanid').val("");
                                     scanon=false;
                                     return false;

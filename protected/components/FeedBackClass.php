@@ -139,7 +139,7 @@ class FeedBackClass
 	{
             if($feedbackId=='0000000000')
             {
-                return "系统消息";
+                return yii::t('app','系统消息');
             }else{
 		$sql = 'select name from nb_feedback where dpid=:dpid and lid=:feedbackId';
                 $conn = Yii::app()->db->createCommand($sql);
@@ -154,7 +154,7 @@ class FeedBackClass
 	{
             if($isOrder=='1')
             {
-                return "全单消息";
+                return yii::t('app','全单消息');
             }else{
                 $sql = 'select t.product_name from nb_product t,nb_order_product t1 where t.dpid=t1.dpid and t.lid=t1.product_id and t1.dpid=:dpid and t1.lid=:orderId';
                 $conn = Yii::app()->db->createCommand($sql);

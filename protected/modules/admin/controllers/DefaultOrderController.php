@@ -5,7 +5,7 @@ class DefaultOrderController extends BackendController
         public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' ,yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -27,7 +27,7 @@ class DefaultOrderController extends BackendController
                     $order = Order::model()->find('lid=:lid and dpid=:dpid and order_status in("1","2","3")' , array(':lid'=>$orderId,':dpid'=>$companyId));
                     if(empty($order))
                     {
-                        $title="该订单不存在，请输入合法订单！";
+                        $title=yii::t('app',"该订单不存在，请输入合法订单！");
                         $backurl=$this->createUrl('default/index',array('companyId'=>$this->companyId));
                         $this->render('error' , 
                                 array('backurl'=>$backurl,
@@ -72,7 +72,7 @@ class DefaultOrderController extends BackendController
                 $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                 if($siteNo->is_temp=='1')
                 {
-                    $total = array('total'=>$productTotal,'remark'=>'临时座位:'.$siteNo->site_id%1000);                    
+                    $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
                 }else{
                     $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
                 }
@@ -316,7 +316,7 @@ class DefaultOrderController extends BackendController
                                 $orderProduct = new OrderProduct();
                                 $orderProduct->dpid = $companyId;
                                 $orderProduct->delete_flag = '0';
-                                $orderProduct->taste_memo = '无';
+                                $orderProduct->taste_memo = yii::t('app','无');
                                 $orderProduct->product_order_status = '0';
                                 $orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
                                 $orderProduct->create_at = date('Y-m-d H:i:s',time());
@@ -358,12 +358,12 @@ class DefaultOrderController extends BackendController
                                 }
                             }
                             $transaction->commit();
-                            Yii::app()->user->setFlash('success' , '添加单品成功');
+                            Yii::app()->user->setFlash('success' , yii::t('app','添加单品成功'));
                             $this->redirect(array('defaultOrder/order' , 'companyId' => $this->companyId,'orderId' => $orderId,'typeId'=>$typeId));
                         } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
                             //echo json_encode(array('status'=>0,'message'=>'换台失败'));
-                            Yii::app()->user->setFlash('success' , '添加失败');
+                            Yii::app()->user->setFlash('success' , yii::t('app','添加失败'));
                             return false;
                     }
                         //var_dump($orderProduct);exit;                   
@@ -426,12 +426,12 @@ class DefaultOrderController extends BackendController
                                     }
                                 }                            
                             $transaction->commit();
-                            Yii::app()->user->setFlash('success' , '添加成功');
+                            Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
                             $this->redirect(array('defaultOrder/order' , 'companyId' => $this->companyId,'orderId' => $orderId,'typeId'=>$typeId));
                         } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
                             //echo json_encode(array('status'=>0,'message'=>'换台失败'));
-                            Yii::app()->user->setFlash('success' , '添加失败');
+                            Yii::app()->user->setFlash('success' , yii::t('app','添加失败'));
                             return false;
                     }
                         //var_dump($orderProduct);exit;                   
@@ -575,9 +575,9 @@ class DefaultOrderController extends BackendController
                     $se=new Sequence("order_retreat");
                     $orderRetreat->lid = $se->nextval();
                     if($orderRetreat->save()){                                
-                        echo json_encode(array('msg'=>'成功'));
+                        echo json_encode(array('msg'=>yii::t('app','成功')));
                     }else{
-                        echo json_encode(array('msg'=>'失败'));
+                        echo json_encode(array('msg'=>yii::t('app','失败')));
                     }                    
                     return;
                 }                
@@ -596,9 +596,9 @@ class DefaultOrderController extends BackendController
                     $orderRetreat->attributes = Yii::app()->request->getPost('OrderRetreat');
                     
                     if($orderRetreat->save()){                                
-                        echo json_encode(array('msg'=>'成功'));
+                        echo json_encode(array('msg'=>yii::t('app','成功')));
                     }else{
-                        echo json_encode(array('msg'=>'失败'));
+                        echo json_encode(array('msg'=>yii::t('app','失败')));
                     }                    
                     return;
                 }                
@@ -618,11 +618,11 @@ class DefaultOrderController extends BackendController
                         $orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
                         if($orderProduct->save())
                         {
-                            Yii::app()->user->setFlash('success' , '修改成功');
+                            Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
                             //echo '333';exit;
                             $this->redirect(array('defaultOrder/order' , 'companyId' => $this->companyId,'orderId' => $orderProduct->order_id,'typeId'=>$typeId));
                         } else {
-                            Yii::app()->user->setFlash('success' , '添加失败');
+                            Yii::app()->user->setFlash('success' , yii::t('app','添加失败'));
                             return false;
                     }
 		}
@@ -695,14 +695,14 @@ class DefaultOrderController extends BackendController
                                 }
                             }
                             $transaction->commit();
-                            Yii::app()->user->setFlash('success' , '修改成功');
+                            Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
                             //echo '333';exit;
                             $this->redirect(array('defaultOrder/order' , 'companyId' => $this->companyId,'orderId' => $orderProduct->order_id,'typeId'=>$typeId));
                         } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
                             //var_dump($e);
                             //echo json_encode(array('status'=>0,'message'=>'换台失败'));
-                            Yii::app()->user->setFlash('success' , '添加失败');
+                            Yii::app()->user->setFlash('success' , yii::t('app','添加失败'));
                             return false;
                     }
 		}
@@ -788,10 +788,10 @@ class DefaultOrderController extends BackendController
                         Gateway::getOnlineStatus();
                         $store = Store::instance('wymenu');
                         $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);                        
-                        $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布');
+                        $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务正常发布'));
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
-                        $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>'打印任务发布异常');
+                        $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务发布异常'));
                         Yii::app()->end(json_encode($ret));
                 }
                 $this->renderPartial('printresultlist' , array(
@@ -859,10 +859,10 @@ class DefaultOrderController extends BackendController
                         Gateway::getOnlineStatus();
                         $store = Store::instance('wymenu');
                         $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);                        
-                        $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布');
+                        $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务正常发布'));
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
-                        $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>'打印任务发布异常');
+                        $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务发布异常'));
                         Yii::app()->end(json_encode($ret));
                 }
                 $this->renderPartial('printresultlistall' , array(
@@ -914,7 +914,7 @@ class DefaultOrderController extends BackendController
                         //$ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布');
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
-                        $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>'打印任务发布异常');
+                        $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务发布异常'));
                         Yii::app()->end(json_encode($ret));
                 }
                 $this->renderPartial('printresultlistall' , array(
@@ -963,7 +963,7 @@ class DefaultOrderController extends BackendController
                 } catch (Exception $e) {
                         //$transaction->rollback(); //如果操作失败, 数据回滚
                         //var_dump($e);exit;
-                        $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>'发生异常');
+                        $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','发生异常'));
                         //Yii::app()->end(json_encode($ret));
                 }
                 //var_dump($ret);exit;
@@ -1103,7 +1103,7 @@ class DefaultOrderController extends BackendController
                 //var_dump($jobresult);exit;
                 if(empty($jobresult))
                 {
-                    $ret=array('status'=>false,'msg'=>'任务未返回');
+                    $ret=array('status'=>false,'msg'=>yii::t('app','任务未返回'));
                 }else{
                     if($jobresult=="success")
                     {
@@ -1114,9 +1114,9 @@ class DefaultOrderController extends BackendController
                             $orderProduct->is_print='1';
                             $orderProduct->save();
                         }
-                        $ret=array('status'=>true,'msg'=>'打印成功');
+                        $ret=array('status'=>true,'msg'=>yii::t('app','打印成功'));
                     }else{
-                        $ret=array('status'=>false,'msg'=>'打印机执行任务失败');
+                        $ret=array('status'=>false,'msg'=>yii::t('app','打印机执行任务失败'));
                     }
                 }     
                 
@@ -1135,7 +1135,7 @@ class DefaultOrderController extends BackendController
                 //要判断打印机类型错误，必须是local。
                 if($pad->printer_type!='1')
                 {
-                    Yii::app()->end(json_encode(array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！')));
+                    Yii::app()->end(json_encode(array('status'=>false,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','必须是本地打印机！'))));
                 }else{
                     //前面加 barcode
                     $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
@@ -1209,13 +1209,13 @@ class DefaultOrderController extends BackendController
                 //var_dump($jobresult);exit;
                 if(empty($jobresult))
                 {
-                    $ret=array('status'=>false,'msg'=>'任务未返回');
+                    $ret=array('status'=>false,'msg'=>yii::t('app','任务未返回'));
                 }else{
                     if($jobresult=="success")
                     {                        
-                        $ret=array('status'=>true,'msg'=>'打印成功');
+                        $ret=array('status'=>true,'msg'=>yii::t('app','打印成功'));
                     }else{
-                        $ret=array('status'=>false,'msg'=>'打印机执行任务失败');
+                        $ret=array('status'=>false,'msg'=>yii::t('app','打印机执行任务失败'));
                     }
                 }               
                 Yii::app()->end(json_encode($ret));                
