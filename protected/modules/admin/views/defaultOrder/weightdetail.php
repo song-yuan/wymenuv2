@@ -25,15 +25,15 @@
                                                                                                                                                 
                                                                 </div>
                                                                 
-                                                        </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
+                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
                                                 </div>
                                                 
                                                 <?php echo $form->hiddenField($orderProduct,'order_id',array('class'=>'form-control')); ?>
                                                 <?php echo $form->hiddenField($orderProduct,'set_id',array('class'=>'form-control')); ?>
                                                 
                                                 <div class="modal-footer">
-                                                        <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                        <input type="submit" class="btn green" id="create_btn" value="确 定">
+                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                        <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>                

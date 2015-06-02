@@ -52,7 +52,7 @@ function pad(num, n) {
  */
 function xmlHttp(url,callback){
 	if(url == ''){
-		alert('地址不能为空');
+		alert('URL地址不能为空');
 	}else{
 		$.getJSON(url,callback);
 	}
@@ -167,7 +167,7 @@ function showListPad(items){
 		if(leftHeight > rightHeight){
 			//濡傛灉鍙充晶楂樺害灏忥紝鍒欒拷鍔犲埌鍙充晶
 			var trHead = '<div class="blockRight blockCategory" category="'+pad(item.category_id,10)+'" category-name="'+item.category_name+'">';
-			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="../../../../../img/product/icon_search.png" style="width:48px;height:48px;"/><br>多图浏览</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="../../../../../img/product/icon_cart.png" style="width:48px;height:48px;"/><br>&nbsp;&nbsp;&nbsp;&nbsp;点&nbsp;&nbsp;菜&nbsp;&nbsp;&nbsp;&nbsp;</i></a>';
+			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="../../../../../img/product/icon_search.png" style="width:48px;height:48px;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="../../../../../img/product/icon_cart.png" style="width:48px;height:48px;"/><br>'+language_diancai+'</i></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
@@ -177,7 +177,7 @@ function showListPad(items){
 		}else{
 			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
 			var trHead = '<div class="blockLeft blockCategory" category="'+pad(item.category_id,10)+'" category-name="'+item.category_name+'">';
-			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="../../../../../img/product/icon_search.png" style="width:48px;height:48px;"/><br>多图浏览</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="../../../../../img/product/icon_cart.png" style="width:48px;height:48px;"/><br>&nbsp;&nbsp;&nbsp;&nbsp;点&nbsp;&nbsp;菜&nbsp;&nbsp;&nbsp;&nbsp;</i></a>';
+			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="../../../../../img/product/icon_search.png" style="width:48px;height:48px;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="../../../../../img/product/icon_cart.png" style="width:48px;height:48px;"/><br>'+language_diancai+'</i></a>';
 			var trBuy = ' <div class="productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
@@ -244,5 +244,5 @@ function showMoreList(items){
 			leftPicObj.append(tr);
 		}
 	}
-	$("#nextpage").text("点击获取下一页");
+	$("#nextpage").text(language_click_nextpage);
 }

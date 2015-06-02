@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'信息反馈管理','subhead'=>'修改信息反馈','breadcrumbs'=>array(array('word'=>'信息反馈管理','url'=>$this->createUrl('feedback/index' , array('companyId'=>$this->companyId,'feedback'=>$allflag))),array('word'=>'修改信息反馈','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','信息反馈管理'),'subhead'=>yii::t('app','修改信息反馈'),'breadcrumbs'=>array(array('word'=>yii::t('app','信息反馈管理'),'url'=>$this->createUrl('feedback/index' , array('companyId'=>$this->companyId,'feedback'=>$allflag))),array('word'=>yii::t('app','修改信息反馈'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php if($allflag) echo '修改信息反馈';else echo '修改信息反馈';?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php if($allflag) echo yii::t('app','修改信息反馈');else echo yii::t('app','修改信息反馈');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

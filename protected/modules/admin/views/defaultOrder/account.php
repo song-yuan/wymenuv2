@@ -14,18 +14,18 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title"><?php if($payback=='1') echo '退款'; else echo '收银 && 结单'; ?><?php switch($order->order_status) {case 2:{echo '未支付';break;} case 3:{echo '已支付';break;} }?></h4>
+                                                        <h4 class="modal-title"><?php if($payback=='1') echo yii::t('app','退款'); else echo yii::t('app','收银 && 结单'); ?><?php switch($order->order_status) {case 2:{echo yii::t('app','未支付');break;} case 3:{echo yii::t('app','已支付');break;} }?></h4>
                                                         <?php if($callid!='0'): ?>
-                                                        <span style="color:red;" id="timecount">20</span>...秒后自动完成结单，点击<input type="button" class="btn green" id="autopay_pause" value="此按钮">停止结单！
+                                                        <span style="color:red;" id="timecount">20</span><?php echo yii::t('app','...秒后自动完成结单，点击');?><input type="button" class="btn green" id="autopay_pause" value="<?php echo yii::t('app','此按钮');?>"><?php echo yii::t('app','停止结单！');?>
                                                         
                                                         <?php endif;?>
                                                 </div>
                                                 <div class="modal-body">
                                                         <div class="form-actions fluid">
                                                             <?php if($payback=='1'): ?>
-                                                                整单应付金额：<?php echo number_format($order->should_total,2); ?>，整单已付金额：<?php echo number_format($order->reality_total,2); ?>
+                                                                <?php echo yii::t('app','整单应付金额：');?><?php echo number_format($order->should_total,2); ?><?php echo yii::t('app','，整单已付金额：');?><?php echo number_format($order->reality_total,2); ?>
                                                             <?php else: ?>
-                                                                整单应付金额：<?php echo number_format($order->should_total,2); ?>，整单已付金额：<?php echo number_format($order->reality_total,2); ?>，本次应付：
+                                                                <?php echo yii::t('app','整单应付金额：');?><?php echo number_format($order->should_total,2); ?><?php echo yii::t('app','，整单已付金额：');?><?php echo number_format($order->reality_total,2); ?><?php echo yii::t('app','，本次应付：');?>
                                                             <?php endif;?>
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderpay, 'pay_amount',array('class' => 'col-md-4 control-label'));?>
@@ -51,16 +51,16 @@
                                                                 <?php echo $form->hiddenField($order , 'order_status' , array('id'=>'account_orderstatus'));?>
                                                                 <?php echo $form->hiddenField($order , 'should_total' , array('id'=>'order_should_total'));?>
 
-                                                                </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
+                                                                </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <?php if($payback=='1'): ?>
-                                                        <input type="button" class="btn green" id="payback-btn" value="退 款">
+                                                        <input type="button" class="btn green" id="payback-btn" value="<?php echo yii::t('app','退 款');?>">
                                                     <?php else: ?>
-                                                        <input type="button" class="btn green" id="pay-btn" value="收 银">
-                                                        <input type="button" class="btn green" id="account-btn" value="结 单">
+                                                        <input type="button" class="btn green" id="pay-btn" value="<?php echo yii::t('app','收 银');?>">
+                                                        <input type="button" class="btn green" id="account-btn" value="<?php echo yii::t('app','结 单');?>">
                                                     <?php endif; ?>
-                                                        <button type="button" data-dismiss="modal" class="btn default" id="btn-account-cancle">取 消</button>
+                                                        <button type="button" data-dismiss="modal" class="btn default" id="btn-account-cancle"><?php echo yii::t('app','取 消');?></button>
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>
@@ -69,7 +69,7 @@
 			<script type="text/javascript">
                             var interval;
                             $('#payback-btn').click(function(){
-                                 bootbox.confirm('你确定退款吗？', function(result) {
+                                 bootbox.confirm("<?php echo yii::t('app','你确定退款吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
                                                 var tempamount=$('#OrderPay_pay_amount').val();
@@ -79,7 +79,7 @@
                                  });
                             });
                             $('#pay-btn').click(function(){
-                                 bootbox.confirm('你确定只收银不结单吗？', function(result) {
+                                 bootbox.confirm("<?php echo yii::t('app','你确定只收银不结单吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
                                                 $('#account_orderstatus').val('3');
@@ -88,7 +88,7 @@
                                  });
                             });
                             $('#account-btn').click(function(){
-                                 bootbox.confirm('确定结单吗？', function(result) {
+                                 bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'account','orderId'=>$order->lid)) ?>');
                                                 $('#account_orderstatus').val('4');

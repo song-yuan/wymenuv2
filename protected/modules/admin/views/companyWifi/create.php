@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'企业WIFI管理','subhead'=>'添加企业WIFI','breadcrumbs'=>array(array('word'=>'企业管理','url'=>$this->createUrl('company/index')),array('word'=>'添加企业WIFI','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','企业WIFI管理'),'subhead'=>yii::t('app','添加企业WIFI'),'breadcrumbs'=>array(array('word'=>yii::t('app','企业管理'),'url'=>$this->createUrl('company/index')),array('word'=>yii::t('app','添加企业WIFI'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>添加企业WIFI</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加企业WIFI');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

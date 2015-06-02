@@ -69,12 +69,12 @@ class ProductSetDetail extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'set_id' => '套餐名称',
-			'product_id' => '产品名称',
-			'price' => '套餐价格',
-			'group_no' => '分组号',
-			'number' => '数量',
-			'is_select' => '组中默认项',
+			'set_id' => yii::t('app','套餐名称'),
+			'product_id' => yii::t('app','产品名称'),
+			'price' =>yii::t('app', '套餐价格'),
+			'group_no' =>yii::t('app', '分组号'),
+			'number' =>yii::t('app', '数量'),
+			'is_select' =>yii::t('app', '组中默认项'),
 			'delete_flag' => 'Delete Flag',
 		);
 	}

@@ -8,7 +8,7 @@
 			<h3 class="form-title"><?php echo yii::t('app','管理员系统')?></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
-				<span>输入用户名和密码</span>
+				<span><?php echo yii::t('app','输入用户名和密码');?></span>
 			</div>
 			<div class="form-group <?php if($model->hasErrors('username')) echo 'has-error';?>">
 				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
@@ -29,12 +29,12 @@
 			</div>
 			<div class="form-actions">
 				<label class="checkbox">
-				<input type="checkbox" name="remember" value="1"/> 记住用户名
+				<input type="checkbox" name="remember" value="1"/> <?php echo yii::t('app','记住用户名');?>
 				</label>
 				<button type="submit" class="btn blue pull-right">
-				登录 <i class="m-icon-swapright m-icon-white"></i>
+				<?php echo yii::t('app','登录');?> <i class="m-icon-swapright m-icon-white"></i>
 				</button> 
-                                <a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>"  id="bindbutton" class="blue" >解除绑定</a>
+                                <a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>"  id="bindbutton" class="blue" ><?php echo yii::t('app','解除绑定');?></a>
 			</div>
 			<!-- 
 			<div class="forget-password">
@@ -56,7 +56,7 @@
                 <script language="JavaScript" type="text/JavaScript">
                     $('#bindbutton').click(function(){
                         if (typeof Androidwymenuprinter == "undefined") {
-                            alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                            alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
                             return false;
                         }
                     });

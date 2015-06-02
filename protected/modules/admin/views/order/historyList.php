@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'订单管理','subhead'=>'订单列表','breadcrumbs'=>array(array('word'=>'订单管理','url'=>''),array('word'=>'订单管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','订单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','订单管理'),'url'=>''),array('word'=>yii::t('app','订单管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -31,18 +31,18 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>订单列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','订单列表');?></div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 					<?php if($models):?>
 						<thead>
 							<tr>
-								<th>订单ID</th>
-								<th>座号</th>
-								<th>开台日期</th>
-								<th>结单日期</th>
-								<th>总计</th>
+								<th><?php echo yii::t('app','订单ID');?></th>
+								<th><?php echo yii::t('app','座号');?></th>
+								<th><?php echo yii::t('app','开台日期');?></th>
+								<th><?php echo yii::t('app','结单日期');?></th>
+								<th><?php echo yii::t('app','总计');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -56,20 +56,20 @@
 								<td><?php echo date('Y-m-d H:i:s',$model->pay_time);?></td>
 								<td ><?php echo $model->reality_total ;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('order/view',array('id' => $model->order_id , 'companyId' => $model->company_id));?>">查看</a>
+								<a href="<?php echo $this->createUrl('order/view',array('id' => $model->order_id , 'companyId' => $model->company_id));?>"><?php echo yii::t('app','查看');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td>还没有订单</td></tr>
+						<tr><td><?php echo yii::t('app','还没有订单');?></td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','确定');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

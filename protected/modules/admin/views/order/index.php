@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'订单管理','subhead'=>'座位列表','breadcrumbs'=>array(array('word'=>'订单管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','座位列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','订单管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -32,14 +32,14 @@
 						<div class="panel-body">
 							<form class="form-inline" id="payForm" role="form" action="">
 								<div class="form-group">
-									<label class="sr-only" for="exampleInputEmail2">座次号</label>
-									<input type="text" class="form-control" id="site_no" placeholder="座次号">
+									<label class="sr-only" for="exampleInputEmail2"><?php echo yii::t('app','座次号');?></label>
+									<input type="text" class="form-control" id="site_no" placeholder="<?php echo yii::t('app','座次号');?>">
 								</div>
 								<span class="label label-primary" id="total" style="display:none;">&nbsp;</span>
-								<a href="#"  id="viewButton" class="btn blue" >订单明细</a> 
-								<a href="javascript:;"  onclick="location.reload();" class="btn blue"><i class="fa fa-refresh"></i> 刷新</a>
+								<a href="#"  id="viewButton" class="btn blue" ><?php echo yii::t('app','订单明细');?></a> 
+								<a href="javascript:;"  onclick="location.reload();" class="btn blue"><i class="fa fa-refresh"></i> <?php echo yii::t('app','刷新');?></a>
 								<div class="btn-group pull-right">
-									<a href="<?php echo $this->createUrl('order/historyList',array('companyId'=>$this->companyId));?>" class="btn blue">历史订单</a>
+									<a href="<?php echo $this->createUrl('order/historyList',array('companyId'=>$this->companyId));?>" class="btn blue"><?php echo yii::t('app','历史订单');?></a>
 								</div>
 							</form>
 						</div>
@@ -97,7 +97,7 @@ jQuery(document).ready(function(){
 					$('#site_no').val('');
 					$('#payForm').attr('action','');
 					$('#siteId_'+data.siteId).removeClass('btn red');
-					alert('结单成功');
+					alert("<?php echo yii::t('app','结单成功');?>");
 				}
 			},'json');
 		}

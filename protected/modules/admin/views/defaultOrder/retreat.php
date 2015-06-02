@@ -11,12 +11,12 @@
                                                     ),
                                             )); ?>
                                                 <div class="modal-header">
-                                                    <h4>请添加退菜理由</h4>
+                                                    <h4><?php echo yii::t('app','请添加退菜理由');?></h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                                         
                                                         <div class="actions">
-                                                        <a href="javascript:void(0);" class="btn blue" id="btn-retreat-add"><i class="fa fa-pencil"></i> 添加</a>
-                                                        <a href="javascript:void(0);" class="btn red" id="btn-retreat-delete"><i class="fa fa-times"></i> 删除</a>
+                                                        <a href="javascript:void(0);" class="btn blue" id="btn-retreat-add"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+                                                        <a href="javascript:void(0);" class="btn red" id="btn-retreat-delete"><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
                                                         </div>
                                                 </div>
                                                 <div class="modal-body">
@@ -25,8 +25,8 @@
                                                                     <thead>
                                                                             <tr>
                                                                                     <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>								
-                                                                                    <th>名称</th>
-                                                                                    <th>备注</th>
+                                                                                    <th><?php echo yii::t('app','名称');?></th>
+                                                                                    <th><?php echo yii::t('app','备注');?></th>
                                                                                     <th>&nbsp;</th>
                                                                             </tr>
                                                                     </thead>
@@ -37,7 +37,7 @@
                                                                                     <td ><?php echo $model->retreat->name ;?></td>
                                                                                     <td><?php echo $model->retreat_memo ;?></td>
                                                                                     <td class="center">
-                                                                                    <a href="javascript:void(0);" class="btn-over btn green edit_retreat_btn" orderRetreatId="<?php echo $model->lid; ?>">编辑</a>
+                                                                                    <a href="javascript:void(0);" class="btn-over btn green edit_retreat_btn" orderRetreatId="<?php echo $model->lid; ?>"><?php echo yii::t('app','编辑');?></a>
                                                                                     </td>
                                                                             </tr>
                                                                     <?php endforeach;?>
@@ -46,8 +46,8 @@
                                                             </table>
                                                     </div>
                                                 <div class="modal-footer">                                                        
-                                                        <button type="button" class="btn default" data-dismiss="modal">返 回</button>
-                                                        <input type="submit" class="btn green" id="create_btn" value="确 定">
+                                                        <button type="button" class="btn default" data-dismiss="modal"><?php echo yii::t('app','返 回');?></button>
+                                                        <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
                                                 <?php $this->endWidget(); ?> 
 							<script>

@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品口味对应','subhead'=>'修改产品口味','breadcrumbs'=>array(array('word'=>'产品口味对应','url'=>$this->createUrl('taste/productTaste' , array('companyId'=>$this->companyId))),array('word'=>'修改产品口味','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','产品口味对应'),'subhead'=>yii::t('app','修改产品口味'),'breadcrumbs'=>array(array('word'=>yii::t('app','产品口味对应'),'url'=>$this->createUrl('taste/productTaste' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改产品口味'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>修改产品口味</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改产品口味');?></div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
@@ -52,7 +52,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label  class="col-md-3 control-label">口味选择</label>
+										<label  class="col-md-3 control-label"><?php echo yii::t('app','口味选择');?></label>
 										<div class="col-md-8">
 											<?php foreach($tastes as $taste):?>
 											<label class="checkbox-inline">
@@ -63,8 +63,8 @@
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('taste/productTaste' , array('companyId' => $model->dpid));?>" class="btn default">返回</a>                              
+											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<a href="<?php echo $this->createUrl('taste/productTaste' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>

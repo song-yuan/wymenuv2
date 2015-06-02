@@ -8,7 +8,7 @@
 							)); ?>
 								<div class="form-body">
 									<div class="form-group">
-										<label class="col-md-3 control-label" >支付方式名称</label>
+										<label class="col-md-3 control-label" ><?php echo yii::t('app','支付方式名称');?></label>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('name')));?>
 											<?php echo $form->error($model, 'name' )?>
@@ -17,8 +17,8 @@
 																		
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('payMethod/index');?>" class="btn default">返回</a>                              
+											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<a href="<?php echo $this->createUrl('payMethod/index');?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>						

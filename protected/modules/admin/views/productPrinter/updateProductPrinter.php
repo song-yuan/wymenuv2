@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'单品打印方案','subhead'=>'修改打印方案','breadcrumbs'=>array(array('word'=>'单品打印方案管理','url'=>$this->createUrl('productPrinter/index' , array('companyId'=>$this->companyId))),array('word'=>'修改打印方案','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','单品打印方案'),'subhead'=>yii::t('app','修改打印方案'),'breadcrumbs'=>array(array('word'=>yii::t('app','单品打印方案管理'),'url'=>$this->createUrl('productPrinter/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改打印方案'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>修改打印方案</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改打印方案');?></div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
@@ -52,10 +52,10 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label  class="col-md-3 control-label">打印方案选择</label>
+										<label  class="col-md-3 control-label"><?php echo yii::t('app','打印方案选择');?></label>
 										<div class="col-md-4">
 											<select class="form-control" name="printerWay">
-											<option value="0">---请选择---</opton>
+											<option value="0"><?php echo yii::t('app','-- 请选择 --');?></opton>
 											<?php foreach($printerWays as $way):?>
 											<option value="<?php echo $way['lid'];?>" <?php if($way['lid']==$model->printer_way_id) echo 'selected';?>><?php echo $way['name'];?></option>
 											<?php endforeach;?>
@@ -64,8 +64,8 @@
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('productPrinter/index' , array('companyId' => $model->dpid));?>" class="btn default">返回</a>                              
+											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<a href="<?php echo $this->createUrl('productPrinter/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>

@@ -37,12 +37,12 @@
                                                                         </div>
                                                                         
                                                                         <div class="col-md-3">
-                                                                                <?php echo $form->dropDownList($orderProduct, 'is_giving', array('0' => '不赠送' , '1' => '赠送') , array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('is_giving')));?>
+                                                                                <?php echo $form->dropDownList($orderProduct, 'is_giving', array('0' => yii::t('app','不赠送') , '1' => yii::t('app','赠送')) , array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('is_giving')));?>
                                                                                 <?php echo $form->error($orderProduct, 'is_giving' )?>
                                                                         </div>                                                                        
                                                                 </div>
                                                                 
-                                                        </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
+                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
                                                 </div>
                                                 <div class="form-actions fluid hidden" id="set_panel">
                                                                 <div class="col-md-10"><span class="label label-default center">'<?php if(!empty($orderProduct->productSet->set_name)) echo $orderProduct->productSet->set_name;?>'</span></div>                                                     
@@ -56,8 +56,8 @@
                                                 <input class="form-control" name="selsetlist" id="selsetlistid" type="hidden" value="">
                                                 <input class="form-control" name="isset" id="isetid" type="hidden" value="0">
                                                 <div class="modal-footer">
-                                                        <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                        <input type="submit" class="btn green" id="create_btn" value="确 定">
+                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                        <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>                

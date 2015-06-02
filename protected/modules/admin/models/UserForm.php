@@ -33,13 +33,13 @@ class UserForm extends CFormModel
 	{
 		return array(
 				'lid' => 'ID',
-				'username' => '用户名',
-				'password' => '密码',
-				'dpid'=>'公司名称',
-				'mobile' => '手机号',
-				'staff_no' => '员工号',
-				'email' => '电子邮箱',
-				'role' => '管理员类型',
+				'username' => yii::t('app','用户名'),
+				'password' => yii::t('app','密码'),
+				'dpid'=>yii::t('app','公司名称'),
+				'mobile' => yii::t('app','手机号'),
+				'staff_no' => yii::t('app','员工号'),
+				'email' => yii::t('app','电子邮箱'),
+				'role' => yii::t('app','管理员类型'),
 		);
 	}
 	public function find($condition , $params) {

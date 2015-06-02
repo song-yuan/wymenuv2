@@ -14,7 +14,7 @@ class ProductController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId && $this->getAction()->getId() != 'upload') {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -60,7 +60,7 @@ class ProductController extends BackendController
                         $model->simple_code = $py->py($model->product_name);
                         //var_dump($model);exit;
 			if($model->save()){
-				Yii::app()->user->setFlash('success','添加成功！');
+				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
 			}
 		}
@@ -84,7 +84,7 @@ class ProductController extends BackendController
                         $model->simple_code = $py->py($model->product_name);
 			//var_dump($model->attributes);exit;
 			if($model->save()){
-				Yii::app()->user->setFlash('success','修改成功！');
+				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
 				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
 			}
 		}
@@ -103,7 +103,7 @@ class ProductController extends BackendController
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
 		} else {
-			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
 			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
 		}
 	}
@@ -155,7 +155,7 @@ class ProductController extends BackendController
                 
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
-		$optionsReturn = array('--请选择分类--');
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
 			foreach ($models as $model) {
 				if($model->pid == '0') {

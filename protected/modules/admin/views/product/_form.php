@@ -33,7 +33,7 @@
 										$this->widget('application.extensions.swfupload.SWFUpload',array(
 											'callbackJS'=>'swfupload_callback',
 											'fileTypes'=> '*.jpg',
-											'buttonText'=> '上传产品图片',
+											'buttonText'=> "<?php echo yii::t('app','上传产品图片');?>",
 											'companyId' => $model->dpid,
 											'imgUrlList' => array($model->main_picture),
 										));
@@ -60,14 +60,14 @@
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'is_member_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_member_discount', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount')));?>
+											<?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount')));?>
 											<?php echo $form->error($model, 'is_member_discount' )?>
 										</div>
 									</div>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'is_show',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_show', array('0' => '是' , '1' => '否') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show')));?>
+											<?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','是') , '1' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show')));?>
 											<?php echo $form->error($model, 'is_show' )?>
 										</div>
 									</div>
@@ -81,7 +81,7 @@
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'is_weight_confirm',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_weight_confirm', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_weight_confirm')));?>
+											<?php echo $form->dropDownList($model, 'is_weight_confirm', array('0' =>yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_weight_confirm')));?>
 											<?php echo $form->error($model, 'is_weight_confirm' )?>
 										</div>
 									</div>
@@ -101,8 +101,8 @@
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue">确定</button>
-											<a href="<?php echo $this->createUrl('product/index' , array('companyId' => $model->dpid));?>" class="btn default">返回</a>                              
+											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<a href="<?php echo $this->createUrl('product/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
@@ -140,7 +140,7 @@
 	   			success:function(result){
 	   				if(result.data.length){
 	   					var str = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter">'+
-	   					'<option value="">--请选择--</option>';
+	   					'<option value="">--<?php echo yii::t('app','请选择');?>--</option>';
 	   					$.each(result.data,function(index,value){
 	   						str = str + '<option value="'+value.id+'">'+value.name+'</option>';
 	   					});

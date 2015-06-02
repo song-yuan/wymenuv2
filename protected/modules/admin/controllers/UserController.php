@@ -4,19 +4,19 @@ class UserController extends BackendController
 	public $roles ;
 	public function init(){
 		$this->roles = array(
-			'2' => '管理员' ,
-			'3' => '服务员',
+			'2' => yii::t('app','管理员') ,
+			'3' => yii::t('app','服务员'),
 		) ;
 		if(Yii::app()->user->role == User::POWER_ADMIN) {
-			$this->roles = array('1' => '系统管理员' ) +$this->roles;
+			$this->roles = array('1' => yii::t('app','系统管理员')+$this->roles);
 		}
-		$this->roles = array('' => '-- 请选择 --' ) +$this->roles;
+		$this->roles = array('' => yii::t('app','-- 请选择 --' ) +$this->roles);
 	}
 	
         public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId && $this->getAction()->getId() != 'upload') {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -47,7 +47,7 @@ class UserController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('UserForm');
                         
 			if($model->save()){
-				Yii::app()->user->setFlash('success','添加成功');
+				Yii::app()->user->setFlash('success',yii::t('app','添加成功'));
 				$this->redirect(array('user/index' , 'companyId' => $companyId));
 			}
 		}
@@ -57,7 +57,7 @@ class UserController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));		
 		$id = Yii::app()->request->getParam('id');
 		if(Yii::app()->user->role > User::ADMIN && Yii::app()->user->userId != $id) {
-			Yii::app()->user->setFlash('error' , '你没有权限修改');
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限修改'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 		$model = new UserForm();
@@ -67,7 +67,7 @@ class UserController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('UserForm');
                         //var_dump($model->attributes);exit;
 			if($model->save()){
-				Yii::app()->user->setFlash('success','修改成功');
+				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
 				$this->redirect(array('user/index' , 'companyId' => $companyId));
 			}
 		}
@@ -76,7 +76,7 @@ class UserController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		if(Yii::app()->user->role > User::ADMIN) {
-			Yii::app()->user->setFlash('error' , '你没有删除权限');
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有删除权限'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 		$ids = Yii::app()->request->getPost('ids');
@@ -90,7 +90,7 @@ class UserController extends BackendController
 			}
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		} else {
-			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 	}

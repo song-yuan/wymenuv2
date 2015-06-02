@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'套餐管理','subhead'=>'修改套餐内容','breadcrumbs'=>array(array('word'=>'套餐管理','url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>'修改套餐','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','套餐管理'),'subhead'=>yii::t('app','修改套餐内容'),'breadcrumbs'=>array(array('word'=>yii::t('app','套餐管理'),'url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改套餐'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>修改打印方案</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改打印方案');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

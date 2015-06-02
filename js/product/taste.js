@@ -69,7 +69,7 @@ $(document).ready(function(){
 			   }
 		   });
 	   }
-	   $('.mask-bottom .area-top').html('做法口味选择:');
+	   $('.mask-bottom .area-top').html(language_taste_select);
 	   if(type==3){
 		   var productId = parseInt($(this).attr('product-id'));
 		   $('.product-id').val(productId);
@@ -89,7 +89,7 @@ $(document).ready(function(){
 				   }
 			   }
 		   });
-		   $('.mask-bottom .area-top').html('全单有话要说:');
+		   $('.mask-bottom .area-top').html(language_call_service);
 	   }
 	   $('.mask').css('display','block');
    });
@@ -131,7 +131,7 @@ $(document).ready(function(){
 			   }
 		   });
 		   if(!tasteIds){
-			   alert('请选择呼叫类型!');
+			   alert(language_calltype_select);
 			   return ;
 		   }
 	   }else{
@@ -178,7 +178,7 @@ $(document).ready(function(){
     	 
     	 $('.cancel').css('display','none');
     	 $('.cancel-order-num').css('display','block');
-    	 $('.area-top').html('修改产品数量:');
+    	 $('.area-top').html(language_productnum_modify);
     	 $('.mask').css('display','block');
     });
     $('.cancel-order-num').click(function(){
@@ -191,7 +191,7 @@ $(document).ready(function(){
     	 $('.cancel').css('display','block');
     	 $('.cancel-order-num').css('display','none');
     	 
-    	 $('.area-top').html('做法口味选择:');
+    	 $('.area-top').html(language_taste_select);
     	 $('.mask').css('display','none');
     });
    

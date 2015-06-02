@@ -58,13 +58,13 @@ class Department extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'department_id' => '操作间Id',
-			'company_id' => '企业ID',
-			'name' => '名称',
-			'manager' => '负责人',
-			'printer_id' => '打印机ID',
-			'list_no' => '打印份数',
-			'remark' => '备注',
+			'department_id' =>yii::t('app', '操作间Id'),
+			'company_id' => yii::t('app','企业ID'),
+			'name' => yii::t('app','名称'),
+			'manager' => yii::t('app','负责人'),
+			'printer_id' => yii::t('app','打印机ID'),
+			'list_no' => yii::t('app','打印份数'),
+			'remark' => yii::t('app','备注'),
 		);
 	}
 

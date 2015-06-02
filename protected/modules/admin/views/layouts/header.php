@@ -23,15 +23,15 @@
 					</a>
                                     <ul class="dropdown-menu extended notification" style="max-width: 800px !important; width:600px !important;">
 						<li>
-							<p>未读消息,点击消除消息</p>
+							<p><?php echo yii::t('app','未读消息,点击消除消息');?></p>
 						</li>
 						<li>
 							<ul id="header_notification_list" class="dropdown-menu-list scroller" style="height: 420px;">
                                                                 <li>  
 									<a href="#">
 									<span class="badge">4</span> 
-									卡座：A123 
-									<span class="time">刚刚</span>
+									<?php echo yii::t('app','卡座');?>：A123 
+									<span class="time"><?php echo yii::t('app','刚刚');?></span>
 									</a>
 								</li>
 								<li>  
@@ -258,7 +258,7 @@
 					<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-                                                <li><a href="<?php echo $this->createUrl('company/index').'/companyId/'.$this->companyId;?>" data-method='get'><i class="fa fa-key"></i> 选择其他店铺</a>
+                                                <li><a href="<?php echo $this->createUrl('company/index').'/companyId/'.$this->companyId;?>" data-method='get'><i class="fa fa-key"></i> <?php echo yii::t('app','选择其他店铺');?></a>
 						</li>
 					</ul>
 				</li>
@@ -279,10 +279,10 @@
 						<li><a href="#"><i class="fa fa-tasks"></i> My Tasks <span class="badge badge-success">7</span></a>
 						</li>
 						<li class="divider"></li> -->
-						<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> 全屏显示</a>
+						<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> <?php echo yii::t('app','全屏显示');?></a>
 						</li>
 						</li>
-						<li><a href="<?php echo $this->createUrl('login/logout');?>" data-method='post'><i class="fa fa-key"></i> 安全退出</a>
+						<li><a href="<?php echo $this->createUrl('login/logout');?>" data-method='post'><i class="fa fa-key"></i> <?php echo yii::t('app','安全退出');?></a>
 						</li>
 					</ul>
 				</li>

@@ -4,7 +4,7 @@ class ProductAdditionController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -71,7 +71,7 @@ class ProductAdditionController extends BackendController
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()) {
-				Yii::app()->user->setFlash('success' , '添加成功');
+				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productAddition/detail','companyId' => $this->companyId,'lid'=>$model->mproduct_id));
 			}
 		}
@@ -95,7 +95,7 @@ class ProductAdditionController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('ProductAddition');
                         //var_dump($model);var_dump(Yii::app()->request->getPost('ProductSetDetail'));exit;
 			if($model->save()){
-				Yii::app()->user->setFlash('success' , '修改成功');
+				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productAddition/detail' , 'companyId' => $this->companyId,'lid' => $model->mproduct_id));
 			}
 		}
@@ -122,7 +122,7 @@ class ProductAdditionController extends BackendController
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('productAddition/detail' , 'companyId' => $companyId,'lid'=>$printset)) ;
 		} else {
-			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
+			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
 			$this->redirect(array('productAddition/detail' , 'companyId' => $companyId,'lid'=>$printset)) ;
 		}
 	}

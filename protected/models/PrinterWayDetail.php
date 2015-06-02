@@ -66,10 +66,10 @@ class PrinterWayDetail extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'print_way_id' => '打印方式id',
-			'floor_id' => '楼层/区域',
-			'printer_id' => '打印机',
-			'list_no' => '打印份数',
+			'print_way_id' => yii::t('app','打印方式'),
+			'floor_id' => yii::t('app','楼层/区域'),
+			'printer_id' => yii::t('app','打印机'),
+			'list_no' =>yii::t('app', '打印份数'),
 			'delete_flag' => 'Delete Flag',
 		);
 	}

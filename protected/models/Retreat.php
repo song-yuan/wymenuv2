@@ -62,8 +62,8 @@ class Retreat extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'name' => '退菜理由',
-			'tip' => '提示信息',
+			'name' => yii::t('app','退菜理由'),
+			'tip' => yii::t('app','提示信息'),
 			'delete_flag' => 'Delete Flag',
 		);
 	}

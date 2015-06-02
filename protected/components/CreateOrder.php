@@ -30,8 +30,8 @@ class CreateOrder
 							'is_temp'=>$this->siteNo->is_temp,
 							'number'=>$this->siteNo->number,
 							'update_at'=>$time,
-							'remark'=>'无',
-							'taste_memo'=>'无',
+							'remark'=>yii::t('app','无'),
+							'taste_memo'=>yii::t('app','无'),
 							);
 				$order->attributes = $data;
 				$order->save();
@@ -60,7 +60,7 @@ class CreateOrder
 										'price'=>$this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']),
 										'update_at'=>$time,
 										'amount'=>1,
-										'taste_memo'=>'无',
+										'taste_memo'=>yii::t('app','无'),
 										);
 				$orderProduct->attributes = $orderProductData;
 				$orderProduct->save();
@@ -256,8 +256,8 @@ class CreateOrder
 						'order_status'=>2,
 						'number'=>1,
 						'update_at'=>$time,
-						'remark'=>'无',
-						'taste_memo'=>'无',
+						'remark'=>yii::t('app','无'),
+						'taste_memo'=>yii::t('app','无'),
 						);
 			$db->createCommand()->insert('nb_order',$data);  
 			//订单产品 $goodsIds = array('goods_id'=>goods_num,'set_id,1'=>set_num);
@@ -281,7 +281,7 @@ class CreateOrder
 										'price'=>$productSet['price'],
 										'update_at'=>$time,
 										'amount'=>$num,
-										'taste_memo'=>'无',
+										'taste_memo'=>yii::t('app','无'),
 										'product_order_status'=>1,
 										);
 					   $db->createCommand()->insert('nb_order_product',$orderProductData);
@@ -300,7 +300,7 @@ class CreateOrder
 										'price'=>$productPrice,
 										'update_at'=>$time,
 										'amount'=>$num,
-										'taste_memo'=>'无',
+										'taste_memo'=>yii::t('app','无'),
 										'product_order_status'=>1,
 										);
 					 $db->createCommand()->insert('nb_order_product',$orderProductData);
@@ -312,12 +312,12 @@ class CreateOrder
 			$order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$dpid));
             $pad=Pad::model()->with('printer')->find('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
            	if(!$pad){
-           		throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'没有找到该pad！'),JSON_UNESCAPED_UNICODE));
+           		throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该pad！')),JSON_UNESCAPED_UNICODE));
            	}
             //要判断打印机类型错误，必须是local。
             if($pad->printer->printer_type!='1')
             {
-                throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！'),JSON_UNESCAPED_UNICODE));
+                throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','必须是本地打印机！')),JSON_UNESCAPED_UNICODE));
             }else{
                 //前面加 barcode
                 $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";

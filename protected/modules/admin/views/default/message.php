@@ -7,13 +7,13 @@
                                                     <a href="#">
                                                     <span class="badge"><?php echo $msg['lcount']; ?></span> 
                                                     <?php echo $msg['name']; ?> 
-                                                    <span class="time">刚刚</span>
+                                                    <span class="time"><?php echo yii::t('app','刚刚');?></span>
                                                     </a>                                                    
                                             </li>
                                             <li class="sitemsg list-group-item" site_id="<?php echo $msg['site_id']; ?>" is_temp="<?php echo $msg['is_temp']; ?>"><span class="badge badge-danger"><?php echo $msg['lcount']; ?></span><?php echo $msg['name']; ?></li>
                                             <?php endforeach;?>  
                                                 <!--
-                                                <li><span class="badge">4</span> 卡座：A123</li>  
+                                                <li><span class="badge">4</span> <?php echo yii::t('app','卡座：A123');?></li>  
                                                 <li class="bg-yellow">[牡丹江厅-12:00]<br>催菜：都等了半个小时了</li>
 						<li class="bg-green">[牡丹江厅-12:00]<br>催菜：都等了半个小时了</li>
 						<li>[牡丹江厅-12:00]<br>催菜：都等了半个小时了</li>
@@ -49,7 +49,7 @@
                                         webkitNotifications.requestPermission();
                                     };
                                 }
-                            }else alert("您的浏览器不支持桌面通知特性，请下载谷歌浏览器试用该功能");
+                            }else alert("<?php echo yii::t('app','您的浏览器不支持桌面通知特性，请下载谷歌浏览器试用该功能');?>");
                         };*/
                         $('.sitemsg').on('click',function(){
                             var site_id = $(this).attr('site_id');

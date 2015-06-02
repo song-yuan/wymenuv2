@@ -1,20 +1,20 @@
 							
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title">共"<?php echo $ret['allnum'] ?>"个任务在厨打</h4>
+                                                        <h4 class="modal-title"><?php echo yii::t('app','共');?><?php echo $ret['allnum'] ?><?php echo yii::t('app','个任务在厨打');?></h4>
                                                 </div>
                                                 <div class="modal-body">
                                                         <div class="form-actions fluid" id="product_panel">
-                                                            <span style="color:red;" id="successnumid">0</span>...个菜品厨打已经成功</br></br>
-                                                            <span style="color:red;" id="notsurenumid">0</span>...个菜品正在打印</br></br>
-                                                            <span style="color:red;" id="errornumid">0</span>...个菜品厨打失败，</br>
-                                                            请点击“确定”按钮，去订单页面查看厨打失败产品，</br>
-                                                            确认打印机无故障后，点击打印失败菜品后面的“操作”按钮下的“重新厨打”按钮。
-                                                        </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
+                                                            <span style="color:red;" id="successnumid">0</span><?php echo yii::t('app','...个菜品厨打已经成功');?></br></br>
+                                                            <span style="color:red;" id="notsurenumid">0</span><?php echo yii::t('app','...个菜品正在打印');?></br></br>
+                                                            <span style="color:red;" id="errornumid">0</span><?php echo yii::t('app','...个菜品厨打失败，');?></br>
+                                                            <?php echo yii::t('app','请点击“确定”按钮，去订单页面查看厨打失败产品，');?></br>
+                                                            <?php echo yii::t('app','确认打印机无故障后，点击打印失败菜品后面的“操作”按钮下的“重新厨打”按钮。');?>
+                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
                                                 </div>
                                                 <input class="form-control" name="additionnames" id="additionids" type="hidden" value="">
                                                 <div class="modal-footer">
-                                                        <input type="button" class="btn green" id="btn-print-roll" value="确 定">
+                                                        <input type="button" class="btn green" id="btn-print-roll" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                             <script>

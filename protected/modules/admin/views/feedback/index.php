@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'信息反馈管理','subhead'=>'信息反馈列表','breadcrumbs'=>array(array('word'=>'信息反馈管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','信息反馈管理'),'subhead'=>yii::t('app','信息反馈列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','信息反馈管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,10 +40,10 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php if($allflag) echo '整单反馈列表';else echo '单品反馈列表';?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php if($allflag) echo yii::t('app','整单反馈列表');else echo yii::t('app','单品反馈列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('feedback/create' , array('companyId' => $this->companyId,'allflag'=>$allflag));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
-                        <a href="javascript:void(0)" class="btn red" onclick="document.getElementById('feedback-form').submit();"><i class="fa fa-times"></i> 删除</a>
+						<a href="<?php echo $this->createUrl('feedback/create' , array('companyId' => $this->companyId,'allflag'=>$allflag));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+                        <a href="javascript:void(0)" class="btn red" onclick="document.getElementById('feedback-form').submit();"><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -51,8 +51,8 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th>反馈名称</th>
-								<th>客人提示</th>
+								<th><?php echo yii::t('app','反馈名称');?></th>
+								<th><?php echo yii::t('app','客人提示');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -64,7 +64,7 @@
 								<td ><?php echo $model->name;?></td>
 								<td><?php echo $model->tip;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('feedback/update',array('lid' => $model->lid , 'companyId' => $model->dpid,'allflag'=>$allflag));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('feedback/update',array('lid' => $model->lid , 'companyId' => $model->dpid,'allflag'=>$allflag));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -75,7 +75,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?><?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

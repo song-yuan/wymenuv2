@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品沽清','subhead'=>'产品沽清列表','breadcrumbs'=>array(array('word'=>'产品沽清','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','产品沽清'),'subhead'=>yii::t('app','产品沽清列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','产品沽清'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,8 +40,8 @@
               
                     <div class="tabbable tabbable-custom">
                             <ul class="nav nav-tabs">
-                                    <li class="<?php if($typeId == 'product') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'product' , 'companyId'=>$this->companyId));?>'">单品</a></li>
-                                    <li class="<?php if($typeId == 'set') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'set' , 'companyId'=>$this->companyId));?>'">套餐</a></li>
+                                    <li class="<?php if($typeId == 'product') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'product' , 'companyId'=>$this->companyId));?>'"><?php echo yii::t('app','单品');?></a></li>
+                                    <li class="<?php if($typeId == 'set') echo 'active' ; ?>"><a href="#tab_1_<?php echo $typeId;?>" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('productClean/index' , array('typeId'=>'set' , 'companyId'=>$this->companyId));?>'"><?php echo yii::t('app','套餐');?></a></li>
                             
                             </ul>
                             <div class="tab-content">
@@ -49,24 +49,24 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
                                     <?php if($typeId=='product') :?>
-					<div class="caption"><i class="fa fa-globe"></i>产品沽清列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品沽清列表');?></div>
 					<div class="actions">						
                                                 <div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
-						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 历史记录</button>
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','历史记录');?></button>
 						</div>-->
 					</div>
                                         <?php else :?>
-                                        <div class="caption"><i class="fa fa-globe"></i>套餐沽清列表</div>
+                                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐沽清列表');?></div>
                                         <?php endif;?>
                                         <!--    <div class="col-md-3 pull-right">
 						<div class="input-group">
-                                                    <input type="text" name="csinquery" class="form-control" placeholder="输入助记符查询">
+                                                    <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
                                                     <span class="input-group-btn">
-                                                        <button class="btn blue" type="submit">查询!</button>
+                                                        <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
                                                     </span>
                                                 </div>
                                             </div>
@@ -77,9 +77,9 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:20%">名称</th>
-								<th >图片</th>
-								<th>状态</th>
+								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th ><?php echo yii::t('app','图片');?></th>
+								<th><?php echo yii::t('app','状态');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -90,7 +90,7 @@
 								<td style="width:20%"><?php if($typeId=='product') echo $model->product_name; else echo $model->set_name;?></td>
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
                                                                 <td>
-									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="在售" data-off-label="售罄">
+									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','在售');?>" data-off-label="<?php echo yii::t('app','售罄');?>">
 										<input typeId="<?php echo $typeId;?>" pid="<?php echo $model->lid;?>" <?php if(!$model->status) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
 									</div>
 								</td>
@@ -103,7 +103,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>页  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

@@ -180,7 +180,7 @@ $(document).ready(function(){
     //打印校正
     $('#printerCheck').on('click',function(){
         if (typeof Androidwymenuprinter == "undefined") {
-                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                alert(language_notget_padinfo);
                 return false;
          }
         var padinfo=Androidwymenuprinter.getPadInfo();
@@ -202,14 +202,14 @@ $(document).ready(function(){
                                     isPrintChecked=true;
                                     $('#print_check').hide();
                                 }else{
-                                    alert("打印机校正失败1，请重试！");
+                                    alert(language_printer_check_falil);
                                 }
                             }else{
-                                alert("打印机校正失败2，请重试！");
+                                alert(language_printer_check_falil);
                             }
  			},
                         error:function(){
- 				alert("打印机校正失败3，请重试！");
+ 				alert(language_printer_check_falil);
  			},
  		});
                  
@@ -217,10 +217,10 @@ $(document).ready(function(){
     
     $('#pad-app-exit').on('click',function(){
             if (typeof Androidwymenuprinter == "undefined") {
-                alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+                alert(language_notget_padinfo);
                 return false;
             }
-            var statu = confirm("清除完缓存后，应用程序会自动退出，请重新打开！确定清除吗？");
+            var statu = confirm(language_clean_exit);
             if(statu){
                 Androidwymenuprinter.appExitClear();
                 //alert("应用程序无法完整清楚所有缓存数据，请到“设置”->“应用程序”->“WebWyMenu”中手动清除！");
@@ -256,7 +256,7 @@ $(document).ready(function(){
                                                                 top: '15%'
                                                         });
                                                 }else{
-                                                        alert('没有大图！');
+                                                        alert(language_no_bigpic);
                                                 }
  			},
  		});
@@ -270,11 +270,11 @@ $(document).ready(function(){
     $('#updatePadOrder').click(function(){
         if(!isPrintChecked)
         {
-            alert("请先进行打印机校正！");
+            alert(language_printer_check_atfirst);
             return false;
         }
         if (typeof Androidwymenuprinter == "undefined") {
-            alert("无法获取PAD设备信息，请在PAD中运行该程序！");
+            alert(language_notget_padinfo);
             return false;
         }
         //var padinfo=Androidwymenuprinter.getPadInfo();
@@ -306,11 +306,11 @@ $(document).ready(function(){
              		}
                      $('.total-price').html(total);
 					 $('.total-num').html(0);
-                     alert("打印成功");
+                     alert(language_print_success);
                  }
                  else
                  {
-                     alert("PAD打印失败！，请确认打印机连接好后再试！");                                                                        
+                     alert(language_print_pad_fail);                                                                        
                  }                                                
                 }else{
                     alert(data.msg);

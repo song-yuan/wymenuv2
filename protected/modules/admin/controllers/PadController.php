@@ -4,7 +4,7 @@ class PadController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -34,7 +34,7 @@ class PadController extends BackendController
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
 			if($model->save()) {
-				Yii::app()->user->setFlash('success' , '添加成功');
+				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('pad/index','companyId' => $this->companyId));
 			}
 		}
@@ -53,7 +53,7 @@ class PadController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('Pad');
                         //($model->attributes);var_dump(Yii::app()->request->getPost('Pad'));exit;
 			if($model->save()){
-				Yii::app()->user->setFlash('success' , '修改成功');
+				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('pad/index' , 'companyId' => $this->companyId));
 			}
 		}
@@ -71,7 +71,7 @@ class PadController extends BackendController
                         $model->is_bind="0";
                         //($model->attributes);var_dump(Yii::app()->request->getPost('Pad'));exit;
 			if($model->save()){
-				Yii::app()->user->setFlash('success' , '修改成功');
+				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('pad/index' , 'companyId' => $this->companyId));
 			}
 		}
@@ -93,7 +93,7 @@ class PadController extends BackendController
 			}
 			$this->redirect(array('pad/index' , 'companyId' => $companyId)) ;
 		} else {
-			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
+			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
 			$this->redirect(array('pad/index' , 'companyId' => $companyId)) ;
 		}
 	}

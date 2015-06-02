@@ -26,7 +26,7 @@
                                                                 <div class="form-group" <?php if($orderProduct->hasErrors('product_id')) echo 'has-error';?>>
                                                                         <?php echo $form->label($orderProduct, 'product_id',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">											
-                                                                                <?php echo $form->dropDownList($orderProduct, 'product_id', array('0' => '-- 请选择 --') +$products ,array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('dpid')));?>
+                                                                                <?php echo $form->dropDownList($orderProduct, 'product_id', array('0' => yii::t('app','-- 请选择 --')) +$products ,array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('dpid')));?>
                                                                                 <?php echo $form->error($orderProduct, 'product_id' )?>
                                                                         </div>
                                                                 </div>                                                      
@@ -52,14 +52,14 @@
                                                                         </div>
                                                                         
                                                                         <div class="col-md-3">
-                                                                                <?php echo $form->dropDownList($orderProduct, 'is_giving', array('0' => '不赠送' , '1' => '赠送') , array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('is_giving')));?>
+                                                                                <?php echo $form->dropDownList($orderProduct, 'is_giving', array('0' => yii::t('app','不赠送' ), '1' => yii::t('app','赠送')) , array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('is_giving')));?>
                                                                                 <?php echo $form->error($orderProduct, 'is_giving' )?>
                                                                         </div>
                                                                         <div class="col-md-4"></div>
-                                                                        <div class="col-md-4"><span class="label label-default center">原价</span></div>
+                                                                        <div class="col-md-4"><span class="label label-default center"><?php echo yii::t('app','原价');?></span></div>
                                                                 </div>
                                                                 
-                                                        </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
+                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
                                                 </div>
                                                 <div class="form-actions fluid <?php if($isset=='0') echo 'hidden';?>" id="set_panel">
                                                                 <div class="form-group">
@@ -77,8 +77,8 @@
                                                 <?php echo $form->hiddenField($orderProduct,'set_id',array('class'=>'form-control')); ?>
                                                 <input class="form-control" name="selsetlist" id="selsetlistid" type="hidden" value="">
                                                 <div class="modal-footer">
-                                                        <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                        <input type="submit" class="btn green" id="create_btn" value="确 定">
+                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                        <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>                
@@ -94,7 +94,7 @@
                                                 dataType:'json',
                                                 success:function(result){
                                                         //alert(result.data);
-                                                        var str = '<option value="">--请选择--</option>';                                                                                            
+                                                        var str = '<option value=""><?php echo yii::t('app','-- 请选择 --');?></option>';                                                                                            
                                                         if(result.data.length){
                                                                 //alert(1);
                                                                 $.each(result.data,function(index,value){
@@ -109,12 +109,12 @@
                             //alert($('#setlist').val());
                             if(isset=='0' && $('#OrderProduct_product_id').val()=='0')
                             {
-                                alert("请选择产品！");
+                                alert("<?php echo yii::t('app','请选择产品！');?>");
                                 return false;
                             }
                             if(isset=='1' && $('#setlist').val()=='0')
                             {
-                                alert("请选择套餐！");
+                                alert("<?php echo yii::t('app','请选择套餐！');?>");
                                 return false;
                             }
                         });

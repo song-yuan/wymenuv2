@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品管理','subhead'=>'产品列表','breadcrumbs'=>array(array('word'=>'产品管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','产品管理'),'subhead'=>yii::t('app','产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','产品管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,14 +40,14 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>产品列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
-						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> 添加</a>
+						<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> 删除</button>
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
 					</div>
 				</div>
@@ -56,18 +56,18 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:20%">名称</th>
-								<th >图片</th>
-								<th>类别</th>
-								<th>现价</th>
-                                                                <th>单位</th>
-                                                                <th>称重</th>
-                                                                <th>重量单位</th>                                                                
-                                                                <th>星级</th>
-                                                                <th>点单数</th>
-                                                                <th>点赞数</th>
-								<th>会员折扣</th>
-                                                                <th>是否配菜</th>
+								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th ><?php echo yii::t('app','图片');?></th>
+								<th><?php echo yii::t('app','类别');?></th>
+								<th><?php echo yii::t('app','现价');?></th>
+                                                                <th><?php echo yii::t('app','单位');?></th>
+                                                                <th><?php echo yii::t('app','称重');?></th>
+                                                                <th><?php echo yii::t('app','重量单位');?></th>                                                                
+                                                                <th><?php echo yii::t('app','星级');?></th>
+                                                                <th><?php echo yii::t('app','点单数');?></th>
+                                                                <th><?php echo yii::t('app','点赞数');?></th>
+								<th><?php echo yii::t('app','会员折扣');?></th>
+                                                                <th><?php echo yii::t('app','是否配菜');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -81,16 +81,16 @@
 								<td><?php echo $model->category->category_name;?></td>
 								<td ><?php echo $model->original_price;?></td>
                                                                 <td ><?php echo $model->product_unit;?></td>
-                                                                <td ><?php echo $model->is_weight_confirm=='0'?'否':'是';?></td>
+                                                                <td ><?php echo $model->is_weight_confirm=='0'?"<?php echo yii::t('app','否');?>":"<?php echo yii::t('app','是');?>";?></td>
                                                                 <td ><?php echo $model->weight_unit;?></td>
                                                                 <td ><?php echo $model->rank;?></td>
                                                                 <td ><?php echo $model->order_number;?></td>
                                                                 <td ><?php echo $model->favourite_number;?></td>
-								<td ><?php echo $model->is_member_discount=='0'?'否':'是';?></td>
-                                                                <td ><?php echo $model->is_show=='0'?'是':'否';?></td>
+								<td ><?php echo $model->is_member_discount=='0'?"<?php echo yii::t('app','否');?>":"<?php echo yii::t('app','是');?>";?></td>
+                                                                <td ><?php echo $model->is_show=='0'?"<?php echo yii::t('app','是');?>":"<?php echo yii::t('app','否');?>";?></td>
                                                                 
 								<td class="center">
-								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>">编辑</a>
+								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -101,7 +101,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?> , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">
@@ -140,7 +140,7 @@
 	$(document).ready(function(){
 		$('#product-form').submit(function(){
 			if(!$('.checkboxes:checked').length){
-				alert('请选择要删除的项');
+				alert("<?php echo yii::t('app','请选择要删除的项');?>");
 				return false;
 			}
 			return true;

@@ -60,12 +60,12 @@ class Printer extends CActiveRecord
 		return array(
 			'lid' => 'Printer',
 			'dpid' => 'Company',
-			'name' => '打印机名称',
-                        'address'=>'地址(IP/USB/COM)',
-			'language' => '语言',
-			'brand' => '品牌',
-                        'printer_type' => '类型',
-			'remark' => '备注',
+			'name' => yii::t('app','打印机名称'),
+                        'address'=>yii::t('app','地址(IP/USB/COM)'),
+			'language' => yii::t('app','语言'),
+			'brand' => yii::t('app','品牌'),
+                        'printer_type' => yii::t('app','类型'),
+			'remark' => yii::t('app','备注'),
 		);
 	}
 

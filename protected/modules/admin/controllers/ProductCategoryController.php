@@ -4,7 +4,7 @@ class ProductCategoryController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -53,7 +53,7 @@ class ProductCategoryController extends BackendController
 				}
                                 //var_dump($model);exit;
 				$model->save();
-				Yii::app()->user->setFlash('success' , '添加成功');
+				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
 			}
 		}
@@ -69,7 +69,7 @@ class ProductCategoryController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
 			if($model->save()){
-				Yii::app()->user->setFlash('success' , '修改成功');
+				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
 			}
 		}
@@ -87,7 +87,7 @@ class ProductCategoryController extends BackendController
 		//var_dump($id,  $this->companyId,$model);exit;
 		if($model) {
 			$model->deleteCategory();
-			Yii::app()->user->setFlash('success','删除成功！');
+			Yii::app()->user->setFlash('success',yii::t('app','删除成功！'));
 		}
 		$this->redirect(array('productCategory/index','companyId'=>$this->companyId,'id'=>$model->pid));
 	}

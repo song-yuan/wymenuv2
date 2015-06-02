@@ -67,10 +67,10 @@ class ProductAddition extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'mproduct_id' => '主产品',
-			'sproduct_id' => '附加菜品',
-			'price' => '附加菜价格',
-			'number' => '单次下单个数',
+			'mproduct_id' => yii::t('app','主产品'),
+			'sproduct_id' => yii::t('app','附加菜品'),
+			'price' => yii::t('app','附加菜价格'),
+			'number' =>yii::t('app', '单次下单个数'),
 			'delete_flag' => 'Delete Flag',
 		);
 	}

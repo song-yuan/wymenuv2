@@ -25,7 +25,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'特价活动管理','subhead'=>'修改特价活动','breadcrumbs'=>array(array('word'=>'特价活动管理','url'=>$this->createUrl('productSpecial/index' , array('companyId'=>$this->companyId))),array('word'=>'修改特价活动','url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>"<?php echo yii::t('app','特价活动管理');?>",'subhead'=>"<?php echo yii::t('app','修改特价活动');?>",'breadcrumbs'=>array(array('word'=>"<?php echo yii::t('app','特价活动管理');?>",'url'=>$this->createUrl('productSpecial/index' , array('companyId'=>$this->companyId))),array('word'=>"<?php echo yii::t('app','修改特价活动');?>",'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -33,7 +33,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>修改特价活动</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改特价活动');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

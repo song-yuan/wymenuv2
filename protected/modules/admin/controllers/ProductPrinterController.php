@@ -4,7 +4,7 @@ class ProductPrinterController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -34,7 +34,7 @@ class ProductPrinterController extends BackendController
 			$postData = Yii::app()->request->getPost('printerWay');
 			$model->printer_way_id = $postData;
 			if($model->save()){
-				Yii::app()->user->setFlash('success' , '修改成功');
+				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productPrinter/index' , 'companyId' => $this->companyId));
 			}
 		}

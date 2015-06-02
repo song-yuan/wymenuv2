@@ -54,9 +54,9 @@ class SiteType extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'lid' => '位置类型ID',
-			'name' => '类型名称',
-			'dpid' => '公司',
+			'lid' => yii::t('app','位置类型ID'),
+			'name' => yii::t('app','类型名称'),
+			'dpid' => yii::t('app','公司'),
 		);
 	}
 

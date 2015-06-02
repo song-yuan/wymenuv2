@@ -14,7 +14,7 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title">口味选择</h4>
+                                                        <h4 class="modal-title"><?php echo yii::t('app','口味选择');?></h4>
                                                 </div>
                                                 <div class="modal-body">
                                                         <div class="clearfix">
@@ -32,8 +32,8 @@
 							</div>
                                                 <div class="modal-footer">
                                                         
-                                                        <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                        <input type="submit" class="btn green" id="create_btn" value="确 定">
+                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                        <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>

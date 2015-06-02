@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'时价产品管理','subhead'=>'产品列表','breadcrumbs'=>array(array('word'=>'时价产品管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','时价产品管理'),'subhead'=>yii::t('app','产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','时价产品管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>产品列表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
@@ -42,12 +42,12 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th style="width:20%">名称</th>
-								<th >图片</th>
-								<th>类别</th>
-								<th>原价</th>
-                                                                <th>单位</th>
-                                                                <th>是否时价</th>
+								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th ><?php echo yii::t('app','图片');?></th>
+								<th><?php echo yii::t('app','类别');?></th>
+								<th><?php echo yii::t('app','原价');?></th>
+                                                                <th><?php echo yii::t('app','单位');?></th>
+                                                                <th><?php echo yii::t('app','是否时价');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -61,12 +61,12 @@
 								<td ><?php echo $model->original_price;?></td>
                                 <td ><?php echo $model->product_unit;?></td>
                                 <td >
-									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="是" data-off-label="否" is-discount="<?php echo $model->is_discount;?>">
+									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>" is-discount="<?php echo $model->is_discount;?>">
 										<input  pid="<?php echo $model->lid;?>" type="checkbox" <?php if($model->is_temp_price) echo 'checked="checked"';?> class="toggle"/>
 									</div>
 								</td>
 								<td class="center">
-								<a href="javascript:;" class="edit" data-id="<?php echo $model->lid;?>">编辑明细</a>
+								<a href="javascript:;" class="edit" data-id="<?php echo $model->lid;?>"><?php echo yii::t('app','编辑明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -77,7 +77,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">
@@ -116,7 +116,7 @@
 		$('.r-btn').on('switch-change', function () {
 			var isDiscount = $(this).attr('is-discount');
 			if(parseInt(isDiscount)){
-				alert('该单品正在优惠,不能参与特价!');
+				alert("<?php echo yii::t('app','该单品正在优惠,不能参与特价!');?>");
 				$(this).find('div').removeClass('switch-on').addClass('switch-off');
 				return;
 			}
@@ -128,7 +128,7 @@
 			if($(this).parents('.odd').find('.toggle').is(':checked')){
 				location.href = '<?php echo $this->createUrl('productTempprice/updatedetail',array('companyId' => $this->companyId));?>/id/'+id;
 			}else{
-				alert('请开启该单品时价');
+				alert("<?php echo yii::t('app','请开启该单品时价');?>");
 			}
 			
 		});

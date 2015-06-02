@@ -20,10 +20,10 @@
                                                             <?php if($models):?>
                                                                     <thead>
                                                                             <tr>
-                                                                                    <th>单品名称</th>
-                                                                                    <th>加菜价格</th>
-                                                                                    <th>单次加菜数量</th>
-                                                                                    <th>总点单数量</th>
+                                                                                    <th><?php echo yii::t('app','单品名称');?></th>
+                                                                                    <th><?php echo yii::t('app','加菜价格');?></th>
+                                                                                    <th><?php echo yii::t('app','单次加菜数量');?></th>
+                                                                                    <th><?php echo yii::t('app','总点单数量');?></th>
                                                                             </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -40,12 +40,12 @@
                                                                     </tbody>
                                                                     <?php endif;?>
                                                             </table>
-                                                        </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
+                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
                                                 </div>
                                                 <input class="form-control" name="additionnames" id="additionids" type="hidden" value="">
                                                 <div class="modal-footer">
-                                                        <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                        <input type="button" class="btn green" id="addition_create_btn" value="确 定">
+                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                        <input type="button" class="btn green" id="addition_create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>

@@ -5,7 +5,7 @@
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="utf-8"/>
-    <title>我要点单 - 后台管理系统</title>
+    <title><?php echo yii::t('app','我要点单 - 后台管理系统');?></title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 	<meta content="" name="description" />
@@ -36,10 +36,10 @@
 	<!-- BEGIN LOGO -->
 	<div class="logo">
                 <!--
-                <a style="color:red; font-size: 23px;" href="<?php echo $this->createUrl('login/index',array('language'=>'zh_cn'));?>"  id="btn_zh_cn">简体中文</a>
-                <a style="color:red; font-size: 23px;" href="<?php echo $this->createUrl('login/index',array('language'=>'jp'));?>"  id="btn_jp">日本語</a>
+                <a style="color:red; font-size: 23px;" href="<?php echo $this->createUrl('login/index',array('language'=>'zh_cn'));?>"  id="btn_zh_cn"><?php echo yii::t('app','简体中文');?></a>
+                <a style="color:red; font-size: 23px;" href="<?php echo $this->createUrl('login/index',array('language'=>'jp'));?>"  id="btn_jp"><?php echo yii::t('app','日本語');?></a>
                 -->
-                <h1 style="color:white;">我要MENU</h1>
+                <h1 style="color:white;"><?php echo yii::t('app','我要MENU');?></h1>
                 
 	</div>
 	<!-- END LOGO -->
@@ -52,7 +52,7 @@
 	<!-- END LOGIN -->
 	<!-- BEGIN COPYRIGHT -->
 	<div class="copyright">
-		2014 &copy; 我要点单 - 后台管理系统
+		2014 &copy; <?php echo yii::t('app','我要点单 - 后台管理系统');?>
 	</div>
 	<!-- END COPYRIGHT -->
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->

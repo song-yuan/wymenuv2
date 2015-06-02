@@ -11,7 +11,7 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title">口味选择</h4>
+                                                        <h4 class="modal-title"><?php echo yii::t('app','口味选择');?></h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -19,8 +19,8 @@
                                                                         <thead>
                                                                                 <tr>
                                                                                         <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-                                                                                        <th>退菜理由</th>
-                                                                                        <th>备注</th>
+                                                                                        <th><?php echo yii::t('app','退菜理由');?></th>
+                                                                                        <th><?php echo yii::t('app','备注');?></th>
                                                                                 </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -37,8 +37,8 @@
                                                                 </table>
                                                     </div>
                                                    <div class="modal-footer">
-                                                           <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                           <input type="submit" class="btn green" id="create_btn" value="确 定">
+                                                           <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                           <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                    </div>
 
                                         <?php $this->endWidget(); ?>

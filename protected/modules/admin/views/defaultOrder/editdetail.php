@@ -26,7 +26,7 @@
                                                                 <div class="form-group" <?php if($orderProduct->hasErrors('product_id')) echo 'has-error';?>>
                                                                         <?php echo $form->label($orderProduct, 'product_id',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">											
-                                                                                <?php echo $form->dropDownList($orderProduct, 'product_id', array('0' => '-- 请选择 --') +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+                                                                                <?php echo $form->dropDownList($orderProduct, 'product_id', array('0' => yii::t('app','-- 请选择 --')) +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
                                                                                 <?php echo $form->error($orderProduct, 'product_id' )?>
                                                                         </div>
                                                                 </div>                                                      
@@ -47,12 +47,12 @@
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderProduct, 'is_giving',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
-                                                                                <?php echo $form->dropDownList($orderProduct, 'is_giving', array('0' => '否' , '1' => '是') , array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('is_giving')));?>
+                                                                                <?php echo $form->dropDownList($orderProduct, 'is_giving', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$orderProduct->getAttributeLabel('is_giving')));?>
                                                                                 <?php echo $form->error($orderProduct, 'is_giving' )?>
                                                                         </div>
                                                                 </div>                              
                                                                 
-                                                        </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
+                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
                                                 </div>
                                                 <div class="form-actions fluid <?php if($setid=='0000000000') echo 'hidden'; ?>" id="set_panel">
                                                         <div class="portlet-body" id="table-set-detail">
@@ -60,10 +60,10 @@
                                                             <?php if($models):?>
                                                                     <thead>
                                                                             <tr>
-                                                                                    <th>单品名称</th>
-                                                                                    <th>套餐价格</th>
-                                                                                    <th>数量</th>
-                                                                                    <th>选择</th>
+                                                                                    <th><?php echo yii::t('app','单品名称');?></th>
+                                                                                    <th><?php echo yii::t('app','套餐价格');?></th>
+                                                                                    <th><?php echo yii::t('app','数量');?></th>
+                                                                                    <th><?php echo yii::t('app','选择');?></th>
                                                                             </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -74,7 +74,7 @@
                                                                                     <td><?php echo $model->price;?></td>
                                                                                     <td><?php echo $model->number;?></td>
                                                                                     <td>
-                                                                                        分组<?php echo $model->group_no;?><input name="group<?php echo $model->group_no;?>" value="<?php echo $model->product_id.'|'.$model->number.'|'.$model->price;?>" <?php if($model->is_select) echo 'checked'; ?> type="radio"  class="toggle groupradio"/> 
+                                                                                        <?php echo yii::t('app','分组');?><?php echo $model->group_no;?><input name="group<?php echo $model->group_no;?>" value="<?php echo $model->product_id.'|'.$model->number.'|'.$model->price;?>" <?php if($model->is_select) echo 'checked'; ?> type="radio"  class="toggle groupradio"/> 
 
                                                                                     </td>                                                                                                             
                                                                             </tr>
@@ -90,8 +90,8 @@
                                                 <input class="form-control" name="selsetlist" id="selsetlistid" type="hidden" value="">
                                                 <input class="form-control" name="isset" id="isetid" type="hidden" value="0">
                                                 <div class="modal-footer">
-                                                        <button type="button" data-dismiss="modal" class="btn default">取 消</button>
-                                                        <input type="submit" class="btn green" id="create_btn" value="确 定">
+                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                        <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>

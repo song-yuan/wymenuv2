@@ -58,7 +58,7 @@ class SiteClass
         public static function getSiteNmae($companyId,$id,$istemp){
 		if($istemp)
                 {
-                    return '临时座位：'.$id%1000;
+                    return yii::t('app','临时座：').$id%1000;
                 }else{
                     $site=Site::model()->with('siteType')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,':lid'=>$id));
                     //var_dump($site);exit;
@@ -100,7 +100,7 @@ class SiteClass
                 'feedback_id'=>0,
                 'order_id'=>0,
                 'is_order'=>'1',
-                'feedback_memo'=>'开台',
+                'feedback_memo'=>yii::t('app','开台'),
                 'delete_flag'=>'0'
             );
             $db->createCommand()->insert('nb_order_feedback',$dataf);  

@@ -15,6 +15,7 @@
 	Yii::app()->clientScript->registerScriptFile('../js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile('../js/product/base64.js'); 
 	Yii::app()->clientScript->registerScriptFile('../js/product/pic.js');
+        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/language/'.Yii::app()->language.'.js');
 	$result = ProductClass::getCartInfo($this->companyId,$siteNoId);	
 	$resArr = explode(':',$result);
 	$price = $resArr[0];

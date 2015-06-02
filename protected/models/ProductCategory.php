@@ -63,11 +63,11 @@ class ProductCategory extends CActiveRecord
 			'lid' => 'Category',
 			'pid'=>'PID',
 			'tree'=>'Tree',
-			'category_name' => '产品类别',
-			'dpid' => '公司',
-                        'order_num' => '显示顺序',
-			'delete_flag' => '状态',
-                        'create_at' => '更新时间',
+			'category_name' => yii::t('app','产品类别'),
+			'dpid' => yii::t('app','公司'),
+                        'order_num' => yii::t('app','显示顺序'),
+			'delete_flag' => yii::t('app','状态'),
+                        'create_at' => yii::t('app','更新时间'),
 		);
 	}
 

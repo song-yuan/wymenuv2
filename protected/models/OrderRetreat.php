@@ -64,9 +64,9 @@ class OrderRetreat extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'retreat_id' => '退菜理由',
+			'retreat_id' => yii::t('app','退菜理由'),
 			'order_detail_id' => 'Order Detail',
-			'retreat_memo' => '具体原因',
+			'retreat_memo' => yii::t('app','具体原因'),
 			'delete_flag' => 'Delete Flag',
 		);
 	}

@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'产品类型管理','subhead'=>'产品类型列表','breadcrumbs'=>array(array('word'=>'产品类型管理','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','产品类型管理'),'subhead'=>yii::t('app','产品类型列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','产品类型管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -39,9 +39,9 @@
 						<div class="col-md-12">
 					<div class="portlet purple box">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cogs"></i>商品类目管理</div>
+							<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','商品类目管理');?></div>
 							<div class="actions">
-								<a class="btn blue add_btn" parentId="0" data-toggle="modal"><i class="fa fa-plus"></i> 添加一级类目</a>
+								<a class="btn blue add_btn" parentId="0" data-toggle="modal"><i class="fa fa-plus"></i> <?php echo yii::t('app','添加一级类目');?></a>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -90,7 +90,7 @@
     });
     $('.btn_delete').click(function(){
     	var cid = $(this).attr('cid');
-        msg ='你确定要删除该类目吗?';
+        msg ="<?php echo yii::t('app','你确定要删除该类目吗?');?>";
         if($(this).parent().parent().hasClass('treegrid-collapsed') || $(this).parent().parent().hasClass('treegrid-expanded')){
         	msg += '<br/>该类目的子类目将会一起被删除！';
         }

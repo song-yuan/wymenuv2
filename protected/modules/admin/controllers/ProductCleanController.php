@@ -4,7 +4,7 @@ class ProductCleanController extends BackendController
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId && $this->getAction()->getId() != 'upload') {
-			Yii::app()->user->setFlash('error' , '请选择公司');
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
 		return true;
@@ -106,7 +106,7 @@ class ProductCleanController extends BackendController
                 
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
-		$optionsReturn = array('--请选择分类--');
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
 			foreach ($models as $model) {
 				if($model->pid == '0') {
