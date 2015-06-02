@@ -94,7 +94,7 @@
 										<i class="fa fa-angle-down"></i>
 										</a>
 										<ul class="dropdown-menu pull-right">
-											<li><a href="<?php echo $this->createUrl('company/update',array('companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></li>
+											<li><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></li>
 											<li><a href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a></li>
 										</ul>
 									</div>

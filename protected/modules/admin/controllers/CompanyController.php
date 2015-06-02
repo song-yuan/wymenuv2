@@ -28,7 +28,7 @@ class CompanyController extends BackendController
 	}
 	public function actionCreate(){
 		if(Yii::app()->user->role != User::POWER_ADMIN) {
-			$this->redirect(array('company/index'));
+			$this->redirect(array('company/index','companyId'=>  $this->companyId));
 		}
 		$model = new Company();
 		$model->create_at = date('Y-m-d H:i:s');
@@ -36,7 +36,7 @@ class CompanyController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('Company');
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
-				$this->redirect(array('company/index'));
+				$this->redirect(array('company/index','companyId'=>  $this->companyId));
 			} else {
 				Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
 			}
@@ -48,14 +48,14 @@ class CompanyController extends BackendController
 		));
 	}
 	public function actionUpdate(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $companyId)) ;
+		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
+		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Company');
 			//var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
-				$this->redirect(array('company/index'));
+				$this->redirect(array('company/index','companyId'=>$this->companyId));
 			} else {
 				Yii::app()->user->setFlash('error',yii::t('app','修改失败'));
 			}
@@ -74,7 +74,7 @@ class CompanyController extends BackendController
 			->execute();
 			
 		}
-		$this->redirect(array('company/index'));
+		$this->redirect(array('company/index','companyId'=>  $this->companyId));
 	}
 	private function getPrinterList(){
 		$printers = Printer::model()->findAll('dpid=:dpid',array(':dpid'=>$this->companyId)) ;

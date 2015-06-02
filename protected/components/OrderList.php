@@ -87,7 +87,7 @@ class OrderList
 	//获取该套餐的产品 array(1=>array(,),2=>array(,)) 1,2表示group_no
 	public function GetSetProduct($setId){
 		$result = array();
-		$sql = 'select t.*, t1.product_name, t1.main_picture from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid where t.set_id=:setId and t.dpid=t1.dpid and t.dpid=:dpid and t.delete_flag=0 and t1.delete_flag=0 order by is_select desc';
+		$sql = 'select t.*, t1.product_name, t1.main_picture from nb_product_set_detail t left join nb_product t1 on t.product_id=t1.lid and t.dpid=t1.dpid where t.set_id=:setId and t.dpid=:dpid and t.delete_flag=0 and t1.delete_flag=0 order by is_select desc';
 		$conn = $this->db->createCommand($sql);
 		$conn->bindValue(':setId',$setId);
 		$conn->bindValue(':dpid',$this->siteNo['dpid']);
@@ -139,10 +139,11 @@ class OrderList
 					$goodsArr = explode(',',$key);//如果数组元素个数是2 证明书套餐
 					if(count($goodsArr)==2){
 						$setId = $goodsArr[0];
-						$sql = 'delete from nb_order_product where order_id=:orderId and set_id=:setId';
+						$sql = 'delete from nb_order_product where order_id=:orderId and set_id=:setId and dpid=:dpid';
 						$connect = Yii::app()->db->createCommand($sql);
 						$connect->bindValue(':setId',$setId);
 						$connect->bindValue(':orderId',$orderId);
+                                                $connect->bindValue(':dpid',$this->dpid);
 						$connect->execute();
 						
 						$goodsData = explode('-',$goodsArr[1]);
@@ -165,17 +166,19 @@ class OrderList
 						}
 							
 					}else{
-						$sql = 'update nb_order_product set amount = :amount where order_id = :orderId and product_id = :productId';
+						$sql = 'update nb_order_product set amount = :amount where order_id = :orderId and product_id = :productId and dpid=:dpid';
 						$conn = Yii::app()->db->createCommand($sql);
 						$conn->bindValue(':amount',$val);
 						$conn->bindValue(':orderId',$orderId);
 						$conn->bindValue(':productId',$key);
+                                                $conn->bindValue(':dpid',$this->dpid);
 						$conn->execute();
 					}
 				}
-				$sql = 'update nb_order set lock_status=1 where lid = :orderId';
+				$sql = 'update nb_order set lock_status=1 where lid = :orderId and dpid=:dpid';
 				$conn = Yii::app()->db->createCommand($sql);
 				$conn->bindValue(':orderId',$orderId);
+                                $conn->bindValue(':dpid',$this->dpid);
 				$conn->execute();
 			$transaction->commit();
 			return true;
@@ -199,10 +202,11 @@ class OrderList
 					$goodsArr = explode(',',$key);//如果数组元素个数是2 证明书套餐
 					if(count($goodsArr)==2){
 						$setId = $goodsArr[0];
-						$sql = 'delete from nb_order_product where order_id=:orderId and set_id=:setId';
+						$sql = 'delete from nb_order_product where order_id=:orderId and set_id=:setId and dpid=:dpid';
 						$connect = Yii::app()->db->createCommand($sql);
 						$connect->bindValue(':setId',$setId);
 						$connect->bindValue(':orderId',$orderId);
+                                                $conn->bindValue(':dpid',$this->dpid);
 						$connect->execute();
 						
 						$goodsData = explode('-',$goodsArr[1]);
@@ -225,11 +229,12 @@ class OrderList
 						}
 							
 					}else{
-						$sql = 'update nb_order_product set amount = :amount where order_id = :orderId and product_id = :productId';
+						$sql = 'update nb_order_product set amount = :amount where order_id = :orderId and product_id = :productId and dpid=:dpid';
 						$conn = Yii::app()->db->createCommand($sql);
 						$conn->bindValue(':amount',$val);
 						$conn->bindValue(':orderId',$orderId);
 						$conn->bindValue(':productId',$key);
+                                                $conn->bindValue(':dpid',$this->dpid);
 						$conn->execute();
 					}
 				}
@@ -251,25 +256,28 @@ class OrderList
 			foreach($goodsIds as $key=>$val){
 				$goodsArr = explode('-',$key);//如果数组元素个数是2 证明书套餐
 				if(count($goodsArr)==2){
-					$sql = 'update nb_order_product set amount = :amount , product_order_status=1 where order_id = :orderId and set_id=:setId and product_id = :productId';
+					$sql = 'update nb_order_product set amount = :amount , product_order_status=1 where order_id = :orderId and set_id=:setId and product_id = :productId and dpid=:dpid';
 					$conn = Yii::app()->db->createCommand($sql);
 					$conn->bindValue(':amount',$val);
 					$conn->bindValue(':orderId',$orderId);
 					$conn->bindValue(':setId',$goodsArr[0]);
 					$conn->bindValue(':productId',$goodsArr[1]);
+                                        $conn->bindValue(':dpid',$this->dpid);
 					$conn->execute();
 				}else{
-					$sql = 'update nb_order_product set amount = :amount , product_order_status=1 where order_id = :orderId and product_id = :productId';
+					$sql = 'update nb_order_product set amount = :amount , product_order_status=1 where order_id = :orderId and product_id = :productId and dpid=:dpid';
 					$conn = Yii::app()->db->createCommand($sql);
 					$conn->bindValue(':amount',$val);
 					$conn->bindValue(':orderId',$orderId);
 					$conn->bindValue(':productId',$key);
+                                        $conn->bindValue(':dpid',$this->dpid);
 					$conn->execute();
 				}
 			}
-			$sql = 'update nb_order set lock_status=0, order_status=2 where lid = :orderId';
+			$sql = 'update nb_order set lock_status=0, order_status=2 where lid = :orderId  and dpid=:dpid';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
+                        $conn->bindValue(':dpid',$this->dpid);
 			$conn->execute();
 			//siteNo 表
 			$sql = 'update nb_site_no set status=2 where lid = :siteNoId and dpid=:dpid';
@@ -290,9 +298,10 @@ class OrderList
 	}
 	//获取种类的名称
 	public static function GetCatoryName($catoryId){
-		$sql = 'select category_name from  nb_product_category where lid = :lid';
+		$sql = 'select category_name from  nb_product_category where lid = :lid and dpid=:dpid';
 		$conn = Yii::app()->db->createCommand($sql);
 		$conn->bindValue(':lid',$catoryId);
+                $conn->bindValue(':dpid',  $this->dpid);
 		$catoryName = $conn->queryScalar();
 		return $catoryName;
 	}
