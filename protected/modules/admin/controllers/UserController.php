@@ -8,9 +8,11 @@ class UserController extends BackendController
 			'3' => yii::t('app','服务员'),
 		) ;
 		if(Yii::app()->user->role == User::POWER_ADMIN) {
-			$this->roles = array('1' => yii::t('app','系统管理员')+$this->roles);
+                    
+			$this->roles = array('1' => yii::t('app','系统管理员')) +$this->roles;
+                        //var_dump($this->roles);exit;
 		}
-		$this->roles = array('' => yii::t('app','-- 请选择 --' ) +$this->roles);
+		$this->roles = array('' => yii::t('app','-- 请选择 --' )) +$this->roles;
 	}
 	
         public function beforeAction($action) {

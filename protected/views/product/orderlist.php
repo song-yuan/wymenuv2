@@ -167,7 +167,7 @@
 			}
 		?>
 		<?php foreach($productSets as $key=>$productSet):?>
-			<div class="order-category"><?php echo ProductSetClass::GetProductSetName($key);?></div>
+			<div class="order-category"><?php echo ProductSetClass::GetProductSetName($this->companyId,$key);?></div>
 			<?php foreach($productSet as $order):?>
 				<div class="order-product">
 				<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
