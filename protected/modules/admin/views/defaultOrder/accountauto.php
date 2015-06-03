@@ -14,7 +14,7 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title"><?php echo yii::t('app','自动下单、厨打、收银')yii::t('app','呼叫器号：')<?php echo $callid;?></h4>                                                        
+                                                        <h4 class="modal-title"><?php echo yii::t('app','自动下单、厨打、收银')."     ".yii::t('app','呼叫器号：').$callid;?></h4>                                                        
                                                         <span style="color:red;" id="timecount">20</span><?php echo yii::t('app','...秒后自动完成厨打收银，点击');?><input type="button" class="btn green" id="autopay_pause" value="<?php echo yii::t('app','此按钮');?>"><?php echo yii::t('app','停止自动厨打收银！');?>
                                                         
                                                             <span style="color:red;" id="successnumid">0</span><?php echo yii::t('app','...个菜品厨打已经成功');?></br>

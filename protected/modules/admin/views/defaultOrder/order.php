@@ -63,11 +63,11 @@
                         <!-- BEGIN PAGE CONTENT-->
 			<div class="row">
                                 <div class="col-md-4">
-                                    <h3 class="page-title"><?php switch($model->order_status) {case 1:{echo "<?php echo yii::t('app','未下单');?>";break;} case 2:{echo "<?php echo yii::t('app','下单未支付');?>";break;} case 3:{echo "<?php echo yii::t('app','已支付');?>".$model->reality_total;break;} }?></h3>                                    
+                                    <h3 class="page-title"><?php switch($model->order_status) {case 1:{echo yii::t('app','未下单');break;} case 2:{echo yii::t('app','下单未支付');break;} case 3:{echo yii::t('app','已支付').$model->reality_total;break;} }?></h3>                                    
                                 </div>
                                 <div class="col-md-8">
                                     <h4>
-                                       <?php echo yii::t('app',);?><?php echo $model->create_at;?> 
+                                       <?php echo yii::t('app','');?><?php echo $model->create_at;?> 
                                        &nbsp;&nbsp;&nbsp;&nbsp; <?php echo yii::t('app','应付金额（元）：');?><?php echo number_format($total['total'], 2);?>
                                        &nbsp;&nbsp;&nbsp;&nbsp; <?php echo yii::t('app','实付金额（元）：');?><?php echo $model->reality_total;?>
                                     </h4>    
@@ -79,7 +79,7 @@
                                                             <?php echo $total['remark'] ;?>
                                                         </div>
                                                         <div class="col-md-3 ">
-                                                                <input id="callbarscanid" type="text" class="form-control" placeholder='<?php if($syscallId!='0') echo <?php echo yii::t('app','扫描呼叫器条码快速收银、结算');?>; else echo <?php echo yii::t('app','扫描呼叫器条码快速下单、厨打');?>; ?>'>
+                                                                <input id="callbarscanid" type="text" class="form-control" placeholder='<?php if($syscallId!='0') echo yii::t('app','扫描呼叫器条码快速收银、结算'); else echo yii::t('app','扫描呼叫器条码快速下单、厨打'); ?>'>
                                                         </div>
                                                         <div class="actions">
                                                             <?php if($model->order_status=='3' || $model->order_status=='4'): ?>
@@ -150,7 +150,7 @@
                         */
                         $('#print-btn').click(function(){
                             if (typeof Androidwymenuprinter == "undefined") {
-                                alert(""<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>);
+                                alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
                                 return false;
                             }
                             var padinfo=Androidwymenuprinter.getPadInfo();

@@ -35,7 +35,7 @@
 										<?php echo $form->label($model, 'list_no',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textArea($model, 'list_no',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('list_no')));?>
-											<?php echo $form->error($model, 'list_no' )?><?php echo yii::t('app','>小于127');?
+											<?php echo $form->error($model, 'list_no' )?><?php echo yii::t('app','>小于127');?>
 										</div>
 									</div>
 									<div class="form-actions fluid">

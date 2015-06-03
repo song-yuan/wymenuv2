@@ -74,7 +74,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php if($model->floor_id!='0') echo $model->floor->name; else echo "<?php echo yii::t('app','临时区域');?>";?></td>
+								<td ><?php if($model->floor_id!='0') echo $model->floor->name; else echo yii::t('app','临时区域');?></td>
 								<td><?php echo $model->printer->name;?></td>
                                                                 <td><?php echo $model->list_no;?></td>
 								<td class="center">
