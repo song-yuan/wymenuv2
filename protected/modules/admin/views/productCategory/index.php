@@ -98,7 +98,7 @@
     	var cid = $(this).attr('cid');
         msg ="<?php echo yii::t('app','你确定要删除该类目吗?');?>";
         if($(this).parent().parent().hasClass('treegrid-collapsed') || $(this).parent().parent().hasClass('treegrid-expanded')){
-        	msg += <?php echo yii::t('app','<br/>该类目的子类目将会一起被删除！');?>;
+        	msg += "<?php echo yii::t('app','<br/>该类目的子类目将会一起被删除！');?>";
         }
         bootbox.confirm(msg, function(result) {
            if(result){

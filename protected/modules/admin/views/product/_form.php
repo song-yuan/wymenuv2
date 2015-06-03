@@ -33,7 +33,7 @@
 										$this->widget('application.extensions.swfupload.SWFUpload',array(
 											'callbackJS'=>'swfupload_callback',
 											'fileTypes'=> '*.jpg',
-											'buttonText'=> "<?php echo yii::t('app','上传产品图片');?>",
+											'buttonText'=> yii::t('app','上传产品图片'),
 											'companyId' => $model->dpid,
 											'imgUrlList' => array($model->main_picture),
 										));
@@ -140,7 +140,7 @@
 	   			success:function(result){
 	   				if(result.data.length){
 	   					var str = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter">'+
-	   					'<option value="">--<?php echo yii::t('app','请选择');?>--</option>';
+	   					'<option value="">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
 	   					$.each(result.data,function(index,value){
 	   						str = str + '<option value="'+value.id+'">'+value.name+'</option>';
 	   					});

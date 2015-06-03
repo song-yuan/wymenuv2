@@ -55,7 +55,7 @@
                                                                                                                                     <?php echo yii::t('app','操作');?>
                                                                                                                                     <i class="fa fa-angle-up"></i>
                                                                                                                                     </a>
-                                                                                                                                    <ul class="dropdown-menu pull-right"><?php echo yii::t('app','!--已厨打不能编辑--');?>
+                                                                                                                                    <ul class="dropdown-menu pull-right"> <!--已厨打不能编辑-->
                                                                                                                                     <?php if($model->order_status!='4'): ?>
                                                                                                                                         <?php if($orderProduct['product_order_status']=='0') :?>
                                                                                                                                             <li><a href="javascript:;" class='btn-edit' setid="<?php echo $orderProduct['set_id'];?>" lid="<?php echo $orderProduct['lid'];?>" ><?php echo yii::t('app','编辑（未下单）');?></a></li>
