@@ -28,7 +28,7 @@
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'company-form',
-				'action' => $this->createUrl('company/delete'),
+				'action' => $this->createUrl('company/delete', array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -42,7 +42,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺列表');?></div>
 					<div class="actions">
 						<?php if(Yii::app()->user->role == User::POWER_ADMIN):?>
-						<a href="<?php echo $this->createUrl('company/create');?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('company/create', array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<?php endif;?>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
@@ -94,7 +94,7 @@
 										<i class="fa fa-angle-down"></i>
 										</a>
 										<ul class="dropdown-menu pull-right">
-											<li><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></li>
+											<li><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a></li>
 											<li><a href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a></li>
 										</ul>
 									</div>

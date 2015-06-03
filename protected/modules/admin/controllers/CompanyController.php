@@ -36,7 +36,7 @@ class CompanyController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('Company');
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
-				$this->redirect(array('company/index','companyId'=>  $this->companyId));
+				$this->redirect(array('company/index','companyId'=> $this->companyId));
 			} else {
 				Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
 			}
@@ -44,7 +44,8 @@ class CompanyController extends BackendController
 		$printers = $this->getPrinterList();
 		return $this->render('create',array(
 				'model' => $model,
-				'printers'=>$printers
+				'printers'=>$printers,
+                                'companyId'=>  $this->companyId
 		));
 	}
 	public function actionUpdate(){
@@ -63,7 +64,8 @@ class CompanyController extends BackendController
 		$printers = $this->getPrinterList();
 		return $this->render('update',array(
 				'model'=>$model,
-				'printers'=>$printers
+				'printers'=>$printers,
+                                'companyId'=>$this->companyId
 		));
 	}
 	public function actionDelete(){
@@ -74,7 +76,7 @@ class CompanyController extends BackendController
 			->execute();
 			
 		}
-		$this->redirect(array('company/index','companyId'=>  $this->companyId));
+		$this->redirect(array('company/index','companyId'=>$this->companyId));
 	}
 	private function getPrinterList(){
 		$printers = Printer::model()->findAll('dpid=:dpid',array(':dpid'=>$this->companyId)) ;

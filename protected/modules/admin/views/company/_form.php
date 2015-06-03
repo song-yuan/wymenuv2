@@ -21,7 +21,7 @@
 										$this->widget('application.extensions.swfupload.SWFUpload',array(
 											'callbackJS'=>'swfupload_callback',
 											'fileTypes'=> '*.jpg',
-											'buttonText'=> "<?php echo yii::t('app','上传产品图片');?>",
+											'buttonText'=> yii::t('app','上传产品图片'),
 											'imgUrlList' => array($model->logo),
 										));
 										?>
@@ -98,7 +98,7 @@
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-											<a href="<?php echo $this->createUrl('company/index');?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
+											<a href="<?php echo $this->createUrl('company/index', array('companyId' => $this->companyId));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
