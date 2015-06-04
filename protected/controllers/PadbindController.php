@@ -164,7 +164,9 @@ class PadbindController extends Controller
 			$tmp['id'] = $c['lid'];
 			$treeDataSource['data'][] = $tmp;
 		}
-		Yii::app()->end(json_encode($treeDataSource));
+		header('Content-type: application/Json');
+                $endjson=json_encode($treeDataSource);
+		Yii::app()->end("{$_GET['jsoncallback']}({$endjson});");
 	}
         
         public function actionGetOnePad(){
