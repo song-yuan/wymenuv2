@@ -182,7 +182,7 @@ class PadbindController extends Controller
 			$tmp['id'] = $c['lid'];
 			$treeDataSource['data'][] = $tmp;
 		}
-                header('Content-type: application/x-javascript');
+                header('Content-type: application/Json');
 		Yii::app()->end(json_encode($treeDataSource));
 	}
         
