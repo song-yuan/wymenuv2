@@ -98,7 +98,7 @@
                                                                                         
                                                                                     </ul>
                                                                             </div>
-                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','历史订单');?></a>
+                                                                            <!--<a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','历史订单');?></a>-->
                                                                         </div>
 								</div>
 								<div class="portlet-body" id="table-manage">

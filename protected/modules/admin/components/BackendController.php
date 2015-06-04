@@ -15,7 +15,7 @@ class BackendController extends CController
 		} elseif(Yii::app()->user->role > User::WAITER &&$controllerId != 'login'){
 			$this->redirect(Yii::app()->params['admin_return_url']);
 		}else {
-			$this->companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+			$this->companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
 		}
 		return true ;
 	}

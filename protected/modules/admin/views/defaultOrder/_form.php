@@ -40,10 +40,10 @@
 															<td><?php echo number_format($orderProduct['price'],2);?></td>
 															<td><?php echo $orderProduct['amount'];?></td>
                                                                                                                         <td><?php echo $orderProduct['weight'];?></td>
-                                                                                                                        <td><?php echo $orderProduct['is_giving']==1?'<span class="label label-sm label-warning">'+yii::t('app','是')+'</span>':yii::t('app','否');?></td>
-															<td><?php echo $orderProduct['is_print']==1?'<span class="label label-sm label-info">'+yii::t('app','是')+'</span>':yii::t('app','否');?></td>
-															<td><?php echo $orderProduct['is_retreat']==1?'<span class="label label-sm label-danger">'+yii::t('app','是')+'</span>':yii::t('app','否');?></td>
-                                                                                                                        <td class="red"><?php switch($orderProduct['is_waiting']){case '0': {echo yii::t('app','不等叫'); break;} case '1': {echo yii::t('app','等叫'); break;} case '2': { echo '<span class="label label-sm label-success">'+yii::t('app','已上菜')+'</span>'; break;}};?></td>
+                                                                                                                        <td><?php echo $orderProduct['is_giving']==1?'<span class="label label-sm label-warning">'.yii::t('app','是').'</span>':yii::t('app','否');?></td>
+															<td><?php echo $orderProduct['is_print']==1?'<span class="label label-sm label-info">'.yii::t('app','是').'</span>':yii::t('app','否'); ?></td>
+															<td><?php echo $orderProduct['is_retreat']==1?'<span class="label label-sm label-danger">'.yii::t('app','是').'</span>':yii::t('app','否');?></td>
+                                                                                                                        <td class="red"><?php switch($orderProduct['is_waiting']){case '0': {echo yii::t('app','不等叫'); break;} case '1': {echo yii::t('app','等叫'); break;} case '2': { echo '<span class="label label-sm label-success">'.yii::t('app','已上菜').'</span>'; break;}};?></td>
 															<td>
                                                                                                                             <?php foreach($allOrderProductTastes as $taste){if($taste['id']==$orderProduct['lid']) echo $taste['name'].' ';} ?>
                                                                                                                             <?php echo $orderProduct['taste_memo'];?>
