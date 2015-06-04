@@ -99,7 +99,7 @@
                         var padInfo=Androidwymenuprinter.getPadInfo();
                         $('#pad_info_id').val(padInfo);
                         //alert($('#pad_info_id').val());
-                        //$('#pad_info_id').val("00000000070000000009");
+                        //$('#pad_info_id').val("00000000070000000016");
                         $('#login-form').submit();
                     });
                 </script>
