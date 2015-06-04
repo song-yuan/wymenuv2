@@ -116,6 +116,7 @@
 		
 		<!-- END PAGE -->  
                 <script language="JavaScript" type="text/JavaScript">
+                    var globaldomain="";
                     $(document).ready(function() {
                             var companyid = "<?php if(empty($model->dpid)) echo "0000000000"; else echo  $model->dpid;?>";
                             var padid = "<?php if(empty($model->lid)) echo "0000000000"; else echo  $model->lid;?>";
@@ -131,6 +132,7 @@
                                     //dataType:'json',
                                     success:function(result){
                                             //alert(result);
+                                            globaldomain=result;
                                             //company_domain=result; 
                                            // alert(result+'padbind/getOnePad/companyid/'+companyid+'/padid/'+padid);
                                             $.ajax({
@@ -174,6 +176,7 @@
                                     //dataType:'json',
                                     success:function(result){
                                             //alert(result);
+                                            globaldomain=result;
                                             //company_domain=result; 
                                             $.ajax({
                                                 url:result+'padbind/getPadList',
@@ -217,8 +220,23 @@
                         }
                         if(Androidwymenuprinter.padSet(companyId,padId))
                         {
-                            alert("<?php echo yii::t('app','绑定成功，请重新打开应用程序！'); ?>");
-                            //local.href="";
+                            $.ajax({
+                                    url:globaldomain+'padbind/bind',
+                                    type: "GET", 
+                                    dataType: 'jsonp', 
+                                    jsonp: 'jsoncallback',
+                                    data: {"companyid":companyId,"padid":padId},
+                                    contentType: "application/json",
+                                    success:function(data){
+                                        if(data.result)
+                                        {
+                                            alert("<?php echo yii::t('app','绑定成功，请重新打开应用程序！'); ?>");
+                                            Androidwymenuprinter.appExitClear();
+                                        }else{
+                                            alert("<?php echo yii::t('app','绑定失败，请稍后再试！3'); ?>");   
+                                        }
+                                    }
+                            });                            
                         }
                         else
                         {
@@ -234,8 +252,24 @@
                             return;
                         }
                         if(Androidwymenuprinter.padDisbind(companyId,padId))
-                        {                                                                    
-                            alert("<?php echo yii::t('app','解除绑定成功，请重新打开应用程序！！'); ?>");
+                        {   
+                            $.ajax({
+                                    url:globaldomain+'padbind/disbind',
+                                    type: "GET", 
+                                    dataType: 'jsonp', 
+                                    jsonp: 'jsoncallback',
+                                    data: {"companyid":companyId,"padid":padId},
+                                    contentType: "application/json",
+                                    success:function(data){
+                                        if(data.result)
+                                        {
+                                            alert("<?php echo yii::t('app','解除绑定成功，请重新打开应用程序！！'); ?>");
+                                            Androidwymenuprinter.appExitClear();
+                                        }else{
+                                            alert("<?php echo yii::t('app','解除绑定失败，请稍后再试！3'); ?>");   
+                                        }
+                                    }
+                            });                            
                             //local.href="";//////
                         }
                         else

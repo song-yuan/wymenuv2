@@ -89,35 +89,43 @@ class PadbindController extends Controller
         public function actionBind(){
 		$companyid = Yii::app()->request->getParam('companyid',0);
                 $padid = Yii::app()->request->getParam('padid',0);
+                $ret=true;
                 if(empty($companyid)||empty($padid))
                 {
-                    echo "fail";
+                    $ret=false;
                 }
                 $pad=Pad::model()->find(' dpid=:companyId and lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
                 $pad->is_bind='1';
                 if($pad->save())
                 {
-                    echo "success";
+                    $ret=true;
                 }
+                $retjson=json_encode(array("result"=>$ret));
+                header('Content-type: application/Json');
+                Yii::app()->end("{$_GET['jsoncallback']}({$retjson});");
 	}
         
         public function actionDisbind(){
 		$companyid = Yii::app()->request->getParam('companyid',0);
                 $padid = Yii::app()->request->getParam('padid',0);
+                $ret=true;
                 if(empty($companyid)||empty($padid))
                 {
-                    echo "fail";
+                    $ret=false;
                 }
                 $pad=Pad::model()->find(' dpid=:companyId and lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
                 if(empty($pad))
                 {
-                    return "fail";
+                    $ret=false;
                 }
                 $pad->is_bind='0';
                 if($pad->save())
                 {
-                    echo "success";
+                    $ret=true;
                 }
+                $retjson=json_encode(array("result"=>$ret));
+                 header('Content-type: application/Json');
+                Yii::app()->end("{$_GET['jsoncallback']}({$retjson});");
 	}
         
         public function actionGetInfo(){
