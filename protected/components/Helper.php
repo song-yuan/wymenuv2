@@ -808,7 +808,7 @@ class Helper
                 }elseif($printer->printer_type=='1')//local
                 {                
                     //$ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
-                    $store->set($printer->dpid."_".$jobid,$contentCode,0,60);
+                    $store->set($printer->dpid."_".$jobid,$contentCode,0,600);//should 60
                     return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
                 }else{
                     return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','打印机类型错误！'));

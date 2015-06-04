@@ -188,7 +188,7 @@ $(document).ready(function(){
        	var company_id=padinfo.substr(0,10);
 //        var pad_id='0000000010';
 //        var company_id='0000000007';
-        alert(pad_id);alert(company_id);
+        //alert(pad_id);alert(company_id);
          $.ajax({
  			url:'/wymenuv2/product/printCheck',
  			async: false,
@@ -197,6 +197,7 @@ $(document).ready(function(){
                             var data = eval('(' + msg + ')');
                             if(data.status)
                             {
+                                alert(data.jobid);
  				if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                                 {
                                     alert(language_printer_check_success);
