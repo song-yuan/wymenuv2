@@ -132,8 +132,7 @@
                                     //dataType:'json',
                                     success:function(result){
                                             //alert(result);
-                                            globaldomain=result;
-                                            //company_domain=result; 
+                                            globaldomain=result; 
                                            // alert(result+'padbind/getOnePad/companyid/'+companyid+'/padid/'+padid);
                                             $.ajax({
                                                     //async: false,
@@ -176,8 +175,7 @@
                                     //dataType:'json',
                                     success:function(result){
                                             //alert(result);
-                                            globaldomain=result;
-                                            //company_domain=result; 
+                                            globaldomain=result; 
                                             $.ajax({
                                                 url:result+'padbind/getPadList',
                                                 type: "GET", 
@@ -233,14 +231,15 @@
                                             alert("<?php echo yii::t('app','绑定成功，请重新打开应用程序！'); ?>");
                                             Androidwymenuprinter.appExitClear();
                                         }else{
-                                            alert("<?php echo yii::t('app','绑定失败，请稍后再试！3'); ?>");   
+                                            alert("<?php echo yii::t('app','绑定失败，请稍后再试！'); ?>"+"1");  
                                         }
                                     }
-                            });                            
+                            });                             
+                            //local.href="";
                         }
                         else
                         {
-                            alert("<?php echo yii::t('app','绑定失败，请稍后再试！'); ?>");                                                                        
+                            alert("<?php echo yii::t('app','绑定失败，请稍后再试！'); ?>"+"2");                                                                        
                         }
                     });
                     
@@ -252,7 +251,7 @@
                             return;
                         }
                         if(Androidwymenuprinter.padDisbind(companyId,padId))
-                        {   
+                        {                                                                    
                             $.ajax({
                                     url:globaldomain+'padbind/disbind',
                                     type: "GET", 
@@ -266,15 +265,15 @@
                                             alert("<?php echo yii::t('app','解除绑定成功，请重新打开应用程序！！'); ?>");
                                             Androidwymenuprinter.appExitClear();
                                         }else{
-                                            alert("<?php echo yii::t('app','解除绑定失败，请稍后再试！3'); ?>");   
+                                            alert("<?php echo yii::t('app','解除绑定失败，请稍后再试！'); ?>"+"1");    
                                         }
                                     }
-                            });                            
+                            });                           
                             //local.href="";//////
                         }
                         else
                         {
-                            alert("<?php echo yii::t('app','解除绑定失败，请稍后再试！'); ?>");                                                                        
+                            alert("<?php echo yii::t('app','解除绑定失败，请稍后再试！'); ?>"+"2");                                                                        
                         }
                     });                    
                 </script>
