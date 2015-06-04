@@ -24,7 +24,8 @@ class PadbindController extends Controller
                             //var_dump($modelpad->lid);exit;//
                         }else{
                             $modelpad=Pad::model()->find(" dpid=:dpid and lid=:lid",array(":dpid"=>substr($loginform["pad_info"],0,10),":lid"=>substr($loginform["pad_info"],10,10)));
-                        }                 
+                        }   
+                        //var_dump($modelpad);exit;
                         $this->render('dobind',array('model'=>$modelpad));
                         exit;
                     }
