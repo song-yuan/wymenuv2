@@ -119,44 +119,50 @@
                     $(document).ready(function() {
                             var companyid = "<?php if(empty($model->dpid)) echo "0000000000"; else echo  $model->dpid;?>";
                             var padid = "<?php if(empty($model->lid)) echo "0000000000"; else echo  $model->lid;?>";
+                            //alert('<?php echo $this->createUrl('padbind/domain');?>/companyid/'+companyid);
                             if(companyid=="0000000000")
                             {
                                 return;
                             }
-                            var company_domain="";
                             $.ajax({
                                     url:'<?php echo $this->createUrl('padbind/domain');?>/companyid/'+companyid,
                                     type:'GET',
-                                    dataType:'json',
+                                    //async: false,
+                                    //dataType:'json',
                                     success:function(result){
-                                            alert(result);
-                                            company_domain=result;                                            
-                                    }
+                                            //alert(result);
+                                            //company_domain=result; 
+                                           // alert(result+'padbind/getOnePad/companyid/'+companyid+'/padid/'+padid);
+                                            $.ajax({
+                                                    //async: false,
+                                                    url:result+'padbind/getOnePad',
+                                                    type: "GET", 
+                                                    dataType: 'jsonp', 
+                                                    jsonp: 'jsoncallback',
+                                                    data: {"companyid":companyid,"padid":padid},
+                                                    contentType: "application/json",
+                                                    success:function(result){
+                                                           // alert(result.data.length);
+                                                            var str = '';                                                                                            
+                                                            if(result.data.length){
+                                                                    $.each(result.data,function(index,value){
+                                                                        if(value.id==padid)
+                                                                        {
+                                                                            str = str + '<option value="'+value.id+' selected="selected">'+value.name+'</option>';
+                                                                        }
+                                                                    });                                                                                                                                                                                                       
+                                                            }
+                                                            $('#Pad_lid').html(str);
+                                                            $('#Pad_lid').attr("disabled","disabled");
+                                                    }
+                                            });
+                                    },
                                     error:function(){
                                         alert("<?php echo yii::t('app','获取服务地址错误'); ?>");
                                         return false;
                                     }
                             });
-                            alert(company_domain+'/padbind/getOnePad/companyid/'+companyid+'/padid/'+padid);
-                            $.ajax({
-                                    url:company_domain+'/padbind/getOnePad/companyid/'+companyid+'/padid/'+padid,
-                                    type:'GET',
-                                    dataType:'json',
-                                    success:function(result){
-                                            //alert(result.data.length);
-                                            var str = '';                                                                                            
-                                            if(result.data.length){
-                                                    $.each(result.data,function(index,value){
-                                                        if(value.id==padid)
-                                                        {
-                                                            str = str + '<option value="'+value.id+' selected="selected">'+value.name+'</option>';
-                                                        }
-                                                    });                                                                                                                                                                                                       
-                                            }
-                                            $('#Pad_lid').html(str);
-                                            $('#Pad_lid').attr("disabled","disabled");
-                                    }
-                            });
+                            
                     });
                     
                     $('#Pad_dpid').change(function(){
@@ -165,32 +171,36 @@
                             $.ajax({
                                     url:'<?php echo $this->createUrl('padbind/domain');?>/companyid/'+companyid,
                                     type:'GET',
-                                    dataType:'json',
+                                    //dataType:'json',
                                     success:function(result){
-                                            alert(result);
-                                            company_domain=result;                                            
-                                    }
+                                            //alert(result);
+                                            //company_domain=result; 
+                                            $.ajax({
+                                                url:result+'padbind/getPadList',
+                                                type: "GET", 
+                                                dataType: 'jsonp', 
+                                                jsonp: 'jsoncallback',
+                                                data: {"companyid":companyid},
+                                                contentType: "application/json",
+                                                success:function(result){
+                                                        //alert(result.data);
+                                                        var str = '<option value="">'+"<?php echo yii::t('app','-- 请选择 --'); ?>"+'</option>';                                                                                            
+                                                        if(result.data.length){
+                                                                $.each(result.data,function(index,value){
+                                                                        str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+                                                                });                                                                                                                                                                                                       
+                                                        }
+                                                        $('#Pad_lid').html(str); 
+                                                }
+                                        });
+                                    },
                                     error:function(){
                                         alert("<?php echo yii::t('app','获取服务地址错误'); ?>");
                                         return false;
                                     }
                             });
-                            alert(company_domain+'/padbind/getOnePad/companyid/'+companyid+'/padid/'+padid);
-                            $.ajax({
-                                    url:'<?php echo $this->createUrl('padbind/getPadList');?>/companyid/'+companyid,
-                                    type:'GET',
-                                    dataType:'json',
-                                    success:function(result){
-                                            //alert(result.data);
-                                            var str = '<option value="">'+"<?php echo yii::t('app','-- 请选择 --'); ?>"+'</option>';                                                                                            
-                                            if(result.data.length){
-                                                    $.each(result.data,function(index,value){
-                                                            str = str + '<option value="'+value.id+'">'+value.name+'</option>';
-                                                    });                                                                                                                                                                                                       
-                                            }
-                                            $('#Pad_lid').html(str); 
-                                    }
-                            });
+                            
+                            
                     });
 
                     $('#btnPadSet').click(function(){ 
