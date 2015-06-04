@@ -32,7 +32,7 @@
     </style>
    
                                                         <div class="popBox1" id="pxbox_button">
-                                                            <h4><?php echo yii::t('app','确定要干掉');?></h4>
+                                                            <h4></h4>
                                                             <div class="button-content">
 
                                                             </div>

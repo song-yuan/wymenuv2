@@ -152,7 +152,7 @@
                                     dataType:'json',
                                     success:function(result){
                                             //alert(result.data);
-                                            var str = '<option value="">'+<?php echo yii::t('app','-- 请选择 --'); ?>+'</option>';                                                                                            
+                                            var str = '<option value="">'+"<?php echo yii::t('app','-- 请选择 --'); ?>"+'</option>';                                                                                            
                                             if(result.data.length){
                                                     $.each(result.data,function(index,value){
                                                             str = str + '<option value="'+value.id+'">'+value.name+'</option>';
@@ -168,7 +168,7 @@
                         var padId=$('#Pad_lid').val();
                         if(companyId=="0000000000"||padId=="0000000000")
                         {
-                            alert("<?php echo yii::t('app','请选择店铺和打印机！'); ?>""");
+                            alert("<?php echo yii::t('app','请选择店铺和打印机！'); ?>");
                             return;
                         }
                         if (typeof Androidwymenuprinter == "undefined") {

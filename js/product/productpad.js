@@ -167,7 +167,9 @@ $(document).ready(function(){
 		totalNum();
 	});
     $('#pad-disbind-menu').on('click',function(){
-            location.href='../../../../../padbind/login';	
+            //location.href='../../../../../padbind/login';
+            //绑定和解绑必须到我们的服务器。
+            location.href='http://menu.wymenu.com/wymenuv2/padbind/login';
 	});
      //打印测试关闭
     $('#printerClose').on('click',function(){
@@ -197,7 +199,7 @@ $(document).ready(function(){
                             var data = eval('(' + msg + ')');
                             if(data.status)
                             {
-                                alert(data.jobid);
+                                //alert(data.jobid);
  				if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                                 {
                                     alert(language_printer_check_success);
