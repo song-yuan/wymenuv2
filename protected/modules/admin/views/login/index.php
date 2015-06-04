@@ -34,7 +34,8 @@
 				<button type="submit" class="btn blue pull-right">
 				<?php echo yii::t('app','登录');?> <i class="m-icon-swapright m-icon-white"></i>
 				</button> 
-                                <a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>"  id="bindbutton" class="blue" ><?php echo yii::t('app','解除绑定');?></a>
+                                <!--<a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>"  id="bindbutton" class="blue" ><?php echo yii::t('app','解除绑定');?></a>-->
+                                <a href="http://menu.wymenu.com/wymenuv2/padbind/login"  id="bindbutton" class="blue" ><?php echo yii::t('app','解除绑定');?></a>
 			</div>
 			<!-- 
 			<div class="forget-password">
