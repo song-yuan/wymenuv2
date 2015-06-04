@@ -70,6 +70,7 @@ class DefaultOrderController extends BackendController
                 //var_dump($allOrderProductTastes);exit;
                 
                 $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                //var_dump($productTotal);exit;
                 if($siteNo->is_temp=='1')
                 {
                     $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
@@ -78,7 +79,7 @@ class DefaultOrderController extends BackendController
                 }
                 $order->should_total=$total['total'];
 		//var_dump($order);exit;
-		
+		//var_dump($total);exit;
 		//$paymentMethods = $this->getPaymentMethodList();
 		$this->render('order' , array(
 				'model'=>$order,

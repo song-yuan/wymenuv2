@@ -65,7 +65,7 @@
 										$this->widget('application.extensions.swfupload.SWFUpload',array(
 											'callbackJS'=>'swfupload_callback',
 											'fileTypes'=> '*.jpg',
-											'buttonText'=> "<?php echo yii::t('app','上传产品图片');?>",
+											'buttonText'=> yii::t('app','上传产品图片'),
 											'companyId' => $model->dpid,
 											'imgUrlList' => array($model->main_picture),
 										));

@@ -59,7 +59,7 @@
                                                                         <div class="col-md-4"><span class="label label-default center"><?php echo yii::t('app','原价');?></span></div>
                                                                 </div>
                                                                 
-                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
+                                                        </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
                                                 </div>
                                                 <div class="form-actions fluid <?php if($isset=='0') echo 'hidden';?>" id="set_panel">
                                                                 <div class="form-group">

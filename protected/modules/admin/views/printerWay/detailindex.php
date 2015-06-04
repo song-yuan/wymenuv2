@@ -87,10 +87,10 @@
 						<tr><td><?php echo yii::t('app','还没有添加详细打印方案');?></td></tr>
 						<?php endif;?>
 					</table>
-		<<?php echo yii::t('app','!-- 缺少确认和返回DIV --');?>>
+		
 					<div class="form-actions fluid">
 						<div class="col-md-offset-3 col-md-9">
-									<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+									<!--<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>-->
 									<a href="<?php echo $this->createUrl('printerWay/index' , array('companyId' => $pwmodel->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 						</div>
 					</div>

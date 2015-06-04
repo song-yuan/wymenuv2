@@ -93,12 +93,13 @@
                 <script language="JavaScript" type="text/JavaScript">
                     $('#btnAdminLogin').click(function(){
                         if (typeof Androidwymenuprinter == "undefined") {
-                            alert("<?php echo yii::t('app','绑定成功，请重新打开应用程序！'); ?>");
+                            alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！'); ?>");
                             return;
                         } 
                         var padInfo=Androidwymenuprinter.getPadInfo();
                         $('#pad_info_id').val(padInfo);
-                        //$('#pad_info_id').val("00000000010000000002");
+                        alert($('#pad_info_id').val());
+                        //$('#pad_info_id').val("00000000070000000009");
                         $('#login-form').submit();
                     });
                 </script>
