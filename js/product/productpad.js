@@ -206,17 +206,17 @@ $(document).ready(function(){
                                     isPrintChecked=true;
                                     $('#print_check').hide();
                                 }else{
-                                    //alert(language_printer_check_falil);
-                                    alert("fail1");
+                                    alert(language_printer_check_falil);
+                                    //alert("fail1");
                                 }
                             }else{
-                                //alert(language_printer_check_falil);
-                                alert("fail2");
+                                alert(language_printer_check_falil);
+                                //alert("fail2");
                             }
  			},
                         error:function(){
- 				//alert(language_printer_check_falil);
-                                alert("fail3");
+ 				alert(language_printer_check_falil);
+                                //alert("fail3");
  			},
  		});
                  

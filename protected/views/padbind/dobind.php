@@ -123,8 +123,23 @@
                             {
                                 return;
                             }
+                            var company_domain="";
                             $.ajax({
-                                    url:'<?php echo $this->createUrl('padbind/getOnePad');?>/companyid/'+companyid+'/padid/'+padid,
+                                    url:'<?php echo $this->createUrl('padbind/domain');?>/companyid/'+companyid,
+                                    type:'GET',
+                                    dataType:'json',
+                                    success:function(result){
+                                            alert(result);
+                                            company_domain=result;                                            
+                                    }
+                                    error:function(){
+                                        alert("<?php echo yii::t('app','获取服务地址错误'); ?>");
+                                        return false;
+                                    }
+                            });
+                            alert(company_domain+'/padbind/getOnePad/companyid/'+companyid+'/padid/'+padid);
+                            $.ajax({
+                                    url:company_domain+'/padbind/getOnePad/companyid/'+companyid+'/padid/'+padid,
                                     type:'GET',
                                     dataType:'json',
                                     success:function(result){
@@ -146,6 +161,21 @@
                     
                     $('#Pad_dpid').change(function(){
                             var companyid = $(this).val();
+                            var company_domain="";
+                            $.ajax({
+                                    url:'<?php echo $this->createUrl('padbind/domain');?>/companyid/'+companyid,
+                                    type:'GET',
+                                    dataType:'json',
+                                    success:function(result){
+                                            alert(result);
+                                            company_domain=result;                                            
+                                    }
+                                    error:function(){
+                                        alert("<?php echo yii::t('app','获取服务地址错误'); ?>");
+                                        return false;
+                                    }
+                            });
+                            alert(company_domain+'/padbind/getOnePad/companyid/'+companyid+'/padid/'+padid);
                             $.ajax({
                                     url:'<?php echo $this->createUrl('padbind/getPadList');?>/companyid/'+companyid,
                                     type:'GET',
