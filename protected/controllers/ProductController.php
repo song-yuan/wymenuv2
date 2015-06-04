@@ -88,7 +88,7 @@ class ProductController extends Controller
                 //要判断打印机类型错误，必须是local。
                 if($pad->printer->printer_type!='1')
                 {
-                    Yii::app()->end(json_encode(array('status'=>false,'dpid'=>$companyId,'jobid'=>"0",'type'=>'local','msg'=>'必须是本地打印机！')));
+                    Yii::app()->end(json_encode(array('status'=>false,'dpid'=>$companyId,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','必须是本地打印机！'))));
                 }else{
                     Yii::app()->end(json_encode(Helper::printCheck($pad)));
                 }
