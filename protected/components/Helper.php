@@ -799,7 +799,7 @@ class Helper
                     //$store = Store::instance('wymenu');
                     //echo 'ss';exit;
                     $clientId=$store->get("client_".$printer->dpid);
-                    var_dump($clientId,$print_data);exit;
+                    //var_dump($clientId,$print_data);exit;
                     if(!empty($clientId))
                     {
                         Gateway::sendToClient($clientId,json_encode($print_data));
