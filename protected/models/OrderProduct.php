@@ -125,6 +125,7 @@ class OrderProduct extends CActiveRecord
                 $criteria->compare('main_id',$this->main_id,true);
 		$criteria->compare('product_id',$this->product_id,true);
 		$criteria->compare('is_retreat',$this->is_retreat,true);
+                $criteria->compare('is_print',$this->is_print,true);
 		$criteria->compare('price',$this->price,true);
 		$criteria->compare('amount',$this->amount);
 		$criteria->compare('zhiamount',$this->zhiamount);
