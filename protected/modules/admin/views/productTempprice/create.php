@@ -26,7 +26,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','时价产品管理'),'subhead'=>yii::t('app','添加时价产品'),'breadcrumbs'=>array(array('word'=>yii::t('app','时价产品管理'),'url'=>$this->createUrl('productTempprice/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加优时价产品'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','时价产品管理'),'subhead'=>yii::t('app','添加时价产品'),'breadcrumbs'=>array(array('word'=>yii::t('app','时价产品管理'),'url'=>$this->createUrl('productTempprice/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加时价产品'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
