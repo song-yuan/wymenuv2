@@ -85,6 +85,7 @@ class ProductController extends Controller
                 $companyId = Yii::app()->request->getParam('companyId');
                 $padId = Yii::app()->request->getParam('padId');
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,'lid'=>$padId));
+                //var_dump($pad);exit;
                 //要判断打印机类型错误，必须是local。
                 if($pad->printer->printer_type!='1')
                 {

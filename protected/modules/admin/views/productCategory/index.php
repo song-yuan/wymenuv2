@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','产品类型管理'),'subhead'=>yii::t('app','产品类型列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','产品类型管理'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','产品分类管理'),'subhead'=>yii::t('app','产品分类列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','产品分类管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -39,7 +39,7 @@
 						<div class="col-md-12">
 					<div class="portlet purple box">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','商品类目管理');?></div>
+							<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','产品分类管理');?></div>
 							<div class="actions">
 								<a class="btn blue add_btn" pid="0" data-toggle="modal"><i class="fa fa-plus"></i> <?php echo yii::t('app','添加一级类目');?></a>
 							</div>

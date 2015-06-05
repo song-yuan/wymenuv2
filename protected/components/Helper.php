@@ -424,8 +424,10 @@ class Helper
 		if(empty($printer)) {
                         return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}
+                
 		$listData = array(Helper::getPlaceholderLenBoth(yii::t('app','打印机校正成功！'), 48));
 		array_push($listData,str_pad('',48,'-'));
+                //var_dump($listData);exit;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";     
 		return Helper::printConetent($printer,$listData,"",$sufcode);		
@@ -758,6 +760,7 @@ class Helper
         {
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
+                //var_dump($store);exit;
                 $contentCode="";
                 //内容编码
                 if($printer->language=='1')//zh-cn GBK
@@ -796,7 +799,7 @@ class Helper
                     //$store = Store::instance('wymenu');
                     //echo 'ss';exit;
                     $clientId=$store->get("client_".$printer->dpid);
-                    //var_dump($clientId,$print_data);exit;
+                    var_dump($clientId,$print_data);exit;
                     if(!empty($clientId))
                     {
                         Gateway::sendToClient($clientId,json_encode($print_data));
