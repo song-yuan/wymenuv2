@@ -854,7 +854,9 @@ class DefaultOrderController extends BackendController
                         $siteNo->save();
                         $transaction->commit();
                         $jobids=array();
+                        //var_dump($order);exit;
                         $tempret=Helper::printKitchenAll($order , $site,$siteNo,false); 
+                        //var_dump($tempret);exit;
                         if($tempret['status'])
                         {
                             array_push($jobids,$tempret['jobid']."_".$order->lid);
@@ -866,8 +868,10 @@ class DefaultOrderController extends BackendController
                         }  else {
                             
                             $ret=$tempret;
+                             
                             Yii::app()->end(json_encode($ret));
                         }
+                       
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
                         $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务发布异常'));
