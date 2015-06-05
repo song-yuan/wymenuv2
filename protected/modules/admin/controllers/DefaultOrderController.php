@@ -855,12 +855,18 @@ class DefaultOrderController extends BackendController
                         $transaction->commit();
                         $jobids=array();
                         $tempret=Helper::printKitchenAll($order , $site,$siteNo,false); 
-                        array_push($jobids,$tempret['jobid']."_".$order->lid);
-                        //var_dump(json_encode($jobids));exit;
-                        Gateway::getOnlineStatus();
-                        $store = Store::instance('wymenu');
-                        $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);                        
-                        $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务正常发布'));
+                        if($tempret['status'])
+                        {
+                            array_push($jobids,$tempret['jobid']."_".$order->lid);
+                            //var_dump(json_encode($jobids));exit;
+                            Gateway::getOnlineStatus();
+                            $store = Store::instance('wymenu');
+                            $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);                        
+                            $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务正常发布'));
+                        }  else {
+                            Yii::app()->end(json_encode($ret));
+                            //$ret=$tempret;
+                        }
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
                         $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务发布异常'));
