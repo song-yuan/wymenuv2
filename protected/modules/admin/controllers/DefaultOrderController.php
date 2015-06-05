@@ -867,7 +867,7 @@ class DefaultOrderController extends BackendController
                             $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务正常发布'));
                         }  else {
                             
-                            $ret=$tempret;
+                            $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>$tempret['msg']);
                              
                             //Yii::app()->end(json_encode($ret));
                         }
