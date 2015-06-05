@@ -190,10 +190,10 @@ $(document).ready(function(){
        	var company_id=padinfo.substr(0,10);
 //        var pad_id='0000000010';
 //        var company_id='0000000007';
-        //alert(pad_id);alert(company_id);
+        alert(pad_id);alert(company_id);
          $.ajax({
  			url:'/wymenuv2/product/printCheck',
- 			//async: false,
+ 			async: false,
  			data:"companyId="+company_id+'&padId='+pad_id,
  			success:function(msg){
                             var data = eval('(' + msg + ')');
