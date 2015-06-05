@@ -30,10 +30,14 @@
                                             <script>
                                             var interval;
                                             var waitingsecond=10;
+                                            var retstatus="<?php echo $ret['status'];?>";                                  
+                                            
                                             $(document).ready(function() {
                                                 clearTimeout(interval);
-                                                interval = setInterval(printStatus,"1000"); 
-                                                
+                                                if(retstatus)
+                                                {
+                                                    interval = setInterval(printStatus,"1000"); 
+                                                }                                                
                                             });
                                             //全部成功自动刷新，有失败任务，停止刷新页面， 
                                             //点击确定，回滚失败的任务单品打印状态，提示逐个重新厨打。
