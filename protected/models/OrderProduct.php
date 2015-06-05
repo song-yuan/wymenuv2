@@ -12,6 +12,7 @@
  * @property string $set_id
  * @property string $product_id
  * @property string $is_retreat
+ * @property string $is_print
  * @property string $price
  * @property integer $amount
  * @property integer $zhiamount
