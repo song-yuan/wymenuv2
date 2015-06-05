@@ -869,13 +869,13 @@ class DefaultOrderController extends BackendController
                             
                             $ret=$tempret;
                              
-                            Yii::app()->end(json_encode($ret));
+                            //Yii::app()->end(json_encode($ret));
                         }
                        
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
                         $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务发布异常'));
-                        Yii::app()->end(json_encode($ret));
+                        //Yii::app()->end(json_encode($ret));
                 }
                 $this->renderPartial('printresultlistall' , array(
                                 'orderId'=>$orderId,
