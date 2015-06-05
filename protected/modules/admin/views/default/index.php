@@ -95,7 +95,7 @@
             var gop=0;
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
-                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>'); 
+                //$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>'); 
                 
             });            
             $('.tabtitle').on('click', function(){

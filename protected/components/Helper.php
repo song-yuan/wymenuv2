@@ -568,6 +568,10 @@ class Helper
                 }
                 //var_dump($orderProducts);exit;
                 $printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid',array(':floorid'=>$floor_id,':pwi'=>$orderProducts[0]->product->printer_way_id,':dpid'=>$order->dpid));
+                if(empty($printwaydetails))
+                {
+                    return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','下单区域没有设定打印方案！'));
+                }
                 //var_dump($printwaydetails);exit;	
 		foreach ($printwaydetails as $printway) {
                         $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$printway->printer_id,':dpid'=>$order->dpid));
