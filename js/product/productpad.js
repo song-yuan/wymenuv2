@@ -193,7 +193,7 @@ $(document).ready(function(){
         //alert(pad_id);alert(company_id);
          $.ajax({
  			url:'/wymenuv2/product/printCheck',
- 			async: false,
+ 			//async: false,
  			data:"companyId="+company_id+'&padId='+pad_id,
  			success:function(msg){
                             var data = eval('(' + msg + ')');
@@ -206,16 +206,16 @@ $(document).ready(function(){
                                     isPrintChecked=true;
                                     $('#print_check').hide();
                                 }else{
-                                    alert(language_printer_check_falil);
+                                    alert(language_printer_check_falil+"1");
                                     //alert("fail1");
                                 }
                             }else{
-                                alert(language_printer_check_falil);
+                                alert(language_printer_check_falil+"2");
                                 //alert("fail2");
                             }
  			},
                         error:function(){
- 				alert(language_printer_check_falil);
+ 				alert(language_printer_check_falil+"3");
                                 //alert("fail3");
  			},
  		});
