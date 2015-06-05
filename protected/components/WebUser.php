@@ -13,11 +13,16 @@ class WebUser extends CWebUser
 		'3' => array('login','default' , 'defaultSite','defaultController','order'),//waiter 服务员 //
 		'4' => array(),
 	);
+        
+        //public static $loginrole="0";
 	public function login($identity,$duration=0)
 	{
 		if(!$this->_checkMod($identity->role)){
 			return false ;
 		}
+                
+                //::app()->session['loginrole']=$identity->role;
+                //var_dump(Yii::app()->session);exit;
 		$id=$identity->getId();
                 
 		$states=$identity->getPersistentStates();
