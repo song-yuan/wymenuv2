@@ -90,7 +90,7 @@
 	</div>
         <script type="text/javascript">
             var gssid=0;
-            var gstemp=0;
+            var gsistemp=0;
             var gstypeid=0;
             var gop=0;
             $(document).ready(function() {
