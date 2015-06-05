@@ -190,7 +190,7 @@ $(document).ready(function(){
        	var company_id=padinfo.substr(0,10);
 //        var pad_id='0000000010';
 //        var company_id='0000000007';
-        //alert(pad_id);alert(company_id);
+        alert(pad_id);alert(company_id);
          $.ajax({
  			url:'/wymenuv2/product/printCheck',
  			async: false,
@@ -206,16 +206,16 @@ $(document).ready(function(){
                                     isPrintChecked=true;
                                     $('#print_check').hide();
                                 }else{
-                                    alert(language_printer_check_falil);
+                                    alert(language_printer_check_falil+"1");
                                     //alert("fail1");
                                 }
                             }else{
-                                alert(language_printer_check_falil);
+                                alert(language_printer_check_falil+"2");
                                 //alert("fail2");
                             }
  			},
                         error:function(){
- 				alert(language_printer_check_falil);
+ 				alert(language_printer_check_falil+"3");
                                 //alert("fail3");
  			},
  		});

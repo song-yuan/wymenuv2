@@ -155,7 +155,7 @@
                             }
                             var padinfo=Androidwymenuprinter.getPadInfo();
                             var pad_id=padinfo.substr(10,10);
-                            //var pad_id="0000000001";
+                            //var pad_id="0000000016";
                             var $modal=$('#portlet-config');
                             $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId));?>/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"+'/padId/'+pad_id
                                     ,'', function(){

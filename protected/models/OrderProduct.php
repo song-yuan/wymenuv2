@@ -12,6 +12,7 @@
  * @property string $set_id
  * @property string $product_id
  * @property string $is_retreat
+ * @property string $is_print
  * @property string $price
  * @property integer $amount
  * @property integer $zhiamount
@@ -44,12 +45,12 @@ class OrderProduct extends CActiveRecord
 			array('lid, dpid, order_id, taste_memo', 'required'),
 			array('lid, dpid, order_id, amount, zhiamount', 'numerical', 'integerOnly'=>true),
 			array('main_id,set_id, product_id, price, weight', 'length', 'max'=>10),
-			array('is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
+			array('is_print, is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
 			array('taste_memo', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, order_id, main_id, set_id, product_id, is_retreat, price, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, order_id, main_id, set_id, product_id, is_retreat, is_print, price, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,6 +86,7 @@ class OrderProduct extends CActiveRecord
                         'main_id' => yii::t('app','主菜'),
 			'product_id' => yii::t('app','产品编号'),
 			'is_retreat' => '0非退菜，1退菜',
+                        'is_print' => yii::t('app','厨打'),
 			'price' => yii::t('app','下单时价格'),
 			'amount' => yii::t('app','下单数量'),
 			'zhiamount' => yii::t('app','下单只数'),
@@ -124,6 +126,7 @@ class OrderProduct extends CActiveRecord
                 $criteria->compare('main_id',$this->main_id,true);
 		$criteria->compare('product_id',$this->product_id,true);
 		$criteria->compare('is_retreat',$this->is_retreat,true);
+                $criteria->compare('is_print',$this->is_print,true);
 		$criteria->compare('price',$this->price,true);
 		$criteria->compare('amount',$this->amount);
 		$criteria->compare('zhiamount',$this->zhiamount);

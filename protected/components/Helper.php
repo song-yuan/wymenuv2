@@ -424,8 +424,10 @@ class Helper
 		if(empty($printer)) {
                         return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}
+                
 		$listData = array(Helper::getPlaceholderLenBoth(yii::t('app','打印机校正成功！'), 48));
 		array_push($listData,str_pad('',48,'-'));
+                //var_dump($listData);exit;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";     
 		return Helper::printConetent($printer,$listData,"",$sufcode);		
@@ -558,11 +560,13 @@ class Helper
                 {
                     $floor_id=$site->floor_id;
                 }
-                $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id=:id and t.dpid=:dpid and t.delete_flag=0' , array(':id'=>$order->lid,':dpid'=>$order->dpid));
+                $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id=:id and t.dpid=:dpid and t.is_print=0 and t.delete_flag=0' , array(':id'=>$order->lid,':dpid'=>$order->dpid));
+                //var_dump($orderProducts);exit;
                 if(empty($orderProducts)) 
                 {
-                    return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
+                    return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
                 }
+                //var_dump($orderProducts);exit;
                 $printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid',array(':floorid'=>$floor_id,':pwi'=>$orderProducts[0]->product->printer_way_id,':dpid'=>$order->dpid));
                 //var_dump($printwaydetails);exit;	
 		foreach ($printwaydetails as $printway) {
@@ -758,6 +762,7 @@ class Helper
         {
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
+                //var_dump($store);exit;
                 $contentCode="";
                 //内容编码
                 if($printer->language=='1')//zh-cn GBK
