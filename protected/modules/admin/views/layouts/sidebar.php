@@ -13,6 +13,7 @@
 					<span class="title"><?php echo yii::t('app','首页');?></span>					
 					</a>
 				</li>
+                                <?php if(Yii::app()->user->role < '3') : ?>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' ,'payMethod', 'companyWifi', 'user'))) echo 'active';?>">
 					<a href="">
                                             <i style="width:10px;" class="fa fa-cog"></i> 
@@ -175,6 +176,7 @@
 					</a>
 				</li>
 				-->
+                                <?php endif; ?>
 			</ul>
 			<!-- END SIDEBAR MENU -->
 		</div>

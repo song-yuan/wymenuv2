@@ -38,6 +38,7 @@ class LoginController extends BackendController
 	{
                 //$language=Yii::app()->session['language'];
 		Yii::app()->user->logout();
+                //Yii::app()->user->
 		//$this->redirect(array('index','language'=>$language));
                 $this->redirect('index');
 	}
