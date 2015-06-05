@@ -83,8 +83,8 @@
 								<td ><?php echo $model->name;?></td>
                                                                 <td ><?php if(empty($model->printer)) echo ""; else echo $model->printer->name;?></td>
 								<td ><?php echo $model->server_address ;?></td>
-                                                                <td ><?php if($model->pad_type=='0') echo "<?php echo yii::t('app','收银台');?>"; elseif($model->pad_type=='1') echo "<?php echo yii::t('app','日本点单pad');?>"; elseif($model->pad_type=='2') echo "<?php echo yii::t('app','中国点单PAD');?>";?></td>
-								<td ><?php if($model->is_bind=='0') echo "<?php echo yii::t('app','未绑定');?>"; elseif($model->is_bind=='1') echo "<?php echo yii::t('app','已绑定');?>";?></td>
+                                                                <td ><?php if($model->pad_type=='0') echo yii::t('app','收银台'); elseif($model->pad_type=='1') echo yii::t('app','日本点单pad'); elseif($model->pad_type=='2') echo yii::t('app','中国点单PAD');?></td>
+								<td ><?php if($model->is_bind=='0') echo yii::t('app','未绑定'); elseif($model->is_bind=='1') echo yii::t('app','已绑定');?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('pad/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
