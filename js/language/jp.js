@@ -11,19 +11,19 @@ var language_duotuliulan="&nbsp;&nbsp;画面大&nbsp;&nbsp;";
 //productpad.js
 var language_printer_check_success="プリンターは矯正することに成功します";
 
-var language_click_nextpage="点击获取下一页";
-
+var language_click_nextpage="クリックして、次の画面へ";
+ 
 //pic.js
-var language_url_notnull="URL地址不能为空";
+var language_url_notnull="URLをいれてください";
 //productpad.js
-var language_notget_padinfo="无法获取PAD设备信息，请在PAD中运行该程序！";
-var language_printer_check_falil="打印机校正失败，请重试！";
-var language_clean_exit="清除完缓存后，应用程序会自动退出，请重新打开！确定清除吗？";
-var language_no_bigpic="没有大图！";
-var language_printer_check_atfirst="请先进行打印机校正！";
-var language_print_success="打印成功";
-var language_print_pad_fail="PAD打印失败！，请确认打印机连接好后再试！";
-var language_taste_select="做法口味选择:";
-var language_call_service="全单呼叫服务员:";
-var language_calltype_select="请选择呼叫类型!";
-var language_productnum_modify="修改产品数量:";
+var language_notget_padinfo="PADの情報がありません、PADにアプリを！";
+var language_printer_check_falil="プリンターチェック失敗、もう一度！";
+var language_clean_exit="メモリを削除されたら、アプリは止まります。再起動が必要です。削除しますか？";
+var language_no_bigpic="画面がありません！";
+var language_printer_check_atfirst="プリンターをチェックしてください！";
+var language_print_success="印刷完成";
+var language_print_pad_fail="PAD印刷失敗！プリンターをチェックして、もう一度！";
+var language_taste_select="味好み選択:";
+var language_call_service="店員を呼ぶ:";
+var language_calltype_select="呼び方を選択!";
+var language_productnum_modify="メニュー数を修正:";
