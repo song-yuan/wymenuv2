@@ -864,8 +864,9 @@ class DefaultOrderController extends BackendController
                             $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);                        
                             $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务正常发布'));
                         }  else {
+                            
+                            $ret=$tempret;
                             Yii::app()->end(json_encode($ret));
-                            //$ret=$tempret;
                         }
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
