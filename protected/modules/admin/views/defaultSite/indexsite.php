@@ -212,7 +212,7 @@
                         return false;                        
                     }
                 }
-                $('#chatAudio')[0].play();
+                //$('#chatAudio')[0].play();
                 //$modal.find('.modal-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){
                  // $modal.modal();
                   //$modal.show();
