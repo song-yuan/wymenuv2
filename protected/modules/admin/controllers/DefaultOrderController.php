@@ -1061,7 +1061,7 @@ class DefaultOrderController extends BackendController
                     }else{
                         if($jobresult=="success")
                         {
-                            $sqlorderproduct="update nb_order_product set is_print='1' where dpid=:companyId and order_id=:orderId";
+                            $sqlorderproduct="update nb_order_product set is_print='1',product_order_status='1' where dpid=:companyId and order_id=:orderId";
                             $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
                             $commandorderproduct->bindValue(":orderId" , $orderId);
                             $commandorderproduct->bindValue(":companyId" , $companyId);
