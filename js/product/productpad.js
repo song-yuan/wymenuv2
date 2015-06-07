@@ -313,7 +313,7 @@ $(document).ready(function(){
              		}
                      $('.total-price').html(total);
 					 $('.total-num').html(0);
-                     alert(language_print_success);
+                     //alert(language_print_success);
                  }
                  else
                  {
