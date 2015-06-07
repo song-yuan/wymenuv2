@@ -37,10 +37,11 @@ class ProductSetClass
 		return $price;
 	}
 	//获取套餐信息
-	public static function GetProductSetName($setId){
-		$sql = 'select * from nb_product_set where lid=:lid';
+	public static function GetProductSetName($dpid,$setId){
+		$sql = 'select * from nb_product_set where lid=:lid and dpid=:dpid';
 		$connect = Yii::app()->db->createCommand($sql);
 		$connect->bindValue(':lid',$setId);
+		$connect->bindValue(':dpid',$dpid);
 		$productset = $connect->queryRow();
 		$name = $productset['set_name'];
 		return $name;
