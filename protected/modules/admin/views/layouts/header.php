@@ -148,7 +148,7 @@
                 getnotificationnum();
                 //$('#header_notification_list').load('<?php echo $this->createUrl('default/messageliall',array('companyId'=>$this->companyId));?>'); 
                 
-                //interval = setInterval(getnotificationnum,"15000");
+                interval = setInterval(getnotificationnum,"15000");
             });            
             
             $('#notification_banner_id').on('click', function(){
