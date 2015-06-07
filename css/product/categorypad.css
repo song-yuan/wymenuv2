@@ -203,6 +203,7 @@
 .product-mask-info button {
 	background: rgb(239,68,77);
 	height: 40px;
+        width: 150px;
 	padding:5px 10px;
 	font-size: 30px;
 	color: white;
