@@ -128,6 +128,16 @@ $(document).ready(function(){
 			$('.total-num').html(nums-1);
  		}
     });
+    $('#forum_list').on('click','.product-pic',function(){
+    	$(this).find('.icon-hover-1').css('left','20%');
+	 	$(this).find('.icon-hover-1').css('right','20%');
+    	$('.blockCategory').each(function(){
+    		$(this).find('.icon-hover-1').css('left','-150px');
+    	 	$(this).find('.icon-hover-2').css('right','-150px');
+    	});
+	 	$(this).find('.icon-hover-1').css('left','20%');
+	 	$(this).find('.icon-hover-1').css('right','20%');
+	 });
    //help
    $('.padsetting').click(function(){
             $(".setting-pad-mask").toggle();});

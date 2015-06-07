@@ -326,18 +326,12 @@
 	background: rgba(69,69,69,0.9);
 }
 
-.product-pic:hover i.icon-hover-1,
-.product-pic:hover i.icon-hover-2{
+.product-pic i.icon-hover-1,
+.product-picr i.icon-hover-2{
 	transition: all 0.6s ease; 
 	-o-transition: all 0.6s ease;
 	-moz-transition: all 0.6s ease;
 	-webkit-transition: all 0.6s ease;
-}
-.product-pic:hover i.icon-hover-1{	
-	left: 20%;
-}
-.product-pic:hover i.icon-hover-2{
-	right: 20%;
 }
 
 .subject-num {
