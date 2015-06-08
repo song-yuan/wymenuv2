@@ -138,6 +138,7 @@ $(document).ready(function(){
 	 });
     $('#cancelPadOrder').click(function(){
     	$('.product-pad-mask').find('.info').html('');
+    	$('.product-pad-mask').css('display','none');
     });
    //help
    $('.padsetting').click(function(){
