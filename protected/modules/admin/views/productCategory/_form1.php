@@ -33,6 +33,6 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
-				<input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>>
+				<input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
 			</div>
 			<?php $this->endWidget(); ?>

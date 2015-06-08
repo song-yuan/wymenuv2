@@ -84,18 +84,15 @@
                                                                                 <input id="barscanid" type="text" class="form-control" placeholder="<?php echo yii::t('app','扫描小票条码，快速查看订单');?>">
                                                                         </div>
                                                                         <div class="actions">
-                                                                            <a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','快速沽清');?></a>
+                                                                            <a href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId,'typeId'=>'product','from'=>'home'));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','快速沽清');?></a>
                                                                             <div class="btn-group">
                                                                                     <a class="btn green" href="#" data-toggle="dropdown">
                                                                                     <i class="fa fa-archive"></i><?php echo yii::t('app','订单操作');?>
                                                                                     <i class="fa fa-angle-down"></i>
                                                                                     </a>
-                                                                                    <ul class="dropdown-menu pull-right"><<?php echo yii::t('app','!--已厨打不能编辑--');?>>
-                                                                                    
-                                                                                            <li><a href="javascript:;" class='btn-edit'  ><?php echo yii::t('app','历史订单');?></a></li>
-                                                                                            <li><a href="javascript:;" class="btn-del"   ><?php echo yii::t('app','支付记录');?></a></li>
-                                                                                            <li><a href="javascript:;" class='btn-taste'  ><?php echo yii::t('app','订单日结');?></a></li> 
-                                                                                        
+                                                                                    <ul class="dropdown-menu pull-right">                                                                                    
+                                                                                            <li><a href="javascript:;" class='btn-edit'  ><?php echo yii::t('app','今日订单');?></a></li>
+                                                                                            <li><a href="javascript:;" class="btn-del"   ><?php echo yii::t('app','支付记录');?></a></li>                                                                                            
                                                                                     </ul>
                                                                             </div>
                                                                             <!--<a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','历史订单');?></a>-->
