@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','加菜管理'),'subhead'=>yii::t('app','添加加菜明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','加菜管理'),'url'=>$this->createUrl('productAddition/detail' , array('companyId'=>$this->companyId,'lid'=>$model->lid))),array('word'=>yii::t('app','添加加菜明细'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','加菜管理'),'subhead'=>yii::t('app','添加加菜明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','加菜管理'),'url'=>$this->createUrl('productAddition/detail' , array('companyId'=>$this->companyId,'lid'=>$model->mproduct_id))),array('word'=>yii::t('app','添加加菜明细'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
