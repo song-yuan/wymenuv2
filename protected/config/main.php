@@ -9,7 +9,7 @@ return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'My Web Application',
 	//'language'=>'zh_cn',
-        'language'=>'jp',
+        //'language'=>'jp',
 	//'sourceLanguage'=>'en',
         'sourceLanguage'=>'zh_cn',
 		
@@ -74,7 +74,7 @@ return array(
 		),
 		/*
                 'urlManager'=>array(  
-                    'showScriptName'=>false,    // 这一步是将代码里链接的index.php隐藏掉。  
+                    'showScriptName'=>false,    // 这一步是将代码里链接的index.php隐藏掉�? 
                     'urlFormat'=>'path',  
                     'rules'=>array(    
                         '<controller:\w+>/<id:\d+>'=>'<controller>/view',                
