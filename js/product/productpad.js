@@ -136,6 +136,9 @@ $(document).ready(function(){
     	$(this).find('.icon-hover-1').css('left','20%');
 	 	$(this).find('.icon-hover-2').css('right','20%');
 	 });
+    $('#cancelPadOrder').click(function(){
+    	$('.product-pad-mask').find('.info').html('');
+    });
    //help
    $('.padsetting').click(function(){
             $(".setting-pad-mask").toggle();});

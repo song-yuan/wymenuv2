@@ -214,7 +214,7 @@
         margin-top: 4px;
 }
 
-.product-mask-tip button {
+.product-mask-tip div#cancelPadOrder {
 	background: rgb(239,68,77);
 	height: 50px;
         width: 90px;
