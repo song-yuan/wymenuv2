@@ -73,9 +73,9 @@
 					<span class="title"><?php echo yii::t('app','订单管理');?></span>					
 					</a>
 					<ul class="sub-menu">
-						<li class=""><a href=""><?php echo yii::t('app','未日结订单');?></a></li>
+						<li class=""><a href=""><?php echo yii::t('app','日结对账单');?></a></li>
 						<li class=""><a href=""><?php echo yii::t('app','付款退款记录');?></a></li>
-						<li class=""><a href=""><?php echo yii::t('app','日结订单');?></a></li>
+						<li class=""><a href=""><?php echo yii::t('app','历史订单');?></a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType', 'floor'))) echo 'active';?>">
@@ -117,7 +117,7 @@
                                 <li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-bar-chart-o"></i> 
-					<span class="title"><?php echo yii::t('app','日常统计');?></span>					
+					<span class="title"><?php echo yii::t('app','统计报表');?></span>					
 					</a>
 					<ul class="sub-menu">
 						<li class=""><a href=""><?php echo yii::t('app','营业额报表');?></a></li>

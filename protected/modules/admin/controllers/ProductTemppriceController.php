@@ -14,7 +14,7 @@ class ProductTemppriceController extends BackendController
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
 		$criteria->with = array('company','category');
-		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
+		$criteria->addCondition('t.dpid=:dpid and t.is_show=1 and t.delete_flag=0');
 		if($categoryId){
 			$criteria->addCondition('category_id=:cid');
 			$criteria->params[':cid']=$categoryId;

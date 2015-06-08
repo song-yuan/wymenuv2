@@ -43,7 +43,7 @@
 						<thead>
 							<tr>
                                                             <th class="col-md-3"><?php echo yii::t('app','产品名称');?></th>
-                                                            <th><?php echo yii::t('app','产品口味');?></th>
+                                                            <th><?php echo yii::t('app','加菜列表');?></th>
                                                             <th  class="col-md-1">&nbsp;</th>
 							</tr>
 						</thead>

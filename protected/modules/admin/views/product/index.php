@@ -81,13 +81,13 @@
 								<td><?php echo $model->category->category_name;?></td>
 								<td ><?php echo $model->original_price;?></td>
                                                                 <td ><?php echo $model->product_unit;?></td>
-                                                                <td ><?php echo $model->is_weight_confirm=='0'?"<?php echo yii::t('app','否');?>":"<?php echo yii::t('app','是');?>";?></td>
+                                                                <td ><?php echo $model->is_weight_confirm=='0'?yii::t('app','否'):yii::t('app','是');?></td>
                                                                 <td ><?php echo $model->weight_unit;?></td>
                                                                 <td ><?php echo $model->rank;?></td>
                                                                 <td ><?php echo $model->order_number;?></td>
                                                                 <td ><?php echo $model->favourite_number;?></td>
-								<td ><?php echo $model->is_member_discount=='0'?"<?php echo yii::t('app','否');?>":"<?php echo yii::t('app','是');?>";?></td>
-                                                                <td ><?php echo $model->is_show=='0'?"<?php echo yii::t('app','是');?>":"<?php echo yii::t('app','否');?>";?></td>
+								<td ><?php echo $model->is_member_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
+                                                                <td ><?php echo $model->is_show=='0'?yii::t('app','是'):yii::t('app','否');?></td>
                                                                 
 								<td class="center">
 								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>

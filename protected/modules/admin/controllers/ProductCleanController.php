@@ -13,6 +13,7 @@ class ProductCleanController extends BackendController
 		//$sc = Yii::app()->request->getPost('csinquery');
                 $typeId = Yii::app()->request->getParam('typeId');
                 $categoryId = Yii::app()->request->getParam('cid',0);
+                $fromId = Yii::app()->request->getParam('from','sidebar');
                 if($typeId=='product')
                 {
                     

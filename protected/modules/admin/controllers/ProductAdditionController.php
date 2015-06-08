@@ -15,9 +15,9 @@ class ProductAdditionController extends BackendController
 		$criteria->with = 'productAddition';
                 if($categoryId!=0)
                 {
-                    $criteria->addCondition('t.dpid=:dpid and t.delete_flag=0 and t.category_id ='.$categoryId);
+                    $criteria->addCondition('t.dpid=:dpid and t.delete_flag=0 and t.is_show=1 and t.category_id ='.$categoryId);
                 }else{
-                    $criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
+                    $criteria->addCondition('t.dpid=:dpid and t.is_show=1 and t.delete_flag=0');
                 }
 		$criteria->order = ' lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
@@ -36,7 +36,7 @@ class ProductAdditionController extends BackendController
 	}
 	
         public function actionDetail(){
-		$pwlid = Yii::app()->request->getParam('lid');
+		$pwlid = Yii::app()->request->getParam('lid',0);
                 $criteria = new CDbCriteria;
                 $criteria->with = array('sproduct');
                 //$criteria->with = 'printer';
@@ -177,10 +177,10 @@ class ProductAdditionController extends BackendController
                 if($categoryId==0)
                 {
                     //var_dump ('2',$categoryId);exit;
-                    $products = Product::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
+                    $products = Product::model()->findAll('dpid=:companyId and is_show=0 and delete_flag=0' , array(':companyId' => $this->companyId));
                 }else{
                     //var_dump ('3',$categoryId);exit;
-                    $products = Product::model()->findAll('dpid=:companyId and category_id=:categoryId and delete_flag=0' , array(':companyId' => $this->companyId,':categoryId'=>$categoryId)) ;
+                    $products = Product::model()->findAll('dpid=:companyId and is_show=0 and category_id=:categoryId and delete_flag=0' , array(':companyId' => $this->companyId,':categoryId'=>$categoryId)) ;
                 }
                 $products = $products ? $products : array();
                 //var_dump($products);exit;
