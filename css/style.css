@@ -196,7 +196,7 @@ Make font awesome icons fixed width(latest version issue)
 li [class^="fa-"],
 li [class*=" fa-"] {
   display: inline-block;
-  width: 1.25em;
+  width: 2.25em;
   text-align: center;
 }
 li [class^="fa-"].icon-large,
@@ -848,7 +848,7 @@ Sidebar toggler(show/hide)
 }
 
 .page-sidebar-closed .page-sidebar-menu {
-  width: 35px !important;
+  width: 55px !important;
 }
 
 .page-sidebar-closed .page-sidebar-menu > li > a {
@@ -918,7 +918,7 @@ Sidebar toggler(show/hide)
 /* sidebar container */
  
 .page-sidebar-closed  .page-sidebar {
-  width: 35px;
+  width: 55px;
 }
 
 .page-sidebar-closed  .page-content {
