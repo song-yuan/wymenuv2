@@ -96,4 +96,22 @@ class UserController extends BackendController
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 	}
+        
+        public function actionCompanyIndex(){
+		$pwlid = Yii::app()->request->getParam('lid');
+                $criteria = new CDbCriteria;
+                $criteria->with = array('user','company');
+                //$criteria->with = 'printer';
+		$criteria->condition =  't.dpid='.$this->companyId .' and t.user_id='.$pwlid.' and t.delete_flag=0 and company.delete_flag=0';
+                $pages = new CPagination(UserCompany::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		
+		$models = UserCompany::model()->findAll($criteria);
+                		
+		$this->render('companyindex',array(
+			'models'=>$models,
+                        'pages'=>$pages
+		));
+	}
 }
