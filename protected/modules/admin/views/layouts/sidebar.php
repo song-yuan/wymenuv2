@@ -16,7 +16,7 @@
                                 <?php if(Yii::app()->user->role < '3') : ?>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' ,'payMethod', 'companyWifi', 'user'))) echo 'active';?>">
 					<a href="">
-                                            <i style="width:10px;" class="fa fa-cog"></i> 
+                                            <i class="fa fa-cog"></i> 
 					<span class="title"><?php echo yii::t('app','基础信息');?></span>					
 					</a>
 					<ul class="sub-menu">
