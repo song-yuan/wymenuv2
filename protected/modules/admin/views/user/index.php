@@ -59,7 +59,8 @@
 								<th ><?php echo yii::t('app','员工号');?></th>
 								<th><?php echo yii::t('app','手机');?></th>
 								<th >email</th>
-								<th>&nbsp;</th>
+								<th><?php echo yii::t('app','店铺');?></th>
+                                                                <th>&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -75,6 +76,9 @@
 								<td ><?php echo $model->email;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid,'companyId'=>$this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
+								</td>
+                                                                <td class="center">
+								<a href="<?php echo $this->createUrl('user/companyindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
