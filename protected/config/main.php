@@ -20,6 +20,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.components.weixinpay.*',
 		'application.extensions.redis.*'
 	),
 	
