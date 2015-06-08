@@ -139,6 +139,16 @@ $(document).ready(function(){
     $('#cancelPadOrder').click(function(){
     	$('.product-pad-mask').find('.info').html('');
     	$('.product-pad-mask').css('display','none');
+    	$('.blockCategory').each(function(){
+    		$(this).find('.subject-order').css('display','none');
+    		$(this).find('.single-num-circel').html(0);
+    	});
+    	var total = 0;
+    	if(!parseInt(language)){
+			total = total.toFixed(2);
+		}
+    	$('.total-price').html(total);
+		$('.total-num').html(0);
     });
    //help
    $('.padsetting').click(function(){
