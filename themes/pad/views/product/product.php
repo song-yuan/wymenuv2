@@ -43,7 +43,7 @@
 <div class="product-pad-mask">
 	<div class="mask-trangle"></div>
         <div class="product-mask-info"><div style="padding:10px;display: inline;"><?php echo yii::t('app','确认无误后，点击“确认”按钮下单。');?></div><button id="updatePadOrder"><?php echo yii::t('app','确认');?></button></div>
-        <div class="product-mask-tip"><?php echo yii::t('app','提示：点击列表中的菜品名称,快速找到该菜品并增减数量。');?>
+        <div class="product-mask-tip" style="display: inline;"><?php echo yii::t('app','提示：点击列表中的菜品名称,快速找到该菜品并增减数量。');?>
             <br><?php echo yii::t('app','也可以点击“取消”按钮，删除本订单');?> 
             <button id="cancelPadOrder"><?php echo yii::t('app','取消');?></button>
         </div>

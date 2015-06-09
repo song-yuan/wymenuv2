@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','用户管理'),'subhead'=>yii::t('app','管理店铺列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','用户管理'),'url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','管理店铺列表'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','用户管理'),'subhead'=>yii::t('app','管理店铺列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','用户管理'),'url'=>$this->createUrl('user/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','管理店铺列表'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('user/companydelete' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid)),
+				'action' => $this->createUrl('user/companydelete' , array('companyId' => $this->companyId,'userid'=>$user->lid)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,9 +40,9 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->set_name ;?>-><?php echo yii::t('app','管理店铺列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','管理店铺列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('user/companycreate' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('user/companycreate' , array('companyId' => $this->companyId,'userid'=>$user->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -66,7 +66,7 @@
 								<th><?php echo yii::t('app','用户名称');?></th>
                                                                 <th><?php echo yii::t('app','店铺名称');?></th>
                                                                 <th><?php echo yii::t('app','默认店铺');?></th>
-                                                                <th>&nbsp;</th>                                                                
+                                                                                                                             
 							</tr>
 						</thead>
 						<tbody>
@@ -74,16 +74,12 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php echo $model->product->product_name ;?></td>
-								<td><?php echo $model->group_no;?></td>
+								<td ><?php echo $model->user->username ;?></td>
+								<td><?php echo $model->company->company_name;?></td>
                                                                 <td>
-									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>">
-										<input pid="<?php echo $model->lid;?>" <?php if($model->is_select) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
-									</div>
+									<?php echo $model->company_id==$model->dpid?yii::t('app','是'):yii::t('app','否');?>
 								</td>
-								<td class="center">
-								<a href="<?php echo $this->createUrl('productSet/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
-								</td>             
+								             
 							</tr>
 						<?php endforeach;?>
 						</tbody>
