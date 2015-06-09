@@ -26,7 +26,6 @@ class Server {
         $this->checkSignature();
         $this->joinWeixinServer();
         $this->postArr();
-        $this->brandUser();
         $this->responseMsg();
     }
     
@@ -82,8 +81,7 @@ class Server {
             
        		//取消关注，自动回复
 			else if($this->event == 'unsubscribe') {
-                $this->unsubscribe();
-            	$this->text('有缘千里来相会，无缘对面手难牵。');
+
             }
             	
         	//存储用户地理位置信息
@@ -149,11 +147,7 @@ class Server {
      * @return String 
      */
 	public function generalResponse() {
-    	$subscribePush = new SubscribePush($this->brandId);
-    	if($subscribePush->has)
-    		exit($subscribePush->format($this->postArr['FromUserName'], $this->postArr['ToUserName']));
-    	else
-    		$this->text('欢迎关注'.$this->brand['brand_name'].'官方微信！');
+    		$this->text('欢迎关注我要点单官方微信！');
 	}
 	
 	/**
