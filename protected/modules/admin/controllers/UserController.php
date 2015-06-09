@@ -119,7 +119,7 @@ class UserController extends BackendController
 	}
         
         public function actionCompanyCreate(){
-		$model = new ProductSetDetail();
+		$model = new UserCompany();
 		$model->dpid = $this->companyId ;
 		$pslid = Yii::app()->request->getParam('psid');
                 $model->set_id=$pslid;
