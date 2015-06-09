@@ -21,6 +21,7 @@ return array(
 		'application.models.*',
 		'application.components.*',
 		'application.components.weixinpay.*',
+		'application.components.weixin.*',
 		'application.extensions.redis.*'
 	),
 	
@@ -75,7 +76,7 @@ return array(
 		),
 		/*
                 'urlManager'=>array(  
-                    'showScriptName'=>false,    // 这一步是将代码里链接的index.php隐藏掉�? 
+                    'showScriptName'=>false,    // 这一步是将代码里链接的index.php隐藏掉�? 
                     'urlFormat'=>'path',  
                     'rules'=>array(    
                         '<controller:\w+>/<id:\d+>'=>'<controller>/view',                
