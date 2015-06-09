@@ -357,5 +357,7 @@ $(document).ready(function(){
         $('#pad_category_select').val(category);
         var height = parents.offset().top;
 		$('body').scrollTop(parseInt(height)-70);
+        $(".setting-pad-mask").css('display','none');
+        $('.product-pad-mask').css('display','none');
     });
  });

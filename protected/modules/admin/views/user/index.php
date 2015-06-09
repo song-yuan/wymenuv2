@@ -78,8 +78,10 @@
 								<a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid,'companyId'=>$this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
                                                                 <td class="center">
+                                                                <?php if(Yii::app()->user->role=="1" && $model->role=="2"): ?>
 								<a href="<?php echo $this->createUrl('user/companyindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>" class="btn_user_company" role="<?php echo $model->role; ?>"><?php echo yii::t('app','明细');?></a>
-								</td>
+								<?php endif; ?>
+                                                                </td>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
@@ -133,11 +135,7 @@
 			return true;
 		});
 	});
-        $('.btn_user_company').click(function(){
-		var role = $(this).attr('role');
-                //alert(role);
-		if(role!='1') {
-                    return false;
-		}
-	});
+//        $('.btn_user_company').click(function(){
+//		
+//	});
 	</script>	

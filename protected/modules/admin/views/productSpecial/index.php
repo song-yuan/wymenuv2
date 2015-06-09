@@ -59,8 +59,8 @@
 								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
 								<td><?php echo $model->category->category_name;?></td>
 								<td ><?php echo $model->original_price;?></td>
-                                <td ><?php echo $model->product_unit;?></td>
-                                <td >
+                                                                <td ><?php echo $model->product_unit;?></td>
+                                                                <td >
 									<div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>" is-discount="<?php echo $model->is_discount;?>">
 										<input  pid="<?php echo $model->lid;?>" type="checkbox" <?php if($model->is_special) echo 'checked="checked"';?> class="toggle"/>
 									</div>
