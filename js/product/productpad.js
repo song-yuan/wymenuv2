@@ -136,6 +136,20 @@ $(document).ready(function(){
     	$(this).find('.icon-hover-1').css('left','20%');
 	 	$(this).find('.icon-hover-2').css('right','20%');
 	 });
+    $('#cancelPadOrder').click(function(){
+    	$('.product-pad-mask').find('.info').html('');
+    	$('.product-pad-mask').css('display','none');
+    	$('.blockCategory').each(function(){
+    		$(this).find('.subject-order').css('display','none');
+    		$(this).find('.single-num-circel').html(0);
+    	});
+    	var total = 0;
+    	if(!parseInt(language)){
+			total = total.toFixed(2);
+		}
+    	$('.total-price').html(total);
+		$('.total-num').html(0);
+    });
    //help
    $('.padsetting').click(function(){
             $(".setting-pad-mask").toggle();});

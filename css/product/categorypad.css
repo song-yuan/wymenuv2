@@ -214,17 +214,19 @@
         margin-top: 4px;
 }
 
-.product-mask-tip button {
+.product-mask-tip div#cancelPadOrder {
 	background: rgb(239,68,77);
 	height: 50px;
-        width: 90px;
+    width: 90px;
 	padding:2px 2px;
 	font-size: 30px;
 	color: white;
 	border: none;
 	border-radius: 10px;
 	margin-right: 2px;
-        margin-top: 2px;
+    margin-top: 2px;
+    line-height:50px;
+    text-align:center;
 }
 
 .top-right button {
