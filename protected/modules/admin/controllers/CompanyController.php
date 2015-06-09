@@ -14,7 +14,16 @@ class CompanyController extends BackendController
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
-		$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? ' delete_flag=0 ' : ' delete_flag=0 and dpid='.Yii::app()->user->companyId ;
+                if(Yii::app()->user->role == User::POWER_ADMIN)
+                {
+                    $criteria->condition =' delete_flag=0 ';
+                }else if(Yii::app()->user->role == '2')
+                {
+                    $criteria->condition =' delete_flag=0 and dpid in (select tt.company_id from nb_user_company tt, nb_user tt1 where tt.dpid=tt1.dpid and tt.user_id=tt1.lid and tt.delete_flag=0 and tt.dpid='.Yii::app()->user->companyId.' and tt1.username="'.Yii::app()->user->id.'" )';
+                }else{
+                    $criteria->condition = ' delete_flag=0 and dpid='.Yii::app()->user->companyId ;
+                }
+		//var_dump($criteria);exit;
 		
 		$pages = new CPagination(Company::model()->count($criteria));
 		//	    $pages->setPageSize(1);
