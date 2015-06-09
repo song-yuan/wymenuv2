@@ -28,7 +28,7 @@ class JsApiPay
 	 * @var array
 	 */
 	public $data = null;
-	
+	public $curl_timeout = 30;
 	/**
 	 * 
 	 * 通过跳转获取用户的openid，跳转流程如下：
