@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','套餐管理'),'subhead'=>yii::t('app','添加套餐明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','套餐管理'),'url'=>$this->createUrl('productSet/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->set_id))),array('word'=>\yii::t('app','添加套餐明细'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','操作员管理店铺'),'subhead'=>yii::t('app','添加管理店铺'),'breadcrumbs'=>array(array('word'=>yii::t('app','操作员管理店铺'),'url'=>$this->createUrl('user/companyindex' , array('companyId'=>$this->companyId,'lid'=>$model->user_id))),array('word'=>\yii::t('app','添加操作员管理店铺'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -38,7 +38,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_detailform', array('model'=>$model, 'categories' => $categories,'categoryId'=>$categoryId,'products'=>$products,'maxgroupno'=>$maxgroupno)); ?>
+							<?php echo $this->renderPartial('_companyform', array('model'=>$model, 'companyslist' => $companyslist)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

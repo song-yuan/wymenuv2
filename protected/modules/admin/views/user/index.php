@@ -79,7 +79,7 @@
 								</td>
                                                                 <td class="center">
                                                                 <?php if(Yii::app()->user->role=="1" && $model->role=="2"): ?>
-								<a href="<?php echo $this->createUrl('user/companyindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>" class="btn_user_company" role="<?php echo $model->role; ?>"><?php echo yii::t('app','明细');?></a>
+								<a href="<?php echo $this->createUrl('user/companyIndex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>" class="btn_user_company" role="<?php echo $model->role; ?>"><?php echo yii::t('app','明细');?></a>
 								<?php endif; ?>
                                                                 </td>
 							</tr>

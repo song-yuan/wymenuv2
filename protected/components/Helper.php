@@ -6,7 +6,12 @@ class Helper
 			return md5(md5($password).Yii::app()->params['salt']);
 	}
 	static public function getCompanyId($companyId) {
-		return Yii::app()->user->role == User::POWER_ADMIN ? $companyId : Yii::app()->user->companyId ;
+            if(Yii::app()->user->role=='1' || Yii::app()->user->role=='2')
+            {
+		return $companyId;
+            }else{
+                return Yii::app()->user->companyId ;
+            }
 	}
         
         static public function getCompanyName($companyId) {

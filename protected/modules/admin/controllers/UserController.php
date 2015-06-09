@@ -121,47 +121,47 @@ class UserController extends BackendController
         public function actionCompanyCreate(){
 		$model = new UserCompany();
 		$model->dpid = $this->companyId ;
-		$pslid = Yii::app()->request->getParam('psid');
-                $model->set_id=$pslid;
+		$userid = Yii::app()->request->getParam('userid');
+                $model->user_id=$userid;
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
-                        $se=new Sequence("porduct_set_detail");
+			$model->attributes = Yii::app()->request->getPost('UserCompany');
+                        $se=new Sequence("user_company");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->update_at=date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
-                        //var_dump($model);exit;
-			if($model->save()) {
+                        if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('productSet/detailindex','companyId' => $this->companyId,'lid'=>$model->set_id));
+				$this->redirect(array('user/companyIndex','companyId' => $this->companyId,'lid'=>$model->user_id));
 			}
-		}
-                $maxgroupno=$this->getMaxGroupNo($pslid);
-                $categories = $this->getCategories();
-                $categoryId=0;
-                $products = $this->getProducts($categoryId);
-                $productslist=CHtml::listData($products, 'lid', 'product_name');
-		$this->render('detailcreate' , array(
+                }
+                $companys = $this->getCompanys();
+                $companyslist=CHtml::listData($companys, 'dpid', 'company_name');
+		$this->render('companycreate' , array(
 				'model' => $model,
-                                'categories' => $categories,
-                                'categoryId' => $categoryId,
-                                'products' => $productslist,
-                                'maxgroupno'=>$maxgroupno
+                                'companyslist' => $companyslist
 		));
 	}
 	
         
-	public function actionDetailDelete(){
+	public function actionCompanyDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-                $printset = Yii::app()->request->getParam('psid');
-		$ids = Yii::app()->request->getPost('ids');
+                $ids = Yii::app()->request->getPost('ids');
+                $userid=Yii::app()->request->getParam('userid',0);
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_user_company set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset)) ;
+			$this->redirect(array('user/companyIndex' , 'companyId' => $companyId,'lid'=>$userid)) ;
 		} else {
 			Yii::app()->user->setFlash('error' ,yii::t('app', '请选择要删除的项目'));
-			$this->redirect(array('productSet/detailindex' , 'companyId' => $companyId,'lid'=>$printset)) ;
+			$this->redirect(array('user/companyIndex' , 'companyId' => $companyId,'lid'=>$userid)) ;
 		}
+	}
+        
+        private function getCompanys(){
+                $companys = Company::model()->findAll(' delete_flag=0') ;                
+                $companys = $companys ? $companys : array();
+                return $companys;		
 	}
 }
