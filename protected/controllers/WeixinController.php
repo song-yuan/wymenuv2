@@ -1,6 +1,6 @@
 <?php
 
-class CompanyController extends Controller
+class WeixinController extends Controller
 {
 	public function actionIndex()
 	{

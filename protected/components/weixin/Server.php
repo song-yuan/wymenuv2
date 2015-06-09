@@ -12,10 +12,6 @@
 
 class Server {
     public $token = 'zhouchao';
-    public $weixinUserName;
-    public $brand;
-    public $postStr;
-    public $sceneId = null;
     
     /**
      * 初始化
