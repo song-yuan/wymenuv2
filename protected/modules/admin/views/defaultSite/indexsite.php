@@ -1,4 +1,4 @@
-                                                        <style type="text/css">
+<style type="text/css">
         
         .popBox1{
             margin: 50px auto;
