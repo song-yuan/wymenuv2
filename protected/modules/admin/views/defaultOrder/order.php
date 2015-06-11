@@ -110,8 +110,30 @@
                         var syscallid='<?php echo $syscallId; ?>';
                         var scanon=false;
                         $(document).ready(function(){
-                                $('body').addClass('page-sidebar-closed');                                
+                            $('body').addClass('page-sidebar-closed');
+                            if(syscallid>"Ca000" && syscallid<"Ca999")
+                            {
+                                accountmanul();
+                            }
                         });
+                        
+                        function accountmanul(){
+                            var loadurl='<?php echo $this->createUrl('defaultOrder/accountManul',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>';
+                            
+                            var callid= $('#callbarscanid').val();
+                            if(callid>"Ca000" && callid<"Ca999")
+                            {
+                                loadurl=loadurl+'/callId/'+callid;
+                            }
+                            //alert(loadurl);
+                            var $modalconfig = $('#portlet-config');
+                                $modalconfig.find('.modal-content')
+                                        .load(loadurl
+                                            , ''
+                                            , function(){
+                                                $modalconfig.modal();
+                                });
+                        }
                         
                         function openaccount(payback){
                             var loadurl='<?php echo $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>';
@@ -135,7 +157,8 @@
                         }
                         
                         $('#btn_account').click(function(){
-                                 openaccount('0');
+                                 //openaccount('0');
+                                 accountmanul();
                         });
                         $('#btn_payback').click(function(){
                                  openaccount('1');

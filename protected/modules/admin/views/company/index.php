@@ -41,6 +41,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺列表');?></div>
 					<div class="actions">
+                                            <?php if(Yii::app()->params->master_slave=='m') : ?>
 						<?php if(Yii::app()->user->role == User::POWER_ADMIN):?>
 						<a href="<?php echo $this->createUrl('company/create', array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<?php endif;?>
@@ -56,6 +57,7 @@
                                                 <div class="btn-group">
                                                         <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
                                                 </div>
+                                            <?php endif; ?>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -94,7 +96,9 @@
 										<i class="fa fa-angle-down"></i>
 										</a>
 										<ul class="dropdown-menu pull-right">
+                                                                                    <?php if(Yii::app()->params->master_slave=='m') : ?>
 											<li><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a></li>
+                                                                                    <?php endif; ?>
 											<li><a href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a></li>
 										</ul>
 									</div>
