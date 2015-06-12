@@ -10,6 +10,7 @@ function printf_info($data)
 //①、获取用户openid
 $tools = new JsApiPay();
 $openId = $tools->GetOpenid();
+echo isset($_GET['code'])?$_GET['code']:0;
 //②、统一下单
 $input = new WxPayUnifiedOrder();
 $input->SetBody("test");
