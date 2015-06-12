@@ -1,7 +1,6 @@
 <?php 
 ini_set('date.timezone','Asia/Shanghai');
 $url='http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
-echo $url;exit;
 //打印输出数组信息
 function printf_info($data)
 {
@@ -12,7 +11,7 @@ function printf_info($data)
 
 //①、获取用户openid
 $tools = new JsApiPay();
-$openId = $tools->GetOpenid();
+$openId = $tools->GetOpenid($url);
 //②、统一下单
 $input = new WxPayUnifiedOrder();
 $input->SetBody("test");
