@@ -1,5 +1,24 @@
 	<!-- BEGIN PAGE -->  
 		<div class="page-content">
+                        <div class="modal fade" id="modal-wide" tabindex="-1" role="basic" aria-hidden="true">
+                                <div class="modal-dialog modal-wide">
+                                        <div class="modal-content">
+                                                <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                        <h4 class="modal-title">Modal Title</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                        Modal body goes here
+                                                </div>
+                                                <div class="modal-footer">
+                                                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn blue">Save changes</button>
+                                                </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                        </div>
                         <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
                         <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -126,7 +145,8 @@
                                 loadurl=loadurl+'/callId/'+callid;
                             }
                             //alert(loadurl);
-                            var $modalconfig = $('#portlet-config');
+                            //var $modalconfig = $('#portlet-config');
+                            var $modalconfig = $('#modal-wide');
                                 $modalconfig.find('.modal-content')
                                         .load(loadurl
                                             , ''
