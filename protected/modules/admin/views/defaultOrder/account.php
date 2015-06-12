@@ -59,6 +59,7 @@
                                                     <?php else: ?>
                                                         <input type="button" class="btn green" id="pay-btn" value="<?php echo yii::t('app','收 银');?>">
                                                         <input type="button" class="btn green" id="account-btn" value="<?php echo yii::t('app','结 单');?>">
+                                                        <input type="button" class="btn green" id="cashin-btn" value="<?php echo yii::t('app','现金支付');?>">
                                                     <?php endif; ?>
                                                         <button type="button" data-dismiss="modal" class="btn default" id="btn-account-cancle"><?php echo yii::t('app','取 消');?></button>
                                                 </div>
@@ -93,6 +94,13 @@
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'account','orderId'=>$order->lid)) ?>');
                                                 $('#account_orderstatus').val('4');
                                                 $('#account-form').submit();
+                                        }
+                                 });
+                            });
+                            $('#cashin-btn').click(function(){
+                                 bootbox.confirm("<?php echo yii::t('app','你确定切换到其他现金支付吗？');?>", function(result) {
+                                        if(result){
+                                                accountmanul();
                                         }
                                  });
                             });

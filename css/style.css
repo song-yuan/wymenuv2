@@ -446,7 +446,7 @@ Header and header elements.
 .header .navbar-nav > li.dropdown .dropdown-toggle .badge {
   position: absolute;
   top: 8px;
-  right: 20px;
+  right: 30px;
 }
 
 /* language bar */

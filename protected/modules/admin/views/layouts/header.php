@@ -163,6 +163,11 @@
                       if(data.num>0)
                       {
                            // $('#chatAudio')[0].play();
+                           if (typeof Androidwymenuprinter == "undefined") {
+                                //alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
+                            }else{
+                                Androidwymenuprinter.padAlarm();
+                            }
                       }
                     } 
                 },'json');
