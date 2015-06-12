@@ -45,7 +45,7 @@ class JsApiPay
 			if(empty($url)){
 				$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].$_SERVER['QUERY_STRING']);	
 			}else{
-				$baseUrl = $url;
+				$baseUrl = urlencode($url);
 			}
 			$url = $this->__CreateOauthUrlForCode($baseUrl);
 			Header("Location: $url");
