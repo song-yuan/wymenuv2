@@ -1,6 +1,4 @@
 <?php 
-ini_set('date.timezone','Asia/Shanghai');
-$url='http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
 //打印输出数组信息
 function printf_info($data)
 {
@@ -11,7 +9,7 @@ function printf_info($data)
 
 //①、获取用户openid
 $tools = new JsApiPay();
-$openId = $tools->GetOpenid($url);
+$openId = $tools->GetOpenid();
 //②、统一下单
 $input = new WxPayUnifiedOrder();
 $input->SetBody("test");
@@ -28,7 +26,7 @@ $order = WxPayApi::unifiedOrder($input);
 echo '<font color="#f00"><b>统一下单支付单信息</b></font><br/>';
 printf_info($order);
 $jsApiParameters = $tools->GetJsApiParameters($order);
-
+echo $jsApiParameters;
 //获取共享收货地址js函数参数
 //$editAddress = $tools->GetEditAddressParameters();
 
