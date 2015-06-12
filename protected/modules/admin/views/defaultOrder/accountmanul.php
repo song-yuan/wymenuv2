@@ -11,8 +11,8 @@
     }
     .calc_num ul li {
         float: left;
-        width: 60px;
-        height: 60px;
+        width: 120px;
+        height: 120px;
         border: 1px solid #add;
         margin: 5px;
         font-size: 20px;
@@ -24,8 +24,8 @@
       }
       .calc_button ul li {
         float: left;
-        width: 60px;
-        height: 60px;
+        width: 120px;
+        height: 120px;
         border: 1px solid #add;
         margin: 5px;
         font-size: 15px;
