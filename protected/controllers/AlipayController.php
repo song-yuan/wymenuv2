@@ -120,7 +120,7 @@ class AlipayController extends Controller
                     //如要调试，请看alipay_notify.php页面的verifyReturn函数
                     $ret_status="验证失败";
                 }
-                var_dump($trade_status);exit;
+                //var_dump($trade_status);exit;
 		$this->render('return',array(
 			'trade_status'=>$trade_status,
                         'ret_status'=>$ret_status
