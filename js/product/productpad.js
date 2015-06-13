@@ -30,7 +30,7 @@ function addToCart() {
 }
 $(document).ready(function(){
 	var language = $('input[name="language"]').val();
-    $('#forum_list').on('click','.addCart',function(){
+    $('#forum_list').on('touchbegin','.addCart',function(){
     	var _this = $(this);
     	var type = _this.attr('type');
     	var parentsBlockCategory = _this.parents('.blockCategory');
@@ -128,7 +128,7 @@ $(document).ready(function(){
 			$('.total-num').html(nums-1);
  		}
     });
-    $('#forum_list').on('click','.product-pic',function(){
+    $('#forum_list').on('touchend','.product-pic',function(){
     	$('.blockCategory').each(function(){
     		$(this).find('.icon-hover-1').css('left','-150px');
     	 	$(this).find('.icon-hover-2').css('right','-150px');
@@ -255,10 +255,8 @@ $(document).ready(function(){
                 //alert("应用程序无法完整清楚所有缓存数据，请到“设置”->“应用程序”->“WebWyMenu”中手动清除！");
             }
 	});
-	 $('#forum_list').on('click','.product-pic',function(){
-	 	
-	 });
-    $('#forum_list').on('click','.view-product-pic',function(){
+	 
+    $('#forum_list').on('touchbegin','.view-product-pic',function(){
     	//var lid = $(this).attr('lid');
         var lid = $(this).attr('product-id');
         //alert(lid);//($('.large-pic').width() - $("#gallery").outerWidth())/2,//($('.large-pic').height() - $("#gallery").outerHeight())/2
@@ -347,7 +345,7 @@ $(document).ready(function(){
     	});
     	return false;
     });
-    $('#padOrderForm').on('click','.product-catory-product',function(){
+    $('#padOrderForm').on('touchend','.product-catory-product',function(){
     	var input = $(this).find('input');
     	var productId = input.attr('name');
     	var productIdArr = productId.split(","); //字符分割 
