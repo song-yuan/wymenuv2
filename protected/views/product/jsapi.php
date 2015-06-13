@@ -1,4 +1,5 @@
 <?php 
+$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 //打印输出数组信息
 function printf_info($data)
 {
@@ -9,8 +10,7 @@ function printf_info($data)
 
 //①、获取用户openid
 $tools = new JsApiPay();
-$openId = $tools->GetOpenid();
-
+$openId = $tools->GetOpenid($url);
 //②、统一下单
 $input = new WxPayUnifiedOrder();
 $input->SetBody("test");

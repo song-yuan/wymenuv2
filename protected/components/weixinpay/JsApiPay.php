@@ -37,19 +37,26 @@ class JsApiPay
 	 * 
 	 * @return 用户的openid
 	 */
-	public function GetOpenid()
+	public function GetOpenid($url = '')
 	{
 		//通过code获得openid
 		if (!isset($_GET['code'])){
 			//触发微信返回code码
-			$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].$_SERVER['QUERY_STRING']);	
+			$baseUrl = urlencode($url);	
 			$url = $this->__CreateOauthUrlForCode($baseUrl);
 			Header("Location: $url");
 			exit();
 		} else {
 			//获取code码，以获取openid
 		    $code = $_GET['code'];
-			$openid = $this->getOpenidFromMp($code);
+			$result = $this->getOpenidFromMp($code);
+			if(!isset($result['openid'])){
+				$baseUrl = urlencode($url);	
+				$url = $this->__CreateOauthUrlForCode($baseUrl);
+				Header("Location: $url");
+				exit();
+			}
+			$openid = $result['openid'];
 			return $openid;
 		}
 	}
@@ -72,7 +79,7 @@ class JsApiPay
 		}
 		$jsapi = new WxPayJsApiPay();
 		$jsapi->SetAppid($UnifiedOrderResult["appid"]);
-		$timeStamp = time();
+		$timeStamp = (string)time();
 		$jsapi->SetTimeStamp($timeStamp);
 		$jsapi->SetNonceStr(WxPayApi::getNonceStr());
 		$jsapi->SetPackage("prepay_id=" . $UnifiedOrderResult['prepay_id']);
@@ -112,10 +119,7 @@ class JsApiPay
 		//取出openid
 		$data = json_decode($res,true);
 		$this->data = $data;
-		echo $code;
-		var_dump($this->data);exit;
-		$openid = $data['openid'];
-		return $openid;
+		return $data;
 	}
 	
 	/**
