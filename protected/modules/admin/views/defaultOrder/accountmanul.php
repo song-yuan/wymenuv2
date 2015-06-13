@@ -55,9 +55,9 @@
                                                                 <?php echo yii::t('app','，已付：');?><?php echo number_format($order->reality_total,2); ?>
                                                                     <?php echo yii::t('app','，应付：');?><?php echo number_format($order->should_total-$order->reality_total,2); ?><br>
                                                                     <span style="width:90px; text-align:right; display: inline-block">收款：</span>
-                                                                    <span id="cash_in" pointat="0" style="color:blue;width:90px; text-align:right; display: inline-block">0</span>
+                                                                    <span id="cash_in" pointat="0" style="color:blue;width:190px; text-align:right; display: inline-block">0</span>
                                                                     <span style="width:90px; text-align:right; display: inline-block">找零：</span>
-                                                                    <span id="cash_out" style="color:red;width:90px; text-align:right; display: inline-block">0</span></h4>
+                                                                    <span id="cash_out" style="color:red;width:190px; text-align:right; display: inline-block">0</span></h4>
                                                         
                                                 </div>
                                                 <div class="">
@@ -96,45 +96,45 @@
 			
 			<script type="text/javascript">
                             var now_should_pay=parseFloat("<?php echo number_format($order->should_total-$order->reality_total,2); ?>");
-                            $('.calc_num').on('click','li',function(){
-                                $("#cash_in").html($("#cash_in").html()+$(this).html());
-//                                var inval=$(this).html();
-//                                var cashin="0";
-//                                var cashint=0;
-//                                var pointat=0;
-//                                if(inval!='.')
-//                                {
-//                                    cashin=$("#cash_in").html();
-//                                     pointat=$("#cash_in").attr("pointat");
-//                                     if(pointat=='0')
-//                                     {
-//                                        cashint=parseInt(cashin);
-//                                        if(inval=="00")
-//                                        {
-//                                            $("#cash_in").html(cashint*100);
-//                                        }else{
-//                                            //alert(cashint);alert(inval)
-//                                            $("#cash_in").html(cashint*10+parseInt(inval));
-//                                        }
-//                                     }else if(pointat=='1'){
-//                                        if(inval!="00")
-//                                        {
-//                                            $("#cash_in").html(cashin.substr(0,cashin.length-2)+inval+"0");
-//                                            $("#cash_in").attr("pointat","10");
-//                                        }
-//                                     }else if(pointat=='10'){
-//                                        $("#cash_in").html(cashin.substr(0,cashin.length-1)+inval);
-//                                        $("#cash_in").attr("pointat","100");
-//                                     }
-//                                }else{
-//                                    $("#cash_in").attr("pointat","1");
-//                                    $("#cash_in").html($("#cash_in").html()+".00");
-//                                }
-//                                var cashinf=parseFloat($("#cash_in").html());
-//                                if(cashinf-now_should_pay>0)
-//                                {
-//                                    $("#cash_out").html(Math.round((cashinf-now_should_pay)*100)/100);//little than 0 not show
-//                                }
+                            $('.calc_num').on('touchbegin','li',function(){
+                                //$("#cash_in").html($("#cash_in").html()+$(this).html());
+                                var inval=$(this).html();
+                                var cashin="0";
+                                var cashint=0;
+                                var pointat=0;
+                                if(inval!='.')
+                                {
+                                    cashin=$("#cash_in").html();
+                                     pointat=$("#cash_in").attr("pointat");
+                                     if(pointat=='0')
+                                     {
+                                        cashint=parseInt(cashin);
+                                        if(inval=="00")
+                                        {
+                                            $("#cash_in").html(cashint*100);
+                                        }else{
+                                            //alert(cashint);alert(inval)
+                                            $("#cash_in").html(cashint*10+parseInt(inval));
+                                        }
+                                     }else if(pointat=='1'){
+                                        if(inval!="00")
+                                        {
+                                            $("#cash_in").html(cashin.substr(0,cashin.length-2)+inval+"0");
+                                            $("#cash_in").attr("pointat","10");
+                                        }
+                                     }else if(pointat=='10'){
+                                        $("#cash_in").html(cashin.substr(0,cashin.length-1)+inval);
+                                        $("#cash_in").attr("pointat","100");
+                                     }
+                                }else{
+                                    $("#cash_in").attr("pointat","1");
+                                    $("#cash_in").html($("#cash_in").html()+".00");
+                                }
+                                var cashinf=parseFloat($("#cash_in").html());
+                                if(cashinf-now_should_pay>0)
+                                {
+                                    $("#cash_out").html(Math.round((cashinf-now_should_pay)*100)/100);//little than 0 not show
+                                }
                             });
                             
                             $('#clearall').click(function(){
