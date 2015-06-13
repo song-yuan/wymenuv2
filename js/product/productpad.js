@@ -289,7 +289,7 @@ $(document).ready(function(){
  		});
     });
     
-    $('.large-pic').touchend(function(){
+    $('.large-pic').on('touchend',function(){
     	$(this).html('');
     	$(this).css('display','none');
     });
