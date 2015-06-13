@@ -96,7 +96,7 @@
 			
 			<script type="text/javascript">
                             var now_should_pay=parseFloat("<?php echo number_format($order->should_total-$order->reality_total,2); ?>");
-                            $('.calc_num').on('touchbegin','li',function(){
+                            $('.calc_num').on('touchstart','li',function(){
                                 //$("#cash_in").html($("#cash_in").html()+$(this).html());
                                 var inval=$(this).html();
                                 var cashin="0";
