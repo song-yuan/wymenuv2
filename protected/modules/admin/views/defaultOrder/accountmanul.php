@@ -97,79 +97,103 @@
 			<script type="text/javascript">
                             var now_should_pay=parseFloat("<?php echo number_format($order->should_total-$order->reality_total,2); ?>");
                             $('.calc_num').on('touchstart','li',function(){
-                                //$("#cash_in").html($("#cash_in").html()+$(this).html());
-                                var inval=$(this).html();
-                                var cashin="0";
-                                var cashint=0;
-                                var pointat=0;
-                                if(inval!='.')
+                                var inval=$("#cash_in").html();
+                                //alert(inval);
+                                if(inval=="0" || inval=="00")
                                 {
-                                    cashin=$("#cash_in").html();
-                                     pointat=$("#cash_in").attr("pointat");
-                                     if(pointat=='0')
-                                     {
-                                        cashint=parseInt(cashin);
-                                        if(inval=="00")
-                                        {
-                                            $("#cash_in").html(cashint*100);
-                                        }else{
-                                            //alert(cashint);alert(inval)
-                                            $("#cash_in").html(cashint*10+parseInt(inval));
-                                        }
-                                     }else if(pointat=='1'){
-                                        if(inval!="00")
-                                        {
-                                            $("#cash_in").html(cashin.substr(0,cashin.length-2)+inval+"0");
-                                            $("#cash_in").attr("pointat","10");
-                                        }
-                                     }else if(pointat=='10'){
-                                        $("#cash_in").html(cashin.substr(0,cashin.length-1)+inval);
-                                        $("#cash_in").attr("pointat","100");
-                                     }
+                                    if($(this).html()!=".")
+                                    {
+                                        $("#cash_in").html($(this).html());
+                                    }
                                 }else{
-                                    $("#cash_in").attr("pointat","1");
-                                    $("#cash_in").html($("#cash_in").html()+".00");
+                                    if(inval.indexOf(".")>0 && $(this).html()==".")
+                                    {
+                                        
+                                    }else{
+                                        $("#cash_in").html(inval+$(this).html());
+                                    }
                                 }
+//                                var inval=$(this).html();
+//                                var cashin="0";
+//                                var cashint=0;
+//                                var pointat=0;
+//                                if(inval!='.')
+//                                {
+//                                    cashin=$("#cash_in").html();
+//                                     pointat=$("#cash_in").attr("pointat");
+//                                     if(pointat=='0')
+//                                     {
+//                                        cashint=parseInt(cashin);
+//                                        if(inval=="00")
+//                                        {
+//                                            $("#cash_in").html(cashint*100);
+//                                        }else{
+//                                            //alert(cashint);alert(inval)
+//                                            $("#cash_in").html(cashint*10+parseInt(inval));
+//                                        }
+//                                     }else if(pointat=='1'){
+//                                        if(inval!="00")
+//                                        {
+//                                            $("#cash_in").html(cashin.substr(0,cashin.length-2)+inval+"0");
+//                                            $("#cash_in").attr("pointat","10");
+//                                        }
+//                                     }else if(pointat=='10'){
+//                                        $("#cash_in").html(cashin.substr(0,cashin.length-1)+inval);
+//                                        $("#cash_in").attr("pointat","100");
+//                                     }
+//                                }else{
+//                                    $("#cash_in").attr("pointat","1");
+//                                    $("#cash_in").html($("#cash_in").html()+".00");
+//                                }
                                 var cashinf=parseFloat($("#cash_in").html());
                                 if(cashinf-now_should_pay>0)
                                 {
                                     $("#cash_out").html(Math.round((cashinf-now_should_pay)*100)/100);//little than 0 not show
+                                }else{
+                                    $("#cash_out").html("0");
                                 }
                             });
                             
-                            $('#clearall').click(function(){
+                            $('#clearall').on('touchend',function(){
                                 $("#cash_in").html("0");
-                                $("#cash_in").attr("pointat","0");
+                                //$("#cash_in").attr("pointat","0");
                                 //cash_out
                                 $("#cash_out").html("0");
                             });
                             
                             $('#clearone').click(function(){
-                                var pointat=$("#cash_in").attr("pointat");
                                 var cashin=$("#cash_in").html();
-                                
-                                if(pointat=="100")
+                                if(cashin.length>1)
                                 {
-                                    //xxx.x0
-                                    $("#cash_in").html(cashin.substr(0,cashin.length-1)+"0");
-                                    $("#cash_in").attr("pointat","10");
-                                }else if(pointat=="10"){
-                                    //xxx.00
-                                    $("#cash_in").html(cashin.substr(0,cashin.length-2)+"00");
-                                    $("#cash_in").attr("pointat","1");
-                                }else if(pointat=="1"){
-                                    //xxx
-                                    $("#cash_in").html(cashin.substr(0,cashin.length-3));
-                                    $("#cash_in").attr("pointat","0");
-                                }else if(pointat=="0"){
-                                    if(cashin.length>1)
-                                    {
-                                        $("#cash_in").html(Math.round((cashinf-now_should_pay)*100)/100);
-                                    }else{
-                                        $("#cash_in").html("0");
-                                    }
-                                    //xx
+                                    $("#cash_in").html(cashin.substr(0,cashin.length-1));
+                                }else{
+                                    $("#cash_in").html("0");
                                 }
+                                //var pointat=$("#cash_in").attr("pointat");
+//                                var cashin=$("#cash_in").html();
+//                                
+//                                if(pointat=="100")
+//                                {
+//                                    //xxx.x0
+//                                    $("#cash_in").html(cashin.substr(0,cashin.length-1)+"0");
+//                                    $("#cash_in").attr("pointat","10");
+//                                }else if(pointat=="10"){
+//                                    //xxx.00
+//                                    $("#cash_in").html(cashin.substr(0,cashin.length-2)+"00");
+//                                    $("#cash_in").attr("pointat","1");
+//                                }else if(pointat=="1"){
+//                                    //xxx
+//                                    $("#cash_in").html(cashin.substr(0,cashin.length-3));
+//                                    $("#cash_in").attr("pointat","0");
+//                                }else if(pointat=="0"){
+//                                    if(cashin.length>1)
+//                                    {
+//                                        $("#cash_in").html(Math.round((cashinf-now_should_pay)*100)/100);
+//                                    }else{
+//                                        $("#cash_in").html("0");
+//                                    }
+//                                    //xx
+//                                }
                                 var cashinf=parseFloat($("#cash_in").html());
                                 if(cashinf-now_should_pay>0)
                                 {
