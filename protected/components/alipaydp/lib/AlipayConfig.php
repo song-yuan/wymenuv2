@@ -9,18 +9,16 @@
  * 以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
  * 该代码仅供学习和研究支付宝接口使用，只是提供一个参考。
  */
-require_once("alipay_core.function.php");
-require_once("alipay_md5.function.php");
-
+require_once("alipay.config.php");
 class AlipayConfig {
 
-	var $alipay_config;
+	var $config;
 	
-	function __construct($alipay_config){
-		$this->alipay_config = $alipay_config;
+	function __construct(){
+		$this->config = $alipay_config;
 	}
-    function AlipayConfig($alipay_config) {
-    	$this->__construct($alipay_config);
+    function AlipayConfig() {
+    	$this->__construct();
     }
 
     /**
@@ -28,7 +26,7 @@ class AlipayConfig {
      */
 	function getAlipayConfig() {
 		//待请求参数数组
-		return $this->alipay_config;
+		return $this->config;
 	}
 	
 	
