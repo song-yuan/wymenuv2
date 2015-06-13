@@ -136,7 +136,7 @@ $(document).ready(function(){
     	$(this).find('.icon-hover-1').css('left','20%');
 	 	$(this).find('.icon-hover-2').css('right','20%');
 	 });
-    $('#cancelPadOrder').touchend(function(){
+    $('#cancelPadOrder').on('touchend',function(){
     	$('.product-pad-mask').find('.info').html('');
     	$('.product-pad-mask').css('display','none');
     	$('.blockCategory').each(function(){
@@ -151,16 +151,16 @@ $(document).ready(function(){
 		$('.total-num').html(0);
     });
    //help
-   $('.padsetting').touchend(function(){
+   $('.padsetting').on('touchend',function(){
             $(".setting-pad-mask").toggle();});
    
-   $('#content').touchend(function(){
+   $('#content').on('touchend',function(){
             $(".setting-pad-mask").css('display','none');
             $('.product-pad-mask').css('display','none');
         });
    
     //查看菜单
-    $('.top-right').touchend(function(){
+    $('.top-right').on('touchend',function(){
     	  if($('.product-pad-mask').is(':hidden')) {
               $('.product-pad-mask').show();
      	  }else{
@@ -294,7 +294,7 @@ $(document).ready(function(){
     	$(this).css('display','none');
     });
     
-    $('#updatePadOrder').touchend(function(){
+    $('#updatePadOrder').on('touchend',function(){
         if(!isPrintChecked)
         {
             alert(language_printer_check_atfirst);
