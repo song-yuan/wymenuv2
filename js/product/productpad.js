@@ -90,7 +90,7 @@ $(document).ready(function(){
 		
     });
    
-    $('#forum_list').on('click','.delCart',function(){
+    $('#forum_list').on('touchbegin','.delCart',function(){
     	var _this = $(this);
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
@@ -136,7 +136,7 @@ $(document).ready(function(){
     	$(this).find('.icon-hover-1').css('left','20%');
 	 	$(this).find('.icon-hover-2').css('right','20%');
 	 });
-    $('#cancelPadOrder').click(function(){
+    $('#cancelPadOrder').touchend(function(){
     	$('.product-pad-mask').find('.info').html('');
     	$('.product-pad-mask').css('display','none');
     	$('.blockCategory').each(function(){
@@ -151,16 +151,16 @@ $(document).ready(function(){
 		$('.total-num').html(0);
     });
    //help
-   $('.padsetting').click(function(){
+   $('.padsetting').touchend(function(){
             $(".setting-pad-mask").toggle();});
    
-   $('#content').click(function(){
+   $('#content').touchend(function(){
             $(".setting-pad-mask").css('display','none');
             $('.product-pad-mask').css('display','none');
         });
    
     //查看菜单
-    $('.top-right').click(function(){
+    $('.top-right').touchend(function(){
     	  if($('.product-pad-mask').is(':hidden')) {
               $('.product-pad-mask').show();
      	  }else{
@@ -168,7 +168,7 @@ $(document).ready(function(){
           }
     	//});
     });
-    $('.product-pad-mask').on('click','.minus',function(){
+    $('.product-pad-mask').on('touchbegin','.minus',function(){
                 //alert('-');
 		var input = $(this).siblings('input');
 		var num = input.val();
@@ -179,7 +179,7 @@ $(document).ready(function(){
 		totalPrice();
 		totalNum();		
 	});
-    $('.product-pad-mask').on('click','.plus',function(){
+    $('.product-pad-mask').on('touchbegin','.plus',function(){
                 //alert('+');
 		var input = $(this).siblings('input');
 		var num = parseInt(input.val());
@@ -188,21 +188,21 @@ $(document).ready(function(){
 		totalPrice();	
 		totalNum();
 	});
-    $('#pad-disbind-menu').on('click',function(){
+    $('#pad-disbind-menu').on('touchend',function(){
             location.href='../../../../../padbind/login';
             //绑定和解绑必须到我们的服务器。
             //location.href='http://menu.wymenu.com/wymenuv2/padbind/login';
 	});
      //打印测试关闭
-    $('#printerClose').on('click',function(){
+    $('#printerClose').on('touchend',function(){
         $('#print_check').hide();
     });
     //打印测试关闭
-    $('#printerShow').on('click',function(){
+    $('#printerShow').on('touchend',function(){
         $('#print_check').show();
     });
     //打印校正
-    $('#printerCheck').on('click',function(){
+    $('#printerCheck').on('touchend',function(){
         if (typeof Androidwymenuprinter == "undefined") {
                 alert(language_notget_padinfo);
                 return false;
@@ -244,7 +244,7 @@ $(document).ready(function(){
                  
     });
     
-    $('#pad-app-exit').on('click',function(){
+    $('#pad-app-exit').on('touchend',function(){
             if (typeof Androidwymenuprinter == "undefined") {
                 alert(language_notget_padinfo);
                 return false;
@@ -289,12 +289,12 @@ $(document).ready(function(){
  		});
     });
     
-    $('.large-pic').click(function(){
+    $('.large-pic').touchend(function(){
     	$(this).html('');
     	$(this).css('display','none');
     });
     
-    $('#updatePadOrder').click(function(){
+    $('#updatePadOrder').touchend(function(){
         if(!isPrintChecked)
         {
             alert(language_printer_check_atfirst);
