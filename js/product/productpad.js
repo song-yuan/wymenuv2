@@ -30,7 +30,7 @@ function addToCart() {
 }
 $(document).ready(function(){
 	var language = $('input[name="language"]').val();
-    $('#forum_list').on('touchbegin','.addCart',function(){
+    $('#forum_list').on('touchstart','.addCart',function(){
     	var _this = $(this);
     	var type = _this.attr('type');
     	var parentsBlockCategory = _this.parents('.blockCategory');
@@ -90,7 +90,7 @@ $(document).ready(function(){
 		
     });
    
-    $('#forum_list').on('touchbegin','.delCart',function(){
+    $('#forum_list').on('touchstart','.delCart',function(){
     	var _this = $(this);
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
@@ -168,7 +168,7 @@ $(document).ready(function(){
           }
     	//});
     });
-    $('.product-pad-mask').on('touchbegin','.minus',function(){
+    $('.product-pad-mask').on('touchstart','.minus',function(){
                 //alert('-');
 		var input = $(this).siblings('input');
 		var num = input.val();
@@ -179,7 +179,7 @@ $(document).ready(function(){
 		totalPrice();
 		totalNum();		
 	});
-    $('.product-pad-mask').on('touchbegin','.plus',function(){
+    $('.product-pad-mask').on('touchstart','.plus',function(){
                 //alert('+');
 		var input = $(this).siblings('input');
 		var num = parseInt(input.val());
@@ -256,7 +256,7 @@ $(document).ready(function(){
             }
 	});
 	 
-    $('#forum_list').on('touchbegin','.view-product-pic',function(){
+    $('#forum_list').on('touchstart','.view-product-pic',function(){
     	//var lid = $(this).attr('lid');
         var lid = $(this).attr('product-id');
         //alert(lid);//($('.large-pic').width() - $("#gallery").outerWidth())/2,//($('.large-pic').height() - $("#gallery").outerHeight())/2
