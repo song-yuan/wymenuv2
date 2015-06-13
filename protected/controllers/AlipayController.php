@@ -39,10 +39,10 @@ class AlipayController extends Controller
             $payment_type = "1";
             //必填，不能修改
             //服务器异步通知页面路径
-            $notify_url = "http://menu.wymenu.com/alipaydp/notify";
+            $notify_url = "http://menu.wymenu.com/wymenuv2/alipay/notify";
             //需http://格式的完整路径，不能加?id=123这类自定义参数
             //页面跳转同步通知页面路径
-            $return_url = "http://menu.wymenu.com/alipaydp/return";
+            $return_url = "http://menu.wymenu.com/wymenuv2/alipay/return";
             //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
             //商户订单号
             $out_trade_no = $_POST['WIDout_trade_no']; //商户网站订单系统中唯一订单号，必填
@@ -91,7 +91,8 @@ class AlipayController extends Controller
                 //计算得出通知验证结果
                 $alipayNotify = new AlipayNotify($this->alipay_config);
                 $verify_result = $alipayNotify->verifyReturn();
-                $ret_status;
+                $ret_status="";
+                $trade_status="";
                 if($verify_result) {//验证成功
                         //商户订单号
                         $out_trade_no = $_GET['out_trade_no'];
@@ -119,6 +120,7 @@ class AlipayController extends Controller
                     //如要调试，请看alipay_notify.php页面的verifyReturn函数
                     $ret_status="验证失败";
                 }
+                var_dump($trade_status);exit;
 		$this->render('return',array(
 			'trade_status'=>$trade_status,
                         'ret_status'=>$ret_status
