@@ -22,6 +22,7 @@ return array(
 		'application.components.*',
 		'application.components.weixinpay.*',
 		'application.components.weixin.*',
+                'application.components.alipaydp.lib.*',
 		'application.extensions.redis.*'
 	),
 	
@@ -66,7 +67,7 @@ return array(
 		// uncomment the following to enable URLs in path-format
 		
 		'urlManager'=>array(
-            'showScriptName'=>false,
+                'showScriptName'=>false,
 			'urlFormat'=>'path',
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',

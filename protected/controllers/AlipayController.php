@@ -2,6 +2,24 @@
 //require_once("alipay.config.php");
 class AlipayController extends Controller
 {
+    public $alipay_config=array();
+    public function init(){
+        $this->alipay_config['partner']= '2088811584894868';
+        //收款支付宝账号
+        $this->alipay_config['seller_email']	= 'hr@wymenu.com';
+        //安全检验码，以数字和字母组成的32位字符
+        $this->alipay_config['key']= 'jg1i916xu88bjmfpv02mx96afz63ormg';
+        //签名方式 不需修改
+        $this->alipay_config['sign_type']    = strtoupper('MD5');
+        //字符编码格式 目前支持 gbk 或 utf-8
+        $this->alipay_config['input_charset']= strtolower('utf-8');
+        //ca证书路径地址，用于curl中ssl校验
+        //请保证cacert.pem文件在当前文件夹目录中
+        //$this->alipay_config['cacert']    = getcwd().'\\cacert.pem';
+        $this->alipay_config['cacert']    = "admin\cacert.pem";
+        //访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
+        $this->alipay_config['transport']    = 'http';
+    }
     /*
      * 一个支付宝支付按钮，
      * 其他参数都作为隐藏参数放在form里面，
@@ -14,15 +32,17 @@ class AlipayController extends Controller
         
         public function actionPay()
 	{
-            $alipayconf=new AlipayConfig();
-            $alipay_config=$alipayconf->getAlipayConfig();
+//            $alipayconf=new AlipayConfig();
+//            var_dump($alipayconf);exit;
+//            $alipay_config=$alipayconf->getAlipayConfig();
+            //var_dump($this->alipay_config); exit;
             $payment_type = "1";
             //必填，不能修改
             //服务器异步通知页面路径
-            $notify_url = "http://menu.wymenu.com/alipaydp/notify_url.php";
+            $notify_url = "http://menu.wymenu.com/alipaydp/notify";
             //需http://格式的完整路径，不能加?id=123这类自定义参数
             //页面跳转同步通知页面路径
-            $return_url = "http://menu.wymenu.com/alipaydp/return_url.php";
+            $return_url = "http://menu.wymenu.com/alipaydp/return";
             //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
             //商户订单号
             $out_trade_no = $_POST['WIDout_trade_no']; //商户网站订单系统中唯一订单号，必填
@@ -41,8 +61,8 @@ class AlipayController extends Controller
             //构造要请求的参数数组，无需改动
             $parameter = array(
                             "service" => "create_direct_pay_by_user",
-                            "partner" => trim($alipay_config['partner']),
-                            "seller_email" => trim($alipay_config['seller_email']),
+                            "partner" => trim($this->alipay_config['partner']),
+                            "seller_email" => trim($this->alipay_config['seller_email']),
                             "payment_type"	=> $payment_type,
                             "notify_url"	=> $notify_url,
                             "return_url"	=> $return_url,
@@ -53,26 +73,23 @@ class AlipayController extends Controller
                             "show_url"	=> $show_url,
                             "anti_phishing_key"	=> $anti_phishing_key,
                             "exter_invoke_ip"	=> $exter_invoke_ip,
-                            "_input_charset"	=> trim(strtolower($alipay_config['input_charset']))
+                            "_input_charset"	=> trim(strtolower($this->alipay_config['input_charset']))
                     );
 
             //建立请求
-            $alipaySubmit = new AlipaySubmit($alipay_config);
+            $alipaySubmit = new AlipaySubmit($this->alipay_config);
             $html_text = $alipaySubmit->buildRequestForm($parameter,"get", "正在跳转到支付宝，请稍等...");
 		$this->render('pay',array(
-                    'html_text'=>$html_text
-                        
-                        
-                        
+                    'html_text'=>$html_text               
                 ));
 	}
         
         public function actionReturn()
 	{
-            $alipayconf=new AlipayConfig();
-            $alipay_config=$alipayconf->getAlipayConfig();
+//            $alipayconf=new AlipayConfig();
+//            $alipay_config=$alipayconf->getAlipayConfig();
                 //计算得出通知验证结果
-                $alipayNotify = new AlipayNotify($alipay_config);
+                $alipayNotify = new AlipayNotify($this->alipay_config);
                 $verify_result = $alipayNotify->verifyReturn();
                 $ret_status;
                 if($verify_result) {//验证成功
@@ -111,8 +128,8 @@ class AlipayController extends Controller
         public function actionNotify()
 	{
             $alipayconf=new AlipayConfig();
-            $alipay_config=$alipayconf->getAlipayConfig();
-            $alipayNotify = new AlipayNotify($alipay_config);
+            $this->alipay_config=$alipayconf->getAlipayConfig();
+            $alipayNotify = new AlipayNotify($this->alipay_config);
             $verify_result = $alipayNotify->verifyNotify();
             if($verify_result) {//验证成功
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
