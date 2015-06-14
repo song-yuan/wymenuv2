@@ -38,9 +38,9 @@
                             <a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>"  target="_blank"  id="bindbutton" class="blue" target="_blank" ><?php echo yii::t('app','解除绑定');?></a>
                             <!--<a href="http://menu.wymenu.com/wymenuv2/padbind/login"  id="bindbutton" class="blue" ><?php echo yii::t('app','解除绑定');?></a>-->
 			</div>
-                        <frameset cols="100,*">
-                            <frame src="http://www.baidu.com" name="view_frame">
-                          </frameset>
+                        <iframe style="width:600px;height: 300px;" src="http://www.baidu.com" name="view_frame">
+                            
+                          </iframe>
 			<!-- 
 			<div class="forget-password">
 				<h4>Forgot your password ?</h4>
