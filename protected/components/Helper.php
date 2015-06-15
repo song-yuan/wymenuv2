@@ -345,45 +345,67 @@ class Helper
 		$hasData=false;
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 ///site error because tempsite and reserve**************
+                $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                array_push($listData,"br");
                 $strSite="";
                 if($order->is_temp==0)
                 {
                     $site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
                     $siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
-                    $strSite=str_pad(yii::t('app','座号：').$siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                    //$strSite=str_pad(yii::t('app','座号：').$siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                    array_push($listData,"00".yii::t('app','座号：'));
+                    array_push($listData,"11".$siteType->name.' '.$site->serial);
+                    //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
                 }else{
-                    $strSite=str_pad(yii::t('app','座号：临时座').$order->site_id%10000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                    //$strSite=str_pad(yii::t('app','座号：临时座').$order->site_id%10000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                    array_push($listData,"00".yii::t('app','座号：临时座'));
+                    array_push($listData,"11".$order->site_id%10000);
+                    //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
                 }
+                array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
 		if(!empty($order->callno))
                 {
-                    $strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
+                    //$strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
                     //array_push($listData,$strcall);
+                    array_push($listData,"00"."   ".yii::t('app','呼叫号：'));
+                    array_push($listData,"11".$order->callno);
                 }
 		//$listKey = $order->dpid.'_'.$printer->ip_address;                	
-		$listData = array(Helper::getPlaceholderLenBoth($order->company->company_name, 48));
-		array_push($listData,$strSite);                
-		array_push($listData,str_pad('',48,'-'));                
+		array_push($listData,"br");
+		//array_push($listData,"00".$strSite);                
+		array_push($listData,"00".str_pad('',48,'-'));                
 		
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
                     $hasData=true;
                     if(Yii::app()->language=='jp')
                     {
-                        array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
+                        //array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
+                        array_push($listData,"11".$product['amount']." X ".number_format($product['price'],0)."    ".$product['product_name']);
                     }else{
-                        array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
+                        //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
+                        array_push($listData,"11".$product['amount']." X ".number_format($product['price'],2)."    ".$product['product_name']);
                     }
+                    array_push($listData,"br");
 		}
-		array_push($listData,str_pad('',48,'-'));
+		array_push($listData,"00".str_pad('',48,'-'));
                 if(Yii::app()->language=='jp')
                 {
-                    array_push($listData,str_pad(yii::t('app','应付：').number_format($order->should_total,0) , 26,' ').str_pad(date('Y-m-d H:i:s',time()),20,' '));
-                    array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
+                    //array_push($listData,str_pad(yii::t('app','应付：').number_format($order->should_total,0) , 26,' ').str_pad(date('Y-m-d H:i:s',time()),20,' '));
+                    //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
+                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,0));
+                    array_push($listData,"br");
+                    array_push($listData,"00".date('Y-m-d H:i:s',time()));                    
+                    array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
                 }else{
-                    array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
-                    array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
-                            .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
-                    array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
+                    //array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
+                    //array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
+                    //        .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
+                    //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
+                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,2));
+                    array_push($listData,"br");
+                    array_push($listData,"00".date('Y-m-d H:i:s',time()));                    
+                    array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
                 }
                 $precode=$cprecode;
                 //后面加切纸
@@ -783,16 +805,32 @@ class Helper
                 {
                     foreach($content as $line)
                     {
-                        $strcontent=mb_convert_encoding($line,"GBK","UTF-8");
-                        $contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
+                        //$strcontent=mb_convert_encoding($line,"GBK","UTF-8");
+                        //$contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
+                        $strcontent=mb_convert_encoding(substr($line,2),"GBK","UTF-8");
+                        $strfontsize=substr($line,0,2);
+                        if($strfontsize=="br")
+                        {
+                            $contentCode.="0A";
+                        }else{                            
+                            $contentCode.="1D21".$strfontsize.strtoupper(implode('',unpack('H*', $strcontent)));
+                        }
                     }
                 }elseif($printer->language=='2')//日文 shift-jis
                 {
                     $contentCode.="1C43011C26";//日文前导符号
                     foreach($content as $line)
                     {
+                        //$strcontent=mb_convert_encoding($line,"SJIS","UTF-8");
+                        //$contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
                         $strcontent=mb_convert_encoding($line,"SJIS","UTF-8");
-                        $contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
+                        $strfontsize=substr($line,0,2);
+                        if($strfontsize=="br")
+                        {
+                            $contentCode.="0A";
+                        }else{                            
+                            $contentCode.="1D21".$strfontsize.strtoupper(implode('',unpack('H*', $strcontent)));
+                        }
                     }
                 }else
                 {

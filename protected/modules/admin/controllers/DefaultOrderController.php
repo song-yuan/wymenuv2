@@ -178,7 +178,7 @@ class DefaultOrderController extends BackendController
                                
                             if($order->order_status=='4')
                             {
-                                SiteClass::deleteCode($this->companyId,$siteNo->code);
+                                SiteClass::deleteCode($this->companyId,$siteNo->code);                                
                             }
                             //FeedBackClass::cancelAllOrderMsg("0000000000","0",$order->lid,$companyId);
                             $sqlfeedback = "update nb_order_feedback set is_deal='1' where dpid=:companyId and site_id=:siteId and is_temp=:istemp";
@@ -853,6 +853,9 @@ class DefaultOrderController extends BackendController
                                 //$orderProduct->is_print='1';
                                 $orderProduct->product_order_status='1';
                                 $orderProduct->save();
+                                $product=  Product::model()->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderProduct->product_id,':dpid'=>$companyId));
+                                $product->order_number++;
+                                $product->save();
                             }                            
                         }
                         $transaction->commit();
