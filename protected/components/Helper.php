@@ -336,7 +336,7 @@ class Helper
         
         //收银台打印清单写入到redis
         //send by workerman encode by GBK or shift-JIS
-	static public function printList(Order $order , Pad $pad, $cprecode){
+	static public function printList(Order $order , Pad $pad, $cprecode,$printserver){
 		
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
@@ -413,7 +413,7 @@ class Helper
                 //var_dump($listData);exit;
                 $printret=array();
 		if($hasData){
-                    $printserver='0';
+                    //$printserver='0';
                     return Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
 		}else{
                     return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
@@ -656,8 +656,9 @@ class Helper
                         $sufcode="0A0A0A0A0A0A1D5601";                        
                         //var_dump($listData);exit;
                         $printret=array();
-                        for($i=0;$i<$printway->list_no;$i++){                                        
-                            $printret=Helper::printConetent($printer,$listData,$precode,$sufcode);
+                        for($i=0;$i<$printway->list_no;$i++){
+                            $printserver="1";
+                            $printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                             if(!$printret['status'])
                             {
                                 return $printret;

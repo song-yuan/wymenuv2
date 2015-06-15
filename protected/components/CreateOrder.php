@@ -321,8 +321,8 @@ class CreateOrder
 //            }else{
                 //前面加 barcode
                 $precode="1D77021D6B04".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."001D2100".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                
-                $printList = Helper::printList($order , $pad,$precode);
+                $printserver="0";
+                $printList = Helper::printList($order , $pad,$precode,$printserver);
                 if(!$printList['status']){
                 	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
@@ -330,9 +330,9 @@ class CreateOrder
  			$transaction->commit();	
  			return json_encode($printList,JSON_UNESCAPED_UNICODE);
 		 } catch (Exception $e) {
-            $transaction->rollback(); //如果操作失败, 数据回滚
-            return $e->getMessage();
-        } 
+                $transaction->rollback(); //如果操作失败, 数据回滚
+                return $e->getMessage();
+            } 
 	}
 	//获取套餐里选中单品的id
 	public static function getSetProductIds($dpid,$setId){
