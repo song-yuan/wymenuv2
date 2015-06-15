@@ -295,11 +295,11 @@ $(document).ready(function(){
     });
     
     $('#updatePadOrder').on('touchend',function(){
-        if(!isPrintChecked)
-        {
-            alert(language_printer_check_atfirst);
-            return false;
-        }
+//        if(!isPrintChecked)
+//        {
+//            alert(language_printer_check_atfirst);
+//            return false;
+//        }
         if (typeof Androidwymenuprinter == "undefined") {
             alert(language_notget_padinfo);
             return false;
