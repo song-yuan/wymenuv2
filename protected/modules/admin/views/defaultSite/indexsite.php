@@ -133,7 +133,7 @@
             gsistemp="<?php echo $sistemp; ?>";
             gstypeid="<?php echo $stypeId; ?>";
             gop="<?php echo $op; ?>";
-            $('.modalaction').on('click', function(){
+            $('.modalaction').on('touchstart', function(){
                 var $modal = $('#portlet-button');
                 var pxbox = $('#pxbox_button'); 
                 var sid = $(this).attr('sid');
