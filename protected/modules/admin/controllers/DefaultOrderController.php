@@ -1281,7 +1281,8 @@ class DefaultOrderController extends BackendController
                 //$precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 
 		//Yii::app()->end(json_encode(Helper::printList($order , $padid)));
-                $ret=Helper::printList($order , $pad,$precode);
+                $printserver="1";
+                $ret=Helper::printList($order , $pad,$precode,$printserver);
                 //exit;
                 $this->renderPartial('printlist' , array(
                                 'orderId'=>$orderId,
