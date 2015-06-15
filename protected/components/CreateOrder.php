@@ -320,7 +320,7 @@ class CreateOrder
 //                throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','必须是本地打印机！')),JSON_UNESCAPED_UNICODE));
 //            }else{
                 //前面加 barcode
-                $precode="1D77021D6B04".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."001D2111".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $precode="1D77021D6B04".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."001D200".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 
                 $printList = Helper::printList($order , $pad,$precode);
                 if(!$printList['status']){
