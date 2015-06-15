@@ -195,6 +195,8 @@ $(document).ready(function(){
 	});
      //打印测试关闭
     $('#printerClose').on('touchend',function(){
+        //var index = layer.load(0, {shade: false});
+        //layer.close(index); 
         $('#print_check').hide();
     });
     //打印测试关闭

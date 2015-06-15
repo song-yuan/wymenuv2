@@ -16,7 +16,10 @@
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/base64.js'); 
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/pic-pad.js');
-       
+//        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/layer/layer.js');
+//        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/layer/extend/layer.ext.js');
+//        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/layer/skin/layer.ext.css');
+//        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/layer/skin/layer.css');
 ?>
 
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type,'siteNoId'=>$siteNoId));?>
