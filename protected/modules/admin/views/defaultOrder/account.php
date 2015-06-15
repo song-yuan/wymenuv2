@@ -69,7 +69,7 @@
 			
 			<script type="text/javascript">
                             var interval;
-                            $('#payback-btn').click(function(){
+                            $('#payback-btn').on(event_clicktouchstart,function(){
                                  bootbox.confirm("<?php echo yii::t('app','你确定退款吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
@@ -79,7 +79,7 @@
                                         }
                                  });
                             });
-                            $('#pay-btn').click(function(){
+                            $('#pay-btn').on(event_clicktouchstart,function(){
                                  bootbox.confirm("<?php echo yii::t('app','你确定只收银不结单吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
@@ -88,7 +88,7 @@
                                         }
                                  });
                             });
-                            $('#account-btn').click(function(){
+                            $('#account-btn').on(event_clicktouchstart,function(){
                                  bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'account','orderId'=>$order->lid)) ?>');
@@ -97,7 +97,7 @@
                                         }
                                  });
                             });
-                            $('#cashin-btn').click(function(){
+                            $('#cashin-btn').on(event_clicktouchstart,function(){
                                  bootbox.confirm("<?php echo yii::t('app','你确定切换到其他现金支付吗？');?>", function(result) {
                                         if(result){
                                                 accountmanul();
@@ -131,7 +131,7 @@
                                     $("#timecount").html(curtime);
                                 }
                             }
-                            $('#btn-account-cancle').click(function(){
+                            $('#btn-account-cancle').on(event_clicktouchstart,function(){
                                  clearTimeout(interval);
                                  scanon=false;
                                  location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$order->lid,'syscallId'=>$callid));?>";

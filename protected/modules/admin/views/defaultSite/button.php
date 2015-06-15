@@ -60,7 +60,7 @@
                                 
                             }
                             
-                           $('#site_open').click(function(){
+                           $('#site_open').on(event_clicktouchstart,(function(){
                                var siteNumber=$('#site_number').val();                               
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
@@ -93,7 +93,7 @@
                                }                               
                            });
                            
-                           $('#open_order').click(function(){
+                           $('#open_order').on(event_clicktouchstart,function(){
                                var siteNumber=$('#site_number').val();                               
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
@@ -124,7 +124,7 @@
                                }                                                              
                            });
                            
-                           $('.closesite').on('click',function(){
+                           $('.closesite').on(event_clicktouchstart,function(){
                                var sid = $(this).attr('sid');
                                $.ajax({
                                     'type':'POST',
@@ -149,7 +149,7 @@
                                 //return false;                               
                            });
                            
-                           $('.switchsite').on('click',function(){
+                           $('.switchsite').on(event_clicktouchstart,function(){
                                //var sid = $(this).attr('sid');
                                var statu = confirm("<?php echo yii::t('app','确定换台吗？');?>");
                                 if(!statu){
@@ -159,7 +159,7 @@
                                 $('#portlet-button').modal('hide');
                            });                           
                            
-                           $('.unionsite').on('click',function(){
+                           $('.unionsite').on(event_clicktouchstart,function(){
                                //var sid = $(this).attr('sid');
                                var statu = confirm("<?php echo yii::t('app','确定并台吗？');?>");
                                 if(!statu){
@@ -169,14 +169,14 @@
                                 $('#portlet-button').modal('hide');
                            });
                            
-                           $('.orderaction').on('click',function(){
+                           $('.orderaction').on(event_clicktouchstart,function(){
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
                                //alert(istemp);
                                location.href='<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp;
                            });
                            
-                           $('#btn-print-btn').click(function(){
+                           $('#btn-print-btn').on(event_clicktouchstart,function(){
                                 var sid = $(this).attr('sid');
                                 var istemp = $(this).attr('istemp');
                                 $.get('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId));?>'+'/sid/'+sid+'/istemp/'+istemp,function(data){
@@ -189,7 +189,7 @@
                                 },'json');
                             });
                             
-                            $('#btn-account-btn').click(function(){
+                            $('#btn-account-btn').on(event_clicktouchstart,function(){
                                 var sid = $(this).attr('sid');
                                 var istemp = $(this).attr('istemp');
                                 var $modalconfig = $('#portlet-button');
@@ -200,7 +200,7 @@
                                          }); 
                                           
                             });
-                           $('#closemodalid').click(function(){
+                           $('#closemodalid').on(event_clicktouchstart,function(){
                                //alert("sdf");
                                return;                                           
                             });
