@@ -539,8 +539,9 @@ class Helper
                         $sufcode="0A0A0A0A0A0A1D5601";                        
                         //var_dump($listData);exit;
                         $printret=array();
+                        $printserver="1";
                         for($i=0;$i<$printway->list_no;$i++){                                        
-                            $printret=Helper::printConetent($printer,$listData,$precode,$sufcode);
+                            $printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                             if(!$printret['status'])
                             {
                                 return $printret;
