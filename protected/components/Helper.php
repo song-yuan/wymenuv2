@@ -345,7 +345,7 @@ class Helper
 		$hasData=false;
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 ///site error because tempsite and reserve**************
-                $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 15));//
                 array_push($listData,"br");
                 $strSite="";
                 if($order->is_temp==0)
@@ -381,10 +381,10 @@ class Helper
                     if(Yii::app()->language=='jp')
                     {
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
-                        array_push($listData,"11".$product['amount']." X ".number_format($product['price'],0)."    ".$product['product_name']);
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),12,' ')." ".$product['product_name']);
                     }else{
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
-                        array_push($listData,"11".$product['amount']." X ".number_format($product['price'],2)."    ".$product['product_name']);
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),12,' ')." ".$product['product_name']);
                     }
                     array_push($listData,"br");
 		}
@@ -396,7 +396,7 @@ class Helper
                     array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,0));
                     array_push($listData,"br");
                     array_push($listData,"00".date('Y-m-d H:i:s',time()));                    
-                    array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
+                    array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
                 }else{
                     //array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
                     //array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
@@ -405,7 +405,7 @@ class Helper
                     array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,2));
                     array_push($listData,"br");
                     array_push($listData,"00".date('Y-m-d H:i:s',time()));                    
-                    array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
+                    array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
                 }
                 $precode=$cprecode;
                 //后面加切纸
