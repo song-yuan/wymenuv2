@@ -88,21 +88,21 @@
 							<?php $this->endWidget(); ?>
 							<script>                                                      
                                                             
-                                                            $('#btn-addproduct').click(function(){
+                                                            $('#btn-addproduct').on(event_clicktouchstart,function(){
                                                                 var $modalconfig = $('#portlet-config');
                                                                 $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'isset'=>'0'));?>', '', function(){
                                                                             $modalconfig.modal();
                                                                           });                                
                                                             });
                                                             
-                                                            $('#btn-addset').click(function(){
+                                                            $('#btn-addset').on(event_clicktouchstart,function(){
                                                                 var $modalconfig = $('#portlet-config');
                                                                 $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'isset'=>'1'));?>', '', function(){
                                                                             $modalconfig.modal();
                                                                           });                                
                                                             });
 
-                                                            $('.btn-edit').click(function(){
+                                                            $('.btn-edit').on(event_clicktouchstart,function(){
                                                                    var id = $(this).attr('lid');
                                                                    var setid = $(this).attr('setid');
                                                                    var $modalconfig = $('#portlet-config');
@@ -112,7 +112,7 @@
                                                                    });
                                                             });
 
-                                                            $('.btn-retreat').click(function(){
+                                                            $('.btn-retreat').on(event_clicktouchstart,function(){
                                                                    var id = $(this).attr('lid');
                                                                    var $modal=$('#portlet-config');
                                                                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+id+'/typeId/'+"<?php echo $typeId; ?>"
@@ -121,7 +121,7 @@
                                                                    });
                                                             });
                                                             
-                                                            $('.btn-addition').click(function(){
+                                                            $('.btn-addition').on(event_clicktouchstart,function(){
                                                                    var productid = $(this).attr('productid');
                                                                    var $modal=$('#portlet-config');
                                                                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addAddition',array('companyId'=>$this->companyId,'orderId'=>$model->lid));?>/productId/'+productid+'/typeId/'+"<?php echo $typeId; ?>"
@@ -130,7 +130,7 @@
                                                                    });
                                                             });
 
-                                                            $('.btn-taste').click(function(){
+                                                            $('.btn-taste').on(event_clicktouchstart,function(){
                                                                    var lid = $(this).attr('lid');
                                                                    var $modal=$('#portlet-config');
                                                                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/productTaste',array('companyId'=>$this->companyId,'typeId'=>$typeId,'isall'=>'0'));?>/lid/'+lid
@@ -139,7 +139,7 @@
                                                                    });
                                                             });
 
-                                                            $('.btn-weight').click(function(){
+                                                            $('.btn-weight').on(event_clicktouchstart,function(){
                                                                    var id = $(this).attr('lid');
                                                                    var isweight=$(this).attr('isweight');
                                                                    if(isweight=='0')
@@ -154,7 +154,7 @@
                                                                    });
                                                             });
 
-                                                            $('.btn-del').click(function(){
+                                                            $('.btn-del').on(event_clicktouchstart,function(){
                                                                var id = $(this).attr('lid');
                                                                var setid = $(this).attr('setid');
                                                                //var orderstatus="<?php echo $model->order_status;?>";
@@ -178,7 +178,7 @@
                                                                }});
                                                            });                                                                  
                                                            
-                                                           $('.btn-reprint').click(function(){
+                                                           $('.btn-reprint').on(event_clicktouchstart,function(){
                                                                 var id = $(this).attr('lid');
                                                                 //alert(id);
                                                                 var $modal=$('#portlet-config');

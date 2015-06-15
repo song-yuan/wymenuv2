@@ -176,11 +176,11 @@
                                 });
                         }
                         
-                        $('#btn_account').click(function(){
+                        $('#btn_account').on(event_clicktouchstart,function(){
                                  //openaccount('0');
                                  accountmanul();
                         });
-                        $('#btn_payback').click(function(){
+                        $('#btn_payback').on(event_clicktouchstart,function(){
                                  openaccount('1');
                         });
                         /*
@@ -191,7 +191,7 @@
                                           }); 
                         });
                         */
-                        $('#print-btn').click(function(){
+                        $('#print-btn').on(event_clicktouchstart,function(){
                             if (typeof Androidwymenuprinter == "undefined") {
                                 alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
                                 return false;
@@ -244,7 +244,7 @@
                             });
                         }
                         
-                        $('#kitchen-btn').click(function(){
+                        $('#kitchen-btn').on(event_clicktouchstart,function(){
                             var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
                                 if(!statu){
                                     return false;
@@ -255,7 +255,7 @@
                             printKitenAll('0'); 
                         });
                         
-                        $('#alltaste-btn').click(function(){
+                        $('#alltaste-btn').on(event_clicktouchstart,function(){
                                 var $modalconfig = $('#portlet-config');
                                 $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/productTaste',array('companyId'=>$this->companyId,'typeId'=>$typeId,'lid'=>$model->lid,'isall'=>'1'));?>', '', function(){
                                             $modalconfig.modal();

@@ -72,6 +72,7 @@
 	<!-- BEGIN PAGE LEVEL SCRIPTS -->
 	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/scripts/app.js');?>
 	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/scripts/table-managed.js');?>
+        <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/padpc.js');?>
 	<script>
 		jQuery(document).ready(function() {
 		   App.init();

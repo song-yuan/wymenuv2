@@ -144,6 +144,11 @@
         <script type="text/javascript">
             
             $(document).ready(function() {
+                if (typeof Androidwymenuprinter == "undefined") {
+                      event_clicktouchstart="click";
+                }else{
+                    event_clicktouchstart="touchstart";
+                }
                 //$('<audio id="chatAudio"><source src="/wymenuv2/admin/audio/notify.ogg" type="audio/ogg"><source src="/wymenuv2/admin/audio/notify.mp3" type="audio/mpeg"><source src="/wymenuv2/admin/audio/notify.wav" type="audio/wav"></audio>').appendTo('body');
                 getnotificationnum();
                 //$('#header_notification_list').load('<?php echo $this->createUrl('default/messageliall',array('companyId'=>$this->companyId));?>'); 
@@ -151,7 +156,7 @@
                 interval = setInterval(getnotificationnum,"15000");
             });            
             
-            $('#notification_banner_id').on('click', function(){
+            $('#notification_banner_id').on(event_clicktouchstart, function(){
                 getnotificationnum();
                 $('#header_notification_list').load('<?php echo $this->createUrl('default/messageliall',array('companyId'=>$this->companyId));?>'); 
             });
