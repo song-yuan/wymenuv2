@@ -60,7 +60,7 @@
                                 
                             }
                             
-                           $('#site_open').on(event_clicktouchstart,(function(){
+                           $('#site_open').on(event_clicktouchstart,function(){
                                var siteNumber=$('#site_number').val();                               
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
