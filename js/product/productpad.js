@@ -289,7 +289,7 @@ $(document).ready(function(){
  		});
     });
     
-    $('.large-pic').on('touchend',function(){
+    $('.large-pic').on('click',function(){
     	$(this).html('');
     	$(this).css('display','none');
     });
@@ -309,20 +309,29 @@ $(document).ready(function(){
        	//var pad_id=0000000008;
     	$('#padOrderForm').ajaxSubmit(function(msg){
     		var data = eval('(' + msg + ')');
+                var printresult;
     		if(data.status){
-                 if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
+                 //printNetJob(String companyId,String jobId,String printer)
+                 if(data.type=='local')
+                 {
+                     printresult=Androidwymenuprinter.printJob(data.dpid,data.jobid);
+                 }else{
+                     printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+                 }
+                 if(printresult)
+                 //if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                  {
                 	 $('#padOrderForm').find('.input-product').each(function(){
                 	    var _this = $(this);
-                     	var productId = _this.attr('name');
-                     	var productIdArr = productId.split(","); //字符分割 
-                     	productId = productIdArr[0];
-                     	var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
-                     	var category = parents.attr('category');//分类id
-                     	parents.find('.subject-order').css('display','none');
-                     	parents.find('.single-num-circel').html(0);
-                     	_this.parents('.product-catory-product').remove();
-                     	if(!$('.catory'+category).find('.product-catory-product').length){
+                            var productId = _this.attr('name');
+                            var productIdArr = productId.split(","); //字符分割 
+                            productId = productIdArr[0];
+                            var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+                            var category = parents.attr('category');//分类id
+                            parents.find('.subject-order').css('display','none');
+                            parents.find('.single-num-circel').html(0);
+                            _this.parents('.product-catory-product').remove();
+                            if(!$('.catory'+category).find('.product-catory-product').length){
 			    			$('.catory'+category).remove();
 			    		}
                      });

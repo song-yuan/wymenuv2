@@ -391,7 +391,8 @@ class Helper
                 //var_dump($listData);exit;
                 $printret=array();
 		if($hasData){
-                    return Helper::printConetent($printer,$listData,$precode,$sufcode);
+                    $printserver='0';
+                    return Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
 		}else{
                     return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
                 }
@@ -767,7 +768,11 @@ class Helper
                 return $ret;
 	}
         
-        static public function printConetent(Printer $printer,$content,$precode,$sufcode)
+        /*
+         * $printserver是否通过打印服务器打印，0表示不通过，数据存储在内存中，由程序通知pad自己去取数据并打印。
+         * 1表示通过，指令发出去后，由打印服务器安排打印，程序只能读取打印服务器的返回结果，是异步的。
+         */
+        static public function printConetent(Printer $printer,$content,$precode,$sufcode,$printserver)
         {
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
@@ -798,8 +803,12 @@ class Helper
                 //任务构建
                 $se=new Sequence("printer_job_id");
                 $jobid = $se->nextval();
-                if($printer->printer_type=='0')//net
+                if($printserver=='1')//通过打印服务器打印
                 {
+                    if($printer->printer_type!='0')//not net
+                    {
+                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','网络打印的打印机必须是网络打印机！'));
+                    }
                     $print_data=array(
                         "company_id"=>$printer->dpid,
                         "job_id"=>$jobid,
@@ -818,14 +827,17 @@ class Helper
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','msg'=>'');
                     }else{
                         return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','打印服务器找不到！'));
+                    }                    
+                }else{//主动的同步打印
+                    if($printer->printer_type=='1')//local
+                    {                
+                        //$ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
+                        $store->set($printer->dpid."_".$jobid,$contentCode,0,120);//should 120测试1200
+                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
+                    }else{
+                        $store->set($printer->dpid."_".$jobid,$contentCode,0,120);//should 120测试1200
+                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
                     }
-                }elseif($printer->printer_type=='1')//local
-                {                
-                    //$ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
-                    $store->set($printer->dpid."_".$jobid,$contentCode,0,1200);//should 60
-                    return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
-                }else{
-                    return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','打印机类型错误！'));
-                }               
+                }
         }
 }
