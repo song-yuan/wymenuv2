@@ -258,7 +258,7 @@ $(document).ready(function(){
             }
 	});
 	 
-    $('#forum_list').on('touchstart','.view-product-pic',function(){
+    $('#forum_list').on('click','.view-product-pic',function(){
     	//var lid = $(this).attr('lid');
         var lid = $(this).attr('product-id');
         //alert(lid);//($('.large-pic').width() - $("#gallery").outerWidth())/2,//($('.large-pic').height() - $("#gallery").outerHeight())/2
