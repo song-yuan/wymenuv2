@@ -116,7 +116,7 @@
                                                                 $('#selsetlistid').val(setsel);
                                                          };
                                                          setlistid();
-                                                         $('.groupradio').click(function(){
+                                                         $('.groupradio').on(event_clicktouchstart,function(){
                                                             setlistid();
                                                          });
                                                 </script>

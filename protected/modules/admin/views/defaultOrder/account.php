@@ -113,7 +113,7 @@
                                     interval = setInterval(autopaytimer,"2000");
                                 }
                             });
-                            $('#autopay_pause').click(function(){
+                            $('#autopay_pause').on(event_clicktouchstart,function(){
                                 //alert(11);
                                 clearTimeout(interval);
                             });

@@ -495,31 +495,44 @@ class Helper
                         /////////**********判断打印机是否存在******//////////////////
                         //$list = new ARedisList($listKey);
                         //var_dump($list);exit;
-                        $strSite="";
-                        if($order->is_temp=='1')
-                        {
-                            $strSite.= str_pad(yii::t('app','临时座：').$siteNo->site_id%1000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
-                        }else{
-                            $strSite.= str_pad(yii::t('app','座号：').$site->siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
-                        }
-                        //$strreprint="";
-                        //var_dump($strSite);exit;
-                        $listData = array(Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 48));
-                        //var_dump($listData);exit;
+                        $listData = array("22".Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 15));//
+                        array_push($listData,"br");
                         if($reprint)
                         {
                             $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
-                            array_push($listData,$strreprint);
+                            array_push($listData,"11".$strreprint);
                         }
+                        array_push($listData,"br");
+                        $strSite="";
+                        if($order->is_temp=='1')
+                        {
+                            //$strSite.= str_pad(yii::t('app','临时座：').$siteNo->site_id%1000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                            array_push($listData,"00".yii::t('app','座号：临时座'));
+                            array_push($listData,"11".$siteNo->site_id%1000);
+                        }else{
+                            //$strSite.= str_pad(yii::t('app','座号：').$site->siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                            array_push($listData,"00".yii::t('app','座号：'));
+                            array_push($listData,"11".$site->siteType->name.' '.$site->serial);
+                        }
+                        array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
+                        //$strreprint="";
+                        //var_dump($strSite);exit;
+                        //$listData = array(Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 48));
+                        //var_dump($listData);exit;
+                        
                         if(!empty($order->callno))
                         {
-                            $strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
+                            //$strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
                             //array_push($listData,$strcall);
+                            array_push($listData,"00"."  ".yii::t('app','呼叫号：'));
+                            array_push($listData,"11".$order->callno);
                         }
                         //var_dump($listData);exit;
-                        array_push($listData,$strSite);                
-                        array_push($listData,str_pad('',48,'-'));
-                        array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,34).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,14));	
+                        //array_push($listData,$strSite);
+                        array_push($listData,"br");                        
+                        array_push($listData,"00".str_pad('',48,'-'));
+                        //array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,34).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,14));	
+                        
                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                         foreach($orderProductTastes as $orderProductTaste){
                             $strTaste.= '/'.$orderProductTaste->taste->name;

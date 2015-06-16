@@ -50,7 +50,7 @@
 
                                                 <?php $this->endWidget(); ?>
 							<script>
-                                                        $('#addition_create_btn').click(function(){
+                                                        $('#addition_create_btn').on(event_clicktouchstart,function(){
                                                             var numlist='';
                                                             var numstr=0;
                                                             $('.additionnum').each(function(){
@@ -70,7 +70,7 @@
                                                             $('#orderAddition').submit();
                                                         });
                                                         
-                                                        $('.minus').click(function(){
+                                                        $('.minus').on(event_clicktouchstart,function(){
                                                                 var input = $(this).siblings('input');
                                                                 var num = parseInt(input.val());
                                                                 var unitnum = parseInt(input.attr('unitnumber'));
@@ -79,7 +79,7 @@
                                                                 }
                                                                 input.val(num);			
                                                         });
-                                                        $('.plus').click(function(){
+                                                        $('.plus').on(event_clicktouchstart,function(){
                                                                 var input = $(this).siblings('input');
                                                                 var num = parseInt(input.val());
                                                                 var unitnum = parseInt(input.attr('unitnumber'));
