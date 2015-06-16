@@ -105,7 +105,7 @@
                                                 }
                                         });
                                 });
-                        $('#create_btn').click(function(){
+                        $('#create_btn').on(event_clicktouchstart,function(){
                             //alert($('#setlist').val());
                             if(isset=='0' && $('#OrderProduct_product_id').val()=='0')
                             {
@@ -118,7 +118,7 @@
                                 return false;
                             }
                         });
-                        $('#btn_product').click(function(){
+                        $('#btn_product').on(event_clicktouchstart,function(){
                                 $('#btn_product').removeClass('grey');
                                 $('#btn_product').addClass('purple');
                                 $('#btn_set').removeClass('purple');
@@ -127,7 +127,7 @@
                                 $('#product_panel').removeClass('hidden');
                                 $('#isetid').val('0');
                         });
-                        $('#btn_set').click(function(){
+                        $('#btn_set').on(event_clicktouchstart,function(){
                                 $('#btn_set').removeClass('grey');
                                 $('#btn_set').addClass('purple');
                                 $('#btn_product').removeClass('purple');

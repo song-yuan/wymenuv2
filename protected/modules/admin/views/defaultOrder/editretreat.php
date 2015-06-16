@@ -42,7 +42,7 @@
                     <script type="text/javascript">                           
                         
                         
-                        $('#create_btn_add_retreat').click(function(){                            
+                        $('#create_btn_add_retreat').on(event_clicktouchstart,function(){                            
                            // var id = $(this).val();                            
                                 $.ajax({
                                         'type':'POST',

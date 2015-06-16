@@ -96,7 +96,7 @@
 			
 			<script type="text/javascript">
                             var now_should_pay=parseFloat("<?php echo number_format($order->should_total-$order->reality_total,2); ?>");
-                            $('.calc_num').on('touchstart','li',function(){
+                            $('.calc_num').on(event_clicktouchstart,'li',function(){
                                 var inval=$("#cash_in").html();
                                 //alert(inval);
                                 if(inval=="0" || inval=="00")
@@ -154,14 +154,14 @@
                                 }
                             });
                             
-                            $('#clearall').on('touchend',function(){
+                            $('#clearall').on(event_clicktouchstart,function(){
                                 $("#cash_in").html("0");
                                 //$("#cash_in").attr("pointat","0");
                                 //cash_out
                                 $("#cash_out").html("0");
                             });
                             
-                            $('#clearone').click(function(){
+                            $('#clearone').on(event_clicktouchstart,function(){
                                 var cashin=$("#cash_in").html();
                                 if(cashin.length>1)
                                 {
@@ -202,14 +202,14 @@
                                     $("#cash_out").html("0");
                                 }
                             });
-                            $('#other-btn').click(function(){
+                            $('#other-btn').on(event_clicktouchstart,function(){
                                  bootbox.confirm("<?php echo yii::t('app','你确定切换到其他支付方式吗？');?>", function(result) {
                                         if(result){
                                                 openaccount('0');
                                         }
                                  });
                             });
-                            $('#pay-btn').click(function(){
+                            $('#pay-btn').on(event_clicktouchstart,function(){
                                  bootbox.confirm("<?php echo yii::t('app','你确定只收银不结单吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
@@ -225,7 +225,7 @@
                                         }
                                  });
                             });
-                            $('#account-btn').click(function(){
+                            $('#account-btn').on(event_clicktouchstart,function(){
                                  bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'account','orderId'=>$order->lid)) ?>');
@@ -250,7 +250,7 @@
                                     interval = setInterval(autopaytimer,"2000");
                                 }
                             });
-                            $('#autopay_pause').click(function(){
+                            $('#autopay_pause').on(event_clicktouchstart,function(){
                                 //alert(11);
                                 clearTimeout(interval);
                             });
@@ -268,7 +268,7 @@
                                     $("#timecount").html(curtime);
                                 }
                             }
-                            $('#btn-account-cancle').click(function(){
+                            $('#btn-account-cancle').on(event_clicktouchstart,function(){
                                  clearTimeout(interval);
                                  scanon=false;
                                  location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$order->lid,'syscallId'=>$callid));?>";
