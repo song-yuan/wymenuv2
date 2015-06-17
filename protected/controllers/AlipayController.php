@@ -108,7 +108,7 @@ class AlipayController extends Controller
                         //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                         //如果有做过处理，不执行商户的业务程序
                         //下单，返回页面，单元清单。。。
-                        $this->newOrder($out_trade_no,$trade_no,$trade_no);
+                        $this->endTrade($out_trade_no,$trade_no,$trade_no);
                         $ret_status="正常返回，下单成功";//下单成功
                     } else {
                         //echo "trade_status=".$_GET['trade_status'];
@@ -158,7 +158,7 @@ class AlipayController extends Controller
                     //调试用，写文本函数记录程序运行情况是否正常
                     //logResult("这里写入想要调试的代码变量值，或其他运行的结果记录");
                     //厨打、收款/退款、结单
-                    $this->endTrade($out_trade_no,$trade_no,$trade_no);
+                    $this->notifyTrade($out_trade_no,$trade_no,$trade_no);
                 }
                 else if ($_POST['trade_status'] == 'TRADE_SUCCESS') {
                     //判断该笔订单是否在商户网站中已经做过处理
@@ -169,7 +169,7 @@ class AlipayController extends Controller
                     //调试用，写文本函数记录程序运行情况是否正常
                     //logResult("这里写入想要调试的代码变量值，或其他运行的结果记录");
                     //厨打、收款/退款、结单
-                    $this->endTrade($out_trade_no,$trade_no,$trade_no);
+                    $this->notifyTrade($out_trade_no,$trade_no,$trade_no);
                 }
                 //——请根据您的业务逻辑来编写程序（以上代码仅作参考）——
                 echo "success";		//请不要修改或删除
@@ -182,12 +182,19 @@ class AlipayController extends Controller
                 //logResult("这里写入想要调试的代码变量值，或其他运行的结果记录");
             }
 	}
-        
+        /*
+         * 支付成功后，订单边支付成功，商品清单就变成下单成功，下单数量加一
+         * 打印清单，同时厨房打印，厨房打印成功，都打印成功了就结单、
+         * 任何一个打印失败都通知到order_feedback
+         */
         private function endTrade($out_trade_no,$trade_no,$trade_no){
 		
 	} 
         
-        private function newOrder($out_trade_no,$trade_no,$trade_no){
+        /*
+         * 做个存储记录，建一个notify表 支付宝和微信共用
+         */
+        private function notifyTrade($out_trade_no,$trade_no,$trade_no){
 		
 	}
 }

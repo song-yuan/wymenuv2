@@ -34,10 +34,38 @@ require_once("lib/alipay_submit.class.php");
         $method = "add";
         //创建商品二维码
         //业务类型
-        $biz_type = "11";//osyosy应该是10吧？
+        $biz_type = "10";//osyosy应该是10吧？
         //目前只支持1
         //业务数据
-        $biz_data = $_POST['WIDbiz_data'];
+        //$biz_data = $_POST['WIDbiz_data'];
+        $biz_type='{
+	"memo":"备注XXX",
+	"ext_info":
+	{
+	"single_limit":"10",
+	"user_limit":"30",
+	"logo_name":"某某集团"
+	},
+	"goods_info":
+	{"id":"10001",
+	"name":"某某食品",
+	"price":"11.23",
+	"expiry_date":"2015-12-01 00:00:01|2016-12-30 23:59:59",
+	"desc":"这件商品的描述",
+	"sku_title":"请选择食品种类",
+	"sku":[{"sku_id":"001",
+		"sku_name":"汉堡",
+		"sku_price":"10.00",
+		"sku_inventory":"500"},
+		{"sku_id":"002",
+		"sku_name":"薯条",
+		"sku_price":"9.00",
+		"sku_inventory":"500"}]
+	},
+	"need_address":"F",
+	"trade_type":"1",
+	
+}';
         //格式：JSON 大字符串，详见技术文档4.2.1章节
 
 
@@ -57,6 +85,7 @@ $parameter = array(
 //建立请求
 $alipaySubmit = new AlipaySubmit($alipay_config);
 $html_text = $alipaySubmit->buildRequestHttp($parameter);
+var_dump($html_text);
 //解析XML
 //注意：该功能PHP5环境及以上支持，需开通curl、SSL等PHP配置环境。建议本地调试时使用PHP开发软件
 $doc = new DOMDocument();
