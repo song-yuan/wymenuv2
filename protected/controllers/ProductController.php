@@ -241,8 +241,9 @@ class ProductController extends Controller
 	}
 	//微信支付
 	public function actionWeixPayOrder(){
-		$orderId = Yii::app()->request->getParam('orderId');
-		$this->render('jsapi');
+		$dpid = Yii::app()->request->getParam('dpid',$this->companyId);
+		$siteNoId = Yii::app()->request->getParam('sitNoId',$this->siteNoId);
+		$this->render('wxpayOrder',array('dpid'=>$dpid,'siteNoId'=>$siteNoId));
 	}
 	//获取商品口味
 	public function actionGetProductPicJson()
