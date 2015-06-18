@@ -309,7 +309,10 @@ $(document).ready(function(){
         //var padinfo=Androidwymenuprinter.getPadInfo();
         //var pad_id=padinfo.substr(10,10); //also can get from session
        	//var pad_id=0000000008;
-    	$('#padOrderForm').ajaxSubmit(function(msg){
+    	$('#padOrderForm').ajaxSubmit({
+            async:false,
+            dataType: "json",
+            success:function(msg){
     		var data = eval('(' + msg + ')');
                 var printresult;
     		if(data.status){
@@ -353,7 +356,8 @@ $(document).ready(function(){
                     alert(data.msg);
                     //return false;
                 }
-    	});
+    	}
+    });
     	//return false;
     });
     $('#padOrderForm').on('touchend','.product-catory-product',function(){
