@@ -703,8 +703,9 @@ class Helper
                         {
                             //array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,10));	
                             array_push($listData,"11".str_pad($orderProduct->amount." X ",8,' ').$orderProduct->product->product_name);
+                            array_push($listData,"br");
                         }
-                        array_push($listData,"br");
+                        
                         //$strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                         //foreach($orderProductTastes as $orderProductTaste){
                         //    $strTaste.= '/'.$orderProductTaste->taste->name;
@@ -864,6 +865,7 @@ class Helper
                            $strAllTaste.= '/'.$orderTaste->taste->name;
                         }
                         array_push($listData,"11".$strAllTaste);
+                        array_push($listData,"br");
                         array_push($listData,"00".str_pad('',48,'-'));
                         array_push($listData,"00".yii::t('app','操作员：').Yii::app()->user->name."  "
                                 .date('Y-m-d H:i:s',time()));
