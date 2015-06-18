@@ -1,13 +1,16 @@
 <?php 
-$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-//打印输出数组信息
-function printf_info($data)
-{
-    foreach($data as $key=>$value){
-        echo "<font color='#00ff55;'>$key</font> : $value <br/>";
-    }
+$orderList = new OrderList($dpid,$siteNoId);
+if($orderList->order){
+	$orderProductListPay = $orderList->OrderProductList($orderList->order['lid'],1,0,1);
+	$pricePay = $orderList->OrderPrice(1,0,1);
+	$pricePayArr = explode(':',$pricePay);
+	$orderPricePay = $pricePayArr[0];
+	$orderPayNum = $pricePayArr[1];
+}else{
+	$orderProductListPay = array();
 }
 
+$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 //①、获取用户openid
 $tools = new JsApiPay();
 $openId = $tools->GetOpenid($url);
@@ -24,19 +27,8 @@ $input->SetNotify_url("http://paysdk.weixin.qq.com/example/notify.php");
 $input->SetTrade_type("JSAPI");
 $input->SetOpenid($openId);
 $order = WxPayApi::unifiedOrder($input);
-echo '<font color="#f00"><b>统一下单支付单信息</b></font><br/>';
-printf_info($order);
-$jsApiParameters = $tools->GetJsApiParameters($order);
-//获取共享收货地址js函数参数
-//$editAddress = $tools->GetEditAddressParameters();
 
-//③、在支持成功回调通知中处理成功之后的事宜，见 notify.php
-/**
- * 注意：
- * 1、当你的回调地址不可访问的时候，回调通知会失败，可以通过查询订单来确认支付是否成功
- * 2、jsapi支付时需要填入用户openid，WxPay.JsApiPay.php中有获取openid流程 （文档可以参考微信公众平台“网页授权接口”，
- * 参考http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html）
- */
+$jsApiParameters = $tools->GetJsApiParameters($order);
 ?>
 
 <html>
@@ -52,7 +44,13 @@ $jsApiParameters = $tools->GetJsApiParameters($order);
 			'getBrandWCPayRequest',
 			<?php echo $jsApiParameters; ?>,
 			function(res){
-				alert(res.err_msg);
+				 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+				 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+				 	
+				 }else{
+				 	//支付失败或取消支付
+				 	
+				 }     
 			}
 		);
 	}

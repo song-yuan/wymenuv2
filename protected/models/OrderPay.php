@@ -10,6 +10,7 @@
  * @property string $update_at
  * @property string $order_id
  * @property string $pay_amount
+ * @property string $paytype 
  * @property string $payment_method_id
  * @property string $remark
  */
@@ -33,6 +34,7 @@ class OrderPay extends CActiveRecord
 		return array(
 			array('lid', 'required'),
 			array('lid, dpid, order_id, pay_amount, payment_method_id', 'length', 'max'=>10),
+                        array('paytype', 'length', 'max'=>2),
 			array('remark', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
@@ -64,6 +66,7 @@ class OrderPay extends CActiveRecord
 			'update_at' => yii::t('app','更新时间'),
 			'order_id' =>yii::t('app', '订单编号'),
 			'pay_amount' => yii::t('app','金额'),
+                        'paytype' => yii::t('app','支付方式'),
 			'payment_method_id' =>yii::t('app', '方式'),
 			'remark' => yii::t('app','备注'),
 		);
@@ -93,6 +96,7 @@ class OrderPay extends CActiveRecord
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('order_id',$this->order_id,true);
 		$criteria->compare('pay_amount',$this->pay_amount,true);
+                $criteria->compare('paytype',$this->paytype,true);
 		$criteria->compare('payment_method_id',$this->payment_method_id,true);
 		$criteria->compare('remark',$this->remark,true);
 

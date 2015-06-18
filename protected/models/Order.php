@@ -16,6 +16,7 @@
  * @property string $reality_total
  * @property string $should_total
  * @property string $callno 
+ * @property string $paytype 
  * @property string $payment_method_id
  * @property string $pay_time
  * @property string $remark
@@ -43,11 +44,12 @@ class Order extends CActiveRecord
 			array('lid, dpid, payment_method_id, site_id, number', 'numerical', 'integerOnly'=>true),
 			array('should_total,reality_total,callno', 'length', 'max'=>10),
 			array('is_temp, order_status, lock_status', 'length', 'max'=>1),
+                        array('paytype', 'length', 'max'=>2),
 			array('remark, taste_memo', 'length', 'max'=>50),
 			array('create_at,pay_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at,payment_method_id, pay_time, site_id, is_temp, number, order_status, lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at,paytype, update_at,payment_method_id, pay_time, site_id, is_temp, number, order_status, lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,7 +82,8 @@ class Order extends CActiveRecord
 			'order_status' => '0未结算、1结单、2被并台、3被撤台、4被换台的标志',
 			'lock_status' => '0未锁定，1锁定',
 			'callno' => yii::t('app','呼叫器编号'),
-                        'payment_method_id'=>yii::t('app','支付方式'),
+                        'paytype' => yii::t('app','支付方式'),
+                        'payment_method_id'=>yii::t('app','支付方式'),//后台手动支付方式
                         'payment_time'=>yii::t('app','支付时间'),
 			'reality_total' =>yii::t('app', '实付金额'),
 			'should_total' =>yii::t('app', '应付金额'),
@@ -121,6 +124,7 @@ class Order extends CActiveRecord
                 $criteria->compare('pay_time',$this->pay_time,true);
                 $criteria->compare('payment_method_id',$this->payment_method_id,true);
 		$criteria->compare('callno',$this->callno,true);
+                $criteria->compare('paytype',$this->paytype,true);
 		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('taste_memo',$this->taste_memo,true);
 
