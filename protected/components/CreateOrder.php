@@ -312,7 +312,7 @@ class CreateOrder
 			$order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$dpid));
             $pad=Pad::model()->with('printer')->find('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
            	if(!$pad){
-           		throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该pad！')),JSON_UNESCAPED_UNICODE));
+           		throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该pad！')),JSON_UNESCAPED_UNICODE));
            	}
             //要判断打印机类型错误，必须是local。
 //            if($pad->printer->printer_type!='1')
@@ -326,13 +326,13 @@ class CreateOrder
                 if(!$printList['status']){
                 	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
-                //////$printList['siteNoId'] = $lid;
+                $printList2=array_merge($printList,array('sitenoid'=> $lid));
 //            }		
  			$transaction->commit();	
- 			return json_encode($printList,JSON_UNESCAPED_UNICODE);
+ 			return json_encode($printList2,JSON_UNESCAPED_UNICODE);
 		 } catch (Exception $e) {
                 $transaction->rollback(); //如果操作失败, 数据回滚
-                throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>$e->getMessage()),JSON_UNESCAPED_UNICODE));
+                throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>$e->getMessage()),JSON_UNESCAPED_UNICODE));
                 //return $e->getMessage();
             } 
 	}
