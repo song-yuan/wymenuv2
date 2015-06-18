@@ -278,10 +278,12 @@ class Helper
         
         static public function getPlaceholderLenBoth($str,$len){
 		$pl=(strlen($str) + mb_strlen($str,'UTF8'))/2;
-                $leftlen=($len-$pl)/2;
+                $intpl=$pl/$len;
+                $rempl=$pl%$len;
+                $leftlen=($len-$rempl)/2;
                 $leftappendstr=substr('                                            ',0,$leftlen);
-                $rightappendstr=substr('                                            ',0,$len-$pl-$leftappendstr);
-                return $leftappendstr.$str.$rightappendstr;
+                $rightappendstr=substr('                                            ',0,$len-$rempl-$leftappendstr);
+                return substr($str,0,$len*$intpl).$leftappendstr.substr($str,$len*$intpl,$rempl).$rightappendstr;
 	}
         
         //根据订单数据和padid开始开源清单
@@ -345,7 +347,7 @@ class Helper
 		$hasData=false;
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 ///site error because tempsite and reserve**************
-                $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 15));//
+                $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                 array_push($listData,"00");
                 array_push($listData,"br");
                 $strSite="";
@@ -496,7 +498,7 @@ class Helper
                         /////////**********判断打印机是否存在******//////////////////
                         //$list = new ARedisList($listKey);
                         //var_dump($list);exit;
-                        $listData = array("22".Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 15));//
+                        $listData = array("22".Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 16));//
                         array_push($listData,"00");
                         array_push($listData,"br");
                         if($reprint)
@@ -628,7 +630,7 @@ class Helper
                                 return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','厨打打印机必须是网络打印机'));		
                         }
                         //$listData = array(Helper::getPlaceholderLenBoth($order->company->company_name, 48));
-                        $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 15));//
+                        $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                         array_push($listData,"00");
                         array_push($listData,"br");
                         if($reprint)
@@ -753,7 +755,7 @@ class Helper
 		foreach ($printer2orderproducts_a as $key=>$values) {
                         $printer = $printers_a[key];
                         
-                        $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 15));//
+                        $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                         array_push($listData,"00");
                         array_push($listData,"br");
                         if($reprint)
