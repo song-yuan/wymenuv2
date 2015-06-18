@@ -343,18 +343,20 @@ $(document).ready(function(){
              			total = total.toFixed(2);
              		}
                      $('.total-price').html(total);
-					 $('.total-num').html(0);
+                        $('.total-num').html(0);
                      //alert(language_print_success);
                  }
                  else
                  {
-                     alert(language_print_pad_fail);                                                                        
+                     alert(language_print_pad_fail);
+                     return false;
                  }                                                
                 }else{
                     alert(data.msg);
+                    return false;
                 }
     	});
-    	return false;
+    	//return false;
     });
     $('#padOrderForm').on('touchend','.product-catory-product',function(){
     	var input = $(this).find('input');
