@@ -886,7 +886,7 @@ class Helper
                     {
                         //$strcontent=mb_convert_encoding($line,"SJIS","UTF-8");
                         //$contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
-                        $strcontent=mb_convert_encoding($line,"SJIS","UTF-8");
+                        $strcontent=mb_convert_encoding(substr($line,2),"SJIS","UTF-8");
                         $strfontsize=substr($line,0,2);
                         if($strfontsize=="br")
                         {
