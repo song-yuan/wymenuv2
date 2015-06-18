@@ -6,4 +6,8 @@ class WeixinController extends Controller
 	{
 		$this->render('index');
 	}
+	public function actionNotify()
+	{
+		$this->render('notify');
+	}
 }
