@@ -121,7 +121,7 @@
 		});
 	});
         
-       function wvtopage(msg) {
+       function menu_alarm(msg) {
             alert(msg);
        }
         
