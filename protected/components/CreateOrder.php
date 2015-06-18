@@ -326,7 +326,7 @@ class CreateOrder
                 if(!$printList['status']){
                 	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
-                $printList['siteNoId'] = $lid;
+                //////$printList['siteNoId'] = $lid;
 //            }		
  			$transaction->commit();	
  			return json_encode($printList,JSON_UNESCAPED_UNICODE);
