@@ -817,6 +817,7 @@ class Helper
                             array_push($listData,"00"."  ".yii::t('app','呼叫号：'));
                             array_push($listData,"11".$order->callno);
                         }
+                        array_push($listData,"br");
                         array_push($listData,"00".str_pad('',48,'-'));
                         
 //                        $strSite="";
@@ -858,6 +859,7 @@ class Helper
                             }
                             array_push($listData,"11".$strTaste);
                             array_push($listData,"br");
+                            array_push($listData,"00".str_pad('',48,'-'));
                         }
                         $orderTastes=  OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=1',  array(':orderid'=>$order->lid,':dpid'=>$order->dpid));
                         $orderTasteEx = $order->taste_memo;                
