@@ -314,6 +314,7 @@ $(document).ready(function(){
             dataType: "json",
             success:function(msg){
     		//var data = eval('(' + msg + ')');
+                var data=msg;
                 var printresult;
     		if(data.status){
                  //printNetJob(String companyId,String jobId,String printer)
