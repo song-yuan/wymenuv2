@@ -276,15 +276,46 @@ class Helper
                 return $str.$appendstr;
 	}
         
+        //
         static public function getPlaceholderLenBoth($str,$len){
 		$pl=(strlen($str) + mb_strlen($str,'UTF8'))/2;
                 $intpl=$pl/$len;
                 $rempl=$pl%$len;
                 $leftlen=($len-$rempl)/2;
                 $leftappendstr=substr('                                            ',0,$leftlen);
-                $rightappendstr=substr('                                            ',0,$len-$rempl-$leftappendstr);
-                return substr($str,0,$len*$intpl).$leftappendstr.substr($str,$len*$intpl,$rempl).$rightappendstr;
+                //$rightappendstr=substr('                                            ',0,$len-$rempl-$leftappendstr);
+                //return mb_substr($str,0,$len*$intpl,'UTF8').$leftappendstr.substr($str,$len*$intpl,$rempl).$rightappendstr;//乱码，以后再修正
+                if($intpl>0)
+                {
+                    return $str;
+                }else{
+                    return $leftappendstr.$str;
+                }
 	}
+        /**
+         * 截取中文和英文无乱码现象
+         * @param type $string
+         * @param type $start
+         * @param type $length
+         * @return type
+         */
+        function GBsubstr($string, $start, $length) {  
+            if(strlen($string)>$length){  
+                $str=null;  
+                $len=$start+$length;  
+                for($i=$start;$i<$len;$i++){  
+                    if(ord(substr($string,$i,1))>0xa0){  
+                        $str.=substr($string,$i,2);  
+                        $i++;  
+                    }else{  
+                        $str.=substr($string,$i,1);  
+                    }  
+                }  
+                return $str;  
+            }else{  
+                return $string;  
+            }  
+        }
         
         //根据订单数据和padid开始开源清单
         //包括条码，总价，产品清单
