@@ -1,4 +1,6 @@
 <?php 
+Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
+$this->setPageTitle('支付');
 $orderList = new OrderList($dpid,$siteNoId);
 if($orderList->order){
 	$orderProductListPay = $orderList->OrderProductList($orderList->order['lid'],1,0,1);
@@ -30,13 +32,77 @@ $order = WxPayApi::unifiedOrder($input);
 
 $jsApiParameters = $tools->GetJsApiParameters($order);
 ?>
-
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/> 
-    <title>微信支付样例-支付</title>
-    <script type="text/javascript">
+<?php if($orderProductListPay):?>
+	<div style="color:#555da8;border-top:2px solid;margin-top: 5px">
+	<div class="order-top"><div class="order-top-left">下单总额 :<span> <?php echo Money::priceFormat($orderPricePay);?></span></div><div class="order-top-right"><button class="online-pay" onclick="callpay()">立即支付</button></div></div>
+	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="3" product-id="0" style="color:#ff8c00">呼叫服务员<img src="../img/product/down-arrow.png" /></div></div>
+	<?php foreach($orderProductListPay as $key=>$orderProduct):?>
+		<!--非套餐-->
+		<?php if($key):?>
+		<div class="order-category"><?php echo OrderList::GetCatoryName($key);?></div>
+	   <?php foreach($orderProduct as $order):?>
+		<div class="order-product">
+			<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
+			<div class="order-product-right">
+				<div class="right-up"><?php echo $order['product_name'];?></div>
+				<div class="right-middle">
+		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
+				</div>
+				<div class="right-down">
+				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php if(!empty($order['addition'])):?>
+		<?php foreach($order['addition'] as $order):?>
+		<div class="order-product">
+			<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
+			<div class="order-product-right">
+				<div class="right-up"><?php echo $order['product_name'];?>(加菜)</div>
+				<div class="right-middle">
+		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
+				</div>
+				<div class="right-down">
+				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<?php endforeach;?>
+		<?php endif;?>
+		<?php endforeach;?>
+		<?php else:?>
+		<!--套餐-->
+		<?php 
+			// key是set_id $order 是该套餐对应产品的数组
+			$productSets = array();
+			foreach($orderProduct as $k=>$order){
+			  $productSets[$order['set_id']][] = $order;
+			}
+		?>
+		<?php foreach($productSets as $key=>$productSet):?>
+			<div class="order-category"><?php echo ProductSetClass::GetProductSetName($this->companyId,$key);?></div>
+			<?php foreach($productSet as $order):?>
+				<div class="order-product">
+				<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
+				<div class="order-product-right">
+				<div class="right-up"><?php echo $order['original_price'];?></div>
+				<div class="right-middle">
+		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
+				</div>
+				<div class="right-down">
+				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+			<?php endforeach;?>
+		<?php endforeach;?>
+		<?php endif;?>
+	<?php endforeach;?>
+	</div>
+	<script type="text/javascript">
 	//调用微信JS api 支付
 	function jsApiCall()
 	{
@@ -68,14 +134,6 @@ $jsApiParameters = $tools->GetJsApiParameters($order);
 		    jsApiCall();
 		}
 	}
-
-	</script>
-</head>
-<body>
-    <br/>
-    <font color="#9ACD32"><b>该笔订单支付金额为<span style="color:#f00;font-size:50px">1分</span>钱</b></font><br/><br/>
-	<div align="center">
-		<button style="width:210px; height:50px; border-radius: 15px;background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >立即支付</button>
-	</div>
-</body>
-</html>
+</script>
+	<?php endif;?>
+	
