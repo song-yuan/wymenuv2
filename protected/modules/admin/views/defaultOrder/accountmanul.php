@@ -82,7 +82,7 @@
                                                             <li id="clearall" style="background-color: #add">清空</li>
                                                             <li id="clearone" style="background-color: #add">退格</li>
                                                             <li id="pay-btn" style="background-color: #0099FF">收银</li>
-                                                            <li id="account-btn" style="background-color: #0099FF">下单</li>
+                                                            <li id="account-btn" style="background-color: #0099FF">结单</li>
                                                             <li id="other-btn" style="background-color: #009f95">其他付款方式</li>
                                                             <li data-dismiss="modal" class="default" style="background-color: #00FFFFFF">取消</li>
                                                         </ul>

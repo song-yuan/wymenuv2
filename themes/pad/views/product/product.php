@@ -121,6 +121,8 @@
 		});
 	});
         
-       
+       function menu_alarm(msg) {
+            alert(msg);
+       }
         
 </script>
