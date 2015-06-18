@@ -347,11 +347,11 @@ $(document).ready(function(){
                      //alert(language_print_success);
                  }else{
                      alert(language_print_pad_fail);
-                     return false;
+                     //return false;
                  }                                                
                 }else{
                     alert(data.msg);
-                    return false;
+                    //return false;
                 }
     	});
     	//return false;
