@@ -2,6 +2,7 @@
 Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
 $this->setPageTitle('支付');
 $orderList = new OrderList($dpid,$siteNoId);
+var_dump($orderList);exit;
 if($orderList->order){
 	$orderProductListPay = $orderList->OrderProductList($orderList->order['lid'],1,0,1);
 	$pricePay = $orderList->OrderPrice(1,0,1);
