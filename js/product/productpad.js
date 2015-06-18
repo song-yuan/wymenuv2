@@ -345,9 +345,7 @@ $(document).ready(function(){
                      $('.total-price').html(total);
                         $('.total-num').html(0);
                      //alert(language_print_success);
-                 }
-                 else
-                 {
+                 }else{
                      alert(language_print_pad_fail);
                      return false;
                  }                                                
