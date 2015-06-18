@@ -326,10 +326,10 @@ class CreateOrder
                 if(!$printList['status']){
                 	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
-                $printList2=array_merge($printList,array('sitenoid'=> $lid));
+                //$printList2=array_merge($printList,array('sitenoid'=> $lid));
 //            }		
  			$transaction->commit();	
- 			return json_encode($printList2,JSON_UNESCAPED_UNICODE);
+ 			return json_encode($printList,JSON_UNESCAPED_UNICODE);
 		 } catch (Exception $e) {
                 $transaction->rollback(); //如果操作失败, 数据回滚
                 throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>$e->getMessage()),JSON_UNESCAPED_UNICODE));
