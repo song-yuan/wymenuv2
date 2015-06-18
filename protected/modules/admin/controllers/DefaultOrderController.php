@@ -938,9 +938,8 @@ class DefaultOrderController extends BackendController
                         //var_dump($order);exit;
                         //printKitchenAll所有的打印在一张单子上，口味等不打印
                         //printKitchenAll2在同一个打印机输出的就打印在一张单子上，口味等也打印
-                        //$tempret=Helper::printKitchenAll($order , $site,$siteNo,false); 
-                        $tempret=Helper::printKitchenAll2($order , $site,$siteNo,false); 
-                        //var_dump($tempret);exit;
+                       /*$tempret=Helper::printKitchenAll($order , $site,$siteNo,false); 
+                       //var_dump($tempret);exit;
                         if($tempret['status'])
                         {
                             array_push($jobids,$tempret['jobid']."_".$order->lid);
@@ -954,7 +953,9 @@ class DefaultOrderController extends BackendController
                             $ret=array('status'=>false,'allnum'=>count($jobids),'msg'=>$tempret['msg']);
                              
                             //Yii::app()->end(json_encode($ret));
-                        }
+                        }*/
+                         $ret=Helper::printKitchenAll2($order , $site,$siteNo,false); 
+                        
                        
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚

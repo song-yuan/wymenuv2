@@ -789,11 +789,12 @@ class Helper
                 
                 //var_dump($printwaydetails);exit;	
 		foreach ($printer2orderproducts_a as $key=>$values) {
-                        $printer = $printers_a[key];
+                        $printer = $printers_a[$key];
                         
                         $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                         array_push($listData,"00");
                         array_push($listData,"br");
+                        
                         if($reprint)
                         {
                             $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
@@ -846,8 +847,9 @@ class Helper
                         {
                             $orderProduct=$orderproducts_a[$value];
                             //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
-                            array_push($listData,"11".str_pad($orderProduct->amount."X".$value->product->product_unit,8," ").$value->product->product_name);	
+                            array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").$orderProduct->product->product_name);	
                             array_push($listData,"br");
+                            
                             $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
                             $orderProductTasteEx = $orderProduct->taste_memo;                
                             $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
@@ -874,8 +876,9 @@ class Helper
                         $sufcode="0A0A0A0A0A0A1D5601";                        
                         //var_dump($listData);exit;
                         $printret=array();
+                        $printserver="1";
                         for($i=0;$i<$printway->list_no;$i++){                                        
-                            $printret=Helper::printConetent($printer,$listData,$precode,$sufcode);
+                            $printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                             array_push($jobids,$printret['jobid']."_".$order->lid);
                             if(!$printret['status'])
                             {
@@ -887,7 +890,7 @@ class Helper
                 //var_dump(json_encode($jobids));exit;
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
-                $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);                        
+                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids),0,300);                        
                 $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布');
                 return $ret;
 	}
