@@ -87,7 +87,14 @@ $(document).ready(function(){
 		}
 		$('.total-price').html(total);
 		$('.total-num').html(nums+1);
-		
+                
+                alert(padprinterping);
+	if (typeof Androidwymenuprinter != "undefined") {
+                    if(padprinterping!="local")
+                    {
+                        Androidwymenuprinter.printNetPing(padprinterping,10);
+                    }
+                 }	
     });
    
     $('#forum_list').on('touchstart','.delCart',function(){
@@ -127,6 +134,13 @@ $(document).ready(function(){
 			$('.total-price').html(total);
 			$('.total-num').html(nums-1);
  		}
+                alert(padprinterping);
+        if (typeof Androidwymenuprinter != "undefined") {
+                    if(padprinterping!="local")
+                    {
+                        Androidwymenuprinter.printNetPing(padprinterping,10);
+                    }
+                 }        
     });
     $('#forum_list').on('touchend','.product-pic',function(){
     	$('.blockCategory').each(function(){
@@ -167,7 +181,10 @@ $(document).ready(function(){
               $('.product-pad-mask').hide();
           }
           if (typeof Androidwymenuprinter != "undefined") {
-                Androidwymenuprinter.printNetPing(6);
+            if(padprinterping!="local")
+            {
+                Androidwymenuprinter.printNetPing(padprinterping,10);
+            }
          }
     	//});
     });
