@@ -130,7 +130,7 @@
        
        function sell_off(msg) {
             alert(msg);
-            var data= = eval('(' + msg + ')');
+            var data = eval('(' + msg + ')');
             //
        }
        
