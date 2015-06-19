@@ -68,7 +68,7 @@ class Pad extends CActiveRecord
 			'update_at' => '更新时间',
 			'name' => yii::t('app','名称'),
 			'printer_id' =>yii::t('app', '默认打印机'),
-			'server_address' =>yii::t('app', '网络打印机服务器地址'),
+			'server_address' =>yii::t('app', '消息服务器地址'),
 			'pad_type' =>yii::t('app', '类型'),
                         'is_bind' => yii::t('app','绑定'),
 			'delete_flag' => 'Delete Flag',

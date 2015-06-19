@@ -119,10 +119,20 @@
 				}
 			});
 		});
+                if (typeof Androidwymenuprinter != "undefined") {
+                        Androidwymenuprinter.printNetPing();
+                 }
 	});
         
        function menu_alarm(msg) {
             alert(msg);
        }
+       
+       function sell_off(msg) {
+            alert(msg);
+            var data= = eval('(' + msg + ')');
+            //
+       }
+       
         
 </script>
