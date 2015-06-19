@@ -88,7 +88,7 @@ $(document).ready(function(){
 		$('.total-price').html(total);
 		$('.total-num').html(nums+1);
                 
-                alert(padprinterping);
+                //alert(padprinterping);
 	if (typeof Androidwymenuprinter != "undefined") {
                     if(padprinterping!="local")
                     {
@@ -134,7 +134,7 @@ $(document).ready(function(){
 			$('.total-price').html(total);
 			$('.total-num').html(nums-1);
  		}
-                alert(padprinterping);
+               // alert(padprinterping);
         if (typeof Androidwymenuprinter != "undefined") {
                     if(padprinterping!="local")
                     {
