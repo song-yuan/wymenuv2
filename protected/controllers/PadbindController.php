@@ -144,6 +144,32 @@ class PadbindController extends Controller
                     echo "0";
                 }
 	}
+        
+        public function actionGetPadPrinter(){
+		$companyid = Yii::app()->request->getParam('companyid',0);
+                $padid = Yii::app()->request->getParam('padid',0);
+                if(empty($companyid)||empty($padid))
+                {
+                    echo "local";
+                    exit;
+                }
+                $pad=Pad::model()->with("printer")->find(' t.dpid=:companyId and t.lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
+                if($pad)
+                {
+                    echo $pad->printer->address;
+                    echo $pad->printer->printer_type;
+                    if($pad->printer->printer_type=="1")
+                    {
+                        echo "local";
+                    }else if(strlen ($pad->printer->address)>7){
+                        echo $pad->printer->address;
+                    }else{
+                        echo "local";
+                    }
+                }else{
+                    echo "local";
+                }
+	}
 	
         public function actionGetJob(){
 		$companyid = Yii::app()->request->getParam('companyid',0);

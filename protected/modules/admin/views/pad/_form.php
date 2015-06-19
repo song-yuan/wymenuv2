@@ -35,7 +35,7 @@
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'server_address',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('server_address')));?>
 											<?php echo $form->error($model, 'server_address' )?>
-                                                                                    <?php echo yii::t('app','是打印服务器填写：IP和端口号，如：192.168.100.100:3030');?>，<br><?php echo yii::t('app','非打印服务器请勿填写，');?><br><?php echo yii::t('app','一个店铺只有一个打印服务器。');?>
+                                                                                    <?php echo yii::t('app','消息服务器，填写：IP和端口号，如：ws://192.168.100.100:3030');?>，<br><?php echo yii::t('app','所有pad都需要填写消息服务器');?>
 										</div>
 									</div>
                                                                         <div class="form-group">

@@ -305,6 +305,8 @@ $(document).ready(function(){
         if (typeof Androidwymenuprinter == "undefined") {
             alert(language_notget_padinfo);
             return false;
+        }else{
+            Androidwymenuprinter.printNetPing();
         }
         //var padinfo=Androidwymenuprinter.getPadInfo();
         //var pad_id=padinfo.substr(10,10); //also can get from session
