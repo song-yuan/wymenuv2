@@ -91,6 +91,7 @@
 	var t = '<?php echo $type;?>';
 	var isPad = '<?php echo $isPad;?>';
         var isPrintChecked=false;
+        var padprinterping="local";
 	window.onload=function(type,catgory,pad)
 	{
 		type = t;
@@ -119,8 +120,26 @@
 				}
 			});
 		});
+                
+                ///
+                $.ajax({
+ 			url:'/wymenuv2/padbind/getPadPrinter',
+ 			async: false,
+ 			data:"companyid=<?php echo $_GET["companyid"]; ?>&padid=<?php echo $_GET["padid"]; ?>",
+ 			success:function(msg){
+                            padprinterping=msg;
+ 			},
+                        error:function(){
+                            padprinterping="local";
+ 			},
+ 		});
+        //alert(padprinterping);
                 if (typeof Androidwymenuprinter != "undefined") {
-                        Androidwymenuprinter.printNetPing(10);
+                    
+                    if(padprinterping!="local")
+                    {
+                        Androidwymenuprinter.printNetPing(padprinterping,10);
+                    }
                  }
 	});
         
