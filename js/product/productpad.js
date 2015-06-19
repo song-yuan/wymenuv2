@@ -166,9 +166,9 @@ $(document).ready(function(){
      	  }else{
               $('.product-pad-mask').hide();
           }
-          if (typeof Androidwymenuprinter != "undefined") {
-                Androidwymenuprinter.printNetPing(2);
-         }
+//          if (typeof Androidwymenuprinter != "undefined") {
+//                Androidwymenuprinter.printNetPing(2);
+//         }
     	//});
     });
     $('.product-pad-mask').on('touchstart','.minus',function(){
