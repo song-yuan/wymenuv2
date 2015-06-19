@@ -156,12 +156,12 @@ class PadbindController extends Controller
                 $pad=Pad::model()->with("printer")->find(' t.dpid=:companyId and t.lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
                 if($pad)
                 {
-                    echo $pad->printer->address;
-                    echo $pad->printer->printer_type;
+                    //echo $pad->printer->address;
+                    //echo $pad->printer->printer_type;
                     if($pad->printer->printer_type=="1")
                     {
                         echo "local";
-                    }else if(strlen ($pad->printer->address)>7){
+                    }else if(filter_var($pad->printer->address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)){
                         echo $pad->printer->address;
                     }else{
                         echo "local";
