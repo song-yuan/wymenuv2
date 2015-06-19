@@ -167,7 +167,7 @@ $(document).ready(function(){
               $('.product-pad-mask').hide();
           }
           if (typeof Androidwymenuprinter != "undefined") {
-                Androidwymenuprinter.printNetPing(2);
+                Androidwymenuprinter.printNetPing(6);
          }
     	//});
     });

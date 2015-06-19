@@ -120,7 +120,7 @@
 			});
 		});
                 if (typeof Androidwymenuprinter != "undefined") {
-                        Androidwymenuprinter.printNetPing(6);
+                        Androidwymenuprinter.printNetPing(10);
                  }
 	});
         
