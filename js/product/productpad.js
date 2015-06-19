@@ -151,7 +151,7 @@ $(document).ready(function(){
 		$('.total-num').html(0);
     });
    //help
-   $('.padsetting').on('touchend',function(){
+   $('.padsetting').on('touchstart',function(){
             $(".setting-pad-mask").toggle();});
    
    $('#content').on('touchend',function(){
@@ -160,7 +160,7 @@ $(document).ready(function(){
         });
    
     //查看菜单
-    $('.top-right').on('touchend',function(){
+    $('.top-right').on('touchstart',function(){
     	  if($('.product-pad-mask').is(':hidden')) {
               $('.product-pad-mask').show();
      	  }else{
@@ -191,23 +191,23 @@ $(document).ready(function(){
 		totalPrice();	
 		totalNum();
 	});
-    $('#pad-disbind-menu').on('touchend',function(){
+    $('#pad-disbind-menu').on('touchstart',function(){
             location.href='../../../../../padbind/login';
             //绑定和解绑必须到我们的服务器。
             //location.href='http://menu.wymenu.com/wymenuv2/padbind/login';
 	});
      //打印测试关闭
-    $('#printerClose').on('touchend',function(){
+    $('#printerClose').on('touchstart',function(){
         //var index = layer.load(0, {shade: false});
         //layer.close(index); 
         $('#print_check').hide();
     });
     //打印测试关闭
-    $('#printerShow').on('touchend',function(){
+    $('#printerShow').on('touchstart',function(){
         $('#print_check').show();
     });
     //打印校正
-    $('#printerCheck').on('touchend',function(){
+    $('#printerCheck').on('touchstart',function(){
         if (typeof Androidwymenuprinter == "undefined") {
                 alert(language_notget_padinfo);
                 return false;
@@ -249,7 +249,7 @@ $(document).ready(function(){
                  
     });
     
-    $('#pad-app-exit').on('touchend',function(){
+    $('#pad-app-exit').on('touchstart',function(){
             if (typeof Androidwymenuprinter == "undefined") {
                 alert(language_notget_padinfo);
                 return false;
@@ -299,7 +299,7 @@ $(document).ready(function(){
     	$(this).css('display','none');
     });
     
-    $('#updatePadOrder').on('touchend',function(){
+    $('#updatePadOrder').on('touchstart',function(){
 //        if(!isPrintChecked)
 //        {
 //            alert(language_printer_check_atfirst);
@@ -364,7 +364,7 @@ $(document).ready(function(){
     });
     	//return false;
     });
-    $('#padOrderForm').on('touchend','.product-catory-product',function(){
+    $('#padOrderForm').on('touchstart','.product-catory-product',function(){
     	var input = $(this).find('input');
     	var productId = input.attr('name');
     	var productIdArr = productId.split(","); //字符分割 
