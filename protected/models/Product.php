@@ -23,6 +23,7 @@
  * @property string $product_unit
  * @property string $weight_unit
  * @property string $is_weight_confirm
+ * @property integer $store_number
  * @property integer $order_number
  * @property integer $favourite_number
  * @property string $printer_way_id
@@ -58,7 +59,7 @@ class Product extends CActiveRecord
 			array('create_at,description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, category_id, product_name, simple_code, main_picture, description, rank, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, product_unit, weight_unit, is_weight_confirm, order_number, favourite_number, printer_way_id, is_show, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, category_id, product_name, simple_code, main_picture, description, rank, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, product_unit, weight_unit, is_weight_confirm, store_number, order_number, favourite_number, printer_way_id, is_show, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -104,7 +105,8 @@ class Product extends CActiveRecord
 			'product_unit' =>yii::t('app', '默认单位'),
 			'weight_unit' =>yii::t('app', '重量单位'),
 			'is_weight_confirm' =>yii::t('app', '是否需要确认重量'),
-			'order_number' =>yii::t('app', '总下单次数'),
+			'store_number' =>yii::t('app', '库存数量'),
+                        'order_number' =>yii::t('app', '总下单次数'),
 			'favourite_number' =>yii::t('app', '总点赞次数'),
 			'printer_way_id' => '打印方案id',
 			'is_show' =>yii::t('app', '是否配菜'),
@@ -150,6 +152,7 @@ class Product extends CActiveRecord
 		$criteria->compare('weight_unit',$this->weight_unit,true);
 		$criteria->compare('is_weight_confirm',$this->is_weight_confirm,true);
 		$criteria->compare('order_number',$this->order_number);
+                $criteria->compare('store_number',$this->store_number);
 		$criteria->compare('favourite_number',$this->favourite_number);
 		$criteria->compare('printer_way_id',$this->printer_way_id,true);
 		$criteria->compare('is_show',$this->is_show,true);

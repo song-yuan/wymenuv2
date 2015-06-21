@@ -90,10 +90,33 @@
 								<td style="width:20%"><?php if($typeId=='product') echo $model->product_name; else echo $model->set_name;?></td>
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
                                                                 <td>
+									<div class="form-group">
+										<label  class="col-md-3 control-label">选择数量</label>
+										<div class="col-md-9">
+											<div class="radio-list">
+												<label class="radio-inline">
+												<input type="radio" name="optionsRadios" id="optionsRadios25" value="option1" checked> 数量不受限
+												</label>
+												<label class="radio-inline">
+												<input type="radio" name="optionsRadios" id="optionsRadios26" value="option2" checked> 已售完
+												</label>
+                                                                                                <label class="radio-inline">
+                                                                                                    <input type="radio" name="optionsRadios" id="optionsRadios26" value="option2" checked> 仅剩
+                                                                                                </label>
+											</div>
+										</div>
+									</div>
+								</td>
+                                                                <!--
+                                                                <label class="radio-inline">
+												<input type="radio" name="optionsRadios" id="optionsRadios27" value="option3" disabled> Disabled
+												</label> 
+                                                                <td>
 									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','在售');?>" data-off-label="<?php echo yii::t('app','售罄');?>">
 										<input typeId="<?php echo $typeId;?>" pid="<?php echo $model->lid;?>" <?php if(!$model->status) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
 									</div>
 								</td>
+                                                                -->
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>

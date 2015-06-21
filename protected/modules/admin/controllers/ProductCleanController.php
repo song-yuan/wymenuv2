@@ -96,6 +96,26 @@ class ProductCleanController extends BackendController
                 //save to product_out
 		exit;
 	}
+        
+        public function actionStore(){
+		$id = Yii::app()->request->getParam('id');
+                $typeId = Yii::app()->request->getParam('typeId');
+                $store_number = Yii::app()->request->getParam('store_number');
+                $db = Yii::app()->db;
+                $sql='';
+                if($typeId=='product')
+                {
+                    $sql='update nb_product set store_number = '.$store_number.' where lid='.$id.' and dpid='.$this->companyId;
+                }else{
+                    $sql='update nb_product_set set store_number = '.$store_number.' where lid='.$id.' and dpid='.$this->companyId;
+                }
+                //var_dump($sql);exit;
+		$command=$db->createCommand($sql);
+                echo $command->execute();
+                    
+                //save to product_out
+		exit;
+	}
 	
 	private function getCategories(){
 		$criteria = new CDbCriteria;
