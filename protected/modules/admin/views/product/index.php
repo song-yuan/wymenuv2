@@ -78,7 +78,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:20%"><?php echo $model->product_name;?></td>
 								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
-								<td><?php echo $model->category->category_name;?></td>
+								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
 								<td ><?php echo $model->original_price;?></td>
                                                                 <td ><?php echo $model->product_unit;?></td>
                                                                 <td ><?php echo $model->is_weight_confirm=='0'?yii::t('app','否'):yii::t('app','是');?></td>
