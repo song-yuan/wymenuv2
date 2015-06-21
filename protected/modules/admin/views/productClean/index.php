@@ -91,17 +91,18 @@
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
                                                                 <td>
 									<div class="form-group">
-										<label  class="col-md-3 control-label">选择数量</label>
-										<div class="col-md-9">
+										<div class="col-md-12">
 											<div class="radio-list">
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios" id="optionsRadios25" value="option1" checked> 数量不受限
+												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>1" value="-1" checked> 数量不受限
 												</label>
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios" id="optionsRadios26" value="option2" checked> 已售完
+												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>2" value="0" checked> 已售完
 												</label>
                                                                                                 <label class="radio-inline">
-                                                                                                    <input type="radio" name="optionsRadios" id="optionsRadios26" value="option2" checked> 仅剩
+                                                                                                <input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>3" value="1" > 仅剩
+                                                                                                <input type="text" style="width:60px;" name="leftnum<?php echo $model->lid;?>" id="idleftnum<?php echo $model->lid;?>" value="0" >
+                                                                                                <input type="button" name="leftbutton<?php echo $model->lid;?>" id="idleftbutton<?php echo $model->lid;?>" class="clear_btn" value="保存" >
                                                                                                 </label>
 											</div>
 										</div>
@@ -180,4 +181,10 @@
 			location.href="<?php echo $this->createUrl('productClean/index' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid;
 		});
 	});
+        
+        $(".clear_btn").on("click",function(){
+            var vid=$(this).attr("id").substr(12,10);
+            alert(vid);
+        });
+        
 	</script>	
