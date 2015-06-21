@@ -18,6 +18,7 @@
  * @property string $is_discount
  * @property string $status
  * @property integer $order_number
+ * @property integer $store_number
  * @property integer $favourite_number
  * @property string $delete_flag
  */
@@ -49,7 +50,7 @@ class ProductSet extends CActiveRecord
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status, order_number, favourite_number, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, delete_flag', 'safe', 'on'=>'search'),
 
 		);
 	}
@@ -84,6 +85,7 @@ class ProductSet extends CActiveRecord
 			'is_special' => yii::t('app','是否特价菜'),
 			'is_discount' => yii::t('app','是否参与优惠活动'),
 			'status' => yii::t('app','是否沽清'),
+                        'store_number' =>yii::t('app', '库存数量'),
 			'order_number' => yii::t('app','总下单次数'),
 			'favourite_number' => yii::t('app','总点赞次数'),
 			'delete_flag' => 'Delete Flag',
@@ -122,6 +124,7 @@ class ProductSet extends CActiveRecord
 		$criteria->compare('is_discount',$this->is_discount,true);
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('order_number',$this->order_number);
+                $criteria->compare('store_number',$this->store_number);
 		$criteria->compare('favourite_number',$this->favourite_number);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 

@@ -147,8 +147,11 @@
             alert(msg);
        }
        
-       function sell_off(msg) {
-            alert(msg);
+       //{"company_id":"0000000001","do_id":"sell_off","do_data":"{"product_id":"0000000001","num"="0"}，{"product_id":"0000000001","num"="0"}，{"product_id":"0000000001","num"="0"}"}
+       //do_data is {"product_id":"0000000001","num"="0"}，{"product_id":"0000000001","num"="0"}，{"product_id":"0000000001","num"="0"}
+       //num <0 无数量限制
+       function sell_off(do_data) {
+            alert(do_data);
             var data = eval('(' + msg + ')');
             //
        }

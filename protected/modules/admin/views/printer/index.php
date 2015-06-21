@@ -82,8 +82,8 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->name;?></td>
 								<td ><?php echo $model->address ;?></td>
-                                                                <td ><?php if($model->language=='1') echo "<?php echo yii::t('app','中文');?>"; else echo "<?php echo yii::t('app','日文');?>";?></td>
-								<td ><?php if($model->printer_type=='0') echo "<?php echo yii::t('app','网络');?>"; elseif($model->printer_type=='1') echo "<?php echo yii::t('app','本地');?>";?></td>
+                                                                <td ><?php if($model->language=='1') echo yii::t('app','中文'); else echo yii::t('app','日文'); ?></td>
+								<td ><?php if($model->printer_type=='0') echo yii::t('app','网络'); elseif($model->printer_type=='1') echo yii::t('app','本地');?></td>
 								<td><?php echo $model->brand;?></td>
                                                                 <td><?php echo $model->remark;?></td>
 								<td class="center">
