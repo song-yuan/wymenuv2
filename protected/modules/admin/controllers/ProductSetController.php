@@ -126,7 +126,9 @@ class ProductSetController extends BackendController
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
-                        //var_dump($model);exit;
+                        $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$pslid.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
+                        var_dump($modelsp);exit;
+                        
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productSet/detailindex','companyId' => $this->companyId,'lid'=>$model->set_id));
@@ -152,8 +154,11 @@ class ProductSetController extends BackendController
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
-                        //var_dump($model);var_dump(Yii::app()->request->getPost('ProductSetDetail'));exit;
-			if($model->save()){
+                        //只有一个时选中，如果第一个必须选中，后续的，判断是选中，必须取消其他选中
+                        $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$model->set_id.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
+                        //var_dump($modelsp);exit;
+                        
+                        if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id));
 			}

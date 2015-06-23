@@ -27,3 +27,5 @@ var language_taste_select="味好み選択:";
 var language_call_service="店員を呼ぶ:";
 var language_calltype_select="呼び方を選択!";
 var language_productnum_modify="メニュー数を修正:";
+var language_store_number_fail="失敗、もう一度！";
+var language_store_number_success="成功";

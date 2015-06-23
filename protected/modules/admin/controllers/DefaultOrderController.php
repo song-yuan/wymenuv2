@@ -139,6 +139,7 @@ class DefaultOrderController extends BackendController
                 $orderpay=new OrderPay();
                 $orderpay->dpid=$order->dpid;
                 $orderpay->order_id=$order->lid;
+                $orderpay->paytype="3";
                 $orderpay->create_at=date('Y-m-d H:i:s',time());
                 
                 $paymentMethods = PaymentClass::getPaymentMethodList($companyId);
@@ -148,6 +149,7 @@ class DefaultOrderController extends BackendController
                         $order->attributes = Yii::app()->request->getPost('Order');
                         $order->pay_time = date('Y-m-d H:i:s',time());
                         $orderpay->attributes = Yii::app()->request->getPost('OrderPay');
+                        $order->paytype=$orderpay->paytype;
                         $order->payment_method_id=$orderpay->payment_method_id;
                         $order->reality_total+=$orderpay->pay_amount;
                         $order->remark.=$orderpay->remark;
@@ -307,6 +309,8 @@ class DefaultOrderController extends BackendController
                 $orderpay=new OrderPay();
                 $orderpay->dpid=$order->dpid;
                 $orderpay->order_id=$order->lid;
+                $orderpay->paytype="0";
+                $orderpay->remark="现金支付";
                 $orderpay->create_at=date('Y-m-d H:i:s',time());
                 
                 $paymentMethods = PaymentClass::getPaymentMethodList($companyId);
@@ -316,7 +320,8 @@ class DefaultOrderController extends BackendController
                         $order->attributes = Yii::app()->request->getPost('Order');
                         $order->pay_time = date('Y-m-d H:i:s',time());
                         $orderpay->attributes = Yii::app()->request->getPost('OrderPay');
-                        $order->payment_method_id=$orderpay->payment_method_id;
+                        $order->paytype=$orderpay->paytype;
+                        //$order->payment_method_id=$orderpay->payment_method_id;
                         $order->reality_total+=$orderpay->pay_amount;
                         $order->remark.=$orderpay->remark;
                         $se=new Sequence("order_pay");
@@ -853,9 +858,26 @@ class DefaultOrderController extends BackendController
                                 //$orderProduct->is_print='1';
                                 $orderProduct->product_order_status='1';
                                 $orderProduct->save();
+                                
+                                if($orderProduct->set_id!="0000000000")
+                                {
+                                    $productset=  ProductSet::model()->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderProduct->set_id,':dpid'=>$companyId));
+                                    if(!empty($productset))
+                                    {
+                                        $productset->order_number++;
+                                        $productset->save();
+                                    }
+                                }
                                 $product=  Product::model()->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderProduct->product_id,':dpid'=>$companyId));
-                                $product->order_number++;
-                                $product->save();
+                                if(!empty($product))
+                                {
+                                    $product->order_number++;
+                                    $product->save();
+                                }
+                            
+//                                $product=  Product::model()->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderProduct->product_id,':dpid'=>$companyId));
+//                                $product->order_number++;
+//                                $product->save();
                             }                            
                         }
                         $transaction->commit();
@@ -933,6 +955,28 @@ class DefaultOrderController extends BackendController
                         }
                         //$siteNo->status='2';
                         $siteNo->save();
+                        
+                        $sqlorderproduct="update nb_order_product set product_order_status='1' where dpid=:companyId and order_id=:orderId";
+                        $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
+                        $commandorderproduct->bindValue(":orderId" , $orderId);
+                        $commandorderproduct->bindValue(":companyId" , $companyId);
+                        $commandorderproduct->execute();
+                        
+                        $sqlproduct="update nb_product set order_number=order_number+1 where dpid=:companyId and lid in (select distinct product_id from nb_order_product where dpid=:sdpid and order_id=:orderId)";
+                        $commandproduct=Yii::app()->db->createCommand($sqlproduct);
+                        $commandproduct->bindValue(":orderId" , $orderId);
+                        $commandproduct->bindValue(":companyId" , $companyId);
+                        $commandproduct->bindValue(":sdpid" , $companyId);
+                        $commandproduct->execute();
+                        
+                        $sqlproductset="update nb_product_set set order_number=order_number+1 where dpid=:companyId and lid in (select distinct set_id from nb_order_product where dpid=:sdpid and order_id=:orderId)";
+                        $commandproductset=Yii::app()->db->createCommand($sqlproductset);
+                        $commandproductset->bindValue(":orderId" , $orderId);
+                        $commandproductset->bindValue(":companyId" , $companyId);
+                        $commandproductset->bindValue(":sdpid" , $companyId);
+                        $commandproductset->execute();
+                        
+                        
                         $transaction->commit();
                         $jobids=array();
                         //var_dump($order);exit;
@@ -969,7 +1013,9 @@ class DefaultOrderController extends BackendController
                                 'callId'=>$callId
 		));                
         }
-        
+        /*
+         * 该函数暂时不用
+         */
         public function actionPrintKitchenAll2(){
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
@@ -1072,7 +1118,9 @@ class DefaultOrderController extends BackendController
                                 'typeId'=>$typeId                                
 		));		             
         }
-        
+        /**
+         * 每个菜品一张单子
+         */
         public function actionPrintKitchenResult(){
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
@@ -1107,7 +1155,8 @@ class DefaultOrderController extends BackendController
                             if($orderProduct->is_print=='0')
                             {
                                 $orderProduct->is_print='1';
-                                $orderProduct->save();
+                                $orderProduct->save();          
+                                
                             }
                             $successnum++;
                         }else{
@@ -1128,6 +1177,8 @@ class DefaultOrderController extends BackendController
         
         //同一个厨打菜品在同一个单子上打印时的结果查询
         //目前没有完善的很仔细，都在一张默认的单子上打印的
+        //15/06/23已经完善了printKitchenAll2，这里进一步完善
+        
         public function actionPrintKitchenResultAll(){
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
@@ -1157,7 +1208,8 @@ class DefaultOrderController extends BackendController
                     }else{
                         if($jobresult=="success")
                         {
-                            $sqlorderproduct="update nb_order_product set is_print='1',product_order_status='1' where dpid=:companyId and order_id=:orderId";
+                            //$sqlorderproduct="update nb_order_product set is_print='1',product_order_status='1' where dpid=:companyId and order_id=:orderId";
+                            $sqlorderproduct="update nb_order_product set is_print='1' where dpid=:companyId and product_id in (".$ids[1].")";
                             $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
                             $commandorderproduct->bindValue(":orderId" , $orderId);
                             $commandorderproduct->bindValue(":companyId" , $companyId);
@@ -1206,10 +1258,15 @@ class DefaultOrderController extends BackendController
                     {
                         //var_dump($companyId,$orderProductId);exit;
                         $orderProduct=  OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$orderProductId));
+//                        if($orderProduct->is_print=='0')
+//                        {
+//                            $orderProduct->is_print='1';
+//                            $orderProduct->save();
+//                        }
                         if($orderProduct->is_print=='0')
                         {
                             $orderProduct->is_print='1';
-                            $orderProduct->save();
+                            $orderProduct->save();                            
                         }
                         $ret=array('status'=>true,'msg'=>yii::t('app','打印成功'));
                     }else{

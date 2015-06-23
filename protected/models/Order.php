@@ -44,7 +44,7 @@ class Order extends CActiveRecord
 			array('lid, dpid, payment_method_id, site_id, number', 'numerical', 'integerOnly'=>true),
 			array('should_total,reality_total,callno', 'length', 'max'=>10),
 			array('is_temp, order_status, lock_status', 'length', 'max'=>1),
-                        array('paytype', 'length', 'max'=>2),
+                        array('paytype', 'length', 'max'=>1),
 			array('remark, taste_memo', 'length', 'max'=>50),
 			array('create_at,pay_time', 'safe'),
 			// The following rule is used by search().
