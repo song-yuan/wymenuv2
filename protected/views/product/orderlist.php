@@ -6,7 +6,6 @@
 	$orderPricePay = 0;
 	$orderPayNum = 0;
 	$orderList = new OrderList($this->companyId,$this->siteNoId);
-	var_dump($orderList);exit;
 	if($orderList->order){
 		$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0,1);
 		$orderProductListPay = $orderList->OrderProductList($orderList->order['lid'],1,0,1);
@@ -23,6 +22,7 @@
 		$orderProductList = array();
 		$orderProductListPay = array();
 	}
+	var_dump($orderProductList);exit;
 ?>
 <script type="text/javascript" src="../js/product/taste.js"></script>
 	<div class="top"><a href="index"><div class="back"><img src="../img/product/back.png" /> 返回</div></a><a id="order" href="javascript:;"><button class="create-order">下单</button></a></div>
