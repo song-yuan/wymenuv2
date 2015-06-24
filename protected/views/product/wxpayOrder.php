@@ -3,9 +3,7 @@
 	$this->setPageTitle('支付');
 	$orderProductListPay = array();
 	$orderProductListPay = OrderList::WxPayOrderList($dpid,$orderId,1,0,1);
-	var_dump($orderProductListPay);
 	$pricePay = OrderList::WxPayOrderPrice($orderProductListPay);
-	var_dump($pricePay);exit;
 	$pricePayArr = explode(':',$pricePay);
 	$orderPricePay = $pricePayArr[0];
 	$orderPayNum = $pricePayArr[1];
@@ -33,11 +31,11 @@
 <?php if($orderProductListPay):?>
 	<div style="color:#555da8;border-top:2px solid;margin-top: 5px">
 	<div class="order-top"><div class="order-top-left">下单总额 :<span> <?php echo Money::priceFormat($orderPricePay);?></span></div><div class="order-top-right"><button class="online-pay" onclick="callpay()">立即支付</button></div></div>
-	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="3" product-id="0" style="color:#ff8c00">呼叫服务员<img src="../img/product/down-arrow.png" /></div></div>
+	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderId;?>" type="3" product-id="0" style="color:#ff8c00">呼叫服务员<img src="../img/product/down-arrow.png" /></div></div>
 	<?php foreach($orderProductListPay as $key=>$orderProduct):?>
 		<!--非套餐-->
 		<?php if($key):?>
-		<div class="order-category"><?php echo OrderList::GetCatoryName($key);?></div>
+		<div class="order-category"><?php echo OrderList::GetCatoryName($key,$dpid);?></div>
 	   <?php foreach($orderProduct as $order):?>
 		<div class="order-product">
 			<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
@@ -47,7 +45,7 @@
 		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
 				</div>
 				<div class="right-down">
-				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
+				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$dpid);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$dpid);?>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -62,7 +60,7 @@
 		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
 				</div>
 				<div class="right-down">
-				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
+				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$dpid);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$dpid);?>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -80,7 +78,7 @@
 			}
 		?>
 		<?php foreach($productSets as $key=>$productSet):?>
-			<div class="order-category"><?php echo ProductSetClass::GetProductSetName($this->companyId,$key);?></div>
+			<div class="order-category"><?php echo ProductSetClass::GetProductSetName($dpid,$key);?></div>
 			<?php foreach($productSet as $order):?>
 				<div class="order-product">
 				<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
@@ -90,7 +88,7 @@
 		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
 				</div>
 				<div class="right-down">
-				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
+				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$dpid);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$dpid);?>
 				</div>
 			</div>
 			<div class="clear"></div>
