@@ -319,7 +319,7 @@ class OrderList
 				$sql = 'select t.*, t1.category_id, t1.product_name, t1.main_picture, t1.original_price, t1.product_unit, t1.weight_unit, t1.is_weight_confirm, t1.printer_way_id from nb_order_product t,nb_product t1  where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and order_id=:orderId and t.delete_flag=0 and main_id=0 and set_id=0 and product_order_status='.$type.
 				   ' union select t.*, 0 as category_id, t1.set_name as product_name, t1.main_picture,t2.product_name as original_price,0 as product_unit, 0 as weight_unit, 0 as is_weight_confirm, 0 as printer_way_id  from nb_order_product t left join nb_product_set t1 on t.set_id=t1.lid and t.dpid=t1.dpid left join nb_product t2 on t.product_id=t2.lid and t.dpid=t2.dpid where t.dpid=:dpid and order_id=:orderId and t.delete_flag=0 and main_id=0 and t.set_id > 0 and t.product_order_status='.$type;
 			}
-			$conn = $this->db->createCommand($sql);
+			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':dpid',$dpid);
 			$conn->bindValue(':orderId',$orderId);
 			$orderlist = $conn->queryAll();
