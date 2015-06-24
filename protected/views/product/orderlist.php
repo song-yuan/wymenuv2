@@ -124,7 +124,7 @@
 	<?php foreach($orderProductListPay as $key=>$orderProduct):?>
 		<!--非套餐-->
 		<?php if($key):?>
-		<div class="order-category"><?php echo OrderList::GetCatoryName($key);?></div>
+		<div class="order-category"><?php echo OrderList::GetCatoryName($key,$this->companyId);?></div>
 	   <?php foreach($orderProduct as $order):?>
 		<div class="order-product">
 			<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
