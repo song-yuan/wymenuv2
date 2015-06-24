@@ -1,4 +1,3 @@
-<?php $this->beginContent('//layouts/productmain.php'); ?>
 <?php
 /* @var $this ProductController */
 	Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
@@ -7,6 +6,7 @@
 	$orderPricePay = 0;
 	$orderPayNum = 0;
 	$orderList = new OrderList($this->companyId,$this->siteNoId);
+	var_dump($orderList);exit;
 	if($orderList->order){
 		$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0,1);
 		$orderProductListPay = $orderList->OrderProductList($orderList->order['lid'],1,0,1);
@@ -341,4 +341,3 @@
 		});
 	});
 </script>
-<?php $this->endContent(); ?>
