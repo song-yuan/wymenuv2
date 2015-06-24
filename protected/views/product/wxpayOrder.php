@@ -1,37 +1,32 @@
 <?php 
-Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
-$this->setPageTitle('支付');
-$orderList = new OrderList($dpid,$siteNoId);
-var_dump($orderList);exit;
-if($orderList->order){
-	$orderProductListPay = $orderList->OrderProductList($orderList->order['lid'],1,0,1);
+	Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
+	$this->setPageTitle('支付');
+	$orderProductListPay = array();
+	$orderProductListPay = OrderList::WxPayOrderList($dpid,$orderId,1,0,1);
 	$pricePay = $orderList->OrderPrice(1,0,1);
 	$pricePayArr = explode(':',$pricePay);
 	$orderPricePay = $pricePayArr[0];
 	$orderPayNum = $pricePayArr[1];
-}else{
-	$orderProductListPay = array();
-}
 
-$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-//①、获取用户openid
-$tools = new JsApiPay();
-$openId = $tools->GetOpenid($url);
-//②、统一下单
-$input = new WxPayUnifiedOrder();
-$input->SetBody("test");
-$input->SetAttach("test");
-$input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
-$input->SetTotal_fee("1");
-$input->SetTime_start(date("YmdHis"));
-$input->SetTime_expire(date("YmdHis", time() + 600));
-$input->SetGoods_tag("test");
-$input->SetNotify_url("http://paysdk.weixin.qq.com/example/notify.php");
-$input->SetTrade_type("JSAPI");
-$input->SetOpenid($openId);
-$order = WxPayApi::unifiedOrder($input);
-
-$jsApiParameters = $tools->GetJsApiParameters($order);
+	$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+	//①、获取用户openid
+	$tools = new JsApiPay();
+	$openId = $tools->GetOpenid($url);
+	//②、统一下单
+	$input = new WxPayUnifiedOrder();
+	$input->SetBody("test");
+	$input->SetAttach("test");
+	$input->SetOut_trade_no(WxPayConfig::MCHID.date("YmdHis"));
+	$input->SetTotal_fee("1");
+	$input->SetTime_start(date("YmdHis"));
+	$input->SetTime_expire(date("YmdHis", time() + 600));
+	$input->SetGoods_tag("test");
+	$input->SetNotify_url("http://paysdk.weixin.qq.com/example/notify.php");
+	$input->SetTrade_type("JSAPI");
+	$input->SetOpenid($openId);
+	$order = WxPayApi::unifiedOrder($input);
+	
+	$jsApiParameters = $tools->GetJsApiParameters($order);
 ?>
 <?php if($orderProductListPay):?>
 	<div style="color:#555da8;border-top:2px solid;margin-top: 5px">
@@ -136,5 +131,5 @@ $jsApiParameters = $tools->GetJsApiParameters($order);
 		}
 	}
 </script>
-	<?php endif;?>
+<?php endif;?>
 	

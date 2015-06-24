@@ -306,4 +306,32 @@ class OrderList
 		$catoryName = $conn->queryScalar();
 		return $catoryName;
 	}
+	
+	//订单商品类别 type 是否下单 0 未下单 1 已下单
+	public static function WxPayOrderList($dpid,$orderId,$type,$groupby = 0,$isOrder = 0){
+			$result = array();
+			//category_id = 0时是套餐
+			if($groupby){
+				$sql = 'select t.*, t1.category_id, t1.product_name, t1.main_picture, t1.original_price, t1.product_unit, t1.weight_unit, t1.is_weight_confirm, t1.printer_way_id from nb_order_product t,nb_product t1  where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and order_id=:orderId and t.delete_flag=0 and main_id=0 and set_id=0 and product_order_status='.$type.
+				   ' union select t.lid,t.dpid,t.create_at,t.update_at,t.order_id,t.set_id,t.main_id,t.product_id,t.is_retreat,sum(t.price) as price,t.amount,t.zhiamount,t.is_waiting,t.weight,t.taste_memo,t.is_giving,t.is_print,t.delete_flag,t.product_order_status, 0 as category_id, t1.set_name as product_name, t1.main_picture,t2.product_name as original_price,0 as product_unit, 0 as weight_unit, 0 as is_weight_confirm, 0 as printer_way_id  from nb_order_product t left join nb_product_set t1 on t.set_id=t1.lid and t.dpid=t1.dpid left join nb_product t2 on t.product_id=t2.lid and t.dpid=t2.dpid where t.dpid=:dpid and order_id=:orderId and t.delete_flag=0 and main_id=0 and t.set_id > 0 and t.product_order_status='.$type;
+				$sql .= ' group by t.set_id';
+			}else{
+				$sql = 'select t.*, t1.category_id, t1.product_name, t1.main_picture, t1.original_price, t1.product_unit, t1.weight_unit, t1.is_weight_confirm, t1.printer_way_id from nb_order_product t,nb_product t1  where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and order_id=:orderId and t.delete_flag=0 and main_id=0 and set_id=0 and product_order_status='.$type.
+				   ' union select t.*, 0 as category_id, t1.set_name as product_name, t1.main_picture,t2.product_name as original_price,0 as product_unit, 0 as weight_unit, 0 as is_weight_confirm, 0 as printer_way_id  from nb_order_product t left join nb_product_set t1 on t.set_id=t1.lid and t.dpid=t1.dpid left join nb_product t2 on t.product_id=t2.lid and t.dpid=t2.dpid where t.dpid=:dpid and order_id=:orderId and t.delete_flag=0 and main_id=0 and t.set_id > 0 and t.product_order_status='.$type;
+			}
+			$conn = $this->db->createCommand($sql);
+			$conn->bindValue(':dpid',$dpid);
+			$conn->bindValue(':orderId',$orderId);
+			$orderlist = $conn->queryAll();
+			foreach($orderlist as $key=>$val){
+				if($isOrder){
+					$val['addition'] = self::GetOrderAddProduct($val['dpid'],$orderId,$val['product_id'],$type);
+				}else{
+					$val['hasAddition'] = self::GetOrderAddProduct($val['dpid'],$orderId,$val['product_id'],$type);
+					$val['addition'] = self::GetAddProduct($val['dpid'],$val['product_id']);
+				}
+				$result[$val['category_id']][] = $val;
+			}
+			return $result;
+	}
 }
