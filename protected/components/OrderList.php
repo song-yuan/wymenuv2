@@ -144,7 +144,7 @@ class OrderList
 						$connect = Yii::app()->db->createCommand($sql);
 						$connect->bindValue(':setId',$setId);
 						$connect->bindValue(':orderId',$orderId);
-                                                $connect->bindValue(':dpid',$this->dpid);
+                        $connect->bindValue(':dpid',$dpid);
 						$connect->execute();
 						
 						$goodsData = explode('-',$goodsArr[1]);
@@ -172,14 +172,14 @@ class OrderList
 						$conn->bindValue(':amount',$val);
 						$conn->bindValue(':orderId',$orderId);
 						$conn->bindValue(':productId',$key);
-                                                $conn->bindValue(':dpid',$this->dpid);
+                        $conn->bindValue(':dpid',$dpid);
 						$conn->execute();
 					}
 				}
 				$sql = 'update nb_order set lock_status=1 where lid = :orderId and dpid=:dpid';
 				$conn = Yii::app()->db->createCommand($sql);
 				$conn->bindValue(':orderId',$orderId);
-                                $conn->bindValue(':dpid',$this->dpid);
+                $conn->bindValue(':dpid',$dpid);
 				$conn->execute();
 			$transaction->commit();
 			return true;
