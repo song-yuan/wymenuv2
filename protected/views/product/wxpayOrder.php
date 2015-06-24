@@ -1,5 +1,6 @@
 <?php 
-	Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
+	$baseUrl = Yii::app()->baseUrl;
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/cartlist.css');
 	$this->setPageTitle('支付');
 	$orderProductListPay = array();
 	$orderProductListPay = OrderList::WxPayOrderList($dpid,$orderId,1,0,1);
