@@ -298,11 +298,11 @@ class OrderList
 		}
 	}
 	//获取种类的名称
-	public static function GetCatoryName($catoryId){
+	public static function GetCatoryName($catoryId,$dpid){
 		$sql = 'select category_name from  nb_product_category where lid = :lid and dpid=:dpid';
 		$conn = Yii::app()->db->createCommand($sql);
 		$conn->bindValue(':lid',$catoryId);
-                $conn->bindValue(':dpid',  $this->dpid);
+        $conn->bindValue(':dpid',$dpid);
 		$catoryName = $conn->queryScalar();
 		return $catoryName;
 	}
