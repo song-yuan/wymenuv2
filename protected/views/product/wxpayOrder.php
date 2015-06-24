@@ -32,7 +32,7 @@
 <?php if($orderProductListPay):?>
 	<div style="color:#555da8;">
 	<div class="order-top"><div class="order-top-left">下单总额 :<span> <?php echo Money::priceFormat($orderPricePay);?></span></div><div class="order-top-right"><button class="online-pay" onclick="callpay()">微信支付</button></div></div>
-	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderId;?>" type="3" product-id="0" style="color:#ff8c00">呼叫服务员<img src="../img/product/down-arrow.png" /></div></div>
+	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderId;?>" type="3" product-id="0" style="color:#ff8c00">呼叫服务员<img src="<?php echo $baseUrl.'/img/product/down-arrow.png';?>" /></div></div>
 	<?php foreach($orderProductListPay as $key=>$orderProduct):?>
 		<!--非套餐-->
 		<?php if($key):?>
