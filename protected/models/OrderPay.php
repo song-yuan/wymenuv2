@@ -34,7 +34,7 @@ class OrderPay extends CActiveRecord
 		return array(
 			array('lid', 'required'),
 			array('lid, dpid, order_id, pay_amount, payment_method_id', 'length', 'max'=>10),
-                        array('paytype', 'length', 'max'=>2),
+                        array('paytype', 'length', 'max'=>1),
 			array('remark', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().

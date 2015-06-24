@@ -79,7 +79,7 @@
                                                                                     dataType:'json',
                                                                                     success:function(result){
                                                                                             //alert(result.data);
-                                                                                            var str = "<?php echo yii::t('app','<option value="">--请选择--</option>');?>";                                                                                            
+                                                                                            var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';                                                                                            
                                                                                             if(result.data.length){
                                                                                                     //alert(1);
                                                                                                     $.each(result.data,function(index,value){

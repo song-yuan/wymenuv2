@@ -26,4 +26,6 @@ var language_taste_select="做法口味选择:";
 var language_call_service="全单呼叫服务员:";
 var language_calltype_select="请选择呼叫类型!";
 var language_productnum_modify="修改产品数量:";
+var language_store_number_fail="保存失败";
+var language_store_number_success="保存成功";
 

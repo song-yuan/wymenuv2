@@ -30,7 +30,7 @@ class ProductCleanController extends BackendController
                     $models = Product::model()->findAll($criteria);
 
                     $categories = $this->getCategories();
-
+                    //var_dump($models);exit;
                     $this->render('index',array(
                                     'models'=>$models,
                                     'pages'=>$pages,
@@ -44,7 +44,7 @@ class ProductCleanController extends BackendController
                     $pages = new CPagination(ProductSet::model()->count($criteria));
                     $pages->applyLimit($criteria);
                     $models = ProductSet::model()->findAll($criteria);
-                    //var_dump($typeId);exit;
+                    //var_dump($models);exit;
                     $this->render('index',array(
                                     'models'=>$models,
                                     'pages'=>$pages,
@@ -100,8 +100,9 @@ class ProductCleanController extends BackendController
         public function actionStore(){
 		$id = Yii::app()->request->getParam('id');
                 $typeId = Yii::app()->request->getParam('typeId');
-                $store_number = Yii::app()->request->getParam('store_number');
+                $store_number = Yii::app()->request->getParam('storeNumber');
                 $db = Yii::app()->db;
+                
                 $sql='';
                 if($typeId=='product')
                 {
@@ -110,11 +111,34 @@ class ProductCleanController extends BackendController
                     $sql='update nb_product_set set store_number = '.$store_number.' where lid='.$id.' and dpid='.$this->companyId;
                 }
                 //var_dump($sql);exit;
-		$command=$db->createCommand($sql);
-                echo $command->execute();
+                 
                     
-                //save to product_out
-		exit;
+		$command=$db->createCommand($sql);
+                if($command->execute())
+                {
+                    Gateway::getOnlineStatus();
+                    $store = Store::instance('wymenu');
+                    $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>  $this->companyId));
+                    //var_dump($pads);exit;
+                    $sendjsondata=json_encode(array("company_id"=>  $this->companyId,
+                        "do_id"=>"sell_off",
+                        "do_data"=>array("0"=>array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
+                            //,"1"=>array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
+                            )));
+                    //var_dump($sendjsondata);exit;
+                    foreach($pads as $pad)
+                    {
+                        $clientId=$store->get("padclient_".$this->companyId.$pad->lid);
+                        //var_dump($clientId,$print_data);exit;
+                        if(!empty($clientId))
+                        {                            
+                            Gateway::sendToClient($clientId,$sendjsondata);
+                        }
+                    }                                    
+                    Yii::app()->end(json_encode(array("status"=>"success")));
+                }else{
+                    Yii::app()->end(json_encode(array("status"=>"fail")));
+                }
 	}
 	
 	private function getCategories(){

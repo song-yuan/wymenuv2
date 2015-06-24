@@ -94,14 +94,14 @@
 										<div class="col-md-12">
 											<div class="radio-list">
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>1" value="-1" checked> 数量不受限
+												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>1" value="-1" <?php if($model->store_number==-1) echo "checked";?>> 数量不受限
 												</label>
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>2" value="0" checked> 已售完
+												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>2" value="0" <?php if($model->store_number==0) echo "checked";?>> 已售完
 												</label>
                                                                                                 <label class="radio-inline">
-                                                                                                <input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>3" value="1" > 仅剩
-                                                                                                <input type="text" style="width:60px;" name="leftnum<?php echo $model->lid;?>" id="idleftnum<?php echo $model->lid;?>" value="0" >
+                                                                                                <input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>3" value="1" <?php if($model->store_number>0) echo "checked";?>> 仅剩
+                                                                                                <input type="text" style="width:60px;" name="leftnum<?php echo $model->lid;?>" id="idleftnum<?php echo $model->lid;?>" value="<?php if($model->store_number>0) echo $model->store_number; else echo "0"; ?>" >
                                                                                                 <input type="button" name="leftbutton<?php echo $model->lid;?>" id="idleftbutton<?php echo $model->lid;?>" class="clear_btn" value="保存" >
                                                                                                 </label>
 											</div>
@@ -184,7 +184,38 @@
         
         $(".clear_btn").on("click",function(){
             var vid=$(this).attr("id").substr(12,10);
-            alert(vid);
+            var arr=document.getElementsByName("optionsRadios"+vid);
+            var optvalue;
+            for(var i=0;i<arr.length;i++)
+            {
+                if(arr[i].checked)
+                {    
+                   optvalue=arr[i].value;
+                }
+            }
+            if(optvalue=="1")
+            {
+               optvalue= $("#idleftnum"+vid).val();
+            }
+            //alert(optvalue);
+            $.ajax({
+ 			url:"<?php echo $this->createUrl('productClean/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/storeNumber/"+optvalue,
+ 			async: false,
+ 			//data:"companyId="+company_id+'&padId='+pad_id,
+                        dataType:'json',
+ 			success:function(msg){
+                            //alert(msg.status);
+                            if(msg.status=="success")
+                            {
+                                alert("<?php echo yii::t('app','成功'); ?>");
+                            }else{
+                                alert("<?php echo yii::t('app','失败'); ?>"+"1")
+                            }
+ 			},
+                        error:function(){
+ 				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+ 			},
+ 		});
         });
         
 	</script>	

@@ -334,4 +334,49 @@ class ProductController extends Controller
 			Yii::app()->end(json_encode($data));
 		}
 	}
+	public function actionExportOrder(){
+		$this->exportOrder();
+		exit;
+	}
+	private function exportOrder($models,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
+ 		$attributes = array(
+			'order_id'=>'订单编号',
+			'create_time'=>'下单时间',
+			'card_id'=>'会员号',
+			'goods_name'=>'所购商品',
+			'order_goods_number'=>'商品总数量',
+			'cost'=>'商品总价(元)',
+			'total'=>'订单总价(元)',
+			'shop_name'=>'门店名'
+		);
+ 		$data[1] = array_values($attributes);
+ 		$fields = array_keys($attributes);
+ 		
+		foreach($models as $model){
+			$arr = array();
+			foreach($fields as $f){
+				if($f == 'create_time'){
+					$arr[] = date('Y-m-d H:i:s',$model[$f]);
+				}elseif(in_array($f,array('cost','total'))){
+					$arr[] = $model[$f]/100;
+				}elseif(in_array($f,array('card_id'))){
+					$arr[] = substr($model[$f],5);
+				}elseif(in_array($f,array('order_goods_number'))){
+					$arr[] = $model[$f];
+				}elseif(in_array($f,array('goods_name'))){
+					$goodsName='';
+					if($model['offGoods']){
+						foreach($model['offGoods'] as $goods){
+							$goodsName.=$goods['goods_num'].'×'.$goods['goods_name'].';';
+						}
+					}
+					$arr[] =rtrim($goodsName,';');
+				}else{
+					$arr[] = $model[$f];
+				}
+			}
+			$data[] = $arr;
+		}
+ 		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
+	}
 }

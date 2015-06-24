@@ -152,7 +152,7 @@
        //num <0 无数量限制
        function sell_off(do_data) {
             alert(do_data);
-            var data = eval('(' + msg + ')');
+            var data = eval('(' + do_data + ')');
             //
        }
        

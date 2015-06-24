@@ -10,8 +10,17 @@
                                                                     </thead>
                                                                     <tbody>
 
-                                                                    <?php foreach ($models as $model):?>
-                                                                            <tr class="<?php echo $model->group_no%2==0?'active':'success';?>">
+                                                                    <?php 
+                                                                    $countrow=1;
+                                                                    $curgroup=$models[0]->group_no;
+                                                                    foreach ($models as $model): 
+                                                                        if($curgroup!=$model->group_no)
+                                                                    {
+                                                                        $countrow++;
+                                                                        $curgroup=$model->group_no;
+                                                                    }
+                                                                        ?>
+                                                                            <tr class="<?php echo $countrow%2==0?'active':'success';?>">
                                                                                     <td ><?php echo $model->product->product_name ;?></td>
                                                                                     <td><?php echo $model->price;?></td>
                                                                                     <td><?php echo $model->number;?></td>
@@ -20,7 +29,10 @@
 
                                                                                     </td>                                                                                                             
                                                                             </tr>
-                                                                    <?php endforeach;?>
+                                                                    <?php 
+                                                                    
+                                                                    
+                                                                    endforeach;?>
                                                                     </tbody>
                                                                     <?php endif;?>
                                                             </table>

@@ -106,11 +106,11 @@
                                                                                     <?php if($typeId == 'tempsite'): ?>
                                                                                         <li class="modalaction bg_add" istemp="1" status="0" sid="0"></li>
                                                                                         <?php foreach ($models as $model):?>
-                                                                                                <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?>><?php echo $model->site_id%1000;?></li>
+                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 25px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo $model->create_at;?></li>
                                                                                         <?php endforeach;?>
                                                                                     <?php else:?>
                                                                                         <?php foreach ($models as $model):?>
-                                                                                                <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?>><?php echo $model->serial.'<br>'.$model->site_level;?></li>
+                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial.'  '.$model->site_level?>"><span style="font-size: 25px;"><?php echo $model->serial.'<br>'.$model->site_level?>&nbsp;</span><?php echo '<br>'.$model->create_at;?></li>
                                                                                         <?php endforeach;?>
                                                                                     <?php endif;?>
                                                                                     
@@ -215,7 +215,7 @@
                   //$modal.show();
                 //});
                 pxbox.find('.button-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){
-                    pxbox.children("h4").text(that.text());
+                    pxbox.children("h4").text(that.attr("shname"));
                     $("#tab_sitelist").hide();
                     pxbox.show();
                 });

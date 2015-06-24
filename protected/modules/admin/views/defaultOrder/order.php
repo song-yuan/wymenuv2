@@ -167,7 +167,7 @@
                                 loadurl=loadurl+'/callId/'+callid;
                             }
                             //alert(loadurl);
-                            var $modalconfig = $('#portlet-config');
+                            var $modalconfig = $('#modal-wide');
                                 $modalconfig.find('.modal-content')
                                         .load(loadurl
                                             , ''

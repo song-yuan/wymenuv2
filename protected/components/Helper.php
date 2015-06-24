@@ -292,6 +292,61 @@ class Helper
                     return $leftappendstr.$str;
                 }
 	}
+        
+        /**
+         * 
+         * @param type $str title
+         * @param type $len 每行8个字符
+         * @param type $code SJIS ＧＢＫ
+         * @return string
+         */
+        static public function setPrinterTitle($str,$len){
+		$pl=mb_strlen($str,"UTF-8");
+                //$intpl=$pl/$len;
+                $rempl=$pl%$len;
+                $retstr=mb_substr($str,0,$pl-$rempl,"UTF-8");
+                if($rempl>0)
+                {
+                        $leftlen=($len-$rempl)/2;
+                        $leftappendstr=mb_substr('                                            ',0,$leftlen*2,"UTF-8");
+                        $retstr=$retstr.$leftappendstr;
+                        $retstr=$retstr.mb_substr($str,$pl-$rempl,$rempl,"UTF-8");
+                }
+                return $retstr;
+	}
+        
+        /**
+         * 
+         * @param type $str 产品名称
+         * @param type $linelen 一行12个字符
+         * @param type $len 8个汉字字符
+         * @param type $code SJIS GBK
+         * @return string
+         */
+        static public function setProductName($str,$linelen,$len){
+		$pl=mb_strlen($str,"UTF-8");
+                $intpl=$pl/$len;
+                $rempl=$pl%$len;
+                $retstr="";
+				//var_dump($intpl);exit;
+                if($intpl < 1)
+                {
+                    return $str;
+                }
+                $retstr=mb_substr($str,0,$len,"UTF-8");
+                for($tempi=1;$tempi<$intpl;$tempi++)
+                {
+                    $retstr=$retstr.mb_substr('                                            ',0,($linelen-$len)*2,"UTF-8");
+                    $retstr=$retstr.mb_substr($str,$len*$tempi,$len,"UTF-8");                    
+                }
+                if($rempl>0)
+                {
+                        $retstr=$retstr.mb_substr('                                            ',0,($linelen-$len)*2,"UTF-8");
+                        $retstr=$retstr.mb_substr($str,$len*$intpl,$rempl,"UTF-8"); 
+                }                
+                return $retstr;
+	}
+        
         /**
          * 截取中文和英文无乱码现象
          * @param type $string
@@ -340,7 +395,8 @@ class Helper
 		
 		///////$listKey = $order->dpid.'_'.$printer->ip_address;                		
 		//var_dump($list);exit;
-                $listData = array(Helper::getPlaceholderLenBoth($order->company->company_name, 48));
+                //$listData = array(Helper::getPlaceholderLenBoth($order->company->company_name, 48));
+                $listData = array("22".setPrinterTitle($order->company->company_name,8));
 		array_push($listData,$strSite);                
 		array_push($listData,str_pad('',48,'-'));
 		
@@ -378,7 +434,8 @@ class Helper
 		$hasData=false;
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 ///site error because tempsite and reserve**************
-                $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                $listData = array("22".setPrinterTitle($order->company->company_name,8));
                 array_push($listData,"00");
                 array_push($listData,"br");
                 $strSite="";
@@ -415,10 +472,10 @@ class Helper
                     if(Yii::app()->language=='jp')
                     {
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
-                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),12,' ')." ".$product['product_name']);
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),12,' ')." ".setProductName($product['product_name'],12,6));
                     }else{
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
-                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),12,' ')." ".$product['product_name']);
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),12,' ')." ".setProductName($product['product_name'],12,6));
                     }
                     array_push($listData,"br");
 		}
@@ -526,10 +583,12 @@ class Helper
                                 return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','厨打打印机必须是网络打印机'));		
                         }
                         //$listKey = $order->dpid.'_'.$printer->ip_address;  
-                        /////////**********判断打印机是否存在******//////////////////
+                        //    dfddddddddddddddd  d 
+                        /////////**********判断打印机是否存  在  ******//////////////////
                         //$list = new ARedisList($listKey);
                         //var_dump($list);exit;
-                        $listData = array("22".Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 16));//
+                        //$listData = array("22".Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 16));//
+                        $listData = array("22".setPrinterTitle($order->company->company_name,8));
                         array_push($listData,"00");
                         array_push($listData,"br");
                         if($reprint)
@@ -567,21 +626,39 @@ class Helper
                         array_push($listData,"br");                        
                         array_push($listData,"00".str_pad('',48,'-'));
                         //array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,34).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,14));	
-                        array_push($listData,"11".str_pad($orderProduct->amount." X ",8,' ').$orderProduct->product->product_name);
+                        array_push($listData,"11".str_pad($orderProduct->amount." X ",8,' ').setProductName($orderProduct->product->product_name,12,8));
                         array_push($listData,"br");
                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
+                        $existTaste=0;
+                        if(!empty($orderProductTasteEx))
+                        {
+                            $existTaste=1;
+                        }
                         foreach($orderProductTastes as $orderProductTaste){
                             $strTaste.= '/'.$orderProductTaste->taste->name;
+                            $existTaste=1;
                         }
-                        array_push($listData,"11".$strTaste);
-                        array_push($listData,"br");
+                        if($existTaste==1)
+                        {
+                            array_push($listData,"11".$strTaste);
+                            array_push($listData,"br");
+                        }
                         array_push($listData,"00".str_pad('',48,'-'));
+                        $existTaste=0;
+                        if(!empty($orderTasteEx))
+                        {
+                            $existTaste=1;
+                        }
                         $strAllTaste= yii::t('app',"全单口味：").$orderTasteEx;
                         foreach($orderTastes as $orderTaste){
                             $strAllTaste.= '/'.$orderTaste->taste->name;
+                            $existTaste=1;
                         }
-                        array_push($listData,"11".$strAllTaste);
-                        array_push($listData,"br");
+                        if($existTaste==1)
+                        {
+                            array_push($listData,"11".$strAllTaste);
+                            array_push($listData,"br");
+                        }
                         array_push($listData,"00".str_pad('',48,'-'));
                         array_push($listData,"00".yii::t('app','操作员：').Yii::app()->user->name
                                 .date('Y-m-d H:i:s',time()));
@@ -663,7 +740,8 @@ class Helper
                                 return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','厨打打印机必须是网络打印机'));		
                         }
                         //$listData = array(Helper::getPlaceholderLenBoth($order->company->company_name, 48));
-                        $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                        //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                        $listData = array("22".setPrinterTitle($order->company->company_name,8));
                         array_push($listData,"00");
                         array_push($listData,"br");
                         if($reprint)
@@ -702,7 +780,7 @@ class Helper
                         foreach($orderProducts as $orderProduct)
                         {
                             //array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,10));	
-                            array_push($listData,"11".str_pad($orderProduct->amount." X ",8,' ').$orderProduct->product->product_name);
+                            array_push($listData,"11".str_pad($orderProduct->amount." X ",8,' ').setProductName($orderProduct->product->product_name,12,8));
                             array_push($listData,"br");
                         }
                         
@@ -764,6 +842,7 @@ class Helper
                 }
                 foreach($orderProducts as $orderProduct)
                 {
+                    
                     $orderproducts_a[$orderProduct->lid]=$orderProduct;
                     $printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid and delete_flag=0',array(':floorid'=>$floor_id,':pwi'=>$orderProduct->product->printer_way_id,':dpid'=>$order->dpid));
                     foreach ($printwaydetails as $printway) {
@@ -787,11 +866,13 @@ class Helper
                     }
                 }
                 
-                //var_dump($printwaydetails);exit;	
+                //var_dump($printwaydetails);exit;
+                
 		foreach ($printer2orderproducts_a as $key=>$values) {
                         $printer = $printers_a[$key];
-                        
-                        $listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                        $productids="";
+                        //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                        $listData = array("22".setPrinterTitle($order->company->company_name,8));
                         array_push($listData,"00");
                         array_push($listData,"br");
                         
@@ -844,32 +925,57 @@ class Helper
 //                        //var_dump($listData);exit;
 //                        array_push($listData,$strSite);                
 //                        array_push($listData,str_pad('',48,'-'));
+                        
                         foreach($values as $value)
                         {
+                            if(empty($productids))
+                            {
+                                $productids.=$value;
+                            }else{
+                                $productids.=",".$value;
+                            }
                             $orderProduct=$orderproducts_a[$value];
                             //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
-                            array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").$orderProduct->product->product_name);	
+                            array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").setProductName($orderProduct->product->product_name,12,8));	
                             array_push($listData,"br");
                             
                             $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
                             $orderProductTasteEx = $orderProduct->taste_memo;                
                             $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
+                            $existTaste=0;
+                            if(!empty($orderProductTasteEx))
+                            {
+                                $existTaste=1;
+                            }
                             foreach($orderProductTastes as $orderProductTaste){
                                 $strTaste.= '/'.$orderProductTaste->taste->name;
+                                $existTaste=1;
                             }
-                            array_push($listData,"11".$strTaste);
-                            array_push($listData,"br");
+                            if($existTaste==1)
+                            {
+                                array_push($listData,"11".$strTaste);
+                                array_push($listData,"br");
+                            }
                             array_push($listData,"00".str_pad('',48,'-'));
                         }
                         $orderTastes=  OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=1',  array(':orderid'=>$order->lid,':dpid'=>$order->dpid));
                         $orderTasteEx = $order->taste_memo;                
                         array_push($listData,"00".str_pad('',48,'-'));
                         $strAllTaste= yii::t('app',"全单口味：").$orderTasteEx;
+                        $existTaste=0;
+                        if(!empty($orderTasteEx))
+                        {
+                            $existTaste=1;
+                        }
                         foreach($orderTastes as $orderTaste){
                            $strAllTaste.= '/'.$orderTaste->taste->name;
+                           $existTaste=1;
                         }
-                        array_push($listData,"11".$strAllTaste);
-                        array_push($listData,"br");
+                        if($existTaste==1)
+                        {
+                            array_push($listData,"11".$strAllTaste);
+                            array_push($listData,"br");
+                        }
                         array_push($listData,"00".str_pad('',48,'-'));
                         array_push($listData,"00".yii::t('app','操作员：').Yii::app()->user->name."  "
                                 .date('Y-m-d H:i:s',time()));
@@ -881,7 +987,8 @@ class Helper
                         $printserver="1";
                         for($i=0;$i<$printway->list_no;$i++){                                        
                             $printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
-                            array_push($jobids,$printret['jobid']."_".$order->lid);
+                            //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
+                            array_push($jobids,$printret['jobid']."_".$productids);
                             if(!$printret['status'])
                             {
                                 return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
