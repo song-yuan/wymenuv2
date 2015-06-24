@@ -472,10 +472,10 @@ class Helper
                     if(Yii::app()->language=='jp')
                     {
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
-                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),12,' ')." ".Helper::setProductName($product['product_name'],12,6));
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
                     }else{
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
-                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),12,' ')." ".Helper::setProductName($product['product_name'],12,6));
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
                     }
                     array_push($listData,"br");
 		}
