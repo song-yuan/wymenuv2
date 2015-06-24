@@ -131,7 +131,7 @@ class ProductController extends Controller
 		if($orderList->order){
 			$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0,1);
 			foreach($orderProductList as $key=>$val){
-				$orderProductList[$key]['category_name'] = OrderList::GetCatoryName($key);
+				$orderProductList[$key]['category_name'] = OrderList::GetCatoryName($key,$this->companyId);
 				if(!$key){
 					foreach($val as $k=>$v){
 						$orderProductList[$key][$k]['product_id'] = ProductSetClass::GetProductSetProductIds($this->companyId,$v['set_id']);
