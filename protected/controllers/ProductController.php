@@ -243,6 +243,7 @@ class ProductController extends Controller
 	public function actionWeixPayOrder(){
 		$dpid = Yii::app()->request->getParam('dpid',0);
 		$orderId = Yii::app()->request->getParam('orderId',0);
+		var_dump($dpid);var_dump($orderId);exit;
 		$this->render('wxpayOrder',array('dpid'=>$dpid,'orderId'=>$orderId));
 	}
 	//获取商品口味
