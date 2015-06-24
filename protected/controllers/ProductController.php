@@ -131,7 +131,7 @@ class ProductController extends Controller
 		if($orderList->order){
 			$orderProductList = $orderList->OrderProductList($orderList->order['lid'],0,1);
 			foreach($orderProductList as $key=>$val){
-				$orderProductList[$key]['category_name'] = OrderList::GetCatoryName($key);
+				$orderProductList[$key]['category_name'] = OrderList::GetCatoryName($key,$this->companyId);
 				if(!$key){
 					foreach($val as $k=>$v){
 						$orderProductList[$key][$k]['product_id'] = ProductSetClass::GetProductSetProductIds($this->companyId,$v['set_id']);
@@ -241,9 +241,9 @@ class ProductController extends Controller
 	}
 	//微信支付
 	public function actionWeixPayOrder(){
-		$dpid = Yii::app()->request->getParam('dpid',$this->companyId);
-		$siteNoId = Yii::app()->request->getParam('sitNoId',$this->siteNoId);
-		$this->render('wxpayOrder',array('dpid'=>$dpid,'siteNoId'=>$siteNoId));
+		$dpid = Yii::app()->request->getParam('dpid',0);
+		$orderId = Yii::app()->request->getParam('orderId',0);
+		$this->render('wxpayOrder',array('dpid'=>$dpid,'orderId'=>$orderId));
 	}
 	//获取商品口味
 	public function actionGetProductPicJson()

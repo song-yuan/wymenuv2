@@ -23,7 +23,7 @@
 <?php foreach($orderProductList as $key=>$orderProduct):?>
 	<!--非套餐-->
 	<?php if($key):?>
-	<div class="order-category"><?php echo OrderList::GetCatoryName($key);?></div>
+	<div class="order-category"><?php echo OrderList::GetCatoryName($key,$this->companyId);?></div>
 	<?php foreach($orderProduct as $order):?>
 		<div class="product">
 		<div class="product-up">
