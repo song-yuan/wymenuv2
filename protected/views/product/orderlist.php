@@ -1,4 +1,4 @@
-<?php $this->beginContent('/layouts/productmain'); ?>
+<?php $this->beginContent('//layouts/productmain.php'); ?>
 <?php
 /* @var $this ProductController */
 	Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
