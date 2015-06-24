@@ -257,7 +257,7 @@ class CreateOrder
 						'number'=>1,
 						'update_at'=>$time,
 						'remark'=>yii::t('app','无'),
-						'taste_memo'=>yii::t('app','无'),
+						'taste_memo'=>"",
 						);
 			$db->createCommand()->insert('nb_order',$data);  
 			//订单产品 $goodsIds = array('goods_id'=>goods_num,'set_id,1'=>set_num);
@@ -281,7 +281,7 @@ class CreateOrder
 										'price'=>$productSet['price'],
 										'update_at'=>$time,
 										'amount'=>$num,
-										'taste_memo'=>yii::t('app','无'),
+										'taste_memo'=>"",
 										'product_order_status'=>1,
 										);
 					   $db->createCommand()->insert('nb_order_product',$orderProductData);
@@ -300,7 +300,7 @@ class CreateOrder
 										'price'=>$productPrice,
 										'update_at'=>$time,
 										'amount'=>$num,
-										'taste_memo'=>yii::t('app','无'),
+										'taste_memo'=>"",
 										'product_order_status'=>1,
 										);
 					 $db->createCommand()->insert('nb_order_product',$orderProductData);
