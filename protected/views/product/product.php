@@ -1,5 +1,6 @@
 <?php
 /* @var $this ProductController */
+	$baseUrl = Yii::app()->baseUrl;
 	Yii::app()->clientScript->registerCssFile('../css/product/ui-btn.css');
 	Yii::app()->clientScript->registerCssFile('../css/product/ui-img.css');
 	Yii::app()->clientScript->registerCssFile('../css/product/ui-list.css');
