@@ -334,4 +334,21 @@ class OrderList
 			}
 			return $result;
 	}
+	public static function WxPayOrderPrice($products){
+		$price = 0;
+		$num = 0;
+		foreach($products as $product){
+			foreach($product as $val){
+				if(!empty($val['addition'])){
+					foreach($val['addition'] as $v){
+						$price += $v['price']*$v['amount'];
+						$num += $v['amount'];
+					}
+				}
+				$price += $val['price']*$val['amount'];
+				$num += $val['amount'];
+			}
+		}
+		return $price.':'.$num;
+	}
 }
