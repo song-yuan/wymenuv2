@@ -322,10 +322,10 @@ $(document).ready(function(){
 //            alert(language_printer_check_atfirst);
 //            return false;
 //        }
-        if (typeof Androidwymenuprinter == "undefined") {
-            alert(language_notget_padinfo);
-            return false;
-        }
+//        if (typeof Androidwymenuprinter == "undefined") {
+//            alert(language_notget_padinfo);
+//            return false;
+//        }
         //var padinfo=Androidwymenuprinter.getPadInfo();
         //var pad_id=padinfo.substr(10,10); //also can get from session
        	//var pad_id=0000000008;
