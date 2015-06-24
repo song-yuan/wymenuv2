@@ -1,3 +1,4 @@
+<?php $this->beginContent('//layouts/productmain'); ?>
 <?php
 /* @var $this ProductController */
 	Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
@@ -340,3 +341,4 @@
 		});
 	});
 </script>
+<?php $this->endContent(); ?>
