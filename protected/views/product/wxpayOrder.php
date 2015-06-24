@@ -3,7 +3,9 @@
 	$this->setPageTitle('支付');
 	$orderProductListPay = array();
 	$orderProductListPay = OrderList::WxPayOrderList($dpid,$orderId,1,0,1);
+	var_dump($orderProductListPay);
 	$pricePay = OrderList::WxPayOrderPrice($orderProductListPay);
+	var_dump($pricePay);exit;
 	$pricePayArr = explode(':',$pricePay);
 	$orderPricePay = $pricePayArr[0];
 	$orderPayNum = $pricePayArr[1];
