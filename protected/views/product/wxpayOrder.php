@@ -25,9 +25,9 @@
 	$input->SetNotify_url("http://paysdk.weixin.qq.com/example/notify.php");
 	$input->SetTrade_type("JSAPI");
 	$input->SetOpenid($openId);
-	$order = WxPayApi::unifiedOrder($input);
+	$orderInfo = WxPayApi::unifiedOrder($input);
 	
-	$jsApiParameters = $tools->GetJsApiParameters($order);
+	$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 ?>
 <?php if($orderProductListPay):?>
 	<div style="color:#555da8;">
@@ -120,7 +120,6 @@
 
 	function callpay()
 	{
-		alert(22);
 		if (typeof WeixinJSBridge == "undefined"){
 		    if( document.addEventListener ){
 		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
