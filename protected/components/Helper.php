@@ -396,7 +396,7 @@ class Helper
 		///////$listKey = $order->dpid.'_'.$printer->ip_address;                		
 		//var_dump($list);exit;
                 //$listData = array(Helper::getPlaceholderLenBoth($order->company->company_name, 48));
-                $listData = array("22".setPrinterTitle($order->company->company_name,8));
+                $listData = array("22". Helper::setPrinterTitle($order->company->company_name,8));
 		array_push($listData,$strSite);                
 		array_push($listData,str_pad('',48,'-'));
 		
@@ -435,7 +435,7 @@ class Helper
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 ///site error because tempsite and reserve**************
                 //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
-                $listData = array("22".setPrinterTitle($order->company->company_name,8));
+                $listData = array("22".  Helper::setPrinterTitle($order->company->company_name,8));
                 array_push($listData,"00");
                 array_push($listData,"br");
                 $strSite="";
@@ -472,10 +472,10 @@ class Helper
                     if(Yii::app()->language=='jp')
                     {
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
-                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),12,' ')." ".setProductName($product['product_name'],12,6));
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),12,' ')." ".Helper::setProductName($product['product_name'],12,6));
                     }else{
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
-                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),12,' ')." ".setProductName($product['product_name'],12,6));
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),12,' ')." ".Helper::setProductName($product['product_name'],12,6));
                     }
                     array_push($listData,"br");
 		}
@@ -588,7 +588,7 @@ class Helper
                         //$list = new ARedisList($listKey);
                         //var_dump($list);exit;
                         //$listData = array("22".Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 16));//
-                        $listData = array("22".setPrinterTitle($order->company->company_name,8));
+                        $listData = array("22".  Helper::setPrinterTitle($order->company->company_name,8));
                         array_push($listData,"00");
                         array_push($listData,"br");
                         if($reprint)
@@ -626,7 +626,7 @@ class Helper
                         array_push($listData,"br");                        
                         array_push($listData,"00".str_pad('',48,'-'));
                         //array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,34).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,14));	
-                        array_push($listData,"11".str_pad($orderProduct->amount." X ",8,' ').setProductName($orderProduct->product->product_name,12,8));
+                        array_push($listData,"11".str_pad($orderProduct->amount." X ",8,' ').Helper::setProductName($orderProduct->product->product_name,12,8));
                         array_push($listData,"br");
                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                         $existTaste=0;
@@ -741,7 +741,7 @@ class Helper
                         }
                         //$listData = array(Helper::getPlaceholderLenBoth($order->company->company_name, 48));
                         //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
-                        $listData = array("22".setPrinterTitle($order->company->company_name,8));
+                        $listData = array("22".  Helper::setPrinterTitle($order->company->company_name,8));
                         array_push($listData,"00");
                         array_push($listData,"br");
                         if($reprint)
@@ -780,7 +780,7 @@ class Helper
                         foreach($orderProducts as $orderProduct)
                         {
                             //array_push($listData,Helper::getPlaceholderLen($orderProduct->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$orderProduct->product->product_unit,10));	
-                            array_push($listData,"11".str_pad($orderProduct->amount." X ",8,' ').setProductName($orderProduct->product->product_name,12,8));
+                            array_push($listData,"11".str_pad($orderProduct->amount." X ",8,' ').Helper::setProductName($orderProduct->product->product_name,12,8));
                             array_push($listData,"br");
                         }
                         
@@ -872,7 +872,7 @@ class Helper
                         $printer = $printers_a[$key];
                         $productids="";
                         //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
-                        $listData = array("22".setPrinterTitle($order->company->company_name,8));
+                        $listData = array("22".Helper::setPrinterTitle($order->company->company_name,8));
                         array_push($listData,"00");
                         array_push($listData,"br");
                         
@@ -936,7 +936,7 @@ class Helper
                             }
                             $orderProduct=$orderproducts_a[$value];
                             //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
-                            array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").setProductName($orderProduct->product->product_name,12,8));	
+                            array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
                             array_push($listData,"br");
                             
                             $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
