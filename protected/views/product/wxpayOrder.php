@@ -2,7 +2,9 @@
 	Yii::app()->clientScript->registerCssFile('../css/cartlist.css');
 	$this->setPageTitle('支付');
 	$orderProductListPay = array();
+	var_dump($orderProductListPay);
 	$orderProductListPay = OrderList::WxPayOrderList($dpid,$orderId,1,0,1);
+	var_dump($orderProductListPay);exit;
 	$pricePay = $orderList->OrderPrice(1,0,1);
 	$pricePayArr = explode(':',$pricePay);
 	$orderPricePay = $pricePayArr[0];
