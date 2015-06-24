@@ -134,7 +134,7 @@ class OrderList
 	//下单更新数量 锁定订单 $goodsIds = array('goods_id'=>'num','goods_id'=>'num','set_id,goods_id1-goods_id2-goods_id3'=>num) 如 array('102'=>2) goods_id =102 num = 2
 	public static function UpdateOrder($dpid,$orderId,$goodsIds){
 		if($goodsIds){
-		$transaction = $this->db->beginTransaction();
+		$transaction = Yii::app()->db->beginTransaction();
 		try{
 			foreach($goodsIds as $key=>$val){
 					$goodsArr = explode(',',$key);//如果数组元素个数是2 证明书套餐
@@ -196,7 +196,7 @@ class OrderList
 	//下单更新数量 锁定订单 $goodsIds = array('goods_id'=>'num','goods_id'=>'num','set_id,goods_id1-goods_id2-goods_id3'=>num) 如 array('102'=>2) goods_id =102 num = 2
 	public static function UpdatePadOrder($dpid,$orderId,$goodsIds){
 		if($goodsIds){
-		$transaction = $this->db->beginTransaction();
+		$transaction = Yii::app()->db->beginTransaction();
 		try{
 			foreach($goodsIds as $key=>$val){
 				if(!strpos($key,'group')){//去除套餐中的 checkbox
@@ -207,25 +207,25 @@ class OrderList
 						$connect = Yii::app()->db->createCommand($sql);
 						$connect->bindValue(':setId',$setId);
 						$connect->bindValue(':orderId',$orderId);
-                                                $conn->bindValue(':dpid',$this->dpid);
+                        $conn->bindValue(':dpid',$dpid);
 						$connect->execute();
 						
 						$goodsData = explode('-',$goodsArr[1]);
 						foreach($goodsData as $goods){
 							$se=new Sequence("order_product");
-                                                        $lid = $se->nextval();
+                            $lid = $se->nextval();
 							$insertData = array(
-                                                                            'lid'=>$lid,
-                                                                            'dpid'=>$dpid,
-                                                                            'create_at'=>time(),
-                                                                            'order_id'=>$orderId,
-                                                                            'set_id'=>$setId,
-                                                                            'product_id'=>$goods,
-                                                                            'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
-                                                                            'update_at'=>time(),
-                                                                            'amount'=>$val,
-                                                                            'taste_memo'=>yii::t('app','无'),
-                                                                            );
+                                            'lid'=>$lid,
+                                            'dpid'=>$dpid,
+                                            'create_at'=>time(),
+                                            'order_id'=>$orderId,
+                                            'set_id'=>$setId,
+                                            'product_id'=>$goods,
+                                            'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
+                                            'update_at'=>time(),
+                                            'amount'=>$val,
+                                            'taste_memo'=>yii::t('app','无'),
+                                            );
 							Yii::app()->db->createCommand()->insert('nb_order_product',$insertData);
 						}
 							
@@ -235,7 +235,7 @@ class OrderList
 						$conn->bindValue(':amount',$val);
 						$conn->bindValue(':orderId',$orderId);
 						$conn->bindValue(':productId',$key);
-                                                $conn->bindValue(':dpid',$this->dpid);
+                        $conn->bindValue(':dpid',$dpid);
 						$conn->execute();
 					}
 				}
