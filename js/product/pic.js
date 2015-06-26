@@ -120,7 +120,7 @@ function showList(items){
 			if(item.order_id)
 				 trAddinfo +='<div class="clear"></div></div><div class="addCart view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			else
-				 trAddinfo +='<div class="clear"></div></div><div class="addCart view" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div class="addCart view" style="float:left" product-id="'+item.lid+'" store="'+item.store_number+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			
                         tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			rightPicObj.append(tr);
@@ -135,7 +135,7 @@ function showList(items){
 			if(item.order_id)
 				 trAddinfo +='<div class="clear"></div></div><div class="addCart view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			else
-				 trAddinfo +='<div class="clear"></div></div><div class="addCart view" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div class="addCart view" style="float:left" product-id="'+item.lid+'" store="'+item.store_number+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			leftPicObj.append(tr);
 		}
