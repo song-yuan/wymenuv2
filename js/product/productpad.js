@@ -32,6 +32,13 @@ $(document).ready(function(){
 	var language = $('input[name="language"]').val();
     $('#forum_list').on('touchstart','.addCart',function(){
     	var _this = $(this);
+    	var store = _this.parents('.blockCategory').attr('store');
+    	if(parseInt(store)==0){
+    		return;
+    	}else if(parseInt(store) > 0){
+    		store -= 1;
+    		 _this.attr('store',store);
+    	}
     	var type = _this.attr('type');
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
@@ -99,6 +106,11 @@ $(document).ready(function(){
    
     $('#forum_list').on('touchstart','.delCart',function(){
     	var _this = $(this);
+    	var store = _this.parents('.blockCategory').attr('store');
+    	if(parseInt(store) >= 0){
+    		store += 1;
+    		 _this.attr('store',store);
+    	}
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
     	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
