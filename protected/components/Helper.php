@@ -658,8 +658,9 @@ class Helper
                         {
                             array_push($listData,"11".$strAllTaste);
                             array_push($listData,"br");
+                            array_push($listData,"00".str_pad('',48,'-'));
                         }
-                        array_push($listData,"00".str_pad('',48,'-'));
+                        
                         array_push($listData,"00".yii::t('app','操作员：').Yii::app()->user->name
                                 .date('Y-m-d H:i:s',time()));
                         $precode="";
@@ -975,8 +976,9 @@ class Helper
                         {
                             array_push($listData,"11".$strAllTaste);
                             array_push($listData,"br");
+                            array_push($listData,"00".str_pad('',48,'-'));
                         }
-                        array_push($listData,"00".str_pad('',48,'-'));
+                        
                         array_push($listData,"00".yii::t('app','操作员：').Yii::app()->user->name."  "
                                 .date('Y-m-d H:i:s',time()));
                         $precode="";
