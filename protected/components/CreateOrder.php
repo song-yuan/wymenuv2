@@ -205,6 +205,7 @@ class CreateOrder
 	 * 
 	 */
 	public static function createPadOrder($dpid,$goodsIds,$padId){
+		$sellOff = array();
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
         $transaction = $db->beginTransaction();
@@ -269,6 +270,15 @@ class CreateOrder
 	             $goodsArr = explode(',', $key);
 	             if(count($goodsArr) > 1){
 	             	// 套餐
+	             	$sql = 'select * from nb_product_set where dpid='.$dpid.' and lid='.$goodsArr[0];
+	             	$result = $db->createCommand()->queryRow();
+	             	if($result){
+	             		if($result['store_number'] > 0&&$result['store_number'] < $num){
+	             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+	             		}
+	             	}else{
+	             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+	             	}
 	             	$productSets = self::getSetProductIds($dpid,$goodsArr[0]);
 	             	foreach($productSets as $productSet){
 	             		$orderProductData = array(
@@ -287,8 +297,22 @@ class CreateOrder
 					   $db->createCommand()->insert('nb_order_product',$orderProductData);
 					   $orderPrice +=$productSet['price']*$num;
 	             	}
+	             	if($result['store_number'] > 0){
+	             		$sql = 'update nb_product_set set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+	             		 $db->createCommand($sql)->execute();
+	             		 array_push($sellOff,array("product_id"=>$goodsArr[0],"type"=>"set","num"=>$result['store_number']-$num));
+	             	}
  	             }else{
 	             	//单品
+	             	$sql = 'select * from nb_product where dpid='.$dpid.' and lid='.$goodsArr[0];
+	             	$result = $db->createCommand()->queryRow();
+	             	if($result){
+	             		if($result['store_number'] > 0&&$result['store_number'] < $num){
+	             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+	             		}
+	             	}else{
+	             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+	             	}
 	             	$productPrice = self::getProductPrice($dpid,$key,0);
 	             	 $orderProductData = array(
 										'lid'=>$orderProductId,
@@ -304,7 +328,12 @@ class CreateOrder
 										'product_order_status'=>1,
 										);
 					 $db->createCommand()->insert('nb_order_product',$orderProductData);
-					  $orderPrice +=$productPrice*$num;
+					 $orderPrice +=$productPrice*$num;
+					 if($result['store_number'] > 0){
+	             		$sql = 'update nb_product set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+	             		 $db->createCommand($sql)->execute();
+	             		  array_push($sellOff,array("product_id"=>$goodsArr[0],"type"=>"product","num"=>$result['store_number']-$num));
+	             	 }
 	             }
 			}	
 			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
@@ -327,7 +356,28 @@ class CreateOrder
                 	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
                 //$printList2=array_merge($printList,array('sitenoid'=> $lid));
-//            }		
+//            }	
+
+			//估清产品通知
+			if(!empty($sellOff)){
+				Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>  $this->companyId));
+                //var_dump($pads);exit;
+                $sendjsondata=json_encode(array("company_id"=>  $this->companyId,
+                    "do_id"=>"sell_off",
+                    "do_data"=>$sellOff));
+                //var_dump($sendjsondata);exit;
+                foreach($pads as $pad)
+                {
+                    $clientId=$store->get("padclient_".$this->companyId.$pad->lid);
+                    //var_dump($clientId,$print_data);exit;
+                    if(!empty($clientId))
+                    {                            
+                        Gateway::sendToClient($clientId,$sendjsondata);
+                    }
+                } 
+			}				
  			$transaction->commit();	
  			return json_encode($printList,JSON_UNESCAPED_UNICODE);
 		 } catch (Exception $e) {

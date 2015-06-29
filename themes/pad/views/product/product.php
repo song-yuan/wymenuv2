@@ -147,12 +147,18 @@
             alert(msg);
        }
        
-       //{"company_id":"0000000001","do_id":"sell_off",//
-       //num <0 无数量限制
+       <!-- 
+	       {"company_id":"0000000001","do_id":"sell_off",
+	       //num <0 无数量限制
+       -->
+       
        function sell_off(do_data) {
-            alert(do_data);
             var data = eval('(' + do_data + ')');
-            //
+            if(data.do_id=="sell_off"){
+            	for(var item in data.do_data){
+            		$('div.blockCategory[product-id="'+item.product_id+'"]').attr('store',item.num);
+            	} 
+            }
        }
        
         
