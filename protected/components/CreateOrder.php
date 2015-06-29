@@ -362,15 +362,15 @@ class CreateOrder
 			if(!empty($sellOff)){
 				Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
-                $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>  $this->companyId));
+                $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>$dpid));
                 //var_dump($pads);exit;
-                $sendjsondata=json_encode(array("company_id"=>  $this->companyId,
+                $sendjsondata=json_encode(array("company_id"=>$dpid,
                     "do_id"=>"sell_off",
                     "do_data"=>$sellOff));
                 //var_dump($sendjsondata);exit;
                 foreach($pads as $pad)
                 {
-                    $clientId=$store->get("padclient_".$this->companyId.$pad->lid);
+                    $clientId=$store->get("padclient_".$dpid.$pad->lid);
                     //var_dump($clientId,$print_data);exit;
                     if(!empty($clientId))
                     {                            
