@@ -153,12 +153,19 @@
        -->
        
        function sell_off(do_data) {
+<<<<<<< HEAD
             var data = eval('(' + do_data + ')');
             if(data.do_id=="sell_off"){
             	for(var item in data.do_data){
             		$('div.blockCategory[product-id="'+item.product_id+'"]').attr('store',item.num);
             	} 
             }
+=======
+            //alert(do_data);
+            var data = eval('(' + do_data + ')');
+            alert(data[0]['product_id']);
+            //
+>>>>>>> 517f952f1d5a99b965a7e578a2f6f83aba4e7dd2
        }
        
         
