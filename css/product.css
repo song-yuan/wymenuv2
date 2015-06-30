@@ -360,16 +360,16 @@
 }
 .sellOff{
 	position:absolute;
-	right:-100px;
-	bottom:-100px;
-	width:200px;
-	height:200px;
+	right:-150px;
+	bottom:-150px;
+	width:300px;
+	height:300px;
 	line-height:45px;
 	color:red;
 	text-align:left;
 	border-top-left-radius:100%;
 	border-bottom-left-radius:100%;
-	background:rgba(255,255,255,0.5);
+	background:rgba(255,255,255,0.6);
 	font-size:35px;
 	font-weight:800;
 }
