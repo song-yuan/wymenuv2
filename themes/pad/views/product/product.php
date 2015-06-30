@@ -155,7 +155,7 @@
             	for(var item in data){
                     $('div.blockCategory[product-id="'+data[item].product_id+'"]').attr('store',data[item].num);
                     if(parseInt(data[item].num)==0){
-                    	var str = '<div class="sellOff">已<br/>售完</div>';
+                    	var str = '<div class="sellOff"> 已<br/>售完</div>';
                     	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
                     }else if(parseInt(data[item].num) > 0){
                     	var str = '<div class="sellOff">仅剩<br/>'+data[item].num+'份</div>';
