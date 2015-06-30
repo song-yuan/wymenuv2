@@ -367,8 +367,8 @@
 	line-leight:100%;
 	color:red;
 	text-align:center;
-	border-left-top:100%;
-	border-left-bottom:100%;
+	border-left-top-radius:100%;
+	border-left-bottom-radius:100%;
 	background:rgba(255,255,255,0.5);
 	font-size:35px;
 	font-weight:800;
