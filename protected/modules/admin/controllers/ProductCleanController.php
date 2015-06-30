@@ -122,8 +122,8 @@ class ProductCleanController extends BackendController
                     //var_dump($pads);exit;
                     $sendjsondata=json_encode(array("company_id"=>  $this->companyId,
                         "do_id"=>"sell_off",
-                        "do_data"=>array("0"=>array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
-                            //,"1"=>array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
+                        "do_data"=>array(array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
+                            //,array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
                             )));
                     //var_dump($sendjsondata);exit;
                     foreach($pads as $pad)
