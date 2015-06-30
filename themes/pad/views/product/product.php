@@ -147,13 +147,22 @@
             alert(msg);
        }
        
-              //{"company_id":"0000000001","do_id":"sell_off",
-	       //num <0 无数量限制
+         <!--{"company_id":"0000000001","do_id":"sell_off",
+	       //num <0 无数量限制-->
       function sell_off(do_data) {
             var data = eval('(' + do_data + ')');
             	//for(var item in data.do_data){
             	for(var item in data){
                     $('div.blockCategory[product-id="'+data[item].product_id+'"]').attr('store',data[item].num);
+                    if(parseInt(data[item].num)==0){
+                    	var str = '<div class="sellOff">已售完</div>';
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').append(str);
+                    }else if(parseInt(data[item].num) > 0){
+                    	var str = '<div class="sellOff">'+data[item].num+'</div>';
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').append(str);
+                    }else{
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+                    }
             	}             
        }       
         

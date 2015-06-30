@@ -355,6 +355,21 @@
 	visibility: hidden;
 	z-index:1000;
 }
+.product-pic{
+	position:relative;
+}
+.sellOff{
+	position:absolute;
+	right:0;
+	bottom:0;
+	width:30px;
+	height:30px;
+	line-leight:100%;
+	color:red;
+	text-align:center;
+	border-left-top:100%;
+	border-left-bottom:100%;
+}
 .aniele.added {
 	-webkit-transform:translate3d(200px, -3000px, 0);
        -moz-transform:translate3d(200px, -3000px, 0);
