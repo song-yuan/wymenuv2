@@ -156,10 +156,10 @@
                     $('div.blockCategory[product-id="'+data[item].product_id+'"]').attr('store',data[item].num);
                     if(parseInt(data[item].num)==0){
                     	var str = '<div class="sellOff">已售完</div>';
-                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').append(str);
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
                     }else if(parseInt(data[item].num) > 0){
                     	var str = '<div class="sellOff">'+data[item].num+'</div>';
-                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').append(str);
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
                     }else{
                     	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
                     }
