@@ -152,7 +152,7 @@
       function sell_off(do_data) {
           alert(do_data);
             //var data = eval('(' + do_data + ')');
-            alert(do_data.0.product_id);
+            //alert(do_data.0.product_id);
             //if(data.do_id=="sell_off"){
             	//for(var item in data.do_data){
             	for(var item in do_data){
@@ -160,7 +160,7 @@
             		$('div.blockCategory[product-id="'+item.product_id+'"]').attr('store',item.num);
             	} 
                 
-                alert(data[0]);alert(data[0]['product_id']);
+               
            // }
             //alert(do_data);
 //            var data = eval('(' + do_data + ')');
