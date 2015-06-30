@@ -370,6 +370,8 @@
 	border-left-top:100%;
 	border-left-bottom:100%;
 	background:rgba(255,255,255,0.5);
+	font-size:35px;
+	font-weight:800;
 }
 .aniele.added {
 	-webkit-transform:translate3d(200px, -3000px, 0);
