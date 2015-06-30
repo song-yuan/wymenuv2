@@ -156,9 +156,10 @@
             //if(data.do_id=="sell_off"){
             	//for(var item in data.do_data){
             	for(var item in data){
-                    var itemd=eval('(' + item + ')');
-                    alert(itemd["product_id"]);alert(itemd.product_id);
-            		$('div.blockCategory[product-id="'+itemd.product_id+'"]').attr('store',item.num);
+                    alert(item);
+                    //var itemd=eval('(' + item + ')');
+                    alert(item.product_id);
+            		$('div.blockCategory[product-id="'+item.product_id+'"]').attr('store',item.num);
             	} 
                 
                
