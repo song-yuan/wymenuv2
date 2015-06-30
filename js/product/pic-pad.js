@@ -172,9 +172,9 @@ function showListPad(items){
 			var trHead = '<div class="blockRight blockCategory" product-id="'+pad(item.lid,10)+'" store="'+item.store_number+'" category="'+pad(item.category_id,10)+'" category-name="'+item.category_name+'">';
 			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="../../../../../img/product/icon_search.png" style="width:48px;height:48px;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="../../../../../img/product/icon_cart.png" style="width:48px;height:48px;"/><br>'+language_diancai+'</i>';
 				if(parseInt(item.store_number)==0){
-					trPic += '<div class="sellOff">已<br/>售完</div>';
+					trPic += '<div class="sellOff">&nbsp;&nbsp;已<br/>&nbsp;售完</div>';
 				}else if(parseInt(item.store_number) > 0){
-					trPic += '<div class="sellOff">仅剩<br/>'+item.store_number+'份</div>';
+					trPic += '<div class="sellOff">&nbsp;仅剩<br/>&nbsp;'+item.store_number+'份</div>';
 				}
 				trPic += '</a>';
 			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
