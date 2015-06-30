@@ -360,10 +360,10 @@
 }
 .sellOff{
 	position:absolute;
-	right:0;
-	bottom:0;
-	width:100px;
-	height:100px;
+	right:-100px;
+	bottom:-100px;
+	width:200px;
+	height:200px;
 	line-height:100%;
 	color:red;
 	text-align:center;
