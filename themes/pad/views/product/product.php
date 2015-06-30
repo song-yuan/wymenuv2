@@ -150,25 +150,13 @@
               //{"company_id":"0000000001","do_id":"sell_off",
 	       //num <0 无数量限制
       function sell_off(do_data) {
-          alert(do_data);
+           //alert(do_data);
             var data = eval('(' + do_data + ')');
-            //alert(do_data.0.product_id);
-            //if(data.do_id=="sell_off"){
             	//for(var item in data.do_data){
             	for(var item in data){
-                    alert(data[item]);
-                    //var itemd=eval('(' + item + ')');
-                    alert(data[item].product_id);
-            		$('div.blockCategory[product-id="'+item.product_id+'"]').attr('store',item.num);
-            	} 
-                
-               
-           // }
-            //alert(do_data);
-//            var data = eval('(' + do_data + ')');
-//            alert(data[0]['product_id']);
-            //
-       }
-       
+                    //alert(data[item].product_id);
+                    $('div.blockCategory[product-id="'+data[item].product_id+'"]').attr('store',data[item].num);
+            	}             
+       }       
         
 </script>
