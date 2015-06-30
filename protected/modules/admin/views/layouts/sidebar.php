@@ -67,14 +67,14 @@
 						<li class="<?php if(Yii::app()->controller->id == 'feedback' &&(!isset($_GET['allflag'])||(isset($_GET['allflag'])&&$_GET['allflag']==0))) echo 'active';?>"><a href="<?php echo $this->createUrl('feedback/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','单品反馈选项');?></a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('' , ''))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('orderManagement'))) echo 'active';?>">
 					<a href="">
 					<i class="fa  fa-files-o"></i> 
 					<span class="title"><?php echo yii::t('app','订单管理');?></span>					
 					</a>
 					<ul class="sub-menu">
 						<li class=""><a href=""><?php echo yii::t('app','日结对账单');?></a></li>
-						<li class=""><a href=""><?php echo yii::t('app','付款退款记录');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'orderManagement' && in_array($this->getAction()->getId(),array('paymentRecord',''))) echo 'active';?>"><a href="<?php echo $this->createUrl('orderManagement/paymentRecord',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','付款退款记录');?></a></li>
 						<li class=""><a href=""><?php echo yii::t('app','历史订单');?></a></li>
 					</ul>
 				</li>
