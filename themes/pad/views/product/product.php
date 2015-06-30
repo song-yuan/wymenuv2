@@ -158,7 +158,7 @@
                     	var str = '<div class="sellOff">已售完</div>';
                     	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
                     }else if(parseInt(data[item].num) > 0){
-                    	var str = '<div class="sellOff">'+data[item].num+'</div>';
+                    	var str = '<div class="sellOff">仅剩'+data[item].num+'份</div>';
                     	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
                     }else{
                     	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
