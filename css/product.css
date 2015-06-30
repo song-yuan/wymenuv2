@@ -375,7 +375,7 @@
 	font-weight:800;
 }
 .sellOut{
-	background:rgba(169,165,165,0.5);
+	background:rgba(169,165,165,0.8);
 }
 .aniele.added {
 	-webkit-transform:translate3d(200px, -3000px, 0);
