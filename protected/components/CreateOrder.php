@@ -274,10 +274,10 @@ class CreateOrder
 	             	$result = $db->createCommand()->queryRow();
 	             	if($result){
 	             		if($result['store_number'] > 0&&$result['store_number'] < $num){
-	             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+	             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
 	             		}
 	             	}else{
-	             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+	             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
 	             	}
 	             	$productSets = self::getSetProductIds($dpid,$goodsArr[0]);
 	             	foreach($productSets as $productSet){
@@ -308,10 +308,10 @@ class CreateOrder
 	             	$result = $db->createCommand()->queryRow();
 	             	if($result){
 	             		if($result['store_number'] > 0&&$result['store_number'] < $num){
-	             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+	             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
 	             		}
 	             	}else{
-	             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+	             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
 	             	}
 	             	$productPrice = self::getProductPrice($dpid,$key,0);
 	             	 $orderProductData = array(
