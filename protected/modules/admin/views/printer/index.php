@@ -66,7 +66,7 @@
 								<th><?php echo yii::t('app','打印机名称');?></th>
                                                                 <th><?php echo yii::t('app','地址(IP/USB/COM)');?></th>
                                                                 <th><?php echo yii::t('app','语言');?></th>
-                                                                <th><?php echo yii::t('app','确定');?>类型</th>
+                                                                <th><?php echo yii::t('app','确定');?><?php echo yii::t('app','类型');?></th>
 								<!--<th><?php echo yii::t('app','IP地址');?></th>
 								<th><?php echo yii::t('app','串口名称');?></th>
                                                                 <th><?php echo yii::t('app','波特率');?></th>-->

@@ -154,7 +154,7 @@ class ProductAdditionController extends BackendController
                 
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		$options = array();
-		$optionsReturn = array('--请选择分类--');
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
 		if($models) {
 			foreach ($models as $model) {
 				if($model->pid == '0') {

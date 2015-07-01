@@ -94,15 +94,15 @@
 										<div class="col-md-12">
 											<div class="radio-list">
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>1" value="-1" <?php if($model->store_number==-1) echo "checked";?>> 数量不受限
+												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>1" value="-1" <?php if($model->store_number==-1) echo "checked";?>> <?php echo yii::t('app','数量不受限');?>
 												</label>
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>2" value="0" <?php if($model->store_number==0) echo "checked";?>> 已售完
+												<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>2" value="0" <?php if($model->store_number==0) echo "checked";?>> <?php echo yii::t('app','已售完');?>
 												</label>
                                                                                                 <label class="radio-inline">
-                                                                                                <input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>3" value="1" <?php if($model->store_number>0) echo "checked";?>> 仅剩
+                                                                                                <input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>3" value="1" <?php if($model->store_number>0) echo "checked";?>> <?php echo yii::t('app','仅剩');?>
                                                                                                 <input type="text" style="width:60px;" name="leftnum<?php echo $model->lid;?>" id="idleftnum<?php echo $model->lid;?>" value="<?php if($model->store_number>0) echo $model->store_number; else echo "0"; ?>" >
-                                                                                                <input type="button" name="leftbutton<?php echo $model->lid;?>" id="idleftbutton<?php echo $model->lid;?>" class="clear_btn" value="保存" >
+                                                                                                <input type="button" name="leftbutton<?php echo $model->lid;?>" id="idleftbutton<?php echo $model->lid;?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
                                                                                                 </label>
 											</div>
 										</div>

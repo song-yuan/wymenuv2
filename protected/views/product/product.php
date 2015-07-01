@@ -32,7 +32,7 @@
 	<div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
-        <div class="product-category"><?php if(!$type&&$pid){ echo ProductClass::getCategoryName($pid).' >>> '.ProductClass::getCategoryName($categoryId);}else{ if($type==1) echo '推荐品';elseif($type==2) echo '套餐';elseif($type==3) echo '点赞TOP10';else echo '点单TOP10';}?></div>
+        <div class="product-category"><?php if(!$type&&$pid){ echo ProductClass::getCategoryName($pid).' >>> '.ProductClass::getCategoryName($categoryId);}else{ if($type==1) echo yii::t('app','推荐品');elseif($type==2) echo yii::t('app','套餐');elseif($type==3) echo yii::t('app','点赞TOP10');else echo yii::t('app','点单TOP10');}?></div>
 		<div id="forum_list">
 			<div class="outDiv" id="leftPic">
 			</div>
@@ -43,19 +43,19 @@
     <!--content结束-->
     <div class="bottom">
     	<div class="bottom-left">
-    		<span>总价: </span><span class="total-price"><?php echo Money::priceFormat($price);?></span>
+    		<span><?php echo yii::t('app','总价: ');?></span><span class="total-price"><?php echo Money::priceFormat($price);?></span>
     	</div>
     	<div class="bottom-middle">
     		<div class="product-nums"><?php echo $nums;?></div>
     	</div>
     	<div class="bottom-right">
-    		<a href="orderList"><button class="see-order">订单>></button></a>
+    		<a href="orderList"><button class="see-order"><?php echo yii::t('app','订单>>');?></button></a>
     	</div>
     	<div class="clear"></div>
     </div>
 </div>
 <div class="product-mask">
-	<div class="product-mask-info">点单信息</div>
+	<div class="product-mask-info"><?php echo yii::t('app','点单信息');?></div>
 	<div class="info">
 	</div>
 </div>
