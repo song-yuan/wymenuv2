@@ -46,7 +46,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>设置PAD</div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','设置PAD'); ?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

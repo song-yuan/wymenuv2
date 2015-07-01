@@ -1,5 +1,5 @@
-    <script type="text/javascript" src="../../../../../../../../../../plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
+    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
    
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -25,14 +25,8 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'订单管理','subhead'=>'订单列表','breadcrumbs'=>array(array('word'=>'付款退款记录','url'=>''))));?>
-	<div class="portlet box purple">
-	    <div class="caption">
-					<div class="btn-group">
-							
-					</div>
-	    </div>
-	</div>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','订单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','付款退款记录'),'url'=>''))));?>
+	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -41,21 +35,21 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>付款退款记录表</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','付款退款记录表');?></div>
 					<div class="actions">
                         
 				<div class="btn-group">
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="起始时间" value="<?php echo $begin_time; ?>">  
+								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
 								<span class="input-group-addon">~</span>
-							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="终止时间"  value="<?php echo $end_time;?>">           
+							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
 						  </div>  
 			    </div>	
 					
 					<div class="btn-group">
-							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i> 查 询</button>
-							<a href="#" class="btn green" ><i class="fa fa-pencial"></i>打印</a>		
+							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+							<a href="#" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','打 印');?></a>		
 					</div>			
 			    
 					</div>
@@ -65,14 +59,14 @@
 						<thead>
 							<tr>
 								
-								<th>序号</th>
-								<th>店铺</th>
-								<th>订单号</th>
-								<th>明细</th>
-								<th>应收金额</th>
-                                <th>实付金额</th>
-                                <th>找零金额</th>
-                                <th>备注</th>                                                                
+								<th><?php echo yii::t('app','序号');?></th>
+								<th><?php echo yii::t('app','店铺');?></th>
+								<th><?php echo yii::t('app','订单号');?></th>
+								<th><?php echo yii::t('app','明细');?></th>
+								<th><?php echo yii::t('app','应收金额');?></th>
+                                <th><?php echo yii::t('app','实付金额');?></th>
+                                <th><?php echo yii::t('app','退款金额');?></th>
+                                <th><?php echo yii::t('app','备注');?></th>                                                                
 								</tr>
 						</thead>
 						<tbody>
@@ -82,18 +76,18 @@
 						<?php foreach ($models as $model):?>
 
 								<tr class="odd gradeX">
-								<td><?php echo $a;?></td>
-								<td><?php echo $model['company_name']; ?></td>
-								<td><?php echo $model['lid']%10000;?></td>
+								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
+								<td><?php echo $model->company->company_name; ?></td>
+								<td><?php echo $model->order_id%10000;?></td>
 								<td>
-								 <div style='width:50px;overflow: hidden;height:18px;' title='<?php echo $this->getOrderDetails($model['lid']); ?>'  >
-								 <?php echo $this->getOrderDetails($model['lid']); ?></div>
+								 <div style='width:50px;overflow: hidden;height:18px;' title='<?php echo $this->getOrderDetails($model->lid); ?>'  >
+								 <?php echo $this->getOrderDetails($model->lid); ?></div>
 								
                                     </td>
-								<td><?php echo $model['should_total'];?></td>
-								<td><?php echo $model['reality_total'];?></td>
-								<td><?php echo $model['reality_total']-$model['should_total'];?></td>
-								<td></td>
+								<td><?php echo $model->order->should_total;?></td>
+								<td><?php if ($model->pay_amount > 0) echo $model->pay_amount ;else echo '--';?></td>
+								<td><?php if ($model->pay_amount < 0) echo -$model->pay_amount ;else echo '--';;?></td>
+								<td><?php echo $model->update_at;?></td>
 							</tr>
 					    <?php $a++;?>
 						<?php endforeach;?>	
@@ -105,7 +99,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共 ');?><?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

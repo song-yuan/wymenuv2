@@ -24,7 +24,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'订单管理','subhead'=>'日结列表','breadcrumbs'=>array(array('word'=>'日结汇总','url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','日结列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','日结汇总'),'url'=>''))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -34,19 +34,19 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 				
-				 <div class="caption"><i class="fa fa-globe"></i>汇总列表</div>
+				 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','汇总列表'); ?></div>
 					 <div class="actions">
                         <div class="btn-group">
             
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="起始时间" value="<?php echo $begin_time; ?>" onfocus=this.blur()>  
+								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder=<?php echo yii::t('app','起始时间'); ?> value="<?php echo $begin_time; ?>" onfocus=this.blur()>  
 								<span class="input-group-addon">~</span>
-							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="终止时间"  value="<?php echo $end_time;?>" onfocus=this.blur()>           
+							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder=<?php echo yii::t('app','终止时间'); ?>  value="<?php echo $end_time;?>" onfocus=this.blur()>           
 						   </div>  
 					    </div>
 					   
 					      <div class="btn-group">
-							    <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i>日 结</button>
+							    <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结'); ?></button>
 				  	      </div>
 				  	  </div>
 				</div>
@@ -56,11 +56,11 @@
 						<thead>
 							<tr>
 								
-								<th width=100px;>序号</th>
-						        <th>店铺</th>
-                                <th>支付方式</th>
-                                <th>金额</th>                                                                
-                                <th>备注</th>
+								<th width=100px;><?php echo yii::t('app','序号'); ?></th>
+						        <th><?php echo yii::t('app','店铺'); ?></th>
+                                <th><?php echo yii::t('app','支付方式'); ?></th>
+                                <th><?php echo yii::t('app','金额'); ?></th>                                                                
+                                <th><?php echo yii::t('app','备注'); ?></th>
 								
 							</tr>
 						</thead>
@@ -75,7 +75,7 @@
 								<tr class="odd gradeX">
 								<td><?php echo $a;?></td>
 								<td><?php echo $model['company_name']; ?></td>
-								<td><?php if($model['payment_method_id'] == '0000000000') echo '现金支付'; else echo $model['name'];?></td>
+								<td><?php if($model['payment_method_id'] == '0000000000') echo yii::t('app','现金支付'); else echo $model['name'];?></td>
 								<td><?php echo $model['should_all'];?></td>
 								<td></td>
 								</tr>
@@ -89,7 +89,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共 <?php echo $pages->getPageCount();?> 页  , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共'); ?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页'); ?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据'); ?> , <?php echo yii::t('app','当前是第'); ?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页'); ?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

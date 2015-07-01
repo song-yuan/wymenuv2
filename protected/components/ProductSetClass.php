@@ -56,7 +56,7 @@ class ProductSetClass
                 
 		//return CHtml::listData($models, 'lid', 'category_name','pid');
 		//$options = array();
-		$options = array('--请选择分类--');
+		$options = array(yii::t('app','--请选择分类--'));
 		if($models) {
 			foreach ($models as $model) {
                                     $options[$model->lid] = $model->set_name;
