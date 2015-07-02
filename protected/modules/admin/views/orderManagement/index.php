@@ -1,7 +1,4 @@
-    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
-    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
-   <!-- BEGIN PAGE -->
-    <div class="page-content">
+<div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -25,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','订单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','今日订单'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','订单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','历史订单查询'),'url'=>''))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -34,23 +31,11 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','今日订单');?></div>
-				<div class="actions">
-				<div class="btn-group">
-				
-						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-								<span class="input-group-addon">~</span>
-							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-						  </div>  
-					</div>	
-					
-					<div class="btn-group">
-							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<a href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>/page/" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日结汇总');?></a>						</div>			
-				  	</div>
-			 </div> 
-			
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','订单列表');?></div>
+					<div class="actions">
+
+					</div>
+				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
@@ -69,11 +54,10 @@
 							</tr>
 						</thead>
 						<tbody>
-						<?php if( $models) :?>
+						<?php if($models) :?>
 						<!--foreach-->
-						
+					
 						<?php foreach ($models as $model):?>
-
 								<tr class="odd gradeX">
 								<td><?php echo $model->lid%10000; ?></td>
 								<td><?php echo $model->update_at;?></td>
@@ -126,35 +110,9 @@
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
+		</div>
 	
 	</div>
 	<!-- END PAGE CONTENT-->
-</div>
-<!-- END PAGE -->
 
-<script>
-		jQuery(document).ready(function(){
-		    if (jQuery().datepicker) {
-	            $('.date-picker').datepicker({
-	            	format: 'yyyy-mm-dd',
-	            	language: 'zh-CN',
-	                rtl: App.isRTL(),
-	                autoclose: true
-	            });
-	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-	            
-           }
-		});
-		 
-		       
-		   $('#btn_time_query').click(function() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
-			   var begin_time = $('#begin_time').val();
-			   var end_time = $('#end_time').val();
-			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('orderManagement/notPay' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
-			  
-	        });
-</script> 
+</div>

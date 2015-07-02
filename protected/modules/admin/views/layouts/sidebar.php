@@ -75,7 +75,7 @@
 					<ul class="sub-menu">
 						<li class=""><a href=""><?php echo yii::t('app','日结对账单');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'orderManagement' && in_array($this->getAction()->getId(),array('paymentRecord',''))) echo 'active';?>"><a href="<?php echo $this->createUrl('orderManagement/paymentRecord',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','付款退款记录');?></a></li>
-						<li class=""><a href=""><?php echo yii::t('app','历史订单');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'orderManagement' && in_array($this->getAction()->getId(),array('index',''))) echo 'active';?>"><a href="<?php echo $this->createUrl('orderManagement/index',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','历史订单');?></a></li>
 					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType', 'floor'))) echo 'active';?>">

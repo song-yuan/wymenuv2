@@ -21,31 +21,27 @@ class orderManagementController extends BackendController
 	}
 	public function actionIndex(){
 		$criteria = new CDbCriteria;
-		$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
-		$connect = Yii::app()->db->createCommand($sql);
-		$model = $connect->queryAll();
-		$categoryId = Yii::app()->request->getParam('cid',0);
-		
-		//$criteria = new CDbCriteria;
-		//$criteria->condition = 't.dpid='.$this->companyId ;
-		$pages = new CPagination(count($model));
-                $pages->PageSize = 10;
+		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
+		$criteria->select = 't.*';
+		$criteria->addCondition("t.dpid= ".$this->companyId);
+		//$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->with = 'paymentMethod';
+	
+		//$connect = Yii::app()->db->createCommand($sql);
+		//$model = $connect->queryAll();
+		$criteria->order = 't.lid ASC' ;
+		$criteria->distinct = TRUE;
+	
+		//$categoryId = Yii::app()->request->getParam('cid',0);
+	
+	
+	
+		$pages = new CPagination(Order::model()->count($criteria));
+		//$pages->PageSize = 10;
 		$pages->applyLimit($criteria);
-// 		$model = Yii::app()->db->creatCommand($sql."LIMIT:offset,:limit");
-// 		$model->bindValue(':offset',$pages->currentPage*$pages->pageSize);
-// 		$model->bindValue(':limit',$pages->pageSize);
-// 		$model = $ret->queryAll();
-		
-		//$pages = new CPagination(Order::model()->count($criteria));
-		//	    $pages->seetPageSize(1);
-		//$pages->applyLimit($criteria);
-		//$models = Order::model()->findAll($criteria);
-		//$nicais = OrderManagementController::getProductname()->findAll($criteria);
-		//$categories = $this->getCategories();
-		//var_dump($models);exit;
-        echo $this->getSiteName();
-       
-		 //      exit;
+	
+		$model=  Order::model()->findAll($criteria);
+		//var_dump($model);exit;
 		$this->render('index',array(
 				'models'=>$model,
 				'pages'=>$pages,
@@ -53,6 +49,63 @@ class orderManagementController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
+	
+/*SQL语句写成的分页出现问题。。。
+ * 	public function actionIndex(){
+		$criteria = new CDbCriteria;
+		$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
+		$connect = Yii::app()->db->createCommand($sql);
+		$model = $connect->queryAll();
+		$categoryId = Yii::app()->request->getParam('cid',0);
+
+        echo $this->getSiteName($orderId);
+
+		$pages = new CPagination(count($model));
+		$pages->PageSize = 10;
+		$pages->applyLimit($criteria);
+		
+		$this->render('index',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
+*/
+	public function actionNotPay(){
+		$criteria = new CDbCriteria();
+		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
+		$end_time = Yii::app()->request->getParam('end_time',5200-08-09);
+		//var_dump($begin_time);
+		//var_dump($end_time);exit;
+		//城里人就是这么会玩(o.o)!
+		$criteria->select = 't.*'; //代表了要查询的字段，默认select='*';
+		$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addInCondition('t.order_status', array(3,4));
+		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+		$criteria->with = 'paymentMethod';//连接表
+		$criteria->order = 't.lid ASC' ;//排序条件
+		$criteria->distinct = TRUE; //是否唯一查询
+		
+		$pages = new CPagination(Order::model()->count($criteria));
+		//$pages->PageSize = 10;
+		$pages->applyLimit($criteria);
+		
+		$model=  Order::model()->findAll($criteria);
+		//var_dump($model);exit;
+				 
+		$this->render('notPay',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				//'ret'=>$ret,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
+	
 	public function actionOrderDaliyCollect(){
 
 		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
@@ -61,20 +114,14 @@ class orderManagementController extends BackendController
 		$sql = "select t2.company_name, t1.name, t.lid, t.dpid, t.payment_method_id, t.update_at, sum(t.should_total) as should_all from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId ." group by t.payment_method_id " ;
 		//var_dump($sql);exit;
 		$connect = Yii::app()->db->createCommand($sql);
-		
-		$pages = new CPagination(count($model));
-		//$pages->PageSize = 10;
-		$pages->applyLimit($criteria);
-		
-		
 		$model = $connect->queryAll();
 		$categoryId = Yii::app()->request->getParam('cid',0);
 	
+		$pages = new CPagination(count($model));
+		$pages->PageSize = 10;
+		$pages->applyLimit($criteria);
 		
 
-		echo $this->getSiteName();
-		 
-		//      exit;
 		$this->render('orderDaliyCollect',array(
 				'models'=>$model,
 				'pages'=>$pages,
@@ -84,22 +131,28 @@ class orderManagementController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
+
         public function actionPaymentRecord(){
         	    $criteria = new CDbCriteria;
                 $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
                 $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+                $Did = Yii::app()->request->getParam('Did',0);
 				//var_dump($begin_time);exit;
                 $criteria->select = 't.*'; //代表了要查询的字段，默认select='*'; 
                 $criteria->addCondition("t.dpid= ".$this->companyId);
+               // if ($Did > 0){
+               // $criteria->addCondition("t.order_id = '$Did'");}
+                if ($begin_time and $end_time){
                 $criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-                $criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+                
+                $criteria->addCondition("t.update_at <='$end_time 23:59:59'");}
                 //$criteria->select = 't1.should_total';
                 //var_dump($begin_time);exit;
 				$criteria->with = array("company","order"); //连接表
                 //$criteria->join = 'left join nb_order t1 on (t.dpid = t1.dpid and t.order_id = t1.lid )'; //连接表
                 //var_dump();exit;
                // $criteria->join = 'left join nb_company on t.dpid = nb_company.dpid '; //连接表
-                $criteria->order = 't.lid ASC' ;//排序条件    
+                $criteria->order = 't.order_id ASC' ;//排序条件    
                // var_dump($begin_time);exit;
                 //$criteria->group = 'group 条件';    
                 //$criteria->having = 'having 条件 ';    
@@ -128,11 +181,12 @@ class orderManagementController extends BackendController
                 //'page'=>1,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
+				'Did'=>$Did,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));
 	}
-	public function actionNotPay(){
+/*	public function actionNotPay(){
 		
 		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
 		$end_time = Yii::app()->request->getParam('end_time',5200-08-09);
@@ -143,11 +197,6 @@ class orderManagementController extends BackendController
 		$sql = "select t2.company_name, t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId;
 		//var_dump($sql);exit;
 		$connect = Yii::app()->db->createCommand($sql);
-
-		$pages = new CPagination(count($ret));
-		// $pages->PageSize = 10;
-		$pages->applyLimit($criteria);
-		
 		$ret = $connect->queryAll();
 		//var_dump($ret);exit;
 	  // $Begin_time = Yii::app()->request->getParam('begin_time');
@@ -160,14 +209,10 @@ class orderManagementController extends BackendController
 		//	$criteria->condition.=' and t.category_id = '.$categoryId;
 		//}
 		
-	/*	$postData = Yii::app()->request->getPost('NotPay');
-		$model->attributes = $postData;
-		$se=new Sequence("retreat");
-		$model->lid = $se->nextval();
-		$model->create_at = date('Y-m-d H:i:s',time());
-	*/	
-		//$categories = $this->getCategories();
-               
+		$pages = new CPagination(count($ret));
+		// $pages->PageSize = 10;
+		$pages->applyLimit($criteria);
+
 		$this->render('notPay',array(
 				'models'=>$ret,
 				'pages'=>$pages,
@@ -178,109 +223,17 @@ class orderManagementController extends BackendController
 				//'categoryId'=>$categoryId
 		 ));
 	}
-	public function actionSetMealList() {
-		
-	}
-	public function actionCreate(){
-		$model = new Product();
-		$model->dpid = $this->companyId ;
-		//$model->create_time = time();
-		
-		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('Product');
-                        $se=new Sequence("product");
-                        $model->lid = $se->nextval();
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
-                        $py=new Pinyin();
-                        $model->simple_code = $py->py($model->product_name);
-                        //var_dump($model);exit;
-			if($model->save()){
-				Yii::app()->user->setFlash('success','添加成功！');
-				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
-			}
-		}
-		$categories = $this->getCategoryList();
-		//$departments = $this->getDepartments();
-                //echo 'ss';exit;
-		$this->render('create' , array(
-			'model' => $model ,
-			'categories' => $categories
-		));
-	}
-	
-	public function actionUpdate(){
-		$id = Yii::app()->request->getParam('id');
-		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
-		$model->dpid = $this->companyId;
-		
-		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('Product');
-                        $py=new Pinyin();
-                        $model->simple_code = $py->py($model->product_name);
-			//var_dump($model->attributes);exit;
-			if($model->save()){
-				Yii::app()->user->setFlash('success','修改成功！');
-				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
-			}
-		}
-		$categories = $this->getCategoryList();
-		//$departments = $this->getDepartments();
-		$this->render('update' , array(
-				'model' => $model ,
-				'categories' => $categories
-		));
-	}
-	public function actionDelete(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$ids = Yii::app()->request->getPost('ids');
-		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_product set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
-			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
-		} else {
-			Yii::app()->user->setFlash('error' , '请选择要删除的项目');
-			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
-		}
-	}
-	public function actionStatus(){
-		$id = Yii::app()->request->getParam('id');
-		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
-		var_dump($product->status);
-		if($product){
-			$product->saveAttributes(array('status'=>$product->status?0:1));
-		}
-		exit;
-	}
-	public function actionRecommend(){
-		$id = Yii::app()->request->getParam('id');
-		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
-		
-		if($product){
-			$product->saveAttributes(array('recommend'=>$product->recommend==0?1:0));
-		}
-		exit;
-	}
+	*/
+
+
+
+
 	private function getCategoryList(){
 		$categories = ProductCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
 		return CHtml::listData($categories, 'lid', 'category_name');
 	}
-	public function actionGetChildren(){
-		$pid = Yii::app()->request->getParam('pid',0);
-		if(!$pid){
-			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
-		}
-		$treeDataSource = array('data'=>array(),'delay'=>400);
-		$categories = Helper::getCategories($this->companyId,$pid);
-	
-		foreach($categories as $c){
-			$tmp['name'] = $c['category_name'];
-			$tmp['id'] = $c['lid'];
-			$treeDataSource['data'][] = $tmp;
-		}
-		Yii::app()->end(json_encode($treeDataSource));
-	}
+
 	private function getCategories(){
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
@@ -314,11 +267,11 @@ class orderManagementController extends BackendController
 		return CHtml::listData($departments, 'department_id', 'name');
 	}
 	
-	public function getSiteName(){
+	public function getSiteName($orderId){
 		$sitename="";
 		$sitetype="";
 
-		$sql = 'select t.site_id, t.dpid, t1.site_level, t1.type_id, t1.serial, t2.name from nb_order t, nb_site t1, nb_site_type t2 where t.site_id = t1.lid and t.dpid = t1.dpid and t1.type_id = t2.lid';
+		$sql = 'select t.site_id, t.dpid, t1.site_level, t1.type_id, t1.serial, t2.name from nb_order t, nb_site t1, nb_site_type t2 where t.site_id = t1.lid and t.dpid = t1.dpid and t1.type_id = t2.lid and t.dpid = t2.dpid and t.lid ='. $orderId;
 		//$conn = Yii::app()->db->createCommand($sql);
 		//$result = $conn->queryRow();
 		//$siteId = $result['lid'];
