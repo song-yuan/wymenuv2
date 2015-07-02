@@ -271,7 +271,7 @@ class CreateOrder
 	             if(count($goodsArr) > 1){
 	             	// 套餐
 	             	$sql = 'select * from nb_product_set where dpid='.$dpid.' and lid='.$goodsArr[0];
-	             	$result = $db->createCommand()->queryRow();
+	             	$result = $db->createCommand($sql)->queryRow();
 	             	if($result){
 	             		if($result['store_number'] > 0&&$result['store_number'] < $num){
 	             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
@@ -305,7 +305,7 @@ class CreateOrder
  	             }else{
 	             	//单品
 	             	$sql = 'select * from nb_product where dpid='.$dpid.' and lid='.$goodsArr[0];
-	             	$result = $db->createCommand()->queryRow();
+	             	$result = $db->createCommand($sql)->queryRow();
 	             	if($result){
 	             		if($result['store_number'] > 0&&$result['store_number'] < $num){
 	             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
