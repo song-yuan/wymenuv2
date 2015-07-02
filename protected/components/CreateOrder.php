@@ -300,7 +300,7 @@ class CreateOrder
 	             	if($result['store_number'] > 0){
 	             		$sql = 'update nb_product_set set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();
-	             		 array_push($sellOff,array("product_id"=>$goodsArr[0],"type"=>"set","num"=>$result['store_number']-$num));
+	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-$num));
 	             	}
  	             }else{
 	             	//单品
@@ -332,7 +332,7 @@ class CreateOrder
 					 if($result['store_number'] > 0){
 	             		$sql = 'update nb_product set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();
-	             		  array_push($sellOff,array("product_id"=>$goodsArr[0],"type"=>"product","num"=>$result['store_number']-$num));
+	             		  array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$num));
 	             	 }
 	             }
 			}	
