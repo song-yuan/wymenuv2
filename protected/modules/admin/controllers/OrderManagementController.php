@@ -1,5 +1,5 @@
 <?php
-class OrderManagementController extends BackendController
+class orderManagementController extends BackendController
 {
 	public function actions() {
 		return array(
@@ -61,14 +61,17 @@ class OrderManagementController extends BackendController
 		$sql = "select t2.company_name, t1.name, t.lid, t.dpid, t.payment_method_id, t.update_at, sum(t.should_total) as should_all from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId ." group by t.payment_method_id " ;
 		//var_dump($sql);exit;
 		$connect = Yii::app()->db->createCommand($sql);
+		
+		$pages = new CPagination(count($model));
+		//$pages->PageSize = 10;
+		$pages->applyLimit($criteria);
+		
+		
 		$model = $connect->queryAll();
 		$categoryId = Yii::app()->request->getParam('cid',0);
 	
 		
-		$pages = new CPagination(count($model));
-		$pages->PageSize = 10;
-		$pages->applyLimit($criteria);
-		
+
 		echo $this->getSiteName();
 		 
 		//      exit;
@@ -82,38 +85,47 @@ class OrderManagementController extends BackendController
 		));
 	}
         public function actionPaymentRecord(){
-	
+        	    $criteria = new CDbCriteria;
                 $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
                 $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		//var_dump($begin_time);exit;
-                $criteria->select = 't.'; //代表了要查询的字段，默认select='*';    
-                $criteria->join = 'nb_payment_method t1 on ...'; //连接表
-                $criteria->join = 'nb_company t2 on ...'; //连接表
+				//var_dump($begin_time);exit;
+                $criteria->select = 't.*'; //代表了要查询的字段，默认select='*'; 
+                $criteria->addCondition("t.dpid= ".$this->companyId);
+                $criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+                $criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+                //$criteria->select = 't1.should_total';
+                //var_dump($begin_time);exit;
+				$criteria->with = array("company","order"); //连接表
+                //$criteria->join = 'left join nb_order t1 on (t.dpid = t1.dpid and t.order_id = t1.lid )'; //连接表
+                //var_dump();exit;
+               // $criteria->join = 'left join nb_company on t.dpid = nb_company.dpid '; //连接表
                 $criteria->order = 't.lid ASC' ;//排序条件    
+               // var_dump($begin_time);exit;
                 //$criteria->group = 'group 条件';    
                 //$criteria->having = 'having 条件 ';    
                 $criteria->distinct = TRUE; //是否唯一查询 
                 
-		$criteria = new CDbCriteria;
+		//$criteria = new CDbCriteria;
 		//$sql = "select t1.company_name, t2.name, t.* from nb_order t left join  nb_payment_method t2 on( t.payment_method_id = t2.lid and t.dpid = t2.dpid )  left join  nb_company t1 on t.dpid = t1.dpid where t.order_status in(3,4,8) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 23:59:59' and t.dpid= ".$this->companyId;
 		//var_dump($sql);exit;
 		//$connect = Yii::app()->db->createCommand($sql);
 		//$model = $connect->queryAll();
+                $pages = new CPagination(OrderPay::model()->count($criteria));
+                //$pages->PageSize = 10;
+                $pages->applyLimit($criteria);
+                
+                // 注意事项：pages语句 必须放在  model 语句前面才能有效的执行。。。
                 $model=  OrderPay::model()->findAll($criteria);
+                //var_dump($model);exit;
 		//$categoryId = Yii::app()->request->getParam('cid',0);
 	
 		//exit;
-		$pages = new CPagination(count($model));
-		$pages->PageSize = 10;
-		$pages->applyLimit($criteria);
-		
-		//echo $this->getSiteName();
+
 		 
-		//      exit;
 		$this->render('paymentRecord',array(
 				'models'=>$model,
 				'pages'=>$pages,
-                                'page'=>1,
+                //'page'=>1,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				//'categories'=>$categories,
@@ -131,6 +143,11 @@ class OrderManagementController extends BackendController
 		$sql = "select t2.company_name, t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId;
 		//var_dump($sql);exit;
 		$connect = Yii::app()->db->createCommand($sql);
+
+		$pages = new CPagination(count($ret));
+		// $pages->PageSize = 10;
+		$pages->applyLimit($criteria);
+		
 		$ret = $connect->queryAll();
 		//var_dump($ret);exit;
 	  // $Begin_time = Yii::app()->request->getParam('begin_time');
@@ -142,17 +159,6 @@ class OrderManagementController extends BackendController
 		//if($categoryId){
 		//	$criteria->condition.=' and t.category_id = '.$categoryId;
 		//}
-	
-		$pages = new CPagination(count($ret));
-	   // $pages->PageSize = 10;
-		$pages->applyLimit($criteria);
-		//$pages = new CPagination();
-		//	    $pages->setPageSize(1);z
-		//$pages->applyLimit($criteria);
-// 		$models = Order::model()->findAll($criteria);
-// 		var_dump($models);exit;
-// 		echo $this->getSiteName();
-		
 		
 	/*	$postData = Yii::app()->request->getPost('NotPay');
 		$model->attributes = $postData;
@@ -350,51 +356,5 @@ class OrderManagementController extends BackendController
  		}				
 		echo $ret;
 	}
-  /*  public function getPayment($lid){
-    	$sql = 'select t2.name from nb_order t1, nb_payment_method t2 where t1.payment_method_id = t2.lid and t1.dpid = t2.dpid';
-        $connect = Yii::app()->db->createCommand($sql);
-        $name = $connect->queryAll();
-        $ret="";
-        //var_dump($name);exit;
-        $ret.=$result['name']."/";
-        echo $ret;
-    }
-   /* public function getPayname($lid){
-    	$sql = 'select name from nb_payment_method ';
-    	$connect = Yii::app()->db->createCommand($sql);
-    	$name = $connect->queryRow();
-    	//var_dump($name);exit;
-    	echo 'adc';
-    
-    }
-/*  public static function getProductname(){
-		$categoryId = Yii::app()->request->getParam('cid',0);
-		$criteria = new CDbCriteria;
-		$criteria->condition =  't.dpid='.$this->companyId ;
-		//if($categoryId){
-		//	$criteria->condition.=' and t.category_id = '.$categoryId;
-		//}
-		
-		$pages = new CPagination(Order::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$models = Order_product::model()->findAll($criteria);
-		
-		//$categories = $this->getCategories();
-                
-		$this->render('index',array(
-				'models'=>$models,
-				'pages'=>$pages,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
-		));
-		$sql = 'select product_id from nb_order_product where lid=:lid';
-		$conn = $command->createcommand($sql);
-		$aonn->bindvalue(':productID',$siteNo['product_id']);
-		$result = $conn->queryRow();
-		return $result['product_id'];
-		
-		
-	}
-*/	
+ 
 }

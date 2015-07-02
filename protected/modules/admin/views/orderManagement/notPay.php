@@ -34,20 +34,20 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>今日订单</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','今日订单'); ?></div>
 				<div class="actions">
 				<div class="btn-group">
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="起始时间" value="<?php echo $begin_time; ?>">  
+								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder=<?php echo yii::t('app','起始时间'); ?> value="<?php echo $begin_time; ?>">  
 								<span class="input-group-addon">~</span>
-							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="终止时间"  value="<?php echo $end_time;?>">           
+							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder=<?php echo yii::t('app','终止时间'); ?>  value="<?php echo $end_time;?>">           
 						  </div>  
 					</div>	
 					
 					<div class="btn-group">
-							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i> 查 询</button>
-							<a href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>/page/" class="btn green" ><i class="fa fa-pencial"></i>日结汇总</a>						</div>			
+							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i> <?php echo yii::t('app','查 询'); ?></button>
+							<a href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>/page/" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日结汇总'); ?></a>						</div>			
 				  	</div>
 			 </div> 
 			
@@ -56,15 +56,15 @@
 						<thead>
 							<tr>
 								
-								<th>编号</th>
-								<th>时间</th>
-								<th>明细</th>
-								<th>座位</th>
-                                <th>人数</th>
-                                <th>状态</th>
-                                <th>支付方式</th>
-                                <th>应付</th>                                                                
-                                <th>实付</th>
+								<th><?php echo yii::t('app','编号'); ?></th>
+								<th><?php echo yii::t('app','时间'); ?></th>
+								<th><?php echo yii::t('app','明细'); ?></th>
+								<th><?php echo yii::t('app','座位'); ?></th>
+                                <th><?php echo yii::t('app','人数'); ?></th>
+                                <th><?php echo yii::t('app','状态'); ?></th>
+                                <th><?php echo yii::t('app','支付方式'); ?></th>
+                                <th><?php echo yii::t('app','应付'); ?></th>                                                                
+                                <th><?php echo yii::t('app','实付'); ?></th>
 								
 							</tr>
 						</thead>
@@ -96,7 +96,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									共  <?php echo $pages->getPageCount();?> 页   , <?php echo $pages->getItemCount();?> 条数据 , 当前是第 <?php echo $pages->getCurrentPage()+1;?> 页
+									<?php echo yii::t('app','共'); ?>  <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页'); ?>   , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据'); ?> , <?php echo yii::t('app','当前是第'); ?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页'); ?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">

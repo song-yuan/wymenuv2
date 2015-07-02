@@ -24,9 +24,9 @@
 	}
 ?>
 <script type="text/javascript" src="../js/product/taste.js"></script>
-	<div class="top"><a href="index"><div class="back"><img src="../img/product/back.png" /> 返回</div></a><a id="order" href="javascript:;"><button class="create-order">下单</button></a></div>
+	<div class="top"><a href="index"><div class="back"><img src="../img/product/back.png" /> <?php echo yii::t('app','返回'); ?></div></a><a id="order" href="javascript:;"><button class="create-order"><?php echo yii::t('app','下单'); ?></button></a></div>
 	<form action="order?orderId=<?php echo $orderList->order?$orderList->order['lid']:0;?>" method="post">
-	<div class="order-top"><div class="order-top-left"><span>￥<span class="total-price"><?php echo Money::priceFormat($orderPrice); ?></span>共<span class="total-num"><?php echo $orderNum;?></span>份</span></div><div class="order-top-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="1" style="color:#ff8c00">全单口味<img src="../img/product/down-arrow.png" /></div></div>
+	<div class="order-top"><div class="order-top-left"><span>￥<span class="total-price"><?php echo Money::priceFormat($orderPrice); ?></span><?php echo yii::t('app','共'); ?><span class="total-num"><?php echo $orderNum;?></span><?php echo yii::t('app','份'); ?></span></div><div class="order-top-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="1" style="color:#ff8c00"><?php echo yii::t('app','全单口味'); ?><img src="../img/product/down-arrow.png" /></div></div>
 	<?php if($orderProductList):?>
 	<?php foreach($orderProductList as $key=>$orderProduct):?>
 		<!--非套餐-->
@@ -41,9 +41,9 @@
 				<div class="right-down">
 		          <div class="right-down-left">￥<?php echo $order['price'];?></div>
 		         <?php if(!empty($order['addition'])):?>
-		         <div class="right-down-right add-product"  data-id="<?php echo $order['lid'];?>" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00">加菜<img src="../img/product/down-arrow.png" /></div>	
+		         <div class="right-down-right add-product"  data-id="<?php echo $order['lid'];?>" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00"><?php echo yii::t('app','加菜'); ?><img src="../img/product/down-arrow.png" /></div>	
 				 <?php endif;?>
-				 <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>	
+				 <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00"><?php echo yii::t('app','口味'); ?><img src="../img/product/down-arrow.png" /></div>	
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -55,11 +55,11 @@
 			<div class="order-product">
 				<div class="order-product-left"><img src="<?php echo $product['main_picture'];?>" /></div>
 				<div class="order-product-right">
-					<div class="right-up"><?php echo $product['product_name'];?>(加菜)</div>
+					<div class="right-up"><?php echo $product['product_name'];?>(<?php echo yii::t('app','加菜'); ?>)</div>
 			               <div class="right-middle"><span class="minus" >-</span><input class="input-product" type="text" name="<?php echo $product['product_id'];?>" addtionid="<?php echo $product['lid'];?>" value="<?php echo $product['amount'];?>"  price="<?php echo $product['price'];?>" readonly="true"/><span class="plus">+</span></div>
 					<div class="right-down">
 			          <div class="right-down-left">￥<?php echo $product['price'];?></div>
-					   <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>						
+					   <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $order['product_id'];?>" style="color:#ff8c00"><?php echo yii::t('app','口味'); ?><img src="../img/product/down-arrow.png" /></div>						
 					</div>
 				</div>
 				<div class="clear"></div>
@@ -75,7 +75,7 @@
 					<div class="order-product-left"><img src="<?php echo $product['main_picture'];?>" /></div>
 					<div class="order-product-right">
 						<div class="right-up"><?php echo $product['product_name'];?></div>
-				               <div class="right-middle"><a href="javascript:;" class="right-down-right add-product-addition"  order-id="<?php echo $order['order_id'];?>" data-id="<?php echo $product['lid'];?>" style="color:#ff8c00">加菜 +</a></div>
+				               <div class="right-middle"><a href="javascript:;" class="right-down-right add-product-addition"  order-id="<?php echo $order['order_id'];?>" data-id="<?php echo $product['lid'];?>" style="color:#ff8c00"><?php echo yii::t('app','加菜 +'); ?></a></div>
 						<div class="right-down">
 				          <div class="right-down-left">￥<?php echo $product['price'];?></div>
 						</div>
@@ -98,12 +98,12 @@
 					<div class="order-product-left"><img src="<?php echo $product['main_picture'];?>" /></div>
 					<div class="order-product-right">
 						<div class="right-up"><?php echo $product['product_name'];?></div>
-				               <div class="right-middle">组<?php echo $key+1;?><input class="set-group-radio" name="group-<?php echo $k.'-'.$key;?>" type="radio" set-id="<?php echo $order['set_id'];?>" product-id="<?php echo $product['product_id'];?>" value="<?php echo $product['product_id'];?>" <?php if($product['is_select']) echo 'checked';?>/>
-				               <?php if(count($setProduct) > 1):?><div class="right-down-right select-setproduct"  style="color:#ff8c00">更换<img src="../img/product/down-arrow.png" /></div>	<?php endif;?>
+				               <div class="right-middle"><?php echo yii::t('app','组'); ?><?php echo $key+1;?><input class="set-group-radio" name="group-<?php echo $k.'-'.$key;?>" type="radio" set-id="<?php echo $order['set_id'];?>" product-id="<?php echo $product['product_id'];?>" value="<?php echo $product['product_id'];?>" <?php if($product['is_select']) echo 'checked';?>/>
+				               <?php if(count($setProduct) > 1):?><div class="right-down-right select-setproduct"  style="color:#ff8c00"><?php echo yii::t('app','更换'); ?><img src="../img/product/down-arrow.png" /></div>	<?php endif;?>
 				        </div>
 						<div class="right-down">
 				                    <div class="right-down-left">￥<?php echo $product['price'];?></div>
-						 <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $product['product_id'];?>" style="color:#ff8c00">口味<img src="../img/product/down-arrow.png" /></div>	
+						 <div class="right-down-right select-taste"  data-id="<?php echo $order['lid'];?>" type="2" product-id="<?php echo $product['product_id'];?>" style="color:#ff8c00"><?php echo yii::t('app','口味'); ?><img src="../img/product/down-arrow.png" /></div>	
 						</div>
 					</div>
 					<div class="clear"></div>
@@ -119,8 +119,8 @@
 
 	<?php if($orderProductListPay):?>
 	<div style="color:#555da8;border-top:2px solid;margin-top: 5px">
-	<div class="order-top"><div class="order-top-left">下单总额 :<span> <?php echo Money::priceFormat($orderPricePay);?></span></div><div class="order-top-right"><button class="online-pay">在线支付</button></div></div>
-	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="3" product-id="0" style="color:#ff8c00">呼叫服务员<img src="../img/product/down-arrow.png" /></div></div>
+	<div class="order-top"><div class="order-top-left"><?php echo yii::t('app','下单总额 :'); ?><span> <?php echo Money::priceFormat($orderPricePay);?></span></div><div class="order-top-right"><button class="online-pay"><?php echo yii::t('app','在线支付'); ?></button></div></div>
+	<div class="order-time"><div class="order-time-left"><?php echo date('Y-m-d H:i:s',time());?></div><div class="order-time-right select-taste" data-id="<?php echo $orderList->order?$orderList->order['lid']:0;?>" type="3" product-id="0" style="color:#ff8c00"><?php echo yii::t('app','呼叫服务员'); ?><img src="../img/product/down-arrow.png" /></div></div>
 	<?php foreach($orderProductListPay as $key=>$orderProduct):?>
 		<!--非套餐-->
 		<?php if($key):?>
@@ -131,10 +131,10 @@
 			<div class="order-product-right">
 				<div class="right-up"><?php echo $order['product_name'];?></div>
 				<div class="right-middle">
-		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
+		                    <div class="right-down-left">￥<?php echo $order['price'];?><?php echo yii::t('app','/例 X'); ?> <font color="#ff8c00"><?php echo $order['amount'];?><?php echo yii::t('app','例'); ?></font></div>
 				</div>
 				<div class="right-down">
-				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
+				<font color="#ff8c00"><?php echo yii::t('app','口味要求'); ?></font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> <?php echo yii::t('app','备注:'); ?><?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -144,12 +144,12 @@
 		<div class="order-product">
 			<div class="order-product-left"><img src="<?php echo $order['main_picture'];?>" /></div>
 			<div class="order-product-right">
-				<div class="right-up"><?php echo $order['product_name'];?>(加菜)</div>
+				<div class="right-up"><?php echo $order['product_name'];?>(<?php echo yii::t('app','加菜'); ?>)</div>
 				<div class="right-middle">
-		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
+		                    <div class="right-down-left">￥<?php echo $order['price'];?><?php echo yii::t('app','/例 X'); ?> <font color="#ff8c00"><?php echo $order['amount'];?><?php echo yii::t('app','例'); ?></font></div>
 				</div>
 				<div class="right-down">
-				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
+				<font color="#ff8c00"><?php echo yii::t('app','口味要求'); ?></font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> <?php echo yii::t('app','备注:'); ?><?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -174,10 +174,10 @@
 				<div class="order-product-right">
 				<div class="right-up"><?php echo $order['original_price'];?></div>
 				<div class="right-middle">
-		                    <div class="right-down-left">￥<?php echo $order['price'];?>/例 X <font color="#ff8c00"><?php echo $order['amount'];?>例</font></div>
+		                    <div class="right-down-left">￥<?php echo $order['price'];?><?php echo yii::t('app','/例 X'); ?> <font color="#ff8c00"><?php echo $order['amount'];?><?php echo yii::t('app','例'); ?></font></div>
 				</div>
 				<div class="right-down">
-				<font color="#ff8c00">口味要求</font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> 备注:<?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
+				<font color="#ff8c00"><?php echo yii::t('app','口味要求'); ?></font>:<?php $productTasteIds = TasteClass::getOrderTaste($order['lid'],2,$this->companyId);if($productTasteIds){ foreach($productTasteIds as $id){ echo TasteClass::getTasteName($id).' ';}}?> <?php echo yii::t('app','备注:'); ?><?php echo TasteClass::getOrderTasteMemo($order['lid'],2,$this->companyId);?>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -192,7 +192,7 @@
 	<div class="product-mask-bottom"></div>
 	<div class="mask">
 		<div class="mask-bottom">
-			<div class="area-top">做法口味选择:</div>
+			<div class="area-top"><?php echo yii::t('app','做法口味选择:'); ?></div>
 			<div class="mask-taste">
 				<!--<div class="taste"></div><div class="taste taste-active"></div>
 				<div class="clear"></div>-->
@@ -200,8 +200,8 @@
 			<div class="mask-area">
 				<textarea name="taste-memo"></textarea>
 				<div class="mask-button">
-				  <div class="cancel">取消</div>
-				  <div class="submit">确定</div>
+				  <div class="cancel"><?php echo yii::t('app','取消'); ?></div>
+				  <div class="submit"><?php echo yii::t('app','确定'); ?></div>
 				  <div class="clear"></div>
 				</div>
 			</div>
@@ -317,7 +317,7 @@
 							str +='<div class="order-product">';
 							str +='<div class="order-product-left"><img src="'+msg.data.main_picture+'" /></div>';
 							str +='<div class="order-product-right">';
-							str +='<div class="right-up">'+msg.data.product_name+'(加菜)</div>';
+							str +='<div class="right-up">'+msg.data.product_name+'(<?php echo yii::t('app','加菜'); ?>)</div>';
 							str +='<div class="right-middle"><span class="minus" >-</span><input class="input-product" type="text" name="'+msg.data.sproduct_id+'" addtionid="'+msg.lastLid+'" value="1" price="'+msg.data.price+'" readonly="true"/><span class="plus">+</span></div>';
 							str +='<div class="right-down">';
 							str +='<div class="right-down-left">￥'+msg.data.price+'</div>';
