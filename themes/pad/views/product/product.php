@@ -150,7 +150,7 @@
          <!--{"company_id":"0000000001","do_id":"sell_off",
 	       //num <0 无数量限制-->
       function sell_off(do_data) {
-            //alert(do_data);
+            alert(do_data);
             var data = eval('(' + do_data + ')');
             	//for(var item in data.do_data){
             	for(var item in data){
