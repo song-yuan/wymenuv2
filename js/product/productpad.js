@@ -317,7 +317,7 @@ $(document).ready(function(){
     
     $('#updatePadOrder').on('touchstart',function(){
     	//layer页面层
-    	var str = '<div class="pay-type cash-color" id="cashpay">柜台支付</div><div class="pay-type wx-color" id="weixinpay">微信支付</div><div class="pay-type zfb-color" id="zhifubaopay">支付宝支付</div>';
+    	var str = '<a herf="javascript:;" class="pay-type cash-color" id="cashpay">柜台支付</a><a herf="javascript:;" class="pay-type wx-color" id="weixinpay">微信支付</a><a herf="javascript:;" class="pay-type zfb-color" id="zhifubaopay">支付宝支付</a>';
 		layer.open({
 		    type: 1,
 		    skin: 'layui-layer-rim', //加上边框
@@ -373,6 +373,9 @@ $(document).ready(function(){
     		}
      	});
     });
+    $('body').on('touchstart','#cashpay',function(){
+     	alert('现金支付');
+     });
     $('#padOrderForm').on('touchstart','.product-catory-product',function(){
     	var input = $(this).find('input');
     	var productId = input.attr('name');
