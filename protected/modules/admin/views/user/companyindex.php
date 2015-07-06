@@ -84,7 +84,7 @@
 						<?php endforeach;?>
 						</tbody>
 						<?php else:?>
-						<tr><td><?php echo yii::t('app','还没有添加详细产品');?></td></tr>
+						<tr><td><?php echo yii::t('app','还没有添加详细店铺');?></td></tr>
 						<?php endif;?>
 					</table>
 						<?php if($pages->getItemCount()):?>
