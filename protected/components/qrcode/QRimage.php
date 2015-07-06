@@ -6,7 +6,6 @@
         {
             $image = self::image($frame, $pixelPerPoint, $outerFrame);
             if ($filename === false) {
-            	var_dump($frame);exit;
                 header("Content-type: image/png");
                 imagepng($image);
             } else {
