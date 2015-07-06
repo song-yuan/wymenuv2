@@ -54,7 +54,7 @@ class Product extends CActiveRecord
 			array('product_name', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
-                        array('category_id','compare','compareValue'=>'0','operator'=>'>','message'=>'必须选择二级产品分类'),
+                        array('category_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','必须选择二级产品分类')),
 			array('is_temp_price, is_member_discount, is_special, is_discount, status, is_weight_confirm, is_show, delete_flag', 'length', 'max'=>1),
 			array('create_at,description', 'safe'),
 			// The following rule is used by search().

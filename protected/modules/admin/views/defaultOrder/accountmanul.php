@@ -50,13 +50,13 @@
                                                 )); ?>
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title"><span style="color:red;">现金收款</span><br>
+                                                        <h4 class="modal-title"><span style="color:red;"><?php echo yii::t('app','现金收款');?></span><br>
                                                             <?php echo yii::t('app','总额：');?><?php echo number_format($order->should_total,2); ?>
                                                                 <?php echo yii::t('app','，已付：');?><?php echo number_format($order->reality_total,2); ?>
                                                                     <?php echo yii::t('app','，应付：');?><?php echo number_format($order->should_total-$order->reality_total,2); ?><br>
-                                                                    <span style="width:90px; text-align:right; display: inline-block">收款：</span>
+                                                                    <span style="width:90px; text-align:right; display: inline-block"><?php echo yii::t('app','收款：');?></span>
                                                                     <span id="cash_in" pointat="0" style="color:blue;width:190px; text-align:right; display: inline-block">0</span>
-                                                                    <span style="width:90px; text-align:right; display: inline-block">找零：</span>
+                                                                    <span style="width:90px; text-align:right; display: inline-block"><?php echo yii::t('app','找零：');?></span>
                                                                     <span id="cash_out" style="color:red;width:190px; text-align:right; display: inline-block">0</span></h4>
                                                         
                                                 </div>
@@ -79,12 +79,12 @@
                                                     </div>
                                                     <div class="calc_button">
                                                         <ul>
-                                                            <li id="clearall" style="background-color: #add">清空</li>
-                                                            <li id="clearone" style="background-color: #add">退格</li>
-                                                            <li id="pay-btn" style="background-color: #0099FF">收银</li>
-                                                            <li id="account-btn" style="background-color: #0099FF">结单</li>
-                                                            <li id="other-btn" style="background-color: #009f95">其他付款方式</li>
-                                                            <li data-dismiss="modal" class="default" style="background-color: #00FFFFFF">取消</li>
+                                                            <li id="clearall" style="background-color: #add"><?php echo yii::t('app','清空');?></li>
+                                                            <li id="clearone" style="background-color: #add"><?php echo yii::t('app','退格');?></li>
+                                                            <li id="pay-btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>
+                                                            <li id="account-btn" style="background-color: #0099FF"><?php echo yii::t('app','结单');?></li>
+                                                            <li id="other-btn" style="background-color: #009f95"><?php echo yii::t('app','其他付款方式');?></li>
+                                                            <li data-dismiss="modal" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
                                                         </ul>
                                                     </div>                                                            
                                                 </div>

@@ -16,10 +16,6 @@
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/base64.js'); 
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/pic-pad.js');
-//        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/layer/layer.js');
-//        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/layer/extend/layer.ext.js');
-//        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/layer/skin/layer.ext.css');
-//        Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/layer/skin/layer.css');
 ?>
 
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type,'siteNoId'=>$siteNoId));?>
@@ -147,13 +143,26 @@
             alert(msg);
        }
        
-       //{"company_id":"0000000001","do_id":"sell_off",//
-       //num <0 无数量限制
-       function sell_off(do_data) {
-            alert(do_data);
+         <!--{"company_id":"0000000001","do_id":"sell_off",
+	       //num <0 无数量限制-->
+      function sell_off(do_data) {
+            //alert(do_data);
             var data = eval('(' + do_data + ')');
-            //
-       }
-       
+            	//for(var item in data.do_data){
+            	for(var item in data){
+                    $('div.blockCategory[product-id="'+data[item].product_id+'"]').attr('store',data[item].num);
+                    if(parseInt(data[item].num)==0){
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+                    	var str = '<div class="sellOff sellOut"><?php echo yii::t('app',"已售完");?></div>';
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
+                    }else if(parseInt(data[item].num) > 0){
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+                    	var str = '<div class="sellOff">仅剩<br/>'+data[item].num+'份</div>';
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
+                    }else{
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+                    }
+            	}             
+       }       
         
 </script>

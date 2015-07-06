@@ -24,6 +24,8 @@
  */
 class Order extends CActiveRecord
 {
+    public $should_all;
+    public $reality_all;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -63,6 +65,7 @@ class Order extends CActiveRecord
 		return array(
 		'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
                 //'siteNo' => array(self::HAS_ONE , 'SiteNo' , '','on'=>' t.dpid=siteNo.dpid and t.site'),
+                'paymentMethod' => array(self::BELONGS_TO , 'PaymentMethod' ,'' ,'on'=>'t.payment_method_id = paymentMethod.lid and t.dpid = paymentMethod.dpid '),
 		);
 	}
 

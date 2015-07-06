@@ -98,7 +98,7 @@
                                  });
                             });
                             $('#cashin-btn').on(event_clicktouchstart,function(){
-                                 bootbox.confirm("<?php echo yii::t('app','你确定切换到其他现金支付吗？');?>", function(result) {
+                                 bootbox.confirm("<?php echo yii::t('app','你确定切换到现金支付吗？');?>", function(result) {
                                         if(result){
                                                 accountmanul();
                                         }

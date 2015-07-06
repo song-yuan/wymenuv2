@@ -208,7 +208,12 @@ class ProductController extends Controller
 		$goodsIds = isset($_POST) ?$_POST :array();
 		$padOrder = json_encode(array('status'=>false,'msg'=>yii::t('app','订单为空')),JSON_UNESCAPED_UNICODE);
 	 	if(!empty($goodsIds)){
-			$padOrder = CreateOrder::createPadOrder($this->companyId,$goodsIds,$this->padId); 
+	 		try{
+	 			$padOrder = CreateOrder::createPadOrder($this->companyId,$goodsIds,$this->padId); 
+	 		}catch (Exception $e) {
+	 			$padOrder = $e->getMessage();
+	 		}
+			
 	 	}
 	 	Yii::app()->end($padOrder);
 	}
@@ -333,6 +338,12 @@ class ProductController extends Controller
 		}else{
 			Yii::app()->end(json_encode($data));
 		}
+	}
+	public function actionQrcode(){
+		$url = urldecode('http://www.baidu.com');
+		QRtools::markTime('start');
+		QRcode::png($url,$outfile = false, $level = QR_ECLEVEL_L, $size = 6, $margin = 4, $saveandprint=false);
+		exit;
 	}
 	public function actionExportOrder(){
 		$this->exportOrder();

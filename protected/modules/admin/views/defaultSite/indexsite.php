@@ -91,8 +91,8 @@
                                                                                     <i class="fa fa-angle-down"></i>
                                                                                     </a>
                                                                                     <ul class="dropdown-menu pull-right">                                                                                    
-                                                                                            <li><a href="javascript:;" class='btn-edit'  ><?php echo yii::t('app','今日订单');?></a></li>
-                                                                                            <li><a href="javascript:;" class="btn-del"   ><?php echo yii::t('app','支付记录');?></a></li>                                                                                            
+                                                                                            <li><a href="<?php echo $this->createUrl('orderManagement/notPay',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>" class='btn-edit'  ><?php echo yii::t('app','今日订单');?></a></li>
+                                                                                            <li><a href="<?php echo $this->createUrl('orderManagement/paymentRecord',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>" class="btn-del"   ><?php echo yii::t('app','支付记录');?></a></li>                                                                                            
                                                                                     </ul>
                                                                             </div>
                                                                             <!--<a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','历史订单');?></a>-->

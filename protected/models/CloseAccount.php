@@ -1,27 +1,27 @@
 <?php
 
 /**
- * This is the model class for table "nb_order_pay".
+ * This is the model class for table "nb_close_account".
  *
- * The followings are the available columns in table 'nb_order_pay':
+ * The followings are the available columns in table 'nb_close_account':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $order_id
- * @property string $pay_amount
- * @property string $paytype 
- * @property string $payment_method_id
- * @property string $remark
+ * @property string $user_id
+ * @property string $begin_time
+ * @property string $end_time
+ * @property string $close_day
+ * @property string $all_money
  */
-class OrderPay extends CActiveRecord
+class CloseAccount extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_order_pay';
+		return 'nb_close_account';
 	}
 
 	/**
@@ -32,14 +32,12 @@ class OrderPay extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid', 'required'),
-			array('lid, dpid, order_id, pay_amount, payment_method_id', 'length', 'max'=>10),
-                        array('paytype', 'length', 'max'=>1),
-			array('remark', 'length', 'max'=>50),
-			array('create_at', 'safe'),
+			array('update_at', 'required'),
+			array('lid, dpid, user_id, all_money', 'length', 'max'=>10),
+			array('create_at, begin_time, end_time, close_day', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, order_id, pay_amount, payment_method_id, remark', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, user_id, begin_time, end_time, close_day, all_money', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,8 +49,6 @@ class OrderPay extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'company' => array(self::BELONGS_TO , 'Company' ,'' ,'on'=>'t.dpid=company.dpid') ,
-				'order' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order.dpid and t.order_id=order.lid') ,
 		);
 	}
 
@@ -65,12 +61,12 @@ class OrderPay extends CActiveRecord
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
-			'update_at' => yii::t('app','更新时间'),
-			'order_id' =>yii::t('app', '订单编号'),
-			'pay_amount' => yii::t('app','金额'),
-                        'paytype' => yii::t('app','支付方式'),
-			'payment_method_id' =>yii::t('app', '方式'),
-			'remark' => yii::t('app','备注'),
+			'update_at' => '更新时间',
+			'user_id' => 'User',
+			'begin_time' => 'Begin Time',
+			'end_time' => 'End Time',
+			'close_day' => '结算日，这段时间的结算属于这个结算日的',
+			'all_money' => 'All Money',
 		);
 	}
 
@@ -96,11 +92,11 @@ class OrderPay extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('order_id',$this->order_id,true);
-		$criteria->compare('pay_amount',$this->pay_amount,true);
-                $criteria->compare('paytype',$this->paytype,true);
-		$criteria->compare('payment_method_id',$this->payment_method_id,true);
-		$criteria->compare('remark',$this->remark,true);
+		$criteria->compare('user_id',$this->user_id,true);
+		$criteria->compare('begin_time',$this->begin_time,true);
+		$criteria->compare('end_time',$this->end_time,true);
+		$criteria->compare('close_day',$this->close_day,true);
+		$criteria->compare('all_money',$this->all_money,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -111,7 +107,7 @@ class OrderPay extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return OrderPay the static model class
+	 * @return CloseAccount the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
