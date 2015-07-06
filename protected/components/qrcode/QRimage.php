@@ -5,7 +5,7 @@
         public static function png($frame, $filename = false, $pixelPerPoint = 4, $outerFrame = 4,$saveandprint=FALSE) 
         {
             $image = self::image($frame, $pixelPerPoint, $outerFrame);
-            echo 122;
+            echo 122;exit;
             if ($filename === false) {
                 Header("Content-type: image/png");
                 ImagePng($image);
