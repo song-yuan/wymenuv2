@@ -63,7 +63,7 @@ class UserCompany extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'company_id' => '被管理店铺',
+			'company_id' => yii::t('app','被管理店铺'),
 			'user_id' => '用户id',
 			'delete_flag' => 'Delete Flag',
 		);
