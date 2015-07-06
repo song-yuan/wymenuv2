@@ -5,6 +5,7 @@
         public static function png($frame, $filename = false, $pixelPerPoint = 4, $outerFrame = 4,$saveandprint=FALSE) 
         {
             $image = self::image($frame, $pixelPerPoint, $outerFrame);
+            var_dump($image);exit;
             if ($filename === false) {
                 Header("Content-type: image/png");
                 ImagePng($image);
@@ -39,7 +40,6 @@
         //----------------------------------------------------------------------
         private static function image($frame, $pixelPerPoint = 4, $outerFrame = 4) 
         {
-        	var_dump($frame);
             $h = count($frame);
             $w = strlen($frame[0]);
             
