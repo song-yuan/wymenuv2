@@ -198,10 +198,8 @@ $(document).ready(function(){
                 Androidwymenuprinter.printNetPing(padprinterping,10);
             }
          }
-    	//});
     });
     $('.product-pad-mask').on('touchstart','.minus',function(){
-                //alert('-');
 		var input = $(this).siblings('input');
 		var num = input.val();
 		if(num > 0){
@@ -227,8 +225,6 @@ $(document).ready(function(){
 	});
      //打印测试关闭
     $('#printerClose').on('touchstart',function(){
-        //var index = layer.load(0, {shade: false});
-        //layer.close(index); 
         $('#print_check').hide();
     });
     //打印测试关闭
@@ -244,9 +240,6 @@ $(document).ready(function(){
         var padinfo=Androidwymenuprinter.getPadInfo();
         var pad_id=padinfo.substr(10,10); //also can get from session
        	var company_id=padinfo.substr(0,10);
-//        var pad_id='0000000010';
-//        var company_id='0000000007';
-  //      alert(pad_id);alert(company_id);
          $.ajax({
  			url:'/wymenuv2/product/printCheck',
  			async: false,
@@ -255,7 +248,6 @@ $(document).ready(function(){
                             var data = eval('(' + msg + ')');
                             if(data.status)
                             {
-                                //alert(data.jobid);
  				if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                                 {
                                     alert(language_printer_check_success);
@@ -263,16 +255,13 @@ $(document).ready(function(){
                                     $('#print_check').hide();
                                 }else{
                                     alert(language_printer_check_falil+"1");
-                                    //alert("fail1");
                                 }
                             }else{
                                 alert(language_printer_check_falil+"2");
-                                //alert("fail2");
                             }
  			},
                         error:function(){
  				alert(language_printer_check_falil+"3");
-                                //alert("fail3");
  			},
  		});
                  
@@ -286,12 +275,10 @@ $(document).ready(function(){
             var statu = confirm(language_clean_exit);
             if(statu){
                 Androidwymenuprinter.appExitClear();
-                //alert("应用程序无法完整清楚所有缓存数据，请到“设置”->“应用程序”->“WebWyMenu”中手动清除！");
             }
 	});
 	 
     $('#forum_list').on('click','.view-product-pic',function(){
-    	//var lid = $(this).attr('lid');
         var lid = $(this).attr('product-id');
         //alert(lid);//($('.large-pic').width() - $("#gallery").outerWidth())/2,//($('.large-pic').height() - $("#gallery").outerHeight())/2
     	$.ajax({
@@ -329,27 +316,24 @@ $(document).ready(function(){
     });
     
     $('#updatePadOrder').on('touchstart',function(){
-//        if(!isPrintChecked)
-//        {
-//            alert(language_printer_check_atfirst);
-//            return false;
-//        }
+    	//页面层
+		layer.open({
+		    type: 1,
+		    skin: 'layui-layer-rim', //加上边框
+		    area: ['420px', '240px'], //宽高
+		    content: 'html内容'
+		});
         if (typeof Androidwymenuprinter == "undefined") {
             alert(language_notget_padinfo);
             return false;
         }
-        //var padinfo=Androidwymenuprinter.getPadInfo();
-        //var pad_id=padinfo.substr(10,10); //also can get from session
-       	//var pad_id=0000000008;
     	$('#padOrderForm').ajaxSubmit({
             async:false,
             dataType: "json",
             success:function(msg){
-    		//var data = eval('(' + msg + ')');
                 var data=msg;
                 var printresult;
     		if(data.status){
-                 //printNetJob(String companyId,String jobId,String printer)
                  if(data.type=='local')
                  {
                      printresult=Androidwymenuprinter.printJob(data.dpid,data.jobid);
@@ -357,7 +341,6 @@ $(document).ready(function(){
                      printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
                  }
                  if(printresult)
-                 //if(Androidwymenuprinter.printJob(data.dpid,data.jobid))
                  {
                 	 $('#padOrderForm').find('.input-product').each(function(){
                 	    var _this = $(this);
@@ -380,18 +363,14 @@ $(document).ready(function(){
              		}
                      $('.total-price').html(total);
                         $('.total-num').html(0);
-                     //alert(language_print_success);
                  }else{
                      alert(language_print_pad_fail);
-                     //return false;
                  }                                                
                 }else{
                     alert(data.msg);
-                    //return false;
                 }
     	}
-    });
-    	//return false;
+     });
     });
     $('#padOrderForm').on('touchstart','.product-catory-product',function(){
     	var input = $(this).find('input');

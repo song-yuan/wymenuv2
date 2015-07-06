@@ -16,7 +16,7 @@ if(isset($_GET['wuyimenusysosyoyhmac']))
     <title><?php echo yii::t('app','我要点单'); ?></title>
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl.'/css/productmain.css';?>"/>
     <script type="text/javascript" src="<?php echo $baseUrl.'/plugins/jquery-1.10.2.min.js';?>"></script>
-    
+    <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 </head>
 <body>
     <div class="page">

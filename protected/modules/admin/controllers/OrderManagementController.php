@@ -1,6 +1,7 @@
 <?php
 class orderManagementController extends BackendController
 {
+	
 	public function actions() {
 		return array(
 				'upload'=>array(
@@ -21,12 +22,16 @@ class orderManagementController extends BackendController
 	}
 	public function actionIndex(){
 		$criteria = new CDbCriteria;
+		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
+		$end_time = Yii::app()->request->getParam('end_time',5200-08-09);
 		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
 		$criteria->select = 't.*';
 		$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
 		//$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->with = 'paymentMethod';
-	
+		$criteria->with = array("company","paymentMethod");
+		
 		//$connect = Yii::app()->db->createCommand($sql);
 		//$model = $connect->queryAll();
 		$criteria->order = 't.lid ASC' ;
@@ -45,33 +50,14 @@ class orderManagementController extends BackendController
 		$this->render('index',array(
 				'models'=>$model,
 				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));
 	}
-	
-/*SQL语句写成的分页出现问题。。。
- * 	public function actionIndex(){
-		$criteria = new CDbCriteria;
-		$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
-		$connect = Yii::app()->db->createCommand($sql);
-		$model = $connect->queryAll();
-		$categoryId = Yii::app()->request->getParam('cid',0);
 
-        echo $this->getSiteName($orderId);
-
-		$pages = new CPagination(count($model));
-		$pages->PageSize = 10;
-		$pages->applyLimit($criteria);
-		
-		$this->render('index',array(
-				'models'=>$model,
-				'pages'=>$pages,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
-		));
-	}
-*/
 	public function actionNotPay(){
 		$criteria = new CDbCriteria();
 		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
@@ -107,21 +93,35 @@ class orderManagementController extends BackendController
 	}
 	
 	public function actionOrderDaliyCollect(){
-
+		
+		$criteria = new CDbCriteria;
 		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
 		$end_time = Yii::app()->request->getParam('end_time',5200-08-09);
-		$criteria = new CDbCriteria;
-		$sql = "select t2.company_name, t1.name, t.lid, t.dpid, t.payment_method_id, t.update_at, sum(t.should_total) as should_all from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId ." group by t.payment_method_id " ;
+		
+		//$sql = "select t2.company_name, t1.name, t.lid, t.dpid, t.payment_method_id, t.update_at, sum(t.should_total) as should_all from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId ." group by t.payment_method_id " ;
 		//var_dump($sql);exit;
-		$connect = Yii::app()->db->createCommand($sql);
-		$model = $connect->queryAll();
-		$categoryId = Yii::app()->request->getParam('cid',0);
-	
-		$pages = new CPagination(count($model));
-		$pages->PageSize = 10;
+		//$connect = Yii::app()->db->createCommand($sql);
+		//$model = $connect->queryAll();
+		//$categoryId = Yii::app()->request->getParam('cid',0);
+		$criteria->select = 't.paytype, t.payment_method_id,t.lid,t.dpid, t.update_at,t.order_status,t.should_total,sum(t.reality_total) as should_all';
+	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
+		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
+		$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addInCondition('t.order_status', array(3,4));
+		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+		$criteria->with = array("company","paymentMethod"); //连接表
+		$criteria->order = 't.lid ASC' ;//排序条件
+		$criteria->group = 't.payment_method_id,t.paytype';
+		//$criteria->group = 't.paytype';
+		$criteria->distinct = TRUE; //是否唯一查询
+		
+		$pages = new CPagination(Order::model()->count($criteria));
+		//$pages->PageSize = 10;
 		$pages->applyLimit($criteria);
 		
-
+		$model=  Order::model()->findAll($criteria);
+		//var_dump($model);exit;
 		$this->render('orderDaliyCollect',array(
 				'models'=>$model,
 				'pages'=>$pages,
@@ -142,10 +142,10 @@ class orderManagementController extends BackendController
                 $criteria->addCondition("t.dpid= ".$this->companyId);
                // if ($Did > 0){
                // $criteria->addCondition("t.order_id = '$Did'");}
-                if ($begin_time and $end_time){
+                
                 $criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
                 
-                $criteria->addCondition("t.update_at <='$end_time 23:59:59'");}
+                $criteria->addCondition("t.update_at <='$end_time 23:59:59'");
                 //$criteria->select = 't1.should_total';
                 //var_dump($begin_time);exit;
 				$criteria->with = array("company","order"); //连接表
@@ -186,6 +186,7 @@ class orderManagementController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
+ 
 /*	public function actionNotPay(){
 		
 		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
@@ -225,10 +226,57 @@ class orderManagementController extends BackendController
 	}
 	*/
 
+	/*SQL语句写成的分页出现问题。。。
+	 * 	public function actionIndex(){
+	$criteria = new CDbCriteria;
+	$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
+	$connect = Yii::app()->db->createCommand($sql);
+	$model = $connect->queryAll();
+	$categoryId = Yii::app()->request->getParam('cid',0);
+	
+	echo $this->getSiteName($orderId);
+	
+	$pages = new CPagination(count($model));
+	$pages->PageSize = 10;
+	$pages->applyLimit($criteria);
+	
+	$this->render('index',array(
+			'models'=>$model,
+			'pages'=>$pages,
+			//'categories'=>$categories,
+			//'categoryId'=>$categoryId
+	));
+	}
+	*/
 
+/*	public function actionOrderDaliyCollect(){
+	
+		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
+		$end_time = Yii::app()->request->getParam('end_time',5200-08-09);
+		$criteria = new CDbCriteria;
+		$sql = "select t2.company_name, t1.name, t.lid, t.dpid, t.payment_method_id, t.update_at, sum(t.should_total) as should_all from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId ." group by t.payment_method_id " ;
+		//var_dump($sql);exit;
+		$connect = Yii::app()->db->createCommand($sql);
+		$model = $connect->queryAll();
+		$categoryId = Yii::app()->request->getParam('cid',0);
+	
+		$pages = new CPagination(count($model));
+		$pages->PageSize = 10;
+		$pages->applyLimit($criteria);
+	
+	
+		$this->render('orderDaliyCollect',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
 
-
-	private function getCategoryList(){
+*/
+/*	private function getCategoryList(){
 		$categories = ProductCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
 		return CHtml::listData($categories, 'lid', 'category_name');
@@ -262,6 +310,7 @@ class orderManagementController extends BackendController
 		}
 		return $optionsReturn;
 	}
+	*/
 	private function getDepartments(){
 		$departments = Department::model()->findAll('company_id=:companyId',array(':companyId'=>$this->companyId)) ;
 		return CHtml::listData($departments, 'department_id', 'name');
@@ -309,5 +358,18 @@ class orderManagementController extends BackendController
  		}				
 		echo $ret;
 	}
+	static public function getCompanyName($companyId) {
+		if($companyId)
+		{
+			$models = Company::model()->find('t.dpid = '.$companyId);
+			//var_dump($models);exit;
+			//return Yii::app()->user->role == User::POWER_ADMIN ? $companyId : Yii::app()->user->companyId ;
+			 
+		}else{
+			$models = Company::model()->find('t.dpid = '.Yii::app()->user->companyId);
+		}
+		return $models->company_name;
+	}
+	
  
 }

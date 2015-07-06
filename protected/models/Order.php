@@ -24,6 +24,7 @@
  */
 class Order extends CActiveRecord
 {
+    public $should_all;
 	/**
 	 * @return string the associated database table name
 	 */
