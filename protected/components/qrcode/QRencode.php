@@ -90,7 +90,6 @@ class QRencode {
                 $tab = $this->encode($intext);
                 $err = ob_get_contents();
                 ob_end_clean();
-                var_dump($tab);exit;
                 if ($err != '')
                     QRtools::log($outfile, $err);
                 

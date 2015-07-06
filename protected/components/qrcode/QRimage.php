@@ -39,6 +39,7 @@
         //----------------------------------------------------------------------
         private static function image($frame, $pixelPerPoint = 4, $outerFrame = 4) 
         {
+        	var_dump($frame);
             $h = count($frame);
             $w = strlen($frame[0]);
             
@@ -63,7 +64,7 @@
             $target_image =ImageCreate($imgW * $pixelPerPoint, $imgH * $pixelPerPoint);
             ImageCopyResized($target_image, $base_image, 0, 0, 0, 0, $imgW * $pixelPerPoint, $imgH * $pixelPerPoint, $imgW, $imgH);
             ImageDestroy($base_image);
-            
+            var_dump($target_image);exit;
             return $target_image;
         }
     }
