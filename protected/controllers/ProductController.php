@@ -339,6 +339,12 @@ class ProductController extends Controller
 			Yii::app()->end(json_encode($data));
 		}
 	}
+	public function actionQrcode(){
+		$url = urldecode('http://www.baidu.com');
+		QRtools::markTime('start');
+		QRcode::png($url,$outfile = false, $level = QR_ECLEVEL_L, $size = 6, $margin = 4, $saveandprint=false);
+		exit;
+	}
 	public function actionExportOrder(){
 		$this->exportOrder();
 		exit;
