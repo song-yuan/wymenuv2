@@ -400,6 +400,23 @@
 	background:black;
 }
 
+.pay-type{
+	width:100%;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	font-size:30px;
+	color:white;
+}
+.cash-color{
+	back-ground:#c81623;
+}
+.wx-color{
+	back-ground:#44b549;
+}
+.zfb-color{
+	background-color: #f48f0d;
+}
 a{
 	text-decoration:none;
 	color:black;
