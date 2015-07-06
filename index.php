@@ -3,6 +3,7 @@
 // change the following paths if necessary
 $yii=dirname(__FILE__).'/../framework/yii.php';
 $config=dirname(__FILE__).'/protected/config/main.php';
+$const=dirname(__FILE__).'/protected/config/const.php';
 
 // remove the following lines when in production mode
 defined('YII_DEBUG') or define('YII_DEBUG',true);
@@ -10,6 +11,7 @@ defined('YII_DEBUG') or define('YII_DEBUG',true);
 defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 
 require_once($yii);
+require_once($const);
 $application=Yii::createWebApplication($config);
 //if(isset(Yii::app()->session['language']) && !empty(Yii::app()->session['language']))
 //{

@@ -20,6 +20,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.components.qrcode.*',
 		'application.components.weixinpay.*',
 		'application.components.weixin.*',
                 'application.components.alipaydp.lib.*',
