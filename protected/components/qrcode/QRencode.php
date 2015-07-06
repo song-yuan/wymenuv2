@@ -86,7 +86,7 @@ class QRencode {
         public function encodePNG($intext, $outfile = false,$saveandprint=false) 
         {
             try {
-            
+            echo $intext;exit;
                 ob_start();
                 $tab = $this->encode($intext);
                 $err = ob_get_contents();
