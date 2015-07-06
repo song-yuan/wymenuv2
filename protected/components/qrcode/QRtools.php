@@ -141,6 +141,5 @@
             </table>';
         }  
     }
-    QRtools::markTime('start');
 ?>	
 
