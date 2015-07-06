@@ -186,7 +186,7 @@ $(document).ready(function(){
         });
    
     //查看菜单
-    $('.top-right').on('touchstart',function(){
+    $('body').on('touchstart','.top-right',function(){
     	  if($('.product-pad-mask').is(':hidden')) {
               $('.product-pad-mask').show();
      	  }else{
