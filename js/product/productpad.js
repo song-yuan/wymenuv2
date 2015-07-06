@@ -376,6 +376,12 @@ $(document).ready(function(){
     $('body').on('touchstart','#cashpay',function(){
      	alert('现金支付');
      });
+     $('body').on('touchstart','#weixinpay',function(){
+     	alert('微信支付');
+     });
+     $('body').on('touchstart','#zhifubaopay',function(){
+     	alert('支付宝支付');
+     });
     $('#padOrderForm').on('touchstart','.product-catory-product',function(){
     	var input = $(this).find('input');
     	var productId = input.attr('name');
