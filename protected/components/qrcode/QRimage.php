@@ -7,18 +7,18 @@
             $image = self::image($frame, $pixelPerPoint, $outerFrame);
             if ($filename === false) {
                 Header("Content-type: image/png");
-                ImagePng($image);
+                imagepng($image);
             } else {
                 if($saveandprint===TRUE){
-                    ImagePng($image, $filename);
+                    imagepng($image, $filename);
                     header("Content-type: image/png");
-                    ImagePng($image);
+                    imagepng($image);
                 }else{
-                    ImagePng($image, $filename);
+                    imagepng($image, $filename);
                 }
             }
             
-            ImageDestroy($image);
+            imagedestroy($image);
         }
     
         //----------------------------------------------------------------------
@@ -33,7 +33,7 @@
                 ImageJpeg($image, $filename, $q);            
             }
             
-            ImageDestroy($image);
+            imagedestroy($image);
         }
     
         //----------------------------------------------------------------------
