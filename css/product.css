@@ -407,12 +407,14 @@
 	text-align:center;
 	font-size:30px;
 	color:white;
+	margin-top:10px;
+	padding:5px 0;
 }
 .cash-color{
-	back-ground:#c81623;
+	background-color:#c81623;
 }
 .wx-color{
-	back-ground:#44b549;
+	background-color:#44b549;
 }
 .zfb-color{
 	background-color: #f48f0d;
