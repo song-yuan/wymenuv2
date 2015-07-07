@@ -88,6 +88,8 @@
 	var isPad = '<?php echo $isPad;?>';
         var isPrintChecked=false;
         var padprinterping="local";
+        document.body.style.fontSize="3px";
+        //alert(document.body.style.fontSize);
 	window.onload=function(type,catgory,pad)
 	{
 		type = t;
