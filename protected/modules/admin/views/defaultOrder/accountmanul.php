@@ -95,7 +95,7 @@
 					
 			
 			<script type="text/javascript">
-                            var now_should_pay=parseFloat("<?php echo number_format($order->should_total-$order->reality_total,2); ?>");
+                            var now_should_pay=parseFloat("<?php echo $order->should_total-$order->reality_total; ?>");
                             $('.calc_num').on(event_clicktouchstart,'li',function(){
                                 var inval=$("#cash_in").html();
                                 //alert(inval);
@@ -146,6 +146,8 @@
 //                                    $("#cash_in").html($("#cash_in").html()+".00");
 //                                }
                                 var cashinf=parseFloat($("#cash_in").html());
+                                //alert($("#cash_in").html());alert(parseFloat($("#cash_in").html()));
+                                //alert(now_should_pay);
                                 if(cashinf-now_should_pay>0)
                                 {
                                     $("#cash_out").html(Math.round((cashinf-now_should_pay)*100)/100);//little than 0 not show
