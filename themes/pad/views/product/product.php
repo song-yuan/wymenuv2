@@ -89,6 +89,7 @@
         var isPrintChecked=false;
         var padprinterping="local";
         document.body.style.fontSize="10px";
+        alert(document.body.clientWidth);
         //alert(document.body.style.fontSize);
 	window.onload=function(type,catgory,pad)
 	{
