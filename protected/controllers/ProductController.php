@@ -340,9 +340,8 @@ class ProductController extends Controller
 		}
 	}
 	public function actionQrcode(){
-		$url = urldecode('http://www.baidu.com');
-		QRtools::markTime('start');
-		QRcode::png($url,$outfile = false, $level = QR_ECLEVEL_L, $size = 6, $margin = 4, $saveandprint=false);
+		$code=new QRCode('http://www.baidu.com');
+		$code->create();
 		exit;
 	}
 	public function actionExportOrder(){
