@@ -21,11 +21,17 @@ class ProductController extends Controller
 		if($padId){
 			$companyId = Yii::app()->request->getParam('companyid',0);
 			$padId = Yii::app()->request->getParam('padid',0);
+                        $padType = Yii::app()->request->getParam('padtype',0);
 			$this->companyId = $companyId;
 			$_SESSION['companyId'] = $this->companyId;
 			$this->isPad = 1;
 			$this->padId = $padId;
-			Yii::app()->theme = 'pad';
+                        if($padType=="1")
+                        {
+                            Yii::app()->theme = 'pad';
+                        }else if($padType=="2"){
+                            Yii::app()->theme = 'pad_cn';
+                        }
 		}
 		if($mac){
 			$companyWifi = CompanyWifi::model()->find('macid=:macId',array(':macId'=>$mac));
