@@ -9,13 +9,13 @@
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-color.css');
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/pic.css');
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-media.css'); 
-	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product.css');
+	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product-cn.css');
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/reset.css');
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/slick.css');
         Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/language/'.Yii::app()->language.'.js');
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/zepto.js');
 	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/base64.js'); 
-	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/pic-pad.js');
+	Yii::app()->clientScript->registerScriptFile($baseUrl.'/js/product/pic-pad-cn.js');
 ?>
 
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type,'siteNoId'=>$siteNoId));?>
@@ -24,7 +24,7 @@
 	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/slick.min.js';?>"></script>
 	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/classie.js';?>"></script>
 	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/jquery.form.js';?>"></script>
-	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/productpad.js';?>"></script>
+	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/productpad-cn.js';?>"></script>
         <div id="page_0" class="up ub ub-ver" tabindex="0">
 	<!--content开始-->
     <div id="content" class="ub-f1 tx-l t-bla ub-img6 res10">
@@ -88,8 +88,9 @@
 	var isPad = '<?php echo $isPad;?>';
         var isPrintChecked=false;
         var padprinterping="local";
-        document.body.style.fontSize="10px";
-        //alert(document.body.clientWidth);//big pad 1080 1920
+        var bodyfont=Math.round(10*document.body.clientWidth/1080)+"px";
+        document.body.style.fontSize=bodyfont;
+        //alert(document.body.clientWidth);//big pad 1080 1920 pc:width1366
         //alert(document.body.style.fontSize);
 	window.onload=function(type,catgory,pad)
 	{

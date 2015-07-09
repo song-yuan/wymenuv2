@@ -88,8 +88,9 @@
 	var isPad = '<?php echo $isPad;?>';
         var isPrintChecked=false;
         var padprinterping="local";
-        document.body.style.fontSize="10px";
-        //alert(document.body.clientWidth);//big pad 1080 1920
+        var bodyfont=Math.round(10*document.body.clientWidth/1080)+"px";
+        document.body.style.fontSize=bodyfont;
+        //alert(document.body.clientWidth);//big pad 1080 1920 pc:width1366
         //alert(document.body.style.fontSize);
 	window.onload=function(type,catgory,pad)
 	{
