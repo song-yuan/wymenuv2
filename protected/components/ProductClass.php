@@ -49,7 +49,7 @@ class ProductClass
 		}
 		if($product){
 			foreach($product as $k=>$v){
-				$sql = 'select t.taste_id,t1.name from nb_product_taste t,nb_taste t1 where t.taste_id=t1.lid and t.dpid=t1.dpid and t1.dpid=:dpid and t1.product_id=:productId and t1.delete_flag=0';
+				$sql = 'select t.taste_id,t1.name from nb_product_taste t,nb_taste t1 where t.taste_id=t1.lid and t.dpid=t1.dpid and t1.dpid=:dpid and t.product_id=:productId and t1.delete_flag=0';
 				$connect = Yii::app()->db->createCommand($sql);
 				$connect->bindValue(':dpid',$dpid);
 				$connect->bindValue(':productId',$v['lid']);
