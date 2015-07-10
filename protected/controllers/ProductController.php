@@ -340,8 +340,13 @@ class ProductController extends Controller
 		}
 	}
 	public function actionQrcode(){
-		$code=new QRCode('http://www.baidu.com');
-		$code->create();
+		$orderId = Yii::app()->request->getParam('orderId',0);
+		$dpid = Yii::app()->request->getParam('dpid',0);
+		$url = 'http://menu.wymenu.com/wymenuv2/product/weixPayOrder/orderId/'.$orderId.'?dpid='.$dpid;
+		$imgurl = './qrcode/wxpay/wxpay'.$dpid.'-'.$orderId.'.png';
+		$code=new QRCode($url);
+		$code->create($imgurl);
+		echo $imgurl;
 		exit;
 	}
 	public function actionExportOrder(){
