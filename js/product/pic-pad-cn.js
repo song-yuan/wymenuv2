@@ -153,7 +153,7 @@ function showListPad(items){
 	
 	var leftHeight = 0;
 	var rightHeight = 0;
-	
+	layer.load();//layer 加载效果
 	for(var i in items){
 		var item = items[i];
 		var thumb = item.main_picture;
@@ -199,7 +199,7 @@ function showListPad(items){
 			leftPicObj.append(tr);
 		}
 	}
-	
+	layer.closeAll('loading');
 }
 
 
