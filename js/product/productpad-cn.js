@@ -34,10 +34,11 @@ $(document).ready(function(){
     	var _this = $(this);
     	var store = _this.parents('.blockCategory').attr('store');
     	if(parseInt(store)==0){
+    		layer.msg('库存不足');
     		return;
     	}else if(parseInt(store) > 0){
     		store -= 1;
-    		 _this.attr('store',store);
+    		_this.parents('.blockCategory').attr('store',store);
     	}
     	var type = _this.attr('type');
     	var parentsBlockCategory = _this.parents('.blockCategory');

@@ -37,7 +37,7 @@ $(document).ready(function(){
     		return;
     	}else if(parseInt(store) > 0){
     		store -= 1;
-    		 _this.attr('store',store);
+    		_this.parents('.blockCategory').attr('store',store);
     	}
     	var type = _this.attr('type');
     	var parentsBlockCategory = _this.parents('.blockCategory');
