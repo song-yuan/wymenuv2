@@ -1064,6 +1064,7 @@ class Helper
                         return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','网络打印的打印机必须是网络打印机！'));
                     }
                     $print_data=array(
+                        "do_id"=>"ipPrintContent",
                         "company_id"=>$printer->dpid,
                         "job_id"=>$jobid,
                         "printer"=>$printer->address,

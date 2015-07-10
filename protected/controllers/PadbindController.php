@@ -69,10 +69,10 @@ class PadbindController extends Controller
                         {
                             //echo 'a';exit;
                             $this->redirect(array('admin/login'));
-                        }else if($model->pad_type=="1")//点餐
+                        }else if($model->pad_type=="1" || $model->pad_type=="2")//点餐
                         {
                             //echo 'b';exit;
-                            $this->redirect(array('product/index/companyid/'.$companyId.'/padid/'.$padId));
+                            $this->redirect(array('product/index/companyid/'.$companyId.'/padid/'.$padId.'/padtype/'.$model->pad_type));
                         }else{
                             $this->redirect(array('login'));
                         }
