@@ -28,8 +28,10 @@ class ProductController extends Controller
 			$this->padId = $padId;
                         if($padType=="1")
                         {
+                        	Yii::app()->language = 'jp';
                             Yii::app()->theme = 'pad';
                         }else if($padType=="2"){
+                        	Yii::app()->language = 'zh_cn';
                             Yii::app()->theme = 'pad_cn';
                         }
 		}
