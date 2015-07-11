@@ -157,7 +157,7 @@
             });            
             
             $('#notification_banner_id').on(event_clicktouchstart, function(){
-                client_open_site("dd");
+                //client_open_site("dd");
                 getnotificationnum();
                 $('#header_notification_list').load('<?php echo $this->createUrl('default/messageliall',array('companyId'=>$this->companyId));?>'); 
             });
@@ -180,50 +180,44 @@
             }
             //clearTimeout(interval); 
             
-            //前台下单
+            //前台开台 company_id:xx,site_id:xx,is_temp:xx;
             //消息提示
             //如果在餐桌界面，对应的餐桌状态改变
             function client_open_site(do_data){
-                var lit=$('li.modalaction[sid="0000000002"][istemp="0"]');
-                lit.attr("status","3");
-                
-                return;
                 var data = eval('(' + do_data + ')');
-                $.get('<?php echo $this->createUrl('default/msgnum',array('companyId'=>$this->companyId));?>',function(data){
-                if(data.status) {
-                      document.getElementById('allnotificationnum').innerHTML = data.num;
-                      if(data.num>0)
-                      {
-                           // $('#chatAudio')[0].play();
-                           if (typeof Androidwymenuprinter == "undefined") {
-                                //alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
-                            }else{
-                                Androidwymenuprinter.padAlarm();
-                            }
-                      }
-                    } 
-                },'json');
+                if(data.company_id!="<?php echo $this->companyId; ?>")
+                {
+                    return false;
+                }
+                var lit=$('li.modalaction[sid="'+data.site_id+'"][istemp="'+data.is_temp+'"]');
+                if(lit.attr("status")!="undefined")
+                {
+                    lit.attr("status","1");
+                    lit.removeClass("bg-blue");
+                    lit.removeClass("bg-green");
+                    lit.addClass("bg-yellow");
+                }
+                getnotificationnum();
             }
             
-            //前台下单
+            //前台下单 company_id:xx,site_id:xx,is_temp:xx;
             //消息提醒
             //打印机自动出单1份，客人确认无误后扫描、下单、厨打。
             //如果停留在座位页面，对应座位状态变化
             function client_order(do_data){
                 var data = eval('(' + do_data + ')');
-                $.get('<?php echo $this->createUrl('default/msgnum',array('companyId'=>$this->companyId));?>',function(data){
-                if(data.status) {
-                      document.getElementById('allnotificationnum').innerHTML = data.num;
-                      if(data.num>0)
-                      {
-                           // $('#chatAudio')[0].play();
-                           if (typeof Androidwymenuprinter == "undefined") {
-                                //alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
-                            }else{
-                                Androidwymenuprinter.padAlarm();
-                            }
-                      }
-                    } 
-                },'json');
+                if(data.company_id!="<?php echo $this->companyId; ?>")
+                {
+                    return false;
+                }
+                var lit=$('li.modalaction[sid="'+data.site_id+'"][istemp="'+data.is_temp+'"]');
+                if(lit.attr("status")!="undefined")
+                {
+                    lit.attr("status","2");
+                    lit.removeClass("bg-yellow");
+                    lit.removeClass("bg-green");
+                    lit.addClass("bg-blue");
+                }
+//                getnotificationnum();
             }
 	</script>

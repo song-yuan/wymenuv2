@@ -56,6 +56,8 @@
 	<div class="mask-trangle"></div>
 	<div class="product-mask-info"><?php echo yii::t('app','点单帮助');?></div>
         <div class="line"></div>
+        <div class="product-mask-info" id="clientSitelist"><?php echo yii::t('app','座位列表');?></div>
+	<div class="line"></div>
         <div class="product-mask-info" id="printerShow"><?php echo yii::t('app','打印机校正');?></div>
 	<div class="line"></div>
         <!--<div class="product-mask-info">中 文</div>
@@ -76,6 +78,10 @@
         <div class="setting-print-tip"><?php echo yii::t('app','第三步、如果打印失败，请再次重复上述过程，直到提示“打印成功”，并且打印机正常输出“打印校正成功”字样。');?>
             <br><img src="../../../../../img/print/2_<?php echo Yii::app()->language; ?>.jpg" /></div>
         <div class="setting-print-tip"><div style="padding:10px;display: inline;"><?php echo yii::t('app','请点击“开始校正”按钮，开始校正吧...');?></div><button id="printerCheck"><?php echo yii::t('app','开始校正');?></button></div>
+</div>
+<!-- 座位列表，每次打开时都刷新 -->
+<div id="divid_client_sitelist" class="client_sitelist">
+    
 </div>
 <!-- 加入订单动画 -->
 <div class="aniele"></div>
@@ -169,4 +175,5 @@
             	}             
        }       
         
+       
 </script>
