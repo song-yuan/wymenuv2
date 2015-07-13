@@ -410,8 +410,10 @@ class ProductController extends Controller
                 $padtype=Yii::app()->request->getParam('padtype');
                 if($padtype=="1")
                 {
+                    Yii::app()->language = 'jp';
                     Yii::app()->theme="pad";
                 }else{
+                    Yii::app()->language = 'zh_cn';
                     Yii::app()->theme="pad_cn";
                 }
                 $criteria = new CDbCriteria;		
