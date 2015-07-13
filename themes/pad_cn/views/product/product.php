@@ -191,6 +191,7 @@
        //加载所有座位
         $('#clientSitelist').on(event_clicktouchstart,function(){
             $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>");
+            $('#divid_client_sitelist').show();
         });
        
 </script>

@@ -20,18 +20,23 @@
 
         </ul>
     </div>
-     <div id="client_open_site" style="display:none">				
+     <div id="client_open_site" style="display:none;">				
             <div style="font-size: 1.5em;padding: 5px;margin-top: 16px;"><?php echo yii::t('app','请输入人数：');?></div>
             <div style="margin:7px;">
-            <input type="text" style="font-size:1.5em; padding: 5px;margin: 6px;" name="siteNumber" id="site_number" maxlength="2" size="5" value="2">
-            <input type="button" style="font-size:1.5em; padding: 5px;margin: 6px;" id="site_open" value="<?php echo yii::t('app','开 台');?>" >
+                <label id="open_site_plus" style="font-size: 3em;padding: 8px; margin: 7px; border: 1px;">━</label>
+                <input type="text" style="font-size:1.5em; padding: 5px;margin: 6px;" name="siteNumber" id="site_number" maxlength="2" size="5" value="3">
+                <label id="open_site_minus" style="font-size: 3em;padding: 8px; margin: 7px; border: 1px;">╋</label>
+            </div>
+            <div style="margin:7px;">
+            <input type="button" style="font-size:1.5em; padding: 5px;margin-left: 10px;" id="site_open" value="<?php echo yii::t('app','开 台');?>" >
+            <input type="button" style="font-size:1.5em; padding: 5px;margin-left: 26px; float: right;" id="site_open_cancel" value="<?php echo yii::t('app','取 消');?>" >
             </div>
             
     </div>
 <script type="text/javascript">
-	$('.siteaction').on(event_clicktouchstart, function(){
-               
-               layer.open({
+    var layer_index;
+	$('.siteaction').on(event_clicktouchstart, function(){               
+               layer_index=layer.open({
                     type: 1,
                     shade: false,
                     title: false, //不显示标题
@@ -42,15 +47,15 @@
 //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                     }
                 });
-                 var sno=$("#site_number");
-                sno.focus();
+//                 var sno=$("#site_number");
+//                sno.focus();
 //                if(sno.length > 0)
 //                {
 //                    sno[0].focus();
 //                }
             });      
         
-       $('#site_open').on(event_clicktouchstart,function(){
+       $('#site_open').on(event_clicktouchend,function(){
            alert(11);return;
             var siteNumber=$('#site_number').val();                               
             var sid = $(this).attr('sid');
@@ -75,5 +80,23 @@
                 alert("<?php echo yii::t('app','输入合法人数');?>");
                 return false;
             }                               
+        });
+        
+        $('#site_open_cancel').on(event_clicktouchend,function(){
+           layer.close(layer_index);                           
+        });
+        
+        $('#open_site_plus').on(event_clicktouchend,function(){
+           var num = parseInt($("#site_number").val());
+		num = num + 1;
+		$("#site_number").val(num);                          
+        });
+        
+        $('#open_site_minus').on(event_clicktouchend,function(){
+           var num = parseInt($("#site_number").val());
+		num = num - 1;
+                if(num < 0)
+                    num=0;
+		$("#site_number").val(num);                          
         });
 </script>
