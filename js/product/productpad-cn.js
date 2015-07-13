@@ -105,7 +105,7 @@ $(document).ready(function(){
                  }	
     });
    
-    $('#forum_list').on('touchstart','.delCart',function(){
+    $('#forum_list').on(event_clicktouchstart,'.delCart',function(){
     	var _this = $(this);
     	var store = _this.parents('.blockCategory').attr('store');
     	if(parseInt(store) >= 0){
@@ -155,7 +155,7 @@ $(document).ready(function(){
                     }
                  }        
     });
-    $('#forum_list').on('touchend','.product-pic',function(){
+    $('#forum_list').on(event_clicktouchend,'.product-pic',function(){
     	$('.blockCategory').each(function(){
     		$(this).find('.icon-hover-1').css('left','-150px');
     	 	$(this).find('.icon-hover-2').css('right','-150px');
@@ -163,7 +163,7 @@ $(document).ready(function(){
     	$(this).find('.icon-hover-1').css('left','20%');
 	 	$(this).find('.icon-hover-2').css('right','20%');
 	 });
-    $('#cancelPadOrder').on('touchend',function(){
+    $('#cancelPadOrder').on(event_clicktouchend,function(){
     	$('.product-pad-mask').find('.info').html('');
     	$('.product-pad-mask').css('display','none');
     	$('.blockCategory').each(function(){
@@ -178,16 +178,16 @@ $(document).ready(function(){
 		$('.total-num').html(0);
     });
    //help
-   $('.padsetting').on('touchstart',function(){
+   $('.padsetting').on(event_clicktouchstart,function(){
             $(".setting-pad-mask").toggle();});
    
-   $('#content').on('touchend',function(){
+   $('#content').on(event_clicktouchend,function(){
             $(".setting-pad-mask").css('display','none');
             $('.product-pad-mask').css('display','none');
         });
    
     //查看菜单
-    $('body').on('touchstart','.top-right',function(){
+    $('body').on(event_clicktouchstart,'.top-right',function(){
     	  if($('.product-pad-mask').is(':hidden')) {
               $('.product-pad-mask').show();
      	  }else{
@@ -200,7 +200,7 @@ $(document).ready(function(){
             }
          }
     });
-    $('.product-pad-mask').on('touchstart','.minus',function(){
+    $('.product-pad-mask').on(event_clicktouchstart,'.minus',function(){
 		var input = $(this).siblings('input');
 		var num = input.val();
 		if(num > 0){
@@ -210,7 +210,7 @@ $(document).ready(function(){
 		totalPrice();
 		totalNum();		
 	});
-    $('.product-pad-mask').on('touchstart','.plus',function(){
+    $('.product-pad-mask').on(event_clicktouchstart,'.plus',function(){
                 //alert('+');
 		var input = $(this).siblings('input');
 		var num = parseInt(input.val());
@@ -219,7 +219,7 @@ $(document).ready(function(){
 		totalPrice();	
 		totalNum();
 	});
-    $('#pad-disbind-menu').on('touchstart',function(){
+    $('#pad-disbind-menu').on(event_clicktouchstart,function(){
             location.href='../../../../../../../padbind/login';
             //绑定和解绑必须到我们的服务器。
             //location.href='http://menu.wymenu.com/wymenuv2/padbind/login';
@@ -227,15 +227,15 @@ $(document).ready(function(){
         
     
      //打印测试关闭
-    $('#printerClose').on('touchstart',function(){
+    $('#printerClose').on(event_clicktouchstart,function(){
         $('#print_check').hide();
     });
     //打印测试关闭
-    $('#printerShow').on('touchstart',function(){
+    $('#printerShow').on(event_clicktouchstart,function(){
         $('#print_check').show();
     });
     //打印校正
-    $('#printerCheck').on('touchstart',function(){
+    $('#printerCheck').on(event_clicktouchstart,function(){
         if (typeof Androidwymenuprinter == "undefined") {
                 alert(language_notget_padinfo);
                 return false;
@@ -270,7 +270,7 @@ $(document).ready(function(){
                  
     });
     
-    $('#pad-app-exit').on('touchstart',function(){
+    $('#pad-app-exit').on(event_clicktouchstart,function(){
             if (typeof Androidwymenuprinter == "undefined") {
                 alert(language_notget_padinfo);
                 return false;
@@ -318,7 +318,7 @@ $(document).ready(function(){
     	$(this).css('display','none');
     });
     
-    $('#updatePadOrder').on('touchstart',function(){
+    $('#updatePadOrder').on(event_clicktouchstart,function(){
     	//layer页面层
 //    	var str = '<a herf="javascript:;" class="pay-type cash-color" id="cashpay">柜台支付</a><a herf="javascript:;" class="pay-type wx-color" id="weixinpay">微信支付</a><a herf="javascript:;" class="pay-type zfb-color" id="zhifubaopay">支付宝支付</a>';
 //		layer.open({
@@ -376,16 +376,16 @@ $(document).ready(function(){
     		}
      	});
     });
-    $('body').on('touchstart','#cashpay',function(){
+    $('body').on(event_clicktouchstart,'#cashpay',function(){
      	alert('现金支付');
      });
-     $('body').on('touchstart','#weixinpay',function(){
+     $('body').on(event_clicktouchstart,'#weixinpay',function(){
      	alert('微信支付');
      });
-     $('body').on('touchstart','#zhifubaopay',function(){
+     $('body').on(event_clicktouchstart,'#zhifubaopay',function(){
      	alert('支付宝支付');
      });
-    $('#padOrderForm').on('touchstart','.product-catory-product',function(){
+    $('#padOrderForm').on(event_clicktouchstart,'.product-catory-product',function(){
     	var input = $(this).find('input');
     	var productId = input.attr('name');
     	var productIdArr = productId.split(","); //字符分割 
