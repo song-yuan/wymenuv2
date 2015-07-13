@@ -29,10 +29,10 @@ class ProductController extends Controller
                         if($padType=="1")
                         {
                         	Yii::app()->language = 'jp';
-                            Yii::app()->theme = 'pad';
+                                Yii::app()->theme = 'pad';
                         }else if($padType=="2"){
                         	Yii::app()->language = 'zh_cn';
-                            Yii::app()->theme = 'pad_cn';
+                                Yii::app()->theme = 'pad_cn';
                         }
 		}
 		if($mac){
@@ -405,17 +405,27 @@ class ProductController extends Controller
         
         public function actionClientSitelist()
 	{
+                //Yii::app()->theme="pad_cn";
 		$compayId=Yii::app()->request->getParam('companyId');
+                $padtype=Yii::app()->request->getParam('padtype');
+                if($padtype=="1")
+                {
+                    Yii::app()->theme="pad";
+                }else{
+                    Yii::app()->theme="pad_cn";
+                }
                 $criteria = new CDbCriteria;		
                 $criteria->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId ;
                 $criteria->order = ' t.create_at desc ';
                 $models_temp = SiteNo::model()->findAll($criteria);
-                
-                $criteria->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId ;
+                //var_dump($models_temp);exit;
+                $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
                 $criteria->with="site";
                 $criteria->order = ' t.create_at desc ';
                 $models_category = SiteType::model()->findAll($criteria);
-                        
+                //var_dump(Yii::app()->theme); exit;
+                
+                //var_dump($models_category);exit;        
 		$this->renderPartial('clientsite',array(
 				'models_temp'=>$models_temp,
 				'models_category' => $models_category

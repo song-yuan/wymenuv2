@@ -110,6 +110,50 @@
         display:none;
 }
 
+.bg_add {
+        background-image: url("/wymenuv2/admin/img/addtempsite.png") !important;
+        filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+        -moz-background-size:100% 100%;
+        background-size:100% 100%;                    
+        color: #fff !important;
+    }
+   
+.client_sitelist{
+	position:fixed;
+	width:auto;
+	top:10px;
+	left:10px;
+	background:white;
+	z-index:1003;
+        padding-right:10px;
+	height:auto;
+	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+	border: 1px solid #ddd;
+	display:block;
+        //display:none;
+        //display:inline-block;
+}
+
+.client_sitelist_in{
+        padding-right:10px;
+        display:inline-block;
+}
+
+    .client_sitelist_in ul {
+            padding-left:5px;
+            padding-left:0px;
+    }
+    .client_sitelist_in ul li {
+            float:left;
+            width:120px;
+            height: 120px;			
+            border: 1px solid #add;
+            margin:5px;
+            list-style:none;
+            text-align:center;
+            vertical-align:middle;
+    }
+
 .setting-print-info{
 	background-color:#eee;
         padding: 0px;
@@ -118,6 +162,16 @@
         font-weight: 700;
         height: 45px;
 }
+
+.client_category_title{
+	background-color:#eee;
+        padding: 0px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 700;
+        height: 45px;
+}
+
 .setting-print-tip{
 	background-color:#fff;
         color:rgb(239,68,77);
