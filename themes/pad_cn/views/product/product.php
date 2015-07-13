@@ -96,7 +96,7 @@
         var padprinterping="local";
         var bodyfont=Math.round(10*document.body.clientWidth/1080)+"px";
         document.body.style.fontSize=bodyfont;
-        //alert(document.body.clientWidth);//big pad 1080 1920 pc:width1366
+        alert(document.body.clientWidth);//big pad 1080 1920 pc:width1366
         //alert(document.body.style.fontSize);
 	window.onload=function(type,catgory,pad)
 	{
@@ -174,6 +174,10 @@
                     }
             	}             
        }       
-        
+       
+       //加载所有座位
+        $('#clientSitelist').on('touchstart',function(){
+            $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId));?>");
+        });
        
 </script>

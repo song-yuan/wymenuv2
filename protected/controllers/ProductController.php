@@ -402,4 +402,23 @@ class ProductController extends Controller
 		}
  		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
 	}
+        
+        public function actionClientSitelist()
+	{
+		$compayId=Yii::app()->request->getParam('companyId');
+                $criteria = new CDbCriteria;		
+                $criteria->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId ;
+                $criteria->order = ' t.create_at desc ';
+                $models_temp = SiteNo::model()->findAll($criteria);
+                
+                $criteria->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId ;
+                $criteria->with="site";
+                $criteria->order = ' t.create_at desc ';
+                $models_category = SiteType::model()->findAll($criteria);
+                        
+		$this->renderPartial('clientsite',array(
+				'models_temp'=>$models_temp,
+				'models_category' => $models_category
+		));
+	}
 }

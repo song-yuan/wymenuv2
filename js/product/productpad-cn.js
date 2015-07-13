@@ -224,6 +224,8 @@ $(document).ready(function(){
             //绑定和解绑必须到我们的服务器。
             //location.href='http://menu.wymenu.com/wymenuv2/padbind/login';
 	});
+        
+    
      //打印测试关闭
     $('#printerClose').on('touchstart',function(){
         $('#print_check').hide();
