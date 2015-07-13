@@ -96,6 +96,7 @@
         var padprinterping="local";
         var bodyfont=Math.round(10*document.body.clientWidth/1080)+"px";
         document.body.style.fontSize=bodyfont;
+        alert(window.screen.width);
         alert(document.body.clientWidth);//big pad 1080 1920 pc:width1366
         //alert(document.body.style.fontSize);
 	window.onload=function(type,catgory,pad)
