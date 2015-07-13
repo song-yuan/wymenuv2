@@ -21,7 +21,16 @@
         </ul>
     </div>
 <script type="text/javascript">
-	      
+	$('.siteaction').on(event_clicktouchstart, function(){
+                //layer页面层
+    	var str = '<a herf="javascript:;" class="pay-type cash-color" id="cashpay">柜台支付</a><a herf="javascript:;" class="pay-type wx-color" id="weixinpay">微信支付</a><a herf="javascript:;" class="pay-type zfb-color" id="zhifubaopay">支付宝支付</a>';
+		layer.open({
+		    type: 1,
+		    skin: 'layui-layer-rim', //加上边框
+		    area: ['420px', '240px'], //宽高
+		    content: str
+		});
+            });      
         
        
 </script>

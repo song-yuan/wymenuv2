@@ -40,6 +40,8 @@
 </div>
 <form id="padOrderForm" action="/wymenuv2/product/confirmPadOrder/companyid/<?php echo $this->companyId;?>/padid/<?php echo $this->padId;?>" method="post">
 <div class="product-pad-mask">
+    <input type="hidden" id="id_client_is_temp" name="client_is_temp" value="1">
+    <input type="hidden" id="id_client_site_id" name="client_site_id" value="0">
 	<div class="mask-trangle"></div>
         <div class="product-mask-info"><div style="padding:1px;display: inline;"><?php echo yii::t('app','确认无误后，点击“确认”按钮下单。');?></div><button id="updatePadOrder"><?php echo yii::t('app','确认');?></button></div>
         <div class="product-mask-tip"><?php echo yii::t('app','提示：点击列表中的菜品名称,快速找到该菜品并增减数量。');?>
