@@ -38,7 +38,7 @@
 				
 				 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','日结对账单');?></div>
 					 <div class="actions">
-                        <div class="btn-group">
+                      <!--   <div class="btn-group">
             
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>" >  
@@ -50,7 +50,7 @@
 					      <div class="btn-group">
 					            <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
 							   
-				  	      </div>
+				  	      </div>   -->
 				  	  </div>
 				</div>
 			
@@ -63,7 +63,7 @@
 								
 								<th><?php echo yii::t('app','日期');?></th>
 						        <th><?php echo yii::t('app','店铺');?></th>
-                                <th><?php echo yii::t('app','操作员');?></th>
+                                <th><?php echo yii::t('app','支付方式');?></th>
                                 <th><?php echo yii::t('app','金额');?></th>                                                                
                                 <th><?php echo yii::t('app','备注');?></th>
 								
@@ -80,13 +80,11 @@
 								<tr class="odd gradeX">
 								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
 								
-								<td><?php echo $model->close_day;?></td>
+								<td><?php echo $model->closeAccount->close_day;?></td>
 								<td><?php echo Helper::getCompanyName($this->companyId);?> </td>
-								<td><?php echo $model->user->username;?></td>								
+								<td><?php if($model->payment_method_id!='0000000000') echo $model->paymentMethod->name.yii::t('app','(后台)'); else switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; case 1: echo  yii::t('app','微信支付');break; case 2: echo  yii::t('app','支付宝支付');break; case 3: echo  yii::t('app','后台手动支付');break;  default :echo ''; }?></td>								
 								<td><?php echo $model->all_money;?></td>
-								<td class="center">
-								<a href="<?php echo $this->createUrl('orderManagement/detail',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','明细');?></a>
-								</td>
+								<td></td>
 								</tr>
 						<?php $a++;?>
 						<!-- <?php endforeach;?>	  -->
@@ -94,7 +92,12 @@
 						
 						</tbody>
 					</table>
-				
+					<div class="form-actions fluid">
+					   <div class="col-md-offset-3 col-md-9">
+						  <!-- <button type="submit" class="btn blue">确定</button>    -->
+						  <a href="<?php echo $this->createUrl('orderManagement/accountStatement' , array('companyId' => $this->companyId));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
+					   </div>
+				    </div>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -103,6 +106,7 @@
 								</div>
 							</div>
 							</div>
+							
 							<div class="col-md-7 col-sm-12">
 								<div class="dataTables_paginate paging_bootstrap">
 								<?php $this->widget('CLinkPager', array(
@@ -172,7 +176,7 @@
 			   var end_time = $('#end_time').val();
 			   //var Did = $('#Did').var();
 			  //var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('orderManagement/accountstatement' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
+			   location.href="<?php echo $this->createUrl('orderManagement/detail' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time
 			  
 	        });
 </script> 

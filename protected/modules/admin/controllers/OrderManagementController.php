@@ -22,8 +22,8 @@ class orderManagementController extends BackendController
 	}
 	public function actionIndex(){
 		$criteria = new CDbCriteria;
-		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
-		$end_time = Yii::app()->request->getParam('end_time',5200-08-09);
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
 		$criteria->select = 't.*';
 		$criteria->addCondition("t.dpid= ".$this->companyId);
@@ -60,8 +60,8 @@ class orderManagementController extends BackendController
 
 	public function actionNotPay(){
 		$criteria = new CDbCriteria();
-		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
-		$end_time = Yii::app()->request->getParam('end_time',5200-08-09);
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		//var_dump($begin_time);
 		//var_dump($end_time);exit;
 		//城里人就是这么会玩(o.o)!
@@ -95,8 +95,8 @@ class orderManagementController extends BackendController
 	public function actionOrderDaliyCollect(){
 		
 		$criteria = new CDbCriteria;
-		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
-		$end_time = Yii::app()->request->getParam('end_time',5200-08-09);
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
 		//$sql = "select t2.company_name, t1.name, t.lid, t.dpid, t.payment_method_id, t.update_at, sum(t.should_total) as should_all from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId ." group by t.payment_method_id " ;
 		//var_dump($sql);exit;
@@ -136,23 +136,55 @@ class orderManagementController extends BackendController
 	public function actionAccountStatement(){
 	
 		$criteria = new CDbCriteria;
-		$begin_time = Yii::app()->request->getParam('begin_time');
-		$end_time = Yii::app()->request->getParam('end_time');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 
 		//$sql= "select year(create_at),month(create_at),day(create_at), t.lid, t.paytype,t.payment_method_id,t.dpid, t.create_at,t.all_money, t1.company_name, t2.name,sum(t.all_money) as should_all  from nb_close_account_detail t left join  nb_payment_method t2 on( t.payment_method_id = t2.lid and t.dpid = t2.dpid )  left join  nb_company t1 on t.dpid = t1.dpid  where t.dpid= ".$this->companyId ." group by t.payment_method_id,t.paytype,year(create_at),month(create_at),day(create_at)";
 		//var_dump($sql);exit();
 		//利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
-		$criteria->select = "year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, t.lid, t.paytype,t.payment_method_id,t.dpid, t.create_at,sum(t.all_money) as should_all ";
+		$criteria->select = "t.lid, t.all_money,t.user_id,t.dpid,t.close_day ";
 		//$criteria->select = "convert(nvarchar(10),CreateDate,120), t.lid, t.paytype,t.payment_method_id,t.dpid, t.create_at,sum(t.all_money) as should_all ";
 		
 		$criteria->addCondition("t.dpid= ".$this->companyId);
 		
-		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-		$criteria->with = 'paymentMethod'; //连接表
-		$criteria->order = 't.create_at ASC' ;//排序条件
-		$criteria->group = 't.payment_method_id,t.paytype,day(t.create_at)';
+		$criteria->addCondition("t.close_day >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.close_day <='$end_time 23:59:59'");
+		$criteria->with = 'user'; //连接表
+		$criteria->order = 't.close_day ASC' ;//排序条件
+		//$criteria->group = 't.payment_method_id,t.paytype,day(t.create_at)';
 		//$criteria->group = 't.paytype';
+		$criteria->distinct = TRUE; //是否唯一查询
+	
+		$pages = new CPagination(CloseAccount::model()->count($criteria));
+		//$pages->PageSize = 10;
+		$pages->applyLimit($criteria);
+	
+		$model=  CloseAccount::model()->findAll($criteria);
+		//var_dump($model);exit;
+		$this->render('accountStatement',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
+	public function actionDetail(){
+		$id = Yii::app()->request->getParam('id');
+		$criteria = new CDbCriteria;
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+	
+		//利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
+		//$criteria->select = "year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all, t.lid, t.paytype,t.payment_method_id,t.dpid, t.create_at,sum(t.all_money) as should_all ";
+		//$criteria->select = "convert(nvarchar(10),CreateDate,120), t.lid, t.paytype,t.payment_method_id,t.dpid, t.create_at,sum(t.all_money) as should_all ";
+	    $criteria->select = "t.lid,t.dpid,t.paytype,t.payment_method_id,t.create_at,t.all_money";
+		$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addCondition("t.close_account_id=".$id);
+		$criteria->with = array("closeAccount","paymentMethod");
+		$criteria->order = 't.create_at ASC' ;//排序条件
+
 		$criteria->distinct = TRUE; //是否唯一查询
 	
 		$pages = new CPagination(CloseAccountDetail::model()->count($criteria));
@@ -160,8 +192,8 @@ class orderManagementController extends BackendController
 		$pages->applyLimit($criteria);
 	
 		$model=  CloseAccountDetail::model()->findAll($criteria);
-		//var_dump($criteria);exit;
-		$this->render('accountStatement',array(
+		//var_dump($model);exit;
+		$this->render('detail',array(
 				'models'=>$model,
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
@@ -225,107 +257,6 @@ class orderManagementController extends BackendController
 		));
 	}
  
-        public function actionCloseAccount(){
-                $begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
-		$end_time = Yii::app()->request->getParam('end_time',5200-08-09);
-                $db=Yii::app()->db;
-                
-                $criteria = new CDbCriteria;
-		$criteria->select = 't.paytype, t.payment_method_id,t.lid,t.dpid, t.update_at,t.order_status,sum(t.should_total) as should_all,sum(t.reality_total) as reality_all';
-		$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->addInCondition('t.order_status', array(3,4));
-		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
-		$criteria->with = array("company","paymentMethod"); //连接表
-		$criteria->order = 't.lid ASC' ;//排序条件
-		$criteria->group = 't.payment_method_id,t.paytype';
-		//$criteria->group = 't.paytype';
-		$criteria->distinct = TRUE; //是否唯一查询
-                
-                $criteria2 = new CDbCriteria;
-		$criteria2->select = 'sum(t.should_total) as should_all,sum(t.reality_total) as reality_all';
-		$criteria2->addCondition("t.dpid= ".$this->companyId);
-		$criteria2->addInCondition('t.order_status', array(3,4));
-		$criteria2->addCondition("t.update_at >='$begin_time 00:00:00'");
-		$criteria2->addCondition("t.update_at <='$end_time 23:59:59'");
-		//$criteria->group = 't.paytype';
-		$criteria2->distinct = TRUE; //是否唯一查询
-                
-                $criteria3 = new CDbCriteria;
-		$criteria3->select = 'lid';
-		//$criteria3->addCondition("t.dpid= ".$this->companyId);
-		$criteria3->addCondition("t.username = '".Yii::app()->user->id."'");
-		
-                $models=  Order::model()->findAll($criteria);
-                $model2=  Order::model()->findAll($criteria2);
-                $model3=  User::model()->findAll($criteria3);
-                //var_dump($model3[0]->lid);exit;
-                
-                $transaction = $db->beginTransaction();
-                try {
-                        //insert close_account
-                        $sec=new Sequence("close_account");
-                        $lidc = $sec->nextval();
-                        $datac = array(
-                            'lid'=>$lidc,
-                            'dpid'=>$this->companyId,
-                            'create_at'=>date('Y-m-d H:i:s',time()),
-                            'user_id'=>$model3[0]->lid,
-                            'begin_time'=>$begin_time,
-                            'end_time'=>$end_time,
-                            'close_day'=>$end_time,
-                            'all_money'=>$model2[0]->reality_all
-                        );
-//                        var_dump($datac);exit;
-                        $db->createCommand()->insert('nb_close_account',$datac);
-                        //insert close_account_detail
-                        $datacd=array();
-                        $secd=new Sequence("close_account_detail");
-                        
-                        foreach ($models as $model)
-                        {
-                            $lidcd = $secd->nextval();
-//                            array_push($datacd,array(
-//                                'lid'=>$lidcd,
-//                                'dpid'=>$this->companyId,
-//                                'create_at'=>date('Y-m-d H:i:s',time()),
-//                                'close_account_id'=>$lidc,
-//                                'paytype'=>$model->paytype,
-//                                'payment_method_id'=>$model->payment_method_id,
-//                                'all_money'=>$model->reality_all
-//                            ));
-                            $datacd=array(
-                                'lid'=>$lidcd,
-                                'dpid'=>$this->companyId,
-                                'create_at'=>date('Y-m-d H:i:s',time()),
-                                'close_account_id'=>$lidc,
-                                'paytype'=>$model->paytype,
-                                'payment_method_id'=>$model->payment_method_id,
-                                'all_money'=>$model->reality_all
-                            );
-                            $db->createCommand()->insert('nb_close_account_detail',$datacd);
-                        }
-                        //var_dump($datacd);exit;
-                        //$db->createCommand()->insert('nb_close_account_detail',$datacd);
-                        //update order set order_status=8 已经日结
-//                        $criteria->addInCondition('t.order_status', array(3,4));
-//                        $criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-//                        $criteria->addCondition("t.update_at <='$end_time 23:59:59'");
-                        $sql = 'update nb_order set order_status=8 where dpid='.$this->companyId.' and order_status in (3,4) and update_at >="'.$begin_time.' 00:00:00"'.' and update_at <="'.$end_time.' 23:59:59"';                        
-                        //var_dump($sql);exit;
-                        $db->createCommand($sql)->execute();
-                        $transaction->commit();
-                        $ret=array('result'=>true);
-                        Yii::app()->end(json_encode($ret));
-                } catch (Exception $e) {
-                        $transaction->rollback(); //如果操作失败, 数据回滚
-                        $ret=array('result'=>false);
-                        Yii::app()->end(json_encode($ret));
-                }
-		
-        }
-        
-        
 /*	public function actionNotPay(){
 		
 		$begin_time = Yii::app()->request->getParam('begin_time',1314-05-17);
@@ -493,7 +424,7 @@ class orderManagementController extends BackendController
  		//var_dump($name);exit;
  		$ret="";
  		foreach($name as $key=>$val){
- 			$ret.=$val['product_name']."/";			
+ 			$ret.=$val['product_name']."/";
  		}				
 		echo $ret;
 	}
@@ -510,6 +441,5 @@ class orderManagementController extends BackendController
 		return $models->company_name;
 		//index 界面的店铺名称获取方法来自于layouts->header.php 和components->Helper.php 。
 	}
-	
  
 }

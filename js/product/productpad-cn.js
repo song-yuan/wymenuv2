@@ -220,10 +220,12 @@ $(document).ready(function(){
 		totalNum();
 	});
     $('#pad-disbind-menu').on('touchstart',function(){
-            location.href='../../../../../padbind/login';
+            location.href='../../../../../../../padbind/login';
             //绑定和解绑必须到我们的服务器。
             //location.href='http://menu.wymenu.com/wymenuv2/padbind/login';
 	});
+        
+    
      //打印测试关闭
     $('#printerClose').on('touchstart',function(){
         $('#print_check').hide();
