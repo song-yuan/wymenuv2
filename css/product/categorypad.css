@@ -147,7 +147,7 @@
     .client_sitelist_in ul li {
             float:left;
             width:120px;
-            height: 120px;			
+            height: 70px;			
             border: 1px solid #add;
             margin:5px;
             list-style:none;
@@ -164,13 +164,22 @@
         height: 45px;
 }
 
-.client_category_title{
-	background-color:#eee;
+.client_siteall_title{
+	background-color:#fff;
         padding: 0px;
         text-align: center;
         font-size: 30px;
         font-weight: 700;
         height: 45px;
+}
+
+.client_category_title{
+	background-color:#eee;
+        padding: 0px;
+        text-align: center;
+        font-size: 20px;
+        font-weight: 500;
+        height: 30px;
 }
 
 .setting-print-tip{
