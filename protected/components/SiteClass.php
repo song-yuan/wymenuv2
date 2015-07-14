@@ -113,4 +113,68 @@ class SiteClass
             return false;
         } 
 	}
+        
+        public static function openSite($companyId = 0,$siteNumber = 1,$istemp = 1,$sid = 0){
+                $db = Yii::app()->db;
+                $transaction = $db->beginTransaction();
+                try {                          
+                    if($istemp=="0")
+                    {
+                        $sqlsite="update nb_site set status=1,number=:number where lid=:sid and dpid=:companyId";
+                        $commandsite=$db->createCommand($sqlsite);
+                        $commandsite->bindValue(":number" , $siteNumber);
+                        $commandsite->bindValue(":sid" , $sid);
+                        $commandsite->bindValue(":companyId" , $companyId);
+                        $commandsite->execute();
+                    }
+
+                    $se=new Sequence("site_no");
+                    $lid = $se->nextval();
+                    $site_id=$sid;
+                    if($istemp!=0)
+                    {
+                        $se=new Sequence("temp_site");
+                        $site_id = $se->nextval();                            
+                    }
+                    $code = SiteClass::getCode($companyId);
+                    $data = array(
+                        'lid'=>$lid,
+                        'dpid'=>$companyId,
+                        'create_at'=>date('Y-m-d H:i:s',time()),
+                        'is_temp'=>$istemp,
+                        'site_id'=>$site_id,
+                        'status'=>'1',
+                        'code'=>$code,
+                        'number'=>$siteNumber,
+                        'delete_flag'=>'0'
+                    );                            
+                    $db->createCommand()->insert('nb_site_no',$data);
+
+                    ///***********insert to order feedback
+                    $sef=new Sequence("order_feedback");
+                    $lidf = $sef->nextval();
+                    $dataf = array(
+                        'lid'=>$lidf,
+                        'dpid'=>$companyId,
+                        'create_at'=>date('Y-m-d H:i:s',time()),
+                        'is_temp'=>$istemp,
+                        'site_id'=>$site_id,
+                        'is_deal'=>'0',
+                        'feedback_id'=>0,
+                        'order_id'=>0,
+                        'is_order'=>'1',
+                        'feedback_memo'=>'开台',
+                        'delete_flag'=>'0'
+                    );
+                    $db->createCommand()->insert('nb_order_feedback',$dataf);
+                    ///*************print
+                    $transaction->commit(); //提交事务会真正的执行数据库操作
+                    return array('status'=>1,'message'=>yii::t('app','开台成功'),'siteid'=>$site_id);  
+                    //return true;
+            } catch (Exception $e) {
+                    $transaction->rollback(); //如果操作失败, 数据回滚
+                    return array('status'=>0,'message'=>yii::t('app','开台失败'),'siteid'=>$site_id); 
+                    //return false;
+            }    
+        }
 }

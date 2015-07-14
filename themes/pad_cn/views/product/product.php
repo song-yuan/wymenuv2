@@ -1,6 +1,7 @@
 <?php
 /* @var $this ProductController */
 	$baseUrl = Yii::app()->baseUrl;
+        Yii::app()->clientScript->registerCssFile($baseUrl.'/css/style.css');
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-btn.css');
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-img.css');
 	Yii::app()->clientScript->registerCssFile($baseUrl.'/css/product/ui-list.css');
@@ -42,6 +43,7 @@
 <div class="product-pad-mask">
     <input type="hidden" id="id_client_is_temp" name="client_is_temp" value="1">
     <input type="hidden" id="id_client_site_id" name="client_site_id" value="0">
+    <input type="hidden" id="id_client_site_name" name="client_site_name" value="新增临时座位！">
 	<div class="mask-trangle"></div>
         <div class="product-mask-info"><div style="padding:1px;display: inline;"><?php echo yii::t('app','确认无误后，点击“确认”按钮下单。');?></div><button id="updatePadOrder"><?php echo yii::t('app','确认');?></button></div>
         <div class="product-mask-tip"><?php echo yii::t('app','提示：点击列表中的菜品名称,快速找到该菜品并增减数量。');?>
@@ -191,6 +193,7 @@
        //加载所有座位
         $('#clientSitelist').on(event_clicktouchstart,function(){
             $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>");
+            $('.setting-pad-mask').hide();
             $('#divid_client_sitelist').show();
         });
        

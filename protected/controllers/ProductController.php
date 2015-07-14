@@ -425,12 +425,28 @@ class ProductController extends Controller
                 $criteria->with="site";
                 $criteria->order = ' t.create_at desc ';
                 $models_category = SiteType::model()->findAll($criteria);
-                //var_dump(Yii::app()->theme); exit;
                 
-                //var_dump($models_category);exit;        
-		$this->renderPartial('clientsite',array(
+                $this->renderPartial('clientsite',array(
 				'models_temp'=>$models_temp,
 				'models_category' => $models_category
 		));
+	}
+        
+        
+        public function actionOpensite() {
+                Yii::app()->language = 'zh_cn';
+		if(Yii::app()->request->isPostRequest) {
+			$sid = Yii::app()->request->getPost('sid');
+                        $siteNumber = Yii::app()->request->getPost('siteNumber');
+                        $companyId = Yii::app()->request->getPost('companyId');
+                        $istemp = Yii::app()->request->getPost('istemp','0');
+                        $ret=SiteClass::openSite($companyId,$siteNumber,$istemp,$sid);
+                        if($ret['status']=='1')
+                        {
+                            //send ws msg to server pad;
+                        }
+                        echo json_encode($ret);
+                        return true;
+		}
 	}
 }
