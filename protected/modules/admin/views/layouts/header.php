@@ -146,8 +146,10 @@
             $(document).ready(function() {
                 if (typeof Androidwymenuprinter == "undefined") {
                       event_clicktouchstart="click";
+                      event_clicktouchend="click";
                 }else{
                     event_clicktouchstart="touchstart";
+                    event_clicktouchend="touchend";
                 }
                 //$('<audio id="chatAudio"><source src="/wymenuv2/admin/audio/notify.ogg" type="audio/ogg"><source src="/wymenuv2/admin/audio/notify.mp3" type="audio/mpeg"><source src="/wymenuv2/admin/audio/notify.wav" type="audio/wav"></audio>').appendTo('body');
                 getnotificationnum();

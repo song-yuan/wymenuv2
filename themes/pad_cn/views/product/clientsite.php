@@ -37,7 +37,7 @@
         var layer_index;
         //alert($('#id_client_site_name').val());
         $('#idclient_siteall_title').html("当前餐桌："+$('#id_client_site_name').val());
-	$('.siteaction').on(event_clicktouchstart, function(){
+	$('.siteaction').on(event_clicktouchend, function(){
             var sid = $(this).attr('sid');
             var istemp = $(this).attr('istemp');
             var status = $(this).attr('status');
