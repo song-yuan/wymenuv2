@@ -42,13 +42,13 @@ class Order extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, site_id, remark, taste_memo', 'required'),
+			array('lid, dpid, site_id', 'required'),
 			array('lid, dpid, payment_method_id, site_id, number', 'numerical', 'integerOnly'=>true),
 			array('should_total,reality_total,callno', 'length', 'max'=>10),
 			array('is_temp, order_status, lock_status', 'length', 'max'=>1),
                         array('paytype', 'length', 'max'=>1),
 			array('remark, taste_memo', 'length', 'max'=>50),
-			array('create_at,pay_time', 'safe'),
+			//array('create_at,pay_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at,paytype, update_at,payment_method_id, pay_time, site_id, is_temp, number, order_status, lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
