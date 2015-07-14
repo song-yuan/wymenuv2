@@ -47,7 +47,7 @@ class DefaultOrderController extends BackendController
                     $criteria->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria);
                 }
-                
+                //var_dump($order);exit;
                 if(empty($order))
                 {
                     $order=new Order();
