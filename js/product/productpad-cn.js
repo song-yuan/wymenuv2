@@ -322,7 +322,7 @@ $(document).ready(function(){
     	$('.tastepad').hide();
     	$(this).parents('.blockCategory').find('.tastepad').show();
     });
-    $('#forum_list').on('click','.taste .item',function(){
+    $('#forum_list').on('click','.tastepad .item',function(){
     	if($(this).hasClass('active')){
     		$(this).removeClass('active');
     	}else{
