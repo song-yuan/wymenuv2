@@ -423,6 +423,7 @@
 	background:rgb(103.103.103);
 }
 .taste-layer{
+  display:none;
   position: fixed;
   top: 0;
   left: 0;
