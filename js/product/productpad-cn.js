@@ -317,7 +317,11 @@ $(document).ready(function(){
     	$(this).html('');
     	$(this).css('display','none');
     });
-    
+    $('#forum_list').on('click','.product-taste',function(){
+    	$('.taste-layer').show();
+    	$('.taste').hide();
+    	$(this).parents('.blockCategory').find('.taste').show();
+    });
     $('#updatePadOrder').on(event_clicktouchstart,function(){
     	//layer页面层
 //    	var str = '<a herf="javascript:;" class="pay-type cash-color" id="cashpay">柜台支付</a><a herf="javascript:;" class="pay-type wx-color" id="weixinpay">微信支付</a><a herf="javascript:;" class="pay-type zfb-color" id="zhifubaopay">支付宝支付</a>';
