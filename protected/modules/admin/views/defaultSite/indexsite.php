@@ -104,7 +104,7 @@
                                                                                 <ul>
                                                                                     
                                                                                     <?php if($typeId == 'tempsite'): ?>
-                                                                                        <li class="modalaction bg_add" istemp="1" status="0" sid="0"></li>
+                                                                                        <li class="modalaction bg_add" istemp="1" status="0" sid="0" shname="<?php echo yii::t('app','新增临时台');?>"></li>
                                                                                         <?php foreach ($models as $model):?>
                                                                                         <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 25px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo $model->create_at;?></li>
                                                                                         <?php endforeach;?>
@@ -144,6 +144,16 @@
                 var that=$(this);
                 if(op=="switch")
                 {
+                    if(gsistemp==istemp && gssid==sid)
+                    {
+                        var statu = confirm("<?php echo yii::t('app','放弃本次换台操作吗？');?>");
+                        if(!statu){
+                            return false;
+                        }else{
+                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$stypeId));?>');
+                            return true;
+                        }
+                    }
                     if(('123'.indexOf(status) >=0))
                     {
                         alert("<?php echo yii::t('app','正在进行换台操作，请选择没有开台、下单的餐桌');?>");
@@ -167,7 +177,8 @@
                                             alert(data.message);
                                     } else {
                                             alert(data.message);
-                                            location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>';
+                                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+                                            //location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>';
                                     }
                             }
                         });
@@ -177,15 +188,23 @@
                 }
                 if(op=="union")
                 {
-                    //alert("<?php echo yii::t('app','正在进行并台操作，请选择已经开台、下单的餐桌');?>");
-                    return false;//20150422休息
+                    if(gsistemp==istemp && gssid==sid)
+                    {
+                        var statu = confirm("<?php echo yii::t('app','放弃本次并台操作吗？');?>");
+                        if(!statu){
+                            return false;
+                        }else{
+                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$stypeId));?>');
+                            return true;
+                        }
+                    }
                     if(('034567'.indexOf(status) >=0))
                     {
                         alert("<?php echo yii::t('app','正在进行并台操作，请选择已经开台、下单的餐桌');?>");
                         return false;
                     }else if(istemp==1)
                     {
-                        alert("<?php echo yii::t('app','正在进行并台操作，请选择没有开台、下单的餐桌');?>");
+                        alert("<?php echo yii::t('app','正在进行并台操作，请选择已经开台、下单的餐桌');?>");
                         return false;
                     }else{
                         var statu = confirm("<?php echo yii::t('app','确定将该餐桌做为换台目标吗？');?>");
@@ -202,7 +221,8 @@
                                             alert(data.message);
                                     } else {
                                             alert(data.message);
-                                            location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>';
+                                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+                                            //location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>';
                                     }
                             }
                         });

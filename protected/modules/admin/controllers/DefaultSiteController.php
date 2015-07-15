@@ -275,6 +275,7 @@ class DefaultSiteController extends BackendController
                                 $commandsite->bindValue(":companyId" , $companyId);
                                 $commandsite->execute();
                             }
+                            //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
                             //更新目标site_no人数和状态
                             $modelsn=SiteNo::model()->find('dpid=:companyId and delete_flag=0 and site_id=:lid and is_temp=:istemp and status in ("1","2")' , array(':companyId' => $companyId,':lid'=>$sid,':istemp'=>$istemp)) ;
                             if($status > $modelsn->status)
@@ -283,33 +284,58 @@ class DefaultSiteController extends BackendController
                             }
                             $modelsn->number=$modelsn->number+$number;
                             $modelsn->save();
-                            
-                            //更新目标订单状态和人数
-                            
-                            //更新源订单状态
-                            
-                            //更新源订单明细，指向目标订单。
-                            
+                            //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
                             //更新源site_no，让上网密码code 指向目标订单
                             $smodelsn->status='5';
                             $smodelsn->site_id=$modelsn->site_id;
                             $smodelsn->is_temp=$modelsn->is_temp;
                             $smodelsn->save();
-                            
-                            $sqlorder="update nb_order set is_temp=:istemp,site_id=:sid where site_id=:ssid and is_temp=:sistemp and dpid=:companyId and order_status in ('1','2','3')";
+                            //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
+                            //更新目标订单状态和人数
+                            $tocriteria = new CDbCriteria;
+                            $tocriteria->condition =  ' t.order_status in ("1","2") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                            $tocriteria->order = ' t.lid desc ';
+                            $torder = Order::model()->find($tocriteria);
+                            if($status > $torder->order_status)
+                            {
+                                $torder->order_status=$status;
+                            }
+                            $torder->number=$torder->number+$number;
+                            $torder->save();
+                            //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
+                            //...
+                            //更新源订单状态
+                            $socriteria = new CDbCriteria;
+                            $socriteria->condition =  ' t.order_status in ("1","2") and  t.dpid='.$companyId.' and t.site_id='.$ssid.' and t.is_temp='.$sistemp ;
+                            $socriteria->order = ' t.lid desc ';
+                            $sorder = Order::model()->find($socriteria);
+                            $sorder->order_status="5";
+                            $sorder->save();
+                            //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
+                            //...
+                            //更新源订单明细，指向目标订单。
+                            $sqlorder="update nb_order_product set order_id=:torderid where dpid=:companyId and order_id=:sorderid";
                             $commandorder=$db->createCommand($sqlorder);
-                            $commandorder->bindValue(":sid" , $sid);
-                            $commandorder->bindValue(":istemp" , $istemp);
-                            $commandorder->bindValue(":ssid" , $ssid);
-                            $commandorder->bindValue(":sistemp" , $sistemp);
+                            $commandorder->bindValue(":torderid" , $torder->lid);
+                            $commandorder->bindValue(":sorderid" , $sorder->lid);
                             $commandorder->bindValue(":companyId" , $companyId);
-                            $commandorder->execute();
+                            $commandorder->execute();                           
+                            //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
+//                            $sqlorder="update nb_order set is_temp=:istemp,site_id=:sid where site_id=:ssid and is_temp=:sistemp and dpid=:companyId and order_status in ('1','2','3')";
+//                            $commandorder=$db->createCommand($sqlorder);
+//                            $commandorder->bindValue(":sid" , $sid);
+//                            $commandorder->bindValue(":istemp" , $istemp);
+//                            $commandorder->bindValue(":ssid" , $ssid);
+//                            $commandorder->bindValue(":sistemp" , $sistemp);
+//                            $commandorder->bindValue(":companyId" , $companyId);
+//                            $commandorder->execute();
                             $transaction->commit(); //提交事务会真正的执行数据库操作
                             echo json_encode(array('status'=>1,'message'=>yii::t('app','换台成功')));  
                             return true;
                     } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
                             echo json_encode(array('status'=>0,'message'=>yii::t('app','换台失败')));
+                            //echo json_encode(array('status'=>0,'message'=>  var_dump($e)));
                             return false;
                     }
 		}                
