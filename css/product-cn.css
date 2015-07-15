@@ -399,6 +399,9 @@
 	display:none;
 	background:black;
 }
+.product-taste{
+	float:left;
+}
 .taste{
 	display:none;
 	position:absolute;
