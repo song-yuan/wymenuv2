@@ -401,6 +401,11 @@
 }
 .taste{
 	display:none;
+	position:absolute;
+	left:0;
+	right:0;
+	width:60%;
+	margin:200px auto;
 }
 .taste .item{
 	min-width:30px;
