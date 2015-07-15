@@ -426,7 +426,7 @@
 }
 .tastepad .item.active{
 	color:white;
-	background:rgb(103.103.103);
+	background:rgb(103,103,103);
 }
 .taste-layer{
   display:none;
