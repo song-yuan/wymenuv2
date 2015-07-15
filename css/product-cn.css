@@ -421,6 +421,8 @@
 	line-height:20px;
 	display:inline;
 	margin:5px 10px;
+	float: left;
+	border:solid 1px rgb(229,229,229); 
 }
 .tastepad .item.active{
 	color:white;
