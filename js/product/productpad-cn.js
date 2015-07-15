@@ -33,7 +33,6 @@ $(document).ready(function(){
     $('#forum_list').on('touchstart','.addCart',function(){
     	var _this = $(this);
     	var store = _this.parents('.blockCategory').attr('store');
-    	alert(store);
     	if(parseInt(store)==0){
     		layer.msg('库存不足');
     		return;
