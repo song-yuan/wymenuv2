@@ -414,6 +414,16 @@
 	color:white;
 	background:rgb(103.103.103);
 }
+.taste-layer{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%
+  z-index: 1002;
+  background-color: #000;
+  opacity: 0.3;
+}
 .pay-type{
 	width:100%;
 	height:30px;

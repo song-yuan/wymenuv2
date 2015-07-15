@@ -89,9 +89,10 @@
 </div>
 <!-- 加入订单动画 -->
 <div class="aniele"></div>
-
-<div class="large-pic">
-</div>
+<!-- 口味的页面  -->
+<div class="taste-layer"></div>
+<!-- 产品大图 -->
+<div class="large-pic"></div>
 <script type="text/javascript">
         var event_clicktouchstart="touchstart";
         var event_clicktouchend="touchend";
