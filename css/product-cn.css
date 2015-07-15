@@ -407,6 +407,8 @@
 	height:20px;
 	padding:5px;
 	line-height:20px;
+	display:inline;
+	margin:5px 10px;
 }
 .taste .item.active{
 	color:white;
