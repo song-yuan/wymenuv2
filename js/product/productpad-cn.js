@@ -330,6 +330,7 @@ $(document).ready(function(){
     	}
     });
     $('.taste-layer').on('click',function(){
+    	$('.tastepad').hide();
     	$(this).hide();
     });
     $('#updatePadOrder').on(event_clicktouchstart,function(){
