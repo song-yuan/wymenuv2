@@ -318,7 +318,6 @@ $(document).ready(function(){
     	$(this).css('display','none');
     });
     $('#forum_list').on('click','.product-taste',function(){
-    	alert(111);
     	$('.taste-layer').show();
     	$('.tastepad').hide();
     	$(this).parents('.blockCategory').find('.tastepad').show();
