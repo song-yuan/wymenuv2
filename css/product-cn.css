@@ -402,15 +402,16 @@
 .product-taste{
 	float:left;
 }
-.taste{
+.tastepad{
 	display:none;
 	position:absolute;
 	left:0;
 	right:0;
 	width:60%;
-	margin:200px auto;
+	min-height:100px;
+	margin:50px auto;
 }
-.taste .item{
+.tastepad .item{
 	min-width:30px;
 	height:20px;
 	padding:5px;
@@ -418,7 +419,7 @@
 	display:inline;
 	margin:5px 10px;
 }
-.taste .item.active{
+.tastepad .item.active{
 	color:white;
 	background:rgb(103.103.103);
 }

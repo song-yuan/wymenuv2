@@ -320,8 +320,8 @@ $(document).ready(function(){
     $('#forum_list').on('click','.product-taste',function(){
     	alert(111);
     	$('.taste-layer').show();
-    	$('.taste').hide();
-    	$(this).parents('.blockCategory').find('.taste').show();
+    	$('.tastepad').hide();
+    	$(this).parents('.blockCategory').find('.tastepad').show();
     });
     $('#updatePadOrder').on(event_clicktouchstart,function(){
     	//layer页面层
