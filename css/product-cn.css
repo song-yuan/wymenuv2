@@ -404,12 +404,13 @@
 }
 .tastepad{
 	display:none;
-	position:absolute;
+	position:fixed;
 	left:0;
 	right:0;
 	width:60%;
 	min-height:100px;
 	margin:50px auto;
+	z-index:1010;
 }
 .tastepad .item{
 	min-width:30px;
