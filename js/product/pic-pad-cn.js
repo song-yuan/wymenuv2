@@ -178,9 +178,21 @@ function showListPad(items){
 				}
 				trPic += '</a>';
 			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
-            var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div><div class="clear"></div></div><div class="subject-order"><div class="single-num-circel">0</div><i class="icon-hover-3 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'">'+language_jiancai+'<img src="/wymenuv2/./img/product/icon_cart_m.png"></i></div>';
+			if(item.taste.length > 0){
+				var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div><div class="clear"></div></div><div class="subject-order"><a class="product-taste" href="javascript:;">口味</a><div class="single-num-circel">0</div><i class="icon-hover-3 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'">'+language_jiancai+'<img src="/wymenuv2/./img/product/icon_cart_m.png"></i></div>';
+			}else{
+				var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div><div class="clear"></div></div><div class="subject-order"><div class="single-num-circel">0</div><i class="icon-hover-3 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'">'+language_jiancai+'<img src="/wymenuv2/./img/product/icon_cart_m.png"></i></div>';
+			}
 			var trAddinfo = '<div class="clear"></div>';
-            tr = trHead + trBuy + trPic + trTitle + trAddinfo;
+			var trTaste = '';
+			trTaste +='<div class="taste" product-id="'+pad(item.lid,10)+'">';
+			for(var j in item.taste){
+				var taste = item.taste[j];
+				trTaste +='<div class="item" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
+			}
+			trTaste +='</div>';
+			var trEnd = '</div></div>';
+            tr = trHead + trBuy + trPic + trTitle + trAddinfo + trTaste + trEnd;
 			rightPicObj.append(tr);
 		}else{
 			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
@@ -193,9 +205,21 @@ function showListPad(items){
 				}
 				trPic += '</a>';
 			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
-            var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div><div class="clear"></div></div><div class="subject-order"><div class="single-num-circel">0</div><i class="icon-hover-3 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'">'+language_jiancai+'<img src="/wymenuv2/./img/product/icon_cart_m.png"></i></div>';
+			if(item.taste.length > 0){
+				var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div><div class="clear"></div></div><div class="subject-order"><a class="product-taste" href="javascript:;">口味</a><div class="single-num-circel">0</div><i class="icon-hover-3 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'">'+language_jiancai+'<img src="/wymenuv2/./img/product/icon_cart_m.png"></i></div>';
+			}else{
+				var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div><div class="clear"></div></div><div class="subject-order"><div class="single-num-circel">0</div><i class="icon-hover-3 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'">'+language_jiancai+'<img src="/wymenuv2/./img/product/icon_cart_m.png"></i></div>';
+			}
 			var trAddinfo = '<div class="clear"></div>';
-			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
+			var trTaste = '';
+			trTaste +='<div class="taste" product-id="'+pad(item.lid,10)+'">';
+			for(var j in item.taste){
+				var taste = item.taste[j];
+				trTaste +='<div class="item" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
+			}
+			trTaste +='</div>';
+			var trEnd = '</div></div>';
+			tr = trHead + trBuy + trPic + trTitle + trAddinfo + trTaste + trEnd;
 			leftPicObj.append(tr);
 		}
 	}

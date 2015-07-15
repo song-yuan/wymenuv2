@@ -399,7 +399,39 @@
 	display:none;
 	background:black;
 }
-
+.product-taste{
+	float:left;
+}
+.taste{
+	display:none;
+	position:absolute;
+	left:0;
+	right:0;
+	width:60%;
+	margin:200px auto;
+}
+.taste .item{
+	min-width:30px;
+	height:20px;
+	padding:5px;
+	line-height:20px;
+	display:inline;
+	margin:5px 10px;
+}
+.taste .item.active{
+	color:white;
+	background:rgb(103.103.103);
+}
+.taste-layer{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%
+  z-index: 1002;
+  background-color: #000;
+  opacity: 0.3;
+}
 .pay-type{
 	width:100%;
 	height:30px;

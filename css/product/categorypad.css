@@ -423,7 +423,7 @@
   height: 50px;
   float:left;
   line-height: 50px;
-  width: 60%;
+  width: 55%;
 }
 
 .subject-order {
@@ -433,7 +433,7 @@
   height: 50px;
   float:right;
   line-height: 50px;
-  width: 35%;
+  width: 45%;
   display:none;
 }
 
