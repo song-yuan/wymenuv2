@@ -322,7 +322,43 @@ class CreateOrder
 	             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
 	             	}
 	             	$productPrice = self::getProductPrice($dpid,$key,0);
-	             	 $orderProductData = array(
+	             	
+	             	if(is_array($num)){
+	                //有口味
+	                	foreach($num as $k=>$v){
+	                		$orderProductData = array(
+										'lid'=>$orderProductId,
+										'dpid'=>$dpid,
+										'create_at'=>$time,
+										'order_id'=>$orderId,
+										'set_id'=>0,
+										'product_id'=>$goodsArr[0],
+										'price'=>$productPrice,
+										'update_at'=>$time,
+										'amount'=>$v,
+										'taste_memo'=>"",
+										'product_order_status'=>1,
+										);
+						   $db->createCommand()->insert('nb_order_product',$orderProductData);
+						   $orderPrice +=$productPrice*$v;
+						   
+						   $orderTastSe = new Sequence("order_taste");
+	            		   $orderTasteId = $orderTastSe->nextval();
+						   $orderTasteData = array(
+						   						'lid'=>$orderTasteId,
+						   						'dpid'=>$dpid,
+						   						'create_at'=>$time,
+						   						'taste_id'=>$k,
+						   						'order_id'=>$orderProductId,
+						   						'is_order'=>0
+						   						);
+						   $db->createCommand()->insert('nb_order_taste',$orderTasteData);
+						   
+						   $se=new Sequence("order_product");
+	            		   $orderProductId = $se->nextval();
+	                	}
+	             	}else{
+	             		 $orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
 										'create_at'=>$time,
@@ -335,8 +371,10 @@ class CreateOrder
 										'taste_memo'=>"",
 										'product_order_status'=>1,
 										);
-					 $db->createCommand()->insert('nb_order_product',$orderProductData);
-					 $orderPrice +=$productPrice*$num;
+						 $db->createCommand()->insert('nb_order_product',$orderProductData);
+						 $orderPrice +=$productPrice*$num;
+	             	}
+	             	
 					 if($result['store_number'] > 0){
 	             		$sql = 'update nb_product set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();
