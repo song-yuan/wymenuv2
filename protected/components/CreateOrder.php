@@ -306,7 +306,7 @@ class CreateOrder
 	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-$num));
 	             	}
  	             }else{
- 	             	//单品
+ 	             	//单品 如果有口味 $num=>array(taste_id1=>$num1,taste_id2=>$num2)
 	             	$sql = 'select * from nb_product where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             	$result = $db->createCommand($sql)->queryRow();
 	             	if($result){
