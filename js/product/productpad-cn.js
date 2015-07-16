@@ -317,7 +317,22 @@ $(document).ready(function(){
     	$(this).html('');
     	$(this).css('display','none');
     });
-    
+    $('#forum_list').on('click','.product-taste',function(){
+    	$('.taste-layer').show();
+    	$('.tastepad').hide();
+    	$(this).parents('.blockCategory').find('.tastepad').show();
+    });
+    $('#forum_list').on('click','.tastepad .item',function(){
+    	if($(this).hasClass('active')){
+    		$(this).removeClass('active');
+    	}else{
+    		$(this).addClass('active');
+    	}
+    });
+    $('.taste-layer').on('click',function(){
+    	$('.tastepad').hide();
+    	$(this).hide();
+    });
     $('#updatePadOrder').on(event_clicktouchstart,function(){
     	//layer页面层
 //    	var str = '<a herf="javascript:;" class="pay-type cash-color" id="cashpay">柜台支付</a><a herf="javascript:;" class="pay-type wx-color" id="weixinpay">微信支付</a><a herf="javascript:;" class="pay-type zfb-color" id="zhifubaopay">支付宝支付</a>';
