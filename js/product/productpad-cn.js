@@ -385,7 +385,7 @@ $(document).ready(function(){
      $('body').on(event_clicktouchstart,'#zhifubaopay',function(){
      	alert('支付宝支付');
      });
-    $('#padOrderForm').on(event_clicktouchstart,'.product-catory-product',function(){
+    $('#padOrderForm').on('click','.product-catory-product',function(){
     	var input = $(this).find('input');
     	var productId = input.attr('name');
     	var productIdArr = productId.split(","); //字符分割 
