@@ -416,6 +416,7 @@
 	border: 6px solid rgba(0,0,0,.3);
     border-radius: 5px;
     box-shadow: none;
+   -webkit-background-clip: content;
 }
 .tastepad .item{
 	min-width:30px;
