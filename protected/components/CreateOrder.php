@@ -205,6 +205,9 @@ class CreateOrder
 	 * 
 	 */
 	public static function createPadOrder($dpid,$goodsIds,$padId){
+		unset($goodsIds['client_is_temp']);
+		unset($goodsIds['client_site_id']);
+		unset($goodsIds['client_site_name']);
 		$sellOff = array();
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
@@ -303,7 +306,7 @@ class CreateOrder
 	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-$num));
 	             	}
  	             }else{
-	             	//单品
+ 	             	//单品
 	             	$sql = 'select * from nb_product where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             	$result = $db->createCommand($sql)->queryRow();
 	             	if($result){
