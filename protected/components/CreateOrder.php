@@ -205,6 +205,9 @@ class CreateOrder
 	 * 
 	 */
 	public static function createPadOrder($dpid,$goodsIds,$padId){
+		$isTemp = $goodsIds['client_is_temp'];
+		$site_id = $goodsIds['client_site_id'];
+		$siteName = $goodsIds['client_site_name'];
 		unset($goodsIds['client_is_temp']);
 		unset($goodsIds['client_site_id']);
 		unset($goodsIds['client_site_name']);
@@ -213,24 +216,26 @@ class CreateOrder
 		$db = Yii::app()->db;
         $transaction = $db->beginTransaction();
  		try {
- 			 $se=new Sequence("site_no");
-             $lid = $se->nextval();
-             $se=new Sequence("temp_site");
-             $site_id = $se->nextval();
-             
-             $code = SiteClass::getCode($dpid);
-            $data = array(
-                'lid'=>$lid,
-                'dpid'=>$dpid,
-                'create_at'=>date('Y-m-d H:i:s',time()),
-                'is_temp'=>1,
-                'site_id'=>$site_id,
-                'status'=>'1',
-                'code'=>$code,
-                'number'=>1,
-                'delete_flag'=>'0'
-            );                            
-            $db->createCommand()->insert('nb_site_no',$data);
+ 			if($site_id==0){
+ 				 $se=new Sequence("site_no");
+	             $lid = $se->nextval();
+	             $se=new Sequence("temp_site");
+	             $site_id = $se->nextval();
+	             
+	             $code = SiteClass::getCode($dpid);
+	            $data = array(
+	                'lid'=>$lid,
+	                'dpid'=>$dpid,
+	                'create_at'=>date('Y-m-d H:i:s',time()),
+	                'is_temp'=>$isTemp,
+	                'site_id'=>$site_id,
+	                'status'=>'1',
+	                'code'=>$code,
+	                'number'=>1,
+	                'delete_flag'=>'0'
+	            );                            
+	            $db->createCommand()->insert('nb_site_no',$data);
+ 			}
             
             $sef=new Sequence("order_feedback");
             $lidf = $sef->nextval();
@@ -238,7 +243,7 @@ class CreateOrder
                 'lid'=>$lidf,
                 'dpid'=>$dpid,
                 'create_at'=>date('Y-m-d H:i:s',time()),
-                'is_temp'=>1,
+                'is_temp'=>$isTemp,
                 'site_id'=>$site_id,
                 'is_deal'=>'0',
                 'feedback_id'=>0,
@@ -256,7 +261,7 @@ class CreateOrder
 						'dpid'=>$dpid,
 						'site_id'=>$site_id,
 						'create_at'=>$time,
-						'is_temp'=>1,
+						'is_temp'=>$isTemp,
 						'order_status'=>2,
 						'number'=>1,
 						'update_at'=>$time,
