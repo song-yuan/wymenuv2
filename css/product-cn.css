@@ -413,12 +413,16 @@
 	margin:auto;
 	z-index:1010;
 	background:white;
+	border: 6px solid rgba(0,0,0,.3);
+    border-radius: 5px;
+    box-shadow: none;
 }
 .tastepad .item{
 	min-width:30px;
-	height:20px;
+	height:30px;
 	padding:5px;
-	line-height:20px;
+	line-height:30px;
+	font-size:20px;
 	display:inline;
 	margin:5px 10px;
 	float: left;
