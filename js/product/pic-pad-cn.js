@@ -188,7 +188,7 @@ function showListPad(items){
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
 			for(var j in item.taste){
 				var taste = item.taste[j];
-				trTaste +='<div class="item" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
+				trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
 			}
 			trTaste +='</div>';
 			var trEnd = '</div></div>';
@@ -215,7 +215,7 @@ function showListPad(items){
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
 			for(var j in item.taste){
 				var taste = item.taste[j];
-				trTaste +='<div class="item" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
+				trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
 			}
 			trTaste +='</div>';
 			var trEnd = '</div></div>';
