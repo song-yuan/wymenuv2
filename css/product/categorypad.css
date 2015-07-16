@@ -1,11 +1,30 @@
 #page_0{
-	margin-top:68px;
+	margin-top:6.8em;
 }
+
+.ver-text-cover ul{
+    width:100px;
+    height:80px;
+    overflow:hidden;
+    list-style:none;
+}
+
+.ver-text-cover ul li{
+    float:right;
+    display:inline;
+    margin-left:4px;
+    width:14px;
+    height:100px;
+    font-size:14px;
+    word-wrap:break-word;
+    word-break:nomal;
+}
+
 .fixed-top{
 	position:fixed;
 	width:100%;
-	height:50px;
-	padding:10px 0;
+	height:5.0em;
+	padding:0.25em 0;
 	top:0;
 	left:0;
 	z-index:1000;
@@ -14,7 +33,7 @@
 .fixed-top select{
 	height:100%;
 	width:98%;
-	font-size:35px;
+	font-size:3.5em;
 }
 .category-partents{
 	font-weight:800;
@@ -25,7 +44,7 @@
 	width:40%;
 	height:100%;
 	float:left;
-	padding-left:20px;
+	padding-left:2.0em;
 }
 .top-left-right{
 	width:100%;
@@ -44,12 +63,12 @@
         padding-left:10px;
 }
 .shoppingCart{
-	height:50px;
-	width:50px;
-        top:10px;
+	height:5.0em;
+	width:5.0em;
+        top:1.0em;
 	background:url(../../img/shopping_cart2.png) top center no-repeat;
 	margin-left:10%;
-	padding: 0 10px;
+	padding: 0 1.0em;
 	float:left;
 }
 
@@ -61,11 +80,11 @@
 }
 
 .padsetting{
-	height:50px;
-	width:35px;
+	height:5.0em;
+	width:3.5em;
 	background:url(../../img/help-small.png) top center no-repeat;
-	margin-left:5px;
-	padding: 0 5px;
+	margin-left:0.5em;
+	padding: 0 0.5em;
 	float:left;
 }
 
@@ -73,14 +92,14 @@
 	position:absolute;
 	width:1.2em;
 	height:1.2em;
-	top:-10px;
-	left:-2px;
+	top:-0.4em;
+	left:-0.1em;
         font-size: 2.5em;
 	border-radius:15px;
 	background-color:red;
 	color:white;
 	text-align:center;
-	line-height:30px;
+	line-height:1.2em;
 	margin:0;
 }
 .setting-pad-mask{
@@ -268,43 +287,44 @@
 
 .product-mask-info button {
 	background: rgb(239,68,77);
-	height: 72px;
-        width: 86px;
-	padding:5px 10px;
-	font-size: 30px;
+	height: 1.3em;
+        width: 3.0em;
+	padding:0.16em 0.33em;
+	font-size: 1.0em;
 	color: white;
 	border: none;
-	border-radius: 36px;
-	margin-right: 5px;
-        margin-top: 4px;
+	border-radius: 0.4em;
+	margin-right: 0.16em;
+        margin-top: 0.12em;
 }
 
 .product-mask-tip div#cancelPadOrder {
 	background: rgb(239,68,77);
-	height: 50px;
-        width: 90px;
+	height: 1.7em;
+        width: 3.0em;
 	padding:2px 2px;
         display: inline-table;
-	font-size: 30px;
+	font-size: 1.0em;
 	color: white;
 	border: none;
-	border-radius: 10px;
+	border-radius: 0.3em;
 	margin-right: 2px;
         margin-top: 2px;
-        line-height:50px;
+        line-height:1.7em;
         text-align:center;
+        top:-0.4em;
 }
 
 .top-right button {
 	background: rgb(239,68,77);
-	height: 1.4em;
-	padding:5px 10px;
-	font-size: 2.5em;
+	height: 1.2em;
+	padding:0.1em 0.2em;
+	font-size: 3.5em;
 	color: white;
 	border: none;
-	border-radius: 8px;
+	border-radius: 0.2em;
 	margin-right: 15%;
-        margin-top: 5px;
+        margin-top: 0.1em;
 	float:right;
 }
 
@@ -312,21 +332,21 @@
 	background-color:#eee;
         padding: 0px;
         text-align: center;
-        font-size: 30px;
+        font-size: 3.0em;
         font-weight: 700;
-        height: 80px;
+        height: 1.5em;
 }
 
 .product-mask-tip{
 	background-color:#fff;
         color:rgb(239,68,77);
-        font-size: 30px;
-        padding:5px;
+        font-size: 3.0em;
+        padding:0.12em;
 }
 
 .pad-productbuy {
   width: 100%;
-  height: 1.2px;
+  height: 1.2em;
   top: 0;
   left: 0;
   position: absolute;
@@ -381,7 +401,7 @@
 }
 .total-price{
 	height:1.4em;
-	line-height:50px;
+	line-height:1.4em;
         font-size: 3.5em;
 	float:left;
 }
@@ -400,8 +420,8 @@
 .product-pic i.icon-hover-2{
 	top: 50%;
 	color: #fff;
-	padding: 5px 10px;
-	font-size: 16px;
+	padding: 0.5em 1.0em;
+	font-size: 1.6em;
 	position: absolute;
 	margin-top: -1.5em;
 	border-radius: 50%;
@@ -419,54 +439,54 @@
 .subject-num {
   text-align: left;
   padding: 0em 0em 0em 0em;
-  font-size: 23px;
-  height: 50px;
+  font-size: 2.5em;
+  height: 2.0em;
   float:left;
-  line-height: 50px;
+  line-height: 2.0em;
   width: 55%;
 }
 
 .subject-order {
   text-align: left;
   padding: 0em 0em 0em 0em;
-  font-size: 23px;
-  height: 50px;
+  font-size: 2.5em;
+  height: 2.0em;
   float:right;
-  line-height: 50px;
+  line-height: 2.0em;
   width: 45%;
   display:none;
 }
 
 i.icon-hover-3{
-	right: 10px;
+	right: 0.33em;
 	color: #fff;
-	padding: 0px 10px;
-	font-size: 16px;
+	padding: 0px 0.33em;
+	font-size: 0.6em;
 	position: absolute;
-	margin-top: -2px;
+	margin-top: -0.1em;
 	border-radius: 50%;
 	background: rgba(69,69,69,0.9);
 }
 
 i.icon-hover-3 img{
 	margin: 0;
-        height: 16px;
-        width:32px;
+        height: 0.6em;
+        width:1.1em;
 }
 
 .single-num-circel{
 	//position:absolute;
-	width:50px;
-	height:40px;
-	top:5px;
+	width:1.7em;
+	height:1.3em;
+	top:0.1em;
 	//left:-2px;
         float: right;
-        right:100px;
-        font-size: 30px;
-	border-radius:15px;
+        right:3.0em;
+        font-size: 1.0em;
+	border-radius:0.5em;
 	background-color:red;
 	color:white;
 	text-align:center;
-	line-height:40px;
+	line-height:1.3em;
 	margin:0;
 }
