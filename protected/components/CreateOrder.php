@@ -205,29 +205,37 @@ class CreateOrder
 	 * 
 	 */
 	public static function createPadOrder($dpid,$goodsIds,$padId){
+		$isTemp = $goodsIds['client_is_temp'];
+		$site_id = $goodsIds['client_site_id'];
+		$siteName = $goodsIds['client_site_name'];
+		unset($goodsIds['client_is_temp']);
+		unset($goodsIds['client_site_id']);
+		unset($goodsIds['client_site_name']);
 		$sellOff = array();
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
         $transaction = $db->beginTransaction();
  		try {
- 			 $se=new Sequence("site_no");
-             $lid = $se->nextval();
-             $se=new Sequence("temp_site");
-             $site_id = $se->nextval();
-             
-             $code = SiteClass::getCode($dpid);
-            $data = array(
-                'lid'=>$lid,
-                'dpid'=>$dpid,
-                'create_at'=>date('Y-m-d H:i:s',time()),
-                'is_temp'=>1,
-                'site_id'=>$site_id,
-                'status'=>'1',
-                'code'=>$code,
-                'number'=>1,
-                'delete_flag'=>'0'
-            );                            
-            $db->createCommand()->insert('nb_site_no',$data);
+ 			if($site_id==0){
+ 				 $se=new Sequence("site_no");
+	             $lid = $se->nextval();
+	             $se=new Sequence("temp_site");
+	             $site_id = $se->nextval();
+	             
+	             $code = SiteClass::getCode($dpid);
+	            $data = array(
+	                'lid'=>$lid,
+	                'dpid'=>$dpid,
+	                'create_at'=>date('Y-m-d H:i:s',time()),
+	                'is_temp'=>$isTemp,
+	                'site_id'=>$site_id,
+	                'status'=>'1',
+	                'code'=>$code,
+	                'number'=>1,
+	                'delete_flag'=>'0'
+	            );                            
+	            $db->createCommand()->insert('nb_site_no',$data);
+ 			}
             
             $sef=new Sequence("order_feedback");
             $lidf = $sef->nextval();
@@ -235,7 +243,7 @@ class CreateOrder
                 'lid'=>$lidf,
                 'dpid'=>$dpid,
                 'create_at'=>date('Y-m-d H:i:s',time()),
-                'is_temp'=>1,
+                'is_temp'=>$isTemp,
                 'site_id'=>$site_id,
                 'is_deal'=>'0',
                 'feedback_id'=>0,
@@ -253,7 +261,7 @@ class CreateOrder
 						'dpid'=>$dpid,
 						'site_id'=>$site_id,
 						'create_at'=>$time,
-						'is_temp'=>1,
+						'is_temp'=>$isTemp,
 						'order_status'=>2,
 						'number'=>1,
 						'update_at'=>$time,
@@ -303,7 +311,7 @@ class CreateOrder
 	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-$num));
 	             	}
  	             }else{
-	             	//单品
+ 	             	//单品 如果有口味 $num=>array(taste_id1=>$num1,taste_id2=>$num2)
 	             	$sql = 'select * from nb_product where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             	$result = $db->createCommand($sql)->queryRow();
 	             	if($result){
@@ -314,7 +322,43 @@ class CreateOrder
 	             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
 	             	}
 	             	$productPrice = self::getProductPrice($dpid,$key,0);
-	             	 $orderProductData = array(
+	             	
+	             	if(is_array($num)){
+	                //有口味
+	                	foreach($num as $k=>$v){
+	                		$orderProductData = array(
+										'lid'=>$orderProductId,
+										'dpid'=>$dpid,
+										'create_at'=>$time,
+										'order_id'=>$orderId,
+										'set_id'=>0,
+										'product_id'=>$goodsArr[0],
+										'price'=>$productPrice,
+										'update_at'=>$time,
+										'amount'=>$v,
+										'taste_memo'=>"",
+										'product_order_status'=>1,
+										);
+						   $db->createCommand()->insert('nb_order_product',$orderProductData);
+						   $orderPrice +=$productPrice*$v;
+						   
+						   $orderTastSe = new Sequence("order_taste");
+	            		   $orderTasteId = $orderTastSe->nextval();
+						   $orderTasteData = array(
+						   						'lid'=>$orderTasteId,
+						   						'dpid'=>$dpid,
+						   						'create_at'=>$time,
+						   						'taste_id'=>$k,
+						   						'order_id'=>$orderProductId,
+						   						'is_order'=>0
+						   						);
+						   $db->createCommand()->insert('nb_order_taste',$orderTasteData);
+						   
+						   $se=new Sequence("order_product");
+	            		   $orderProductId = $se->nextval();
+	                	}
+	             	}else{
+	             		 $orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
 										'create_at'=>$time,
@@ -327,8 +371,10 @@ class CreateOrder
 										'taste_memo'=>"",
 										'product_order_status'=>1,
 										);
-					 $db->createCommand()->insert('nb_order_product',$orderProductData);
-					 $orderPrice +=$productPrice*$num;
+						 $db->createCommand()->insert('nb_order_product',$orderProductData);
+						 $orderPrice +=$productPrice*$num;
+	             	}
+	             	
 					 if($result['store_number'] > 0){
 	             		$sql = 'update nb_product set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();

@@ -324,8 +324,15 @@ $(document).ready(function(){
     });
     $('#forum_list').on('click','.tastepad .item',function(){
     	if($(this).hasClass('active')){
+    		var productId = $(this).attr('product-id');
+    		var tasteId = $(this).attr('taste-id');
+    		$('input[name="'+productId+'['+tasteId+']'+'"]').remove();
     		$(this).removeClass('active');
     	}else{
+    		var productId = $(this).attr('product-id');
+    		var tasteId = $(this).attr('taste-id');
+    		var str = '<input type="hidden" name="'+productId+'['+tasteId+']'+'" value="1"/>';
+    		$('#padOrderForm').append(str);
     		$(this).addClass('active');
     	}
     });
