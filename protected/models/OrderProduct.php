@@ -48,11 +48,11 @@ class OrderProduct extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, order_id, taste_memo', 'required'),
+			array('lid, dpid, order_id', 'required'),
 			array('lid, dpid, order_id, amount, zhiamount', 'numerical', 'integerOnly'=>true),
 			array('main_id,set_id, product_id, price, weight', 'length', 'max'=>10),
 			array('is_print, is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
-			array('taste_memo', 'length', 'max'=>50),
+			//array('taste_memo', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

@@ -393,7 +393,7 @@ class DefaultOrderController extends BackendController
                                 $orderProduct = new OrderProduct();
                                 $orderProduct->dpid = $companyId;
                                 $orderProduct->delete_flag = '0';
-                                //$orderProduct->taste_memo = yii::t('app','无');
+                                $orderProduct->taste_memo = "";
                                 $orderProduct->product_order_status = '0';
                                 $orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
                                 $orderProduct->create_at = date('Y-m-d H:i:s',time());
