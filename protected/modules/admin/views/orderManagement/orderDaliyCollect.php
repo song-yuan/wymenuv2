@@ -46,7 +46,7 @@
 					    </div>
 					   
 					      <div class="btn-group">
-							    <button id="btn_close_account" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
+							    <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
 				  	      </div>
 				  	  </div>
 				</div>
@@ -58,9 +58,9 @@
 								
 								<th width=100px;><?php echo yii::t('app','序号');?></th>
 						        <th><?php echo yii::t('app','店铺');?></th>
-                                                        <th><?php echo yii::t('app','支付方式');?></th>
-                                                        <th><?php echo yii::t('app','金额');?></th>                                                                
-                                                        <th><?php echo yii::t('app','备注');?></th>
+                                <th><?php echo yii::t('app','支付方式');?></th>
+                                <th><?php echo yii::t('app','金额');?></th>                                                                
+                                <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
 						</thead>
@@ -75,8 +75,8 @@
 								<tr class="odd gradeX">
 								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
 								<td><?php echo $model->company->company_name; ?></td>
-								<td><?php if($model->payment_method_id!='0000000000') echo $model->paymentMethod->name.yii::t('app','(后台)'); else switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; case 1: echo  yii::t('app','微信支付');break; case 2: echo  yii::t('app','支付宝支付');break; case 3: echo  yii::t('app','后台手动支付');break;  default :echo ''; }?></td>
-                                                                <td><?php echo $model->reality_all;?></td>
+								<td><?php if($model->payment_method_id!='0000000000') echo $model->paymentMethod->name.yii::t('app','(后台)'); else switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; case 1: echo  yii::t('app','微信支付');break; case 2: echo  yii::t('app','支付宝支付');break; case 3: echo  yii::t('app','后台手动支付');break;  default :echo ''; }?></td>								
+								<td><?php echo $model->should_all;?></td>
 								<td></td>
 								</tr>
 						<?php $a++;?>
@@ -133,30 +133,3 @@
 	<!-- END PAGE CONTENT-->
 
 </div>
-<script>
-    function closeaccount()
-    {
-        var caurl="<?php echo $this->createUrl('orderManagement/closeAccount' , array('companyId'=>$this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time ));?>";
-        //alert(caurl);
-        $.ajax({
-                url:caurl,
-                type:'GET',
-                dataType:'json',
-                success:function(result){                                                                                                                                       
-                        if(result.result)
-                        {
-                            alert("<?php echo yii::t('app','日结成功？');?>");
-                            location.href="<?php echo $this->createUrl('orderManagement/notPay' , array('companyId'=>$this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time ));?>";
-                        }; 
-                }
-        });
-    }
-    
-    $('#btn_close_account').click(function() {  
-        bootbox.confirm("<?php echo yii::t('app','确定账目无误，并完成日结吗？');?>", function(result) {
-                if(result){
-                        closeaccount();
-                }
-         });
- });
-</script> 
