@@ -411,7 +411,7 @@
 	width:60%;
 	min-height:300px;
 	max-height:600px;
-	over-flow:scroll;
+	overflow:scroll;
 	margin:auto;
 	z-index:1010;
 	background:white;
