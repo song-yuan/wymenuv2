@@ -460,6 +460,30 @@
 	float:left;
 }
 
+.taste-title-r input{
+	width: 30px;
+	height: 15px;
+	padding: 10px;
+	border: 0px !important;
+	border-top: #e5e5e5 1px solid !important;
+	border-bottom: #e5e5e5 1px solid !important;
+	line-height: 15px;
+	font-size: 1.1em !important;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.taste-title-r span{
+	text-align:center;
+	width:15px;
+	height:15px;
+	font-size:18px;
+	padding: 10px 10px 10px;
+	display:inline-block;
+	vertical-align: middle;
+	background-color: #eeeeee;
+	border: #e5e5e5 1px solid;
+}
 .tastepad .item{
 	min-width:30px;
 	height:30px;
