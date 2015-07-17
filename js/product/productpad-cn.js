@@ -338,7 +338,7 @@ $(document).ready(function(){
     });
     var i = 2;
     $('#forum_list').on('click','#addTaste',function(){
-    	var totalTaste = $(this).parents('.taste-list').length;
+    	var totalTaste = $(this).parents('.tastepad').length;
     	var str= '';
 		str +='<div class="taste-list" eq="'+i+'">';
 		str +='<div class="taste-title"><div class="taste-title-l">口味'+totalTaste+'</div><div class="taste-title-m"><a id="delTaste" href="javascript:;">-</a></div><div class="taste-title-r"></div><div class="clear"></div></div>';
