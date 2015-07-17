@@ -186,11 +186,14 @@ function showListPad(items){
 			var trAddinfo = '<div class="clear"></div></div>';
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
+			trTaste +='<div class="product-taste" eq="1">';
+			trTaste +='<div class="taste-title"><div class="taste-title-l">口味1</div><div class="taste-title-m"><a id="addTaste" href="javascript:;">+</a></div><div class="taste-title-r"></div><div class="clear"></div></div>';
+			trTaste +='<div class="product-item">';
 			for(var j in item.taste){
 				var taste = item.taste[j];
 				trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
 			}
-			trTaste +='</div>';
+			trTaste +='</div></div></div>';
 			var trEnd = '</div></div>';
             tr = trHead + trBuy + trPic + trTitle + trAddinfo + trTaste + trEnd;
 			rightPicObj.append(tr);
