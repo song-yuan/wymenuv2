@@ -193,6 +193,7 @@ function showListPad(items){
 				var taste = item.taste[j];
 				trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
 			}
+			trTaste +='<div class="clear"></div>';
 			trTaste +='</div></div></div>';
 			var trEnd = '</div></div>';
             tr = trHead + trBuy + trPic + trTitle + trAddinfo + trTaste + trEnd;
@@ -214,13 +215,19 @@ function showListPad(items){
 				var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div><div class="clear"></div></div><div class="subject-order"><div class="single-num-circel">0</div><i class="icon-hover-3 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'">'+language_jiancai+'<img src="/wymenuv2/./img/product/icon_cart_m.png"></i></div>';
 			}
 			var trAddinfo = '<div class="clear"></div></div>';
+			
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
+			trTaste +='<div class="taste-list" eq="1">';
+			trTaste +='<div class="taste-title"><div class="taste-title-l">口味1</div><div class="taste-title-m"><a id="addTaste" href="javascript:;">+</a></div><div class="taste-title-r"></div><div class="clear"></div></div>';
+			trTaste +='<div class="product-item">';
 			for(var j in item.taste){
 				var taste = item.taste[j];
 				trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
 			}
-			trTaste +='</div>';
+			trTaste +='<div class="clear"></div>';
+			trTaste +='</div></div></div>';
+			
 			var trEnd = '</div></div>';
 			tr = trHead + trBuy + trPic + trTitle + trAddinfo + trTaste + trEnd;
 			leftPicObj.append(tr);
