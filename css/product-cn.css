@@ -431,7 +431,8 @@
 }
 .taste-title-l{
 	height:100%;
-	width:45%;
+	width:43%;
+	padding-left:2%;
 	text-align:left;
 	float:left;
 }
