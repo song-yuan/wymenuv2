@@ -444,6 +444,7 @@
 .taste-title-m a{
 	width:20px;
 	height:20px;
+	border: solid 1px rgb(103,103,103);
 	border-radius:100%;
 }
 .taste-title-r{
