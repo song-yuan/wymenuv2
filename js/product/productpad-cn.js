@@ -345,10 +345,10 @@ $(document).ready(function(){
 		str +=$(this).parents('.product-taste').find('.product-item').html();
 		str +='</div></div>';
 		
-		$(this)..parents('.tastepad').append(str);
+		$(this).parents('.tastepad').append(str);
     });
      $('#forum_list').on('click','#delTaste',function(){
-     	$(this)..parents('.product-taste').remove();
+     	$(this).parents('.product-taste').remove();
      });
     $('.taste-layer').on('click',function(){
     	$('.tastepad').hide();
