@@ -393,7 +393,7 @@ class DefaultOrderController extends BackendController
                                 $orderProduct = new OrderProduct();
                                 $orderProduct->dpid = $companyId;
                                 $orderProduct->delete_flag = '0';
-                                $orderProduct->taste_memo = yii::t('app','无');
+                                //$orderProduct->taste_memo = yii::t('app','无');
                                 $orderProduct->product_order_status = '0';
                                 $orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
                                 $orderProduct->create_at = date('Y-m-d H:i:s',time());
@@ -1206,8 +1206,8 @@ class DefaultOrderController extends BackendController
                     {
                         $notsurenum++;
                     }else{
-//                        $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and order_id=".$orderId." and product_id in (".$ids[1].")";
-//                        var_dump($sqlorderproduct);exit;
+                        $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and order_id=".$orderId." and product_id in (".$ids[1].")";
+                        var_dump($sqlorderproduct);exit;
                         if($jobresult=="success")
                         {
                             //$sqlorderproduct="update nb_order_product set is_print='1',product_order_status='1' where dpid=:companyId and order_id=:orderId";

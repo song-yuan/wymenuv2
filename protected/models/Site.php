@@ -37,11 +37,11 @@ class Site extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('serial , type_id ,lid,floor_id, dpid , site_level' , 'required'),
+			array('serial , type_id ,lid,floor_id, dpid' , 'required'),
 			array('floor_id,type_id, delete_flag, has_minimum_consumption, minimum_consumption_type', 'numerical', 'integerOnly'=>true),
 			array('period, overtime,buffer', 'numerical'),
 			array('serial', 'length', 'max'=>20),
-			array('site_level', 'length', 'max'=>20),
+			//array('site_level', 'length', 'max'=>20),
 			array('floor_id','compare','compareValue'=>'0','operator'=>'>','message'=>'楼层必须选择'),
 			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().
