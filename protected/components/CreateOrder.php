@@ -31,7 +31,7 @@ class CreateOrder
 							'number'=>$this->siteNo->number,
 							'update_at'=>$time,
 							'remark'=>yii::t('app','无'),
-							'taste_memo'=>yii::t('app','无'),
+							'taste_memo'=>"",
 							);
 				$order->attributes = $data;
 				$order->save();
@@ -60,7 +60,7 @@ class CreateOrder
 										'price'=>$this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']),
 										'update_at'=>$time,
 										'amount'=>1,
-										'taste_memo'=>yii::t('app','无'),
+										'taste_memo'=>"",
 										);
 				$orderProduct->attributes = $orderProductData;
 				$orderProduct->save();
