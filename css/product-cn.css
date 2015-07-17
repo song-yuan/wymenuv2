@@ -424,7 +424,7 @@
 	padding:0;
 	margin:0;
 }
-.taste-list:last{
+.taste-list:last-child{
 	margin-bottom:20px;
 }
 .taste-title{
