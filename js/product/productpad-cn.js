@@ -342,7 +342,7 @@ $(document).ready(function(){
 		str +='<div class="taste-list" eq="'+i+'">';
 		str +='<div class="taste-title"><div class="taste-title-l">口味'+i+'</div><div class="taste-title-m"><a id="delTaste" href="javascript:;">-</a></div><div class="taste-title-r"></div><div class="clear"></div></div>';
 		str +='<div class="product-item">';
-		str +=$(this).parents('.product-taste').find('.product-item').html();
+		str +=$(this).parents('.taste-list').find('.product-item').html();
 		str +='</div></div>';
 		
 		$(this).parents('.tastepad').append(str);
