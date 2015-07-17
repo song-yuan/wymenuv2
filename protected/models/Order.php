@@ -24,9 +24,14 @@
  */
 class Order extends CActiveRecord
 {
-    public $should_all;
-    public $reality_all;
-	/**
+        public $should_all;
+	public $all_reality;
+	public $y_all;
+	public $m_all;
+	public $d_all;
+	public $all_status;
+        public $reality_all;
+        /**
 	 * @return string the associated database table name
 	 */
 	public function tableName()

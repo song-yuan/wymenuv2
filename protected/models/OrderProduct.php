@@ -26,6 +26,12 @@
  */
 class OrderProduct extends CActiveRecord
 {
+        public $all_money;
+	public $all_total;
+	public $all_price;
+	public $y_all;
+	public $m_all;
+	public $d_all;
 	/**
 	 * @return string the associated database table name
 	 */
