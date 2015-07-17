@@ -346,9 +346,10 @@ $(document).ready(function(){
 		str +='</div></div>';
 		
 		$(this).parents('.tastepad').append(str);
+		i++;
     });
      $('#forum_list').on('click','#delTaste',function(){
-     	$(this).parents('.product-taste').remove();
+     	$(this).parents('.taste-list').remove();
      });
     $('.taste-layer').on('click',function(){
     	$('.tastepad').hide();
