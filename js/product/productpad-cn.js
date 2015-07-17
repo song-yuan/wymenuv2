@@ -341,7 +341,7 @@ $(document).ready(function(){
     	var str= '';
 		str +='<div class="taste-list" eq="'+i+'">';
 		str +='<div class="taste-title"><div class="taste-title-l">口味'+i+'</div><div class="taste-title-m"><a id="delTaste" href="javascript:;">-</a></div>';
-		str +='<div class="taste-title-r">trTaste +='<span class="minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="plus">+</span></div><div class="clear"></div></div>';
+		str +='<div class="taste-title-r"><span class="minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="plus">+</span></div><div class="clear"></div></div>';
 		str +='<div class="taste-item">';
 		str +=$(this).parents('.taste-list').find('.taste-item').html();
 		str +='</div></div>';
