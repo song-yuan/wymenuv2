@@ -110,7 +110,7 @@
                                                                                         <?php endforeach;?>
                                                                                     <?php else:?>
                                                                                         <?php foreach ($models as $model):?>
-                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial.'  '.$model->site_level?>"><span style="font-size: 25px;"><?php echo $model->serial.'<br>'.$model->site_level?>&nbsp;</span><?php echo '<br>'.$model->create_at;?></li>
+                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial;?>"><span style="font-size: 25px;"><?php echo $model->serial;?>&nbsp;</span><?php echo '<br>'.$model->create_at;?></li>
                                                                                         <?php endforeach;?>
                                                                                     <?php endif;?>
                                                                                     
