@@ -410,6 +410,8 @@
 	right:0;
 	width:60%;
 	min-height:300px;
+	max-height:600px;
+	over-flow:scroll;
 	margin:auto;
 	z-index:1010;
 	background:white;
@@ -453,6 +455,9 @@
 	height:100%;
 	width:45%;
 	float:left;
+}
+.taste-item:last{
+	margin-bottom:20px;
 }
 .tastepad .item{
 	min-width:30px;
