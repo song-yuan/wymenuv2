@@ -345,7 +345,7 @@ $(document).ready(function(){
     	//订单 和 商品中数量变化
 		 var blockCategory = $(this).parents('.blockCategory');
 	   	 
-	   	 var category = parentsBlockCategory.attr('category');//分类id
+	   	 var category = blockCategory.attr('category');//分类id
 	   	 var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
 	   	 var store = blockCategory.attr('store'); // 库存
 	   	 
@@ -441,7 +441,7 @@ $(document).ready(function(){
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var prevInput = $(this).prev('input');
     	 
-    	 var category = parentsBlockCategory.attr('category');//分类id
+    	 var category = blockCategory.attr('category');//分类id
     	 var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
     	 var store = blockCategory.attr('store'); // 库存
     	 
