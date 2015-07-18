@@ -336,6 +336,7 @@ $(document).ready(function(){
     		$(this).addClass('active');
     	}
     });
+  //增加口味
     var i = 2;
     $('#forum_list').on('click','#addTaste',function(){
     	var str= '';
@@ -349,9 +350,38 @@ $(document).ready(function(){
 		$(this).parents('.tastepad').append(str);
 		i++;
     });
+    //删除口味
      $('#forum_list').on('click','#delTaste',function(){
      	$(this).parents('.taste-list').remove();
      });
+     
+     $('#forum_list').on('click','。minus',function(){
+    	 var blockCategory = $(this).parents('.blockCategory');
+    	 var nextInput = $(this).next('input');
+    	 var store = blockCategory.attr('store');
+    	 var val = nextInput.val();
+    	 if(parseInt(val) > 1){
+    		nextInput.val(parseInt(val)-1); 
+    		if(store >= 0){
+    			store +=1;
+    			blockCategory.attr('store',store);
+    		}
+    	 }
+      });
+     $('#forum_list').on('click','。plus',function(){
+    	 var blockCategory = $(this).parents('.blockCategory');
+    	 var nextInput = $(this).next('input');
+    	 var store = blockCategory.attr('store');
+    	 if(store==0){
+    		 return;
+    	 }
+    	 var val = nextInput.val();
+		 nextInput.val(parseInt(val)+1); 
+		 if(store >= 0){
+			store -=1;
+			blockCategory.attr('store',store);
+		 }
+       });
     $('.taste-layer').on('click',function(){
     	$('.tastepad').hide();
     	$(this).hide();

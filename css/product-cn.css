@@ -429,10 +429,11 @@
 }
 .taste-title{
 	width:100%;
-	height:20px;
+	height:35px;
 	padding:5px 0;
 	margin-top:10px;
-	line-height:20px;
+	line-height:30px;
+	font-size:20px;
 	border-bottom:solid 2px rgb(229,229,229); 
 }
 .taste-title-l{
@@ -448,9 +449,9 @@
 	float:left;
 }
 .taste-title-m a{
-	width:20px;
-	height:20px;
-	font-size:25px;
+	width:30px;
+	height:30px;
+	font-size:30px;
 	border: solid 1px rgb(103,103,103);
 	border-radius:100%;
 }
@@ -481,6 +482,7 @@
 	padding: 10px 10px 10px;
 	display:inline-block;
 	vertical-align: middle;
+	line-height:18px;
 	background-color: #eeeeee;
 	border: #e5e5e5 1px solid;
 }
