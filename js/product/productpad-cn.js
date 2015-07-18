@@ -411,29 +411,7 @@ $(document).ready(function(){
      //口味中数量减少
      $('#forum_list').on('click','。minus',function(){
     	 alert(1);
-    	 var blockCategory = $(this).parents('.blockCategory');
-    	 var nextInput = $(this).next('input');
-    	 var productId = blockCategory.attr('product-id');
-    	 var store = blockCategory.attr('store');
-    	 var val = nextInput.val();//口味中数量变化
-    	 if(parseInt(val) > 1){
-    		nextInput.val(parseInt(val)-1); 
-    		if(store >= 0){
-    			store =parseInt(store) + 1;
-    			blockCategory.attr('store',store);
-    		}
-    	 }
-		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
-			var singleNums = 0;
-				singleNums = parseInt(singleNumObj.html());
-			singleNumObj.html(singleNums-1);
-			
-		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
-		var inputVal = inputNumObj.val();
-				inputNumObj.val(parseInt(inputVal)-1);
-				
-    	 totalPrice();
- 		 totalNum();
+
       });
      
      //口味中数量增加
