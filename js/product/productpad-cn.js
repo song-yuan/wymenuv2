@@ -410,7 +410,6 @@ $(document).ready(function(){
      
      //口味中数量减少
      $('#forum_list').on('click','.taste-minus',function(){
-    	 alert(1);
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var nextInput = $(this).next('input');
     	 var productId = blockCategory.attr('product-id');
@@ -438,7 +437,6 @@ $(document).ready(function(){
      
      //口味中数量增加
      $('#forum_list').on('click','.taste-plus',function(){
-    	 alert(2);
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var prevInput = $(this).prev('input');
     	 
