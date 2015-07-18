@@ -189,7 +189,7 @@ function showListPad(items){
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
 			trTaste +='<div class="taste-list" eq="1">';
 			trTaste +='<div class="taste-title"><div class="taste-title-l">口味1</div><div class="taste-title-m"><a id="addTaste" href="javascript:;">+</a></div><div class="taste-title-r">';
-			trTaste +='<span class="minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="plus">+</span>';
+			trTaste +='<span class="taste-minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="taste-plus">+</span>';
 			trTaste +='</div><div class="clear"></div></div>';
 			trTaste +='<div class="taste-item">';
 			for(var j in item.taste){
@@ -224,7 +224,7 @@ function showListPad(items){
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
 			trTaste +='<div class="taste-list" eq="1">';
 			trTaste +='<div class="taste-title"><div class="taste-title-l">口味1</div><div class="taste-title-m"><a id="addTaste" href="javascript:;">+</a></div><div class="taste-title-r">';
-			trTaste +='<span class="minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="plus">+</span>';
+			trTaste +='<span class="taste-minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="taste-plus">+</span>';
 			trTaste +='</div><div class="clear"></div></div>';
 			trTaste +='<div class="taste-item">';
 			for(var j in item.taste){
