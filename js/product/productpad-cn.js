@@ -362,7 +362,7 @@ $(document).ready(function(){
     	var str= '';
 		str +='<div class="taste-list" eq="'+i+'">';
 		str +='<div class="taste-title"><div class="taste-title-l">口味'+i+'</div><div class="taste-title-m"><a id="delTaste" href="javascript:;">-</a></div>';
-		str +='<div class="taste-title-r"><span class="minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="plus">+</span></div><div class="clear"></div></div>';
+		str +='<div class="taste-title-r"><span class="taste-minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="taste-plus">+</span></div><div class="clear"></div></div>';
 		str +='<div class="taste-item">';
 		str +=$(this).parents('.taste-list').find('.taste-item').html();
 		str +='</div></div>';
@@ -409,13 +409,35 @@ $(document).ready(function(){
      });
      
      //口味中数量减少
-     $('#forum_list').on('click','。minus',function(){
+     $('#forum_list').on('click','.taste-minus',function(){
     	 alert(1);
-
+    	 var blockCategory = $(this).parents('.blockCategory');
+    	 var nextInput = $(this).next('input');
+    	 var productId = blockCategory.attr('product-id');
+    	 var store = blockCategory.attr('store');
+    	 var val = nextInput.val();//口味中数量变化
+    	 if(parseInt(val) > 1){
+    		nextInput.val(parseInt(val)-1); 
+    		if(store >= 0){
+    			store =parseInt(store) + 1;
+    			blockCategory.attr('store',store);
+    		}
+    	 }
+		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
+			var singleNums = 0;
+				singleNums = parseInt(singleNumObj.html());
+			singleNumObj.html(singleNums-1);
+			
+		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
+		var inputVal = inputNumObj.val();
+				inputNumObj.val(parseInt(inputVal)-1);
+				
+    	 totalPrice();
+ 		 totalNum();
       });
      
      //口味中数量增加
-     $('#forum_list').on('click','。plus',function(){
+     $('#forum_list').on('click','.taste-plus',function(){
     	 alert(2);
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var prevInput = $(this).prev('input');
