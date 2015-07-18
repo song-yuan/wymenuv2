@@ -290,26 +290,26 @@ $(document).ready(function(){
  			data:'id='+lid,
  			success:function(msg){
  				if(msg!='nopic'){
-                                    //alert(msg);
-                                    $('.large-pic').css('display','block');
-                                                        $('.large-pic').html(msg);
-                                                                $('#gallery').slick({
-                                                                          dots: true,
-                                                                          infinite: true,
-                                                                          speed: 1000,
-                                                                          slidesToShow: 1,
-                                                                          slidesToScroll: 1,
-                                                                          autoplay: true,
-                                                                          arrows: false
-                                                                });
-                                                $("#gallery").css({
-                                                        position:'absolute',
-                                                                top: '15%'
-                                                        });
-                                                }else{
-                                                        alert(language_no_bigpic);
-                                                }
- 			},
+                //alert(msg);
+                $('.large-pic').css('display','block');
+                        $('.large-pic').html(msg);
+                                $('#gallery').slick({
+                                          dots: true,
+                                          infinite: true,
+                                          speed: 1000,
+                                          slidesToShow: 1,
+                                          slidesToScroll: 1,
+                                          autoplay: true,
+                                          arrows: false
+                                });
+                $("#gallery").css({
+                        position:'absolute',
+                                top: '15%'
+                        });
+                }else{
+                        alert(language_no_bigpic);
+                }
+},
  		});
     });
     
@@ -317,11 +317,14 @@ $(document).ready(function(){
     	$(this).html('');
     	$(this).css('display','none');
     });
+    
+    //点产品口味
     $('#forum_list').on('click','.product-taste',function(){
     	$('.taste-layer').show();
     	$('.tastepad').hide();
     	$(this).parents('.blockCategory').find('.tastepad').show();
     });
+    //选择产品口味
     $('#forum_list').on('click','.tastepad .item',function(){
     	if($(this).hasClass('active')){
     		var productId = $(this).attr('product-id');
@@ -339,6 +342,23 @@ $(document).ready(function(){
   //增加口味
     var i = 2;
     $('#forum_list').on('click','#addTaste',function(){
+    	//订单 和 商品中数量变化
+		 var blockCategory = $(this).parents('.blockCategory');
+	   	 
+	   	 var category = parentsBlockCategory.attr('category');//分类id
+	   	 var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
+	   	 var store = blockCategory.attr('store'); // 库存
+	   	 
+	   	 //检查库存
+	   	 if(store==0){
+	   		 layer.msg('库存不足');
+	   		 return;
+	   	 }
+	   	 if(store >= 0){
+				store -=1;
+				blockCategory.attr('store',store);
+		}
+    	
     	var str= '';
 		str +='<div class="taste-list" eq="'+i+'">';
 		str +='<div class="taste-title"><div class="taste-title-l">口味'+i+'</div><div class="taste-title-m"><a id="delTaste" href="javascript:;">-</a></div>';
@@ -348,18 +368,53 @@ $(document).ready(function(){
 		str +='</div></div>';
 		
 		$(this).parents('.tastepad').append(str);
+		
+		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
+			var singleNums = 0;
+				singleNums = parseInt(singleNumObj.html());
+			singleNumObj.html(singleNums+1);
+			
+		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
+		var inputVal = inputNumObj.val();
+				inputNumObj.val(parseInt(inputVal)+1);
+		 
+		 totalPrice();
+		 totalNum();
+		 
 		i++;
     });
     //删除口味
      $('#forum_list').on('click','#delTaste',function(){
-     	$(this).parents('.taste-list').remove();
+     	 $(this).parents('.taste-list').remove();
+     	 var blockCategory = $(this).parents('.blockCategory');
+	   	 var productId = blockCategory.attr('product-id');
+	   	 var store = blockCategory.attr('store');
+	   	 
+   		if(store >= 0){
+   			store =parseInt(store) + 1;
+   			blockCategory.attr('store',store);
+   		}
+   		
+		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
+			var singleNums = 0;
+				singleNums = parseInt(singleNumObj.html());
+			singleNumObj.html(singleNums-1);
+			
+		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
+		var inputVal = inputNumObj.val();
+				inputNumObj.val(parseInt(inputVal)-1);
+					
+	   	 totalPrice();
+		 totalNum();
      });
      
+     //口味中数量减少
      $('.tastepad').on('click','。minus',function(){
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var nextInput = $(this).next('input');
+    	 var productId = blockCategory.attr('product-id');
     	 var store = blockCategory.attr('store');
-    	 var val = nextInput.val();
+    	 var val = nextInput.val();//口味中数量变化
     	 if(parseInt(val) > 1){
     		nextInput.val(parseInt(val)-1); 
     		if(store >= 0){
@@ -367,20 +422,49 @@ $(document).ready(function(){
     			blockCategory.attr('store',store);
     		}
     	 }
+		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
+			var singleNums = 0;
+				singleNums = parseInt(singleNumObj.html());
+			singleNumObj.html(singleNums-1);
+			
+		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
+		var inputVal = inputNumObj.val();
+				inputNumObj.val(parseInt(inputVal)-1);
+				
+    	 totalPrice();
+ 		 totalNum();
       });
+     
+     //口味中数量增加
      $('.tastepad').on('click','。plus',function(){
     	 var blockCategory = $(this).parents('.blockCategory');
-    	 var nextInput = $(this).next('input');
-    	 var store = blockCategory.attr('store');
+    	 var prevInput = $(this).prev('input');
+    	 
+    	 var category = parentsBlockCategory.attr('category');//分类id
+    	 var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
+    	 var store = blockCategory.attr('store'); // 库存
+    	 
     	 if(store==0){
+    		 layer.msg('库存不足');
     		 return;
     	 }
-    	 var val = nextInput.val();
-		 nextInput.val(parseInt(val)+1); 
-		 if(store >= 0){
-			store -=1;
-			blockCategory.attr('store',store);
-		 }
+    	 if(store >= 0){
+ 			store -=1;
+ 			blockCategory.attr('store',store);
+ 		 }
+    	 var val = prevInput.val();//口味中数量变化
+    	 	prevInput.val(parseInt(val)+1); 
+		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
+			var singleNums = 0;
+				singleNums = parseInt(singleNumObj.html());
+			singleNumObj.html(singleNums+1);
+			
+		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
+		var inputVal = inputNumObj.val();
+				inputNumObj.val(parseInt(inputVal)+1);
+		 
+		 totalPrice();
+		 totalNum();
        });
     $('.taste-layer').on('click',function(){
     	$('.tastepad').hide();
