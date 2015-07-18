@@ -31,6 +31,7 @@ function addToCart() {
 $(document).ready(function(){
 	var language = $('input[name="language"]').val();
     $('#forum_list').on('touchstart','.addCart',function(){
+    	alert(22);
     	var _this = $(this);
     	var store = _this.parents('.blockCategory').attr('store');
     	if(parseInt(store)==0){
@@ -163,11 +164,12 @@ $(document).ready(function(){
     	$(this).find('.icon-hover-1').css('left','20%');
 	 	$(this).find('.icon-hover-2').css('right','20%');
 	 });
+    
     $('#cancelPadOrder').on(event_clicktouchend,function(){
     	$('.product-pad-mask').find('.info').html('');
     	$('.product-pad-mask').css('display','none');
 	
-    	 $('#padOrderForm').find('.input-product').each(function(){
+    	$('#padOrderForm').find('.input-product').each(function(){
  		 	var _this = $(this);
              var productId = _this.attr('name');
              var num = _this.val(); //获取下单数量
@@ -195,8 +197,8 @@ $(document).ready(function(){
 	 					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
 	 				}
 	 			});
- 		  }
-      });
+ 		    }
+        });
     	
     	var total = 0;
     	if(!parseInt(language)){
