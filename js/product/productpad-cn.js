@@ -110,7 +110,7 @@ $(document).ready(function(){
     	var store = _this.parents('.blockCategory').attr('store');
     	if(parseInt(store) >= 0){
     		store += 1;
-    		 _this.attr('store',store);
+    		 _this.parents('.blockCategory').attr('store',store);
     	}
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
@@ -355,7 +355,7 @@ $(document).ready(function(){
      	$(this).parents('.taste-list').remove();
      });
      
-     $('#forum_list').on('click','。minus',function(){
+     $('.tastepad').on('click','。minus',function(){
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var nextInput = $(this).next('input');
     	 var store = blockCategory.attr('store');
@@ -368,7 +368,7 @@ $(document).ready(function(){
     		}
     	 }
       });
-     $('#forum_list').on('click','。plus',function(){
+     $('.tastepad').on('click','。plus',function(){
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var nextInput = $(this).next('input');
     	 var store = blockCategory.attr('store');
