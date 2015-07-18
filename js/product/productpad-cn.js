@@ -410,6 +410,7 @@ $(document).ready(function(){
      
      //口味中数量减少
      $('#forum_list').on('click','。minus',function(){
+    	 alert(1);
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var nextInput = $(this).next('input');
     	 var productId = blockCategory.attr('product-id');
@@ -437,7 +438,7 @@ $(document).ready(function(){
      
      //口味中数量增加
      $('#forum_list').on('click','。plus',function(){
-    	 alert(222);
+    	 alert(2);
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var prevInput = $(this).prev('input');
     	 
@@ -466,7 +467,7 @@ $(document).ready(function(){
 		 
 		 totalPrice();
 		 totalNum();
-       });
+    });
     $('.taste-layer').on('click',function(){
     	$('.tastepad').hide();
     	$(this).hide();
