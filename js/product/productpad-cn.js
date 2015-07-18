@@ -166,19 +166,35 @@ $(document).ready(function(){
     $('#cancelPadOrder').on(event_clicktouchend,function(){
     	$('.product-pad-mask').find('.info').html('');
     	$('.product-pad-mask').css('display','none');
-    	$('.blockCategory').each(function(){
-    		$(this).find('.subject-order').css('display','none');
-    		$(this).find('.single-num-circel').html(0);
-    		
-    		$(this).find('.product-taste').removeClass('hasclick'); //去掉口味点击类
-    		$(this).find('.taste-list').each(function(eq){
-				if(eq > 0){
-					$(this).remove();
-				}else{
-					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
-				}
-			});
-    	});
+	
+    	 $('#padOrderForm').find('.input-product').each(function(){
+ 		 	var _this = $(this);
+             var productId = _this.attr('name');
+             var num = _this.val(); //获取下单数量
+             var productIdArr = productId.split(","); //字符分割 
+             productId = productIdArr[0];
+             var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+             //获取库存
+             var store = parents.attr('store');
+             if(parseInt(store) >= 0){
+            	 parents.attr('store',parseInt(num)+parseInt(store));
+             }
+             var category = parents.attr('category');//分类id
+             parents.find('.subject-order').css('display','none');
+             parents.find('.single-num-circel').html(0);
+             _this.parents('.product-catory-product').remove();
+             if(!$('.catory'+category).find('.product-catory-product').length){
+ 			$('.catory'+category).remove();
+ 			parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+ 			parents.find('.taste-list').each(function(eq){
+ 				if(eq > 0){
+ 					$(this).remove();
+ 				}else{
+ 					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
+ 				}
+ 			});
+ 		}
+      });
     	
     	var total = 0;
     	if(!parseInt(language)){
