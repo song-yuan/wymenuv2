@@ -170,7 +170,7 @@ $(document).ready(function(){
     		$(this).find('.subject-order').css('display','none');
     		$(this).find('.single-num-circel').html(0);
     		
-    		$(this)。find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+    		$(this).find('.product-taste').removeClass('hasclick'); //去掉口味点击类
     		$(this).find('.taste-list')。each(function(eq){
 				if(eq > 0){
 					$(this).remove();
@@ -541,7 +541,7 @@ $(document).ready(function(){
                             _this.parents('.product-catory-product').remove();
                             if(!$('.catory'+category).find('.product-catory-product').length){
 			    			$('.catory'+category).remove();
-			    			parents。find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+			    			parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
 			    			parents.find('.taste-list')。each(function(eq){
 			    				if(eq > 0){
 			    					$(this).remove();
