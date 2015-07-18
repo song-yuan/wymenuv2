@@ -437,6 +437,7 @@ $(document).ready(function(){
      
      //口味中数量增加
      $('#forum_list').on('click','。plus',function(){
+    	 alert(222);
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var prevInput = $(this).prev('input');
     	 
