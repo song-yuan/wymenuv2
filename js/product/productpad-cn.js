@@ -30,7 +30,7 @@ function addToCart() {
 }
 $(document).ready(function(){
 	var language = $('input[name="language"]').val();
-    $('#forum_list').on('touchstart','.addCart',function(){
+    $('#forum_list').on(event_clicktouchstart,'.addCart',function(){
     	alert(22);
     	var _this = $(this);
     	var store = _this.parents('.blockCategory').attr('store');
