@@ -169,7 +169,17 @@ $(document).ready(function(){
     	$('.blockCategory').each(function(){
     		$(this).find('.subject-order').css('display','none');
     		$(this).find('.single-num-circel').html(0);
+    		
+    		$(this)。find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+    		$(this).find('.taste-list')。each(function(eq){
+				if(eq > 0){
+					$(this).remove();
+				}else{
+					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
+				}
+			});
     	});
+    	
     	var total = 0;
     	if(!parseInt(language)){
 			total = total.toFixed(2);
@@ -318,23 +328,41 @@ $(document).ready(function(){
     	$(this).css('display','none');
     });
     
+    
     //点产品口味
     $('#forum_list').on('click','.product-taste',function(){
+    	//第一次点击 同步订单数量  点击后增加 hasclick 类
+    	var blockCategory = $(this).parents('.blockCategory');
+	   	var category = blockCategory.attr('category');//分类id
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
+    	if(!$(this).hasClass('hasclick')){
+    		//添加已点击类
+    		$(this).addClass('hasclick');
+    		
+    		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
+    		var inputVal = inputNumObj.val();
+    		blockCategory.find('.taste-list input').val(inputVal);
+    	}
     	$('.taste-layer').show();
     	$('.tastepad').hide();
     	$(this).parents('.blockCategory').find('.tastepad').show();
     });
     //选择产品口味
     $('#forum_list').on('click','.tastepad .item',function(){
+    	var tasteList = $(this).parents('.taste-list');
+    	var eq = tasteList.attr('eq');
+    	
+    	var num = tasteList.find('input.input-product').val();
+    	
     	if($(this).hasClass('active')){
     		var productId = $(this).attr('product-id');
     		var tasteId = $(this).attr('taste-id');
-    		$('input[name="'+productId+'['+tasteId+']'+'"]').remove();
+    		$('input[name="'+productId+'['+num'-'+eq+']['+tasteId+']'+'"]').remove();
     		$(this).removeClass('active');
     	}else{
     		var productId = $(this).attr('product-id');
     		var tasteId = $(this).attr('taste-id');
-    		var str = '<input type="hidden" name="'+productId+'['+tasteId+']'+'" value="1"/>';
+    		var str = '<input type="hidden" name="'+productId+'['+num'-'+eq+']['+tasteId+']'+'" value="1"/>';
     		$('#padOrderForm').append(str);
     		$(this).addClass('active');
     	}
@@ -410,8 +438,11 @@ $(document).ready(function(){
      
      //口味中数量减少
      $('#forum_list').on('click','.taste-minus',function(){
+    	 
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var nextInput = $(this).next('input');
+    	 
+    	 var category = blockCategory.attr('category');//分类id
     	 var productId = blockCategory.attr('product-id');
     	 var store = blockCategory.attr('store');
     	 var val = nextInput.val();//口味中数量变化
@@ -499,7 +530,7 @@ $(document).ready(function(){
                  if(printresult)
                  {
                 	 $('#padOrderForm').find('.input-product').each(function(){
-                	    var _this = $(this);
+                		 	var _this = $(this);
                             var productId = _this.attr('name');
                             var productIdArr = productId.split(","); //字符分割 
                             productId = productIdArr[0];
@@ -510,6 +541,14 @@ $(document).ready(function(){
                             _this.parents('.product-catory-product').remove();
                             if(!$('.catory'+category).find('.product-catory-product').length){
 			    			$('.catory'+category).remove();
+			    			parents。find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+			    			parents.find('.taste-list')。each(function(eq){
+			    				if(eq > 0){
+			    					$(this).remove();
+			    				}else{
+			    					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
+			    				}
+			    			});
 			    		}
                      });
                      $('.product-pad-mask').hide();
