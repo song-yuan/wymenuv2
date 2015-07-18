@@ -200,25 +200,25 @@ $(document).ready(function(){
             }
          }
     });
-    $('.product-pad-mask').on(event_clicktouchstart,'.minus',function(){
-		var input = $(this).siblings('input');
-		var num = input.val();
-		if(num > 0){
-			num = num - 1;
-		}
-		input.val(num);	
-		totalPrice();
-		totalNum();		
-	});
-    $('.product-pad-mask').on(event_clicktouchstart,'.plus',function(){
-                //alert('+');
-		var input = $(this).siblings('input');
-		var num = parseInt(input.val());
-		num = num + 1;
-		input.val(num);	
-		totalPrice();	
-		totalNum();
-	});
+//    $('.product-pad-mask').on(event_clicktouchstart,'.minus',function(){
+//		var input = $(this).siblings('input');
+//		var num = input.val();
+//		if(num > 0){
+//			num = num - 1;
+//		}
+//		input.val(num);	
+//		totalPrice();
+//		totalNum();		
+//	});
+//    $('.product-pad-mask').on(event_clicktouchstart,'.plus',function(){
+//                //alert('+');
+//		var input = $(this).siblings('input');
+//		var num = parseInt(input.val());
+//		num = num + 1;
+//		input.val(num);	
+//		totalPrice();	
+//		totalNum();
+//	});
     $('#pad-disbind-menu').on(event_clicktouchstart,function(){
             location.href='../../../../../../../padbind/login';
             //绑定和解绑必须到我们的服务器。
@@ -409,7 +409,7 @@ $(document).ready(function(){
      });
      
      //口味中数量减少
-     $('.tastepad').on('click','。minus',function(){
+     $('#forum_list').on('click','。minus',function(){
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var nextInput = $(this).next('input');
     	 var productId = blockCategory.attr('product-id');
@@ -436,7 +436,7 @@ $(document).ready(function(){
       });
      
      //口味中数量增加
-     $('.tastepad').on('click','。plus',function(){
+     $('#forum_list').on('click','。plus',function(){
     	 var blockCategory = $(this).parents('.blockCategory');
     	 var prevInput = $(this).prev('input');
     	 
