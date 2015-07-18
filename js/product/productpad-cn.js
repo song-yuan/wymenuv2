@@ -166,7 +166,7 @@ $(document).ready(function(){
     
     $('#cancelPadOrder').on(event_clicktouchend,function(){
     	$('.product-pad-mask').css('display','none');
-	
+    	$('.product-pad-mask').siblings().remove();
     	$('#padOrderForm').find('.input-product').each(function(){
  		 	var _this = $(this);
              var productId = _this.attr('name');
