@@ -109,7 +109,7 @@ $(document).ready(function(){
     	var _this = $(this);
     	var store = _this.parents('.blockCategory').attr('store');
     	if(parseInt(store) >= 0){
-    		store += 1;
+    		store =parseInt(store) + 1;
     		 _this.parents('.blockCategory').attr('store',store);
     	}
     	var parentsBlockCategory = _this.parents('.blockCategory');
@@ -363,7 +363,7 @@ $(document).ready(function(){
     	 if(parseInt(val) > 1){
     		nextInput.val(parseInt(val)-1); 
     		if(store >= 0){
-    			store +=1;
+    			store =parseInt(store) + 1;
     			blockCategory.attr('store',store);
     		}
     	 }
