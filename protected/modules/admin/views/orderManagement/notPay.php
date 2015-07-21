@@ -36,7 +36,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','今日订单');?></div>
 				<div class="actions">
-				<div class="btn-group">
+                                    <div class="btn-group">
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
@@ -47,8 +47,10 @@
 					
 					<div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<a href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>/page/" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日结汇总');?></a>						</div>			
-				  	</div>
+                                                        <a style="margin-left: 40px;" href="" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','打印');?></a>
+                                                        <a style="margin-left: 40px;" href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>/page/" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日结汇总');?></a>
+                                        </div>			
+				  </div>
 			 </div> 
 			
 				<div class="portlet-body" id="table-manage">

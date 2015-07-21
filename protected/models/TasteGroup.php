@@ -1,25 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "nb_product_taste".
+ * This is the model class for table "nb_taste_group".
  *
- * The followings are the available columns in table 'nb_product_taste':
- * @property string $lid
+ * The followings are the available columns in table 'nb_taste_group':
+ * @property integer $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $taste_group_id
- * @property string $product_id
+ * @property string $name
+ * @property string $allflae
  * @property string $delete_flag
  */
-class ProductTaste extends CActiveRecord
+class TasteGroup extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_product_taste';
+		return 'nb_taste_group';
 	}
 
 	/**
@@ -30,13 +30,15 @@ class ProductTaste extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at', 'required'),
-			array('lid, dpid, taste_group_id, product_id', 'length', 'max'=>10),
-			array('delete_flag', 'length', 'max'=>1),
+			array('name', 'required'),
+			array('lid', 'numerical', 'integerOnly'=>true),
+			array('dpid', 'length', 'max'=>10),
+			array('name', 'length', 'max'=>50),
+			array('allflae, delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, taste_group_id, product_id, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, name, allflae, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,8 +63,8 @@ class ProductTaste extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'taste_group_id' => 'Taste',
-			'product_id' => 'Product',
+			'name' => '口味分组名称',
+			'allflae' => '1整单口味，0不是',
 			'delete_flag' => 'Delete Flag',
 		);
 	}
@@ -85,12 +87,12 @@ class ProductTaste extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('lid',$this->lid,true);
+		$criteria->compare('lid',$this->lid);
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('taste_group_id',$this->taste_group_id,true);
-		$criteria->compare('product_id',$this->product_id,true);
+		$criteria->compare('name',$this->name,true);
+		$criteria->compare('allflae',$this->allflae,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 
 		return new CActiveDataProvider($this, array(
@@ -102,7 +104,7 @@ class ProductTaste extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ProductTaste the static model class
+	 * @return TasteGroup the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

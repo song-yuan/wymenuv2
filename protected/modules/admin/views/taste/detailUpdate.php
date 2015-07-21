@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味分组管理'),'subhead'=>yii::t('app','添加口味分组'),'breadcrumbs'=>array(array('word'=>yii::t('app','口味分组管理'),'url'=>$this->createUrl('taste/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','添加口味分组'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味管理'),'subhead'=>yii::t('app','修改口味'),'breadcrumbs'=>array(array('word'=>yii::t('app','口味管理'),'url'=>$this->createUrl('taste/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','修改口味'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,14 +31,14 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php if($type) echo yii::t('app','添加整单口味分组');else echo yii::t('app','添加单品口味分组');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php if($type) echo $groupname;?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'type'=>$type)); ?>
+							<?php echo $this->renderPartial('_detailForm', array('model'=>$model,'groupname'=>$groupname ,'groupid'=>$groupid,'type'=>$type)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>
