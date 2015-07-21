@@ -311,7 +311,7 @@ class CreateOrder
 	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-$num));
 	             	}
  	             }else{
- 	             	//单品 如果有口味 $num=>array(taste_id1=>$num1,taste_id2=>$num2)
+ 	             	//单品 如果有口味  num-eq =>array('taste_id1','taste_id2') num 是数量 eq是序号 $goodsArr[0] 产品id
 	             	$sql = 'select * from nb_product where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             	$result = $db->createCommand($sql)->queryRow();
 	             	if($result){
@@ -324,38 +324,43 @@ class CreateOrder
 	             	$productPrice = self::getProductPrice($dpid,$key,0);
 	             	
 	             	if(is_array($num)){
-	                //有口味
+	                	//有口味$num = num-eq 格式
 	                	foreach($num as $k=>$v){
-	                		$orderProductData = array(
-										'lid'=>$orderProductId,
-										'dpid'=>$dpid,
-										'create_at'=>$time,
-										'order_id'=>$orderId,
-										'set_id'=>0,
-										'product_id'=>$goodsArr[0],
-										'price'=>$productPrice,
-										'update_at'=>$time,
-										'amount'=>$v,
-										'taste_memo'=>"",
-										'product_order_status'=>1,
-										);
-						   $db->createCommand()->insert('nb_order_product',$orderProductData);
-						   $orderPrice +=$productPrice*$v;
-						   
-						   $orderTastSe = new Sequence("order_taste");
-	            		   $orderTasteId = $orderTastSe->nextval();
-						   $orderTasteData = array(
-						   						'lid'=>$orderTasteId,
-						   						'dpid'=>$dpid,
-						   						'create_at'=>$time,
-						   						'taste_id'=>$k,
-						   						'order_id'=>$orderProductId,
-						   						'is_order'=>0
-						   						);
-						   $db->createCommand()->insert('nb_order_taste',$orderTasteData);
-						   
-						   $se=new Sequence("order_product");
-	            		   $orderProductId = $se->nextval();
+	                		$numEq = explode('-', $k);
+	                		$amount = $numEq[0];
+	                		foreach($v as $val){
+		                		$orderProductData = array(
+											'lid'=>$orderProductId,
+											'dpid'=>$dpid,
+											'create_at'=>$time,
+											'order_id'=>$orderId,
+											'set_id'=>0,
+											'product_id'=>$goodsArr[0],
+											'price'=>$productPrice,
+											'update_at'=>$time,
+											'amount'=>$amount,
+											'taste_memo'=>"",
+											'product_order_status'=>1,
+											);
+							   $db->createCommand()->insert('nb_order_product',$orderProductData);
+							   $orderPrice +=$productPrice*$v;
+							   
+							   $orderTastSe = new Sequence("order_taste");
+		            		   $orderTasteId = $orderTastSe->nextval();
+							   $orderTasteData = array(
+							   						'lid'=>$orderTasteId,
+							   						'dpid'=>$dpid,
+							   						'create_at'=>$time,
+							   						'taste_id'=>$val,
+							   						'order_id'=>$orderProductId,
+							   						'is_order'=>0
+							   						);
+							   $db->createCommand()->insert('nb_order_taste',$orderTasteData);
+							   
+							   $se=new Sequence("order_product");
+		            		   $orderProductId = $se->nextval();	                			
+	                	 }
+
 	                	}
 	             	}else{
 	             		 $orderProductData = array(

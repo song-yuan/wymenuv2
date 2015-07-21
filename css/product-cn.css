@@ -410,6 +410,8 @@
 	right:0;
 	width:60%;
 	min-height:300px;
+	max-height:600px;
+	overflow:scroll;
 	margin:auto;
 	z-index:1010;
 	background:white;
@@ -417,6 +419,72 @@
     border-radius: 5px;
     box-shadow: none;
    -webkit-background-clip: content;
+}
+.taste-list{
+	padding:0;
+	margin:0;
+}
+.taste-list:last-child{
+	margin-bottom:20px;
+}
+.taste-title{
+	width:100%;
+	height:35px;
+	padding:5px 0;
+	margin-top:10px;
+	line-height:30px;
+	font-size:20px;
+	border-bottom:solid 2px rgb(229,229,229); 
+}
+.taste-title-l{
+	height:100%;
+	width:43%;
+	padding-left:2%;
+	text-align:left;
+	float:left;
+}
+.taste-title-m{
+	height:100%;
+	width:10%;
+	float:left;
+}
+.taste-title-m a{
+	width:30px;
+	height:30px;
+	font-size:30px;
+	border: solid 1px rgb(103,103,103);
+	border-radius:100%;
+}
+.taste-title-r{
+	height:100%;
+	width:45%;
+	float:left;
+}
+
+.taste-title-r input{
+	width: 30px;
+	height: 15px;
+	padding: 10px;
+	border: 0px !important;
+	border-top: #e5e5e5 1px solid !important;
+	border-bottom: #e5e5e5 1px solid !important;
+	line-height: 15px;
+	font-size: 1.1em !important;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.taste-title-r span{
+	text-align:center;
+	width:15px;
+	height:15px;
+	font-size:18px;
+	padding: 10px 10px 10px;
+	display:inline-block;
+	vertical-align: middle;
+	line-height:18px;
+	background-color: #eeeeee;
+	border: #e5e5e5 1px solid;
 }
 .tastepad .item{
 	min-width:30px;
