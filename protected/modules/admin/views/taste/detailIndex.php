@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味分组管理'),'subhead'=>yii::t('app','口味分组列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','口味分组管理'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味管理'),'subhead'=>yii::t('app','口味列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','口味管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'taste-form',
-				'action' => $this->createUrl('taste/delete' , array('companyId' => $this->companyId,'type'=>$type)),
+				'action' => $this->createUrl('taste/detailDelete' , array('companyId' => $this->companyId,'type'=>$type,'groupid'=>$groupid)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,10 +40,11 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php if($type) echo yii::t('app','整单口味分组列表');else echo yii::t('app','单品口味分组列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo $groupname;?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('taste/create' , array('companyId' => $this->companyId,'type'=>$type));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-                        <a href="javascript:void(0)" class="btn red" onclick="document.getElementById('taste-form').submit();"><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
+						<a href="<?php echo $this->createUrl('taste/detailCreate' , array('companyId' => $this->companyId,'groupname'=>$groupname ,'groupid'=>$groupid,'type'=>$type));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+                                                <a href="javascript:void(0)" class="btn red" onclick="document.getElementById('taste-form').submit();"><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
+                                                <a href="<?php echo $this->createUrl('taste/index' , array('companyId' => $this->companyId,'type'=>$type));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -51,10 +52,9 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','口味分组名称');?></th>
+								<th><?php echo yii::t('app','口味名称');?></th>
 								<th><?php echo yii::t('app','添加时间');?></th>
 								<th>&nbsp;</th>
-                                                                <th>&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -65,10 +65,7 @@
 								<td ><?php echo $model->name;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('taste/update',array('lid' => $model->lid , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
-								</td>
-                                                                <td class="center">
-								<a href="<?php echo $this->createUrl('taste/detailIndex',array('groupid' => $model->lid,'groupname'=>$model->name ,'type'=>$type, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
+								<a href="<?php echo $this->createUrl('taste/detailUpdate',array('lid' => $model->lid,'groupname'=>$groupname , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
