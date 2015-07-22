@@ -367,7 +367,6 @@ $(document).ready(function(){
     			str +='<div class="taste-select">选择</div><div class="taste-same">同上</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
     			str +='</div><div class="clear"></div></div>';
     			str +='<div class="taste-item">';
-    			str +='<div class="clear"></div>';
 				str +='</div></div>';
 				blockCategory.find('.tastepad').append(str);
 				var inputstr = '<input type="hidden" name="'+productId+'[1-'+(i+length)+'][0]" value="1"/>';
