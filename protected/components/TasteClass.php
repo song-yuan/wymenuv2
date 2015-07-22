@@ -10,7 +10,37 @@ class TasteClass
 		$result = $conn->queryAll();
 		return $result;
 	}
+        
+        //产品口味 列表
+	public static function getProductTasteGroup($productId,$dpid){
+		$sql = 'select t.taste_group_id as lid,t1.name from nb_product_taste t,nb_taste_group t1 where t.taste_group_id=t1.lid and t.product_id=:productId and t.dpid=t1.dpid and t.dpid=:dpid and t.delete_flag=0';
+		$conn = Yii::app()->db->createCommand($sql);
+		$conn->bindValue(':productId',$productId);
+                $conn->bindValue(':dpid',$dpid);
+		$result = $conn->queryAll();
+		return $result;
+	}
 	
+        //全订单口味列表 1 整单 0 非整单
+	public static function getAllOrderTasteGroup($dpid,$type){
+		$sql = 'select lid,name from nb_taste_group where dpid=:dpid and allflae=:allflae and delete_flag=0';
+		$conn = Yii::app()->db->createCommand($sql);
+		$conn->bindValue(':dpid',$dpid);
+		$conn->bindValue(':allflae',$type);
+		$result = $conn->queryAll();
+		return $result;
+	}
+        
+        //全订单口味列表 1 整单 0 非整单
+	public static function gettastes($lid,$dpid){
+		$sql = 'select lid,name from nb_taste where dpid=:dpid and taste_group_id=:lid and delete_flag=0';
+		$conn = Yii::app()->db->createCommand($sql);
+		$conn->bindValue(':dpid',$dpid);
+		$conn->bindValue(':lid',$lid);
+		$result = $conn->queryAll();
+		return $result;
+	}
+        
 	//全订单口味列表 1 整单 0 非整单
 	public static function getAllOrderTaste($dpid,$type){
 		$sql = 'select lid,name from nb_taste where dpid=:dpid and allflae=:allflae and delete_flag=0';
@@ -156,9 +186,9 @@ class TasteClass
 			return false;
 		}
 	}
-	public static function getTasteName($tasteId){
-		$sql = 'SELECT name from nb_taste where lid=:lid';
-		$taste = Yii::app()->db->createCommand($sql)->bindValue(':lid',$tasteId)->queryRow();
+	public static function getTasteName($tasteId,$dpid){
+		$sql = 'SELECT name from nb_taste_group where lid=:lid and dpid=:dpid';
+		$taste = Yii::app()->db->createCommand($sql)->bindValue(':lid',$tasteId)->bindValue(':dpid',$dpid)->queryRow();
 		return $taste['name'];
 	}
 	

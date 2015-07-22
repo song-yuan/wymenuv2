@@ -54,7 +54,7 @@
 								<td ><?php echo $model->product_name;?></td>
 								<td>
 									<?php foreach($model->productTaste as $val){
-											echo TasteClass::getTasteName($val->taste_id).' ';
+											echo TasteClass::getTasteName($val->taste_group_id,$this->companyId).' ';
 									}?>
 								</td>
 								<td class="center">

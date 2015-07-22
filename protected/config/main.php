@@ -9,7 +9,7 @@ return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'My Web Application',
 	//'language'=>'zh_cn',
-        'language'=>'jp',
+        //'language'=>'jp',
 	//'sourceLanguage'=>'en',
         'sourceLanguage'=>'zh_cn',
 		
@@ -24,7 +24,9 @@ return array(
 		'application.components.weixin.*',
                 'application.components.alipaydp.lib.*',
 		'application.extensions.redis.*',
-		'application.extensions.qrcode.*'
+		'application.extensions.qrcode.*',
+                'application.extensions.phpexcel.*'
+
 	),
 	
 	'modules'=>array(

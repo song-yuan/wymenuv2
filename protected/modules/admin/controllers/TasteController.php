@@ -110,50 +110,67 @@ class TasteController extends BackendController
 	}
 	public function actionDetailCreate() {
 		$groupid = Yii::app()->request->getParam('groupid',0);
-                $type = Yii::app()->request->getParam('type',0);
-		$model = new Taste ;
-		$model->dpid = $this->companyId ;
-		$model->taste_group_id = $groupid ;
+                $groupname = Yii::app()->request->getParam('groupname',0);
+                $type = Yii::app()->request->getParam('type','0');
+		$model = new Taste();
+		$model->dpid = $this->companyId ;		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Taste');
                         $se=new Sequence("taste");
-                        $model->lid = $se->nextval();
+                        $model->taste_group_id = $groupid ;
                         $model->allflae = $type;
-                        $model->create_at = date('Y-m-d H:i:s',time());
+                        //$model->lid = $se->nextval();                        
+                        //$model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
+                        $data = array(
+					 'lid'=>substr("0000000000".$se->nextval(),-10),//$model->lid,
+					 'dpid'=>$model->dpid,
+					 'create_at'=>date('Y-m-d H:i:s',time()),
+					 'taste_group_id'=>$groupid,
+					 'allflae'=>$type,
+                                         'name'=>$model->name,
+					 'delete_flag'=>'0'
+					);
+                        //var_dump($data);exit;
+                        if(Yii::app()->db->createCommand()->insert('nb_taste',$data))
+                        {
 //                        var_dump($model);exit;
-			if($model->save()) {
+//			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('taste/detailIndex' , 'companyId' => $this->companyId,'groupid'=>$groupid,'type'=>$type));
+				$this->redirect(array('taste/detailIndex' , 'companyId' => $this->companyId,'groupname'=>$groupname,'groupid'=>$groupid,'type'=>$type));
 			}
 		}
 		$this->render('detailCreate' , array(
 				'model' => $model , 
                                 'groupid'=>$groupid,
+                                'groupname'=>$groupname,
 				'type' => $type
 		));
 	}
 	public function actionDetailUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
 		$type = Yii::app()->request->getParam('type');
+                $groupname = Yii::app()->request->getParam('groupname',0);
 		$model = Taste::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Taste');
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('taste/detailIndex' , 'type'=>$type,'groupid'=>$model->taste_group_id, 'companyId' => $this->companyId));
+				$this->redirect(array('taste/detailIndex' , 'type'=>$type,'groupname'=>$groupname,'groupid'=>$model->taste_group_id, 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('detailUpdate' , array(
 			'model'=>$model,
                         'groupid'=>$model->taste_group_id,
+                        'groupname'=>$groupname,
 			'type' => $type
 		));
 	}
 	public function actionDetailDelete(){
 		//$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 $groupid = Yii::app()->request->getParam('groupid',0);
+                $groupname = Yii::app()->request->getParam('groupname',0);
 		$ids = Yii::app()->request->getPost('lid');
 		$type = Yii::app()->request->getParam('type',0);
 		if(!empty($ids)) {
@@ -163,10 +180,10 @@ class TasteController extends BackendController
 					$model->saveAttributes(array('delete_flag'=>1));
 				}
 			}
-			$this->redirect(array('taste/detailIndex' , 'companyId' => $this->companyId,'groupid'=>$groupid,'type'=>$type)) ;
+			$this->redirect(array('taste/detailIndex' , 'companyId' => $this->companyId,'groupname'=>$groupname,'groupid'=>$groupid,'type'=>$type)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('taste/detailIndex' , 'companyId' => $this->companyId,'groupid'=>$groupid,'type'=>$type)) ;
+			$this->redirect(array('taste/detailIndex' , 'companyId' => $this->companyId,'groupname'=>$groupname,'groupid'=>$groupid,'type'=>$type)) ;
 		}
 	}
 	public function actionProductTaste(){
@@ -206,8 +223,8 @@ class TasteController extends BackendController
 				$this->redirect(array('taste/productTaste' , 'companyId' => $this->companyId));
 			}
 		}
-		$tastes = TasteClass::getAllOrderTaste($this->companyId,0);
-		$productTastes = TasteClass::getProductTaste($lid,  $this->companyId);
+		$tastes = TasteClass::getAllOrderTasteGroup($this->companyId,0);
+		$productTastes = TasteClass::getProductTasteGroup($lid,  $this->companyId);
 		
 		foreach($productTastes as $taste){
 			array_push($tasteArr,$taste['lid']);

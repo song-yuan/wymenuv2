@@ -18,6 +18,7 @@ class DefaultOrderController extends BackendController
                 $typeId = Yii::app()->request->getParam('typeId',0);
                 $orderId = Yii::app()->request->getParam('orderId',0);
                 $syscallId = Yii::app()->request->getParam('syscallId',0);
+                $autoaccount = Yii::app()->request->getParam('autoaccount',0);
                 $order=array();
                 $siteNo=array();
                 ///***********insert to order feedback
@@ -91,7 +92,8 @@ class DefaultOrderController extends BackendController
 				'total' => $total,
 				//'paymentMethods'=>$paymentMethods,
                                 'typeId' => $typeId,
-                                'syscallId'=>$syscallId
+                                'syscallId'=>$syscallId,
+                                'autoaccount'=>$autoaccount
                                 //'categories' => $categories
                                 //'products' => $productslist,
                                 //'setlist' => $setlist
@@ -583,19 +585,19 @@ class DefaultOrderController extends BackendController
                 $isall = Yii::app()->request->getParam('isall','0');
                 if($isall=='1')
                 {
-                    $tastes= TasteClass::getAllOrderTaste($companyId, '1');
+                    $tastegroups= TasteClass::getAllOrderTasteGroup($companyId, '1');
                     $orderTastes=  TasteClass::getOrderTaste($lid, '1', $companyId);
                     $tasteMemo = TasteClass::getOrderTasteMemo($lid, '1', $companyId);
                     $orderId=$lid;
-                    //var_dump($tastes,$orderTastes,$tasteMemo);exit;                   
+                    //var_dump($tastegroups,$orderTastes,$tasteMemo);exit;                   
                     
                 }else{
                     $orderProduct=  OrderProduct::model()->find(' lid=:lid and dpid=:dpid',array(':lid'=>$lid,':dpid'=>$companyId));
-                    $tastes=  TasteClass::getProductTaste($orderProduct->product_id,$companyId);
+                    $tastegroups=  TasteClass::getProductTasteGroup($orderProduct->product_id,$companyId);
                     $orderTastes=  TasteClass::getOrderTaste($lid, '2', $companyId);
                     $tasteMemo = TasteClass::getOrderTasteMemo($lid, '2', $companyId);
                     $orderId=$orderProduct->order_id;
-                    //var_dump($tastes,$orderTastes,$tasteMemo);exit;       
+                    //var_dump($tastegroups,$orderTastes,$tasteMemo);exit;       
                                        
                 }
                 if(Yii::app()->request->isPostRequest) {
@@ -608,7 +610,7 @@ class DefaultOrderController extends BackendController
                         }                        
                 } 
                 $this->renderPartial('tastedetail' , array(
-                                'tastes' => $tastes,
+                                'tastegroups' => $tastegroups,
                                 'orderTastes'=>$orderTastes,
                                 'tasteMemo' => $tasteMemo,
                                 'isall'=>$isall,
