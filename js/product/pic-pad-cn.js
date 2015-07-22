@@ -187,9 +187,9 @@ function showListPad(items){
 			
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
-			trTaste +='<div class="taste-list" eq="1">';
-			trTaste +='<div class="taste-title"><div class="taste-title-l">口味1</div><div class="taste-title-m"><a id="addTaste" href="javascript:;">+</a></div><div class="taste-title-r">';
-			trTaste +='<span class="taste-minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="taste-plus">+</span>';
+			trTaste +='<div class="taste-list" eq="0">';
+			trTaste +='<div class="taste-title"><div class="taste-title-l">第1道菜口味</div><div class="taste-title-r">';
+			trTaste +='<div class="taste-select"></div><div class="taste-same"></div><div class="taste-none"></div></div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
 			trTaste +='</div><div class="clear"></div></div>';
 			trTaste +='<div class="taste-item">';
 			for(var j in item.taste){
@@ -222,9 +222,9 @@ function showListPad(items){
 			
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
-			trTaste +='<div class="taste-list" eq="1">';
-			trTaste +='<div class="taste-title"><div class="taste-title-l">口味1</div><div class="taste-title-m"><a id="addTaste" href="javascript:;">+</a></div><div class="taste-title-r">';
-			trTaste +='<span class="taste-minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="taste-plus">+</span>';
+			trTaste +='<div class="taste-list" eq="0">';
+			trTaste +='<div class="taste-title"><div class="taste-title-l">第1道菜口味</div><div class="taste-title-r">';
+			trTaste +='<div class="taste-select"></div><div class="taste-same"></div><div class="taste-none"></div></div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
 			trTaste +='</div><div class="clear"></div></div>';
 			trTaste +='<div class="taste-item">';
 			for(var j in item.taste){

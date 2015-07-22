@@ -307,7 +307,7 @@ $(document).ready(function(){
             }
 	});
 	 
-    $('#forum_list').on('click','.view-product-pic',function(){
+    $('#forum_list').on(event_clicktouchstart,'.view-product-pic',function(){
         var lid = $(this).attr('product-id');
         //alert(lid);//($('.large-pic').width() - $("#gallery").outerWidth())/2,//($('.large-pic').height() - $("#gallery").outerHeight())/2
     	$.ajax({
@@ -339,32 +339,46 @@ $(document).ready(function(){
  		});
     });
     
-    $('.large-pic').on('click',function(){
+    $('.large-pic').on(event_clicktouchstart,function(){
     	$(this).html('');
     	$(this).css('display','none');
     });
     
     
-    //点产品口味
-    $('#forum_list').on('click','.product-taste',function(){
+    //点产品口味  按照订单数量增加对应数量的口味
+    $('#forum_list').on(event_clicktouchstart,'.product-taste',function(){
     	//第一次点击 同步订单数量  点击后增加 hasclick 类
     	var blockCategory = $(this).parents('.blockCategory');
 	   	var category = blockCategory.attr('category');//分类id
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
-    	if(!$(this).hasClass('hasclick')){
-    		//添加已点击类
-    		$(this).addClass('hasclick');
-    		
-    		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
-    		var inputVal = inputNumObj.val();
-    		blockCategory.find('.taste-list input').val(inputVal);
+	   	
+	   	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量
+    	var inputVal = inputNumObj.val();
+    	
+    	if(!$(this).hasClass('hasClick')){
+    		$(this).addClass('hasClick');
+    		var inputstr = '<input type="hidden" name="'+productId+'[1-0][0]" value="1"/>';
+    		$('#padOrderForm').append(inputstr);
+    	}
+    	var length = blockCategory.find('.taste-list').length;
+    	for(var i=0;i<(inputVal-length);i++){
+    		var str = '<div class="taste-list" eq="'+(i+length)+'">';
+    			str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length)+'道菜口味</div><div class="taste-title-r">';
+    			str +='<div class="taste-select"></div><div class="taste-same"></div><div class="taste-none"></div></div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
+    			str +='</div><div class="clear"></div></div>';
+    			str +='<div class="taste-item">';
+    			str +='<div class="clear"></div>';
+				str +='</div></div>';
+				blockCategory.find('.tastepad').append(str);
+				var inputstr = '<input type="hidden" name="'+productId+'[1-'+(i+length)+'][0]" value="1"/>';
+    			$('#padOrderForm').append(inputstr);
     	}
     	$('.taste-layer').show();
     	$('.tastepad').hide();
     	$(this).parents('.blockCategory').find('.tastepad').show();
     });
     //选择产品口味
-    $('#forum_list').on('click','.tastepad .item',function(){
+    $('#forum_list').on(event_clicktouchstart,'.tastepad .item',function(){
     	var tasteList = $(this).parents('.taste-list');
     	var eq = tasteList.attr('eq');
     	
@@ -383,136 +397,7 @@ $(document).ready(function(){
     		$(this).addClass('active');
     	}
     });
-  //增加口味
-    var i = 2;
-    $('#forum_list').on('click','#addTaste',function(){
-    	//订单 和 商品中数量变化
-		 var blockCategory = $(this).parents('.blockCategory');
-	   	 
-	   	 var category = blockCategory.attr('category');//分类id
-	   	 var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
-	   	 var store = blockCategory.attr('store'); // 库存
-	   	 
-	   	 //检查库存
-	   	 if(store==0){
-	   		 layer.msg('库存不足');
-	   		 return;
-	   	 }
-	   	 if(store >= 0){
-				store -=1;
-				blockCategory.attr('store',store);
-		}
-    	
-    	var str= '';
-		str +='<div class="taste-list" eq="'+i+'">';
-		str +='<div class="taste-title"><div class="taste-title-l">口味'+i+'</div><div class="taste-title-m"><a id="delTaste" href="javascript:;">-</a></div>';
-		str +='<div class="taste-title-r"><span class="taste-minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="taste-plus">+</span></div><div class="clear"></div></div>';
-		str +='<div class="taste-item">';
-		str +=$(this).parents('.taste-list').find('.taste-item').html();
-		str +='</div></div>';
-		
-		$(this).parents('.tastepad').append(str);
-		
-		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
-			var singleNums = 0;
-				singleNums = parseInt(singleNumObj.html());
-			singleNumObj.html(singleNums+1);
-			
-		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
-		var inputVal = inputNumObj.val();
-				inputNumObj.val(parseInt(inputVal)+1);
-		 
-		 totalPrice();
-		 totalNum();
-		 
-		i++;
-    });
-    //删除口味
-     $('#forum_list').on('click','#delTaste',function(){
-     	 $(this).parents('.taste-list').remove();
-     	 var blockCategory = $(this).parents('.blockCategory');
-	   	 var productId = blockCategory.attr('product-id');
-	   	 var store = blockCategory.attr('store');
-	   	 
-   		if(store >= 0){
-   			store =parseInt(store) + 1;
-   			blockCategory.attr('store',store);
-   		}
-   		
-		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
-			var singleNums = 0;
-				singleNums = parseInt(singleNumObj.html());
-			singleNumObj.html(singleNums-1);
-			
-		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
-		var inputVal = inputNumObj.val();
-				inputNumObj.val(parseInt(inputVal)-1);
-					
-	   	 totalPrice();
-		 totalNum();
-     });
-     
-     //口味中数量减少
-     $('#forum_list').on('click','.taste-minus',function(){
-    	 
-    	 var blockCategory = $(this).parents('.blockCategory');
-    	 var nextInput = $(this).next('input');
-    	 
-    	 var category = blockCategory.attr('category');//分类id
-    	 var productId = blockCategory.attr('product-id');
-    	 var store = blockCategory.attr('store');
-    	 var val = nextInput.val();//口味中数量变化
-    	 if(parseInt(val) > 1){
-    		nextInput.val(parseInt(val)-1); 
-    		if(store >= 0){
-    			store =parseInt(store) + 1;
-    			blockCategory.attr('store',store);
-    		}
-    	 }
-		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
-			var singleNums = 0;
-				singleNums = parseInt(singleNumObj.html());
-			singleNumObj.html(singleNums-1);
-			
-		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
-		var inputVal = inputNumObj.val();
-				inputNumObj.val(parseInt(inputVal)-1);
-				
-    	 totalPrice();
- 		 totalNum();
-      });
-     
-     //口味中数量增加
-     $('#forum_list').on('click','.taste-plus',function(){
-    	 var blockCategory = $(this).parents('.blockCategory');
-    	 var prevInput = $(this).prev('input');
-    	 
-    	 var category = blockCategory.attr('category');//分类id
-    	 var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
-    	 var store = blockCategory.attr('store'); // 库存
-    	 
-    	 if(store==0){
-    		 layer.msg('库存不足');
-    		 return;
-    	 }
-    	 if(store >= 0){
- 			store -=1;
- 			blockCategory.attr('store',store);
- 		 }
-    	 var val = prevInput.val();//口味中数量变化
-    	 	prevInput.val(parseInt(val)+1); 
-		 var singleNumObj = blockCategory.find('.single-num-circel'); //数量变化
-			var singleNums = 0;
-				singleNums = parseInt(singleNumObj.html());
-			singleNumObj.html(singleNums+1);
-			
-		var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量改变
-		var inputVal = inputNumObj.val();
-				inputNumObj.val(parseInt(inputVal)+1);
-		 
-		 totalPrice();
-		 totalNum();
-    });
+
     $('.taste-layer').on('click',function(){
     	$('.tastepad').hide();
     	$(this).hide();
