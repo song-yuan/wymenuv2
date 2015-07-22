@@ -187,14 +187,20 @@ function showListPad(items){
 			
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
-			trTaste +='<div class="taste-list" eq="1">';
-			trTaste +='<div class="taste-title"><div class="taste-title-l">口味1</div><div class="taste-title-m"><a id="addTaste" href="javascript:;">+</a></div><div class="taste-title-r">';
-			trTaste +='<span class="taste-minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="taste-plus">+</span>';
+			trTaste +='<div class="taste-list" eq="0">';
+			trTaste +='<div class="taste-title"><div class="taste-title-l">第1道菜口味</div><div class="taste-title-r">';
+			trTaste +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
 			trTaste +='</div><div class="clear"></div></div>';
 			trTaste +='<div class="taste-item">';
 			for(var j in item.taste){
 				var taste = item.taste[j];
-				trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
+				trTaste +='<div class="taste-group">';
+				for(var k in taste){
+					var taste = taste[k];
+					trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.lid+'">'+taste.name+'</div>'; 
+				}
+				trTaste +='<div class="clear"></div>';
+				trTaste +='</div>';
 			}
 			trTaste +='<div class="clear"></div>';
 			trTaste +='</div></div></div>';
@@ -222,14 +228,20 @@ function showListPad(items){
 			
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
-			trTaste +='<div class="taste-list" eq="1">';
-			trTaste +='<div class="taste-title"><div class="taste-title-l">口味1</div><div class="taste-title-m"><a id="addTaste" href="javascript:;">+</a></div><div class="taste-title-r">';
-			trTaste +='<span class="taste-minus" >-</span><input class="input-product" type="text" name="taste-num" value="1" readonly="true"/><span class="taste-plus">+</span>';
+			trTaste +='<div class="taste-list" eq="0">';
+			trTaste +='<div class="taste-title"><div class="taste-title-l">第1道菜口味</div><div class="taste-title-r">';
+			trTaste +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
 			trTaste +='</div><div class="clear"></div></div>';
 			trTaste +='<div class="taste-item">';
 			for(var j in item.taste){
 				var taste = item.taste[j];
-				trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.taste_id+'">'+taste.name+'</div>'; 
+				trTaste +='<div class="taste-group">';
+				for(var k in taste){
+					var taste = taste[k];
+					trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.lid+'">'+taste.name+'</div>'; 
+				}
+				trTaste +='<div class="clear"></div>';
+				trTaste +='</div>';
 			}
 			trTaste +='<div class="clear"></div>';
 			trTaste +='</div></div></div>';
