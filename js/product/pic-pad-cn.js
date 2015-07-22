@@ -196,7 +196,7 @@ function showListPad(items){
 				var taste = item.taste[j];
 				trTaste +='<div class="taste-group">';
 				for(var k in taste){
-					var tast = taste[k];
+					var taste = taste[k];
 					trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.lid+'">'+taste.name+'</div>'; 
 				}
 				trTaste +='</div>';
@@ -236,7 +236,7 @@ function showListPad(items){
 				var taste = item.taste[j];
 				trTaste +='<div class="taste-group">';
 				for(var k in taste){
-					var tast = taste[k];
+					var taste = taste[k];
 					trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.lid+'">'+taste.name+'</div>'; 
 				}
 				trTaste +='</div>';
