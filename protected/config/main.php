@@ -25,7 +25,7 @@ return array(
                 'application.components.alipaydp.lib.*',
 		'application.extensions.redis.*',
 		'application.extensions.qrcode.*',
-                'application.extensions.phpexcel.*'
+                'application.extensions.PHPExcel.*'
 
 	),
 	
