@@ -9,10 +9,10 @@
                                                         'htmlOptions'=>array(
                                                                 'class'=>'form-horizontal'
                                                         ),
-                                                )); ?>
-                                                <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        
+                                                )); ?>                                                
+                                                <div class="modal-footer">
+                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                        <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
                                                 <div class="modal-body">
                                                         <div class="form-actions fluid <?php if($isset=='1') echo 'hidden';?>" id="product_panel">
@@ -76,10 +76,7 @@
                                                 <?php echo $form->hiddenField($orderProduct,'order_id',array('class'=>'form-control')); ?>
                                                 <?php echo $form->hiddenField($orderProduct,'set_id',array('class'=>'form-control')); ?>
                                                 <input class="form-control" name="selsetlist" id="selsetlistid" type="hidden" value="">
-                                                <div class="modal-footer">
-                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
-                                                        <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
-                                                </div>
+                                                
 
                                                 <?php $this->endWidget(); ?>                
                     <script type="text/javascript">

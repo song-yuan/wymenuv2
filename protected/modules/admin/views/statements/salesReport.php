@@ -52,7 +52,8 @@
 					
 					<div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<a href="" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></a>					
+							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+							<!-- <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/text/<?php echo $text;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
 					</div>			
 				</div>
 			 </div> 
@@ -67,13 +68,13 @@
 								<th>
 									<div class="btn-group">
 										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
-										<button type="button" class="btn blue dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
+										<button type="button" class="btn green dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
 										<div class="dropdown-menu hold-on-click dropdown-checkboxes" role="menu">
 											
 											
 											<?php foreach($comName as $key=>$value):?>
 
-											<label><input name="accept" id="cked" class="checkedCN" value="<?php echo $key;?>" type="checkbox"><?php echo $value;?></label>
+											<label><input name="accept" id="checkedCNid" class="checkedCN" value="<?php echo $key;?>" type="checkbox"><?php echo $value;?></label>
 											  
 											<?php endforeach;?>
 											
@@ -153,6 +154,7 @@
 <!-- END PAGE -->
 
 <script>
+		//var str=new array();						
 		jQuery(document).ready(function(){
 		    if (jQuery().datepicker) {
 	            $('.date-picker').datepicker({
@@ -165,9 +167,11 @@
 	            
            }
 		});
-		 
-		       
-		   $('#btn_time_query').click(function() {  
+// 		  $('#explode1').click(function(){
+// 			  exportSalesReport($models);
+// 		  });
+  
+		   $('#btn_time_query').click(function time() {  
 			  // alert($('#begin_time').val()); 
 			  // alert($('#end_time').val()); 
 			  // alert(111);
@@ -178,10 +182,11 @@
 			   location.href="<?php echo $this->createUrl('statements/salesReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text    
 			  
 	        });
-		   $('#cx').click(function(){  
+		   a = new Array();
+		   $('#cx').click(function cx(){  
 			   // var obj = document.getElementById('accept');
 			    var obj=$('.checkedCN');
-			    
+			   
 			    var str=new Array();
 					obj.each(function(){
 						if($(this).attr("checked")=="checked")
@@ -191,15 +196,47 @@
 							
 						}								
 					});
-				str = str.substr(0,str.length-1);//除去最后一个“，”
+				a = str = str.substr(0,str.length-1);//除去最后一个“，”
 				//alert(str);
 					  var begin_time = $('#begin_time').val();
 					   var end_time = $('#end_time').val();
 					   var text = $('#text').val();
-					   //var cid = $(this).val();
 					   
-					 location.href="<?php echo $this->createUrl('statements/salesReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+					   //var cid = $(this).val();
 					  
+					 location.href="<?php echo $this->createUrl('statements/salesReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;	  
+					 return a; 
+			 });
 
-			  });
+			  $('#excel').click(function excel(){
+// 				  var obj=$('#checkedCNid');
+// 				    alert(obj);
+// 				    var str=new Array();
+// 						obj.each(function(){
+// 							alert(1);
+// 							if($(this).attr("checked")=="checked")
+// 							{
+// 								alert(str);
+// 								str += $(this).val()+","
+								
+// 							}								
+// 						});
+// 					str = str.substr(0,str.length-1);//除去最后一个“，”
+				   var str ='<?php echo $str;?>';
+		    	   var begin_time = $('#begin_time').val();
+				   var end_time = $('#end_time').val();
+				   var text = $('#text').val();
+				  
+				   //alert(str);
+			       if(confirm('确认导出并且下载Excel文件吗？')){
+
+			    	   location.href="<?php echo $this->createUrl('statements/salesExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			       }
+			       else{
+			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			       }
+			      
+			   });
+			     excel();
+			     cx();
 </script> 

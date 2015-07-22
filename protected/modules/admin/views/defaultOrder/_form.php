@@ -89,14 +89,14 @@
 							<script>                                                      
                                                             
                                                             $('#btn-addproduct').on(event_clicktouchstart,function(){
-                                                                var $modalconfig = $('#portlet-config');
+                                                                var $modalconfig = $('#modal-fullwide');
                                                                 $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'isset'=>'0'));?>', '', function(){
                                                                             $modalconfig.modal();
                                                                           });                                
                                                             });
                                                             
                                                             $('#btn-addset').on(event_clicktouchstart,function(){
-                                                                var $modalconfig = $('#portlet-config');
+                                                                var $modalconfig = $('#modal-fullwide');
                                                                 $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'isset'=>'1'));?>', '', function(){
                                                                             $modalconfig.modal();
                                                                           });                                

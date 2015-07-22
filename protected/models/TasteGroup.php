@@ -31,8 +31,8 @@ class TasteGroup extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('lid', 'numerical', 'integerOnly'=>true),
-			array('dpid', 'length', 'max'=>10),
+			//array('lid', 'numerical', 'integerOnly'=>true),
+			array('lid,dpid', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>50),
 			array('allflae, delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
@@ -50,6 +50,7 @@ class TasteGroup extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'taste'=>array(self::HAS_MANY,'Taste','','on'=>'t.lid=taste.taste_group_id and t.dpid=taste.dpid'),
 		);
 	}
 

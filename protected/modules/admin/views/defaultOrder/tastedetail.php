@@ -16,20 +16,25 @@
                                                 </div>
                                                 <div class="modal-body">
                                                         <div class="clearfix col-md-12">
-                                                        <?php if($tastes):?>
-                                                            <div class="btn-group" data-toggle="buttons">
-                                                        <?php foreach ($tastes as $taste):?>                                                                                       
-                                                                <label tasteid="<?php echo $taste['lid']; ?>" class="selectTaste btn btn-default  <?php if(in_array($taste['lid'],$orderTastes)) echo 'active'; ?>">
-                                                                    <input type="checkbox" class="toggle"> <?php echo $taste['name'];?>
-                                                                </label>
+                                                        <?php if($tastegroups):?>
+                                                            
+                                                        <?php foreach ($tastegroups as $tastegroup):?> 
+                                                            <div class="btn-group" data-toggle="buttons" style="margin-right: 10px;border: 1px solid red;background: rgb(245,230,230);">
+                                                                    <?php 
+                                                                    $tastes=TasteClass::gettastes($tastegroup['lid'],$this->companyId);
+                                                                    foreach ($tastes as $taste):?> 
+                                                                    <label tasteid="<?php echo $taste['lid']; ?>" group="tastegroup_<?php echo $tastegroup['lid']; ?>" class="selectTaste btn btn-default <?php if(in_array($taste['lid'],$orderTastes)) echo 'active'; ?>">
+                                                                        <input type="checkbox" class="toggle"> <?php echo $taste['name'];?>
+                                                                    </label>
+                                                                    <?php endforeach;?> 
+                                                           </div>
                                                         <?php endforeach;?>                                                                                        
-                                                            </div>
+                                                            
                                                         <?php endif;?>                                                            
                                                         </div>                                             
-                                                        <div class="form-group">
-                                                            <label class ='col-md-6 control-label'><?php echo yii::t('app','其他口味');?></label><br>
+                                                        <div class="form-group">                                                            
                                                             <div class="col-md-12">
-                                                                <textarea class="form-control" name="taste_memo" id="Order_remark"><?php echo $tasteMemo; ?></textarea>                                                                                                                                                   
+                                                                <textarea class="form-control" name="taste_memo" placeholder="<?php echo yii::t('app','请输入其他口味要求');?>" id="Order_remark"><?php echo $tasteMemo; ?></textarea>                                                                                                                                                   
                                                             </div>
                                                         </div>                                                   
                                                         <input class="form-control" name="selectTasteList" id="selectTasteListId" type="hidden" value="">                                                        
@@ -41,6 +46,14 @@
 
                                         <?php $this->endWidget(); ?>
                                                 <script>
+                                                    $('.selectTaste').click(function(){
+                                                        var groupid=$(this).attr("group");
+                                                        var lit=$('label.selectTaste[group="'+groupid+'"]');
+                                                        lit.each(function(){
+                                                            $(this).removeClass('active');
+                                                        });
+                                                   });
+                                                    
                                                     $('#addtaste-btn').click(function(){
                                                         var selectTasteList="";
                                                         var selectTasteId="";

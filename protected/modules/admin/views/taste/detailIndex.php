@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'taste-form',
-				'action' => $this->createUrl('taste/detailDelete' , array('companyId' => $this->companyId,'type'=>$type,'groupid'=>$groupid)),
+				'action' => $this->createUrl('taste/detailDelete' , array('companyId' => $this->companyId,'type'=>$type,'groupid'=>$groupid,'groupname'=>$groupname)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',

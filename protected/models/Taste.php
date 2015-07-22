@@ -32,14 +32,14 @@ class Taste extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name', 'required'),
-			array('lid', 'numerical', 'integerOnly'=>true),
-			array('dpid,taste_group_id', 'length', 'max'=>10),
+			//array('lid', 'numerical', 'integerOnly'=>true),
+			array('lid,dpid, taste_group_id', 'length', 'max'=>10),
 			array('name', 'length', 'max'=>50),
 			array('allflae, delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid,taste_group_id, create_at, update_at, name, allflae, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, taste_group_id, create_at, name, allflae, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,10 +62,10 @@ class Taste extends CActiveRecord
 		return array(
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
-                        'taste_group_id' => '口味分组ID',
+			'taste_group_id' => '口味分组',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'name' => '名称',
+			'name' => '口味描述',
 			'allflae' => '1整单口味，0不是',
 			'delete_flag' => 'Delete Flag',
 		);
@@ -91,7 +91,7 @@ class Taste extends CActiveRecord
 
 		$criteria->compare('lid',$this->lid);
 		$criteria->compare('dpid',$this->dpid,true);
-                $criteria->compare('taste_group_id',$this->taste_group_id,true);
+		$criteria->compare('taste_group_id',$this->taste_group_id,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('name',$this->name,true);
