@@ -54,16 +54,20 @@ class ProductClass
 				$connect->bindValue(':dpid',$dpid);
 				$connect->bindValue(':productId',$v['lid']);
 				$tasteGroup = $connect->queryAll();
-				foreach($tasteGroup as $key=>$group){
-					$sql = 'select lid,name from nb_taste where dpid=:dpid and taste_group_id=:tasteGroupId and delete_flag=0';
-					$connect->bindValue(':dpid',$dpid);
-					$connect->bindValue(':tasteGroupId',$group['taste_group_id']);
-					$taste = $connect->queryAll();
-					$product[$k]['taste'][$key] = $taste;
+				if($tasteGroup){
+					foreach($tasteGroup as $key=>$group){
+						$sql = 'select lid,name from nb_taste where dpid=:dpid and taste_group_id=:tasteGroupId and delete_flag=0';
+						$connect->bindValue(':dpid',$dpid);
+						$connect->bindValue(':tasteGroupId',$group['taste_group_id']);
+						$taste = $connect->queryAll();
+						$product[$k]['taste'][$key] = $taste;
+					}
+				}else{
+					$product[$k]['taste'] = array();
 				}
+				
 			}
 		}
-		var_dump($product);exit;
 		return $product;
 	}
 	public static function getCartInfo($dpid = 0,$siteNoId = 0){
