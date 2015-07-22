@@ -63,6 +63,7 @@ class ProductClass
 				}
 			}
 		}
+		var_dump($product);exit;
 		return $product;
 	}
 	public static function getCartInfo($dpid = 0,$siteNoId = 0){
