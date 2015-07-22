@@ -199,6 +199,7 @@ function showListPad(items){
 					var taste = taste[k];
 					trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.lid+'">'+taste.name+'</div>'; 
 				}
+				trTaste +='<div class="clear"></div>';
 				trTaste +='</div>';
 			}
 			trTaste +='<div class="clear"></div>';
@@ -239,6 +240,7 @@ function showListPad(items){
 					var taste = taste[k];
 					trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.lid+'">'+taste.name+'</div>'; 
 				}
+				trTaste +='<div class="clear"></div>';
 				trTaste +='</div>';
 			}
 			trTaste +='<div class="clear"></div>';
