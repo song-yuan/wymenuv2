@@ -53,8 +53,14 @@ class ProductClass
 				$connect = Yii::app()->db->createCommand($sql);
 				$connect->bindValue(':dpid',$dpid);
 				$connect->bindValue(':productId',$v['lid']);
-				$taste = $connect->queryAll();
-				$product[$k]['taste'] = $taste;
+				$tasteGroup = $connect->queryAll();
+				foreach($tasteGroup as $key=>$group){
+					$sql = 'select lid,name from nb_taste where dpid=:dpid and taste_group_id=:tasteGroupId and delete_flag=0';
+					$connect->bindValue(':dpid',$dpid);
+					$connect->bindValue(':tasteGroupId',$group['taste_group_id']);
+					$taste = $connect->queryAll();
+					$product[$k]['taste'][$key] = $taste;
+				}
 			}
 		}
 		return $product;
