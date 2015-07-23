@@ -20,8 +20,8 @@
                                 <!-- /.modal-dialog -->
                         </div>
                     <div class="modal fade" id="modal-fullwide" tabindex="-1" role="basic" aria-hidden="true">
-                                <div class="modal-dialog modal-full">
-                                        <div class="modal-content">
+                                <div class="modal-dialog modal-full" style="height:100%;">
+                                        <div class="modal-content" style="height:100%;">
                                                 <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                                         <h4 class="modal-title">Modal Title</h4>
