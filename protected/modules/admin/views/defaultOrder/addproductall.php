@@ -1,3 +1,43 @@
+
+<style>
+
+.navigation {
+    width:200px;
+    font-family:Arial;
+    float: left;
+}
+.navigation ul {
+    list-style-type:none;                /* 不显示项目符号 */
+    margin:0px;
+    padding:0px;
+}
+.navigation li {
+    border-bottom:1px solid #ED9F9F;    /* 添加下划线 */
+    font-size: 18px;
+}
+.navigation li a{
+    display:block;                        /* 区块显示 */
+    padding:8px 8px 8px 0.5em;
+    text-decoration:none;
+    border-left:12px solid #711515;        /* 左边的粗红边 */
+    border-right:1px solid #711515;        /* 右侧阴影 */
+}
+.navigation li a:link, .navigation li a:visited{
+    background-color:#c11136;
+    color:#FFFFFF;
+}
+.navigation li a:hover{                    /* 鼠标经过时 */
+    background-color:#990020;            /* 改变背景色 */
+    color:#ffff00;                        /* 改变文字颜色 */
+}
+.clear{
+    clear: both;
+}
+</style>
+
+
+
+
                        			<?php $form=$this->beginWidget('CActiveForm', array(
                                                         'id'=>'orderProduct',
                                                         'action' => $this->createUrl('defaultOrder/addProduct',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId,'isset'=>$isset)),
@@ -12,7 +52,62 @@
                                                 )); ?>                                                
                                                 
                                                 <div class="modal-body">
-                                                                
+                                                                <div style="position:absolute; width: 97%;height: 98%; background: #fff;color: #555555;;border-radius: 0 !important;box-sizing: border-box;">
+                                                                    <div class="navigation">
+                                                                        <ul>
+                                                                            <li><a href="#">Home</a></li>
+                                                                            <li><a href="#">My Blog</a></li>
+                                                                            <li><a href="#">Friends</a></li>
+                                                                            <li><a href="#">Next Station</a></li>
+                                                                            <li><a href="#">Contact Me</a></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="navigation">
+                                                                        <ul>
+                                                                            <li><a href="#">Home</a></li>
+                                                                            <li><a href="#">My Blog</a></li>
+                                                                            <li><a href="#">Friends</a></li>
+                                                                            <li><a href="#">Next Station</a></li>
+                                                                            <li><a href="#">Contact Me</a></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="navigation">
+                                                                        <ul>
+                                                                            <li><a href="#">Home</a></li>
+                                                                            <li><a href="#">My Blog</a></li>
+                                                                            <li><a href="#">Friends</a></li>
+                                                                            <li><a href="#">Next Station</a></li>
+                                                                            <li><a href="#">Contact Me</a></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                    <div class="navigation" style="float:right;height: 100%;">
+                                                                        <div style="float:right;">
+                                                                            <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
+                                                                            <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                                        </div>
+                                                                        <div class="clear"></div>
+                                                                        <div>
+                                                                            <ul>
+                                                                                <li><a href="#">Home</a></li>
+                                                                                <li><a href="#">My Blog</a></li>
+                                                                                <li><a href="#">Friends</a></li>
+                                                                                <li><a href="#">Next Station</a></li>
+                                                                                <li><a href="#">Contact Me</a></li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="navigation" style="float:right;height: 100%;">
+                                                                        <div>
+                                                                            <ul>
+                                                                                <li><a href="#">1Home</a></li>
+                                                                                <li><a href="#">2My Blog</a></li>
+                                                                                <li><a href="#">3Friends</a></li>
+                                                                                <li><a href="#">4Next Station</a></li>
+                                                                                <li><a href="#">5Contact Me</a></li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                         <div class="form-actions fluid <?php if($isset=='1') echo 'hidden';?>" id="product_panel">
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderProduct, 'category_id',array('class' => 'col-md-4 control-label'));?>
@@ -59,7 +154,7 @@
                                                                 
                                                         </div><!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->
                                                 </div>
-                                                <div class="form-actions fluid <?php if($isset=='0') echo 'hidden';?>" id="set_panel">
+                                                <div class="form-actions fluid hidden <?php if($isset=='0') echo 'hidden';?>" id="set_panel">
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderProduct, 'set_id',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
@@ -74,11 +169,7 @@
                                                 <?php echo $form->hiddenField($orderProduct,'order_id',array('class'=>'form-control')); ?>
                                                 <?php echo $form->hiddenField($orderProduct,'set_id',array('class'=>'form-control')); ?>
                                                 <input class="form-control" name="selsetlist" id="selsetlistid" type="hidden" value="">
-                                                <div class="modal-footer">
-                                                       <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
-                                                       <input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
-                                                                
-                                                </div>
+                                                
 
                                                 <?php $this->endWidget(); ?>                
                     <script type="text/javascript">
