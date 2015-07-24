@@ -385,7 +385,7 @@ $(document).ready(function(){
      		var preTasteList = tasteList.prev('.taste-list');
      		var item = preTasteList.find('.taste-item').html();
      		tasteList.find('.taste-item').html(item);
-     		tasteList.find('.taste-item').removeClass('active');
+     		tasteList.find('.taste-item .item').removeClass('active');
      	}
      });
     //选择产品口味
