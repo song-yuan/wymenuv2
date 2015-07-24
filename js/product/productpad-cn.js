@@ -360,6 +360,13 @@ $(document).ready(function(){
     		var inputstr = '<input type="hidden" name="'+productId+'[1-0][0]" value="1"/>';
     		$('#padOrderForm').append(inputstr);
     	}
+    	blockCategory.find('.taste-list').each(function(q){
+    		if(q!=0){
+    			var num = $(this).find('input.input-product').val();
+    			$('input[name^="'+productId+'['+num+'-'+q+']"]').remove();
+    			$(this).remove();
+    		}
+    	});
     	var length = blockCategory.find('.taste-list').length;
     	for(var i=0;i<(inputVal-length);i++){
     		var str = '<div class="taste-list" eq="'+(i+length)+'">';
