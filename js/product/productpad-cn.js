@@ -412,8 +412,8 @@ $(document).ready(function(){
      	$('input[name^="'+productId+'['+num+'-'+preEq+']"]').each(function(e){
      		if(e>0){
      			var name = $(this).attr('name');
-     			var o = "'+num+'-'+preEq+'";
-     			var re = "'+num+'-'+eq+'";
+     			var o = num+'-'+preEq;
+     			var re = num+'-'+eq;
      			alert(o);alert(re);
      			name = name.replace(o,re);
      			alert(name);
