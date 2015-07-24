@@ -398,7 +398,11 @@ $(document).ready(function(){
      	tasteList.find('.taste-item').hide();
      	tasteList.find('.taste-item .item').removeClass('active');
      	//订单里删除
-     	$('input[name^="'+productId+'['+num+'-'+eq+']"]').remove();
+     	$('input[name^="'+productId+'['+num+'-'+eq+']"]').each(function(e){
+     		if(e>0){
+     			$(this).remove();
+     		}
+     	});
      });
     //选择产品口味
     $('#forum_list').on(event_clicktouchstart,'.tastepad .item',function(){
