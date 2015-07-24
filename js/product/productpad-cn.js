@@ -114,7 +114,7 @@ $(document).ready(function(){
     	}
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
-    	var 	 = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
+    	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
     	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
     	var singleNums = singleNumObj.html();
     	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
