@@ -394,6 +394,7 @@ $(document).ready(function(){
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
      	var tasteList = $(this).parents('.taste-list');
      	var eq = tasteList.attr('eq');
+     	var num = tasteList.find('input.input-product').val();
      	tasteList.find('.taste-item').hide();
      	tasteList.find('.taste-item .item').removeClass('active');
      	//订单里删除
