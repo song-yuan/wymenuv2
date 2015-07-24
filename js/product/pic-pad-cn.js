@@ -238,6 +238,7 @@ function showListPad(items){
 				trTaste +='<div class="taste-group">';
 				for(var k in taste){
 					var taste = taste[k];
+					alert(taste.lid);
 					trTaste +='<div class="item" product-id="'+pad(item.lid,10)+'" taste-id="'+taste.lid+'">'+taste.name+'</div>'; 
 				}
 				trTaste +='<div class="clear"></div>';
