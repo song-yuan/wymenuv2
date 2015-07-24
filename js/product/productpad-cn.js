@@ -378,6 +378,8 @@ $(document).ready(function(){
     });
     //点击选择
      $('#forum_list').on(event_clicktouchstart,'.taste-select',function(){
+     	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
      	var tasteList = $(this).parents('.taste-list');
      	var eq = tasteList.attr('eq');
      	tasteList.find('.taste-item').show();
@@ -387,6 +389,12 @@ $(document).ready(function(){
      		tasteList.find('.taste-item').html(item);
      		tasteList.find('.taste-item .item').removeClass('active');
      	}
+     	//订单里删除 已存在的口味
+     	$('input[name^="'+productId+'['+num+'-'+eq+']"]').each(function(e){
+     		if(e>0){
+     			$(this).remove();
+     		}
+     	});
      });
      //点击同上
      $('#forum_list').on(event_clicktouchstart,'.taste-same',function(){
