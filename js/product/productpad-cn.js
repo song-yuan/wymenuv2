@@ -362,7 +362,7 @@ $(document).ready(function(){
     	}
     	var length = blockCategory.find('.taste-list').length;
     	for(var i=0;i<(inputVal-length);i++){
-    		var str = '<div class="taste-list" eq="'+(i+length+1)+'">';
+    		var str = '<div class="taste-list" eq="'+i+length+'">';
     			str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length)+'道菜口味</div><div class="taste-title-r">';
     			str +='<div class="taste-select">选择</div><div class="taste-same">同上</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
     			str +='</div><div class="clear"></div></div>';
