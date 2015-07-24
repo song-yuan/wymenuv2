@@ -388,6 +388,36 @@ $(document).ready(function(){
      		tasteList.find('.taste-item .item').removeClass('active');
      	}
      });
+     //点击同上
+     $('#forum_list').on(event_clicktouchstart,'.taste-none',function(){
+    	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
+     	var tasteList = $(this).parents('.taste-list');
+     	var eq = tasteList.attr('eq');
+     	var num = tasteList.find('input.input-product').val();
+     	tasteList.find('.taste-item').hide();
+     	
+     	var preTasteList = tasteList.prev('.taste-list');
+     	var preEq = preTasteList.attr('eq');
+ 		var item = preTasteList.find('.taste-item').html();
+ 		tasteList.find('.taste-item').html(item);
+     		
+     	//订单里删除 已存在的口味
+     	$('input[name^="'+productId+'['+num+'-'+eq+']"]').each(function(e){
+     		if(e>0){
+     			$(this).remove();
+     		}
+     	});
+     	//订单里 按照上一口味 重新添加
+     	$('input[name^="'+productId+'['+num+'-'+preEq+']"]').each(function(e){
+     		if(e>0){
+     			var name = $(this).attr('name');
+     			name.replace("'+num+'-'+preEq+'","'+num+'-'+eq+'");
+     			var str = '<input type="hidden" name="'+name+'" value="1"/>';
+    			$('#padOrderForm').append(str);
+     		}
+     	});
+     });
       //点击 无
      $('#forum_list').on(event_clicktouchstart,'.taste-none',function(){
     	var blockCategory = $(this).parents('.blockCategory');
