@@ -147,8 +147,9 @@ $(document).ready(function(){
 			$('.total-price').html(total);
 			$('.total-num').html(nums-1);
  		}
- 		var length = $('input[name^="'+productId+'[1-"]').length;
- 		alert(length);
+ 		var tasteInput = $('input[name^="'+productId+'[1-"]');
+ 		var length = tasteInput.length;
+ 		tasteInput.eq(length-1).remove();
                // alert(padprinterping);
         if (typeof Androidwymenuprinter != "undefined") {
                     if(padprinterping!="local")
