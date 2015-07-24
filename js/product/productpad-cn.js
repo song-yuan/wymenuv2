@@ -376,6 +376,18 @@ $(document).ready(function(){
     	$('.tastepad').hide();
     	$(this).parents('.blockCategory').find('.tastepad').show();
     });
+    //点击选择
+     $('#forum_list').on(event_clicktouchstart,'.taste-select',function(){
+     	var tasteList = $(this).parents('.taste-list');
+     	var eq = tasteList.attr('eq');
+     	tasteList.find('.taste-item').show();
+     	if(eq!=0){
+     		var preTasteList = tasteList.prev('.taste-list');
+     		var item = preTasteList.find('.taste-item').html();
+     		tasteList.find('.taste-item').html(item);
+     		tasteList.find('.taste-item').removeClass('active');
+     	}
+     });
     //选择产品口味
     $('#forum_list').on(event_clicktouchstart,'.tastepad .item',function(){
     	var tasteList = $(this).parents('.taste-list');
@@ -396,7 +408,7 @@ $(document).ready(function(){
     		$(this).addClass('active');
     	}
     });
-
+	
     $('.taste-layer').on('click',function(){
     	$('.tastepad').hide();
     	$(this).hide();
