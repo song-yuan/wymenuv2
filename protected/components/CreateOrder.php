@@ -344,23 +344,23 @@ class CreateOrder
 											);
 							   $db->createCommand()->insert('nb_order_product',$orderProductData);
 							   $orderPrice +=$productPrice*$v;
-							   
-							   $orderTastSe = new Sequence("order_taste");
-		            		   $orderTasteId = $orderTastSe->nextval();
-							   $orderTasteData = array(
-							   						'lid'=>$orderTasteId,
-							   						'dpid'=>$dpid,
-							   						'create_at'=>$time,
-							   						'taste_id'=>$val,
-							   						'order_id'=>$orderProductId,
-							   						'is_order'=>0
-							   						);
-							   $db->createCommand()->insert('nb_order_taste',$orderTasteData);
-							   
-							   $se=new Sequence("order_product");
-		            		   $orderProductId = $se->nextval();	                			
-	                	 }
-
+							   if($val){
+								   $orderTastSe = new Sequence("order_taste");
+			            		   $orderTasteId = $orderTastSe->nextval();
+								   $orderTasteData = array(
+								   						'lid'=>$orderTasteId,
+								   						'dpid'=>$dpid,
+								   						'create_at'=>$time,
+								   						'taste_id'=>$val,
+								   						'order_id'=>$orderProductId,
+								   						'is_order'=>0
+								   						);
+								   $db->createCommand()->insert('nb_order_taste',$orderTasteData);
+								   
+								   $se=new Sequence("order_product");
+			            		   $orderProductId = $se->nextval();	                			
+	                	 	  }
+	                	  }
 	                	}
 	             	}else{
 	             		 $orderProductData = array(
