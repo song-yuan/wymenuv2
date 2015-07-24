@@ -450,19 +450,23 @@ $(document).ready(function(){
     	var blockCategory = $(this).parents('.blockCategory');
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
     	var tasteList = $(this).parents('.taste-list');
+    	var tasteGroup = $(this).parents('.taste-group');
     	var eq = tasteList.attr('eq');
     	
     	var num = tasteList.find('input.input-product').val();
     	
-    	if($(this).hasClass('active')){
-    		var tasteId = $(this).attr('taste-id');
-    		$('input[name="'+productId+'['+num+'-'+eq+']['+tasteId+']'+'"]').remove();
-    		$(this).removeClass('active');
-    	}else{
+    	if(!$(this).hasClass('active')){
     		var tasteId = $(this).attr('taste-id');
     		var str = '<input type="hidden" name="'+productId+'['+num+'-'+eq+']['+tasteId+']'+'" value="1"/>';
     		$('#padOrderForm').append(str);
     		$(this).addClass('active');
+    		$(this).siblings().each(function(){
+    			if($(this).hasClass('active')){
+		    		var tasteId = $(this).attr('taste-id');
+		    		$('input[name="'+productId+'['+num+'-'+eq+']['+tasteId+']'+'"]').remove();
+		    		$(this).removeClass('active');
+		    	}
+    		});
     	}
     });
 	
