@@ -114,7 +114,7 @@ $(document).ready(function(){
     	}
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
-    	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
+    	var 	 = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
     	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
     	var singleNums = singleNumObj.html();
     	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
@@ -147,6 +147,8 @@ $(document).ready(function(){
 			$('.total-price').html(total);
 			$('.total-num').html(nums-1);
  		}
+ 		var length = $('input[name^="'+productId+'[1-"]').length;
+ 		alert(length);
                // alert(padprinterping);
         if (typeof Androidwymenuprinter != "undefined") {
                     if(padprinterping!="local")
