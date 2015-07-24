@@ -388,20 +388,31 @@ $(document).ready(function(){
      		tasteList.find('.taste-item .item').removeClass('active');
      	}
      });
+      //点击 无
+     $('#forum_list').on(event_clicktouchstart,'.taste-none',function(){
+    	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
+     	var tasteList = $(this).parents('.taste-list');
+     	var eq = tasteList.attr('eq');
+     	tasteList.find('.taste-item').hide();
+     	tasteList.find('.taste-item .item').removeClass('active');
+     	//订单里删除
+     	$('input[name^="'+productId+'['+num+'-'+eq+']"]').remove();
+     });
     //选择产品口味
     $('#forum_list').on(event_clicktouchstart,'.tastepad .item',function(){
+    	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
     	var tasteList = $(this).parents('.taste-list');
     	var eq = tasteList.attr('eq');
     	
     	var num = tasteList.find('input.input-product').val();
     	
     	if($(this).hasClass('active')){
-    		var productId = $(this).attr('product-id');
     		var tasteId = $(this).attr('taste-id');
     		$('input[name="'+productId+'['+num+'-'+eq+']['+tasteId+']'+'"]').remove();
     		$(this).removeClass('active');
     	}else{
-    		var productId = $(this).attr('product-id');
     		var tasteId = $(this).attr('taste-id');
     		var str = '<input type="hidden" name="'+productId+'['+num+'-'+eq+']['+tasteId+']'+'" value="1"/>';
     		$('#padOrderForm').append(str);
