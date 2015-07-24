@@ -382,6 +382,7 @@ $(document).ready(function(){
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
      	var tasteList = $(this).parents('.taste-list');
      	var eq = tasteList.attr('eq');
+     	var num = tasteList.find('input.input-product').val();
      	tasteList.find('.taste-item').show();
      	if(eq!=0){
      		var preTasteList = tasteList.prev('.taste-list');
@@ -422,9 +423,7 @@ $(document).ready(function(){
      			var name = $(this).attr('name');
      			var o = num+'-'+preEq;
      			var re = num+'-'+eq;
-     			alert(o);alert(re);
      			name = name.replace(o,re);
-     			alert(name);
      			var str = '<input type="hidden" name="'+name+'" value="1"/>';
     			$('#padOrderForm').append(str);
      		}
