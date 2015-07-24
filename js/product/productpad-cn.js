@@ -412,7 +412,7 @@ $(document).ready(function(){
      	$('input[name^="'+productId+'['+num+'-'+preEq+']"]').each(function(e){
      		if(e>0){
      			var name = $(this).attr('name');
-     			name.replace("'+num+'-'+preEq+'","'+num+'-'+eq+'");
+     			name = name.replace("'+num+'-'+preEq+'","'+num+'-'+eq+'");
      			var str = '<input type="hidden" name="'+name+'" value="1"/>';
     			$('#padOrderForm').append(str);
      		}
