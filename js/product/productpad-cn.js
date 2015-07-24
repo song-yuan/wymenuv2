@@ -389,7 +389,7 @@ $(document).ready(function(){
      	}
      });
      //点击同上
-     $('#forum_list').on(event_clicktouchstart,'.taste-none',function(){
+     $('#forum_list').on(event_clicktouchstart,'.taste-same',function(){
     	var blockCategory = $(this).parents('.blockCategory');
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
      	var tasteList = $(this).parents('.taste-list');
