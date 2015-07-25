@@ -26,8 +26,8 @@
                                                                                                                         <th class="hidden-xs"><?php echo yii::t('app','口味');?></th>
                                                                                                                         <th><?php echo yii::t('app','应付合计');?><br><span id="total"><?php echo number_format($productTotal,2);?></span></th>
                                                                                                                         <th >
-                                                                                                                            <a class="btn green add_btn" id="btn-addproduct" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;<?php echo yii::t('app','单品');?></a>
-                                                                                                                            <a class="btn green add_btn" id="btn-addset" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;<?php echo yii::t('app','套餐');?></a>
+                                                                                                                            <!--<a class="btn green add_btn" id="btn-addproduct" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;<?php echo yii::t('app','单品');?></a>-->
+                                                                                                                            <a class="btn green add_btn" id="btn-addset" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;<?php echo yii::t('app','选菜');?></a>
                                                                                                                         </th>
 														</tr>
 													</thead>

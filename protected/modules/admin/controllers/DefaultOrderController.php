@@ -469,69 +469,60 @@ class DefaultOrderController extends BackendController
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $typeId=Yii::app()->request->getParam('typeId','0');
                 $orderId=Yii::app()->request->getParam('orderId','0');
-                $orderProduct = new OrderProduct();
-                $orderProduct->order_id = $orderId;
-                $categories = ProductClass::getCategories($companyId);
-                $isset=Yii::app()->request->getParam('isset','0');
-                //var_dump($categories);exit;
-                $setlist = ProductSetClass::getSetlist($companyId);
-                $categoryId=0;
-                $products = ProductClass::getProducts($categoryId,$companyId);
-                $productslist=CHtml::listData($products, 'lid', 'product_name');
                 
+                $criteria = new CDbCriteria;
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
+		$criteria->order = ' order_num asc ';		
+		$categories = ProductCategory::model()->findAll($criteria);
                 
+                $criteriaps = new CDbCriteria;
+		$criteriaps->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
+                $criteriaps->with="productsetdetail";
+		$criteriaps->order = ' t.lid asc ';		
+		$productSets = ProductSet::model()->findAll($criteriaps);
+                                
+                $criteriap = new CDbCriteria;
+		$criteriap->condition =  'delete_flag=0 and t.dpid='.$companyId ;// and is_show=1
+		$criteriap->order = ' t.category_id asc,t.lid asc ';
+                $products =  Product::model()->findAll($criteriap);
+                
+                $productidnameArr=array();
+                foreach($products as $product)
+                {
+                    $productidnameArr[$product->lid]=$product->product_name;
+                }
+                //var_dump($productidnameArr);exit;
+                        
 		if(Yii::app()->request->isPostRequest){
                         //$isset = Yii::app()->request->getPost('isset',0);
                         //$setid = Yii::app()->request->getParam('setid',0);
-                        $selsetlist = Yii::app()->request->getPost('selsetlist',0);
+                        $selectlist=Yii::app()->request->getPost('selectproductlist','0');
                         $db = Yii::app()->db;
                         $transaction = $db->beginTransaction();
                         try {
-                            //var_dump($isset);exit;
-                            if($isset==0)
-                            {   
-                                $orderProduct = new OrderProduct();
-                                $orderProduct->dpid = $companyId;
-                                $orderProduct->delete_flag = '0';
-                                $orderProduct->taste_memo = "";
-                                $orderProduct->product_order_status = '0';
-                                $orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
-                                $orderProduct->create_at = date('Y-m-d H:i:s',time());
-                                $orderProduct->set_id = '0000000000';                                
-                                $se=new Sequence("order_product");
-                                $orderProduct->lid = $se->nextval();
-                                //var_dump($orderProduct);exit;
-                                $orderProduct->save();
-                            }else{
-                                //var_dump($selsetlist);exit;
-                                if(strlen($selsetlist)>10)
-                                {   
-                                    
-                                    $productIdlist=explode(',',$selsetlist);
-                                    $setid=Yii::app()->request->getPost('OrderProduct');
-                                    //var_dump($setid['set_id']);exit;
-                                    foreach ($productIdlist as $productId){
-                                        //var_dump($productId);
-                                        $sorderProduct = new OrderProduct();
-                                        $sorderProduct->dpid = $companyId;
-                                        $sorderProduct->delete_flag = '0';
-                                        $sorderProduct->product_order_status = '0';
-                                        $sorderProduct->set_id=$setid['set_id'];
-                                        $sorderProduct->main_id='0000000000';
-                                        $sorderProduct->order_id=$setid['order_id'];
-                                        //$orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
-                                        $sorderProduct->create_at = date('Y-m-d H:i:s',time());
-                                        $productUnit=explode('|',$productId);
-                                        $sorderProduct->product_id = $productUnit[0];
-                                        $sorderProduct->amount = $productUnit[1];
-                                        $sorderProduct->price = $productUnit[2];
-                                        $sorderProduct->is_giving = '0';
-                                        $sorderProduct->zhiamount = 0;                                    
-                                        $se=new Sequence("order_product");
-                                        $sorderProduct->lid = $se->nextval();
-                                        //var_dump($orderProduct);exit;
-                                        $sorderProduct->save();                                    
-                                    }
+                            if(strlen($selectlist)>10)
+                            {                              
+                                $productlist=explode(';',$selectlist);                                
+                                foreach ($productlist as $product){
+                                    //var_dump($productId);
+                                    $productUnit=explode(',',$product);
+                                    $sorderProduct = new OrderProduct();
+                                    $sorderProduct->dpid = $companyId;
+                                    $sorderProduct->delete_flag = '0';
+                                    $sorderProduct->product_order_status = '0';
+                                    $sorderProduct->set_id=$productUnit[0];
+                                    $sorderProduct->main_id='0000000000';
+                                    $sorderProduct->order_id=$orderId;
+                                    $sorderProduct->create_at = date('Y-m-d H:i:s',time());
+                                    $sorderProduct->product_id = $productUnit[1];
+                                    $sorderProduct->amount = $productUnit[2];
+                                    $sorderProduct->zhiamount = $productUnit[3];                                    
+                                    $sorderProduct->price = $productUnit[4];
+                                    $sorderProduct->is_giving = $productUnit[5];
+                                    $se=new Sequence("order_product");
+                                    $sorderProduct->lid = $se->nextval();
+                                    //var_dump($orderProduct);exit;
+                                    $sorderProduct->save();                                    
                                 }
                             }
                             $transaction->commit();
@@ -548,17 +539,15 @@ class DefaultOrderController extends BackendController
                         //添加产品时，还可以添加套餐。。。                     
                 }
                 
-                $paymentMethods = PaymentClass::getPaymentMethodList($companyId);
-                //var_dump($paymentMethods);exit;
                 $this->renderPartial('addproductall' , array(
                                 'orderId'=>$orderId,
-				'orderProduct' => $orderProduct,
-				'paymentMethods'=>$paymentMethods,
-                                'categories' => $categories,
-                                'products' => $productslist,
+				'categories' => $categories,
+                                'products' => $products,
+                                'productSets' => $productSets,
                                 'typeId'=>$typeId,
-                                'setlist' => $setlist,
-                                'isset' => $isset
+                                //'setlist' => $setlist,
+                                //'isset' => $isset
+                                "pn"=>$productidnameArr
 		));
 	}
         
