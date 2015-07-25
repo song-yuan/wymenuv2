@@ -538,7 +538,7 @@ class DefaultOrderController extends BackendController
                         //第一个菜需要更新订单状态。。。。
                         //添加产品时，还可以添加套餐。。。                     
                 }
-                
+//                var_dump($productidnameArr);exit;
                 $this->renderPartial('addproductall' , array(
                                 'orderId'=>$orderId,
 				'categories' => $categories,
