@@ -490,6 +490,11 @@
 .taste-item{
 	display:none;
 }
+.taste-group{
+	float:left;
+	border:solid 1px rgb(229,229,229);
+	margin:5px; 
+}
 .tastepad .item{
 	min-width:30px;
 	height:30px;

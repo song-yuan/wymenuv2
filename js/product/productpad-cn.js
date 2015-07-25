@@ -147,6 +147,9 @@ $(document).ready(function(){
 			$('.total-price').html(total);
 			$('.total-num').html(nums-1);
  		}
+ 		var tasteInput = $('input[name^="'+productId+'[1-"]');
+ 		var length = tasteInput.length;
+ 		tasteInput.eq(length-1).remove();
                // alert(padprinterping);
         if (typeof Androidwymenuprinter != "undefined") {
                     if(padprinterping!="local")
@@ -360,10 +363,17 @@ $(document).ready(function(){
     		var inputstr = '<input type="hidden" name="'+productId+'[1-0][0]" value="1"/>';
     		$('#padOrderForm').append(inputstr);
     	}
+    	blockCategory.find('.taste-list').each(function(q){
+    		if(q!=0){
+    			var num = $(this).find('input.input-product').val();
+    			$('input[name^="'+productId+'['+num+'-'+q+']"]').remove();
+    			$(this).remove();
+    		}
+    	});
     	var length = blockCategory.find('.taste-list').length;
     	for(var i=0;i<(inputVal-length);i++){
-    		var str = '<div class="taste-list" eq="'+(i+length+1)+'">';
-    			str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length)+'道菜口味</div><div class="taste-title-r">';
+    		var str = '<div class="taste-list" eq="'+(i+length)+'">';
+    			str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length+1)+'道菜口味</div><div class="taste-title-r">';
     			str +='<div class="taste-select">选择</div><div class="taste-same">同上</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
     			str +='</div><div class="clear"></div></div>';
     			str +='<div class="taste-item">';
@@ -376,27 +386,100 @@ $(document).ready(function(){
     	$('.tastepad').hide();
     	$(this).parents('.blockCategory').find('.tastepad').show();
     });
+    //点击选择
+     $('#forum_list').on(event_clicktouchstart,'.taste-select',function(){
+     	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
+     	var tasteList = $(this).parents('.taste-list');
+     	var eq = tasteList.attr('eq');
+     	var num = tasteList.find('input.input-product').val();
+     	tasteList.find('.taste-item').show();
+     	if(eq!=0){
+     		var preTasteList = tasteList.prev('.taste-list');
+     		var item = preTasteList.find('.taste-item').html();
+     		tasteList.find('.taste-item').html(item);
+     		tasteList.find('.taste-item .item').removeClass('active');
+     	}
+     	//订单里删除 已存在的口味
+     	$('input[name^="'+productId+'['+num+'-'+eq+']"]').each(function(e){
+     		if(e>0){
+     			$(this).remove();
+     		}
+     	});
+     });
+     //点击同上
+     $('#forum_list').on(event_clicktouchstart,'.taste-same',function(){
+    	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
+     	var tasteList = $(this).parents('.taste-list');
+     	var eq = tasteList.attr('eq');
+     	var num = tasteList.find('input.input-product').val();
+     	tasteList.find('.taste-item').hide();
+     	
+     	var preTasteList = tasteList.prev('.taste-list');
+     	var preEq = preTasteList.attr('eq');
+ 		var item = preTasteList.find('.taste-item').html();
+ 		tasteList.find('.taste-item').html(item);
+     		
+     	//订单里删除 已存在的口味
+     	$('input[name^="'+productId+'['+num+'-'+eq+']"]').each(function(e){
+     		if(e>0){
+     			$(this).remove();
+     		}
+     	});
+     	//订单里 按照上一口味 重新添加
+     	$('input[name^="'+productId+'['+num+'-'+preEq+']"]').each(function(e){
+     		if(e>0){
+     			var name = $(this).attr('name');
+     			var o = num+'-'+preEq;
+     			var re = num+'-'+eq;
+     			name = name.replace(o,re);
+     			var str = '<input type="hidden" name="'+name+'" value="1"/>';
+    			$('#padOrderForm').append(str);
+     		}
+     	});
+     });
+      //点击 无
+     $('#forum_list').on(event_clicktouchstart,'.taste-none',function(){
+    	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
+     	var tasteList = $(this).parents('.taste-list');
+     	var eq = tasteList.attr('eq');
+     	var num = tasteList.find('input.input-product').val();
+     	tasteList.find('.taste-item').hide();
+     	tasteList.find('.taste-item .item').removeClass('active');
+     	//订单里删除
+     	$('input[name^="'+productId+'['+num+'-'+eq+']"]').each(function(e){
+     		if(e>0){
+     			$(this).remove();
+     		}
+     	});
+     });
     //选择产品口味
     $('#forum_list').on(event_clicktouchstart,'.tastepad .item',function(){
+    	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
     	var tasteList = $(this).parents('.taste-list');
+    	var tasteGroup = $(this).parents('.taste-group');
     	var eq = tasteList.attr('eq');
     	
     	var num = tasteList.find('input.input-product').val();
     	
-    	if($(this).hasClass('active')){
-    		var productId = $(this).attr('product-id');
-    		var tasteId = $(this).attr('taste-id');
-    		$('input[name="'+productId+'['+num+'-'+eq+']['+tasteId+']'+'"]').remove();
-    		$(this).removeClass('active');
-    	}else{
-    		var productId = $(this).attr('product-id');
+    	if(!$(this).hasClass('active')){
     		var tasteId = $(this).attr('taste-id');
     		var str = '<input type="hidden" name="'+productId+'['+num+'-'+eq+']['+tasteId+']'+'" value="1"/>';
     		$('#padOrderForm').append(str);
     		$(this).addClass('active');
+    		$(this).siblings().each(function(){
+    			if($(this).hasClass('active')){
+		    		var tasteId = $(this).attr('taste-id');
+		    		$('input[name="'+productId+'['+num+'-'+eq+']['+tasteId+']'+'"]').remove();
+		    		$(this).removeClass('active');
+		    	}
+    		});
     	}
     });
-
+	
     $('.taste-layer').on('click',function(){
     	$('.tastepad').hide();
     	$(this).hide();
