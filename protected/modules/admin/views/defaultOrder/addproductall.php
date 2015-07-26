@@ -169,7 +169,7 @@
                                                                                 <div class="clear"></div>
                                                                                 <div style="width:100%;">
                                                                                 <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">-1</span>
-                                                                                <input id="product-detail-zhiamount" style="width:50%;display:inline-block;" class="form-control" placeholder="下单只数" name="OrderProduct[zhiamount]" id="OrderProduct_zhiamount" type="text" value="0">
+                                                                                <input id="product-detail-zhiamount" style="width:30%;display:inline-block;" class="form-control" placeholder="下单只数" name="OrderProduct[zhiamount]" id="OrderProduct_zhiamount" type="text" value="0">
                                                                                 <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">+1</span>
                                                                                 <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 6px;">+0.5</span>
                                                                                 </div>
