@@ -225,7 +225,7 @@ class PadbindController extends Controller
         
         public function actionDomain(){
 		$companyid = Yii::app()->request->getParam('companyid',0);
-                if(empty($companyid))
+                if(empty($companyid)||$companyid=="0000000000")
                 {
                     echo "http://menu.wymenu.com/wymenuv2/";
                     exit;

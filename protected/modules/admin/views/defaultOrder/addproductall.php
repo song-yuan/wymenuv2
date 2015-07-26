@@ -157,10 +157,22 @@
                                                                                 <input id="product-detail-price" style="width:50%;display:inline-block;" class="form-control" placeholder="下单时价格" name="OrderProduct[price]" id="OrderProduct_price" type="text" maxlength="10" value="0.00">
                                                                                 <div class="clear"></div>
                                                                                 <label style="width:40%;">数量</label>
-                                                                                <input id="product-detail-amount" style="width:50%;display:inline-block;" class="form-control" placeholder="下单数量" name="OrderProduct[amount]" id="OrderProduct_amount" type="text" value="1">
                                                                                 <div class="clear"></div>
-                                                                                <label style="width:40%;">只数</label>
+                                                                                <div style="width:100%;">
+                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">-1</span>
+                                                                                <input id="product-detail-amount" style="width:30%;display:inline-block;" class="form-control" placeholder="下单数量" name="OrderProduct[amount]" id="OrderProduct_amount" type="text" value="1">
+                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">+1</span>
+                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 6px;">+0.5</span>
+                                                                                </div>
+                                                                                <div class="clear"></div>
+                                                                                <label style="width:20%;">只数</label>
+                                                                                <div class="clear"></div>
+                                                                                <div style="width:100%;">
+                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">-1</span>
                                                                                 <input id="product-detail-zhiamount" style="width:50%;display:inline-block;" class="form-control" placeholder="下单只数" name="OrderProduct[zhiamount]" id="OrderProduct_zhiamount" type="text" value="0">
+                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">+1</span>
+                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 6px;">+0.5</span>
+                                                                                </div>
                                                                                                                                                      
                                                                             </div>
                                                                             <div class="clear"></div> 
