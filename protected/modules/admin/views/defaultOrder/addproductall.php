@@ -110,9 +110,7 @@
                                                                             <span style="color:#000088;font-size: 1.5em;">菜品名称</span>
                                                                             <ul class="productstyle">
                                                                                 <?php foreach ($productSets as $productSet): 
-                                                                                    ?>
-                                                                                    <li><a lid="<?php echo $productSet->lid; ?>" setselect=<?php
-                                                                                        $setdetail="";
+                                                                                    $setdetail="";
                                                                                         foreach ($productSet->productsetdetail as $psd): 
                                                                                             $tempdetail="gp".$psd->group_no.",".$psd->product_id.",".$psd->is_select.",".$psd->number.",".$psd->price.",".$pn[$psd->product_id];
                                                                                             if(empty($setdetail))
@@ -120,8 +118,8 @@
                                                                                             else
                                                                                                 $setdetail.=";".$tempdetail;                                                                                            
                                                                                         endforeach;
-                                                                                        echo $setdetail;
-                                                                                    ?> cid="set" price=0 href="#"><?php echo $productSet->set_name; ?></a></li>
+                                                                                    ?>
+                                                                                    <li><a lid="<?php echo $productSet->lid; ?>" setselect="<?php echo $setdetail; ?>"  cid="set" price="0" href="#"><?php echo $productSet->set_name; ?></a></li>
                                                                                 <?php endforeach;?>
                                                                                 <?php foreach ($products as $product): 
                                                                                     if($product->is_show=="1"):
@@ -159,19 +157,19 @@
                                                                                 <label style="width:40%;">数量</label>
                                                                                 <div class="clear"></div>
                                                                                 <div style="width:100%;">
-                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">-1</span>
+                                                                                <span id="product-detail-amount-m1" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">-1</span>
                                                                                 <input id="product-detail-amount" style="width:30%;display:inline-block;" class="form-control" placeholder="下单数量" name="OrderProduct[amount]" id="OrderProduct_amount" type="text" value="1">
-                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">+1</span>
-                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 6px;">+0.5</span>
+                                                                                <span id="product-detail-amount-a1" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">+1</span>
+                                                                                <span id="product-detail-amount-ah" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 6px;">+0.5</span>
                                                                                 </div>
                                                                                 <div class="clear"></div>
                                                                                 <label style="width:20%;">只数</label>
                                                                                 <div class="clear"></div>
                                                                                 <div style="width:100%;">
-                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">-1</span>
+                                                                                <span id="product-detail-zhiamount-m1" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">-1</span>
                                                                                 <input id="product-detail-zhiamount" style="width:30%;display:inline-block;" class="form-control" placeholder="下单只数" name="OrderProduct[zhiamount]" id="OrderProduct_zhiamount" type="text" value="0">
-                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">+1</span>
-                                                                                <span style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 6px;">+0.5</span>
+                                                                                <span id="product-detail-zhiamount-a1" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">+1</span>
+                                                                                <span id="product-detail-zhiamount-ah" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 6px;">+0.5</span>
                                                                                 </div>
                                                                                                                                                      
                                                                             </div>
@@ -318,6 +316,7 @@
 //                            var isgiving=obja.attr("isgiving");
                             var pname=obja.text();
                             var setselect=obja.attr("setselect");
+                            
                             $('.selectedproduct').find("li").removeClass("slectliclass");
                             var strli="<li class='slectliclass'><a lid="+lid+" cid="+cid+" price="+price+" setselect="+setselect+" amount=1 zhiamount=0 isgiving=0 href='#'>"+pname+"</a></li>";
                             //alert(strli);
@@ -330,7 +329,7 @@
                                 $("#product-detail-isgiving").val('0');
                                 $("#product-detail-amount").val('1');
                                 $("#product-detail-zhiamount").val('0');
-                            }else{
+                            }else if(setselect!=""){
                                 $("#product-detail").hide();
                                 $("#product-set-detail").show();
                                 $("#product-set-detail").find("div").remove();
@@ -454,4 +453,43 @@
                             //return false;
                         });
                         
+                        $('#product-detail-amount-m1').on(event_clicktouchstart,function(){
+                            var num = parseFloat($("#product-detail-amount").val());
+                            if(num >= 1){
+                                    num = num - 1;
+                            }
+                            $("#product-detail-amount").val(num);
+                        });
+                        
+                        $('#product-detail-amount-a1').on(event_clicktouchstart,function(){
+                            var num = parseFloat($("#product-detail-amount").val());
+                            num = num + 1;
+                            $("#product-detail-amount").val(num);
+                        });
+                        
+                        $('#product-detail-amount-ah').on(event_clicktouchstart,function(){
+                            var num = parseFloat($("#product-detail-amount").val());
+                            num = num + 0.5;
+                            $("#product-detail-amount").val(num);
+                        });
+                        
+                        $('#product-detail-zhiamount-m1').on(event_clicktouchstart,function(){
+                            var num = parseFloat($("#product-detail-zhiamount").val());
+                            if(num >= 1){
+                                    num = num - 1;
+                            }
+                            $("#product-detail-zhiamount").val(num);
+                        });
+                        
+                        $('#product-detail-zhiamount-a1').on(event_clicktouchstart,function(){
+                            var num = parseFloat($("#product-detail-zhiamount").val());
+                            num = num + 1;
+                            $("#product-detail-zhiamount").val(num);
+                        });
+                        
+                        $('#product-detail-zhiamount-ah').on(event_clicktouchstart,function(){
+                            var num = parseFloat($("#product-detail-zhiamount").val());
+                            num = num + 0.5;
+                            $("#product-detail-zhiamount").val(num);
+                        });
                     </script>
