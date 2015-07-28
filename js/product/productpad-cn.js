@@ -349,7 +349,7 @@ $(document).ready(function(){
     
     
     //点产品口味  按照订单数量增加对应数量的口味
-    $('#forum_list').on(event_clicktouchstart,'.product-taste',function(){
+    $('#forum_list').on(event_clicktouchend,'.product-taste',function(){
     	//第一次点击 同步订单数量  点击后增加 hasclick 类
     	var blockCategory = $(this).parents('.blockCategory');
 	   	var category = blockCategory.attr('category');//分类id
@@ -456,7 +456,7 @@ $(document).ready(function(){
      	});
      });
     //选择产品口味
-    $('#forum_list').on(event_clicktouchstart,'.tastepad .item',function(){
+    $('#forum_list').on('click','.tastepad .item',function(){
     	var blockCategory = $(this).parents('.blockCategory');
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
     	var tasteList = $(this).parents('.taste-list');
