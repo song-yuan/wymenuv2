@@ -329,6 +329,7 @@ class CreateOrder
 			             	}else{
 			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
 			             	}
+			             	var_dump($num);
 			             	var_dump($v);exit;
 	                		foreach($v as $val){
 		                		$orderProductData = array(
