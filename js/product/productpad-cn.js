@@ -197,6 +197,7 @@ $(document).ready(function(){
 	 				}
 	 			});
  		    }
+ 		    $('input[name^="'+productId+'"]').remove();
         });
     	
     	var total = 0;
@@ -205,6 +206,9 @@ $(document).ready(function(){
 		}
     	$('.total-price').html(total);
 		$('.total-num').html(0);
+		$('#padOrderForm').submit(function(){
+			return false;
+		});
     });
    //help
    $('.padsetting').on(event_clicktouchstart,function(){
