@@ -360,7 +360,13 @@ class CreateOrder
 	                	 	  }
 	                	 	   $se=new Sequence("order_product");
 			            	   $orderProductId = $se->nextval();
-	                	  }
+			            	   
+			            	   if($result['store_number'] > 0){
+			             		  $sql = 'update nb_product set store_number=store_number-'.$amount.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+			             		  $db->createCommand($sql)->execute();
+			             		  array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$amount));
+			             	   }
+	                	   }
 	                	}
 	             	}else{
 	             		if($result){
@@ -385,13 +391,12 @@ class CreateOrder
 										);
 						 $db->createCommand()->insert('nb_order_product',$orderProductData);
 						 $orderPrice +=$productPrice*$num;
+						 if($result['store_number'] > 0){
+		             		$sql = 'update nb_product set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+		             		$db->createCommand($sql)->execute();
+		             		array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$num));
+		             	 }
 	             	}
-	             	
-					 if($result['store_number'] > 0){
-	             		$sql = 'update nb_product set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
-	             		 $db->createCommand($sql)->execute();
-	             		  array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$num));
-	             	 }
 	             }
 			}	
 			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
