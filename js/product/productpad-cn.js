@@ -227,6 +227,7 @@ $(document).ready(function(){
               $('.product-pad-mask').hide();
           }
           if (typeof Androidwymenuprinter != "undefined") {
+              alert(padprinterping);
             if(padprinterping!="local")
             {
                 Androidwymenuprinter.printNetPing(padprinterping,10);
@@ -557,6 +558,7 @@ $(document).ready(function(){
 	                        $('.total-num').html(0);
 	                 }else{
 	                     alert(language_print_pad_fail+"1");
+                             return false;
 	                 }                                                
 	                }else{
 	                    alert(data.msg);
