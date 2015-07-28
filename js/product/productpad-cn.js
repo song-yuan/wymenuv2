@@ -480,7 +480,7 @@ $(document).ready(function(){
     	}
     });
 	
-    $('.taste-layer').on('click',function(){
+    $('.taste-layer').on(event_clicktouchstart,function(){
     	$('.tastepad').hide();
     	$(this).hide();
     });
