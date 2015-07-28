@@ -501,13 +501,17 @@ $(document).ready(function(){
             alert(language_notget_padinfo);
             return false;
         }
-        //var data=$('#padOrderForm').formSerialize();
-        $('#padOrderForm').submit(function(){
-	    	$(this).ajaxSubmit({
+        var formdata=$('#padOrderForm').formSerialize();
+//        $('#padOrderForm').submit(function(){
+//	    	$(this).ajaxSubmit({
+            $.ajax({
+                    url:$('#padOrderForm').action,
+                    type:$('#padOrderForm').method,
+                    data:formdata,
                     async:false,
 	            dataType: "json",
 	            success:function(msg){
-                        alert("dddd");
+                        //alert("dddd");
 	                var data=msg;
 	                var printresult;
 	    		if(data.status){
@@ -559,9 +563,9 @@ $(document).ready(function(){
                     }
 	     	});
                 //$('#padOrderForm')[0].reset() 
-	     	return false;
+	     	//return false;
                 
-     	});
+//     	});
         //return false;
     });
     $('body').on(event_clicktouchstart,'#cashpay',function(){
