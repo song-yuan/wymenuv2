@@ -322,7 +322,6 @@ class CreateOrder
 	                	foreach($num as $k=>$v){
 	                		$numEq = explode('-', $k);
 	                		$amount = $numEq[0];
-	                		var_dump($amount);exit;
 	                		if($result){
 			             		if($result['store_number'] > 0&&$result['store_number'] < $amount){
 			             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
@@ -330,8 +329,7 @@ class CreateOrder
 			             	}else{
 			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
 			             	}
-			             	
-	                		foreach($v as $val){
+	                		foreach($v as $tasteId=>$val){
 		                		$orderProductData = array(
 											'lid'=>$orderProductId,
 											'dpid'=>$dpid,
@@ -346,24 +344,29 @@ class CreateOrder
 											'product_order_status'=>1,
 											);
 							   $db->createCommand()->insert('nb_order_product',$orderProductData);
-							   $orderPrice +=$productPrice*$v;
-							   if($val){
+							   $orderPrice +=$productPrice*$val;
+							   if($tasteId){
 								   $orderTastSe = new Sequence("order_taste");
 			            		   $orderTasteId = $orderTastSe->nextval();
 								   $orderTasteData = array(
 								   						'lid'=>$orderTasteId,
 								   						'dpid'=>$dpid,
 								   						'create_at'=>$time,
-								   						'taste_id'=>$val,
+								   						'taste_id'=>$tasteId,
 								   						'order_id'=>$orderProductId,
 								   						'is_order'=>0
 								   						);
 								   $db->createCommand()->insert('nb_order_taste',$orderTasteData);
-								   
-								   $se=new Sequence("order_product");
-			            		   $orderProductId = $se->nextval();	                			
 	                	 	  }
-	                	  }
+	                	 	   $se=new Sequence("order_product");
+			            	   $orderProductId = $se->nextval();
+			            	   
+			            	   if($result['store_number'] > 0){
+			             		  $sql = 'update nb_product set store_number=store_number-'.$amount.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+			             		  $db->createCommand($sql)->execute();
+			             		  array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$amount));
+			             	   }
+	                	   }
 	                	}
 	             	}else{
 	             		if($result){
@@ -388,13 +391,12 @@ class CreateOrder
 										);
 						 $db->createCommand()->insert('nb_order_product',$orderProductData);
 						 $orderPrice +=$productPrice*$num;
+						 if($result['store_number'] > 0){
+		             		$sql = 'update nb_product set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+		             		$db->createCommand($sql)->execute();
+		             		array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$num));
+		             	 }
 	             	}
-	             	
-					 if($result['store_number'] > 0){
-	             		$sql = 'update nb_product set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
-	             		 $db->createCommand($sql)->execute();
-	             		  array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$num));
-	             	 }
 	             }
 			}	
 			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
