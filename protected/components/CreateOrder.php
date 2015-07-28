@@ -343,6 +343,7 @@ class CreateOrder
 											'taste_memo'=>"",
 											'product_order_status'=>1,
 											);
+								var_dump($orderProductData);exit;
 							   $db->createCommand()->insert('nb_order_product',$orderProductData);
 							   $orderPrice +=$productPrice*$val;
 							   if($tasteId){
