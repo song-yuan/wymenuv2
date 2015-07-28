@@ -536,6 +536,7 @@ $(document).ready(function(){
 				    					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
 				    				}
 				    			});
+				    			$('input[name^="'+productId+'"]').remove();
 				    		}
 	                     });
 	                     $('.product-pad-mask').hide();
