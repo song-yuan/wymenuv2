@@ -498,7 +498,7 @@ $(document).ready(function(){
             return false;
         }
     	$('#padOrderForm').ajaxSubmit({
-            async:false,
+            async:true,
             dataType: "json",
             success:function(msg){
                 var data=msg;
