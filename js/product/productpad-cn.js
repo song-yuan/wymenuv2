@@ -561,9 +561,9 @@ $(document).ready(function(){
 	                     $('.total-price').html(total);
 	                        $('.total-num').html(0);
 	                 }else{
-	                     alert(language_print_pad_fail+"1");
-//                             $('#updatePadOrder').text("重新打印");
-//                             $('#updatePadOrder').attr("jobid",data.jobid);
+	                     //alert(language_print_pad_fail+"1");
+                             $('#updatePadOrder').text("重新打印");
+                             $('#updatePadOrder').attr("jobid",data.jobid);
                              $('#padOrderForm').resetForm();
                              return;
 	                 }                                                
