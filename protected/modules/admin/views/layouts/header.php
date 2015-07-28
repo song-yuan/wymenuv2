@@ -192,7 +192,7 @@
                     return false;
                 }
                 var lit=$('li.modalaction[sid="'+data.site_id+'"][istemp="'+data.is_temp+'"]');
-                if(lit.attr("status")!="undefined")
+                if(typeof lit.attr("status")!="undefined")
                 {
                     lit.attr("status","1");
                     lit.removeClass("bg-blue");
@@ -213,13 +213,13 @@
                     return false;
                 }
                 var lit=$('li.modalaction[sid="'+data.site_id+'"][istemp="'+data.is_temp+'"]');
-                if(lit.attr("status")!="undefined")
+                if(typeof lit.attr("status")!="undefined")
                 {
                     lit.attr("status","2");
                     lit.removeClass("bg-yellow");
                     lit.removeClass("bg-green");
                     lit.addClass("bg-blue");
                 }
-//                getnotificationnum();
+                getnotificationnum();
             }
 	</script>

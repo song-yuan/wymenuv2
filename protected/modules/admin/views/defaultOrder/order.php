@@ -162,7 +162,15 @@
                         });
                         
                         function accountmanul(){
-                            var loadurl='<?php echo $this->createUrl('defaultOrder/accountManul',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>';
+                            var pad_id="0000000000";
+                            if (typeof Androidwymenuprinter == "undefined") {
+                                alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
+                                //return false;
+                            }else{
+                                var padinfo=Androidwymenuprinter.getPadInfo();
+                                pad_id=padinfo.substr(10,10);
+                            }
+                            var loadurl='<?php echo $this->createUrl('defaultOrder/accountManul',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>/padId/'+pad_id;
                             
                             var callid= $('#callbarscanid').val();
                             if(callid>"Ca000" && callid<"Ca999")
@@ -181,7 +189,15 @@
                         }
                         
                         function openaccount(payback){
-                            var loadurl='<?php echo $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>';
+                            var pad_id="0000000000";
+                            if (typeof Androidwymenuprinter == "undefined") {
+                                alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
+                                //return false;
+                            }else{
+                                var padinfo=Androidwymenuprinter.getPadInfo();
+                                pad_id=padinfo.substr(10,10);
+                            }
+                            var loadurl='<?php echo $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$model->lid,'total'=>$total['total']));?>/padId/'+pad_id;
                             if(payback==1)
                             {
                                 loadurl=loadurl+'/payback/1'
@@ -217,12 +233,14 @@
                         });
                         */
                         $('#print-btn').on(event_clicktouchstart,function(){
+                            var pad_id="0000000000";
                             if (typeof Androidwymenuprinter == "undefined") {
                                 alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
-                                return false;
+                                //return false;
+                            }else{
+                                var padinfo=Androidwymenuprinter.getPadInfo();
+                                pad_id=padinfo.substr(10,10);
                             }
-                            var padinfo=Androidwymenuprinter.getPadInfo();
-                            var pad_id=padinfo.substr(10,10);
                             //var pad_id="0000000016";
                             var $modal=$('#portlet-config');
                             $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printList',array('companyId'=>$this->companyId));?>/orderId/'+"<?php echo $model->lid; ?>"+'/typeId/'+"<?php echo $typeId; ?>"+'/padId/'+pad_id
