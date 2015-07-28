@@ -502,6 +502,9 @@ $(document).ready(function(){
             alert(language_notget_padinfo);
             return false;
         }
+        
+        //if(jobid)存在，说明是重新打印，不用下单
+        
         var formdata=$('#padOrderForm').formSerialize();
 //        alert($('#padOrderForm').attr('action'));
 //        alert(formdata);
@@ -515,8 +518,8 @@ $(document).ready(function(){
 	            dataType: "json",
 	            success:function(msg){
                         var data=msg;
-	                alert(data.type);
-                        alert(data.address);
+//	                alert(data.type);
+//                        alert(data.address);
 	                var printresult;
 	    		if(data.status){
 	                 if(data.type=='local')
@@ -559,6 +562,8 @@ $(document).ready(function(){
 	                        $('.total-num').html(0);
 	                 }else{
 	                     alert(language_print_pad_fail+"1");
+                             $('#updatePadOrder').text("重新打印");
+                             $('#updatePadOrder').attr("jobid",data.jobid);
                              return false;
 	                 }                                                
 	                }else{
