@@ -553,9 +553,12 @@ $(document).ready(function(){
 	                }else{
 	                    alert(data.msg);
 	                }
-	    		}
+                        $(this).resetForm();
+                    }
 	     	});
-	     	//return false;
+                //$('#padOrderForm')[0].reset() 
+	     	return false;
+                
      	});
         
     });
