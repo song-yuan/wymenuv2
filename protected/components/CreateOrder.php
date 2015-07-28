@@ -322,7 +322,6 @@ class CreateOrder
 	                	foreach($num as $k=>$v){
 	                		$numEq = explode('-', $k);
 	                		$amount = $numEq[0];
-	                		var_dump($amount);exit;
 	                		if($result){
 			             		if($result['store_number'] > 0&&$result['store_number'] < $amount){
 			             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
@@ -330,7 +329,7 @@ class CreateOrder
 			             	}else{
 			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
 			             	}
-			             	
+			             	var_dump($v);exit;
 	                		foreach($v as $val){
 		                		$orderProductData = array(
 											'lid'=>$orderProductId,
