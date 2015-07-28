@@ -501,11 +501,12 @@ $(document).ready(function(){
             alert(language_notget_padinfo);
             return false;
         }
-        //$('#padOrderForm').submit(function(){
-	$('#padOrderForm').ajaxSubmit({
+        $('#padOrderForm').submit(function(){
+	    	$(this).ajaxSubmit({
                     async:false,
 	            dataType: "json",
 	            success:function(msg){
+                        alert("dddd");
 	                var data=msg;
 	                var printresult;
 	    		if(data.status){
@@ -559,7 +560,7 @@ $(document).ready(function(){
                 //$('#padOrderForm')[0].reset() 
 	     	return false;
                 
-     	//});
+     	});
         //return false;
     });
     $('body').on(event_clicktouchstart,'#cashpay',function(){
