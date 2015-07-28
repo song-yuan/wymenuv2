@@ -560,7 +560,7 @@ $(document).ready(function(){
 	     	return false;
                 
      	});
-        
+        return false;
     });
     $('body').on(event_clicktouchstart,'#cashpay',function(){
      	alert('现金支付');
