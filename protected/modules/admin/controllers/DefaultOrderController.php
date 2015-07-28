@@ -411,6 +411,7 @@ class DefaultOrderController extends BackendController
                                 'orderId'=>$orderId,
                                 //'companyId'=>$companyId,
                                 'ret'=>$ret,
+                                
                                 'typeId'=>$typeId                                
                         ));
 		}
@@ -420,6 +421,7 @@ class DefaultOrderController extends BackendController
                                 'orderpay' => $orderpay,
                                 'typeId'=>$typeId,
                                 'callid'=>$callId,
+                                'padId'=>$padId,
                                 'paymentMethods'=>$paymentMethods
 		));
 	}
