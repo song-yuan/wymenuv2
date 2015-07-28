@@ -342,7 +342,7 @@ $(document).ready(function(){
  		});
     });
     
-    $('.large-pic').on(event_clicktouchstart,function(){
+    $('.large-pic').on("click",function(){
     	$(this).html('');
     	$(this).css('display','none');
     });
