@@ -488,7 +488,7 @@ $(document).ready(function(){
     	$('.tastepad').hide();
     	$(this).hide();
     });
-    $('#updatePadOrder').on(event_clicktouchstart,function(){
+    $('#updatePadOrder').on("click",function(){
     	//layer页面层
 //    	var str = '<a herf="javascript:;" class="pay-type cash-color" id="cashpay">柜台支付</a><a herf="javascript:;" class="pay-type wx-color" id="weixinpay">微信支付</a><a herf="javascript:;" class="pay-type zfb-color" id="zhifubaopay">支付宝支付</a>';
 //		layer.open({
@@ -519,15 +519,15 @@ $(document).ready(function(){
 	                 {
 	                	 $('#padOrderForm').find('.input-product').each(function(){
                 		 	var _this = $(this);
-                            var productId = _this.attr('name');
-                            var productIdArr = productId.split(","); //字符分割 
-                            productId = productIdArr[0];
-                            var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
-                            var category = parents.attr('category');//分类id
-                            parents.find('.subject-order').css('display','none');
-                            parents.find('.single-num-circel').html(0);
-                            _this.parents('.product-catory-product').remove();
-                            if(!$('.catory'+category).find('.product-catory-product').length){
+                                        var productId = _this.attr('name');
+                                        var productIdArr = productId.split(","); //字符分割 
+                                        productId = productIdArr[0];
+                                        var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+                                        var category = parents.attr('category');//分类id
+                                        parents.find('.subject-order').css('display','none');
+                                        parents.find('.single-num-circel').html(0);
+                                        _this.parents('.product-catory-product').remove();
+                                        if(!$('.catory'+category).find('.product-catory-product').length){
                                                    $('.catory'+category).remove();
                                                    parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
                                                    parents.find('.taste-list').each(function(eq){
