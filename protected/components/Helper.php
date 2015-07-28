@@ -425,7 +425,7 @@ class Helper
         
         //收银台打印清单写入到redis
         //send by workerman encode by GBK or shift-JIS
-	static public function printList(Order $order , Pad $pad, $cprecode,$printserver){
+	static public function printList(Order $order , Pad $pad, $cprecode,$printserver,$memo){
 		
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
@@ -436,6 +436,11 @@ class Helper
                 ///site error because tempsite and reserve**************
                 //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                 $listData = array("22".  Helper::setPrinterTitle($order->company->company_name,8));
+                if(!empty($memo))
+                {
+                    array_push($listData,"br");
+                    $listData = array("11".$memo);
+                }
                 array_push($listData,"00");
                 array_push($listData,"br");
                 $strSite="";

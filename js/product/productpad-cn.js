@@ -310,7 +310,7 @@ $(document).ready(function(){
             }
 	});
 	 
-    $('#forum_list').on(event_clicktouchstart,'.view-product-pic',function(){
+    $('#forum_list').on('click','.view-product-pic',function(){
         var lid = $(this).attr('product-id');
         //alert(lid);//($('.large-pic').width() - $("#gallery").outerWidth())/2,//($('.large-pic').height() - $("#gallery").outerHeight())/2
     	$.ajax({
@@ -338,11 +338,11 @@ $(document).ready(function(){
                 }else{
                         alert(language_no_bigpic);
                 }
-},
+                },
  		});
     });
     
-    $('.large-pic').on(event_clicktouchstart,function(){
+    $('.large-pic').on('click',function(){
     	$(this).html('');
     	$(this).css('display','none');
     });

@@ -182,36 +182,48 @@ class DefaultOrderController extends BackendController
                                
                             if($order->order_status=='4')
                             {
-                                SiteClass::deleteCode($this->companyId,$siteNo->code);                                
-                            }
-                            //FeedBackClass::cancelAllOrderMsg("0000000000","0",$order->lid,$companyId);
-                            $sqlfeedback = "update nb_order_feedback set is_deal='1' where dpid=:companyId and site_id=:siteId and is_temp=:istemp";
-                            $commandfeedback = Yii::app()->db->createCommand($sqlfeedback);
-                            $commandfeedback->bindValue(":companyId",$companyId);
-                            $commandfeedback->bindValue(":siteId",$order->site_id);
-                            $commandfeedback->bindValue(":istemp",$order->is_temp);
-                            //var_dump($sqlsite);exit;
-                            $commandfeedback->execute();
+                                SiteClass::deleteCode($this->companyId,$siteNo->code);                     
                             
-                            $sqlall = "update nb_order_feedback set is_deal='1'where dpid=:dpid and order_id=:orderId and is_order='1'";
-                            $connorder = Yii::app()->db->createCommand($sqlall);
-                            $connorder->bindValue(':dpid',$companyId);
-                            $connorder->bindValue(':orderId',$orderId);
-                            
-                            $connorder->execute();
+                                //FeedBackClass::cancelAllOrderMsg("0000000000","0",$order->lid,$companyId);
+                                $sqlfeedback = "update nb_order_feedback set is_deal='1' where dpid=:companyId and site_id=:siteId and is_temp=:istemp";
+                                $commandfeedback = Yii::app()->db->createCommand($sqlfeedback);
+                                $commandfeedback->bindValue(":companyId",$companyId);
+                                $commandfeedback->bindValue(":siteId",$order->site_id);
+                                $commandfeedback->bindValue(":istemp",$order->is_temp);
+                                //var_dump($sqlsite);exit;
+                                $commandfeedback->execute();
 
-                            $sql = 'update nb_order_feedback set is_deal=1 where dpid=:dpid and order_id in (select lid from nb_order_product where dpid=:sdpid and order_id=:sorderId) and is_order=0';
-                            $connorderproduct = Yii::app()->db->createCommand($sql);
-                            $connorderproduct->bindValue(':dpid',$companyId);
-                            $connorderproduct->bindValue(':sdpid',$companyId);
-                            $connorderproduct->bindValue(':sorderId',$orderId);
-                            $connorderproduct->execute();
-                            //var_dump($connorderproduct);exit;
+                                $sqlall = "update nb_order_feedback set is_deal='1'where dpid=:dpid and order_id=:orderId and is_order='1'";
+                                $connorder = Yii::app()->db->createCommand($sqlall);
+                                $connorder->bindValue(':dpid',$companyId);
+                                $connorder->bindValue(':orderId',$orderId);
+
+                                $connorder->execute();
+
+                                $sql = 'update nb_order_feedback set is_deal=1 where dpid=:dpid and order_id in (select lid from nb_order_product where dpid=:sdpid and order_id=:sorderId) and is_order=0';
+                                $connorderproduct = Yii::app()->db->createCommand($sql);
+                                $connorderproduct->bindValue(':dpid',$companyId);
+                                $connorderproduct->bindValue(':sdpid',$companyId);
+                                $connorderproduct->bindValue(':sorderId',$orderId);
+                                $connorderproduct->execute();
+                                //var_dump($connorderproduct);exit;
+                            }
                             $transaction->commit();
-                            $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
+                            //$this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
+                            $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+                            $precode="1B70001EFF00";//开钱箱
+                            $printserver="1";                            
+                            $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                            
 			} catch(Exception $e){
 				$transaction->rollback();
 			}
+                        $this->renderPartial('printlist' , array(
+                                'orderId'=>$orderId,
+                                //'companyId'=>$companyId,
+                                'ret'=>$ret,
+                                'typeId'=>$typeId                                
+                        ));
 		}
 		$this->renderPartial('account' , array(
 				'order' => $order,
@@ -219,6 +231,7 @@ class DefaultOrderController extends BackendController
                                 'payback'=>$ispayback,
                                 'typeId'=>$typeId,
                                 'callid'=>$callId,
+                                'padId'=>$padId,
                                 'paymentMethods'=>$paymentMethods
 		));
 	}
@@ -298,7 +311,7 @@ class DefaultOrderController extends BackendController
                 $companyId = Yii::app()->request->getParam('companyId','0');
                 $typeId=Yii::app()->request->getParam('typeId','0');
                 $callId=Yii::app()->request->getParam('callId','0');
-                
+                $padId=Yii::app()->request->getParam('padId','0000000000');
                 $totaldata=Yii::app()->request->getParam('total','0');
                  ///*************print
 
@@ -329,7 +342,13 @@ class DefaultOrderController extends BackendController
                         $se=new Sequence("order_pay");
                         $orderpay->lid = $se->nextval();
                         //var_dump($order);exit;
-                        
+                        $memo="";
+                        if($order->order_status=="3")
+                        {
+                            $memo=yii::t('app','收款').":".$orderpay->pay_amount;
+                        }else if($order->order_status=="4"){
+                            $memo=yii::t('app','结单').":".$orderpay->pay_amount;
+                        }
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
                             
@@ -351,11 +370,49 @@ class DefaultOrderController extends BackendController
                             $siteNo->status=$order->order_status;
                             $siteNo->save();                               
                             
+                            if($order->order_status=='4')
+                            {
+                                SiteClass::deleteCode($this->companyId,$siteNo->code);  
+                                //FeedBackClass::cancelAllOrderMsg("0000000000","0",$order->lid,$companyId);
+                                $sqlfeedback = "update nb_order_feedback set is_deal='1' where dpid=:companyId and site_id=:siteId and is_temp=:istemp";
+                                $commandfeedback = Yii::app()->db->createCommand($sqlfeedback);
+                                $commandfeedback->bindValue(":companyId",$companyId);
+                                $commandfeedback->bindValue(":siteId",$order->site_id);
+                                $commandfeedback->bindValue(":istemp",$order->is_temp);
+                                //var_dump($sqlsite);exit;
+                                $commandfeedback->execute();
+
+                                $sqlall = "update nb_order_feedback set is_deal='1'where dpid=:dpid and order_id=:orderId and is_order='1'";
+                                $connorder = Yii::app()->db->createCommand($sqlall);
+                                $connorder->bindValue(':dpid',$companyId);
+                                $connorder->bindValue(':orderId',$orderId);
+
+                                $connorder->execute();
+
+                                $sql = 'update nb_order_feedback set is_deal=1 where dpid=:dpid and order_id in (select lid from nb_order_product where dpid=:sdpid and order_id=:sorderId) and is_order=0';
+                                $connorderproduct = Yii::app()->db->createCommand($sql);
+                                $connorderproduct->bindValue(':dpid',$companyId);
+                                $connorderproduct->bindValue(':sdpid',$companyId);
+                                $connorderproduct->bindValue(':sorderId',$orderId);
+                                $connorderproduct->execute();
+                            }                                                
+                            
                             $transaction->commit();
-                            $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
+                            //$this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
+                            $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+                            $precode="1B70001EFF00";//开钱箱
+                            $printserver="1";                            
+                            $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                            
 			} catch(Exception $e){
 				$transaction->rollback();
 			}
+                        $this->renderPartial('printlist' , array(
+                                'orderId'=>$orderId,
+                                //'companyId'=>$companyId,
+                                'ret'=>$ret,
+                                'typeId'=>$typeId                                
+                        ));
 		}
                 //var_dump($order);exit;
 		$this->renderPartial('accountmanul' , array(
@@ -1433,7 +1490,8 @@ class DefaultOrderController extends BackendController
                 
 		//Yii::app()->end(json_encode(Helper::printList($order , $padid)));
                 $printserver="1";
-                $ret=Helper::printList($order , $pad,$precode,$printserver);
+                $memo="";
+                $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
                 //exit;
                 $this->renderPartial('printlist' , array(
                                 'orderId'=>$orderId,
