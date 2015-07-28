@@ -319,6 +319,7 @@ class CreateOrder
 	             	
 	             	if(is_array($num)){
 	                	//有口味$num = num-eq 格式
+	                	var_dump($num);exit;
 	                	foreach($num as $k=>$v){
 	                		$numEq = explode('-', $k);
 	                		$amount = $numEq[0];
