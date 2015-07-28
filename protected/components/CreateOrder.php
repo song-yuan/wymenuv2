@@ -343,7 +343,6 @@ class CreateOrder
 											'taste_memo'=>"",
 											'product_order_status'=>1,
 											);
-								var_dump($orderProductData);exit;
 							   $db->createCommand()->insert('nb_order_product',$orderProductData);
 							   $orderPrice +=$productPrice*$val;
 							   if($tasteId){
@@ -358,10 +357,9 @@ class CreateOrder
 								   						'is_order'=>0
 								   						);
 								   $db->createCommand()->insert('nb_order_taste',$orderTasteData);
-								   
-								   $se=new Sequence("order_product");
-			            		   $orderProductId = $se->nextval();	                			
 	                	 	  }
+	                	 	   $se=new Sequence("order_product");
+			            	   $orderProductId = $se->nextval();
 	                	  }
 	                	}
 	             	}else{
