@@ -502,12 +502,12 @@ $(document).ready(function(){
             return false;
         }
         var formdata=$('#padOrderForm').formSerialize();
-        alert($('#padOrderForm').action);
+        alert($('#padOrderForm').attr('action'));
         alert(formdata);
 //        $('#padOrderForm').submit(function(){
 //	    	$(this).ajaxSubmit({
             $.ajax({
-                    url:$('#padOrderForm').action,
+                    url:$('#padOrderForm').attr('action'),
                     type:'POST',
                     data:formdata,
                     async:false,
