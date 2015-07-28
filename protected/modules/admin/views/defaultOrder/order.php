@@ -207,7 +207,7 @@
                             {
                                 loadurl=loadurl+'/callId/'+callid;
                             }
-                            //alert(loadurl);
+                            alert(loadurl);
                             var $modalconfig = $('#modal-wide');
                                 $modalconfig.find('.modal-content')
                                         .load(loadurl
@@ -222,7 +222,7 @@
                                  accountmanul();
                         });
                         $('#btn_payback').on(event_clicktouchstart,function(){
-                            alert(0);
+                            //alert(0);
                                  openaccount('1');
                         });
                         /*
