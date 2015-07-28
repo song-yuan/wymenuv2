@@ -517,16 +517,16 @@ $(document).ready(function(){
 	                 if(printresult)
 	                 {
 	                	 $('#padOrderForm').find('.input-product').each(function(){
-	                		 	var _this = $(this);
-	                            var productId = _this.attr('name');
-	                            var productIdArr = productId.split(","); //字符分割 
-	                            productId = productIdArr[0];
-	                            var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
-	                            var category = parents.attr('category');//分类id
-	                            parents.find('.subject-order').css('display','none');
-	                            parents.find('.single-num-circel').html(0);
-	                            _this.parents('.product-catory-product').remove();
-	                            if(!$('.catory'+category).find('.product-catory-product').length){
+                		 	var _this = $(this);
+                            var productId = _this.attr('name');
+                            var productIdArr = productId.split(","); //字符分割 
+                            productId = productIdArr[0];
+                            var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+                            var category = parents.attr('category');//分类id
+                            parents.find('.subject-order').css('display','none');
+                            parents.find('.single-num-circel').html(0);
+                            _this.parents('.product-catory-product').remove();
+	                         if(!$('.catory'+category).find('.product-catory-product').length){
 				    			$('.catory'+category).remove();
 				    			parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
 				    			parents.find('.taste-list').each(function(eq){
@@ -536,8 +536,8 @@ $(document).ready(function(){
 				    					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
 				    				}
 				    			});
-				    			$('input[name^="'+productId+'"]').remove();
 				    		}
+				    		$('input[name^="'+productId+'"]').remove();
 	                     });
 	                     $('.product-pad-mask').hide();
 	                     var total = 0;
