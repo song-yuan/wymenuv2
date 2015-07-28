@@ -511,7 +511,7 @@ $(document).ready(function(){
                     async:false,
 	            dataType: "json",
 	            success:function(msg){
-                        //alert("dddd");
+                        alert("dddd");
 	                var data=msg;
 	                var printresult;
 	    		if(data.status){
@@ -563,7 +563,7 @@ $(document).ready(function(){
                     }
 	     	});
                 //$('#padOrderForm')[0].reset() 
-	     	//return false;
+	     	return false;
                 
 //     	});
         //return false;
