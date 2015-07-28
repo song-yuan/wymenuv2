@@ -329,8 +329,8 @@ class CreateOrder
 			             	}else{
 			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
 			             	}
-	                		foreach($v as $tasteId=>$val){
-		                		$orderProductData = array(
+			             	//每一个eq 生成一个订单
+			             	$orderProductData = array(
 											'lid'=>$orderProductId,
 											'dpid'=>$dpid,
 											'create_at'=>$time,
@@ -343,8 +343,11 @@ class CreateOrder
 											'taste_memo'=>"",
 											'product_order_status'=>1,
 											);
-							   $db->createCommand()->insert('nb_order_product',$orderProductData);
-							   $orderPrice +=$productPrice*$val;
+							 $db->createCommand()->insert('nb_order_product',$orderProductData);
+							 $orderPrice +=$productPrice*$amount;
+							 
+							 //该订单对应的多个口味
+	                		 foreach($v as $tasteId=>$val){
 							   if($tasteId){
 								   $orderTastSe = new Sequence("order_taste");
 			            		   $orderTasteId = $orderTastSe->nextval();
@@ -357,8 +360,9 @@ class CreateOrder
 								   						'is_order'=>0
 								   						);
 								   $db->createCommand()->insert('nb_order_taste',$orderTasteData);
-	                	 	  }
-	                	 	   $se=new Sequence("order_product");
+	                	 	   }
+	                	     }
+		                	   $se=new Sequence("order_product");
 			            	   $orderProductId = $se->nextval();
 			            	   
 			            	   if($result['store_number'] > 0){
@@ -366,7 +370,6 @@ class CreateOrder
 			             		  $db->createCommand($sql)->execute();
 			             		  array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$amount));
 			             	   }
-	                	   }
 	                	}
 	             	}else{
 	             		if($result){
