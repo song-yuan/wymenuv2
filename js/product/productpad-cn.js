@@ -227,7 +227,7 @@ $(document).ready(function(){
               $('.product-pad-mask').hide();
           }
           if (typeof Androidwymenuprinter != "undefined") {
-              alert(padprinterping);
+              //alert(padprinterping);
             if(padprinterping!="local")
             {
                 Androidwymenuprinter.printNetPing(padprinterping,10);
@@ -514,8 +514,9 @@ $(document).ready(function(){
                     async:false,
 	            dataType: "json",
 	            success:function(msg){
-//                        alert("dddd");
-	                var data=msg;
+                        var data=msg;
+	                alert(data.jobid);
+                        alert(data.address);
 	                var printresult;
 	    		if(data.status){
 	                 if(data.type=='local')
