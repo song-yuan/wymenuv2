@@ -501,6 +501,7 @@ $(document).ready(function(){
             alert(language_notget_padinfo);
             return false;
         }
+        //var data=$('#padOrderForm').formSerialize();
         $('#padOrderForm').submit(function(){
 	    	$(this).ajaxSubmit({
                     async:false,
