@@ -493,10 +493,10 @@ $(document).ready(function(){
 //		    area: ['420px', '240px'], //宽高
 //		    content: str
 //		});
-        if (typeof Androidwymenuprinter == "undefined") {
-            alert(language_notget_padinfo);
-            return false;
-        }
+        //if (typeof Androidwymenuprinter == "undefined") {
+         //   alert(language_notget_padinfo);
+        //    return false;
+       // }
     	$('#padOrderForm').ajaxSubmit({
             async:false,
             dataType: "json",
