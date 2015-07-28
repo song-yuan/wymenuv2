@@ -508,7 +508,7 @@ $(document).ready(function(){
         var formdata=$('#padOrderForm').formSerialize();
 //        alert($('#padOrderForm').attr('action'));
 //        alert(formdata);
-        $('#padOrderForm').submit(function(){
+//        $('#padOrderForm').submit(function(){
 //	    	$(this).ajaxSubmit({
             $.ajax({
                     url:$('#padOrderForm').attr('action'),
@@ -579,7 +579,7 @@ $(document).ready(function(){
                 //$('#padOrderForm')[0].reset() 
 	     	return false;
                 
-     	});
+//     	});
         //return false;
     });
     $('body').on(event_clicktouchstart,'#cashpay',function(){
