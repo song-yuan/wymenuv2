@@ -207,7 +207,7 @@
                             {
                                 loadurl=loadurl+'/callId/'+callid;
                             }
-                            alert(loadurl);
+                            //alert(loadurl);
                             var $modalconfig = $('#modal-wide');
                                 $modalconfig.find('.modal-content')
                                         .load(loadurl
