@@ -222,7 +222,7 @@
                                  accountmanul();
                         });
                         $('#btn_payback').on(event_clicktouchstart,function(){
-                            alert(0);
+                            //alert(0);
                                  openaccount('1');
                         });
                         /*

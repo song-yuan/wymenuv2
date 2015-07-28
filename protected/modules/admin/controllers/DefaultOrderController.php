@@ -127,6 +127,7 @@ class DefaultOrderController extends BackendController
                 $companyId = Yii::app()->request->getParam('companyId','0');
                 $typeId=Yii::app()->request->getParam('typeId','0');
                 $callId=Yii::app()->request->getParam('callId','0');
+                $padId=Yii::app()->request->getParam('padId','0');
                 $ispayback=Yii::app()->request->getParam('payback','0');
                 //$op=
                 $totaldata=Yii::app()->request->getParam('total','0');
@@ -143,7 +144,7 @@ class DefaultOrderController extends BackendController
                 $orderpay->order_id=$order->lid;
                 $orderpay->paytype="3";
                 $orderpay->create_at=date('Y-m-d H:i:s',time());
-                
+                $memo="";
                 $paymentMethods = PaymentClass::getPaymentMethodList($companyId);
                 //var_dump($paymentMethods);exit;
                 if(Yii::app()->request->isPostRequest){
@@ -179,7 +180,18 @@ class DefaultOrderController extends BackendController
                             $orderpay->save();
                             $siteNo->status=$order->order_status;
                             $siteNo->save();
-                               
+                            
+                            if($order->order_status=="3")
+                            {
+                                $memo=yii::t('app','收款').":".$orderpay->pay_amount;
+                                if($orderpay->pay_amount<0)
+                                {
+                                    $memo=yii::t('app','退款').":".$orderpay->pay_amount;
+                                }
+                            }else if($order->order_status=="4"){
+                                $memo=yii::t('app','结单').":".$orderpay->pay_amount;
+                            }
+                            
                             if($order->order_status=='4')
                             {
                                 SiteClass::deleteCode($this->companyId,$siteNo->code);                     
