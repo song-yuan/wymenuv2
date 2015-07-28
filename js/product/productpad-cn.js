@@ -503,6 +503,7 @@ $(document).ready(function(){
         }
         $('#padOrderForm').submit(function(){
 	    	$(this).ajaxSubmit({
+                    async:false,
 	            dataType: "json",
 	            success:function(msg){
 	                var data=msg;
@@ -526,18 +527,18 @@ $(document).ready(function(){
                             parents.find('.subject-order').css('display','none');
                             parents.find('.single-num-circel').html(0);
                             _this.parents('.product-catory-product').remove();
-	                         if(!$('.catory'+category).find('.product-catory-product').length){
-				    			$('.catory'+category).remove();
-				    			parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
-				    			parents.find('.taste-list').each(function(eq){
-				    				if(eq > 0){
-				    					$(this).remove();
-				    				}else{
-				    					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
-				    				}
-				    			});
-				    		}
-				    		$('input[name^="'+productId+'"]').remove();
+                            if(!$('.catory'+category).find('.product-catory-product').length){
+                                                   $('.catory'+category).remove();
+                                                   parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+                                                   parents.find('.taste-list').each(function(eq){
+                                                           if(eq > 0){
+                                                                   $(this).remove();
+                                                           }else{
+                                                                   $(this).find('.item').removeClass('active'); //去掉第一个口味选中
+                                                           }
+                                                   });
+                                           }
+                                           $('input[name^="'+productId+'"]').remove();
 	                     });
 	                     $('.product-pad-mask').hide();
 	                     var total = 0;
