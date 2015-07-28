@@ -209,21 +209,21 @@ class DefaultOrderController extends BackendController
                                 //var_dump($connorderproduct);exit;
                             }
                             $transaction->commit();
-                            //$this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
                             $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
                             $precode="1B70001EFF00";//开钱箱
                             $printserver="1";                            
                             $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                            $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
                             
 			} catch(Exception $e){
 				$transaction->rollback();
 			}
-                        $this->renderPartial('printlist' , array(
-                                'orderId'=>$orderId,
-                                //'companyId'=>$companyId,
-                                'ret'=>$ret,
-                                'typeId'=>$typeId                                
-                        ));
+//                        $this->renderPartial('printlist' , array(
+//                                'orderId'=>$orderId,
+//                                //'companyId'=>$companyId,
+//                                'ret'=>$ret,
+//                                'typeId'=>$typeId                                
+//                        ));
 		}
 		$this->renderPartial('account' , array(
 				'order' => $order,
@@ -398,22 +398,24 @@ class DefaultOrderController extends BackendController
                             }                                                
                             
                             $transaction->commit();
-                            //$this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
                             $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
                             $precode="1B70001EFF00";//开钱箱
                             $printserver="1";                            
                             $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                            //$ret=array('status'=>false,'dpid'=>"0000000011",'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
+                            $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
                             
 			} catch(Exception $e){
 				$transaction->rollback();
 			}
-                        $this->renderPartial('printlist' , array(
-                                'orderId'=>$orderId,
-                                //'companyId'=>$companyId,
-                                'ret'=>$ret,
-                                
-                                'typeId'=>$typeId                                
-                        ));
+//                        $this->renderPartial('printlist' , array(
+//                                'orderId'=>$orderId,
+//                                //'companyId'=>$companyId,
+//                                'ret'=>$ret,
+//                                
+//                                'typeId'=>$typeId                                
+//                        ));
+//                        exit;
 		}
                 //var_dump($order);exit;
 		$this->renderPartial('accountmanul' , array(

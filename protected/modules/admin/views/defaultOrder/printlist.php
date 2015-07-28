@@ -6,7 +6,7 @@
                                                 <div class="modal-body">
                                                         <div class="form-actions fluid" id="product_panel">
                                                             <span style="color:red;" id="printresult"><?php echo yii::t('app','检测打印状态...');?></span>
-                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
+                                                        </div>
                                                 </div>
                                                 <input class="form-control" name="additionnames" id="additionids" type="hidden" value="">
                                                 <div class="modal-footer">

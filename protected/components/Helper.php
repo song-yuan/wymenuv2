@@ -439,7 +439,7 @@ class Helper
                 if(!empty($memo))
                 {
                     array_push($listData,"br");
-                    $listData = array("11".$memo);
+                    array_push($listData,"11".$memo);                    
                 }
                 array_push($listData,"00");
                 array_push($listData,"br");
