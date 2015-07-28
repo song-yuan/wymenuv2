@@ -501,8 +501,8 @@ $(document).ready(function(){
             alert(language_notget_padinfo);
             return false;
         }
-        $('#padOrderForm').submit(function(){
-	    	$(this).ajaxSubmit({
+        //$('#padOrderForm').submit(function(){
+	$('#padOrderForm').ajaxSubmit({
                     async:false,
 	            dataType: "json",
 	            success:function(msg){
@@ -559,8 +559,8 @@ $(document).ready(function(){
                 //$('#padOrderForm')[0].reset() 
 	     	return false;
                 
-     	});
-        return false;
+     	//});
+        //return false;
     });
     $('body').on(event_clicktouchstart,'#cashpay',function(){
      	alert('现金支付');
