@@ -127,6 +127,7 @@ class DefaultOrderController extends BackendController
                 $companyId = Yii::app()->request->getParam('companyId','0');
                 $typeId=Yii::app()->request->getParam('typeId','0');
                 $callId=Yii::app()->request->getParam('callId','0');
+                $padId=Yii::app()->request->getParam('padId','0');
                 $ispayback=Yii::app()->request->getParam('payback','0');
                 //$op=
                 $totaldata=Yii::app()->request->getParam('total','0');
