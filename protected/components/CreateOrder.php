@@ -329,9 +329,7 @@ class CreateOrder
 			             	}else{
 			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
 			             	}
-			             	var_dump($num);
-			             	var_dump($v);exit;
-	                		foreach($v as $val){
+	                		foreach($v as $tasteId=>$val){
 		                		$orderProductData = array(
 											'lid'=>$orderProductId,
 											'dpid'=>$dpid,
@@ -346,15 +344,15 @@ class CreateOrder
 											'product_order_status'=>1,
 											);
 							   $db->createCommand()->insert('nb_order_product',$orderProductData);
-							   $orderPrice +=$productPrice*$v;
-							   if($val){
+							   $orderPrice +=$productPrice*$val;
+							   if($tasteId){
 								   $orderTastSe = new Sequence("order_taste");
 			            		   $orderTasteId = $orderTastSe->nextval();
 								   $orderTasteData = array(
 								   						'lid'=>$orderTasteId,
 								   						'dpid'=>$dpid,
 								   						'create_at'=>$time,
-								   						'taste_id'=>$val,
+								   						'taste_id'=>$tasteId,
 								   						'order_id'=>$orderProductId,
 								   						'is_order'=>0
 								   						);
