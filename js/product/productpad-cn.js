@@ -342,14 +342,14 @@ $(document).ready(function(){
  		});
     });
     
-    $('.large-pic').on('click',function(){
+    $('.large-pic').on(event_clicktouchstart,function(){
     	$(this).html('');
     	$(this).css('display','none');
     });
     
     
     //点产品口味  按照订单数量增加对应数量的口味
-    $('#forum_list').on(event_clicktouchstart,'.product-taste',function(){
+    $('#forum_list').on(event_clicktouchend,'.product-taste',function(){
     	//第一次点击 同步订单数量  点击后增加 hasclick 类
     	var blockCategory = $(this).parents('.blockCategory');
 	   	var category = blockCategory.attr('category');//分类id

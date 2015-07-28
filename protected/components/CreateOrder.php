@@ -402,7 +402,7 @@ class CreateOrder
                 //前面加 barcode
                 $precode="1D77021D6B04".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."001D2100".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $printserver="0";
-                $printList = Helper::printList($order , $pad,$precode,$printserver);
+                $printList = Helper::printList($order , $pad,$precode,$printserver,"");
                 if(!$printList['status']){
                 	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
