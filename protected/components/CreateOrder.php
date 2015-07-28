@@ -319,11 +319,10 @@ class CreateOrder
 	             	
 	             	if(is_array($num)){
 	                	//有口味$num = num-eq 格式
-	                	var_dump($num);exit;
 	                	foreach($num as $k=>$v){
 	                		$numEq = explode('-', $k);
 	                		$amount = $numEq[0];
-	                		
+	                		var_dump($amount);exit;
 	                		if($result){
 			             		if($result['store_number'] > 0&&$result['store_number'] < $amount){
 			             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
