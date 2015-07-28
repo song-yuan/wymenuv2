@@ -45,7 +45,7 @@
     <input type="hidden" id="id_client_site_id" name="client_site_id" value="0">
     <input type="hidden" id="id_client_site_name" name="client_site_name" value="新增临时座位！">
 	<div class="mask-trangle"></div>
-        <div class="product-mask-info"><button id="updatePadOrder"><?php echo yii::t('app','下单确认');?></button><button id="cancelPadOrder"><?php echo yii::t('app','清空全部菜品');?></button></div>
+        <div class="product-mask-info"><button id="cancelPadOrder" style="float:left;"><?php echo yii::t('app','清空全部菜品');?></button><button id="updatePadOrder" style="float:right;"><?php echo yii::t('app','下单确认');?></button></div>
         <div class="product-mask-tip"><?php echo yii::t('app','提示：点击列表中的菜品,快速找到该菜品。');?>
         </div>
 	<div class="info">
