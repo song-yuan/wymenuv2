@@ -502,8 +502,8 @@ $(document).ready(function(){
             return false;
         }
         var formdata=$('#padOrderForm').formSerialize();
-        alert($('#padOrderForm').attr('action'));
-        alert(formdata);
+//        alert($('#padOrderForm').attr('action'));
+//        alert(formdata);
 //        $('#padOrderForm').submit(function(){
 //	    	$(this).ajaxSubmit({
             $.ajax({
@@ -513,7 +513,7 @@ $(document).ready(function(){
                     async:false,
 	            dataType: "json",
 	            success:function(msg){
-                        alert("dddd");
+//                        alert("dddd");
 	                var data=msg;
 	                var printresult;
 	    		if(data.status){
