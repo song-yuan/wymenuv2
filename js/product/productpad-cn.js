@@ -488,7 +488,7 @@ $(document).ready(function(){
     	$('.tastepad').hide();
     	$(this).hide();
     });
-    $('#updatePadOrder').on("click",function(){
+    $('#updatePadOrder').on(event_clicktouchstart,function(){
     	//layer页面层
 //    	var str = '<a herf="javascript:;" class="pay-type cash-color" id="cashpay">柜台支付</a><a herf="javascript:;" class="pay-type wx-color" id="weixinpay">微信支付</a><a herf="javascript:;" class="pay-type zfb-color" id="zhifubaopay">支付宝支付</a>';
 //		layer.open({
@@ -555,8 +555,9 @@ $(document).ready(function(){
 	                }
 	    		}
 	     	});
-	     	return false;
+	     	//return false;
      	});
+        
     });
     $('body').on(event_clicktouchstart,'#cashpay',function(){
      	alert('现金支付');
