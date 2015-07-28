@@ -556,7 +556,7 @@ $(document).ready(function(){
 	                     $('.total-price').html(total);
 	                        $('.total-num').html(0);
 	                 }else{
-	                     alert(language_print_pad_fail);
+	                     alert(language_print_pad_fail+"1");
 	                 }                                                
 	                }else{
 	                    alert(data.msg);
@@ -565,7 +565,7 @@ $(document).ready(function(){
                     },
                     error: function(msg){
                         alert("error");
-                        alert(msg);
+                        //alert(msg);
                     }
 	     	});
                 //$('#padOrderForm')[0].reset() 
