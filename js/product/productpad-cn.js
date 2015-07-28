@@ -562,6 +562,10 @@ $(document).ready(function(){
 	                    alert(data.msg);
 	                }
                         $(this).resetForm();
+                    },
+                    error: function(msg){
+                        alert("error");
+                        alert(msg);
                     }
 	     	});
                 //$('#padOrderForm')[0].reset() 
