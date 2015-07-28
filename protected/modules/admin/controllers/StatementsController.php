@@ -130,7 +130,7 @@ class StatementsController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,count(t.order_status) as all_status,t.paytype,t.payment_method_id,t.order_status';
+		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.reality_total) as all_total,count(t.order_status) as all_status,t.paytype,t.payment_method_id,t.order_status';
 		$criteria->with = array('company','paymentMethod');
 		$criteria->condition = ' t.dpid='.$this->companyId ;
 		if($str){
@@ -442,7 +442,7 @@ class StatementsController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,count(t.order_status) as all_status,t.paytype,t.payment_method_id,t.order_status';
+		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.reality_total) as all_total,count(t.order_status) as all_status,t.paytype,t.payment_method_id,t.order_status';
 		$criteria->with = array('company','paymentMethod');
 		$criteria->condition = ' t.dpid='.$this->companyId ;
 		if($str){
@@ -520,7 +520,8 @@ class StatementsController extends BackendController
 			->setCellValue('B3',yii::t('app','店铺名称'))
 			->setCellValue('C3',yii::t('app','订单状态'))
 			->setCellValue('D3',yii::t('app','数量统计'))
-			->setCellValue('E3',yii::t('app','备注'));
+			->setCellValue('E3',yii::t('app','金额统计'))
+			->setCellValue('F3',yii::t('app','备注'));
 			$j=4;
 			foreach($model as $v){
 				//print_r($v);
@@ -532,6 +533,7 @@ class StatementsController extends BackendController
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','未下单'))
 						->setCellValue('D'.$j,$v->all_status)
+						->setCellValue('E'.$j,$v->all_total)
 						->setCellValue('F'.$j);
 						break;
 						case 2:
@@ -540,6 +542,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','下单未支付'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 3:
@@ -547,7 +550,8 @@ class StatementsController extends BackendController
 							->setCellValue('A'.$j,$v->y_all)
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','已支付'))
-							->setCellValue('D'.$j,$v->all_status)						
+							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 4:
@@ -556,6 +560,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j, yii::t('app','已结单'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 5:
@@ -564,6 +569,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','被并台'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 6:
@@ -572,6 +578,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','被换台'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 7:
@@ -580,6 +587,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','被撤台'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 8:
@@ -588,6 +596,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','日结'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						default:
@@ -596,6 +605,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j, yii::t('app',''))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 					}
@@ -608,6 +618,7 @@ class StatementsController extends BackendController
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','未下单'))
 						->setCellValue('D'.$j,$v->all_status)
+						->setCellValue('E'.$j,$v->all_total)
 						->setCellValue('F'.$j);
 						break;
 						case 2:
@@ -616,6 +627,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','下单未支付'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 3:
@@ -623,7 +635,8 @@ class StatementsController extends BackendController
 							->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','已支付'))
-							->setCellValue('D'.$j,$v->all_status)						
+							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 4:
@@ -632,6 +645,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j, yii::t('app','已结单'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 5:
@@ -640,6 +654,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','被并台'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 6:
@@ -648,6 +663,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','被换台'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 7:
@@ -656,6 +672,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j, yii::t('app','被撤台'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 8:
@@ -664,6 +681,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','日结'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						default:
@@ -672,6 +690,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app',''))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 					}
@@ -683,6 +702,7 @@ class StatementsController extends BackendController
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','未下单'))
 						->setCellValue('D'.$j,$v->all_status)
+						->setCellValue('E'.$j,$v->all_total)
 						->setCellValue('F'.$j);
 						break;
 						case 2:
@@ -691,6 +711,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','下单未支付'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 3:
@@ -698,7 +719,8 @@ class StatementsController extends BackendController
 							->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','已支付'))
-							->setCellValue('D'.$j,$v->all_status)						
+							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 4:
@@ -707,6 +729,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j, yii::t('app','已结单'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 5:
@@ -715,6 +738,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','被并台'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 6:
@@ -723,6 +747,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','被换台'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 7:
@@ -731,6 +756,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','被撤台'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						case 8:
@@ -739,6 +765,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j,yii::t('app','日结'))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 						default:
@@ -747,6 +774,7 @@ class StatementsController extends BackendController
 							->setCellValue('B'.$j,$v->company->company_name)
 							->setCellValue('C'.$j, yii::t('app',''))
 							->setCellValue('D'.$j,$v->all_status)
+							->setCellValue('E'.$j,$v->all_total)
 							->setCellValue('F'.$j);
 						break;
 					}
@@ -763,24 +791,24 @@ class StatementsController extends BackendController
 			}
 			
 			//合并单元格
-			$objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
-			$objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
+			$objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+			$objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
 			//单元格加粗，居中：
 			
 			// 将A1单元格设置为加粗，居中
 			$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
 			$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 			//加粗字体
-			$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFont()->setBold(true);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
 			//设置字体垂直居中
-			$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 			//设置字体水平居中
-			$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 			//字体靠左
 			//$objPHPExcel->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 			//设置填充颜色
-			$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-			$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFill()->getStartColor()->setARGB('fdfc8d');
+			$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->getStartColor()->setARGB('fdfc8d');
 			//设置每列宽度
 			$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
@@ -788,6 +816,7 @@ class StatementsController extends BackendController
 			$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+			$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
 			
 			//输出
 			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');

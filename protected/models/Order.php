@@ -31,6 +31,7 @@ class Order extends CActiveRecord
 	public $d_all;
 	public $all_status;
         public $reality_all;
+        public $all_total;
         /**
 	 * @return string the associated database table name
 	 */

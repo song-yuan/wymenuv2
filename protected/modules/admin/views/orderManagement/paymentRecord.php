@@ -37,7 +37,9 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','付款退款记录表');?></div>
 					<div class="actions">
-                        
+                        <div class="btn-group">
+							<!-- <input type="text" class="form-control" name="订单号" id="Did" placeholder="<?php echo yii::t('app','输入订单号进行查询');?>" value=""> -->
+						</div>
 				<div class="btn-group">
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
@@ -80,13 +82,13 @@
 								<td><?php echo $model->company->company_name; ?></td>
 								<td><?php echo $model->order_id%10000;?></td>
 								<td>
-								 <div style='width:50px;overflow: hidden;height:18px;' title='<?php echo $this->getOrderDetails($model->lid); ?>'  >
-								 <?php echo $this->getOrderDetails($model->lid); ?></div>
+								 <div style='width:50px;overflow: hidden;height:18px;' title='<?php echo $this->getOrderDetails($model->order_id); ?>'  >
+								 <?php echo $this->getOrderDetails($model->order_id); ?></div>
 								
                                     </td>
 								<td><?php echo $model->order->should_total;?></td>
-								<td><?php if ($model->pay_amount > 0) echo $model->pay_amount ;else echo '--';?></td>
-								<td><?php if ($model->pay_amount < 0) echo -$model->pay_amount ;else echo '--';;?></td>
+								<td><?php if ($model->pay_amount > 0) echo $model->pay_amount ;else echo '--/--';?></td>
+								<td><?php if ($model->pay_amount < 0) echo -$model->pay_amount ;else echo '--/--';;?></td>
 								<td><?php echo $model->update_at;?></td>
 							</tr>
 					    <?php $a++;?>
@@ -169,7 +171,8 @@
 			  // alert(111);
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			  // var cid = $(this).val();
+			   //var Did = $('#Did').var();
+			  //var cid = $(this).val();
 			   location.href="<?php echo $this->createUrl('orderManagement/paymentRecord' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
 			  
 	        });
