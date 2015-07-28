@@ -56,20 +56,20 @@
 </form>
 <div class="setting-pad-mask">
 	<div class="mask-trangle"></div>
-	<div class="product-mask-info"><?php echo yii::t('app','点单帮助');?></div>
-        <div class="line"></div>
+	<!--<div class="product-mask-info"><?php echo yii::t('app','点单帮助');?></div>
+        <div class="line"></div>-->
         <div class="product-mask-info" id="clientSitelist"><?php echo yii::t('app','座位列表');?></div>
 	<div class="line"></div>
-        <div class="product-mask-info" id="printerShow"><?php echo yii::t('app','打印机校正');?></div>
-	<div class="line"></div>
+        <!--<div class="product-mask-info" id="printerShow"><?php echo yii::t('app','打印机校正');?></div>
+	<div class="line"></div>-->
         <!--<div class="product-mask-info">中 文</div>
         <div class="line"></div>
         <div class="product-mask-info">日本語</div>
         <div class="line"></div>-->
         <div class="product-mask-info" id="pad-disbind-menu"><?php echo yii::t('app','解除绑定'); ?></div>
         <div class="line"></div>
-        <div class="product-mask-info" id="pad-app-exit"><?php echo yii::t('app',"清除缓存");?></div>
-	<div class="product-bottom">
+        <!--<div class="product-mask-info" id="pad-app-exit"><?php echo yii::t('app',"清除缓存");?></div>
+	<div class="product-bottom">>-->
 	</div>
 </div>
 <div id="print_check" class="setting-pad-print">

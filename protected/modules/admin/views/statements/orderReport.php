@@ -66,7 +66,7 @@
 								<th>
 									<div class="btn-group">
 										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
-										<button type="button" class="btn blue dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
+										<button type="button" class="btn green dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
 										<div class="dropdown-menu hold-on-click dropdown-checkboxes" role="menu">
 											
 											
@@ -83,7 +83,8 @@
 								</th>
                                 <th><?php echo yii::t('app','订单状态');?></th>
                               
-                                <th><?php echo yii::t('app','数量统计');?></th>                                                                
+                                <th><?php echo yii::t('app','数量统计');?></th>
+                                <th><?php echo yii::t('app','金额统计');?></th>                                                                 
                                 <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
@@ -99,6 +100,7 @@
 								<td><?php echo $model->company->company_name;?></td>
 								<td><?php switch($model->order_status){case 1: echo yii::t('app','未下单');break;case 2: echo yii::t('app','下单未支付');break;case 3: echo yii::t('app','已支付');break;case 4: echo yii::t('app','已结单');break;case 5: echo yii::t('app','被并台');break;case 6: echo yii::t('app','被换台');break; case 7: echo yii::t('app','被撤台');break;case 8: echo yii::t('app','日结');break;default:echo "";break;}?></td>
 								<td><?php echo $model->all_status;?></td>
+								<td><?php echo $model->all_total;?></td>
 								<td></td>
 								
 							</tr>
