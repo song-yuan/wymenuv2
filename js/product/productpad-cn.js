@@ -515,7 +515,7 @@ $(document).ready(function(){
 	            dataType: "json",
 	            success:function(msg){
                         var data=msg;
-	                alert(data.jobid);
+	                alert(data.type);
                         alert(data.address);
 	                var printresult;
 	    		if(data.status){
