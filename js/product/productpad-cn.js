@@ -487,14 +487,7 @@ $(document).ready(function(){
     	$(this).hide();
     });
     $('#updatePadOrder').on(event_clicktouchstart,function(){
-    	//layer页面层
-//    	var str = '<a herf="javascript:;" class="pay-type cash-color" id="cashpay">柜台支付</a><a herf="javascript:;" class="pay-type wx-color" id="weixinpay">微信支付</a><a herf="javascript:;" class="pay-type zfb-color" id="zhifubaopay">支付宝支付</a>';
-//		layer.open({
-//		    type: 1,
-//		    skin: 'layui-layer-rim', //加上边框
-//		    area: ['420px', '240px'], //宽高
-//		    content: str
-//		});
+
         if (typeof Androidwymenuprinter == "undefined") {
             alert(language_notget_padinfo);
             return false;
@@ -503,10 +496,7 @@ $(document).ready(function(){
         //if(jobid)存在，说明是重新打印，不用下单
         
         var formdata=$('#padOrderForm').formSerialize();
-//        alert($('#padOrderForm').attr('action'));
-//        alert(formdata);
-//        $('#padOrderForm').submit(function(){
-//	    	$(this).ajaxSubmit({
+
             $.ajax({
                     url:$('#padOrderForm').attr('action'),
                     type:'POST',
@@ -556,11 +546,7 @@ $(document).ready(function(){
 	                     $('.total-price').html(total);
 	                        $('.total-num').html(0);
 	                 }else{
-	                     //alert(language_print_pad_fail+"1");
-                             $('#updatePadOrder').text("重新打印");
-                             $('#updatePadOrder').attr("jobid",data.jobid);
-                             $('#padOrderForm').resetForm();
-                             return;
+	                     alert(language_print_pad_fail);
 	                 }                                                
 	                }else{
 	                    alert(data.msg);
@@ -569,12 +555,8 @@ $(document).ready(function(){
                     },
                     error: function(msg){
                         alert("error");
-                        //alert(msg);
                     }
 	     	});
-                
-//     	});
-        //return false;
     });
     $('body').on(event_clicktouchstart,'#cashpay',function(){
      	alert('现金支付');
