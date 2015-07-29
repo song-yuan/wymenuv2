@@ -227,6 +227,7 @@ $(document).ready(function(){
               $('.product-pad-mask').hide();
           }
           if (typeof Androidwymenuprinter != "undefined") {
+              //alert(padprinterping);
             if(padprinterping!="local")
             {
                 Androidwymenuprinter.printNetPing(padprinterping,10);
@@ -501,11 +502,24 @@ $(document).ready(function(){
             alert(language_notget_padinfo);
             return false;
         }
-        $('#padOrderForm').submit(function(){
-	    	$(this).ajaxSubmit({
+        
+        //if(jobid)存在，说明是重新打印，不用下单
+        
+        var formdata=$('#padOrderForm').formSerialize();
+//        alert($('#padOrderForm').attr('action'));
+//        alert(formdata);
+//        $('#padOrderForm').submit(function(){
+//	    	$(this).ajaxSubmit({
+            $.ajax({
+                    url:$('#padOrderForm').attr('action'),
+                    type:'POST',
+                    data:formdata,
+                    async:false,
 	            dataType: "json",
 	            success:function(msg){
-	                var data=msg;
+                        var data=msg;
+//	                alert(data.type);
+//                        alert(data.address);
 	                var printresult;
 	    		if(data.status){
 	                 if(data.type=='local')
@@ -518,26 +532,26 @@ $(document).ready(function(){
 	                 {
 	                	 $('#padOrderForm').find('.input-product').each(function(){
                 		 	var _this = $(this);
-                            var productId = _this.attr('name');
-                            var productIdArr = productId.split(","); //字符分割 
-                            productId = productIdArr[0];
-                            var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
-                            var category = parents.attr('category');//分类id
-                            parents.find('.subject-order').css('display','none');
-                            parents.find('.single-num-circel').html(0);
-                            _this.parents('.product-catory-product').remove();
-	                         if(!$('.catory'+category).find('.product-catory-product').length){
-				    			$('.catory'+category).remove();
-				    			parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
-				    			parents.find('.taste-list').each(function(eq){
-				    				if(eq > 0){
-				    					$(this).remove();
-				    				}else{
-				    					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
-				    				}
-				    			});
-				    		}
-				    		$('input[name^="'+productId+'"]').remove();
+                                        var productId = _this.attr('name');
+                                        var productIdArr = productId.split(","); //字符分割 
+                                        productId = productIdArr[0];
+                                        var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+                                        var category = parents.attr('category');//分类id
+                                        parents.find('.subject-order').css('display','none');
+                                        parents.find('.single-num-circel').html(0);
+                                        _this.parents('.product-catory-product').remove();
+                                        if(!$('.catory'+category).find('.product-catory-product').length){
+                                                   $('.catory'+category).remove();
+                                                   parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+                                                   parents.find('.taste-list').each(function(eq){
+                                                           if(eq > 0){
+                                                                   $(this).remove();
+                                                           }else{
+                                                                   $(this).find('.item').removeClass('active'); //去掉第一个口味选中
+                                                           }
+                                                   });
+                                           }
+                                           $('input[name^="'+productId+'"]').remove();
 	                     });
 	                     $('.product-pad-mask').hide();
 	                     var total = 0;
@@ -547,15 +561,27 @@ $(document).ready(function(){
 	                     $('.total-price').html(total);
 	                        $('.total-num').html(0);
 	                 }else{
-	                     alert(language_print_pad_fail);
+	                     //alert(language_print_pad_fail+"1");
+                             $('#updatePadOrder').text("重新打印");
+                             $('#updatePadOrder').attr("jobid",data.jobid);
+                             $('#padOrderForm').resetForm();
+                             return;
 	                 }                                                
 	                }else{
 	                    alert(data.msg);
 	                }
-	    		}
+                        $('#padOrderForm').resetForm();
+                    },
+                    error: function(msg){
+                        alert("error");
+                        //alert(msg);
+                    }
 	     	});
+                //$('#padOrderForm')[0].reset() 
 	     	return false;
-     	});
+                
+//     	});
+        //return false;
     });
     $('body').on(event_clicktouchstart,'#cashpay',function(){
      	alert('现金支付');
