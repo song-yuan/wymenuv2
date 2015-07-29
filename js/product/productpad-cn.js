@@ -206,9 +206,6 @@ $(document).ready(function(){
 		}
     	$('.total-price').html(total);
 		$('.total-num').html(0);
-		$('#padOrderForm').submit(function(){
-			return false;
-		});
     });
    //help
    $('.padsetting').on(event_clicktouchstart,function(){
@@ -518,8 +515,6 @@ $(document).ready(function(){
 	            dataType: "json",
 	            success:function(msg){
                         var data=msg;
-//	                alert(data.type);
-//                        alert(data.address);
 	                var printresult;
 	    		if(data.status){
 	                 if(data.type=='local')
@@ -532,26 +527,26 @@ $(document).ready(function(){
 	                 {
 	                	 $('#padOrderForm').find('.input-product').each(function(){
                 		 	var _this = $(this);
-                                        var productId = _this.attr('name');
-                                        var productIdArr = productId.split(","); //字符分割 
-                                        productId = productIdArr[0];
-                                        var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
-                                        var category = parents.attr('category');//分类id
-                                        parents.find('.subject-order').css('display','none');
-                                        parents.find('.single-num-circel').html(0);
-                                        _this.parents('.product-catory-product').remove();
-                                        if(!$('.catory'+category).find('.product-catory-product').length){
-                                                   $('.catory'+category).remove();
-                                                   parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
-                                                   parents.find('.taste-list').each(function(eq){
-                                                           if(eq > 0){
-                                                                   $(this).remove();
-                                                           }else{
-                                                                   $(this).find('.item').removeClass('active'); //去掉第一个口味选中
-                                                           }
-                                                   });
-                                           }
-                                           $('input[name^="'+productId+'"]').remove();
+                            var productId = _this.attr('name');
+                            var productIdArr = productId.split(","); //字符分割 
+                            productId = productIdArr[0];
+                            var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+                            var category = parents.attr('category');//分类id
+                            parents.find('.subject-order').css('display','none');
+                            parents.find('.single-num-circel').html(0);
+                            _this.parents('.product-catory-product').remove();
+                            if(!$('.catory'+category).find('.product-catory-product').length){
+                                       $('.catory'+category).remove();
+                                       parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+                                       parents.find('.taste-list').each(function(eq){
+                                               if(eq > 0){
+                                                       $(this).remove();
+                                               }else{
+                                                       $(this).find('.item').removeClass('active'); //去掉第一个口味选中
+                                               }
+                                       });
+                               }
+                               $('input[name^="'+productId+'"]').remove();
 	                     });
 	                     $('.product-pad-mask').hide();
 	                     var total = 0;
@@ -577,8 +572,6 @@ $(document).ready(function(){
                         //alert(msg);
                     }
 	     	});
-                //$('#padOrderForm')[0].reset() 
-	     	return false;
                 
 //     	});
         //return false;
