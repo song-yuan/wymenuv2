@@ -328,7 +328,8 @@ $(document).ready(function(){
             alert(language_notget_padinfo);
             return false;
         }
-    	$('#padOrderForm').ajaxSubmit({
+     $('#padOrderForm').submit(function(){
+    	$(this).ajaxSubmit({
             async:false,
             dataType: "json",
             success:function(msg){
@@ -372,6 +373,8 @@ $(document).ready(function(){
                 }
     		}
      	});
+     	return false;
+      });
     });
     $('body').on('touchstart','#cashpay',function(){
      	alert('现金支付');
