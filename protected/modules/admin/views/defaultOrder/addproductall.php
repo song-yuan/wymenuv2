@@ -188,7 +188,7 @@
                                                                         </div>
                                                                         <div style="position:absolute;width: 19%;height: 15%;bottom:2%;right:2%;">
                                                                             <button style="float:right;margin-top: 5%;" type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
-                                                                            <input style="float:right;margin-right: 5%;margin-top: 5%;height:" type="submit" class="btn blue" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
+                                                                            <input style="float:right;margin-right: 5%;margin-top: 5%;height:" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
                                                                             
                                                                         </div>
                                                                     </div>                                                                                                                                       
@@ -418,7 +418,7 @@
                             var setlid="";
                             $('.selectedproduct').find('a').each(function(){
                                 setselect=$(this).attr("setselect");
-                                
+                                alert(setselect);
                                 if(setselect=="0")
                                 {
                                     productselect="0000000000,"+$(this).attr("lid")+","+$(this).attr("amount")
@@ -449,6 +449,7 @@
                                     });                                    
                                 }                                
                             });
+                            alert(sendlist);
                             $('#selectproductlistid').val(sendlist);
                             //return false;
                         });
