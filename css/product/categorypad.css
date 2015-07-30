@@ -418,7 +418,7 @@
 
 .product-pic i.icon-hover-1,
 .product-pic i.icon-hover-2{
-	top: 50%;
+	top: 60%;
 	color: #fff;
 	padding: 0.5em 1.0em;
 	font-size: 1.6em;
@@ -435,7 +435,42 @@
 	-moz-transition: all 0.6s ease;
 	-webkit-transition: all 0.6s ease;
 }
+.product-pic i.icon-hover-3{
+	left: -150px;
+}
+.product-pic i.icon-hover-4,.product-pic i.icon-hover-5{
+	right: -150px;
+}
 
+
+.product-pic i.icon-hover-3,
+.product-pic i.icon-hover-4{
+	top: 30%;
+	color: #fff;
+	padding: 0.5em 1.0em;
+	font-size: 1.6em;
+	position: absolute;
+	margin-top: -1.5em;
+	border-radius: 50%;
+	background: rgba(69,69,69,0.9);
+}
+
+.product-pic i.icon-hover-3,
+.product-pic i.icon-hover-4,.product-pic i.icon-hover-5{
+	transition: all 0.6s ease; 
+	-o-transition: all 0.6s ease;
+	-moz-transition: all 0.6s ease;
+	-webkit-transition: all 0.6s ease;
+}
+.product-pic i.icon-hover-5{
+	top: 45%;
+	color: #fff;
+	padding: 0.5em 1.0em;
+	font-size: 1.6em;
+	position: absolute;
+	margin-top: -1.5em;
+	background: rgba(69,69,69,0.9);
+}
 .subject-num {
   text-align: left;
   padding: 0em 0em 0em 0em;
