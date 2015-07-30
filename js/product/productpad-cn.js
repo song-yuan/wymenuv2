@@ -537,13 +537,13 @@ $(document).ready(function(){
                                 if(printresult)
                                 {
                                      clearInterval(wait);
-//                                     $('#id_client_reprint').val("0");
+                                     $('#id_client_reprint').val("0");
                                      layer.close(index);
                                      //alert()
                                 }else if(waittime>5)
                                 {
                                      clearInterval(wait);
-//                                     $('#id_client_reprint').val("1");
+                                     $('#id_client_reprint').val("1");
                                      layer.close(index);
                                      alert(language_print_pad_fail);
                                 }                                
