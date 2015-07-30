@@ -466,7 +466,7 @@
 	font-size: 3.0em;
 	position: absolute;
 	margin-top: -1.5em;
-	background: rgba(69,69,69,0.9);
+	background: rgba(255,0,0,0.9);
 	display:none;
 	z-index:20;
 }
