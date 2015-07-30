@@ -62,7 +62,7 @@
 
 
                        			<?php $form=$this->beginWidget('CActiveForm', array(
-                                                        'id'=>'orderProduct',
+                                                        'id'=>'orderProductForm',
                                                         'action' => $this->createUrl('defaultOrder/addProductAll',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId)),
                                                         'enableAjaxValidation'=>true,
                                                         'enableClientValidation'=>true,
@@ -173,18 +173,7 @@
                                                                                 </div>
                                                                                                                                                      
                                                                             </div>
-                                                                            <div class="clear"></div> 
-                                                                            <div style="display: none; width:100%;overflow-y:auto;height:100%;" id="product-set-detail">
-                                                                                <!--<div class="btn-group" groupid="groupid" data-toggle="buttons" style="width:95%;margin-right: 10px;border: 1px solid red;background: rgb(245,230,230);">                                                                                        
-                                                                                    <label style="width:95%;margin-right: 2px;margin-left:2px;" tasteid="" group="tastegroup_1" class="selectTaste btn btn-default active">
-                                                                                        <input type="checkbox" class="toggle"> dd
-                                                                                    </label>
-                                                                                    <label style="width:95%;margin-right: 2px;margin-left:2px;" tasteid="" group="tastegroup_1" class="selectTaste btn btn-default">
-                                                                                        <input type="checkbox" class="toggle"> ss
-                                                                                    </label>                                                                                        
-                                                                                </div>-->
-                                                                                  
-                                                                            </div>
+                                                                            
                                                                         </div>
                                                                         <div style="position:absolute;width: 19%;height: 15%;bottom:2%;right:2%;">
                                                                             <button style="float:right;margin-top: 5%;" type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
@@ -195,7 +184,7 @@
                                                                 <!--</div>-->                                                        
                                                 </div>
                                                 
-                                                <input class="form-control" name="selectproductlist" id="selectproductlistid" type="hidden" value="34243">                                     
+                                                <input class="form-control" name="selectproductlist" id="selectproductlistid" type="hidden" value="">                                     
 
                                                 <?php $this->endWidget(); ?>                
                     <script type="text/javascript">
@@ -418,7 +407,7 @@
                             var setlid="";
                             $('.selectedproduct').find('a').each(function(){
                                 setselect=$(this).attr("setselect");
-                                alert(setselect);
+                                //alert(setselect);
                                 if(setselect=="0")
                                 {
                                     productselect="0000000000,"+$(this).attr("lid")+","+$(this).attr("amount")
@@ -452,6 +441,21 @@
                             alert(sendlist);
                             $('#selectproductlistid').val(sendlist);
                             //return false;
+//                            $.ajax({
+//                                url:$('#orderProductForm').attr('action'),
+//                                type:'POST',
+//                                data:"selectproductlist="+sendlist,
+//                                async:false,
+//                                dataType: "json",
+//                                success:function(msg){
+//                                     
+//                                },
+//                                error: function(msg){
+//                                    alert("error");
+//                                }
+//                            });
+                            $('#orderProductForm').submit();
+                           
                         });
                         
                         $('#product-detail-amount-m1').on(event_clicktouchstart,function(){
