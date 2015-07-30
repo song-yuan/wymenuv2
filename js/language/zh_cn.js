@@ -28,4 +28,4 @@ var language_calltype_select="请选择呼叫类型!";
 var language_productnum_modify="修改产品数量:";
 var language_store_number_fail="保存失败";
 var language_store_number_success="保存成功";
-
+var language_sure_bind="确定解除绑定吗？";
