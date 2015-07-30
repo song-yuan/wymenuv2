@@ -40,6 +40,7 @@ $(document).ready(function(){
     		store -= 1;
     		_this.parents('.blockCategory').attr('store',store);
     	}
+    	
     	var type = _this.attr('type');
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
@@ -52,6 +53,8 @@ $(document).ready(function(){
 		var singleNums = 0;
 			singleNums = parseInt(singleNumObj.html());
 		singleNumObj.html(singleNums+1);
+		//数量显示
+		singleNumObj.css('display','block');
 		
 		var str = '';
 		str +='<div class="order-product catory'+category+'">';
@@ -129,7 +132,9 @@ $(document).ready(function(){
     		if(parseInt(singleNums)==0){
     			return;
     		}
-    		singleNumObj.html(parseInt(singleNums) - 1);
+    		singleNumObj.html(parseInt(singleNums) - 1);//到达数量0
+    		//数量0时 隐藏
+			singleNumObj.css('display','none');
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
     			$('.catory'+category).remove();
@@ -168,13 +173,11 @@ $(document).ready(function(){
     	 	$(this).find('.icon-hover-2').css('right','-150px');
     	 	$(this).find('.icon-hover-3').css('left','-150px');
     	 	$(this).find('.icon-hover-4').css('right','-150px');
-    	 	$(this).find('.icon-hover-5').css('left','-150px');
     	});
     	$(this).find('.icon-hover-1').css('left','20%');
 	 	$(this).find('.icon-hover-2').css('right','20%');
 	 	$(this).find('.icon-hover-3').css('left','20%');
 	 	$(this).find('.icon-hover-4').css('right','20%');
-	 	$(this).find('.icon-hover-5').css('left','45%');
 	 });
     
     $('#cancelPadOrder').on(event_clicktouchend,function(){
@@ -556,7 +559,7 @@ $(document).ready(function(){
                             var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
                             var category = parents.attr('category');//分类id
                             parents.find('.subject-order').css('display','none');
-                            parents.find('.single-num-circel').html(0);
+                            parents.find('.single-num-circel').css('display','none').html(0);
                             _this.parents('.product-catory-product').remove();
                             if(!$('.catory'+category).find('.product-catory-product').length){
                                        $('.catory'+category).remove();
