@@ -164,7 +164,7 @@ $(document).ready(function(){
     	 	$(this).find('.icon-hover-2').css('right','-150px');
     	 	$(this).find('.icon-hover-3').css('left','-150px');
     	 	$(this).find('.icon-hover-4').css('right','-150px');
-    	 	$(this).find('.icon-hover-5').css('right','-150px');
+    	 	$(this).find('.icon-hover-5').css('left','-150px');
     	});
     	$(this).find('.icon-hover-1').css('left','20%');
 	 	$(this).find('.icon-hover-2').css('right','20%');
