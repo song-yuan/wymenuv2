@@ -130,11 +130,11 @@ $(document).ready(function(){
     		}
     	}else{
     		if(parseInt(singleNums)==0){
-    			//数量0时 隐藏
-    			singleNumObj.css('display','none');
     			return;
     		}
-    		singleNumObj.html(parseInt(singleNums) - 1);
+    		singleNumObj.html(parseInt(singleNums) - 1);//到达数量0
+    		//数量0时 隐藏
+			singleNumObj.css('display','none');
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
     			$('.catory'+category).remove();
