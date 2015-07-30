@@ -251,7 +251,11 @@ $(document).ready(function(){
 //		totalNum();
 //	});
     $('#pad-disbind-menu').on(event_clicktouchstart,function(){
-            location.href='../../../../../../../padbind/login';
+        //alert(1);
+            var statu = confirm(language_sure_bind);
+            if(statu){
+                location.href='../../../../../../../padbind/login';
+            }
             //绑定和解绑必须到我们的服务器。
             //location.href='http://menu.wymenu.com/wymenuv2/padbind/login';
 	});

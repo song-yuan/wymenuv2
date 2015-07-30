@@ -222,9 +222,12 @@ class DefaultOrderController extends BackendController
                             }
                             $transaction->commit();
                             $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
-                            $precode="1B70001EFF00";//开钱箱
-                            $printserver="1";                            
-                            $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                            if(!empty($pad))
+                            {
+                                $precode="1B70001EFF00";//开钱箱
+                                $printserver="1";                            
+                                $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                            }
                             $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
                             
 			} catch(Exception $e){
@@ -411,10 +414,12 @@ class DefaultOrderController extends BackendController
                             
                             $transaction->commit();
                             $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
-                            $precode="1B70001EFF00";//开钱箱
-                            $printserver="1";                            
-                            $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
-                            //$ret=array('status'=>false,'dpid'=>"0000000011",'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
+                            if(!empty($pad))
+                            {
+                                $precode="1B70001EFF00";//开钱箱
+                                $printserver="1";                            
+                                $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                            }//$ret=array('status'=>false,'dpid'=>"0000000011",'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
                             $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
                             
 			} catch(Exception $e){
@@ -1501,13 +1506,18 @@ class DefaultOrderController extends BackendController
                 $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$this->companyId));
                 $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
                 //前面加 barcode
-                $precode="";
-                //$precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                
-		//Yii::app()->end(json_encode(Helper::printList($order , $padid)));
-                $printserver="1";
-                $memo="";
-                $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                if(!empty($pad))
+                {
+                    $precode="";
+                    //$precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+
+                    //Yii::app()->end(json_encode(Helper::printList($order , $padid)));
+                    $printserver="1";
+                    $memo="";
+                    $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                }else{
+                    $ret=array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD不存在！'));
+                }
                 //exit;
                 $this->renderPartial('printlist' , array(
                                 'orderId'=>$orderId,
