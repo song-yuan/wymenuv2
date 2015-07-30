@@ -181,7 +181,6 @@ function showListPad(items){
 				trPic += '</a>';
 			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div></div></div>';
-			var trAddinfo = '</div>';
 			
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
@@ -204,7 +203,7 @@ function showListPad(items){
 			trTaste +='</div></div></div>';
 			
 			var trEnd = '</div></div>';
-            tr = trHead + trBuy + trPic + trTitle + trAddinfo + trTaste + trEnd;
+            tr = trHead + trBuy + trPic + trTitle + trTaste + trEnd;
 			rightPicObj.append(tr);
 		}else{
 			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
@@ -221,7 +220,6 @@ function showListPad(items){
 				
 			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div></div></div>';
-			var trAddinfo = '</div>';
 			
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
@@ -244,7 +242,7 @@ function showListPad(items){
 			trTaste +='</div></div></div>';
 			
 			var trEnd = '</div></div>';
-			tr = trHead + trBuy + trPic + trTitle + trAddinfo + trTaste + trEnd;
+			tr = trHead + trBuy + trPic + trTitle + trTaste + trEnd;
 			leftPicObj.append(tr);
 		}
 	}
