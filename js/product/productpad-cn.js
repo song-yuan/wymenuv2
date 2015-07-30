@@ -108,10 +108,7 @@ $(document).ready(function(){
     $('#forum_list').on(event_clicktouchstart,'.delCart',function(){
     	var _this = $(this);
     	var store = _this.parents('.blockCategory').attr('store');
-    	if(parseInt(store) >= 0){
-    		store =parseInt(store) + 1;
-    		 _this.parents('.blockCategory').attr('store',store);
-    	}
+
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
     	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
@@ -123,6 +120,11 @@ $(document).ready(function(){
     		singleNumObj.html(parseInt(singleNums) - 1);
     		var val = inputNumObj.val();
 			inputNumObj.val(parseInt(val)-1);
+			
+			if(parseInt(store) >= 0){
+	    		store =parseInt(store) + 1;
+	    		 _this.parents('.blockCategory').attr('store',store);
+    		}
     	}else{
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
