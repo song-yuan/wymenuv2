@@ -189,7 +189,7 @@
         text-align: center;
         font-size: 30px;
         font-weight: 700;
-        height: 45px;
+        height: 75px;
 }
 
 .client_category_title{
@@ -335,6 +335,7 @@
         font-size: 3.0em;
         font-weight: 700;
         height: 2.5em;
+        padding: 0.5em;
 }
 
 .product-mask-tip{

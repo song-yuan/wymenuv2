@@ -418,7 +418,7 @@ class ProductController extends Controller
                 }
                 $criteria = new CDbCriteria;		
                 $criteria->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId ;
-                $criteria->order = ' t.create_at desc ';
+                $criteria->order = ' t.site_id desc ';
                 $models_temp = SiteNo::model()->findAll($criteria);
                 //var_dump($models_temp);exit;
                 $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
