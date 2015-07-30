@@ -852,7 +852,7 @@ class StatementsController extends BackendController
 				$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
 			}else{
 				$criteria->group ='t.paytype,t.dpid,t.payment_method_id,day(t.update_at)';
-				$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t,update_at) asc,t.dpid asc';
+				$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 			}
 			//$criteria->order = 't.update_at asc';
 			//var_dump($criteria);exit;
@@ -1122,7 +1122,7 @@ class StatementsController extends BackendController
 		//设置每列宽度
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(22);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
