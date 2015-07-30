@@ -129,7 +129,7 @@ $(document).ready(function(){
     		if(!$('.catory'+category).find('.product-catory-product').length){
     			$('.catory'+category).remove();
     		}
-    		parentsBlockCategory.find('.subject-order').css('display','none');
+    		return;
     	}
     	
     	var productId = _this.attr('product-id');
