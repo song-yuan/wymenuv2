@@ -526,28 +526,28 @@ $(document).ready(function(){
                         var waittime=0;
 	    		if(data.status){
                             var index = layer.load(0, {shade: [0.3,'#fff']});
-                            var wait=setInterval(function(){ 
-                                waittime++;
-                                if(data.type=='local')
-                                {
-                                    printresult=Androidwymenuprinter.printJob(data.dpid,data.jobid);
-                                }else{
-                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
-                                }
-                                if(printresult)
-                                {
-                                     clearInterval(wait);
-                                     $('#id_client_reprint').val("0");
-                                     layer.close(index);
-                                     //alert()
-                                }else if(waittime>5)
-                                {
-                                     clearInterval(wait);
-                                     $('#id_client_reprint').val("1");
-                                     layer.close(index);
-                                     alert(language_print_pad_fail);
-                                }                                
-                            },1000); 	                 
+//                            var wait=setInterval(function(){ 
+//                                waittime++;
+//                                if(data.type=='local')
+//                                {
+//                                    printresult=Androidwymenuprinter.printJob(data.dpid,data.jobid);
+//                                }else{
+//                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+//                                }
+//                                if(printresult)
+//                                {
+//                                     clearInterval(wait);
+//                                     $('#id_client_reprint').val("0");
+//                                     layer.close(index);
+//                                     //alert()
+//                                }else if(waittime>5)
+//                                {
+//                                     clearInterval(wait);
+//                                     $('#id_client_reprint').val("1");
+//                                     layer.close(index);
+//                                     alert(language_print_pad_fail);
+//                                }                                
+//                            },1000); 	                 
                          //var index = layer.load(0, {shade: true}); //0代表加载的风格，支持0-2
 //	                 if(printresult)
 //	                 {
@@ -590,7 +590,7 @@ $(document).ready(function(){
                         $('#padOrderForm').resetForm();
                     },
                     error: function(msg){
-                        alert("error");
+                        alert(language_client_order_fail);
                     }
 	     	});
     });
