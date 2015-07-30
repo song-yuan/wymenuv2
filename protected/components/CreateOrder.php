@@ -208,9 +208,11 @@ class CreateOrder
 		$isTemp = $goodsIds['client_is_temp'];
 		$site_id = $goodsIds['client_site_id'];
 		$siteName = $goodsIds['client_site_name'];
+                $reprint = $goodsIds['client_reprint'];
 		unset($goodsIds['client_is_temp']);
 		unset($goodsIds['client_site_id']);
 		unset($goodsIds['client_site_name']);
+                unset($goodsIds['client_reprint']);
 		$sellOff = array();
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
