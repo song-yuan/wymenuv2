@@ -206,9 +206,6 @@ $(document).ready(function(){
 		}
     	$('.total-price').html(total);
 		$('.total-num').html(0);
-		$('#padOrderForm').submit(function(){
-			return false;
-		});
     });
    //help
    $('.padsetting').on(event_clicktouchstart,function(){
@@ -490,14 +487,7 @@ $(document).ready(function(){
     	$(this).hide();
     });
     $('#updatePadOrder').on(event_clicktouchstart,function(){
-    	//layer页面层
-//    	var str = '<a herf="javascript:;" class="pay-type cash-color" id="cashpay">柜台支付</a><a herf="javascript:;" class="pay-type wx-color" id="weixinpay">微信支付</a><a herf="javascript:;" class="pay-type zfb-color" id="zhifubaopay">支付宝支付</a>';
-//		layer.open({
-//		    type: 1,
-//		    skin: 'layui-layer-rim', //加上边框
-//		    area: ['420px', '240px'], //宽高
-//		    content: str
-//		});
+
         if (typeof Androidwymenuprinter == "undefined") {
             alert(language_notget_padinfo);
             return false;
@@ -506,10 +496,7 @@ $(document).ready(function(){
         //if(jobid)存在，说明是重新打印，不用下单
         
         var formdata=$('#padOrderForm').formSerialize();
-//        alert($('#padOrderForm').attr('action'));
-//        alert(formdata);
-//        $('#padOrderForm').submit(function(){
-//	    	$(this).ajaxSubmit({
+
             $.ajax({
                     url:$('#padOrderForm').attr('action'),
                     type:'POST',
@@ -518,8 +505,6 @@ $(document).ready(function(){
 	            dataType: "json",
 	            success:function(msg){
                         var data=msg;
-//	                alert(data.type);
-//                        alert(data.address);
 	                var printresult;
 	    		if(data.status){
 	                 if(data.type=='local')
@@ -532,26 +517,26 @@ $(document).ready(function(){
 	                 {
 	                	 $('#padOrderForm').find('.input-product').each(function(){
                 		 	var _this = $(this);
-                                        var productId = _this.attr('name');
-                                        var productIdArr = productId.split(","); //字符分割 
-                                        productId = productIdArr[0];
-                                        var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
-                                        var category = parents.attr('category');//分类id
-                                        parents.find('.subject-order').css('display','none');
-                                        parents.find('.single-num-circel').html(0);
-                                        _this.parents('.product-catory-product').remove();
-                                        if(!$('.catory'+category).find('.product-catory-product').length){
-                                                   $('.catory'+category).remove();
-                                                   parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
-                                                   parents.find('.taste-list').each(function(eq){
-                                                           if(eq > 0){
-                                                                   $(this).remove();
-                                                           }else{
-                                                                   $(this).find('.item').removeClass('active'); //去掉第一个口味选中
-                                                           }
-                                                   });
-                                           }
-                                           $('input[name^="'+productId+'"]').remove();
+                            var productId = _this.attr('name');
+                            var productIdArr = productId.split(","); //字符分割 
+                            productId = productIdArr[0];
+                            var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
+                            var category = parents.attr('category');//分类id
+                            parents.find('.subject-order').css('display','none');
+                            parents.find('.single-num-circel').html(0);
+                            _this.parents('.product-catory-product').remove();
+                            if(!$('.catory'+category).find('.product-catory-product').length){
+                                       $('.catory'+category).remove();
+                                       parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+                                       parents.find('.taste-list').each(function(eq){
+                                               if(eq > 0){
+                                                       $(this).remove();
+                                               }else{
+                                                       $(this).find('.item').removeClass('active'); //去掉第一个口味选中
+                                               }
+                                       });
+                               }
+                               $('input[name^="'+productId+'"]').remove();
 	                     });
 	                     $('.product-pad-mask').hide();
 	                     var total = 0;
@@ -561,11 +546,7 @@ $(document).ready(function(){
 	                     $('.total-price').html(total);
 	                        $('.total-num').html(0);
 	                 }else{
-	                     //alert(language_print_pad_fail+"1");
-                             $('#updatePadOrder').text("重新打印");
-                             $('#updatePadOrder').attr("jobid",data.jobid);
-                             $('#padOrderForm').resetForm();
-                             return;
+	                     alert(language_print_pad_fail);
 	                 }                                                
 	                }else{
 	                    alert(data.msg);
@@ -574,14 +555,8 @@ $(document).ready(function(){
                     },
                     error: function(msg){
                         alert("error");
-                        //alert(msg);
                     }
 	     	});
-                //$('#padOrderForm')[0].reset() 
-	     	return false;
-                
-//     	});
-        //return false;
     });
     $('body').on(event_clicktouchstart,'#cashpay',function(){
      	alert('现金支付');
