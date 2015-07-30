@@ -147,7 +147,7 @@
                                                                                 <div class="clear"></div>
                                                                                 <div style="width:100%;">
                                                                                 <span id="product-detail-amount-m1" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">-1</span>
-                                                                                <input id="product-detail-amount" style="width:30%;display:inline-block;" class="form-control" placeholder="下单数量" name="OrderProduct[amount]" id="OrderProduct_amount" type="text" value="1">
+                                                                                <span id="product-detail-amount" style="width:30%;display:inline-block;" class="form-control" placeholder="下单数量" name="OrderProduct[amount]" id="OrderProduct_amount" type="text" value="1">0</span>
                                                                                 <span id="product-detail-amount-a1" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">+1</span>
                                                                                 <span id="product-detail-amount-ah" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 6px;">+0.5</span>
                                                                                 </div>
@@ -156,7 +156,7 @@
                                                                                 <div class="clear"></div>
                                                                                 <div style="width:100%;">
                                                                                 <span id="product-detail-zhiamount-m1" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">-1</span>
-                                                                                <input id="product-detail-zhiamount" style="width:30%;display:inline-block;" class="form-control" placeholder="下单只数" name="OrderProduct[zhiamount]" id="OrderProduct_zhiamount" type="text" value="0">
+                                                                                <span id="product-detail-zhiamount" style="width:30%;display:inline-block;disabled:disabled;" class="form-control" placeholder="下单只数" name="OrderProduct[zhiamount]" id="OrderProduct_zhiamount" type="text" value="0">0</span>
                                                                                 <span id="product-detail-zhiamount-a1" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 12px;">+1</span>
                                                                                 <span id="product-detail-zhiamount-ah" style="width:20%;margin:2px;border: 1px solid red;background: rgb(245,230,230);height: 34px;padding: 6px 6px;">+0.5</span>
                                                                                 </div>
@@ -188,7 +188,7 @@
 
                                                 <?php $this->endWidget(); ?>                
                     <script type="text/javascript">
-                        $('.firstcategory').on(event_clicktouchstart,'li',function(){
+                        $('.firstcategory').on(event_clicktouchend,'li',function(){
                             //alert($(this).find('a').attr("lid"));
                             $(this).parent().find('li').removeClass('slectliclass');
                             $(this).addClass('slectliclass');
@@ -215,7 +215,7 @@
                             }
                         });
                         
-                        $('.secondcategory').on(event_clicktouchstart,'li',function(){
+                        $('.secondcategory').on(event_clicktouchend,'li',function(){
                             //alert($(this).find('a').attr("pid"));
                             $(this).parent().find('li').removeClass('slectliclass');
                             $(this).addClass('slectliclass');
@@ -226,13 +226,13 @@
                             $('.productstyle').find('li').removeClass('slectliclass');
                         });
                         
-                        $('.productstyle').on(event_clicktouchstart,'li',function(){
+                        $('.productstyle').on(event_clicktouchend,'li',function(){
                             //alert($(this).find('a').attr("pid"));
                             $(this).parent().find('li').removeClass('slectliclass');
                             $(this).addClass('slectliclass');
                         });
                         
-                        $('.selectedproduct').on(event_clicktouchstart,'li',function(){
+                        $('.selectedproduct').on(event_clicktouchend,'li',function(){
                             //alert($(this).find('a').attr("pid"));
                             $(this).parent().find('li').removeClass('slectliclass');
                             $(this).addClass('slectliclass');
@@ -248,8 +248,8 @@
                                 $("#product-detail").show();
                                 $("#product-detail-price").val(price);
                                 $("#product-detail-isgiving").val(isgiving);
-                                $("#product-detail-amount").val(amount);
-                                $("#product-detail-zhiamount").val(zhiamount);
+                                $("#product-detail-amount").text(amount);
+                                $("#product-detail-zhiamount").text(zhiamount);
                             }else{
                                 $("#product-detail").hide();
                                 $("#product-set-detail").show();
@@ -282,7 +282,7 @@
                             }
                         });
                         
-                        $('#plusproducticon').on(event_clicktouchstart,function(){
+                        $('#plusproducticon').on(event_clicktouchend,function(){
                             var obj=$('.productstyle').find('li[class="slectliclass"]');
                             var obja=obj.find('a');
                             var lid=obja.attr('lid');
@@ -316,8 +316,8 @@
                                 $("#product-detail").show();
                                 $("#product-detail-price").val(price);
                                 $("#product-detail-isgiving").val('0');
-                                $("#product-detail-amount").val('1');
-                                $("#product-detail-zhiamount").val('0');
+                                $("#product-detail-amount").text('1');
+                                $("#product-detail-zhiamount").text('0');
                             }else if(setselect!=""){
                                 $("#product-detail").hide();
                                 $("#product-set-detail").show();
@@ -351,7 +351,7 @@
                             obj.removeClass("slectliclass");
                         });
                         
-                        $('#minusproducticon').on(event_clicktouchstart,function(){
+                        $('#minusproducticon').on(event_clicktouchend,function(){
                             $('.selectedproduct').find('li[class="slectliclass"]').remove();
                             $("#product-set-detail").hide();
                             $("#product-detail").hide();
@@ -367,7 +367,7 @@
                             return word.substr(0,word.length-2)+"0,";
                         }
                         
-                        $('.selectTaste').live(event_clicktouchstart,"label",function(){
+                        $('.selectTaste').live(event_clicktouchend,"label",function(){
                             $(this).parent().find("label").removeClass("active");
                             var groupno=$(this).parent().attr("groupid");
                             var productid=$(this).attr("productid");
@@ -392,15 +392,15 @@
                         
                         $('#product-detail-amount').on("change",function(){
                             var obja=$('.selectedproduct').find('li[class="slectliclass"]').find('a');
-                            obja.attr("amount",$(this).val());
+                            obja.attr("amount",$(this).text());
                         });
                         
                         $('#product-detail-zhiamount').on("change",function(){
                             var obja=$('.selectedproduct').find('li[class="slectliclass"]').find('a');
-                            obja.attr("zhiamount",$(this).val());
+                            obja.attr("zhiamount",$(this).text());
                         });
                         
-                        $('#create_btn').on(event_clicktouchstart,function(){
+                        $('#create_btn').on(event_clicktouchend,function(){
                             var sendlist="";
                             var setselect="";
                             var productselect="";
@@ -459,42 +459,54 @@
                         });
                         
                         $('#product-detail-amount-m1').on(event_clicktouchstart,function(){
-                            var num = parseFloat($("#product-detail-amount").val());
+                            var num = parseFloat($("#product-detail-amount").text());
                             if(num >= 1){
                                     num = num - 1;
                             }
-                            $("#product-detail-amount").val(num);
+                            $("#product-detail-amount").text(num);
+                            var obja=$('.selectedproduct').find('li[class="slectliclass"]').find('a');
+                            obja.attr("amount",num);
                         });
                         
                         $('#product-detail-amount-a1').on(event_clicktouchstart,function(){
-                            var num = parseFloat($("#product-detail-amount").val());
+                            var num = parseFloat($("#product-detail-amount").text());
                             num = num + 1;
-                            $("#product-detail-amount").val(num);
+                            $("#product-detail-amount").text(num);
+                            var obja=$('.selectedproduct').find('li[class="slectliclass"]').find('a');
+                            obja.attr("amount",num);
                         });
                         
                         $('#product-detail-amount-ah').on(event_clicktouchstart,function(){
-                            var num = parseFloat($("#product-detail-amount").val());
+                            var num = parseFloat($("#product-detail-amount").text());
                             num = num + 0.5;
-                            $("#product-detail-amount").val(num);
+                            $("#product-detail-amount").text(num);
+                            var obja=$('.selectedproduct').find('li[class="slectliclass"]').find('a');
+                            obja.attr("amount",num);
                         });
                         
                         $('#product-detail-zhiamount-m1').on(event_clicktouchstart,function(){
-                            var num = parseFloat($("#product-detail-zhiamount").val());
+                            var num = parseFloat($("#product-detail-zhiamount").text());
                             if(num >= 1){
                                     num = num - 1;
                             }
-                            $("#product-detail-zhiamount").val(num);
+                            $("#product-detail-zhiamount").text(num);
+                            var obja=$('.selectedproduct').find('li[class="slectliclass"]').find('a');
+                            obja.attr("zhiamount",num);
                         });
                         
                         $('#product-detail-zhiamount-a1').on(event_clicktouchstart,function(){
-                            var num = parseFloat($("#product-detail-zhiamount").val());
+                            var num = parseFloat($("#product-detail-zhiamount").text());
                             num = num + 1;
-                            $("#product-detail-zhiamount").val(num);
+                            $("#product-detail-zhiamount").text(num);
+                            var obja=$('.selectedproduct').find('li[class="slectliclass"]').find('a');
+                            obja.attr("zhiamount",num);
                         });
                         
                         $('#product-detail-zhiamount-ah').on(event_clicktouchstart,function(){
-                            var num = parseFloat($("#product-detail-zhiamount").val());
+                            var num = parseFloat($("#product-detail-zhiamount").text());
                             num = num + 0.5;
-                            $("#product-detail-zhiamount").val(num);
+                            $("#product-detail-zhiamount").text(num);
+                            var obja=$('.selectedproduct').find('li[class="slectliclass"]').find('a');
+                            obja.attr("zhiamount",num);
                         });
                     </script>

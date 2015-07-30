@@ -49,11 +49,11 @@ class OrderProduct extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, dpid, order_id', 'required'),
-			array('lid, dpid, order_id, amount, zhiamount', 'numerical', 'integerOnly'=>true),
+			array('lid, dpid, order_id', 'numerical', 'integerOnly'=>true),
 			array('main_id,set_id, product_id, price, weight', 'length', 'max'=>10),
 			array('is_print, is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
 			//array('taste_memo', 'length', 'max'=>50),
-			array('create_at', 'safe'),
+			array('create_at, amount, zhiamount', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, order_id, main_id, set_id, product_id, is_retreat, is_print, price, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
