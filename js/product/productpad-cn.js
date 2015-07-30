@@ -513,7 +513,7 @@ $(document).ready(function(){
         //if(jobid)存在，说明是重新打印，不用下单
         
         var formdata=$('#padOrderForm').formSerialize();
-
+alert(formdata);
             $.ajax({
                     url:$('#padOrderForm').attr('action'),
                     type:'POST',
