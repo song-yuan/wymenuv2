@@ -181,7 +181,7 @@ function showListPad(items){
 				trPic += '</a>';
 			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
 			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div></div></div>';
-			var trAddinfo = '<div class="clear"></div></div>';
+			var trAddinfo = '</div>';
 			
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
@@ -209,20 +209,19 @@ function showListPad(items){
 		}else{
 			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
 			var trHead = '<div class="blockLeft blockCategory" product-id="'+pad(item.lid,10)+'" store="'+item.store_number+'" category="'+pad(item.category_id,10)+'" category-name="'+item.category_name+'">';
-			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'"><i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_search.png" style="width:4.8em;height:4.8em;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart.png" style="width:4.8em;height:4.8em;"/><br>'+language_diancai+'</i>';
+			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'">';
+				trPic +='<i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_search.png" style="width:4.8em;height:4.8em;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart.png" style="width:4.8em;height:4.8em;"/><br>'+language_diancai+'</i>';
+				trPic +='<i class="icon-hover-3 product-taste" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_search.png" style="width:4.8em;height:4.8em;"/><br>口味</i><i class="icon-hover-4 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart_m.png" style="width:4.8em;height:4.8em;"/><br>'+language_jiancai+'</i><i class="icon-hover-5 single-num-circel">0</i>';
 				if(parseInt(item.store_number)==0){
 					trPic += '<div class="sellOff sellOut">'+" "+'已<br/>售完</div>';
 				}else if(parseInt(item.store_number) > 0){
 					trPic += '<div class="sellOff">仅剩<br/>'+item.store_number+'份</div>';
 				}
 				trPic += '</a>';
+				
 			var trBuy = ' <div class="pad-productbuy"><div class="inmiddle">'+item.product_name+'</div></div>';
-			if(item.taste.length > 0){
-				var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div><div class="clear"></div></div><div class="subject-order"><a class="product-taste" href="javascript:;">口味</a><div class="single-num-circel">0</div><i class="icon-hover-3 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'">'+language_jiancai+'<img src="/wymenuv2/./img/product/icon_cart_m.png"></i></div>';
-			}else{
-				var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div><div class="clear"></div></div><div class="subject-order"><div class="single-num-circel">0</div><i class="icon-hover-3 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'">'+language_jiancai+'<img src="/wymenuv2/./img/product/icon_cart_m.png"></i></div>';
-			}
-			var trAddinfo = '<div class="clear"></div></div>';
+			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div></div></div>';
+			var trAddinfo = '</div>';
 			
 			var trTaste = '';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
