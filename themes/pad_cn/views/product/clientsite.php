@@ -1,6 +1,6 @@
 <div class="client_siteall_title"><span id="idclient_siteall_title"></span>
-    <input type="button" id="idclient_siteall_close" style="float:left;font-size: 20px;padding: 5px; margin: 5px;" value="关闭">
-    <input type="button" id="idclient_siteall_clear" style="float:right;font-size: 20px;padding: 5px; margin: 5px;" value="清除">
+    <input type="button" id="idclient_siteall_close" style="float:left;font-size: 30px;padding: 15px; width: 4.0em; margin: 5px;" value="关闭">
+    <input type="button" id="idclient_siteall_clear" style="float:right;font-size: 30px;padding: 15px; width: 4.0em; margin: 5px;" value="清除">
 </div>
     <?php foreach ($models_category as $mc):?>
         <div class="client_category_title"><?php echo $mc->name; ?></div>
