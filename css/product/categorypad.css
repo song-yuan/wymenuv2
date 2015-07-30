@@ -427,6 +427,7 @@
 	margin-top: -1.5em;
 	border-radius: 50%;
 	background: rgba(69,69,69,0.9);
+	z-index:20;
 }
 
 .product-pic i.icon-hover-1,
@@ -454,6 +455,7 @@
 	margin-top: -1.5em;
 	border-radius: 50%;
 	background: rgba(69,69,69,0.9);
+	z-index:20;
 }
 
 .product-pic i.icon-hover-5{
@@ -466,6 +468,7 @@
 	margin-top: -1.5em;
 	background: rgba(69,69,69,0.9);
 	display:none;
+	z-index:20;
 }
 .product-pic i.icon-hover-3,
 .product-pic i.icon-hover-4{
