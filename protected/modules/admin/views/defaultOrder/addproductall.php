@@ -61,18 +61,7 @@
 
 
 
-                       			<?php $form=$this->beginWidget('CActiveForm', array(
-                                                        'id'=>'orderProductForm',
-                                                        'action' => $this->createUrl('defaultOrder/addProductAll',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId)),
-                                                        'enableAjaxValidation'=>true,
-                                                        'enableClientValidation'=>true,
-                                                        'clientOptions'=>array(
-                                                                'validateOnSubmit'=>false,
-                                                        ),
-                                                        'htmlOptions'=>array(
-                                                                'class'=>'form-horizontal'
-                                                        ),
-                                                )); ?>                                                
+                       			                                              
                                                 
                                                             <div class="modal-body" style="position:absolute;height: 97%;width:100%;">
                                                                 <!--<div style="position:absolute; width: 97%;height: 98%; background: #fff;color: #555555;;border-radius: 0 !important;box-sizing: border-box;">-->
@@ -183,7 +172,18 @@
                                                                     </div>                                                                                                                                       
                                                                 <!--</div>-->                                                        
                                                 </div>
-                                                
+                                                <?php $form=$this->beginWidget('CActiveForm', array(
+                                                        'id'=>'orderProductForm',
+                                                        'action' => $this->createUrl('defaultOrder/addProductAll',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId)),
+                                                        'enableAjaxValidation'=>true,
+                                                        'enableClientValidation'=>true,
+                                                        'clientOptions'=>array(
+                                                                'validateOnSubmit'=>false,
+                                                        ),
+                                                        'htmlOptions'=>array(
+                                                                'class'=>'form-horizontal'
+                                                        ),
+                                                )); ?>  
                                                 <input class="form-control" name="selectproductlist" id="selectproductlistid" type="hidden" value="">                                     
 
                                                 <?php $this->endWidget(); ?>                
