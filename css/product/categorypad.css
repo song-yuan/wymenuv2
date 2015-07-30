@@ -456,10 +456,9 @@
 }
 
 .product-pic i.icon-hover-5{
-	top: 45%;
+	top: 50%;
 	color: #fff;
-	padding: 0.5em 1.0em;
-	font-size: 1.6em;
+	padding: 0.5em 0.5em;
 	position: absolute;
 	margin-top: -1.5em;
 	background: rgba(69,69,69,0.9);
@@ -473,12 +472,7 @@
 }
 .subject-num {
   text-align: left;
-  padding: 0em 0em 0em 0em;
   font-size: 2.5em;
-  height: 2.0em;
-  float:left;
-  line-height: 2.0em;
-  width: 55%;
 }
 
 .subject-order {
