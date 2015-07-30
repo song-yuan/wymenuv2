@@ -119,12 +119,11 @@ $(document).ready(function(){
     	var singleNums = singleNumObj.html();
     	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
     	
-    	if(parseInt(singleNums) > 1){
+    	if(parseInt(singleNums) >= 1){
     		singleNumObj.html(parseInt(singleNums) - 1);
     		var val = inputNumObj.val();
 			inputNumObj.val(parseInt(val)-1);
     	}else{
-    		singleNumObj.html(parseInt(singleNums) - 1);
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
     			$('.catory'+category).remove();
