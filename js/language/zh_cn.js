@@ -29,3 +29,4 @@ var language_productnum_modify="修改产品数量:";
 var language_store_number_fail="保存失败";
 var language_store_number_success="保存成功";
 var language_sure_bind="确定解除绑定吗？";
+var language_client_order_fail="下单失败，请稍后重试！";
