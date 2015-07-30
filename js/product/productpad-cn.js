@@ -116,7 +116,7 @@ $(document).ready(function(){
     	var singleNums = singleNumObj.html();
     	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
     	
-    	if(parseInt(singleNums) >= 1){
+    	if(parseInt(singleNums) > 1){
     		singleNumObj.html(parseInt(singleNums) - 1);
     		var val = inputNumObj.val();
 			inputNumObj.val(parseInt(val)-1);
@@ -126,11 +126,13 @@ $(document).ready(function(){
 	    		 _this.parents('.blockCategory').attr('store',store);
     		}
     	}else{
+    		if(parseInt(singleNums)==0){
+    			return;
+    		}
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
     			$('.catory'+category).remove();
     		}
-    		return;
     	}
     	
     	var productId = _this.attr('product-id');
