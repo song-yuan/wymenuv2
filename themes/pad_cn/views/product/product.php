@@ -43,6 +43,7 @@
 <div class="product-pad-mask">
     <input type="hidden" id="id_client_is_temp" name="client_is_temp" value="1">
     <input type="hidden" id="id_client_site_id" name="client_site_id" value="0">
+    <input type="hidden" id="id_client_reprint" name="client_reprint" value="0"><!--0是下单，1是重新打印-->
     <input type="hidden" id="id_client_site_name" name="client_site_name" value="新增临时座位！">
 	<div class="mask-trangle"></div>
         <div class="product-mask-info"><button id="cancelPadOrder" type="button" style="float:left;"><?php echo yii::t('app','清空全部菜品');?></button><button id="updatePadOrder" type="button" style="float:right;"><?php echo yii::t('app','下单确认');?></button></div>
@@ -194,6 +195,11 @@
             $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>");
             $('.setting-pad-mask').hide();
             $('#divid_client_sitelist').show();
+//            var index = layer.load(0, {shade: [0.3,'#fff']}); //0代表加载的风格，支持0-2
+//            layer.close(index);
+//            var index = layer.load(1, {
+//                shade: [0.1,'#fff'] //0.1透明度的白色背景
+//            });
         });
        
 </script>
