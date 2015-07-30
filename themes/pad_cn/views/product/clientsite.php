@@ -27,15 +27,15 @@
         </ul>
     </div>
      <div id="client_open_site" style="display:none;">				
-            <div style="font-size: 2.0em;padding: 5px;margin-top: 16px;"><?php echo yii::t('app','请输入人数：');?></div>
-            <div style="margin:7px;font-size: 2.0em;">
+            <div style="font-size: 3.0em;padding: 5px;margin-top: 16px;"><?php echo yii::t('app','请输入人数：');?></div>
+            <div style="margin:47px;font-size: 1.5em;">
                 <label id="open_site_minus" style="font-size: 3em;padding: 8px; margin: 7px; border: 1px;">━</label>
-                <input type="text" style="font-size:1.5em; padding: 5px;margin: 6px;" name="siteNumber" id="site_number" maxlength="2" size="5" value="3">
+                <input type="text" style="font-size:1.5em; padding: 5px;margin: 6px;" name="siteNumber" id="site_number" maxlength="2" size="3" value="3">
                 <label id="open_site_plus" style="font-size: 3em;padding: 8px; margin: 7px; border: 1px;">╋</label>
             </div>
-            <div style="margin:7px;font-size:4.0em; ">
-            <input type="button" style="padding: 5px;margin-left: 10px;" id="site_open" sid="0" istemp="1" sname="" value="<?php echo yii::t('app','开 台');?>" >
-            <input type="button" style="padding: 5px;margin-left: 26px; float: right;" id="site_open_cancel" value="<?php echo yii::t('app','取 消');?>" >
+            <div style="margin:17px;font-size:2.0em; ">
+            <input type="button" style="font-size:2.0em;padding: 5px;margin-left: 10px;" id="site_open" sid="0" istemp="1" sname="" value="<?php echo yii::t('app','开 台');?>" >
+            <input type="button" style="font-size:2.0em;padding: 5px;margin-left: 26px; float: right;" id="site_open_cancel" value="<?php echo yii::t('app','取 消');?>" >
             </div>
             
     </div>
@@ -43,7 +43,7 @@
         var layer_index;
         //alert($('#id_client_site_name').val());
         $('#idclient_siteall_title').html("当前餐桌："+$('#id_client_site_name').val());
-	$('.siteaction').on(event_clicktouchend, function(){
+	$('.siteaction').on('click', function(){
             var sid = $(this).attr('sid');
             var istemp = $(this).attr('istemp');
             var status = $(this).attr('status');
