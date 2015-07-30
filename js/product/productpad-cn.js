@@ -108,10 +108,7 @@ $(document).ready(function(){
     $('#forum_list').on(event_clicktouchstart,'.delCart',function(){
     	var _this = $(this);
     	var store = _this.parents('.blockCategory').attr('store');
-    	if(parseInt(store) >= 0){
-    		store =parseInt(store) + 1;
-    		 _this.parents('.blockCategory').attr('store',store);
-    	}
+
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
     	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
@@ -119,17 +116,21 @@ $(document).ready(function(){
     	var singleNums = singleNumObj.html();
     	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
     	
-    	if(parseInt(singleNums) > 1){
+    	if(parseInt(singleNums) >= 1){
     		singleNumObj.html(parseInt(singleNums) - 1);
     		var val = inputNumObj.val();
 			inputNumObj.val(parseInt(val)-1);
+			
+			if(parseInt(store) >= 0){
+	    		store =parseInt(store) + 1;
+	    		 _this.parents('.blockCategory').attr('store',store);
+    		}
     	}else{
-    		singleNumObj.html(parseInt(singleNums) - 1);
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
     			$('.catory'+category).remove();
     		}
-    		parentsBlockCategory.find('.subject-order').css('display','none');
+    		return;
     	}
     	
     	var productId = _this.attr('product-id');
@@ -162,9 +163,15 @@ $(document).ready(function(){
     	$('.blockCategory').each(function(){
     		$(this).find('.icon-hover-1').css('left','-150px');
     	 	$(this).find('.icon-hover-2').css('right','-150px');
+    	 	$(this).find('.icon-hover-3').css('left','-150px');
+    	 	$(this).find('.icon-hover-4').css('right','-150px');
+    	 	$(this).find('.icon-hover-5').css('left','-150px');
     	});
     	$(this).find('.icon-hover-1').css('left','20%');
 	 	$(this).find('.icon-hover-2').css('right','20%');
+	 	$(this).find('.icon-hover-3').css('left','20%');
+	 	$(this).find('.icon-hover-4').css('right','20%');
+	 	$(this).find('.icon-hover-5').css('left','45%');
 	 });
     
     $('#cancelPadOrder').on(event_clicktouchend,function(){

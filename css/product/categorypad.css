@@ -418,7 +418,7 @@
 
 .product-pic i.icon-hover-1,
 .product-pic i.icon-hover-2{
-	top: 50%;
+	top: 60%;
 	color: #fff;
 	padding: 0.5em 1.0em;
 	font-size: 1.6em;
@@ -435,15 +435,48 @@
 	-moz-transition: all 0.6s ease;
 	-webkit-transition: all 0.6s ease;
 }
+.product-pic i.icon-hover-3{
+	left: -150px;
+}
+.product-pic i.icon-hover-4,.product-pic i.icon-hover-5{
+	right: -150px;
+}
 
+
+.product-pic i.icon-hover-3,
+.product-pic i.icon-hover-4{
+	top: 30%;
+	color: #fff;
+	padding: 0.5em 1.0em;
+	font-size: 1.6em;
+	position: absolute;
+	margin-top: -1.5em;
+	border-radius: 50%;
+	background: rgba(69,69,69,0.9);
+}
+
+.product-pic i.icon-hover-5{
+	top: 50%;
+	color: #fff;
+	padding: 0.5em 0.5em;
+	font-size: 3.0em;
+	position: absolute;
+	margin-top: -1.5em;
+	background: rgba(69,69,69,0.9);
+}
+.product-pic i.icon-hover-3,
+.product-pic i.icon-hover-4,.product-pic i.icon-hover-5{
+	transition: all 0.6s ease; 
+	-o-transition: all 0.6s ease;
+	-moz-transition: all 0.6s ease;
+	-webkit-transition: all 0.6s ease;
+}
 .subject-num {
   text-align: left;
-  padding: 0em 0em 0em 0em;
   font-size: 2.5em;
   height: 2.0em;
-  float:left;
   line-height: 2.0em;
-  width: 55%;
+  width: 100%;
 }
 
 .subject-order {
@@ -457,36 +490,12 @@
   display:none;
 }
 
-i.icon-hover-3{
-	right: 0.33em;
-	color: #fff;
-	padding: 0px 0.33em;
-	font-size: 0.6em;
-	position: absolute;
-	margin-top: -0.1em;
-	border-radius: 50%;
-	background: rgba(69,69,69,0.9);
-}
-
-i.icon-hover-3 img{
-	margin: 0;
-        height: 0.6em;
-        width:1.1em;
-}
 
 .single-num-circel{
-	//position:absolute;
-	width:1.7em;
+	width:1.0em;
 	height:1.3em;
-	top:0.1em;
-	//left:-2px;
-        float: right;
-        right:3.0em;
-        font-size: 1.0em;
 	border-radius:0.5em;
-	background-color:red;
 	color:white;
 	text-align:center;
-	line-height:1.3em;
 	margin:0;
 }
