@@ -459,6 +459,7 @@
 	top: 50%;
 	color: #fff;
 	padding: 0.5em 0.5em;
+	font-size: 2.0em;
 	position: absolute;
 	margin-top: -1.5em;
 	background: rgba(69,69,69,0.9);
@@ -473,6 +474,10 @@
 .subject-num {
   text-align: left;
   font-size: 2.5em;
+  height: 2.0em;
+  float:left;
+  line-height: 2.0em;
+  width: 55%;
 }
 
 .subject-order {
@@ -488,18 +493,10 @@
 
 
 .single-num-circel{
-	//position:absolute;
 	width:1.7em;
 	height:1.3em;
-	top:0.1em;
-	//left:-2px;
-        float: right;
-        right:3.0em;
-        font-size: 1.0em;
 	border-radius:0.5em;
-	background-color:red;
 	color:white;
 	text-align:center;
-	line-height:1.3em;
 	margin:0;
 }
