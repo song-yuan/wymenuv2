@@ -77,7 +77,7 @@
                                                 var tempamount=$('#OrderPay_pay_amount').val();
                                                 $('#OrderPay_pay_amount').val(-1*tempamount);
                                                 var formdata=$('#account-form').formSerialize();
-//                                                alert(formdata);
+                                                alert(formdata);
                                                 //$('#account-form').submit();
                                                 $.ajax({
                                                     url:$('#account-form').attr("action"),
@@ -86,11 +86,11 @@
                                                     async:false,
                                                     dataType: "json",
                                                     success:function(msg){
-                                                        //alert(msg.status);
+                                                        alert(msg.status);
                                                         location.href="<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>";
                                                     },
                                                     error: function(msg){
-                                                        
+                                                        alert("error");
                                                     }
                                                 });
                                         }
