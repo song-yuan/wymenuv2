@@ -43,7 +43,7 @@
                                     <button id="open_order" type="button" istemp="<?php echo $istemp; ?>" sid="<?php echo $sid; ?>" class="btn green-stripe"><?php echo yii::t('app','开台并点单');?></button>
                                 </div>
                                 <?php endif; ?>
-				<<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
+				
 			</div>
 			
 			<?php $this->endWidget(); ?>
