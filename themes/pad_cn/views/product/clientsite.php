@@ -57,6 +57,7 @@
                     $('#id_client_site_id').val(sid);
                     $('#id_client_site_name').val(sname);
                     $("#idclient_siteall_title").html("当前餐桌："+$("#id_client_site_name").val());
+                    $("#productmasksiteinfo").html("当前餐桌："+$("#id_client_site_name").val());
                 }
                 
             }else{
@@ -108,12 +109,13 @@
                                  if(istemp=="1")
                                  {
                                      $('#id_client_site_id').val(data.siteid);
-                                    $('#id_client_site_name').val(data.siteid%1000);
+                                    $('#id_client_site_name').val("临时台->"+data.siteid%1000);
                                  }else{
                                     $('#id_client_site_id').val(sid);
                                     $('#id_client_site_name').val(sname);
                                 }
                                  $("#idclient_siteall_title").html("当前餐桌："+$("#id_client_site_name").val());
+                                 $("#id_client_site_name").html("当前餐桌："+$("#id_client_site_name").val());
                              }
                      },
                      'error':function(e){
@@ -153,7 +155,8 @@
            //$('#divid_client_sitelist').hide(); 
            $('#id_client_is_temp').val("1");                                 
            $('#id_client_site_id').val("0");
-           $('#id_client_site_name').val("临时餐桌！");
+           $('#id_client_site_name').val("新增临时餐桌！");
            $("#idclient_siteall_title").html("当前餐桌："+$("#id_client_site_name").val());
+           $("#id_client_site_name").html("当前餐桌："+$("#id_client_site_name").val());
         });
 </script>
