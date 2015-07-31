@@ -199,8 +199,7 @@ $(document).ready(function(){
             	 parents.attr('store',parseInt(num)+parseInt(store));
              }
              var category = parents.attr('category');//分类id
-             parents.find('.subject-order').css('display','none');
-             parents.find('.single-num-circel').html(0);
+             parents.find('.single-num-circel').css('display','none').html(0);
              _this.parents('.product-catory-product').remove();
              if(!$('.catory'+category).find('.product-catory-product').length){
 	 			$('.catory'+category).remove();
