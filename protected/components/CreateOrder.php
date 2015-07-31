@@ -286,7 +286,14 @@ class CreateOrder
 								'remark'=>yii::t('app','无'),
 								'taste_memo'=>"",
 								);
-					$db->createCommand()->insert('nb_order',$data); 
+					$db->createCommand()->insert('nb_order',$data);
+					 
+					 //更新site表状态
+					$sql = 'update nb_site set status=1 where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
+				    $db->createCommand($sql)->execute();
+				    //更新site_no表状态
+				    $sql = 'update nb_site_no set status=1 where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
+				    $db->createCommand($sql)->execute();
             	}
             }
             
