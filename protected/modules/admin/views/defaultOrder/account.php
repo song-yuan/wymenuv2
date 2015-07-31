@@ -72,9 +72,12 @@
                             $('#payback-btn').on(event_clicktouchstart,function(){
                                  bootbox.confirm("<?php echo yii::t('app','你确定退款吗？');?>", function(result) {
                                         if(result){
+                                            //alert(1);
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
                                                 var tempamount=$('#OrderPay_pay_amount').val();
                                                 $('#OrderPay_pay_amount').val(-1*tempamount);
+//                                                var formdata=$('#account-form').formSerialize();
+//                                                alert(formdata);
                                                 $('#account-form').submit();
                                         }
                                  });
