@@ -55,11 +55,11 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <?php if($payback=='1'): ?>
-                                                        <input type="button" class="btn green" id="payback-btn" value="<?php echo yii::t('app','退 款');?>">
+                                                        <button type="submit" class="btn green" id="payback-btn"><?php echo yii::t('app','退 款');?></button>
                                                     <?php else: ?>
-                                                        <input type="button" class="btn green" id="pay-btn" value="<?php echo yii::t('app','收 银');?>">
-                                                        <input type="button" class="btn green" id="account-btn" value="<?php echo yii::t('app','结 单');?>">
-                                                        <input type="button" class="btn green" id="cashin-btn" value="<?php echo yii::t('app','现金支付');?>">
+                                                        <button type="submit" class="btn green" id="pay-btn"><?php echo yii::t('app','收 银');?></button>
+                                                        <button type="submit" class="btn green" id="account-btn"><?php echo yii::t('app','结 单');?></button>
+                                                        <button type="button" class="btn green" id="cashin-btn"><?php echo yii::t('app','现金支付');?></button>
                                                     <?php endif; ?>
                                                         <button type="button" data-dismiss="modal" class="btn default" id="btn-account-cancle"><?php echo yii::t('app','取 消');?></button>
                                                 </div>
@@ -78,7 +78,7 @@
                                                 $('#OrderPay_pay_amount').val(-1*tempamount);
 //                                                var formdata=$('#account-form').formSerialize();
 //                                                alert(formdata);
-                                                $('#account-form').submit();
+                                                //$('#account-form').submit();
                                         }
                                  });
                             });
@@ -87,7 +87,7 @@
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
                                                 $('#account_orderstatus').val('3');
-                                                $('#account-form').submit();
+                                                //$('#account-form').submit();
                                         }
                                  });
                             });
@@ -96,7 +96,7 @@
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'account','orderId'=>$order->lid)) ?>');
                                                 $('#account_orderstatus').val('4');
-                                                $('#account-form').submit();
+                                                //$('#account-form').submit();
                                         }
                                  });
                             });
@@ -129,7 +129,7 @@
                                     clearTimeout(interval);
                                     //auto pay
                                     $('#account_orderstatus').val('4');
-                                    $('#account-form').submit();
+                                    //$('#account-form').submit();
                                 }else{
                                     $("#timecount").html(curtime);
                                 }
