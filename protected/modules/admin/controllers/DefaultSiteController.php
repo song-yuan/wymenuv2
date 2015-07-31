@@ -70,6 +70,10 @@ class DefaultSiteController extends BackendController
                 $siteNo = SiteNo::model()->find($criteria2);
                 $status=$siteNo->status;
 //                var_dump($siteNo);exit;
+                if(empty($siteNo))
+                {
+                    $status="0";
+                }
 		$model=array();
 		$this->renderPartial('button' , array(
 				'model' => $model,
