@@ -30,7 +30,7 @@
             <div style="font-size: 3.0em;padding: 5px;margin-top: 16px;"><?php echo yii::t('app','请输入人数：');?></div>
             <div style="margin:47px;font-size: 1.5em;">
                 <label id="open_site_minus" style="font-size: 3em;padding: 8px; margin: 7px; border: 1px;">━</label>
-                <input type="text" style="font-size:1.5em; padding: 5px;margin: 6px;" name="siteNumber" id="site_number" maxlength="2" size="3" value="3">
+                <label style="font-size:1.5em; padding: 5px;margin: 26px;" name="siteNumber" id="site_number">4</label>
                 <label id="open_site_plus" style="font-size: 3em;padding: 8px; margin: 7px; border: 1px;">╋</label>
             </div>
             <div style="margin:17px;font-size:2.0em; ">
@@ -61,7 +61,7 @@
                 }
                 
             }else{
-                $('#site_number').val("4");
+                $('#site_number').text("4");
                 $('#site_open').attr("sid",sid);
                 $('#site_open').attr("istemp",istemp);
                 $('#site_open').attr("sname",sname);
@@ -87,7 +87,7 @@
         
        $('#site_open').on(event_clicktouchend,function(){
            
-            var siteNumber=$('#site_number').val();                               
+            var siteNumber=$('#site_number').text();                               
             var sid = $('#site_open').attr('sid');
             var istemp = $('#site_open').attr('istemp');
             var sname = $('#site_open').attr('sname');
@@ -134,17 +134,17 @@
         });
         
         $('#open_site_plus').on(event_clicktouchend,function(){
-           var num = parseInt($("#site_number").val());
+           var num = parseInt($("#site_number").text());
 		num = num + 1;
-		$("#site_number").val(num);                          
+		$("#site_number").text(num);                          
         });
         
         $('#open_site_minus').on(event_clicktouchend,function(){
-           var num = parseInt($("#site_number").val());
+           var num = parseInt($("#site_number").text());
 		num = num - 1;
                 if(num < 0)
                     num=0;
-		$("#site_number").val(num);                          
+		$("#site_number").text(num);                          
         });
         
         $('#idclient_siteall_close').on(event_clicktouchstart,function(){
