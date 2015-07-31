@@ -381,7 +381,7 @@ $(document).ready(function(){
     	var inputVal = inputNumObj.val();
     	
     	var tasteItem = blockCategory.find('.tastepad .item');
-    	if(tasteItem.length==0){
+    	if(!tasteItem.length > 0){
     		layer.msg('该产品无口味!');
     		return;
     	}
