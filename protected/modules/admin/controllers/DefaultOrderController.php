@@ -229,10 +229,12 @@ class DefaultOrderController extends BackendController
                                 $printserver="1";                            
                                 $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
                             }
-                            $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
+                            Yii::app()->end(json_encode(array("status"=>"success")));
+                            //$this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
                             
 			} catch(Exception $e){
 				$transaction->rollback();
+                                Yii::app()->end(json_encode(array("status"=>"fail")));
 			}
 //                        $this->renderPartial('printlist' , array(
 //                                'orderId'=>$orderId,
