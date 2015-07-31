@@ -68,11 +68,13 @@ class DefaultSiteController extends BackendController
                 $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$this->companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                 $criteria2->order = ' t.lid desc ';
                 $siteNo = SiteNo::model()->find($criteria2);
-                $status=$siteNo->status;
-//                var_dump($siteNo);exit;
+//                
+ //               var_dump($siteNo);exit;
                 if(empty($siteNo))
                 {
                     $status="0";
+                }else{
+                    $status=$siteNo->status;
                 }
 		$model=array();
 		$this->renderPartial('button' , array(
