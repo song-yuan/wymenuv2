@@ -380,7 +380,13 @@ $(document).ready(function(){
 	   	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量
     	var inputVal = inputNumObj.val();
     	
-    	var singleNum = blockCategory.find('.single-num-circel').html();
+    	var tasteItem = blockCategory.find('.tastepad .item');
+    	if(tasteItem.length==0){
+    		layer.msg('该产品无口味!');
+    		return;
+    	}
+    	
+    	var singleNum = blockCategory.find('.single-num-circel').html(); //查看该产品下单数量
     	if(parseInt(singleNum)==0){
     		layer.msg('请添加该产品到订单!');
     		return;
