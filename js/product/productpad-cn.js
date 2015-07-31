@@ -380,6 +380,11 @@ $(document).ready(function(){
 	   	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量
     	var inputVal = inputNumObj.val();
     	
+    	var singleNum = blockCategory.find('.single-num-circel').html();
+    	if(parseInt(singleNum)==0){
+    		layer.msg('请添加该产品到订单!');
+    		return;
+    	}
     	if(!$(this).hasClass('hasClick')){
     		$(this).addClass('hasClick');
     		var inputstr = '<input type="hidden" name="'+productId+'[1-0][0]" value="1"/>';
