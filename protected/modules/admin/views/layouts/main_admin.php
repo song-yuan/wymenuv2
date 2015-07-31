@@ -73,6 +73,7 @@
 	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/scripts/app.js');?>
 	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/scripts/table-managed.js');?>
         <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/padpc.js');?>
+        <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/product/jquery.form.js');?>
 	<script>
 		jQuery(document).ready(function() {
 		   App.init();
