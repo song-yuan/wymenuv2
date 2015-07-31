@@ -135,6 +135,9 @@ $(document).ready(function(){
     		singleNumObj.html(parseInt(singleNums) - 1);//到达数量0
     		//数量0时 隐藏
 			singleNumObj.css('display','none');
+			//数量0时点击口味 类 移除
+			parentsBlockCategory.find('.product-taste').removeClass('hasClick');
+			
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
     			$('.catory'+category).remove();
@@ -377,6 +380,17 @@ $(document).ready(function(){
 	   	var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');//订单中数量
     	var inputVal = inputNumObj.val();
     	
+    	var tasteItem = blockCategory.find('.tastepad .item');
+    	if(!tasteItem.length > 0){
+    		layer.msg('该产品无口味!');
+    		return;
+    	}
+    	
+    	var singleNum = blockCategory.find('.single-num-circel').html(); //查看该产品下单数量
+    	if(parseInt(singleNum)==0){
+    		layer.msg('请添加该产品到订单!');
+    		return;
+    	}
     	if(!$(this).hasClass('hasClick')){
     		$(this).addClass('hasClick');
     		var inputstr = '<input type="hidden" name="'+productId+'[1-0][0]" value="1"/>';
