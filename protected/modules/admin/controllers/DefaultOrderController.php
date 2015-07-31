@@ -44,6 +44,7 @@ class DefaultOrderController extends BackendController
                     $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria->order = ' t.lid desc ';
                     $order = Order::model()->find($criteria);
+                    //var_dump($order);exit;
                     $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria);

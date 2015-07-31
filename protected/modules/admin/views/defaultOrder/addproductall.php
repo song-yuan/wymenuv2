@@ -188,7 +188,7 @@
 
                                                 <?php $this->endWidget(); ?>                
                     <script type="text/javascript">
-                        $('.firstcategory').on(event_clicktouchend,'li',function(){
+                        $('.firstcategory').on('click','li',function(){
                             //alert($(this).find('a').attr("lid"));
                             $(this).parent().find('li').removeClass('slectliclass');
                             $(this).addClass('slectliclass');
@@ -215,7 +215,7 @@
                             }
                         });
                         
-                        $('.secondcategory').on(event_clicktouchend,'li',function(){
+                        $('.secondcategory').on('click','li',function(){
                             //alert($(this).find('a').attr("pid"));
                             $(this).parent().find('li').removeClass('slectliclass');
                             $(this).addClass('slectliclass');
@@ -226,13 +226,13 @@
                             $('.productstyle').find('li').removeClass('slectliclass');
                         });
                         
-                        $('.productstyle').on(event_clicktouchend,'li',function(){
+                        $('.productstyle').on('click','li',function(){
                             //alert($(this).find('a').attr("pid"));
                             $(this).parent().find('li').removeClass('slectliclass');
                             $(this).addClass('slectliclass');
                         });
                         
-                        $('.selectedproduct').on(event_clicktouchend,'li',function(){
+                        $('.selectedproduct').on('click','li',function(){
                             //alert($(this).find('a').attr("pid"));
                             $(this).parent().find('li').removeClass('slectliclass');
                             $(this).addClass('slectliclass');
@@ -367,7 +367,7 @@
                             return word.substr(0,word.length-2)+"0,";
                         }
                         
-                        $('.selectTaste').live(event_clicktouchend,"label",function(){
+                        $('.selectTaste').live('click',"label",function(){
                             $(this).parent().find("label").removeClass("active");
                             var groupno=$(this).parent().attr("groupid");
                             var productid=$(this).attr("productid");
@@ -438,7 +438,7 @@
                                     });                                    
                                 }                                
                             });
-                            alert(sendlist);
+                            //alert(sendlist);
                             $('#selectproductlistid').val(sendlist);
                             //return false;
 //                            $.ajax({

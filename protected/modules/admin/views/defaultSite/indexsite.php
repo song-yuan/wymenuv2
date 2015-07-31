@@ -261,6 +261,8 @@
             
             $('#site_button_cancel').on(event_clicktouchstart, function(){//site_button_cancel
                 $(this).parent().hide();
+                $('#tabsiteindex').load(tabcurrenturl); 
+                //alert(tabcurrenturl);
                 $("#tab_sitelist").show();
             });
 	</script>
