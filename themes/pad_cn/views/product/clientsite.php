@@ -115,7 +115,7 @@
                                     $('#id_client_site_name').val(sname);
                                 }
                                  $("#idclient_siteall_title").html("当前餐桌："+$("#id_client_site_name").val());
-                                 $("#id_client_site_name").html("当前餐桌："+$("#id_client_site_name").val());
+                                 $("#productmasksiteinfo").html("当前餐桌："+$("#id_client_site_name").val());
                              }
                      },
                      'error':function(e){
@@ -157,6 +157,6 @@
            $('#id_client_site_id').val("0");
            $('#id_client_site_name').val("新增临时餐桌！");
            $("#idclient_siteall_title").html("当前餐桌："+$("#id_client_site_name").val());
-           $("#id_client_site_name").html("当前餐桌："+$("#id_client_site_name").val());
+           $("#productmasksiteinfo").html("当前餐桌："+$("#id_client_site_name").val());
         });
 </script>

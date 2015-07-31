@@ -527,6 +527,7 @@ $(document).ready(function(){
         }
         var sid=$('#id_client_site_id').val();
         var istemp=$('#id_client_is_temp').val();
+        var forbidden=false;
         $.ajax({
                     url:$('#productmasksiteinfo').attr("action")+'/sid/'+sid+"/istemp/"+istemp,
                     type:'GET',
@@ -534,19 +535,24 @@ $(document).ready(function(){
                     async:false,
 	            dataType: "json",
 	            success:function(msg){
-                        if(msg.status != "1" || msg.status != "2" || msg.status != "3")
+                        if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                         {
                             alert(language_client_order_forbidden);
+                            forbidden=true;
                             return;
                         }
                     },
                     error: function(msg){
                         alert(language_client_order_forbidden);
+                        forbidden=true;
                         return;
                     }
 	     	});
         //if(jobid)存在，说明是重新打印，不用下单
-        
+        if(forbidden)
+        {
+            return;
+        }
         var formdata=$('#padOrderForm').formSerialize();
 //alert(formdata);
             $.ajax({
