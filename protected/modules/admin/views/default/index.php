@@ -82,6 +82,7 @@
 				<div class="portlet-title"><i class="fa fa-volume-up"></i>
 					<div class="caption pull-right"> <?php echo yii::t('app','历史消息>>');?></div>					
 				</div>
+                            
                                 <div class="portlet-body message_list" id="messagepartid">
                                     
                                 </div>
@@ -93,15 +94,17 @@
             var gsistemp=0;
             var gstypeid=0;
             var gop=0;
+            var tabcurrenturl="";
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
-                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>'); 
+                tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>';
+                $('#tabsiteindex').load(tabcurrenturl); 
                 
             });            
             $('.tabtitle').on('click', function(){
                 var typeId=$(this).attr('typeid');
-                //alert(typeId);
-                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>'+'/typeId/'+typeId+'/sistemp/'+gsistemp+'/stypeId/'+gstypeid+'/ssid/'+gssid+'/op/'+gop); 
+                tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>'+'/typeId/'+typeId+'/sistemp/'+gsistemp+'/stypeId/'+gstypeid+'/ssid/'+gssid+'/op/'+gop;
+                $('#tabsiteindex').load(tabcurrenturl); 
             });
             
 	</script>

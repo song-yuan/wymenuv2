@@ -36,7 +36,7 @@
                                                             <div class="button-content">
 
                                                             </div>
-                                                            <span onclick="button_cancel(this)"><?php echo yii::t('app','关 闭');?></span>
+                                                            <span id="site_button_cancel"><?php echo yii::t('app','关 闭');?></span>
                                                         </div>
                                                         <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
                                                         <div class="modal fade" id="portlet-button" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -259,10 +259,12 @@
                 
             });
             
-            function button_cancel(obj){
-                $(obj).parent().hide();
+            $('#site_button_cancel').on(event_clicktouchstart, function(){//site_button_cancel
+                $(this).parent().hide();
+                $('#tabsiteindex').load(tabcurrenturl); 
+                //alert(tabcurrenturl);
                 $("#tab_sitelist").show();
-            }
+            });
 	</script>
 	<!-- END PAGE CONTENT-->
         
