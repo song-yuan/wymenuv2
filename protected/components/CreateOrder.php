@@ -219,28 +219,31 @@ class CreateOrder
         $transaction = $db->beginTransaction();
  		try {
  			if($site_id==0){
- 				//临时台
+ 				//未开台的临时台
  				$se=new Sequence("site_no");
-	            $lid = $se->nextval();
-	              
-	            $code = SiteClass::getCode($dpid);
-	            $data = array(
-	                'lid'=>$lid,
-	                'dpid'=>$dpid,
-	                'create_at'=>date('Y-m-d H:i:s',time()),
-	                'is_temp'=>$isTemp,
-	                'site_id'=>$site_id,
-	                'status'=>'1',
-	                'code'=>$code,
-	                'number'=>1,
-	                'delete_flag'=>'0'
-	            );                            
-	            $db->createCommand()->insert('nb_site_no',$data);
-	            $feedback_memo = '开台';
-	            
-	            $se=new Sequence("order");
-	            $orderId = $se->nextval();
-	            $data = array(
+                                $lid = $se->nextval();
+
+                                $code = SiteClass::getCode($dpid);
+                                $se=new Sequence("temp_site");
+                                $site_id = $se->nextval(); 
+                                
+                                $data = array(
+                                    'lid'=>$lid,
+                                    'dpid'=>$dpid,
+                                    'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'is_temp'=>$isTemp,
+                                    'site_id'=>$site_id,
+                                    'status'=>'1',
+                                    'code'=>$code,
+                                    'number'=>1,
+                                    'delete_flag'=>'0'
+                                );                            
+                                $db->createCommand()->insert('nb_site_no',$data);
+                                $feedback_memo = '开台';
+
+                                $se=new Sequence("order");
+                                $orderId = $se->nextval();
+                                $data = array(
 							'lid'=>$orderId,
 							'dpid'=>$dpid,
 							'site_id'=>$site_id,
@@ -253,66 +256,74 @@ class CreateOrder
 							'taste_memo'=>"",
 							);
 				$db->createCommand()->insert('nb_order',$data);
+                                
+                                $sef=new Sequence("order_feedback");
+                                $lidf = $sef->nextval();
+                                $dataf = array(
+                                    'lid'=>$lidf,
+                                    'dpid'=>$dpid,
+                                    'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'is_temp'=>$isTemp,
+                                    'site_id'=>$site_id,
+                                    'is_deal'=>'0',
+                                    'feedback_id'=>0,
+                                    'order_id'=>0,
+                                    'is_order'=>'1',
+                                    'feedback_memo'=>$feedback_memo,
+                                    'delete_flag'=>'0'
+                                );
+                                $db->createCommand()->insert('nb_order_feedback',$dataf); 
+                                
  			}else{
- 				//固定台
- 				$feedback_memo = '下单';
- 				//查找site表
- 				$sql = 'select * from nb_site where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
- 				$siteModel = $db->createCommand($sql)->queryRow();
- 				if(!$siteModel){
- 					throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'msg'=>yii::t('app','存在该座次号,请重新选座次下单!')),JSON_UNESCAPED_UNICODE));
- 				}
- 				 //如果该座位 状态开台未下单
-	            if(0 < $siteModel['status'] && $siteModel['status'] < 4){
-	            	//先查找是否已经存在订单
-	            	$sql = 'select * from nb_order where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
-	            	$orderModel = $db->createCommand($sql)->queryRow();
-	            	if($orderModel){
-	            		$orderId = $orderModel['lid'];
-	            	}else{
+ 				//已经开台的固定台或临时台，
+ 				//$feedback_memo = yii::t('app','点单');
+// 				//查找site表
+// 				$sql = 'select * from nb_site_no where site_id='.$site_id.' and dpid='.$dpid.' order by lid desc';
+// 				$siteModel = $db->createCommand($sql)->queryRow();
+// 				if(!$siteModel){
+// 					throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'msg'=>yii::t('app','存在该座次号,请重新选座次下单!')),JSON_UNESCAPED_UNICODE));
+// 				}
+// 				 //如果该座位 状态开台未下单
+        //	            if(0 < $siteModel['status'] && $siteModel['status'] < 4){
+        //	            	//先查找是否已经存在订单
+        //	            	$sql = 'select * from nb_order where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
+                                $criteria = new CDbCriteria;
+                                $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$dpid.' and t.site_id='.$site_id.' and t.is_temp='.$isTemp ;
+                                $criteria->order = ' t.lid desc ';
+                                $orderModel = Order::model()->find($criteria);
+                                $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$dpid.' and t.site_id='.$site_id.' and t.is_temp='.$isTemp ;
+                                $criteria->order = ' t.lid desc ';
+                                $siteNo = SiteNo::model()->find($criteria);
+                                if($orderModel){
+                                        $orderId = $orderModel['lid'];
+                                }else{
 	            		 //生成订单
 			            $se=new Sequence("order");
 			            $orderId = $se->nextval();
 			            $data = array(
-									'lid'=>$orderId,
-									'dpid'=>$dpid,
-									'site_id'=>$site_id,
-									'create_at'=>$time,
-									'is_temp'=>$isTemp,
-									'order_status'=>1,
-									'number'=>1,
-									'update_at'=>$time,
-									'remark'=>yii::t('app','无'),
-									'taste_memo'=>"",
-									);
-						$db->createCommand()->insert('nb_order',$data);
-						 
+                                                'lid'=>$orderId,
+                                                'dpid'=>$dpid,
+                                                'site_id'=>$site_id,
+                                                'create_at'=>$time,
+                                                'is_temp'=>$isTemp,
+                                                'order_status'=>1,
+                                                'number'=>$siteNo->number,
+                                                'update_at'=>$time,
+                                                'remark'=>yii::t('app','无'),
+                                                'taste_memo'=>"",
+                                                );
+				$db->createCommand()->insert('nb_order',$data);						 
 						 //更新site表状态
-						$sql = 'update nb_site set status=1 where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
-					    $db->createCommand($sql)->execute();
-					    //更新site_no表状态
-					    $sql = 'update nb_site_no set status=1 where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
-					    $db->createCommand($sql)->execute();
-	            	}
-	            }
- 			}
+//						$sql = 'update nb_site set status=1 where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
+//					    $db->createCommand($sql)->execute();
+//					    //更新site_no表状态
+//					    $sql = 'update nb_site_no set status=1 where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
+//					    $db->createCommand($sql)->execute();
+                                }
+                            }
+ 			
             
-            $sef=new Sequence("order_feedback");
-            $lidf = $sef->nextval();
-            $dataf = array(
-                'lid'=>$lidf,
-                'dpid'=>$dpid,
-                'create_at'=>date('Y-m-d H:i:s',time()),
-                'is_temp'=>$isTemp,
-                'site_id'=>$site_id,
-                'is_deal'=>'0',
-                'feedback_id'=>0,
-                'order_id'=>0,
-                'is_order'=>'1',
-                'feedback_memo'=>$feedback_memo,
-                'delete_flag'=>'0'
-            );
-            $db->createCommand()->insert('nb_order_feedback',$dataf); 
+            
             
            
             
@@ -321,21 +332,21 @@ class CreateOrder
 			
 			foreach($goodsIds as $key=>$num){
 				 $se=new Sequence("order_product");
-	             $orderProductId = $se->nextval();
-	             $goodsArr = explode(',', $key);
-	             if(count($goodsArr) > 1){
-	             	// 套餐
-	             	$sql = 'select * from nb_product_set where dpid='.$dpid.' and lid='.$goodsArr[0];
-	             	$result = $db->createCommand($sql)->queryRow();
-	             	if($result){
-	             		if($result['store_number'] > 0&&$result['store_number'] < $num){
-	             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
-	             		}
-	             	}else{
-	             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
-	             	}
-	             	$productSets = self::getSetProductIds($dpid,$goodsArr[0]);
-	             	foreach($productSets as $productSet){
+                                $orderProductId = $se->nextval();
+                                $goodsArr = explode(',', $key);
+                                if(count($goodsArr) > 1){
+                                   // 套餐
+                                   $sql = 'select * from nb_product_set where dpid='.$dpid.' and lid='.$goodsArr[0];
+                                   $result = $db->createCommand($sql)->queryRow();
+                                   if($result){
+                                           if($result['store_number'] > 0&&$result['store_number'] < $num){
+                                                   throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+                                           }
+                                   }else{
+                                           throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+                                   }
+                                   $productSets = self::getSetProductIds($dpid,$goodsArr[0]);
+                                   foreach($productSets as $productSet){
 	             		$orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
