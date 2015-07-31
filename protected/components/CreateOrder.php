@@ -219,6 +219,7 @@ class CreateOrder
         $transaction = $db->beginTransaction();
  		try {
  			if($site_id==0){
+ 				//临时台
  				$se=new Sequence("site_no");
 	            $lid = $se->nextval();
 	              
@@ -229,14 +230,31 @@ class CreateOrder
 	                'create_at'=>date('Y-m-d H:i:s',time()),
 	                'is_temp'=>$isTemp,
 	                'site_id'=>$site_id,
-	                'status'=>'2',
+	                'status'=>'1',
 	                'code'=>$code,
 	                'number'=>1,
 	                'delete_flag'=>'0'
 	            );                            
 	            $db->createCommand()->insert('nb_site_no',$data);
 	            $feedback_memo = '开台';
+	            
+	            $se=new Sequence("order");
+	            $orderId = $se->nextval();
+	            $data = array(
+							'lid'=>$orderId,
+							'dpid'=>$dpid,
+							'site_id'=>$site_id,
+							'create_at'=>$time,
+							'is_temp'=>$isTemp,
+							'order_status'=>1,
+							'number'=>1,
+							'update_at'=>$time,
+							'remark'=>yii::t('app','无'),
+							'taste_memo'=>"",
+							);
+				$db->createCommand()->insert('nb_order',$data);
  			}else{
+ 				//固定台
  				$feedback_memo = '下单';
  				//查找site表
  				$sql = 'select * from nb_site where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
@@ -244,6 +262,39 @@ class CreateOrder
  				if(!$siteModel){
  					throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'msg'=>yii::t('app','存在该座次号,请重新选座次下单!')),JSON_UNESCAPED_UNICODE));
  				}
+ 				 //如果该座位 状态开台未下单
+	            if(0 < $siteModel['status'] && $siteModel['status'] < 4){
+	            	//先查找是否已经存在订单
+	            	$sql = 'select * from nb_order where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
+	            	$orderModel = $db->createCommand($sql)->queryRow();
+	            	if($orderModel){
+	            		$orderId = $orderModel['lid'];
+	            	}else{
+	            		 //生成订单
+			            $se=new Sequence("order");
+			            $orderId = $se->nextval();
+			            $data = array(
+									'lid'=>$orderId,
+									'dpid'=>$dpid,
+									'site_id'=>$site_id,
+									'create_at'=>$time,
+									'is_temp'=>$isTemp,
+									'order_status'=>1,
+									'number'=>1,
+									'update_at'=>$time,
+									'remark'=>yii::t('app','无'),
+									'taste_memo'=>"",
+									);
+						$db->createCommand()->insert('nb_order',$data);
+						 
+						 //更新site表状态
+						$sql = 'update nb_site set status=1 where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
+					    $db->createCommand($sql)->execute();
+					    //更新site_no表状态
+					    $sql = 'update nb_site_no set status=1 where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
+					    $db->createCommand($sql)->execute();
+	            	}
+	            }
  			}
             
             $sef=new Sequence("order_feedback");
@@ -263,39 +314,7 @@ class CreateOrder
             );
             $db->createCommand()->insert('nb_order_feedback',$dataf); 
             
-            //如果该座位 状态开台未下单
-            if(0 < $siteModel['status'] && $siteModel['status'] < 4){
-            	//先查找是否已经存在订单
-            	$sql = 'select * from nb_order where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
-            	$orderModel = $db->createCommand($sql)->queryRow();
-            	if($orderModel){
-            		$orderId = $orderModel['lid'];
-            	}else{
-            		 //生成订单
-		            $se=new Sequence("order");
-		            $orderId = $se->nextval();
-		            $data = array(
-								'lid'=>$orderId,
-								'dpid'=>$dpid,
-								'site_id'=>$site_id,
-								'create_at'=>$time,
-								'is_temp'=>$isTemp,
-								'order_status'=>1,
-								'number'=>1,
-								'update_at'=>$time,
-								'remark'=>yii::t('app','无'),
-								'taste_memo'=>"",
-								);
-					$db->createCommand()->insert('nb_order',$data);
-					 
-					 //更新site表状态
-					$sql = 'update nb_site set status=1 where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
-				    $db->createCommand($sql)->execute();
-				    //更新site_no表状态
-				    $sql = 'update nb_site_no set status=1 where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
-				    $db->createCommand($sql)->execute();
-            	}
-            }
+           
             
 			//订单产品 $goodsIds = array('goods_id'=>goods_num,'set_id,1'=>set_num);
 			$orderPrice = 0;
