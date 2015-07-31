@@ -432,6 +432,8 @@ $(document).ready(function(){
      		var item = preTasteList.find('.taste-item').html();
      		tasteList.find('.taste-item').html(item);
      		tasteList.find('.taste-item .item').removeClass('active');
+     	}else{
+     		tasteList.find('.taste-item .item').removeClass('active');
      	}
      	//订单里删除 已存在的口味
      	$('input[name^="'+productId+'['+num+'-'+eq+']"]').each(function(e){
