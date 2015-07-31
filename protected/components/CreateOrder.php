@@ -219,24 +219,31 @@ class CreateOrder
         $transaction = $db->beginTransaction();
  		try {
  			if($site_id==0){
- 				 $se=new Sequence("site_no");
-	             $lid = $se->nextval();
-	             $se=new Sequence("temp_site");
-	             $site_id = $se->nextval();
-	             
-	             $code = SiteClass::getCode($dpid);
+ 				$se=new Sequence("site_no");
+	            $lid = $se->nextval();
+	              
+	            $code = SiteClass::getCode($dpid);
 	            $data = array(
 	                'lid'=>$lid,
 	                'dpid'=>$dpid,
 	                'create_at'=>date('Y-m-d H:i:s',time()),
 	                'is_temp'=>$isTemp,
 	                'site_id'=>$site_id,
-	                'status'=>'1',
+	                'status'=>'2',
 	                'code'=>$code,
 	                'number'=>1,
 	                'delete_flag'=>'0'
 	            );                            
 	            $db->createCommand()->insert('nb_site_no',$data);
+	            $feedback_memo = '开台';
+ 			}else{
+ 				$feedback_memo = '下单';
+ 				//查找site表
+ 				$sql = 'select * from nb_site where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
+ 				$siteModel = $db->createCommand($sql)->queryRow();
+ 				if(!$siteModel){
+ 					throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'msg'=>yii::t('app','存在该座次号,请重新选座次下单!')),JSON_UNESCAPED_UNICODE));
+ 				}
  			}
             
             $sef=new Sequence("order_feedback");
@@ -251,26 +258,38 @@ class CreateOrder
                 'feedback_id'=>0,
                 'order_id'=>0,
                 'is_order'=>'1',
-                'feedback_memo'=>'开台',
+                'feedback_memo'=>$feedback_memo,
                 'delete_flag'=>'0'
             );
-            $db->createCommand()->insert('nb_order_feedback',$dataf);  
-            //生成订单
-            $se=new Sequence("order");
-            $orderId = $se->nextval();
-            $data = array(
-						'lid'=>$orderId,
-						'dpid'=>$dpid,
-						'site_id'=>$site_id,
-						'create_at'=>$time,
-						'is_temp'=>$isTemp,
-						'order_status'=>2,
-						'number'=>1,
-						'update_at'=>$time,
-						'remark'=>yii::t('app','无'),
-						'taste_memo'=>"",
-						);
-			$db->createCommand()->insert('nb_order',$data);  
+            $db->createCommand()->insert('nb_order_feedback',$dataf); 
+            
+            //如果该座位 状态开台未下单
+            if(0 < $siteModel['status'] && $siteModel['status'] < 4){
+            	//先查找是否已经存在订单
+            	$sql = 'select * from nb_order where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
+            	$orderModel = $db->createCommand($sql)->queryRow();
+            	if($orderModel){
+            		$orderId = $orderModel['lid'];
+            	}else{
+            		 //生成订单
+		            $se=new Sequence("order");
+		            $orderId = $se->nextval();
+		            $data = array(
+								'lid'=>$orderId,
+								'dpid'=>$dpid,
+								'site_id'=>$site_id,
+								'create_at'=>$time,
+								'is_temp'=>$isTemp,
+								'order_status'=>1,
+								'number'=>1,
+								'update_at'=>$time,
+								'remark'=>yii::t('app','无'),
+								'taste_memo'=>"",
+								);
+					$db->createCommand()->insert('nb_order',$data); 
+            	}
+            }
+            
 			//订单产品 $goodsIds = array('goods_id'=>goods_num,'set_id,1'=>set_num);
 			$orderPrice = 0;
 			
@@ -302,7 +321,7 @@ class CreateOrder
 										'update_at'=>$time,
 										'amount'=>$num,
 										'taste_memo'=>"",
-										'product_order_status'=>1,
+										'product_order_status'=>0,
 										);
 					   $db->createCommand()->insert('nb_order_product',$orderProductData);
 					   $orderPrice +=$productSet['price']*$num;
@@ -343,7 +362,7 @@ class CreateOrder
 											'update_at'=>$time,
 											'amount'=>$amount,
 											'taste_memo'=>"",
-											'product_order_status'=>1,
+											'product_order_status'=>0,
 											);
 							 $db->createCommand()->insert('nb_order_product',$orderProductData);
 							 $orderPrice +=$productPrice*$amount;
@@ -392,7 +411,7 @@ class CreateOrder
 										'update_at'=>$time,
 										'amount'=>$num,
 										'taste_memo'=>"",
-										'product_order_status'=>1,
+										'product_order_status'=>0,
 										);
 						 $db->createCommand()->insert('nb_order_product',$orderProductData);
 						 $orderPrice +=$productPrice*$num;
