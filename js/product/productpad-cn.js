@@ -538,7 +538,7 @@ $(document).ready(function(){
                         async:false,
                         dataType: "json",
                         success:function(msg){
-                            alert(msg);
+                            //alert(msg);
                             if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                             {
                                 alert(language_client_order_forbidden);
