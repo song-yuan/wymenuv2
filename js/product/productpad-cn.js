@@ -86,6 +86,11 @@ $(document).ready(function(){
 			parentsBlockCategory.find('.subject-order').css('display','block');
 		}
 		
+		//把以前选择的口味清除
+		parentsBlockCategory.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+		$('input[name^="'+productId+'[1-"]').remove();
+		
+		
     	var price = parseFloat(_this.attr('price'));
     	var total = 0;
     		total = parseFloat($('.total-price').html());
