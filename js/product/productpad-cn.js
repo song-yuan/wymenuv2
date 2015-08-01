@@ -144,7 +144,7 @@ $(document).ready(function(){
 				var tasteListLast = parentsBlockCategory.find('.taste-list:last');
 				
 				var eq = tasteListLast.attr('eq');
-				var tasteInput = $('input[name^="'+productId+'[1-"'+eq+']').remove();
+				$('input[name^="'+productId+'[1-'+eq+']"]').remove();
 			}
     	}else{
     		if(parseInt(singleNums)==0){
@@ -159,7 +159,7 @@ $(document).ready(function(){
 				
 				var tasteListLast = parentsBlockCategory.find('.taste-list:last');
 				var eq = tasteListLast.attr('eq');
-				var tasteInput = $('input[name^="'+productId+'[1-"'+eq+']').remove();
+				$('input[name^="'+productId+'[1-'+eq+']"]').remove();
 			}
 			
     		inputNumObj.parents('.product-catory-product').remove();
