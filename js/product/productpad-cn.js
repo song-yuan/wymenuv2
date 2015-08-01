@@ -86,15 +86,9 @@ $(document).ready(function(){
 		
 		//把以前选择的口味清除
 		if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
-			parentsBlockCategory.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
-			$('input[name^="'+productId+'[1-"]').remove();
-			parentsBlockCategory.find('.taste-list').each(function(eq){
-				if(eq > 0){
-					$(this).remove();
-				}else{
-					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
-				}
-			});
+			var eq = singleNums;
+			var inputstr = '<input type="hidden" name="'+productId+'[1-'+eq+'][0]" value="1"/>';
+    		$('#padOrderForm').append(inputstr);
 		}
 		
 		
