@@ -79,15 +79,13 @@ $(document).ready(function(){
 				inputNumObj.val(parseInt(val)+1);
 			}else{
 				$('.catory'+category).append(substr);
-				parentsBlockCategory.find('.subject-order').css('display','block');
 			}
 		}else{
 			$('.product-pad-mask .info').append(str);
-			parentsBlockCategory.find('.subject-order').css('display','block');
 		}
 		
 		//把以前选择的口味清除
-		parentsBlockCategory.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+		parentsBlockCategory.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
 		$('input[name^="'+productId+'[1-"]').remove();
 		
 		
@@ -208,7 +206,7 @@ $(document).ready(function(){
              _this.parents('.product-catory-product').remove();
              if(!$('.catory'+category).find('.product-catory-product').length){
 	 			$('.catory'+category).remove();
-	 			parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+	 			parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
 	 			parents.find('.taste-list').each(function(eq){
 	 				if(eq > 0){
 	 					$(this).remove();
@@ -614,7 +612,7 @@ $(document).ready(function(){
                                         _this.parents('.product-catory-product').remove();
                                         if(!$('.catory'+category).find('.product-catory-product').length){
                                        $('.catory'+category).remove();
-                                       parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+                                       parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
                                        parents.find('.taste-list').each(function(eq){
                                                if(eq > 0){
                                                        $(this).remove();
