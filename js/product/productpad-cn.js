@@ -141,9 +141,7 @@ $(document).ready(function(){
 	    		 _this.parents('.blockCategory').attr('store',store);
     		}
 			if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
-				var tasteListLast = parentsBlockCategory.find('.taste-list:last');
-				
-				var eq = tasteListLast.attr('eq');
+				var eq = singleNums;
 				$('input[name^="'+productId+'[1-'+eq+']"]').remove();
 			}
     	}else{
@@ -156,9 +154,7 @@ $(document).ready(function(){
 			//数量0时点击口味 类 移除
 			if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
 				parentsBlockCategory.find('.product-taste').removeClass('hasClick');
-				
-				var tasteListLast = parentsBlockCategory.find('.taste-list:last');
-				var eq = tasteListLast.attr('eq');
+				var eq = singleNums;
 				$('input[name^="'+productId+'[1-'+eq+']"]').remove();
 			}
 			
