@@ -85,8 +85,17 @@ $(document).ready(function(){
 		}
 		
 		//把以前选择的口味清除
-		parentsBlockCategory.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
-		$('input[name^="'+productId+'[1-"]').remove();
+		if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
+			parentsBlockCategory.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
+			$('input[name^="'+productId+'[1-"]').remove();
+			parentsBlockCategory.find('.taste-list').each(function(eq){
+				if(eq > 0){
+					$(this).remove();
+				}else{
+					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
+				}
+			});
+		}
 		
 		
     	var price = parseFloat(_this.attr('price'));
@@ -131,6 +140,12 @@ $(document).ready(function(){
 	    		store =parseInt(store) + 1;
 	    		 _this.parents('.blockCategory').attr('store',store);
     		}
+			if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
+				var tasteListLast = parentsBlockCategory.find('.taste-list:last');
+				
+				var eq = tasteListLast.attr('eq');
+				var tasteInput = $('input[name^="'+productId+'[1-"'+eq+']').remove();
+			}
     	}else{
     		if(parseInt(singleNums)==0){
     			return;
@@ -139,7 +154,13 @@ $(document).ready(function(){
     		//数量0时 隐藏
 			singleNumObj.css('display','none');
 			//数量0时点击口味 类 移除
-			parentsBlockCategory.find('.product-taste').removeClass('hasClick');
+			if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
+				parentsBlockCategory.find('.product-taste').removeClass('hasClick');
+				
+				var tasteListLast = parentsBlockCategory.find('.taste-list:last');
+				var eq = tasteListLast.attr('eq');
+				var tasteInput = $('input[name^="'+productId+'[1-"'+eq+']').remove();
+			}
 			
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
@@ -162,9 +183,6 @@ $(document).ready(function(){
 			$('.total-price').html(total);
 			$('.total-num').html(nums-1);
  		}
- 		var tasteInput = $('input[name^="'+productId+'[1-"]');
- 		var length = tasteInput.length;
- 		tasteInput.eq(length-1).remove();
                // alert(padprinterping);
         if (typeof Androidwymenuprinter != "undefined") {
                     if(padprinterping!="local")
