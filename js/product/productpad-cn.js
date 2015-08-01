@@ -87,6 +87,15 @@ $(document).ready(function(){
 		//把以前选择的口味清除
 		if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
 			var eq = singleNums;
+			
+			var str = '<div class="taste-list" eq="'+eq+'">';
+				str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length+1)+'道菜口味</div><div class="taste-title-r">';
+				str +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
+				str +='</div><div class="clear"></div></div>';
+				str +='<div class="taste-item">';
+				str +='</div></div>';
+			parentsBlockCategory.find('.tastepad').append(str);
+		
 			var inputstr = '<input type="hidden" name="'+productId+'[1-'+eq+'][0]" value="1"/>';
     		$('#padOrderForm').append(inputstr);
 		}
@@ -137,6 +146,9 @@ $(document).ready(function(){
 			if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
 				var eq = singleNums - 1;
 				$('input[name^="'+productId+'[1-'+eq+']"]').remove();
+				
+				//减菜时如果有口味了 去掉最后一个口味
+				parentsBlockCategory.find('.tastepad .taste-list[eq="'+eq+'"]').remove();
 			}
     	}else{
     		if(parseInt(singleNums)==0){
@@ -150,6 +162,9 @@ $(document).ready(function(){
 				parentsBlockCategory.find('.product-taste').removeClass('hasClick');
 				var eq = singleNums - 1;
 				$('input[name^="'+productId+'[1-'+eq+']"]').remove();
+				
+				//减菜时如果有口味了 去掉最后一个口味
+				parentsBlockCategory.find('.tastepad .taste-list[eq="'+eq+'"]').remove();
 			}
 			
     		inputNumObj.parents('.product-catory-product').remove();
@@ -405,26 +420,22 @@ $(document).ready(function(){
     		$(this).addClass('hasClick');
     		var inputstr = '<input type="hidden" name="'+productId+'[1-0][0]" value="1"/>';
     		$('#padOrderForm').append(inputstr);
+    		
+    		var length = blockCategory.find('.taste-list').length;
+        	for(var i=0;i<(inputVal-length);i++){
+        		var str = '<div class="taste-list" eq="'+(i+length)+'">';
+        			str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length+1)+'道菜口味</div><div class="taste-title-r">';
+        			str +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
+        			str +='</div><div class="clear"></div></div>';
+        			str +='<div class="taste-item">';
+    				str +='</div></div>';
+    				blockCategory.find('.tastepad').append(str);
+    				var inputstr = '<input type="hidden" name="'+productId+'[1-'+(i+length)+'][0]" value="1"/>';
+        			$('#padOrderForm').append(inputstr);
+        	}
     	}
-    	blockCategory.find('.taste-list').each(function(q){
-    		if(q!=0){
-    			var num = $(this).find('input.input-product').val();
-    			$('input[name^="'+productId+'['+num+'-'+q+']"]').remove();
-    			$(this).remove();
-    		}
-    	});
-    	var length = blockCategory.find('.taste-list').length;
-    	for(var i=0;i<(inputVal-length);i++){
-    		var str = '<div class="taste-list" eq="'+(i+length)+'">';
-    			str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length+1)+'道菜口味</div><div class="taste-title-r">';
-    			str +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
-    			str +='</div><div class="clear"></div></div>';
-    			str +='<div class="taste-item">';
-				str +='</div></div>';
-				blockCategory.find('.tastepad').append(str);
-				var inputstr = '<input type="hidden" name="'+productId+'[1-'+(i+length)+'][0]" value="1"/>';
-    			$('#padOrderForm').append(inputstr);
-    	}
+    	
+    	
     	$('.taste-layer').show();
     	$('.tastepad').hide();
     	$(this).parents('.blockCategory').find('.tastepad').show();
