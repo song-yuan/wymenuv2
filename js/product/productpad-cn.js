@@ -89,7 +89,7 @@ $(document).ready(function(){
 			var eq = singleNums;
 			
 			var str = '<div class="taste-list" eq="'+eq+'">';
-				str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length+1)+'道菜口味</div><div class="taste-title-r">';
+				str +='<div class="taste-title"><div class="taste-title-l">第'+eq+'道菜口味</div><div class="taste-title-r">';
 				str +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
 				str +='</div><div class="clear"></div></div>';
 				str +='<div class="taste-item">';
