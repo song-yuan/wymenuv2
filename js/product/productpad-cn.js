@@ -79,12 +79,27 @@ $(document).ready(function(){
 				inputNumObj.val(parseInt(val)+1);
 			}else{
 				$('.catory'+category).append(substr);
-				parentsBlockCategory.find('.subject-order').css('display','block');
 			}
 		}else{
 			$('.product-pad-mask .info').append(str);
-			parentsBlockCategory.find('.subject-order').css('display','block');
 		}
+		
+		//把以前选择的口味清除
+		if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
+			var eq = singleNums;
+			
+			var str = '<div class="taste-list" eq="'+eq+'">';
+				str +='<div class="taste-title"><div class="taste-title-l">第'+(eq+1)+'道菜口味</div><div class="taste-title-r">';
+				str +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
+				str +='</div><div class="clear"></div></div>';
+				str +='<div class="taste-item">';
+				str +='</div></div>';
+			parentsBlockCategory.find('.tastepad').append(str);
+		
+			var inputstr = '<input type="hidden" name="'+productId+'[1-'+eq+'][0]" value="1"/>';
+    		$('#padOrderForm').append(inputstr);
+		}
+		
 		
     	var price = parseFloat(_this.attr('price'));
     	var total = 0;
@@ -128,6 +143,13 @@ $(document).ready(function(){
 	    		store =parseInt(store) + 1;
 	    		 _this.parents('.blockCategory').attr('store',store);
     		}
+			if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
+				var eq = singleNums - 1;
+				$('input[name^="'+productId+'[1-'+eq+']"]').remove();
+				
+				//减菜时如果有口味了 去掉最后一个口味
+				parentsBlockCategory.find('.tastepad .taste-list[eq="'+eq+'"]').remove();
+			}
     	}else{
     		if(parseInt(singleNums)==0){
     			return;
@@ -136,7 +158,14 @@ $(document).ready(function(){
     		//数量0时 隐藏
 			singleNumObj.css('display','none');
 			//数量0时点击口味 类 移除
-			parentsBlockCategory.find('.product-taste').removeClass('hasClick');
+			if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
+				parentsBlockCategory.find('.product-taste').removeClass('hasClick');
+				var eq = singleNums - 1;
+				$('input[name^="'+productId+'[1-'+eq+']"]').remove();
+				
+				//减菜时如果有口味了 去掉最后一个口味
+				parentsBlockCategory.find('.tastepad .taste-list[eq="'+eq+'"]').remove();
+			}
 			
     		inputNumObj.parents('.product-catory-product').remove();
     		if(!$('.catory'+category).find('.product-catory-product').length){
@@ -159,9 +188,6 @@ $(document).ready(function(){
 			$('.total-price').html(total);
 			$('.total-num').html(nums-1);
  		}
- 		var tasteInput = $('input[name^="'+productId+'[1-"]');
- 		var length = tasteInput.length;
- 		tasteInput.eq(length-1).remove();
                // alert(padprinterping);
         if (typeof Androidwymenuprinter != "undefined") {
                     if(padprinterping!="local")
@@ -203,7 +229,7 @@ $(document).ready(function(){
              _this.parents('.product-catory-product').remove();
              if(!$('.catory'+category).find('.product-catory-product').length){
 	 			$('.catory'+category).remove();
-	 			parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+	 			parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
 	 			parents.find('.taste-list').each(function(eq){
 	 				if(eq > 0){
 	 					$(this).remove();
@@ -394,26 +420,22 @@ $(document).ready(function(){
     		$(this).addClass('hasClick');
     		var inputstr = '<input type="hidden" name="'+productId+'[1-0][0]" value="1"/>';
     		$('#padOrderForm').append(inputstr);
+    		
+    		var length = blockCategory.find('.taste-list').length;
+        	for(var i=0;i<(inputVal-length);i++){
+        		var str = '<div class="taste-list" eq="'+(i+length)+'">';
+        			str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length+1)+'道菜口味</div><div class="taste-title-r">';
+        			str +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
+        			str +='</div><div class="clear"></div></div>';
+        			str +='<div class="taste-item">';
+    				str +='</div></div>';
+    				blockCategory.find('.tastepad').append(str);
+    				var inputstr = '<input type="hidden" name="'+productId+'[1-'+(i+length)+'][0]" value="1"/>';
+        			$('#padOrderForm').append(inputstr);
+        	}
     	}
-    	blockCategory.find('.taste-list').each(function(q){
-    		if(q!=0){
-    			var num = $(this).find('input.input-product').val();
-    			$('input[name^="'+productId+'['+num+'-'+q+']"]').remove();
-    			$(this).remove();
-    		}
-    	});
-    	var length = blockCategory.find('.taste-list').length;
-    	for(var i=0;i<(inputVal-length);i++){
-    		var str = '<div class="taste-list" eq="'+(i+length)+'">';
-    			str +='<div class="taste-title"><div class="taste-title-l">第'+(i+length+1)+'道菜口味</div><div class="taste-title-r">';
-    			str +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
-    			str +='</div><div class="clear"></div></div>';
-    			str +='<div class="taste-item">';
-				str +='</div></div>';
-				blockCategory.find('.tastepad').append(str);
-				var inputstr = '<input type="hidden" name="'+productId+'[1-'+(i+length)+'][0]" value="1"/>';
-    			$('#padOrderForm').append(inputstr);
-    	}
+    	
+    	
     	$('.taste-layer').show();
     	$('.tastepad').hide();
     	$(this).parents('.blockCategory').find('.tastepad').show();
@@ -609,7 +631,7 @@ $(document).ready(function(){
                                         _this.parents('.product-catory-product').remove();
                                         if(!$('.catory'+category).find('.product-catory-product').length){
                                        $('.catory'+category).remove();
-                                       parents.find('.product-taste').removeClass('hasclick'); //去掉口味点击类
+                                       parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
                                        parents.find('.taste-list').each(function(eq){
                                                if(eq > 0){
                                                        $(this).remove();
