@@ -155,6 +155,10 @@ $(document).ready(function(){
     			return;
     		}
     		
+    		if(parseInt(store) >= 0){
+	    		store =parseInt(store) + 1;
+	    		 _this.parents('.blockCategory').attr('store',store);
+    		}
     		//数量为1的情况
     		singleNumObj.html(parseInt(singleNums) - 1);//到达数量0
     		//数量0时 隐藏

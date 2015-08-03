@@ -514,8 +514,13 @@
 	position:absolute;
 	bottom:20px;
 	height:25px;
+	line-height:25px;
 	padding:5px;
-	margin:0 10px;
+	left:0;
+	right:0;
+	color:white;
+	width: 100px;
+	margin:auto;
 	background-color: #d84a38;
 	border-radius:5px;
 }
