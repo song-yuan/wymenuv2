@@ -543,7 +543,8 @@ $(document).ready(function(){
     });
 	  //点击  确定
      $('#forum_list').on(event_clicktouchstart,'.taste-confirm',function(){
-    	$('.taste-layer').click();
+    	$('.tastepad').hide();
+    	$('.taste-layer').hide();
      });
     $('.taste-layer').on(event_clicktouchstart,function(){
     	$('.tastepad').hide();
