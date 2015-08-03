@@ -150,9 +150,15 @@ class DefaultOrderController extends BackendController
                 //var_dump($paymentMethods);exit;
                 if(Yii::app()->request->isPostRequest){
                         //var_dump(Yii::app()->request->getPost('Order'));exit;
-                        $order->attributes = Yii::app()->request->getPost('Order');
+                        //$order->attributes = Yii::app()->request->getPost('Order');
+                        $orderpay->pay_amount = Yii::app()->request->getPost('OrderPay_pay_amount');
+                        $orderpay->payment_method_id = Yii::app()->request->getPost('OrderPay_payment_method_id');
+                        $orderpay->remark = Yii::app()->request->getPost('OrderPay_remark');
+                        $order->order_status = Yii::app()->request->getPost('order_status');
+                        $order->should_total = Yii::app()->request->getPost('order_should_total');
+                        
                         $order->pay_time = date('Y-m-d H:i:s',time());
-                        $orderpay->attributes = Yii::app()->request->getPost('OrderPay');
+                       // $orderpay->attributes = Yii::app()->request->getPost('OrderPay');
                         $order->paytype=$orderpay->paytype;
                         $order->payment_method_id=$orderpay->payment_method_id;
                         $order->reality_total+=$orderpay->pay_amount;
