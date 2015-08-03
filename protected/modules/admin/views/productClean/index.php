@@ -208,8 +208,10 @@
                             if(msg.status=="success")
                             {
                                 alert("<?php echo yii::t('app','成功'); ?>");
+                                location.reload();
                             }else{
                                 alert("<?php echo yii::t('app','失败'); ?>"+"1")
+                                location.reload();
                             }
  			},
                         error:function(){

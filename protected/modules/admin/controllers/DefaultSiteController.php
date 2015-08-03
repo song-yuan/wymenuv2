@@ -341,11 +341,11 @@ class DefaultSiteController extends BackendController
 //                            $commandorder->bindValue(":companyId" , $companyId);
 //                            $commandorder->execute();
                             $transaction->commit(); //提交事务会真正的执行数据库操作
-                            echo json_encode(array('status'=>1,'message'=>yii::t('app','换台成功')));  
+                            echo json_encode(array('status'=>1,'message'=>yii::t('app','并台成功')));  
                             return true;
                     } catch (Exception $e) {
                             $transaction->rollback(); //如果操作失败, 数据回滚
-                            echo json_encode(array('status'=>0,'message'=>yii::t('app','换台失败')));
+                            echo json_encode(array('status'=>0,'message'=>yii::t('app','并台失败')));
                             //echo json_encode(array('status'=>0,'message'=>  var_dump($e)));
                             return false;
                     }
