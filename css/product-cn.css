@@ -425,7 +425,7 @@
 	margin:0;
 }
 .taste-list:last-child{
-	margin-bottom:20px;
+	margin-bottom:50px;
 }
 .taste-title{
 	width:100%;
@@ -509,6 +509,15 @@
 .tastepad .item.active{
 	color:white;
 	background:rgb(103,103,103);
+}
+.taste-confirm{
+	position:absolute;
+	bottom:20px;
+	height:25px;
+	padding:5px;
+	margin:0 10px;
+	background-color: #d84a38;
+	border-radius:5px;
 }
 .taste-layer{
   display:none;
