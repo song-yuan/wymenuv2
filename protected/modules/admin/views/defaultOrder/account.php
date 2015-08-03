@@ -77,7 +77,7 @@
                                                 var OrderPay_pay_amount=-1*$('#OrderPay_pay_amount').val();
                                                 var OrderPay_payment_method_id=$('#OrderPay_payment_method_id').val();
                                                 var OrderPay_remark=$('#OrderPay_remark').val();
-                                                var order_status=$('#order_status').val();
+                                                var order_status='3';
                                                 var order_should_total=$('#order_should_total').val();
                                                 
                                                 //$('#OrderPay_pay_amount').val(-1*tempamount);
@@ -114,8 +114,34 @@
                                  bootbox.confirm("<?php echo yii::t('app','你确定只收银不结单吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
-                                                $('#account_orderstatus').val('3');
-                                               $('#account-form').submit();
+                                               // $('#account_orderstatus').val('3');
+                                               //$('#account-form').submit();
+                                               var OrderPay_pay_amount=-1*$('#OrderPay_pay_amount').val();
+                                                var OrderPay_payment_method_id=$('#OrderPay_payment_method_id').val();
+                                                var OrderPay_remark=$('#OrderPay_remark').val();
+                                                var order_status='3';
+                                                var order_should_total=$('#order_should_total').val();
+                                                
+                                                $.ajax({
+                                                    url:$('#account-form').attr("action"),
+                                                    type:'POST',
+                                                    data:{ 
+                                                        'OrderPay_pay_amount': OrderPay_pay_amount, 
+                                                        'OrderPay_payment_method_id': OrderPay_payment_method_id,
+                                                        'OrderPay_remark':OrderPay_remark,
+                                                        'order_status':order_status,
+                                                        'order_should_total':order_should_total
+                                                    },
+                                                    async:false,
+                                                    dataType: "json",
+                                                    success:function(msg){
+                                                        alert(msg.status);
+                                                        location.href="<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>";
+                                                    },
+                                                    error: function(msg){
+                                                        alert("error");
+                                                    }
+                                                });
                                         }
                                  });
                             });
@@ -123,8 +149,34 @@
                                  bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {
                                         if(result){
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'account','orderId'=>$order->lid)) ?>');
-                                                $('#account_orderstatus').val('4');
-                                                $('#account-form').submit();
+                                                //$('#account_orderstatus').val('4');
+                                                //$('#account-form').submit();
+                                                var OrderPay_pay_amount=-1*$('#OrderPay_pay_amount').val();
+                                                var OrderPay_payment_method_id=$('#OrderPay_payment_method_id').val();
+                                                var OrderPay_remark=$('#OrderPay_remark').val();
+                                                var order_status='4';
+                                                var order_should_total=$('#order_should_total').val();
+                                                
+                                                $.ajax({
+                                                    url:$('#account-form').attr("action"),
+                                                    type:'POST',
+                                                    data:{ 
+                                                        'OrderPay_pay_amount': OrderPay_pay_amount, 
+                                                        'OrderPay_payment_method_id': OrderPay_payment_method_id,
+                                                        'OrderPay_remark':OrderPay_remark,
+                                                        'order_status':order_status,
+                                                        'order_should_total':order_should_total
+                                                    },
+                                                    async:false,
+                                                    dataType: "json",
+                                                    success:function(msg){
+                                                        alert(msg.status);
+                                                        location.href="<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>";
+                                                    },
+                                                    error: function(msg){
+                                                        alert("error");
+                                                    }
+                                                });
                                         }
                                  });
                             });
