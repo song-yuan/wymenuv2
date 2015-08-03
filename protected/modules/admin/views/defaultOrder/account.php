@@ -48,10 +48,10 @@
                                                                                 <?php echo $form->error($orderpay, 'remark' )?>
                                                                         </div>
                                                                 </div>
-                                                                <?php echo $form->hiddenField($order , 'order_status' , array('id'=>'account_orderstatus'));?>
+                                                                <?php echo $form->hiddenField($order , 'order_status' , array('id'=>'order_status'));?>
                                                                 <?php echo $form->hiddenField($order , 'should_total' , array('id'=>'order_should_total'));?>
 
-                                                                </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
+                                                                </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <?php if($payback=='1'): ?>
@@ -74,15 +74,29 @@
                                         if(result){
                                             //alert(1);
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
-                                                var tempamount=$('#OrderPay_pay_amount').val();
-                                                $('#OrderPay_pay_amount').val(-1*tempamount);
-                                                var formdata=$('#account-form').formSerialize();
-                                                alert(formdata);
+                                                var OrderPay_pay_amount=-1*$('#OrderPay_pay_amount').val();
+                                                var OrderPay_payment_method_id=$('#OrderPay_payment_method_id').val();
+                                                var OrderPay_remark=$('#OrderPay_remark').val();
+                                                var order_status=$('#order_status').val();
+                                                var order_should_total=$('#order_should_total').val();
+                                                
+                                                //$('#OrderPay_pay_amount').val(-1*tempamount);
+                                                //var formdata=$('#account-form').formSerialize();
+                                                //alert(formdata);
                                                 //$('#account-form').submit();
+                                                
+//                                                alert(OrderPay_pay_amount+"|"+OrderPay_payment_method_id+"|"+OrderPay_remark
+//                                                        +"|"+order_status+"|"+order_should_total);
                                                 $.ajax({
                                                     url:$('#account-form').attr("action"),
                                                     type:'POST',
-                                                    data:formdata,
+                                                    data:{ 
+                                                        'OrderPay_pay_amount': OrderPay_pay_amount, 
+                                                        'OrderPay_payment_method_id': OrderPay_payment_method_id,
+                                                        'OrderPay_remark':OrderPay_remark,
+                                                        'order_status':order_status,
+                                                        'order_should_total':order_should_total
+                                                    },
                                                     async:false,
                                                     dataType: "json",
                                                     success:function(msg){
