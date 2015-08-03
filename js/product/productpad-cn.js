@@ -537,7 +537,22 @@ $(document).ready(function(){
     		});
     	}
     });
-	
+	  //点击  确定
+     $('#forum_list').on(event_clicktouchstart,'.taste-none',function(){
+    	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
+     	var tasteList = $(this).parents('.taste-list');
+     	var eq = tasteList.attr('eq');
+     	var num = tasteList.find('input.input-product').val();
+     	tasteList.find('.taste-item').hide();
+     	tasteList.find('.taste-item .item').removeClass('active');
+     	//订单里删除
+     	$('input[name^="'+productId+'['+num+'-'+eq+']"]').each(function(e){
+     		if(e>0){
+     			$(this).remove();
+     		}
+     	});
+     });
     $('.taste-layer').on(event_clicktouchstart,function(){
     	$('.tastepad').hide();
     	$(this).hide();
