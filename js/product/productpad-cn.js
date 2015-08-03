@@ -154,6 +154,8 @@ $(document).ready(function(){
     		if(parseInt(singleNums)==0){
     			return;
     		}
+    		
+    		//数量为1的情况
     		singleNumObj.html(parseInt(singleNums) - 1);//到达数量0
     		//数量0时 隐藏
 			singleNumObj.css('display','none');
@@ -164,7 +166,7 @@ $(document).ready(function(){
 				$('input[name^="'+productId+'[1-'+eq+']"]').remove();
 				
 				//减菜时如果有口味了 去掉最后一个口味
-				parentsBlockCategory.find('.tastepad .taste-list[eq="'+eq+'"]').remove();
+				parentsBlockCategory.find('.tastepad .taste-list[eq="'+eq+'"]').find('.item').removeClass('active');
 			}
 			
     		inputNumObj.parents('.product-catory-product').remove();
@@ -535,7 +537,10 @@ $(document).ready(function(){
     		});
     	}
     });
-	
+	  //点击  确定
+     $('#forum_list').on(event_clicktouchstart,'.taste-confirm',function(){
+    	$('.taste-layer').click();
+     });
     $('.taste-layer').on(event_clicktouchstart,function(){
     	$('.tastepad').hide();
     	$(this).hide();
