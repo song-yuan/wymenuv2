@@ -116,7 +116,7 @@
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'pay','orderId'=>$order->lid)) ?>');
                                                // $('#account_orderstatus').val('3');
                                                //$('#account-form').submit();
-                                               var OrderPay_pay_amount=-1*$('#OrderPay_pay_amount').val();
+                                               var OrderPay_pay_amount=$('#OrderPay_pay_amount').val();
                                                 var OrderPay_payment_method_id=$('#OrderPay_payment_method_id').val();
                                                 var OrderPay_remark=$('#OrderPay_remark').val();
                                                 var order_status='3';
@@ -151,7 +151,7 @@
                                                 //$('#account-form').attr('action','<?php $this->createUrl('defaultOrder/account',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'account','orderId'=>$order->lid)) ?>');
                                                 //$('#account_orderstatus').val('4');
                                                 //$('#account-form').submit();
-                                                var OrderPay_pay_amount=-1*$('#OrderPay_pay_amount').val();
+                                                var OrderPay_pay_amount=$('#OrderPay_pay_amount').val();
                                                 var OrderPay_payment_method_id=$('#OrderPay_payment_method_id').val();
                                                 var OrderPay_remark=$('#OrderPay_remark').val();
                                                 var order_status='4';
