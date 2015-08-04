@@ -183,7 +183,7 @@ function showListPad(items){
 			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div></div></div>';
 			
 			var trTaste = '';
-			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
+			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'"><div class="taste-confirm">确 定</div>';
 			trTaste +='<div class="taste-list" eq="0">';
 			trTaste +='<div class="taste-title"><div class="taste-title-l">第1道菜口味</div><div class="taste-title-r">';
 			trTaste +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
@@ -222,7 +222,7 @@ function showListPad(items){
 			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div></div></div>';
 			
 			var trTaste = '';
-			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'">';
+			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'"><div class="taste-confirm">确 定</div>';
 			trTaste +='<div class="taste-list" eq="0">';
 			trTaste +='<div class="taste-title"><div class="taste-title-l">第1道菜口味</div><div class="taste-title-r">';
 			trTaste +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
@@ -239,7 +239,7 @@ function showListPad(items){
 				trTaste +='</div>';
 			}
 			trTaste +='<div class="clear"></div>';
-			trTaste +='</div></div><div class="taste-confirm">确 定</div></div>';
+			trTaste +='</div></div></div>';
 			
 			var trEnd = '</div></div>';
 			tr = trHead + trBuy + trPic + trTitle + trTaste + trEnd;
