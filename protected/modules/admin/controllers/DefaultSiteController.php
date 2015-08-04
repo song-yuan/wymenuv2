@@ -307,12 +307,28 @@ class DefaultSiteController extends BackendController
                             $tocriteria->condition =  ' t.order_status in ("1","2") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                             $tocriteria->order = ' t.lid desc ';
                             $torder = Order::model()->find($tocriteria);
-                            if($status > $torder->order_status)
+                            if(empty($torder))
                             {
+                                //新生成订单
+                                $torder=new Order();
+                                $se=new Sequence("order");
+                                $torder->lid = $se->nextval();
+                                $torder->dpid=$companyId;
+                                $torder->create_at = date('Y-m-d H:i:s',time());
+                                $torder->lock_status = '0';
+                                $torder->site_id = $sid;
+                                $torder->is_temp = $istemp;
                                 $torder->order_status=$status;
+                                $torder->number=$modelsn->number+$number;
+                                $torder->save();
+                            }else{
+                                if($status > $torder->order_status)
+                                {
+                                    $torder->order_status=$status;
+                                }
+                                $torder->number=$torder->number+$number;
+                                $torder->save();
                             }
-                            $torder->number=$torder->number+$number;
-                            $torder->save();
                             //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
                             //...
                             //更新源订单状态
@@ -320,17 +336,23 @@ class DefaultSiteController extends BackendController
                             $socriteria->condition =  ' t.order_status in ("1","2") and  t.dpid='.$companyId.' and t.site_id='.$ssid.' and t.is_temp='.$sistemp ;
                             $socriteria->order = ' t.lid desc ';
                             $sorder = Order::model()->find($socriteria);
-                            $sorder->order_status="5";
-                            $sorder->save();
+                            if(!empty($sorder))
+                            {
+                                $sorder->order_status="5";
+                                $sorder->save();
+                            }
                             //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
                             //...
                             //更新源订单明细，指向目标订单。
-                            $sqlorder="update nb_order_product set order_id=:torderid where dpid=:companyId and order_id=:sorderid";
-                            $commandorder=$db->createCommand($sqlorder);
-                            $commandorder->bindValue(":torderid" , $torder->lid);
-                            $commandorder->bindValue(":sorderid" , $sorder->lid);
-                            $commandorder->bindValue(":companyId" , $companyId);
-                            $commandorder->execute();                           
+                            if(!empty($sorder))
+                            {
+                                $sqlorder="update nb_order_product set order_id=:torderid where dpid=:companyId and order_id=:sorderid";
+                                $commandorder=$db->createCommand($sqlorder);
+                                $commandorder->bindValue(":torderid" , $torder->lid);
+                                $commandorder->bindValue(":sorderid" , $sorder->lid);
+                                $commandorder->bindValue(":companyId" , $companyId);
+                                $commandorder->execute();   
+                            }
                             //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
 //                            $sqlorder="update nb_order set is_temp=:istemp,site_id=:sid where site_id=:ssid and is_temp=:sistemp and dpid=:companyId and order_status in ('1','2','3')";
 //                            $commandorder=$db->createCommand($sqlorder);
