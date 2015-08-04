@@ -546,10 +546,10 @@ $(document).ready(function(){
     	$('.tastepad').hide();
     	$('.taste-layer').hide();
      });
-    $('.taste-layer').on(event_clicktouchstart,function(){
-    	$('.tastepad').hide();
-    	$(this).hide();
-    });
+  //  $('.taste-layer').on(event_clicktouchstart,function(){
+    //	$('.tastepad').hide();
+    //  $(this).hide();
+    //});
     $('#updatePadOrder').on(event_clicktouchstart,function(){
 
         if (typeof Androidwymenuprinter == "undefined") {
