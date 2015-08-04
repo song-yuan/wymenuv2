@@ -200,7 +200,7 @@ function showListPad(items){
 				trTaste +='</div>';
 			}
 			trTaste +='<div class="clear"></div>';
-			trTaste +='</div></div><div class="taste-confirm">确 定</div></div>';
+			trTaste +='</div></div></div>';
 			
 			var trEnd = '</div></div>';
             tr = trHead + trBuy + trPic + trTitle + trTaste + trEnd;
