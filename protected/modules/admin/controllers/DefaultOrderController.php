@@ -1114,8 +1114,11 @@ class DefaultOrderController extends BackendController
                         if($siteNo->is_temp=='0')
                         {
                             $site = Site::model()->with('siteType')->find('t.lid=:lid and t.dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
-                            $site->status = '2';
-                            $site->save();
+                            if($site->status<'2')
+                            {
+                                $site->status = '2';
+                                $site->save();
+                            }
                         }else{
                             $site = new Site();
                         }
