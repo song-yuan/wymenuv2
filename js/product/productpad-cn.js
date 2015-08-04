@@ -543,12 +543,13 @@ $(document).ready(function(){
     });
 	  //点击  确定
      $('#forum_list').on(event_clicktouchstart,'.taste-confirm',function(){
-    	$('.taste-layer').click();
-     });
-    $('.taste-layer').on(event_clicktouchstart,function(){
     	$('.tastepad').hide();
-    	$(this).hide();
-    });
+    	$('.taste-layer').hide();
+     });
+  //  $('.taste-layer').on(event_clicktouchstart,function(){
+    //	$('.tastepad').hide();
+    //  $(this).hide();
+    //});
     $('#updatePadOrder').on(event_clicktouchstart,function(){
 
         if (typeof Androidwymenuprinter == "undefined") {
