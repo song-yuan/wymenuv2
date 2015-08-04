@@ -232,20 +232,22 @@ $(document).ready(function(){
              }
              var category = parents.attr('category');//分类id
              parents.find('.single-num-circel').css('display','none').html(0);
-             _this.parents('.product-catory-product').remove();
-             if(!$('.catory'+category).find('.product-catory-product').length){
-	 			$('.catory'+category).remove();
-	 			parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
-	 			parents.find('.taste-list').each(function(eq){
-	 				if(eq > 0){
-	 					$(this).remove();
-	 				}else{
-	 					$(this).find('.item').removeClass('active'); //去掉第一个口味选中
-	 				}
-	 			});
- 		    }
+             
+             if(parents.find('.product-taste').hasClass('hasClick')){
+                 parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
+                 parents.find('.taste-list').each(function(eq){
+                   if(eq > 0){
+                           $(this).remove();
+                   }else{
+                           $(this).find('.item').removeClass('active'); //去掉第一个口味选中
+                   }
+           	     });
+             }
+            
  		    $('input[name^="'+productId+'"]').remove();
         });
+        //清空订单
+    	$('#padOrderForm').find('.info').html('');
     	
     	var total = 0;
     	if(!parseInt(language)){
@@ -637,19 +639,23 @@ $(document).ready(function(){
                             var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
                             var category = parents.attr('category');//分类id
                             parents.find('.single-num-circel').css('display','none').html(0);
-                            if(!$('.catory'+category).find('.product-catory-product').length){
-                            $('.catory'+category).remove();
-                            parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
-                            parents.find('.taste-list').each(function(eq){
-                                   if(eq > 0){
-                                           $(this).remove();
-                                   }else{
-                                           $(this).find('.item').removeClass('active'); //去掉第一个口味选中
-                                   }
-                           	  });
-                           }
-                               $('input[name^="'+productId+'"]').remove();
+                            
+                            if(parents.find('.product-taste').hasClass('hasClick')){
+	                             parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
+	                             parents.find('.taste-list').each(function(eq){
+	                               if(eq > 0){
+	                                       $(this).remove();
+	                               }else{
+	                                       $(this).find('.item').removeClass('active'); //去掉第一个口味选中
+	                               }
+	                       	     });
+                            }
+                             $('input[name^="'+productId+'"]').remove();
 	                     });
+	                     
+	                     //清空订单
+	                     $('#padOrderForm').find('.info').html('');
+	                      
 	                     $('.product-pad-mask').hide();
 	                     var total = 0;
 	                     if(!parseInt(language)){
