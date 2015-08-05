@@ -214,6 +214,7 @@ class CreateOrder
 		unset($goodsIds['client_site_name']);
                 unset($goodsIds['client_reprint']);
 		$sellOff = array();
+		$printOrderProducts = array();
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
         $transaction = $db->beginTransaction();
@@ -362,6 +363,7 @@ class CreateOrder
 										);
 					   $db->createCommand()->insert('nb_order_product',$orderProductData);
 					   $orderPrice +=$productSet['price']*$num;
+					   array_push($printOrderProducts,array('amount'=>$num,'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
 	             	}
 	             	if($result['store_number'] > 0){
 	             		$sql = 'update nb_product_set set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
@@ -404,6 +406,7 @@ class CreateOrder
 							 $db->createCommand()->insert('nb_order_product',$orderProductData);
 							 $orderPrice +=$productPrice*$amount;
 							 
+							 array_push($printOrderProducts,array('amount'=>$amount,'price'=>$productPrice,'product_name'=>ProductClass::getProductName($goodsArr[0],$dpid)));
 							 //该订单对应的多个口味
 	                		 foreach($v as $tasteId=>$val){
 							   if($tasteId){
@@ -452,6 +455,9 @@ class CreateOrder
 										);
 						 $db->createCommand()->insert('nb_order_product',$orderProductData);
 						 $orderPrice +=$productPrice*$num;
+						 
+						 array_push($printOrderProducts,array('amount'=>$num,'price'=>$productPrice,'product_name'=>ProductClass::getProductName($goodsArr[0],$dpid)));
+						 
 						 if($result['store_number'] > 0){
 		             		$sql = 'update nb_product set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
 		             		$db->createCommand($sql)->execute();
@@ -475,7 +481,7 @@ class CreateOrder
                 //前面加 barcode
                 $precode="1D77021D6B04".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."001D2100".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $printserver="0";
-                $printList = Helper::printList($order , $pad,$precode,$printserver,"");
+                $printList = Helper::printList($order, $printOrderProducts, $pad, $precode, $printserver,"");
                 if(!$printList['status']){
                 	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
