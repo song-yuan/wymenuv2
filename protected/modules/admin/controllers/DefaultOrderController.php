@@ -232,8 +232,11 @@ class DefaultOrderController extends BackendController
                             if(!empty($pad))
                             {
                                 $precode="1B70001EFF00";//开钱箱
-                                $printserver="1";                            
-                                $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                                $printserver="1";
+                                //$orderProducts= //传递要打印的菜品，这里是已经下单的
+                                //$ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                                $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
+                                $ret=Helper::printList($order,$orderProducts , $pad,$precode,$printserver,$memo);
                             }
                             Yii::app()->end(json_encode(array("status"=>"success")));
                             //$this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
@@ -426,8 +429,10 @@ class DefaultOrderController extends BackendController
                             if(!empty($pad))
                             {
                                 $precode="1B70001EFF00";//开钱箱
-                                $printserver="1";                            
-                                $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                                $printserver="1"; 
+                                //$orderProducts= //传递要打印的菜品，这里是已经下单的
+                                $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
+                                $ret=Helper::printList($order,$orderProducts , $pad,$precode,$printserver,$memo);
                             }//$ret=array('status'=>false,'dpid'=>"0000000011",'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
                             $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
                             
