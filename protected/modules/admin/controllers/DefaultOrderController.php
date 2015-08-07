@@ -1145,14 +1145,14 @@ class DefaultOrderController extends BackendController
                         $commandorderproduct->bindValue(":orderId" , $orderId);
                         $commandorderproduct->bindValue(":companyId" , $companyId);
                         $commandorderproduct->execute();
-                        
-                        $sqlproduct="update nb_product set order_number=order_number+1 where dpid=:companyId and lid in (select distinct product_id from nb_order_product where dpid=:sdpid and order_id=:orderId)";
-                        $commandproduct=Yii::app()->db->createCommand($sqlproduct);
-                        $commandproduct->bindValue(":orderId" , $orderId);
-                        $commandproduct->bindValue(":companyId" , $companyId);
-                        $commandproduct->bindValue(":sdpid" , $companyId);
+//                        var_dump($sqlorderproduct);exit;
+                        $sqlproduct='update nb_product set order_number=order_number+1 where dpid='.$companyId.' and lid in (select distinct product_id from nb_order_product where dpid='.$companyId.' and order_id='.$orderId.')';
+                        $commandproduct=Yii::app()->db->createCommand($sqlproduct);//->execute();
+//                        $commandproduct->bindValue(":orderId" , $orderId);
+//                        $commandproduct->bindValue(":companyId" , $companyId);
+//                        $commandproduct->bindValue(":sdpid" , $companyId);
                         $commandproduct->execute();
-                        
+                        //var_dump($commandproduct);exit;
                         $sqlproductset="update nb_product_set set order_number=order_number+1 where dpid=:companyId and lid in (select distinct set_id from nb_order_product where dpid=:sdpid and order_id=:orderId)";
                         $commandproductset=Yii::app()->db->createCommand($sqlproductset);
                         $commandproductset->bindValue(":orderId" , $orderId);
@@ -1182,6 +1182,8 @@ class DefaultOrderController extends BackendController
                              
                             //Yii::app()->end(json_encode($ret));
                         }*/
+//                        $deeeeeee="3r42rfwrewr324r";
+//                     var_dump($deeeeeee);exit;
                          $ret=Helper::printKitchenAll2($order , $site,$siteNo,false); 
                         
                        
