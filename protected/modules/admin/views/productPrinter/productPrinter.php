@@ -48,7 +48,9 @@
 							<tr class="odd gradeX">
 								<td ><?php echo $model->product_name;?></td>
 								<td>
-									 <?php if($model->printerWay) echo $model->printerWay->name; else echo '';?>
+									<?php foreach($model->productPrinterway as $val){
+											echo ProductPrinterway::getPrinterwayName($val->printer_way_id,$this->companyId).' ';
+									}?>
 								</td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('productPrinter/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>

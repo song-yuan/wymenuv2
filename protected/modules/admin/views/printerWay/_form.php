@@ -23,7 +23,20 @@
 										<?php echo $form->error($model, 'name' )?>
 									</div>
 								</div>
-                                                                        
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'is_onepaper',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_onepaper', array('0' => yii::t('app','分开打印') , '1' => yii::t('app','整单打印')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_onepaper')));?>
+											<?php echo $form->error($model, 'is_onepaper' )?>
+										</div>
+									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'list_no',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'list_no',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('list_no')));?>
+											<?php echo $form->error($model, 'list_no' )?>
+										</div>
+									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'memo',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">

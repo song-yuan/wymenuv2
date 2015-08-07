@@ -42,7 +42,7 @@
 						<li class="<?php if(Yii::app()->controller->id == 'productSales') echo 'active';?>"><a href="<?php echo $this->createUrl('productSales/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','优惠活动管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productClean') echo 'active';?>"><a href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId,'typeId'=>'product'));?>"><?php echo yii::t('app','沽清列表');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productImg') echo 'active';?>"><a href="<?php echo $this->createUrl('productImg/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','产品图片管理');?></a></li>
-                                                <li class="<?php if(Yii::app()->controller->id == 'productPrinter') echo 'active';?>"><a href="<?php echo $this->createUrl('productPrinter/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','单品打印方式管理');?></a></li>
+                                                <li class="<?php if(Yii::app()->controller->id == 'productPrinter') echo 'active';?>"><a href="<?php echo $this->createUrl('productPrinter/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','单品厨打');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'retreat') echo 'active';?>"><a href="<?php echo $this->createUrl('retreat/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','退菜理由选项设定');?></a></li>
 					</ul>
 				</li>
@@ -96,7 +96,7 @@
 					</a>
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'printer' && $this->getAction()->getId() == 'index') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','打印机管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'printerWay') echo 'active';?>"><a href="<?php echo $this->createUrl('printerWay/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','打印方案');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'printerWay') echo 'active';?>"><a href="<?php echo $this->createUrl('printerWay/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','厨打方案');?></a></li>
 						<!--<li class="<?php if(Yii::app()->controller->id == 'printer' && $this->getAction()->getId() == 'list') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/list',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','清单打印机');?></a></li>-->
                                                 <li class="<?php if(Yii::app()->controller->id == 'pad' && $this->getAction()->getId() == 'index') echo 'active';?>"><a href="<?php echo $this->createUrl('pad/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','pad管理');?></a></li>
 					</ul>

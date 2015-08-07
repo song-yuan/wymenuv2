@@ -126,6 +126,10 @@
                            });
                            
                            $('.closesite').on(event_clicktouchstart,function(){
+                                var statu = confirm("<?php echo yii::t('app','确定撤台吗？');?>");
+                                if(!statu){
+                                    return false;
+                                } 
                                var sid = $(this).attr('sid');
                                $.ajax({
                                     'type':'POST',

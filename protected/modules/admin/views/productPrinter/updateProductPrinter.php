@@ -51,15 +51,15 @@
 											<?php echo $form->error($model, 'product_name' )?>
 										</div>
 									</div>
-									<div class="form-group">
+									
+                                                                        <div class="form-group">
 										<label  class="col-md-3 control-label"><?php echo yii::t('app','打印方案选择');?></label>
-										<div class="col-md-4">
-											<select class="form-control" name="printerWay">
-											<option value="0"><?php echo yii::t('app','-- 请选择 --');?></opton>
+										<div class="col-md-8">
 											<?php foreach($printerWays as $way):?>
-											<option value="<?php echo $way['lid'];?>" <?php if($way['lid']==$model->printer_way_id) echo 'selected';?>><?php echo $way['name'];?></option>
+											<label class="checkbox-inline">
+											<input type="checkbox" name="ProductPrinterway[]" <?php if(in_array($way['lid'],$printerway)) echo 'checked';?> value="<?php echo $way['lid'];?>"> <?php echo $way['name'];?>
+											</label>
 											<?php endforeach;?>
-											</select>
 										</div>
 									</div>
 									<div class="form-actions fluid">
