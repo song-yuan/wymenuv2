@@ -850,12 +850,15 @@ class Helper
                 }
                 //foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
                 $printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));
+//                var_dump($printerways);exit;
                 foreach($printerways as $printerway)
                 {
                         foreach($orderProducts as $orderProduct)
                         {
                             $orderproducts_a[$orderProduct->lid]=$orderProduct;
-                            $productprinterwaynow=  ProductPrinterway::model()->find("dpid=:dpid and printer_way_id=:pwi and product_id=:pid",array(':dpid'=>$order->dpid,':pwi'=>$printerway->lid,':pid'=>$orderProduct->lid));
+                            
+                            $productprinterwaynow=  ProductPrinterway::model()->find("dpid=:dpid and printer_way_id=:pwi and product_id=:pid",array(':dpid'=>$order->dpid,':pwi'=>$printerway->lid,':pid'=>$orderProduct->product_id));
+                            //var_dump($printerway->lid,$productprinterwaynow);exit;
                             if(!empty($productprinterwaynow))
                             {
                                 $printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid and delete_flag=0',array(':floorid'=>$floor_id,':pwi'=>$printerway->lid,':dpid'=>$order->dpid));
@@ -880,7 +883,7 @@ class Helper
                                 }
                             }
                         }
-
+                        //var_dump($printer2orderproducts_a);exit;
                         //var_dump($printwaydetails);exit;
                         //如果是整体，
                         if($printerway->is_onepaper=="1")
