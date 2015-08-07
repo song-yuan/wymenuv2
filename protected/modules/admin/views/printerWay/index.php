@@ -64,6 +64,8 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','打印机方式名称');?></th>
+                                                                <th><?php echo yii::t('app','是否整单打印');?></th>
+                                                                <th><?php echo yii::t('app','打印份数');?></th>
                                                                 <th><?php echo yii::t('app','备注');?></th>
 								<th>&nbsp;</th>
                                                                 <th>&nbsp;</th>
@@ -75,6 +77,8 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->name ;?></td>
+								<td ><?php  if($model->is_onepaper=="1") echo "整单打印"; else echo "分开打印";?></td>
+								<td ><?php echo $model->list_no ;?></td>
 								<td><?php echo $model->memo;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('printerWay/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>

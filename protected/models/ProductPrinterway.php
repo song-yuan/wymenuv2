@@ -1,27 +1,25 @@
 <?php
 
 /**
- * This is the model class for table "nb_printer_way".
+ * This is the model class for table "nb_product_printerway".
  *
- * The followings are the available columns in table 'nb_printer_way':
+ * The followings are the available columns in table 'nb_product_printerway':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $name
- * @property string $is_onepaper
- * @property integer $list_no
- * @property string $memo
+ * @property string $printer_way_id
+ * @property string $product_id
  * @property string $delete_flag
  */
-class PrinterWay extends CActiveRecord
+class ProductPrinterway extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_printer_way';
+		return 'nb_product_printerway';
 	}
 
 	/**
@@ -32,16 +30,13 @@ class PrinterWay extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'required'),
-			array('lid, dpid', 'length', 'max'=>10),
-                        array('list_no', 'length', 'max'=>3),
-			array('name', 'length', 'max'=>50),
-			array('memo', 'length', 'max'=>100),
-			array('is_onepaper,delete_flag', 'length', 'max'=>1),
+			array('update_at', 'required'),
+			array('lid, dpid, printer_way_id, product_id', 'length', 'max'=>10),
+			array('delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, name, memo, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, printer_way_id, product_id, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,10 +61,8 @@ class PrinterWay extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'name' => yii::t('app','名称'),
-                        'is_onepaper'=>yii::t('app','是否整单打印'),
-                        'list_no'=>yii::t('app','打印份数'),
-			'memo' => yii::t('app','说明'),
+			'printer_way_id' => 'nb_taste_group的ID',
+			'product_id' => 'Product',
 			'delete_flag' => 'Delete Flag',
 		);
 	}
@@ -96,10 +89,8 @@ class PrinterWay extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('name',$this->name,true);
-                $criteria->compare('is_onepaper',$this->name,true);
-                $criteria->compare('list_no',$this->name,true);
-		$criteria->compare('memo',$this->memo,true);
+		$criteria->compare('printer_way_id',$this->printer_way_id,true);
+		$criteria->compare('product_id',$this->product_id,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 
 		return new CActiveDataProvider($this, array(
@@ -111,16 +102,53 @@ class PrinterWay extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return PrinterWay the static model class
+	 * @return ProductPrinterway the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
 	}
-	public static function getPrinterWay($companyId)
+        
+        public static function getPrinterwayName($printerwayId,$dpid){
+		$sql = 'SELECT name from nb_printer_way where lid=:lid and dpid=:dpid';
+		$printerway = Yii::app()->db->createCommand($sql)->bindValue(':lid',$printerwayId)->bindValue(':dpid',$dpid)->queryRow();
+		return $printerway['name'];
+	}
+        
+        public static function getProductPrinterWay($productId,$companyId)
 	{
-		$sql = 'select lid,name from nb_printer_way where dpid='.$companyId.' and delete_flag=0';
+		$sql = 'select printer_way_id from nb_product_printerway where dpid='.$companyId.' and product_id='.$productId.' and delete_flag=0';
 		$result = Yii::app()->db->createCommand($sql)->queryAll();
 		return $result;
+	}
+        
+        public static function saveProductPrinterway($dpid,$productId,$printerwayIds=array()){
+		$transaction = Yii::app()->db->beginTransaction();
+		try {
+			$sql = 'delete from nb_product_printerway where dpid=:dpid and product_id=:productId';
+			$conn = Yii::app()->db->createCommand($sql);
+			$conn->bindValue(':dpid',$dpid);
+			$conn->bindValue(':productId',$productId);
+			$conn->execute();
+			if(!empty($printerwayIds)){
+				foreach($printerwayIds as $printerwayId){
+					$sql = 'SELECT NEXTVAL("product_printerway") AS id';
+					$maxId = Yii::app()->db->createCommand($sql)->queryRow();
+					$data = array(
+					 'lid'=>$maxId['id'],
+					 'dpid'=>$dpid,
+					 'create_at'=>date('Y-m-d H:i:s',time()),
+					 'printer_way_id'=>$printerwayId,
+					 'product_id'=>$productId,
+					);
+					Yii::app()->db->createCommand()->insert('nb_product_printerway',$data);
+				}
+			}
+			$transaction->commit(); //提交事务会真正的执行数据库操作
+			return true;
+		} catch (Exception $e) {
+			$transaction->rollback(); //如果操作失败, 数据回滚
+			return false;
+		}
 	}
 }
