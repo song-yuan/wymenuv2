@@ -126,10 +126,14 @@
 					</a>
 					<ul class="dropdown-menu">
 					
-						<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> <?php echo yii::t('app','全屏显示');?></a>
+						<li>
+                                                    <a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> <?php echo yii::t('app','全屏显示');?></a>
 						</li>
+                                                <li>
+                                                    <a href="<?php echo $this->createUrl('login/logout');?>" data-method='post'><i class="fa fa-key"></i> <?php echo yii::t('app','锁定屏幕');?></a>
 						</li>
-						<li><a href="<?php echo $this->createUrl('login/logout');?>" data-method='post'><i class="fa fa-key"></i> <?php echo yii::t('app','安全退出');?></a>
+						<li>
+                                                    <a href="<?php echo $this->createUrl('login/logout');?>" data-method='post'><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>
 						</li>
 					</ul>
 				</li>

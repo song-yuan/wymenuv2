@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','打印方式列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','厨打方案列表');?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('printerWay/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
@@ -63,7 +63,7 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','打印机方式名称');?></th>
+								<th><?php echo yii::t('app','厨打方案名称');?></th>
                                                                 <th><?php echo yii::t('app','是否整单打印');?></th>
                                                                 <th><?php echo yii::t('app','打印份数');?></th>
                                                                 <th><?php echo yii::t('app','备注');?></th>

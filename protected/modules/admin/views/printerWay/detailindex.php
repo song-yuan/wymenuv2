@@ -65,7 +65,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','楼层区域');?></th>
                                                                 <th><?php echo yii::t('app','打印机');?></th>
-                                                                <th><?php echo yii::t('app','打印份数');?></th>
+                                                             <!--   <th><?php echo yii::t('app','打印份数');?></th> -->
 								<th>&nbsp;</th>                                                                
 							</tr>
 						</thead>
@@ -76,7 +76,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php if($model->floor_id!='0') echo $model->floor->name; else echo yii::t('app','临时区域');?></td>
 								<td><?php if(!empty($model->printer)) echo $model->printer->name; else echo "";?></td>
-                                                                <td><?php echo $model->list_no;?></td>
+                                                                <!-- <td><?php echo $model->list_no;?></td> -->
 								<td class="center">
 								<a href="<?php echo $this->createUrl('printerWay/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>             
