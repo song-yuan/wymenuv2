@@ -853,6 +853,7 @@ class Helper
 //                var_dump($printerways);exit;
                 foreach($printerways as $printerway)
                 {
+                    $printer2orderproducts_a=array();
                         foreach($orderProducts as $orderProduct)
                         {
                             $orderproducts_a[$orderProduct->lid]=$orderProduct;
@@ -1052,9 +1053,10 @@ class Helper
                                     array_push($listDataTail,"00".yii::t('app','操作员：').Yii::app()->user->name."  "
                                             .date('Y-m-d H:i:s',time()));
                                     //生成body并打印
-                                    $listDataBody= array();
+                                    
                                     foreach($values as $value)
                                     {
+                                        $listDataBody= array();
                                         //组装身体
                                         if(empty($productids))
                                         {
