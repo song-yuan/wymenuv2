@@ -6,6 +6,7 @@
                                                 <?php if($ret['status']):?>
                                                 <div class="modal-body">
                                                         <div class="form-actions fluid" id="product_panel">
+                                                            <span style="color:red;" id="minustimes">30</span><?php echo yii::t('app','30秒倒计时...');?></br></br>
                                                             <span style="color:red;" id="successnumid">0</span><?php echo yii::t('app','...个菜品厨打已经成功');?></br></br>
                                                             <span style="color:red;" id="notsurenumid">0</span><?php echo yii::t('app','...个菜品正在打印');?></br></br>
                                                             <span style="color:red;" id="errornumid">0</span><?php echo yii::t('app','...个菜品厨打失败，');?></br>
@@ -29,7 +30,7 @@
 
                                             <script>
                                             var interval;
-                                            var waitingsecond=10;
+                                            var waitingsecond=30;
                                             var retstatus="<?php echo $ret['status'];?>";                                  
                                             
                                             $(document).ready(function() {
@@ -49,6 +50,7 @@
                                                                                                 
                                                 $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResultAll',array('companyId'=>$this->companyId,'orderId'=>$orderId));?>/timenum/'+waitingsecond,function(data){
                                                     //alert(data.notsurenum);
+                                                    $("#minustimes").html(waitingsecond);
                                                     $("#successnumid").html(data.successnum);
                                                     $("#errornumid").html(data.errornum);
                                                     $("#notsurenumid").html(data.notsurenum);
@@ -70,11 +72,10 @@
                                                 },'json');
                                                 waitingsecond--;
                                                 //alert(waitingsecond);
-                                                //10s后还有任务没有返回，就作为失败处理。
+                                                //30s后还有任务没有返回，就作为失败处理。
                                                 if(waitingsecond<0)
                                                 {
-                                                    clearTimeout(interval);
-                                                    
+                                                    clearTimeout(interval);                                                    
                                                 }                                                
                                             }
                                             </script>
