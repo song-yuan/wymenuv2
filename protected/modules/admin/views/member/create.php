@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php if($type) echo yii::t('app','添加会员');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加会员');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
