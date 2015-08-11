@@ -1,5 +1,5 @@
 <?php
-class TasteController extends BackendController
+class MemberController extends BackendController
 {
 	public function beforeAction($action) {
 		parent::beforeAction($action);
@@ -19,7 +19,7 @@ class TasteController extends BackendController
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = MemberCard::model()->findAll($criteria);
-		
+		var_dump($models);exit;
 		$this->render('index',array(
 				'models'=>$models,
 				'pages' => $pages,
