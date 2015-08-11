@@ -27,6 +27,7 @@ class MemberCard extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return MemberCard the static model class
 	 */
+	public $password_hash1;
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -83,16 +84,17 @@ class MemberCard extends CActiveRecord
 			'dpid' => 'Dpid',
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
-			'selfcode' => 'Selfcode',
+			'selfcode' => '会员卡号',
 			'rfid' => 'Rfid',
-			'name' => 'Name',
-			'mobile' => 'Mobile',
-			'email' => 'Email',
+			'name' => '姓名',
+			'mobile' => '联系方式',
+			'email' => '邮箱',
 			'haspassword' => 'Haspassword',
-			'password_hash' => 'Password Hash',
-			'sex' => 'Sex',
-			'ages' => 'Ages',
-			'all_money' => 'All Money',
+			'password_hash' => '支付密码',
+			'password_hash1' => '确认支付密码',
+			'sex' => '性别',
+			'ages' => '年龄',
+			'all_money' => '总金额',
 			'delete_flag' => 'Delete Flag',
 		);
 	}

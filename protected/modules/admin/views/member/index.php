@@ -62,11 +62,13 @@
 								<td ><?php echo $model->all_money;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('taste/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
-									<a href="<?php echo $this->createUrl('taste/detailIndex',array('groupid' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','删除');?></a>
+									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
+									<a href="<?php echo $this->createUrl('member/delete',array('groupid' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','删除');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
+						<td colspan="8">没有找到数据</td>
+						<?php else:?>
 						<?php endif;?>
 						</tbody>
 					</table>

@@ -30,11 +30,10 @@ class MemberController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberCard');
-                        $se=new Sequence("taste_group");
-                        $model->lid = $se->nextval();
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
-//                        var_dump($model);exit;
+            $se=new Sequence("member_card");
+            $model->lid = $se->nextval();
+            $model->create_at = date('Y-m-d H:i:s',time());
+            $model->delete_flag = '0';
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('taste/index' , 'companyId' => $this->companyId));
