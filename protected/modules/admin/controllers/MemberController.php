@@ -36,7 +36,7 @@ class MemberController extends BackendController
             $model->delete_flag = '0';
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('taste/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('member/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('create' , array(
@@ -51,7 +51,7 @@ class MemberController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('MemberCard');
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('taste/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('member/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('update' , array(
@@ -61,7 +61,6 @@ class MemberController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('lid');
-		$type = Yii::app()->request->getParam('type',0);
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = TasteGroup::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
@@ -69,10 +68,10 @@ class MemberController extends BackendController
 					$model->saveAttributes(array('delete_flag'=>1));
 				}
 			}
-			$this->redirect(array('taste/index' , 'companyId' => $companyId,'type'=>$type)) ;
+			$this->redirect(array('member/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('taste/index' , 'companyId' => $companyId,'type'=>$type)) ;
+			$this->redirect(array('member/index' , 'companyId' => $companyId)) ;
 		}
 	}
 }
