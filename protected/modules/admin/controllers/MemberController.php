@@ -1,5 +1,5 @@
 <?php
-class TasteController extends BackendController
+class MemberController extends BackendController
 {
 	public function beforeAction($action) {
 		parent::beforeAction($action);
