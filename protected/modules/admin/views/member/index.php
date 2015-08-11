@@ -67,8 +67,8 @@
 								</td>
 							</tr>
 						<?php endforeach;?>
-						<td colspan="8">没有找到数据</td>
 						<?php else:?>
+						<td colspan="8">没有找到数据</td>
 						<?php endif;?>
 						</tbody>
 					</table>
