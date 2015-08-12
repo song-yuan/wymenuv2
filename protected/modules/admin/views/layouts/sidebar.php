@@ -114,7 +114,7 @@
 					</ul>
 				</li>
                                 -->
-                                <li class="<?php if(in_array(Yii::app()->controller->id , array('statements'))) echo 'active';?>">
+                    <li class="<?php if(in_array(Yii::app()->controller->id , array('statements'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-bar-chart-o"></i> 
 					<span class="title"><?php echo yii::t('app','统计报表');?></span>					
@@ -123,6 +123,15 @@
 						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'salesReport') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/salesReport',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','营业额报表');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'productsalesReport') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/productsalesReport',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','产品销售报表');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'orderReport') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/orderReport',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','订单统计报表');?></a></li>
+					</ul>
+				</li>
+				 <li class="<?php if(in_array(Yii::app()->controller->id , array('member'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-bar-chart-o"></i> 
+					<span class="title"><?php echo yii::t('app','会员管理');?></span>					
+					</a>
+					<ul class="sub-menu">
+						<li class="<?php if(Yii::app()->controller->id == 'member' && in_array($this->getAction()->getId(),'index','create','update')) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','会员列表');?></a></li>
 					</ul>
 				</li>
 				<!--
