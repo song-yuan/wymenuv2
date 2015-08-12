@@ -63,7 +63,7 @@
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
-									<a href="<?php echo $this->createUrl('member/delete',array('groupid' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','删除');?></a>
+									<a href="<?php echo $this->createUrl('member/delete',array('id' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','删除');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
