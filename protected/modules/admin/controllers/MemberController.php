@@ -62,7 +62,7 @@ class MemberController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$id = Yii::app()->request->getParam('id');
 		if(!empty($id)) {
-				$model = TasteGroup::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
+				$model = MemberCard::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 				if($model) {
 					$model->saveAttributes(array('delete_flag'=>1));
 				}
