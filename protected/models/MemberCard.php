@@ -49,7 +49,6 @@ class MemberCard extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at', 'required'),
 			array('lid, dpid, all_money', 'length', 'max'=>10),
 			array('selfcode, name, mobile, ages', 'length', 'max'=>20),
 			array('rfid', 'length', 'max'=>128),
