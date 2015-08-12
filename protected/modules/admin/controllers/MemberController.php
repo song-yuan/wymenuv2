@@ -60,14 +60,12 @@ class MemberController extends BackendController
 	}
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$ids = Yii::app()->request->getPost('lid');
-		if(!empty($ids)) {
-			foreach ($ids as $id) {
+		$id = Yii::app()->request->getParam('id');
+		if(!empty($id)) {
 				$model = TasteGroup::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 				if($model) {
 					$model->saveAttributes(array('delete_flag'=>1));
 				}
-			}
 			$this->redirect(array('member/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
