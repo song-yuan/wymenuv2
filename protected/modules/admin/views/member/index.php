@@ -25,7 +25,9 @@
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员管理'),'subhead'=>yii::t('app','会员列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','会员管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
-	<?php $form=$this->beginWidget('CActiveForm', array(
+	<!-- BEGIN PAGE CONTENT-->
+	<div class="row">
+		<?php $form=$this->beginWidget('CActiveForm', array(
 					'id'=>'MemberCard',
 					'clientOptions'=>array(
 						'validateOnSubmit'=>true,
@@ -34,31 +36,27 @@
 						'class'=>'form-inline pull-right'
 					),
 				)); ?>
-	<div class="row">
-		<div class="col-md-12">
-			<table id="search-form" class="table">
-				<tr>
-					<td width="15%"><label class="control-label">按卡号查找</label></td>
-					<td width="35%">
-					<div class="input-group">
-					<span class="input-group-addon">会员卡号</span><input type="text" name="id" class="form-control input-medium" value="<?php echo isset($id) && $id ?$id:'';?>"/>
-					</div>
-					</td>
-					<td width="15%">
-					</td>
-					<td width="35%">
-					   <button type="submit" class="btn green">
-							查找 &nbsp; 
-							<i class="m-icon-swapright m-icon-white"></i>
-						</button>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
-	<?php $this->endWidget(); ?>
-	<!-- BEGIN PAGE CONTENT-->
-	<div class="row">
+			<div class="col-md-12">
+				<table id="search-form" class="table">
+					<tr>
+						<td width="15%"><label class="control-label">按卡号查找</label></td>
+						<td width="35%">
+						<div class="input-group">
+						<span class="input-group-addon">会员卡号</span><input type="text" name="id" class="form-control input-medium" value="<?php echo isset($id) && $id ?$id:'';?>"/>
+						</div>
+						</td>
+						<td width="15%">
+						</td>
+						<td width="35%">
+						   <button type="submit" class="btn green">
+								查找 &nbsp; 
+								<i class="m-icon-swapright m-icon-white"></i>
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		<?php $this->endWidget(); ?>
 		<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
