@@ -16,7 +16,7 @@ class MemberController extends BackendController
 		if(Yii::app()->request->isPostRequest){
 			$id = Yii::app()->request->getPost('id',0);
 			if($id){
-				$criteria->addSearchCondition('lid',$id);
+				$criteria->addSearchCondition('selfcode',$id);
 			}
 		}
 		
