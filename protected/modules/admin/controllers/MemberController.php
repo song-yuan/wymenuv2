@@ -10,13 +10,16 @@ class MemberController extends BackendController
 		return true;
 	}
 	public function actionIndex() {
-		$id = Yii::app()->request->getParam('id',0);
+		$id = 0;
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
-		if($id){
-			$criteria->addCondition('lid=:lid');
-			$criteria->params[':lid']=$id;
+		if(Yii::app()->request->isPostRequest){
+			$id = Yii::app()->request->getPost('id',0);
+			if($id){
+				$criteria->addSearchCondition('lid',$id);
+			}
 		}
+		
 		$criteria->order = ' lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		
