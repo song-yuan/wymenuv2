@@ -127,7 +127,7 @@
 				</li>
 				 <li class="<?php if(in_array(Yii::app()->controller->id , array('member'))) echo 'active';?>">
 					<a href="">
-					<i class="fa fa-bar-user"></i> 
+					<i class="fa fa-user"></i> 
 					<span class="title"><?php echo yii::t('app','会员管理');?></span>					
 					</a>
 					<ul class="sub-menu">
