@@ -81,4 +81,23 @@ class MemberController extends BackendController
 			$this->redirect(array('member/index' , 'companyId' => $companyId)) ;
 		}
 	}
+	public function actionCharge() {
+		$model = new MemberRecharge;
+		$model->dpid = $this->companyId ;
+		
+		if(Yii::app()->request->isPostRequest) {
+			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
+            $se=new Sequence("member_recharge");
+            $model->lid = $se->nextval();
+            $model->create_at = date('Y-m-d H:i:s',time());
+            $model->delete_flag = '0';
+			if($model->save()) {
+				Yii::app()->user->setFlash('success' ,yii::t('app', '充值成功'));
+				$this->redirect(array('member/charge' , 'companyId' => $this->companyId));
+			}
+		}
+		$this->render('charge' , array(
+				'model' => $model , 
+		));
+	}
 }
