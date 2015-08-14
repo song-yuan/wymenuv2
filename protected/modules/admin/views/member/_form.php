@@ -71,14 +71,14 @@
 			<div class="form-group">
 				<?php echo $form->label($model, 'password_hash',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
-					<?php echo $form->password($model, 'password_hash',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('password_hash')));?>
+					<?php echo $form->passwordField($model, 'password_hash',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('password_hash')));?>
 					<?php echo $form->error($model, 'password_hash' )?>
 				</div>
 			</div>
 			<div class="form-group">
 				<?php echo $form->label($model, 'password_hash1',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
-					<?php echo $form->password($model, 'password_hash1',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('password_hash1')));?>
+					<?php echo $form->passwordField($model, 'password_hash1',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('password_hash1')));?>
 					<?php echo $form->error($model, 'password_hash1' )?>
 				</div>
 			</div>
