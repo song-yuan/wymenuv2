@@ -132,6 +132,7 @@
 					</a>
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'member' && in_array($this->getAction()->getId(),array('index','create','update'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','会员列表');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'member' && in_array($this->getAction()->getId(),array('charge'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/charge',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','会员充值');?></a></li>
 					</ul>
 				</li>
 				<!--
