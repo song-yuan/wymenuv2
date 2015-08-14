@@ -32,9 +32,6 @@
 					<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','会员充值');?></div>
-							<div class="tools">
-								<a href="javascript:;" class="collapse"></a>
-							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
