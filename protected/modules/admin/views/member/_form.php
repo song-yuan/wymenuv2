@@ -6,6 +6,7 @@
 	<?php $form=$this->beginWidget('CActiveForm', array(
 			'id' => 'taste-form',
 			'errorMessageCssClass' => 'help-block',
+			'onsubmit'=>'return check()',
 			'htmlOptions' => array(
 				'class' => 'form-horizontal',
 				'enctype' => 'multipart/form-data'
@@ -90,6 +91,15 @@
 				</div>
 			</div>
 	<script type="text/javascript">
+	function check(){
+		var password1 = $('input[name="MemberCard[password_hash]"]').val();
+		var password2 = $('input[name="MemberCard[password_hash1]"]').val();
+		if(password1 != password2){
+			alert('两次输入的密码不一致!');
+			return false;
+		}
+		return true;
+	}
 	jQuery(document).ready(function() {
 		   $('input[type="radio"]').change(function(){
 		   	  if($(this).val()==0){
@@ -97,15 +107,6 @@
 		   	  }else{
 		   	  	 $('.password').show();
 		   	  }
-		   });
-		   $('form').submit(function(){
-		   	  var password1 = $('input[name="MemberCard[password_hash]"]').val();
-		   	  var password2 = $('input[name="MemberCard[password_hash1]"]').val();
-		   	  if(password1 != password2){
-		   	  	alert('两次密码不一致!');
-		   	  	return false;
-		   	  }
-		   	  return true;
 		   });
 		});
 	</script>
