@@ -73,8 +73,8 @@ class MemberRecharge extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
 			'member_card_id' => '会员卡号',
-			'reality_money' => '实际支付金额',
-			'give_money' => '充值金额',
+			'reality_money' => '充值金额',
+			'give_money' => '赠送金额',
 			'delete_flag' => 'Delete Flag',
 		);
 	}

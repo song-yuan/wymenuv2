@@ -39,6 +39,9 @@ class MemberController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberCard');
+			if($model->haspassword){
+				$model->password_hash = MD5($model->password_hash);
+			}
             $se=new Sequence("member_card");
             $model->lid = $se->nextval();
             $model->create_at = date('Y-m-d H:i:s',time());
@@ -58,6 +61,11 @@ class MemberController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberCard');
+			if($model->haspassword){
+				$model->password_hash = MD5($model->password_hash);
+			}else{
+				$model->password_hash = '';
+			}
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('member/index' , 'companyId' => $this->companyId));
@@ -87,13 +95,24 @@ class MemberController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
-            $se=new Sequence("member_recharge");
-            $model->lid = $se->nextval();
-            $model->create_at = date('Y-m-d H:i:s',time());
-            $model->delete_flag = '0';
-			if($model->save()) {
-				Yii::app()->user->setFlash('success' ,yii::t('app', '充值成功'));
-				$this->redirect(array('member/charge' , 'companyId' => $this->companyId));
+			$rfid = Yii::app()->request->getPost('rfid');
+			$transaction=Yii::app()->db->beginTransaction();
+			try{
+				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
+	            $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
+	            $se = new Sequence("member_recharge");
+	            $model->lid = $se->nextval();
+	            $model->create_at = date('Y-m-d H:i:s',time());
+	            $model->delete_flag = '0';
+	           if($model->save()&&$member->update()) {
+	           		$transaction->commit();
+					Yii::app()->user->setFlash('success' ,yii::t('app', '充值成功'));
+					$model = new MemberRecharge;
+					$this->redirect(array('member/charge' , 'model' => $model));
+				}
+			}catch(Exception $e){
+				Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
+				$transaction->rollback();
 			}
 		}
 		$this->render('charge' , array(
