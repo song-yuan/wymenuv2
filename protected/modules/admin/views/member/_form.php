@@ -90,7 +90,7 @@
 				</div>
 			</div>
 	<script type="text/javascript">
-	JQuery(document).ready(function() {
+	jQuery(document).ready(function() {
 		   $('input[type="radio"]').change(function(){
 		   	  if($(this).val()==0){
 		   	  	 $('.password').hide();
