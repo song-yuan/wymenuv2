@@ -45,6 +45,12 @@
 							)); ?>
 								<div class="form-body">
 								<div class="form-group">
+										<label class="col-md-3 control-label">RFID卡号</label>
+										<div class="col-md-4">
+											<input type="text" class="form-control" name="rfid" placeholder="RFID卡号" value=""  />
+										</div>
+									</div>
+								<div class="form-group">
 										<?php echo $form->label($model, 'member_card_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'member_card_id',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('member_card_id')));?>
