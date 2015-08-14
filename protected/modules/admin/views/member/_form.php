@@ -6,10 +6,10 @@
 	<?php $form=$this->beginWidget('CActiveForm', array(
 			'id' => 'taste-form',
 			'errorMessageCssClass' => 'help-block',
-			'onsubmit'=>'return check()',
 			'htmlOptions' => array(
 				'class' => 'form-horizontal',
-				'enctype' => 'multipart/form-data'
+				'enctype' => 'multipart/form-data',
+				'onsubmit'=>'return check()',
 			),
 	)); ?>
 		<div class="form-body">
