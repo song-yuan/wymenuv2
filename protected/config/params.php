@@ -12,5 +12,28 @@ return array(
 		'image_width' => 300,
 		'image_height' => 300,
                 'has_cache' => FALSE,
-                'master_slave'=>'m',//m is master can add company s only can import company data from master
+                'cloud_local'=>'c',
+                //c is （cloud） can add company 
+                //l only local） can import company data from master
+                'masterdomain'=>'http://menu.wymenu.com/wymenuv2/',//获取图片的域名
+                'dbcloud'=>array(
+                        //'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
+                        // uncomment the following lines to use a MySQL database
+                        //'connectionString' => 'mysql:host=52.68.233.6;dbname=nb_wymenu',
+                        'connectionString' => 'mysql:host=121.42.12.97;dbname=nb_wymenu',
+                        'emulatePrepare' => true,
+                        'username' => 'root',
+                        'password' => 'MYmenu123',
+                        'charset' => 'utf8',
+                ),
+                'dblocal'=>array(
+                        //'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
+                        // uncomment the following lines to use a MySQL database
+                        //'connectionString' => 'mysql:host=52.68.233.6;dbname=nb_wymenu',
+                        'connectionString' => 'mysql:host=127.0.0.1;dbname=nb_wymenu',
+                        'emulatePrepare' => true,
+                        'username' => 'root',
+                        'password' => 'MYmenu123',
+                        'charset' => 'utf8',
+                ),
 );

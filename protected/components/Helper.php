@@ -1206,4 +1206,42 @@ class Helper
                     }
                 }
         }
+        
+        static public function  GrabImage($baseurl,$filename="") { 
+            if($baseurl=="") return false; 
+            if(file_exists($filename))
+            {
+                return "";
+            }
+            $basedir="";
+            if($filename=="") { 
+                $ext=strrchr($url,"."); 
+                if($ext!=".gif" && $ext!=".jpg" && $ext!=".png") return false; 
+                $filename=date("YmdHis").$ext; 
+            } else{
+                $basedir=substr($filename, 0,strrpos($filename,"/"));
+            }
+            
+            try{
+                if (!is_dir($basedir)){  		
+                    //第三个参数是“true”表示能创建多级目录，iconv防止中文目录乱码
+                    $res=mkdir(iconv("UTF-8", "GBK", $basedir),0777,true); 
+                    if (!$res){
+                        return "";    
+                    }
+                }
+                ob_start(); 
+                readfile($baseurl.$filename); 
+                $img = ob_get_contents(); 
+                ob_end_clean(); 
+                $size = strlen($img); 
+
+                $fp2=@fopen($filename, "a"); 
+                fwrite($fp2,$img); 
+                fclose($fp2); 
+            }catch (Exception $e) {
+                return "";
+            }
+            return $filename; 
+        } 
 }

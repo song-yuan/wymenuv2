@@ -53,6 +53,7 @@
 	<div class="info">
 	</div>
 	<div class="product-bottom">
+	  <button id="order-tastes-btn" type="button" style="float:right;background:rgb(11,241,11);width:auto;height:auto"><?php echo yii::t('app','订单口味');?></button>
 	</div>
 </div>
 </form>
@@ -91,6 +92,27 @@
 <div class="aniele"></div>
 <!-- 口味的页面  -->
 <div class="taste-layer"></div>
+<!-- 全单口味 -->
+<div class="tastepad order-tastes" product-id="0">
+  <div class="taste-confirm">确 定</div>
+  <div class="taste-list">
+     <div class="taste-title"><div class="taste-title-l">全单口味选择</div>
+     <div class="taste-title-r">
+       <div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1"></div><div class="clear"></div>
+     </div>
+     <div class="taste-item">
+     <?php foreach($orderTastes as $group):?>
+       <div class="taste-group">
+       	  <?php foreach($group['order_tastes'] as $taste):?>
+          <div class="item" product-id="0" taste-id="<?php echo $taste['lid'];?>"><?php echo $taste['name'];?></div>
+          <?php endforeach;?>
+          <div class="clear"></div>
+       </div>
+      <?php endforeach;?>
+       <div class="clear"></div>
+     </div>
+   </div>
+</div>
 <!-- 产品大图 -->
 <div class="large-pic"></div>
 <script type="text/javascript">

@@ -16,7 +16,7 @@ class DefaultSiteController extends BackendController
 		$models=array();
                 if($typeId == 'tempsite'){
                         $criteria->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId ;
-                        $criteria->order = ' t.site_id asc ';
+                        $criteria->order = ' t.site_id desc ';
                         $models = SiteNo::model()->findAll($criteria);
                 }else{
                         $criteria->with = 'siteType';
