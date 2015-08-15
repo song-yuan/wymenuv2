@@ -53,7 +53,7 @@
 	<div class="info">
 	</div>
 	<div class="product-bottom">
-	  <button id="order-tastes-btn" type="button" style="float:right;background:#35aa47;"><?php echo yii::t('app','订单口味');?></button>
+	  <button id="order-tastes-btn" type="button" style="float:right;background:#35aa47;height: 30px;font-size: 20px;"><?php echo yii::t('app','订单口味');?></button>
 	</div>
 </div>
 </form>
@@ -93,7 +93,7 @@
 <!-- 口味的页面  -->
 <div class="taste-layer"></div>
 <!-- 全单口味 -->
-<div class="tastepad order-tastes" product-id="0">
+<div class="order-tastes" product-id="0">
   <div class="taste-confirm">确 定</div>
   <div class="taste-list">
      <div class="taste-title"><div class="taste-title-l">全单口味选择</div>

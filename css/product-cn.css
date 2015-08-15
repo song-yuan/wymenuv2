@@ -402,7 +402,7 @@
 .product-taste{
 	float:left;
 }
-.tastepad{
+.tastepad , .order-tastes{
 	display:none;
 	position:fixed;
 	top:100px;
@@ -420,6 +420,7 @@
     box-shadow: none;
    -webkit-background-clip: content;
 }
+
 .taste-list{
 	padding:0;
 	margin:0;
@@ -495,7 +496,7 @@
 	border:solid 1px rgb(229,229,229);
 	margin:5px; 
 }
-.tastepad .item{
+.tastepad .item,.order-tastes .item{
 	min-width:30px;
 	height:30px;
 	padding:5px;
@@ -506,7 +507,7 @@
 	float: left;
 	border:solid 1px rgb(229,229,229); 
 }
-.tastepad .item.active{
+.tastepad .item.active,.order-tastes .item.active{
 	color:white;
 	background:rgb(103,103,103);
 }
