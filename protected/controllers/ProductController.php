@@ -79,14 +79,15 @@ class ProductController extends Controller
 		$pid = Yii::app()->request->getParam('pid',0);
 		$type = Yii::app()->request->getParam('type',0);
 		$categoryId = Yii::app()->request->getParam('categoryId',0);
-
+		
+		$orderTastes = ProductClass::getOrderTaste($this->companyId);
 		if(!$categoryId){
 			$categorys = ProductClass::getFirstCategoryId($this->companyId);
                         //var_dump($categorys);exit;
 			$pid = $categorys['pid'];
 			$categoryId = $categorys['lid'];
 		}
-		$this->render('product',array('pid'=>$pid,'categoryId'=>$categoryId,'siteNoId'=>$this->siteNoId,'type'=>$type,'isPad'=>$this->isPad));
+		$this->render('product',array('pid'=>$pid,'orderTastes'=>$orderTastes,'categoryId'=>$categoryId,'siteNoId'=>$this->siteNoId,'type'=>$type,'isPad'=>$this->isPad));
 	}
         
         public function actionPrintCheck(){                
