@@ -298,6 +298,19 @@
         margin-top: 0.12em;
 }
 
+.product-bottom button {
+	background: rgb(239,68,77);
+	height: 2.2em;
+    width: 7.0em;
+	padding:0.16em 0.33em;
+	font-size: 1.0em;
+	color: white;
+	border: none;
+	border-radius: 0.4em;
+	margin-right: 0.16em;
+        margin-top: 0.12em;
+}
+
 .product-mask-tip div#cancelPadOrder {
 	background: rgb(239,68,77);
 	height: 1.7em;
