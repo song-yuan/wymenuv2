@@ -45,6 +45,8 @@ return array(
                 'wifi',
 	),
 
+        
+    
 	// application components
 	'components'=>array(
 		"redis" => array(
@@ -91,8 +93,8 @@ return array(
                 ), 
                 */
 		// database settings are configured in database.php
-		'db'=>require(dirname(__FILE__).'/database.php'),
-
+		'db'=>require(dirname(__FILE__).'/database.php'),               
+                    
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
@@ -119,8 +121,8 @@ return array(
                     ),
 
 	),
-
-	// application-level parameters that can be accessed
+        // application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>require(dirname(__FILE__).'/params.php'),
+	
 );
