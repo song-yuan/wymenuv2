@@ -406,7 +406,7 @@ $(document).ready(function(){
     $('#order-tastes-btn').on(event_clicktouchend,function(){
     	var tasteItem = $('.order-tastes').find('.taste-item .item');
     	if(!tasteItem.length > 0){
-    		layer.msg('该产品无口味!');
+    		layer.msg('没有订单口味!');
     		return;
     	}
     	$('.taste-layer').show();
