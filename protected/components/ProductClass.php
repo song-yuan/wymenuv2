@@ -104,7 +104,7 @@ class ProductClass
 	}
 	public static function getOrderTaste($dpid = 0){
 		$orderTastes = array();
-		$sql = 'select taste_group_id from nb_taste_group  where dpid=:dpid and delete_flag=0 and allflae=1';
+		$sql = 'select lid from nb_taste_group  where dpid=:dpid and delete_flag=0 and allflae=1';
 		$connect = Yii::app()->db->createCommand($sql);
 		$connect->bindValue(':dpid',$dpid);
 		$tasteGroup = $connect->queryAll();
@@ -113,9 +113,9 @@ class ProductClass
 				$sql = 'select lid,name from nb_taste where dpid=:dpid and taste_group_id=:tasteGroupId and delete_flag=0 and allflae=1';
 				$connect = Yii::app()->db->createCommand($sql);
 				$connect->bindValue(':dpid',$dpid);
-				$connect->bindValue(':tasteGroupId',$group['taste_group_id']);
+				$connect->bindValue(':tasteGroupId',$group['lid']);
 				$taste = $connect->queryAll();
-				$orderTastes[$group['taste_group_id']]['order_tastes'] = $taste;
+				$orderTastes[$group['lid']]['order_tastes'] = $taste;
 			}
 		}else{
 			 $orderTastes = array();
