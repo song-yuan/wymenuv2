@@ -53,7 +53,7 @@
 	<div class="info">
 	</div>
 	<div class="product-bottom">
-	  <button id="order-tastes-btn" type="button" style="float:right;background:rgb(11,241,11);width:auto;height:auto"><?php echo yii::t('app','订单口味');?></button>
+	  <button id="order-tastes-btn" type="button" style="float:right;background:#35aa47;"><?php echo yii::t('app','订单口味');?></button>
 	</div>
 </div>
 </form>
