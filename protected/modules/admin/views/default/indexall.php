@@ -352,7 +352,7 @@
             });
             
             var now_should_pay=100;
-                            $('.calc_num').on(event_clicktouchstart,'li',function(){
+                            $('.calc_num').on('touchstart','li',function(){
                                 var inval=$("#cash_in").html();
                                 //alert(inval);
                                 if(inval=="0" || inval=="00")
