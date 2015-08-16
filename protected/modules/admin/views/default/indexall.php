@@ -144,46 +144,7 @@
 					<h4 class="modal-title">Modal title</h4>
 				</div>
 				<div class="modal-body">
-					<div style="margin:20px;">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        <h4 class="modal-title"><span style="color:red;"><?php echo yii::t('app','现金收款');?></span><br>
-                                                            <?php echo yii::t('app','总额：');?>
-                                                                <?php echo yii::t('app','，已付：');?>
-                                                                    <?php echo yii::t('app','，应付：');?><br>
-                                                                    <span style="width:90px; text-align:right; display: inline-block"><?php echo yii::t('app','收款：');?></span>
-                                                                    <span id="cash_in" pointat="0" style="color:blue;width:190px; text-align:right; display: inline-block">0</span>
-                                                                    <span style="width:90px; text-align:right; display: inline-block"><?php echo yii::t('app','找零：');?></span>
-                                                                    <span id="cash_out" style="color:red;width:190px; text-align:right; display: inline-block">0</span></h4>
-                                                        
-                                               
-                                                
-                                                    <div class="calc_num">
-                                                        <ul>
-                                                            <li>1</li>
-                                                            <li>2</li>
-                                                            <li>3</li>
-                                                            <li>4</li>
-                                                            <li>5</li>
-                                                            <li>6</li>
-                                                            <li>7</li>
-                                                            <li>8</li>
-                                                            <li>9</li>
-                                                            <li>0</li>
-                                                            <li>00</li>
-                                                            <li>.</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="calc_button">
-                                                        <ul>
-                                                            <li id="clearall" style="background-color: #add"><?php echo yii::t('app','清空');?></li>
-                                                            <li id="clearone" style="background-color: #add"><?php echo yii::t('app','退格');?></li>
-                                                            <li id="pay-btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>
-                                                            <li id="account-btn" style="background-color: #0099FF"><?php echo yii::t('app','结单');?></li>
-                                                            <li id="other-btn" style="background-color: #009f95"><?php echo yii::t('app','其他付款方式');?></li>
-                                                            <li id="layer2_close" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
-                                                        </ul>
-                                                    </div>                                                            
-                                                </div>
+					
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn blue">Save changes</button>
@@ -295,9 +256,48 @@
                             </div> 
                             </div>
                 </div>	
-            <div id="accountbox" style="display:none;">
+                                    <div id="accountbox" style="display:none;">
                 
-                                        
+                                        <div style="margin:20px;">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                        <h4 class="modal-title"><span style="color:red;"><?php echo yii::t('app','现金收款');?></span><br>
+                                                            <?php echo yii::t('app','总额：');?>
+                                                                <?php echo yii::t('app','，已付：');?>
+                                                                    <?php echo yii::t('app','，应付：');?><br>
+                                                                    <span style="width:90px; text-align:right; display: inline-block"><?php echo yii::t('app','收款：');?></span>
+                                                                    <span id="cash_in" pointat="0" style="color:blue;width:190px; text-align:right; display: inline-block">0</span>
+                                                                    <span style="width:90px; text-align:right; display: inline-block"><?php echo yii::t('app','找零：');?></span>
+                                                                    <span id="cash_out" style="color:red;width:190px; text-align:right; display: inline-block">0</span></h4>
+                                                        
+                                               
+                                                
+                                                    <div class="calc_num">
+                                                        <ul>
+                                                            <li>1</li>
+                                                            <li>2</li>
+                                                            <li>3</li>
+                                                            <li>4</li>
+                                                            <li>5</li>
+                                                            <li>6</li>
+                                                            <li>7</li>
+                                                            <li>8</li>
+                                                            <li>9</li>
+                                                            <li>0</li>
+                                                            <li>00</li>
+                                                            <li>.</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="calc_button">
+                                                        <ul>
+                                                            <li id="clearall" style="background-color: #add"><?php echo yii::t('app','清空');?></li>
+                                                            <li id="clearone" style="background-color: #add"><?php echo yii::t('app','退格');?></li>
+                                                            <li id="pay-btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>
+                                                            <li id="account-btn" style="background-color: #0099FF"><?php echo yii::t('app','结单');?></li>
+                                                            <li id="other-btn" style="background-color: #009f95"><?php echo yii::t('app','其他付款方式');?></li>
+                                                            <li id="layer2_close" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
+                                                        </ul>
+                                                    </div>                                                            
+                                                </div>
                                     </div>
 	</div>
         <script type="text/javascript">
@@ -323,22 +323,22 @@
             });
             $('#printerKitchen').on(event_clicktouchstart, function(){
                
-//                 layer_index2=layer.open({
-//                     type: 1,
-//                     shade: false,
-//                     title: false, //不显示标题
-//                     area: ['80%', '90%'],
-//                     content: $('#accountbox'),//$('#productInfo'), //捕获的元素
-//                     cancel: function(index){
-//                         layer.close(index);
-//        //                        this.content.show();
-//        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
-//                     }
-//                 });   
+                 layer_index2=layer.open({
+                     type: 1,
+                     shade: false,
+                     title: false, //不显示标题
+                     area: ['80%', '90%'],
+                     content: $('#accountbox'),//$('#productInfo'), //捕获的元素
+                     cancel: function(index){
+                         layer.close(index);
+        //                        this.content.show();
+        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                     }
+                 });   
                 $('#portlet-config3').modal();
                 //portlet-config3
             });
-            $('#layer2_close').on(event_clicktouchstart, function(){               
+            $('#layer2_close').on('touchstart', function(){               
                  layer.close(layer_index2);                    
             });
             
