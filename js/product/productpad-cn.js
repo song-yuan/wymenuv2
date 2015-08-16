@@ -385,6 +385,7 @@ $(document).ready(function(){
 	                if(top < 0){
 	                	top = 0;
 	                }
+	                alert(left);alert(top);
 	                $('#gallery').css({'top':top,'left':left});
                 }else{
                         alert(language_no_bigpic);
