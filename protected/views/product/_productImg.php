@@ -26,6 +26,6 @@ $('#gallery').slick({
    if(top < 0){
    	top = 0;
    }
-   $('#gallery').css({left:left,top:top});
+   $('#gallery').css({left:left;top:top});
 </script>
 
