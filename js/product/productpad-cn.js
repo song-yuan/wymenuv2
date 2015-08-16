@@ -375,8 +375,17 @@ $(document).ready(function(){
  			success:function(msg){
  				if(msg!='nopic'){
                 //alert(msg);
-                $('.large-pic').css('display','block');
-                $('.large-pic').html(msg);
+	                $('.large-pic').css('display','block');
+	                $('.large-pic').html(msg);
+	                var left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
+	                var top = ($('.large-pic').height() - $("#gallery").outerHeight())/2;
+	                if(left < 0){
+	                	left = 0;
+	                }
+	                if(top < 0){
+	                	top = 0;
+	                }
+	                $('#gallery').css({'top':top,'left':left});
                 }else{
                         alert(language_no_bigpic);
                 }

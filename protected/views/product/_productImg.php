@@ -18,15 +18,5 @@ $('#gallery').slick({
       autoplay: true,
       arrows: false
     });
-   var left = ($(window).width() - $("#gallery").outerWidth())/2;
-   var top = ($(window).height() - $("#gallery").outerHeight())/2;
-   if(left < 0){
-   	left = 0;
-   }
-   if(top < 0){
-   	top = 0;
-   }
-   $('#gallery').css('left',left);
-    $('#gallery').css('top',top);
 </script>
 
