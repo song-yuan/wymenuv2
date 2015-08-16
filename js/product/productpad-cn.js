@@ -483,7 +483,7 @@ $(document).ready(function(){
      	});
      });
      //点击全单选择
-     $('#forum_list').on(event_clicktouchstart,'.order-tastes .taste-select',function(){
+     $('body').on(event_clicktouchstart,'.order-tastes .taste-select',function(){
      	  var tasteList = $(this).parents('.taste-list');
      	  tasteList.find('.taste-item').show();
      });
@@ -536,7 +536,7 @@ $(document).ready(function(){
      	});
      });
      //点击全单 无
-     $('#forum_list').on(event_clicktouchstart,'.order-tastes .taste-none',function(){
+     $('body').on(event_clicktouchstart,'.order-tastes .taste-none',function(){
 
     	var tasteList = $(this).parents('.taste-list');
      	tasteList.find('.taste-item .item').removeClass('active');
@@ -570,7 +570,7 @@ $(document).ready(function(){
     	}
     });
     //选择全单口味
-    $('#forum_list').on(event_clicktouchstart,'.order-tastes .item',function(){
+    $('body').on(event_clicktouchstart,'.order-tastes .item',function(){
 
     	if(!$(this).hasClass('active')){
     		var tasteId = $(this).attr('taste-id');
