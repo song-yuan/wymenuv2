@@ -171,7 +171,7 @@
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
 			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','全单口味');?>">
 			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','挂单');?>">
-			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','下单&厨打');?>">
+			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="printerKitchen" value="<?php echo yii::t('app','下单&厨打');?>">
 			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','收银&结单');?>">
 			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','退款');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
@@ -256,7 +256,7 @@
                             </div> 
                             </div>
                 </div>	
-            <div id="accountbox">
+            <div id="accountbox" style="display:none;">
                 <div style="margin:20px;">
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                                         <h4 class="modal-title"><span style="color:red;"><?php echo yii::t('app','现金收款');?></span><br>
@@ -293,7 +293,7 @@
                                                             <li id="pay-btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>
                                                             <li id="account-btn" style="background-color: #0099FF"><?php echo yii::t('app','结单');?></li>
                                                             <li id="other-btn" style="background-color: #009f95"><?php echo yii::t('app','其他付款方式');?></li>
-                                                            <li data-dismiss="modal" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
+                                                            <li id="layer2_close" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
                                                         </ul>
                                                     </div>                                                            
                                                 </div>
@@ -301,19 +301,29 @@
                                     </div>
 	</div>
         <script type="text/javascript">
+            var layer_index1;
+            var layer_index2;
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');                
             });            
-            $('.selectProductInfo').on('click', function(){
+            $('.selectProductInfo').on(event_clicktouchstart, function(){
                
-//                    var id = "0000005525";//$(this).attr('lid');
-//                    var setid = "0000000000";//$(this).attr('setid');
-//                    var $modalconfig = $('#portlet-config');
-//                    $modalconfig.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/editProduct',array('companyId'=>"0000000011"));?>/id/'+id+'/setid/'+setid+'/orderId/'+"0000001999"+'/typeId/'+"tempsite"
-//                    ,'', function(){
-//                      $modalconfig.modal();
-//                    });
-                  var layer_index=layer.open({
+                 layer_index1=layer.open({
+                     type: 1,
+                     shade: false,
+                     title: false, //不显示标题
+                     //area: ['80%', '90%'],
+                     content: $('#productInfo'), //捕获的元素
+                     cancel: function(index){
+                         layer.close(index);
+        //                        this.content.show();
+        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                     }
+                 });                                          
+            });
+            $('#printerKitchen').on(event_clicktouchstart, function(){
+               
+                 layer_index2=layer.open({
                      type: 1,
                      shade: false,
                      title: false, //不显示标题
@@ -326,12 +336,17 @@
                      }
                  });                                          
             });
+            $('#layer2_close').on(event_clicktouchstart, function(){               
+                 layer.close(layer_index2);                    
+            });
+            
+            
             $('.selectProductDel').on('click', function(){
                 alert("selectProductDel");
                 return false;
             });
             $('.selectProductA').on('click', function(){
-                alert("selectProductA");
+                //alert("selectProductA");
             });
             
 	</script>
