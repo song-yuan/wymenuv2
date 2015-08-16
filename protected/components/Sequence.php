@@ -36,8 +36,8 @@ class Sequence {
      * 请注意这个方法只能查看，
      * 不能用该方法取得最大值后+1做为自己的新数据的lid，必须用nextval的
      * 返回值做为自己新插入数据的lid
-     * 云端的lid都是双数
-     * 本地的lid都是单数
+     * 云端的lid都是双数 0
+     * 本地的lid都是单数 1
      */
     public function currval()
     {
