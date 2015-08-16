@@ -587,7 +587,7 @@ $(document).ready(function(){
     	}
     });
 	  //点击  确定
-     $('#forum_list').on(event_clicktouchstart,'.taste-confirm',function(){
+     $('body').on(event_clicktouchstart,'.taste-confirm',function(){
     	$('.tastepad').hide();
     	$('.taste-layer').hide();
      });
