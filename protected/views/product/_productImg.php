@@ -18,14 +18,14 @@ $('#gallery').slick({
       autoplay: true,
       arrows: false
     });
-   var left = ($('.large-pic').width() - $("#gallery").outerWidth())/2;
-   var top = ($('.large-pic').height() - $("#gallery").outerHeight())/2;
+   var left = ($(window).width() - $("#gallery").outerWidth())/2;
+   var top = ($(window).height() - $("#gallery").outerHeight())/2;
    if(left < 0){
    	left = 0;
    }
    if(top < 0){
    	top = 0;
    }
-   $('#gallery').css({'left':left,'top':top});
+   $('#gallery').css({'top':top,'left':left});
 </script>
 
