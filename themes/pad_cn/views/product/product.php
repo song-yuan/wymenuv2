@@ -22,8 +22,6 @@
 	<?php $this->renderPartial('parentcategory',array('categoryId'=>$categoryId,'type'=>$type,'siteNoId'=>$siteNoId));?>
 	<link href='<?php echo $baseUrl.'/css/product/reset.css';?>' rel='stylesheet' type='text/css'>
 	<link href=<?php echo $baseUrl.'/css/product/slick.css';?> rel='stylesheet' type='text/css'>
-	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/slick.min.js';?>"></script>
-	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/classie.js';?>"></script>
 	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/jquery.form.js';?>"></script>
 	<script type="text/javascript" src="<?php echo $baseUrl.'/js/product/productpad-cn.js';?>"></script>
         <div id="page_0" class="up ub ub-ver" tabindex="0">
