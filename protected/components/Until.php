@@ -30,7 +30,8 @@ class Until {
          * 判断lid是否是双数，如果是则返回：“本地不能更新云端数据”，
          * 否则返回“1”
  	 */
- 	static public function isUpdateValid($lid,$dpid){
+ 	static public function isUpdateValid(array $lids,$dpid,$parent){
+            $db = Yii::app()->db;
             if(Yii::app()->params['cloud_local']=='c')//云端服务器
             {
                 $sql = "select is2_cloud from nb_company where dpid=".$dpid;
@@ -38,23 +39,36 @@ class Until {
                 $nowval= $command->queryScalar();
                 if($nowval=="1")
                 {
-                    if($lid%2==0)
+                   foreach ($lids as $lid)
                     {
-                        return "1";
-                    }else{
-                        return yii::t('app',"云端不能更新本地数据");
+                        if($lid%2==1)
+                        {
+                            // return yii::t('app',"云端不能更新本地数据");
+                             $title=yii::t('app',"云端不能更新本地数据");
+                             $parent->redirect(array('default/error2',
+                                     'companyId'=>$dpid,
+                                     'title' => $title                               
+                             ));
+                        }
                     }
                 }else{
                     return "1";
                 }                    
             }else{//本地服务器
-                if($lid%2==0)
+                foreach ($lids as $lid)
                 {
-                    return yii::t('app',"本地不能更新云端数据");
-                }else{
-                    return "1";
+                    if($lid%2==0)
+                    {
+                        //return yii::t('app',"本地不能更新云端数据");
+                        $title=yii::t('app',"本地不能更新云端数据");
+                            $parent->redirect(array('default/error2',
+                                    'companyId'=>$dpid,
+                                    'title' => $title                               
+                            ));
+                    }
                 }
-            } 				
+            } 
+            return "1";
  	}
         
         /*
@@ -70,26 +84,63 @@ class Until {
          * ？？后台收银部分呢？PAD和云端共存，所以要区分判断，isOperateValid 及 isUpdateValid
          * ？？后台其他部分也是只需要判断isUpdateValid
          */
-        static public function isOperateValid($controller,$action){
+        static public function isOperateValid($controller,$action,$dpid,$parent){
+            $db = Yii::app()->db;
             //非法的controller->action数组
             $validOperate=array(
                 //前台
                 "product->confirmPadOrder",
                 "product->opensite",
                 //后台
-                
+                //"company->index",
+                "default->readfeedback",
+                "",
             );
             if(Yii::app()->params['cloud_local']=='c')//云端服务器
             {
-                $sql = "select is2_cloud from nb_company where dpid=".$dpid;
+                $sql = "select is2_cloud from nb_company where delete_flag = 0 and dpid=".$dpid;
+                //var_dump($sql);
                 $command=$db->createCommand($sql);
                 $nowval= $command->queryScalar();
+                //var_dump($sql,$nowval,$controller."->".$action);
                 if($nowval=="1")
                 {
                     if(in_array($controller."->".$action,$validOperate))
                     {
+                        $title=yii::t('app',"云端不能进行此项操作");
+                        $parent->redirect(array('default/error2',
+                                'companyId'=>$dpid,
+				'title' => $title                               
+                        ));
                         return false;
                     }
+                }
+            }
+            return true;
+        }
+        
+        /*
+         * 方法内判断某个操作是否合法
+         */
+        static public function validOperate($dpid,$parent){
+            $db = Yii::app()->db;
+            //非法的controller->action数组
+            
+            if(Yii::app()->params['cloud_local']=='c')//云端服务器
+            {
+                $sql = "select is2_cloud from nb_company where delete_flag = 0 and dpid=".$dpid;
+                //var_dump($sql);
+                $command=$db->createCommand($sql);
+                $nowval= $command->queryScalar();
+                //var_dump($sql,$nowval,$controller."->".$action);
+                if($nowval=="1")
+                {
+                        $title=yii::t('app',"云端不能进行此项操作");
+                        $parent->redirect(array('default/error2',
+                                'companyId'=>$dpid,
+				'title' => $title                               
+                        ));
+                        return false;
                 }
             }
             return true;

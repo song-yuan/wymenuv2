@@ -7,6 +7,7 @@ class BackendController extends CController
 		parent::beforeAction($action);
 		$controllerId = Yii::app()->controller->getId();
 		$action = Yii::app()->controller->getAction()->getId();                
+                $companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
                 
 		if(Yii::app()->user->isGuest) {
 			if($controllerId != 'login' && $action != 'upload') {
@@ -17,6 +18,8 @@ class BackendController extends CController
 		}else {
 			$this->companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
 		}
+                Until::isOperateValid($controllerId, $action,$this->companyId,$this);
+                
 		return true ;
 	}
         

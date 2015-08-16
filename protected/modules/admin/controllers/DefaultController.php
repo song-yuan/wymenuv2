@@ -4,10 +4,13 @@ class DefaultController extends BackendController
 {
         public function beforeAction($action) {
 		parent::beforeAction($action);
+                $controllerId = Yii::app()->controller->getId();
+		$action = Yii::app()->controller->getAction()->getId();
 		if(!$this->companyId) {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
 			$this->redirect(array('company/index'));
 		}
+                
 		return true;
 	}
     
@@ -71,7 +74,7 @@ class DefaultController extends BackendController
         public function actionIndex()
 	{
 		$typeId = Yii::app()->request->getParam('typeId','0');
-                
+                //$this->redirect(array('default/error2'));
 		$this->render('indexall',array(
 				//'siteTypes' => $siteTypes,
 				//'models'=>$models,
@@ -82,6 +85,17 @@ class DefaultController extends BackendController
                                 //'sistemp' => $sistemp
 		));
 	}
+        
+        public function actionError2()
+	{
+            $title = Yii::app()->request->getParam('title');
+            //var_dump($title);exit;
+            $this->render('error2',array(
+				'title' => $title
+				//'typeId' => $typeId,                                
+		));
+            //exit;
+        }
         
         public function actionMsgnum()
 	{

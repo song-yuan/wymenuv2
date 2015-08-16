@@ -13,6 +13,7 @@ class CompanyController extends BackendController
 	}
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+                
 		$criteria = new CDbCriteria;
                 if(Yii::app()->user->role == User::POWER_ADMIN)
                 {
@@ -61,6 +62,7 @@ class CompanyController extends BackendController
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
 		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
 		if(Yii::app()->request->isPostRequest) {
+                    Until::isUpdateValid(array("0"),$dpid,$this);
 			$model->attributes = Yii::app()->request->getPost('Company');
 			//var_dump($model->attributes);exit;
 			if($model->save()){
@@ -79,7 +81,7 @@ class CompanyController extends BackendController
 	}
 	public function actionDelete(){
 		$ids = Yii::app()->request->getPost('companyIds');
-                
+                Until::isUpdateValid(array("0"),$dpid,$this);
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_company set delete_flag=1 where dpid in ('.implode(',' , $ids).')')
 			->execute();
