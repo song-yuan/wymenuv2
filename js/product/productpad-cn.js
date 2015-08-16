@@ -376,20 +376,7 @@ $(document).ready(function(){
  				if(msg!='nopic'){
                 //alert(msg);
                 $('.large-pic').css('display','block');
-                        $('.large-pic').html(msg);
-                                $('#gallery').slick({
-                                          dots: true,
-                                          infinite: true,
-                                          speed: 1000,
-                                          slidesToShow: 1,
-                                          slidesToScroll: 1,
-                                          autoplay: true,
-                                          arrows: false
-                                });
-                $("#gallery").css({
-                        position:'absolute',
-                                top: '15%'
-                        });
+                $('.large-pic').html(msg);
                 }else{
                         alert(language_no_bigpic);
                 }
