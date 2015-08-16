@@ -375,26 +375,22 @@ $(document).ready(function(){
  			success:function(msg){
  				if(msg!='nopic'){
                 //alert(msg);
-                $('.large-pic').css('display','block');
-                        $('.large-pic').html(msg);
-                                $('#gallery').slick({
-                                          dots: true,
-                                          infinite: true,
-                                          speed: 1000,
-                                          slidesToShow: 1,
-                                          slidesToScroll: 1,
-                                          autoplay: true,
-                                          arrows: false
-                                });
-                $("#gallery").css({
-                        position:'absolute',
-                                top: '15%'
-                        });
+	                $('.large-pic').css('display','block');
+	                $('.large-pic').html(msg);
                 }else{
                         alert(language_no_bigpic);
                 }
-                },
+            }
  		});
+    	 var left = ($(window).width() - $("#gallery").width())/2;
+         var top = ($(window).height() - $("#gallery").height())/2;
+         if(left < 0){
+         	left = 0;
+         }
+         if(top < 0){
+         	top = 0;
+         }
+         $('#gallery').css({'top':top,'left':left});
     });
     
     $('.large-pic').on("click",function(){
@@ -402,6 +398,17 @@ $(document).ready(function(){
     	$(this).css('display','none');
     });
     
+  //全单口味
+    $('#order-tastes-btn').on(event_clicktouchend,function(){
+    	var tasteItem = $('.order-tastes').find('.taste-item .item');
+    	if(!tasteItem.length > 0){
+    		layer.msg('没有订单口味!');
+    		return;
+    	}
+    	$('.taste-layer').show();
+    	$('.tastepad').hide();
+    	$('.order-tastes').show();
+    });
     
     //点产品口味  按照订单数量增加对应数量的口味
     $('#forum_list').on(event_clicktouchend,'.product-taste',function(){
@@ -449,7 +456,7 @@ $(document).ready(function(){
     	$(this).parents('.blockCategory').find('.tastepad').show();
     });
     //点击选择
-     $('#forum_list').on(event_clicktouchstart,'.taste-select',function(){
+     $('#forum_list').on(event_clicktouchstart,'.tastepad .taste-select',function(){
      	var blockCategory = $(this).parents('.blockCategory');
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
      	var tasteList = $(this).parents('.taste-list');
@@ -471,8 +478,13 @@ $(document).ready(function(){
      		}
      	});
      });
+     //点击全单选择
+     $('body').on(event_clicktouchstart,'.order-tastes .taste-select',function(){
+     	  var tasteList = $(this).parents('.taste-list');
+     	  tasteList.find('.taste-item').show();
+     });
      //点击同上
-     $('#forum_list').on(event_clicktouchstart,'.taste-same',function(){
+     $('#forum_list').on(event_clicktouchstart,'.tastepad .taste-same',function(){
     	var blockCategory = $(this).parents('.blockCategory');
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
      	var tasteList = $(this).parents('.taste-list');
@@ -504,7 +516,7 @@ $(document).ready(function(){
      	});
      });
       //点击 无
-     $('#forum_list').on(event_clicktouchstart,'.taste-none',function(){
+     $('#forum_list').on(event_clicktouchstart,'.tastepad .taste-none',function(){
     	var blockCategory = $(this).parents('.blockCategory');
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//产品 ID
      	var tasteList = $(this).parents('.taste-list');
@@ -517,6 +529,16 @@ $(document).ready(function(){
      		if(e>0){
      			$(this).remove();
      		}
+     	});
+     });
+     //点击全单 无
+     $('body').on(event_clicktouchstart,'.order-tastes .taste-none',function(){
+
+    	var tasteList = $(this).parents('.taste-list');
+     	tasteList.find('.taste-item .item').removeClass('active');
+     	//订单里删除
+     	$('input[name^="quandan"]').each(function(e){
+     		$(this).remove();
      	});
      });
     //选择产品口味
@@ -543,9 +565,27 @@ $(document).ready(function(){
     		});
     	}
     });
+    //选择全单口味
+    $('body').on(event_clicktouchstart,'.order-tastes .item',function(){
+
+    	if(!$(this).hasClass('active')){
+    		var tasteId = $(this).attr('taste-id');
+    		var str = '<input type="hidden" name="quandan['+tasteId+']'+'" value="1"/>';
+    		$('#padOrderForm').append(str);
+    		$(this).addClass('active');
+    		$(this).siblings().each(function(){
+    			if($(this).hasClass('active')){
+		    		var tasteId = $(this).attr('taste-id');
+		    		$('input[name="quandan['+tasteId+']'+'"]').remove();
+		    		$(this).removeClass('active');
+		    	}
+    		});
+    	}
+    });
 	  //点击  确定
-     $('#forum_list').on(event_clicktouchstart,'.taste-confirm',function(){
+     $('body').on(event_clicktouchstart,'.taste-confirm',function(){
     	$('.tastepad').hide();
+    	$('.order-tastes').hide();
     	$('.taste-layer').hide();
      });
   //  $('.taste-layer').on(event_clicktouchstart,function(){
@@ -655,6 +695,11 @@ $(document).ready(function(){
 	                     
 	                     //清空订单
 	                     $('#padOrderForm').find('.info').html('');
+	                    
+	                     //清空全单口味
+	                     $('input[name^="quandan"]').each(function(e){
+	                  		$(this).remove();
+	                  	 });
 	                      
 	                     $('.product-pad-mask').hide();
 	                     var total = 0;

@@ -331,23 +331,23 @@ class CreateOrder
 			//订单产品 $goodsIds = array('goods_id'=>goods_num,'set_id,1'=>set_num);
 			$orderPrice = 0;
 			
-			foreach($goodsIds as $key=>$num){
-				 $se=new Sequence("order_product");
-                                $orderProductId = $se->nextval();
-                                $goodsArr = explode(',', $key);
-                                if(count($goodsArr) > 1){
-                                   // 套餐
-                                   $sql = 'select * from nb_product_set where dpid='.$dpid.' and lid='.$goodsArr[0];
-                                   $result = $db->createCommand($sql)->queryRow();
-                                   if($result){
-                                           if($result['store_number'] > 0&&$result['store_number'] < $num){
-                                                   throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
-                                           }
-                                   }else{
-                                           throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
-                                   }
-                                   $productSets = self::getSetProductIds($dpid,$goodsArr[0]);
-                                   foreach($productSets as $productSet){
+				foreach($goodsIds as $key=>$num){
+				 	$se=new Sequence("order_product");
+                    $orderProductId = $se->nextval();
+                    $goodsArr = explode(',', $key);
+                    if(count($goodsArr) > 1){
+                       // 套餐
+                       $sql = 'select * from nb_product_set where dpid='.$dpid.' and lid='.$goodsArr[0];
+                       $result = $db->createCommand($sql)->queryRow();
+                       if($result){
+                               if($result['store_number'] > 0&&$result['store_number'] < $num){
+                                       throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+                               }
+                       }else{
+                               throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+                       }
+                       $productSets = self::getSetProductIds($dpid,$goodsArr[0]);
+                       foreach($productSets as $productSet){
 	             		$orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
@@ -372,12 +372,30 @@ class CreateOrder
 	             	}
  	             }else{
  	             	//单品 如果有口味  num-eq =>array('taste_id1','taste_id2') num 是数量 eq是序号 $goodsArr[0] 产品id
-	             	$sql = 'select * from nb_product where dpid='.$dpid.' and lid='.$goodsArr[0];
-	             	$result = $db->createCommand($sql)->queryRow();
-	             	
-	             	$productPrice = self::getProductPrice($dpid,$key,0);
-	             	
-	             	if(is_array($num)){
+ 	             	if($goodsArr[0]=='quandan'){
+ 	             		//全单口味
+ 	             		foreach($num as $tasteId=>$taste){
+ 	             			$se=new Sequence("order_taste");
+                    		$orderTasteId = $se->nextval();
+                    		$orderTasteData = array(
+										'lid'=>$orderProductId,
+										'dpid'=>$dpid,
+										'create_at'=>$time,
+										'order_id'=>$orderId,
+										'taste_id'=>$tasteId,
+										'is_order'=>1,
+										'update_at'=>$time,
+										);
+					  		 $db->createCommand()->insert('nb_order_taste',$orderTasteData);
+ 	             		}
+ 	             		
+ 	             	}else{
+		             	$sql = 'select * from nb_product where dpid='.$dpid.' and lid='.$goodsArr[0];
+		             	$result = $db->createCommand($sql)->queryRow();
+		             	
+		             	$productPrice = self::getProductPrice($dpid,$key,0);
+		             	
+		             	if(is_array($num)){
 	                	//有口味$num = num-eq 格式
 	                	foreach($num as $k=>$v){
 	                		$numEq = explode('-', $k);
@@ -465,6 +483,7 @@ class CreateOrder
 		             	 }
 	             	}
 	             }
+               }
 			}	
 			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
 			$db->createCommand($sql)->execute();

@@ -49,14 +49,14 @@ class ProductClass
 		}
 		if($product){
 			foreach($product as $k=>$v){
-				$sql = 'select t.taste_group_id,t1.name from nb_product_taste t,nb_taste_group t1 where t.taste_group_id=t1.lid and t.dpid=t1.dpid and t1.dpid=:dpid and t.product_id=:productId and t1.delete_flag=0';
+				$sql = 'select t.taste_group_id,t1.name from nb_product_taste t,nb_taste_group t1 where t.taste_group_id=t1.lid and t.dpid=t1.dpid and t1.dpid=:dpid and t.product_id=:productId and t1.delete_flag=0 and t1.allflae=0';
 				$connect = Yii::app()->db->createCommand($sql);
 				$connect->bindValue(':dpid',$dpid);
 				$connect->bindValue(':productId',$v['lid']);
 				$tasteGroup = $connect->queryAll();
 				if($tasteGroup){
 					foreach($tasteGroup as $key=>$group){
-						$sql = 'select lid,name from nb_taste where dpid=:dpid and taste_group_id=:tasteGroupId and delete_flag=0';
+						$sql = 'select lid,name from nb_taste where dpid=:dpid and taste_group_id=:tasteGroupId and delete_flag=0 and allflae=0';
 						$connect = Yii::app()->db->createCommand($sql);
 						$connect->bindValue(':dpid',$dpid);
 						$connect->bindValue(':tasteGroupId',$group['taste_group_id']);
@@ -101,6 +101,26 @@ class ProductClass
 		
 		$result = join(':',array($price,$nums));
 		return $result;
+	}
+	public static function getOrderTaste($dpid = 0){
+		$orderTastes = array();
+		$sql = 'select lid from nb_taste_group  where dpid=:dpid and delete_flag=0 and allflae=1';
+		$connect = Yii::app()->db->createCommand($sql);
+		$connect->bindValue(':dpid',$dpid);
+		$tasteGroup = $connect->queryAll();
+		if($tasteGroup){
+			foreach($tasteGroup as $group){
+				$sql = 'select lid,name from nb_taste where dpid=:dpid and taste_group_id=:tasteGroupId and delete_flag=0 and allflae=1';
+				$connect = Yii::app()->db->createCommand($sql);
+				$connect->bindValue(':dpid',$dpid);
+				$connect->bindValue(':tasteGroupId',$group['lid']);
+				$taste = $connect->queryAll();
+				$orderTastes[$group['lid']]['order_tastes'] = $taste;
+			}
+		}else{
+			 $orderTastes = array();
+		}
+		return $orderTastes;
 	}
 	public static function getCategoryName($categoryId = 0){
 		$command = Yii::app()->db;
