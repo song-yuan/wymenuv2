@@ -698,6 +698,11 @@ $(document).ready(function(){
 	                     
 	                     //清空订单
 	                     $('#padOrderForm').find('.info').html('');
+	                    
+	                     //清空全单口味
+	                     $('input[name^="quandan"]').each(function(e){
+	                  		$(this).remove();
+	                  	 });
 	                      
 	                     $('.product-pad-mask').hide();
 	                     var total = 0;
