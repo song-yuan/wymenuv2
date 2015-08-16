@@ -589,6 +589,7 @@ $(document).ready(function(){
 	  //点击  确定
      $('body').on(event_clicktouchstart,'.taste-confirm',function(){
     	$('.tastepad').hide();
+    	$('.order-tastes').hide();
     	$('.taste-layer').hide();
      });
   //  $('.taste-layer').on(event_clicktouchstart,function(){
