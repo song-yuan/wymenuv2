@@ -256,7 +256,7 @@
                             </div> 
                             </div>
                 </div>	
-            <div id="accountbox" class="col-md-8">
+            <div id="accountbox">
                 <div style="margin:20px;">
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                                                         <h4 class="modal-title"><span style="color:red;"><?php echo yii::t('app','现金收款');?></span><br>
@@ -317,7 +317,7 @@
                      type: 1,
                      shade: false,
                      title: false, //不显示标题
-                     area: ['680px', '90%'],
+                     area: ['80%', '90%'],
                      content: $('#accountbox'),//$('#productInfo'), //捕获的元素
                      cancel: function(index){
                          layer.close(index);
