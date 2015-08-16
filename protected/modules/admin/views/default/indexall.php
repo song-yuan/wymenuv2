@@ -335,7 +335,7 @@
         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                      }
                  });   
-                $('#portlet-config3').modal();
+                //$('#portlet-config3').modal();
                 //portlet-config3
             });
             $('#layer2_close').on('touchstart', function(){               
