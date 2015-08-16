@@ -52,6 +52,8 @@ class DefaultOrderController extends BackendController
                 //var_dump($order);exit;
                 if(empty($order))
                 {
+                    Until::validOperate($companyId,$this);
+                    
                     $order=new Order();
                     $se=new Sequence("order");
                     $order->lid = $se->nextval();
@@ -151,6 +153,7 @@ class DefaultOrderController extends BackendController
                 if(Yii::app()->request->isPostRequest){
                         //var_dump(Yii::app()->request->getPost('Order'));exit;
                         //$order->attributes = Yii::app()->request->getPost('Order');
+                        Until::validOperate($companyId,$this);
                         $orderpay->pay_amount = Yii::app()->request->getPost('OrderPay_pay_amount');
                         $orderpay->payment_method_id = Yii::app()->request->getPost('OrderPay_payment_method_id');
                         $orderpay->remark = Yii::app()->request->getPost('OrderPay_remark');
@@ -286,6 +289,7 @@ class DefaultOrderController extends BackendController
                 $paymentMethods = PaymentClass::getPaymentMethodList($companyId);
                 //var_dump($paymentMethods);exit;
                 if(Yii::app()->request->isPostRequest){
+                        Until::validOperate($companyId,$this);
                         //var_dump(Yii::app()->request->getPost('Order'));exit;
                         $order->attributes = Yii::app()->request->getPost('Order');
                         $order->pay_time = date('Y-m-d H:i:s',time());
@@ -358,6 +362,7 @@ class DefaultOrderController extends BackendController
                 $paymentMethods = PaymentClass::getPaymentMethodList($companyId);
                 //var_dump($paymentMethods);exit;
                 if(Yii::app()->request->isPostRequest){
+                        Until::validOperate($companyId,$this);
                         //var_dump(Yii::app()->request->getPost('Order'));exit;
                         $order->attributes = Yii::app()->request->getPost('Order');
                         $order->pay_time = date('Y-m-d H:i:s',time());
@@ -475,6 +480,7 @@ class DefaultOrderController extends BackendController
                 
                 
 		if(Yii::app()->request->isPostRequest){
+                        Until::validOperate($companyId,$this);
                         //$isset = Yii::app()->request->getPost('isset',0);
                         //$setid = Yii::app()->request->getParam('setid',0);
                         $selsetlist = Yii::app()->request->getPost('selsetlist',0);
@@ -586,6 +592,7 @@ class DefaultOrderController extends BackendController
                 //var_dump($productidnameArr);exit;
                         
 		if(Yii::app()->request->isPostRequest){
+                    Until::validOperate($companyId,$this);
                         //$isset = Yii::app()->request->getPost('isset',0);
                         //$setid = Yii::app()->request->getParam('setid',0);
                         $selectlist=Yii::app()->request->getPost('selectproductlist','0');
@@ -651,6 +658,7 @@ class DefaultOrderController extends BackendController
                 $products = ProductClass::getAdditionProducts($productId,$companyId);
                 
 		if(Yii::app()->request->isPostRequest){
+                    Until::validOperate($companyId,$this);
                         $additionnames = Yii::app()->request->getPost('additionnames','');
                         $db = Yii::app()->db;
                         $transaction = $db->beginTransaction();
@@ -735,6 +743,7 @@ class DefaultOrderController extends BackendController
                 $companyId = Yii::app()->request->getParam('companyId',0);
                 $orderId = Yii::app()->request->getParam('orderId',0);
                 $typeId = Yii::app()->request->getParam('typeId',0);
+                Until::isUpdateValid(array($lid), $companyId, $this);
                 $sql='update nb_order_product set is_waiting=2 where dpid='.$companyId.' and lid='.$lid;
                 //var_dump($sql);exit;
                 Yii::app()->db->createCommand($sql)->execute();
@@ -747,6 +756,8 @@ class DefaultOrderController extends BackendController
 		$orderId = Yii::app()->request->getParam('orderId');
 		$typeId = Yii::app()->request->getParam('typeId');
 		$companyId = Yii::app()->request->getParam('companyId');
+                //Until::isUpdateValid($lid, $companyId, $this);
+                Until::validOperate($companyId, $this);
                 if($setid=='0000000000')
                 {
                     $sql='update nb_order_product set delete_flag = 1 where lid='.$id.' and dpid='.$companyId;
@@ -780,6 +791,7 @@ class DefaultOrderController extends BackendController
                                        
                 }
                 if(Yii::app()->request->isPostRequest) {
+                        Until::validOperate($companyId, $this);
                         $taste_memo = Yii::app()->request->getPost('taste_memo');
                         $selectTasteList = Yii::app()->request->getPost('selectTasteList');
                         $selectTastes=explode(',',$selectTasteList);
@@ -803,6 +815,7 @@ class DefaultOrderController extends BackendController
 		$typeId = Yii::app()->request->getParam('typeId');
 		$companyId = Yii::app()->request->getParam('companyId');
                 if(Yii::app()->request->isPostRequest) {
+                    Until::validOperate($companyId, $this);
                     $orderProduct = OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$id));
                     $orderProduct->is_retreat ='1';
                     if($orderProduct->save()){                                
@@ -827,7 +840,8 @@ class DefaultOrderController extends BackendController
                 $retreats = Retreat::model()->findAll(' dpid=:dpid and delete_flag = 0',array(':dpid'=>$companyId));                
                 $retreatslist=CHtml::listData($retreats, 'lid', 'name');                
                 
-		if(Yii::app()->request->isPostRequest){                        
+		if(Yii::app()->request->isPostRequest){
+                    Until::validOperate($companyId, $this);
                     $orderRetreat->attributes = Yii::app()->request->getPost('OrderRetreat');
                     $orderRetreat->create_at = date('Y-m-d H:i:s',time());
                     $se=new Sequence("order_retreat");
@@ -850,7 +864,8 @@ class DefaultOrderController extends BackendController
                 $orderRetreatId=Yii::app()->request->getParam('orderRetreatId','0');
                 $orderRetreat = OrderRetreat::model()->with('retreat')->find(' t.dpid=:dpid and t.lid=:lid and t.delete_flag=0',  array(':dpid'=>$companyId,':lid'=>$orderRetreatId));
                 
-		if(Yii::app()->request->isPostRequest){                        
+		if(Yii::app()->request->isPostRequest){
+                    Until::validOperate($companyId, $this);
                     $orderRetreat->attributes = Yii::app()->request->getPost('OrderRetreat');
                     
                     if($orderRetreat->save()){                                
@@ -873,6 +888,7 @@ class DefaultOrderController extends BackendController
                 $orderProduct = OrderProduct::model()->with(array('product'))->find('t.lid=:id and t.dpid=:dpid',array(':id'=>$id,':dpid'=>$companyId));
                 //}
                 if(Yii::app()->request->isPostRequest) {
+                        Until::validOperate($companyId, $this);
                         $orderProduct->attributes = Yii::app()->request->getPost('OrderProduct');
                         if($orderProduct->save())
                         {
@@ -908,6 +924,7 @@ class DefaultOrderController extends BackendController
                 $orderProduct = OrderProduct::model()->with(array('product','productSet'))->find('t.lid=:id and t.dpid=:dpid',array(':id'=>$id,':dpid'=>$companyId));
                 //}
                 if(Yii::app()->request->isPostRequest) {
+                    Until::validOperate($companyId, $this);
                         $isset = Yii::app()->request->getPost('isset',0);
                         //$setid = Yii::app()->request->getParam('setid',0);
                         $selsetlist = Yii::app()->request->getPost('selsetlist',0);
@@ -993,6 +1010,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId');
                 $callId =  Yii::app()->request->getParam('callId');
+                Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;              
                 $ret=array();
                 //var_dump(Yii::app()->params->has_cache);exit;
@@ -1104,6 +1122,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId');
                 $callId =  Yii::app()->request->getParam('callId');
+                Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;              
                 $ret=array();
                 //var_dump(Yii::app()->params->has_cache);exit;
@@ -1207,6 +1226,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId');
                 $callId =  Yii::app()->request->getParam('callId');
+                Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;              
                 $ret=array();
                 //var_dump(Yii::app()->params->has_cache);exit;
@@ -1258,6 +1278,7 @@ class DefaultOrderController extends BackendController
                 $orderProductId = Yii::app()->request->getParam('orderProductId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId');
+                Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;              
                 
                 //var_dump(Yii::app()->params->has_cache);exit;
@@ -1311,6 +1332,7 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
                 $timenum =  Yii::app()->request->getParam('timenum');
+                Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;
                 $finished=false;
                 $successnum=0;
@@ -1369,6 +1391,7 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
                 $timenum =  Yii::app()->request->getParam('timenum');
+                Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;
                 $finished=false;
                 $successnum=0;
@@ -1429,6 +1452,7 @@ class DefaultOrderController extends BackendController
                 $companyId = Yii::app()->request->getParam('companyId');
                 $jobid =  Yii::app()->request->getParam('jobid');
                 $orderProductId =  Yii::app()->request->getParam('orderProductId');
+                Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;
                 
                 //$jobstatus=false;
@@ -1471,6 +1495,7 @@ class DefaultOrderController extends BackendController
                 $id = Yii::app()->request->getParam('id',0);
 		$companyId = Yii::app()->request->getParam('companyId');
                 $padId = Yii::app()->request->getParam('padId');
+                Until::validOperate($companyId, $this);
                 $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$id,':dpid'=>$companyId));
                 $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
                 //要判断打印机类型错误，必须是local。
@@ -1521,7 +1546,8 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',0);
 		//$companyId = Yii::app()->request->getParam('companyId');
                 $padId = Yii::app()->request->getParam('padId');
-                $typeId = Yii::app()->request->getParam('typeId');             
+                $typeId = Yii::app()->request->getParam('typeId');
+                Until::validOperate($companyId, $this);
                 $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$this->companyId));
                 $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
                 //前面加 barcode

@@ -88,9 +88,11 @@ class DefaultSiteController extends BackendController
         
         public function actionOpensite() {
 		if(Yii::app()->request->isPostRequest) {
+                    
 			$sid = Yii::app()->request->getPost('sid');
                         $siteNumber = Yii::app()->request->getPost('siteNumber');
                         $companyId = Yii::app()->request->getPost('companyId');
+                        Until::validOperate($companyId, $this);
                         //$sid = Yii::app()->request->getPost('sid');
                         $istemp = Yii::app()->request->getPost('istemp','0');                        
                         echo json_encode(SiteClass::openSite($companyId,$siteNumber,$istemp,$sid));
@@ -103,7 +105,7 @@ class DefaultSiteController extends BackendController
 			$sid = Yii::app()->request->getPost('sid');
                         $companyId = Yii::app()->request->getPost('companyId');
                         $istemp = Yii::app()->request->getPost('istemp','0');
-                        
+                        Until::validOperate($companyId, $this);
                         $db = Yii::app()->db;
                         $transaction = $db->beginTransaction();
                         try {  
@@ -167,6 +169,7 @@ class DefaultSiteController extends BackendController
                         $istemp = Yii::app()->request->getPost('istemp','0');
                         $ssid = Yii::app()->request->getPost('ssid',0);
                         $sistemp = Yii::app()->request->getPost('sistemp','0');
+                        Until::validOperate($companyId, $this);
                         //echo json_encode(array('status'=>0,'message'=>$sid.'dd'.$companyId.'dd'.$istemp.'dd'.$ssid.'dd'.$sistemp));exit;
                         $db = Yii::app()->db;
                         $transaction = $db->beginTransaction();
@@ -250,6 +253,7 @@ class DefaultSiteController extends BackendController
                         $istemp = Yii::app()->request->getPost('istemp','0');
                         $ssid = Yii::app()->request->getPost('ssid',0);
                         $sistemp = Yii::app()->request->getPost('sistemp','0');
+                        Until::validOperate($companyId, $this);
                         //echo json_encode(array('status'=>0,'message'=>$sid.'dd'.$companyId.'dd'.$istemp.'dd'.$ssid.'dd'.$sistemp));exit;
                         $db = Yii::app()->db;
                         $transaction = $db->beginTransaction();
