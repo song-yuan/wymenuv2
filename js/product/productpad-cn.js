@@ -377,8 +377,8 @@ $(document).ready(function(){
                 //alert(msg);
 	                $('.large-pic').css('display','block');
 	                $('.large-pic').html(msg);
-	                var left = ($(window).width() - $("#gallery").outerWidth())/2;
-	                var top = ($(window).height() - $("#gallery").outerHeight())/2;
+	                var left = ($(window).width() - $("#gallery").width())/2;
+	                var top = ($(window).height() - $("#gallery").height())/2;
 	                if(left < 0){
 	                	left = 0;
 	                }
