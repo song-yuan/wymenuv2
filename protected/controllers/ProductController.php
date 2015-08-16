@@ -215,6 +215,7 @@ class ProductController extends Controller
 	//确认订单
 	public function actionConfirmPadOrder(){
 		$goodsIds = isset($_POST) ?$_POST :array();
+		vare_dump($goodsIds);exit;
 		$padOrder = json_encode(array('status'=>false,'msg'=>yii::t('app','订单为空')),JSON_UNESCAPED_UNICODE);
 	 	if(!empty($goodsIds)){
 	 		try{
