@@ -5,6 +5,7 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
+$params=require(dirname(__FILE__).'/params.php');
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'My Web Application',
@@ -93,7 +94,10 @@ return array(
                 ), 
                 */
 		// database settings are configured in database.php
-		'db'=>require(dirname(__FILE__).'/database.php'),               
+		'db'=>require(dirname(__FILE__).'/database.php'),
+            
+                'dbcloud'=>$params['dbcloud'],
+                'dblocal'=>$params['dblocal'],
                     
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
