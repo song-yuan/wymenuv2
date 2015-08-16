@@ -377,20 +377,20 @@ $(document).ready(function(){
                 //alert(msg);
 	                $('.large-pic').css('display','block');
 	                $('.large-pic').html(msg);
-	                var left = ($(window).width() - $("#gallery").width())/2;
-	                var top = ($(window).height() - $("#gallery").height())/2;
-	                if(left < 0){
-	                	left = 0;
-	                }
-	                if(top < 0){
-	                	top = 0;
-	                }
-	                $('#gallery').css({'top':0,'left':left});
                 }else{
                         alert(language_no_bigpic);
                 }
-                },
+            }
  		});
+    	 var left = ($(window).width() - $("#gallery").width())/2;
+         var top = ($(window).height() - $("#gallery").height())/2;
+         if(left < 0){
+         	left = 0;
+         }
+         if(top < 0){
+         	top = 0;
+         }
+         $('#gallery').css({'top':top,'left':left});
     });
     
     $('.large-pic').on("click",function(){

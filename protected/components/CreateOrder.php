@@ -374,7 +374,7 @@ class CreateOrder
  	             	//单品 如果有口味  num-eq =>array('taste_id1','taste_id2') num 是数量 eq是序号 $goodsArr[0] 产品id
  	             	if($goodsArr[0]=='quandan'){
  	             		//全单口味
- 	             		foreach($num as $taste){
+ 	             		foreach($num as $tasteId=>$taste){
  	             			$se=new Sequence("order_taste");
                     		$orderTasteId = $se->nextval();
                     		$orderTasteData = array(
@@ -382,7 +382,7 @@ class CreateOrder
 										'dpid'=>$dpid,
 										'create_at'=>$time,
 										'order_id'=>$orderId,
-										'taste_id'=>$taste,
+										'taste_id'=>$tasteId,
 										'is_order'=>1,
 										'update_at'=>$time,
 										);
