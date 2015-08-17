@@ -20,7 +20,29 @@
         text-align:center;
         vertical-align:middle;
 }
-    
+
+.firstCategory {
+        padding-right:10px;
+}
+.firstCategory {
+        display:inline-block;
+}
+.firstCategory ul {
+        padding-left:5px;
+        padding-left:0px;
+}
+.firstCategory ul li {
+        float:left;
+        background-color: #DDDDDD;
+        min-width: 5.0em;
+        height:2.8em;			
+        border: 1px solid #add;
+        margin:5px;
+        list-style:none;
+        text-align:center;
+        vertical-align:middle;
+}
+
 .navigation {
     width:100%;
     font-family:Arial;
@@ -57,7 +79,7 @@
     clear: both;
 }
 .slectliclass{
-    background-color:#90111A;
+    background-color:#0099FF !important;
 }
 
 .firstcategory{
@@ -187,20 +209,23 @@
 		
                 <div class="col-md-3">
                         <div class="navigation" style="">
-                            <ul>
-                                <li lid="1" href="#" class="selectProductA">
-                                        <span dd="dd" class="badge">7</span>
+                            <ul class="selectProduct">
+                                <li lid="0000000000" class="selectProductA">                                    
+                                        <span class="selectProductInfo">已选菜品</span>
+                                </li>
+                                <li lid="1" class="selectProductA">
+                                    <span style="font-size:20px !important;height:auto;" class="badge">7</span>
                                         <span class="selectProductPrice" style="color:#976125">11.21</span>
                                         <span class="selectProductInfo">三文鱼</span>
-                                        <img class="selectProductDel" style="float:right; width: 30px;height: 20px;margin:5px 10px 5px 10px;" 
+                                        <img class="selectProductDel" style="float:right; width: 60px;height: 40px;padding:5px 15px 5px 15px;" 
                                              src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">
                                     
                                 </li>
-                                <li lid="2" href="#" class="selectProductA">
-                                        <span class="selectProductNum badge">7</span>
+                                <li lid="2"  class="selectProductA">
+                                        <span  style="font-size:20px !important;height:auto;" class="badge">7</span>
                                         <span class="selectProductPrice" style="color:#976125">11.21</span>
                                         <span class="selectProductInfo">三文鱼</span>
-                                        <img class="selectProductDel" style="float:right; width: 30px;height: 20px;margin:5px 10px 5px 10px;" 
+                                        <img class="selectProductDel" style="float:right; width: 60px;height: 40px;padding:5px 15px 5px 15px;" 
                                              src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">
                                     
                                 </li>
@@ -245,23 +270,25 @@
             
             <div class="col-md-9">			
                         <div class="tabbable tabbable-custom">
-                                <ul class="nav nav-tabs">
+                            <div class="firstCategory">
+                                <ul class="">
                                         <?php 
                                         foreach ($categories as $categorie): 
                                             if($categorie->pid=="0000000000"):?>
-                                            <li lid="<?php echo $categorie->lid; ?>" class="tabtitle"><a href="#tab_1_tempsite" data-toggle="tab"><?php echo $categorie->category_name; ?></a></li>
+                                            <li lid="<?php echo $categorie->lid; ?>" class="tabtitle"><?php echo $categorie->category_name; ?></li>
                                         <?php 
                                             endif;
                                         endforeach; ?>                                        
                                         <!--<li typeId="reserve" class="tabtitle"><a href="#tab_1_reserve" data-toggle="tab">套餐</a></li>-->
                                 </ul>
+                            </div>
                                 <?php 
                                 foreach ($categories as $categorie): 
                                     if($categorie->pid=="0000000000"):?>
                             <div class="tab-content" style="display:none;" lid="<?php echo $categorie->lid; ?>">                                        
                                         <div style="width:100%;height:100%;">
                                             <div class="product_list">
-                                                <ul class="firstcategory">
+                                                <ul class="">
                                                     <?php 
                                                         foreach ($categories as $categorie2): 
                                                             if($categorie2->pid==$categorie->lid):?>
@@ -344,15 +371,16 @@
             //alert(event_clicktouchstart);
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
-                //$('.nav-tabs').find('li[lid='+first_tab+']').addClass("active");
-                $('.tabtitle[lid='+first_tab+']').addClass("active");
+                //$('.nav-tabs').find('li[lid='+first_tab+']').addClass("slectliclass");
+                $('.firstCategory').find('li[lid='+first_tab+']').addClass("slectliclass");
                 $('.tab-content[lid='+first_tab+']').show();
                 //tab-content
             });
             
             $('.tabtitle').on(event_clicktouchstart, function(){
+                $('.tabtitle').removeClass('slectliclass');
+                $(this).addClass('slectliclass');
                 var lid=$(this).attr('lid');
-                //alert(lid);
                 $('.tab-content').hide();
                 $('.tab-content[lid='+lid+']').show();
             });
@@ -365,18 +393,7 @@
             
             $('.selectProductInfo').on(event_clicktouchstart, function(){
                
-                 layer_index1=layer.open({
-                     type: 1,
-                     shade: false,
-                     title: false, //不显示标题
-                     //area: ['80%', '90%'],
-                     content: $('#productInfo'), //捕获的元素
-                     cancel: function(index){
-                         layer.close(index);
-        //                        this.content.show();
-        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
-                     }
-                 });                                          
+                                                         
             });
             $('#printerKitchen').on(event_clicktouchstart, function(){
                
@@ -400,12 +417,30 @@
             });
             
             
-            $('.selectProductDel').on('click', function(){
-                alert("selectProductDel");
+            $('.selectProductDel').on(event_clicktouchstart, function(){
+                var obj=$(this).parent().find('span[class="badge"]');
+                var curnum=parseFloat(obj.text());
+                if(curnum==1)
+                {
+                    $(this).parent().remove();
+                }else{
+                    obj.text(curnum-1);
+                }
                 return false;
             });
-            $('.selectProductA').on('click', function(){
-                //alert("selectProductA");
+            $('.selectProductA').on(event_clicktouchstart, function(){
+                layer_index1=layer.open({
+                     type: 1,
+                     shade: false,
+                     title: false, //不显示标题
+                     //area: ['80%', '90%'],
+                     content: $('#productInfo'), //捕获的元素
+                     cancel: function(index){
+                         layer.close(index);
+        //                        this.content.show();
+        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                     }
+                 });  
             });
             
             var now_should_pay=100;
