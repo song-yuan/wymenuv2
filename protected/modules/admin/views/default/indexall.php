@@ -12,8 +12,8 @@
 }
 .product_list ul li {
         float:left;
-        width:80px;
-        height:60px;			
+        width:5.0em;
+        height:4.2em;			
         border: 1px solid #add;
         margin:5px;
         list-style:none;
@@ -45,14 +45,14 @@
     border-left:12px solid #711515;        /* 左边的粗红边 */
     border-right:1px solid #711515;        /* 右侧阴影 */
 }
-.navigation li a:link, .navigation li a:visited{
+/*.navigation li a:link, .navigation li a:visited{
     //background-color:#c11136;
     color:#000;
 }
-.navigation li a:hover{                    /* 鼠标经过时 */
-    background-color:#90111A;            /* 改变背景色 */
-    color:#000;                        /* 改变文字颜色 */
-}
+.navigation li a:hover{                     鼠标经过时 
+    background-color:#90111A;             改变背景色 
+    color:#000;                         改变文字颜色 
+}*/
 .clear{
     clear: both;
 }
@@ -73,7 +73,7 @@
 }
 
 .selectedproduct{
-    background-color:#0088cc;
+    background-color:#add;
 }
 .calc_num {
         width: 56%;
@@ -161,19 +161,18 @@
 	<div class="row">
                 <div class="col-md-6">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','当前台：卡座->B02');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','转台');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','并台');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','撤台');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green" id="create_btn" value="<?php echo yii::t('app','当前台：卡座->B02');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="create_btn" value="<?php echo yii::t('app','转台>>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="create_btn" value="<?php echo yii::t('app','并台>>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="create_btn" value="<?php echo yii::t('app','撤台>>');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
-            <div class="col-md-6" style="">
+                <div class="col-md-6" style="">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
-			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','全单口味');?>">
-			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','挂单');?>">
-			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="printerKitchen" value="<?php echo yii::t('app','下单&厨打');?>">
-			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','收银&结单');?>">
-			<input style="margin:-10px 0 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','退款');?>">
+			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','退款<<');?>">
+			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','挂单--');?>">
+			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="create_btn" value="<?php echo yii::t('app','全单口味');?>">
+			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printerKitchen" value="<?php echo yii::t('app','下单&厨打&收银&结单');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
 	</div>
@@ -181,31 +180,13 @@
 	<!-- BEGIN PAGE CONTENT-->
 	
 	<div class="row">
-		<div class="col-md-9">			
-                        <div class="tabbable tabbable-custom">
-                                <ul class="nav nav-tabs">
-                                        <li typeId="tempsite" class="tabtitle active"><a href="#tab_1_tempsite" data-toggle="tab">海鲜</a></li>
-                                        <li typeId="reserve" class="tabtitle"><a href="#tab_1_reserve" data-toggle="tab">套餐</a></li>
-                                </ul>
-                                <div class="tab-content" id="tabsiteindex">
-                                                <div style="width:100%;height:100%;">                                                                        
-                                                        <div class="product_list">
-                                                            <ul class="firstcategory">
-                                                                <li><a lid="all" href="#">三文鱼</a></li>
-                                                                <li><a lid="special" href="#">八爪鱼</a></li>
-
-                                                            </ul>
-                                                        </div>
-                                        <!-- END EXAMPLE TABLE PORTLET-->												
-                                        </div>
-                                </div>		
-                        </div>
-                </div>
+		
                 <div class="col-md-3">
                         <div class="navigation" style="">
                             <ul class="selectedproduct">
                                 <li><a lid="all" href="#" class="selectProductA">
                                         <span class="badge selectProductNum">7</span>
+                                        <span class="selectProductPrice" style="color:#976125">11.21</span>
                                         <span class="selectProductInfo">三文鱼</span>
                                         <img class="selectProductDel" style="float:right; width: 30px;height: 20px;margin:5px 10px 5px 10px;" 
                                              src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">
@@ -213,6 +194,7 @@
                                 </li>
                                 <li><a lid="all" href="#" class="selectProductA">
                                         <span class="badge selectProductNum">7</span>
+                                        <span class="selectProductPrice" style="color:#976125">11.21</span>
                                         <span class="selectProductInfo">三文鱼</span>
                                         <img class="selectProductDel" style="float:right; width: 30px;height: 20px;margin:5px 10px 5px 10px;" 
                                              src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">
@@ -256,6 +238,50 @@
                             </div> 
                             </div>
                 </div>	
+            
+            <div class="col-md-9">			
+                        <div class="tabbable tabbable-custom">
+                                <ul class="nav nav-tabs">
+                                        <?php 
+                                        foreach ($categories as $categorie): 
+                                            if($categorie->pid=="0000000000"):?>
+                                            <li lid="<?php echo $categorie->lid; ?>" class="tabtitle"><a href="#tab_1_tempsite" data-toggle="tab"><?php echo $categorie->category_name; ?></a></li>
+                                        <?php 
+                                            endif;
+                                        endforeach; ?>                                        
+                                        <!--<li typeId="reserve" class="tabtitle"><a href="#tab_1_reserve" data-toggle="tab">套餐</a></li>-->
+                                </ul>
+                                <?php 
+                                foreach ($categories as $categorie): 
+                                    if($categorie->pid=="0000000000"):?>
+                            <div class="tab-content" style="display:none;" lid="<?php echo $categorie->lid; ?>">                                        
+                                        <div style="width:100%;height:100%;">
+                                            <div class="product_list">
+                                                <ul class="firstcategory">
+                                                    <?php 
+                                                        foreach ($categories as $categorie2): 
+                                                            if($categorie2->pid==$categorie->lid):?>
+                                                        <li style="width:2.2em;background-color: #add"><a lid="<?php echo $categorie2->lid; ?>" href="#"><?php echo $categorie2->category_name; ?></a></li>
+                                                            <?php 
+                                                                foreach ($products as $product): 
+                                                                    if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
+                                                                    <li><a lid="<?php echo $product->lid; ?>" href="#"><?php echo $product->product_name; ?></a></li>                                                                    
+                                                            <?php  endif;                                                         
+                                                            endforeach; ?>
+                                                    <?php 
+                                                        endif;
+                                                    endforeach; ?>
+                                                </ul>
+                                            </div>                                        												
+                                        </div>
+                                    </div>
+                                <?php 
+                                    endif;
+                                endforeach; ?> 
+                                
+                        </div>
+                </div>
+            
                                     <div id="accountbox" style="display:none;">
                 
                                         <div style="margin:20px;">
@@ -303,9 +329,23 @@
         <script type="text/javascript">
             var layer_index1;
             var layer_index2;
+            var first_tab="<?php echo $categories[0]['lid']; ?>";
+            //alert(first_tab);
             $(document).ready(function() {
-                $('body').addClass('page-sidebar-closed');                
-            });            
+                $('body').addClass('page-sidebar-closed');
+                //$('.nav-tabs').find('li[lid='+first_tab+']').addClass("active");
+                $('.tabtitle[lid='+first_tab+']').addClass("active");
+                $('.tab-content[lid='+first_tab+']').show();
+                //tab-content
+            });
+            
+            $('.tabtitle').on(event_clicktouchstart, function(){
+                var lid=$(this).attr('lid');
+                //alert(lid);
+                $('.tab-content').hide();
+                $('.tab-content[lid='+lid+']').show();
+            });
+            
             $('.selectProductInfo').on(event_clicktouchstart, function(){
                
                  layer_index1=layer.open({
@@ -352,23 +392,23 @@
             });
             
             var now_should_pay=100;
-                            $('.calc_num').on('touchstart','li',function(){
-                                var inval=$("#cash_in").html();
-                                //alert(inval);
-                                if(inval=="0" || inval=="00")
-                                {
-                                    if($(this).html()!=".")
-                                    {
-                                        $("#cash_in").html($(this).html());
-                                    }
-                                }else{
-                                    if(inval.indexOf(".")>0 && $(this).html()==".")
-                                    {
-                                        
-                                    }else{
-                                        $("#cash_in").html(inval+$(this).html());
-                                    }
-                                }
+            $('.calc_num').on('touchstart','li',function(){
+                var inval=$("#cash_in").html();
+                //alert(inval);
+                if(inval=="0" || inval=="00")
+                {
+                    if($(this).html()!=".")
+                    {
+                        $("#cash_in").html($(this).html());
+                    }
+                }else{
+                    if(inval.indexOf(".")>0 && $(this).html()==".")
+                    {
+
+                    }else{
+                        $("#cash_in").html(inval+$(this).html());
+                    }
+                }
 //                                var inval=$(this).html();
 //                                var cashin="0";
 //                                var cashint=0;
@@ -401,33 +441,33 @@
 //                                    $("#cash_in").attr("pointat","1");
 //                                    $("#cash_in").html($("#cash_in").html()+".00");
 //                                }
-                                var cashinf=parseFloat($("#cash_in").html());
-                                //alert($("#cash_in").html());alert(parseFloat($("#cash_in").html()));
-                                //alert(now_should_pay);
-                                if(cashinf-now_should_pay>0)
-                                {
-                                    $("#cash_out").html(Math.round((cashinf-now_should_pay)*100)/100);//little than 0 not show
-                                }else{
-                                    $("#cash_out").html("0");
-                                }
-                            });
-                            
-                            $('#clearall').on(event_clicktouchstart,function(){
-                                $("#cash_in").html("0");
-                                //$("#cash_in").attr("pointat","0");
-                                //cash_out
-                                $("#cash_out").html("0");
-                            });
-                            
-                            $('#clearone').on(event_clicktouchstart,function(){
-                                var cashin=$("#cash_in").html();
-                                if(cashin.length>1)
-                                {
-                                    $("#cash_in").html(cashin.substr(0,cashin.length-1));
-                                }else{
-                                    $("#cash_in").html("0");
-                                }
-                                //var pointat=$("#cash_in").attr("pointat");
+                var cashinf=parseFloat($("#cash_in").html());
+                //alert($("#cash_in").html());alert(parseFloat($("#cash_in").html()));
+                //alert(now_should_pay);
+                if(cashinf-now_should_pay>0)
+                {
+                    $("#cash_out").html(Math.round((cashinf-now_should_pay)*100)/100);//little than 0 not show
+                }else{
+                    $("#cash_out").html("0");
+                }
+            });
+
+            $('#clearall').on(event_clicktouchstart,function(){
+                $("#cash_in").html("0");
+                //$("#cash_in").attr("pointat","0");
+                //cash_out
+                $("#cash_out").html("0");
+            });
+
+            $('#clearone').on(event_clicktouchstart,function(){
+                var cashin=$("#cash_in").html();
+                if(cashin.length>1)
+                {
+                    $("#cash_in").html(cashin.substr(0,cashin.length-1));
+                }else{
+                    $("#cash_in").html("0");
+                }
+                //var pointat=$("#cash_in").attr("pointat");
 //                                var cashin=$("#cash_in").html();
 //                                
 //                                if(pointat=="100")
@@ -452,21 +492,21 @@
 //                                    }
 //                                    //xx
 //                                }
-                                var cashinf=parseFloat($("#cash_in").html());
-                                if(cashinf-now_should_pay>0)
-                                {
-                                    $("#cash_out").html(cashinf-now_should_pay);//little than 0 not show
-                                }else{
-                                    $("#cash_out").html("0");
-                                }
-                            });
-                            $('#other-btn').on(event_clicktouchstart,function(){
-                                 bootbox.confirm("<?php echo yii::t('app','你确定切换到其他支付方式吗？');?>", function(result) {
-                                        if(result){
-                                                openaccount('0');
-                                        }
-                                 });
-                            });
+                var cashinf=parseFloat($("#cash_in").html());
+                if(cashinf-now_should_pay>0)
+                {
+                    $("#cash_out").html(cashinf-now_should_pay);//little than 0 not show
+                }else{
+                    $("#cash_out").html("0");
+                }
+            });
+            $('#other-btn').on(event_clicktouchstart,function(){
+                 bootbox.confirm("<?php echo yii::t('app','你确定切换到其他支付方式吗？');?>", function(result) {
+                        if(result){
+                                openaccount('0');
+                        }
+                 });
+            });
                             
 	</script>
 
