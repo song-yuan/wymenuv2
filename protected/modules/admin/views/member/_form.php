@@ -43,15 +43,29 @@
 			</div>
 			<div class="form-group">
 				<?php echo $form->label($model, 'sex',array('class' => 'col-md-3 control-label'));?>
-				<div class="col-md-4">
-					<?php echo $form->textField($model, 'sex',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sex')));?>
+				<div class="col-md-2">
+					<select name="MemberCard[sex]">
+						<opation value="m" <?php if($model->sex=='m') echo 'selected';?>>男</opation>
+						<opation value="f" <?php if($model->sex=='f') echo 'selected';?>>女</opation>
+					</select>
 					<?php echo $form->error($model, 'sex' )?>
 				</div>
 			</div>
 			<div class="form-group">
 				<?php echo $form->label($model, 'ages',array('class' => 'col-md-3 control-label'));?>
-				<div class="col-md-4">
-					<?php echo $form->textField($model, 'ages',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('ages')));?>
+				<div class="col-md-2">
+					<select name="MemberCard[ages]">
+						<opation value="<18" <?php if($model->sex=='<18') echo 'selected';?>> <18 </opation>
+						<opation value="18-25" <?php if($model->sex=='18-25') echo 'selected';?>>18-25</opation>
+						<opation value="25-30" <?php if($model->sex=='25-30') echo 'selected';?>>25-30</opation>
+						<opation value="30-35" <?php if($model->sex=='30-35') echo 'selected';?>>30-35</opation>
+						<opation value="35-40" <?php if($model->sex=='35-40') echo 'selected';?>>35-40</opation>
+						<opation value="40-45" <?php if($model->sex=='40-45') echo 'selected';?>>40-45</opation>
+						<opation value="45-50" <?php if($model->sex=='45-50') echo 'selected';?>>45-50</opation>
+						<opation value="50-55" <?php if($model->sex=='50-55') echo 'selected';?>>50-55</opation>
+						<opation value="55-60" <?php if($model->sex=='55-60') echo 'selected';?>>55-60</opation>
+						<opation value=">60" <?php if($model->sex=='>60') echo 'selected';?>> >60 </opation>
+					</select>
 					<?php echo $form->error($model, 'ages' )?>
 				</div>
 			</div>
