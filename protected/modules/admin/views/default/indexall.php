@@ -330,8 +330,14 @@
             var layer_index1;
             var layer_index2;
             var first_tab="<?php echo $categories[0]['lid']; ?>";
+            if (typeof Androidwymenuprinter == "undefined") {
+                event_clicktouchstart="click";
+                event_clicktouchend="click";
+            }else{
+                event_clicktouchstart="touchstart";
+                event_clicktouchend="touchend";
+            }
             alert(event_clicktouchstart);
-            //alert(first_tab);
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
                 //$('.nav-tabs').find('li[lid='+first_tab+']').addClass("active");
@@ -379,7 +385,7 @@
                 //$('#portlet-config3').modal();
                 //portlet-config3
             });
-            $('#layer2_close').on('touchstart', function(){               
+            $('#layer2_close').on(event_clicktouchstart, function(){               
                  layer.close(layer_index2);                    
             });
             
@@ -393,7 +399,7 @@
             });
             
             var now_should_pay=100;
-            $('.calc_num').on('touchstart','li',function(){
+            $('.calc_num').on(event_clicktouchstart,'li',function(){
                 var inval=$("#cash_in").html();
                 //alert(inval);
                 if(inval=="0" || inval=="00")
