@@ -44,7 +44,7 @@
 			<div class="form-group">
 				<?php echo $form->label($model, 'sex',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-2">
-					<select name="MemberCard[sex]">
+					<select class="form-control" name="MemberCard[sex]">
 						<option value="m" <?php if($model->sex=='m') echo 'selected';?>>男</option>
 						<option value="f" <?php if($model->sex=='f') echo 'selected';?>>女</option>
 					</select>
@@ -54,7 +54,7 @@
 			<div class="form-group">
 				<?php echo $form->label($model, 'ages',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-2">
-					<select name="MemberCard[ages]">
+					<select class="form-control" name="MemberCard[ages]">
 						<option value="<18" <?php if($model->sex=='<18') echo 'selected';?>> <18 </option>
 						<option value="18-25" <?php if($model->sex=='18-25') echo 'selected';?>>18-25</option>
 						<option value="25-30" <?php if($model->sex=='25-30') echo 'selected';?>>25-30</option>
