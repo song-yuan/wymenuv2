@@ -73,16 +73,35 @@ class DefaultController extends BackendController
         
         public function actionIndex()
 	{
-		$typeId = Yii::app()->request->getParam('typeId','0');
-                //$this->redirect(array('default/error2'));
+                $companyId=Yii::app()->request->getParam('companyId','0');
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
+		$criteria->order = ' pid,lid ';		
+		$categories = ProductCategory::model()->findAll($criteria);
+//                var_dump($categories);exit;
+                $criteriaps = new CDbCriteria;
+		$criteriaps->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
+                $criteriaps->with="productsetdetail";
+		$criteriaps->order = ' t.lid asc ';		
+		$productSets = ProductSet::model()->findAll($criteriaps);
+                                
+                $criteriap = new CDbCriteria;
+		$criteriap->condition =  'delete_flag=0 and t.dpid='.$companyId ;// and is_show=1
+		$criteriap->order = ' t.category_id asc,t.lid asc ';
+                $products =  Product::model()->findAll($criteriap);
+                
+                $productidnameArr=array();
+                foreach($products as $product)
+                {
+                    $productidnameArr[$product->lid]=$product->product_name;
+                }
+                
+                
 		$this->render('indexall',array(
-				//'siteTypes' => $siteTypes,
-				//'models'=>$models,
-				//'typeId' => $typeId,
-                                //'title' => $title,
-                                //'geturl' => $geturl,
-                                //'ssid' => $ssid,
-                                //'sistemp' => $sistemp
+				"categories"=>$categories,
+                                "productSets"=>$productSets,
+                                "products"=>$products,
+                                "productidnameArr"=>$productidnameArr
 		));
 	}
         
