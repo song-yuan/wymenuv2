@@ -65,6 +65,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','会员列表');?></div>
 					<div class="actions">
+						<a href="<?php echo $this->createUrl('member/charge' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-plus"></i> <?php echo yii::t('app','充 值');?></a>
 						<a href="<?php echo $this->createUrl('member/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添 加');?></a>
 					</div>
 				</div>
@@ -88,7 +89,7 @@
 							<tr class="odd gradeX">
 								<td ><?php echo $model->selfcode;?></td>
 								<td ><?php echo $model->name;?></td>
-								<td ><?php echo $model->sex;?></td>
+								<td ><?php if($model->sex=='m') echo '男';else echo '女';?></td>
 								<td ><?php echo $model->ages;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->all_money;?></td>
