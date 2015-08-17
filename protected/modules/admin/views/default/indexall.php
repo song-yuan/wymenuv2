@@ -330,6 +330,7 @@
             var layer_index1;
             var layer_index2;
             var first_tab="<?php echo $categories[0]['lid']; ?>";
+            alert(event_clicktouchstart);
             //alert(first_tab);
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
