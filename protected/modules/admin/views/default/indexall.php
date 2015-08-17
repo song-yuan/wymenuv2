@@ -38,7 +38,7 @@
     border-bottom:1px solid #ED9F9F;    /* 添加下划线 */
     font-size: 18px;
 }
-.navigation li a{
+.navigation li{
     display:block;                        /* 区块显示 */
     padding:8px 8px 8px 0.5em;
     text-decoration:none;
@@ -70,6 +70,10 @@
 
 .productstyle{
     background-color:#78ccf8;
+}
+
+.productClick{
+    //background-color:#78ccf8;
 }
 
 .selectedproduct{
@@ -183,22 +187,22 @@
 		
                 <div class="col-md-3">
                         <div class="navigation" style="">
-                            <ul class="selectedproduct">
-                                <li><a lid="all" href="#" class="selectProductA">
-                                        <span class="badge selectProductNum">7</span>
+                            <ul>
+                                <li lid="1" href="#" class="selectProductA">
+                                        <span dd="dd" class="badge">7</span>
                                         <span class="selectProductPrice" style="color:#976125">11.21</span>
                                         <span class="selectProductInfo">三文鱼</span>
                                         <img class="selectProductDel" style="float:right; width: 30px;height: 20px;margin:5px 10px 5px 10px;" 
                                              src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">
-                                    </a>
+                                    
                                 </li>
-                                <li><a lid="all" href="#" class="selectProductA">
-                                        <span class="badge selectProductNum">7</span>
+                                <li lid="2" href="#" class="selectProductA">
+                                        <span class="selectProductNum badge">7</span>
                                         <span class="selectProductPrice" style="color:#976125">11.21</span>
                                         <span class="selectProductInfo">三文鱼</span>
                                         <img class="selectProductDel" style="float:right; width: 30px;height: 20px;margin:5px 10px 5px 10px;" 
                                              src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">
-                                    </a>
+                                    
                                 </li>
                             </ul>
                         </div>
@@ -261,11 +265,11 @@
                                                     <?php 
                                                         foreach ($categories as $categorie2): 
                                                             if($categorie2->pid==$categorie->lid):?>
-                                                        <li style="width:2.2em;background-color: #add"><a lid="<?php echo $categorie2->lid; ?>" href="#"><?php echo $categorie2->category_name; ?></a></li>
+                                                        <li style="width:2.2em;background-color: #add" lid="<?php echo $categorie2->lid; ?>"><?php echo $categorie2->category_name; ?></li>
                                                             <?php 
                                                                 foreach ($products as $product): 
                                                                     if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
-                                                                    <li><a lid="<?php echo $product->lid; ?>" href="#"><?php echo $product->product_name; ?></a></li>                                                                    
+                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>"><?php echo $product->product_name; ?></li>                                                                    
                                                             <?php  endif;                                                         
                                                             endforeach; ?>
                                                     <?php 
@@ -337,7 +341,7 @@
                 event_clicktouchstart="touchstart";
                 event_clicktouchend="touchend";
             }
-            alert(event_clicktouchstart);
+            //alert(event_clicktouchstart);
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
                 //$('.nav-tabs').find('li[lid='+first_tab+']').addClass("active");
@@ -351,6 +355,12 @@
                 //alert(lid);
                 $('.tab-content').hide();
                 $('.tab-content[lid='+lid+']').show();
+            });
+            
+            $('.productClick').on(event_clicktouchstart, function(){                
+                var obj=$('.selectProductA[lid=1]').find('span[class="badge"]');
+                var curnum = parseFloat(obj.text());
+                obj.text(curnum+1);
             });
             
             $('.selectProductInfo').on(event_clicktouchstart, function(){
