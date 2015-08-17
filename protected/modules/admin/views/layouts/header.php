@@ -148,10 +148,13 @@
         <script type="text/javascript">
             
             $(document).ready(function() {
+                //alert(typeof Androidwymenuprinter);
                 if (typeof Androidwymenuprinter == "undefined") {
+                    alert("click");
                       event_clicktouchstart="click";
                       event_clicktouchend="click";
                 }else{
+                    alert("touch");
                     event_clicktouchstart="touchstart";
                     event_clicktouchend="touchend";
                 }
