@@ -95,10 +95,9 @@ class MemberController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
-			$rfid = Yii::app()->request->getPost('rfid');
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
-				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
+				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$model->rfid,':selfcode'=>$model->member_card_id));
 	            $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
 	            $se = new Sequence("member_recharge");
 	            $model->lid = $se->nextval();
@@ -135,7 +134,7 @@ class MemberController extends BackendController
 		
 		$model = MemberCard::model()->find($criteria);
 		if($model){
-			$res = array('selfcode'=>$model->selfcode,'all_money'=>$model->all_money,'name'=>$model->name,'mobile'=>$model->mobile,'email'=>$model->email);
+			$res = array('rfid'=>$model->rfid,'selfcode'=>$model->selfcode,'all_money'=>$model->all_money,'name'=>$model->name,'mobile'=>$model->mobile,'email'=>$model->email);
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$res)));
 		}else{
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'没有查询到该会员信息')));

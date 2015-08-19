@@ -101,11 +101,13 @@
 													<?php echo $form->error($model, 'give_money' )?>
 												</div>
 											</div>
-												<div class="col-md-offset-3 col-md-9">
+											<div class="col-md-offset-3 col-md-9">
 													<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
 													<a href="<?php echo $this->createUrl('member/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 												</div>
 											</div>
+											<input type="hidden" name="MemberRecharge[rfid]" value="" />
+											<input type="hidden" name="MemberRecharge[selfcode]" value="" />
 									<?php $this->endWidget(); ?>
 									<!-- END FORM--> 
 									</div>
@@ -126,6 +128,8 @@
 				var card = $(this).parents('.input-group').find('input').val();
 				$.get('<?php echo $this->createUrl('/admin/member/getMember', array('companyId' => $model->dpid));?>/card/'+card,function(data){
 					if(data.status){
+						$('input[name="MemberRecharge[rfid]"]').val(rfid);
+						$('input[name="MemberRecharge[selfcode]"]').val(selfcode);
 						$('#selfcode').html(data.msg.selfcode)
 						$('#all-money').html(data.msg.all_money)
 						$('#name').html(data.msg.name)
