@@ -6,11 +6,11 @@
 							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','会员充值');?></div>
 						</div>
 						<div class="portlet-body form">
-							<div class="col-md-2">
-							</div>
-							<div class="col-md-8">
+							<div class="col-md-12">
 								<div class="row">
-									<div class="col-md-12" style="padding:0;margin-top:20px;">
+									<div class="col-md-1">
+									</div>
+									<div class="col-md-10" style="padding:0;margin-top:20px;">
 										<div class="input-group">
 											<input type="text" class="form-control" placeholder="请输入卡号、手机、会员姓名" value="" />
 											<span class="input-group-btn">
@@ -18,6 +18,8 @@
 											</span>
 									     </div>
 							        </div>
+							        <div class="col-md-1">
+									</div>
 								</div>
 								<div class="row">
 									<div class="col-md-7" style="padding:0;margin-top:10px;">
@@ -52,6 +54,7 @@
 									<!-- BEGIN FORM-->
 									<?php $form=$this->beginWidget('CActiveForm', array(
 											'id' => 'taste-form',
+											'action'=>$this->createUrl('member/charge',array('companyId'=>$this->companyId)),
 											'errorMessageCssClass' => 'help-block',
 											'htmlOptions' => array(
 												'class' => 'form-horizontal',
@@ -84,8 +87,6 @@
 									<!-- END FORM--> 
 									</div>
 								</div>
-							</div>
-							<div class="col-md-2">
 							</div>
 						</div>
 					</div>
