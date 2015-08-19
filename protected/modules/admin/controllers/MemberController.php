@@ -109,16 +109,15 @@ class MemberController extends BackendController
 	           if($model->save()&&$member->update()) {
 	           		$transaction->commit();
 					Yii::app()->user->setFlash('success',yii::t('app', '充值成功'));
-					$model = new MemberRecharge;
 				}else{
 					$transaction->rollback();
 					Yii::app()->user->setFlash('error',yii::t('app', '充值失败'));
 				}
-				$this->redirect(array('member/index','companyId'=>$this->companyId));
 			}catch(Exception $e){
 				Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
 				$transaction->rollback();
 			}
+			$this->redirect(array('member/index','companyId'=>$this->companyId));
 		}
 		$this->renderPartial('charge' , array(
 				'model' => $model , 
