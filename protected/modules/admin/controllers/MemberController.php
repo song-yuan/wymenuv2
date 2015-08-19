@@ -106,8 +106,6 @@ class MemberController extends BackendController
 	            $model->update_at = date('Y-m-d H:i:s',time());
 	            $model->create_at = date('Y-m-d H:i:s',time());
 	            $model->delete_flag = '0';
-	            var_dump($model->attributes);exit;
-	            var_dump($model->save());var_dump($member->update());exit;
 	           if($model->save()&&$member->update()) {
 	           		$transaction->commit();
 					Yii::app()->user->setFlash('success',yii::t('app', '充值成功'));
