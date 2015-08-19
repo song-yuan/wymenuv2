@@ -91,7 +91,7 @@ class MemberController extends BackendController
 	}
 	public function actionCharge() {
 		$model = new MemberRecharge;
-		$model->dpid = $this->companyId ;
+		$model->dpid = $this->companyId;
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
@@ -100,6 +100,7 @@ class MemberController extends BackendController
 			try{
 				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
 	            $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
+	          
 	            $se = new Sequence("member_recharge");
 	            $model->lid = $se->nextval();
 	            $model->update_at = date('Y-m-d H:i:s',time());
@@ -107,13 +108,13 @@ class MemberController extends BackendController
 	            $model->delete_flag = '0';
 	           if($model->save()&&$member->update()) {
 	           		$transaction->commit();
-					Yii::app()->user->setFlash('success' ,yii::t('app', '充值成功'));
+					Yii::app()->user->setFlash('success',yii::t('app', '充值成功'));
 					$model = new MemberRecharge;
 				}else{
 					$transaction->rollback();
-					Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
+					Yii::app()->user->setFlash('error',yii::t('app', '充值失败'));
 				}
-				$this->redirect(array('member/charge' , 'model' => $model));
+				$this->redirect(array('member/charge','companyId'=>$this->companyId,'model' => $model));
 			}catch(Exception $e){
 				Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
 				$transaction->rollback();
