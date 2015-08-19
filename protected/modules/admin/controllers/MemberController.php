@@ -100,9 +100,9 @@ class MemberController extends BackendController
 			try{
 				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
 	            $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
-	            var_dump($member->attributes);exit;
 	            $se = new Sequence("member_recharge");
 	            $model->lid = $se->nextval();
+	            $model->update_at = date('Y-m-d H:i:s',time());
 	            $model->create_at = date('Y-m-d H:i:s',time());
 	            $model->delete_flag = '0';
 	           if($model->save()&&$member->update()) {
