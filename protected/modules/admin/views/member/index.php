@@ -143,6 +143,7 @@
 		</div>
 	</div>
 	<!-- END PAGE CONTENT-->
+	<script>
 	jQuery(document).ready(function(){
 		 var $modal = $('.modal');
    		 $('.add_btn').on('click', function(){
@@ -152,3 +153,4 @@
 	        });
     	});
 	});
+	</script>
