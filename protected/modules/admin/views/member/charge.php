@@ -127,7 +127,7 @@
 				$.get('<?php echo $this->createUrl('/admin/member/getMember', array('companyId' => $model->dpid));?>/card/'+card,function(data){
 					if(data.status){
 						$('#selfcode').html(data.msg.selfcode)
-						$('#all-money').html(data.msg.all-money)
+						$('#all-money').html(data.msg.all_money)
 						$('#name').html(data.msg.name)
 						$('#mobile').html(data.msg.mobile)
 						$('#email').html(data.msg.email)
