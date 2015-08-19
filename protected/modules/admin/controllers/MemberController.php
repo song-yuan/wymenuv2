@@ -96,6 +96,7 @@ class MemberController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
 			$rfid = Yii::app()->request->getPost('rfid');
+			var_dump($model->attributes);exit;
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
 				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
