@@ -96,7 +96,6 @@ class MemberController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
 			$rfid = Yii::app()->request->getPost('rfid');
-			var_dump($model->attributes);exit;
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
 				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
@@ -107,6 +106,7 @@ class MemberController extends BackendController
 	            $model->update_at = date('Y-m-d H:i:s',time());
 	            $model->create_at = date('Y-m-d H:i:s',time());
 	            $model->delete_flag = '0';
+	            var_dump($model->attributes);exit;
 	            var_dump($model->save());var_dump($member->update());exit;
 	           if($model->save()&&$member->update()) {
 	           		$transaction->commit();
