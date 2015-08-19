@@ -114,7 +114,7 @@ class MemberController extends BackendController
 					$transaction->rollback();
 					Yii::app()->user->setFlash('error',yii::t('app', '充值失败'));
 				}
-				$this->redirect(array('member/charge','companyId'=>$this->companyId,'model' => $model));
+				$this->redirect(array('member/charge','companyId'=>$this->companyId));
 			}catch(Exception $e){
 				Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
 				$transaction->rollback();
