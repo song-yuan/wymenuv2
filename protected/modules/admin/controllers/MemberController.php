@@ -120,7 +120,7 @@ class MemberController extends BackendController
 				$transaction->rollback();
 			}
 		}
-		$this->render('charge' , array(
+		$this->renderPartial('charge' , array(
 				'model' => $model , 
 		));
 	}
