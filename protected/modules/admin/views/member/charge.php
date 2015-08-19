@@ -128,8 +128,8 @@
 				var card = $(this).parents('.input-group').find('input').val();
 				$.get('<?php echo $this->createUrl('/admin/member/getMember', array('companyId' => $model->dpid));?>/card/'+card,function(data){
 					if(data.status){
-						$('input[name="MemberRecharge[rfid]"]').val(rfid);
-						$('input[name="MemberRecharge[selfcode]"]').val(selfcode);
+						$('input[name="MemberRecharge[rfid]"]').val(data.msg.rfid);
+						$('input[name="MemberRecharge[selfcode]"]').val(data.msg.selfcode);
 						$('#selfcode').html(data.msg.selfcode)
 						$('#all-money').html(data.msg.all_money)
 						$('#name').html(data.msg.name)
