@@ -100,6 +100,7 @@ class MemberController extends BackendController
 			try{
 				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
 	            $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
+	            var_dump($memeber->attributes);exit;
 	            $se = new Sequence("member_recharge");
 	            $model->lid = $se->nextval();
 	            $model->create_at = date('Y-m-d H:i:s',time());
@@ -108,8 +109,11 @@ class MemberController extends BackendController
 	           		$transaction->commit();
 					Yii::app()->user->setFlash('success' ,yii::t('app', '充值成功'));
 					$model = new MemberRecharge;
-					$this->redirect(array('member/charge' , 'model' => $model));
+				}else{
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
 				}
+				$this->redirect(array('member/charge' , 'model' => $model));
 			}catch(Exception $e){
 				Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
 				$transaction->rollback();
