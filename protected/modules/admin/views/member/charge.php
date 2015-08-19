@@ -106,8 +106,8 @@
 													<a href="<?php echo $this->createUrl('member/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 												</div>
 											</div>
-											<input type="hidden" name="MemberRecharge[rfid]" value="" />
-											<input type="hidden" name="MemberRecharge[selfcode]" value="" />
+											<input type="hidden" name="rfid" value="" />
+											<input type="hidden" name="MemberRecharge[member_card_id]" value="" />
 									<?php $this->endWidget(); ?>
 									<!-- END FORM--> 
 									</div>
@@ -128,8 +128,8 @@
 				var card = $(this).parents('.input-group').find('input').val();
 				$.get('<?php echo $this->createUrl('/admin/member/getMember', array('companyId' => $model->dpid));?>/card/'+card,function(data){
 					if(data.status){
-						$('input[name="MemberRecharge[rfid]"]').val(data.msg.rfid);
-						$('input[name="MemberRecharge[selfcode]"]').val(data.msg.selfcode);
+						$('input[name="rfid"]').val(data.msg.rfid);
+						$('input[name="MemberRecharge[member_card_id]"]').val(data.msg.selfcode);
 						$('#selfcode').html(data.msg.selfcode)
 						$('#all-money').html(data.msg.all_money)
 						$('#name').html(data.msg.name)
