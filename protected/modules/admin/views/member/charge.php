@@ -27,7 +27,7 @@
 											<table class="table table-hover">
 												<tbody>
 													<tr>
-														<td width="10%">卡号:</td>
+														<td width="20%">卡号:</td>
 														<td width="40%" id="selfcode"></td>
 													</tr>
 													<tr>
