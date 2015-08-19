@@ -46,7 +46,6 @@ class MemberController extends BackendController
             $model->lid = $se->nextval();
             $model->create_at = date('Y-m-d H:i:s',time());
             $model->delete_flag = '0';
-            var_dump($model->attributes);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('member/index' , 'companyId' => $this->companyId));
