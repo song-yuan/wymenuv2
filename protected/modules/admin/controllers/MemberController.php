@@ -119,4 +119,27 @@ class MemberController extends BackendController
 				'model' => $model , 
 		));
 	}
+	public function actionGetMember() {
+		$card = Yii::app()->request->getParam('card',0);
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		if($card){
+			$criteria->addCondition('selfcode=:card','OR');
+			$criteria->addCondition('name=:card','OR');
+			$criteria->addCondition('mobile=:card','OR');
+			$criteria->params[':card']=$card;
+		}
+		
+		$criteria->order = ' lid desc ';
+		$criteria->params[':dpid']=$this->companyId;
+		
+		$model = MemberCard::model()->find($criteria);
+		if($model){
+			$res = array('selfcode'=>$model->selfcode,'all_money'=>$model->all_money,'name'=>$model->name,'mobile'=>$model->mobile,'email'=>$model->email);
+			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$res)));
+		}else{
+			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'没有查询到该会员信息')));
+		}
+		
+	}
 }
