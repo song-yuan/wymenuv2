@@ -307,7 +307,7 @@
 	<div class="row">
 		
                 <div class="col-md-3">
-                        <div class="navigation" id="orderdetail" style="">
+                        <div class="navigation" id="orderdetailauto" style="">
                             <ul orderid="0000000000" class="selectProduct">
                                 <span id="order_create_at">2004/12/12 12:00:00</span>
                                 <li lid="0000000000" class="selectProductA">                                    
