@@ -19,15 +19,16 @@
                                                 echo $orderProduct['is_print']==1?'印':'';
                                                 echo $orderProduct['is_retreat']==1?'退':'';
                                                 if(!empty($orderProduct['taste_memo']))
-                                                {  echo "味";}else{if(in_array($orderProduct['lid'],  array_column($allOrderProductTastes, "lid"))) echo "味";}
+                                                {  echo "味";}else{
+                                                    if(in_array($orderProduct['lid'],  array_column($allOrderProductTastes, "lid"))) {echo "味";}}
                                         ?></span>
                                     <span style="font-size:20px !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>
-                                        <span class="selectProductPrice" style="color:#976125;display:none"><?php echo number_format($orderProduct['price'],2);?></span>
-                                        <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>
-                                        <span class="selectProductNowPrice" style="color:#976125"><?php echo number_format($orderProduct['price'],2);?></span>
-                                        <span style="position:absolute;" class="selectProductName"><?php echo $orderProduct['product_name'];?></span>
-                                        <img class="selectProductDel" style="position: absolute;right:0.3em; width: 3.0em;height: 2.0em;padding:5px 10px 5px 10px;" 
-                                             src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">                                   
+                                    <span class="selectProductPrice" style="color:#976125;display:none"><?php echo number_format($orderProduct['price'],2);?></span>
+                                    <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>
+                                    <span class="selectProductNowPrice" style="color:#976125"><?php echo number_format($orderProduct['price'],2);?></span>
+                                    <span style="position:absolute;" class="selectProductName"><?php echo $orderProduct['product_name'];?></span>
+                                    <img class="selectProductDel" style="position: absolute;right:0.3em; width: 3.0em;height: 2.0em;padding:5px 10px 5px 10px;" 
+                                         src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">                                   
                                    </li>
                 <?php endforeach;?>
         </ul>
@@ -73,7 +74,7 @@
                         var sysautoaccount='<?php echo $autoaccount; ?>';
                         //alert(sysautoaccount);
                         var scanon=false;
-                        $(document).ready(function(){
+                        $(document).ready(function () {
                             $('body').addClass('page-sidebar-closed');
                             $('#site_list_button').val("<?php echo $total['remark'] ;?>(<?php switch($model->order_status) {case 1:{echo yii::t('app','未下单');break;} case 2:{echo yii::t('app','下单未支付');break;} case 3:{echo yii::t('app','已支付');break;} }?>)");
                             if(syscallid>"Ca000" && syscallid<"Ca999")
@@ -302,8 +303,5 @@
                             }
                        });
                         
-                        $(document).ready(function () {
-                            //$('#barscanid').val("222");
-                            
-                        });
+                        
                     </script>
