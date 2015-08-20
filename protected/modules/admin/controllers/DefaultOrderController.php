@@ -163,7 +163,7 @@ class DefaultOrderController extends BackendController
 		//$orderProducts = OrderProduct::model()->findAll('dpid=:dpid and order_id=:orderid',array(':dpid'=>$companyId,':orderid'=>$order->order_id));
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 $allOrderProductTastes=  TasteClass::getOrderTasteKV($order->lid,'2',$companyId);
-                //var_dump($allOrderProductTastes);exit;
+                //var_dump($allOrderProductTastes);
                 
                 $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                 //var_dump($productTotal);exit;
@@ -180,7 +180,7 @@ class DefaultOrderController extends BackendController
                 $tastegroups= TasteClass::getAllOrderTasteGroup($companyId, '1');
                 $orderTastes=  TasteClass::getOrderTaste($order->lid, '1', $companyId);
                 $tasteMemo = TasteClass::getOrderTasteMemo($order->lid, '1', $companyId);
-                
+                //var_dump(array_column($allOrderProductTastes, "lid"));exit;
 		$this->renderPartial('orderPartial' , array(
 				'model'=>$order,
 				'orderProducts' => $orderProducts,
