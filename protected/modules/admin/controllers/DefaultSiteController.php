@@ -92,7 +92,11 @@ class DefaultSiteController extends BackendController
 			$sid = Yii::app()->request->getPost('sid');
                         $siteNumber = Yii::app()->request->getPost('siteNumber');
                         $companyId = Yii::app()->request->getPost('companyId');
-                        Until::validOperate($companyId, $this);
+                        if(!Until::validOperateJson($companyId, $this))
+                        {
+                            echo json_encode(array('status'=>0,'message'=>yii::t('app','云端不能操作本地数据'),'siteid'=>$sid));
+                            return true;
+                        }
                         //$sid = Yii::app()->request->getPost('sid');
                         $istemp = Yii::app()->request->getPost('istemp','0');                        
                         echo json_encode(SiteClass::openSite($companyId,$siteNumber,$istemp,$sid));
