@@ -658,7 +658,7 @@
                 }
                 return false;
             });
-            $('.selectProductA').live(event_clicktouchstart, function(){
+            $('.selectProductA').live(event_clicktouchend, function(){
                 var lid=$(this).attr('lid');
                 var productid=$(this).attr('productid');
                 var isgiving=$(this).attr('is_giving');
