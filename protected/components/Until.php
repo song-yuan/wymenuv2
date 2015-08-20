@@ -145,5 +145,25 @@ class Until {
             }
             return true;
         }
+        
+        static public function validOperateJson($dpid,$parent){
+            $db = Yii::app()->db;
+            //非法的controller->action数组
+            
+            if(Yii::app()->params['cloud_local']=='c')//云端服务器
+            {
+                $sql = "select is2_cloud from nb_company where delete_flag = 0 and dpid=".$dpid;
+                //var_dump($sql);
+                $command=$db->createCommand($sql);
+                $nowval= $command->queryScalar();
+                //var_dump($sql,$nowval,$controller."->".$action);
+                if($nowval=="1")
+                {
+                       
+                        return false;
+                }
+            }
+            return true;
+        }
 }
 ?>

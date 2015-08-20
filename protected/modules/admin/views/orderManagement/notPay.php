@@ -67,7 +67,7 @@
                                 <th><?php echo yii::t('app','支付方式');?></th>
                                 <th><?php echo yii::t('app','应付');?></th>                                                                
                                 <th><?php echo yii::t('app','实付');?></th>
-								
+				<th></th>				
 							</tr>
 						</thead>
 						<tbody>
@@ -86,6 +86,7 @@
 								<td><?php if($model->payment_method_id!='0000000000') echo $model->paymentMethod->name; else switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; case 1: echo  yii::t('app','微信支付');break; case 2: echo  yii::t('app','支付宝支付');break; case 3: echo  yii::t('app','后台手动支付');break;  default :echo ''; }?></td>
 								<td><?php echo $model->should_total;?></td>
 								<td><?php echo $model->reality_total;?></td>
+                                                                <td>付款记录</td>
 								</tr>
 						
 						<?php endforeach;?>	

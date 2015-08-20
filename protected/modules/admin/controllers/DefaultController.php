@@ -69,11 +69,24 @@ class DefaultController extends BackendController
 //                                //'ssid' => $ssid,
 //                                //'sistemp' => $sistemp
 //		));
-//	}
+////	}
         
         public function actionIndex()
-	{
+	{              
+                //           
                 $companyId=Yii::app()->request->getParam('companyId','0');
+                $typeId = Yii::app()->request->getParam('typeId','0');
+                $siteTypes = SiteClass::getTypes($this->companyId);
+                
+                
+                if(empty($siteTypes)) {
+			$typeId='tempsite';
+		}
+                if($typeId != 'tempsite')
+                {
+                    $typeKeys = array_keys($siteTypes);
+                    $typeId = array_search($typeId, $typeKeys) ? $typeId : $typeKeys[0] ;
+                }
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
 		$criteria->order = ' pid,lid ';		
@@ -96,8 +109,9 @@ class DefaultController extends BackendController
                     $productidnameArr[$product->lid]=$product->product_name;
                 }
                 
-                
-		$this->render('indexall',array(
+                $this->render('indexall',array(
+                                'siteTypes' => $siteTypes,
+                                'typeId' => $typeId,
 				"categories"=>$categories,
                                 "productSets"=>$productSets,
                                 "products"=>$products,

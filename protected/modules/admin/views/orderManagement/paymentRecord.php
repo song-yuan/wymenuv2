@@ -68,7 +68,8 @@
 								<th><?php echo yii::t('app','应收金额');?></th>
                                 <th><?php echo yii::t('app','实付金额');?></th>
                                 <th><?php echo yii::t('app','退款金额');?></th>
-                                <th><?php echo yii::t('app','备注');?></th>                                                                
+                                <th><?php echo yii::t('app','备注');?></th> 
+                                <th></th> 
 								</tr>
 						</thead>
 						<tbody>
@@ -90,6 +91,7 @@
 								<td><?php if ($model->pay_amount > 0) echo $model->pay_amount ;else echo '--/--';?></td>
 								<td><?php if ($model->pay_amount < 0) echo -$model->pay_amount ;else echo '--/--';;?></td>
 								<td><?php echo $model->update_at;?></td>
+                                                                <td>退款</td>
 							</tr>
 					    <?php $a++;?>
 						<?php endforeach;?>	

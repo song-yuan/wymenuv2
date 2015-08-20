@@ -4,7 +4,7 @@
             margin: 50px auto;
             text-align: center;
             width: 40em;
-            height: 15em;
+            height: 20em;
             border: 1px solid red;
             background: rgb(245,230,230);
             z-index: 11000;
@@ -84,33 +84,26 @@
                                                                                 <input id="barscanid" type="text" class="form-control" placeholder="<?php echo yii::t('app','扫描小票条码，快速查看订单');?>">
                                                                         </div>
                                                                         <div class="actions">
-                                                                            <a href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId,'typeId'=>'product','from'=>'home'));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','快速沽清');?></a>
-                                                                            <div class="btn-group">
-                                                                                    <a class="btn green" href="#" data-toggle="dropdown">
-                                                                                    <i class="fa fa-archive"></i><?php echo yii::t('app','订单操作');?>
-                                                                                    <i class="fa fa-angle-down"></i>
-                                                                                    </a>
-                                                                                    <ul class="dropdown-menu pull-right">                                                                                    
-                                                                                            <li><a href="<?php echo $this->createUrl('orderManagement/notPay',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>" class='btn-edit'  ><?php echo yii::t('app','今日订单');?></a></li>
-                                                                                            <li><a href="<?php echo $this->createUrl('orderManagement/paymentRecord',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>" class="btn-del"   ><?php echo yii::t('app','支付记录');?></a></li>                                                                                            
-                                                                                    </ul>
-                                                                            </div>
-                                                                            <!--<a href="<?php echo $this->createUrl('default/historyorder' , array('companyId' => $this->companyId));?>" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','历史订单');?></a>-->
+                                                                            
+                                                                            <a id="order_list" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','点单界面');?></a>
+                                                                            <a  href="<?php echo $this->createUrl('orderManagement/notPay',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>" class='btn green'  ><?php echo yii::t('app','今日订单');?></a>
+                                                                            <a  href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId,'typeId'=>'product','from'=>'home'));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','快速沽清');?></a>
+                        
                                                                         </div>
 								</div>
 								<div class="portlet-body" id="table-manage">
 				
-                                                                        <div class="portlet-body site_list">
+                                                                    <div class="portlet-body site_list">
                                                                                 <ul>
                                                                                     
                                                                                     <?php if($typeId == 'tempsite'): ?>
                                                                                         <li class="modalaction bg_add" istemp="1" status="0" sid="0" shname="<?php echo yii::t('app','新增临时台');?>"></li>
                                                                                         <?php foreach ($models as $model):?>
-                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 25px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo $model->update_at;?></li>
+                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 20px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo $model->update_at;?></li>
                                                                                         <?php endforeach;?>
                                                                                     <?php else:?>
                                                                                         <?php foreach ($models as $model):?>
-                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial;?>"><span style="font-size: 25px;"><?php echo $model->serial;?>&nbsp;</span><?php echo '<br>'.$model->update_at;?></li>
+                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial;?>"><span style="font-size: 20px;"><?php echo $model->serial;?>&nbsp;</span><?php echo '<br>'.$model->update_at;?></li>
                                                                                         <?php endforeach;?>
                                                                                     <?php endif;?>
                                                                                     
@@ -239,6 +232,7 @@
                     pxbox.children("h4").text(that.attr("shname"));
                     $("#tab_sitelist").hide();
                     pxbox.show();
+                    //$('#pxbox_button').hide();
                 });
             });
             
@@ -252,6 +246,16 @@
                     //defaultOrder/order/companyId/0000000001/orderId/85/typeId/0000000001
                     //$(this).val("111");
                 }
+            });
+            
+            $('#order_list').on(event_clicktouchstart,function(){
+                if($('.selectProduct').attr("orderid")=="0000000000")
+                {
+                    alert("请选择一个台号");
+                    return false;
+                }
+                $('#site_row').hide();
+                $('#order_row').show();
             });
             
             $(document).ready(function () {

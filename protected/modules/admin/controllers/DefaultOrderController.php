@@ -103,6 +103,106 @@ class DefaultOrderController extends BackendController
 		));
 	}
         
+        public function actionOrderPartial(){
+		$sid = Yii::app()->request->getParam('sid',0);
+		$istemp = Yii::app()->request->getParam('istemp',0);
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $typeId = Yii::app()->request->getParam('typeId',0);
+                $orderId = Yii::app()->request->getParam('orderId',0);
+                $syscallId = Yii::app()->request->getParam('syscallId',0);
+                $autoaccount = Yii::app()->request->getParam('autoaccount',0);
+                $order=array();
+                $siteNo=array();
+                ///***********insert to order feedback
+                ///*************print
+                if($orderId !='0')
+                {
+                    $order = Order::model()->find('lid=:lid and dpid=:dpid and order_status in("1","2","3")' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    if(empty($order))
+                    {
+                        $title=yii::t('app',"该订单不存在，请输入合法订单！");
+                        $backurl=$this->createUrl('default/index',array('companyId'=>$this->companyId));
+                        $this->render('error' , 
+                                array('backurl'=>$backurl,
+                                    'title'=>$title));
+                        exit;
+                    }
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                    $criteria->order = ' t.lid desc ';                    
+                    $siteNo = SiteNo::model()->find($criteria);
+                }else{
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria->order = ' t.lid desc ';
+                    $order = Order::model()->find($criteria);
+                    //var_dump($order);exit;
+                    $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria->order = ' t.lid desc ';
+                    $siteNo = SiteNo::model()->find($criteria);
+                }
+                //var_dump($order);exit;
+                if(empty($order))
+                {
+                    Until::validOperate($companyId,$this);
+                    
+                    $order=new Order();
+                    $se=new Sequence("order");
+                    $order->lid = $se->nextval();
+                    $order->dpid=$companyId;
+                    $order->create_at = date('Y-m-d H:i:s',time());
+                    $order->lock_status = '0';
+                    $order->order_status = '1';
+                    $order->site_id = $siteNo->site_id;
+                    $order->number = $siteNo->number;
+                    $order->is_temp = $siteNo->is_temp;
+                    //var_dump($order);exit;
+                    $order->save();
+                }
+                $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,'1',$companyId);
+		//$orderProducts = OrderProduct::model()->findAll('dpid=:dpid and order_id=:orderid',array(':dpid'=>$companyId,':orderid'=>$order->order_id));
+		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
+                $allOrderProductTastes=  TasteClass::getOrderTasteKV($order->lid,'2',$companyId);
+                //var_dump($allOrderProductTastes);exit;
+                
+                $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                //var_dump($productTotal);exit;
+                if($siteNo->is_temp=='1')
+                {
+                    $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+                }else{
+                    $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
+                }
+                $order->should_total=$total['total'];
+		//var_dump($order);exit;
+		//var_dump($total);exit;
+		//$paymentMethods = $this->getPaymentMethodList();
+                $tastegroups= TasteClass::getAllOrderTasteGroup($companyId, '1');
+                $orderTastes=  TasteClass::getOrderTaste($order->lid, '1', $companyId);
+                $tasteMemo = TasteClass::getOrderTasteMemo($order->lid, '1', $companyId);
+                
+		$this->renderPartial('orderPartial' , array(
+				'model'=>$order,
+				'orderProducts' => $orderProducts,
+                                'allOrderTastes'=>$allOrderTastes,
+                                'allOrderProductTastes'=>$allOrderProductTastes,
+                                //'orderProduct' => $orderProduct,
+				'productTotal' => $productTotal ,
+				'total' => $total,
+				//'paymentMethods'=>$paymentMethods,
+                                'typeId' => $typeId,
+                                'syscallId'=>$syscallId,
+                                'autoaccount'=>$autoaccount,
+                                'tastegroups'=>$tastegroups,
+                                'orderTastes'=>$orderTastes,
+                                'tasteMemo'=>$tasteMemo
+                                //'categories' => $categories
+                                //'products' => $productslist,
+                                //'setlist' => $setlist
+		));
+	}
+
+        
         public function actionHistoryList(){
 		$criteria = new CDbCriteria;
 		$criteria->with = array('siteNo','siteNo.site') ;
@@ -807,6 +907,29 @@ class DefaultOrderController extends BackendController
                                 'isall'=>$isall,
                                 'lid'=>$lid,
                                 'typeId'=>$typeId
+                ));
+	}
+        
+        public function actionProductTasteAll(){
+		$lid = Yii::app()->request->getParam('lid',0);
+		$companyId = Yii::app()->request->getParam('companyId');
+                $isall = Yii::app()->request->getParam('isall','0');
+                if($isall=='1')
+                {
+                    $tastegroups= TasteClass::getAllOrderTasteGroup($companyId, '1');
+                    $orderTastes=  TasteClass::getOrderTaste($lid, '1', $companyId);
+                    $tasteMemo = TasteClass::getOrderTasteMemo($lid, '1', $companyId);
+                    $orderId=$lid;
+                }else{
+                    $tastegroups=  TasteClass::getProductTasteGroup($lid,$companyId);
+                    $orderTastes=  TasteClass::getOrderTaste($lid, '2', $companyId);
+                    $tasteMemo = TasteClass::getOrderTasteMemo($lid, '2', $companyId);
+                }
+                 
+                $this->renderPartial('tastedetailall' , array(
+                                'tastegroups' => $tastegroups,
+                                'orderTastes'=>$orderTastes,
+                                'tasteMemo' => $tasteMemo
                 ));
 	}
         
