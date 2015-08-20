@@ -12,15 +12,15 @@
                                         is_giving="<?php echo $orderProduct['is_giving'];?>" 
                                         is_print="<?php echo $orderProduct['is_print'];?>" 
                                         is_retreat="<?php echo $orderProduct['is_retreat'];?>" 
-                                        tasteids="" tastememo="<?php echo $orderProduct['taste_memo'];?>" 
+                                        tasteids="<?php if(!empty($tasteidsOrderProducts[$orderProduct['lid']])){ echo $tasteidsOrderProducts[$orderProduct['lid']];}?>" 
+                                        tastememo="<?php echo $orderProduct['taste_memo'];?>" 
                                         class="selectProductA">
                                     <span style="background-color:#005580;" class="special badge" content="">
                                         <?php  echo $orderProduct['is_giving']==1?'赠':'';
                                                 echo $orderProduct['is_print']==1?'印':'';
                                                 echo $orderProduct['is_retreat']==1?'退':'';
-                                                if(!empty($orderProduct['taste_memo']))
-                                                {  echo "味";}else{
-                                                    if(in_array($orderProduct['lid'],  array_column($allOrderProductTastes, "lid"))) {echo "味";}}
+                                                if(!empty($orderProduct['taste_memo']) || !empty($tasteids))
+                                                {  echo "味";}
                                         ?></span>
                                     <span style="font-size:20px !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>
                                     <span class="selectProductPrice" style="color:#976125;display:none"><?php echo number_format($orderProduct['price'],2);?></span>
@@ -36,7 +36,7 @@
             <?php 
             $ordertastename="";
             $ordertasteid="";
-            foreach($allOrderTastes as $taste){$ordertastename.=$taste['name'].' ';$ordertasteid.=$taste['id'].'|';} 
+            foreach($allOrderTastes as $taste){$ordertastename.=$taste['name'].' ';$ordertasteid.=$taste['tasteid'].'|';} 
             ?>
             <span id="ordertasteall" tid="<?php echo $ordertasteid; ?>"><?php echo $ordertastename; ?></span>
             <span id="ordertastememoall"><?php echo $model->taste_memo; ?></span>  

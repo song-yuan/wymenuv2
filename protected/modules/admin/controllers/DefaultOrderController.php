@@ -164,7 +164,17 @@ class DefaultOrderController extends BackendController
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 $allOrderProductTastes=  TasteClass::getOrderTasteKV($order->lid,'2',$companyId);
                 //var_dump($allOrderProductTastes);
-                
+                $tasteidsOrderProducts=array();
+                foreach($allOrderProductTastes as $orderProductTaste)
+                {
+                    if(empty($tasteidsOrderProducts[$orderProductTaste->id]))
+                    {
+                        $tasteidsOrderProducts[$orderProductTaste->id]=$orderProductTaste->tasteid."|";
+                    }else{
+                        $tasteidsOrderProducts[$orderProductTaste->id]=$tasteidsOrderProducts[$orderProductTaste->id].$orderProductTaste->tasteid."|";
+                    }
+                }
+               // var_dump($tasteidsOrderProducts);exit;
                 $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                 //var_dump($productTotal);exit;
                 if($siteNo->is_temp=='1')
@@ -195,7 +205,8 @@ class DefaultOrderController extends BackendController
                                 'autoaccount'=>$autoaccount,
                                 'tastegroups'=>$tastegroups,
                                 'orderTastes'=>$orderTastes,
-                                'tasteMemo'=>$tasteMemo
+                                'tasteMemo'=>$tasteMemo,
+                                'tasteidsOrderProducts'=>$tasteidsOrderProducts
                                 //'categories' => $categories
                                 //'products' => $productslist,
                                 //'setlist' => $setlist
