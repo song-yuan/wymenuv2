@@ -17,8 +17,8 @@
     }
     .site_list ul li {
             float:left;
-            width:120px;
-            height: 120px;			
+            width:8.0em;
+            height:6.0em;			
             border: 1px solid #add;
             margin:5px;
             list-style:none;
