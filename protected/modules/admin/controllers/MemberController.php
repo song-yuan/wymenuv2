@@ -91,7 +91,7 @@ class MemberController extends BackendController
 	}
 	public function actionCharge() {
 		$model = new MemberRecharge;
-		$model->dpid = $this->companyId ;
+		$model->dpid = $this->companyId;
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
@@ -100,23 +100,50 @@ class MemberController extends BackendController
 			try{
 				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
 	            $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
+	          
 	            $se = new Sequence("member_recharge");
 	            $model->lid = $se->nextval();
+	            $model->update_at = date('Y-m-d H:i:s',time());
 	            $model->create_at = date('Y-m-d H:i:s',time());
 	            $model->delete_flag = '0';
 	           if($model->save()&&$member->update()) {
 	           		$transaction->commit();
-					Yii::app()->user->setFlash('success' ,yii::t('app', '充值成功'));
-					$model = new MemberRecharge;
-					$this->redirect(array('member/charge' , 'model' => $model));
+					Yii::app()->user->setFlash('success',yii::t('app', '充值成功'));
+				}else{
+					$transaction->rollback();
+					Yii::app()->user->setFlash('error',yii::t('app', '充值失败'));
 				}
 			}catch(Exception $e){
 				Yii::app()->user->setFlash('error' ,yii::t('app', '充值失败'));
 				$transaction->rollback();
 			}
+			$this->redirect(array('member/index','companyId'=>$this->companyId));
 		}
-		$this->render('charge' , array(
+		$this->renderPartial('charge' , array(
 				'model' => $model , 
 		));
+	}
+	public function actionGetMember() {
+		$card = Yii::app()->request->getParam('card',0);
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		if($card){
+			$criteria->addCondition('selfcode=:card','OR');
+			$criteria->addCondition('name=:card','OR');
+			$criteria->addCondition('mobile=:card','OR');
+			$criteria->params[':card']=$card;
+		}
+		
+		$criteria->order = ' lid desc ';
+		$criteria->params[':dpid']=$this->companyId;
+		
+		$model = MemberCard::model()->find($criteria);
+		if($model){
+			$res = array('rfid'=>$model->rfid,'selfcode'=>$model->selfcode,'all_money'=>$model->all_money,'name'=>$model->name,'mobile'=>$model->mobile,'email'=>$model->email);
+			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$res)));
+		}else{
+			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'没有查询到该会员信息')));
+		}
+		
 	}
 }
