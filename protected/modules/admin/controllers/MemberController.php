@@ -128,10 +128,10 @@ class MemberController extends BackendController
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
 		if($card){
-			$criteria->addCondition('rfid=:card','OR');
+			$criteria->addCondition('rfid=:card');
 			$criteria->addCondition('selfcode=:card','OR');
 			$criteria->addCondition('name=:card','OR');
-			$criteria->addCondition('mobile1=:card','OR');
+			$criteria->addCondition('mobile=:card','OR');
 			$criteria->params[':card']=$card;
 		}
 		
