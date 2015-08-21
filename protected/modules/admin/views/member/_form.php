@@ -146,7 +146,7 @@
 		   	  	 $('.password').show();
 		   	  }
 		   });
-		   $('#MemberCard_rfid').keypress(function(e){
+		   $('form input').keypress(function(e){
             if(e.keyCode==13){
                 e.preventDefault();
             }
