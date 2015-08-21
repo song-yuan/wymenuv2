@@ -121,7 +121,6 @@
 				},'json') ;
 			});
 			$('.membercard').change(function(){
-				alert(22);
 				$('.getMember').click();
 			});
 		});
