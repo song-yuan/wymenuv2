@@ -151,5 +151,6 @@
                 e.preventDefault();
             }
 		});
+	});
 	</script>
 	<?php $this->endWidget(); ?>
