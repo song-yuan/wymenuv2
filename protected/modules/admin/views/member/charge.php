@@ -12,7 +12,7 @@
 									</div>
 									<div class="col-md-10" style="padding:0;margin-top:20px;">
 										<div class="input-group">
-											<input type="text" class="form-control membercard" placeholder="请输入卡号、手机、会员姓名" value="" />
+											<input type="text" class="form-control membercard" placeholder="请输入会员号、手机、会员姓名" value="" />
 											<span class="input-group-btn">
 											<button class="btn blue getMember" type="button"> 搜 索 </button>
 											</span>
@@ -27,7 +27,7 @@
 											<table class="table table-hover">
 												<tbody>
 													<tr>
-														<td width="20%">卡号:</td>
+														<td width="20%">会员号:</td>
 														<td width="40%" id="selfcode"></td>
 													</tr>
 													<tr>
