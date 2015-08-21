@@ -31,19 +31,19 @@
 														<td width="40%" id="selfcode"></td>
 													</tr>
 													<tr>
-														<td>余额:</td>
+														<td>余 额:</td>
 														<td id="all-money"></td>
 													</tr>
 													<tr>
-														<td>姓名:</td>
+														<td>姓 名:</td>
 														<td id="name"></td>
 													</tr>
 													<tr>
-														<td>手机:</td>
+														<td>手 机:</td>
 														<td id="mobile"></td>
 													</tr>
 													<tr>
-														<td>邮箱:</td>
+														<td>邮 箱:</td>
 														<td id="email"></td>
 													</tr>
 												</tbody>
