@@ -12,7 +12,7 @@
 									</div>
 									<div class="col-md-10" style="padding:0;margin-top:20px;">
 										<div class="input-group">
-											<input type="text" class="form-control" placeholder="请输入卡号、手机、会员姓名" value="" />
+											<input type="text" class="form-control membercard" placeholder="请输入卡号、手机、会员姓名" value="" />
 											<span class="input-group-btn">
 											<button class="btn blue getMember" type="button"> 搜 索 </button>
 											</span>
@@ -58,7 +58,8 @@
 											'errorMessageCssClass' => 'help-block',
 											'htmlOptions' => array(
 												'class' => 'form-horizontal',
-												'enctype' => 'multipart/form-data'
+												'enctype' => 'multipart/form-data',
+												'onsubmit' => 'return check()',
 											),
 									)); ?>
 										<div class="form-body">
@@ -94,6 +95,14 @@
 			</div>
 			<!-- END PAGE CONTENT-->    
 		<script type="text/javascript">
+		function check(){
+			var rfid = $('input[name="rfid"]').val();
+			var membercard = $('input[name="MemberRecharge[member_card_id]"]').val();
+			if(!rfid || !membercard){
+				return false;
+			}
+			return true;
+		}
 		jQuery(document).ready(function(){
 			$('.getMember').click(function(){
 				var card = $(this).parents('.input-group').find('input').val();
@@ -110,6 +119,9 @@
 						alert(data.msg);
 					}
 				},'json') ;
+			});
+			$('.membercard').change(function(){
+				$('.getMember').click();
 			});
 		});
 		</script> 
