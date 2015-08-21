@@ -32,7 +32,7 @@
 			<div class="form-group">
 				<?php echo $form->label($model, 'rfid',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
-					<?php echo $form->textField($model, 'rfid',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rfid'),'disabled'=>'disabled'));?>
+					<?php echo $form->textField($model, 'rfid',array('class' => 'form-control rfid','placeholder'=>$model->getAttributeLabel('rfid'),'disabled'=>'disabled'));?>
 					<?php echo $form->error($model, 'rfid' )?>
 				</div>
 			</div>
@@ -146,6 +146,10 @@
 		   	  	 $('.password').show();
 		   	  }
 		   });
+		   $('.rfid').keypress(function(e){
+            if(e.keyCode==13){
+                e.preventDefault();
+            }
 		});
 	</script>
 	<?php $this->endWidget(); ?>
