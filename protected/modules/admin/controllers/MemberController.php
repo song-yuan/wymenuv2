@@ -131,7 +131,7 @@ class MemberController extends BackendController
 			$criteria->addCondition('rfid=:card','OR');
 			$criteria->addCondition('selfcode=:card','OR');
 			$criteria->addCondition('name=:card','OR');
-			$criteria->addCondition('mobile=:card','OR');
+			$criteria->addCondition('mobile1=:card','OR');
 			$criteria->params[':card']=$card;
 		}
 		
