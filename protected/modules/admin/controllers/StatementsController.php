@@ -304,7 +304,7 @@ class StatementsController extends BackendController
 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
 		}else{
 			$criteria->group ='t.product_id,day(t.update_at)';
-			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t,update_at) asc,t.dpid asc';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 		}
 		
 	//	$criteria->order = 't.update_at asc';
@@ -456,9 +456,9 @@ class StatementsController extends BackendController
 		}elseif($text==2){
 			$criteria->group ='t.dpid,t.order_status,month(t.update_at)';
 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
-		}elseif ($txet==3){
+		}elseif ($text==3){
 			$criteria->group ='t.dpid,t.order_status,day(t.update_at)';
-			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t,update_at) asc,t.dpid asc';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 		}
 		
 		//$criteria->group = 't.paytype,t.payment_method_id';

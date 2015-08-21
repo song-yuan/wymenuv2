@@ -126,7 +126,7 @@
             gsistemp="<?php echo $sistemp; ?>";
             gstypeid="<?php echo $stypeId; ?>";
             gop="<?php echo $op; ?>";
-            $('.modalaction').on(event_clicktouchend, function(){
+            $('.modalaction').on("click", function(){
                 var $modal = $('#portlet-button');
                 var pxbox = $('#pxbox_button'); 
                 var sid = $(this).attr('sid');

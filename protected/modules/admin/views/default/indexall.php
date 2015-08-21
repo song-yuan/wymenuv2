@@ -261,6 +261,26 @@
 	</div>
 	<!-- /.modal -->
         <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+                        <div class="modal fade" id="portlet-config2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                        <div class="modal-content">
+                                                <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                        <h4 class="modal-title">Modal title2</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                        Widget settings form goes here2
+                                                </div>
+                                                <div class="modal-footer">
+                                                        <button type="button" class="btn blue">Save changes</button>
+                                                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                                                </div>
+                                        </div>
+                                        <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                        </div>
+        <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-wide">
 			<div class="modal-content">
@@ -323,13 +343,15 @@
                                 <div style="margin:0.5em;">
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanLid"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanProductId"></span>
+                                    <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanIsRetreat"></span>
+                                    <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanOrderStatus"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanProductDiscountOrig"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanNowPriceOrig"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteIds"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteMemo"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;" id="spanProductName">菜品名称</span>
-                                    <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="alltaste_ok" value="<?php echo yii::t('app','退菜');?>">
-                                    <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="alltaste_cancel" value="<?php echo yii::t('app','单品厨打');?>">
+                                    <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">
+                                    <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-reprint" value="<?php echo yii::t('app','单品厨打');?>">
                                 </div>
                                 <div style="float:left;width:65%;">
                                		 <div style="float:left;width:96%;margin:1px 5px 5px 10px;padding:8px;border:1px solid red;">
@@ -416,7 +438,7 @@
                                                             <?php 
                                                                 foreach ($products as $product): 
                                                                     if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
-                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" price="<?php echo $product->original_price; ?>"><?php echo $product->product_name; ?></li>                                                                    
+                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>"><?php echo $product->product_name; ?></li>                                                                    
                                                             <?php  endif;                                                         
                                                             endforeach; ?>
                                                     <?php 
@@ -596,6 +618,38 @@
                                                          
             });
             
+            function getallproductinfo(orderstatus)
+            {
+                //取得orderid
+                var orderid=$(".selectProduct").attr("orderid");
+                //取得整体订单的tasteids tastememo
+                var ordertasteids=$("#ordertasteall").attr("tid");
+                var ordertastememo=$("#ordertastememoall").text();
+                var productlist="";
+                var tempproduct="";
+                //取得所有未下单状态的单品，没有打印和厨打都是0,1就不能修改了。
+                $(".selectProductA[order_status='0']").each(function(){
+                    tempproduct=$(this).attr("lid");
+                    tempproduct=tempproduct+","+$(this).attr("productid");
+                    tempproduct=tempproduct+","+$(this).find("span[class='badge']").text();
+                    tempproduct=tempproduct+","+$(this).find("span[class='selectProductNowPrice']").text();
+                    tempproduct=tempproduct+","+$(this).attr("is_giving");
+                    tempproduct=tempproduct+","+$(this).attr("tasteids");
+                    tempproduct=tempproduct+","+$(this).attr("tastememo");
+                    if(productlist!="")
+                    {
+                        productlist=productlist+"&"+tempproduct;
+                    }else{
+                        productlist=tempproduct;
+                    }
+                    
+                });
+                //包括单品列表、单品口味列表，口味备注等
+                return '{"orderid":'+orderid+',"orderstatus":'+orderstatus+
+                    ',"productlist":'+productlist+',"ordertasteids":'+ordertasteids+
+                    ',"ordertastememo":'+ordertastememo+'}';                 
+            }
+            
             $('#alltaste_btn').on(event_clicktouchstart,function(){
                     var tids=$("#ordertasteall").attr("tid");
                     $(".selectTaste").removeClass("active");
@@ -618,11 +672,79 @@
             });
                         
             $('#tempsave_btn').on(event_clicktouchstart,function(){
-                     
+                   //取得数据
+                   var sendjson=getallproductinfo("1");
+                   //alert(sendjson);return false;
+                   //postjson
+                   var index = layer.load(0, {shade: [0.3,'#fff']});
+                   $.ajax({
+                    url:'<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>',
+                    type:'POST',
+                    data:sendjson,
+                    async:false,
+	            dataType: "json",
+	            success:function(msg){
+                        var data=msg;
+	                if(data.status){
+                            layer.close(index);
+                            alert("保存成功！");
+                        }else{
+                            layer.close(index);
+                            alert("保存失败！");
+                        }
+                    },
+                    error: function(msg){
+                        layer.close(index);
+                        alert("保存失败！");
+                    }
+	     	});
+                   
             });
             
             $('#printerKitchen').on(event_clicktouchstart, function(){               
-                 layer_index2=layer.open({
+                
+                //取得数据，
+                   
+                   //postjson
+                   $.ajax({
+                    url:$('#padOrderForm').attr('action'),
+                    type:'POST',
+                    data:formdata,
+                    async:false,
+	            dataType: "json",
+	            success:function(msg){
+                        var data=msg;
+	                var printresult;
+                        var waittime=0;
+	    		if(data.status){
+                            //取得打印结果,在layer中定时取得
+                             //提示
+                            layer_index3=layer.open({
+                                 type: 1,
+                                 shade: false,
+                                 title: false, //不显示标题
+                                 area: ['30%', 'auto'],
+                                 content: $('#tastebox'),//$('#productInfo'), //捕获的元素
+                                 cancel: function(index){
+                                     layer.close(index);
+                    //                        this.content.show();
+                    //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                                 }
+                             });
+                        }
+//                        else{
+//                            alert("下单成功，打印失败");
+//                        }
+                       //以上是打印
+                       //刷新orderPartial	                 
+                    },
+                    error: function(msg){
+                        alert("保存失败");
+                    }
+	     	});
+                  
+                //出现收银界面
+                layer_index2=layer.open({
                      type: 1,
                      shade: false,
                      title: false, //不显示标题
@@ -648,6 +770,12 @@
             });
             
             $('.selectProductDel').live(event_clicktouchstart, function(){
+                var orderstatus=$(this).parent().attr("order_status");
+                if(orderstatus!="0" && orderstatus!="1")
+                {
+                    alert("已经下单，不能删除，请退菜");
+                    return false;
+                }                
                 var obj=$(this).parent().find('span[class="badge"]');
                 var curnum=parseFloat(obj.text());
                 if(curnum==1)
@@ -659,17 +787,18 @@
                 return false;
             });
             $('.selectProductName,.selectProductName,.badge').live('click', function(){
-                var lid=$(this).attr('lid');
-                var productid=$(this).attr('productid');
-                var isgiving=$(this).attr('is_giving');
-                var originprice=$(this).find(".selectProductPrice").text();
-                var productnumber=$(this).find("span[class='badge']").text();
-                var nowprice=$(this).find(".selectProductNowPrice").text();
-                var productdiscount=$(this).find(".selectProductDiscount").text();
-                var productname=$(this).find(".selectProductName").text();
-                var tasteids=$(this).attr("tasteids");
-                var tastememo=$(this).attr("tastememo");                
-                               
+                var lid=$(this).parent().attr('lid');
+                var productid=$(this).parent().attr('productid');
+                var isgiving=$(this).parent().attr('is_giving');
+                var originprice=$(this).parent().find(".selectProductPrice").text();
+                var productnumber=$(this).parent().find("span[class='badge']").text();
+                var nowprice=$(this).parent().find(".selectProductNowPrice").text();
+                var productdiscount=$(this).parent().find(".selectProductDiscount").text();
+                var productname=$(this).parent().find(".selectProductName").text();
+                var tasteids=$(this).parent().attr("tasteids");
+                var tastememo=$(this).parent().attr("tastememo");                
+                var isretreat=$(this).parent().attr("is_retreat");
+                var orderstatus=$(this).parent().attr("order_status");
                 if(productdiscount.lastIndexOf("%")>=0)
                 {
                     $(".selectDiscount").removeClass("active");
@@ -696,6 +825,8 @@
                 $("#spanProductDiscountOrig").text(productdiscount);
                 $("#spanTasteIds").text(tasteids);
                 $("#spanTasteMemo").text(tastememo);
+                $("#spanIsRetreat").text(isretreat);
+                $("#spanOrderStatus").text(orderstatus);
                 $('#productTaste').load('<?php echo $this->createUrl('defaultOrder/productTasteAll',array('companyId'=>$this->companyId,'isall'=>'0'));?>/lid/'+productid);
                 layer_index1=layer.open({
                      type: 1,
@@ -709,6 +840,40 @@
         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                      }
                  });  
+            });
+            
+            $('#btn-retreat').on(event_clicktouchstart,function(){
+                var lid =$("#spanLid").text();
+                var productid=$("#spanProductId").text();
+                var isretreat=$("#spanIsRetreat").text();
+                var orderstatus=$("#spanOrderStatus").text();
+                if(isretreat=="1")
+                {
+                    alert("已经退菜！");
+                    return false
+                }
+                if(orderstatus=="0" || orderstatus=="1")
+                {
+                    alert("还没有下单、直接删除就行！");
+                    return false
+                }    
+                alert(lid);//不能刷新orderPartial，手动改变状态
+                var $modal=$('#portlet-config');
+                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+lid
+                    ,'', function(){
+                      $modal.modal();
+                    });
+             });
+             
+             $('#btn-reprint').on(event_clicktouchstart,function(){
+                var lid =$("#spanLid").text();
+                var orderid=$(".selectProduct").attr("orderid");
+                var $modal=$('#portlet-config');
+                //不能刷新orderPartial，手动改变状态
+                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid
+                        ,'', function(){
+                                    $modal.modal();
+                            });                                                                    
             });
             
             $('#cancel_zero').on(event_clicktouchstart,function(){
@@ -994,6 +1159,12 @@
             });
             
             $('#product_yes').on(event_clicktouchstart,function(){
+                var orderstatus=$("#spanOrderStatus").text();
+                if(orderstatus=="1")
+                {
+                    alert("已下单，不能再修改！");
+                    return false;
+                }
                 lid=$("#spanLid").text();
                 productid=$("#spanProductId").text();
                 var obj=$(".selectProduct").find("li[lid='"+lid+"'][productid='"+productid+"']");
@@ -1002,6 +1173,7 @@
                 var special="";
                 var tasteids="";
                 var tastememo="";
+                
                 tastememo=$("#Order_remark_taste").val();
                 $("#productTaste").find("label[class='selectTaste btn btn-default active']").each(function(){
                     tasteids=tasteids+$(this).attr("tasteid")+"|";
@@ -1262,6 +1434,25 @@
                     $("#spanNowPrice").text("0.00");
                 }
             });
-                            
+        //库存提示
+        function sell_off(do_data) {
+            //alert(do_data);
+            var data = eval('(' + do_data + ')');
+            	//for(var item in data.do_data){
+            	for(var item in data){
+                    $('div.blockCategory[product-id="'+data[item].product_id+'"]').attr('store',data[item].num);
+                    if(parseInt(data[item].num)==0){
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+                    	var str = '<div class="sellOff sellOut"><?php echo yii::t('app',"已售完");?></div>';
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
+                    }else if(parseInt(data[item].num) > 0){
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+                    	var str = '<div class="sellOff">仅剩<br/>'+data[item].num+'份</div>';
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
+                    }else{
+                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+                    }
+            	}             
+       }                
 	</script>
 

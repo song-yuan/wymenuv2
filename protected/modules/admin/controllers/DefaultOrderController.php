@@ -213,6 +213,112 @@ class DefaultOrderController extends BackendController
 		));
 	}
 
+        /*
+         * 挂单
+         * 传递数据保存，
+         * 保存前检查库存
+         * 更新库存
+         * 
+         */
+        public function actionOrderPause(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getPost('orderid',"0");
+                $orderStatus = Yii::app()->request->getPost('orderstatus',"0");
+                $productList = Yii::app()->request->getPost('productlist',"0");
+                $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
+                $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
+                //如果orderId是0，表示是临时台，
+                //要开台、生成新的订单//暂时不处理
+                if($orderId =="0")
+                {
+                    //临时台，没有开过台的，
+                    //要开台，
+                    //生成新的订单，
+                    //然后才有后面的插入！！
+                    //var_dump($order);exit;
+//                    if(empty($order))
+//                    {
+//                        Until::validOperate($companyId,$this);
+//
+//                        $order=new Order();
+//                        $se=new Sequence("order");
+//                        $order->lid = $se->nextval();
+//                        $order->dpid=$companyId;
+//                        $order->create_at = date('Y-m-d H:i:s',time());
+//                        $order->lock_status = '0';
+//                        $order->order_status = '1';
+//                        $order->site_id = $siteNo->site_id;
+//                        $order->number = $siteNo->number;
+//                        $order->is_temp = $siteNo->is_temp;
+//                        //var_dump($order);exit;
+//                        $order->save();
+//                    }
+                }
+                //$syscallId = Yii::app()->request->getParam('syscallId',0);
+                //$autoaccount = Yii::app()->request->getParam('autoaccount',0);
+                $order=array();
+                $siteNo=array();
+                $site=array();
+                ///***********insert to order feedback
+                ///*************print
+                if($orderId !='0')
+                {
+                    $order = Order::model()->find('lid=:lid and dpid=:dpid and order_status in("1","2","3")' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    if(empty($order))
+                    {
+                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                    }
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                    $criteria->order = ' t.lid desc ';                    
+                    $siteNo = SiteNo::model()->find($criteria);
+                    //order site 和 siteno都需要更新状态 所以要取出来
+                    if($order->is_temp=="0")
+                    {
+                        $criteria->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
+                        $criteria->order = ' t.lid desc ';                    
+                        $site = $site::model()->find($criteria);
+                    }
+                }
+                $db=Yii::app()->db;
+                $transaction = $db->beginTransaction();
+		try {
+                    if(!empty($site))
+                    {
+                        $site->status=$orderStatus;
+                        $site->save();
+                    }
+                    if(!empty($siteNo))
+                    {
+                        $siteNo->status=$orderStatus;
+                        $siteNo->save();
+                    }
+                    $order->order_status=$orderStatus;
+                    $order->taste_memo=$orderTasteMemo;
+                    $order->save();
+                    //删除全单口味
+                    str_replace("|",",",$orderTasteIds);
+                    $sql = 'delete from nb_order_taste where dpid='.$companyId.' and lid in ('.$orderTasteIds.')';
+                    $result = $db->createCommand($sql)->execute();
+                    //重新插入
+                    $orderTasteArr=$orderTasteIds.split(",");
+                    
+                    //插入订单单品
+                } catch (Exception $ex) {
+
+                }
+                foreach($allOrderProductTastes as $orderProductTaste)
+                {
+                    if(empty($tasteidsOrderProducts[$orderProductTaste->id]))
+                    {
+                        $tasteidsOrderProducts[$orderProductTaste->id]=$orderProductTaste->tasteid."|";
+                    }else{
+                        $tasteidsOrderProducts[$orderProductTaste->id]=$tasteidsOrderProducts[$orderProductTaste->id].$orderProductTaste->tasteid."|";
+                    }
+                }
+               
+                //返回json挂单成功或失败
+	}
         
         public function actionHistoryList(){
 		$criteria = new CDbCriteria;
@@ -946,7 +1052,7 @@ class DefaultOrderController extends BackendController
         
         public function actionRetreatProduct(){
 		$id = Yii::app()->request->getParam('id',0);
-		$typeId = Yii::app()->request->getParam('typeId');
+		$typeId = Yii::app()->request->getParam('typeId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
                 if(Yii::app()->request->isPostRequest) {
                     Until::validOperate($companyId, $this);
@@ -1411,7 +1517,7 @@ class DefaultOrderController extends BackendController
         public function actionPrintOneKitchen(){
                 $orderProductId = Yii::app()->request->getParam('orderProductId',0);
 		$companyId = Yii::app()->request->getParam('companyId');
-                $typeId =  Yii::app()->request->getParam('typeId');
+                $typeId =  Yii::app()->request->getParam('typeId',0);
                 Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;              
                 
