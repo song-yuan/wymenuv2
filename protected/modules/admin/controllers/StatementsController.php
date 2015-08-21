@@ -304,7 +304,7 @@ class StatementsController extends BackendController
 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
 		}else{
 			$criteria->group ='t.product_id,day(t.update_at)';
-			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t,update_at) asc,t.dpid asc';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 		}
 		
 	//	$criteria->order = 't.update_at asc';
