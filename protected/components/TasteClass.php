@@ -76,12 +76,12 @@ class TasteClass
 	public static function getOrderTasteKV($orderId,$type,$dpid){
 		$result = array();
 		if($type==1){
-			$sql = 'select t.order_id as id,t1.name as name from nb_order_taste t left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid where t.order_id=:orderId and t.dpid=:dpid and t.is_order=1';
+			$sql = 'select t.order_id as id,t.taste_id as tasteid,t1.name as name from nb_order_taste t left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid where t.order_id=:orderId and t.dpid=:dpid and t.is_order=1';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
                         $conn->bindValue(':dpid',$dpid);
 		}elseif($type==2){
-			$sql = 'select t.order_id as id,t1.name as name from nb_order_taste t left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid  where t.order_id in (select lid from nb_order_product where dpid=:ddpid and order_id = :orderId) and t.dpid=:dpid and t.is_order=0';
+			$sql = 'select t.order_id as id,t.taste_id as tasteid,t1.name as name from nb_order_taste t left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid  where t.order_id in (select lid from nb_order_product where dpid=:ddpid and order_id = :orderId) and t.dpid=:dpid and t.is_order=0';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':orderId',$orderId);
                         $conn->bindValue(':dpid',$dpid);
