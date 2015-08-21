@@ -12,7 +12,7 @@
 									</div>
 									<div class="col-md-10" style="padding:0;margin-top:20px;">
 										<div class="input-group">
-											<input type="text" class="form-control" placeholder="请输入卡号、手机、会员姓名" value="" />
+											<input type="text" class="form-control membercard" placeholder="请输入会员号、手机、会员姓名" value="" />
 											<span class="input-group-btn">
 											<button class="btn blue getMember" type="button"> 搜 索 </button>
 											</span>
@@ -27,23 +27,23 @@
 											<table class="table table-hover">
 												<tbody>
 													<tr>
-														<td width="20%">卡号:</td>
+														<td width="20%">会员号:</td>
 														<td width="40%" id="selfcode"></td>
 													</tr>
 													<tr>
-														<td>余额:</td>
+														<td>余 额:</td>
 														<td id="all-money"></td>
 													</tr>
 													<tr>
-														<td>姓名:</td>
+														<td>姓 名:</td>
 														<td id="name"></td>
 													</tr>
 													<tr>
-														<td>手机:</td>
+														<td>手 机:</td>
 														<td id="mobile"></td>
 													</tr>
 													<tr>
-														<td>邮箱:</td>
+														<td>邮 箱:</td>
 														<td id="email"></td>
 													</tr>
 												</tbody>
@@ -58,7 +58,8 @@
 											'errorMessageCssClass' => 'help-block',
 											'htmlOptions' => array(
 												'class' => 'form-horizontal',
-												'enctype' => 'multipart/form-data'
+												'enctype' => 'multipart/form-data',
+												'onsubmit' => 'return check()',
 											),
 									)); ?>
 										<div class="form-body">
@@ -94,6 +95,14 @@
 			</div>
 			<!-- END PAGE CONTENT-->    
 		<script type="text/javascript">
+		function check(){
+			var rfid = $('input[name="rfid"]').val();
+			var membercard = $('input[name="MemberRecharge[member_card_id]"]').val();
+			if(!rfid || !membercard){
+				return false;
+			}
+			return true;
+		}
 		jQuery(document).ready(function(){
 			$('.getMember').click(function(){
 				var card = $(this).parents('.input-group').find('input').val();
@@ -107,9 +116,19 @@
 						$('#mobile').html(data.msg.mobile)
 						$('#email').html(data.msg.email)
 					}else{
+						$('input[name="rfid"]').val('');
+						$('input[name="MemberRecharge[member_card_id]"]').val('');
+						$('#selfcode').html('')
+						$('#all-money').html('')
+						$('#name').html('')
+						$('#mobile').html('')
+						$('#email').html('')
 						alert(data.msg);
 					}
 				},'json') ;
+			});
+			$('.membercard').change(function(){
+				$('.getMember').click();
 			});
 		});
 		</script> 

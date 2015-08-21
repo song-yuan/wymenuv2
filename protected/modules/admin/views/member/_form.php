@@ -12,14 +12,38 @@
 				'onsubmit'=>'return check()',
 			),
 	)); ?>
-		<div class="form-body">
-		<div class="form-group">
+	<div class="form-body">
+	<?php if($model->getIsNewRecord()):?>
+			<div class="form-group">
+				<?php echo $form->label($model, 'rfid',array('class' => 'col-md-3 control-label'));?>
+				<div class="col-md-4">
+					<?php echo $form->textField($model, 'rfid',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rfid')));?>
+					<?php echo $form->error($model, 'rfid' )?>
+				</div>
+			</div>
+			<div class="form-group">
 				<?php echo $form->label($model, 'selfcode',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
 					<?php echo $form->textField($model, 'selfcode',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('selfcode')));?>
 					<?php echo $form->error($model, 'selfcode' )?>
 				</div>
 			</div>
+		<?php else:?>
+			<div class="form-group">
+				<?php echo $form->label($model, 'rfid',array('class' => 'col-md-3 control-label'));?>
+				<div class="col-md-4">
+					<?php echo $form->textField($model, 'rfid',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rfid'),'disabled'=>'disabled'));?>
+					<?php echo $form->error($model, 'rfid' )?>
+				</div>
+			</div>
+			<div class="form-group">
+				<?php echo $form->label($model, 'selfcode',array('class' => 'col-md-3 control-label'));?>
+				<div class="col-md-4">
+					<?php echo $form->textField($model, 'selfcode',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('selfcode'),'disabled'=>'disabled'));?>
+					<?php echo $form->error($model, 'selfcode' )?>
+				</div>
+			</div>
+		<?php endif;?>
 			<div class="form-group">
 				<?php echo $form->label($model, 'name',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
