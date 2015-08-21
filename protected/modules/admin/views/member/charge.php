@@ -116,6 +116,13 @@
 						$('#mobile').html(data.msg.mobile)
 						$('#email').html(data.msg.email)
 					}else{
+						$('input[name="rfid"]').val('');
+						$('input[name="MemberRecharge[member_card_id]"]').val('');
+						$('#selfcode').html('')
+						$('#all-money').html('')
+						$('#name').html('')
+						$('#mobile').html('')
+						$('#email').html('')
 						alert(data.msg);
 					}
 				},'json') ;
