@@ -23,8 +23,8 @@
                                                 {  echo "味";}
                                         ?></span>
                                     <span style="font-size:20px !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>
-                                    <span class="selectProductPrice" style="color:#976125;display:none"><?php echo number_format($orderProduct['price'],2);?></span>
-                                    <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>
+                                    <span class="selectProductPrice" style="color:#976125;display:none"><?php echo number_format($orderProduct['original_price'],2);?></span>
+                                    <span class="selectProductDiscount" style="color:#976125;display:none"><?php echo $orderProduct['offprice'];?></span>
                                     <span class="selectProductNowPrice" style="color:#976125"><?php echo number_format($orderProduct['price'],2);?></span>
                                     <span style="position:absolute;" class="selectProductName"><?php echo $orderProduct['product_name'];?></span>
                                     <img class="selectProductDel" style="position: absolute;right:0.3em; width: 3.0em;height: 2.0em;padding:5px 10px 5px 10px;" 

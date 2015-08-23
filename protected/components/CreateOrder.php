@@ -505,13 +505,13 @@ class CreateOrder
                 	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
                 }
                 //$printList2=array_merge($printList,array('sitenoid'=> $lid));
-//            }	
-
-			//估清产品通知
+//            }								
+ 			$transaction->commit();	
+                        //估清产品通知
 			if(!empty($sellOff)){
 				Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
-                $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>$dpid));
+                $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('0','1','2')",array(":dpid"=>$dpid));
                 //var_dump($pads);exit;
                 $sendjsondata=json_encode(array("company_id"=>$dpid,
                     "do_id"=>"sell_off",
@@ -526,8 +526,7 @@ class CreateOrder
                         Gateway::sendToClient($clientId,$sendjsondata);
                     }
                 } 
-			}				
- 			$transaction->commit();	
+			}
  			return json_encode($printList,JSON_UNESCAPED_UNICODE);
 		 } catch (Exception $e) {
                 $transaction->rollback(); //如果操作失败, 数据回滚

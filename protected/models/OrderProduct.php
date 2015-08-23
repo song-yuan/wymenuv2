@@ -14,6 +14,7 @@
  * @property string $is_retreat
  * @property string $is_print
  * @property string $price
+ * @property string $offprice
  * @property integer $amount
  * @property integer $zhiamount
  * @property string $is_waiting
@@ -53,10 +54,10 @@ class OrderProduct extends CActiveRecord
 			array('main_id,set_id, product_id, price, weight', 'length', 'max'=>10),
 			array('is_print, is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
 			//array('taste_memo', 'length', 'max'=>50),
-			array('create_at, amount, zhiamount', 'safe'),
+			array('create_at, offprice, amount, zhiamount', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, order_id, main_id, set_id, product_id, is_retreat, is_print, price, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, order_id, main_id, set_id, product_id, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -94,6 +95,7 @@ class OrderProduct extends CActiveRecord
 			'is_retreat' => '0非退菜，1退菜',
                         'is_print' => yii::t('app','厨打'),
 			'price' => yii::t('app','下单时价格'),
+                        'offprice' => yii::t('app','优惠价格'),
 			'amount' => yii::t('app','下单数量'),
 			'zhiamount' => yii::t('app','下单只数'),
 			'is_waiting' => '0不等叫，1等叫，2已上菜',
@@ -134,6 +136,7 @@ class OrderProduct extends CActiveRecord
 		$criteria->compare('is_retreat',$this->is_retreat,true);
                 $criteria->compare('is_print',$this->is_print,true);
 		$criteria->compare('price',$this->price,true);
+                $criteria->compare('offprice',$this->offprice,true);
 		$criteria->compare('amount',$this->amount);
 		$criteria->compare('zhiamount',$this->zhiamount);
 		$criteria->compare('is_waiting',$this->is_waiting,true);

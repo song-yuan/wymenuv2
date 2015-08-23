@@ -536,6 +536,21 @@
             <div id="tastebox" style="display: none">
                 
             </div>
+            <!---printRsultList printresult -->
+            <div id="printRsultList" style="display: none">
+                <div style="margin:10px;">
+                <h4 id="printalljobs"></h4>
+                <span style="color:red;" id="minustimes">30</span><?php echo yii::t('app','秒倒计时...');?></br>
+                <span style="color:red;" id="successnumid">0</span><?php echo yii::t('app','...个菜品厨打已经成功');?></br>
+                <span style="color:red;" id="notsurenumid">0</span><?php echo yii::t('app','...个菜品正在打印');?></br>
+                <span style="color:red;" id="errornumid">0</span><?php echo yii::t('app','...个菜品厨打失败，');?></br></br>
+                <?php echo yii::t('app','有打印失败的菜品，请重新厨打。');?><br><br>
+                <div style="text-align:center;">
+                    <input type="button" class="btn green" id="print_box_close" value="<?php echo yii::t('app','确 定');?>">
+                </div>
+                </div>
+            </div>
+            
         <script type="text/javascript">
             var gssid=0;
             var gsistemp=0;
@@ -545,6 +560,8 @@
             var layer_index1;
             var layer_index2;
             var layer_index3;
+            //var layer_index_account;
+            var layer_index_printresult;
             var first_tab="<?php echo $categories[0]['lid']; ?>";
             if (typeof Androidwymenuprinter == "undefined") {
                 event_clicktouchstart="click";
@@ -582,7 +599,7 @@
             
             $('.productClick').on(event_clicktouchstart, function(){
                 var origin_price=$(this).attr("price");
-                var lid=$(this).attr("lid");                
+                var lid=$(this).attr("lid");                //[lid='+lid+']
                 var obj=$('.selectProductA[productid="'+lid+'"][order_status="0"]');//.find('span[class="badge"]');
                 //alert(obj.attr("lid"));
                 if(typeof obj.attr("lid")== "undefined")
@@ -607,8 +624,8 @@
                                   +' </li>'
                     $(".selectProduct").append(appendstr);
                 }else{
-                    var curnum = parseFloat(obj.find('span[class="badge"]').text());
-                    obj.find('span[class="badge"]').text(curnum+1);
+                    var curnum = parseFloat(obj.find('span[class="badge"]').text())+1;                    
+                    obj.find('span[class="badge"]').text(curnum);
                 }
                 
             });
@@ -631,24 +648,27 @@
                 $(".selectProductA[order_status='0']").each(function(){
                     tempproduct=$(this).attr("lid");
                     tempproduct=tempproduct+","+$(this).attr("productid");
+                    tempproduct=tempproduct+","+$(this).attr("order_status");
                     tempproduct=tempproduct+","+$(this).find("span[class='badge']").text();
+                    tempproduct=tempproduct+","+$(this).find("span[class='selectProductDiscount']").text();
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductNowPrice']").text();
                     tempproduct=tempproduct+","+$(this).attr("is_giving");
                     tempproduct=tempproduct+","+$(this).attr("tasteids");
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
                     if(productlist!="")
                     {
-                        productlist=productlist+"&"+tempproduct;
+                        productlist=productlist+";"+tempproduct;
                     }else{
                         productlist=tempproduct;
                     }
                     
                 });
                 //包括单品列表、单品口味列表，口味备注等
-                return '{"orderid":'+orderid+',"orderstatus":'+orderstatus+
-                    ',"productlist":'+productlist+',"ordertasteids":'+ordertasteids+
-                    ',"ordertastememo":'+ordertastememo+'}';                 
+                return 'orderid='+orderid+'&orderstatus='+orderstatus+
+                    '&productlist='+productlist+'&ordertasteids='+ordertasteids+
+                    '&ordertastememo='+ordertastememo;                 
             }
+            
             
             $('#alltaste_btn').on(event_clicktouchstart,function(){
                     var tids=$("#ordertasteall").attr("tid");
@@ -673,12 +693,12 @@
                         
             $('#tempsave_btn').on(event_clicktouchstart,function(){
                    //取得数据
+                   var orderid=$(".selectProduct").attr("orderid");
                    var sendjson=getallproductinfo("1");
-                   //alert(sendjson);return false;
-                   //postjson
+                   var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
-                    url:'<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>',
+                    url:url,
                     type:'POST',
                     data:sendjson,
                     async:false,
@@ -687,6 +707,7 @@
                         var data=msg;
 	                if(data.status){
                             layer.close(index);
+                            $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                             alert("保存成功！");
                         }else{
                             layer.close(index);
@@ -701,63 +722,98 @@
                    
             });
             
-            $('#printerKitchen').on(event_clicktouchstart, function(){               
-                
-                //取得数据，
-                   
-                   //postjson
-                   $.ajax({
-                    url:$('#padOrderForm').attr('action'),
-                    type:'POST',
-                    data:formdata,
-                    async:false,
-	            dataType: "json",
-	            success:function(msg){
-                        var data=msg;
-	                var printresult;
-                        var waittime=0;
-	    		if(data.status){
-                            //取得打印结果,在layer中定时取得
-                             //提示
-                            layer_index3=layer.open({
-                                 type: 1,
-                                 shade: false,
-                                 title: false, //不显示标题
-                                 area: ['30%', 'auto'],
-                                 content: $('#tastebox'),//$('#productInfo'), //捕获的元素
-                                 cancel: function(index){
-                                     layer.close(index);
-                    //                        this.content.show();
-                    //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
-                                 }
-                             });
-                        }
-//                        else{
-//                            alert("下单成功，打印失败");
-//                        }
-                       //以上是打印
-                       //刷新orderPartial	                 
-                    },
-                    error: function(msg){
-                        alert("保存失败");
-                    }
-	     	});
-                  
-                //出现收银界面
-                layer_index2=layer.open({
-                     type: 1,
-                     shade: false,
-                     title: false, //不显示标题
-                     area: ['65%', '60%'],
-                     content: $('#accountbox'),//$('#productInfo'), //捕获的元素
-                     cancel: function(index){
-                         layer.close(index);
-        //                        this.content.show();
-        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
-                     }
-                 });   
-                //$('#portlet-config3').modal();
-                //portlet-config3
+            $('#printerKitchen').on(event_clicktouchstart, function(){
+                var orderid=$(".selectProduct").attr("orderid");
+                //有新品
+                if($(".selectProductA[order_status='0']").length>0)
+                {
+                        //取得数据
+                        var sendjson=getallproductinfo("2");
+                        var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>";
+                        var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
+                         if(!statu){
+                             return false;
+                         }                   
+                        $.ajax({
+                            url:url,
+                            type:'POST',
+                            data:sendjson,
+                            async:false,
+                            dataType: "json",
+                            success:function(msg){
+                                //保存成功，刷新
+                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
+                                var data=msg;
+                                if(data.status){
+                                    //取得打印结果,在layer中定时取得
+                                    //alert(data.msg);
+                                    $("#printalljobs").text(data.msg);
+                                    layer_index_printresult=layer.open({
+                                         type: 1,
+                                         shade: false,
+                                         title: false, //不显示标题
+                                         area: ['30%', 'auto'],
+                                         content: $('#printRsultList'),//$('#productInfo'), //捕获的元素
+                                         cancel: function(index){
+                                             layer.close(index);
+                            //                        this.content.show();
+                            //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                                         }
+                                     });
+                                    var waitingsecond=30;
+                                    var interval=setInterval(function(){ 
+                                        $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResultAll',array('companyId'=>$this->companyId));?>/orderId/'+orderid+'/timenum/'+waitingsecond,
+                                            function(data){
+                                                //waitingsecond--
+                                                //alert(data.notsurenum);
+                                                $("#minustimes").html(waitingsecond);
+                                                $("#successnumid").html(data.successnum);
+                                                $("#errornumid").html(data.errornum);
+                                                $("#notsurenumid").html(data.notsurenum);
+                                                if(data.finished && data.errornum==0 && data.notsurenum==0)
+                                                {
+                                                    //all success
+                                                    clearInterval(interval);
+                                                    layer.close(layer_index_printresult);
+                                                }                                                
+                                            },'json'); 
+                                            waitingsecond--;
+                                            if(waitingsecond<0)
+                                            {                                                       
+                                                $("#notsurenumid").html(0);
+                                                $("#errornumid").html(data.errornum+data.notsurenum);
+                                                clearInterval(interval);
+                                            }
+                                    },1000);                                    
+                                }else{
+                                    alert("下单成功，打印失败");
+                                }
+                               //以上是打印
+                               //刷新orderPartial	                 
+                            },
+                            error: function(msg){
+                                alert("保存失败2");
+                            }
+                        });
+                }else{ //没有新品
+                    //出现收银界面
+                    layer_index2=layer.open({
+                         type: 1,
+                         shade: false,
+                         title: false, //不显示标题
+                         area: ['65%', '60%'],
+                         content: $('#accountbox'),//$('#productInfo'), //捕获的元素
+                         cancel: function(index){
+                             layer.close(index);
+            //                        this.content.show();
+            //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                         }
+                     });   
+                 }
+            });
+            
+            $('#print_box_close').on(event_clicktouchstart, function(){               
+                 layer.close(layer_index_printresult);                    
             });
             
             $('#layer2_close').on(event_clicktouchstart, function(){               
@@ -771,7 +827,7 @@
             
             $('.selectProductDel').live(event_clicktouchstart, function(){
                 var orderstatus=$(this).parent().attr("order_status");
-                if(orderstatus!="0" && orderstatus!="1")
+                if(orderstatus!="0")
                 {
                     alert("已经下单，不能删除，请退菜");
                     return false;
@@ -1144,13 +1200,22 @@
             });
             
             $('#cl_all').on(event_clicktouchstart,function(){
-                if(discountOrig.lastIndexOf("%")>="0")
+                var discountOrig=$("#spanProductDiscountOrig").text();
+                var spanOriginPrice=$("#spanOriginPrice").text();
+                var nowpriceOrig=$("#spanNowPriceOrig").text();
+                //alert(discountOrig);
+                
+                if(discountOrig.lastIndexOf("%")>=0)
                 {
-                    $("#spanProductDiscount").text("0.00");
-                    $("#spanNowPrice").text(spanOriginPrice);
-                }else{
                     $("#spanProductDiscount").text(discountOrig);
                     $("#spanNowPrice").text(nowpriceOrig);
+                    $(".selectDiscount").removeClass("active");
+                    $(".selectDiscount[id='checkboxDiscount']").addClass("active");
+                }else{                    
+                    $("#spanProductDiscount").text("0.00");
+                    $("#spanNowPrice").text(spanOriginPrice);
+                    $(".selectDiscount").removeClass("active");
+                    $(".selectDiscount[id='checkboxMinus']").addClass("active");
                 }
             });
             
@@ -1393,6 +1458,18 @@
                     }
                 }
             });
+            
+            $('#pay_btn').on(event_clicktouchstart,function(){
+                //accountManul
+                bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {
+                        if(result){
+                             //实收，打折等注释
+                             //存数order_pay 0现金，4会员卡，5银联
+                             //写入会员卡消费记录，会员卡总额减少
+                        }
+                 });
+            });
+            
             $('#other-btn').on(event_clicktouchstart,function(){
                  bootbox.confirm("<?php echo yii::t('app','你确定切换到其他支付方式吗？');?>", function(result) {
                         if(result){
