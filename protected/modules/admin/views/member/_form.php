@@ -146,6 +146,11 @@
 		   	  	 $('.password').show();
 		   	  }
 		   });
+		   $('form input').keypress(function(e){
+            if(e.keyCode==13){
+                e.preventDefault();
+            }
 		});
+	});
 	</script>
 	<?php $this->endWidget(); ?>
