@@ -3,7 +3,7 @@
             <span id="order_status" orderStatus="<?php echo $model->order_status; ?>">
                                         *<?php echo $model->create_at;?></span>
             <li lid="0000000000" class="selectProductA">                                    
-                    已付<span id="order_should_pay"><?php echo $model->reality_total;?></span>元/应付<span id="order_reality_pay"><?php echo number_format($total['total'], 2);?></span>元
+                    已付<span id="order_reality_pay"><?php echo $model->reality_total;?></span>元/应付<span id="order_should_pay"><?php echo number_format($total['total'], 2);?></span>元
             </li>
                 <?php foreach ($orderProducts as $orderProduct):?>
                                     <li lid="<?php echo $orderProduct['lid'];?>" 

@@ -88,7 +88,7 @@
                                                                             <a id="order_list" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','点单界面');?></a>
                                                                             <a  href="<?php echo $this->createUrl('orderManagement/notPay',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>" class='btn green'  ><?php echo yii::t('app','今日订单');?></a>
                                                                             <a  href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId,'typeId'=>'product','from'=>'home'));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','快速沽清');?></a>
-                        
+                                                                            <a  href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId,'from'=>'home'));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','会员管理');?></a>
                                                                         </div>
 								</div>
 								<div class="portlet-body" id="table-manage">

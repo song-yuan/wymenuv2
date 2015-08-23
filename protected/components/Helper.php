@@ -1109,9 +1109,9 @@ class Helper
                         }
                 }        
                 //var_dump(json_encode($jobids));exit;
-//                Gateway::getOnlineStatus();
-//                $store = Store::instance('wymenu');
-//                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids),0,300);                        
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids),0,300);                        
                 $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布');
                 return $ret;
 	}
