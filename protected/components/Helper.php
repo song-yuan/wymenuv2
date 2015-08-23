@@ -821,8 +821,6 @@ class Helper
                 }			
 	}
         
-        //在同一个打印机厨打的菜品，不分开厨打，
-        //目前就是所有菜品一张厨打单子上出来。
         //这个是最新的，临时的在printKitchenAll中
         //2015/8/5更新
         //遍历所有打印方案，通常有传菜打印放啊、厨房整单打印方案、厨房分开打印方案
@@ -831,7 +829,7 @@ class Helper
                 $orderproducts_a=array();
                 $printer2orderproducts_a=array();
                 $jobids=array();
-                        
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"dddd");        
                 //$orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
                 //$orderProductTasteEx = $orderProduct->taste_memo;
                 //var_dump($orderProductTasteEx);exit;
@@ -850,7 +848,8 @@ class Helper
                 }
                 //foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
                 $printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));
-//                var_dump($printerways);exit;
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"dddd");
+                //var_dump($printerways);exit;
                 foreach($printerways as $printerway)
                 {
                     $printer2orderproducts_a=array();

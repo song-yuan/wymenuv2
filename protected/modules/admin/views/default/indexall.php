@@ -198,7 +198,9 @@
 .edit_span_select {
     border:1px solid red;
 }
-
+.edit_span_select_zero {
+    border:1px solid red;
+}
 /*
 .calc_num {
         width: 56%;
@@ -490,7 +492,7 @@
                                                 <div style="margin:0px;border:0px solid green;" class="calc_button">
                                                     <ul style="padding-left:0px;">
                                                         <li id="pay_clearone" style="background-color: #add"><?php echo yii::t('app','退格');?></li>
-                                                        <li id="pay_clearall" style="background-color: red"><?php echo yii::t('app','清除');?></li>
+                                                        <li id="pay_clearall" style="background-color: red"><?php echo yii::t('app','清除/全额');?></li>
                                                         <li id="pay_btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>    
                                                         <li id="layer2_close" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
                                                     </ul>
@@ -502,7 +504,7 @@
                                                     实收<span style="text-align:right;" id="payRealityAccount">0.00</span><br>
                                                     找零<span style="text-align:right;" id="payChangeAccount">0.00</span><br>
                                                     <DIV class="edit_span edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" id="payMemberAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
                                                     <DIV class="edit_span" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
                                                     
                                                 </div>    
@@ -536,6 +538,34 @@
             <div id="tastebox" style="display: none">
                 
             </div>
+            <!---printRsultList printresult -->
+            <div id="printRsultList" style="display: none">
+                <div style="margin:10px;">
+                <h4 id="printalljobs"></h4>
+                <span style="color:red;" id="minustimes">30</span><?php echo yii::t('app','秒倒计时...');?></br>
+                <span style="color:red;" id="successnumid">0</span><?php echo yii::t('app','...个菜品厨打已经成功');?></br>
+                <span style="color:red;" id="notsurenumid">0</span><?php echo yii::t('app','...个菜品正在打印');?></br>
+                <span style="color:red;" id="errornumid">0</span><?php echo yii::t('app','...个菜品厨打失败，');?></br></br>
+                <?php echo yii::t('app','有打印失败的菜品，请重新厨打。');?><br><br>
+                <div style="text-align:center;">
+                    <input type="button" class="btn green" id="print_box_close" value="<?php echo yii::t('app','确 定');?>">
+                </div>
+                </div>
+            </div>
+            <!---membercardInfo  -->
+            <div id="membercardInfo" style="display:none;">
+                <div style="width: 95%;margin:1.0em;font-size: 1.5em;">
+                        <DIV style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','还欠:');?><span id="card_pay_span_money">10000.23</span></DIV>
+                        <DIV style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','会员卡支付：');?><input id="card_pay_input_money" style="width:50%;border:none;" type="text" value="10000.23"></DIV>
+                        <DIV style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','请刷卡');?><input id="card_pay_input_card" style="width:50%;border:none;" type="text" value="888123"></DIV>
+                        <DIV style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','密码');?><input id="card_pay_input_password" style="width:50%;border:none;" type="password" value="12345"></DIV>
+                </div>
+                <div style="text-align:center;width: 95%;margin:1.0em;">
+                    <input style="margin:1.0em;" type="button" class="btn green" id="member_card_pay" value="<?php echo yii::t('app','确 定');?>">
+                    <input style="margin:1.0em;" type="button" class="btn green" id="member_card_pay_close" value="<?php echo yii::t('app','取 消');?>">
+                </div>
+            </div>
+            
         <script type="text/javascript">
             var gssid=0;
             var gsistemp=0;
@@ -545,6 +575,9 @@
             var layer_index1;
             var layer_index2;
             var layer_index3;
+            //var layer_index_account;
+            var layer_index_printresult;
+            var layer_index_membercard;
             var first_tab="<?php echo $categories[0]['lid']; ?>";
             if (typeof Androidwymenuprinter == "undefined") {
                 event_clicktouchstart="click";
@@ -582,7 +615,7 @@
             
             $('.productClick').on(event_clicktouchstart, function(){
                 var origin_price=$(this).attr("price");
-                var lid=$(this).attr("lid");                
+                var lid=$(this).attr("lid");                //[lid='+lid+']
                 var obj=$('.selectProductA[productid="'+lid+'"][order_status="0"]');//.find('span[class="badge"]');
                 //alert(obj.attr("lid"));
                 if(typeof obj.attr("lid")== "undefined")
@@ -607,8 +640,8 @@
                                   +' </li>'
                     $(".selectProduct").append(appendstr);
                 }else{
-                    var curnum = parseFloat(obj.find('span[class="badge"]').text());
-                    obj.find('span[class="badge"]').text(curnum+1);
+                    var curnum = parseFloat(obj.find('span[class="badge"]').text().replace(",",""))+1;                    
+                    obj.find('span[class="badge"]').text(curnum);
                 }
                 
             });
@@ -631,24 +664,27 @@
                 $(".selectProductA[order_status='0']").each(function(){
                     tempproduct=$(this).attr("lid");
                     tempproduct=tempproduct+","+$(this).attr("productid");
+                    tempproduct=tempproduct+","+$(this).attr("order_status");
                     tempproduct=tempproduct+","+$(this).find("span[class='badge']").text();
+                    tempproduct=tempproduct+","+$(this).find("span[class='selectProductDiscount']").text();
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductNowPrice']").text();
                     tempproduct=tempproduct+","+$(this).attr("is_giving");
                     tempproduct=tempproduct+","+$(this).attr("tasteids");
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
                     if(productlist!="")
                     {
-                        productlist=productlist+"&"+tempproduct;
+                        productlist=productlist+";"+tempproduct;
                     }else{
                         productlist=tempproduct;
                     }
                     
                 });
                 //包括单品列表、单品口味列表，口味备注等
-                return '{"orderid":'+orderid+',"orderstatus":'+orderstatus+
-                    ',"productlist":'+productlist+',"ordertasteids":'+ordertasteids+
-                    ',"ordertastememo":'+ordertastememo+'}';                 
+                return 'orderid='+orderid+'&orderstatus='+orderstatus+
+                    '&productlist='+productlist+'&ordertasteids='+ordertasteids+
+                    '&ordertastememo='+ordertastememo;                 
             }
+            
             
             $('#alltaste_btn').on(event_clicktouchstart,function(){
                     var tids=$("#ordertasteall").attr("tid");
@@ -673,12 +709,12 @@
                         
             $('#tempsave_btn').on(event_clicktouchstart,function(){
                    //取得数据
+                   var orderid=$(".selectProduct").attr("orderid");
                    var sendjson=getallproductinfo("1");
-                   //alert(sendjson);return false;
-                   //postjson
+                   var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
-                    url:'<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>',
+                    url:url,
                     type:'POST',
                     data:sendjson,
                     async:false,
@@ -687,6 +723,7 @@
                         var data=msg;
 	                if(data.status){
                             layer.close(index);
+                            $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                             alert("保存成功！");
                         }else{
                             layer.close(index);
@@ -701,63 +738,105 @@
                    
             });
             
-            $('#printerKitchen').on(event_clicktouchstart, function(){               
-                
-                //取得数据，
-                   
-                   //postjson
-                   $.ajax({
-                    url:$('#padOrderForm').attr('action'),
-                    type:'POST',
-                    data:formdata,
-                    async:false,
-	            dataType: "json",
-	            success:function(msg){
-                        var data=msg;
-	                var printresult;
-                        var waittime=0;
-	    		if(data.status){
-                            //取得打印结果,在layer中定时取得
-                             //提示
-                            layer_index3=layer.open({
-                                 type: 1,
-                                 shade: false,
-                                 title: false, //不显示标题
-                                 area: ['30%', 'auto'],
-                                 content: $('#tastebox'),//$('#productInfo'), //捕获的元素
-                                 cancel: function(index){
-                                     layer.close(index);
-                    //                        this.content.show();
-                    //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
-                                 }
-                             });
-                        }
-//                        else{
-//                            alert("下单成功，打印失败");
-//                        }
-                       //以上是打印
-                       //刷新orderPartial	                 
-                    },
-                    error: function(msg){
-                        alert("保存失败");
-                    }
-	     	});
-                  
-                //出现收银界面
-                layer_index2=layer.open({
-                     type: 1,
-                     shade: false,
-                     title: false, //不显示标题
-                     area: ['65%', '60%'],
-                     content: $('#accountbox'),//$('#productInfo'), //捕获的元素
-                     cancel: function(index){
-                         layer.close(index);
-        //                        this.content.show();
-        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
-                     }
-                 });   
-                //$('#portlet-config3').modal();
-                //portlet-config3
+            $('#printerKitchen').on(event_clicktouchstart, function(){
+                var orderid=$(".selectProduct").attr("orderid");
+                //有新品
+                if($(".selectProductA[order_status='0']").length>0)
+                {
+                        //取得数据
+                        var sendjson=getallproductinfo("2");
+                        var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>";
+                        var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
+                         if(!statu){
+                             return false;
+                         }                   
+                        $.ajax({
+                            url:url,
+                            type:'POST',
+                            data:sendjson,
+                            async:false,
+                            dataType: "json",
+                            success:function(msg){
+                                //保存成功，刷新
+                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
+                                var data=msg;
+                                if(data.status){
+                                    //取得打印结果,在layer中定时取得
+                                    //alert(data.msg);
+                                    $("#printalljobs").text(data.msg);
+                                    layer_index_printresult=layer.open({
+                                         type: 1,
+                                         shade: false,
+                                         title: false, //不显示标题
+                                         area: ['30%', 'auto'],
+                                         content: $('#printRsultList'),//$('#productInfo'), //捕获的元素
+                                         cancel: function(index){
+                                             layer.close(index);
+                            //                        this.content.show();
+                            //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                                         }
+                                     });
+                                    var waitingsecond=30;
+                                    var interval=setInterval(function(){ 
+                                        $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResultAll',array('companyId'=>$this->companyId));?>/orderId/'+orderid+'/timenum/'+waitingsecond,
+                                            function(data){
+                                                //waitingsecond--
+                                                //alert(data.notsurenum);
+                                                $("#minustimes").html(waitingsecond);
+                                                $("#successnumid").html(data.successnum);
+                                                $("#errornumid").html(data.errornum);
+                                                $("#notsurenumid").html(data.notsurenum);
+                                                if(data.finished && data.errornum==0 && data.notsurenum==0)
+                                                {
+                                                    //all success
+                                                    clearInterval(interval);
+                                                    layer.close(layer_index_printresult);
+                                                }                                                
+                                            },'json'); 
+                                            waitingsecond--;
+                                            if(waitingsecond<0)
+                                            {                                                       
+                                                $("#notsurenumid").html(0);
+                                                $("#errornumid").html(data.errornum+data.notsurenum);
+                                                clearInterval(interval);
+                                            }
+                                    },1000);                                    
+                                }else{
+                                    alert("下单成功，打印失败");
+                                }
+                               //以上是打印
+                               //刷新orderPartial	                 
+                            },
+                            error: function(msg){
+                                alert("保存失败2");
+                            }
+                        });
+                }else{ //没有新品
+                    //设置总额
+                    var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
+                    $("#payOriginAccount").text(payOriginAccount);
+                    var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
+                    var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
+                    $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                        
+                    //出现收银界面
+                    layer_index2=layer.open({
+                         type: 1,
+                         shade: false,
+                         title: false, //不显示标题
+                         area: ['65%', '60%'],
+                         content: $('#accountbox'),//$('#productInfo'), //捕获的元素
+                         cancel: function(index){
+                             layer.close(index);
+            //                        this.content.show();
+            //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                         }
+                     });   
+                 }
+            });
+            
+            $('#print_box_close').on(event_clicktouchstart, function(){               
+                 layer.close(layer_index_printresult);                    
             });
             
             $('#layer2_close').on(event_clicktouchstart, function(){               
@@ -771,13 +850,13 @@
             
             $('.selectProductDel').live(event_clicktouchstart, function(){
                 var orderstatus=$(this).parent().attr("order_status");
-                if(orderstatus!="0" && orderstatus!="1")
+                if(orderstatus!="0")
                 {
                     alert("已经下单，不能删除，请退菜");
                     return false;
                 }                
                 var obj=$(this).parent().find('span[class="badge"]');
-                var curnum=parseFloat(obj.text());
+                var curnum=parseFloat(obj.text().replace(",",""));
                 if(curnum==1)
                 {
                     $(this).parent().remove();
@@ -878,28 +957,28 @@
             
             $('#cancel_zero').on(event_clicktouchstart,function(){
                 var payRealityAccount=$("#payRealityAccount").text();
-                var payOriginAccount=parseFloat($("#payOriginAccount").text());
-                var payDiscountAccount=parseFloat($("#payDiscountAccount").text());
-                var payMinusAccount=parseFloat($("#payMinusAccount").text());
+                var payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
+                var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                 var payShouldAccount=$("#payShouldAccount").text();                        
                 //var payChangeAccount=$("#payChangeAccount").text();
-                if($(this).hasClass("edit_span_select"))
+                if($(this).hasClass("edit_span_select_zero"))
                 {
-                    $(this).removeClass("edit_span_select");
+                    $(this).removeClass("edit_span_select_zero");
                     $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
                     
                 }else{
-                    $(this).addClass("edit_span_select");
+                    $(this).addClass("edit_span_select_zero");
                     payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                     $("#payShouldAccount").text(payShouldAccount);
                     
                 }
-                var changeaccount=parseFloat(payRealityAccount)-parseFloat($("#payShouldAccount").text());
+                var changeaccount=parseFloat(payRealityAccount.replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                 if(changeaccount>0)
                 {
                     $("#payChangeAccount").text(changeaccount.toFixed(2));
                 }else{
-                    $("#payChangeAccount").text((changeaccount*-1).toFixed(2));
+                    $("#payChangeAccount").text("0.00");
                 }
             });
             
@@ -908,7 +987,10 @@
                 $(this).addClass("edit_span_select");
                 var payOriginAccount=$("#payOriginAccount").text();
                 var selectid=$(this).attr("selectid");
-                
+                if(selectid=="pay_member_card")
+                {
+                    fn_member_card_pay();
+                }
             });
             
             $('.calc_num').on(event_clicktouchstart,'li',function(){
@@ -917,7 +999,7 @@
                 var payOriginAccount=$("#payOriginAccount").text();
                 var payDiscountAccount=$("#payDiscountAccount").text();
                 var payMinusAccount=$("#payMinusAccount").text();
-                var cancel_zero=$("#cancel_zero").hasClass("edit_span_select");
+                var cancel_zero=$("#cancel_zero").hasClass("edit_span_select_zero");
                 var payShouldAccount=$("#payShouldAccount").text();
                 var payRealityAccount=$("#payRealityAccount").text();
                 var payCashAccount=$("#payCashAccount").text();
@@ -927,7 +1009,7 @@
                 {   
                     if(nowval!="." && nowval!="00" && nowval!="10" && nowval!="20" && nowval!="50" && nowval!="100")
                     {
-                        if(parseFloat(payDiscountAccount)*10>100)
+                        if(parseFloat(payDiscountAccount.replace(",",""))*10>100)
                         {
                             payDiscountAccount=nowval;
                         }else{
@@ -935,9 +1017,9 @@
                         }
                         $("#payDiscountAccount").text(payDiscountAccount+"%");
                         $("#payMinusAccount").text("0.00");
-                        payOriginAccount=parseFloat($("#payOriginAccount").text());
-                        payDiscountAccount=parseFloat($("#payDiscountAccount").text());
-                        payMinusAccount=parseFloat($("#payMinusAccount").text());
+                        payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                        payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
+                        payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                         $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
                         if(cancel_zero)
                         {
@@ -945,7 +1027,7 @@
                             payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                             $("#payShouldAccount").text(payShouldAccount);
                         }
-                        var changeaccount=parseFloat(payRealityAccount)-parseFloat($("#payShouldAccount").text());
+                        var changeaccount=parseFloat(payRealityAccount.replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                         if(changeaccount>0)
                         {
                             $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -975,9 +1057,9 @@
                         }
                     }                    
                     $("#payDiscountAccount").text("100%");
-                    payOriginAccount=parseFloat($("#payOriginAccount").text());
-                    payDiscountAccount=parseFloat($("#payDiscountAccount").text());
-                    payMinusAccount=parseFloat($("#payMinusAccount").text());
+                    payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                    payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
+                    payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                     var shouldpaytemp=payOriginAccount*payDiscountAccount/100 - payMinusAccount;
                     if(shouldpaytemp>0)
                     {
@@ -991,7 +1073,7 @@
                         payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                         $("#payShouldAccount").text(payShouldAccount);
                     }
-                    var changeaccount=parseFloat(payRealityAccount)-parseFloat($("#payShouldAccount").text());
+                    var changeaccount=parseFloat(payRealityAccount.replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
                         $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1019,9 +1101,9 @@
                             $("#payCashAccount").html(payCashAccount+nowval);
                         }
                     }                    
-                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text())+parseFloat(payMemberAccount)+parseFloat(payUnionAccount)).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payUnionAccount.replace(",",""))).toFixed(2));
                     
-                    var changeaccount=parseFloat($("#payRealityAccount").text())-parseFloat($("#payShouldAccount").text());
+                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
                         $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1052,9 +1134,9 @@
                             $("#payUnionAccount").html(payUnionAccount+nowval);
                         }
                     }                    
-                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text())+parseFloat(payMemberAccount)+parseFloat(payCashAccount)).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
                     
-                    var changeaccount=parseFloat($("#payRealityAccount").text())-parseFloat($("#payShouldAccount").text());
+                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
                         $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1072,7 +1154,7 @@
                 }
                 if($("#checkboxDiscount").hasClass("active"))
                 {
-                    var discount=parseFloat($("#spanProductDiscount").text());
+                    var discount=parseFloat($("#spanProductDiscount").text().replace(",",""));
                     var originprice=$("#spanOriginPrice").text();
                     var nowval=$(this).html();
                     if(nowval!="." && nowval!="00")
@@ -1091,7 +1173,7 @@
                 if($("#checkboxMinus").hasClass("active"))
                 {
                     var discount=$("#spanProductDiscount").text();
-                    var originprice=parseFloat($("#spanOriginPrice").text());
+                    var originprice=parseFloat($("#spanOriginPrice").text().replace(",",""));
                     var nowval=$(this).html();
                     if(discount=="0.00" && nowval!=".")
                     {
@@ -1111,7 +1193,7 @@
                             $("#spanProductDiscount").html(discount+nowval);
                         }
                     }
-                    var cashinf=parseFloat($("#spanProductDiscount").text());
+                    var cashinf=parseFloat($("#spanProductDiscount").text().replace(",",""));
                     if(originprice-cashinf>0)
                     {
                         $("#spanNowPrice").html(Math.round((originprice-cashinf)*100)/100);//little than 0 not show
@@ -1125,14 +1207,14 @@
                 if($("#checkboxMinus").hasClass("active"))
                 {
                     var discount=$("#spanProductDiscount").text();
-                    var originprice=parseFloat($("#spanOriginPrice").text());
+                    var originprice=parseFloat($("#spanOriginPrice").text().replace(",",""));
                     if(discount.length==1)
                     {
                         $("#spanProductDiscount").html("0");
                         $("#spanNowPrice").html($("#spanOriginPrice").text());
                     }else{
                         $("#spanProductDiscount").html(discount.substr(0,discount.length-1));                    
-                        var cashinf=parseFloat($("#spanProductDiscount").text());
+                        var cashinf=parseFloat($("#spanProductDiscount").text().replace(",",""));
                         if(originprice-cashinf>0)
                         {
                             $("#spanNowPrice").html(Math.round((originprice-cashinf)*100)/100);//little than 0 not show
@@ -1144,13 +1226,22 @@
             });
             
             $('#cl_all').on(event_clicktouchstart,function(){
-                if(discountOrig.lastIndexOf("%")>="0")
+                var discountOrig=$("#spanProductDiscountOrig").text();
+                var spanOriginPrice=$("#spanOriginPrice").text();
+                var nowpriceOrig=$("#spanNowPriceOrig").text();
+                //alert(discountOrig);
+                
+                if(discountOrig.lastIndexOf("%")>=0)
                 {
-                    $("#spanProductDiscount").text("0.00");
-                    $("#spanNowPrice").text(spanOriginPrice);
-                }else{
                     $("#spanProductDiscount").text(discountOrig);
                     $("#spanNowPrice").text(nowpriceOrig);
+                    $(".selectDiscount").removeClass("active");
+                    $(".selectDiscount[id='checkboxDiscount']").addClass("active");
+                }else{                    
+                    $("#spanProductDiscount").text("0.00");
+                    $("#spanNowPrice").text(spanOriginPrice);
+                    $(".selectDiscount").removeClass("active");
+                    $(".selectDiscount[id='checkboxMinus']").addClass("active");
                 }
             });
             
@@ -1214,7 +1305,7 @@
                 var payOriginAccount=$("#payOriginAccount").text();
                 var payDiscountAccount=$("#payDiscountAccount").text();
                 var payMinusAccount=$("#payMinusAccount").text();
-                var cancel_zero=$("#cancel_zero").hasClass("edit_span_select");
+                var cancel_zero=$("#cancel_zero").hasClass("edit_span_select_zero");
                 var payShouldAccount=$("#payShouldAccount").text();
                 var payRealityAccount=$("#payRealityAccount").text();
                 var payCashAccount=$("#payCashAccount").text();
@@ -1233,9 +1324,9 @@
                         $("#payMinusAccount").text(payMinusAccount.substr(0,payMinusAccount.length-1));
                     }
                     $("#payDiscountAccount").text("100%");
-                    payOriginAccount=parseFloat($("#payOriginAccount").text());
-                    payDiscountAccount=parseFloat($("#payDiscountAccount").text());
-                    payMinusAccount=parseFloat($("#payMinusAccount").text());
+                    payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                    payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
+                    payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                     var shouldpaytemp=payOriginAccount*payDiscountAccount/100 - payMinusAccount;
                     if(shouldpaytemp>0)
                     {
@@ -1249,7 +1340,7 @@
                         payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                         $("#payShouldAccount").text(payShouldAccount);
                     }
-                    var changeaccount=parseFloat(payRealityAccount)-parseFloat($("#payShouldAccount").text());
+                    var changeaccount=parseFloat(payRealityAccount.replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
                         $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1268,9 +1359,9 @@
                     }else{
                         $("#payCashAccount").text(payCashAccount.substr(0,payCashAccount.length-1));
                     }
-                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text())+parseFloat(payMemberAccount)+parseFloat(payUnionAccount)).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payUnionAccount.replace(",",""))).toFixed(2));
                     
-                    var changeaccount=parseFloat($("#payRealityAccount").text())-parseFloat($("#payShouldAccount").text());
+                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
                         $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1292,9 +1383,9 @@
                     }else{
                         $("#payUnionAccount").text(payUnionAccount.substr(0,payUnionAccount.length-1));
                     }
-                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text())+parseFloat(payMemberAccount)+parseFloat(payCashAccount)).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
                     
-                    var changeaccount=parseFloat($("#payRealityAccount").text())-parseFloat($("#payShouldAccount").text());
+                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
                         $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1309,19 +1400,20 @@
                 var payOriginAccount=$("#payOriginAccount").text();
                 var payDiscountAccount=$("#payDiscountAccount").text();
                 var payMinusAccount=$("#payMinusAccount").text();
-                var cancel_zero=$("#cancel_zero").hasClass("edit_span_select");
+                var cancel_zero=$("#cancel_zero").hasClass("edit_span_select_zero");
                 var payShouldAccount=$("#payShouldAccount").text();
                 var payRealityAccount=$("#payRealityAccount").text();
                 var payCashAccount=$("#payCashAccount").text();
                 var payMemberAccount=$("#payMemberAccount").text();
                 var payUnionAccount=$("#payUnionAccount").text();
+                
                 if(selectid=="discount")
                 {   
                     
                         $("#payDiscountAccount").text("100%");
-                        payOriginAccount=parseFloat($("#payOriginAccount").text());
-                        payDiscountAccount=parseFloat($("#payDiscountAccount").text());
-                        payMinusAccount=parseFloat($("#payMinusAccount").text());
+                        payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                        payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
+                        payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                         $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
                         if(cancel_zero)
                         {
@@ -1329,7 +1421,7 @@
                             payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                             $("#payShouldAccount").text(payShouldAccount);
                         }
-                        var changeaccount=parseFloat(payRealityAccount)-parseFloat($("#payShouldAccount").text());
+                        var changeaccount=parseFloat(payRealityAccount.replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                         if(changeaccount>0)
                         {
                             $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1341,9 +1433,9 @@
                 {
                     $("#payMinusAccount").text("0.00");
                     //$("#payDiscountAccount").text("100%");
-                    payOriginAccount=parseFloat($("#payOriginAccount").text());
-                    payDiscountAccount=parseFloat($("#payDiscountAccount").text());
-                    payMinusAccount=parseFloat($("#payMinusAccount").text());
+                    payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                    payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
+                    payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                     var shouldpaytemp=payOriginAccount*payDiscountAccount/100 - payMinusAccount;
                     if(shouldpaytemp>0)
                     {
@@ -1357,7 +1449,7 @@
                         payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                         $("#payShouldAccount").text(payShouldAccount);
                     }
-                    var changeaccount=parseFloat(payRealityAccount)-parseFloat($("#payShouldAccount").text());
+                    var changeaccount=parseFloat(payRealityAccount.replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
                         $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1366,10 +1458,19 @@
                     }
                 }else if(selectid=="pay_cash")
                 {
-                    $("#payCashAccount").text("0.00");
-                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text())+parseFloat(payMemberAccount)+parseFloat(payUnionAccount)).toFixed(2));
+                    var offvalue=parseFloat(payShouldAccount.replace(",","")) - parseFloat(payRealityAccount.replace(",",""))
+                    if(parseFloat($("#payCashAccount").text().replace(",",""))==0)
+                    {
+                        if(offvalue>0)
+                        {
+                            $("#payCashAccount").text(offvalue.toFixed(2));
+                        }
+                    }else{
+                        $("#payCashAccount").text("0.00");
+                    }
+                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payUnionAccount.replace(",",""))).toFixed(2));
                     
-                    var changeaccount=parseFloat($("#payRealityAccount").text())-parseFloat($("#payShouldAccount").text());
+                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
                         $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1381,10 +1482,20 @@
                     return false;
                 }else if(selectid=="pay_union_card")
                 {
-                    $("#payUnionAccount").text("0.00");
-                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text())+parseFloat(payMemberAccount)+parseFloat(payCashAccount)).toFixed(2));
+                    var offvalue=parseFloat(payShouldAccount.replace(",","")) - parseFloat(payRealityAccount.replace(",",""))
+                    if(parseFloat($("#payUnionAccount").text().replace(",",""))==0)
+                    {
+                        if(offvalue>0)
+                        {
+                            $("#payUnionAccount").text(offvalue.toFixed(2));
+                        }
+                    }else{
+                        $("#payUnionAccount").text("0.00");
+                    }
                     
-                    var changeaccount=parseFloat($("#payRealityAccount").text())-parseFloat($("#payShouldAccount").text());
+                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+                    
+                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
                         $("#payChangeAccount").text(changeaccount.toFixed(2));
@@ -1393,6 +1504,170 @@
                     }
                 }
             });
+            
+            function fn_member_card_pay(){
+                var nowcard=parseFloat($('#payMemberAccount').text().replace(",",""));
+                var payShouldAccount=parseFloat($('#payShouldAccount').text().replace(",",""));
+                var payRealityAccount=parseFloat($('#payRealityAccount').text().replace(",",""));
+                $('#card_pay_span_money').text((payShouldAccount-payRealityAccount).toFixed(2));
+                if(nowcard>0)
+                {
+                    $('#card_pay_input_money').val(nowcard);
+                }else{
+                    if(payShouldAccount-payRealityAccount>0)
+                    {
+                        $('#card_pay_input_money').val((payShouldAccount-payRealityAccount).toFixed(2));
+                    }else{
+                        $('#card_pay_input_money').val(0.00);
+                    }
+                }
+                layer_index_membercard=layer.open({
+                     type: 1,
+                     shade: false,
+                     title: false, //不显示标题
+                     area: ['30%', 'auto'],
+                     content: $('#membercardInfo'), //捕获的元素
+                     cancel: function(index){
+                         layer.close(index);
+        //                        this.content.show();
+        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                     }
+                 });
+            };
+            
+            $('#member_card_pay').on(event_clicktouchstart,function(){
+                var cardmoney=$('#card_pay_input_money').val();
+                var cardno=$('#card_pay_input_card').val();
+                var cardpassword=$('#card_pay_input_password').val();
+                //确认密码
+                //如果密码正确，带回数据，并关闭
+                $.get('<?php echo $this->createUrl(
+                    'defaultOrder/memberCardPassword',array('companyId'=>$this->companyId));?>/passWord/'+cardpassword+"/cardno/"+cardno,
+                    function(data){
+                        //alert(data.msg);
+                        if(data.status)
+                        {
+                            $('#payMemberAccount').text(cardmoney);
+                            $('#payMemberAccount').attr("cardno",cardno);
+                            $("#payRealityAccount").text((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat($("#payMemberAccount").text().replace(",",""))+parseFloat($("#payUnionAccount").text().replace(",",""))).toFixed(2));
+                            var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
+                            if(changeaccount>0)
+                            {
+                                $("#payChangeAccount").text(changeaccount.toFixed(2));
+                            }else{
+                                $("#payChangeAccount").text("0.00");
+                            }
+                            layer.close(layer_index_membercard);
+                        }else{
+                            alert("密码错误");
+                            //$('#card_pay_input_password').clear();
+                        }
+                    },'json');               
+            });
+            
+            $('#member_card_pay_close').on(event_clicktouchstart,function(){
+                layer.close(layer_index_membercard);                
+            });
+            
+            $('#pay_btn').on(event_clicktouchstart,function(){
+                //accountManul
+                //判断找零是否大于现金
+                if(parseFloat($("#payChangeAccount").text().replace(",",""))> parseFloat($("#payCashAccount").text().replace(",","")))
+                {
+                    alert("金额有误");
+                    return false;
+                }
+                 //改变order实收，打折等注释
+                var ordermemo="";
+                var payDiscountAccount=$("#payDiscountAccount").text()
+                if(payDiscountAccount!="100%")
+                {
+                    ordermemo=ordermemo+" 折扣"+payDiscountAccount;
+                }
+                var payMinusAccount=$("#payMinusAccount").text()
+                if(payMinusAccount!="100%")
+                {
+                    ordermemo=ordermemo+" 优惠"+payMinusAccount;
+                }
+                if($("#cancel_zero").hasClass("edit_span_select_zero"))
+                {
+                    ordermemo=ordermemo+" 抹零";
+                }
+                 //存数order order_pay 0现金，4会员卡，5银联                         
+                 //写入会员卡消费记录，会员卡总额减少
+                var orderid=$(".selectProduct").attr("orderid");
+                var payCashAccount=$("#payCashAccount").text();
+                var payShouldAccount=$("#payShouldAccount").text();
+                var payOriginAccount=$("#payOriginAccount").text();
+                var payRealityAccount=$("#payRealityAccount").text();
+                var payMemberAccount=$("#payMemberAccount").text();
+                var cardno=$("#payMemberAccount").attr("cardno");
+                var payUnionAccount=$("#payUnionAccount").text();
+                if(parseFloat(payRealityAccount.replace(",","")) < parseFloat(payShouldAccount.replace(",","")))
+                {
+                    alert("收款不够");
+                    return false;
+                }
+                layer.close(layer_index2);
+                bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {                    
+                    if(result){                        
+                        var url="<?php echo $this->createUrl('defaultOrder/orderAccount',array('companyId'=>$this->companyId));?>";
+                        var sendjson='orderid='+orderid+'&orderstatus=4&paycashaccount='+payCashAccount+
+                                    '&paymemberaccount='+payMemberAccount+'&payunionaccount='+payUnionAccount+
+                                    '&ordermemo='+ordermemo+"&payshouldaccount="+payShouldAccount+
+                                    "&payoriginaccount="+payOriginAccount+"&cardno="+cardno;
+                        $.ajax({
+                            url:url,
+                            type:'POST',
+                            data:sendjson,
+                            async:false,
+                            dataType: "json",
+                            success:function(msg){
+                                var data=msg;
+                                if(data.status){
+                                    layer.close(layer_index2);
+                                    alert(data.msg);
+                                    //刷新座位页面
+                                    
+                                }else{
+                                    //layer.close(layer_index2);
+                                    alert(data.msg);
+                                    layer_index2=layer.open({
+                                        type: 1,
+                                        shade: false,
+                                        title: false, //不显示标题
+                                        area: ['65%', '60%'],
+                                        content: $('#accountbox'),//$('#productInfo'), //捕获的元素
+                                        cancel: function(index){
+                                            layer.close(index);
+                           //                        this.content.show();
+                           //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                                        }
+                                    });
+                                }
+                            },
+                            error: function(msg){
+                                //layer.close(index);
+                                alert("结算失败2！");
+                                layer_index2=layer.open({
+                                    type: 1,
+                                    shade: false,
+                                    title: false, //不显示标题
+                                    area: ['65%', '60%'],
+                                    content: $('#accountbox'),//$('#productInfo'), //捕获的元素
+                                    cancel: function(index){
+                                        layer.close(index);
+                       //                        this.content.show();
+                       //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                                    }
+                                });
+                            }
+                        });
+                         //返回座位列表页面
+                    }
+                });
+            });
+            
             $('#other-btn').on(event_clicktouchstart,function(){
                  bootbox.confirm("<?php echo yii::t('app','你确定切换到其他支付方式吗？');?>", function(result) {
                         if(result){

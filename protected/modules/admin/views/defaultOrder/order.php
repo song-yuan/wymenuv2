@@ -290,9 +290,9 @@
                         
                         $('#kitchen-btn').on(event_clicktouchstart,function(){
                             var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
-                                if(!statu){
-                                    return false;
-                                }
+                            if(!statu){
+                                return false;
+                            }
                              //由于打印机不能连续厨打，
                             //printKiten('0');       
                             //采用以下函数

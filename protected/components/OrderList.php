@@ -351,4 +351,204 @@ class OrderList
 		}
 		return $price.':'.$num;
 	}
+        
+        public static function createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,Order $order,Site $site,SiteNo $siteNo)
+        {
+            $sellOff = array();                
+            //////////////
+            //return json_encode(array('status'=>false,'msg'=>"test1"));
+            /////////////
+            $time=date('Y-m-d H:i:s',time());
+            $db=Yii::app()->db;
+            $transaction = $db->beginTransaction();
+            $se=new Sequence("order_product");
+            $setaste=new Sequence("order_taste");
+            $orderProductStatus=0;
+            if($orderStatus>1)
+            {
+                $orderProductStatus=1;
+            }
+                 //return json_encode(array('status'=>false,'msg'=>"test1"));
+            try {
+                //插入订单单品
+                if(!empty($productList))
+                {
+                    $productListArr=explode(";",$productList);
+
+                    foreach($productListArr as $tvalue)
+                    {   
+                        //更新库存//失败则返回
+                        $productDetailArr=explode(",",$tvalue);
+                        $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$productDetailArr[1],':dpid'=>$companyId));
+                        //return json_encode(array('status'=>true,'msg'=>$productdata->store_number.$productDetailArr[1].$productDetailArr[2]));
+                        if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[2] ))
+                        {
+                            $transaction->rollback();
+                            return json_encode(array('status'=>false,'msg'=>$productdata->product_name."数量不足"));
+                        }
+                        //不是临时挂单就更新库存，更新下单数和点赞数，发送更新库存消息
+                        if($orderStatus>1)
+                        {
+                            $productdata->order_number=$productdata->order_number+1;
+                            $productdata->favourite_number=$productdata->favourite_number+1;
+                            if($productdata->store_number>0)
+                            {
+                                $productdata->store_number=$productdata->store_number-$productDetailArr[2];                            
+                                array_push($sellOff,array("product_id"=>sprintf("%010d",$productDetailArr[1]),"type"=>"product","num"=>$productdata->store_number));
+                            }
+                        }
+                        $productdata->save();
+
+                        if($productDetailArr[2]=="0")
+                        {
+                            ///先删除，后插入
+                            $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId.' and product_id ='.$productDetailArr[1];
+                            $result = $db->createCommand($sql)->execute();
+                            //插入
+                            $orderProductId = $se->nextval();
+                            //插入一条
+                            $orderProductData = array(
+                                                'lid'=>$orderProductId,
+                                                'dpid'=>$companyId,
+                                                'create_at'=>$time,
+                                                'order_id'=>$orderId,
+                                                'set_id'=>0,
+                                                'product_id'=>$productDetailArr[1],
+                                                'offprice'=>$productDetailArr[4],
+                                                'price'=>$productDetailArr[5],
+                                                'update_at'=>$time,
+                                                'amount'=>$productDetailArr[3],
+                                                'is_giving'=>$productDetailArr[6],
+                                                'taste_memo'=>$productDetailArr[8],
+                                                'product_order_status'=>$orderProductStatus,
+                                                );
+                            $db->createCommand()->insert('nb_order_product',$orderProductData);                                
+                        }
+                        //修改为先删除后插入，防止以后一个菜品被分开点多分。
+                        ////else{
+//                                //更新
+//                                $orderProductData=  OrderProduct::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$productDetailArr[0],':dpid'=>$companyId));
+//                                $orderProductData->price=$productDetailArr[3];
+//                                $orderProductData->amount=$productDetailArr[2];
+//                                $orderProductData->is_giving=$productDetailArr[4];
+//                                $orderProductData->taste_memo=$productDetailArr[6];
+//                                $orderProductData->save();
+//                            }
+                        //insert taste//delete and insert taste
+                        $orderProductTasteIds=str_replace("|",",",$productDetailArr[7]);
+                        if(!empty($orderProductTasteIds))
+                        {
+                            $orderProductTasteIds=substr($orderProductTasteIds, 0,strlen($orderProductTasteIds)-1);
+                            $orderProductTasteArr=explode(",",$orderProductTasteIds);
+                            $sql2 = 'delete from nb_order_taste where dpid='.$companyId.' and is_order=0 and order_id = '.$productDetailArr[0];
+                            //return json_encode(array('status'=>true,'msg'=>$orderProductTasteIds));
+                            $result = $db->createCommand($sql2)->execute();
+                            //重新插入  
+                            if(!empty($orderProductTasteArr))
+                            {
+                                foreach($orderProductTasteArr as $tvalue)
+                                {    
+                                    $orderProductTasteId = $setaste->nextval();
+                                    //return json_encode(array('status'=>false,'msg'=>$productDetailArr[0]."|".$tvalue."|".$orderTasteId));                                
+
+                                    $orderProductTasteAll = array(
+                                                            'lid'=>$orderProductTasteId,
+                                                            'dpid'=>$companyId,
+                                                            'create_at'=> $time,
+                                                            'update_at'=> $time,
+                                                            'order_id'=>$orderProductId,
+                                                            'taste_id'=>$tvalue,
+                                                            'is_order'=>"0",
+                                                            'delete_flag'=>"0",
+                                                            );
+                                    $db->createCommand()->insert('nb_order_taste',$orderProductTasteAll);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(!empty($site))
+                {
+                    if($site->status<$orderStatus)
+                    {
+                        $site->status=$orderStatus;
+                        $site->save();
+                    }
+                }
+                if(!empty($siteNo))
+                {
+                    if($siteNo->status<$orderStatus)
+                    {
+                        $siteNo->status=$orderStatus;
+                        $siteNo->save();
+                    }
+                }
+                if($order->order_status<$orderStatus)
+                {
+                    $order->order_status=$orderStatus;
+                }
+                $order->taste_memo=$orderTasteMemo;
+                $order->callno=$callId;
+                $order->save();
+                //删除全单口味
+                $orderTasteIds=str_replace("|",",",$orderTasteIds);
+                if(!empty($orderTasteIds))
+                {
+                    //return json_encode(array('status'=>false,'msg'=>$orderTasteIds));
+                    $orderTasteIds=substr($orderTasteIds, 0,strlen($orderTasteIds)-1);
+                    $orderTasteArr=explode(",",$orderTasteIds);
+                    $sql = 'delete from nb_order_taste where dpid='.$companyId.' and is_order=1 and order_id ='.$orderId;
+                    $result = $db->createCommand($sql)->execute();
+                    //重新插入                        
+                    //return json_encode(array('status'=>false,'msg'=>"test3"));
+                    //$se=new Sequence("order_taste");
+                    if(!empty($orderTasteArr))
+                    {
+                        foreach($orderTasteArr as $tvalue)
+                        {                            
+                            $orderTasteId = $setaste->nextval();
+                            $orderTasteAll = array(
+                                                    'lid'=>$orderTasteId,
+                                                    'dpid'=>$companyId,
+                                                    'create_at'=> $time,
+                                                    'update_at'=> $time,
+                                                    'order_id'=>$orderId,
+                                                    'taste_id'=>$tvalue,
+                                                    'is_order'=>"1",
+                                                    'delete_flag'=>"0",
+                                                    );
+                            $db->createCommand()->insert('nb_order_taste',$orderTasteAll);
+                        }
+                    }
+                }
+
+                $transaction->commit();
+                //估清产品通知
+                if(!empty($sellOff)){
+                    Gateway::getOnlineStatus();
+                    $store = Store::instance('wymenu');
+                    $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('0','1','2')",array(":dpid"=>$dpid));
+                    //var_dump($pads);exit;
+                    $sendjsondata=json_encode(array("company_id"=>$dpid,
+                        "do_id"=>"sell_off",
+                        "do_data"=>$sellOff));
+                    //var_dump($sendjsondata);exit;
+                    foreach($pads as $pad)
+                    {
+                        $clientId=$store->get("padclient_".$dpid.$pad->lid);
+                        //var_dump($clientId,$print_data);exit;
+                        if(!empty($clientId))
+                        {                            
+                            Gateway::sendToClient($clientId,$sendjsondata);
+                        }
+                    } 
+                }
+                return json_encode(array('status'=>true,'msg'=>"保存成功"));
+            } catch (Exception $ex) {
+                $transaction->rollback();
+                return json_encode(array('status'=>false,'msg'=>"异常发生"));
+            }
+                
+        }
 }

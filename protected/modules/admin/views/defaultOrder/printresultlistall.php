@@ -48,28 +48,29 @@
                                              });
                                              function printStatus(){
                                                                                                 
-                                                $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResultAll',array('companyId'=>$this->companyId,'orderId'=>$orderId));?>/timenum/'+waitingsecond,function(data){
-                                                    //alert(data.notsurenum);
-                                                    $("#minustimes").html(waitingsecond);
-                                                    $("#successnumid").html(data.successnum);
-                                                    $("#errornumid").html(data.errornum);
-                                                    $("#notsurenumid").html(data.notsurenum);
-                                                    
-                                                    if(data.finished && data.errornum==0 && data.notsurenum==0)
-                                                    {
-                                                        //all success
-                                                        //location.href= order
-                                                        clearTimeout(interval);
-                                                        location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId,'syscallId'=>$callId));?>";
-                                                    }
-                                                    
-                                                    if(waitingsecond<0)
-                                                    {                                                       
-                                                        $("#notsurenumid").html(0);
-                                                        $("#errornumid").html(data.errornum+data.notsurenum);
-                                                    }
-                                                    
-                                                },'json');
+                                                $.get('<?php echo $this->createUrl('defaultOrder/printKitchenResultAll',array('companyId'=>$this->companyId,'orderId'=>$orderId));?>/timenum/'+waitingsecond,
+                                                    function(data){
+                                                        //alert(data.notsurenum);
+                                                        $("#minustimes").html(waitingsecond);
+                                                        $("#successnumid").html(data.successnum);
+                                                        $("#errornumid").html(data.errornum);
+                                                        $("#notsurenumid").html(data.notsurenum);
+
+                                                        if(data.finished && data.errornum==0 && data.notsurenum==0)
+                                                        {
+                                                            //all success
+                                                            //location.href= order
+                                                            clearTimeout(interval);
+                                                            location.href="<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId,'orderId'=>$orderId,'syscallId'=>$callId));?>";
+                                                        }
+
+                                                        if(waitingsecond<0)
+                                                        {                                                       
+                                                            $("#notsurenumid").html(0);
+                                                            $("#errornumid").html(data.errornum+data.notsurenum);
+                                                        }
+
+                                                    },'json');
                                                 waitingsecond--;
                                                 //alert(waitingsecond);
                                                 //30s后还有任务没有返回，就作为失败处理。

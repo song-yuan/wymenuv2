@@ -163,18 +163,19 @@ class DefaultOrderController extends BackendController
 		//$orderProducts = OrderProduct::model()->findAll('dpid=:dpid and order_id=:orderid',array(':dpid'=>$companyId,':orderid'=>$order->order_id));
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 $allOrderProductTastes=  TasteClass::getOrderTasteKV($order->lid,'2',$companyId);
-                //var_dump($allOrderProductTastes);
+                //var_dump($orderProducts); exit;
                 $tasteidsOrderProducts=array();
                 foreach($allOrderProductTastes as $orderProductTaste)
                 {
-                    if(empty($tasteidsOrderProducts[$orderProductTaste->id]))
+                    //var_dump($orderProductTaste);
+                    if(empty($tasteidsOrderProducts[$orderProductTaste['id']]))
                     {
-                        $tasteidsOrderProducts[$orderProductTaste->id]=$orderProductTaste->tasteid."|";
+                        $tasteidsOrderProducts[$orderProductTaste['id']]=$orderProductTaste['tasteid']."|";
                     }else{
-                        $tasteidsOrderProducts[$orderProductTaste->id]=$tasteidsOrderProducts[$orderProductTaste->id].$orderProductTaste->tasteid."|";
+                        $tasteidsOrderProducts[$orderProductTaste['id']]=$tasteidsOrderProducts[$orderProductTaste['id']].$orderProductTaste['tasteid']."|";
                     }
                 }
-               // var_dump($tasteidsOrderProducts);exit;
+                //var_dump($tasteidsOrderProducts);exit;
                 $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                 //var_dump($productTotal);exit;
                 if($siteNo->is_temp=='1')
@@ -191,6 +192,7 @@ class DefaultOrderController extends BackendController
                 $orderTastes=  TasteClass::getOrderTaste($order->lid, '1', $companyId);
                 $tasteMemo = TasteClass::getOrderTasteMemo($order->lid, '1', $companyId);
                 //var_dump(array_column($allOrderProductTastes, "lid"));exit;
+                //var_dump($tasteMemo);exit;
 		$this->renderPartial('orderPartial' , array(
 				'model'=>$order,
 				'orderProducts' => $orderProducts,
@@ -227,8 +229,12 @@ class DefaultOrderController extends BackendController
                 $productList = Yii::app()->request->getPost('productlist',"0");
                 $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
+                $callId=Yii::app()->request->getParam('callId',"0");
+                //返回json挂单成功或失败
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
+                ///Yii::app()->end(json_encode(array('status'=>false,'msg'=>$productList)));
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"test1")));
                 if($orderId =="0")
                 {
                     //临时台，没有开过台的，
@@ -236,29 +242,29 @@ class DefaultOrderController extends BackendController
                     //生成新的订单，
                     //然后才有后面的插入！！
                     //var_dump($order);exit;
-//                    if(empty($order))
-//                    {
-//                        Until::validOperate($companyId,$this);
-//
-//                        $order=new Order();
-//                        $se=new Sequence("order");
-//                        $order->lid = $se->nextval();
-//                        $order->dpid=$companyId;
-//                        $order->create_at = date('Y-m-d H:i:s',time());
-//                        $order->lock_status = '0';
-//                        $order->order_status = '1';
-//                        $order->site_id = $siteNo->site_id;
-//                        $order->number = $siteNo->number;
-//                        $order->is_temp = $siteNo->is_temp;
-//                        //var_dump($order);exit;
-//                        $order->save();
-//                    }
+    //                    if(empty($order))
+    //                    {
+    //                        Until::validOperate($companyId,$this);
+    //
+    //                        $order=new Order();
+    //                        $se=new Sequence("order");
+    //                        $order->lid = $se->nextval();
+    //                        $order->dpid=$companyId;
+    //                        $order->create_at = date('Y-m-d H:i:s',time());
+    //                        $order->lock_status = '0';
+    //                        $order->order_status = '1';
+    //                        $order->site_id = $siteNo->site_id;
+    //                        $order->number = $siteNo->number;
+    //                        $order->is_temp = $siteNo->is_temp;
+    //                        //var_dump($order);exit;
+    //                        $order->save();
+    //                    }
                 }
                 //$syscallId = Yii::app()->request->getParam('syscallId',0);
                 //$autoaccount = Yii::app()->request->getParam('autoaccount',0);
-                $order=array();
-                $siteNo=array();
-                $site=array();
+                $order;
+                $siteNo;
+                $site;
                 ///***********insert to order feedback
                 ///*************print
                 if($orderId !='0')
@@ -266,7 +272,7 @@ class DefaultOrderController extends BackendController
                     $order = Order::model()->find('lid=:lid and dpid=:dpid and order_status in("1","2","3")' , array(':lid'=>$orderId,':dpid'=>$companyId));
                     if(empty($order))
                     {
-                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                        return json_encode(array('status'=>false,'msg'=>"该订单不存在"));
                     }
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
@@ -275,49 +281,233 @@ class DefaultOrderController extends BackendController
                     //order site 和 siteno都需要更新状态 所以要取出来
                     if($order->is_temp=="0")
                     {
-                        $criteria->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
-                        $criteria->order = ' t.lid desc ';                    
-                        $site = $site::model()->find($criteria);
+                        $criteria2 = new CDbCriteria;
+                        $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
+                        $criteria2->order = ' t.lid desc ';                    
+                        $site = Site::model()->find($criteria2);
                     }
                 }
-                $db=Yii::app()->db;
-                $transaction = $db->beginTransaction();
-		try {
-                    if(!empty($site))
+                //返回json挂单成功或失败
+                Yii::app()->end(OrderList::createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo));
+	}
+        
+        /*
+         * 挂单
+         * 传递数据保存，
+         * 保存前检查库存
+         * 更新库存
+         * 
+         */
+        public function actionOrderKitchen(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getPost('orderid',"0");
+                $orderStatus = Yii::app()->request->getPost('orderstatus',"0");
+                $productList = Yii::app()->request->getPost('productlist',"0");
+                $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
+                $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
+                $callId=Yii::app()->request->getParam('callId',"0");
+                //返回json挂单成功或失败
+                //如果orderId是0，表示是临时台，
+                //要开台、生成新的订单//暂时不处理
+                ///Yii::app()->end(json_encode(array('status'=>false,'msg'=>$productList)));
+                if($orderId =="0")
+                {
+                    //临时台，没有开过台的，
+                    //要开台，
+                    //生成新的订单，
+                    //然后才有后面的插入！！
+                    //var_dump($order);exit;
+    //                    if(empty($order))
+    //                    {
+    //                        Until::validOperate($companyId,$this);
+    //
+    //                        $order=new Order();
+    //                        $se=new Sequence("order");
+    //                        $order->lid = $se->nextval();
+    //                        $order->dpid=$companyId;
+    //                        $order->create_at = date('Y-m-d H:i:s',time());
+    //                        $order->lock_status = '0';
+    //                        $order->order_status = '1';
+    //                        $order->site_id = $siteNo->site_id;
+    //                        $order->number = $siteNo->number;
+    //                        $order->is_temp = $siteNo->is_temp;
+    //                        //var_dump($order);exit;
+    //                        $order->save();
+    //                    }
+                }
+                //$syscallId = Yii::app()->request->getParam('syscallId',0);
+                //$autoaccount = Yii::app()->request->getParam('autoaccount',0);
+                $order;
+                $siteNo;
+                $site;
+                ///***********insert to order feedback
+                ///*************print
+                if($orderId !='0')
+                {
+                    $order = Order::model()->find('lid=:lid and dpid=:dpid and order_status in("1","2","3")' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    if(empty($order))
                     {
-                        $site->status=$orderStatus;
+                        return json_encode(array('status'=>false,'msg'=>"该订单不存在"));
+                    }
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                    $criteria->order = ' t.lid desc ';                    
+                    $siteNo = SiteNo::model()->find($criteria);
+                    //order site 和 siteno都需要更新状态 所以要取出来
+                    if($order->is_temp=="0")
+                    {
+                        $criteria2 = new CDbCriteria;
+                        $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
+                        $criteria2->order = ' t.lid desc ';                    
+                        $site = Site::model()->find($criteria2);
+                    }
+                }
+                $savejson=OrderList::createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
+                //$jobids=array();
+                $ret=  json_encode(Helper::printKitchenAll2($order,$site,$siteNo,false));
+                Yii::app()->end($ret);
+	}
+        
+        public function actionMemberCardPassword(){
+		$companyId = Yii::app()->request->getParam('companyId',"0");
+                $password = Yii::app()->request->getParam('passWord',"0");
+                $cardno = Yii::app()->request->getParam('cardno',"0");
+                $db = Yii::app()->db;
+                $sql;
+                if(empty($password))
+                {
+                    $sql = "SELECT count(*) from nb_member_card where dpid=".$companyId." and haspassword=0 and (rfid='".$cardno."' or selfcode='".$cardno."') and delete_flag=0";
+                }else{
+                    $sql = "SELECT count(*) from nb_member_card where dpid=".$companyId." and password_hash='".MD5($password)."' and (rfid='".$cardno."' or selfcode='".$cardno."') and delete_flag=0";
+                }
+                $command=$db->createCommand($sql);
+                $nowval= $command->queryScalar();
+                $ret;
+                if($nowval>0)
+                {
+                    $ret=json_encode(array('status'=>true,'msg'=>$nowval));
+                }else{
+                    $ret=json_encode(array('status'=>false,'msg'=>$nowval));
+                }
+                Yii::app()->end($ret);                
+	}
+        
+        public function actionOrderAccount(){
+		$companyId = Yii::app()->request->getParam('companyId',"0");
+                $orderid = Yii::app()->request->getPost('orderid',"0");
+                $orderstatus = Yii::app()->request->getPost('orderstatus',"0");
+                $paycashaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paycashaccount',"0")));
+                $paymemberaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paymemberaccount',"0")));
+                $payunionaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payunionaccount',"0")));
+                $payshouldaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payshouldaccount',"0")));
+                $payoriginaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payoriginaccount',"0")));
+                $cardno = Yii::app()->request->getPost('cardno',"0000000000");
+                $ordermemo = Yii::app()->request->getPost('ordermemo',"0");
+                //存数order order_pay 0现金，4会员卡，5银联                         
+                //写入会员卡消费记录，会员卡总额减少
+                $ret;
+                $time=date('Y-m-d H:i:s',time());
+                $db = Yii::app()->db;
+                $transaction = $db->beginTransaction();
+                try{
+                    $order=Order::model()->find(" lid=:lid and dpid=:dpid",array(":lid"=>$orderid,":dpid"=>$companyId));
+                    $order->should_total=$payoriginaccount;
+                    $order->reality_total=$payshouldaccount;
+                    $order->order_status=$orderstatus;
+                    $order->remark=$order->remark+$ordermemo;
+                    $order->save();
+                    
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                    $criteria->order = ' t.lid desc ';                    
+                    $siteNo = SiteNo::model()->find($criteria);
+                    $siteNo->status=$orderstatus;
+                    $siteNo->save();
+                    //order site 和 siteno都需要更新状态 所以要取出来
+                    if($order->is_temp=="0")
+                    {
+                        $criteria2 = new CDbCriteria;
+                        $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
+                        $criteria2->order = ' t.lid desc ';                    
+                        $site = Site::model()->find($criteria2);
+                        $site->status=$orderstatus;
                         $site->save();
                     }
-                    if(!empty($siteNo))
-                    {
-                        $siteNo->status=$orderStatus;
-                        $siteNo->save();
-                    }
-                    $order->order_status=$orderStatus;
-                    $order->taste_memo=$orderTasteMemo;
-                    $order->save();
-                    //删除全单口味
-                    str_replace("|",",",$orderTasteIds);
-                    $sql = 'delete from nb_order_taste where dpid='.$companyId.' and lid in ('.$orderTasteIds.')';
-                    $result = $db->createCommand($sql)->execute();
-                    //重新插入
-                    $orderTasteArr=$orderTasteIds.split(",");
+                    $se=new Sequence("order_pay");
                     
-                    //插入订单单品
-                } catch (Exception $ex) {
-
-                }
-                foreach($allOrderProductTastes as $orderProductTaste)
-                {
-                    if(empty($tasteidsOrderProducts[$orderProductTaste->id]))
+                    if($paycashaccount>0)
                     {
-                        $tasteidsOrderProducts[$orderProductTaste->id]=$orderProductTaste->tasteid."|";
-                    }else{
-                        $tasteidsOrderProducts[$orderProductTaste->id]=$tasteidsOrderProducts[$orderProductTaste->id].$orderProductTaste->tasteid."|";
+                        $orderPayId = $se->nextval();
+                        //插入一条
+                        $orderPayData = array(
+                                            'lid'=>$orderPayId,
+                                            'dpid'=>$companyId,
+                                            'create_at'=>$time,
+                                            'order_id'=>$orderid,
+                                            'update_at'=>$time,
+                                            'pay_amount'=>$paycashaccount,
+                                            'paytype'=>"0",
+                                            'payment_method_id'=>"0000000000",
+                                            'remark'=>'现金付款',//'product_order_status'=>$orderProductStatus,
+                                            );
+                        $db->createCommand()->insert('nb_order_pay',$orderPayData);
                     }
-                }
-               
-                //返回json挂单成功或失败
+                    
+                    if($paymemberaccount>0)
+                    {
+                        $orderPayId = $se->nextval();
+                        //插入一条
+                        $orderPayData = array(
+                                            'lid'=>$orderPayId,
+                                            'dpid'=>$companyId,
+                                            'create_at'=>$time,
+                                            'order_id'=>$orderid,
+                                            'update_at'=>$time,
+                                            'pay_amount'=>$paymemberaccount,
+                                            'paytype'=>"4",
+                                            'payment_method_id'=>$cardno,
+                                            'remark'=>'会员卡付款',//'product_order_status'=>$orderProductStatus,
+                                            );
+                        $db->createCommand()->insert('nb_order_pay',$orderPayData);                        
+                        $membercard= MemberCard::model()->find(' dpid=:dpid and (rfid =:rfid or selfcode =:selfcode) and delete_flag =0',
+                                array(":dpid"=>$companyId,":rfid"=>$cardno,":selfcode"=>$cardno));
+//                        $ret=json_encode(array('status'=>false,'msg'=>$paymemberaccount ));
+//                            Yii::app()->end($ret);
+                
+                        if($membercard->all_money >= $paymemberaccount)
+                        {
+                            $membercard->all_money=$membercard->all_money-$paymemberaccount;
+                            $membercard->save();
+                        }else{
+                            $transaction->rollback();
+                            $ret=json_encode(array('status'=>false,'msg'=>"会员卡余额不足"));
+                            Yii::app()->end($ret);
+                        }
+                    }
+                    if($payunionaccount>0)
+                    {
+                        $orderPayId = $se->nextval();
+                        //插入一条
+                        $orderPayData = array(
+                                            'lid'=>$orderPayId,
+                                            'dpid'=>$companyId,
+                                            'create_at'=>$time,
+                                            'order_id'=>$orderid,
+                                            'update_at'=>$time,
+                                            'pay_amount'=>$payunionaccount,
+                                            'paytype'=>"5",
+                                            'payment_method_id'=>"0000000000",
+                                            'remark'=>'银联卡付款',//'product_order_status'=>$orderProductStatus,
+                                            );
+                        $db->createCommand()->insert('nb_order_pay',$orderPayData);
+                    }
+                    $transaction->commit();
+                    $ret=json_encode(array('status'=>true,'msg'=>"结单成功"));
+                } catch (Exception $ex) {
+                    $ret=json_encode(array('status'=>false,'msg'=>"结单失败"));
+                    $transaction->rollback();
+                }                
+                Yii::app()->end($ret);                
 	}
         
         public function actionHistoryList(){
