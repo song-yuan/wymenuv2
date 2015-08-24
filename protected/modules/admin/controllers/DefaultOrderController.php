@@ -418,7 +418,7 @@ class DefaultOrderController extends BackendController
                 $db = Yii::app()->db;
                 $transaction = $db->beginTransaction();
                 try{
-                    $order=Order::model()->find(" lid=:lid and dpid=:dpid",array(":lid"=>$orderid,":dpid"=>$companyId));
+                    $order=Order::model()->with("company")->find(" t.lid=:lid and t.dpid=:dpid",array(":lid"=>$orderid,":dpid"=>$companyId));
                     $order->should_total=$payoriginaccount;
                     $order->reality_total=$payshouldaccount;
                     $order->order_status=$orderstatus;
@@ -437,12 +437,12 @@ class DefaultOrderController extends BackendController
                         $criteria2 = new CDbCriteria;
                         $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
                         $criteria2->order = ' t.lid desc ';                    
-                        $site = Site::model()->find($criteria2);
+                        $site = Site::model()->with("siteType")->find($criteria2);
                         $site->status=$orderstatus;
                         $site->save();
                     }
                     $se=new Sequence("order_pay");
-                    
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"测试啊")));
                     if($paycashaccount>0)
                     {
                         $orderPayId = $se->nextval();
