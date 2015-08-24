@@ -1612,7 +1612,7 @@
                 layer.close(layer_index2);
                 bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {                    
                     if(result){
-                        ordermemo="11";
+                        //ordermemo="11";
                         var url="<?php echo $this->createUrl('defaultOrder/orderAccount',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;
                         var sendjson='paycashaccount='+payCashAccount+
                                     '&paymemberaccount='+payMemberAccount+
@@ -1620,8 +1620,8 @@
                                     '&ordermemo='+ordermemo+
                                     '&payshouldaccount='+payShouldAccount+
                                     '&payoriginaccount='+payOriginAccount;
-                            alert(sendjson);
-                            alert(url);
+                            //alert(sendjson);
+                            //alert(url);
                         $.ajax({
                             url:url,
                             type:'POST',
