@@ -848,7 +848,7 @@ class Helper
                 }
                 //foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
                 $printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));
-                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"dddd");
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>count($printerways));
                 //var_dump($printerways);exit;
                 foreach($printerways as $printerway)
                 {
@@ -882,7 +882,7 @@ class Helper
                                     }
                                 }
                             }
-                        }
+                        }                        
                         //var_dump($printer2orderproducts_a);exit;
                         //var_dump($printwaydetails);exit;
                         //如果是整体，
@@ -895,7 +895,6 @@ class Helper
                                     $listData = array("22".Helper::setPrinterTitle($order->company->company_name,8));
                                     array_push($listData,"00");
                                     array_push($listData,"br");
-
                                     if($reprint)
                                     {
                                         $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
@@ -912,7 +911,7 @@ class Helper
                                         array_push($listData,"11".$site->siteType->name.' '.$site->serial);
                                     }
                                     array_push($listData,"00".yii::t('app','人数：').$order->number);
-
+                                    //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
                                     if(!empty($order->callno))
                                     {
                                         array_push($listData,"00"."  ".yii::t('app','呼叫号：'));
@@ -981,7 +980,7 @@ class Helper
                                     //var_dump($listData);exit;
                                     $printret=array();
                                     $printserver="1";
-                                    //份数循环
+                                    //份数循环                                    
                                     for($i=0;$i<$printerway->list_no;$i++){             //////////////                           
                                         $printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                                         //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
@@ -995,6 +994,7 @@ class Helper
                             }
                         }else{ ////如果不是整体，分开打印    //////////////
                             foreach ($printer2orderproducts_a as $key=>$values) {
+                                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试n");
                                     $printer = $printers_a[$key];
                                     $productids="";
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
@@ -1102,8 +1102,7 @@ class Helper
                                                 return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
                                             }
                                         }  
-                                    }                                   
-                                                                      
+                                    }                               
                                     //return $printret;
                             }
                         }

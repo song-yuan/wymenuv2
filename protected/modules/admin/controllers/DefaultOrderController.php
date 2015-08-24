@@ -344,7 +344,8 @@ class DefaultOrderController extends BackendController
                 ///*************print
                 if($orderId !='0')
                 {
-                    $order = Order::model()->find('lid=:lid and dpid=:dpid and order_status in("1","2","3")' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
                     if(empty($order))
                     {
                         return json_encode(array('status'=>false,'msg'=>"该订单不存在"));
@@ -359,12 +360,19 @@ class DefaultOrderController extends BackendController
                         $criteria2 = new CDbCriteria;
                         $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
                         $criteria2->order = ' t.lid desc ';                    
-                        $site = Site::model()->find($criteria2);
+                        $site = Site::model()->with("siteType")->find($criteria2);
                     }
                 }
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));
                 $savejson=OrderList::createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
                 //$jobids=array();
-                $ret=  json_encode(Helper::printKitchenAll2($order,$site,$siteNo,false));
+                //Yii::app()->end($savejson);
+                if(!$savejson["status"])
+                {
+                    $ret=json_encode($savejson);
+                }else{
+                    $ret=  json_encode(Helper::printKitchenAll2($order,$site,$siteNo,false));
+                }
                 Yii::app()->end($ret);
 	}
         

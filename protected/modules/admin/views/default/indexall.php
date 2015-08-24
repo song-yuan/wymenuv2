@@ -740,9 +740,9 @@
             
             $('#printerKitchen').on(event_clicktouchstart, function(){
                 var orderid=$(".selectProduct").attr("orderid");
-                //有新品
-                if($(".selectProductA[order_status='0']").length>0)
-                {
+//                //有新品
+//                if($(".selectProductA[order_status='0']").length>0)
+//                {
                         //取得数据
                         var sendjson=getallproductinfo("2");
                         var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>";
@@ -760,6 +760,7 @@
                                 //保存成功，刷新
                                 $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                                 var data=msg;
+                                alert(data.msg);
                                 if(data.status){
                                     //取得打印结果,在layer中定时取得
                                     //alert(data.msg);
@@ -811,28 +812,28 @@
                                 alert("保存失败2");
                             }
                         });
-                }else{ //没有新品
-                    //设置总额
-                    var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
-                    $("#payOriginAccount").text(payOriginAccount);
-                    var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
-                    var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                    $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
-                        
-                    //出现收银界面
-                    layer_index2=layer.open({
-                         type: 1,
-                         shade: false,
-                         title: false, //不显示标题
-                         area: ['65%', '60%'],
-                         content: $('#accountbox'),//$('#productInfo'), //捕获的元素
-                         cancel: function(index){
-                             layer.close(index);
-            //                        this.content.show();
-            //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
-                         }
-                     });   
-                 }
+//                }else{ //没有新品
+//                    //设置总额
+//                    var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
+//                    $("#payOriginAccount").text(payOriginAccount);
+//                    var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
+//                    var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
+//                    $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+//                        
+//                    //出现收银界面
+//                    layer_index2=layer.open({
+//                         type: 1,
+//                         shade: false,
+//                         title: false, //不显示标题
+//                         area: ['65%', '60%'],
+//                         content: $('#accountbox'),//$('#productInfo'), //捕获的元素
+//                         cancel: function(index){
+//                             layer.close(index);
+//            //                        this.content.show();
+//            //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+//                         }
+//                     });   
+//                 }
             });
             
             $('#print_box_close').on(event_clicktouchstart, function(){               

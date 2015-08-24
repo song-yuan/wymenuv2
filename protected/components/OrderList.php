@@ -384,7 +384,7 @@ class OrderList
                         if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[2] ))
                         {
                             $transaction->rollback();
-                            return json_encode(array('status'=>false,'msg'=>$productdata->product_name."数量不足"));
+                            return array('status'=>false,'msg'=>$productdata->product_name."数量不足");
                         }
                         //不是临时挂单就更新库存，更新下单数和点赞数，发送更新库存消息
                         if($orderStatus>1)
@@ -524,8 +524,10 @@ class OrderList
                 }
 
                 $transaction->commit();
+                //return array('status'=>false,'msg'=>"dddd");
                 //估清产品通知
                 if(!empty($sellOff)){
+                    return array('status'=>false,'msg'=>"沽清：".$sellOff);
                     Gateway::getOnlineStatus();
                     $store = Store::instance('wymenu');
                     $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('0','1','2')",array(":dpid"=>$dpid));
@@ -544,10 +546,10 @@ class OrderList
                         }
                     } 
                 }
-                return json_encode(array('status'=>true,'msg'=>"保存成功"));
+                return array('status'=>true,'msg'=>"保存成功");
             } catch (Exception $ex) {
                 $transaction->rollback();
-                return json_encode(array('status'=>false,'msg'=>"异常发生"));
+                return array('status'=>false,'msg'=>"保存时异常发生");
             }
                 
         }
