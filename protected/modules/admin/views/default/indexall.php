@@ -712,6 +712,7 @@
                     //var orderid=$(".selectProduct").attr("orderid");
                    //var orderstatus="1";
                    var sendjson=getallproductinfo();
+                   alert(sendjson);
                    var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/1";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
@@ -725,7 +726,7 @@
 	                if(data.status){
                             layer.close(index);
                             $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
-                            alert("保存成功！");
+                            alert("保存成功！");                            
                         }else{
                             layer.close(index);
                             alert(data.msg);
@@ -789,19 +790,21 @@
                                                 $("#successnumid").html(data.successnum);
                                                 $("#errornumid").html(data.errornum);
                                                 $("#notsurenumid").html(data.notsurenum);
-                                                if(data.finished && data.errornum==0 && data.notsurenum==0)
+                                                if(data.finished && parseInt(data.errornum)==0 && parseInt(data.notsurenum)==0)
                                                 {
                                                     //all success
                                                     clearInterval(interval);
                                                     layer.close(layer_index_printresult);
+                                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                                                 }                                                
                                             },'json'); 
                                             waitingsecond--;
                                             if(waitingsecond<0)
                                             {                                                       
                                                 $("#notsurenumid").html(0);
-                                                $("#errornumid").html(data.errornum+data.notsurenum);
+                                                $("#errornumid").html(parseInt(data.errornum)+parseInt(data.notsurenum));
                                                 clearInterval(interval);
+                                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                                             }
                                     },1000);                                    
                                 }else{
@@ -847,6 +850,11 @@
             });
             
             $('#site_list_button').on(event_clicktouchstart,function(){
+                //刷新座位页面                                    
+                var typeId=$('li[class="tabSite slectliclass"]').attr('typeid');
+                //alert(typeId);
+                tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
+                $('#tabsiteindex').load(tabcurrenturl);
                 $('#site_row').show();
                 $('#order_row').hide();
             });
@@ -934,7 +942,7 @@
                     alert("已经退菜！");
                     return false
                 }
-                if(orderstatus=="0" || orderstatus=="1")
+                if(orderstatus=="0")
                 {
                     alert("还没有下单、直接删除就行！");
                     return false
@@ -944,7 +952,7 @@
                     $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+lid
                     ,'', function(){
                       $modal.modal();
-                    });
+                });
              });
              
              $('#btn-reprint').on(event_clicktouchstart,function(){
@@ -1611,19 +1619,18 @@
                     alert("收款不够");
                     return false;
                 }
+                var typeId=$('li[class="tabSite slectliclass"]').attr('typeid');
+                //var isaccount=false;
                 layer.close(layer_index2);
                 bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {                    
                     if(result){
-                        //ordermemo="11";
                         var url="<?php echo $this->createUrl('defaultOrder/orderAccount',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;
                         var sendjson='paycashaccount='+payCashAccount+
                                     '&paymemberaccount='+payMemberAccount+
                                     '&payunionaccount='+payUnionAccount+
                                     '&ordermemo='+ordermemo+
                                     '&payshouldaccount='+payShouldAccount+
-                                    '&payoriginaccount='+payOriginAccount;
-                            //alert(sendjson);
-                            //alert(url);
+                                    '&payoriginaccount='+payOriginAccount;                            
                         $.ajax({
                             url:url,
                             type:'POST',
@@ -1635,8 +1642,12 @@
                                 if(data.status){
                                     layer.close(layer_index2);
                                     alert(data.msg);
-                                    //刷新座位页面
-                                    
+                                    //刷新座位页面                                    
+                                    //alert(typeId);
+                                    tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
+                                    $('#tabsiteindex').load(tabcurrenturl);
+                                    $('#site_row').show();
+                                    $('#order_row').hide();
                                 }else{
                                     //layer.close(layer_index2);
                                     alert(data.msg);
@@ -1671,9 +1682,24 @@
                                 });
                             }
                         });
-                         //返回座位列表页面
+
+                    }else{
+                        layer_index2=layer.open({
+                            type: 1,
+                            shade: false,
+                            title: false, //不显示标题
+                            area: ['65%', '60%'],
+                            content: $('#accountbox'),//$('#productInfo'), //捕获的元素
+                            cancel: function(index){
+                                layer.close(index);
+               //                        this.content.show();
+               //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                            }
+                        });
                     }
                 });
+                     //返回座位列表页面
+                
             });
             
             $('#other-btn').on(event_clicktouchstart,function(){
@@ -1720,22 +1746,22 @@
         //库存提示
         function sell_off(do_data) {
             //alert(do_data);
-            var data = eval('(' + do_data + ')');
-            	//for(var item in data.do_data){
-            	for(var item in data){
-                    $('div.blockCategory[product-id="'+data[item].product_id+'"]').attr('store',data[item].num);
-                    if(parseInt(data[item].num)==0){
-                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
-                    	var str = '<div class="sellOff sellOut"><?php echo yii::t('app',"已售完");?></div>';
-                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
-                    }else if(parseInt(data[item].num) > 0){
-                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
-                    	var str = '<div class="sellOff">仅剩<br/>'+data[item].num+'份</div>';
-                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
-                    }else{
-                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
-                    }
-            	}             
+//            var data = eval('(' + do_data + ')');
+//            	//for(var item in data.do_data){
+//            	for(var item in data){
+//                    $('div.blockCategory[product-id="'+data[item].product_id+'"]').attr('store',data[item].num);
+//                    if(parseInt(data[item].num)==0){
+//                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+//                    	var str = '<div class="sellOff sellOut"><?php echo yii::t('app',"已售完");?></div>';
+//                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
+//                    }else if(parseInt(data[item].num) > 0){
+//                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+//                    	var str = '<div class="sellOff">仅剩<br/>'+data[item].num+'份</div>';
+//                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('a').append(str);
+//                    }else{
+//                    	$('div.blockCategory[product-id="'+data[item].product_id+'"]').find('.sellOff').remove();
+//                    }
+//            	}             
        }                
 	</script>
 
