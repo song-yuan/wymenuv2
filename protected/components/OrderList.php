@@ -370,13 +370,14 @@ class OrderList
             }
                  //return json_encode(array('status'=>false,'msg'=>"test1"));
             try {
+                ///先删除所有为下单的临时菜品，后插入
+                $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
+                $result = $db->createCommand($sql)->execute();                            
+                    
                 //插入订单单品
                 if(!empty($productList))
                 {
                     $productListArr=explode(";",$productList);
-                    ///先删除所有为下单的临时菜品，后插入
-                    $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
-                    $result = $db->createCommand($sql)->execute();                            
                         
                     foreach($productListArr as $tvalue)
                     {   

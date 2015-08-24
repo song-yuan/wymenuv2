@@ -123,8 +123,7 @@
 							alert(data.message);
 						} else {
 							alert(data.message);
-                                                        $('#orderdetail').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+data.siteid+'/istemp/'+istemp);
-							//ocation.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+data.siteid+'/istemp/'+istemp;
+                                                        $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp);
                                                         $("#tab_sitelist").show();
                                                         $('#pxbox_button').hide();
                                                         $('#site_row').hide();
@@ -194,8 +193,6 @@
                            $('.orderaction').on(event_clicktouchstart,function(){
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
-                               //alert(istemp);
-                               //location.href='<?php echo $this->createUrl('defaultOrder/order',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp;
                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp);
                                $("#tab_sitelist").show();
                                $('#pxbox_button').hide();
