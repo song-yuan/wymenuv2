@@ -398,12 +398,13 @@ class OrderList
                             }
                         }
                         $productdata->save();
-
+                        
+                        ///先删除所有为下单的临时菜品，后插入
+                        $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
+                        $result = $db->createCommand($sql)->execute();
+                            
                         if($productDetailArr[2]=="0")
                         {
-                            ///先删除，后插入
-                            $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId.' and product_id ='.$productDetailArr[1];
-                            $result = $db->createCommand($sql)->execute();
                             //插入
                             $orderProductId = $se->nextval();
                             //插入一条
@@ -527,7 +528,7 @@ class OrderList
                 //return array('status'=>false,'msg'=>"dddd");
                 //估清产品通知
                 if(!empty($sellOff)){
-                    return array('status'=>false,'msg'=>"沽清：".$sellOff);
+                    //return array('status'=>false,'msg'=>"沽清：".$sellOff);
                     Gateway::getOnlineStatus();
                     $store = Store::instance('wymenu');
                     $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('0','1','2')",array(":dpid"=>$dpid));
@@ -549,8 +550,7 @@ class OrderList
                 return array('status'=>true,'msg'=>"保存成功");
             } catch (Exception $ex) {
                 $transaction->rollback();
-                return array('status'=>false,'msg'=>"保存时异常发生");
-            }
-                
+                return array('status'=>false,'msg'=>$e->getMessage());
+            }                
         }
 }
