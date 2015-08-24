@@ -592,7 +592,10 @@ $(document).ready(function(){
     //	$('.tastepad').hide();
     //  $(this).hide();
     //});
-    $('#updatePadOrder').on(event_clicktouchstart,function(){
+     $('#updatePadOrder').on(event_clicktouchstart,function(){
+     	alert('点完单,请联系服务员,谢谢!');
+     });
+    $('#pad-order-submit').on(event_clicktouchstart,function(){
 
         if (typeof Androidwymenuprinter == "undefined") {
             alert(language_notget_padinfo);
