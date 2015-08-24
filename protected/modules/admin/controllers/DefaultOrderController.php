@@ -402,14 +402,14 @@ class DefaultOrderController extends BackendController
         
         public function actionOrderAccount(){
 		$companyId = Yii::app()->request->getParam('companyId',"0");
-                $orderid = Yii::app()->request->getPost('orderid',"0");
-                $orderstatus = Yii::app()->request->getPost('orderstatus',"0");
+                $orderid = Yii::app()->request->getParam('orderid',"0");
+                $orderstatus = Yii::app()->request->getParam('orderstatus',"0");
                 $paycashaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paycashaccount',"0")));
                 $paymemberaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paymemberaccount',"0")));
                 $payunionaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payunionaccount',"0")));
                 $payshouldaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payshouldaccount',"0")));
                 $payoriginaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payoriginaccount',"0")));
-                $cardno = Yii::app()->request->getPost('cardno',"0000000000");
+                $cardno = Yii::app()->request->getParam('cardno',"0000000000");
                 $ordermemo = Yii::app()->request->getPost('ordermemo',"0");
                 //存数order order_pay 0现金，4会员卡，5银联                         
                 //写入会员卡消费记录，会员卡总额减少
