@@ -269,7 +269,7 @@ class DefaultOrderController extends BackendController
                 ///*************print
                 if($orderId !='0')
                 {
-                    $order = Order::model()->find('lid=:lid and dpid=:dpid and order_status in("1","2","3")' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    $order = Order::model()->with("company")->find('t.lid=:lid and t.dpid=:dpid and t.order_status in("1","2","3")' , array(':lid'=>$orderId,':dpid'=>$companyId));
                     if(empty($order))
                     {
                         return json_encode(array('status'=>false,'msg'=>"该订单不存在"));
@@ -284,7 +284,7 @@ class DefaultOrderController extends BackendController
                         $criteria2 = new CDbCriteria;
                         $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
                         $criteria2->order = ' t.lid desc ';                    
-                        $site = Site::model()->find($criteria2);
+                        $site = Site::model()->with("siteType")->find($criteria2);
                     }
                 }
                 //返回json挂单成功或失败
@@ -442,7 +442,7 @@ class DefaultOrderController extends BackendController
                         $site->save();
                     }
                     $se=new Sequence("order_pay");
-                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"测试啊")));
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"测试啊")));
                     if($paycashaccount>0)
                     {
                         $orderPayId = $se->nextval();
