@@ -1618,6 +1618,8 @@
                                     '&paymemberaccount='+payMemberAccount+'&payunionaccount='+payUnionAccount+
                                     '&ordermemo='+ordermemo+'&payshouldaccount='+payShouldAccount+
                                     '&payoriginaccount='+payOriginAccount+'&cardno='+cardno;
+                            alert(sendjson);
+                            alert(url);
                         $.ajax({
                             url:url,
                             type:'POST',
