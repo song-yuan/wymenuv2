@@ -727,12 +727,12 @@
                             alert("保存成功！");
                         }else{
                             layer.close(index);
-                            alert("保存失败！");
+                            alert(data.msg);
                         }
                     },
                     error: function(msg){
                         layer.close(index);
-                        alert("保存失败！");
+                        alert("保存失败2！");
                     }
 	     	});
                    
