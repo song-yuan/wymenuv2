@@ -487,23 +487,36 @@ class CreateOrder
 			}	
 			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
 			$db->createCommand($sql)->execute();
-			$order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderId,':dpid'=>$dpid));
-            $pad=Pad::model()->with('printer')->find('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
-           	if(!$pad){
-           		throw new Exception(json_encode( array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该pad！')),JSON_UNESCAPED_UNICODE));
-           	}
-            //要判断打印机类型错误，必须是local。
-//            if($pad->printer->printer_type!='1')
-//            {
-//                throw new Exception(json_encode( array('status'=>false,$order->dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','必须是本地打印机！')),JSON_UNESCAPED_UNICODE));
-//            }else{
-                //前面加 barcode
-                $precode="1D77021D6B04".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."001D2100".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                $printserver="0";
-                $printList = Helper::printList($order, $printOrderProducts, $pad, $precode, $printserver,"");
-                if(!$printList['status']){
-                	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
+			
+			//厨打
+			$order = new Order;
+            $siteNo = new SiteNo;
+            $site = new Site;
+            if($orderId !='0')
+            {
+                $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$dpid));
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
+                if(empty($order))
+                {
+                    return json_encode(array('status'=>false,'msg'=>"该订单不存在"));
                 }
+                $criteria = new CDbCriteria;
+                $criteria->condition =  't.dpid='.$dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                $criteria->order = ' t.lid desc ';                    
+                $siteNo = SiteNo::model()->find($criteria);
+                //order site 和 siteno都需要更新状态 所以要取出来
+                if($order->is_temp=="0")
+                {
+                    $criteria2 = new CDbCriteria;
+                    $criteria2->condition =  't.dpid='.$dpid.' and t.lid='.$order->site_id ;
+                    $criteria2->order = ' t.lid desc ';                    
+                    $site = Site::model()->with("siteType")->find($criteria2);
+                }
+            }
+            $printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
+            if(!$printList['status']){
+            	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
+            }
                 //$printList2=array_merge($printList,array('sitenoid'=> $lid));
 //            }								
  			$transaction->commit();	

@@ -67,6 +67,8 @@
         <div class="line"></div>
         <div class="product-mask-info">日本語</div>
         <div class="line"></div>-->
+        <div class="product-mask-info" id="pad-order-submit"><?php echo yii::t('app','下单确认'); ?></div>
+        <div class="line"></div>
         <div class="product-mask-info" id="pad-disbind-menu"><?php echo yii::t('app','解除绑定'); ?></div>
         <div class="line"></div>
         <!--<div class="product-mask-info" id="pad-app-exit"><?php echo yii::t('app',"清除缓存");?></div>
