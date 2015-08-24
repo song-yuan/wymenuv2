@@ -88,7 +88,7 @@ class ProductClass
 		$order = $conn->queryRow();
 		
 		$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid and delete_flag = 0 and product_order_status = 0 and set_id = 0 ' .
-			   ' union select lid,dpid,create_at,update_at,order_id,set_id,main_id,product_id,is_retreat,sum(price) as price,amount,zhiamount,is_waiting,weight,taste_memo,is_giving,is_print,delete_flag,product_order_status from nb_order_product where order_id=:orderId and dpid=:dpid and delete_flag = 0 and product_order_status = 0 and set_id > 0 group by set_id';
+			   ' union select lid,dpid,create_at,update_at,order_id,set_id,main_id,product_id,is_retreat,sum(price) as price,offprice,amount,zhiamount,is_waiting,weight,taste_memo,is_giving,is_print,delete_flag,product_order_status from nb_order_product where order_id=:orderId and dpid=:dpid and delete_flag = 0 and product_order_status = 0 and set_id > 0 group by set_id';
 		$conn = $command->createCommand($sql);
 		$conn->bindValue(':orderId',$order['lid']);
 		$conn->bindValue(':dpid',$siteNo['dpid']);
