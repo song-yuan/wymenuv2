@@ -374,7 +374,10 @@ class OrderList
                 if(!empty($productList))
                 {
                     $productListArr=explode(";",$productList);
-
+                    ///先删除所有为下单的临时菜品，后插入
+                    $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
+                    $result = $db->createCommand($sql)->execute();                            
+                        
                     foreach($productListArr as $tvalue)
                     {   
                         //更新库存//失败则返回
@@ -399,10 +402,6 @@ class OrderList
                         }
                         $productdata->save();
                         
-                        ///先删除所有为下单的临时菜品，后插入
-                        $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
-                        $result = $db->createCommand($sql)->execute();
-                            
                         if($productDetailArr[2]=="0")
                         {
                             //插入
