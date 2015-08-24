@@ -224,8 +224,8 @@ class DefaultOrderController extends BackendController
          */
         public function actionOrderPause(){
 		$companyId = Yii::app()->request->getParam('companyId',0);
-                $orderId = Yii::app()->request->getPost('orderid',"0");
-                $orderStatus = Yii::app()->request->getPost('orderstatus',"0");
+                $orderId = Yii::app()->request->getParam('orderid',"0");
+                $orderStatus = Yii::app()->request->getParam('orderstatus',"0");
                 $productList = Yii::app()->request->getPost('productlist',"0");
                 $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
@@ -233,7 +233,6 @@ class DefaultOrderController extends BackendController
                 //返回json挂单成功或失败
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
-                ///Yii::app()->end(json_encode(array('status'=>false,'msg'=>$productList)));
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"test1")));
                 if($orderId =="0")
                 {
@@ -288,7 +287,7 @@ class DefaultOrderController extends BackendController
                     }
                 }
                 //返回json挂单成功或失败
-                Yii::app()->end(OrderList::createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo));
+                Yii::app()->end(json_encode(OrderList::createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo)));
 	}
         
         /*

@@ -651,10 +651,8 @@
                                                          
             });
             
-            function getallproductinfo(orderstatus)
+            function getallproductinfo()
             {
-                //取得orderid
-                var orderid=$(".selectProduct").attr("orderid");
                 //取得整体订单的tasteids tastememo
                 var ordertasteids=$("#ordertasteall").attr("tid");
                 var ordertastememo=$("#ordertastememoall").text();
@@ -680,9 +678,9 @@
                     
                 });
                 //包括单品列表、单品口味列表，口味备注等
-                return 'orderid='+orderid+'&orderstatus='+orderstatus+
-                    '&productlist='+productlist+'&ordertasteids='+ordertasteids+
-                    '&ordertastememo='+ordertastememo;                 
+                return '&productlist='+productlist+
+                        '&ordertasteids='+ordertasteids+
+                        '&ordertastememo='+ordertastememo;                 
             }
             
             
@@ -710,8 +708,11 @@
             $('#tempsave_btn').on(event_clicktouchstart,function(){
                    //取得数据
                    var orderid=$(".selectProduct").attr("orderid");
-                   var sendjson=getallproductinfo("1");
-                   var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>";
+                   //取得orderid
+                    //var orderid=$(".selectProduct").attr("orderid");
+                   //var orderstatus="1";
+                   var sendjson=getallproductinfo();
+                   var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/1";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
                     url:url,
@@ -740,12 +741,13 @@
             
             $('#printerKitchen').on(event_clicktouchstart, function(){
                 var orderid=$(".selectProduct").attr("orderid");
+                //var orderstatus="2";
 //                //有新品
                 if($(".selectProductA[order_status='0']").length>0)
                 {
                         //取得数据
-                        var sendjson=getallproductinfo("2");
-                        var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>";
+                        var sendjson=getallproductinfo();
+                        var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>/orderid/"+orderid+"/orderstatus/2";
                         var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
                          if(!statu){
                              return false;
