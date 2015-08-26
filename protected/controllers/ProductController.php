@@ -26,14 +26,17 @@ class ProductController extends Controller
 			$_SESSION['companyId'] = $this->companyId;
 			$this->isPad = 1;
 			$this->padId = $padId;
-                        if($padType=="1")
-                        {
-                        	Yii::app()->language = 'jp';
-                                Yii::app()->theme = 'pad';
-                        }else if($padType=="2"){
-                        	Yii::app()->language = 'zh_cn';
-                                Yii::app()->theme = 'pad_cn';
-                        }
+            if($padType=="1")
+            {
+            	Yii::app()->language = 'jp';
+                    Yii::app()->theme = 'pad';
+            }else if($padType=="2"){
+            	Yii::app()->language = 'zh_cn';
+                    Yii::app()->theme = 'pad_cn';
+            }else if($padType=="3"){
+            	Yii::app()->language = 'zh_cn';
+                    Yii::app()->theme = 'pad_cn_h';
+            }
 		}
 		if($mac){
 			$companyWifi = CompanyWifi::model()->find('macid=:macId',array(':macId'=>$mac));
