@@ -136,4 +136,13 @@ class Company extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+        static public function getCompanyName($dpid){
+            $db = Yii::app()->db;
+            $sql = "SELECT company_name from nb_company where dpid=:dpid";
+            $command=$db->createCommand($sql);
+            $command->bindValue(":dpid" , $dpid);
+            $nowval= $command->queryScalar();
+            return $nowval;
+        }
 }

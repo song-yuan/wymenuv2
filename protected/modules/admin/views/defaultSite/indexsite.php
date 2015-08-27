@@ -82,6 +82,7 @@
 									<div class="caption"><i class="fa fa-cogs"></i><?php echo $title; ?></div>
                                                                         <div class="col-md-3">
                                                                                 <input id="barscanid" type="text" class="form-control" placeholder="<?php echo yii::t('app','扫描小票条码，快速查看订单');?>">
+                                                                                
                                                                         </div>
                                                                         <div class="actions">
                                                                             
@@ -238,6 +239,7 @@
                   //$modal.show();
                 //});
                 //alert('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId);
+                //alert(status);
                 pxbox.find('.button-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){
                     pxbox.children("h4").text(that.attr("shname"));
                     $("#tab_sitelist").hide();
@@ -256,8 +258,8 @@
                     //defaultOrder/order/companyId/0000000001/orderId/85/typeId/0000000001
                     //$(this).val("111");
                 }
-            });
-            
+            });           
+           
             $('#order_list').on(event_clicktouchstart,function(){
                 if($('.selectProduct').attr("orderid")=="0000000000")
                 {

@@ -126,8 +126,8 @@ class SiteClass
                         $commandsite->bindValue(":sid" , $sid);
                         $commandsite->bindValue(":companyId" , $companyId);
                         $commandsite->execute();
-                    }
-
+                    }                           
+                             
                     $se=new Sequence("site_no");
                     $lid = $se->nextval();
                     $site_id=$sid;
@@ -136,7 +136,9 @@ class SiteClass
                         $se=new Sequence("temp_site");
                         $site_id = $se->nextval();                            
                     }
+                    //return array('status'=>0,'message'=>"dddddd22",'siteid'=>$sid);
                     $code = SiteClass::getCode($companyId);
+                    
                     $data = array(
                         'lid'=>$lid,
                         'dpid'=>$companyId,

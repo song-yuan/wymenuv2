@@ -42,6 +42,19 @@ class LoginController extends BackendController
 		//$this->redirect(array('index','language'=>$language));
                 $this->redirect('index');
 	}
+        public function actionUnlock()
+        {
+                $username=Yii::app()->user->name;
+                $password=Yii::app()->request->getParam('password','0');
+                $identity=new UserIdentity($username,$password);
+                $identity->authenticate();
+		if($identity->errorCode===UserIdentity::ERROR_NONE)
+		{
+                    Yii::app()->end(json_encode(array('status'=>true,'msg'=>"")));
+                }else{
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"")));
+                }
+        }
 	
 	
 	

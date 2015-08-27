@@ -197,9 +197,16 @@
 }
 .edit_span_select {
     border:1px solid red;
+    background-color:#ED9F9F !important;    
 }
 .edit_span_select_zero {
     border:1px solid red;
+    background-color:#add !important;
+}
+
+.edit_span_select_member {
+    border:1px solid red;
+    background-color:#ED9F9F !important;
 }
 /*
 .calc_num {
@@ -556,9 +563,9 @@
             <div id="membercardInfo" style="display:none;">
                 <div style="width: 95%;margin:1.0em;font-size: 1.5em;">
                         <DIV style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','还欠:');?><span id="card_pay_span_money">10000.23</span></DIV>
-                        <DIV style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','会员卡支付：');?><input id="card_pay_input_money" style="width:50%;border:none;" type="text" value="10000.23"></DIV>
-                        <DIV style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','请刷卡');?><input id="card_pay_input_card" style="width:50%;border:none;" type="text" value="888123"></DIV>
-                        <DIV style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','密码');?><input id="card_pay_input_password" style="width:50%;border:none;" type="password" value="12345"></DIV>
+                        <DIV class="member_card_div edit_span_select_member" style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','会员卡支付：');?><span id="card_pay_span_should" actual=""></span></DIV>
+                        <DIV class="member_card_div" style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','请刷卡');?><span id="card_pay_span_card" actual=""></span></DIV>
+                        <DIV class="member_card_div" style="float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','密码');?><span id="card_pay_span_password" actual=""></span></DIV>
                 </div>
                 <div style="text-align:center;width: 95%;margin:1.0em;">
                     <input style="margin:1.0em;" type="button" class="btn green" id="member_card_pay" value="<?php echo yii::t('app','确 定');?>">
@@ -572,13 +579,14 @@
             var gstypeid=0;
             var gop=0;
             var tabcurrenturl="";
-            var layer_index1;
-            var layer_index2;
-            var layer_index3;
+            var layer_index1=0;
+            var layer_index2=0;
+            var layer_index3=0;
             //var layer_index_account;
-            var layer_index_printresult;
-            var layer_index_membercard;
+            var layer_index_printresult=0;
+            var layer_index_membercard=0;
             var first_tab="<?php echo $categories[0]['lid']; ?>";
+            //var member_card_pop_flag=0;
             if (typeof Androidwymenuprinter == "undefined") {
                 event_clicktouchstart="click";
                 event_clicktouchend="click";
@@ -644,12 +652,8 @@
                     obj.find('span[class="badge"]').text(curnum);
                 }
                 
-            });
-            
-            $('.selectProductInfo').on(event_clicktouchstart, function(){
-               
-                                                         
-            });
+            });            
+           
             
             function getallproductinfo()
             {
@@ -690,7 +694,12 @@
                     $.each(tids.split("|"),function(index,data){
                         $(".selectTaste[tasteid="+data+"]").addClass("active");
                     });
-                    $("#taste_memo_edit").val($("#ordertastememoall").text());                
+                    $("#taste_memo_edit").val($("#ordertastememoall").text());
+                    if(layer_index3!=0)
+                    {
+                        return;
+                    }
+                    //alert(layer_index3);
                     layer_index3=layer.open({
                      type: 1,
                      shade: false,
@@ -699,10 +708,12 @@
                      content: $('#tastebox'),//$('#productInfo'), //捕获的元素
                      cancel: function(index){
                          layer.close(index);
+                         layer_index3=0;
         //                        this.content.show();
         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                      }
                  });
+                 //alert(layer_index3);
             });
                         
             $('#tempsave_btn').on(event_clicktouchstart,function(){
@@ -712,7 +723,7 @@
                     //var orderid=$(".selectProduct").attr("orderid");
                    //var orderstatus="1";
                    var sendjson=getallproductinfo();
-                   alert(sendjson);
+                   //alert(sendjson);
                    var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/1";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
@@ -763,11 +774,13 @@
                                 //保存成功，刷新
                                 $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                                 var data=msg;
-                                //alert(data.msg);
+                                alert(data.msg);
                                 if(data.status){
                                     //取得打印结果,在layer中定时取得
                                     //alert(data.msg);
                                     $("#printalljobs").text(data.msg);
+                                    if(layer_index_printresult!=0)
+                                        return;
                                     layer_index_printresult=layer.open({
                                          type: 1,
                                          shade: false,
@@ -776,6 +789,7 @@
                                          content: $('#printRsultList'),//$('#productInfo'), //捕获的元素
                                          cancel: function(index){
                                              layer.close(index);
+                                             layer_index_printresult=0;
                             //                        this.content.show();
                             //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                                          }
@@ -795,20 +809,25 @@
                                                     //all success
                                                     clearInterval(interval);
                                                     layer.close(layer_index_printresult);
+                                                    layer_index_printresult=0;
                                                     $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
-                                                }                                                
+                                                }
+                                                if(waitingsecond==0)
+                                                {   
+                                                    $("#notsurenumid").text(0);
+                                                    $("#errornumid").text(parseInt(data.errornum) + parseInt(data.notsurenum));                                                
+                                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
+                                                }
                                             },'json'); 
                                             waitingsecond--;
-                                            if(waitingsecond<0)
-                                            {                                                       
-                                                $("#notsurenumid").html(0);
-                                                $("#errornumid").html(parseInt(data.errornum)+parseInt(data.notsurenum));
-                                                clearInterval(interval);
-                                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
+                                            if(waitingsecond==0)
+                                            {   
+                                                clearInterval(interval);                                                
                                             }
                                     },1000);                                    
                                 }else{
-                                    alert("下单成功，打印失败");
+                                    alert(data.msg);
+                                    //alert("下单成功，打印失败");
                                 }
                                //以上是打印
                                //刷新orderPartial	                 
@@ -824,7 +843,10 @@
                     var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                     var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                     $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
-                        
+                    if(layer_index2!=0)
+                    {
+                        return;
+                    }
                     //出现收银界面
                     layer_index2=layer.open({
                          type: 1,
@@ -834,6 +856,7 @@
                          content: $('#accountbox'),//$('#productInfo'), //捕获的元素
                          cancel: function(index){
                              layer.close(index);
+                             layer_index2=0;
             //                        this.content.show();
             //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                          }
@@ -842,11 +865,13 @@
             });
             
             $('#print_box_close').on(event_clicktouchstart, function(){               
-                 layer.close(layer_index_printresult);                    
+                 layer.close(layer_index_printresult);
+                 layer_index_printresult=0;
             });
             
             $('#layer2_close').on(event_clicktouchstart, function(){               
-                 layer.close(layer_index2);                    
+                 layer.close(layer_index2);
+                 layer_index2=0;
             });
             
             $('#site_list_button').on(event_clicktouchstart,function(){
@@ -857,6 +882,13 @@
                 $('#tabsiteindex').load(tabcurrenturl);
                 $('#site_row').show();
                 $('#order_row').hide();
+            });
+            
+            //member_card_div
+            $('.member_card_div').on(event_clicktouchstart,function(){
+                //刷新座位页面                                    
+                $(".member_card_div").removeClass("edit_span_select_member");
+                $(this).addClass("edit_span_select_member");
             });
             
             $('.selectProductDel').live(event_clicktouchstart, function(){
@@ -876,6 +908,7 @@
                 }
                 return false;
             });
+            
             $('.selectProductName,.selectProductName,.badge').live('click', function(){
                 var lid=$(this).parent().attr('lid');
                 var productid=$(this).parent().attr('productid');
@@ -918,6 +951,10 @@
                 $("#spanIsRetreat").text(isretreat);
                 $("#spanOrderStatus").text(orderstatus);
                 $('#productTaste').load('<?php echo $this->createUrl('defaultOrder/productTasteAll',array('companyId'=>$this->companyId,'isall'=>'0'));?>/lid/'+productid);
+                if(layer_index1!=0)
+                {
+                    return;
+                }
                 layer_index1=layer.open({
                      type: 1,
                      shade: false,
@@ -926,6 +963,7 @@
                      content: $('#productInfo'), //捕获的元素
                      cancel: function(index){
                          layer.close(index);
+                         layer_index1=0;
         //                        this.content.show();
         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                      }
@@ -1258,6 +1296,7 @@
             
             $('#product_close').on(event_clicktouchstart,function(){
                 layer.close(layer_index1);
+                layer_index1=0;
             });
             
             $('#product_yes').on(event_clicktouchstart,function(){
@@ -1309,6 +1348,7 @@
                 var productdiscount=$("#spanProductDiscount").text();
                 obj.find("span[class='selectProductDiscount']").text(productdiscount);
                 layer.close(layer_index1);
+                layer_index1=0;
             });
 
             $('#pay_clearone').on(event_clicktouchstart,function(){
@@ -1523,15 +1563,21 @@
                 $('#card_pay_span_money').text((payShouldAccount-payRealityAccount).toFixed(2));
                 if(nowcard>0)
                 {
-                    $('#card_pay_input_money').val(nowcard);
+                    //$('#card_pay_input_money').val(nowcard);
+                    $('#card_pay_span_should').text(nowcard);
                 }else{
                     if(payShouldAccount-payRealityAccount>0)
                     {
-                        $('#card_pay_input_money').val((payShouldAccount-payRealityAccount).toFixed(2));
+                        //$('#card_pay_input_money').val((payShouldAccount-payRealityAccount).toFixed(2));
+                        $('#card_pay_span_should').text((payShouldAccount-payRealityAccount).toFixed(2));
                     }else{
-                        $('#card_pay_input_money').val(0.00);
+                        //$('#card_pay_input_money').val("0.00");
+                        $('#card_pay_span_should').text("0.00");
                     }
                 }
+                //member_card_pop_flag=1;
+                if(layer_index_membercard!=0)
+                    return;
                 layer_index_membercard=layer.open({
                      type: 1,
                      shade: false,
@@ -1540,16 +1586,56 @@
                      content: $('#membercardInfo'), //捕获的元素
                      cancel: function(index){
                          layer.close(index);
+                         layer_index_membercard=0;
         //                        this.content.show();
         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                      }
                  });
+                 
             };
             
+            $(document).on('keydown',function(event){
+                //alert(event.which);
+                
+                if(layer_index_membercard==0)
+                    return;
+                event.preventDefault();
+                var obj=$(".edit_span_select_member");
+                //var selectinput=obj.find("input");
+                var selectspan=obj.find("span");
+                var keycode=parseInt(event.which)-48;
+                if(keycode==142 ||( keycode>=0 && keycode <10))
+                {
+                    var addkeycode=keycode;
+                    if(keycode==142)
+                    {
+                        keycode=".";
+                    }
+                    var selectactual=selectspan.attr("actual");
+                    if(selectspan.attr("id")=="card_pay_span_password")
+                    {
+                        selectspan.text(selectspan.text()+"*");
+                    }else{
+                        selectspan.text(selectactual+keycode);
+                    }
+                    selectspan.attr("actual",selectactual+keycode);                    
+                }
+                if(event.which==8)
+                {
+                    //alert(888)
+                    var selectspantext=selectspan.text();
+                    var selectspanactual=selectspan.attr("actual");
+                    selectspan.text(selectspantext.substring(0,selectspantext.length-1));
+                    selectspan.attr("actual",selectspanactual.substring(0,selectspanactual.length-1));
+                    //event.preventDefault();
+                }
+            });
+            
             $('#member_card_pay').on(event_clicktouchstart,function(){
-                var cardmoney=$('#card_pay_input_money').val();
-                var cardno=$('#card_pay_input_card').val();
-                var cardpassword=$('#card_pay_input_password').val();
+                var cardmoney=$('#card_pay_span_should').text();
+                var cardno=$('#card_pay_span_card').text();
+                var cardpassword=$('#card_pay_span_password').attr("actual");
+                //alert(cardpassword);
                 //确认密码
                 //如果密码正确，带回数据，并关闭
                 $.get('<?php echo $this->createUrl(
@@ -1569,6 +1655,8 @@
                                 $("#payChangeAccount").text("0.00");
                             }
                             layer.close(layer_index_membercard);
+                            layer_index_membercard=0;
+                            //member_card_pop_flag=0;
                         }else{
                             alert("密码错误");
                             //$('#card_pay_input_password').clear();
@@ -1577,7 +1665,9 @@
             });
             
             $('#member_card_pay_close').on(event_clicktouchstart,function(){
-                layer.close(layer_index_membercard);                
+                layer.close(layer_index_membercard);
+                layer_index_membercard=0;
+                //member_card_pop_flag=0;
             });
             
             $('#pay_btn').on(event_clicktouchstart,function(){
@@ -1622,6 +1712,7 @@
                 var typeId=$('li[class="tabSite slectliclass"]').attr('typeid');
                 //var isaccount=false;
                 layer.close(layer_index2);
+                layer_index2=0;
                 bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {                    
                     if(result){
                         var url="<?php echo $this->createUrl('defaultOrder/orderAccount',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;
@@ -1641,6 +1732,7 @@
                                 var data=msg;
                                 if(data.status){
                                     layer.close(layer_index2);
+                                    layer_index2=0;
                                     alert(data.msg);
                                     //刷新座位页面                                    
                                     //alert(typeId);
@@ -1651,6 +1743,10 @@
                                 }else{
                                     //layer.close(layer_index2);
                                     alert(data.msg);
+                                    if(layer_index2!=0)
+                                    {
+                                        return;
+                                    }
                                     layer_index2=layer.open({
                                         type: 1,
                                         shade: false,
@@ -1659,6 +1755,7 @@
                                         content: $('#accountbox'),//$('#productInfo'), //捕获的元素
                                         cancel: function(index){
                                             layer.close(index);
+                                            layer_index2=0;
                            //                        this.content.show();
                            //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                                         }
@@ -1668,6 +1765,10 @@
                             error: function(msg){
                                 //layer.close(index);
                                 alert("结算失败2！");
+                                if(layer_index2!=0)
+                                {
+                                    return;
+                                }
                                 layer_index2=layer.open({
                                     type: 1,
                                     shade: false,
@@ -1676,6 +1777,7 @@
                                     content: $('#accountbox'),//$('#productInfo'), //捕获的元素
                                     cancel: function(index){
                                         layer.close(index);
+                                        layer_index2=0;
                        //                        this.content.show();
                        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                                     }
@@ -1684,6 +1786,10 @@
                         });
 
                     }else{
+                        if(layer_index2!=0)
+                        {
+                            return;
+                        }
                         layer_index2=layer.open({
                             type: 1,
                             shade: false,
@@ -1692,6 +1798,7 @@
                             content: $('#accountbox'),//$('#productInfo'), //捕获的元素
                             cancel: function(index){
                                 layer.close(index);
+                                layer_index2=0;
                //                        this.content.show();
                //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                             }

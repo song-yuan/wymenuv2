@@ -111,8 +111,9 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',0);
                 $syscallId = Yii::app()->request->getParam('syscallId',0);
                 $autoaccount = Yii::app()->request->getParam('autoaccount',0);
-                $order=array();
-                $siteNo=array();
+                $order=new Order();
+                $siteNo=new SiteNo();
+                $site=new Site();
                 ///***********insert to order feedback
                 ///*************print
                 if($orderId !='0')
@@ -140,12 +141,12 @@ class DefaultOrderController extends BackendController
                     $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria);
+                    //var_dump($siteNo);exit;
                 }
                 //var_dump($order);exit;
                 if(empty($order))
                 {
-                    Until::validOperate($companyId,$this);
-                    
+                    Until::validOperate($companyId,$this);                    
                     $order=new Order();
                     $se=new Sequence("order");
                     $order->lid = $se->nextval();
@@ -261,9 +262,9 @@ class DefaultOrderController extends BackendController
                 }
                 //$syscallId = Yii::app()->request->getParam('syscallId',0);
                 //$autoaccount = Yii::app()->request->getParam('autoaccount',0);
-                $order;
-                $siteNo;
-                $site;
+                $order=new Order();
+                $siteNo=new SiteNo();
+                $site=new Site();
                 ///***********insert to order feedback
                 ///*************print
                 if($orderId !='0')
@@ -336,9 +337,9 @@ class DefaultOrderController extends BackendController
                 }
                 //$syscallId = Yii::app()->request->getParam('syscallId',0);
                 //$autoaccount = Yii::app()->request->getParam('autoaccount',0);
-                $order;
-                $siteNo;
-                $site;
+                $order=new Order();
+                $siteNo=new SiteNo();
+                $site=new Site();
                 ///***********insert to order feedback
                 ///*************print
                 if($orderId !='0')
@@ -365,7 +366,7 @@ class DefaultOrderController extends BackendController
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));
                 $savejson=OrderList::createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
                 //$jobids=array();
-                //Yii::app()->end($savejson);
+                //Yii::app()->end(json_encode($savejson));
                 if(!$savejson["status"])
                 {
                     $ret=json_encode($savejson);
@@ -424,12 +425,18 @@ class DefaultOrderController extends BackendController
                     $order->remark=$order->remark+$ordermemo;
                     $order->save();
                     
-                    $criteria = new CDbCriteria;
-                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
-                    $criteria->order = ' t.lid desc ';                    
-                    $siteNo = SiteNo::model()->find($criteria);
-                    $siteNo->status=$orderstatus;
-                    $siteNo->save();
+//                    $criteria = new CDbCriteria;
+//                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+//                    $criteria->order = ' t.lid desc ';                    
+//                    $siteNo = SiteNo::model()->find($criteria);
+//                    $siteNo->status=$orderstatus;
+//                    $siteNo->save();
+                    //为了删除脏数据，这里用全部的update
+                    $sitenosql="update nb_site_no set status=".$orderstatus.
+                            " where dpid=".$companyId." and site_id=".$order->site_id.
+                            " and is_temp=".$order->is_temp;
+                    $db->createCommand($sitenosql)->execute();
+                                        
                     //order site 和 siteno都需要更新状态 所以要取出来
                     if($order->is_temp=="0")
                     {

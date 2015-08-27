@@ -64,8 +64,23 @@
                                 }
                             });
                             
-                            var opensitef=function(siteNumber,sid,istemp){
-                                
+                            function clearolddata(){
+                                $("#tab_sitelist").show();
+                                $('#pxbox_button').hide();
+                                $('#site_row').hide();
+                                $('#order_row').show();
+                                $("#payDiscountAccount").text("100%");
+                                $("#payMinusAccount").text("0.00");
+                                $("#cancel_zero").removeClass("edit_span_select_zero");
+                                $("#payRealityAccount").text("0.00");
+                                $("#payChangeAccount").text("0.00");
+                                $("#payCashAccount").text("0.00");
+                                $("#payMemberAccount").text("0.00");
+                                $("#pay_union_card").text("0.00");
+                                $("#card_pay_span_card").text("");
+                                $("#card_pay_span_card").attr("actual","");
+                                $("#card_pay_span_password").text("");
+                                $("#card_pay_span_password").attr("actual","");
                             }
                             
                            $('#site_open').on(event_clicktouchstart,function(){
@@ -73,6 +88,14 @@
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
                                var companyid='<?php echo $this->companyId; ?>';
+                               var padid="0000000000";
+                               if (typeof Androidwymenuprinter == "undefined") {
+                                    alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
+                                    //return false;
+                                }else{
+                                    var padinfo=Androidwymenuprinter.getPadInfo();
+                                    padid=padinfo.substr(10,10);
+                                }
                                //alert(istemp);alert(companyid);
                                if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 99)
                                {
@@ -80,7 +103,7 @@
                                     $.ajax({
 					'type':'POST',
 					'dataType':'json',
-					'data':{"sid":sid,"siteNumber":siteNumber,"companyId":companyid,"istemp":istemp},
+					'data':{"sid":sid,"siteNumber":siteNumber,"companyId":companyid,"istemp":istemp,"padId":padid},
 					'url':'<?php echo $this->createUrl('defaultSite/opensite',array());?>',
 					'success':function(data){
 						if(data.status == 0) {
@@ -123,11 +146,8 @@
 							alert(data.message);
 						} else {
 							alert(data.message);
-                                                        $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp);
-                                                        $("#tab_sitelist").show();
-                                                        $('#pxbox_button').hide();
-                                                        $('#site_row').hide();
-                                                        $('#order_row').show();
+                                                        $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+data.siteid+'/istemp/'+istemp);
+                                                        clearolddata();
 						}
 					},
                                         'error':function(e){
@@ -194,10 +214,7 @@
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp);
-                               $("#tab_sitelist").show();
-                               $('#pxbox_button').hide();
-                               $('#site_row').hide();
-                               $('#order_row').show();
+                               clearolddata();
                            });
                            
                            $('#btn-print-btn').on(event_clicktouchstart,function(){

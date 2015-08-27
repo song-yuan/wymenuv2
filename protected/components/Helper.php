@@ -542,6 +542,52 @@ class Helper
 		}*/
 	}
         
+        //开台时的打印
+        //打印开台号和人数，以后有WiFi的密码等。
+	static public function printSite(SiteNo $siteno,Site $site,Pad $pad, $cprecode,$printserver,$memo){
+		
+                $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$siteno->dpid));
+		if(empty($printer)) {
+                        return array('status'=>0,'dpid'=>$siteno->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
+		}		
+                $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($siteno->dpid),8));
+                if(!empty($memo))
+                {
+                    array_push($listData,"br");
+                    array_push($listData,"11".$memo);                    
+                }
+                array_push($listData,"00");
+                array_push($listData,"br");
+                $strSite="";
+                if($siteno->is_temp==0)
+                {
+                    array_push($listData,"00".yii::t('app','座号：'));
+                    array_push($listData,"11".$site->siteType->name.' '.$site->serial);
+                }else{
+                    array_push($listData,"00".yii::t('app','座号：临时座'));
+                    array_push($listData,"11".$siteno->site_id%10000);                    
+                }
+                array_push($listData,"00"."   ".yii::t('app','人数：').$siteno->number);
+		array_push($listData,"br");
+		array_push($listData,"00".str_pad('',48,'-'));                
+		
+		array_push($listData,"00".date('Y-m-d H:i:s',time()));                    
+                //array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
+                
+                $precode=$cprecode;
+                //后面加切纸
+                $sufcode="0A0A0A0A0A0A1D5601";                        
+                $printret=array();
+		$retccontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);	
+                if($retccontent["status"])
+                {
+                    return array('status'=>1,'message'=>yii::t('app','打印成功'),'siteid'=>$SiteNo->site_id);
+                }else{
+                    return array('status'=>0,'message'=>yii::t('app','发送打印内容失败'),'siteid'=>$SiteNo->site_id);
+                }
+	}
+        
+        
         //打印机测试
 	static public function printCheck(Pad $pad){		
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$pad->dpid));
@@ -848,7 +894,7 @@ class Helper
                 }
                 //foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
                 $printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));
-                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>count($printerways));
+                ///return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>count($printerways));
                 //var_dump($printerways);exit;
                 foreach($printerways as $printerway)
                 {
@@ -883,8 +929,7 @@ class Helper
                                 }
                             }
                         }                        
-                        //var_dump($printer2orderproducts_a);exit;
-                        //var_dump($printwaydetails);exit;
+                        //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3");
                         //如果是整体，
                         if($printerway->is_onepaper=="1")
                         {
@@ -1106,7 +1151,9 @@ class Helper
                                     //return $printret;
                             }
                         }
-                }        
+                } 
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试13");
+                        
                 //var_dump(json_encode($jobids));exit;
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');

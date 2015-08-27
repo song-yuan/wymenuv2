@@ -94,14 +94,45 @@ class DefaultSiteController extends BackendController
 			$sid = Yii::app()->request->getPost('sid');
                         $siteNumber = Yii::app()->request->getPost('siteNumber');
                         $companyId = Yii::app()->request->getPost('companyId');
+                        $padId = Yii::app()->request->getPost('padId',"0000000000");
                         if(!Until::validOperateJson($companyId, $this))
                         {
                             echo json_encode(array('status'=>0,'message'=>yii::t('app','云端不能操作本地数据'),'siteid'=>$sid));
                             return true;
                         }
                         //$sid = Yii::app()->request->getPost('sid');
-                        $istemp = Yii::app()->request->getPost('istemp','0');                        
-                        echo json_encode(SiteClass::openSite($companyId,$siteNumber,$istemp,$sid));
+                        $istemp = Yii::app()->request->getPost('istemp','0');
+                        
+                        $ret=SiteClass::openSite($companyId,$siteNumber,$istemp,$sid);
+//                        if($ret["status"]==1)
+//                        {
+//                            $siteno;
+//                            $site=new Site();
+//                            $siteid=$ret->siteid;
+//                            $criteria = new CDbCriteria;
+//                            $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$siteid.' and t.is_temp='.$istemp ;
+//                            $criteria->order = ' t.lid desc ';                    
+//                            $siteno = SiteNo::model()->find($criteria);
+//                            //order site 和 siteno都需要更新状态 所以要取出来
+//                            if($istemp=="0")
+//                            {
+//                                $criteria2 = new CDbCriteria;
+//                                $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$siteid ;
+//                                $criteria2->order = ' t.lid desc ';                    
+//                                $site = Site::model()->with("siteType")->find($criteria2);
+//                            }
+//                            $pad=Pad::model()->find(' dpid=:dpid and lid=:lid',array(':dpid'=>$companyId,'lid'=>$padId));
+//                            if(!empty($pad))
+//                            {
+//                                $precode="1B70001EFF00";//开钱箱
+//                                $printserver="1";
+//                                $memo="请等待叫号！";
+//                                $ret=Helper::printSite($siteno,$site,$pad,$precode,$printserver,$memo);
+//                            }else{
+//                                $ret = array('status'=>0,'message'=>yii::t('app','没有找到PAD'),'siteid'=>$siteid);
+//                            }                            
+//                        }
+                        echo json_encode($ret);
                         return true;
 		}
 	}
