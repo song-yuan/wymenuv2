@@ -92,7 +92,7 @@ class MemberController extends BackendController
 	public function actionCharge() {
 		$model = new MemberRecharge;
 		$model->dpid = $this->companyId;
-		
+		Until::validOperate($model->dpid, $this);
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
 			$rfid = Yii::app()->request->getPost('rfid');

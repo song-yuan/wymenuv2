@@ -235,6 +235,10 @@ class DefaultOrderController extends BackendController
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"test1")));
+                if(!Until::validOperateJson($companyId, $this))
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"云端不能操作本地数据")));                    
+                }
                 if($orderId =="0")
                 {
                     //临时台，没有开过台的，
@@ -310,6 +314,10 @@ class DefaultOrderController extends BackendController
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
                 ///Yii::app()->end(json_encode(array('status'=>false,'msg'=>$productList)));
+                if(!Until::validOperateJson($companyId, $this))
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"云端不能操作本地数据")));                    
+                }
                 if($orderId =="0")
                 {
                     //临时台，没有开过台的，
@@ -348,7 +356,7 @@ class DefaultOrderController extends BackendController
                     //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
                     if(empty($order))
                     {
-                        return json_encode(array('status'=>false,'msg'=>"该订单不存在"));
+                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
                     }
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
@@ -416,6 +424,10 @@ class DefaultOrderController extends BackendController
                 $ret;
                 $time=date('Y-m-d H:i:s',time());
                 $db = Yii::app()->db;
+                if(!Until::validOperateJson($companyId, $this))
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"云端不能操作本地数据")));                    
+                }
                 $transaction = $db->beginTransaction();
                 try{
                     $order=Order::model()->with("company")->find(" t.lid=:lid and t.dpid=:dpid",array(":lid"=>$orderid,":dpid"=>$companyId));
