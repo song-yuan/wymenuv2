@@ -219,6 +219,7 @@ class ProductController extends Controller
 	public function actionConfirmPadOrder(){
 		$goodsIds = isset($_POST) ?$_POST :array();
 		$padOrder = json_encode(array('status'=>false,'msg'=>yii::t('app','订单为空')),JSON_UNESCAPED_UNICODE);
+                Yii::app()->end($padOrder);
 	 	if(!empty($goodsIds)){
 	 		try{
 	 			$padOrder = CreateOrder::createPadOrder($this->companyId,$goodsIds,$this->padId); 

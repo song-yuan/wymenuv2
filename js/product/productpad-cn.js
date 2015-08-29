@@ -636,7 +636,7 @@ $(document).ready(function(){
             return;
         }
         var formdata=$('#padOrderForm').formSerialize();
-//alert(formdata);
+alert(formdata);
             $.ajax({
                     url:$('#padOrderForm').attr('action'),
                     type:'POST',
