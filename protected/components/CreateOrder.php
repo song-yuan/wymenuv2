@@ -211,6 +211,7 @@ class CreateOrder
 		$site_id = $goodsIds['client_site_id'];
 		$siteName = $goodsIds['client_site_name'];
                 $reprint = $goodsIds['client_reprint'];
+                var_dump($goodsIds);exit;
 		unset($goodsIds['client_is_temp']);
 		unset($goodsIds['client_site_id']);
 		unset($goodsIds['client_site_name']);
@@ -516,7 +517,6 @@ class CreateOrder
             
             	$printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
             }else{
-            	var_dump($order);eixt;
 //            	 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
 //            	 //前面加 barcode
 //                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
