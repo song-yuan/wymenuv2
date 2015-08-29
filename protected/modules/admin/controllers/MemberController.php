@@ -95,14 +95,16 @@ class MemberController extends BackendController
 	public function actionCharge() {
 		$model = new MemberRecharge;
 		$model->dpid = $this->companyId;
-		Until::validOperate($model->dpid, $this);
+		//Until::validOperate($model->dpid, $this);
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
 			$rfid = Yii::app()->request->getPost('rfid');
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
-				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
-	            $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
+				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode and dpid=:dpid',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id,':dpid'=>$this->companyId));
+                                Until::validOperate($member->lid, $this);
+                                //var_dump($member);exit;
+                                $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
 	          
 	            $se = new Sequence("member_recharge");
 	            $model->lid = $se->nextval();
