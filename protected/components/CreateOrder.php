@@ -505,20 +505,26 @@ class CreateOrder
                 {
                     return json_encode(array('status'=>false,'msg'=>"该订单不存在"));
                 }
-                $criteria = new CDbCriteria;
+            }
+            if($order->is_temp=="0"){
+            	$criteria = new CDbCriteria;
                 $criteria->condition =  't.dpid='.$dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                 $criteria->order = ' t.lid desc ';                    
                 $siteNo = SiteNo::model()->find($criteria);
                 //order site 和 siteno都需要更新状态 所以要取出来
-                if($order->is_temp=="0")
-                {
-                    $criteria2 = new CDbCriteria;
-                    $criteria2->condition =  't.dpid='.$dpid.' and t.lid='.$order->site_id ;
-                    $criteria2->order = ' t.lid desc ';                    
-                    $site = Site::model()->with("siteType")->find($criteria2);
-                }
+                $criteria2 = new CDbCriteria;
+                $criteria2->condition =  't.dpid='.$dpid.' and t.lid='.$order->site_id ;
+                $criteria2->order = ' t.lid desc ';                    
+                $site = Site::model()->with("siteType")->find($criteria2);
+            
+            	$printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
+            }else{
+            	 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+            	 //前面加 barcode
+                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
+                $printList = Helper::printList($order,$orderProducts , $pad,$precode,1,'');
             }
-            $printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
             if(!$printList['status']){
             	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
             }
