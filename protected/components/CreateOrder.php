@@ -494,9 +494,7 @@ class CreateOrder
 			$db->createCommand($sql)->execute();
 			
 			//厨打
-			$order = new Order;
-            $siteNo = new SiteNo;
-            $site = new Site;
+			
             if($orderId !='0')
             {
                 $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$dpid));
