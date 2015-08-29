@@ -224,9 +224,9 @@ class CreateOrder
  			if($site_id==0){
  				//未开台的临时台
  				$se=new Sequence("site_no");
- 				var_dump(222);exit;
                                 $lid = $se->nextval();
-
+                          var_dump($lid);      
+						var_dump(222);exit;
                                 $code = SiteClass::getCode($dpid);
                                 $se=new Sequence("temp_site");
                                 $site_id = $se->nextval(); 
