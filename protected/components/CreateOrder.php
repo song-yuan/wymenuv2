@@ -223,6 +223,7 @@ class CreateOrder
  		try {
  			if($site_id==0){
  				//未开台的临时台
+ 				var_dump(222);exit;
  				$se=new Sequence("site_no");
                                 $lid = $se->nextval();
 
@@ -247,7 +248,6 @@ class CreateOrder
 
                                 $se=new Sequence("order");
                                 $orderId = $se->nextval();
-                                var_dump($orderId);exit;
                                 $data = array(
 							'lid'=>$orderId,
 							'dpid'=>$dpid,
