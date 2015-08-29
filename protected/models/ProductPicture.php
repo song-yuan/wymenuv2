@@ -129,6 +129,7 @@ class ProductPicture extends CActiveRecord
 					'lid'=>$lid,
 					'dpid'=>$dpid,
 					'create_at'=>date('Y-m-d H:i:s',time()),
+                                        'update_at'=>date('Y-m-d H:i:s',time()),
 					'is_set'=>0,
 					'product_id'=>$productId,
 					'pic_path'=>$pic,

@@ -154,12 +154,12 @@ class OrderList
 							$insertData = array(
 												'lid'=>$lid,
 												'dpid'=>$dpid,
-												'create_at'=>time(),
+												'create_at'=>date('Y-m-d H:i:s',time()),
 												'order_id'=>$orderId,
 												'set_id'=>$setId,
 												'product_id'=>$goods,
 												'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
-												'update_at'=>time(),
+												'update_at'=>date('Y-m-d H:i:s',time()),
 												'amount'=>$val,
 												'taste_memo'=>yii::t('app','无'),
 												);
@@ -217,12 +217,12 @@ class OrderList
 							$insertData = array(
                                             'lid'=>$lid,
                                             'dpid'=>$dpid,
-                                            'create_at'=>time(),
+                                            'create_at'=>date('Y-m-d H:i:s',time()),
                                             'order_id'=>$orderId,
                                             'set_id'=>$setId,
                                             'product_id'=>$goods,
                                             'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
-                                            'update_at'=>time(),
+                                            'update_at'=>date('Y-m-d H:i:s',time()),
                                             'amount'=>$val,
                                             'taste_memo'=>yii::t('app','无'),
                                             );

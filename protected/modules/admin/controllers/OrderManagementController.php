@@ -57,6 +57,26 @@ class orderManagementController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
+	
+	public function actionRefund(){
+		$model = new Printer() ;//新建数据库表！！！
+		$model->dpid = $this->companyId ;
+	
+		if(Yii::app()->request->isPostRequest) {
+			//$model->attributes = Yii::app()->request->getPost('Printer');
+			$se=new Sequence("refund");
+			$model->lid = $se->nextval();
+			$model->create_at = date('Y-m-d H:i:s',time());
+			$model->delete_flag = '0';
+			if($model->save()) {
+				Yii::app()->user->setFlash('success' , yii::t('app','退款成功'));
+				$this->redirect(array('orderManagement/refund','companyId' => $this->companyId));
+			}
+		}
+		$this->render('refund' , array(
+				'model' => $model
+		));
+	}
 
 	public function actionNotPay(){
 		$criteria = new CDbCriteria();
@@ -207,7 +227,9 @@ class orderManagementController extends BackendController
                 $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
                 $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
                 $Did = Yii::app()->request->getParam('Did',0);
-				//var_dump($begin_time);exit;
+                //var_dump($begin_time);exit;
+                $orderID = Yii::app()->request->getParam('orderID');
+                //var_dump($orderID);exit;
                 $criteria->select = 't.*'; //代表了要查询的字段，默认select='*'; 
                 $criteria->addCondition("t.dpid= ".$this->companyId);
                // if ($Did > 0){
@@ -216,6 +238,9 @@ class orderManagementController extends BackendController
                 $criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
                 
                 $criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+                if($orderID){
+                	$criteria->addCondition("t.order_id= ".$orderID);
+                }
                 //$criteria->select = 't1.should_total';
                 //var_dump($begin_time);exit;
 				$criteria->with = array("company","order"); //连接表
@@ -252,6 +277,7 @@ class orderManagementController extends BackendController
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'Did'=>$Did,
+				'orderID'=>$orderID,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));

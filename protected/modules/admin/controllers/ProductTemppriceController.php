@@ -69,6 +69,7 @@ class ProductTemppriceController extends BackendController
                         $se=new Sequence("retreat");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->update_at = date('Y-m-d H:i:s',time());
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productTempprice/updatedetail' , 'companyId' => $this->companyId,'id'=>$productId));
@@ -86,6 +87,7 @@ class ProductTemppriceController extends BackendController
                 $printset = Yii::app()->request->getParam('psid');
 				//var_dump($printset);exit;
 		$ids = Yii::app()->request->getPost('ids');
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_tempprice set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
@@ -100,10 +102,12 @@ class ProductTemppriceController extends BackendController
 	//delete方法新加
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('id');
-		$model = ProductTempprice::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
+		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+                $model = ProductTempprice::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		$product = Product::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$model->product_id,':dpid'=>  $this->companyId));
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductTempprice');
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productTempprice/updatedetail' , 'companyId' => $this->companyId,'id'=>$model->product_id));
@@ -116,10 +120,12 @@ class ProductTemppriceController extends BackendController
 	}
 	public function actionRecommend(){
 		$id = Yii::app()->request->getParam('id');
+                Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		
 		if($product){
-			$product->saveAttributes(array('is_temp_price'=>$product->is_temp_price==0?1:0));
+			$product->saveAttributes(array('is_temp_price'=>$product->is_temp_price==0?1:0,'update_at'=>date('Y-m-d H:i:s',time())));
+                        //$product->update_at=date('Y-m-d H:i:s',time());
 		}
 		exit;
 	}

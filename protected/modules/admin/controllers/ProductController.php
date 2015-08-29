@@ -55,6 +55,7 @@ class ProductController extends BackendController
                         $se=new Sequence("product");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->update_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $py=new Pinyin();
                         $model->simple_code = $py->py($model->product_name);
@@ -77,12 +78,12 @@ class ProductController extends BackendController
 		$id = Yii::app()->request->getParam('id');
 		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		
+		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
                         $py=new Pinyin();
                         $model->simple_code = $py->py($model->product_name);
-			//var_dump($model->attributes);exit;
+			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
 				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
@@ -98,6 +99,7 @@ class ProductController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
@@ -110,9 +112,9 @@ class ProductController extends BackendController
 	public function actionStatus(){
 		$id = Yii::app()->request->getParam('id');
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
-		var_dump($product->status);
+		//var_dump($product->status);
 		if($product){
-			$product->saveAttributes(array('status'=>$product->status?0:1));
+			$product->saveAttributes(array('status'=>$product->status?0:1,'update_at'=>date('Y-m-d H:i:s',time())));
 		}
 		exit;
 	}
@@ -121,7 +123,7 @@ class ProductController extends BackendController
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		
 		if($product){
-			$product->saveAttributes(array('recommend'=>$product->recommend==0?1:0));
+			$product->saveAttributes(array('recommend'=>$product->recommend==0?1:0,'update_at'=>date('Y-m-d H:i:s',time())));
 		}
 		exit;
 	}

@@ -154,6 +154,11 @@ class DatasyncController extends Controller
          */
         public function actionInsertSync(){
             //一份钟的随机时间，防止高并发
+            //$now = new DateTime(date('Y-m-d H:i:s',time()));
+            //echo $now->format('Y-m-d H-i-s');
+            //$now->modify("-1 minute");
+            //echo $now->format('Y-m-d H-i-s');
+            //exit;
             $randtime=rand(1,60);
             echo $randtime;
             sleep($randtime);
@@ -163,6 +168,7 @@ class DatasyncController extends Controller
             //云端更新云端数据，本地更新本地数据，数据更新时要检查，不能随便更新。
             //图片下载，图片上传（phpcurl 和 move_upload_file上传，暂时不做）
             $dpid = Yii::app()->request->getParam('companyId',0);
+            $typeId = Yii::app()->request->getParam('typeId',0);
             if(Yii::app()->params['cloud_local']=='l')
             {
                 $dbcloud;
@@ -207,9 +213,25 @@ class DatasyncController extends Controller
                 if(empty($cloudtime))
                 {
                     $cloudtime="2015-08-15 19:00:00";
+                }else{
+                    //echo $cloudtime;
+                    $tempnow = new DateTime($cloudtime);
+                    $tempnow->modify("-1 minute");
+                    $cloudtime=$tempnow->format('Y-m-d H:i:s');
+                    //echo $cloudtime;       exit;             
                 }
                 if(empty($localtime))
                 {
+                    $localtime="2015-08-15 19:00:00";
+                }else{
+                    $tempnow = new DateTime($localtime);
+                    $tempnow->modify("-1 minute");
+                    $localtime=$tempnow->format('Y-m-d H:i:s');
+                }
+                echo "typeId:".$typeId."<br>";
+                if($typeId=="1")
+                {
+                    $cloudtime="2015-08-15 19:00:00";
                     $localtime="2015-08-15 19:00:00";
                 }
                 echo "get cloud tiem:".$cloudtime." and local time:".$localtime." <br>";
@@ -266,13 +288,14 @@ class DatasyncController extends Controller
                 ////特殊的更新
                 $syncSpecialTalbe=array(
                     "nb_site"=>array("status","number"),  //本地状态同步过去
-                    "nb_member_card"=>array("all_money") //本地金额同步过去
+                    "nb_member_card"=>array("all_money"), //本地金额同步过去
+                    "nb_product"=>array("store_number","order_number","favourite_number") //本地库存产品下单数量，人气同步过去
                 );
                 $isalllocalsuccess=1;
                 $isallcloudsuccess=1;
                 foreach ($synctalbe as $t)
                 {
-                    echo "cloud -> local:".$t."<br>";
+                    
                     $deletelist1="";
                     $clouddataarr=array();
                     $deletelist2="";
@@ -282,7 +305,8 @@ class DatasyncController extends Controller
                     //将这个时间点开始的云端数据取出
                     $sql1 = "select * from ".$t." where lid%2=0 and dpid=".$dpid." and update_at >= '".$cloudtime."'";
                     //var_dump($sql1);exit;
-                    $clouddata=$dbcloud->createCommand($sql1)->queryAll();                    
+                    $clouddata=$dbcloud->createCommand($sql1)->queryAll();  
+                    echo "cloud -> local:".$t.":".count($clouddata)."<br>";
                     if(!empty($clouddata))
                     {
                         $deletelist1="(";
@@ -301,6 +325,7 @@ class DatasyncController extends Controller
                     {
                         $specialfield=$syncSpecialTalbe[$t];
                         $localspecialdata=$dblocal->createCommand($sql1)->queryAll();
+                         echo "cloud -> local(special):".$t.":".count($localspecialdata)."<br>";
                         if(!empty($localspecialdata))
                         {
                             $deletelist2="(";
@@ -334,16 +359,7 @@ class DatasyncController extends Controller
                                 foreach($localspecialdataarr as $lsd)
                                 {
                                     $dbcloud->createCommand()->insert($t,$lsd);
-                                }
-                                if(!empty($clouddataarr))
-                                {
-                                    $dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid in ".$deletelist1)->execute();
-                                    //$dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid%2=0 and create_at>='".$cloudtime."'")->execute();
-                                    foreach($clouddataarr as $cd)
-                                    {
-                                        $dblocal->createCommand()->insert($t,$cd);
-                                    }                                
-                                }
+                                }                                
                                 $transactionspecial->commit();
                             } catch (Exception $ex) {
                                 echo $ex->getMessage();
@@ -360,33 +376,31 @@ class DatasyncController extends Controller
                     //$cloudupdate=  array_diff($clouddata, $cloudlocal);
                     //$dblocal->begainTransaction();
                     //var_dump($clouddata,$cloudlocal);exit;
-//                    if(!empty($clouddataarr))
-//                    {
-//                        $transactionlocal = $dblocal->beginTransaction();
-//                        try {
-//                            //$deletelist=  "(".implode(",",array_column($clouddata, 'lid')).")";
-//                            
-//                            //var_dump($deletelist);exit;
-//                            $dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid in ".$deletelist1)->execute();
-//                            //$dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid%2=0 and create_at>='".$cloudtime."'")->execute();
-//                            foreach($clouddataarr as $cd)
-//                            {
-//                                $dblocal->createCommand()->insert($t,$cd);
-//                            }
-//                            $dbcloud->createCommand($sqlsuccess)->execute();
-//                            $transactionlocal->commit();
-//                        } catch (Exception $ex) {
-//                            echo $ex->getMessage();
-//                            $transactionlocal->rollback();
-//                            $isallsuccess=0;
-//                            continue;
-//                            //exit;
-//                        }
-//                    }
-                    echo "local->cloud".$t."<br>";
+                    
+                    if(!empty($clouddataarr))
+                    {
+                        $transactionlocal = $dblocal->beginTransaction();
+                        try {
+                            $dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid in ".$deletelist1)->execute();
+                            //$dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid%2=0 and create_at>='".$cloudtime."'")->execute();
+                            foreach($clouddataarr as $cd)
+                            {
+                                $dblocal->createCommand()->insert($t,$cd);
+                            }
+                            //$dbcloud->createCommand($sqlsuccess)->execute();
+                            $transactionlocal->commit();
+                        } catch (Exception $ex) {
+                            echo $ex->getMessage();
+                            $transactionlocal->rollback();
+                            $isallcloudsuccess=0;
+                            continue;
+                            //exit;
+                        }
+                    }
                     //将这个时间点开始的本地数据取出///云端不可能修改本地，只有本地修改云端。
                     $sql3 = "select * from ".$t." where lid%2=1 and dpid=".$dpid." and update_at >= '".$localtime."'";
                     $localdata=$dblocal->createCommand($sql3)->queryAll();
+                    echo "local->cloud".$t.":".count($localdata)."<br>";
                     //var_dump($localdata);
                     //$sql4 = "select * from ".$t." where lid%2=1 and dpid=".$dpid." and create_at >= ".$localtime;
                     //$localcoud=$dbcloud->createCommand($sql4)->queryAll();

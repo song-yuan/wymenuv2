@@ -26,10 +26,10 @@ class CreateOrder
 							'lid'=>$this->getMaxOrderId(),
 							'dpid'=>$this->companyId,
 							'site_id'=>$this->siteId,
-							'create_at'=>$time,
+							'create_at'=>date('Y-m-d H:i:s',time()),
 							'is_temp'=>$this->siteNo->is_temp,
 							'number'=>$this->siteNo->number,
-							'update_at'=>$time,
+							'update_at'=>date('Y-m-d H:i:s',time()),
 							'remark'=>yii::t('app','无'),
 							'taste_memo'=>"",
 							);
@@ -47,18 +47,19 @@ class CreateOrder
 			if($orderProduct){
 				$orderProduct->price = $this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']);
 				$orderProduct->delete_flag = 0;
+                                $orderProduct->update_at = date('Y-m-d H:i:s',time());
 				$orderProduct->update();
 			}else{
 				$orderProduct = new OrderProduct;
 				$orderProductData = array(
 										'lid'=>$this->getMaxOrderProductId(),
 										'dpid'=>$this->companyId,
-										'create_at'=>$time,
+										'create_at'=>date('Y-m-d H:i:s',time()),
 										'order_id'=>$order->lid,
 										'set_id'=>$setId,
 										'product_id'=>$this->product['lid'],
 										'price'=>$this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']),
-										'update_at'=>$time,
+										'update_at'=>date('Y-m-d H:i:s',time()),
 										'amount'=>1,
 										'taste_memo'=>"",
 										);
@@ -183,7 +184,7 @@ class CreateOrder
 		$order = Order::model()->find($criteria);
 		
 		if($this->product['type']){
-			$orderProduct = OrderProduct::model()->updateAll(array('delete_flag'=>1),'order_id=:orderId and dpid=:dpid and set_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
+			$orderProduct = OrderProduct::model()->updateAll(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())),'order_id=:orderId and dpid=:dpid and set_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
 			if($orderProduct){
 				return true;
 			}else{
@@ -192,6 +193,7 @@ class CreateOrder
 		}else{
 			$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid  and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
 			$orderProduct->delete_flag = 1;
+                        $orderProduct->update_at = date('Y-m-d H:i:s',time());
 			if($orderProduct->update()){
 				return true;
 			}else{
@@ -232,6 +234,7 @@ class CreateOrder
                                     'lid'=>$lid,
                                     'dpid'=>$dpid,
                                     'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'update_at'=>date('Y-m-d H:i:s',time()),
                                     'is_temp'=>$isTemp,
                                     'site_id'=>$site_id,
                                     'status'=>'1',
@@ -264,6 +267,7 @@ class CreateOrder
                                     'lid'=>$lidf,
                                     'dpid'=>$dpid,
                                     'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'update_at'=>date('Y-m-d H:i:s',time()),
                                     'is_temp'=>$isTemp,
                                     'site_id'=>$site_id,
                                     'is_deal'=>'0',
@@ -434,6 +438,7 @@ class CreateOrder
 								   						'lid'=>$orderTasteId,
 								   						'dpid'=>$dpid,
 								   						'create_at'=>$time,
+                                                                                                                'update_at'=>$time,
 								   						'taste_id'=>$tasteId,
 								   						'order_id'=>$orderProductId,
 								   						'is_order'=>0

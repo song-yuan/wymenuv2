@@ -138,6 +138,7 @@ class ProductPrinterway extends CActiveRecord
 					 'lid'=>$maxId['id'],
 					 'dpid'=>$dpid,
 					 'create_at'=>date('Y-m-d H:i:s',time()),
+                                         'update_at'=>date('Y-m-d H:i:s',time()),
 					 'printer_way_id'=>$printerwayId,
 					 'product_id'=>$productId,
 					);

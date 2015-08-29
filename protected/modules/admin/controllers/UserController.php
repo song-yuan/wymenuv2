@@ -47,7 +47,8 @@ class UserController extends BackendController
 		$model->status = 1;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
-                        
+                        $model->create_at=date('Y-m-d H:i:s',time());
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功'));
 				$this->redirect(array('user/index' , 'companyId' => $companyId));
@@ -58,6 +59,7 @@ class UserController extends BackendController
 	public function actionUpdate() {
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));		
 		$id = Yii::app()->request->getParam('id');
+                Until::isUpdateValid(array($id),$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->user->role > User::ADMIN && Yii::app()->user->userId != $id) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限修改'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
@@ -67,6 +69,7 @@ class UserController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
+                        $model->update_at=date('Y-m-d H:i:s',time());
                         //var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
@@ -82,12 +85,12 @@ class UserController extends BackendController
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 		$ids = Yii::app()->request->getPost('ids');
-                //var_dump($companyId);exit;
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = User::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id,':companyId'=>$companyId)) ;
 				if($model) {
-					$model->saveAttributes(array('status'=>0));
+					$model->saveAttributes(array('status'=>0,'update_at'=>date('Y-m-d H:i:s',time())));
 				}
 			}
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
@@ -148,7 +151,7 @@ class UserController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 $ids = Yii::app()->request->getPost('ids');
                 $userid=Yii::app()->request->getParam('userid',0);
-                //var_dump($ids);exit;
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_user_company set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));

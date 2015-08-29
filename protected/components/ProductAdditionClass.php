@@ -35,6 +35,7 @@ class ProductAdditionClass
 	    						'lid'=>$maxId['id'],
 	    						'dpid'=>$this->productAddition['dpid'],
 	    						'create_at'=>date('Y-m-d H:i:s',time()),
+                                                        'update_at'=>date('Y-m-d H:i:s',time()),
 	    						'order_id'=>$this->orderId,
 	    						'main_id'=>$this->productAddition['mproduct_id'],
 	    						'product_id'=>$this->productAddition['sproduct_id'],

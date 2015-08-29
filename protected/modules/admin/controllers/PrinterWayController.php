@@ -32,6 +32,7 @@ class PrinterWayController extends BackendController
                         $se=new Sequence("print_way");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->update_at=date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()) {
@@ -47,9 +48,10 @@ class PrinterWayController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
                 //echo 'ddd';
 		$model = PrinterWay::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		//var_dump($model);exit;
+		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PrinterWay');
+                        $model->update_at=date('Y-m-d H:i:s',time());
                         //($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
@@ -64,6 +66,7 @@ class PrinterWayController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_printer_way set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
@@ -109,7 +112,7 @@ class PrinterWayController extends BackendController
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
-                        //var_dump($model);exit;
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('printerWay/detailindex','companyId' => $this->companyId,'lid'=>$model->print_way_id));
@@ -125,12 +128,12 @@ class PrinterWayController extends BackendController
 	}
 	public function actionDetailUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
-                //echo 'ddd';
+                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = PrinterWayDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PrinterWayDetail');
-                        //var_dump($model);var_dump(Yii::app()->request->getPost('PrinterWayDetail'));exit;
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('printerWay/detailindex' , 'companyId' => $this->companyId,'lid' => $model->print_way_id));
@@ -149,7 +152,7 @@ class PrinterWayController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 $printway = Yii::app()->request->getParam('pwid');
 		$ids = Yii::app()->request->getPost('ids');
-                //var_dump($ids);exit;
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_printer_way_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));

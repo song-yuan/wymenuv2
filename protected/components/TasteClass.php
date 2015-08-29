@@ -131,6 +131,7 @@ class TasteClass
 					 'lid'=>$maxId['id'],
 					 'dpid'=>$dpid,
 					 'create_at'=>date('Y-m-d H:i:s',time()),
+                                         'update_at'=>date('Y-m-d H:i:s',time()),
 					 'taste_id'=>$taste,
 					 'order_id'=>$id,
 					 'is_order'=>$type
@@ -173,6 +174,7 @@ class TasteClass
 					 'lid'=>$maxId['id'],
 					 'dpid'=>$dpid,
 					 'create_at'=>date('Y-m-d H:i:s',time()),
+                                         'update_at'=>date('Y-m-d H:i:s',time()),
 					 'taste_group_id'=>$taste,
 					 'product_id'=>$productId,
 					);

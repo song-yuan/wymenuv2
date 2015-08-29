@@ -44,7 +44,7 @@ class ProductSpecialController extends BackendController
 		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		$criteria->params[':productId']=$productId;
-		
+		//Until::isUpdateValid(array($productId),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$pages = new CPagination(ProductSpecial::model()->count($criteria));
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -69,6 +69,7 @@ class ProductSpecialController extends BackendController
                         $se=new Sequence("retreat");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->update_at = date('Y-m-d H:i:s',time());
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productSpecial/updatedetail' , 'companyId' => $this->companyId,'id'=>$productId));
@@ -84,9 +85,8 @@ class ProductSpecialController extends BackendController
 	public function actionDetailDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 $printset = Yii::app()->request->getParam('psid');
-				//var_dump($printset);exit;
 		$ids = Yii::app()->request->getPost('ids');
-                //var_dump($ids);exit;
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_special set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
@@ -100,10 +100,12 @@ class ProductSpecialController extends BackendController
 	//delete方法新加
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('id');
-		$model = ProductSpecial::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
+		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+                $model = ProductSpecial::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		$product = Product::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$model->product_id,':dpid'=>  $this->companyId));
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSpecial');
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productSpecial/updatedetail' , 'companyId' => $this->companyId,'id'=>$model->product_id));
@@ -116,10 +118,12 @@ class ProductSpecialController extends BackendController
 	}
 	public function actionRecommend(){
 		$id = Yii::app()->request->getParam('id');
+                Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$product = Product::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		
 		if($product){
-			$product->saveAttributes(array('is_special'=>$product->is_special==0?1:0));
+                        //$product->update_at=date('Y-m-d H:i:s',time());
+			$product->saveAttributes(array('is_special'=>$product->is_special==0?1:0,'update_at'=>date('Y-m-d H:i:s',time())));
 		}
 		exit;
 	}

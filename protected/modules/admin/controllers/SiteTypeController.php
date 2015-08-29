@@ -35,6 +35,7 @@ class SiteTypeController extends BackendController
                         $se=new Sequence("site_type");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->update_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()){
@@ -49,10 +50,12 @@ class SiteTypeController extends BackendController
 	public function actionUpdate() {
 		$lid = Yii::app()->request->getParam('lid');
                 $dpid = Yii::app()->request->getParam('companyId');
+                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = SiteType::model()->find('t.lid=:lid and t.dpid=:dpid', array(':lid' => $lid,':dpid'=>$dpid));
 		//var_dump($model);
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('SiteType');
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('siteType/index' , 'companyId' => $this->companyId));
@@ -65,6 +68,7 @@ class SiteTypeController extends BackendController
 	public function actionDelete() {
 		//$ids = $_POST['type_id'] ;
                 $ids = Yii::app()->request->getPost('type_id');
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		//var_dump(implode(',' , $ids),$this->companyId);exit;
                 //$sql='update nb_site_type set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId';
                 //$command=Yii::app()->db->createCommand($sql);

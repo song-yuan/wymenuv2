@@ -45,6 +45,7 @@ class SiteController extends BackendController
                         $se=new Sequence("site");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->update_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()) {
@@ -64,11 +65,12 @@ class SiteController extends BackendController
 	}
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
+                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = Site::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Site');
-                        //var_dump(Yii::app()->request->getPost('Site'));exit;
+                        $model->update_at = date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('site/index' , 'typeId'=>$model->type_id, 'companyId' => $this->companyId));
@@ -85,11 +87,12 @@ class SiteController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = Site::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 				if($model) {
-					$model->saveAttributes(array('delete_flag'=>1));
+					$model->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
 				}
 			}
 			$this->redirect(array('site/index' , 'companyId' => $companyId)) ;

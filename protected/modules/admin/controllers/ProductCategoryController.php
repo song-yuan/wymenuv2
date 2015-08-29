@@ -42,7 +42,7 @@ class ProductCategoryController extends BackendController
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
-                        
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
                                 //var_dump($model);exit;
 				if($model->pid!='0'){
@@ -65,9 +65,10 @@ class ProductCategoryController extends BackendController
 	public function actionUpdate() {
 		$id = Yii::app()->request->getParam('id');
 		$model = ProductCategory::model()->find('lid=:id and dpid=:dpid', array(':id' => $id,':dpid'=>  $this->companyId));
-	
+                Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
@@ -83,6 +84,7 @@ class ProductCategoryController extends BackendController
 	}
 	public function actionDelete(){
 		$id = Yii::app()->request->getParam('id');
+                Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = ProductCategory::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		//var_dump($id,  $this->companyId,$model);exit;
 		if($model) {

@@ -49,6 +49,7 @@ class FeedBackClass
 				 'lid'=>$maxId['id'],
 				 'dpid'=>$dpid,
 				 'create_at'=>date('Y-m-d H:i:s',time()),
+                                 'update_at'=>date('Y-m-d H:i:s',time()),
 				 'site_id'=>$siteNo['site_id'],
 				 'is_temp'=>$siteNo['is_temp'],
 				 'is_deal'=>0,

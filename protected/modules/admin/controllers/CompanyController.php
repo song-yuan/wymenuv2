@@ -44,6 +44,8 @@ class CompanyController extends BackendController
 		$model->create_at = date('Y-m-d H:i:s');
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Company');
+                        $model->create_at=date('Y-m-d H:i:s',time());
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
 				$this->redirect(array('company/index','companyId'=> $this->companyId));
@@ -62,8 +64,10 @@ class CompanyController extends BackendController
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
 		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
 		if(Yii::app()->request->isPostRequest) {
-                    Until::isUpdateValid(array("0"),$dpid,$this);
+                        Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 			$model->attributes = Yii::app()->request->getPost('Company');
+                        $model->update_at=date('Y-m-d H:i:s',time());
+			
 			//var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));
@@ -81,9 +85,9 @@ class CompanyController extends BackendController
 	}
 	public function actionDelete(){
 		$ids = Yii::app()->request->getPost('companyIds');
-                Until::isUpdateValid(array("0"),$dpid,$this);
+                Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_company set delete_flag=1 where dpid in ('.implode(',' , $ids).')')
+			Yii::app()->db->createCommand('update nb_company set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where dpid in ('.implode(',' , $ids).')')
 			->execute();
 			
 		}
