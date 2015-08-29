@@ -636,11 +636,11 @@ $(document).ready(function(){
             return;
         }
         var formdata=$('#padOrderForm').formSerialize();
-alert(formdata);
+alert($('#padOrderForm').attr('action'));
             $.ajax({
                     url:$('#padOrderForm').attr('action'),
                     type:'POST',
-                    data:formdata,
+                    data:"",
                     async:false,
 	            dataType: "json",
 	            success:function(msg){
