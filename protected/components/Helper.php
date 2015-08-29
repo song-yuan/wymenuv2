@@ -426,7 +426,6 @@ class Helper
         //收银台打印清单写入到redis
         //send by workerman encode by GBK or shift-JIS
 	static public function printList(Order $order,$orderProducts , Pad $pad, $cprecode,$printserver,$memo){
-		var_dump($pad);exit;
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
                         return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
@@ -470,7 +469,7 @@ class Helper
 		array_push($listData,"br");
 		//array_push($listData,"00".$strSite);                
 		array_push($listData,"00".str_pad('',48,'-'));                
-		
+		var_dump($orderProducts);exit;
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
                     $hasData=true;
