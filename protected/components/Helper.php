@@ -507,7 +507,6 @@ class Helper
                 $sufcode="0A0A0A0A0A0A1D5601";                        
                 //var_dump($listData);exit;
                 $printret=array();
-                var_dump($hasData);exit;
 		if($hasData){
                     //$printserver='0';
                     return Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
@@ -1168,6 +1167,7 @@ class Helper
          */
         static public function printConetent(Printer $printer,$content,$precode,$sufcode,$printserver)
         {
+        		var_dump(1);exit;
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
                 //var_dump($store);exit;
