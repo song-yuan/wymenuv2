@@ -494,11 +494,9 @@ class CreateOrder
 			$db->createCommand($sql)->execute();
 			
 			//厨打
-			var_dump($orderId);
             if($orderId !='0')
             {
                 $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$dpid));
-                var_dump($order);exit;
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
                 if(empty($order))
                 {
@@ -518,11 +516,12 @@ class CreateOrder
             
             	$printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
             }else{
-            	 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
-            	 //前面加 barcode
-                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
-                $printList = Helper::printList($order,$orderProducts , $pad,$precode,1,'');
+            	var_dump($order);eixt;
+//            	 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+//            	 //前面加 barcode
+//                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+//                $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
+//                $printList = Helper::printList($order,$orderProducts , $pad,$precode,1,'');
             }
             if(!$printList['status']){
             	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
