@@ -597,10 +597,10 @@ $(document).ready(function(){
      });
     $('#pad-order-submit').on(event_clicktouchstart,function(){
 
-        if (typeof Androidwymenuprinter == "undefined") {
-            alert(language_notget_padinfo);
-            return false;
-        }
+//        if (typeof Androidwymenuprinter == "undefined") {
+//            alert(language_notget_padinfo);
+//            return false;
+//        }
         var sid=$('#id_client_site_id').val();
         var istemp=$('#id_client_is_temp').val();
         var forbidden=false;
