@@ -469,7 +469,7 @@ class Helper
 		array_push($listData,"br");
 		//array_push($listData,"00".$strSite);                
 		array_push($listData,"00".str_pad('',48,'-'));                
-		var_dump($orderProducts);exit;
+		
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
                     $hasData=true;
@@ -507,6 +507,7 @@ class Helper
                 $sufcode="0A0A0A0A0A0A1D5601";                        
                 //var_dump($listData);exit;
                 $printret=array();
+                var_dump($hasData);exit;
 		if($hasData){
                     //$printserver='0';
                     return Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
