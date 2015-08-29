@@ -47,8 +47,8 @@ class UserController extends BackendController
 		$model->status = 1;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
-                        $model->create_at=date('Y-m-d H:i:s',time());
-                        $model->update_at=date('Y-m-d H:i:s',time());
+                        //$model->create_at=date('Y-m-d H:i:s',time());
+                        //$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功'));
 				$this->redirect(array('user/index' , 'companyId' => $companyId));
@@ -69,7 +69,7 @@ class UserController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
-                        $model->update_at=date('Y-m-d H:i:s',time());
+                        //$model->update_at=date('Y-m-d H:i:s',time());
                         //var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功'));

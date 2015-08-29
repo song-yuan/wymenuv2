@@ -36,7 +36,7 @@
                                     <div>
                                         <label class="col-md-3 control-label"><?php echo yii::t('app','人数');?></label>
                                         <div class="col-md-3">
-                                            <input class="form-control" placeholder="<?php echo yii::t('app','请输入人数');?>" name="siteNumber" id="site_number" type="text" maxlength="2" style="width:55px;" value="1">
+                                            <input class="form-control" placeholder="<?php echo yii::t('app','请输入人数');?>" name="siteNumber" id="site_number" type="text" maxlength="3" style="width:55px;" value="1">
                                         </div>
                                         <!--<label class="col-md-3 control-label"><?php echo yii::t('app','小孩');?></label>
                                         <div style="">
@@ -88,7 +88,7 @@
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
                                var companyid='<?php echo $this->companyId; ?>';
-                               var padid="0000000000";
+                               var padid="0000000039";
                                if (typeof Androidwymenuprinter == "undefined") {
                                     alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
                                     //return false;
@@ -97,19 +97,19 @@
                                     padid=padinfo.substr(10,10);
                                 }
                                //alert(istemp);alert(companyid);
-                               if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 99)
+                               if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 199)
                                {
                                    //alert(!isNaN(siteNumber));
                                     $.ajax({
 					'type':'POST',
 					'dataType':'json',
 					'data':{"sid":sid,"siteNumber":siteNumber,"companyId":companyid,"istemp":istemp,"padId":padid},
-					'url':'<?php echo $this->createUrl('defaultSite/opensite',array());?>',
+					'url':'<?php echo $this->createUrl('defaultSite/opensiteprint',array());?>',
 					'success':function(data){
 						if(data.status == 0) {
-							alert(data.message);
+							alert(data.msg);                                                        
 						} else {
-							alert(data.message);
+							alert(data.msg);
                                                         //$('#portlet-button').modal('hide');
 							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
                                                         //$("#tab_sitelist").hide();
@@ -133,7 +133,7 @@
                                var siteNumber=$('#site_number').val();                               
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
-                               if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 99)
+                               if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 199)
                                {
                                    //alert(!isNaN(siteNumber));
                                     $.ajax({
@@ -143,9 +143,9 @@
 					'url':'<?php echo $this->createUrl('defaultSite/opensite',array());?>',
 					'success':function(data){
 						if(data.status == 0) {
-							alert(data.message);
+							alert(data.msg);
 						} else {
-							alert(data.message);
+							alert(data.msg);
                                                         $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+data.siteid+'/istemp/'+istemp);
                                                         clearolddata();
 						}
