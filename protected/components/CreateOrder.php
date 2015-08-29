@@ -519,7 +519,6 @@ class CreateOrder
             	 //前面加 barcode
                 $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
-                var_dump($orderProducts);exit;
                 $printList = Helper::printList($order,$orderProducts , $pad,$precode,1,'');
             }
             if(!$printList['status']){
