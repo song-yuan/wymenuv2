@@ -881,6 +881,7 @@
                 tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
                 $('#tabsiteindex').load(tabcurrenturl);
                 $('#site_row').show();
+                $('#tabsiteindex').show();
                 $('#order_row').hide();
             });
             
@@ -1739,6 +1740,7 @@
                                     tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
                                     $('#tabsiteindex').load(tabcurrenturl);
                                     $('#site_row').show();
+                                    $('#tabsiteindex').show();
                                     $('#order_row').hide();
                                 }else{
                                     //layer.close(layer_index2);
