@@ -211,7 +211,6 @@ class CreateOrder
 		$site_id = $goodsIds['client_site_id'];
 		$siteName = $goodsIds['client_site_name'];
                 $reprint = $goodsIds['client_reprint'];
-                var_dump($goodsIds);exit;
 		unset($goodsIds['client_is_temp']);
 		unset($goodsIds['client_site_id']);
 		unset($goodsIds['client_site_name']);
@@ -248,6 +247,7 @@ class CreateOrder
 
                                 $se=new Sequence("order");
                                 $orderId = $se->nextval();
+                                var_dump($orderId);exit;
                                 $data = array(
 							'lid'=>$orderId,
 							'dpid'=>$dpid,
