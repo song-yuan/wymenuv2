@@ -547,10 +547,10 @@ class OrderList
                         }
                     } 
                 }
-                return array('status'=>true,'msg'=>"保存成功");
+                return array('status'=>true,'msg'=>"保存成功",'jobs'=>array());
             } catch (Exception $ex) {
                 $transaction->rollback();
-                return array('status'=>false,'msg'=>$e->getMessage());
+                return array('status'=>false,'msg'=>$e->getMessage(),'jobs'=>array());
             }                
         }
 }

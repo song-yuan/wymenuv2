@@ -934,6 +934,7 @@ class Helper
                         if($printerway->is_onepaper=="1")
                         {
                             foreach ($printer2orderproducts_a as $key=>$values) {
+                                
                                     $printer = $printers_a[$key];
                                     $productids="";
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
@@ -964,7 +965,7 @@ class Helper
                                     }
                                     array_push($listData,"br");
                                     array_push($listData,"00".str_pad('',48,'-'));
-
+                                    $productids="";
                                     foreach($values as $value)
                                     {
                                         if(empty($productids))
@@ -1024,12 +1025,14 @@ class Helper
                                     $sufcode="0A0A0A0A0A0A1D5601";                        
                                     //var_dump($listData);exit;
                                     $printret=array();
-                                    $printserver="1";
+                                    $printserver="0";//0通过自己同步打印，1通过打印服务器打印
+                                    
                                     //份数循环                                    
                                     for($i=0;$i<$printerway->list_no;$i++){             //////////////                           
                                         $printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                                         //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
-                                        array_push($jobids,$printret['jobid']."_".$productids);
+                                        array_push($jobids,$printret['jobid']."_".$printret['address']."_".$productids);
+                                        $productids="";
                                         if(!$printret['status'])
                                         {
                                             return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
@@ -1039,7 +1042,7 @@ class Helper
                             }
                         }else{ ////如果不是整体，分开打印    //////////////
                             foreach ($printer2orderproducts_a as $key=>$values) {
-                                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试n");
+                                
                                     $printer = $printers_a[$key];
                                     $productids="";
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
@@ -1097,11 +1100,12 @@ class Helper
                                     array_push($listDataTail,"00".yii::t('app','操作员：').Yii::app()->user->name."  "
                                             .date('Y-m-d H:i:s',time()));
                                     //生成body并打印
-                                    
+                                    $productids="";
                                     foreach($values as $value)
                                     {
                                         $listDataBody= array();
                                         //组装身体
+                                        //$productids="";
                                         if(empty($productids))
                                         {
                                             $productids.=$value;
@@ -1136,19 +1140,20 @@ class Helper
                                         $sufcode="0A0A0A0A0A0A1D5601";                        
                                         //var_dump($listData);exit;
                                         $printret=array();
-                                        $printserver="1";
+                                        $printserver="0";  ///自己去轮询
                                         //份数循环
                                         for($i=0;$i<$printerway->list_no;$i++){             //////////////                           
                                             $printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                                             //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
-                                            array_push($jobids,$printret['jobid']."_".$productids);
+                                            array_push($jobids,$printret['jobid']."_".$printret['address']."_".$productids);
+                                            $productids="";
                                             if(!$printret['status'])
                                             {
                                                 return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
                                             }
                                         }  
                                     }                               
-                                    //return $printret;
+                                    //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试n");
                             }
                         }
                 } 
@@ -1158,7 +1163,7 @@ class Helper
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
                 $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids),0,300);                        
-                $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布');
+                $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>'打印任务正常发布',"jobs"=>$jobids);
                 return $ret;
 	}
         
@@ -1238,17 +1243,20 @@ class Helper
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','msg'=>'');
                     }else{
                         return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','打印服务器找不到！'));
-                    }                    
-                }else{//主动的同步打印
-                    if($printer->printer_type=='1')//local
-                    {                
-                        //$ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
-                        $store->set($printer->dpid."_".$jobid,$contentCode,0,120);//should 120测试1200
-                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
-                    }else{
-                        $store->set($printer->dpid."_".$jobid,$contentCode,0,120);//should 120测试1200
+                    }   
+                    ///////////////////
+                    ///打印任务不再发送，返回job编号，有pad自己去取                   
+                    
+                }else{//主动的同步打印 0
+//                    if($printer->printer_type=='1')//local
+//                    {                
+//                        //$ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
+//                        $store->set($printer->dpid."_".$jobid,$contentCode,0,120);//should 120测试1200
+//                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
+//                    }else{
+                        $store->set($printer->dpid."_".$jobid,$contentCode,0,300);//should 120测试1200
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
-                    }
+//                    }
                 }
         }
         
