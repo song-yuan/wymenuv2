@@ -217,10 +217,10 @@ class ProductController extends Controller
 	}
 	//确认订单
 	public function actionConfirmPadOrder(){
-            Yii::app()->end(json_encode(array('status'=>false,'msg'=>'订单为空')));
+            
 		$goodsIds = isset($_POST) ?$_POST :array();
-		$padOrder = json_encode(array('status'=>false,'msg'=>yii::t('app','订单为空')),JSON_UNESCAPED_UNICODE);
-                
+		$padOrder = json_encode(array('status'=>false,'msg'=>yii::t('app','订单为空')));
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>'订单为空wwww')));
 	 	if(!empty($goodsIds)){
 	 		try{
 	 			$padOrder = CreateOrder::createPadOrder($this->companyId,$goodsIds,$this->padId); 

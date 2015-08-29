@@ -219,7 +219,7 @@ class CreateOrder
 		$printOrderProducts = array();
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
-                return json_encode(array('status'=>false,'msg'=>"test"));
+                //return json_encode(array('status'=>false,'msg'=>"test"));
         $transaction = $db->beginTransaction();
  		try {
  			if($site_id==0){
@@ -328,7 +328,7 @@ class CreateOrder
                             }
  			
             
-            return json_encode(array('status'=>false,'msg'=>"test"));
+            //return json_encode(array('status'=>false,'msg'=>"test"));
             
            
             
@@ -345,10 +345,10 @@ class CreateOrder
                        $result = $db->createCommand($sql)->queryRow();
                        if($result){
                                if($result['store_number'] > 0&&$result['store_number'] < $num){
-                                       throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+                                       throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！'))));
                                }
                        }else{
-                               throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+                               throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
                        }
                        $productSets = self::getSetProductIds($dpid,$goodsArr[0]);
                        foreach($productSets as $productSet){
@@ -406,10 +406,10 @@ class CreateOrder
 	                		$amount = $numEq[0];
 	                		if($result){
 			             		if($result['store_number'] > 0&&$result['store_number'] < $amount){
-			             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+			             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！'))));
 			             		}
 			             	}else{
-			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
 			             	}
 			             	//每一个eq 生成一个订单
 			             	$orderProductData = array(
@@ -458,10 +458,10 @@ class CreateOrder
 	             	}else{
 	             		if($result){
 		             		if($result['store_number'] > 0&&$result['store_number'] < $num){
-		             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+		             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！'))));
 		             		}
 		             	}else{
-		             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+		             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
 		             	}
 	             		 $orderProductData = array(
 										'lid'=>$orderProductId,
@@ -492,7 +492,7 @@ class CreateOrder
 			}	
 			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
 			$db->createCommand($sql)->execute();
-			return json_encode(array('status'=>false,'msg'=>"test"));
+			//return json_encode(array('status'=>false,'msg'=>"test"));
 			//厨打
             if($orderId !='0')
             {
@@ -513,7 +513,7 @@ class CreateOrder
                 $criteria2->condition =  't.dpid='.$dpid.' and t.lid='.$order->site_id ;
                 $criteria2->order = ' t.lid desc ';                    
                 $site = Site::model()->with("siteType")->find($criteria2);
-            return json_encode(array('status'=>false,'msg'=>"test"));
+            //return json_encode(array('status'=>false,'msg'=>"test"));
             	$printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
             }else{
             	 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
@@ -524,7 +524,7 @@ class CreateOrder
                 $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",'');
             }
             if(!$printList['status']){
-            	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
+            	throw new Exception(json_encode($printList));
             }
                 //$printList2=array_merge($printList,array('sitenoid'=> $lid));
 //            }								
@@ -549,7 +549,7 @@ class CreateOrder
                     }
                 } 
 			}
- 			return json_encode($printList,JSON_UNESCAPED_UNICODE);
+ 			return json_encode($printList);
 		 } catch (Exception $e) {
                 $transaction->rollback(); //如果操作失败, 数据回滚
                 throw new Exception($e->getMessage());
