@@ -1168,7 +1168,6 @@ class Helper
         static public function printConetent(Printer $printer,$content,$precode,$sufcode,$printserver)
         {
                 Gateway::getOnlineStatus();
-                var_dump(1);exit;
                 $store = Store::instance('wymenu');
                 //var_dump($store);exit;
                 $contentCode="";
