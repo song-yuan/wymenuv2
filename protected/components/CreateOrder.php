@@ -225,8 +225,7 @@ class CreateOrder
  				//未开台的临时台
  				$se=new Sequence("site_no");
                                 $lid = $se->nextval();
-
-                                $code = SiteClass::getCode($dpid);
+                                $code = rand(1000,9999);
                                 $se=new Sequence("temp_site");
                                 $site_id = $se->nextval(); 
                                 
@@ -494,7 +493,6 @@ class CreateOrder
 			$db->createCommand($sql)->execute();
 			
 			//厨打
-			
             if($orderId !='0')
             {
                 $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$dpid));
@@ -520,7 +518,7 @@ class CreateOrder
             	 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
                 $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
+                $orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 $printList = Helper::printList($order,$orderProducts , $pad,$precode,1,'');
             }
             if(!$printList['status']){
