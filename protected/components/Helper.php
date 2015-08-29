@@ -1169,7 +1169,6 @@ class Helper
         {
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
-                var_dump($store);exit;
                 $contentCode="";
                 //内容编码
                 if($printer->language=='1')//zh-cn GBK

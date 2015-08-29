@@ -597,44 +597,44 @@ $(document).ready(function(){
      });
     $('#pad-order-submit').on(event_clicktouchstart,function(){
 
-//        if (typeof Androidwymenuprinter == "undefined") {
-//            alert(language_notget_padinfo);
-//            return false;
-//        }
-//        var sid=$('#id_client_site_id').val();
-//        var istemp=$('#id_client_is_temp').val();
-//        var forbidden=false;
-//        var getstatusurl=$('#productmasksiteinfo').attr("action")+'/sid/'+sid+"/istemp/"+istemp;
-//        //alert(getstatusurl);
-//        if(sid!=0)
-//        {
-//            $.ajax({
-//                        url:getstatusurl,
-//                        type:'GET',
-//                        //data:formdata,
-//                        async:false,
-//                        dataType: "json",
-//                        success:function(msg){
-//                            //alert(msg);防止前台开台，但是后台结单或撤台了，就不能继续下单
-//                            if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
-//                            {
-//                                alert(language_client_order_forbidden);
-//                                forbidden=true;
-//                                return;
-//                            }
-//                        },
-//                        error: function(msg){
-//                            alert(language_client_order_forbidden);
-//                            forbidden=true;
-//                            return;
-//                        }
-//                    });
-//            //if(jobid)存在，说明是重新打印，不用下单
-//        }
-//        if(forbidden)
-//        {
-//            return;
-//        }
+        if (typeof Androidwymenuprinter == "undefined") {
+            alert(language_notget_padinfo);
+            return false;
+        }
+        var sid=$('#id_client_site_id').val();
+        var istemp=$('#id_client_is_temp').val();
+        var forbidden=false;
+        var getstatusurl=$('#productmasksiteinfo').attr("action")+'/sid/'+sid+"/istemp/"+istemp;
+        //alert(getstatusurl);
+        if(sid!=0)
+        {
+            $.ajax({
+                        url:getstatusurl,
+                        type:'GET',
+                        //data:formdata,
+                        async:false,
+                        dataType: "json",
+                        success:function(msg){
+                            //alert(msg);防止前台开台，但是后台结单或撤台了，就不能继续下单
+                            if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
+                            {
+                                alert(language_client_order_forbidden);
+                                forbidden=true;
+                                return;
+                            }
+                        },
+                        error: function(msg){
+                            alert(language_client_order_forbidden);
+                            forbidden=true;
+                            return;
+                        }
+                    });
+            //if(jobid)存在，说明是重新打印，不用下单
+        }
+        if(forbidden)
+        {
+            return;
+        }
         var formdata=$('#padOrderForm').formSerialize();
 //alert(formdata);
             $.ajax({
