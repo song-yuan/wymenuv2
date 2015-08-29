@@ -790,6 +790,10 @@
                                          cancel: function(index){
                                              layer.close(index);
                                              layer_index_printresult=0;
+                                             $("#minustimes").html(30);
+                                            $("#successnumid").html(0);
+                                            $("#errornumid").html(0);
+                                            $("#notsurenumid").html(0);
                             //                        this.content.show();
                             //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                                          }
@@ -810,6 +814,10 @@
                                                     clearInterval(interval);
                                                     layer.close(layer_index_printresult);
                                                     layer_index_printresult=0;
+                                                    $("#minustimes").html(30);
+                                                    $("#successnumid").html(0);
+                                                    $("#errornumid").html(0);
+                                                    $("#notsurenumid").html(0);
                                                     $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                                                 }
                                                 if(waitingsecond==0)
@@ -866,6 +874,10 @@
             
             $('#print_box_close').on(event_clicktouchstart, function(){               
                  layer.close(layer_index_printresult);
+                $("#minustimes").html(30);
+                $("#successnumid").html(0);
+                $("#errornumid").html(0);
+                $("#notsurenumid").html(0);
                  layer_index_printresult=0;
             });
             
@@ -881,6 +893,7 @@
                 tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
                 $('#tabsiteindex').load(tabcurrenturl);
                 $('#site_row').show();
+                $('#tabsiteindex').show();
                 $('#order_row').hide();
             });
             
@@ -1739,6 +1752,7 @@
                                     tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
                                     $('#tabsiteindex').load(tabcurrenturl);
                                     $('#site_row').show();
+                                    $('#tabsiteindex').show();
                                     $('#order_row').hide();
                                 }else{
                                     //layer.close(layer_index2);

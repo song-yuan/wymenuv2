@@ -545,7 +545,7 @@ class Helper
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
 	static public function printSite(SiteNo $siteno,Site $site,Pad $pad, $cprecode,$printserver,$memo){
-		                
+		               
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$siteno->dpid));
 		if(empty($printer)) {
                         return array('status'=>0,'dpid'=>$siteno->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
@@ -579,11 +579,11 @@ class Helper
                 $sufcode="0A0A0A0A0A0A1D5601";                        
                 $printret=array();
 		$retccontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);	
-                if($retccontent["status"])
+                if($retccontent['status'])
                 {
-                    return array('status'=>1,'msg'=>yii::t('app','打印成功'),'siteid'=>$SiteNo->site_id);
+                    return array('status'=>1,'msg'=>yii::t('app','打印成功'));
                 }else{
-                    return array('status'=>0,'msg'=>yii::t('app','发送打印内容失败'),'siteid'=>$SiteNo->site_id);
+                    return array('status'=>0,'msg'=>yii::t('app','发送打印内容失败'));
                 }
 	}
         

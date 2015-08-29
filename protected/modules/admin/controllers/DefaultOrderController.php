@@ -1857,39 +1857,42 @@ class DefaultOrderController extends BackendController
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
                 $joblist=json_decode($store->get("kitchenjobs_".$companyId."_".$orderId),true);
-                foreach ($joblist as $job_orderproduct_id)
+                if(!empty($joblist))
                 {
-                    $ids=explode('_',$job_orderproduct_id);
-                    $jobid=$ids[0];
-                    if($jobid=='0')
+                    foreach ($joblist as $job_orderproduct_id)
                     {
-                        $errornum++;
-                        continue;
-                    }
-                    $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
-                    if(empty($jobresult))
-                    {
-                        $notsurenum++;
-                    }else{
-//                        $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and lid in (".$ids[1].")";
-//                        var_dump($sqlorderproduct);exit;
-                        if($jobresult=="success")
+                        $ids=explode('_',$job_orderproduct_id);
+                        $jobid=$ids[0];
+                        if($jobid=='0')
                         {
-                            //$sqlorderproduct="update nb_order_product set is_print='1',product_order_status='1' where dpid=:companyId and order_id=:orderId";
-                            $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and lid in (".$ids[1].")";
-                            $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
-                            //$commandorderproduct->bindValue(":companyId" , $companyId);
-                            $commandorderproduct->execute();
-                            //update status//
-                            //$orderProduct=  OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$ids[1]));
-                            //if($orderProduct->is_print=='0')
-                            //{
-                            //    $orderProduct->is_print='1';
-                            //    $orderProduct->save();
-                            //}
-                            $successnum++;
-                        }else{
                             $errornum++;
+                            continue;
+                        }
+                        $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
+                        if(empty($jobresult))
+                        {
+                            $notsurenum++;
+                        }else{
+    //                        $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and lid in (".$ids[1].")";
+    //                        var_dump($sqlorderproduct);exit;
+                            if($jobresult=="success")
+                            {
+                                //$sqlorderproduct="update nb_order_product set is_print='1',product_order_status='1' where dpid=:companyId and order_id=:orderId";
+                                $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and lid in (".$ids[1].")";
+                                $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
+                                //$commandorderproduct->bindValue(":companyId" , $companyId);
+                                $commandorderproduct->execute();
+                                //update status//
+                                //$orderProduct=  OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$ids[1]));
+                                //if($orderProduct->is_print=='0')
+                                //{
+                                //    $orderProduct->is_print='1';
+                                //    $orderProduct->save();
+                                //}
+                                $successnum++;
+                            }else{
+                                $errornum++;
+                            }
                         }
                     }
                 }
