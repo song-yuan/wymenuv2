@@ -107,14 +107,15 @@
 					'url':'<?php echo $this->createUrl('defaultSite/opensiteprint',array());?>',
 					'success':function(data){
 						if(data.status == 0) {
-							alert(data.msg);                                                        
+							alert(data.msg+"0");                                                        
 						} else {
-							alert(data.msg);
+							alert(data.msg+"1");
                                                         //$('#portlet-button').modal('hide');
 							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
-                                                        //$("#tab_sitelist").hide();
-                                                        //$("#tab_sitelist").hide();
-                                                        //$('#pxbox_button').hide();
+//                                                        $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+//                                                        $('#tabsiteindex').load(tabcurrenturl); 
+//                                                        $("#tab_sitelist").show();
+//                                                        $('#pxbox_button').hide();
 						}
 					},
                                         'error':function(e){
