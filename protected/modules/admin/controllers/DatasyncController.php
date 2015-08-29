@@ -159,9 +159,9 @@ class DatasyncController extends Controller
             //$now->modify("-1 minute");
             //echo $now->format('Y-m-d H-i-s');
             //exit;
-//            $randtime=rand(1,60);
-//            echo $randtime;
-//            sleep($randtime);
+            $randtime=rand(1,60);
+            echo $randtime;
+            sleep($randtime);
             //启用本地模式时，才存在同步，云端不存在同步
             //等于L是，本地系统知道连接到本地系统，云端根据该company的is2_cloud
             //判断是否使用本地服务器，如果是云端开台，点单等功能不能操作，否则冲突。
