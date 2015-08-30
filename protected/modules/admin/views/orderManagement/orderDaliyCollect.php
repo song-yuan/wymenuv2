@@ -26,7 +26,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','日结列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','日结汇总'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','日结列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','日结汇总'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('orderManagement/notPay' , array('companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -48,12 +48,11 @@
 					    </div>
 					   
 					      <div class="btn-group">
-					      		<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							    <button type="submit" id="btn_submit" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
+					      		<button type="submit" id="btn_time_query" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+							    <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
 				  	      </div>
 				  	  </div>
 				</div>
-			</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
@@ -88,12 +87,6 @@
 						
 						</tbody>
 					</table>
-					<div class="form-actions fluid">
-					   <div class="col-md-offset-3 col-md-9">
-						  <!-- <button type="submit" class="btn blue">确定</button>    -->
-						  <a href="<?php echo $this->createUrl('orderManagement/notPay' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>/page/" class="btn default"><?php echo yii::t('app','返回');?></a>                              
-					   </div>
-				    </div>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -148,30 +141,24 @@
 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
 	            
            }
-		});
-		
-		function MM_over(mmObj) {
-			var mSubObj = mmObj.getElementsByTagName("div")[0];
-			mSubObj.style.display = "block";
-			mSubObj.style.backgroundColor = "pink";
-			mSubObj.style.opacity="100";
-		}
-		function MM_out(mmObj) {
-			var mSubObj = mmObj.getElementsByTagName("div")[0];
-			mSubObj.style.display = "none";
-			
-		}
-		
-		       
-		   $('#btn_time_query').click(function() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
+          $('#btn_time_query').click(function() {  
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   //var Did = $('#Did').var();
-			  //var cid = $(this).val();
 			   location.href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
 			  
 	        });
+	         $('#btn_submit').click(function() {
+	         	var begin_time = $('#begin_time').val();
+			    var end_time = $('#end_time').val();
+	         	$.get("<?php echo $this->createUrl('orderManagement/dailyclose',array('companyId'=>$this->companyId ));?>",{begin_time:begin_time,end_time:end_time},function(msg){
+	         		if(parseInt(msg)){
+	         			alert('日结成功!');
+	         			history.go(0);
+	         		}else{
+	         			alert('日结失败,请重新日结!');
+	         		}
+	         	});
+	         });
+		});
+		
 </script> 
