@@ -424,7 +424,20 @@ class DefaultOrderController extends BackendController
                     {
                         Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
                     }
+                    $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                    $criteria->order = ' t.lid desc ';                    
+                    $siteNo = SiteNo::model()->find($criteria);
+                    if($order->is_temp=='1')
+                    {
+                        $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+                    }else{
+                        $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
+                    }
+                    $order->should_total=$total['total'];
                 }
+                
                 //return json_encode(array('status'=>false,'msg'=>"111"));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
