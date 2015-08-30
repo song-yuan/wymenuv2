@@ -576,51 +576,7 @@
                             任务222打印失败，打印机IP(192.168.1.37)
                             <input style="float:right;" type="button" class="btn red" value="重新打印">
                         </li>
-                        <li>                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li>                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li>                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
-                        <li lid="0000000000" class="selectProductA">                                    
-                            已付<span id="order_reality_pay"></span>元/应付元
-                        </li>
+                        
                     </ul>
                 </div>
                 
@@ -942,10 +898,8 @@
             $('#printerKitchen').on(event_clicktouchstart, function(){
                 var orderid=$(".selectProduct").attr("orderid");
                 if (typeof Androidwymenuprinter == "undefined") {
-                    alert(language_notget_padinfo);
+                    alert("不再app中");
                     //return false;
-                }else{
-                    alert("在pad中");
                 }
                  //有新品
                 if($(".selectProductA[order_status='0']").length>0)
@@ -1045,8 +999,7 @@
                                                         content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
                                                         cancel: function(index){
                                                             layer.close(index);
-                                                            layer_index_printresult=0;
-                                                            $("#printjobresultlist").html("");                                           
+                                                            layer_index_printresult=0;                                                                                                     
                                                         }
                                                     });
                                             }
