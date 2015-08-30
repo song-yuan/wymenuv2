@@ -648,6 +648,13 @@ $(document).ready(function(){
 	                var printresult;
                         var waittime=0;
 	    		if(data.status){
+                            if(istemp=="1")
+                            {
+                                alert(data.jobid);
+                            }else{
+                                alert(data.jobs);
+                            }
+                            return;
                             var index = layer.load(0, {shade: [0.3,'#fff']});
                             var wait=setInterval(function(){ 
                                 waittime++;
