@@ -168,10 +168,12 @@ class TasteClass
 			$conn->execute();
 			if(!empty($tastesIds)){
 				foreach($tastesIds as $taste){
-					$sql = 'SELECT NEXTVAL("product_taste") AS id';
-					$maxId = Yii::app()->db->createCommand($sql)->queryRow();
+//					$sql = 'SELECT NEXTVAL("product_taste") AS id';
+//					$maxId = Yii::app()->db->createCommand($sql)->queryRow();
+                                        $se=new Sequence("product_taste");
+                                        $lid = $se->nextval();
 					$data = array(
-					 'lid'=>$maxId['id'],
+					 'lid'=>$lid,
 					 'dpid'=>$dpid,
 					 'create_at'=>date('Y-m-d H:i:s',time()),
                                          'update_at'=>date('Y-m-d H:i:s',time()),
