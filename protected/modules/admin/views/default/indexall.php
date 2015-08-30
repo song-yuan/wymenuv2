@@ -894,6 +894,32 @@
 //                     });   
 //                 }
 //            });
+            function gotoaccount(){
+                //设置总额
+                var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
+                $("#payOriginAccount").text(payOriginAccount);
+                var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
+                var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
+                $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                if(layer_index2!=0)
+                {
+                    return;
+                }
+                //出现收银界面
+                layer_index2=layer.open({
+                     type: 1,
+                     shade: false,
+                     title: false, //不显示标题
+                     area: ['65%', '60%'],
+                     content: $('#accountbox'),//$('#productInfo'), //捕获的元素
+                     cancel: function(index){
+                         layer.close(index);
+                         layer_index2=0;
+        //                        this.content.show();
+        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                     }
+                });
+            }
             
             $('#printerKitchen').on(event_clicktouchstart, function(){
                 var orderid=$(".selectProduct").attr("orderid");
@@ -1019,57 +1045,44 @@
                         });
                 }else{ //没有新品
                 //判断有没有失败的任务。
-                    $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
-                    if(parseInt($('#failprintjobnum').val())>0)
-                    {
-                        if(layer_index_printresult!=0)
-                            return;
-                         layer_index_printresult=layer.open({
-                             type: 1,
-                             shade: false,
-                             title: false, //不显示标题
-                             area: ['30%', '70%'],
-                             content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-                             cancel: function(index){
-                                 layer.close(index);
-                                 layer_index_printresult=0;
-                                 $("#printjobresultlist").html("");                                           
-                             }
-                         });
-                         return;
-                     }
-                    //设置总额
-                    var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
-                    $("#payOriginAccount").text(payOriginAccount);
-                    var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
-                    var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                    $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
-                    if(layer_index2!=0)
-                    {
-                        return;
-                    }
-                    //出现收银界面
-                    layer_index2=layer.open({
-                         type: 1,
-                         shade: false,
-                         title: false, //不显示标题
-                         area: ['65%', '60%'],
-                         content: $('#accountbox'),//$('#productInfo'), //捕获的元素
-                         cancel: function(index){
-                             layer.close(index);
-                             layer_index2=0;
-            //                        this.content.show();
-            //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                    $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+orderid
+                    ,function(){                        
+                        if(parseInt($('#failprintjobnum').val())>0)
+                        {
+                            if(layer_index_printresult!=0)
+                                return;
+                             layer_index_printresult=layer.open({
+                                 type: 1,
+                                 shade: false,
+                                 title: false, //不显示标题
+                                 area: ['30%', '70%'],
+                                 content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                                 cancel: function(index){
+                                     layer.close(index);
+                                     layer_index_printresult=0;
+                                                                               
+                                 }
+                                });
+                                
+                        }else{
+                           gotoaccount();   
                          }
-                     });   
-                 }
+                    // });
+                    });
+                }
             });
             
-            $('#print_box_close2').on(event_clicktouchstart, function(){               
-                 layer.close(layer_index_printresult);
-                $("#printjobresultlist").html("");
+            $('#print_box_close_failjobs').on(event_clicktouchstart, function(){               
+                 layer.close(layer_index_printresult);                
                  layer_index_printresult=0;
             });
+            
+            $('#print_box_account_direct').on(event_clicktouchstart, function(){               
+                 layer.close(layer_index_printresult);                
+                 layer_index_printresult=0;
+                 gotoaccount();
+            });
+            
             
             $('#layer2_close').on(event_clicktouchstart, function(){               
                  layer.close(layer_index2);

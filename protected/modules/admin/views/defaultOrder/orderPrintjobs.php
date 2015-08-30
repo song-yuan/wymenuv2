@@ -22,13 +22,14 @@
                             var jobid=$(this).attr("jobid");
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
+                            var orderid="<?php echo $orderid; ?>";
                             
                             var printresulttemp=Androidwymenuprinter.printNetJob(dpid,jobid,address);
                             if(!printresulttemp)
                             {
                                 alert("打印失败，请检查网络和打印机后重试！");
                             }else{
-                                $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$dpid));?>/orderId/'+data.orderid+'/jobId/'+jobid);
+                                $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$dpid));?>/orderId/'+orderid+'/jobId/'+jobid);
                             }
                        });                      
                         

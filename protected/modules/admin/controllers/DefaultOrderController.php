@@ -237,7 +237,8 @@ class DefaultOrderController extends BackendController
                 //var_dump($orderprintjobs);exit;
                 $this->renderPartial('orderPrintjobs' , array(
 				'orderPrintjobs'=>$orderprintjobs,
-				'dpid' => $companyId
+				'dpid' => $companyId,
+                                'orderid'=>$orderId
 		));
 	}
 
