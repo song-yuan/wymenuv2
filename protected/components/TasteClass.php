@@ -191,7 +191,7 @@ class TasteClass
 		}
 	}
 	public static function getTasteName($tasteId,$dpid){
-		$sql = 'SELECT name from nb_taste_group where lid=:lid and dpid=:dpid';
+		$sql = 'SELECT name from nb_taste_group where lid=:lid and dpid=:dpid and delete_flag="0"';
 		$taste = Yii::app()->db->createCommand($sql)->bindValue(':lid',$tasteId)->bindValue(':dpid',$dpid)->queryRow();
 		return $taste['name'];
 	}
