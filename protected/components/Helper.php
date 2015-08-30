@@ -511,7 +511,7 @@ class Helper
                     //$printserver='0';
                     return Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
 		}else{
-                    return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
+                    return array('status'=>false,'orderid'=>$order->lid,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
                 }
                 /*$listData.= str_pad('',48,'-').'<br>';
 		$listData.= str_pad('消费合计：'.$order->reality_total , 20,' ').'<br>';
@@ -1162,7 +1162,7 @@ class Helper
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
                 $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids),0,300);                        
-                $ret=array('status'=>true,'dpid'=>$order->dpid,'allnum'=>count($jobids),'msg'=>'打印任务正常发布',"jobs"=>$jobids);
+                $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids),'msg'=>'打印任务正常发布',"jobs"=>$jobids);
                 return $ret;
 	}
         
