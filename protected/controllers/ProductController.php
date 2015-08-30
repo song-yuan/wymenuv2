@@ -136,6 +136,40 @@ class ProductController extends Controller
 		}
 		Yii::app()->end(json_encode($product));
 	}
+        
+        public function actionSaveFailJobs()
+	{
+		$jobid = Yii::app()->request->getParam('jobid',"0");
+                $dpid = Yii::app()->request->getParam('dpid',"0000000000");
+                $address = Yii::app()->request->getParam('address',"0");
+                $orderid = Yii::app()->request->getParam('orderid',"0");
+                $db=Yii::app()->db;
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $printData = $store->get($dpid."_".$jobid);
+                if(empty($printData))
+                {
+                    $se=new Sequence("order_printjobs");
+                    $orderjobId = $se->nextval();
+                    $time=date('Y-m-d H:i:s',time());
+                    //插入一条
+                    $orderPrintJob = array(
+                                        'lid'=>$orderjobId,
+                                        'dpid'=>$dpid,
+                                        'create_at'=>$time,
+                                        'orderid'=>$orderid,
+                                        'update_at'=>$time,
+                                        'address'=>$address,
+                                        'content'=>$printData,
+                                        'printer_type'=>"0",
+                                        'finish_flag'=>'0',
+                                        'delete_flag'=>'0',
+                                        );
+                    $db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
+                }		
+		Yii::app()->end(json_encode(array("status"=>true,"msg"=>"OK")));
+	}
+        
 	public function actionGetOrderListJson()
 	{
 		$orderProductList = array();

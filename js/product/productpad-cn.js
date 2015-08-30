@@ -670,6 +670,23 @@ $(document).ready(function(){
                                 {
                                     //alert(data.jobid);
                                     printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+                                    if(!printresult)
+                                    {
+                                        $.ajax({
+                                                url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+data.jobid+"/address/"+data.address,
+                                                type:'GET',
+                                                //data:formdata,
+                                                async:false,
+                                                dataType: "json",
+                                                success:function(msg){
+                                                    
+                                                },
+                                                error: function(msg){
+                                                    alert("网络故障！")
+                                                }
+                                            });
+                                            alert("有打印失败，请去收银台查看！");
+                                    }
                                 }else{
                                     //alert(data.jobs);
                                     $.each(data.jobs,function(skey,svalue){
@@ -680,6 +697,20 @@ $(document).ready(function(){
                                             printresult=true;
                                         }else{
                                             printresultfail=true;
+                                            //如果失败，就把打印任务插入到数据库
+                                            $.ajax({
+                                                url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+detaildata[0]+"/address/"+detaildata[0],
+                                                type:'GET',
+                                                //data:formdata,
+                                                async:false,
+                                                dataType: "json",
+                                                success:function(msg){
+                                                    
+                                                },
+                                                error: function(msg){
+                                                    alert("网络故障！")
+                                                }
+                                            });
                                         }
                                      }); 
                                 }
@@ -700,7 +731,7 @@ $(document).ready(function(){
                        
                        if(printresultfail)
                        {
-                           alert("有任务失败！");
+                           alert("有打印失败，请去收银台查看！");
                        }
 //	                 if(printresult)
 //	                 {
