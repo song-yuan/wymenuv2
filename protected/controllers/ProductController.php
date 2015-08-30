@@ -159,6 +159,7 @@ class ProductController extends Controller
                                         'dpid'=>$dpid,
                                         'create_at'=>$time,
                                         'orderid'=>$orderid,
+                                        'jobid'=>$jobid,
                                         'update_at'=>$time,
                                         'address'=>$address,
                                         'content'=>$printData,

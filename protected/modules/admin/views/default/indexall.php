@@ -570,19 +570,19 @@
                     <input type="button" class="btn green-stripe" id="print_box_close_failjobs" value="<?php echo yii::t('app','关 闭');?>">
                     <input type="button" style="margin-left: 20px;" class="btn green" id="print_box_account_direct" value="<?php echo yii::t('app','直接结单');?>">
                 </div>
-                <div class="navigation">
+                <div class="navigation" id="printRsultListdetailsub">
                     <ul>
-                        <li lid="0000000000" class="selectProductA">                                    
+                        <li>                                    
                             任务222打印失败，打印机IP(192.168.1.37)
                             <input style="float:right;" type="button" class="btn red" value="重新打印">
                         </li>
-                        <li lid="0000000000" class="selectProductA">                                    
+                        <li>                                    
                             已付<span id="order_reality_pay"></span>元/应付元
                         </li>
-                        <li lid="0000000000" class="selectProductA">                                    
+                        <li>                                    
                             已付<span id="order_reality_pay"></span>元/应付元
                         </li>
-                        <li lid="0000000000" class="selectProductA">                                    
+                        <li>                                    
                             已付<span id="order_reality_pay"></span>元/应付元
                         </li>
                         <li lid="0000000000" class="selectProductA">                                    
@@ -941,13 +941,15 @@
             
             $('#printerKitchen').on(event_clicktouchstart, function(){
                 var orderid=$(".selectProduct").attr("orderid");
-//                if (typeof Androidwymenuprinter == "undefined") {
-//                    alert(language_notget_padinfo);
-//                    return false;
-//                }
+                if (typeof Androidwymenuprinter == "undefined") {
+                    alert(language_notget_padinfo);
+                    //return false;
+                }else{
+                    alert("在pad中");
+                }
                  //有新品
                 if($(".selectProductA[order_status='0']").length>0)
-                //if(true)
+//                if(true)
                 {                    
                         //取得数据
                         var sendjson=getallproductinfo();
@@ -978,16 +980,34 @@
                                      $.each(data.jobs,function(skey,svalue){ 
                                         data.jobs[skey]="0_"+svalue;
                                     }); 
-                                    alert(data.jobs);
+                                    //alert(data.jobs)
                                     var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
                                     var wait=setInterval(function(){ 
                                         waittime++;                                
                                         printresultfail=false;
-                                          
+                                        $.each(data.jobs,function(skey,svalue){                                        
+                                            detaildata=svalue.split("_");
+                                            if(detaildata[0]=="0")//继续打印
+                                            {
+                                                //printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
+                                                if(printresulttemp)
+                                                {
+                                                    data.jobs[skey]="1_"+svalue.substring(2);
+                                                    //printresult=true;
+                                                }else{
+                                                    printresultfail=true;                                                
+                                                }
+                                            }
+                                         }); 
+                                         if(!printresultfail)
+                                         {
+                                            clearInterval(wait);
+                                            layer.close(layer_flash_index);
+                                         }                               
+        //                                
                                         if(waittime>5)
                                         {
                                              clearInterval(wait);
-                                             $('#id_client_reprint').val("1");
                                              layer.close(layer_flash_index);                                     
                                             if(printresultfail)
                                             {
@@ -1016,6 +1036,7 @@
                                                     //如果有失败任务就打开对话框
                                                     if(layer_index_printresult!=0)
                                                        return;
+                                                    $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid);                                
                                                     layer_index_printresult=layer.open({
                                                         type: 1,
                                                         shade: false,

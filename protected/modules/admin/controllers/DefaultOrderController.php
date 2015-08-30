@@ -215,6 +215,22 @@ class DefaultOrderController extends BackendController
                                 //'setlist' => $setlist
 		));
 	}
+        
+        public function actionGetFailPrintjobs(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getParam('orderId',0);
+                
+                $criteria = new CDbCriteria;
+                $criteria->condition =  't.dpid='.$companyId.' and t.orderid='.$orderId.' and t.finish_flag=0';
+                $criteria->order = ' t.lid desc ';                    
+                //$siteNo = SiteNo::model()->find($criteria);
+                $orderprintjobs=  OrderPrintjobs::model()->findAll($criteria);
+                //var_dump($orderprintjobs);exit;
+                $this->renderPartial('orderPrintjobs' , array(
+				'orderPrintjobs'=>$orderprintjobs,
+				'dpid' => $companyId
+		));
+	}
 
         /*
          * 挂单
