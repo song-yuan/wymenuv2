@@ -149,30 +149,12 @@
 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
 	            
            }
-		});
-		
-		function MM_over(mmObj) {
-			var mSubObj = mmObj.getElementsByTagName("div")[0];
-			mSubObj.style.display = "block";
-			mSubObj.style.backgroundColor = "pink";
-			mSubObj.style.opacity="100";
-		}
-		function MM_out(mmObj) {
-			var mSubObj = mmObj.getElementsByTagName("div")[0];
-			mSubObj.style.display = "none";
-			
-		}
-		
-		       
-		   $('#btn_time_query').click(function() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
+           $('#btn_time_query').click(function() {  
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   //var Did = $('#Did').var();
-			  //var cid = $(this).val();
 			   location.href="<?php echo $this->createUrl('orderManagement/accountstatement' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
 			  
 	        });
+		});
+		
 </script> 
