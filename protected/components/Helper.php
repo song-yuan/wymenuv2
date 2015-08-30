@@ -509,9 +509,11 @@ class Helper
                 $printret=array();
 		if($hasData){
                     //$printserver='0';
-                    return Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
+                    $retcontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
+                    $retcontent['orderid']=$order->lid;
+                    return $retcontent;
 		}else{
-                    return array('status'=>false,'orderid'=>$order->lid,'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
+                    return array('status'=>false,'orderid'=>$order->lid, 'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
                 }
                 /*$listData.= str_pad('',48,'-').'<br>';
 		$listData.= str_pad('消费合计：'.$order->reality_total , 20,' ').'<br>';

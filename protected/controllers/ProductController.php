@@ -147,7 +147,8 @@ class ProductController extends Controller
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
                 $printData = $store->get($dpid."_".$jobid);
-                if(empty($printData))
+               // var_dump($printData);exit;
+                if(!empty($printData))
                 {
                     $se=new Sequence("order_printjobs");
                     $orderjobId = $se->nextval();
