@@ -646,23 +646,42 @@ $(document).ready(function(){
 	            success:function(msg){
                         var data=msg;
 	                var printresult;
+                        var printresultfail;
+                        var printresulttemp;
                         var waittime=0;
 	    		if(data.status){
-                            if(istemp=="1")
-                            {
-                                alert(data.jobid);
-                            }else{
-                                alert(data.jobs);
-                            }
-                            return;
+//                            if(istemp=="1")
+//                            {
+//                                alert(data.jobid);
+//                            }else{
+//                                alert(data.jobs);
+//                            }
+//                            return;
                             var index = layer.load(0, {shade: [0.3,'#fff']});
                             var wait=setInterval(function(){ 
                                 waittime++;
-                                if(data.type=='local')
+//                                if(data.type=='local')
+//                                {
+//                                    printresult=Androidwymenuprinter.printJob(data.dpid,data.jobid);
+//                                }else{
+//                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+//                                }
+                                if(istemp=="1")
                                 {
-                                    printresult=Androidwymenuprinter.printJob(data.dpid,data.jobid);
-                                }else{
+                                    alert(data.jobid);
                                     printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+                                }else{
+                                    alert(data.jobs);
+                                    $.each(data.jobs,function(skey,svalue){
+                                        detaildata=svalue.split("_");
+                                        printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[0],detaildata[1]);
+                                        if(printresulttemp)
+                                        {
+                                            printresult=true;
+                                        }else{
+                                            printresultfail=true;
+                                        }
+                                     }); 
                                 }
                                 if(printresult)
                                 {
@@ -679,6 +698,10 @@ $(document).ready(function(){
                                 }                                
                             },1000); 	                 
                        
+                       if(printresultfail)
+                       {
+                           alert("有任务失败！");
+                       }
 //	                 if(printresult)
 //	                 {
 	                	 $('#padOrderForm').find('.input-product').each(function(){

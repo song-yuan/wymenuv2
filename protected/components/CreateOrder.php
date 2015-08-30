@@ -211,6 +211,16 @@ class CreateOrder
 		$site_id = $goodsIds['client_site_id'];
 		$siteName = $goodsIds['client_site_name'];
                 $reprint = $goodsIds['client_reprint'];
+                
+                
+                //订单的状态，临时做下单时挂单状态，非临时做下单直接厨打
+                $orderStatus="2";
+                $orderPorductStatus="1";
+                if($isTemp=="1")
+                {
+                    $orderStatus="1";
+                    $orderPorductStatus="0";
+                }
 		unset($goodsIds['client_is_temp']);
 		unset($goodsIds['client_site_id']);
 		unset($goodsIds['client_site_name']);
@@ -253,7 +263,7 @@ class CreateOrder
 							'site_id'=>$site_id,
 							'create_at'=>$time,
 							'is_temp'=>$isTemp,
-							'order_status'=>1,
+							'order_status'=>$orderStatus,
 							'number'=>1,
 							'update_at'=>$time,
 							'remark'=>yii::t('app','无'),
@@ -311,7 +321,7 @@ class CreateOrder
                                                 'site_id'=>$site_id,
                                                 'create_at'=>$time,
                                                 'is_temp'=>$isTemp,
-                                                'order_status'=>1,
+                                                'order_status'=>$orderStatus,
                                                 'number'=>$siteNo->number,
                                                 'update_at'=>$time,
                                                 'remark'=>yii::t('app','无'),
@@ -363,7 +373,7 @@ class CreateOrder
 										'update_at'=>$time,
 										'amount'=>$num,
 										'taste_memo'=>"",
-										'product_order_status'=>0,
+										'product_order_status'=>$orderPorductStatus,
 										);
 					   $db->createCommand()->insert('nb_order_product',$orderProductData);
 					   $orderPrice +=$productSet['price']*$num;
@@ -423,7 +433,7 @@ class CreateOrder
 											'update_at'=>$time,
 											'amount'=>$amount,
 											'taste_memo'=>"",
-											'product_order_status'=>0,
+											'product_order_status'=>$orderPorductStatus,
 											);
 							 $db->createCommand()->insert('nb_order_product',$orderProductData);
 							 $orderPrice +=$productPrice*$amount;
@@ -474,7 +484,7 @@ class CreateOrder
 										'update_at'=>$time,
 										'amount'=>$num,
 										'taste_memo'=>"",
-										'product_order_status'=>0,
+										'product_order_status'=>$orderPorductStatus,
 										);
 						 $db->createCommand()->insert('nb_order_product',$orderProductData);
 						 $orderPrice +=$productPrice*$num;
