@@ -338,7 +338,7 @@ class CreateOrder
                             }
  			
             
-            //return json_encode(array('status'=>false,'msg'=>"test"));
+//            return json_encode(array('status'=>false,'msg'=>"test"));
             
            
             
@@ -502,7 +502,7 @@ class CreateOrder
 			}	
 			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
 			$db->createCommand($sql)->execute();
-			//return json_encode(array('status'=>false,'msg'=>"test"));
+//			return json_encode(array('status'=>false,'msg'=>"test"));
 			//厨打
             if($orderId !='0')
             {
@@ -523,7 +523,7 @@ class CreateOrder
                 $criteria2->condition =  't.dpid='.$dpid.' and t.lid='.$order->site_id ;
                 $criteria2->order = ' t.lid desc ';                    
                 $site = Site::model()->with("siteType")->find($criteria2);
-            //return json_encode(array('status'=>false,'msg'=>"test"));
+//            return json_encode(array('status'=>false,'msg'=>"test8"));
             	$printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
             }else{
             	 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
