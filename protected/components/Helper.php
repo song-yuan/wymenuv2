@@ -1165,7 +1165,7 @@ class Helper
                 $store = Store::instance('wymenu');
                 $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids),0,300);                        
                 $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids),'msg'=>'打印任务正常发布',"jobs"=>$jobids);
-                
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
                 //更新菜品状态为已打印
                 $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$order->dpid." and order_id =".$order->lid;
                 $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);

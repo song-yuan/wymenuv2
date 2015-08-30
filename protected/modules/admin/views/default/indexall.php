@@ -560,15 +560,70 @@
                 </div>
             </div>
             <!---printRsultList printresult -->
+                        
             <div id="printRsultListdetail" style="display: none">
                 <div style="margin:10px;">
-                <h4 id="printalljobsdetail"></h4>
-                <textarea id="printjobresultlist" style="width:90%;height:16.0em;margin:10px;" value="">
-                    
-                </textarea>
-                <div style="text-align:center;">
-                    <input type="button" class="btn green" id="print_box_close2" value="<?php echo yii::t('app','确 定');?>">
+                    <h4 style="color:#900;"><span id="failprintjobs">4</span>个任务打印失败</h4>
+                <!--<textarea id="printjobresultlist" style="width:90%;height:16.0em;margin:10px;" value="">                    
+                </textarea>-->
+                <div style="text-align:center;margin: 10px;">
+                    <input type="button" class="btn green-stripe" id="print_box_close_failjobs" value="<?php echo yii::t('app','关 闭');?>">
+                    <input type="button" style="margin-left: 20px;" class="btn green" id="print_box_account_direct" value="<?php echo yii::t('app','直接结单');?>">
                 </div>
+                <div class="navigation">
+                    <ul>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            任务222打印失败，打印机IP(192.168.1.37)
+                            <input style="float:right;" type="button" class="btn red" value="重新打印">
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                        <li lid="0000000000" class="selectProductA">                                    
+                            已付<span id="order_reality_pay"></span>元/应付元
+                        </li>
+                    </ul>
+                </div>
+                
                 </div>
             </div>
             <!---membercardInfo  -->
@@ -886,9 +941,14 @@
             
             $('#printerKitchen').on(event_clicktouchstart, function(){
                 var orderid=$(".selectProduct").attr("orderid");
+//                if (typeof Androidwymenuprinter == "undefined") {
+//                    alert(language_notget_padinfo);
+//                    return false;
+//                }
                  //有新品
                 if($(".selectProductA[order_status='0']").length>0)
-                {
+                //if(true)
+                {                    
                         //取得数据
                         var sendjson=getallproductinfo();
                         var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>/orderid/"+orderid+"/orderstatus/2";
@@ -903,39 +963,75 @@
                             async:false,
                             dataType: "json",
                             success:function(msg){
+                                var printresultfail=false;
+                                var printresulttemp;
+                                var waittime=0;
                                 //保存成功，刷新
                                 $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                                 var data=msg;
                                 alert(data.msg);
                                 if(data.status){
-                                    //取得打印结果,在layer中定时取得
-                                    //alert(data.msg);
-                                    $("#printalljobsdetail").text(data.msg);
-                                    if(layer_index_printresult!=0)
-                                        return;
-                                    layer_index_printresult=layer.open({
-                                         type: 1,
-                                         shade: false,
-                                         title: false, //不显示标题
-                                         area: ['30%', 'auto'],
-                                         content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-                                         cancel: function(index){
-                                             layer.close(index);
-                                             layer_index_printresult=0;
-                                             $("#printjobresultlist").html("");                                           
-                                         }
-                                     });
+                                    //取得打印结果,在layer中定时取得                                    
                                      //"kitchenjobs_".$order->dpid."_".$order->lid
                                      //kitchenjobs_0000000012_0000003421
                                      //jobid_productid,productid,productid
-                                     $("#printjobresultlist").html("");
-                                     $.each(data.jobs,function(skey,svalue){
-                                         $("#printjobresultlist").html(
-                                                 $("#printjobresultlist").html()+svalue);
-                                        detaildata=svalue.split("_");
-                                        alert(detaildata[0]);
-                                        printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
-                                     });                                    
+                                     $.each(data.jobs,function(skey,svalue){ 
+                                        data.jobs[skey]="0_"+svalue;
+                                    }); 
+                                    alert(data.jobs);
+                                    var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
+                                    var wait=setInterval(function(){ 
+                                        waittime++;                                
+                                        printresultfail=false;
+                                          
+                                        if(waittime>5)
+                                        {
+                                             clearInterval(wait);
+                                             $('#id_client_reprint').val("1");
+                                             layer.close(layer_flash_index);                                     
+                                            if(printresultfail)
+                                            {
+                                                alert("有打印失败，请去收银台查看2！");
+                                                //如果失败，就把打印任务插入到数据库
+                                                $.each(data.jobs,function(skey,svalue){                                        
+                                                        detaildata=svalue.split("_");
+                                                        if(detaildata[0]=="0")
+                                                        {
+                                                            $.ajax({
+                                                                url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+detaildata[1]+"/address/"+detaildata[2],
+                                                                type:'GET',
+                                                                //data:formdata,
+                                                                async:false,
+                                                                dataType: "json",
+                                                                success:function(msg){
+
+                                                                },
+                                                                error: function(msg){
+                                                                    alert("网络故障！")
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                    
+                                                    //如果有失败任务就打开对话框
+                                                    if(layer_index_printresult!=0)
+                                                       return;
+                                                    layer_index_printresult=layer.open({
+                                                        type: 1,
+                                                        shade: false,
+                                                        title: false, //不显示标题
+                                                        area: ['30%', '70%'],
+                                                        content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                                                        cancel: function(index){
+                                                            layer.close(index);
+                                                            layer_index_printresult=0;
+                                                            $("#printjobresultlist").html("");                                           
+                                                        }
+                                                    });
+                                            }
+
+                                        }                                
+                                    },1000);
                                      
                                 }else{
                                     alert(data.msg);
@@ -949,6 +1045,21 @@
                             }
                         });
                 }else{ //没有新品
+                //判断有没有失败的任务。
+                    if(layer_index_printresult!=0)
+                        return;
+                     layer_index_printresult=layer.open({
+                         type: 1,
+                         shade: false,
+                         title: false, //不显示标题
+                         area: ['30%', '70%'],
+                         content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                         cancel: function(index){
+                             layer.close(index);
+                             layer_index_printresult=0;
+                             $("#printjobresultlist").html("");                                           
+                         }
+                     });
                     //设置总额
                     var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
                     $("#payOriginAccount").text(payOriginAccount);
