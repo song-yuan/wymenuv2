@@ -325,6 +325,7 @@
                 <div class="col-md-8" style="">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
                         <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsave_btn" value="<?php echo yii::t('app','挂单--');?>">
+			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printlist_btn" value="<?php echo yii::t('app','打印清单');?>">
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="alltaste_btn" value="<?php echo yii::t('app','全单设定');?>">
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printerKitchen" value="<?php echo yii::t('app','下单&厨打&收银&结单');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
@@ -771,6 +772,64 @@
                         alert("保存失败2！");
                     }
 	     	});
+                   
+            });
+            
+            //printlist_btn
+            $('#printlist_btn').on(event_clicktouchstart,function(){
+                var orderid=$(".selectProduct").attr("orderid");
+                var padid="0000000054";
+                if (typeof Androidwymenuprinter == "undefined") {
+                    alert("找不到PAD设备");
+                    //return false;
+                }else{
+                    var padinfo=Androidwymenuprinter.getPadInfo();
+                    padid=padinfo.substr(10,10);
+                }
+                var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
+                var statu = confirm("<?php echo yii::t('app','确定要打印清单吗？');?>");
+                if(!statu){
+                    return false;
+                } 
+                //alert(url);
+                $.ajax({
+                        url:url,
+                        type:'GET',
+                        data:"",
+                        async:false,
+                        dataType: "json",
+                        success:function(msg){
+                            var waittime=0;
+                            var data=msg;
+                            //alert(data.jobid);
+                            var printresult=false;
+                            if(data.status){
+                                var index = layer.load(0, {shade: [0.3,'#fff']});
+                                var wait=setInterval(function(){ 
+                                    waittime++;
+                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+                                    if(printresult)
+                                    {
+                                        clearInterval(wait);
+                                        layer.close(index);
+                                    }
+                                    if(waittime>5)
+                                    {
+                                         clearInterval(wait);
+                                         layer.close(index);
+                                         //alert(language_print_pad_fail);
+                                     }
+                                },1000); 	
+                            }else{
+                                alert(data.msg);                                
+                            }
+                           //以上是打印
+                           //刷新orderPartial	                 
+                        },
+                        error: function(msg){
+                            alert("保存失败2");
+                        }
+                    }); 
                    
             });
             

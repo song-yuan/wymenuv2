@@ -410,6 +410,30 @@ class DefaultOrderController extends BackendController
                 Yii::app()->end($ret);
 	}
         
+        public function actionOrderPrintlist(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getParam('orderId',"0");
+                $padId = Yii::app()->request->getParam('padId',"0");
+                $order=new Order();
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
+                if($orderId !='0')
+                {
+                    $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
+                    if(empty($order))
+                    {
+                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                    }
+                }
+                //return json_encode(array('status'=>false,'msg'=>"111"));
+                $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+            	 //前面加 barcode
+                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
+                $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",'');
+                Yii::app()->end(json_encode($printList));
+        }
+        
         public function actionMemberCardPassword(){
 		$companyId = Yii::app()->request->getParam('companyId',"0");
                 $password = Yii::app()->request->getParam('passWord',"0");

@@ -542,7 +542,7 @@ class CreateOrder
 //            return json_encode(array('status'=>false,'msg'=>"test8"));
             	$printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
             }else{
-            	 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+            	$pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
                 $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
