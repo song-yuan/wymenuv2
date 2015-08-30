@@ -179,7 +179,17 @@ class PadbindController extends Controller
                 $printData = $store->get($companyid."_".$jobid);
                 if(empty($printData))
                 {
-                    $printData="";
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyid.' and t.jobid='.$jobid.' and t.finish_flag=0';
+                    $criteria->order = ' t.lid desc ';                    
+                    //$siteNo = SiteNo::model()->find($criteria);
+                    $orderprintjobs=  OrderPrintjobs::model()->find($criteria);
+                    if(!empty($orderprintjobs))
+                    {
+                        $printData=$orderprintjobs->content;
+                    }else{
+                        $printData="";
+                    }                    
                 }
                 echo $printData;
 	}
