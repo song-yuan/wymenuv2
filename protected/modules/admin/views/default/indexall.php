@@ -563,7 +563,7 @@
                         
             <div id="printRsultListdetail" style="display: none">
                 <div style="margin:10px;">
-                    <h4 style="color:#900;"><span id="failprintjobs">4</span>个任务打印失败</h4>
+                    <h4 style="color:#900;"><span id="failprintjobs">0</span>个任务打印失败</h4>
                 <!--<textarea id="printjobresultlist" style="width:90%;height:16.0em;margin:10px;" value="">                    
                 </textarea>-->
                 <div style="text-align:center;margin: 10px;">
@@ -898,7 +898,7 @@
             $('#printerKitchen').on(event_clicktouchstart, function(){
                 var orderid=$(".selectProduct").attr("orderid");
                 if (typeof Androidwymenuprinter == "undefined") {
-                    alert("不再app中");
+                    alert("找不到PAD设备");
                     //return false;
                 }
                  //有新品
@@ -947,7 +947,6 @@
                                                 if(printresulttemp)
                                                 {
                                                     data.jobs[skey]="1_"+svalue.substring(2);
-                                                    //printresult=true;
                                                 }else{
                                                     printresultfail=true;                                                
                                                 }
@@ -1020,20 +1019,25 @@
                         });
                 }else{ //没有新品
                 //判断有没有失败的任务。
-                    if(layer_index_printresult!=0)
-                        return;
-                     layer_index_printresult=layer.open({
-                         type: 1,
-                         shade: false,
-                         title: false, //不显示标题
-                         area: ['30%', '70%'],
-                         content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-                         cancel: function(index){
-                             layer.close(index);
-                             layer_index_printresult=0;
-                             $("#printjobresultlist").html("");                                           
-                         }
-                     });
+                    $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
+                    if(parseInt($('#failprintjobnum').val())>0)
+                    {
+                        if(layer_index_printresult!=0)
+                            return;
+                         layer_index_printresult=layer.open({
+                             type: 1,
+                             shade: false,
+                             title: false, //不显示标题
+                             area: ['30%', '70%'],
+                             content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                             cancel: function(index){
+                                 layer.close(index);
+                                 layer_index_printresult=0;
+                                 $("#printjobresultlist").html("");                                           
+                             }
+                         });
+                         return;
+                     }
                     //设置总额
                     var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
                     $("#payOriginAccount").text(payOriginAccount);

@@ -1,4 +1,5 @@
 	<!-- BEGIN PAGE -->  
+        <input type="hidden" value="<?PHP echo count($orderPrintjobs); ?>" id="failprintjobnum"> 
         <ul>
             
         <?php foreach ($orderPrintjobs as $orderPrintjob):
@@ -13,21 +14,22 @@
         </ul>
         	<!-- END PAGE -->                  
                     <script type="text/javascript">
+                        $(document).ready(function(){
+                            $('#failprintjobs').text($('#failprintjobnum').val());
+                        });
                         
                         $('.reprintjob').click(function(){
                             var jobid=$(this).attr("jobid");
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
-                            alert(jobid);
-                            alert(address);
-                            alert(dpid);
+                            
                             var printresulttemp=Androidwymenuprinter.printNetJob(dpid,jobid,address);
                             if(!printresulttemp)
                             {
-                                alert("打印失败，请重试！");
+                                alert("打印失败，请检查网络和打印机后重试！");
+                            }else{
+                                $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$dpid));?>/orderId/'+data.orderid+'/jobId/'+jobid);
                             }
-                            
-                       });
-                        
+                       });                      
                         
                     </script>
