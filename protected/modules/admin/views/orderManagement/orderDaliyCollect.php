@@ -1,4 +1,6 @@
-
+<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
+<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
+   
 <div class="page-content">
 
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -46,7 +48,8 @@
 					    </div>
 					   
 					      <div class="btn-group">
-							    <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
+					      		<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+							    <button type="submit" id="btn_submit" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
 				  	      </div>
 				  	  </div>
 				</div>
@@ -133,3 +136,42 @@
 	<!-- END PAGE CONTENT-->
 
 </div>
+<script>
+		jQuery(document).ready(function(){
+		    if (jQuery().datepicker) {
+	            $('.date-picker').datepicker({
+	            	format: 'yyyy-mm-dd',
+	            	language: 'zh-CN',
+	                rtl: App.isRTL(),
+	                autoclose: true
+	            });
+	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+	            
+           }
+		});
+		
+		function MM_over(mmObj) {
+			var mSubObj = mmObj.getElementsByTagName("div")[0];
+			mSubObj.style.display = "block";
+			mSubObj.style.backgroundColor = "pink";
+			mSubObj.style.opacity="100";
+		}
+		function MM_out(mmObj) {
+			var mSubObj = mmObj.getElementsByTagName("div")[0];
+			mSubObj.style.display = "none";
+			
+		}
+		
+		       
+		   $('#btn_time_query').click(function() {  
+			  // alert($('#begin_time').val()); 
+			  // alert($('#end_time').val()); 
+			  // alert(111);
+			   var begin_time = $('#begin_time').val();
+			   var end_time = $('#end_time').val();
+			   //var Did = $('#Did').var();
+			  //var cid = $(this).val();
+			   location.href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
+			  
+	        });
+</script> 
