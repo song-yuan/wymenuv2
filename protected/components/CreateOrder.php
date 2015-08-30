@@ -247,7 +247,7 @@ class CreateOrder
                                     'update_at'=>date('Y-m-d H:i:s',time()),
                                     'is_temp'=>$isTemp,
                                     'site_id'=>$site_id,
-                                    'status'=>'1',
+                                    'status'=>$orderStatus,
                                     'code'=>$code,
                                     'number'=>1,
                                     'delete_flag'=>'0'
@@ -309,6 +309,19 @@ class CreateOrder
                                 $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$dpid.' and t.site_id='.$site_id.' and t.is_temp='.$isTemp ;
                                 $criteria->order = ' t.lid desc ';
                                 $siteNo = SiteNo::model()->find($criteria);
+                                
+                                $siteNo->status=$orderStatus;
+                                $siteNo->update_at=date('Y-m-d H:i:s',time());
+                                $siteNo->save();
+                                
+                                if($isTemp=="0")
+                                {
+                                    $site=  Site::model()->find(" t.dpid=:dpid and t.lid=:siteid",array(':dpid'=>$siteNo->dpid,':siteid'=>$siteNo->site_id));
+                                    $site->status=$orderStatus;
+                                    $site->update_at=date('Y-m-d H:i:s',time());
+                                    $site->save();
+                                }
+                                
                                 if($orderModel){
                                         $orderId = $orderModel['lid'];
                                 }else{
@@ -502,6 +515,9 @@ class CreateOrder
 			}	
 			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
 			$db->createCommand($sql)->execute();
+                        
+//                        $sql = 'update nb_site_no set status='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
+//			$db->createCommand($sql)->execute();
 //			return json_encode(array('status'=>false,'msg'=>"test"));
 			//厨打
             if($orderId !='0')

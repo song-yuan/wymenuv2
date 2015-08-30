@@ -668,10 +668,10 @@ $(document).ready(function(){
 //                                }
                                 if(istemp=="1")
                                 {
-                                    alert(data.jobid);
+                                    //alert(data.jobid);
                                     printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
                                 }else{
-                                    alert(data.jobs);
+                                    //alert(data.jobs);
                                     $.each(data.jobs,function(skey,svalue){
                                         detaildata=svalue.split("_");
                                         printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[0],detaildata[1]);
