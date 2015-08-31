@@ -73,6 +73,7 @@
 				 
 						<!--foreach-->
 					<?php $a=1;?>
+						<?php if($models):?>
 						<!--  <?php foreach ($models as $model):?>   -->
 						
 						
@@ -90,6 +91,7 @@
 								</tr>
 						<?php $a++;?>
 						<!-- <?php endforeach;?>	  -->
+						<?php endif;?>
 						<!-- end foreach-->
 						
 						</tbody>
