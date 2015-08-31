@@ -245,7 +245,6 @@ class orderManagementController extends BackendController
 		$criteria->order = 't.close_day ASC' ;//排序条件
 		//$criteria->group = 't.payment_method_id,t.paytype,day(t.create_at)';
 		//$criteria->group = 't.paytype';
-		$criteria->distinct = TRUE; //是否唯一查询
 	
 		$pages = new CPagination(CloseAccount::model()->count($criteria));
 		//$pages->PageSize = 10;
