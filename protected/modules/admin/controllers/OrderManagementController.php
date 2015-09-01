@@ -251,6 +251,7 @@ class orderManagementController extends BackendController
 		$pages->applyLimit($criteria);
 	
 		$model=  CloseAccount::model()->findAll($criteria);
+                //var_dump($model);exit;
 		//var_dump($model);exit;
 		$this->render('accountStatement',array(
 				'models'=>$model,
