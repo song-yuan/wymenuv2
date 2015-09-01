@@ -37,20 +37,18 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','交接班');?></div>
 				<div class="actions">
                                     开始时间：
-                                    <select id="text" class="btn yellow" >
+                                    <select id="begintimelist" class="btn yellow" >
                                         <?php if(!empty($logintime)):
                                             foreach ($logintime as $lt):
                                         ?>
-                                        <option value="1" <?php if($lt["create_at"]==$begin_time) {echo 'selected="selected"';} ?> ><?php echo $lt["create_at"];?></option>
+                                        <option value="<?php echo $lt["create_at"];?>" <?php if($lt["create_at"]==$begin_time) {echo 'selected="selected"';} ?> ><?php echo $lt["create_at"];?></option>
 					<?php  endforeach;
                                             endif;
                                         ?>
                                     </select>
                                     结束时间：<span><?php echo $end_time; ?></span> 
 				</div>
-                                <div class="actions">                                                                            
-                                    <a id="order_list" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','查询');?></a>                                    
-                                </div>
+                                
 			 </div> 
 			
 				<div class="portlet-body" id="table-manage">
@@ -98,8 +96,8 @@
 					</table>
 					<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<a href="<?php echo $this->createUrl('login/logout');?>" data-method='post' class="btn red">交接班并退出</a>
-                                                                                        <a style="margin-left: 20px;" href="<?php echo $this->createUrl('login/logout');?>" data-method='post' class="btn red">直接退出</a>
+											<a id="shiftandout" class="btn red">交接班并退出</a>
+                                                                                        <a style="margin-left: 20px;" href="<?php echo $this->createUrl('login/logout');?>" class="btn red">直接退出</a>
 											<a style="margin-left: 20px;" href="<?php echo $this->createUrl('default/index', array('companyId' => $this->companyId));?>" class="btn default">返回</a>                              
 										</div>
 									</div>
@@ -114,5 +112,15 @@
 <!-- END PAGE -->
 
 <script>
-		
+ var url=window.location.href;
+ //alert(url+"/save/1");
+$("#begintimelist").change(function(){
+    //alert($(this).val());
+    location.href='<?php echo $this->createUrl('default/shiftlogout',array("companyId"=>$this->companyId));?>/begin_time/'+$(this).val();
+});
+
+$("#shiftandout").on("click",function(){
+    //alert($(this).val());
+    location.href=url+"/save/1";
+});
 </script> 

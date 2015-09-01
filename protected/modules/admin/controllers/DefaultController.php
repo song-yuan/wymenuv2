@@ -160,6 +160,7 @@ class DefaultController extends BackendController
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
                 $begin_time = Yii::app()->request->getParam('begin_time','0000-00-00 00:00:00');
+                $save= Yii::app()->request->getParam('save',"0");
                 $db = Yii::app()->db;
                 $userarr=  explode("_", Yii::app()->user->userId);
                 $sqllogintime='select create_at from nb_b_login where out_time="0000-00-00 00:00:00" and user_id ='.
@@ -170,10 +171,10 @@ class DefaultController extends BackendController
                     Yii::app()->user->logout();
                     //$this->redirect('index');
                 }
-//                if($begin_time="0000-00-00 00:00:00")
-//                {
-//                    $begin_time=$logintime[0]["create_at"];
-//                }
+                if($begin_time="0000-00-00 00:00:00")
+                {
+                    $begin_time=$logintime[0]["create_at"];
+                }
                 $end_time = date('Y-m-d H:i:s',time());
                 //var_dump($begin_time,$end_time);exit;
                 $sqlorder='select count(*) as ordernumber, sum(reality_total) as ordermoney from nb_order where order_status in (3,4,8) and dpid = "'.
@@ -188,6 +189,7 @@ class DefaultController extends BackendController
 //                $memberConsume=$db->createCommand($sqlmemberconsume)->queryScalar();
                 $sqlmemberconsume='select sum(pay_amount) from nb_order_pay where paytype =4 and dpid = "'.
                         $companyId.'" and update_at >="'.$begin_time.'" and update_at <="'.$end_time.'"';
+                //var_dump($sqlmemberconsume);exit;
                 $memberConsume=$db->createCommand($sqlmemberconsume)->queryScalar();
                 $sqlcash='select sum(pay_amount) from nb_order_pay where paytype =0 and dpid = "'.
                         $companyId.'" and update_at >="'.$begin_time.'" and update_at <="'.$end_time.'"';
@@ -195,18 +197,53 @@ class DefaultController extends BackendController
                 $sqlunion='select sum(pay_amount) from nb_order_pay where paytype =5 and dpid = "'.
                         $companyId.'" and update_at >="'.$begin_time.'" and update_at <="'.$end_time.'"';
                 $unionTotal=$db->createCommand($sqlunion)->queryScalar();
+                empty($orderdata['ordermoney'])?0:$orderdata['ordermoney'];
                 //($memberCharge,$memberConsume,$cashTotal,$sqlunion,$unionTotal);exit;
+                if($save=="1")
+                {
+                    //insert shift
+                    $se=new Sequence("shift_detail");
+                    $lid = $se->nextval(); 
+                    //$userarray= explode("_",Yii::app()->user->userId);
+                    $data = array(
+                        'lid'=>$lid,
+                        'dpid'=>$companyId,
+                        'create_at'=>date('Y-m-d H:i:s',time()),
+                        'update_at'=>date('Y-m-d H:i:s',time()),
+                        'userid'=>$userarr[0],
+                        'begin_time'=>$begin_time,
+                        'end_time'=>$end_time,
+                        'order_num'=>$orderdata['ordernumber'],
+                        'order_money'=>empty($orderdata['ordermoney'])?0:$orderdata['ordermoney'],
+                        'member_charge'=>empty($memberCharge)?0:$memberCharge,
+                        'member_consume'=>empty($memberConsume)?0:$memberConsume,
+                        'cash_total'=>empty($cashTotal)?0:$cashTotal,
+                        'union_total'=>empty($unionTotal)?0:$unionTotal,
+                        'weixin_total'=>0,
+                        'zhifubao_total'=>0,
+                        'other_total'=>0,
+                        'delete_flag'=>"0"
+                    );                            
+                    Yii::app()->db->createCommand()->insert('nb_shift_detail',$data);
+                    //update loginin
+                    $sqlloginup='update nb_b_login set out_time="'.$end_time.'" where out_time="0000-00-00 00:00:00" and user_id ='.
+                        $userarr[0].' and dpid='.$userarr[1];
+                    $db->createCommand($sqlloginup)->execute();
+                    
+                    //Yii::app()->user->logout();
+                    $this->redirect('/wymenuv2/admin/login');
+                }
                 $this->render('shiftlogout',array(
                                     'logintime' => $logintime,
                                     'begin_time' => $begin_time,
                                     'end_time' => $end_time,
                                     //'company_name'=>$companyName,
                                     'order_number'=>$orderdata['ordernumber'],
-                                    'order_money'=>$orderdata['ordermoney'],
-                                    'member_charge'=>$memberCharge,
-                                    'member_consume'=>$memberConsume,
-                                    'cash_total'=>$cashTotal,
-                                    'union_total'=>$unionTotal
+                                    'order_money'=>empty($orderdata['ordermoney'])?0:$orderdata['ordermoney'],
+                                    'member_charge'=>empty($memberCharge)?0:$memberCharge,
+                                    'member_consume'=>empty($memberConsume)?0:$memberConsume,
+                                    'cash_total'=>empty($cashTotal)?0:$cashTotal,
+                                    'union_total'=>empty($unionTotal)?0:$unionTotal
 //                                    'weixin_total'=>$weixinTotal,
 //                                    'zhifubao_total'=>$zhifubaoTotal,
 //                                    ''
