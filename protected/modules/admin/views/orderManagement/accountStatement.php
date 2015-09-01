@@ -83,7 +83,7 @@
 								
 								<td><?php echo $model->close_day;?></td>
 								<td><?php echo Helper::getCompanyName($this->companyId);?> </td>
-								<td><?php echo $model->user->username;?></td>								
+								<td><?php if(!empty($model->user->username)) echo $model->user->username;?></td>								
 								<td><?php echo $model->all_money;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('orderManagement/detail',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','明细');?></a>
