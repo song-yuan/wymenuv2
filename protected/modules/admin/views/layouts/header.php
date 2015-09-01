@@ -134,7 +134,7 @@
                                                     <a href="javascript:;" ><i class="fa fa-key"></i> <?php echo yii::t('app','锁定屏幕');?></a>
 						</li>
 						<li id="shift_logout">
-                                                    <a href="<?php echo $this->createUrl('default/shiftlogout');?>" ><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>
+                                                    <a href="<?php echo $this->createUrl('default/shiftlogout',array("companyId"=>$this->companyId));?>" ><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>
                                                     <!--<a href="<?php echo $this->createUrl('login/logout');?>" ><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>-->
 						</li>
 					</ul>

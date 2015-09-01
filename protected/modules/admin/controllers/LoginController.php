@@ -29,6 +29,20 @@ class LoginController extends BackendController
 			//var_dump($model);exit;
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login()) {
+                                //insert into nb_b_login
+                                //echo Yii::app()->user->userId;
+                                $se=new Sequence("b_login");
+                                $lid = $se->nextval(); 
+                                $userarray= explode("_",Yii::app()->user->userId);
+                                $data = array(
+                                    'lid'=>$lid,
+                                    'dpid'=>$userarray[1],
+                                    'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'update_at'=>date('Y-m-d H:i:s',time()),
+                                    'user_id'=>$userarray[0],
+                                    'out_time'=>"0000-00-00 00:00:00"                                    
+                                );                            
+                                Yii::app()->db->createCommand()->insert('nb_b_login',$data);
 				$this->redirect(array('default/index/companyId/'.Yii::app()->user->companyId));
 			}
 		}

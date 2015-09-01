@@ -49,7 +49,7 @@ class CloseAccount extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-				'user' => array(self::BELONGS_TO , 'User' ,'', 'on'=>'t.dpid=user.dpip and t.user_id=user.lid'),
+				'user' => array(self::BELONGS_TO , 'User' ,'', 'on'=>'t.dpid=user.dpid and t.user_id=user.lid'),
 		);
 	}
 
