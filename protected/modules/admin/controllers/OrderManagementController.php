@@ -59,22 +59,54 @@ class orderManagementController extends BackendController
 	}
 	
 	public function actionRefund(){
-		$model = new Printer() ;//新建数据库表！！！
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$orderID = Yii::app()->request->getParam('orderID');
+		
+		$model = new OrderPay;//新建数据库表！！！
 		$model->dpid = $this->companyId ;
-	
+		
+		$order = Order::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$orderID,':dpid'=>$this->companyId));
+		if(!$order){
+			Yii::app()->user->setFlash('success' , yii::t('app','无法查询到该订单!'));
+			$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
+		}
+		
 		if(Yii::app()->request->isPostRequest) {
-			//$model->attributes = Yii::app()->request->getPost('Printer');
-			$se=new Sequence("refund");
-			$model->lid = $se->nextval();
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->delete_flag = '0';
-			if($model->save()) {
-				Yii::app()->user->setFlash('success' , yii::t('app','退款成功'));
-				$this->redirect(array('orderManagement/refund','companyId' => $this->companyId));
-			}
+			$postData = Yii::app()->request->getPost('OrderPay');
+			
+			 $model->attributes = $postData;
+			 $transaction = Yii::app()->db->beginTransaction();
+			try {
+				$pay_amount = -abs($postData['pay_amount']);
+				$order->reality_total = $order->reality_total + $pay_amount;
+				if($order->reality_total < 0){
+					Yii::app()->user->setFlash('success' , yii::t('app','退款失败,退款金额大于订单金额!'));
+					$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
+				}
+				$order->update();
+				
+				$model->pay_amount = $pay_amount;
+				$se=new Sequence("order_pay");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->delete_flag = '0';
+				if($model->save()) {
+					Yii::app()->user->setFlash('success' , yii::t('app','退款成功'));
+					$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
+				}
+			     $transaction->commit(); //提交事务会真正的执行数据库操作
+			} catch (Exception $e) {
+				$transaction->rollback(); //如果操作失败, 数据回滚
+				 echo json_encode(array('msg'=>yii::t('app','失败')));
+			}      
 		}
 		$this->render('refund' , array(
-				'model' => $model
+				'model' => $model,
+				'orderId'=>$orderID,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
 		));
 	}
 

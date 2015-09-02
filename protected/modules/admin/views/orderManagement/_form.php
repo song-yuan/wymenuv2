@@ -6,9 +6,6 @@
 										'enctype' => 'multipart/form-data'
 									),
 							));
-							$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
-							$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-							$orderID = Yii::app()->request->getParam('orderID');
 							
 							?>
 								<div class="form-body">
@@ -17,44 +14,41 @@
 									<?php echo $form->label($model, '退款订单号',array('class' => 'col-md-3 control-label'));?>
 									<div class="col-md-4">
 									       <?php echo $form->label($model,$orderID,array('class' =>'form-control'));?>
-									
-								<!--		<?php echo $form->textField($model, 'name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('name')));?>
-										<?php echo $form->error($model, 'name' )?>
-								-->		
+									       <input type="hidden" name="OrderPay[order_id]" value="<?php echo $orderID;?>" />
 									</div>
 								</div>
-                                                                        <div class="form-group">
-										<?php echo $form->label($model, '退款菜品',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-									 				<?php echo $form->dropDownList($model, 'language', array('1' => yii::t('app','小鸡炖蘑菇') , '2' => yii::t('app','鲤鱼跃龙门')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('language')));?>
-													<?php echo $form->error($model, 'language' )?>
-										<!-- 	<?php echo $form->textField($model, 'address',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('address')));?>
-											<?php echo $form->error($model, 'address' )?>
-										 -->
-										</div>
+								<div class="form-group">
+									<label class="col-md-3 control-label">退款类型</label>
+									<div class="col-md-9">
+									<div class="radio-list">
+										<label class="radio-inline">
+										<input type="radio" name="OrderPay[paytype]" value="0" <?php if(!$model->type) echo 'checked';?>> 现金支付
+										</label>
+										<label class="radio-inline">
+										<input type="radio" name="OrderPay[paytype]" value="1" <?php if($model->type) echo 'checked';?>> 微信支付
+										</label>
+										<label class="radio-inline">
+										<input type="radio" name="OrderPay[paytype]" value="2" <?php if($model->type) echo 'checked';?>> 支付宝支付
+										</label>
+										<label class="radio-inline">
+										<input type="radio" name="OrderPay[paytype]" value="3" <?php if($model->type) echo 'checked';?>> 后台手动支付
+										</label>
+										<label class="radio-inline">
+										<input type="radio" name="OrderPay[paytype]" value="4" <?php if($model->type) echo 'checked';?>> 会员卡
+										</label>
+										<label class="radio-inline">
+										<input type="radio" name="OrderPay[paytype]" value="5" <?php if($model->type) echo 'checked';?>> 银联
+										</label>
 									</div>
-                                                                        <div class="form-group">
-										<?php echo $form->label($model, '退款理由',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'language', array('1' => yii::t('app','上菜太慢') , '2' => yii::t('app','有异物')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('language')));?>
-											<?php echo $form->error($model, 'language' )?>
-										</div>
 									</div>
-                                                                        <div class="form-group">
+								</div>
+                                <div class="form-group">
 										<?php echo $form->label($model, '退款金额',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'printer_type', array('0' => yii::t('app','88.00') , '1' => yii::t('app','随便')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('printer_type')));?>
-											<?php echo $form->error($model, 'printer_type' )?>
+											<?php echo $form->dropDownList($model, 'pay_amount', array('0' => yii::t('app','88.00') , '1' => yii::t('app','随便')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('printer_type')));?>
+											<?php echo $form->error($model, 'pay_amount' )?>
 										</div>
 									</div>
-								<!-- <div class="form-group">
-										<?php echo $form->label($model, 'brand',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->textField($model, 'brand',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('brand')));?>
-											<?php echo $form->error($model, 'brand' )?>
-										</div>
-									</div>
-                                 -->	                                    
 									<div class="form-group">
 										<?php echo $form->label($model, 'remark',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
