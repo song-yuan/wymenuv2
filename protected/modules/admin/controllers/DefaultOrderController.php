@@ -1353,6 +1353,8 @@ class DefaultOrderController extends BackendController
         public function actionAddRetreat() {
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $orderDetailId=Yii::app()->request->getParam('orderDetailId','0');
+                
+               
                 $orderRetreat = new OrderRetreat();
                 $orderRetreat->order_detail_id = $orderDetailId;
                 $orderRetreat->dpid = $companyId;
@@ -1361,15 +1363,25 @@ class DefaultOrderController extends BackendController
                 
 		if(Yii::app()->request->isPostRequest){
                     Until::validOperate($companyId, $this);
-                    $orderRetreat->attributes = Yii::app()->request->getPost('OrderRetreat');
-                    $orderRetreat->create_at = date('Y-m-d H:i:s',time());
-                    $se=new Sequence("order_retreat");
-                    $orderRetreat->lid = $se->nextval();
-                    if($orderRetreat->save()){                                
-                        echo json_encode(array('msg'=>yii::t('app','成功')));
-                    }else{
-                        echo json_encode(array('msg'=>yii::t('app','失败')));
-                    }                    
+                    $orderDetail = OrderProduct::model()->find('dpid=:dpid and lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));
+                    $transaction = Yii::app()->db->beginTransaction();
+					try {
+						$orderDetail->is_retreat = 1;
+						$orderDetail->update();
+	                    $orderRetreat->attributes = Yii::app()->request->getPost('OrderRetreat');
+	                    $orderRetreat->create_at = date('Y-m-d H:i:s',time());
+	                    $se=new Sequence("order_retreat");
+	                    $orderRetreat->lid = $se->nextval();
+	                    if($orderRetreat->save()){                                
+	                        echo json_encode(array('msg'=>yii::t('app','成功')));
+	                    }else{
+	                        echo json_encode(array('msg'=>yii::t('app','失败')));
+	                    }
+	                    $transaction->commit(); //提交事务会真正的执行数据库操作
+					} catch (Exception $e) {
+						$transaction->rollback(); //如果操作失败, 数据回滚
+						 echo json_encode(array('msg'=>yii::t('app','失败')));
+					}                    
                     return;
                 }                
                 $this->renderPartial('addretreat' , array(
