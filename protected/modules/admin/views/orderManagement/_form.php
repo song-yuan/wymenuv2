@@ -25,15 +25,6 @@
 										<input type="radio" name="OrderPay[paytype]" value="0" <?php if(!$model->paytype) echo 'checked';?>> 现金支付
 										</label>
 										<label class="radio-inline">
-										<input type="radio" name="OrderPay[paytype]" value="1" <?php if($model->paytype) echo 'checked';?>> 微信支付
-										</label>
-										<label class="radio-inline">
-										<input type="radio" name="OrderPay[paytype]" value="2" <?php if($model->paytype) echo 'checked';?>> 支付宝支付
-										</label>
-										<label class="radio-inline">
-										<input type="radio" name="OrderPay[paytype]" value="3" <?php if($model->paytype) echo 'checked';?>> 后台手动支付
-										</label>
-										<label class="radio-inline">
 										<input type="radio" name="OrderPay[paytype]" value="4" <?php if($model->paytype) echo 'checked';?>> 会员卡
 										</label>
 										<label class="radio-inline">
