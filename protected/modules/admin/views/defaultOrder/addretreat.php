@@ -16,7 +16,6 @@
                                                         
                                                 </div>
                                                 <div class="modal-body">
-                                                        <div class="form-actions fluid" id="product_panel">
                                                                 <div class="form-group" <?php if($orderRetreat->hasErrors('retreat_id')) echo 'has-error';?>>
                                                                         <?php echo $form->label($orderRetreat, 'retreat_id',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">											
@@ -28,19 +27,19 @@
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderRetreat, 'retreat_memo',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
-                                                                                <?php echo $form->textField($orderRetreat, 'retreat_memo' ,array('class' => 'form-control','placeholder'=>$orderRetreat->getAttributeLabel('retreat_memo')));?>
+                                                                                <?php echo $form->textArea($orderRetreat, 'retreat_memo' ,array('class' => 'form-control','placeholder'=>$orderRetreat->getAttributeLabel('retreat_memo')));?>
                                                                                 <?php echo $form->error($orderRetreat, 'retreat_memo' )?>
                                                                         </div>
                                                                 </div>
                                                                 
-                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
+                                                        <?php echo yii::t('app','<!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠-->');?>
                                                 </div>
                                                 
                                                 <?php echo $form->hiddenField($orderRetreat,'order_detail_id',array('class'=>'form-control')); ?>
                                                 
                                                 <div class="modal-footer">
                                                         <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
-                                                        <input type="button" class="btn green" id="create_btn_add_retreat" value="<?php echo yii::t('app','确 定');?>">
+                                                        <input type="button" class="btn green" id="" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>

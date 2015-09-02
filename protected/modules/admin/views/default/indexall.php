@@ -360,7 +360,7 @@
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteIds"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteMemo"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;" id="spanProductName">菜品名称</span>
-                               <!--     <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">-->
+                                   <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">
                                <!--     <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-reprint" value="<?php echo yii::t('app','厨打');?>">-->
                                 </div>
                                 <div style="float:left;width:65%;">
@@ -1262,10 +1262,16 @@
                     alert("还没有下单、直接删除就行！");
                     return false
                 }    
-                alert(lid);//不能刷新orderPartial，手动改变状态
+//                alert(lid);//不能刷新orderPartial，手动改变状态
                 var $modal=$('#portlet-config');
-                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+lid
+//                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+lid
+//                    ,'', function(){
+//                      $modal.modal();
+//                });
+				  $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addRetreat',array('companyId'=>$this->companyId));?>/id/'+lid
                     ,'', function(){
+                      layer.close(layer_index1);
+                 	  layer_index1=0;
                       $modal.modal();
                 });
              });
