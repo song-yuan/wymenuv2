@@ -42,11 +42,16 @@
 									</div>
 									</div>
 								</div>
+								<div class="form-group">
+										<?php echo $form->label($model, '订单金额',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<input type="text" class="form-control"  value="<?php echo $order->reality_total;?>"/>
+										</div>
+									</div>
                                 <div class="form-group">
 										<?php echo $form->label($model, '退款金额',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'pay_amount', array('0' => yii::t('app','88.00') , '1' => yii::t('app','随便')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('printer_type')));?>
-											<?php echo $form->error($model, 'pay_amount' )?>
+											<input type="text" class="form-control" name="OrderPay[pay_amount]" value=""/>
 										</div>
 									</div>
 									<div class="form-group">
