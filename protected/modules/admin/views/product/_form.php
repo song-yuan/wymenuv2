@@ -58,10 +58,10 @@
 										</div>
 									</div>
                                                                         <div class="form-group">
-										<?php echo $form->label($model, 'is_member_discount',array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, 'is_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_member_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_member_discount')));?>
-											<?php echo $form->error($model, 'is_member_discount' )?>
+											<?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_discount')));?>
+											<?php echo $form->error($model, 'is_discount' )?>
 										</div>
 									</div>
                                                                         <div class="form-group">

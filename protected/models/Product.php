@@ -100,7 +100,7 @@ class Product extends CActiveRecord
 			'is_temp_price' =>yii::t('app', '是否时价菜'),
 			'is_member_discount' =>yii::t('app', '是否参与会员折扣'),
 			'is_special' =>yii::t('app', '是否特价菜'),
-			'is_discount' =>yii::t('app', '是否参与优惠活动'),
+			'is_discount' =>yii::t('app', '是否折扣'),
 			'status' =>yii::t('app', '状态'),
 			'original_price' =>yii::t('app', '价格'),
 			'product_unit' =>yii::t('app', '默认单位'),

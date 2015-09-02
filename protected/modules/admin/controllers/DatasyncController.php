@@ -365,7 +365,8 @@ class DatasyncController extends Controller
                                 echo $ex->getMessage();
                                 $transactionspecial->rollback();
                                 $isallcloudsuccess=0;
-                                continue;
+                                break;
+                                //continue;
                                 //exit;
                             }
                         }
@@ -393,7 +394,8 @@ class DatasyncController extends Controller
                             echo $ex->getMessage();
                             $transactionlocal->rollback();
                             $isallcloudsuccess=0;
-                            continue;
+                            break;
+                            //continue;
                             //exit;
                         }
                     }
@@ -431,7 +433,8 @@ class DatasyncController extends Controller
                         } catch (Exception $ex) {
                             $transactioncloud->rollback();
                             $isalllocalsuccess=0;
-                            continue;
+                            break;
+                            //continue;
                         }
                     }
                 }
@@ -440,11 +443,11 @@ class DatasyncController extends Controller
                 //更新dataSync同步记录为成功状态，
                 echo "all success;"."<br>";
                 $sqlsuccess = "update nb_data_sync set sync_result='1' where dpid=".$dpid." and lid=".$lid;                    
-                if($isalllocalsuccess)
+                if($isalllocalsuccess==1)
                 {
                     $localtime= $dblocal->createCommand($sqlsuccess)->execute();
                 }
-                if($isallcloudsuccess)
+                if($isallcloudsuccess==1)
                 {
                     $cloudtime= $dbcloud->createCommand($sqlsuccess)->execute();                    
                 }

@@ -190,6 +190,16 @@ class OrderProduct extends CActiveRecord
 		$ret= $db->createCommand($sql)->queryScalar();
                 return empty($ret)?0:$ret;
 	}
+        
+        static public function getDisTotal($orderId,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select sum(t.price*(IF(t.weight>0,t.weight,t.amount))) as total from nb_order_product t"
+                        ." left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid"
+                        . " where t.delete_flag=0 and t1.is_discount=1 and t.product_order_status=1 and t.is_giving=0 and t.is_retreat=0 and t.order_id=".$orderId." and t.dpid=".$dpid;
+		$ret= $db->createCommand($sql)->queryScalar();
+                return empty($ret)?0:$ret;
+	}
+        
        static public function getTaste($orderId,$dpid,$isorder){
 		$db = Yii::app()->db;
 		$sql = "select t.*,t1.order_id from nb_taste t"
