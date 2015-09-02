@@ -360,7 +360,7 @@
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteIds"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteMemo"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;" id="spanProductName">菜品名称</span>
-                               <!--     <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">-->
+                                   <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">
                                <!--     <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-reprint" value="<?php echo yii::t('app','厨打');?>">-->
                                 </div>
                                 <div style="float:left;width:65%;">
