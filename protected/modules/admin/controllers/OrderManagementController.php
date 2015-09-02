@@ -84,14 +84,14 @@ class orderManagementController extends BackendController
 					Yii::app()->user->setFlash('success' , yii::t('app','退款失败,退款金额大于订单金额!'));
 					$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
 				}
-				$order->update();
-				
+				var_dump($order->update());
 				$model->pay_amount = $pay_amount;
 				$se=new Sequence("order_pay");
 				$model->lid = $se->nextval();
 				$model->create_at = date('Y-m-d H:i:s',time());
 				$model->update_at = date('Y-m-d H:i:s',time());
 				$model->delete_flag = '0';
+				var_dump($model->save());exit;
 				if($model->save()) {
 					Yii::app()->user->setFlash('success' , yii::t('app','退款成功'));
 					$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
@@ -99,7 +99,7 @@ class orderManagementController extends BackendController
 			     $transaction->commit(); //提交事务会真正的执行数据库操作
 			} catch (Exception $e) {
 				$transaction->rollback(); //如果操作失败, 数据回滚
-				 echo json_encode(array('msg'=>yii::t('app','失败')));
+				 Yii::app()->user->setFlash('error' , yii::t('app','退款失败'));
 			}      
 		}
 		$this->render('refund' , array(
