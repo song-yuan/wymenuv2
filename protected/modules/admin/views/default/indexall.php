@@ -1260,10 +1260,15 @@
                     alert("还没有下单、直接删除就行！");
                     return false
                 }    
-                alert(lid);//不能刷新orderPartial，手动改变状态
+//                alert(lid);//不能刷新orderPartial，手动改变状态
                 var $modal=$('#portlet-config');
-                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+lid
+//                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+lid
+//                    ,'', function(){
+//                      $modal.modal();
+//                });
+				  $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addRetreat',array('companyId'=>$this->companyId));?>/id/'+lid
                     ,'', function(){
+                      layer.close(layer_index1);
                       $modal.modal();
                 });
              });

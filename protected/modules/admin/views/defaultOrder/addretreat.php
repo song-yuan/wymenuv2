@@ -28,7 +28,7 @@
                                                                 <div class="form-group">
                                                                         <?php echo $form->label($orderRetreat, 'retreat_memo',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">
-                                                                                <?php echo $form->textField($orderRetreat, 'retreat_memo' ,array('class' => 'form-control','placeholder'=>$orderRetreat->getAttributeLabel('retreat_memo')));?>
+                                                                                <?php echo $form->textArea($orderRetreat, 'retreat_memo' ,array('class' => 'form-control','placeholder'=>$orderRetreat->getAttributeLabel('retreat_memo')));?>
                                                                                 <?php echo $form->error($orderRetreat, 'retreat_memo' )?>
                                                                         </div>
                                                                 </div>
@@ -40,7 +40,7 @@
                                                 
                                                 <div class="modal-footer">
                                                         <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
-                                                        <input type="button" class="btn green" id="create_btn_add_retreat" value="<?php echo yii::t('app','确 定');?>">
+                                                        <input type="button" class="btn green" id="" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
                                                 <?php $this->endWidget(); ?>
