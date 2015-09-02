@@ -66,7 +66,7 @@
                                                                 <th><?php echo yii::t('app','星级');?></th>
                                                                 <th><?php echo yii::t('app','点单数');?></th>
                                                                 <th><?php echo yii::t('app','点赞数');?></th>
-								<th><?php echo yii::t('app','会员折扣');?></th>
+								<th><?php echo yii::t('app','是否折扣');?></th>
                                                                 <th><?php echo yii::t('app','是否配菜');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -86,7 +86,7 @@
                                                                 <td ><?php echo $model->rank;?></td>
                                                                 <td ><?php echo $model->order_number;?></td>
                                                                 <td ><?php echo $model->favourite_number;?></td>
-								<td ><?php echo $model->is_member_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
+								<td ><?php echo $model->is_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
                                                                 <td ><?php echo $model->is_show=='0'?yii::t('app','是'):yii::t('app','否');?></td>
                                                                 
 								<td class="center">

@@ -1,5 +1,6 @@
 	<!-- BEGIN PAGE -->  
         <ul class="selectProduct" orderid="<?php echo $model->lid; ?>">
+            <input type="hidden" value="<?php echo $productDisTotal; ?>" id="productDisTotal">
             <span id="order_status" orderStatus="<?php echo $model->order_status; ?>">
                                         *<?php echo $model->create_at;?></span>
             <li lid="0000000000" class="selectProductA">                                    
