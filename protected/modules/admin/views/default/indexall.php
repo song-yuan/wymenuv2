@@ -341,7 +341,7 @@
                             <ul orderid="0000000000" class="selectProduct">
                                 <span id="order_create_at">2004/12/12 12:00:00</span>
                                 <li lid="0000000000" class="selectProductA">                                    
-                                        已付<span id="order_should_pay">0</span>元/应付<span id="order_reality_pay">0</span>元
+                                        已付<span id="order_reality_pay">0</span>元/应付<span id="order_should_pay">0</span>元
                                 </li>    
                             </ul>
                             全单设定：
@@ -957,9 +957,11 @@
                 //设置总额
                 var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
                 $("#payOriginAccount").text(payOriginAccount);
+                var productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                 var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                 var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                //alert(payOriginAccount);alert(productDisTotal);alert(payDiscountAccount);alert(payMinusAccount);
+                $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+ productDisTotal*payDiscountAccount/100 - payMinusAccount).toFixed(2));
                 if(layer_index2!=0)
                 {
                     return;
@@ -1288,6 +1290,7 @@
             $('#cancel_zero').on(event_clicktouchstart,function(){
                 var payRealityAccount=$("#payRealityAccount").text();
                 var payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                var productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                 var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                 var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                 var payShouldAccount=$("#payShouldAccount").text();                        
@@ -1295,7 +1298,7 @@
                 if($(this).hasClass("edit_span_select_zero"))
                 {
                     $(this).removeClass("edit_span_select_zero");
-                    $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                    $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount).toFixed(2));
                     
                 }else{
                     $(this).addClass("edit_span_select_zero");
@@ -1328,6 +1331,7 @@
                 var selectid=$(".edit_span_select").attr("selectid");
                 var payOriginAccount=$("#payOriginAccount").text();
                 var payDiscountAccount=$("#payDiscountAccount").text();
+                var productDisTotal=$("#productDisTotal").val();
                 var payMinusAccount=$("#payMinusAccount").text();
                 var cancel_zero=$("#cancel_zero").hasClass("edit_span_select_zero");
                 var payShouldAccount=$("#payShouldAccount").text();
@@ -1348,9 +1352,11 @@
                         $("#payDiscountAccount").text(payDiscountAccount+"%");
                         $("#payMinusAccount").text("0.00");
                         payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                        productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                         payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                         payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                        $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                        //payOriginAccount*payDiscountAccount/100 productDisTotal*payDiscountAccount/100
+                        $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount).toFixed(2));
                         if(cancel_zero)
                         {
                             payShouldAccount=$("#payShouldAccount").text();
@@ -1390,7 +1396,7 @@
                     payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
                     payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                     payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                    var shouldpaytemp=payOriginAccount*payDiscountAccount/100 - payMinusAccount;
+                    var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount;
                     if(shouldpaytemp>0)
                     {
                         $("#payShouldAccount").text(shouldpaytemp.toFixed(2));
@@ -1635,6 +1641,7 @@
             $('#pay_clearone').on(event_clicktouchstart,function(){
                 var selectid=$(".edit_span_select").attr("selectid");
                 var payOriginAccount=$("#payOriginAccount").text();
+                var productDisTotal=$("#productDisTotal").val();
                 var payDiscountAccount=$("#payDiscountAccount").text();
                 var payMinusAccount=$("#payMinusAccount").text();
                 var cancel_zero=$("#cancel_zero").hasClass("edit_span_select_zero");
@@ -1657,9 +1664,10 @@
                     }
                     $("#payDiscountAccount").text("100%");
                     payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                    productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                     payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                     payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                    var shouldpaytemp=payOriginAccount*payDiscountAccount/100 - payMinusAccount;
+                    var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount;
                     if(shouldpaytemp>0)
                     {
                         $("#payShouldAccount").text(shouldpaytemp.toFixed(2));
@@ -1730,6 +1738,7 @@
             $('#pay_clearall').on(event_clicktouchstart,function(){
                 var selectid=$(".edit_span_select").attr("selectid");
                 var payOriginAccount=$("#payOriginAccount").text();
+                var productDisTotal=$("#productDisTotal").val();
                 var payDiscountAccount=$("#payDiscountAccount").text();
                 var payMinusAccount=$("#payMinusAccount").text();
                 var cancel_zero=$("#cancel_zero").hasClass("edit_span_select_zero");
@@ -1744,9 +1753,10 @@
                     
                         $("#payDiscountAccount").text("100%");
                         payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                        productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                         payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                         payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                        $("#payShouldAccount").text((payOriginAccount*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                        $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount).toFixed(2));
                         if(cancel_zero)
                         {
                             payShouldAccount=$("#payShouldAccount").text();
@@ -1766,9 +1776,10 @@
                     $("#payMinusAccount").text("0.00");
                     //$("#payDiscountAccount").text("100%");
                     payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                    productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                     payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                     payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                    var shouldpaytemp=payOriginAccount*payDiscountAccount/100 - payMinusAccount;
+                    var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount;
                     if(shouldpaytemp>0)
                     {
                         $("#payShouldAccount").text(shouldpaytemp.toFixed(2));

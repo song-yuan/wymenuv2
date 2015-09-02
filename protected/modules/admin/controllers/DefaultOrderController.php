@@ -178,6 +178,7 @@ class DefaultOrderController extends BackendController
                 }
                 //var_dump($tasteidsOrderProducts);exit;
                 $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                $productDisTotal = OrderProduct::getDisTotal($order->lid,$order->dpid);
                 //var_dump($productTotal);exit;
                 if($siteNo->is_temp=='1')
                 {
@@ -201,6 +202,7 @@ class DefaultOrderController extends BackendController
                                 'allOrderProductTastes'=>$allOrderProductTastes,
                                 //'orderProduct' => $orderProduct,
 				'productTotal' => $productTotal ,
+                                'productDisTotal'=>$productDisTotal,
 				'total' => $total,
 				//'paymentMethods'=>$paymentMethods,
                                 'typeId' => $typeId,
