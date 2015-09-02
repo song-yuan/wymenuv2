@@ -365,7 +365,7 @@ class DatasyncController extends Controller
                                 echo $ex->getMessage();
                                 $transactionspecial->rollback();
                                 $isallcloudsuccess=0;
-                                break;
+                                //break;
                                 //continue;
                                 //exit;
                             }
@@ -394,7 +394,7 @@ class DatasyncController extends Controller
                             echo $ex->getMessage();
                             $transactionlocal->rollback();
                             $isallcloudsuccess=0;
-                            break;
+                            //break;
                             //continue;
                             //exit;
                         }
@@ -433,7 +433,7 @@ class DatasyncController extends Controller
                         } catch (Exception $ex) {
                             $transactioncloud->rollback();
                             $isalllocalsuccess=0;
-                            break;
+                            //break;
                             //continue;
                         }
                     }
