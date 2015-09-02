@@ -104,6 +104,7 @@ class orderManagementController extends BackendController
 		}
 		$this->render('refund' , array(
 				'model' => $model,
+				'order'=>$order,
 				'orderId'=>$orderId,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
