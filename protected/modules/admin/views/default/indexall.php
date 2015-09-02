@@ -960,7 +960,7 @@
                 var productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                 var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                 var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                alert(payOriginAccount);alert(productDisTotal);alert(payDiscountAccount);alert(payMinusAccount);
+                //alert(payOriginAccount);alert(productDisTotal);alert(payDiscountAccount);alert(payMinusAccount);
                 $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+ productDisTotal*payDiscountAccount/100 - payMinusAccount).toFixed(2));
                 if(layer_index2!=0)
                 {
