@@ -412,6 +412,7 @@ class Helper
 		}
 		array_push($listData,str_pad('',48,'-'));
 		array_push($listData,str_pad(yii::t('app','合计：').$order->reality_total , 24,' ').str_pad(yii::t('app','时间：').time(),24,' '));
+                array_push($listData,str_pad(yii::t('app','服务员：').$order->username , 48,' '));
 		//前面加 barcode
                 $precode="1D6B450B".  strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".  strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 //后面加切纸
@@ -488,20 +489,19 @@ class Helper
                 {
                     //array_push($listData,str_pad(yii::t('app','应付：').number_format($order->should_total,0) , 26,' ').str_pad(date('Y-m-d H:i:s',time()),20,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,0));
-                    array_push($listData,"br");
-                    array_push($listData,"00".date('Y-m-d H:i:s',time()));                    
-                    array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
+                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,0));                    
                 }else{
                     //array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
                     //array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
                     //        .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,2));
-                    array_push($listData,"br");
-                    array_push($listData,"00".date('Y-m-d H:i:s',time()));                    
-                    array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
+                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,2));                    
                 }
+                array_push($listData,"br");
+                array_push($listData,"00".$oder->username);
+                array_push($listData,"00"."   ".date('Y-m-d H:i:s',time()));
+                array_push($listData,"br");
+                array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
                 $precode=$cprecode;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";                        
@@ -572,7 +572,7 @@ class Helper
 		array_push($listData,"br");
 		array_push($listData,"00".str_pad('',48,'-'));                
 		
-		array_push($listData,"00".date('Y-m-d H:i:s',time()));                    
+		array_push($listData,"00".$order->username."    ".date('Y-m-d H:i:s',time()));                    
                 //array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
                  
                 $precode=$cprecode;
@@ -713,7 +713,7 @@ class Helper
                             array_push($listData,"00".str_pad('',48,'-'));
                         }
                         
-                        array_push($listData,"00".yii::t('app','操作员：').Yii::app()->user->name
+                        array_push($listData,"00".yii::t('app','操作员：').$order->username //Yii::app()->user->name
                                 .date('Y-m-d H:i:s',time()));
                         $precode="";
                         //后面加切纸
@@ -849,7 +849,7 @@ class Helper
                        // }
                        // array_push($listData,$strAllTaste);
                         array_push($listData,"00".str_pad('',48,'-'));
-                        array_push($listData,"00".yii::t('app','操作员：').Yii::app()->user->name
+                        array_push($listData,"00".yii::t('app','操作员：').$order->username
                                 ."  ".date('Y-m-d H:i:s',time()));
                         $precode="";
                         //后面加切纸
@@ -1019,7 +1019,7 @@ class Helper
                                         array_push($listData,"00".str_pad('',48,'-'));
                                     }
 
-                                    array_push($listData,"00".yii::t('app','操作员：').Yii::app()->user->name."  "
+                                    array_push($listData,"00".yii::t('app','操作员：').$order->username."  "//Yii::app()->user->name."  "
                                             .date('Y-m-d H:i:s',time()));
                                     $precode="";
                                     //后面加切纸
@@ -1098,7 +1098,7 @@ class Helper
                                         array_push($listDataTail,"00".str_pad('',48,'-'));
                                     }
 
-                                    array_push($listDataTail,"00".yii::t('app','操作员：').Yii::app()->user->name."  "
+                                    array_push($listDataTail,"00".yii::t('app','操作员：').$order->username."  "//Yii::app()->user->name."  "
                                             .date('Y-m-d H:i:s',time()));
                                     //生成body并打印
                                     $productids="";
