@@ -73,6 +73,7 @@
 				 
 						<!--foreach-->
 					<?php $a=1;?>
+						<?php if($models):?>
 						<!--  <?php foreach ($models as $model):?>   -->
 						
 						
@@ -82,7 +83,7 @@
 								
 								<td><?php echo $model->close_day;?></td>
 								<td><?php echo Helper::getCompanyName($this->companyId);?> </td>
-								<td><?php echo $model->user->username;?></td>								
+								<td><?php if(!empty($model->user->username)) echo $model->user->username;?></td>								
 								<td><?php echo $model->all_money;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('orderManagement/detail',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','明细');?></a>
@@ -90,6 +91,7 @@
 								</tr>
 						<?php $a++;?>
 						<!-- <?php endforeach;?>	  -->
+						<?php endif;?>
 						<!-- end foreach-->
 						
 						</tbody>
@@ -149,30 +151,12 @@
 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
 	            
            }
-		});
-		
-		function MM_over(mmObj) {
-			var mSubObj = mmObj.getElementsByTagName("div")[0];
-			mSubObj.style.display = "block";
-			mSubObj.style.backgroundColor = "pink";
-			mSubObj.style.opacity="100";
-		}
-		function MM_out(mmObj) {
-			var mSubObj = mmObj.getElementsByTagName("div")[0];
-			mSubObj.style.display = "none";
-			
-		}
-		
-		       
-		   $('#btn_time_query').click(function() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
+           $('#btn_time_query').click(function() {  
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   //var Did = $('#Did').var();
-			  //var cid = $(this).val();
 			   location.href="<?php echo $this->createUrl('orderManagement/accountstatement' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
 			  
 	        });
+		});
+		
 </script> 

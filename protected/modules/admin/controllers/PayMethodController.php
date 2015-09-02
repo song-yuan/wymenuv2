@@ -34,8 +34,9 @@ class PayMethodController extends BackendController {
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PaymentMethod');
 			$se=new Sequence("payment_method");
-            $model->lid = $se->nextval();
+                        $model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s');
+                        $model->update_at=date('Y-m-d H:i:s',time());
 //			var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
@@ -48,8 +49,10 @@ class PayMethodController extends BackendController {
 		$id = Yii::app()->request->getParam('id');
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$model = PaymentMethod::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId));
-		if(Yii::app()->request->isPostRequest) {
+		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+                if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PaymentMethod');
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('payMethod/index' , 'companyId' => $companyId));
@@ -60,6 +63,7 @@ class PayMethodController extends BackendController {
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 				foreach ($ids as $id) {
 					$model = PaymentMethod::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;

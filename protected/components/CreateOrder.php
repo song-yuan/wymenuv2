@@ -26,10 +26,10 @@ class CreateOrder
 							'lid'=>$this->getMaxOrderId(),
 							'dpid'=>$this->companyId,
 							'site_id'=>$this->siteId,
-							'create_at'=>$time,
+							'create_at'=>date('Y-m-d H:i:s',time()),
 							'is_temp'=>$this->siteNo->is_temp,
 							'number'=>$this->siteNo->number,
-							'update_at'=>$time,
+							'update_at'=>date('Y-m-d H:i:s',time()),
 							'remark'=>yii::t('app','无'),
 							'taste_memo'=>"",
 							);
@@ -47,18 +47,19 @@ class CreateOrder
 			if($orderProduct){
 				$orderProduct->price = $this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']);
 				$orderProduct->delete_flag = 0;
+                                $orderProduct->update_at = date('Y-m-d H:i:s',time());
 				$orderProduct->update();
 			}else{
 				$orderProduct = new OrderProduct;
 				$orderProductData = array(
 										'lid'=>$this->getMaxOrderProductId(),
 										'dpid'=>$this->companyId,
-										'create_at'=>$time,
+										'create_at'=>date('Y-m-d H:i:s',time()),
 										'order_id'=>$order->lid,
 										'set_id'=>$setId,
 										'product_id'=>$this->product['lid'],
 										'price'=>$this->getProductPrice($this->companyId,$this->product['lid'],$this->product['type']),
-										'update_at'=>$time,
+										'update_at'=>date('Y-m-d H:i:s',time()),
 										'amount'=>1,
 										'taste_memo'=>"",
 										);
@@ -183,7 +184,7 @@ class CreateOrder
 		$order = Order::model()->find($criteria);
 		
 		if($this->product['type']){
-			$orderProduct = OrderProduct::model()->updateAll(array('delete_flag'=>1),'order_id=:orderId and dpid=:dpid and set_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
+			$orderProduct = OrderProduct::model()->updateAll(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())),'order_id=:orderId and dpid=:dpid and set_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
 			if($orderProduct){
 				return true;
 			}else{
@@ -192,6 +193,7 @@ class CreateOrder
 		}else{
 			$orderProduct = OrderProduct::model()->find('order_id=:orderId and dpid=:dpid  and product_id=:productId and product_order_status=0',array(':orderId'=>$order->lid,':dpid'=>$this->companyId,':productId'=>$this->product['lid']));
 			$orderProduct->delete_flag = 1;
+                        $orderProduct->update_at = date('Y-m-d H:i:s',time());
 			if($orderProduct->update()){
 				return true;
 			}else{
@@ -209,6 +211,16 @@ class CreateOrder
 		$site_id = $goodsIds['client_site_id'];
 		$siteName = $goodsIds['client_site_name'];
                 $reprint = $goodsIds['client_reprint'];
+                
+                
+                //订单的状态，临时做下单时挂单状态，非临时做下单直接厨打
+                $orderStatus="2";
+                $orderPorductStatus="1";
+                if($isTemp=="1")
+                {
+                    $orderStatus="1";
+                    $orderPorductStatus="0";
+                }
 		unset($goodsIds['client_is_temp']);
 		unset($goodsIds['client_site_id']);
 		unset($goodsIds['client_site_name']);
@@ -217,14 +229,14 @@ class CreateOrder
 		$printOrderProducts = array();
 		$time = date('Y-m-d H:i:s',time());
 		$db = Yii::app()->db;
+                //return json_encode(array('status'=>false,'msg'=>"test"));
         $transaction = $db->beginTransaction();
  		try {
  			if($site_id==0){
  				//未开台的临时台
  				$se=new Sequence("site_no");
                                 $lid = $se->nextval();
-
-                                $code = SiteClass::getCode($dpid);
+                                $code = rand(1000,9999);
                                 $se=new Sequence("temp_site");
                                 $site_id = $se->nextval(); 
                                 
@@ -232,9 +244,10 @@ class CreateOrder
                                     'lid'=>$lid,
                                     'dpid'=>$dpid,
                                     'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'update_at'=>date('Y-m-d H:i:s',time()),
                                     'is_temp'=>$isTemp,
                                     'site_id'=>$site_id,
-                                    'status'=>'1',
+                                    'status'=>$orderStatus,
                                     'code'=>$code,
                                     'number'=>1,
                                     'delete_flag'=>'0'
@@ -250,7 +263,7 @@ class CreateOrder
 							'site_id'=>$site_id,
 							'create_at'=>$time,
 							'is_temp'=>$isTemp,
-							'order_status'=>1,
+							'order_status'=>$orderStatus,
 							'number'=>1,
 							'update_at'=>$time,
 							'remark'=>yii::t('app','无'),
@@ -264,6 +277,7 @@ class CreateOrder
                                     'lid'=>$lidf,
                                     'dpid'=>$dpid,
                                     'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'update_at'=>date('Y-m-d H:i:s',time()),
                                     'is_temp'=>$isTemp,
                                     'site_id'=>$site_id,
                                     'is_deal'=>'0',
@@ -295,6 +309,19 @@ class CreateOrder
                                 $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$dpid.' and t.site_id='.$site_id.' and t.is_temp='.$isTemp ;
                                 $criteria->order = ' t.lid desc ';
                                 $siteNo = SiteNo::model()->find($criteria);
+                                
+                                $siteNo->status=$orderStatus;
+                                $siteNo->update_at=date('Y-m-d H:i:s',time());
+                                $siteNo->save();
+                                
+                                if($isTemp=="0")
+                                {
+                                    $site=  Site::model()->find(" t.dpid=:dpid and t.lid=:siteid",array(':dpid'=>$siteNo->dpid,':siteid'=>$siteNo->site_id));
+                                    $site->status=$orderStatus;
+                                    $site->update_at=date('Y-m-d H:i:s',time());
+                                    $site->save();
+                                }
+                                
                                 if($orderModel){
                                         $orderId = $orderModel['lid'];
                                 }else{
@@ -307,7 +334,7 @@ class CreateOrder
                                                 'site_id'=>$site_id,
                                                 'create_at'=>$time,
                                                 'is_temp'=>$isTemp,
-                                                'order_status'=>1,
+                                                'order_status'=>$orderStatus,
                                                 'number'=>$siteNo->number,
                                                 'update_at'=>$time,
                                                 'remark'=>yii::t('app','无'),
@@ -324,7 +351,7 @@ class CreateOrder
                             }
  			
             
-            
+//            return json_encode(array('status'=>false,'msg'=>"test"));
             
            
             
@@ -341,10 +368,10 @@ class CreateOrder
                        $result = $db->createCommand($sql)->queryRow();
                        if($result){
                                if($result['store_number'] > 0&&$result['store_number'] < $num){
-                                       throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+                                       throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！'))));
                                }
                        }else{
-                               throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+                               throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
                        }
                        $productSets = self::getSetProductIds($dpid,$goodsArr[0]);
                        foreach($productSets as $productSet){
@@ -359,7 +386,7 @@ class CreateOrder
 										'update_at'=>$time,
 										'amount'=>$num,
 										'taste_memo'=>"",
-										'product_order_status'=>0,
+										'product_order_status'=>$orderPorductStatus,
 										);
 					   $db->createCommand()->insert('nb_order_product',$orderProductData);
 					   $orderPrice +=$productSet['price']*$num;
@@ -402,10 +429,10 @@ class CreateOrder
 	                		$amount = $numEq[0];
 	                		if($result){
 			             		if($result['store_number'] > 0&&$result['store_number'] < $amount){
-			             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+			             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！'))));
 			             		}
 			             	}else{
-			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
 			             	}
 			             	//每一个eq 生成一个订单
 			             	$orderProductData = array(
@@ -419,7 +446,7 @@ class CreateOrder
 											'update_at'=>$time,
 											'amount'=>$amount,
 											'taste_memo'=>"",
-											'product_order_status'=>0,
+											'product_order_status'=>$orderPorductStatus,
 											);
 							 $db->createCommand()->insert('nb_order_product',$orderProductData);
 							 $orderPrice +=$productPrice*$amount;
@@ -434,6 +461,7 @@ class CreateOrder
 								   						'lid'=>$orderTasteId,
 								   						'dpid'=>$dpid,
 								   						'create_at'=>$time,
+                                                                                                                'update_at'=>$time,
 								   						'taste_id'=>$tasteId,
 								   						'order_id'=>$orderProductId,
 								   						'is_order'=>0
@@ -453,10 +481,10 @@ class CreateOrder
 	             	}else{
 	             		if($result){
 		             		if($result['store_number'] > 0&&$result['store_number'] < $num){
-		             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！')),JSON_UNESCAPED_UNICODE));
+		             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！'))));
 		             		}
 		             	}else{
-		             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！')),JSON_UNESCAPED_UNICODE));
+		             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
 		             	}
 	             		 $orderProductData = array(
 										'lid'=>$orderProductId,
@@ -469,7 +497,7 @@ class CreateOrder
 										'update_at'=>$time,
 										'amount'=>$num,
 										'taste_memo'=>"",
-										'product_order_status'=>0,
+										'product_order_status'=>$orderPorductStatus,
 										);
 						 $db->createCommand()->insert('nb_order_product',$orderProductData);
 						 $orderPrice +=$productPrice*$num;
@@ -487,11 +515,11 @@ class CreateOrder
 			}	
 			$sql = 'update nb_order set should_total='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
 			$db->createCommand($sql)->execute();
-			
+                        
+//                        $sql = 'update nb_site_no set status='.$orderPrice.' where lid='.$orderId.' and dpid='.$dpid;
+//			$db->createCommand($sql)->execute();
+//			return json_encode(array('status'=>false,'msg'=>"test"));
 			//厨打
-			$order = new Order;
-            $siteNo = new SiteNo;
-            $site = new Site;
             if($orderId !='0')
             {
                 $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$dpid));
@@ -500,22 +528,29 @@ class CreateOrder
                 {
                     return json_encode(array('status'=>false,'msg'=>"该订单不存在"));
                 }
-                $criteria = new CDbCriteria;
+            }
+            if($order->is_temp=="0"){
+            	$criteria = new CDbCriteria;
                 $criteria->condition =  't.dpid='.$dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                 $criteria->order = ' t.lid desc ';                    
                 $siteNo = SiteNo::model()->find($criteria);
                 //order site 和 siteno都需要更新状态 所以要取出来
-                if($order->is_temp=="0")
-                {
-                    $criteria2 = new CDbCriteria;
-                    $criteria2->condition =  't.dpid='.$dpid.' and t.lid='.$order->site_id ;
-                    $criteria2->order = ' t.lid desc ';                    
-                    $site = Site::model()->with("siteType")->find($criteria2);
-                }
+                $criteria2 = new CDbCriteria;
+                $criteria2->condition =  't.dpid='.$dpid.' and t.lid='.$order->site_id ;
+                $criteria2->order = ' t.lid desc ';                    
+                $site = Site::model()->with("siteType")->find($criteria2);
+//            return json_encode(array('status'=>false,'msg'=>"test8"));
+            	$printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
+            }else{
+            	$pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+            	 //前面加 barcode
+                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
+                //var_dump($orderProducts);exit;
+                $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",'');
             }
-            $printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
             if(!$printList['status']){
-            	throw new Exception(json_encode($printList,JSON_UNESCAPED_UNICODE));
+            	throw new Exception(json_encode($printList));
             }
                 //$printList2=array_merge($printList,array('sitenoid'=> $lid));
 //            }								
@@ -540,7 +575,7 @@ class CreateOrder
                     }
                 } 
 			}
- 			return json_encode($printList,JSON_UNESCAPED_UNICODE);
+ 			return json_encode($printList);
 		 } catch (Exception $e) {
                 $transaction->rollback(); //如果操作失败, 数据回滚
                 throw new Exception($e->getMessage());

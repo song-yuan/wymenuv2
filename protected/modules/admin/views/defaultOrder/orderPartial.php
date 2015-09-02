@@ -108,6 +108,7 @@
                         
                         $('#alltaste_cancel').on(event_clicktouchstart,function(){
                             layer.close(layer_index3);
+                            layer_index3=0;
                         });
                         
                         function accountmanul(){

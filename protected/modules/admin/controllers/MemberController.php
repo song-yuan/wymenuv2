@@ -45,6 +45,7 @@ class MemberController extends BackendController
             $se=new Sequence("member_card");
             $model->lid = $se->nextval();
             $model->create_at = date('Y-m-d H:i:s',time());
+            $model->update_at=date('Y-m-d H:i:s',time());
             $model->delete_flag = '0';
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
@@ -58,9 +59,10 @@ class MemberController extends BackendController
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
 		$model = MemberCard::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
-		
+		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberCard');
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->haspassword){
 				$model->password_hash = MD5($model->password_hash);
 			}else{
@@ -78,10 +80,11 @@ class MemberController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$id = Yii::app()->request->getParam('id');
+                Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($id)) {
 				$model = MemberCard::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 				if($model) {
-					$model->saveAttributes(array('delete_flag'=>1));
+					$model->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
 				}
 			$this->redirect(array('member/index' , 'companyId' => $companyId)) ;
 		} else {
@@ -92,14 +95,16 @@ class MemberController extends BackendController
 	public function actionCharge() {
 		$model = new MemberRecharge;
 		$model->dpid = $this->companyId;
-		
+		//Until::validOperate($model->dpid, $this);
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MemberRecharge');
 			$rfid = Yii::app()->request->getPost('rfid');
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
-				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id));
-	            $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
+				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode and dpid=:dpid',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id,':dpid'=>$this->companyId));
+                                Until::validOperate($member->lid, $this);
+                                //var_dump($member);exit;
+                                $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
 	          
 	            $se = new Sequence("member_recharge");
 	            $model->lid = $se->nextval();

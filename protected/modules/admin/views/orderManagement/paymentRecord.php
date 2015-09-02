@@ -91,7 +91,7 @@
 								<td><?php if ($model->pay_amount > 0) echo $model->pay_amount ;else echo '--/--';?></td>
 								<td><?php if ($model->pay_amount < 0) echo -$model->pay_amount ;else echo '--/--';;?></td>
 								<td><?php echo $model->update_at;?></td>
-                                                                <td>退款</td>
+                                <td><a href="<?php echo $this->createUrl('orderManagement/refund' , array('companyId' => $this->companyId));?>/orderID/<?php echo $model->order_id;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green"><i class="fa fa-pencil"></i> <?php echo yii::t('app','退款');?></a></td>
 							</tr>
 					    <?php $a++;?>
 						<?php endforeach;?>	
@@ -99,6 +99,12 @@
 						<?php endif;?>
 						</tbody>
 					</table>
+								<div class="form-actions fluid">
+										<div class="col-md-offset-3 col-md-9">
+											    <!--        <button type="submit" class="btn blue">确定</button>     -->   
+											<a href="<?php echo $this->createUrl('orderManagement/notPay' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn default">返回</a>                              
+										</div>
+									</div>
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -140,7 +146,7 @@
 	<!-- END PAGE CONTENT-->
 
 </div>
-<script>
+<script type="text/javascript">
 		jQuery(document).ready(function(){
 		    if (jQuery().datepicker) {
 	            $('.date-picker').datepicker({
@@ -153,7 +159,7 @@
 	            
            }
 		});
-		
+
 		function MM_over(mmObj) {
 			var mSubObj = mmObj.getElementsByTagName("div")[0];
 			mSubObj.style.display = "block";
@@ -178,4 +184,6 @@
 			   location.href="<?php echo $this->createUrl('orderManagement/paymentRecord' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
 			  
 	        });
+
+			
 </script> 

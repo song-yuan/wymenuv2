@@ -32,6 +32,7 @@ class PadController extends BackendController
                         $se=new Sequence("pad");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->update_at=date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
@@ -46,12 +47,11 @@ class PadController extends BackendController
 	}
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
-                //echo 'ddd';
-		$model = Pad::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		//var_dump($model);exit;
+                $model = Pad::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
+		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Pad');
-                        //($model->attributes);var_dump(Yii::app()->request->getPost('Pad'));exit;
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('pad/index' , 'companyId' => $this->companyId));
@@ -65,9 +65,11 @@ class PadController extends BackendController
 	}
         public function actionBind(){
 		$padId = Yii::app()->request->getParam('padId',0);
+                Until::isUpdateValid(array($padId),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
                 $model = Pad::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $padId,':dpid'=> $this->companyId));
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Pad');
+                        $model->update_at=date('Y-m-d H:i:s',time());
                         $model->is_bind="0";
                         //($model->attributes);var_dump(Yii::app()->request->getPost('Pad'));exit;
 			if($model->save()){
@@ -83,12 +85,13 @@ class PadController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
                 //var_dump($ids);exit;
 		if(!empty($ids)) {
 			foreach ($ids as $id) {
 				$model = Pad::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 				if($model) {
-					$model->saveAttributes(array('delete_flag'=>1));
+					$model->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
 				}
 			}
 			$this->redirect(array('pad/index' , 'companyId' => $companyId)) ;

@@ -12,6 +12,7 @@
 			<img src="<?php echo Yii::app()->request->baseUrl;?>/img/menu-toggler.png" alt="" />
 			</a> 
 			<!-- END RESPONSIVE MENU TOGGLER -->
+                        
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<ul class="nav navbar-nav pull-right">
 				<!-- BEGIN NOTIFICATION DROPDOWN -->
@@ -129,11 +130,12 @@
 						<li>
                                                     <a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> <?php echo yii::t('app','全屏显示');?></a>
 						</li>
-                                                <li>
-                                                    <a href="<?php echo $this->createUrl('login/logout');?>" data-method='post'><i class="fa fa-key"></i> <?php echo yii::t('app','锁定屏幕');?></a>
+                                                <li id="lock_screen">
+                                                    <a href="javascript:;" ><i class="fa fa-key"></i> <?php echo yii::t('app','锁定屏幕');?></a>
 						</li>
-						<li>
-                                                    <a href="<?php echo $this->createUrl('login/logout');?>" data-method='post'><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>
+						<li id="shift_logout">
+                                                    <a href="<?php echo $this->createUrl('default/shiftlogout',array("companyId"=>$this->companyId));?>" ><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>
+                                                    <!--<a href="<?php echo $this->createUrl('login/logout');?>" ><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>-->
 						</li>
 					</ul>
 				</li>
@@ -144,9 +146,16 @@
 		<!-- END TOP NAVIGATION BAR -->
 	</div>
 	<!-- END HEADER -->
+        <div id="portlet-lockscreen1111" style="margin:10px; display: none;">
+                <DIV style="margin:10px;float:left;width:95%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','密码');?><input id="user_input_password" style="width:60%;border:none;" type="password" value="12345"></DIV>
+                <div style="text-align:center;">
+                    <input type="button" class="btn green" id="lock_screen_close" value="<?php echo yii::t('app','确 定');?>">
+                </div>
+        </div>
+        
 	<div class="clearfix"></div>
         <script type="text/javascript">
-            
+            var layer_index_lock_screen;
             $(document).ready(function() {
                 //alert(typeof Androidwymenuprinter);
                 if (typeof Androidwymenuprinter == "undefined") {
@@ -169,6 +178,38 @@
                 //client_open_site("dd");
                 getnotificationnum();
                 $('#header_notification_list').load('<?php echo $this->createUrl('default/messageliall',array('companyId'=>$this->companyId));?>'); 
+            });
+            
+            $('#lock_screen_close').on(event_clicktouchstart, function(){
+                var password=$("#user_input_password").val();
+                //alert(password);
+                $.get('<?php echo $this->createUrl(
+                    'login/unlock',array('companyId'=>$this->companyId));?>/password/'+password,
+                    function(data){
+                        //alert(data.msg);
+                        if(data.status)
+                        {                           
+                            layer.close(layer_index_lock_screen);
+                        }else{
+                            alert("密码错误");
+                            //$('#card_pay_input_password').clear();
+                        }
+                    },'json');                
+            });
+            
+            $('#lock_screen').on(event_clicktouchstart, function(){
+//                var $modal=$('#portlet-lockscreen');
+//                $modal.modal();
+                //自定页
+                layer_index_lock_screen=layer.open({
+                    type: 1,
+                    title:"<?php echo Yii::app()->user->name; ?>锁定屏幕",
+                    skin: 'layui-layer-demo', //样式类名
+                    closeBtn: false, //不显示关闭按钮
+                    shift: 2,
+                    shadeClose: false, //开启遮罩关闭
+                    content: $('#portlet-lockscreen1111')
+                });
             });
             
             function getnotificationnum(){

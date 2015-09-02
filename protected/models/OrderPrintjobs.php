@@ -1,27 +1,29 @@
 <?php
 
 /**
- * This is the model class for table "nb_product_picture".
+ * This is the model class for table "nb_order_printjobs".
  *
- * The followings are the available columns in table 'nb_product_picture':
+ * The followings are the available columns in table 'nb_order_printjobs':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $product_id
- * @property string $is_set
- * @property string $pic_path
- * @property integer $pic_show_order
+ * @property string $jobid
+ * @property string $orderid
+ * @property string $address
+ * @property string $content
+ * @property string $printer_type
+ * @property string $finish_flag
  * @property string $delete_flag
  */
-class ProductPicture extends CActiveRecord
+class OrderPrintjobs extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_product_picture';
+		return 'nb_order_printjobs';
 	}
 
 	/**
@@ -32,15 +34,15 @@ class ProductPicture extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, pic_path', 'required'),
-			array('pic_show_order', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid, product_id', 'length', 'max'=>10),
-			array('is_set, delete_flag', 'length', 'max'=>1),
-			array('pic_path', 'length', 'max'=>255),
+			array('address, content', 'required'),
+			array('lid, dpid, jobid, orderid', 'length', 'max'=>10),
+			array('address', 'length', 'max'=>64),
+			array('printer_type', 'length', 'max'=>2),
+			array('finish_flag, delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, product_id, is_set, pic_path, pic_show_order, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, jobid, orderid, address, content, printer_type, finish_flag, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,11 +67,13 @@ class ProductPicture extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'product_id' => 'Product',
-			'is_set' => '0上面的product_id是单品，1product_id是套餐',
-			'pic_path' => 'Pic Path',
-			'pic_show_order' => 'Pic Show Order',
-			'delete_flag' => '1删除，0未删除',
+			'jobid' => 'Jobid',
+			'orderid' => '店铺id',
+			'address' => '地址(IP/COM/USB)',
+			'content' => 'Content',
+			'printer_type' => '0网络，1本地',
+			'finish_flag' => '0没有完成，1已经重新打印完成',
+			'delete_flag' => 'Delete Flag',
 		);
 	}
 
@@ -95,10 +99,12 @@ class ProductPicture extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('product_id',$this->product_id,true);
-		$criteria->compare('is_set',$this->is_set,true);
-		$criteria->compare('pic_path',$this->pic_path,true);
-		$criteria->compare('pic_show_order',$this->pic_show_order);
+		$criteria->compare('jobid',$this->jobid,true);
+		$criteria->compare('orderid',$this->orderid,true);
+		$criteria->compare('address',$this->address,true);
+		$criteria->compare('content',$this->content,true);
+		$criteria->compare('printer_type',$this->printer_type,true);
+		$criteria->compare('finish_flag',$this->finish_flag,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 
 		return new CActiveDataProvider($this, array(
@@ -110,34 +116,10 @@ class ProductPicture extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ProductPicture the static model class
+	 * @return OrderPrintjobs the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
-	}
-	public static function saveImg($dpid,$productId,$pictures)
-	{
-		$db = Yii::app()->db;
-		$sql = 'delete from nb_product_picture where product_id='.$productId;
-		$db->createCommand($sql)->execute();
-		if(!empty($pictures)){
-			foreach($pictures as $pic){
-				$se=new Sequence("product_picture");
-                $lid = $se->nextval();
-				$data=array(
-					'lid'=>$lid,
-					'dpid'=>$dpid,
-					'create_at'=>date('Y-m-d H:i:s',time()),
-                                        'update_at'=>date('Y-m-d H:i:s',time()),
-					'is_set'=>0,
-					'product_id'=>$productId,
-					'pic_path'=>$pic,
-				);
-				$db->createCommand()->insert('nb_product_picture',$data);
-			}
-			return true;
-		}
-		return false;
 	}
 }

@@ -26,14 +26,17 @@ class ProductController extends Controller
 			$_SESSION['companyId'] = $this->companyId;
 			$this->isPad = 1;
 			$this->padId = $padId;
-                        if($padType=="1")
-                        {
-                        	Yii::app()->language = 'jp';
-                                Yii::app()->theme = 'pad';
-                        }else if($padType=="2"){
-                        	Yii::app()->language = 'zh_cn';
-                                Yii::app()->theme = 'pad_cn';
-                        }
+            if($padType=="1")
+            {
+            	Yii::app()->language = 'jp';
+                    Yii::app()->theme = 'pad';
+            }else if($padType=="2"){
+            	Yii::app()->language = 'zh_cn';
+                    Yii::app()->theme = 'pad_cn';
+            }else if($padType=="3"){
+            	Yii::app()->language = 'zh_cn';
+                    Yii::app()->theme = 'pad_cn_h';
+            }
 		}
 		if($mac){
 			$companyWifi = CompanyWifi::model()->find('macid=:macId',array(':macId'=>$mac));
@@ -133,6 +136,42 @@ class ProductController extends Controller
 		}
 		Yii::app()->end(json_encode($product));
 	}
+        
+        public function actionSaveFailJobs()
+	{
+		$jobid = Yii::app()->request->getParam('jobid',"0");
+                $dpid = Yii::app()->request->getParam('dpid',"0000000000");
+                $address = Yii::app()->request->getParam('address',"0");
+                $orderid = Yii::app()->request->getParam('orderid',"0");
+                $db=Yii::app()->db;
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $printData = $store->get($dpid."_".$jobid);
+               // var_dump($printData);exit;
+                if(!empty($printData))
+                {
+                    $se=new Sequence("order_printjobs");
+                    $orderjobId = $se->nextval();
+                    $time=date('Y-m-d H:i:s',time());
+                    //插入一条
+                    $orderPrintJob = array(
+                                        'lid'=>$orderjobId,
+                                        'dpid'=>$dpid,
+                                        'create_at'=>$time,
+                                        'orderid'=>$orderid,
+                                        'jobid'=>$jobid,
+                                        'update_at'=>$time,
+                                        'address'=>$address,
+                                        'content'=>$printData,
+                                        'printer_type'=>"0",
+                                        'finish_flag'=>'0',
+                                        'delete_flag'=>'0',
+                                        );
+                    $db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
+                }		
+		Yii::app()->end(json_encode(array("status"=>true,"msg"=>"OK")));
+	}
+        
 	public function actionGetOrderListJson()
 	{
 		$orderProductList = array();
@@ -214,8 +253,10 @@ class ProductController extends Controller
 	}
 	//确认订单
 	public function actionConfirmPadOrder(){
+            
 		$goodsIds = isset($_POST) ?$_POST :array();
-		$padOrder = json_encode(array('status'=>false,'msg'=>yii::t('app','订单为空')),JSON_UNESCAPED_UNICODE);
+		$padOrder = json_encode(array('status'=>false,'msg'=>yii::t('app','订单为空')));
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>'订单为空wwww')));
 	 	if(!empty($goodsIds)){
 	 		try{
 	 			$padOrder = CreateOrder::createPadOrder($this->companyId,$goodsIds,$this->padId); 

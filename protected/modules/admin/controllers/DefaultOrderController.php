@@ -111,8 +111,9 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',0);
                 $syscallId = Yii::app()->request->getParam('syscallId',0);
                 $autoaccount = Yii::app()->request->getParam('autoaccount',0);
-                $order=array();
-                $siteNo=array();
+                $order=new Order();
+                $siteNo=new SiteNo();
+                $site=new Site();
                 ///***********insert to order feedback
                 ///*************print
                 if($orderId !='0')
@@ -140,12 +141,12 @@ class DefaultOrderController extends BackendController
                     $criteria->condition =  ' t.status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria);
+                    //var_dump($siteNo);exit;
                 }
                 //var_dump($order);exit;
                 if(empty($order))
                 {
-                    Until::validOperate($companyId,$this);
-                    
+                    Until::validOperate($companyId,$this);                    
                     $order=new Order();
                     $se=new Sequence("order");
                     $order->lid = $se->nextval();
@@ -214,6 +215,32 @@ class DefaultOrderController extends BackendController
                                 //'setlist' => $setlist
 		));
 	}
+        
+        public function actionGetFailPrintjobs(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getParam('orderId',0);
+                $jobId=Yii::app()->request->getParam('jobId',0);
+                
+                if($jobId!="0")
+                {
+                    $printjobsql="update nb_order_printjobs set finish_flag=1".
+                            " where dpid=".$companyId." and orderid=".$orderId.
+                            " and jobid=".$jobId;
+                    Yii::app()->db->createCommand($printjobsql)->execute();
+                }
+                
+                $criteria = new CDbCriteria;
+                $criteria->condition =  't.dpid='.$companyId.' and t.orderid='.$orderId.' and t.finish_flag=0';
+                $criteria->order = ' t.lid desc ';                    
+                //$siteNo = SiteNo::model()->find($criteria);
+                $orderprintjobs=  OrderPrintjobs::model()->findAll($criteria);
+                //var_dump($orderprintjobs);exit;
+                $this->renderPartial('orderPrintjobs' , array(
+				'orderPrintjobs'=>$orderprintjobs,
+				'dpid' => $companyId,
+                                'orderid'=>$orderId
+		));
+	}
 
         /*
          * 挂单
@@ -234,6 +261,10 @@ class DefaultOrderController extends BackendController
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"test1")));
+                if(!Until::validOperateJson($companyId, $this))
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"云端不能操作本地数据")));                    
+                }
                 if($orderId =="0")
                 {
                     //临时台，没有开过台的，
@@ -261,9 +292,9 @@ class DefaultOrderController extends BackendController
                 }
                 //$syscallId = Yii::app()->request->getParam('syscallId',0);
                 //$autoaccount = Yii::app()->request->getParam('autoaccount',0);
-                $order;
-                $siteNo;
-                $site;
+                $order=new Order();
+                $siteNo=new SiteNo();
+                $site=new Site();
                 ///***********insert to order feedback
                 ///*************print
                 if($orderId !='0')
@@ -309,6 +340,10 @@ class DefaultOrderController extends BackendController
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
                 ///Yii::app()->end(json_encode(array('status'=>false,'msg'=>$productList)));
+                if(!Until::validOperateJson($companyId, $this))
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"云端不能操作本地数据")));                    
+                }
                 if($orderId =="0")
                 {
                     //临时台，没有开过台的，
@@ -336,9 +371,9 @@ class DefaultOrderController extends BackendController
                 }
                 //$syscallId = Yii::app()->request->getParam('syscallId',0);
                 //$autoaccount = Yii::app()->request->getParam('autoaccount',0);
-                $order;
-                $siteNo;
-                $site;
+                $order=new Order();
+                $siteNo=new SiteNo();
+                $site=new Site();
                 ///***********insert to order feedback
                 ///*************print
                 if($orderId !='0')
@@ -347,7 +382,7 @@ class DefaultOrderController extends BackendController
                     //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
                     if(empty($order))
                     {
-                        return json_encode(array('status'=>false,'msg'=>"该订单不存在"));
+                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
                     }
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
@@ -365,7 +400,7 @@ class DefaultOrderController extends BackendController
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));
                 $savejson=OrderList::createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
                 //$jobids=array();
-                //Yii::app()->end($savejson);
+                //Yii::app()->end(json_encode($savejson));
                 if(!$savejson["status"])
                 {
                     $ret=json_encode($savejson);
@@ -374,6 +409,43 @@ class DefaultOrderController extends BackendController
                 }
                 Yii::app()->end($ret);
 	}
+        
+        public function actionOrderPrintlist(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getParam('orderId',"0");
+                $padId = Yii::app()->request->getParam('padId',"0");
+                $order=new Order();
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
+                if($orderId !='0')
+                {
+                    $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
+                    if(empty($order))
+                    {
+                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                    }
+                    $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                    $criteria->order = ' t.lid desc ';                    
+                    $siteNo = SiteNo::model()->find($criteria);
+                    if($order->is_temp=='1')
+                    {
+                        $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+                    }else{
+                        $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
+                    }
+                    $order->should_total=$total['total'];
+                }
+                
+                //return json_encode(array('status'=>false,'msg'=>"111"));
+                $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+            	 //前面加 barcode
+                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
+                $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",'');
+                Yii::app()->end(json_encode($printList));
+        }
         
         public function actionMemberCardPassword(){
 		$companyId = Yii::app()->request->getParam('companyId',"0");
@@ -415,6 +487,10 @@ class DefaultOrderController extends BackendController
                 $ret;
                 $time=date('Y-m-d H:i:s',time());
                 $db = Yii::app()->db;
+                if(!Until::validOperateJson($companyId, $this))
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"云端不能操作本地数据")));                    
+                }
                 $transaction = $db->beginTransaction();
                 try{
                     $order=Order::model()->with("company")->find(" t.lid=:lid and t.dpid=:dpid",array(":lid"=>$orderid,":dpid"=>$companyId));
@@ -424,12 +500,18 @@ class DefaultOrderController extends BackendController
                     $order->remark=$order->remark+$ordermemo;
                     $order->save();
                     
-                    $criteria = new CDbCriteria;
-                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
-                    $criteria->order = ' t.lid desc ';                    
-                    $siteNo = SiteNo::model()->find($criteria);
-                    $siteNo->status=$orderstatus;
-                    $siteNo->save();
+//                    $criteria = new CDbCriteria;
+//                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+//                    $criteria->order = ' t.lid desc ';                    
+//                    $siteNo = SiteNo::model()->find($criteria);
+//                    $siteNo->status=$orderstatus;
+//                    $siteNo->save();
+                    //为了删除脏数据，这里用全部的update
+                    $sitenosql="update nb_site_no set status=".$orderstatus.
+                            " where dpid=".$companyId." and site_id=".$order->site_id.
+                            " and is_temp=".$order->is_temp;
+                    $db->createCommand($sitenosql)->execute();
+                                        
                     //order site 和 siteno都需要更新状态 所以要取出来
                     if($order->is_temp=="0")
                     {
@@ -1838,39 +1920,42 @@ class DefaultOrderController extends BackendController
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
                 $joblist=json_decode($store->get("kitchenjobs_".$companyId."_".$orderId),true);
-                foreach ($joblist as $job_orderproduct_id)
+                if(!empty($joblist))
                 {
-                    $ids=explode('_',$job_orderproduct_id);
-                    $jobid=$ids[0];
-                    if($jobid=='0')
+                    foreach ($joblist as $job_orderproduct_id)
                     {
-                        $errornum++;
-                        continue;
-                    }
-                    $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
-                    if(empty($jobresult))
-                    {
-                        $notsurenum++;
-                    }else{
-//                        $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and lid in (".$ids[1].")";
-//                        var_dump($sqlorderproduct);exit;
-                        if($jobresult=="success")
+                        $ids=explode('_',$job_orderproduct_id);
+                        $jobid=$ids[0];
+                        if($jobid=='0')
                         {
-                            //$sqlorderproduct="update nb_order_product set is_print='1',product_order_status='1' where dpid=:companyId and order_id=:orderId";
-                            $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and lid in (".$ids[1].")";
-                            $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
-                            //$commandorderproduct->bindValue(":companyId" , $companyId);
-                            $commandorderproduct->execute();
-                            //update status//
-                            //$orderProduct=  OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$ids[1]));
-                            //if($orderProduct->is_print=='0')
-                            //{
-                            //    $orderProduct->is_print='1';
-                            //    $orderProduct->save();
-                            //}
-                            $successnum++;
-                        }else{
                             $errornum++;
+                            continue;
+                        }
+                        $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
+                        if(empty($jobresult))
+                        {
+                            $notsurenum++;
+                        }else{
+    //                        $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and lid in (".$ids[1].")";
+    //                        var_dump($sqlorderproduct);exit;
+                            if($jobresult=="success")
+                            {
+                                //$sqlorderproduct="update nb_order_product set is_print='1',product_order_status='1' where dpid=:companyId and order_id=:orderId";
+                                $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$companyId." and lid in (".$ids[1].")";
+                                $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
+                                //$commandorderproduct->bindValue(":companyId" , $companyId);
+                                $commandorderproduct->execute();
+                                //update status//
+                                //$orderProduct=  OrderProduct::model()->find(' dpid=:dpid and lid=:lid', array(':dpid'=>$companyId,':lid'=>$ids[1]));
+                                //if($orderProduct->is_print=='0')
+                                //{
+                                //    $orderProduct->is_print='1';
+                                //    $orderProduct->save();
+                                //}
+                                $successnum++;
+                            }else{
+                                $errornum++;
+                            }
                         }
                     }
                 }

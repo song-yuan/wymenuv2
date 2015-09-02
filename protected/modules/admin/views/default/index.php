@@ -1,5 +1,6 @@
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/default.css'); ?>
 <div class="page-content">
+    
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -89,6 +90,7 @@
 			</div>    
 		</div>
 	</div>
+        
         <script type="text/javascript">
             var gssid=0;
             var gsistemp=0;

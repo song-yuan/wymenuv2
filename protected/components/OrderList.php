@@ -154,12 +154,12 @@ class OrderList
 							$insertData = array(
 												'lid'=>$lid,
 												'dpid'=>$dpid,
-												'create_at'=>time(),
+												'create_at'=>date('Y-m-d H:i:s',time()),
 												'order_id'=>$orderId,
 												'set_id'=>$setId,
 												'product_id'=>$goods,
 												'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
-												'update_at'=>time(),
+												'update_at'=>date('Y-m-d H:i:s',time()),
 												'amount'=>$val,
 												'taste_memo'=>yii::t('app','无'),
 												);
@@ -217,12 +217,12 @@ class OrderList
 							$insertData = array(
                                             'lid'=>$lid,
                                             'dpid'=>$dpid,
-                                            'create_at'=>time(),
+                                            'create_at'=>date('Y-m-d H:i:s',time()),
                                             'order_id'=>$orderId,
                                             'set_id'=>$setId,
                                             'product_id'=>$goods,
                                             'price'=>ProductSetClass::GetProductSetPrice($dpid,$setId,$goods),
-                                            'update_at'=>time(),
+                                            'update_at'=>date('Y-m-d H:i:s',time()),
                                             'amount'=>$val,
                                             'taste_memo'=>yii::t('app','无'),
                                             );
@@ -368,7 +368,7 @@ class OrderList
             {
                 $orderProductStatus=1;
             }
-                 //return json_encode(array('status'=>false,'msg'=>"test1"));
+                 
             try {
                 ///先删除所有为下单的临时菜品，后插入
                 $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
@@ -523,9 +523,9 @@ class OrderList
                         }
                     }
                 }
-
+                
                 $transaction->commit();
-                //return array('status'=>false,'msg'=>"dddd");
+                
                 //估清产品通知
                 if(!empty($sellOff)){
                     //return array('status'=>false,'msg'=>"沽清：".$sellOff);
@@ -547,10 +547,10 @@ class OrderList
                         }
                     } 
                 }
-                return array('status'=>true,'msg'=>"保存成功");
+                return array('status'=>true,'msg'=>"保存成功",'jobs'=>array());
             } catch (Exception $ex) {
                 $transaction->rollback();
-                return array('status'=>false,'msg'=>$e->getMessage());
+                return array('status'=>false,'msg'=>$e->getMessage(),'jobs'=>array());
             }                
         }
 }

@@ -36,7 +36,7 @@
                                     <div>
                                         <label class="col-md-3 control-label"><?php echo yii::t('app','人数');?></label>
                                         <div class="col-md-3">
-                                            <input class="form-control" placeholder="<?php echo yii::t('app','请输入人数');?>" name="siteNumber" id="site_number" type="text" maxlength="2" style="width:55px;" value="1">
+                                            <input class="form-control" placeholder="<?php echo yii::t('app','请输入人数');?>" name="siteNumber" id="site_number" type="text" maxlength="3" style="width:55px;" value="1">
                                         </div>
                                         <!--<label class="col-md-3 control-label"><?php echo yii::t('app','小孩');?></label>
                                         <div style="">
@@ -64,8 +64,23 @@
                                 }
                             });
                             
-                            var opensitef=function(siteNumber,sid,istemp){
-                                
+                            function clearolddata(){
+                                $("#tab_sitelist").show();
+                                $('#pxbox_button').hide();
+                                $('#site_row').hide();
+                                $('#order_row').show();
+                                $("#payDiscountAccount").text("100%");
+                                $("#payMinusAccount").text("0.00");
+                                $("#cancel_zero").removeClass("edit_span_select_zero");
+                                $("#payRealityAccount").text("0.00");
+                                $("#payChangeAccount").text("0.00");
+                                $("#payCashAccount").text("0.00");
+                                $("#payMemberAccount").text("0.00");
+                                $("#pay_union_card").text("0.00");
+                                $("#card_pay_span_card").text("");
+                                $("#card_pay_span_card").attr("actual","");
+                                $("#card_pay_span_password").text("");
+                                $("#card_pay_span_password").attr("actual","");
                             }
                             
                            $('#site_open').on(event_clicktouchstart,function(){
@@ -73,29 +88,38 @@
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
                                var companyid='<?php echo $this->companyId; ?>';
+                               var padid="0000000039";
+                               if (typeof Androidwymenuprinter == "undefined") {
+                                    alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
+                                    //return false;
+                                }else{
+                                    var padinfo=Androidwymenuprinter.getPadInfo();
+                                    padid=padinfo.substr(10,10);
+                                }
                                //alert(istemp);alert(companyid);
-                               if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 99)
+                               if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 199)
                                {
                                    //alert(!isNaN(siteNumber));
                                     $.ajax({
 					'type':'POST',
 					'dataType':'json',
-					'data':{"sid":sid,"siteNumber":siteNumber,"companyId":companyid,"istemp":istemp},
-					'url':'<?php echo $this->createUrl('defaultSite/opensite',array());?>',
+					'data':{"sid":sid,"siteNumber":siteNumber,"companyId":companyid,"istemp":istemp,"padId":padid},
+					'url':'<?php echo $this->createUrl('defaultSite/opensiteprint',array());?>',
 					'success':function(data){
 						if(data.status == 0) {
-							alert(data.message);
+							alert(data.msg+"0");                                                        
 						} else {
-							alert(data.message);
+							alert(data.msg+"1");
                                                         //$('#portlet-button').modal('hide');
 							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
-                                                        //$("#tab_sitelist").hide();
-                                                        //$("#tab_sitelist").hide();
-                                                        //$('#pxbox_button').hide();
+//                                                        $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+//                                                        $('#tabsiteindex').load(tabcurrenturl); 
+//                                                        $("#tab_sitelist").show();
+//                                                        $('#pxbox_button').hide();
 						}
 					},
                                         'error':function(e){
-                                            //alert(111);
+                                            alert("错误");
                                             return false;
                                         }
                                     });
@@ -110,7 +134,7 @@
                                var siteNumber=$('#site_number').val();                               
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
-                               if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 99)
+                               if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 199)
                                {
                                    //alert(!isNaN(siteNumber));
                                     $.ajax({
@@ -120,14 +144,11 @@
 					'url':'<?php echo $this->createUrl('defaultSite/opensite',array());?>',
 					'success':function(data){
 						if(data.status == 0) {
-							alert(data.message);
+							alert(data.msg);
 						} else {
-							alert(data.message);
-                                                        $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp);
-                                                        $("#tab_sitelist").show();
-                                                        $('#pxbox_button').hide();
-                                                        $('#site_row').hide();
-                                                        $('#order_row').show();
+							alert(data.msg);
+                                                        $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+data.siteid+'/istemp/'+istemp);
+                                                        clearolddata();
 						}
 					},
                                         'error':function(e){
@@ -194,10 +215,7 @@
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp);
-                               $("#tab_sitelist").show();
-                               $('#pxbox_button').hide();
-                               $('#site_row').hide();
-                               $('#order_row').show();
+                               clearolddata();
                            });
                            
                            $('#btn-print-btn').on(event_clicktouchstart,function(){

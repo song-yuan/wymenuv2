@@ -39,6 +39,7 @@ class ProductImgController extends BackendController
 	public function actionUpdate(){
 		$pictures = array();
 		$lid = Yii::app()->request->getParam('lid');
+                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$criteria = new CDbCriteria;
 		$criteria->with='productImg';
 		$criteria->addCondition('t.lid=:lid and t.dpid=:dpid and t.delete_flag=0 ');
@@ -46,6 +47,7 @@ class ProductImgController extends BackendController
 		$criteria->params[':lid']=$lid;
 		$criteria->params[':dpid']=$this->companyId;
 		$model = Product::model()->find($criteria);
+                
 		if(Yii::app()->request->isPostRequest) {
 			$postData = Yii::app()->request->getPost('productImg');
 			if(ProductPicture::saveImg($this->companyId,$lid,$postData)){

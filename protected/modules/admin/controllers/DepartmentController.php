@@ -29,6 +29,8 @@ class DepartmentController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Department');
+                        $model->create_at=date('Y-m-d H:i:s',time());
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
 				$this->redirect(array('department/index','companyId' => $this->companyId));
@@ -45,7 +47,10 @@ class DepartmentController extends BackendController
 		$model = Department::model()->findByPk($id);
 		
 		if(Yii::app()->request->isPostRequest) {
+                        Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+			
 			$model->attributes = Yii::app()->request->getPost('Department');
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('department/index' , 'companyId' => $this->companyId));

@@ -130,17 +130,22 @@ class ProductPrinterway extends CActiveRecord
 			$conn->bindValue(':dpid',$dpid);
 			$conn->bindValue(':productId',$productId);
 			$conn->execute();
-			if(!empty($printerwayIds)){
+			if(!empty($printerwayIds)){                                                                    
 				foreach($printerwayIds as $printerwayId){
-					$sql = 'SELECT NEXTVAL("product_printerway") AS id';
-					$maxId = Yii::app()->db->createCommand($sql)->queryRow();
-					$data = array(
-					 'lid'=>$maxId['id'],
+//					$sql = 'SELECT NEXTVAL("product_printerway") AS id';
+//					$maxId = Yii::app()->db->createCommand($sql)->queryRow();
+                                        $se=new Sequence("product_printerway");
+                                        $lid = $se->nextval();
+                                        $data = array(
+					 'lid'=>$lid,
 					 'dpid'=>$dpid,
 					 'create_at'=>date('Y-m-d H:i:s',time()),
+                                         'update_at'=>date('Y-m-d H:i:s',time()),
 					 'printer_way_id'=>$printerwayId,
 					 'product_id'=>$productId,
+                                         'delete_flag'=>"0",
 					);
+                                        //var_dump($data);exit;
 					Yii::app()->db->createCommand()->insert('nb_product_printerway',$data);
 				}
 			}

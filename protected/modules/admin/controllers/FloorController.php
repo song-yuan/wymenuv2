@@ -33,6 +33,7 @@ class FloorController extends BackendController
                         $se=new Sequence("floor");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
+                        $model->update_at=date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         //var_dump($model);exit;
 			if($model->save()){
@@ -48,10 +49,10 @@ class FloorController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
                 $dpid = Yii::app()->request->getParam('companyId');
 		$model = Floor::model()->find('t.lid=:lid and t.dpid=:dpid', array(':lid' => $lid,':dpid'=>$dpid));
-		//var_dump($model);
-		if(Yii::app()->request->isPostRequest) {
+		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
+                if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Floor');
-                        //var_dump($model);exit;
+                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('floor/index' , 'companyId' => $this->companyId));
@@ -70,11 +71,12 @@ class FloorController extends BackendController
                 //$command->bindValue(":ids" , implode(',' , $ids));
                 //$command->bindValue(":dpid" , $this->companyId);
                 //var_dump($command);exit;
-		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_floor set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+		Until::isUpdateValid($ids,$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
+                if(!empty($ids)) {
+			Yii::app()->db->createCommand('update nb_floor set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			
-			Yii::app()->db->createCommand('update nb_site set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_site set delete_flag=1,update_at="'.date('Y-m-d H:i:s',time()).'" where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 		}
 		$this->redirect(array('floor/index' , 'companyId' => $this->companyId));

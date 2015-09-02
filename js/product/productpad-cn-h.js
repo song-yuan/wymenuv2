@@ -636,6 +636,7 @@ $(document).ready(function(){
             return;
         }
         var formdata=$('#padOrderForm').formSerialize();
+//alert(formdata);
             $.ajax({
                     url:$('#padOrderForm').attr('action'),
                     type:'POST',
@@ -644,115 +645,33 @@ $(document).ready(function(){
 	            dataType: "json",
 	            success:function(msg){
                         var data=msg;
-	                var printresult=false;
-                        var printresultfail=false;
-                        var printresulttemp;
+	                var printresult;
                         var waittime=0;
 	    		if(data.status){
-                            if(istemp=="0")
-                            {
-                                $.each(data.jobs,function(skey,svalue){ 
-                                    data.jobs[skey]="0_"+svalue;
-                                });
-                            }
-                            //alert(data.orderid);
                             var index = layer.load(0, {shade: [0.3,'#fff']});
                             var wait=setInterval(function(){ 
                                 waittime++;
-//                                if(data.type=='local')
-//                                {
-//                                    printresult=Androidwymenuprinter.printJob(data.dpid,data.jobid);
-//                                }else{
-//                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
-//                                }
-                                if(istemp=="1")
+                                if(data.type=='local')
                                 {
-                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
-                                    if(printresult)
-                                    {
-                                        clearInterval(wait);
-                                        $('#id_client_reprint').val("0");
-                                        layer.close(index);
-                                    }
+                                    printresult=Androidwymenuprinter.printJob(data.dpid,data.jobid);
                                 }else{
-                                    printresultfail=false;
-                                    $.each(data.jobs,function(skey,svalue){                                        
-                                        detaildata=svalue.split("_");
-                                        if(detaildata[0]=="0")//继续打印
-                                        {
-                                            printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                            if(printresulttemp)
-                                            {
-                                                data.jobs[skey]="1_"+svalue.substring(2);
-                                                //printresult=true;
-                                            }else{
-                                                printresultfail=true;
-//                                                svalue="0_"+svalue;                                                
-                                            }
-                                        }
-                                     }); 
-                                     if(!printresultfail)
-                                     {
-                                        clearInterval(wait);
-                                        $('#id_client_reprint').val("0");
-                                        layer.close(index);
-                                     }
+                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
                                 }
-//                                
-                                if(waittime>5)
+                                if(printresult)
+                                {
+                                     clearInterval(wait);
+                                     $('#id_client_reprint').val("0");
+                                     layer.close(index);
+                                     //alert()
+                                }else if(waittime>5)
                                 {
                                      clearInterval(wait);
                                      $('#id_client_reprint').val("1");
                                      layer.close(index);
-                                     //alert(language_print_pad_fail);
-                                     
-                                     if(istemp=="1"&&!printresult)
-                                    {
-                                        alert("有打印失败，请去收银台查看1！");
-                                        //如果失败，就把打印任务插入到数据库
-                                        $.ajax({
-                                            url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+data.jobid+"/address/"+data.address,
-                                            type:'GET',
-                                            //data:formdata,
-                                            async:false,
-                                            dataType: "json",
-                                            success:function(msg){
-
-                                            },
-                                            error: function(msg){
-                                                alert("网络故障！")
-                                            }
-                                        });
-                                    }
-                                    if(istemp=="0"&&printresultfail)
-                                    {
-                                        alert("有打印失败，请去收银台查看2！");
-                                        //如果失败，就把打印任务插入到数据库
-                                        $.each(data.jobs,function(skey,svalue){                                        
-                                                detaildata=svalue.split("_");
-                                                if(detaildata[0]=="0")
-                                                {
-                                                    $.ajax({
-                                                        url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+detaildata[1]+"/address/"+detaildata[2],
-                                                        type:'GET',
-                                                        //data:formdata,
-                                                        async:false,
-                                                        dataType: "json",
-                                                        success:function(msg){
-
-                                                        },
-                                                        error: function(msg){
-                                                            alert("网络故障！")
-                                                        }
-                                                    });
-                                                }
-                                            });
-                                    }
-                                     
+                                     alert(language_print_pad_fail);
                                 }                                
                             },1000); 	                 
-                       //if(istemp=="1")
-                            
+                       
 //	                 if(printresult)
 //	                 {
 	                	 $('#padOrderForm').find('.input-product').each(function(){

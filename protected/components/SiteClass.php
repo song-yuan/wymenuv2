@@ -79,6 +79,7 @@ class SiteClass
                 'lid'=>$lid,
                 'dpid'=>$companyId,
                 'create_at'=>date('Y-m-d H:i:s',time()),
+                'update_at'=>date('Y-m-d H:i:s',time()),
                 'is_temp'=>$istemp,
                 'site_id'=>$site_id,
                 'status'=>'1',
@@ -94,6 +95,7 @@ class SiteClass
                 'lid'=>$lidf,
                 'dpid'=>$companyId,
                 'create_at'=>date('Y-m-d H:i:s',time()),
+                'update_at'=>date('Y-m-d H:i:s',time()),
                 'is_temp'=>$istemp,
                 'site_id'=>$site_id,
                 'is_deal'=>'0',
@@ -126,8 +128,8 @@ class SiteClass
                         $commandsite->bindValue(":sid" , $sid);
                         $commandsite->bindValue(":companyId" , $companyId);
                         $commandsite->execute();
-                    }
-
+                    }                           
+                             
                     $se=new Sequence("site_no");
                     $lid = $se->nextval();
                     $site_id=$sid;
@@ -136,11 +138,14 @@ class SiteClass
                         $se=new Sequence("temp_site");
                         $site_id = $se->nextval();                            
                     }
+                    //return array('status'=>0,'message'=>"dddddd22",'siteid'=>$sid);
                     $code = SiteClass::getCode($companyId);
+                    
                     $data = array(
                         'lid'=>$lid,
                         'dpid'=>$companyId,
                         'create_at'=>date('Y-m-d H:i:s',time()),
+                        'update_at'=>date('Y-m-d H:i:s',time()),
                         'is_temp'=>$istemp,
                         'site_id'=>$site_id,
                         'status'=>'1',
@@ -157,6 +162,7 @@ class SiteClass
                         'lid'=>$lidf,
                         'dpid'=>$companyId,
                         'create_at'=>date('Y-m-d H:i:s',time()),
+                        'update_at'=>date('Y-m-d H:i:s',time()),
                         'is_temp'=>$istemp,
                         'site_id'=>$site_id,
                         'is_deal'=>'0',
@@ -169,11 +175,11 @@ class SiteClass
                     $db->createCommand()->insert('nb_order_feedback',$dataf);
                     ///*************print
                     $transaction->commit(); //提交事务会真正的执行数据库操作
-                    return array('status'=>1,'message'=>yii::t('app','开台成功'),'siteid'=>$site_id);  
+                    return array('status'=>1,'msg'=>yii::t('app','开台成功'),'siteid'=>$site_id);  
                     //return true;
             } catch (Exception $e) {
                     $transaction->rollback(); //如果操作失败, 数据回滚
-                    return array('status'=>0,'message'=>yii::t('app','开台失败'),'siteid'=>$site_id); 
+                    return array('status'=>0,'msg'=>yii::t('app','开台失败'),'siteid'=>$site_id); 
                     //return false;
             }    
         }

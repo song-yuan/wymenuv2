@@ -131,6 +131,7 @@ class TasteClass
 					 'lid'=>$maxId['id'],
 					 'dpid'=>$dpid,
 					 'create_at'=>date('Y-m-d H:i:s',time()),
+                                         'update_at'=>date('Y-m-d H:i:s',time()),
 					 'taste_id'=>$taste,
 					 'order_id'=>$id,
 					 'is_order'=>$type
@@ -167,12 +168,15 @@ class TasteClass
 			$conn->execute();
 			if(!empty($tastesIds)){
 				foreach($tastesIds as $taste){
-					$sql = 'SELECT NEXTVAL("product_taste") AS id';
-					$maxId = Yii::app()->db->createCommand($sql)->queryRow();
+//					$sql = 'SELECT NEXTVAL("product_taste") AS id';
+//					$maxId = Yii::app()->db->createCommand($sql)->queryRow();
+                                        $se=new Sequence("product_taste");
+                                        $lid = $se->nextval();
 					$data = array(
-					 'lid'=>$maxId['id'],
+					 'lid'=>$lid,
 					 'dpid'=>$dpid,
 					 'create_at'=>date('Y-m-d H:i:s',time()),
+                                         'update_at'=>date('Y-m-d H:i:s',time()),
 					 'taste_group_id'=>$taste,
 					 'product_id'=>$productId,
 					);
@@ -187,7 +191,7 @@ class TasteClass
 		}
 	}
 	public static function getTasteName($tasteId,$dpid){
-		$sql = 'SELECT name from nb_taste_group where lid=:lid and dpid=:dpid';
+		$sql = 'SELECT name from nb_taste_group where lid=:lid and dpid=:dpid and delete_flag="0"';
 		$taste = Yii::app()->db->createCommand($sql)->bindValue(':lid',$tasteId)->bindValue(':dpid',$dpid)->queryRow();
 		return $taste['name'];
 	}

@@ -31,7 +31,7 @@ class ProductPrinterController extends BackendController
                 $printerway=array();
 		$lid = Yii::app()->request->getParam('lid');
 		$model = Product::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
-		
+		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$postData = Yii::app()->request->getPost('ProductPrinterway');
 			//$model->printer_way_id = $postData;

@@ -57,6 +57,26 @@ class orderManagementController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
+	
+	public function actionRefund(){
+		$model = new Printer() ;//新建数据库表！！！
+		$model->dpid = $this->companyId ;
+	
+		if(Yii::app()->request->isPostRequest) {
+			//$model->attributes = Yii::app()->request->getPost('Printer');
+			$se=new Sequence("refund");
+			$model->lid = $se->nextval();
+			$model->create_at = date('Y-m-d H:i:s',time());
+			$model->delete_flag = '0';
+			if($model->save()) {
+				Yii::app()->user->setFlash('success' , yii::t('app','退款成功'));
+				$this->redirect(array('orderManagement/refund','companyId' => $this->companyId));
+			}
+		}
+		$this->render('refund' , array(
+				'model' => $model
+		));
+	}
 
 	public function actionNotPay(){
 		$criteria = new CDbCriteria();
@@ -93,7 +113,6 @@ class orderManagementController extends BackendController
 	}
 	
 	public function actionOrderDaliyCollect(){
-		
 		$criteria = new CDbCriteria;
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
@@ -112,9 +131,7 @@ class orderManagementController extends BackendController
 		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
 		$criteria->with = array("company","paymentMethod"); //连接表
 		$criteria->order = 't.lid ASC' ;//排序条件
-		$criteria->group = 't.payment_method_id,t.paytype';
-		//$criteria->group = 't.paytype';
-		$criteria->distinct = TRUE; //是否唯一查询
+		$criteria->group = 't.paytype';
 		
 		$pages = new CPagination(Order::model()->count($criteria));
 		//$pages->PageSize = 10;
@@ -131,7 +148,82 @@ class orderManagementController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
-	
+	//日结 指定日期的订单
+	public function actionDailyclose(){
+
+		$criteria = new CDbCriteria;
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
+		$criteria->select = 't.paytype, t.payment_method_id,t.lid,t.dpid, t.update_at,t.order_status,t.should_total,sum(t.reality_total) as should_all';
+	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
+		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
+		$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addInCondition('t.order_status', array(3,4));
+		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+		$criteria->with = array("company","paymentMethod"); //连接表
+		$criteria->order = 't.lid ASC' ;//排序条件
+		$criteria->group = 't.paytype';
+		
+		$models =  Order::model()->findAll($criteria);
+		$transaction = Yii::app()->db->beginTransaction(); 
+		try{
+			$userId = Yii::app()->user->userId;// lid_dpid
+			$userIdArr = explode('_',$userId);
+			$se=new Sequence("close_account");
+            $clid = $se->nextval();
+			$closeA = new CloseAccount;
+			$closeAdata = array(
+								'lid'=>$clid,
+								'dpid'=>$this->companyId,
+								'create_at'=>date('Y-m-d H:i:s',time()),
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'user_id'=>$userIdArr[0],
+								'begin_time'=>$begin_time,
+								'end_time'=>$end_time,
+								'close_day'=>date('Y-m-d H:i:s',time()),
+								'all_money'=>0
+								);
+			$closeA->attributes = $closeAdata;
+			$closeA->save();
+			
+			$totalMoney = 0;
+			foreach($models as $model){
+				//插入明细表
+				$se=new Sequence("close_account_detail");
+	            $lid = $se->nextval();
+				$closeADel = new CloseAccountDetail;
+				$closeADeldata = array(
+								'lid'=>$lid,
+								'dpid'=>$this->companyId,
+								'create_at'=>date('Y-m-d H:i:s',time()),
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'close_account_id'=>$clid,
+								'paytype'=>$model->paytype,
+								'payment_method_id'=>$model->payment_method_id,
+								'all_money'=>$model->should_all,
+								);
+				$closeADel->attributes = $closeADeldata;
+				$closeADel->save();
+				
+				$totalMoney +=$model->should_all;
+			}
+			
+			//更改订单表状态
+			Order::model()->updateAll(array('order_status'=>8),'update_at >=:begin_time and :end_time >=update_at and order_status in (3,4)',array(':begin_time'=>$begin_time,':end_time'=>$end_time));
+			
+			$cmodel = CloseAccount::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$clid,'dpid'=>$this->companyId));
+			$cmodel->all_money = $totalMoney;
+			$cmodel->update();
+			$transaction->commit(); //提交事务会真正的执行数据库操作
+			echo 1;
+		}catch (Exception $e) {
+			$transaction->rollback(); //如果操作失败, 数据回滚
+			echo 0;
+		}
+		exit();
+	}
 	
 	public function actionAccountStatement(){
 	
@@ -153,13 +245,13 @@ class orderManagementController extends BackendController
 		$criteria->order = 't.close_day ASC' ;//排序条件
 		//$criteria->group = 't.payment_method_id,t.paytype,day(t.create_at)';
 		//$criteria->group = 't.paytype';
-		$criteria->distinct = TRUE; //是否唯一查询
 	
 		$pages = new CPagination(CloseAccount::model()->count($criteria));
 		//$pages->PageSize = 10;
 		$pages->applyLimit($criteria);
 	
 		$model=  CloseAccount::model()->findAll($criteria);
+                //var_dump($model);exit;
 		//var_dump($model);exit;
 		$this->render('accountStatement',array(
 				'models'=>$model,
@@ -207,7 +299,9 @@ class orderManagementController extends BackendController
                 $begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
                 $end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
                 $Did = Yii::app()->request->getParam('Did',0);
-				//var_dump($begin_time);exit;
+                //var_dump($begin_time);exit;
+                $orderID = Yii::app()->request->getParam('orderID');
+                //var_dump($orderID);exit;
                 $criteria->select = 't.*'; //代表了要查询的字段，默认select='*'; 
                 $criteria->addCondition("t.dpid= ".$this->companyId);
                // if ($Did > 0){
@@ -216,6 +310,9 @@ class orderManagementController extends BackendController
                 $criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
                 
                 $criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+                if($orderID){
+                	$criteria->addCondition("t.order_id= ".$orderID);
+                }
                 //$criteria->select = 't1.should_total';
                 //var_dump($begin_time);exit;
 				$criteria->with = array("company","order"); //连接表
@@ -252,6 +349,7 @@ class orderManagementController extends BackendController
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'Did'=>$Did,
+				'orderID'=>$orderID,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));
