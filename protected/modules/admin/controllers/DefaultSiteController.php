@@ -382,6 +382,7 @@ class DefaultSiteController extends BackendController
                                 $se=new Sequence("order");
                                 $torder->lid = $se->nextval();
                                 $torder->dpid=$companyId;
+                                $torder->username=Yii::app()->user->name;
                                 $torder->create_at = date('Y-m-d H:i:s',time());
                                 $torder->lock_status = '0';
                                 $torder->site_id = $sid;

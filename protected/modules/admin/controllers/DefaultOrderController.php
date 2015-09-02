@@ -58,6 +58,7 @@ class DefaultOrderController extends BackendController
                     $se=new Sequence("order");
                     $order->lid = $se->nextval();
                     $order->dpid=$companyId;
+                    $order->usernmae=Yii::app()->user->name;
                     $order->create_at = date('Y-m-d H:i:s',time());
                     $order->lock_status = '0';
                     $order->order_status = '1';
@@ -151,6 +152,7 @@ class DefaultOrderController extends BackendController
                     $se=new Sequence("order");
                     $order->lid = $se->nextval();
                     $order->dpid=$companyId;
+                    $order->username=Yii::app()->user->name;
                     $order->create_at = date('Y-m-d H:i:s',time());
                     $order->lock_status = '0';
                     $order->order_status = '1';

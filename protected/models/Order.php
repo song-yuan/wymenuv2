@@ -53,11 +53,11 @@ class Order extends CActiveRecord
 			array('should_total,reality_total,callno', 'length', 'max'=>10),
 			array('is_temp, order_status, lock_status', 'length', 'max'=>1),
                         array('paytype', 'length', 'max'=>1),
-			array('remark, taste_memo', 'length', 'max'=>50),
+			array('remark, username, taste_memo', 'length', 'max'=>50),
 			//array('create_at,pay_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at,paytype, update_at,payment_method_id, pay_time, site_id, is_temp, number, order_status, lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at,paytype, update_at,username,payment_method_id, pay_time, site_id, is_temp, number, order_status, lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,6 +85,7 @@ class Order extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => yii::t('app','下单时间'),
 			'update_at' => yii::t('app','更新时间'),
+                        'username' => yii::t('app','员工登录名'),
 			'site_id' => yii::t('app','餐桌'),
 			'is_temp' => '0固定台 1临时台',
 			'number' => '人数，和开台中的人数保持一致',
@@ -124,6 +125,7 @@ class Order extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('site_id',$this->site_id);
+                $criteria->compare('username',$this->username);
 		$criteria->compare('is_temp',$this->is_temp,true);
 		$criteria->compare('number',$this->number);
 		$criteria->compare('order_status',$this->order_status,true);
