@@ -55,7 +55,7 @@ class CloseAccountDetail extends CActiveRecord
 		return array(
 				'company' => array(self::BELONGS_TO , 'Company' ,'' ,'on'=>'t.dpid = company.dpid') ,
 				'paymentMethod' => array(self::BELONGS_TO , 'PaymentMethod' ,'' ,'on'=>'t.payment_method_id = paymentMethod.lid and t.dpid = paymentMethod.dpid ') ,
-			    'closeAccount'=>array(self::BELONGS_TO , 'closeAccount' ,'' ,'on'=>'t.dpid = closeAccount.dpid and t.close_account_id = closeAccount.lid'),
+			    'closeAccount'=>array(self::BELONGS_TO , 'CloseAccount' ,'' ,'on'=>'t.dpid = closeAccount.dpid and t.close_account_id = closeAccount.lid'),
 		);
 	}
 
