@@ -45,7 +45,7 @@
 								<div class="form-group">
 										<?php echo $form->label($model, '订单金额',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<input type="text" class="form-control"  value="<?php echo $order->reality_total;?>"/>
+											<input type="text" class="form-control"  value="<?php echo $order->reality_total;?>" disabled="disabled"/>
 										</div>
 									</div>
                                 <div class="form-group">
