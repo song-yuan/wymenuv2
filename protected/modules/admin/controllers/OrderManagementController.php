@@ -61,12 +61,12 @@ class orderManagementController extends BackendController
 	public function actionRefund(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		$orderID = Yii::app()->request->getParam('orderID');
+		$orderId = Yii::app()->request->getParam('orderId');
 		
 		$model = new OrderPay;//新建数据库表！！！
 		$model->dpid = $this->companyId ;
 		
-		$order = Order::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$orderID,':dpid'=>$this->companyId));
+		$order = Order::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$orderId,':dpid'=>$this->companyId));
 		if(!$order){
 			Yii::app()->user->setFlash('success' , yii::t('app','无法查询到该订单!'));
 			$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
@@ -104,7 +104,7 @@ class orderManagementController extends BackendController
 		}
 		$this->render('refund' , array(
 				'model' => $model,
-				'orderId'=>$orderID,
+				'orderId'=>$orderId,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 		));

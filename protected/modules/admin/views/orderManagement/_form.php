@@ -13,7 +13,7 @@
 								<div class="form-group">
 									<?php echo $form->label($model, '退款订单号',array('class' => 'col-md-3 control-label'));?>
 									<div class="col-md-4">
-									       <?php echo $form->label($model,$orderID,array('class' =>'form-control'));?>
+									       <?php echo $form->label($model,$orderId,array('class' =>'form-control'));?>
 									       <input type="hidden" name="OrderPay[order_id]" value="<?php echo $orderID;?>" />
 									</div>
 								</div>
