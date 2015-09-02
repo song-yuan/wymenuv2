@@ -16,7 +16,6 @@
                                                         
                                                 </div>
                                                 <div class="modal-body">
-                                                        <div class="form-actions fluid" id="product_panel">
                                                                 <div class="form-group" <?php if($orderRetreat->hasErrors('retreat_id')) echo 'has-error';?>>
                                                                         <?php echo $form->label($orderRetreat, 'retreat_id',array('class' => 'col-md-4 control-label'));?>
                                                                         <div class="col-md-6">											
@@ -33,7 +32,7 @@
                                                                         </div>
                                                                 </div>
                                                                 
-                                                        </div><<?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>>
+                                                        <?php echo yii::t('app','!--订单明细中 退菜、勾挑、优惠、重新厨打///厨打、结单、整单优惠--');?>
                                                 </div>
                                                 
                                                 <?php echo $form->hiddenField($orderRetreat,'order_detail_id',array('class'=>'form-control')); ?>
