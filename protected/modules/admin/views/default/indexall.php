@@ -1268,6 +1268,8 @@
 //                });
 				  $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addRetreat',array('companyId'=>$this->companyId));?>/id/'+lid
                     ,'', function(){
+                      layer.close(layer_index1);
+                 	  layer_index1=0;
                       $modal.modal();
                 });
              });
