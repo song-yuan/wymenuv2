@@ -61,7 +61,7 @@ class orderManagementController extends BackendController
 	public function actionRefund(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		$orderId = Yii::app()->request->getParam('orderId');
+		$orderId = Yii::app()->request->getParam('orderID');
 		
 		$model = new OrderPay;//新建数据库表！！！
 		$model->dpid = $this->companyId ;
