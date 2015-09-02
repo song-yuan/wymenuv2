@@ -93,9 +93,9 @@ class orderManagementController extends BackendController
 				$model->update_at = date('Y-m-d H:i:s',time());
 				if($model->save()) {
 					Yii::app()->user->setFlash('success' , yii::t('app','退款成功'));
-					$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
 				}
 			     $transaction->commit(); //提交事务会真正的执行数据库操作
+			     $this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
 			} catch (Exception $e) {
 				$transaction->rollback(); //如果操作失败, 数据回滚
 				 Yii::app()->user->setFlash('error' , yii::t('app','退款失败'));
