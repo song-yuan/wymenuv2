@@ -22,22 +22,22 @@
 									<div class="col-md-9">
 									<div class="radio-list">
 										<label class="radio-inline">
-										<input type="radio" name="OrderPay[paytype]" value="0" <?php if(!$model->type) echo 'checked';?>> 现金支付
+										<input type="radio" name="OrderPay[paytype]" value="0" <?php if(!$model->paytype) echo 'checked';?>> 现金支付
 										</label>
 										<label class="radio-inline">
-										<input type="radio" name="OrderPay[paytype]" value="1" <?php if($model->type) echo 'checked';?>> 微信支付
+										<input type="radio" name="OrderPay[paytype]" value="1" <?php if($model->paytype) echo 'checked';?>> 微信支付
 										</label>
 										<label class="radio-inline">
-										<input type="radio" name="OrderPay[paytype]" value="2" <?php if($model->type) echo 'checked';?>> 支付宝支付
+										<input type="radio" name="OrderPay[paytype]" value="2" <?php if($model->paytype) echo 'checked';?>> 支付宝支付
 										</label>
 										<label class="radio-inline">
-										<input type="radio" name="OrderPay[paytype]" value="3" <?php if($model->type) echo 'checked';?>> 后台手动支付
+										<input type="radio" name="OrderPay[paytype]" value="3" <?php if($model->paytype) echo 'checked';?>> 后台手动支付
 										</label>
 										<label class="radio-inline">
-										<input type="radio" name="OrderPay[paytype]" value="4" <?php if($model->type) echo 'checked';?>> 会员卡
+										<input type="radio" name="OrderPay[paytype]" value="4" <?php if($model->paytype) echo 'checked';?>> 会员卡
 										</label>
 										<label class="radio-inline">
-										<input type="radio" name="OrderPay[paytype]" value="5" <?php if($model->type) echo 'checked';?>> 银联
+										<input type="radio" name="OrderPay[paytype]" value="5" <?php if($model->paytype) echo 'checked';?>> 银联
 										</label>
 									</div>
 									</div>
