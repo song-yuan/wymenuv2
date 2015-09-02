@@ -85,8 +85,7 @@ class orderManagementController extends BackendController
 					Yii::app()->user->setFlash('success' , yii::t('app','退款失败,退款金额大于订单金额!'));
 					$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
 				}
-				var_dump($pay_amount);var_dump($order->reality_total);exit;
-				var_dump($order->update());
+				var_dump($order->update());exit;
 				$model->pay_amount = $pay_amount;
 				$se=new Sequence("order_pay");
 				$model->lid = $se->nextval();
