@@ -59,7 +59,7 @@
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-											<a href="<?php echo $this->createUrl('orderManagement/paymentRecord' , array('companyId' => $this->companyId));?>/orderID/<?php echo $orderID;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green"><?php echo yii::t('app','返回');?></a>  
+											<a href="<?php echo $this->createUrl('orderManagement/paymentRecord' , array('companyId' => $this->companyId));?>/orderID/<?php echo $orderId;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green"><?php echo yii::t('app','返回');?></a>  
 											<a href="<?php echo $this->createUrl('orderManagement/paymentRecord' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green"><?php echo yii::t('app','返回所有');?></a>                             
 										</div>
 									</div>
