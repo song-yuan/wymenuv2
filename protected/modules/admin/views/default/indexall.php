@@ -778,7 +778,7 @@
             //printlist_btn
             $('#printlist_btn').on(event_clicktouchstart,function(){
                 var orderid=$(".selectProduct").attr("orderid");
-                var padid="0000000054";
+                var padid="0000000046";
                 if (typeof Androidwymenuprinter == "undefined") {
                     alert("找不到PAD设备");
                     //return false;
@@ -805,21 +805,48 @@
                             var printresult=false;
                             if(data.status){
                                 var index = layer.load(0, {shade: [0.3,'#fff']});
-                                var wait=setInterval(function(){ 
+                                //var wait=setInterval(function(){ 
+                                var waitfun=function(){
                                     waittime++;
+                                    //alert(waittime);
                                     printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+                                    //printresult=true;
                                     if(printresult)
                                     {
-                                        clearInterval(wait);
+                                        //clearInterval(wait);
+                                        waittime=10;
                                         layer.close(index);
                                     }
-                                    if(waittime>5)
+                                    if(waittime>3)
                                     {
-                                         clearInterval(wait);
+                                         //clearInterval(wait);
                                          layer.close(index);
                                          //alert(language_print_pad_fail);
+                                         if(!printresult)
+                                        {
+                                            alert("有打印失败，请去收银台查看1！");
+                                            //如果失败，就把打印任务插入到数据库
+                                            $.ajax({
+                                                url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+data.jobid+"/address/"+data.address,
+                                                type:'GET',
+                                                //data:formdata,
+                                                async:false,
+                                                dataType: "json",
+                                                success:function(msg){
+
+                                                },
+                                                error: function(msg){
+                                                    alert("网络故障！")
+                                                }
+                                            });
+                                        }
+                                     }else{
+                                         waitfun();
                                      }
-                                },1000); 	
+                                 }
+                                 
+                               // },3000); 
+                               waitfun();
                             }else{
                                 alert(data.msg);                                
                             }
@@ -1023,14 +1050,17 @@
                                     }); 
                                     //alert(data.jobs)
                                     var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
-                                    var wait=setInterval(function(){ 
-                                        waittime++;                                
+                                    //var wait=setInterval(function(){ 
+                                    var waitfun=function(){
+                                        waittime++;
+                                        //alert(waittime);
                                         printresultfail=false;
                                         $.each(data.jobs,function(skey,svalue){                                        
                                             detaildata=svalue.split("_");
                                             if(detaildata[0]=="0")//继续打印
                                             {
                                                 printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
+                                                //printresulttemp=true;
                                                 if(printresulttemp)
                                                 {
                                                     data.jobs[skey]="1_"+svalue.substring(2);
@@ -1041,13 +1071,14 @@
                                          }); 
                                          if(!printresultfail)
                                          {
-                                            clearInterval(wait);
-                                            layer.close(layer_flash_index);
+                                            //clearInterval(wait);
+                                            //layer.close(layer_flash_index);
+                                            waittime=10;
                                          }                               
         //                                
-                                        if(waittime>5)
+                                        if(waittime>3)
                                         {
-                                             clearInterval(wait);
+                                             //clearInterval(wait);
                                              layer.close(layer_flash_index);                                     
                                             if(printresultfail)
                                             {
@@ -1089,10 +1120,12 @@
                                                         }
                                                     });
                                             }
-
-                                        }                                
-                                    },1000);
-                                     
+                                        }else{
+                                            waitfun();
+                                        }
+                                    }
+                                    //},3000);
+                                    waitfun();
                                 }else{
                                     alert(data.msg);
                                     //alert("下单成功，打印失败");

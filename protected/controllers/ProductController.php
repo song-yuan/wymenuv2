@@ -474,6 +474,30 @@ class ProductController extends Controller
 		));
 	}
         
+        public function actionClientWaitorlist()
+	{
+                //Yii::app()->theme="pad_cn";
+		$compayId=Yii::app()->request->getParam('companyId');
+                $padtype=Yii::app()->request->getParam('padtype');
+                if($padtype=="1")
+                {
+                    Yii::app()->language = 'jp';
+                    Yii::app()->theme="pad";
+                }else{
+                    Yii::app()->language = 'zh_cn';
+                    Yii::app()->theme="pad_cn";
+                }
+                $criteria = new CDbCriteria;		
+                $criteria->condition =  't.delete_flag = 0 and t.status = 1 and t.dpid='.$compayId ;
+               // $criteria->order = ' t.site_id desc ';
+                
+                $users = User::model()->findAll($criteria);
+                
+                $this->renderPartial('clientwaitor',array(
+				'users'=>$users
+		));
+	}
+        
         
         public function actionOpensite() {
                 Yii::app()->language = 'zh_cn';

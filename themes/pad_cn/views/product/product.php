@@ -42,6 +42,7 @@
     <input type="hidden" id="id_client_is_temp" name="client_is_temp" value="1">
     <input type="hidden" id="id_client_site_id" name="client_site_id" value="0">
     <input type="hidden" id="id_client_site_name" name="client_site_name" value="新增临时座位！">
+    <input type="hidden" id="id_client_waitor_name" name="client_waitor_name" value="">
     <input type="hidden" id="id_client_reprint" name="client_reprint" value="0">    
 	<div class="mask-trangle"></div>
         <div class="product-mask-info" id="productmasksiteinfo" style="height:0.5em;" action="/wymenuv2/product/getsiteStatus/companyId/<?php echo $this->companyId;?>"></div>
@@ -67,7 +68,7 @@
         <div class="line"></div>
         <div class="product-mask-info">日本語</div>
         <div class="line"></div>-->
-        <div class="product-mask-info" id="pad-order-submit"><?php echo yii::t('app','下单确认'); ?></div>
+        <div class="product-mask-info" id="pad-order-submit"><?php echo yii::t('app','服务员下单'); ?></div>
         <div class="line"></div>
         <div class="product-mask-info" id="pad-disbind-menu"><?php echo yii::t('app','解除绑定'); ?></div>
         <div class="line"></div>
@@ -86,6 +87,10 @@
 </div>
 <!-- 座位列表，每次打开时都刷新 -->
 <div id="divid_client_sitelist" class="client_sitelist">
+    
+</div>
+<!-- 座位列表，每次打开时都刷新 -->
+<div id="divid_client_waitorlist" class="client_sitelist">
     
 </div>
 <!-- 加入订单动画 -->
@@ -225,5 +230,11 @@
 //                shade: [0.1,'#fff'] //0.1透明度的白色背景
 //            });
         });
-       
+       //pad-order-submit
+       $('#pad-order-submit').on(event_clicktouchstart,function(){
+            $('#divid_client_waitorlist').load("<?php echo $this->createUrl('product/clientWaitorlist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>");
+            $('.setting-pad-mask').hide();
+            $('#divid_client_waitorlist').show();
+       });       
+      
 </script>

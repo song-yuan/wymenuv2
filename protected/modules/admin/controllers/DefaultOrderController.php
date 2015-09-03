@@ -442,12 +442,13 @@ class DefaultOrderController extends BackendController
                     $order->should_total=$total['total'];
                 }
                 
-                //return json_encode(array('status'=>false,'msg'=>"111"));
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
                 $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
-                $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",'');
+                $memo="清单";
+                $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo);
                 Yii::app()->end(json_encode($printList));
         }
         
