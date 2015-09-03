@@ -12,16 +12,16 @@ class ProductPrinterController extends BackendController
 	public function actionindex(){
 		$criteria = new CDbCriteria;
 		//$criteria->with = 'printerWay';
-		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0 ');
-                $criteria->with='productPrinterway';
+		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0 ');                
 		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		
 		$pages = new CPagination(Product::model()->count($criteria));
 		//$pages->setPageSize(1);
 		$pages->applyLimit($criteria);
+                $criteria->with='productPrinterway';
 		$models = Product::model()->findAll($criteria);
-		//var_dump($models[0]);exit;
+		//var_dump($models,$pages);exit;
 		$this->render('productPrinter',array(
 				'models'=>$models,
 				'pages' => $pages,

@@ -489,16 +489,18 @@ class Helper
                 {
                     //array_push($listData,str_pad(yii::t('app','应付：').number_format($order->should_total,0) , 26,' ').str_pad(date('Y-m-d H:i:s',time()),20,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,0));                    
+                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,0)
+                        .yii::t('app','实付：').number_format($order->reality_total,0));                    
                 }else{
                     //array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
                     //array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
                     //        .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,2));                    
+                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,2)
+                            .yii::t('app','实付：').number_format($order->reality_total,2));                    
                 }
                 array_push($listData,"br");
-                array_push($listData,"00".$oder->username);
+                array_push($listData,"00".$order->username);
                 array_push($listData,"00"."   ".date('Y-m-d H:i:s',time()));
                 array_push($listData,"br");
                 array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
@@ -940,6 +942,8 @@ class Helper
                                     $productids="";
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                                     $listData = array("22".Helper::setPrinterTitle($order->company->company_name,8));
+                                    array_push($listData,"br");
+                                    array_push($listData,"11"."总单"); 
                                     array_push($listData,"00");
                                     array_push($listData,"br");
                                     if($reprint)
@@ -1049,6 +1053,8 @@ class Helper
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                                     //组装头
                                     $listDataHeader = array("22".Helper::setPrinterTitle($order->company->company_name,8));
+                                    array_push($listData,"br");
+                                    array_push($listData,"11"."分单"); 
                                     array_push($listDataHeader,"00");
                                     array_push($listDataHeader,"br");
 

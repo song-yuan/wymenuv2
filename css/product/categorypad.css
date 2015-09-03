@@ -145,7 +145,7 @@
 	background:white;
 	z-index:1003;
         padding-right:10px;
-	height: 63%;
+	height: 43%;
         overflow-y: scroll;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
 	border: 1px solid #ddd;
@@ -167,6 +167,26 @@
             float:left;
             width:120px;
             height: 70px;			
+            border: 1px solid #add;
+            margin:5px;
+            list-style:none;
+            text-align:center;
+            vertical-align:middle;
+    }
+    
+.client_waitorlist_in{
+        padding-right:10px;
+        display:inline-block;
+}
+
+    .client_waitorlist_in ul {
+            padding-left:5px;
+            padding-left:0px;
+    }
+    .client_waitorlist_in ul li {
+            float:left;
+            width:140px;
+            height: 50px;			
             border: 1px solid #add;
             margin:5px;
             list-style:none;
