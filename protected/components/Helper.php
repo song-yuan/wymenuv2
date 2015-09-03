@@ -943,7 +943,7 @@ class Helper
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                                     $listData = array("22".Helper::setPrinterTitle($order->company->company_name,8));
                                     array_push($listData,"br");
-                                    array_push($listData,"11"."总单"); 
+                                    array_push($listData,"22"."+++总单+++"); 
                                     array_push($listData,"00");
                                     array_push($listData,"br");
                                     if($reprint)
@@ -1054,7 +1054,7 @@ class Helper
                                     //组装头
                                     $listDataHeader = array("22".Helper::setPrinterTitle($order->company->company_name,8));
                                     array_push($listData,"br");
-                                    array_push($listData,"11"."分单"); 
+                                    array_push($listData,"22"."---分单---"); 
                                     array_push($listDataHeader,"00");
                                     array_push($listDataHeader,"br");
 
