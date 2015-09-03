@@ -845,7 +845,8 @@
                                             });
                                         }
                                      }else{
-                                         waitfun();
+                                         //waitfun();
+                                         setTimeout(waitfun, 2000);
                                      }
                                  }
                                  
@@ -1125,7 +1126,8 @@
                                                     });
                                             }
                                         }else{
-                                            waitfun();
+                                            //waitfun();
+                                            setTimeout(waitfun, 2000);
                                         }
                                     }
                                     //},3000);
