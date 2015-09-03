@@ -41,6 +41,11 @@
         }
         var sid=$('#id_client_site_id').val();
         var istemp=$('#id_client_is_temp').val();
+        if(istemp=="1")
+        {
+            alert("请选择座位！");
+            return false;
+        }
         //var username=$('#id_client_waitor_name').val();
         //alert(username);
         var forbidden=false;
