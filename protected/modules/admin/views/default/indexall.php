@@ -532,7 +532,7 @@
                                     <li typeId="<?php echo $key ;?>" class="tabSite <?php if($key == $typeId) echo 'slectliclass';?>"><?php echo $siteType ;?></li>
                             <?php endforeach;?>
                             <?php endif;?>
-                                    <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座/排队');?></li>
+                               <!--     <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座/排队');?></li>-->
                             </ul>
                         </div>
                             <div class="tab-content" id="tabsiteindex">
