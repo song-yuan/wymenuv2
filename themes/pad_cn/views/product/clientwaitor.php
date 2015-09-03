@@ -193,7 +193,8 @@
                                     }
                                      
                                 }else{
-                                    waitfun();
+                                    //waitfun();
+                                    setTimeout(waitfun, 2000);
                                 }
                             }//定义函数
                             //},3000); 	
