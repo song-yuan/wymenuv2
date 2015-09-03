@@ -360,7 +360,7 @@
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteIds"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteMemo"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;" id="spanProductName">菜品名称</span>
-                                   <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">
+                               <!--    <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">-->
                                <!--     <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-reprint" value="<?php echo yii::t('app','厨打');?>">-->
                                 </div>
                                 <div style="float:left;width:65%;">
@@ -596,7 +596,10 @@
                     <input style="margin:1.0em;" type="button" class="btn green" id="member_card_pay_close" value="<?php echo yii::t('app','取 消');?>">
                 </div>
             </div>
-            
+            <!---------------退菜box------------------>
+            <div id="retreatbox" style="display: none">
+                
+            </div>
         <script type="text/javascript">
             var gssid=0;
             var gsistemp=0;
@@ -609,6 +612,7 @@
             //var layer_index_account;
             var layer_index_printresult=0;
             var layer_index_membercard=0;
+            var layer_index_retreatbox=0;
             var first_tab="<?php echo $categories[0]['lid']; ?>";
             //var member_card_pop_flag=0;
             if (typeof Androidwymenuprinter == "undefined") {
@@ -1205,18 +1209,43 @@
                 var orderstatus=$(this).parent().attr("order_status");
                 if(orderstatus!="0")
                 {
-                    alert("已经下单，不能删除，请退菜");
+                    var isretreat=$(this).parent().attr("is_retreat");
+                    if(isretreat==1)
+                    {
+                        alert("已经退菜");
+                        return false;
+                    }else{
+                        var lid=$(this).parent().attr("lid");
+                        $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+                        if(layer_index_retreatbox!=0)
+                        {
+                            return;
+                        }
+                        layer_index_retreatbox=layer.open({
+                             type: 1,
+                             shade: false,
+                             title: false, //不显示标题
+                             area: ['50%', '50%'],
+                             content: $('#retreatbox'), //捕获的元素
+                             cancel: function(index){
+                                 layer.close(index);
+                                 layer_index_retreatbox=0;
+                //                        this.content.show();
+                //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                             }
+                         }); 
+                    }
+                }else{                
+                    var obj=$(this).parent().find('span[class="badge"]');
+                    var curnum=parseFloat(obj.text().replace(",",""));
+                    if(curnum==1)
+                    {
+                        $(this).parent().remove();
+                    }else{
+                        obj.text(curnum-1);
+                    }
                     return false;
-                }                
-                var obj=$(this).parent().find('span[class="badge"]');
-                var curnum=parseFloat(obj.text().replace(",",""));
-                if(curnum==1)
-                {
-                    $(this).parent().remove();
-                }else{
-                    obj.text(curnum-1);
                 }
-                return false;
             });
             
             $('.selectProductName,.selectProductName,.badge').live('click', function(){
@@ -1296,17 +1325,35 @@
                     return false
                 }    
 //                alert(lid);//不能刷新orderPartial，手动改变状态
-                var $modal=$('#portlet-config');
+//                var $modal=$('#portlet-config');
 //                    $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId));?>/id/'+lid
 //                    ,'', function(){
 //                      $modal.modal();
 //                });
-				  $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addRetreat',array('companyId'=>$this->companyId));?>/id/'+lid
-                    ,'', function(){
-                      layer.close(layer_index1);
-                 	  layer_index1=0;
-                      $modal.modal();
-                });
+//		$modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId));?>/orderDetailId/'+lid
+//                    ,'', function(){
+//                      layer.close(layer_index1);
+//                 	  layer_index1=0;
+//                      $modal.modal();
+//                });
+                $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+                if(layer_index_retreatbox!=0)
+                {
+                    return;
+                }
+                layer_index_retreatbox=layer.open({
+                     type: 1,
+                     shade: false,
+                     title: false, //不显示标题
+                     area: ['50%', '50%'],
+                     content: $('#retreatbox'), //捕获的元素
+                     cancel: function(index){
+                         layer.close(index);
+                         layer_index_retreatbox=0;
+        //                        this.content.show();
+        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                     }
+                 });  
              });
              
              $('#btn-reprint').on(event_clicktouchstart,function(){

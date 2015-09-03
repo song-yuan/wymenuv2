@@ -1,7 +1,7 @@
                        	
                                         	<?php $form=$this->beginWidget('CActiveForm', array(
                                                         'id'=>'retreat_form',
-                                                        'action' => $this->createUrl('defaultOrder/addRetreat',array('companyId'=>$this->companyId,'orderDetailId'=>$orderRetreat->order_detail_id)),
+                                                        'action' => $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId,'orderDetailId'=>$orderRetreat->order_detail_id)),
                                                         'enableAjaxValidation'=>true,
                                                         'enableClientValidation'=>true,
                                                         'clientOptions'=>array(
@@ -12,8 +12,7 @@
                                                         ),
                                                 )); ?>
                                                 <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                                        
+                                                    <h4> <?php echo $productname;?> </h4>
                                                 </div>
                                                 <div class="modal-body">
                                                                 <div class="form-group" <?php if($orderRetreat->hasErrors('retreat_id')) echo 'has-error';?>>
@@ -38,7 +37,7 @@
                                                 <?php echo $form->hiddenField($orderRetreat,'order_detail_id',array('class'=>'form-control')); ?>
                                                 
                                                 <div class="modal-footer">
-                                                        <button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+                                                        <button type="button" class="btn default" id="create_btn_close_retreat"><?php echo yii::t('app','取 消');?></button>
                                                         <input type="button" class="btn green" id="create_btn_add_retreat" value="<?php echo yii::t('app','确 定');?>">
                                                 </div>
 
@@ -77,23 +76,29 @@
 //                        });
                         
                         $('#create_btn_add_retreat').on(event_clicktouchstart,function(){                            
-                           // var id = $(this).val();                            
+                           var orderid=$(".selectProduct").attr("orderid");                            
                                 $.ajax({
                                         'type':'POST',
 					'dataType':'json',
 					'data':$('#retreat_form').serialize(),
 					'url':$('#retreat_form').attr('action'),
                                         success:function(result){
-                                            alert(result.status);
-                                            if(result.status)
+                                            alert(result.msg);
+                                            if(result.status=="1")
                                             {
-                                                alert(result.msg);
                                                 $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
-//                                                var $modal=$('#portlet-config');
-//                                                $modal.hide();
+//                                              //$('#portlet-config').hide();
+                                                layer.close(layer_index_retreatbox);
+                                                layer_index_retreatbox=0;
+                                                
                                             }
                                                                                                 
                                         }
                                 });                            
+                        });
+                        //create_btn_close_retreat
+                        $('#create_btn_close_retreat').on(event_clicktouchstart,function(){   
+                            layer.close(layer_index_retreatbox);
+                            layer_index_retreatbox=0;
                         });
                     </script>
