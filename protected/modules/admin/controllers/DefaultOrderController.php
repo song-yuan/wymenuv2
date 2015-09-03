@@ -1395,6 +1395,51 @@ class DefaultOrderController extends BackendController
 		));
 	}
         
+        public function actionAddRetreatOne() {
+                $companyId=Yii::app()->request->getParam('companyId','0');
+                $orderDetailId=Yii::app()->request->getParam('orderDetailId','0');
+                
+               $db=Yii::app()->db;
+                $orderRetreat = new OrderRetreat();
+                $orderRetreat->order_detail_id = $orderDetailId;
+                $orderRetreat->dpid = $companyId;
+                $retreats = Retreat::model()->findAll(' dpid=:dpid and delete_flag = 0',array(':dpid'=>$companyId));                
+                $retreatslist=CHtml::listData($retreats, 'lid', 'name');
+                $orderDetail = OrderProduct::model()->find('dpid=:dpid and lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));                    
+                $productname=$db->createCommand("select product_name from nb_product where dpid=".$companyId." and lid=".$orderDetail->product_id)->queryScalar();
+                $ret=array();
+		if(Yii::app()->request->isPostRequest){
+                    Until::validOperate($companyId, $this);
+                    //$orderDetail = OrderProduct::model()->find('dpid=:dpid and lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));
+                    
+                    $transaction = Yii::app()->db->beginTransaction();
+                    try {
+                            $sqlorderproduct="update nb_order_product set is_retreat = 1 where dpid=".$companyId." and lid = ".$orderDetailId;
+                            $db->createCommand($sqlorderproduct)->execute();
+	                    $orderRetreat->attributes = Yii::app()->request->getPost('OrderRetreat');
+	                    $orderRetreat->create_at = date('Y-m-d H:i:s',time());
+                            $orderRetreat->update_at = date('Y-m-d H:i:s',time());
+	                    $se=new Sequence("order_retreat");
+	                    $orderRetreat->lid = $se->nextval();
+	                    if($orderRetreat->save()){                                
+	                        $ret= json_encode(array('status'=>"1",'msg'=>yii::t('app','退菜成功')));
+	                    }else{
+	                        $ret= json_encode(array('status'=>"0",'msg'=>yii::t('app','失败2')));
+	                    }
+	                    $transaction->commit(); //提交事务会真正的执行数据库操作
+					} catch (Exception $e) {
+						$transaction->rollback(); //如果操作失败, 数据回滚
+						 $ret= json_encode(array('status'=>"0",'msg'=>yii::t('app','失败1')));
+					}                    
+                    Yii::app()->end($ret);
+                }                
+                $this->renderPartial('addretreatone' , array(
+				'orderRetreat' => $orderRetreat,
+				'retreats'=>$retreatslist,
+                                'productname'=>$productname
+		));
+	}
+        
         public function actionEditRetreat() {
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $orderRetreatId=Yii::app()->request->getParam('orderRetreatId','0');
