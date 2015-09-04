@@ -456,7 +456,7 @@
     //});on click到此
         
          $('#pad-order-submit-subbtn').on('click',function(){
-             $('#divid_client_waitorlist').hide();
+             $('#divid_client_waitorlist').css("display","none");
             clientsaveorder2(); 
         });
         
