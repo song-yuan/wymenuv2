@@ -85,32 +85,50 @@ class StatementsController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.reality_total) as all_reality,t.paytype,t.payment_method_id,t.order_status';
-		$criteria->with = array('company','paymentMethod');
-		$criteria->condition = 't.order_status in(3,4,8) and t.dpid='.$this->companyId ;
+//		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.reality_total) as all_reality,t.paytype,t.payment_method_id,t.order_status';
+//		$criteria->with = array('company','paymentMethod');
+//		$criteria->condition = 't.order_status in(3,4,8) and t.dpid='.$this->companyId ;
+//		if($str){
+//			$criteria->condition = ' t.order_status in(3,4,8) and t.dpid in('.$str.')';
+//		}
+//		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+//		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+//		if($text==1){
+//			$criteria->group ='t.paytype,t.dpid,t.payment_method_id,year(t.update_at)';
+//			$criteria->order = 'year(t.update_at) asc,t.dpid asc';
+//		}elseif($text==2){
+//			$criteria->group ='t.paytype,t.dpid,t.payment_method_id,month(t.update_at)';
+//			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+//		}else{
+//			$criteria->group ='t.paytype,t.dpid,t.payment_method_id,day(t.update_at)';
+//			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+//		}
+		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id';
+		$criteria->with = array('company','order');
+		$criteria->condition = ' t.dpid='.$this->companyId ;
 		if($str){
-			$criteria->condition = ' t.order_status in(3,4,8) and t.dpid in('.$str.')';
+			$criteria->condition = ' t.dpid in('.$str.')';
 		}
-		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
 		if($text==1){
-			$criteria->group ='t.paytype,t.dpid,t.payment_method_id,year(t.update_at)';
+			$criteria->group ='t.paytype,t.dpid,year(t.update_at)';
 			$criteria->order = 'year(t.update_at) asc,t.dpid asc';
 		}elseif($text==2){
-			$criteria->group ='t.paytype,t.dpid,t.payment_method_id,month(t.update_at)';
+			$criteria->group ='t.paytype,t.dpid,month(t.update_at)';
 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
 		}else{
-			$criteria->group ='t.paytype,t.dpid,t.payment_method_id,day(t.update_at)';
+			$criteria->group ='t.paytype,t.dpid,day(t.update_at)';
 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 		}
 		//$criteria->order = 't.update_at asc,t.dpid asc';
 		//$criteria->group = 't.paytype,t.payment_method_id';
 		
-		$pages = new CPagination(Order::model()->count($criteria));
+		$pages = new CPagination(OrderPay::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		//var_dump($criteria);exit;
-	    $model = Order::model()->findAll($criteria);
+	    $model = OrderPay::model()->findAll($criteria);
 	    $comName = $this->getComName();
 		$this->render('salesReport',array(
 				'models'=>$model,

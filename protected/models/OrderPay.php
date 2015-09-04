@@ -16,6 +16,14 @@
  */
 class OrderPay extends CActiveRecord
 {
+        public $should_all;
+        public $all_reality;
+	public $y_all;
+	public $m_all;
+	public $d_all;
+	public $all_status;
+        public $reality_all;
+        public $all_total;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -52,7 +60,8 @@ class OrderPay extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 				'company' => array(self::BELONGS_TO , 'Company' ,'' ,'on'=>'t.dpid=company.dpid') ,
-				'order' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order.dpid and t.order_id=order.lid') ,
+				'order' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order.dpid and t.order_id=order.lid and order.order_status=4') ,
+                                'paymentMethod' => array(self::BELONGS_TO , 'PaymentMethod' ,'' ,'on'=>'t.payment_method_id = paymentMethod.lid and t.dpid = paymentMethod.dpid '),
 		);
 	}
 

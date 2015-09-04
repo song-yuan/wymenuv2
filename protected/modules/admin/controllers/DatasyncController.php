@@ -242,10 +242,10 @@ class DatasyncController extends Controller
                     "nb_b_login",
                     "nb_close_account",
                     "nb_close_account_detail",
-                    "nb_company_wifi",
+                    //"nb_company_wifi",
                     "nb_feedback",
                     "nb_floor",
-                    "nb_guest_message",
+                    //"nb_guest_message",
                     //"nb_local_company",
                     "nb_member_card", // ！！！云端添加，充值时，等改变
                     "nb_member_consumer", 

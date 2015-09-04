@@ -496,8 +496,8 @@ class Helper
                     //array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
                     //        .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,2)
-                            .yii::t('app','实付：').number_format($order->reality_total,2));                    
+                    array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,2)
+                            .yii::t('app','优惠价：').number_format($order->reality_total,2));                    
                 }
                 array_push($listData,"br");
                 array_push($listData,"00".$order->username);
@@ -547,6 +547,63 @@ class Helper
         
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
+	static public function printCloseAccount($dpid,$models,Pad $pad, $cprecode,$printserver,$memo){
+		               
+                $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$dpid));
+		if(empty($printer)) {
+                        return array('status'=>0,'dpid'=>$siteno->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
+		}		
+                $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid),8));
+                if(!empty($memo))
+                {
+                    array_push($listData,"br");
+                    array_push($listData,"22"."<<".$memo);                    
+                }
+                array_push($listData,"00");
+                array_push($listData,"br");
+                foreach ($models as $model)
+                {
+                    $payname="";
+                    switch ($model->paytype)
+                    {
+                        case 0:
+                            $payname="现金支付";
+                            break;
+                        case 1:
+                            $payname="微信支付";
+                            break;
+                        case 2:
+                            $payname="支付宝支付";
+                            break;
+                        case 3:
+                            $payname="后台手动支付";
+                            break;
+                        case 4:
+                            $payname="会员卡支付";
+                            break;
+                        case 5:
+                            $payname="银联卡支付";
+                            break;
+                    }
+                        
+                    array_push($listData,"11".str_pad($payname,12,' ').$model->should_all);
+                    array_push($listData,"br");
+                }
+		array_push($listData,"00".str_pad('',48,'-'));             
+		array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));                    
+                //array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
+                 
+                $precode=$cprecode;
+                //后面加切纸
+                $sufcode="0A0A0A0A0A0A1D5601";                        
+                $retcontent=array();
+		$retcontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);	
+                //$retcontent['orderid']=$order->lid;
+                return $retcontent;
+	}
+        
+        //开台时的打印
+        //打印开台号和人数，以后有WiFi的密码等。
 	static public function printSite(SiteNo $siteno,Site $site,Pad $pad, $cprecode,$printserver,$memo){
 		               
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$siteno->dpid));
@@ -589,7 +646,6 @@ class Helper
                     return array('status'=>0,'msg'=>yii::t('app','发送打印内容失败'));
                 }
 	}
-        
         
         //打印机测试
 	static public function printCheck(Pad $pad){		
@@ -897,7 +953,10 @@ class Helper
                 }
                 //foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
                 $printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));
-                ///return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>count($printerways));
+                if(empty($printerways))
+                {
+                    return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"没有打印方案");
+                }
                 //var_dump($printerways);exit;
                 foreach($printerways as $printerway)
                 {
@@ -910,11 +969,14 @@ class Helper
                             //var_dump($printerway->lid,$productprinterwaynow);exit;
                             if(!empty($productprinterwaynow))
                             {
+                                //不是每个产品都对应所有打印方案
+//                                return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"部分产品没有设置打印方案");
+//                            }else{
                                 $printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid and delete_flag=0',array(':floorid'=>$floor_id,':pwi'=>$printerway->lid,':dpid'=>$order->dpid));
                                 foreach ($printwaydetails as $printway) {
                                     $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$printway->printer_id,':dpid'=>$order->dpid));
                                     if(empty($printer)) {
-                                            return array('status'=>false,'dpid'=>$printer->dpid,'allnum'=>"0",'type'=>'none','msg'=>yii::t('app','没有设置厨房打印机'));		
+                                            return array('status'=>false,'dpid'=>$printer->dpid,'allnum'=>"0",'type'=>'none','msg'=>yii::t('app','打印方案没有设置厨房打印机'));		
                                     }
                                     if(!array_key_exists($printer->lid, $printers_a))
                                     {
@@ -932,8 +994,12 @@ class Helper
                                 }
                             }
                         }                        
-                        //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3");
+                        //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3");
                         //如果是整体，
+//                        if(empty($printer2orderproducts_a))
+//                        {
+//                            return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"没有找到打印机和产品关系");
+//                        }
                         if($printerway->is_onepaper=="1")
                         {
                             foreach ($printer2orderproducts_a as $key=>$values) {
@@ -1166,13 +1232,369 @@ class Helper
                             }
                         }
                 } 
-                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试13");
-                        
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试13");                        
                 //var_dump(json_encode($jobids));exit;
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
                 $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids),0,300);                        
                 $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids),'msg'=>'打印任务正常发布',"jobs"=>$jobids);
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
+                //更新菜品状态为已打印
+                $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$order->dpid." and order_id =".$order->lid;
+                $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
+                $commandorderproduct->execute();
+                
+                return $ret;
+	}
+        
+        //2015/9/4更新
+        //在2的基础上将同一个打印机的任务一次输出，减少打印机的连接请求
+	static public function printKitchenAll3(Order $order,Site $site,  SiteNo $siteNo , $reprint){		
+                $printers_a=array();
+                $orderproducts_a=array();
+                $printer2orderproducts_a=array();
+                $jobids=array();
+                $printercontent_a=array();
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"dddd");        
+                //$orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
+                //$orderProductTasteEx = $orderProduct->taste_memo;
+                //var_dump($orderProductTasteEx);exit;
+                //$site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
+		//$siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
+		//var_dump($site->floor_id,$orderProduct->product->printer_way_id);exit;
+                $floor_id='0';
+                if($order->is_temp=='0')
+                {
+                    $floor_id=$site->floor_id;
+                }
+                $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id=:id and t.dpid=:dpid and t.is_print=0 and t.delete_flag=0' , array(':id'=>$order->lid,':dpid'=>$order->dpid));
+                if(empty($orderProducts)) 
+                {
+                    return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
+                }
+                //foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
+                $printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));
+                if(empty($printerways))
+                {
+                    return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"没有打印方案");
+                }
+                //var_dump($printerways);exit;
+                foreach($printerways as $printerway)
+                {
+                    $printer2orderproducts_a=array();
+                        foreach($orderProducts as $orderProduct)
+                        {
+                            $orderproducts_a[$orderProduct->lid]=$orderProduct;
+                            
+                            $productprinterwaynow=  ProductPrinterway::model()->find("dpid=:dpid and printer_way_id=:pwi and product_id=:pid",array(':dpid'=>$order->dpid,':pwi'=>$printerway->lid,':pid'=>$orderProduct->product_id));
+                            //var_dump($printerway->lid,$productprinterwaynow);exit;
+                            if(!empty($productprinterwaynow))
+                            {
+                                //不是每个产品都对应所有打印方案
+//                                return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"部分产品没有设置打印方案");
+//                            }else{
+                                $printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid and delete_flag=0',array(':floorid'=>$floor_id,':pwi'=>$printerway->lid,':dpid'=>$order->dpid));
+                                foreach ($printwaydetails as $printway) {
+                                    $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$printway->printer_id,':dpid'=>$order->dpid));
+                                    if(empty($printer)) {
+                                            return array('status'=>false,'dpid'=>$printer->dpid,'allnum'=>"0",'type'=>'none','msg'=>yii::t('app','打印方案没有设置厨房打印机'));		
+                                    }
+                                    if(!array_key_exists($printer->lid, $printers_a))
+                                    {
+                                        $printers_a[$printer->lid]=$printer; //add isonpaper listno
+                                    }
+                                    if(array_key_exists($printer->lid, $printer2orderproducts_a))
+                                    {
+                                        array_push($printer2orderproducts_a[$printer->lid],$orderProduct->lid);
+                                    }else{
+                                        $printer2orderproducts_a[$printer->lid]=array($orderProduct->lid);
+                                    }
+                                    if($printer->printer_type!='0') {
+                                            return array('status'=>false,'dpid'=>$printer->dpid,'allnum'=>"0",'type'=>'none','msg'=>yii::t('app','厨打打印机必须是网络打印机'));		
+                                    }
+                                }
+                            }
+                        }                        
+                        //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3");
+                        //如果是整体，
+//                        if(empty($printer2orderproducts_a))
+//                        {
+//                            return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"没有找到打印机和产品关系");
+//                        }
+                        if($printerway->is_onepaper=="1")
+                        {
+                            foreach ($printer2orderproducts_a as $key=>$values) {
+                                
+                                    $printer = $printers_a[$key];
+                                    $productids="";
+                                    //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                                    $listData = array("22".Helper::setPrinterTitle($order->company->company_name,8));
+                                    array_push($listData,"br");
+                                    //array_push($listData,"22"."+++总单+++"); 
+                                    array_push($listData,"22"."<".$printerway->name.">");
+                                    array_push($listData,"00");
+                                    array_push($listData,"br");
+                                    if($reprint)
+                                    {
+                                        $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
+                                        array_push($listData,"11".$strreprint);
+                                    }
+                                    array_push($listData,"br");
+                                    $strSite="";
+                                    if($order->is_temp=='1')
+                                    {
+                                        array_push($listData,"00".yii::t('app','临时座：'));
+                                        array_push($listData,"11".$siteNo->site_id%1000);
+                                    }else{
+                                        array_push($listData,"00".yii::t('app','座号：'));
+                                        array_push($listData,"11".$site->siteType->name.' '.$site->serial);
+                                    }
+                                    array_push($listData,"00".yii::t('app','人数：').$order->number);
+                                    //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
+                                    if(!empty($order->callno))
+                                    {
+                                        array_push($listData,"00"."  ".yii::t('app','呼叫号：'));
+                                        array_push($listData,"11".$order->callno);
+                                    }
+                                    array_push($listData,"br");
+                                    array_push($listData,"00".str_pad('',48,'-'));
+                                    $productids="";
+                                    foreach($values as $value)
+                                    {
+                                        if(empty($productids))
+                                        {
+                                            $productids.=$value;
+                                        }else{
+                                            $productids.=",".$value;
+                                        }
+                                        $orderProduct=$orderproducts_a[$value];
+                                        //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
+                                        array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
+                                        array_push($listData,"br");
+
+                                        $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
+                                        $orderProductTasteEx = $orderProduct->taste_memo;                
+                                        $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
+                                        $existTaste=0;
+                                        if(!empty($orderProductTasteEx))
+                                        {
+                                            $existTaste=1;
+                                        }
+                                        foreach($orderProductTastes as $orderProductTaste){
+                                            $strTaste.= '/'.$orderProductTaste->taste->name;
+                                            $existTaste=1;
+                                        }
+                                        if($existTaste==1)
+                                        {
+                                            array_push($listData,"11".$strTaste);
+                                            array_push($listData,"br");
+                                        }
+                                        array_push($listData,"00".str_pad('',48,'-'));
+                                    }
+                                    $orderTastes=  OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=1',  array(':orderid'=>$order->lid,':dpid'=>$order->dpid));
+                                    $orderTasteEx = $order->taste_memo;                
+                                    array_push($listData,"00".str_pad('',48,'-'));
+                                    $strAllTaste= yii::t('app',"全单口味：").$orderTasteEx;
+                                    $existTaste=0;
+                                    if(!empty($orderTasteEx))
+                                    {
+                                        $existTaste=1;
+                                    }
+                                    foreach($orderTastes as $orderTaste){
+                                       $strAllTaste.= '/'.$orderTaste->taste->name;
+                                       $existTaste=1;
+                                    }
+                                    if($existTaste==1)
+                                    {
+                                        array_push($listData,"11".$strAllTaste);
+                                        array_push($listData,"br");
+                                        array_push($listData,"00".str_pad('',48,'-'));
+                                    }
+
+                                    array_push($listData,"00".yii::t('app','操作员：').$order->username."  "//Yii::app()->user->name."  "
+                                            .date('Y-m-d H:i:s',time()));
+//                                    $precode="";
+//                                    //后面加切纸
+//                                    $sufcode="0A0A0A0A0A0A1D5601";                        
+//                                    //var_dump($listData);exit;
+//                                    $printret=array();
+//                                    $printserver="0";//0通过自己同步打印，1通过打印服务器打印
+//                                    
+//                                    //份数循环                                    
+//                                    for($i=0;$i<$printerway->list_no;$i++){             //////////////                           
+//                                        $printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
+//                                        //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
+//                                        array_push($jobids,$printret['jobid']."_".$printret['address']."_".$productids);
+//                                        $productids="";
+//                                        if(!$printret['status'])
+//                                        {
+//                                            return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
+//                                        }
+//                                    }                                    
+                                    //return $printret;
+                                    /////尝试用整体打印$printercontent_a
+                                    for($i=0;$i<$printerway->list_no;$i++){
+                                        if(array_key_exists($key, $printercontent_a))
+                                        {
+                                            array_push($printercontent_a[$key],$listData);
+                                        }else{
+                                            $printercontent_a[$key]=array($listData);
+                                        }                                        
+                                    }                                    
+                            }
+                        }else{ ////如果不是整体，分开打印    //////////////
+                            foreach ($printer2orderproducts_a as $key=>$values) {
+                                
+                                    $printer = $printers_a[$key];
+                                    $productids="";
+                                    //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                                    //组装头
+                                    $listDataHeader = array("22".Helper::setPrinterTitle($order->company->company_name,8));
+                                    array_push($listData,"br");
+                                    //array_push($listData,"22"."---分菜单---"); 
+                                    array_push($listData,"22"."<".$printerway->name.">");
+                                    array_push($listDataHeader,"00");
+                                    array_push($listDataHeader,"br");
+
+                                    if($reprint)
+                                    {
+                                        $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
+                                        array_push($listDataHeader,"11".$strreprint);
+                                    }
+                                    array_push($listDataHeader,"br");
+                                    $strSite="";
+                                    if($order->is_temp=='1')
+                                    {
+                                        array_push($listDataHeader,"00".yii::t('app','临时座：'));
+                                        array_push($listDataHeader,"11".$siteNo->site_id%1000);
+                                    }else{
+                                        array_push($listDataHeader,"00".yii::t('app','座号：'));
+                                        array_push($listDataHeader,"11".$site->siteType->name.' '.$site->serial);
+                                    }
+                                    array_push($listDataHeader,"00".yii::t('app','人数：').$order->number);
+
+                                    if(!empty($order->callno))
+                                    {
+                                        array_push($listDataHeader,"00"."  ".yii::t('app','呼叫号：'));
+                                        array_push($listDataHeader,"11".$order->callno);
+                                    }
+                                    array_push($listDataHeader,"br");
+                                    array_push($listDataHeader,"00".str_pad('',48,'-'));
+                                    //组装尾部
+                                    $orderTastes=  OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=1',  array(':orderid'=>$order->lid,':dpid'=>$order->dpid));
+                                    $orderTasteEx = $order->taste_memo; 
+                                    $listDataTail =array("00".str_pad('',48,'-')); 
+                                    //array_push($listData,"00".str_pad('',48,'-'));
+                                    $strAllTaste= yii::t('app',"全单口味：").$orderTasteEx;
+                                    $existTaste=0;
+                                    if(!empty($orderTasteEx))
+                                    {
+                                        $existTaste=1;
+                                    }
+                                    foreach($orderTastes as $orderTaste){
+                                       $strAllTaste.= '/'.$orderTaste->taste->name;
+                                       $existTaste=1;
+                                    }
+                                    if($existTaste==1)
+                                    {
+                                        array_push($listDataTail,"11".$strAllTaste);
+                                        array_push($listDataTail,"br");
+                                        array_push($listDataTail,"00".str_pad('',48,'-'));
+                                    }
+
+                                    array_push($listDataTail,"00".yii::t('app','操作员：').$order->username."  "//Yii::app()->user->name."  "
+                                            .date('Y-m-d H:i:s',time()));
+                                    //生成body并打印
+                                    $productids="";
+                                    foreach($values as $value)
+                                    {
+                                        $listDataBody= array();
+                                        //组装身体
+                                        //$productids="";
+                                        if(empty($productids))
+                                        {
+                                            $productids.=$value;
+                                        }else{
+                                            $productids.=",".$value;
+                                        }
+                                        $orderProduct=$orderproducts_a[$value];
+                                        //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
+                                        array_push($listDataBody,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
+                                        array_push($listDataBody,"br");
+
+                                        $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
+                                        $orderProductTasteEx = $orderProduct->taste_memo;                
+                                        $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
+                                        $existTaste=0;
+                                        if(!empty($orderProductTasteEx))
+                                        {
+                                            $existTaste=1;
+                                        }
+                                        foreach($orderProductTastes as $orderProductTaste){
+                                            $strTaste.= '/'.$orderProductTaste->taste->name;
+                                            $existTaste=1;
+                                        }
+                                        if($existTaste==1)
+                                        {
+                                            array_push($listDataBody,"11".$strTaste);
+                                            array_push($listDataBody,"br");
+                                        }
+                                        $listData=  array_merge($listDataHeader,$listDataBody,$listDataTail);                                        
+//                                        $precode="";
+                                        //后面加切纸
+//                                        $sufcode="0A0A0A0A0A0A1D5601";                        
+//                                        //var_dump($listData);exit;
+//                                        $printret=array();
+//                                        $printserver="0";  ///自己去轮询
+//                                        //份数循环
+//                                        for($i=0;$i<$printerway->list_no;$i++){             //////////////                           
+//                                            $printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
+//                                            //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
+//                                            array_push($jobids,$printret['jobid']."_".$printret['address']."_".$productids);
+//                                            $productids="";
+//                                            if(!$printret['status'])
+//                                            {
+//                                                return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
+//                                            }
+//                                        }  
+                                        for($i=0;$i<$printerway->list_no;$i++){
+                                            if(array_key_exists($key, $printercontent_a))
+                                            {
+                                                array_push($printercontent_a[$key],$listData);
+                                            }else{
+                                                $printercontent_a[$key]=array($listData);
+                                            }                                        
+                                        }
+                                    }                               
+                                    //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试n");
+                            }
+                        }
+                } 
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试13");
+                //整体打印
+                $jobids2=array();
+                $precode="";
+                $sufcode="0A0A0A0A0A0A1D5601";                        
+                //var_dump($listData);exit;
+                $printret=array();
+                $printserver="0";  ///自己去轮询
+                //份数循环
+                foreach ($printercontent_a as $key=>$values) {             //////////////                           
+                    //$printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
+                    $printer2 = $printers_a[$key];
+                    $printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver);
+                    //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
+                    array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
+                    if(!$printret['status'])
+                    {
+                        return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
+                    }
+                }               
+                //var_dump(json_encode($jobids));exit;
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids2),0,300);                        
+                $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'msg'=>'打印任务正常发布',"jobs"=>$jobids2);
                 //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
                 //更新菜品状态为已打印
                 $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$order->dpid." and order_id =".$order->lid;
@@ -1272,6 +1694,106 @@ class Helper
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
 //                    }
                 }
+        }
+        
+        /*
+         * $printserver是否通过打印服务器打印，0表示不通过，数据存储在内存中，由程序通知pad自己去取数据并打印。
+         * 1表示通过，指令发出去后，由打印服务器安排打印，程序只能读取打印服务器的返回结果，是异步的。
+         */
+        static public function printConetent2(Printer $printer,$contents,$precode,$sufcode,$printserver)
+        {
+                Gateway::getOnlineStatus();
+                $store = Store::instance('wymenu');
+                $contentCode="";
+                $contentCodeAll="";
+                
+                foreach($contents as $content)
+                {
+                    //内容编码
+                    if($printer->language=='1')//zh-cn GBK
+                    {
+                        foreach($content as $line)
+                        {
+                            //$strcontent=mb_convert_encoding($line,"GBK","UTF-8");
+                            //$contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
+                            $strcontent=mb_convert_encoding(substr($line,2),"GBK","UTF-8");
+                            $strfontsize=substr($line,0,2);
+                            if($strfontsize=="br")
+                            {
+                                $contentCode.="0A";
+                            }else{                            
+                                $contentCode.="1D21".$strfontsize.strtoupper(implode('',unpack('H*', $strcontent)));
+                            }
+                        }
+                    }elseif($printer->language=='2')//日文 shift-jis
+                    {
+                        $contentCode.="1C43011C26";//日文前导符号
+                        foreach($content as $line)
+                        {
+                            //$strcontent=mb_convert_encoding($line,"SJIS","UTF-8");
+                            //$contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
+                            $strcontent=mb_convert_encoding(substr($line,2),"SJIS","UTF-8");
+                            $strfontsize=substr($line,0,2);
+                            if($strfontsize=="br")
+                            {
+                                $contentCode.="0A";
+                            }else{                            
+                                $contentCode.="1D21".$strfontsize.strtoupper(implode('',unpack('H*', $strcontent)));
+                            }
+                        }
+                    }else
+                    {
+                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'none','msg'=>yii::t('app','无法确定打印机语言！'));
+                    }
+                    //加barcode和切纸
+                    $contentCode=$precode.$contentCode.$sufcode;
+                    $contentCodeAll=$contentCodeAll.$contentCode;
+                    $contentCode="";
+                }
+                    //任务构建
+                $se=new Sequence("printer_job_id");
+                $jobid = $se->nextval();
+                if($printserver=='1')//通过打印服务器打印
+                {
+                    if($printer->printer_type!='0')//not net
+                    {
+                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','网络打印的打印机必须是网络打印机！'));
+                    }
+                    $print_data=array(
+                        "do_id"=>"ipPrintContent",
+                        "company_id"=>$printer->dpid,
+                        "job_id"=>$jobid,
+                        "printer"=>$printer->address,
+                        //"content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
+                        "content"=>$contentCode
+                    );
+                    //$store = Store::instance('wymenu');
+                    //echo 'ss';exit;
+                    $clientId=$store->get("client_".$printer->dpid);
+                    //var_dump($clientId,$print_data);exit;
+                    if(!empty($clientId))
+                    {
+                        Gateway::sendToClient($clientId,json_encode($print_data));
+                        //Gateway::sendToAll(json_encode($print_data));
+                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','msg'=>'');
+                    }else{
+                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','打印服务器找不到！'));
+                    }   
+                    ///////////////////
+                    ///打印任务不再发送，返回job编号，有pad自己去取                   
+
+                }else{//主动的同步打印 0
+//                    if($printer->printer_type=='1')//local
+//                    {                
+//                        //$ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
+//                        $store->set($printer->dpid."_".$jobid,$contentCode,0,120);//should 120测试1200
+//                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
+//                    }else{
+                        $store->set($printer->dpid."_".$jobid,$contentCodeAll,0,300);//should 120测试1200
+                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
+//                    }
+                }
+
         }
         
         static public function  GrabImage($baseurl,$filename="") { 

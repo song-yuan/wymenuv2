@@ -76,7 +76,7 @@
                                 $("#payChangeAccount").text("0.00");
                                 $("#payCashAccount").text("0.00");
                                 $("#payMemberAccount").text("0.00");
-                                $("#pay_union_card").text("0.00");
+                                $("#payUnionAccount").text("0.00");
                                 $("#card_pay_span_card").text("");
                                 $("#card_pay_span_card").attr("actual","");
                                 $("#card_pay_span_password").text("");

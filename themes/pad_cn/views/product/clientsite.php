@@ -100,7 +100,7 @@
                      'data':{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":istemp},
                      'url':'<?php echo $this->createUrl('product/opensite',array());?>',
                      'success':function(data){
-                            alert(data.message);
+                            alert(data.msg);
                              if(data.status=="1")
                              {
                                  layer.close(layer_index); 

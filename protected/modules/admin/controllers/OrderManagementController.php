@@ -154,23 +154,39 @@ class orderManagementController extends BackendController
 		//$connect = Yii::app()->db->createCommand($sql);
 		//$model = $connect->queryAll();
 		//$categoryId = Yii::app()->request->getParam('cid',0);
-		$criteria->select = 't.paytype, t.payment_method_id,t.lid,t.dpid, t.update_at,t.order_status,t.should_total,sum(t.reality_total) as should_all';
+//		$criteria->select = 't.paytype, t.payment_method_id,t.lid,t.dpid, t.update_at,t.order_status,t.should_total,sum(t.reality_total) as should_all';
+//	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
+//		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
+//		$criteria->addCondition("t.dpid= ".$this->companyId);
+//		$criteria->addInCondition('t.order_status', array(3,4));
+//		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+//		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+//		$criteria->with = array("company","paymentMethod"); //连接表
+//		$criteria->order = 't.lid ASC' ;//排序条件
+//		$criteria->group = 't.paytype';
+//		
+//		$pages = new CPagination(Order::model()->count($criteria));
+//		//$pages->PageSize = 10;
+//		$pages->applyLimit($criteria);
+//		
+//		$model=  Order::model()->findAll($criteria);
+		//var_dump($model);exit;
+                $criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
 		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
-		$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->addInCondition('t.order_status', array(3,4));
-		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
-		$criteria->with = array("company","paymentMethod"); //连接表
-		$criteria->order = 't.lid ASC' ;//排序条件
-		$criteria->group = 't.paytype';
+		$criteria->with = array("order"); //连接表
 		
-		$pages = new CPagination(Order::model()->count($criteria));
+                $criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
+		$criteria->group = "t.paytype";
+		
+		$pages = new CPagination(OrderPay::model()->count($criteria));
 		//$pages->PageSize = 10;
 		$pages->applyLimit($criteria);
 		
-		$model=  Order::model()->findAll($criteria);
-		//var_dump($model);exit;
+		$model=  OrderPay::model()->findAll($criteria);
+                //var_dump($model);exit;
 		$this->render('orderDaliyCollect',array(
 				'models'=>$model,
 				'pages'=>$pages,
@@ -180,6 +196,33 @@ class orderManagementController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
+        
+        public function actionOrderDaliyCollectPrint(){
+		$criteria = new CDbCriteria;
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+                $padid= Yii::app()->request->getParam('padid');
+		
+		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
+	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
+		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
+		$criteria->with = array("order"); //连接表
+		$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
+		$criteria->group = "t.paytype";
+		
+		$model=  OrderPay::model()->findAll($criteria);
+		//var_dump($model[0]->order);exit;
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
+                $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$this->companyId,'lid'=>$padid));
+            	 //前面加 barcode
+                $precode="";
+                $memo="日结对账单";
+                $printList = Helper::printCloseAccount($this->companyId,$model , $pad,$precode,"0",$memo);
+                Yii::app()->end(json_encode($printList));
+		
+	}
 	//日结 指定日期的订单
 	public function actionDailyclose(){
 
@@ -187,18 +230,31 @@ class orderManagementController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
-		$criteria->select = 't.paytype, t.payment_method_id,t.lid,t.dpid, t.update_at,t.order_status,t.should_total,sum(t.reality_total) as should_all';
+//		$criteria->select = 't.paytype, t.payment_method_id,t.lid,t.dpid, t.update_at,t.order_status,t.should_total,sum(t.reality_total) as should_all';
+//	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
+//		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
+//		$criteria->addCondition("t.dpid= ".$this->companyId);
+//		$criteria->addInCondition('t.order_status', array(3,4));
+//		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+//		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+//		$criteria->with = array("company","paymentMethod"); //连接表
+//		$criteria->order = 't.lid ASC' ;//排序条件
+//		$criteria->group = 't.paytype';
+//		
+//		$models =  Order::model()->findAll($criteria);
+                $criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
 		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
-		$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->addInCondition('t.order_status', array(3,4));
-		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
-		$criteria->with = array("company","paymentMethod"); //连接表
-		$criteria->order = 't.lid ASC' ;//排序条件
-		$criteria->group = 't.paytype';
+		$criteria->with = array("order"); //连接表
 		
-		$models =  Order::model()->findAll($criteria);
+                $criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
+		//$criteria->with = array("paymentMethod"); //连接表
+                $criteria->group = "t.paytype";
+		
+		$models=  OrderPay::model()->findAll($criteria);
+                
 		$transaction = Yii::app()->db->beginTransaction(); 
 		try{
 			$userId = Yii::app()->user->userId;// lid_dpid
@@ -243,8 +299,10 @@ class orderManagementController extends BackendController
 			}
 			
 			//更改订单表状态
-			Order::model()->updateAll(array('order_status'=>8),'update_at >=:begin_time and :end_time >=update_at and order_status in (3,4)',array(':begin_time'=>$begin_time,':end_time'=>$end_time));
-			
+			//Order::model()->updateAll(array('order_status'=>8),'update_at >=:begin_time and :end_time >=update_at and order_status in (3,4) and dpid=:dpid',array(':begin_time'=>$begin_time,':end_time'=>$end_time));
+			$sqlorderup="update nb_order set order_status=8 where dpid=$this->companyId and update_at >='$begin_time 00:00:00' and update_at<='$end_time 23:59:59' and order_status in (4)";
+                        //var_dump($sqlorderup);exit;
+                        Yii::app()->db->createCommand($sqlorderup)->execute();
 			$cmodel = CloseAccount::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$clid,'dpid'=>$this->companyId));
 			$cmodel->all_money = $totalMoney;
 			$cmodel->update();
