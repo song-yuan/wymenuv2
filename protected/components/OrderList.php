@@ -524,30 +524,46 @@ class OrderList
                     }
                 }
                 
-                $transaction->commit();
-                
-                //估清产品通知
-                if(!empty($sellOff)){
-                    //return array('status'=>false,'msg'=>"沽清：".$sellOff);
-                    Gateway::getOnlineStatus();
-                    $store = Store::instance('wymenu');
-                    $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('0','1','2')",array(":dpid"=>$dpid));
-                    //var_dump($pads);exit;
-                    $sendjsondata=json_encode(array("company_id"=>$dpid,
-                        "do_id"=>"sell_off",
-                        "do_data"=>$sellOff));
-                    //var_dump($sendjsondata);exit;
-                    foreach($pads as $pad)
+//                if(!$savejson["status"])
+//                {
+//                    $ret=json_encode($savejson);
+//                }else{
+                if($orderStatus>1)
+                {
+                    $ret=  Helper::printKitchenAll3($order,$site,$siteNo,false);
+                    if(!$ret['status'])
                     {
-                        $clientId=$store->get("padclient_".$dpid.$pad->lid);
-                        //var_dump($clientId,$print_data);exit;
-                        if(!empty($clientId))
-                        {                            
-                            Gateway::sendToClient($clientId,$sendjsondata);
-                        }
-                    } 
-                }
-                return array('status'=>true,'msg'=>"保存成功",'jobs'=>array());
+                        $transaction->rollback();
+                    }else{
+                        $transaction->commit();
+                    }
+                }else{
+                    $ret = array('status'=>true,'msg'=>"保存成功",'jobs'=>array());
+                    $transaction->commit();
+                }       
+                //估清产品通知
+//                if(!empty($sellOff)){
+//                    //return array('status'=>false,'msg'=>"沽清：".$sellOff);
+//                    Gateway::getOnlineStatus();
+//                    $store = Store::instance('wymenu');
+//                    $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('0','1','2')",array(":dpid"=>$dpid));
+//                    //var_dump($pads);exit;
+//                    $sendjsondata=json_encode(array("company_id"=>$dpid,
+//                        "do_id"=>"sell_off",
+//                        "do_data"=>$sellOff));
+//                    //var_dump($sendjsondata);exit;
+//                    foreach($pads as $pad)
+//                    {
+//                        $clientId=$store->get("padclient_".$dpid.$pad->lid);
+//                        //var_dump($clientId,$print_data);exit;
+//                        if(!empty($clientId))
+//                        {                            
+//                            Gateway::sendToClient($clientId,$sendjsondata);
+//                        }
+//                    } 
+//                }
+                //return array('status'=>true,'msg'=>"保存成功",'jobs'=>array());
+                return $ret;
             } catch (Exception $ex) {
                 $transaction->rollback();
                 return array('status'=>false,'msg'=>$e->getMessage(),'jobs'=>array());

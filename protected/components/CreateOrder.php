@@ -545,7 +545,7 @@ class CreateOrder
                 $criteria2->order = ' t.lid desc ';                    
                 $site = Site::model()->with("siteType")->find($criteria2);
 //            return json_encode(array('status'=>false,'msg'=>"test8"));
-            	$printList = Helper::printKitchenAll2($order,$site,$siteNo,false);
+            	$printList = Helper::printKitchenAll3($order,$site,$siteNo,false);
             }else{
 //                return json_encode(array('status'=>false,'msg'=>"test223"));
             	$pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));

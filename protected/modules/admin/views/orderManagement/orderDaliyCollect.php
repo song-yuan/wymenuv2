@@ -49,7 +49,8 @@
 					   
 					      <div class="btn-group">
 					      		<button type="submit" id="btn_time_query" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							    <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
+                                                        <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','打印');?></button>
+                                                        <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
 				  	      </div>
 				  	  </div>
 				</div>
@@ -59,7 +60,7 @@
 							<tr>
 								
 								<th width=100px;><?php echo yii::t('app','序号');?></th>
-						        <th><?php echo yii::t('app','店铺');?></th>
+						        
                                 <th><?php echo yii::t('app','支付方式');?></th>
                                 <th><?php echo yii::t('app','金额');?></th>                                                                
                                 <th><?php echo yii::t('app','备注');?></th>
@@ -76,8 +77,24 @@
 						
 								<tr class="odd gradeX">
 								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
-								<td><?php echo $model->company->company_name; ?></td>
-								<td><?php if($model->payment_method_id!='0000000000') echo $model->paymentMethod->name.yii::t('app','(后台)'); else switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; case 1: echo  yii::t('app','微信支付');break; case 2: echo  yii::t('app','支付宝支付');break; case 3: echo  yii::t('app','后台手动支付');break;  default :echo ''; }?></td>								
+								
+								<!--<td><?php //($model->payment_method_id!='0000000000') 
+                                                                    //echo $model->paymentMethod->name.yii::t('app','(后台)'); 
+                                                                //else 
+                                                                    switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
+                                                                case 1: echo  yii::t('app','微信支付');break; 
+                                                                case 2: echo  yii::t('app','支付宝支付');break; 
+                                                                case 3: echo  yii::t('app','后台手动支付');break;  
+                                                                case 4: echo  yii::t('app','会员卡支付');break;  
+                                                                case 5: echo  yii::t('app','银联卡支付');break;  
+                                                                default :echo ''; }?></td>-->
+                                                                <td><?php switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
+                                                                case 1: echo  yii::t('app','微信支付');break; 
+                                                                case 2: echo  yii::t('app','支付宝支付');break; 
+                                                                case 3: echo  yii::t('app','后台手动支付');break;  
+                                                                case 4: echo  yii::t('app','会员卡支付');break;  
+                                                                case 5: echo  yii::t('app','银联卡支付');break;  
+                                                                default :echo ''; }?></td>
 								<td><?php echo $model->should_all;?></td>
 								<td></td>
 								</tr>
@@ -160,5 +177,60 @@
 	         	});
 	         });
 		});
+                
+                $('#btn-closeaccount-print').on('click',function() {
+                        var padid="0000000046";
+                        if (typeof Androidwymenuprinter == "undefined") {
+                            alert("找不到PAD设备");
+                            //return false;
+                        }else{
+                            var padinfo=Androidwymenuprinter.getPadInfo();
+                            padid=padinfo.substr(10,10);
+                        }
+                        var begin_time = $('#begin_time').val();
+			var end_time = $('#end_time').val();
+                        var url = "<?php echo $this->createUrl('orderManagement/orderDaliyCollectPrint',array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/padid/"+padid;
+                        //var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
+                        var statu = confirm("<?php echo yii::t('app','确定要打印日结单吗？');?>");
+                        if(!statu){
+                            return false;
+                        } 
+	         	$.ajax({
+                        url:url,
+                        type:'GET',
+                        data:"",
+                        async:false,
+                        dataType: "json",
+                        success:function(msg){
+//                            var waittime=0;
+                            var data=msg;
+                            //alert(data.msg);
+                            var printresult=false;
+                            if(data.status){
+                                //alert(data.jobid);
+                                var index = layer.load(0, {shade: [0.3,'#fff']});
+                                //var wait=setInterval(function(){ 
+                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+                                    layer.close(index);
+                                    if(!printresult)
+                                    {
+                                        alert("打印失败，请稍后重试！");
+                                    }else{
+                                        alert("打印完成！");
+                                    }                                    
+                                                           
+                               
+                            }else{
+                                alert(data.msg);                                
+                            }
+                           //以上是打印
+                           //刷新orderPartial	                 
+                        },
+                        error: function(msg){
+                            alert("保存失败2");
+                        }
+                    });                	
+	         });
+                
 		
 </script> 

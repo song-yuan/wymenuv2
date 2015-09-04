@@ -172,6 +172,8 @@ class OrderProduct extends CActiveRecord
 				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id'; //and is_retreat=0
 		return $db->createCommand($sql)->queryAll();
 	}
+        
+        
         //已经下单的产品
         static public function getHasOrderProducts($orderId,$dpid){
 		$db = Yii::app()->db;
