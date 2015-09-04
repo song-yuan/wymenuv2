@@ -259,7 +259,7 @@
         
                 //$('#pad-order-submit-subbtn').on('click',function(){
     function clientsaveorder2(){
-        $('#divid_client_waitorlist').hide();
+        
         var index = layer.load(0, {shade: [0.3,'#fff']});
         if (typeof Androidwymenuprinter == "undefined") {
 //            layer.close(index);
@@ -456,7 +456,8 @@
     //});on click到此
         
          $('#pad-order-submit-subbtn').on('click',function(){
-           clientsaveorder2(); 
+             $('#divid_client_waitorlist').hide();
+            clientsaveorder2(); 
         });
         
 </script>
