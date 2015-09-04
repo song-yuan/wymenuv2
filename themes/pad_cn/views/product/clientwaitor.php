@@ -259,7 +259,9 @@
         
                 //$('#pad-order-submit-subbtn').on('click',function(){
     function clientsaveorder2(){
+        var index = layer.load(0, {shade: [0.3,'#fff']});
         if (typeof Androidwymenuprinter == "undefined") {
+//            layer.close(index);
             alert(language_notget_padinfo);
             //return false;
         }
@@ -267,11 +269,13 @@
         var istemp=$('#id_client_is_temp').val();
         if(istemp=="1")
         {
+            layer.close(index);
             alert("请选择座位！");
             return false;
         }
         //var username=$('#id_client_waitor_name').val();
         //alert(username);
+        
         var forbidden=false;
         var getstatusurl=$('#productmasksiteinfo').attr("action")+'/sid/'+sid+"/istemp/"+istemp;
         //alert(getstatusurl);
@@ -287,12 +291,14 @@
                             //alert(msg);防止前台开台，但是后台结单或撤台了，就不能继续下单
                             if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                             {
+                                layer.close(index);
                                 alert(language_client_order_forbidden);
                                 forbidden=true;
                                 return;
                             }
                         },
                         error: function(msg){
+                            layer.close(index);
                             alert(language_client_order_forbidden);
                             forbidden=true;
                             return;
@@ -302,6 +308,7 @@
         }
         if(forbidden)
         {
+            layer.close(index);
             return;
         }
         var formdata=$('#padOrderForm').formSerialize();
@@ -318,7 +325,7 @@
                         var printresulttemp;
                         if(data.status){
                             
-                            var index = layer.load(0, {shade: [0.3,'#fff']});
+//                            var index = layer.load(0, {shade: [0.3,'#fff']});
                                 if(istemp=="1")
                                 {
                                     printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
@@ -342,7 +349,7 @@
                                      });                                      
                                 }                               
                                 
-                                     layer.close(index);
+//                                     layer.close(index);
                                      //alert(language_print_pad_fail);                                     
                                     if(istemp=="1"&&!printresult)
                                     {
@@ -358,6 +365,7 @@
 
                                             },
                                             error: function(msg){
+                                                layer.close(index);
                                                 alert("网络故障！")
                                             }
                                         });
@@ -381,6 +389,7 @@
 
                                                         },
                                                         error: function(msg){
+                                                            layer.close(index);
                                                             alert("网络故障！")
                                                         }
                                                     });
@@ -435,8 +444,10 @@
 	                    alert(data.msg);
 	                }
                         $('#padOrderForm').resetForm();
+                        layer.close(index);
                     },
                     error: function(msg){
+                        layer.close(index);
                         alert(language_client_order_fail);
                     }
 	     	});

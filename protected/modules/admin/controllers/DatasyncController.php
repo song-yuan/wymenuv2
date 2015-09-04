@@ -216,7 +216,8 @@ class DatasyncController extends Controller
                 }else{
                     //echo $cloudtime;
                     $tempnow = new DateTime($cloudtime);
-                    $tempnow->modify("-20 minute");
+                    //$tempnow->modify("-120 minute");
+                    $tempnow->modify("-2 hour");
                     $cloudtime=$tempnow->format('Y-m-d H:i:s');
                     //echo $cloudtime;       exit;             
                 }
@@ -225,7 +226,8 @@ class DatasyncController extends Controller
                     $localtime="2015-08-15 19:00:00";
                 }else{
                     $tempnow = new DateTime($localtime);
-                    $tempnow->modify("-20 minute");
+                    //$tempnow->modify("-120 minute");hour
+                    $tempnow->modify("-2 hour");
                     $localtime=$tempnow->format('Y-m-d H:i:s');
                 }
                 echo "typeId:".$typeId."<br>";
