@@ -121,11 +121,17 @@
                            var allnum=parseInt($("#selectproductnumfordelete").val());
                            //lert(retreatnum);alert(allnum);
                            var isall=0;
+                           if(retreatnum<1)
+                           {
+                               alert("数量不对");
+                               return;
+                           }
                            if(allnum <= retreatnum)
                            {
                                isall=1;
                                retreatnum=allnum;
                            }
+                           
                            //alert(isall);
                            //var orderdetailid="<?php echo $orderRetreat->order_detail_id; ?>";
                            var retreatid=$("label[class='selectRetreat btn btn-default active']").attr("retreatid");

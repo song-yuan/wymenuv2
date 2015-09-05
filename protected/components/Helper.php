@@ -473,6 +473,10 @@ class Helper
 		
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
+                    if($product['amount']<1)
+                    {
+                        continue;
+                    }
                     $hasData=true;
                     if(Yii::app()->language=='jp')
                     {
@@ -1051,7 +1055,12 @@ class Helper
                                         }else{
                                             $productids.=",".$value;
                                         }
+                                        
                                         $orderProduct=$orderproducts_a[$value];
+                                        if($orderProduct->amount<1)
+                                        {
+                                            continue;
+                                        }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
                                         array_push($listData,"br");
@@ -1193,6 +1202,10 @@ class Helper
                                             $productids.=",".$value;
                                         }
                                         $orderProduct=$orderproducts_a[$value];
+                                        if($orderProduct->amount<1)
+                                        {
+                                            continue;
+                                        }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         array_push($listDataBody,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
                                         array_push($listDataBody,"br");
@@ -1373,6 +1386,10 @@ class Helper
                                             $productids.=",".$value;
                                         }
                                         $orderProduct=$orderproducts_a[$value];
+                                        if($orderProduct->amount<1)
+                                        {
+                                            continue;
+                                        }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
                                         array_push($listData,"br");
@@ -1523,6 +1540,10 @@ class Helper
                                             $productids.=",".$value;
                                         }
                                         $orderProduct=$orderproducts_a[$value];
+                                        if($orderProduct->amount<1)
+                                        {
+                                            continue;
+                                        }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         array_push($listDataBody,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
                                         array_push($listDataBody,"br");
@@ -1737,6 +1758,10 @@ class Helper
                                         }
                                         //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3");
                                         $orderProduct=$orderproducts_a[$value];
+                                        if($orderProduct->amount<1)
+                                        {
+                                            continue;
+                                        }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
                                         array_push($listData,"br");
@@ -1890,6 +1915,10 @@ class Helper
                                             $productids.=",".$value;
                                         }
                                         $orderProduct=$orderproducts_a[$value];
+                                        if($orderProduct->amount<1)
+                                        {
+                                            continue;
+                                        }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         array_push($listDataBody,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
                                         array_push($listDataBody,"br");
