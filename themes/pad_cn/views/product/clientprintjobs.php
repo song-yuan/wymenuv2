@@ -39,6 +39,7 @@
                             {
                                 alert("打印失败，请检查打印机和网络后重试！");
                             }else{
+                                alert("打印成功！");
                                 $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
                             }
                             joblock=false;

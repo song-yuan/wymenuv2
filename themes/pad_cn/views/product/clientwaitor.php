@@ -405,7 +405,7 @@
                                                 type: 1,
                                                 shade: [0.1,'#fff'],
                                                 title: false, //不显示标题
-                                                closeBtn:1,
+                                                closeBtn:0,
                                                 area: ['50%', '40%'],
                                                 content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
                                                 cancel: function(index){
