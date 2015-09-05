@@ -88,6 +88,31 @@
 	float:left;
 }
 
+.waitorprint {
+    width:100%;
+    font-family:Arial;
+    float: left;
+    height: 98%;
+}
+.waitorprint ul {
+    list-style-type:none;                /* 不显示项目符号 */
+    margin:0px;
+    padding:0px;
+    height: 100%;
+    overflow-y:auto; 
+}
+.waitorprint li {
+    border-bottom:1px solid #ED9F9F;    /* 添加下划线 */
+    font-size: 18px;
+}
+.waitorprint li{
+    display:block;                        /* 区块显示 */
+    padding:8px 8px 8px 0.5em;
+    text-decoration:none;
+    border-left:12px solid #711515;        /* 左边的粗红边 */
+    border-right:1px solid #711515;        /* 右侧阴影 */
+}
+
 .num-circel{
 	position:absolute;
 	width:1.2em;
@@ -106,7 +131,7 @@
 	position:fixed;
 	width:auto;
 	top:50px;
-	left:10px;
+	left:44%;
 	background:white;
 	z-index:1001;
 	height:183px;

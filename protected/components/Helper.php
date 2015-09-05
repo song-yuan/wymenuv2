@@ -552,7 +552,8 @@ class Helper
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$dpid));
 		if(empty($printer)) {
                         return array('status'=>0,'dpid'=>$siteno->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
-		}		
+		}
+                $sumall=0;
                 $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid),8));
                 if(!empty($memo))
                 {
@@ -586,10 +587,14 @@ class Helper
                             break;
                     }
                         
-                    array_push($listData,"11".str_pad($payname,12,' ').$model->should_all);
+                    array_push($listData,"11".str_pad($payname,7).$model->should_all);
                     array_push($listData,"br");
+                    $sumall=$sumall+$model->should_all;
                 }
-		array_push($listData,"00".str_pad('',48,'-'));             
+		array_push($listData,"00".str_pad('',48,'-')); 
+                array_push($listData,"11".str_pad("合计：",7).$sumall);
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));   
 		array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));                    
                 //array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
                  

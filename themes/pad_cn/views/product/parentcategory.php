@@ -12,7 +12,6 @@
 ?>
 <link rel="stylesheet" type="text/css"  href="<?php echo $baseUrl.'/css/product/categorypad.css';?>" />
 <div class="fixed-top">
-  <div class="padsetting"></div>
   <div class="top-left"> 
       
   	<div class="top-left-right">            
@@ -29,6 +28,9 @@
 	</select>
 	</div>
   </div>
+    
+    <div class="padsetting"></div>
+  
    <!--<div class="top-middle">
    	<button id="updatePadOrder">下单并打印</button>
    </div>-->

@@ -70,24 +70,14 @@
 						<tbody>
 				 
 						<!--foreach-->
-					<?php $a=1;?>
-						<!--  <?php foreach ($models as $model):?>   -->
+					<?php $a=1;$sumall=0;?>
+						  <?php foreach ($models as $model):?>  
 						
-						
-						
+												
 								<tr class="odd gradeX">
 								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
 								
-								<!--<td><?php //($model->payment_method_id!='0000000000') 
-                                                                    //echo $model->paymentMethod->name.yii::t('app','(后台)'); 
-                                                                //else 
-                                                                    switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
-                                                                case 1: echo  yii::t('app','微信支付');break; 
-                                                                case 2: echo  yii::t('app','支付宝支付');break; 
-                                                                case 3: echo  yii::t('app','后台手动支付');break;  
-                                                                case 4: echo  yii::t('app','会员卡支付');break;  
-                                                                case 5: echo  yii::t('app','银联卡支付');break;  
-                                                                default :echo ''; }?></td>-->
+								
                                                                 <td><?php switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
                                                                 case 1: echo  yii::t('app','微信支付');break; 
                                                                 case 2: echo  yii::t('app','支付宝支付');break; 
@@ -98,10 +88,15 @@
 								<td><?php echo $model->should_all;?></td>
 								<td></td>
 								</tr>
-						<?php $a++;?>
-						<!-- <?php endforeach;?>	  -->
+						<?php $a++;$sumall=$sumall+$model->should_all;?>
+						<?php endforeach;?>	
 						<!-- end foreach-->
-						
+                                                    <tr class="odd gradeX">
+                                                    <td></td>
+                                                    <td>合计：</td>
+                                                    <td><?php echo $sumall;?></td>
+                                                    <td></td>
+                                                    </tr>
 						</tbody>
 					</table>
 						<?php if($pages->getItemCount()):?>
