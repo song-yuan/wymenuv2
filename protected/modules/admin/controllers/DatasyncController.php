@@ -169,6 +169,7 @@ class DatasyncController extends Controller
             //图片下载，图片上传（phpcurl 和 move_upload_file上传，暂时不做）
             $dpid = Yii::app()->request->getParam('companyId',0);
             $typeId = Yii::app()->request->getParam('typeId',0);
+            $date = Yii::app()->request->getParam('date','2015-08-15 19:00:00');
             if(Yii::app()->params['cloud_local']=='l')
             {
                 $dbcloud;
@@ -236,7 +237,13 @@ class DatasyncController extends Controller
                     $cloudtime="2015-08-15 19:00:00";
                     $localtime="2015-08-15 19:00:00";
                 }
+                if($date!="2015-08-15 19:00:00")
+                {
+                    $cloudtime="$date";
+                    $localtime="$date";
+                }
                 echo "get cloud tiem:".$cloudtime." and local time:".$localtime." <br>";
+                exit;
                 //var_dump($cloudtime,$localtime);exit;
                 //轮询以下表(云端和本地都会操作的，)
                 //云端生成，本地操作的表， 如：site，member_card等被本地平凡修改的的有吗？
