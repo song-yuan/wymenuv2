@@ -26,16 +26,18 @@
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
                             var orderid="<?php echo $orderid; ?>";
-                            //alert(jobid);alert(address);alert(dpid);alert(orderid);
+                            alert(jobid);alert(address);alert(dpid);alert(orderid);
                             var printresulttemp2=false;
-                            printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address);
-                            //printresulttemp=true;
-                            //alert(222);
+                            //printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address);
+                            //printresulttemp2=true;
+                            alert(printresulttemp2);
                             if(!printresulttemp2)
                             {
+                                alert(2);
                                 alert("打印失败，请检查打印机和网络后重试！");
                             }else{
-                                $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$dpid));?>/orderId/'+orderid+'/jobId/'+jobid);
+                                alert(3);
+                                $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2');
                             }
                        });                      
                         
