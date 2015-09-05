@@ -13,6 +13,7 @@
         </ul>
         	<!-- END PAGE -->                  
                     <script type="text/javascript">
+                        var joblock=false;
 //                        $(document).ready(function(){
                             $('#failprintjobs').text($('#failprintjobnum').val());
                             if($('#failprintjobnum').val()=="0")
@@ -22,11 +23,16 @@
 //                        });
                         
                         $('.reprintjob').on("click",function(){
+                            if(joblock)
+                            {
+                                return;
+                            }else{
+                                joblock=true;
+                            }
                             var jobid=$(this).attr("jobid");
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
                             var orderid="<?php echo $orderid; ?>";
-                            alert(jobid);alert(address);alert(dpid);alert(orderid);
                             var printresulttemp2=false;
                             printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address);
                             if(!printresulttemp2)
@@ -35,6 +41,7 @@
                             }else{
                                 $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
                             }
+                            joblock=false;
                        });                      
                         
                     </script>
