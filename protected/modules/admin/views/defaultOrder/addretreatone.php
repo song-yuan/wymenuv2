@@ -209,7 +209,9 @@
                                             }
                                            //以上是打印                                                        
                                         }
-                                });                            
+                                });
+                                layer.close(layer_index_retreatbox);
+                                layer_index_retreatbox=0;
                         });
                         //create_btn_close_retreat
                         $('#create_btn_close_retreat').on(event_clicktouchstart,function(){   

@@ -502,7 +502,7 @@
                                                         <li id="pay_clearone" style="background-color: #add"><?php echo yii::t('app','退格');?></li>
                                                         <li id="pay_clearall" style="background-color: red"><?php echo yii::t('app','清除/全额');?></li>
                                                         <li id="pay_btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>    
-                                                        <li id="printlistaccount" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
+                                                        <li id="printlistaccount" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','打印消费清单');?></li>
                                                     </ul>
                                                 </div> 
                                               </DIV> 
