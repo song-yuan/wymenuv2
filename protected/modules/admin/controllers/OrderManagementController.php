@@ -71,7 +71,6 @@ class orderManagementController extends BackendController
 			Yii::app()->user->setFlash('error' , yii::t('app','无法查询到该订单!'));
 			$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
 		}
-		
 		if(Yii::app()->request->isPostRequest) {
 			$postData = Yii::app()->request->getPost('OrderPay');
 			
