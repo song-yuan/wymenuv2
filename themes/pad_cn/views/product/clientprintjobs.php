@@ -1,23 +1,25 @@
 	<!-- BEGIN PAGE -->  
         <input type="hidden" value="<?PHP echo count($orderPrintjobs); ?>" id="failprintjobnum"> 
-        <ul>
-            
+        <ul>            
         <?php foreach ($orderPrintjobs as $orderPrintjob):
      //var_dump($orderPrintjob);exit;
             ?>
             <li>                                    
                 任务<?php echo $orderPrintjob['jobid']; ?>打印失败，打印机IP(<?php echo $orderPrintjob['address']; ?>)
-                <input style="float:right;" jobid="<?php echo $orderPrintjob['jobid']; ?>" 
-                       address="<?php echo $orderPrintjob['address']; ?>" type="button" class="btn red reprintjob" value="重新打印">
+                <input style="float:right;padding: 5px;background-color:greenyellow; " jobid="<?php echo $orderPrintjob['jobid']; ?>" 
+                       address="<?php echo $orderPrintjob['address']; ?>" type="button" class="reprintjob" value="重新打印">
             </li>
         <?php endforeach; ?>   
         </ul>
         	<!-- END PAGE -->                  
                     <script type="text/javascript">
-                        $(document).ready(function(){
+//                        $(document).ready(function(){
                             $('#failprintjobs').text($('#failprintjobnum').val());
-                            
-                        });
+                            if($('#failprintjobnum').val()=="0")
+                            {
+                                layer.close(layer_index_printresult2);
+                            }
+//                        });
                         
                         $('.reprintjob').on("click",function(){
                             var jobid=$(this).attr("jobid");

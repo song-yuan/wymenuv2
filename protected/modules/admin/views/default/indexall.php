@@ -325,7 +325,7 @@
                 <div class="col-md-8" style="">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
                         <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsave_btn" value="<?php echo yii::t('app','挂单--');?>">
-			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printlist_btn" value="<?php echo yii::t('app','打印清单');?>">
+			<!--<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printlist_btn" value="<?php echo yii::t('app','打印清单');?>">-->
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="alltaste_btn" value="<?php echo yii::t('app','全单设定');?>">
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printerKitchen" value="<?php echo yii::t('app','下单&厨打&收银&结单');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
@@ -502,7 +502,7 @@
                                                         <li id="pay_clearone" style="background-color: #add"><?php echo yii::t('app','退格');?></li>
                                                         <li id="pay_clearall" style="background-color: red"><?php echo yii::t('app','清除/全额');?></li>
                                                         <li id="pay_btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>    
-                                                        <li id="layer2_close" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
+                                                        <li id="printlistaccount" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
                                                     </ul>
                                                 </div> 
                                               </DIV> 
@@ -516,6 +516,7 @@
                                                     <DIV class="edit_span" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
                                                     
                                                 </div>    
+                                                <input style="position:absolute;right:3%;bottom: 4%;width:6.0em;height:3.0em;" type="button" class="btn green" id="layer2_close" value="<?php echo yii::t('app',' 关 闭 ');?>">
                                             </div>
                                         </div>
                                     </div>
@@ -781,7 +782,7 @@
             });
             
             //printlist_btn
-            $('#printlist_btn').on(event_clicktouchstart,function(){
+            $('#printlistaccount').on(event_clicktouchstart,function(){
                 var orderid=$(".selectProduct").attr("orderid");
                 var padid="0000000046";
                 if (typeof Androidwymenuprinter == "undefined") {
@@ -791,7 +792,8 @@
                     var padinfo=Androidwymenuprinter.getPadInfo();
                     padid=padinfo.substr(10,10);
                 }
-                var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
+                var payShouldAccount=$("#payShouldAccount").text();
+                var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/payShouldAccount/"+payShouldAccount;
                 var statu = confirm("<?php echo yii::t('app','确定要打印清单吗？');?>");
                 if(!statu){
                     return false;

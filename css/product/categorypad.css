@@ -41,7 +41,7 @@
         //color: #ccc;
 }
 .top-left{
-	width:40%;
+	width:35%;
 	height:100%;
 	float:left;
 	padding-left:2.0em;
@@ -81,7 +81,7 @@
 
 .padsetting{
 	height:5.0em;
-	width:3.5em;
+	width:7.0em;
 	background:url(../../img/help-small.png) top center no-repeat;
 	margin-left:0.5em;
 	padding: 0 0.5em;
@@ -131,7 +131,7 @@
 	position:fixed;
 	width:auto;
 	top:50px;
-	left:44%;
+	left:40%;
 	background:white;
 	z-index:1001;
 	height:183px;

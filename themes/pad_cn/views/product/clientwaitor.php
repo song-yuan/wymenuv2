@@ -339,8 +339,8 @@
                                         detaildata=svalue.split("_");                                        
                                         if(detaildata[0]=="0")//继续打印
                                         {
-                                            printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                            //printresulttemp=false;
+                                            //printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
+                                            printresulttemp=false;
                                             if(printresulttemp)
                                             {
                                                 data.jobs[skey]="1_"+svalue.substring(2);                                                
@@ -400,7 +400,7 @@
                                             //如果有失败任务就打开对话框
 //                                            if(layer_index_printresult!=0)
 //                                               return;
-                                            $('#printRsultListdetailsub').load('<?php echo $this->createUrl('/admin/defaultOrder/getFailPrintjobs',array());?>/companyId/'+data.dpid+'/orderId/'+data.orderid);                                
+                                            $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2");                                
                                             layer_index_printresult2=layer.open({
                                                 type: 1,
                                                 shade: [0.1,'#fff'],

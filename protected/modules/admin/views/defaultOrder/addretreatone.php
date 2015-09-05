@@ -51,6 +51,7 @@
                                                 <?php $this->endWidget(); ?>
                                         
                     <script type="text/javascript">
+                        var layer_retreat_printresult=0;
                         $(document).ready(function(){                            
                             $("#site_number").text($("#selectproductnumfordelete").val());
                         });
@@ -107,8 +108,15 @@
 //                                });                            
 //                        });
                         $('#create_btn_add_retreat').on(event_clicktouchstart,function(){                            
-                           var orderid=$(".selectProduct").attr("orderid"); 
-                          // var companyid="<?php echo $this->companyId; ?>";
+                           var orderid=$(".selectProduct").attr("orderid");
+                            var padid="0000000046";
+                            if (typeof Androidwymenuprinter == "undefined") {
+                                alert("找不到PAD设备");
+                                //return false;
+                            }else{
+                                var padinfo=Androidwymenuprinter.getPadInfo();
+                                padid=padinfo.substr(10,10);
+                            }
                            var retreatnum=parseInt($("#site_number").text());
                            var allnum=parseInt($("#selectproductnumfordelete").val());
                            //lert(retreatnum);alert(allnum);
@@ -116,6 +124,7 @@
                            if(allnum <= retreatnum)
                            {
                                isall=1;
+                               retreatnum=allnum;
                            }
                            //alert(isall);
                            //var orderdetailid="<?php echo $orderRetreat->order_detail_id; ?>";
@@ -126,19 +135,79 @@
                                 $.ajax({
                                         'type':'POST',
 					'dataType':'json',
-					'data':{"retreatnum":retreatnum,"othermemo":othermemo,"retreatid":retreatid,"isall":isall},
+					'data':{"retreatnum":retreatnum,"othermemo":othermemo,"retreatid":retreatid,"isall":isall,"padid":padid},
 					'url':url,
                                         success:function(result){
+                                            var printresultfail=false;
+                                            var printresulttemp;
                                             alert(result.msg);
-                                            if(result.status=="1")
-                                            {
-                                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
-//                                              //$('#portlet-config').hide();
-                                                layer.close(layer_index_retreatbox);
-                                                layer_index_retreatbox=0;
-                                                
+                                            data=result;
+                                            if(data.status){
+                                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
+                                                    var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
+                                                    $.each(data.jobs,function(skey,svalue){                                        
+                                                        detaildata=svalue.split("_");
+                                                        if(detaildata[0]=="0")//继续打印
+                                                        {
+                                                            printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
+                                                            //printresulttemp=true;
+                                                            if(printresulttemp)
+                                                            {
+                                                                data.jobs[skey]="1_"+svalue.substring(2);
+                                                            }else{
+                                                                printresultfail=true;                                                
+                                                            }
+                                                        }
+                                                     }); 
+                                                        if(printresultfail)
+                                                        {
+                                                            alert("可能有打印失败，请去打印机处确认，如果失败，请去收银台查看并重打！");
+                                                            //如果失败，就把打印任务插入到数据库
+                                                            $.each(data.jobs,function(skey,svalue){                                        
+                                                                    detaildata=svalue.split("_");
+                                                                    if(detaildata[0]=="0")
+                                                                    {
+                                                                        $.ajax({
+                                                                            url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+detaildata[1]+"/address/"+detaildata[2],
+                                                                            type:'GET',
+                                                                            //data:formdata,
+                                                                            async:false,
+                                                                            dataType: "json",
+                                                                            success:function(msg){
+
+                                                                            },
+                                                                            error: function(msg){
+                                                                                alert("网络故障！")
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                                layer.close(layer_flash_index);                                                     
+                                                                //如果有失败任务就打开对话框
+                                                                if(layer_index_printresult!=0)
+                                                                   return;
+                                                                $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid);                                
+                                                                layer_index_printresult=layer.open({
+                                                                    type: 1,
+                                                                    shade: false,
+                                                                    title: false, //不显示标题
+                                                                    area: ['30%', '70%'],
+                                                                    content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                                                                    cancel: function(index){
+                                                                        layer.close(index);
+                                                                        layer_index_printresult=0;                                                                                                     
+                                                                    }
+                                                                });
+                                                        }else{
+                                                            layer.close(layer_flash_index);
+                                                            alert("打印成功");
+                                                        }                                            
+                                                        layer.close(layer_flash_index);
+                                            }else{
+                                                //alert(data.msg);
+                                                //alert("下单成功，打印失败");
                                             }
-                                                                                                
+                                           //以上是打印                                                        
                                         }
                                 });                            
                         });

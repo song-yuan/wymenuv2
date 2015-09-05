@@ -393,11 +393,11 @@ class OrderList
                         //不是临时挂单就更新库存，更新下单数和点赞数，发送更新库存消息
                         if($orderStatus>1)
                         {
-                            $productdata->order_number=$productdata->order_number+1;
-                            $productdata->favourite_number=$productdata->favourite_number+1;
+                            $productdata->order_number=$productdata->order_number+$productDetailArr[3];
+                            $productdata->favourite_number=$productdata->favourite_number+$productDetailArr[3];
                             if($productdata->store_number>0)
                             {
-                                $productdata->store_number=$productdata->store_number-$productDetailArr[2];                            
+                                $productdata->store_number=$productdata->store_number-$productDetailArr[3];                            
                                 array_push($sellOff,array("product_id"=>sprintf("%010d",$productDetailArr[1]),"type"=>"product","num"=>$productdata->store_number));
                             }
                         }

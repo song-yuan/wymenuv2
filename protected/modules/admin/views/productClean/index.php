@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('productClean/index' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('productClean/index' , array('companyId' => $this->companyId,'typeId'=>"product")),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -51,7 +51,7 @@
                                     <?php if($typeId=='product') :?>
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品沽清列表');?></div>
 					<div class="actions">						
-                                                <div class="btn-group">
+                                            <div style="margin-top:-5px !important;" class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
@@ -62,7 +62,7 @@
                                         <?php else :?>
                                         <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐沽清列表');?></div>
                                         <?php endif;?>
-                                        <!--    <div class="col-md-3 pull-right">
+                                            <div class="col-md-3 pull-right">
 						<div class="input-group">
                                                     <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
                                                     <span class="input-group-btn">
@@ -70,7 +70,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                        -->
+                                        
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">

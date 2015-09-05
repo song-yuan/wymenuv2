@@ -480,6 +480,8 @@ class CreateOrder
 			             		  $db->createCommand($sql)->execute();
 			             		  array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$amount));
 			             	   }
+                                           $sqladd = 'update nb_product set order_number=order_number+'.$amount.',favourite_number=favourite_number+'.$amount.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+                                           $db->createCommand($sqladd)->execute();
 	                	}
 	             	}else{
 	             		if($result){
@@ -512,6 +514,8 @@ class CreateOrder
 		             		$db->createCommand($sql)->execute();
 		             		array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"product","num"=>$result['store_number']-$num));
 		             	 }
+                                 $sqladd = 'update nb_product set order_number=order_number+'.$num.',favourite_number=favourite_number+'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+                                           $db->createCommand($sqladd)->execute();
 	             	}
 	             }
                }

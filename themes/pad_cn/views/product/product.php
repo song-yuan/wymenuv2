@@ -93,26 +93,17 @@
 <div id="divid_client_waitorlist" class="client_sitelist">
     
 </div>
-<div id="printRsultListdetail" style="display: none">
-                <div style="margin:10px;">
-                    <h4 style="color:#900;"><span id="failprintjobs">0</span>个任务打印失败</h4>
-                <!--<textarea id="printjobresultlist" style="width:90%;height:16.0em;margin:10px;" value="">                    
-                </textarea
-                <div style="text-align:center;margin: 10px;">
-                    <input type="button" class="btn green-stripe" id="print_box_close_failjobs" value="<?php echo yii::t('app','关 闭');?>">                    
-                </div>>-->
-                <div class="waitorprint" id="printRsultListdetailsub">
-                    <ul>
-                        <li>                                    
-                            任务222打印失败，打印机IP(192.168.1.37)
-                            <input style="float:right;" type="button" class="btn red" value="重新打印">
-                        </li>
-                        
-                    </ul>
-                </div>
-                
-                </div>
-            </div>
+<!--打印修正-->
+   <div id="printRsultListdetail" style="display: none">
+    <div style="margin:10px;">
+        <h4 style="color:#900;"><span id="failprintjobs">0</span>个任务打印失败</h4>
+    
+        <div class="waitorprint" id="printRsultListdetailsub">
+            
+        </div>
+
+    </div>
+</div>
 <!-- 加入订单动画 -->
 <div class="aniele"></div>
 <!-- 口味的页面  -->

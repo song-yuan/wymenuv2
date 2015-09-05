@@ -474,6 +474,40 @@ class ProductController extends Controller
 		));
 	}
         
+        public function actionGetFailPrintjobs(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getParam('orderId',0);
+                $jobId=Yii::app()->request->getParam('jobId',0);
+                $padtype=Yii::app()->request->getParam('padtype');
+                if($padtype=="1")
+                {
+                    Yii::app()->language = 'jp';
+                    Yii::app()->theme="pad";
+                }else{
+                    Yii::app()->language = 'zh_cn';
+                    Yii::app()->theme="pad_cn";
+                }
+                if($jobId!="0")
+                {
+                    $printjobsql="update nb_order_printjobs set finish_flag=1".
+                            " where dpid=".$companyId." and orderid=".$orderId.
+                            " and jobid=".$jobId;
+                    Yii::app()->db->createCommand($printjobsql)->execute();
+                }
+                
+                $criteria = new CDbCriteria;
+                $criteria->condition =  't.dpid='.$companyId.' and t.orderid='.$orderId.' and t.finish_flag=0';
+                $criteria->order = ' t.lid desc ';                    
+                //$siteNo = SiteNo::model()->find($criteria);
+                $orderprintjobs=  OrderPrintjobs::model()->findAll($criteria);
+                //var_dump($orderprintjobs);exit;
+                $this->renderPartial('clientprintjobs' , array(
+				'orderPrintjobs'=>$orderprintjobs,
+				'dpid' => $companyId,
+                                'orderid'=>$orderId
+		));
+	}
+        
         public function actionClientWaitorlist()
 	{
                 //Yii::app()->theme="pad_cn";
