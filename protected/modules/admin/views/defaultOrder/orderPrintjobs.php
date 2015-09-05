@@ -25,9 +25,10 @@
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
                             var orderid="<?php echo $orderid; ?>";
-                            
+                            alert(jobid);alert(address);alert(dpid);alert(orderid);
                             var printresulttemp=Androidwymenuprinter.printNetJob(dpid,jobid,address);
                             //printresulttemp=true;
+                            alert(222);
                             if(!printresulttemp)
                             {
                                 alert("打印失败，请检查打印机和网络后重试！");
