@@ -1226,8 +1226,8 @@
                                             detaildata=svalue.split("_");
                                             if(detaildata[0]=="0")//继续打印
                                             {
-                                                //printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                                printresulttemp=false;
+                                                printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
+                                                //printresulttemp=false;
                                                 if(printresulttemp)
                                                 {
                                                     data.jobs[skey]="1_"+svalue.substring(2);
