@@ -414,6 +414,7 @@
                                                 }
                                             });
                                     }
+                                    layer.close(layer_shape_index);
 //	                 if(printresult)
 //	                 {
                             $('#padOrderForm').find('.input-product').each(function(){
@@ -464,6 +465,7 @@
 //	                     alert(language_print_pad_fail);
 //	                 }                                                
 	                }else{
+                            layer.close(layer_shape_index);
 	                    alert(data.msg);
 	                }
                         $('#padOrderForm').resetForm();
