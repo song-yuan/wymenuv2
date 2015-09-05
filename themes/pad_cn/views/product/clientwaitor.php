@@ -20,7 +20,7 @@
         var curclientwaitorname=$('#id_client_waitor_name').val();
         var language = $('input[name="language"]').val();
         var layer_shape_index=0;
-        var layer_index_printresult=0;
+        var layer_index_printresult2=0;
         $('#idclient_waitorall_title').html("当前服务员："+curclientwaitorname);
         $("li[username="+curclientwaitorname+"]").addClass('bg-yellow');
 	$('.waitoraction').on('click', function(){
@@ -401,16 +401,16 @@
 //                                            if(layer_index_printresult!=0)
 //                                               return;
                                             $('#printRsultListdetailsub').load('<?php echo $this->createUrl('/admin/defaultOrder/getFailPrintjobs',array());?>/companyId/'+data.dpid+'/orderId/'+data.orderid);                                
-                                            layer_index_printresult=layer.open({
+                                            layer_index_printresult2=layer.open({
                                                 type: 1,
                                                 shade: [0.1,'#fff'],
                                                 title: false, //不显示标题
-                                                closeBtn:0,
+                                                closeBtn:1,
                                                 area: ['50%', '40%'],
                                                 content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
                                                 cancel: function(index){
                                                     layer.close(index);
-                                                    layer_index_printresult=0;                                                                                                     
+                                                    layer_index_printresult2=0;                                                                                                     
                                                 }
                                             });
                                     }

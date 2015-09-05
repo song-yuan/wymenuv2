@@ -17,19 +17,22 @@
                         $(document).ready(function(){
                             $('#failprintjobs').text($('#failprintjobnum').val());
                             if($('#failprintjobnum').val()=="0")
-                                layer.close(layer_index_printresult);
+                            {
+                                layer.close(layer_index_printresult2);
+                            }
                         });
                         
-                        $('.reprintjob').click(function(){
+                        $('.reprintjob').on("click",function(){
                             var jobid=$(this).attr("jobid");
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
                             var orderid="<?php echo $orderid; ?>";
-                            alert(jobid);alert(address);alert(dpid);alert(orderid);
-                            var printresulttemp=Androidwymenuprinter.printNetJob(dpid,jobid,address);
+                            //alert(jobid);alert(address);alert(dpid);alert(orderid);
+                            var printresulttemp2=false;
+                            printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address);
                             //printresulttemp=true;
-                            alert(222);
-                            if(!printresulttemp)
+                            //alert(222);
+                            if(!printresulttemp2)
                             {
                                 alert("打印失败，请检查打印机和网络后重试！");
                             }else{
