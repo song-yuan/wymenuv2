@@ -586,18 +586,20 @@ class orderManagementController extends BackendController
  	//	$connect->bindValue(':site_id',$siteId);
  	//	$connect->bindValue(':dpid',$dpid);
  		$site = $connect->queryRow();
+                $retsite="";
  		if($site['site_id'] && $site['dpid'] ){
 		//	echo 'ABC';
-		$sitelevel = $site['site_level'];
-		$sitename = $site['name'];
-		$sitetype = $site['serial'];
+                    $sitelevel = $site['site_level'];
+                    $sitename = $site['name'];
+                    $sitetype = $site['serial'];
+                    $retsite=$sitelevel.":".$sitename.":".$sitetype;
 		}
 		//if($siteId && $dpid){
 			//$sql = 'select order.site_id, order.dpid,site.type_id, site.serial, site_type.name from nb_order, nb_site, nb_site_type where order.site_id = site.lid and order.dpid = site.dpid';
 			//$conn = Yii::app()->db->createCommand($sql);
 
 	      //}
-		return $sitelevel.":".$sitename.":".$sitetype;
+		return $retsite;
 	}
 	
 	public function getOrderDetails($orderId){
