@@ -1488,6 +1488,7 @@ class DefaultOrderController extends BackendController
                                 }
                             }
                             $memo="<<退菜";
+                            $orderDetail[0]->amount=$retreatnum;
                             //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$order->dpid)));                           
                             $ret=  Helper::printKitchenOther($order,$orderDetail,$site,$siteNo,false,$memo);                    
                             if(!$ret['status'])
