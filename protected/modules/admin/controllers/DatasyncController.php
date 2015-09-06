@@ -243,7 +243,7 @@ class DatasyncController extends Controller
                     $localtime="$date";
                 }
                 echo "get cloud tiem:".$cloudtime." and local time:".$localtime." <br>";
-                exit;
+                //exit;
                 //var_dump($cloudtime,$localtime);exit;
                 //轮询以下表(云端和本地都会操作的，)
                 //云端生成，本地操作的表， 如：site，member_card等被本地平凡修改的的有吗？
