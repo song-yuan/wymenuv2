@@ -237,7 +237,7 @@ class DefaultOrderController extends BackendController
                 $criteria->condition =  't.dpid='.$companyId.' and t.orderid='.$orderId.' and t.finish_flag=0';
                 $criteria->order = ' t.lid desc ';                    
                 //$siteNo = SiteNo::model()->find($criteria);
-                $orderprintjobs=  OrderPrintjobs::model()->findAll($criteria);
+                $orderprintjobs=  OrderPrintjobs::model()->with("printer")->findAll($criteria);
                 //var_dump($orderprintjobs);exit;
                 $this->renderPartial('orderPrintjobs' , array(
 				'orderPrintjobs'=>$orderprintjobs,

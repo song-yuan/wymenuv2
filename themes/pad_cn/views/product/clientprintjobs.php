@@ -5,9 +5,9 @@
      //var_dump($orderPrintjob);exit;
             ?>
             <li>                                    
-                任务<?php echo $orderPrintjob['jobid']; ?>打印失败，打印机IP(<?php echo $orderPrintjob['address']; ?>)
-                <input style="float:right;padding: 5px;background-color:greenyellow; " jobid="<?php echo $orderPrintjob['jobid']; ?>" 
-                       address="<?php echo $orderPrintjob['address']; ?>" type="button" class="reprintjob" value="重新打印">
+                任务<?php echo $orderPrintjob['jobid']; ?>打印失败，打印机位置(<?php if(!empty($orderPrintjob->printer->name)) echo $orderPrintjob->printer->name; ?>)
+                <input style="float:right;padding: 5px;background-color:greenyellow; " jobid="<?php echo $orderPrintjob->jobid; ?>" 
+                       address="<?php echo $orderPrintjob->address; ?>" type="button" class="reprintjob" value="重新打印">
             </li>
         <?php endforeach; ?>   
         </ul>
