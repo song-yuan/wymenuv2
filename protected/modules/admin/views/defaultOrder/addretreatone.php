@@ -155,8 +155,16 @@
                                                         detaildata=svalue.split("_");
                                                         if(detaildata[0]=="0")//继续打印
                                                         {
-                                                            printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                                            //printresulttemp=true;
+                                                            printresulttemp=false;
+                                                            for(var itemp=1;itemp<4;itemp++)
+                                                            {
+                                                                if(printresulttemp)
+                                                                {
+                                                                    break;
+                                                                }
+                                                                //alert(itemp);
+                                                                printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);                                                            
+                                                            }
                                                             if(printresulttemp)
                                                             {
                                                                 data.jobs[skey]="1_"+svalue.substring(2);
@@ -167,7 +175,7 @@
                                                      }); 
                                                         if(printresultfail)
                                                         {
-                                                            alert("可能有打印失败，请去打印机处确认，如果失败，请去收银台查看并重打！");
+                                                            alert("打印机忙，请手动点击重新打印！");
                                                             //如果失败，就把打印任务插入到数据库
                                                             $.each(data.jobs,function(skey,svalue){                                        
                                                                     detaildata=svalue.split("_");
@@ -206,7 +214,7 @@
                                                                 });
                                                         }else{
                                                             layer.close(layer_flash_index);
-                                                            alert("打印成功");
+                                                            //alert("打印成功");
                                                         }                                            
                                                         layer.close(layer_flash_index);
                                             }else{

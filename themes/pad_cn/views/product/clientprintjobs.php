@@ -34,15 +34,22 @@
                             var dpid="<?php echo $dpid; ?>";
                             var orderid="<?php echo $orderid; ?>";
                             var printresulttemp2=false;
-                            printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address);
+                            var index = layer.load(0, {shade: [0.3,'#fff']});
+                            for(var itemp=1;itemp<4;itemp++)
+                            {
+                                if(printresulttemp2)
+                                {
+                                    $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
+                                    break;
+                                }
+                                printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address);                                
+                            }
+                            layer.close(index);
+                            joblock=false;
                             if(!printresulttemp2)
                             {
-                                //alert("打印失败，请检查打印机和网络后重试！");
-                            }else{
-                                alert("打印成功！");
-                                $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
+                                alert("再试一次！");
                             }
-                            joblock=false;
                        });                      
                         
                     </script>

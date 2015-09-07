@@ -49,8 +49,8 @@
 					   
 					      <div class="btn-group">
 					      		<button type="submit" id="btn_time_query" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-                                                        <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','打印');?></button>
-                                                        <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
+                                                        <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日结打印');?></button>
+                                                       <!-- <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>-->
 				  	      </div>
 				  	  </div>
 				</div>
@@ -205,16 +205,20 @@
                                 //alert(data.jobid);
                                 var index = layer.load(0, {shade: [0.3,'#fff']});
                                 //var wait=setInterval(function(){ 
-                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
-                                    layer.close(index);
-                                    if(!printresult)
+                                for(var itemp=1;itemp<4;itemp++)
+                                {
+                                    if(printresult)
                                     {
-                                        alert("打印失败，请稍后重试！");
-                                    }else{
-                                        alert("打印完成！");
-                                    }                                    
-                                                           
-                               
+                                        break;
+                                    }
+                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);                                  
+                                     //alert(itemp);                                  
+                                }                           
+                                layer.close(index);
+                                if(!printresult)
+                                {
+                                    alert("请重试！");
+                                }
                             }else{
                                 alert(data.msg);                                
                             }

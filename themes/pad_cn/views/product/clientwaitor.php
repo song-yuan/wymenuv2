@@ -294,14 +294,14 @@
                             if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                             {
                                 layer.close(layer_shape_index);
-                                alert(language_client_order_forbidden);
+                                alert(language_client_order_forbidden+"11");
                                 forbidden=true;
                                 return;
                             }
                         },
                         error: function(msg){
                             layer.close(layer_shape_index);
-                            alert(language_client_order_forbidden);
+                            alert(language_client_order_forbidden+"22");
                             forbidden=true;
                             return;
                         }
@@ -459,7 +459,7 @@
                                 $('#id_client_site_name').val("新增临时餐桌！");
                                 $("#idclient_siteall_title").html("当前餐桌："+$("#id_client_site_name").val());
                                 $("#productmasksiteinfo").html("当前餐桌："+$("#id_client_site_name").val());
-                                alert("下单成功");
+                                //alert("下单成功");
                                 $('#divid_client_waitorlist').hide();
 //	                 }else{
 //	                     alert(language_print_pad_fail);

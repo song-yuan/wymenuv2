@@ -812,19 +812,27 @@
                             var printresult=false;
                             if(data.status){
                                 var index = layer.load(0, {shade: [0.3,'#fff']});
+                                
                                 //var wait=setInterval(function(){ 
 //                                var waitfun=function(){
 //                                    waittime++;
 //                                    //alert(waittime);
-                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
-                                    //printresult=false;
-                                    layer.close(index);
-                                    if(!printresult)
+                                for(var itemp=1;itemp<4;itemp++)
+                                {
+                                    if(printresult)
                                     {
-                                        alert("打印失败，请重试！");
-                                    }else{
-                                        alert("打印完成！");
+                                        layer.close(index);
+                                        break;
                                     }
+                                    //alert(itemp);
+                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);                                    
+                                }
+                                if(!printresult)
+                                {
+                                    //layer.close(index);
+                                    alert("再试一次！");
+                                }
+                                layer.close(index);
 //                                    if(printresult)
 //                                    {
                                         //clearInterval(wait);
@@ -2200,7 +2208,8 @@
             $('#pay_btn').on(event_clicktouchstart,function(){
                 //accountManul
                 //判断找零是否大于现金
-                if(parseFloat($("#payChangeAccount").text().replace(",",""))> parseFloat($("#payCashAccount").text().replace(",","")))
+                var payCashAccount= parseFloat($("#payCashAccount").text().replace(",","")) - parseFloat($("#payChangeAccount").text().replace(",",""));
+                if(payCashAccount<0)
                 {
                     alert("金额有误");
                     return false;
@@ -2224,7 +2233,8 @@
                  //存数order order_pay 0现金，4会员卡，5银联                         
                  //写入会员卡消费记录，会员卡总额减少
                 var orderid=$(".selectProduct").attr("orderid");
-                var payCashAccount=$("#payCashAccount").text();
+                //var payCashAccount=$("#payCashAccount").text();
+                //var payChangeAccount=$("#payChangeAccount").text();
                 var payShouldAccount=$("#payShouldAccount").text();
                 var payOriginAccount=$("#payOriginAccount").text();
                 var payRealityAccount=$("#payRealityAccount").text();
@@ -2248,6 +2258,7 @@
                                     '&payunionaccount='+payUnionAccount+
                                     '&ordermemo='+ordermemo+
                                     '&payshouldaccount='+payShouldAccount+
+                                   // '&payChangeAccount='+payChangeAccount+
                                     '&payoriginaccount='+payOriginAccount;                            
                         $.ajax({
                             url:url,
@@ -2260,7 +2271,7 @@
                                 if(data.status){
                                     layer.close(layer_index2);
                                     layer_index2=0;
-                                    alert(data.msg);
+                                    //alert(data.msg);
                                     //刷新座位页面                                    
                                     //alert(typeId);
                                     tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;

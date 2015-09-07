@@ -67,6 +67,7 @@
                                                     <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
                                                     <span class="input-group-btn">
                                                         <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
+                                                        <button class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>                                                        
                                                     </span>
                                                 </div>
                                             </div>
