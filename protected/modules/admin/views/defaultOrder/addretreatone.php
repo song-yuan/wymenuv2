@@ -156,15 +156,15 @@
                                                         if(detaildata[0]=="0")//继续打印
                                                         {
                                                             printresulttemp=false;
-                                                            for(var itemp=1;itemp<4;itemp++)
-                                                            {
-                                                                if(printresulttemp)
-                                                                {
-                                                                    break;
-                                                                }
+//                                                            for(var itemp=1;itemp<4;itemp++)
+//                                                            {
+//                                                                if(printresulttemp)
+//                                                                {
+//                                                                    break;
+//                                                                }
                                                                 //alert(itemp);
                                                                 printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);                                                            
-                                                            }
+//                                                            }
                                                             if(printresulttemp)
                                                             {
                                                                 data.jobs[skey]="1_"+svalue.substring(2);
