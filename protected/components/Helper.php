@@ -1733,6 +1733,7 @@ class Helper
                                         array_push($listData,"11".$site->siteType->name.' '.$site->serial);
                                     }
                                     array_push($listData,"00".yii::t('app','人数：').$order->number);
+                                    array_push($listData,"br");
                                     //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
                                     array_push($listData,"00".str_pad('',48,'-'));
                                     $productids="";
@@ -1782,11 +1783,11 @@ class Helper
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                                     //组装头
                                     $listDataHeader = array("22".Helper::setPrinterTitle($order->company->company_name,8));
-                                    array_push($listData,"br");
+                                    array_push($listDataHeader,"br");
                                     //array_push($listData,"22"."---分菜单---"); 
-                                    array_push($listData,"22"."分单<".$printerway->name.">");
-                                    array_push($listData,"br");
-                                    array_push($listData,"22"."<".$memo);
+                                    array_push($listDataHeader,"22"."分单<".$printerway->name.">");
+                                    array_push($listDataHeader,"br");
+                                    array_push($listDataHeader,"22"."<".$memo);
                                     array_push($listDataHeader,"00");
                                     array_push($listDataHeader,"br");
                                     //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"fen-memo3:".$memo);
@@ -1800,6 +1801,7 @@ class Helper
                                         array_push($listDataHeader,"11".$site->siteType->name.' '.$site->serial);
                                     }
                                     array_push($listDataHeader,"00".yii::t('app','人数：').$order->number);
+                                    array_push($listData,"br");
                                     //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试4".$memo);                                        
                                     array_push($listDataHeader,"00".str_pad('',48,'-'));
                                     //组装尾部
@@ -1827,8 +1829,8 @@ class Helper
                                         }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         array_push($listDataBody,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
-                                        array_push($listData,"br");
-                                        array_push($listData,$memo);
+                                        array_push($listDataBody,"br");
+                                        array_push($listDataBody,$memo);
                                         array_push($listDataBody,"br");
                                         //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试4".$memo);                                        
                                         $listData=  array_merge($listDataHeader,$listDataBody,$listDataTail);                                        
