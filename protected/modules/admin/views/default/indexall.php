@@ -511,9 +511,9 @@
                                                 <div style="width: 85%;margin:1.0em;font-size:1.5em;">
                                                     实收<span style="text-align:right;" id="payRealityAccount">0.00</span><br>
                                                     找零<span style="text-align:right;" id="payChangeAccount">0.00</span><br>
-                                                    <DIV class="edit_span edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
                                                     
                                                 </div>    
                                                 <input style="position:absolute;right:3%;bottom: 4%;width:6.0em;height:3.0em;" type="button" class="btn green" id="layer2_close" value="<?php echo yii::t('app',' 关 闭 ');?>">
@@ -1220,7 +1220,7 @@
                                 var printresulttemp;
                                 //保存成功，刷新
                                 var data=msg;
-                                alert(data.msg);
+                               // alert(data.msg);
                                 if(data.status){
                                     $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                                 
