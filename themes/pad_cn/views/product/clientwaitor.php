@@ -301,7 +301,7 @@
                         },
                         error: function(msg){
                             layer.close(layer_shape_index);
-                            alert(language_client_order_forbidden+"22");
+                            alert("网络可能有问题"+"22");
                             forbidden=true;
                             return;
                         }

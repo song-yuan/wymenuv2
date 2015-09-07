@@ -1722,6 +1722,7 @@ class Helper
                                     array_push($listData,"22"."<".$memo);
                                     array_push($listData,"00");
                                     array_push($listData,"br");
+                                    //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"zheng-memo:".$memo);
                                     if($reprint)
                                     {
                                         $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
@@ -1855,7 +1856,7 @@ class Helper
                                     array_push($listData,"22"."<".$memo);
                                     array_push($listDataHeader,"00");
                                     array_push($listDataHeader,"br");
-
+//                                    return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"fen-memo:".$memo);
                                     if($reprint)
                                     {
                                         $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
