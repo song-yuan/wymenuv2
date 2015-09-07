@@ -552,20 +552,6 @@ class DefaultOrderController extends BackendController
                     
                     if($paymemberaccount>0)
                     {
-                        $orderPayId = $se->nextval();
-                        //插入一条
-                        $orderPayData = array(
-                                            'lid'=>$orderPayId,
-                                            'dpid'=>$companyId,
-                                            'create_at'=>$time,
-                                            'order_id'=>$orderid,
-                                            'update_at'=>$time,
-                                            'pay_amount'=>$paymemberaccount,
-                                            'paytype'=>"4",
-                                            'payment_method_id'=>$cardno,
-                                            'remark'=>'会员卡付款',//'product_order_status'=>$orderProductStatus,
-                                            );
-                        $db->createCommand()->insert('nb_order_pay',$orderPayData);                        
                         $membercard= MemberCard::model()->find(' dpid=:dpid and (rfid =:rfid or selfcode =:selfcode) and delete_flag =0',
                                 array(":dpid"=>$companyId,":rfid"=>$cardno,":selfcode"=>$cardno));
 //                        $ret=json_encode(array('status'=>false,'msg'=>$paymemberaccount ));
@@ -580,6 +566,21 @@ class DefaultOrderController extends BackendController
                             $ret=json_encode(array('status'=>false,'msg'=>"会员卡余额不足"));
                             Yii::app()->end($ret);
                         }
+                        $orderPayId = $se->nextval();
+                        //插入一条
+                        $orderPayData = array(
+                                            'lid'=>$orderPayId,
+                                            'dpid'=>$companyId,
+                                            'create_at'=>$time,
+                                            'order_id'=>$orderid,
+                                            'update_at'=>$time,
+                                            'pay_amount'=>$paymemberaccount,
+                                            'paytype'=>"4",
+                                            'payment_method_id'=>$cardno,
+                                            'remark'=>'会员卡付款',//'product_order_status'=>$orderProductStatus,
+                                            );
+                        $db->createCommand()->insert('nb_order_pay',$orderPayData);                        
+                        
                     }
                     if($payunionaccount>0)
                     {
