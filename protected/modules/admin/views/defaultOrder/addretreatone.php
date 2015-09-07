@@ -146,7 +146,7 @@
                                         success:function(result){
                                             var printresultfail=false;
                                             var printresulttemp;
-                                            alert(result.msg);
+                                            //alert(result.msg);
                                             data=result;
                                             if(data.status){
                                                     $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
@@ -156,15 +156,15 @@
                                                         if(detaildata[0]=="0")//继续打印
                                                         {
                                                             printresulttemp=false;
-//                                                            for(var itemp=1;itemp<4;itemp++)
-//                                                            {
-//                                                                if(printresulttemp)
-//                                                                {
-//                                                                    break;
-//                                                                }
+                                                            for(var itemp=1;itemp<4;itemp++)
+                                                            {
+                                                                if(printresulttemp)
+                                                                {
+                                                                    break;
+                                                                }
                                                                 //alert(itemp);
                                                                 printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);                                                            
-//                                                            }
+                                                            }
                                                             if(printresulttemp)
                                                             {
                                                                 data.jobs[skey]="1_"+svalue.substring(2);
@@ -218,7 +218,7 @@
                                                         }                                            
                                                         layer.close(layer_flash_index);
                                             }else{
-                                                //alert(data.msg);
+                                                alert(data.msg);
                                                 //alert("下单成功，打印失败");
                                             }
                                            //以上是打印                                                        
