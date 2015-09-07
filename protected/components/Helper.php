@@ -1801,7 +1801,7 @@ class Helper
                                         array_push($listDataHeader,"11".$site->siteType->name.' '.$site->serial);
                                     }
                                     array_push($listDataHeader,"00".yii::t('app','人数：').$order->number);
-                                    array_push($listData,"br");
+                                    array_push($listDataHeader,"br");
                                     //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试4".$memo);                                        
                                     array_push($listDataHeader,"00".str_pad('',48,'-'));
                                     //组装尾部
