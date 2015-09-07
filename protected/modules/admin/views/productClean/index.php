@@ -67,7 +67,7 @@
                                                     <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
                                                     <span class="input-group-btn">
                                                         <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
-                                                        <button class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>                                                        
+                                                        <button style="left:10px;" class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>                                                        
                                                     </span>
                                                 </div>
                                             </div>
@@ -182,6 +182,32 @@
 			location.href="<?php echo $this->createUrl('productClean/index' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid;
 		});
 	});
+        
+        //cancelallclean
+        
+        $("#cancelallclean").on("click",function(){
+            
+            $.ajax({
+ 			url:"<?php echo $this->createUrl('productClean/resetall',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>",
+ 			async: false,
+ 			//data:"companyId="+company_id+'&padId='+pad_id,
+                        dataType:'json',
+ 			success:function(msg){
+                            //alert(msg.status);
+                            if(msg.status=="success")
+                            {
+                                alert("已经解除全部沽清！");
+                                location.reload();
+                            }else{
+                                alert("已经解除全部沽清"+"111")
+                                location.reload();
+                            }
+ 			},
+                        error:function(){
+ 				alert("请重试"+"2");                                
+ 			},
+ 		});
+        });
         
         $(".clear_btn").on("click",function(){
             var vid=$(this).attr("id").substr(12,10);
