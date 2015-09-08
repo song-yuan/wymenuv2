@@ -65,6 +65,7 @@
                                 if(jobnum==1 && printresulttemp2)
                                 {
     //                                alert(1);
+                                    $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
                                     layer.close(layer_index_printresult2);
                                 }
                             }
