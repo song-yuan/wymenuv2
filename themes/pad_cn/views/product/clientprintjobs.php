@@ -35,21 +35,32 @@
                             var orderid="<?php echo $orderid; ?>";
                             var printresulttemp2=false;
                             var index = layer.load(0, {shade: [0.3,'#fff']});
-                            for(var itemp=1;itemp<4;itemp++)
-                            {
+                            var jobnum=parseInt($('#failprintjobnum').val());
+//                            for(var itemp=1;itemp<4;itemp++)
+//                            {
+                                
+                                printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address); 
+                                //printresulttemp2=true;
                                 if(printresulttemp2)
                                 {
-                                    $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
-                                    break;
+                                    if(jobnum>1)
+                                    {
+                                        $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
+//                                        break;
+                                    }                                    
                                 }
-                                printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address);                                
-                            }
+//                            }
                             layer.close(index);
                             joblock=false;
                             if(!printresulttemp2)
                             {
                                 alert("再试一次！");
                             }
+                            if(jobnum==1 && printresulttemp2)
+                            {
+//                                alert(1);
+                                layer.close(layer_index_printresult2);
+                            }                            
                        });                      
                         
                     </script>
