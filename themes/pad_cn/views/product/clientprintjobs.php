@@ -4,9 +4,9 @@
         <?php foreach ($orderPrintjobs as $orderPrintjob):
      //var_dump($orderPrintjob);exit;
             ?>
-            <li>                                    
+            <li style="height:40px;">                                    
                 任务<?php echo $orderPrintjob['jobid']; ?>打印失败，打印机位置(<?php if(!empty($orderPrintjob->printer->name)) echo $orderPrintjob->printer->name; ?>)
-                <input style="float:right;padding: 5px;background-color:greenyellow; " jobid="<?php echo $orderPrintjob->jobid; ?>" 
+                <input style="float:right;padding: 10px 25px;background-color:greenyellow; " jobid="<?php echo $orderPrintjob->jobid; ?>" 
                        address="<?php echo $orderPrintjob->address; ?>" type="button" class="reprintjob" value="重新打印">
             </li>
         <?php endforeach; ?>   
@@ -38,7 +38,13 @@
                             var jobnum=parseInt($('#failprintjobnum').val());
 //                            for(var itemp=1;itemp<4;itemp++)
 //                            {
-                                
+                            Androidwymenuprinter.printNetPing(address,10);
+                            setTimeout(Androidwymenuprinter.printNetPing(address,10)
+                                    ,400);
+//                            setTimeout(alert(1)
+//                                    ,400);
+                            var printfun=function()
+                            {
                                 printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address); 
                                 //printresulttemp2=true;
                                 if(printresulttemp2)
@@ -49,18 +55,20 @@
 //                                        break;
                                     }                                    
                                 }
-//                            }
-                            layer.close(index);
-                            joblock=false;
-                            if(!printresulttemp2)
-                            {
-                                alert("再试一次！");
+                                
+                                layer.close(index);
+                                joblock=false;
+                                if(!printresulttemp2)
+                                {
+                                    alert("再试一次！");
+                                }
+                                if(jobnum==1 && printresulttemp2)
+                                {
+    //                                alert(1);
+                                    layer.close(layer_index_printresult2);
+                                }
                             }
-                            if(jobnum==1 && printresulttemp2)
-                            {
-//                                alert(1);
-                                layer.close(layer_index_printresult2);
-                            }                            
+                            setTimeout(printfun,1000);                            
                        });                      
                         
                     </script>
