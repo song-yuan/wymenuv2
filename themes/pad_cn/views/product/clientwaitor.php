@@ -338,8 +338,9 @@
                                     printresultfail=false;
                                     $.each(data.jobs,function(skey,svalue){ 
                                         //alert(svalue);
+                                        detaildata=svalue.split("_");
                                         Androidwymenuprinter.printNetPing(detaildata[2],10);
-                                        detaildata=svalue.split("_");                                        
+                                                                                
                                         if(detaildata[0]=="0")//继续打印
                                         {
                                             printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
