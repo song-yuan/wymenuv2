@@ -187,6 +187,16 @@ class StatementsController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
+	
+	/**
+	 * 
+	 * 就餐人数统计
+	 * 
+	 */
+	public function actionDiningNum(){
+		
+		$sql = 'select sum(number) as total from nb_order where order_status in (3,4,8) and dpid='.$this->companyId;
+	}
 /*	private function exportSalesReport($models,$params=array(),$export = 'xml'){
 // 		$objectPHPExcel = new PHPExcel();
 // 		$objectPHPExcel->setActiveSheetIndex(0);	
