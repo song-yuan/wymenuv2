@@ -1220,7 +1220,7 @@
                                 var printresulttemp;
                                 //保存成功，刷新
                                 var data=msg;
-                               // alert(data.msg);
+                                alert(data.msg);
                                 if(data.status){
                                     $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
                                 
@@ -1236,8 +1236,8 @@
                                             detaildata=svalue.split("_");
                                             if(detaildata[0]=="0")//继续打印
                                             {
-                                                //printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                                printresulttemp=false;
+                                                printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
+                                                //printresulttemp=false;
                                                 if(printresulttemp)
                                                 {
                                                     data.jobs[skey]="1_"+svalue.substring(2);
