@@ -194,8 +194,19 @@ class StatementsController extends BackendController
 	 * 
 	 */
 	public function actionDiningNum(){
+		$str = Yii::app()->request->getParam('str');
+		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
-		$sql = 'select sum(number) as total from nb_order where order_status in (3,4,8) and dpid='.$this->companyId;
+		$sql = 'select sum(number) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >='.$beginTime.' 00:00:00 and create_at <='.$endTime.' 23:59:59';
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		$comName = $this->getComName();
+		$this->render('dingNum',array(
+				'model'=>$model,
+				'begin_time'=>$beginTime,
+				'end_time'=>$endTime,
+				'comName'=>$comName,
+		));
 	}
 /*	private function exportSalesReport($models,$params=array(),$export = 'xml'){
 // 		$objectPHPExcel = new PHPExcel();
