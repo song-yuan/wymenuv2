@@ -215,7 +215,7 @@ class StatementsController extends BackendController
 				'str'=>$str,
 		));
 	}
-	private function exportDiningNum($models,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
+	private function exportDiningNum($model,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
  		$attributes = array(
 			'id'=>'编号',
 			'total'=>'就餐人数',
@@ -223,17 +223,15 @@ class StatementsController extends BackendController
  		$data[1] = array_values($attributes);
  		$fields = array_keys($attributes);
  		
-		foreach($models as $model){
-			$arr = array();
-			foreach($fields as $f){
-				if($f == 'id'){
-					$arr[] = 1;
-				}else{
-					$arr[] = $model[$f];
-				}
+		$arr = array();
+		foreach($fields as $f){
+			if($f == 'id'){
+				$arr[] = 1;
+			}else{
+				$arr[] = $model[$f];
 			}
-			$data[] = $arr;
 		}
+		$data[] = $arr;
  		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
 	}
 /*	private function getCategoryList(){
