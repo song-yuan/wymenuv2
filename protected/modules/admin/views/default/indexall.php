@@ -325,7 +325,7 @@
                 <div class="col-md-8" style="">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
                         <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsave_btn" value="<?php echo yii::t('app','挂单--');?>">
-			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printlist_btn" value="<?php echo yii::t('app','打印清单');?>">
+			<!--<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printlist_btn" value="<?php echo yii::t('app','打印清单');?>">-->
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="alltaste_btn" value="<?php echo yii::t('app','全单设定');?>">
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printerKitchen" value="<?php echo yii::t('app','下单&厨打&收银&结单');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
@@ -502,7 +502,7 @@
                                                         <li id="pay_clearone" style="background-color: #add"><?php echo yii::t('app','退格');?></li>
                                                         <li id="pay_clearall" style="background-color: red"><?php echo yii::t('app','清除/全额');?></li>
                                                         <li id="pay_btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>    
-                                                        <li id="layer2_close" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','取消');?></li>
+                                                        <li id="printlistaccount" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','打印消费清单');?></li>
                                                     </ul>
                                                 </div> 
                                               </DIV> 
@@ -511,11 +511,12 @@
                                                 <div style="width: 85%;margin:1.0em;font-size:1.5em;">
                                                     实收<span style="text-align:right;" id="payRealityAccount">0.00</span><br>
                                                     找零<span style="text-align:right;" id="payChangeAccount">0.00</span><br>
-                                                    <DIV class="edit_span edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
                                                     
                                                 </div>    
+                                                <input style="position:absolute;right:3%;bottom: 4%;width:6.0em;height:3.0em;" type="button" class="btn green" id="layer2_close" value="<?php echo yii::t('app',' 关 闭 ');?>">
                                             </div>
                                         </div>
                                     </div>
@@ -781,7 +782,7 @@
             });
             
             //printlist_btn
-            $('#printlist_btn').on(event_clicktouchstart,function(){
+            $('#printlistaccount').on(event_clicktouchstart,function(){
                 var orderid=$(".selectProduct").attr("orderid");
                 var padid="0000000046";
                 if (typeof Androidwymenuprinter == "undefined") {
@@ -791,7 +792,8 @@
                     var padinfo=Androidwymenuprinter.getPadInfo();
                     padid=padinfo.substr(10,10);
                 }
-                var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
+                var payShouldAccount=$("#payShouldAccount").text();
+                var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/payShouldAccount/"+payShouldAccount;
                 var statu = confirm("<?php echo yii::t('app','确定要打印清单吗？');?>");
                 if(!statu){
                     return false;
@@ -810,19 +812,27 @@
                             var printresult=false;
                             if(data.status){
                                 var index = layer.load(0, {shade: [0.3,'#fff']});
+                                
                                 //var wait=setInterval(function(){ 
 //                                var waitfun=function(){
 //                                    waittime++;
 //                                    //alert(waittime);
-                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
-                                    //printresult=false;
-                                    layer.close(index);
-                                    if(!printresult)
+                                for(var itemp=1;itemp<4;itemp++)
+                                {
+                                    if(printresult)
                                     {
-                                        alert("打印失败，请重试！");
-                                    }else{
-                                        alert("打印完成！");
+                                        layer.close(index);
+                                        break;
                                     }
+                                    //alert(itemp);
+                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);                                    
+                                }
+                                if(!printresult)
+                                {
+                                    //layer.close(index);
+                                    alert("再试一次！");
+                                }
+                                layer.close(index);
 //                                    if(printresult)
 //                                    {
                                         //clearInterval(wait);
@@ -2198,7 +2208,8 @@
             $('#pay_btn').on(event_clicktouchstart,function(){
                 //accountManul
                 //判断找零是否大于现金
-                if(parseFloat($("#payChangeAccount").text().replace(",",""))> parseFloat($("#payCashAccount").text().replace(",","")))
+                var payCashAccount= parseFloat($("#payCashAccount").text().replace(",","")) - parseFloat($("#payChangeAccount").text().replace(",",""));
+                if(payCashAccount<0)
                 {
                     alert("金额有误");
                     return false;
@@ -2222,7 +2233,8 @@
                  //存数order order_pay 0现金，4会员卡，5银联                         
                  //写入会员卡消费记录，会员卡总额减少
                 var orderid=$(".selectProduct").attr("orderid");
-                var payCashAccount=$("#payCashAccount").text();
+                //var payCashAccount=$("#payCashAccount").text();
+                //var payChangeAccount=$("#payChangeAccount").text();
                 var payShouldAccount=$("#payShouldAccount").text();
                 var payOriginAccount=$("#payOriginAccount").text();
                 var payRealityAccount=$("#payRealityAccount").text();
@@ -2246,6 +2258,7 @@
                                     '&payunionaccount='+payUnionAccount+
                                     '&ordermemo='+ordermemo+
                                     '&payshouldaccount='+payShouldAccount+
+                                   // '&payChangeAccount='+payChangeAccount+
                                     '&payoriginaccount='+payOriginAccount;                            
                         $.ajax({
                             url:url,
@@ -2258,7 +2271,7 @@
                                 if(data.status){
                                     layer.close(layer_index2);
                                     layer_index2=0;
-                                    alert(data.msg);
+                                    //alert(data.msg);
                                     //刷新座位页面                                    
                                     //alert(typeId);
                                     tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;

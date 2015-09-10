@@ -6,9 +6,9 @@
      //var_dump($orderPrintjob);exit;
             ?>
             <li>                                    
-                任务<?php echo $orderPrintjob['jobid']; ?>打印失败，打印机IP(<?php echo $orderPrintjob['address']; ?>)
-                <input style="float:right;" jobid="<?php echo $orderPrintjob['jobid']; ?>" 
-                       address="<?php echo $orderPrintjob['address']; ?>" type="button" class="btn red reprintjob" value="重新打印">
+                任务<?php echo $orderPrintjob['jobid']; ?>打印失败，打印机位置(<?php if(!empty($orderPrintjob->printer->name)) echo $orderPrintjob->printer->name; ?>)
+                <input style="float:right;" jobid="<?php echo $orderPrintjob->jobid; ?>" 
+                       address="<?php echo $orderPrintjob->address; ?>" type="button" class="btn red reprintjob" value="重新打印">
             </li>
         <?php endforeach; ?>   
         </ul>
@@ -16,18 +16,22 @@
                     <script type="text/javascript">
                         $(document).ready(function(){
                             $('#failprintjobs').text($('#failprintjobnum').val());
+                            
                         });
                         
-                        $('.reprintjob').click(function(){
+                        $('.reprintjob').on("click",function(){
                             var jobid=$(this).attr("jobid");
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
                             var orderid="<?php echo $orderid; ?>";
-                            
-                            var printresulttemp=Androidwymenuprinter.printNetJob(dpid,jobid,address);
-                            if(!printresulttemp)
+                            //alert(jobid);alert(address);alert(dpid);alert(orderid);
+                            var printresulttemp2=false;
+                            printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address);
+                            //printresulttemp=true;
+                            //alert(222);
+                            if(!printresulttemp2)
                             {
-                                alert("打印失败，请检查网络和打印机后重试！");
+                                alert("打印失败，请检查打印机和网络后重试！");
                             }else{
                                 $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$dpid));?>/orderId/'+orderid+'/jobId/'+jobid);
                             }

@@ -49,8 +49,8 @@
 					   
 					      <div class="btn-group">
 					      		<button type="submit" id="btn_time_query" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-                                                        <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','打印');?></button>
-                                                        <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>
+                                                        <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日结打印');?></button>
+                                                       <!-- <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>-->
 				  	      </div>
 				  	  </div>
 				</div>
@@ -70,24 +70,14 @@
 						<tbody>
 				 
 						<!--foreach-->
-					<?php $a=1;?>
-						<!--  <?php foreach ($models as $model):?>   -->
+					<?php $a=1;$sumall=0;?>
+						  <?php foreach ($models as $model):?>  
 						
-						
-						
+												
 								<tr class="odd gradeX">
 								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
 								
-								<!--<td><?php //($model->payment_method_id!='0000000000') 
-                                                                    //echo $model->paymentMethod->name.yii::t('app','(后台)'); 
-                                                                //else 
-                                                                    switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
-                                                                case 1: echo  yii::t('app','微信支付');break; 
-                                                                case 2: echo  yii::t('app','支付宝支付');break; 
-                                                                case 3: echo  yii::t('app','后台手动支付');break;  
-                                                                case 4: echo  yii::t('app','会员卡支付');break;  
-                                                                case 5: echo  yii::t('app','银联卡支付');break;  
-                                                                default :echo ''; }?></td>-->
+								
                                                                 <td><?php switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
                                                                 case 1: echo  yii::t('app','微信支付');break; 
                                                                 case 2: echo  yii::t('app','支付宝支付');break; 
@@ -98,10 +88,15 @@
 								<td><?php echo $model->should_all;?></td>
 								<td></td>
 								</tr>
-						<?php $a++;?>
-						<!-- <?php endforeach;?>	  -->
+						<?php $a++;$sumall=$sumall+$model->should_all;?>
+						<?php endforeach;?>	
 						<!-- end foreach-->
-						
+                                                    <tr class="odd gradeX">
+                                                    <td></td>
+                                                    <td>合计：</td>
+                                                    <td><?php echo $sumall;?></td>
+                                                    <td></td>
+                                                    </tr>
 						</tbody>
 					</table>
 						<?php if($pages->getItemCount()):?>
@@ -210,16 +205,20 @@
                                 //alert(data.jobid);
                                 var index = layer.load(0, {shade: [0.3,'#fff']});
                                 //var wait=setInterval(function(){ 
-                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
-                                    layer.close(index);
-                                    if(!printresult)
+                                for(var itemp=1;itemp<4;itemp++)
+                                {
+                                    if(printresult)
                                     {
-                                        alert("打印失败，请稍后重试！");
-                                    }else{
-                                        alert("打印完成！");
-                                    }                                    
-                                                           
-                               
+                                        break;
+                                    }
+                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);                                  
+                                     //alert(itemp);                                  
+                                }                           
+                                layer.close(index);
+                                if(!printresult)
+                                {
+                                    alert("请重试！");
+                                }
                             }else{
                                 alert(data.msg);                                
                             }

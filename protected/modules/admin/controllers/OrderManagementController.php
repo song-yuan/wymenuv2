@@ -71,7 +71,6 @@ class orderManagementController extends BackendController
 			Yii::app()->user->setFlash('error' , yii::t('app','无法查询到该订单!'));
 			$this->redirect(array('orderManagement/paymentRecord','companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time));
 		}
-		
 		if(Yii::app()->request->isPostRequest) {
 			$postData = Yii::app()->request->getPost('OrderPay');
 			
@@ -202,7 +201,7 @@ class orderManagementController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
                 $padid= Yii::app()->request->getParam('padid');
-		
+		$ret=array();
 		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
 		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
@@ -212,16 +211,81 @@ class orderManagementController extends BackendController
 		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
 		$criteria->group = "t.paytype";
 		
-		$model=  OrderPay::model()->findAll($criteria);
+		$models=  OrderPay::model()->findAll($criteria);
+                if(count($models)==0)
+                {
+                    $ret=array('status'=>false,'msg'=>"没有数据！");
+                    Yii::app()->end(json_encode($ret));
+                }
 		//var_dump($model[0]->order);exit;
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
-                $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$this->companyId,'lid'=>$padid));
-            	 //前面加 barcode
-                $precode="";
-                $memo="日结对账单";
-                $printList = Helper::printCloseAccount($this->companyId,$model , $pad,$precode,"0",$memo);
-                Yii::app()->end(json_encode($printList));
-		
+                ////////////////
+                
+                $transaction = Yii::app()->db->beginTransaction(); 
+		try{
+			$userId = Yii::app()->user->userId;// lid_dpid
+			$userIdArr = explode('_',$userId);
+			$se=new Sequence("close_account");
+                        $clid = $se->nextval();
+			$closeA = new CloseAccount;
+			$closeAdata = array(
+								'lid'=>$clid,
+								'dpid'=>$this->companyId,
+								'create_at'=>date('Y-m-d H:i:s',time()),
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'user_id'=>$userIdArr[0],
+								'begin_time'=>$begin_time,
+								'end_time'=>$end_time,
+								'close_day'=>date('Y-m-d H:i:s',time()),
+								'all_money'=>0
+								);
+			$closeA->attributes = $closeAdata;
+			$closeA->save();
+			
+			$totalMoney = 0;
+			foreach($models as $model){
+				//插入明细表
+				$se=new Sequence("close_account_detail");
+	            $lid = $se->nextval();
+				$closeADel = new CloseAccountDetail;
+				$closeADeldata = array(
+								'lid'=>$lid,
+								'dpid'=>$this->companyId,
+								'create_at'=>date('Y-m-d H:i:s',time()),
+								'update_at'=>date('Y-m-d H:i:s',time()),
+								'close_account_id'=>$clid,
+								'paytype'=>$model->paytype,
+								'payment_method_id'=>$model->payment_method_id,
+								'all_money'=>$model->should_all,
+								);
+				$closeADel->attributes = $closeADeldata;
+				$closeADel->save();				
+				$totalMoney +=$model->should_all;
+			}
+			
+			//更改订单表状态
+			//Order::model()->updateAll(array('order_status'=>8),'update_at >=:begin_time and :end_time >=update_at and order_status in (3,4) and dpid=:dpid',array(':begin_time'=>$begin_time,':end_time'=>$end_time));
+			$sqlorderup="update nb_order set order_status=8 where dpid=$this->companyId and update_at >='$begin_time 00:00:00' and update_at<='$end_time 23:59:59' and order_status in (4)";
+                        //var_dump($sqlorderup);exit;
+                        Yii::app()->db->createCommand($sqlorderup)->execute();
+			$cmodel = CloseAccount::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$clid,'dpid'=>$this->companyId));
+			$cmodel->all_money = $totalMoney;
+			$cmodel->update();
+                        
+                        ///////////////////////
+                        $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$this->companyId,'lid'=>$padid));
+                         //前面加 barcode
+                        $precode="";
+                        $memo="日结对账单";
+                        $ret = Helper::printCloseAccount($this->companyId,$models , $pad,$precode,"0",$memo);
+			$transaction->commit(); //提交事务会真正的执行数据库操作
+			//echo 1;
+		}catch (Exception $e) {
+			$transaction->rollback(); //如果操作失败, 数据回滚
+			//echo 0;
+                        $ret=array('status'=>false,'msg'=>"请重试！");
+		}              
+                Yii::app()->end(json_encode($ret));		
 	}
 	//日结 指定日期的订单
 	public function actionDailyclose(){
@@ -586,18 +650,20 @@ class orderManagementController extends BackendController
  	//	$connect->bindValue(':site_id',$siteId);
  	//	$connect->bindValue(':dpid',$dpid);
  		$site = $connect->queryRow();
+                $retsite="";
  		if($site['site_id'] && $site['dpid'] ){
 		//	echo 'ABC';
-		$sitelevel = $site['site_level'];
-		$sitename = $site['name'];
-		$sitetype = $site['serial'];
+                    $sitelevel = $site['site_level'];
+                    $sitename = $site['name'];
+                    $sitetype = $site['serial'];
+                    $retsite=$sitelevel.":".$sitename.":".$sitetype;
 		}
 		//if($siteId && $dpid){
 			//$sql = 'select order.site_id, order.dpid,site.type_id, site.serial, site_type.name from nb_order, nb_site, nb_site_type where order.site_id = site.lid and order.dpid = site.dpid';
 			//$conn = Yii::app()->db->createCommand($sql);
 
 	      //}
-		return $sitelevel.":".$sitename.":".$sitetype;
+		return $retsite;
 	}
 	
 	public function getOrderDetails($orderId){

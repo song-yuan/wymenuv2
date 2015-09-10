@@ -474,6 +474,40 @@ class ProductController extends Controller
 		));
 	}
         
+        public function actionGetFailPrintjobs(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getParam('orderId',0);
+                $jobId=Yii::app()->request->getParam('jobId',0);
+                $padtype=Yii::app()->request->getParam('padtype');
+                if($padtype=="1")
+                {
+                    Yii::app()->language = 'jp';
+                    Yii::app()->theme="pad";
+                }else{
+                    Yii::app()->language = 'zh_cn';
+                    Yii::app()->theme="pad_cn";
+                }
+                if($jobId!="0")
+                {
+                    $printjobsql="update nb_order_printjobs set finish_flag=1".
+                            " where dpid=".$companyId." and orderid=".$orderId.
+                            " and jobid=".$jobId;
+                    Yii::app()->db->createCommand($printjobsql)->execute();
+                }
+                
+                $criteria = new CDbCriteria;
+                $criteria->condition =  't.dpid='.$companyId.' and t.orderid='.$orderId.' and t.finish_flag=0';
+                $criteria->order = ' t.lid desc ';                    
+                //$siteNo = SiteNo::model()->find($criteria);
+                $orderprintjobs=  OrderPrintjobs::model()->with("printer")->findAll($criteria);
+                //var_dump($orderprintjobs);exit;
+                $this->renderPartial('clientprintjobs' , array(
+				'orderPrintjobs'=>$orderprintjobs,
+				'dpid' => $companyId,
+                                'orderid'=>$orderId
+		));
+	}
+        
         public function actionClientWaitorlist()
 	{
                 //Yii::app()->theme="pad_cn";
@@ -501,6 +535,7 @@ class ProductController extends Controller
         
         public function actionOpensite() {
                 Yii::app()->language = 'zh_cn';
+                $ret=array();
 		if(Yii::app()->request->isPostRequest) {
 			$sid = Yii::app()->request->getPost('sid');
                         $siteNumber = Yii::app()->request->getPost('siteNumber');
@@ -511,9 +546,12 @@ class ProductController extends Controller
                         {
                             //send ws msg to server pad;
                         }
-                        echo json_encode($ret);
-                        return true;
+//                        echo json_encode($ret);
+//                        return true;
 		}
+                //$ret=array('status'=>1,'msg'=>yii::t('app','开台成功'),'siteid'=>"df");
+                echo json_encode($ret);
+                        return true;
 	}
         
         public function actionGetsiteStatus() {
@@ -522,7 +560,7 @@ class ProductController extends Controller
                 $companyId = Yii::app()->request->getParam('companyId','0');
                 $istemp = Yii::app()->request->getParam('istemp','0');
                 $criteria2 = new CDbCriteria;
-                $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$this->companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                 $criteria2->order = ' t.lid desc ';
                 $siteNo = SiteNo::model()->find($criteria2);
                 if(empty($siteNo))

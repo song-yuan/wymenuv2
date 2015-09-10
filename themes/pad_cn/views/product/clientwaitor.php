@@ -12,12 +12,15 @@
             endforeach;?>
             </ul>
         </div>
+        
    
     
      
 <script type="text/javascript">
         var curclientwaitorname=$('#id_client_waitor_name').val();
         var language = $('input[name="language"]').val();
+        var layer_shape_index=0;
+        var layer_index_printresult2=0;
         $('#idclient_waitorall_title').html("当前服务员："+curclientwaitorname);
         $("li[username="+curclientwaitorname+"]").addClass('bg-yellow');
 	$('.waitoraction').on('click', function(){
@@ -258,11 +261,9 @@
 //    //});on click到此
         
                 //$('#pad-order-submit-subbtn').on('click',function(){
-    function clientsaveorder2(){
+    function clientsaveorder2(){       
         
-        var index = layer.load(0, {shade: [0.3,'#fff']});
         if (typeof Androidwymenuprinter == "undefined") {
-//            layer.close(index);
             alert(language_notget_padinfo);
             //return false;
         }
@@ -270,7 +271,7 @@
         var istemp=$('#id_client_is_temp').val();
         if(istemp=="1")
         {
-            layer.close(index);
+            layer.close(layer_shape_index);
             alert("请选择座位！");
             return false;
         }
@@ -292,15 +293,17 @@
                             //alert(msg);防止前台开台，但是后台结单或撤台了，就不能继续下单
                             if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                             {
-                                layer.close(index);
-                                alert(language_client_order_forbidden);
+                                $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>");            
+                                layer.close(layer_shape_index);
+                                alert(language_client_order_forbidden+"11");
                                 forbidden=true;
+                                $('#divid_client_sitelist').show();
                                 return;
                             }
                         },
                         error: function(msg){
-                            layer.close(index);
-                            alert(language_client_order_forbidden);
+                            layer.close(layer_shape_index);
+                            alert("网络可能有问题"+"22");
                             forbidden=true;
                             return;
                         }
@@ -309,7 +312,7 @@
         }
         if(forbidden)
         {
-            layer.close(index);
+            layer.close(layer_shape_index);
             return;
         }
         var formdata=$('#padOrderForm').formSerialize();
@@ -335,7 +338,9 @@
                                     printresultfail=false;
                                     $.each(data.jobs,function(skey,svalue){ 
                                         //alert(svalue);
-                                        detaildata=svalue.split("_");                                        
+                                        detaildata=svalue.split("_");
+                                        Androidwymenuprinter.printNetPing(detaildata[2],10);
+                                                                                
                                         if(detaildata[0]=="0")//继续打印
                                         {
                                             printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
@@ -350,7 +355,7 @@
                                      });                                      
                                 }                               
                                 
-//                                     layer.close(index);
+//                                     layer.close(layer_shape_index);
                                      //alert(language_print_pad_fail);                                     
                                     if(istemp=="1"&&!printresult)
                                     {
@@ -366,7 +371,7 @@
 
                                             },
                                             error: function(msg){
-                                                layer.close(index);
+                                                layer.close(layer_shape_index);
                                                 alert("网络故障！")
                                             }
                                         });
@@ -374,7 +379,7 @@
                                     //alert(istemp);alert(printresultfail);
                                     if(istemp=="0"&& printresultfail)
                                     {
-                                        alert("可能有打印失败，请去打印机处确认，如果失败，请去收银台查看并重打！");
+                                        alert("打印机太忙，已经丢单，请手动打印2！");
                                         //如果失败，就把打印任务插入到数据库
                                         $.each(data.jobs,function(skey,svalue){                                        
                                                 detaildata=svalue.split("_");
@@ -390,13 +395,30 @@
 
                                                         },
                                                         error: function(msg){
-                                                            layer.close(index);
+                                                            layer.close(layer_shape_index);
                                                             alert("网络故障！")
                                                         }
                                                     });
                                                 }
                                             });
+                                            //如果有失败任务就打开对话框
+//                                            if(layer_index_printresult!=0)
+//                                               return;
+                                            $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2");                                
+                                            layer_index_printresult2=layer.open({
+                                                type: 1,
+                                                shade: [0.1,'#fff'],
+                                                title: false, //不显示标题
+                                                closeBtn:0,
+                                                area: ['50%', '40%'],
+                                                content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                                                cancel: function(index){
+                                                    layer.close(index);
+                                                    layer_index_printresult2=0;                                                                                                     
+                                                }
+                                            });
                                     }
+                                    layer.close(layer_shape_index);
 //	                 if(printresult)
 //	                 {
                             $('#padOrderForm').find('.input-product').each(function(){
@@ -436,28 +458,37 @@
 	             		}
 	                     $('.total-price').html(total);
 	                        $('.total-num').html(0);
-                                alert("下单成功");
+                                $('#id_client_is_temp').val("1");                                 
+                                $('#id_client_site_id').val("0");
+                                $('#id_client_site_name').val("新增临时餐桌！");
+                                $("#idclient_siteall_title").html("当前餐桌："+$("#id_client_site_name").val());
+                                $("#productmasksiteinfo").html("当前餐桌："+$("#id_client_site_name").val());
+                                //alert("下单成功");
                                 $('#divid_client_waitorlist').hide();
 //	                 }else{
 //	                     alert(language_print_pad_fail);
 //	                 }                                                
 	                }else{
+                            layer.close(layer_shape_index);
 	                    alert(data.msg);
 	                }
                         $('#padOrderForm').resetForm();
-                        layer.close(index);
+                        layer.close(layer_shape_index);
                     },
                     error: function(msg){
-                        layer.close(index);
+                        layer.close(layer_shape_index);
                         alert(language_client_order_fail);
                     }
 	     	});
+                layer.close(layer_shape_index);
             }//functon到此
     //});on click到此
         
          $('#pad-order-submit-subbtn').on('click',function(){
              $('#divid_client_waitorlist').css("display","none");
-            clientsaveorder2(); 
+             layer_shape_index= layer.load(0, {shade: [0.3,'#fff']});
+            setTimeout(clientsaveorder2,300); 
+            
         });
         
 </script>

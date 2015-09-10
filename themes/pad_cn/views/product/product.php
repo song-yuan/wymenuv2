@@ -93,6 +93,17 @@
 <div id="divid_client_waitorlist" class="client_sitelist">
     
 </div>
+<!--打印修正-->
+   <div id="printRsultListdetail" style="display: none">
+    <div style="margin:10px;">
+        <h4 style="color:#900;"><span id="failprintjobs">0</span>个任务打印失败</h4>
+    
+        <div class="waitorprint" id="printRsultListdetailsub">
+            
+        </div>
+
+    </div>
+</div>
 <!-- 加入订单动画 -->
 <div class="aniele"></div>
 <!-- 口味的页面  -->

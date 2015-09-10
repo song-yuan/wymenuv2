@@ -54,6 +54,7 @@ class OrderPrintjobs extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'printer' => array(self::BELONGS_TO , 'Printer' ,'','on' =>'t.address=printer.address and t.dpid=printer.dpid')
 		);
 	}
 

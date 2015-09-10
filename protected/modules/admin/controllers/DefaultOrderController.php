@@ -237,7 +237,7 @@ class DefaultOrderController extends BackendController
                 $criteria->condition =  't.dpid='.$companyId.' and t.orderid='.$orderId.' and t.finish_flag=0';
                 $criteria->order = ' t.lid desc ';                    
                 //$siteNo = SiteNo::model()->find($criteria);
-                $orderprintjobs=  OrderPrintjobs::model()->findAll($criteria);
+                $orderprintjobs=  OrderPrintjobs::model()->with("printer")->findAll($criteria);
                 //var_dump($orderprintjobs);exit;
                 $this->renderPartial('orderPrintjobs' , array(
 				'orderPrintjobs'=>$orderprintjobs,
@@ -418,6 +418,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',0);
                 $orderId = Yii::app()->request->getParam('orderId',"0");
                 $padId = Yii::app()->request->getParam('padId',"0");
+                $payShouldAccount=Yii::app()->request->getParam('payShouldAccount',"0");
                 $order=new Order();
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 if($orderId !='0')
@@ -440,12 +441,13 @@ class DefaultOrderController extends BackendController
                         $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
                     }
                     $order->should_total=$total['total'];
+                    $order->reality_total=$payShouldAccount;
                 }
                 
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
-                $precode="1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
                 $memo="清单";
                 $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo);
@@ -550,20 +552,6 @@ class DefaultOrderController extends BackendController
                     
                     if($paymemberaccount>0)
                     {
-                        $orderPayId = $se->nextval();
-                        //插入一条
-                        $orderPayData = array(
-                                            'lid'=>$orderPayId,
-                                            'dpid'=>$companyId,
-                                            'create_at'=>$time,
-                                            'order_id'=>$orderid,
-                                            'update_at'=>$time,
-                                            'pay_amount'=>$paymemberaccount,
-                                            'paytype'=>"4",
-                                            'payment_method_id'=>$cardno,
-                                            'remark'=>'会员卡付款',//'product_order_status'=>$orderProductStatus,
-                                            );
-                        $db->createCommand()->insert('nb_order_pay',$orderPayData);                        
                         $membercard= MemberCard::model()->find(' dpid=:dpid and (rfid =:rfid or selfcode =:selfcode) and delete_flag =0',
                                 array(":dpid"=>$companyId,":rfid"=>$cardno,":selfcode"=>$cardno));
 //                        $ret=json_encode(array('status'=>false,'msg'=>$paymemberaccount ));
@@ -578,6 +566,21 @@ class DefaultOrderController extends BackendController
                             $ret=json_encode(array('status'=>false,'msg'=>"会员卡余额不足"));
                             Yii::app()->end($ret);
                         }
+                        $orderPayId = $se->nextval();
+                        //插入一条
+                        $orderPayData = array(
+                                            'lid'=>$orderPayId,
+                                            'dpid'=>$companyId,
+                                            'create_at'=>$time,
+                                            'order_id'=>$orderid,
+                                            'update_at'=>$time,
+                                            'pay_amount'=>$paymemberaccount,
+                                            'paytype'=>"4",
+                                            'payment_method_id'=>$cardno,
+                                            'remark'=>'会员卡付款',//'product_order_status'=>$orderProductStatus,
+                                            );
+                        $db->createCommand()->insert('nb_order_pay',$orderPayData);                        
+                        
                     }
                     if($payunionaccount>0)
                     {
@@ -1399,26 +1402,30 @@ class DefaultOrderController extends BackendController
         public function actionAddRetreatOne() {
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $orderDetailId=Yii::app()->request->getParam('orderDetailId','0');
-                
-               $db=Yii::app()->db;
+                //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
+                $db=Yii::app()->db;
                 $orderRetreat = new OrderRetreat();
                 $orderRetreat->order_detail_id = $orderDetailId;
                 $orderRetreat->dpid = $companyId;
                 $retreats = Retreat::model()->findAll(' dpid=:dpid and delete_flag = 0',array(':dpid'=>$companyId));                
                 $retreatslist=CHtml::listData($retreats, 'lid', 'name');
                 //var_dump($retreatslist);exit;
-                $orderDetail = OrderProduct::model()->find('dpid=:dpid and lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));                    
-                $productname=$db->createCommand("select product_name from nb_product where dpid=".$companyId." and lid=".$orderDetail->product_id)->queryScalar();
+                $orderDetail = OrderProduct::model()->with("product")->findAll('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));
+                //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
+                $orderId=$orderDetail[0]->order_id;
+                //var_dump($orderDetail);exit;
+                $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderDetail[0]->product_id,':dpid'=>$companyId));
+                $productname=$productdata->product_name;
                 $ret=array();
 		if(Yii::app()->request->isPostRequest){
                     Until::validOperate($companyId, $this);
-                    //$orderDetail = OrderProduct::model()->find('dpid=:dpid and lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));
                     $retreatnum=Yii::app()->request->getPost('retreatnum',0);
                     $othermemo=Yii::app()->request->getPost('othermemo','');
                     $retreatid=Yii::app()->request->getPost('retreatid','');
                     $isall=Yii::app()->request->getPost('isall','1');
+                    $padid=Yii::app()->request->getPost('padid','1');
                     $time=date('Y-m-d H:i:s',time());
-                    //Yii::app()->end(json_encode(array('status'=>"0",'msg'=>$retreatnum.$othermemo.$paymethodid.$isall)));
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$retreatnum.$othermemo.$isall.$padid)));
                     $transaction = Yii::app()->db->beginTransaction();
                     try {
                         $sqlorderproduct="";
@@ -1445,15 +1452,58 @@ class DefaultOrderController extends BackendController
                                             'retreat_id'=>$retreatid,
                                             'delete_flag'=>'0',//'product_order_status'=>$orderProductStatus,
                                             );
-                            $db->createCommand()->insert('nb_order_retreat',$orderRetreat);	                    
-	                    $transaction->commit(); //提交事务会真正的执行数据库操作
-                            $ret= json_encode(array('status'=>"1",'msg'=>yii::t('app','退菜成功')));
+                            $db->createCommand()->insert('nb_order_retreat',$orderRetreat);
+//                            Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
+                            if($productdata->store_number>=0)
+                            {
+                                $productdata->store_number=$retreatnum+$productdata->store_number;
+                                $productdata->update_at=$time;
+                                $productdata->save();
+                            }
+                            //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
+                                ////////////////退菜打印
+                            $order=new Order();
+                            $siteNo=new SiteNo();
+                            $site=new Site();
+                            ///***********insert to order feedback
+                            ///*************print
+                            if(!empty($orderId))
+                            {
+                                $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
+                                if(empty($order))
+                                {
+                                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                                }
+                                $criteria = new CDbCriteria;
+                                $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                                $criteria->order = ' t.lid desc ';                    
+                                $siteNo = SiteNo::model()->find($criteria);
+                                //order site 和 siteno都需要更新状态 所以要取出来
+                                if($order->is_temp=="0")
+                                {
+                                    $criteria2 = new CDbCriteria;
+                                    $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
+                                    $criteria2->order = ' t.lid desc ';                    
+                                    $site = Site::model()->with("siteType")->find($criteria2);
+                                }
+                            }
+                            $memo="<<退菜";
+                            $orderDetail[0]->amount=$retreatnum;
+                            //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$order->dpid)));                           
+                            $ret=  Helper::printKitchenOther($order,$orderDetail,$site,$siteNo,false,$memo);                    
+                            if(!$ret['status'])
+                            {
+                                $transaction->rollback();
+                            }else{
+                                $transaction->commit();
+                            }
+                            //$ret= json_encode(array('status'=>"1",'msg'=>yii::t('app','退菜成功')));
                         } catch (Exception $e) {
                                 $transaction->rollback(); //如果操作失败, 数据回滚
-                                 $ret= json_encode(array('status'=>"0",'msg'=>yii::t('app','失败1')));
-                        }  
-                    
-                    Yii::app()->end($ret);
+                                $ret= array('status'=>false,'msg'=>yii::t('app','失败1'));
+                        } 
+                        Yii::app()->end(json_encode($ret));                    
                 }                
                 $this->renderPartial('addretreatone' , array(
 				'orderRetreat' => $orderRetreat,

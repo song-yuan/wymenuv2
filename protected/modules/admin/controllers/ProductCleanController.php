@@ -12,16 +12,22 @@ class ProductCleanController extends BackendController
 	public function actionIndex(){
 		//$sc = Yii::app()->request->getPost('csinquery');
                 $typeId = Yii::app()->request->getParam('typeId');
-                $categoryId = Yii::app()->request->getParam('cid',0);
+                $categoryId = Yii::app()->request->getParam('cid',"");
                 $fromId = Yii::app()->request->getParam('from','sidebar');
+                $csinquery=Yii::app()->request->getPost('csinquery',"");
+                //var_dump($csinquery);exit;
                 if($typeId=='product')
                 {
                     
                     $criteria = new CDbCriteria;
                     $criteria->with = array('company','category');
                     $criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-                    if($categoryId){
+                    if(!empty($categoryId)){
                             $criteria->condition.=' and t.category_id = '.$categoryId;
+                    }
+                    
+                    if(!empty($csinquery)){
+                            $criteria->condition.=' and t.simple_code like "%'.strtoupper($csinquery).'%"';
                     }
 
                     $pages = new CPagination(Product::model()->count($criteria));
@@ -109,6 +115,48 @@ class ProductCleanController extends BackendController
                     $sql='update nb_product set store_number = '.$store_number.' where lid='.$id.' and dpid='.$this->companyId;
                 }else{
                     $sql='update nb_product_set set store_number = '.$store_number.' where lid='.$id.' and dpid='.$this->companyId;
+                }
+                //var_dump($sql);exit;
+                 
+                    
+		$command=$db->createCommand($sql);
+                if($command->execute())
+                {
+                    Gateway::getOnlineStatus();
+                    $store = Store::instance('wymenu');
+                    $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>  $this->companyId));
+                    //var_dump($pads);exit;
+                    $sendjsondata=json_encode(array("company_id"=>  $this->companyId,
+                        "do_id"=>"sell_off",
+                        "do_data"=>array(array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
+                            //,array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
+                            )));
+                    //var_dump($sendjsondata);exit;
+                    foreach($pads as $pad)
+                    {
+                        $clientId=$store->get("padclient_".$this->companyId.$pad->lid);
+                        //var_dump($clientId,$print_data);exit;
+                        if(!empty($clientId))
+                        {                            
+                            Gateway::sendToClient($clientId,$sendjsondata);
+                        }
+                    }                                    
+                    Yii::app()->end(json_encode(array("status"=>"success")));
+                }else{
+                    Yii::app()->end(json_encode(array("status"=>"fail")));
+                }
+	}
+        
+        public function actionResetall(){
+		$typeId = Yii::app()->request->getParam('typeId');
+                $db = Yii::app()->db;
+                
+                $sql='';
+                if($typeId=='product')
+                {
+                    $sql='update nb_product set store_number = -1 where dpid='.$this->companyId;
+                }else{
+                    $sql='update nb_product_set set store_number = -1 where dpid='.$this->companyId;
                 }
                 //var_dump($sql);exit;
                  

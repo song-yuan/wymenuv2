@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('productClean/index' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('productClean/index' , array('companyId' => $this->companyId,'typeId'=>"product")),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -51,7 +51,7 @@
                                     <?php if($typeId=='product') :?>
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品沽清列表');?></div>
 					<div class="actions">						
-                                                <div class="btn-group">
+                                            <div style="margin-top:-5px !important;" class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
@@ -62,15 +62,16 @@
                                         <?php else :?>
                                         <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐沽清列表');?></div>
                                         <?php endif;?>
-                                        <!--    <div class="col-md-3 pull-right">
+                                            <div class="col-md-3 pull-right">
 						<div class="input-group">
                                                     <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
                                                     <span class="input-group-btn">
                                                         <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
+                                                        <button style="left:10px;" class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>                                                        
                                                     </span>
                                                 </div>
                                             </div>
-                                        -->
+                                        
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -181,6 +182,32 @@
 			location.href="<?php echo $this->createUrl('productClean/index' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid;
 		});
 	});
+        
+        //cancelallclean
+        
+        $("#cancelallclean").on("click",function(){
+            
+            $.ajax({
+ 			url:"<?php echo $this->createUrl('productClean/resetall',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>",
+ 			async: false,
+ 			//data:"companyId="+company_id+'&padId='+pad_id,
+                        dataType:'json',
+ 			success:function(msg){
+                            //alert(msg.status);
+                            if(msg.status=="success")
+                            {
+                                alert("已经解除全部沽清！");
+                                location.reload();
+                            }else{
+                                alert("已经解除全部沽清"+"111")
+                                location.reload();
+                            }
+ 			},
+                        error:function(){
+ 				alert("请重试"+"2");                                
+ 			},
+ 		});
+        });
         
         $(".clear_btn").on("click",function(){
             var vid=$(this).attr("id").substr(12,10);

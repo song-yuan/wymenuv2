@@ -105,8 +105,8 @@ class DefaultSiteController extends BackendController
                         
                         $ret=SiteClass::openSite($companyId,$siteNumber,$istemp,$sid);
 
-                        echo json_encode($ret);
-                        return true;
+                        Yii::app()->end(json_encode($ret));
+                        //return true;
 		}
 	}
         
@@ -277,6 +277,7 @@ class DefaultSiteController extends BackendController
                                 'lid'=>$lid,
                                 'dpid'=>$companyId,
                                 'create_at'=>date('Y-m-d H:i:s',time()),
+                                'update_at'=>date('Y-m-d H:i:s',time()),
                                 'is_temp'=>$istemp,
                                 'site_id'=>$sid,
                                 'status'=>$status,
