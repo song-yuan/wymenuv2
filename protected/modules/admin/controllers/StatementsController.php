@@ -187,55 +187,53 @@ class StatementsController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
-/*	private function exportSalesReport($models,$params=array(),$export = 'xml'){
-// 		$objectPHPExcel = new PHPExcel();
-// 		$objectPHPExcel->setActiveSheetIndex(0);	
-// 		ob_end_clean();
-// 		ob_start();	
-// 		header('Content-Type : application/vnd.ms-excel');
-// 		header('Content-Disposition:attachment;filename="'.'xxx'.date("Ymj").'.xls"');
-// 		$objWriter= PHPExcel_IOFactory::createWriter($objectPHPExcel,'Excel5');
-// 		$objWriter->save('php://output');
 	
-		$attributes = array(
-				'y_all'=>'时间',
-				'company_name'=>'店铺名称',
-				'paytype'=>'支付方式',
-				'all_reality'=>'售出金额',
-// 				'order_goods_number'=>'商品总数量',
-// 				'cost'=>'商品总价(元)',
-// 				'total'=>'订单总价(元)',
-// 				'shop_name'=>'门店名'
-		);
-		$data[1] = array_values($attributes);
-		$fields = array_keys($attributes);
-			
-		foreach($models as $model){
-			$arr = array();
-			foreach($fields as $f){
-				if($f == 'y_all'){
-					$arr[] = date('Y',$model[$f]);
-				}elseif(in_array($f,array('all_reality'))){
-					$arr[] = $model[$f]/100;
-				}
-				//elseif(in_array($f,array('company_name'))){
-// 					$goodsName='';
-// 					if($model['offGoods']){
-// 						foreach($model['offGoods'] as $goods){
-// 							$goodsName.=$goods['goods_num'].'×'.$goods['goods_name'].';';
-// 						}
-// 					}
-// 					$arr[] =rtrim($goodsName,';');
-// 				}
-				else{
-					$arr[] = $model[$f];
-				}
-			}
-			$data[] = $arr;
+	/**
+	 * 
+	 * 就餐人数统计
+	 * 
+	 */
+	public function actionDiningNum(){
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$download = Yii::app()->request->getParam('d',0);
+		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
+		$sql = 'select sum(number) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59"';
+		if($download){
+			$model = Yii::app()->db->createCommand($sql)->queryRow();
+			$this->exportDiningNum($model);
+			exit;
 		}
-		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
+		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		$comName = $this->getComName();
+		$this->render('diningNum',array(
+				'model'=>$model,
+				'begin_time'=>$beginTime,
+				'end_time'=>$endTime,
+				'comName'=>$comName,
+				'str'=>$str,
+		));
 	}
-*/
+	private function exportDiningNum($model,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
+ 		$attributes = array(
+			'id'=>'编号',
+			'total'=>'就餐人数',
+		);
+ 		$data[1] = array_values($attributes);
+ 		$fields = array_keys($attributes);
+ 		
+		$arr = array();
+		foreach($fields as $f){
+			if($f == 'id'){
+				$arr[] = 1;
+			}else{
+				$arr[] = $model[$f];
+			}
+		}
+		$data[] = $arr;
+ 		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
+	}
 /*	private function getCategoryList(){
 		$categories = user::model()->findAll('delete_flag=0 ' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
