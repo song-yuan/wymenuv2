@@ -200,6 +200,7 @@ class StatementsController extends BackendController
 		
 		$sql = 'select sum(number) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59"';
 		$model = Yii::app()->db->createCommand($sql)->queryRow();
+		var_dump($model);exit;
 		$comName = $this->getComName();
 		$this->render('diningNum',array(
 				'model'=>$model,
