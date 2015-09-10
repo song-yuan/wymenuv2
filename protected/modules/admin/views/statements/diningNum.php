@@ -79,7 +79,7 @@
 							</tr>
 						</thead>
 						<tbody>
-						<?php if( $models) :?>
+						<?php if( $model) :?>
 
 							<tr class="odd gradeX">
 								<td>1</td>
