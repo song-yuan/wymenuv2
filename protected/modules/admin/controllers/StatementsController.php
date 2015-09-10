@@ -206,6 +206,7 @@ class StatementsController extends BackendController
 				'begin_time'=>$beginTime,
 				'end_time'=>$endTime,
 				'comName'=>$comName,
+				'str'=>$str,
 		));
 	}
 /*	private function exportSalesReport($models,$params=array(),$export = 'xml'){
