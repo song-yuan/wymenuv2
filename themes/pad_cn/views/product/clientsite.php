@@ -94,10 +94,11 @@
             if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 99)
             {
                 //alert(!isNaN(siteNumber));
+                var randtime=new Date().getTime()
                  $.ajax({
                      'type':'POST',
                      'dataType':'json',
-                     'data':{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":istemp},
+                     'data':{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":istemp,"randtime":randtime},
                      'url':'<?php echo $this->createUrl('product/opensite',array());?>',
                      'success':function(data){
                             alert(data.msg);

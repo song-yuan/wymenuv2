@@ -279,7 +279,10 @@
         //alert(username);
         
         var forbidden=false;
-        var getstatusurl=$('#productmasksiteinfo').attr("action")+'/sid/'+sid+"/istemp/"+istemp;
+        var randtime=new Date().getTime();
+//        alert(randtime);
+//        return;
+        var getstatusurl=$('#productmasksiteinfo').attr("action")+'/sid/'+sid+"/istemp/"+istemp+"/rand/"+randtime;
         //alert(getstatusurl);
         if(sid!=0)
         {
@@ -293,7 +296,7 @@
                             //alert(msg);防止前台开台，但是后台结单或撤台了，就不能继续下单
                             if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                             {
-                                $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>");            
+                                $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>/randtime/"+randtime);            
                                 layer.close(layer_shape_index);
                                 alert(language_client_order_forbidden+"11");
                                 forbidden=true;

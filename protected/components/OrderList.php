@@ -373,7 +373,7 @@ class OrderList
                 ///先删除所有为下单的临时菜品，后插入
                 $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
                 $result = $db->createCommand($sql)->execute();                            
-                    
+                    //return array('status'=>false,'msg'=>"test11");
                 //插入订单单品
                 if(!empty($productList))
                 {
@@ -402,7 +402,7 @@ class OrderList
                             }
                         }
                         $productdata->save();
-                        
+                        //return array('status'=>false,'msg'=>"test111333");
                         if($productDetailArr[2]=="0")
                         {
                             //插入
@@ -423,6 +423,7 @@ class OrderList
                                                 'taste_memo'=>$productDetailArr[8],
                                                 'product_order_status'=>$orderProductStatus,
                                                 );
+                            //return array('status'=>false,'msg'=>"test14444".implode("..",$orderProductData));
                             $db->createCommand()->insert('nb_order_product',$orderProductData);                                
                         }
                         //修改为先删除后插入，防止以后一个菜品被分开点多分。
@@ -436,6 +437,7 @@ class OrderList
 //                                $orderProductData->save();
 //                            }
                         //insert taste//delete and insert taste
+                        
                         $orderProductTasteIds=str_replace("|",",",$productDetailArr[7]);
                         if(!empty($orderProductTasteIds))
                         {
