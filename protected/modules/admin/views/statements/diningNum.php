@@ -55,7 +55,7 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								
+								<th><?php echo yii::t('app','序号');?></th>
 								<th>
 									<div class="btn-group">
 										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
@@ -74,7 +74,6 @@
 										</div>
 									</div>
 								</th>
-                                <th><?php echo yii::t('app','序号');?></th>
                                 <th><?php echo yii::t('app','就餐人数');?></th>
 							</tr>
 						</thead>
@@ -83,11 +82,12 @@
 
 							<tr class="odd gradeX">
 								<td>1</td>
+								<td></td>
 								<td><?php echo $model['total'];?></td>
 							</tr>
 						<?php else:?>
 						<tr>
-							<td colspan="2"></td>
+							<td colspan="3"></td>
 						</tr>
 						<?php endif;?>
 						</tbody>
