@@ -79,11 +79,10 @@
 						</thead>
 						<tbody>
 						<?php if( $model) :?>
-
 							<tr class="odd gradeX">
 								<td>1</td>
 								<td></td>
-								<td><?php echo $model['total'];?></td>
+								<td><?php echo $model['total']?$model['total']:0;?></td>
 							</tr>
 						<?php else:?>
 						<tr>
@@ -120,9 +119,8 @@
 		   $('#btn_time_query').click(function() {  
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   var text = $('#text').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/dingNum' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text
+			   location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 			  
 	        });
 		   $('#cx').click(function(){  
@@ -142,10 +140,9 @@
 				//alert(str);
 					  var begin_time = $('#begin_time').val();
 					   var end_time = $('#end_time').val();
-					   var text = $('#text').val();
 					   //var cid = $(this).val();
 					   
-					 location.href="<?php echo $this->createUrl('statements/dingNum' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+					 location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
 					  
 
 			  });
@@ -154,15 +151,14 @@
 				   var str ='<?php echo $str;?>';
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
-				   var text = $('#text').val();
 				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 
-			    	   location.href="<?php echo $this->createUrl('statements/dingNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	   location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/dingNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	  // location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			      
 			   });
