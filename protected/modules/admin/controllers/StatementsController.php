@@ -194,7 +194,7 @@ class StatementsController extends BackendController
 	 * 
 	 */
 	public function actionDiningNum(){
-		$str = Yii::app()->request->getParam('str');
+		$str = Yii::app()->request->getParam('str',$this->companyId);
 		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
