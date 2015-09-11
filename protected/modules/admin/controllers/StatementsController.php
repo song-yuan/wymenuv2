@@ -289,10 +289,10 @@ class StatementsController extends BackendController
  		$fields = array_keys($attributes);
  		
 		$arr = array();
-		foreach($models as $model){
+		foreach($models as $k=>$model){
 			foreach($fields as $f){
 				if($f == 'id'){
-					$arr[] = 1;
+					$arr[] = $k+1;
 				}else{
 					$arr[] = $model[$f];
 				}
