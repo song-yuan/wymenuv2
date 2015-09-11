@@ -476,6 +476,7 @@ class OrderList
                     if($site->status<$orderStatus)
                     {
                         $site->status=$orderStatus;
+                        $site->update_at= $time;
                         $site->save();
                     }
                 }
@@ -484,6 +485,7 @@ class OrderList
                     if($siteNo->status<$orderStatus)
                     {
                         $siteNo->status=$orderStatus;
+                        $siteNo->update_at= $time;
                         $siteNo->save();
                     }
                 }

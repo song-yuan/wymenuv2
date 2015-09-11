@@ -40,7 +40,8 @@
             
     </div>
 <script type="text/javascript">
-        var layer_index;
+        var layer_index=0;
+        var isopensiteclicked=false;
         //alert($('#id_client_site_name').val());
         $('#idclient_siteall_title').html("当前餐桌："+$('#id_client_site_name').val());
 	$('.siteaction').on('click', function(){
@@ -86,7 +87,16 @@
          });      
         
        $('#site_open').on(event_clicktouchend,function(){
-           
+           layer.close(layer_index);
+           layer_index=0;
+            if(isopensiteclicked)
+            {
+                //alert(1);
+                return;
+            }else{
+                //alert(0);
+                isopensiteclicked=true;
+            }
             var siteNumber=$('#site_number').text();                               
             var sid = $('#site_open').attr('sid');
             var istemp = $('#site_open').attr('istemp');
@@ -117,21 +127,70 @@
                                 }
                                  $("#idclient_siteall_title").html("当前餐桌："+$("#id_client_site_name").val());
                                  $("#productmasksiteinfo").html("当前餐桌："+$("#id_client_site_name").val());
+                             }else{
+                                 if(layer_index>0)
+                                {
+                                    return;
+                                }
+                                layer_index=layer.open({
+                                     type: 1,
+                                     shade: false,
+                                     title: false, //不显示标题
+                                     content: $('#client_open_site'), //捕获的元素
+                                     cancel: function(index){
+                                         layer.close(index);
+                        //                        this.content.show();
+                        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                                     }
+                                 });
                              }
                      },
                      'error':function(e){
-                         return false;
+                         alert("网络错误，请重试！");
+                         isopensiteclicked=false;
+                         if(layer_index>0)
+                        {
+                            return;
+                        }
+                        layer_index=layer.open({
+                             type: 1,
+                             shade: false,
+                             title: false, //不显示标题
+                             content: $('#client_open_site'), //捕获的元素
+                             cancel: function(index){
+                                 layer.close(index);
+                //                        this.content.show();
+                //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                             }
+                         });
+                         //return false;
                      }
                  });
-
+                 isopensiteclicked=false;
             }else{
                 alert("<?php echo yii::t('app','输入合法人数');?>");
-                return false;
+                isopensiteclicked=false;
+                if(layer_index>0)
+                {
+                    return;
+                }
+                layer_index=layer.open({
+                     type: 1,
+                     shade: false,
+                     title: false, //不显示标题
+                     content: $('#client_open_site'), //捕获的元素
+                     cancel: function(index){
+                         layer.close(index);
+        //                        this.content.show();
+        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                     }
+                 });
             }                               
         });
         
         $('#site_open_cancel').on(event_clicktouchstart,function(){
-           layer.close(layer_index);                           
+           layer.close(layer_index);         
+           layer_index=0;
         });
         
         $('#open_site_plus').on(event_clicktouchend,function(){
