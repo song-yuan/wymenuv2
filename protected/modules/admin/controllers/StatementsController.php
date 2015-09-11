@@ -233,7 +233,7 @@ class StatementsController extends BackendController
 			$this->exportTurnOver($models);
 			exit;
 		}
-		
+		echo $sql;exit;
 		$count = $db->createCommand(str_replace('username,sum(reality_total) as total','count(*)',$sql))->queryScalar();
 		$pages = new CPagination($count);
 		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
