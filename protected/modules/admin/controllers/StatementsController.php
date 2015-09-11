@@ -288,8 +288,8 @@ class StatementsController extends BackendController
  		$data[1] = array_values($attributes);
  		$fields = array_keys($attributes);
  		
-		$arr = array();
 		foreach($models as $k=>$model){
+			$arr = array();
 			foreach($fields as $f){
 				if($f == 'id'){
 					$arr[] = $k+1;
