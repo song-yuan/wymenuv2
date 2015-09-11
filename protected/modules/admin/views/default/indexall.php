@@ -616,6 +616,7 @@
             var layer_index_membercard=0;
             var layer_index_retreatbox=0;
             var first_tab="<?php echo $categories[0]['lid']; ?>";
+            var ispaybuttonclicked=false;
             //var member_card_pop_flag=0;
             if (typeof Androidwymenuprinter == "undefined") {
                 event_clicktouchstart="click";
@@ -2206,12 +2207,19 @@
             });
             
             $('#pay_btn').on(event_clicktouchstart,function(){
+                if(ispaybuttonclicked)
+                {
+                    return;
+                }else{
+                    ispaybuttonclicked=true;
+                }
                 //accountManul
                 //判断找零是否大于现金
                 var payCashAccount= parseFloat($("#payCashAccount").text().replace(",","")) - parseFloat($("#payChangeAccount").text().replace(",",""));
                 if(payCashAccount<0)
                 {
                     alert("金额有误");
+                    ispaybuttonclicked=false;
                     return false;
                 }
                  //改变order实收，打折等注释
@@ -2244,6 +2252,7 @@
                 if(parseFloat(payRealityAccount.replace(",","")) < parseFloat(payShouldAccount.replace(",","")))
                 {
                     alert("收款不够");
+                    ispaybuttonclicked=false;
                     return false;
                 }
                 var typeId=$('li[class="tabSite slectliclass"]').attr('typeid');
@@ -2282,6 +2291,7 @@
                                 }else{
                                     //layer.close(layer_index2);
                                     alert(data.msg);
+                                    ispaybuttonclicked=false;
                                     if(layer_index2!=0)
                                     {
                                         return;
@@ -2304,6 +2314,7 @@
                             error: function(msg){
                                 //layer.close(index);
                                 alert("结算失败2！");
+                                ispaybuttonclicked=false;
                                 if(layer_index2!=0)
                                 {
                                     return;
@@ -2325,6 +2336,7 @@
                         });
 
                     }else{
+                        ispaybuttonclicked=false;
                         if(layer_index2!=0)
                         {
                             return;
@@ -2345,7 +2357,7 @@
                     }
                 });
                      //返回座位列表页面
-                
+                ispaybuttonclicked=false;
             });
             
             $('#other-btn').on(event_clicktouchstart,function(){

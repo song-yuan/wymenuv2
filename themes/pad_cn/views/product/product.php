@@ -208,8 +208,7 @@
             alert(msg);
        }
        
-         <!--{"company_id":"0000000001","do_id":"sell_off",
-	       //num <0 无数量限制-->
+         //<!--{"company_id":"0000000001","do_id":"sell_off",num <0 无数量限制-->
       function sell_off(do_data) {
             //alert(do_data);
             var data = eval('(' + do_data + ')');
@@ -232,7 +231,8 @@
        
        //加载所有座位
         $('#clientSitelist').on(event_clicktouchstart,function(){
-            $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>");
+            var randtime=new Date().getTime()
+            $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>/randtime/"+randtime);
             $('.setting-pad-mask').hide();
             $('#divid_client_sitelist').show();
 //            var index = layer.load(0, {shade: [0.3,'#fff']}); //0代表加载的风格，支持0-2

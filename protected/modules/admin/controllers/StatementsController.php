@@ -215,6 +215,41 @@ class StatementsController extends BackendController
 				'str'=>$str,
 		));
 	}
+	/**
+	 * 
+	 * 员工营业额统计
+	 * 
+	 */
+	public function actionTurnOver(){
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$download = Yii::app()->request->getParam('d',0);
+		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
+		$db = Yii::app()->db;
+		$sql = 'select username,sum(reality_total) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" group by username order by lid desc';
+		if($download){
+			$models = $db->createCommand($sql)->queryAll();
+			$this->exportDiningNum($models);
+			exit;
+		}
+		
+		$count = $db->createCommand(str_replace('username,sum(reality_total) as total','count(*)',$sql))->queryScalar();
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+
+		$comName = $this->getComName();
+		$this->render('turnover',array(
+				'models'=>$models,
+				'begin_time'=>$beginTime,
+				'end_time'=>$endTime,
+				'comName'=>$comName,
+				'str'=>$str,
+		));
+	}
 	private function exportDiningNum($model,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
  		$attributes = array(
 			'id'=>'编号',

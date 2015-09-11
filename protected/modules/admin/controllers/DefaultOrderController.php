@@ -501,6 +501,12 @@ class DefaultOrderController extends BackendController
                 $transaction = $db->beginTransaction();
                 try{
                     $order=Order::model()->with("company")->find(" t.lid=:lid and t.dpid=:dpid",array(":lid"=>$orderid,":dpid"=>$companyId));
+                    if($order->order_status > "3")
+                    {
+                        $transaction->rollback();
+                        $ret=json_encode(array('status'=>false,'msg'=>"已经结单"));
+                        Yii::app()->end($ret);
+                    }
                     $order->should_total=$payoriginaccount;
                     $order->reality_total=$payshouldaccount;
                     $order->update_at=$time;
@@ -602,8 +608,9 @@ class DefaultOrderController extends BackendController
                     $transaction->commit();
                     $ret=json_encode(array('status'=>true,'msg'=>"结单成功"));
                 } catch (Exception $ex) {
-                    $ret=json_encode(array('status'=>false,'msg'=>"结单失败"));
                     $transaction->rollback();
+                    $ret=json_encode(array('status'=>false,'msg'=>"结单失败"));
+                    
                 }                
                 Yii::app()->end($ret);                
 	}
