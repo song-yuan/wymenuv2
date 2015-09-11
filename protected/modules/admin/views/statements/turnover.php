@@ -80,9 +80,9 @@
 						</thead>
 						<tbody>
 						<?php if( $models) :?>
-							<?php foreach($models as $model):?>
+							<?php foreach($models as $k=>$model):?>
 							<tr class="odd gradeX">
-								<td>1</td>
+								<td><?php echo $k+1;?></td>
 								<td></td>
 								<td><?php echo $model['username'];?></td>
 								<td><?php echo $model['total']?$model['total']:0;?></td>
