@@ -476,6 +476,7 @@ class OrderList
                     if($site->status<$orderStatus)
                     {
                         $site->status=$orderStatus;
+                        $site->update_at= $time;
                         $site->save();
                     }
                 }
@@ -484,12 +485,14 @@ class OrderList
                     if($siteNo->status<$orderStatus)
                     {
                         $siteNo->status=$orderStatus;
+                        $siteNo->update_at= $time;
                         $siteNo->save();
                     }
                 }
                 if($order->order_status<$orderStatus)
                 {
                     $order->order_status=$orderStatus;
+                    $order->update_at= $time;
                 }
                 $order->taste_memo=$orderTasteMemo;
                 $order->callno=$callId;
