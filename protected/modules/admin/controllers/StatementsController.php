@@ -244,6 +244,7 @@ class StatementsController extends BackendController
 		$comName = $this->getComName();
 		$this->render('turnover',array(
 				'models'=>$models,
+				'pages'=>$pages,
 				'begin_time'=>$beginTime,
 				'end_time'=>$endTime,
 				'comName'=>$comName,
