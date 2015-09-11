@@ -536,11 +536,12 @@ class ProductController extends Controller
         public function actionOpensite() {
                 Yii::app()->language = 'zh_cn';
                 $ret=array();
-		if(Yii::app()->request->isPostRequest) {
+                if(Yii::app()->request->isPostRequest) {
 			$sid = Yii::app()->request->getPost('sid');
                         $siteNumber = Yii::app()->request->getPost('siteNumber');
                         $companyId = Yii::app()->request->getPost('companyId');
                         $istemp = Yii::app()->request->getPost('istemp','0');
+                        //$ret= array('status'=>0,'msg'=>yii::t('app','开台失败11'),'siteid'=>"111");
                         $ret=SiteClass::openSite($companyId,$siteNumber,$istemp,$sid);
                         if($ret['status']=='1')
                         {
