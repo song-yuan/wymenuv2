@@ -79,13 +79,15 @@
 							</tr>
 						</thead>
 						<tbody>
-						<?php if( $model) :?>
+						<?php if( $models) :?>
+							<?php foreach($models as $model):?>
 							<tr class="odd gradeX">
 								<td>1</td>
 								<td></td>
 								<td><?php echo $model['username'];?></td>
 								<td><?php echo $model['total']?$model['total']:0;?></td>
 							</tr>
+							<?php endforeach;?>
 						<?php else:?>
 						<tr>
 							<td colspan="4"></td>
