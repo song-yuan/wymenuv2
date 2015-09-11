@@ -230,7 +230,7 @@ class StatementsController extends BackendController
 		$sql = 'select username,sum(reality_total) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" group by username order by lid desc';
 		if($download){
 			$models = $db->createCommand($sql)->queryAll();
-			$this->exportDiningNum($models);
+			$this->exportTurnOver($models);
 			exit;
 		}
 		
@@ -251,6 +251,11 @@ class StatementsController extends BackendController
 				'str'=>$str,
 		));
 	}
+	/**
+	 * 
+	 * 就餐人数
+	 * 
+	 */
 	private function exportDiningNum($model,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
  		$attributes = array(
 			'id'=>'编号',
@@ -268,6 +273,33 @@ class StatementsController extends BackendController
 			}
 		}
 		$data[] = $arr;
+ 		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
+	}
+	/**
+	 * 
+	 * 员工营业额
+	 * 
+	 */
+	private function exportTurnOver($models,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
+ 		$attributes = array(
+			'id'=>'编号',
+			'username'=>'员工名',
+			'total'=>'营业额',
+		);
+ 		$data[1] = array_values($attributes);
+ 		$fields = array_keys($attributes);
+ 		
+		$arr = array();
+		foreach($models as $model){
+			foreach($fields as $f){
+				if($f == 'id'){
+					$arr[] = 1;
+				}else{
+					$arr[] = $model[$f];
+				}
+			}
+			$data[] = $arr;
+		}
  		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
 	}
 /*	private function getCategoryList(){
