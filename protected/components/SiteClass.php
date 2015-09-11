@@ -118,6 +118,7 @@ class SiteClass
         
         public static function openSite($companyId = 0,$siteNumber = 1,$istemp = 1,$sid = 0){
                 $db = Yii::app()->db;
+                //return array('status'=>0,'msg'=>yii::t('app','开台失败122'),'siteid'=>"111");
                 $transaction = $db->beginTransaction();
                 try {                          
                     if($istemp=="0")
