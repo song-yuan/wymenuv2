@@ -74,24 +74,58 @@
 										</div>
 									</div>
 								</th>
-                                <th><?php echo yii::t('app','就餐人数');?></th>
+                                <th><?php echo yii::t('app','店员名');?></th>
+                                 <th><?php echo yii::t('app','营业额');?></th>
 							</tr>
 						</thead>
 						<tbody>
-						<?php if( $model) :?>
+						<?php if( $models) :?>
+							<?php foreach($models as $k=>$model):?>
 							<tr class="odd gradeX">
-								<td>1</td>
+								<td><?php echo $k+1;?></td>
 								<td></td>
+								<td><?php echo $model['username'];?></td>
 								<td><?php echo $model['total']?$model['total']:0;?></td>
 							</tr>
+							<?php endforeach;?>
 						<?php else:?>
 						<tr>
-							<td colspan="3">没有查询到数据</td>
+							<td colspan="4">没有查询到数据</td>
 						</tr>
 						<?php endif;?>
 						</tbody>
 					</table>
-					
+					<?php if($pages->getItemCount()):?>
+						<div class="row">
+							<div class="col-md-5 col-sm-12">
+								<div class="dataTables_info">
+									<?php echo yii::t('app','共 ');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> ,  <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
+								</div>
+							</div>
+							<div class="col-md-7 col-sm-12">
+								<div class="dataTables_paginate paging_bootstrap">
+								<?php $this->widget('CLinkPager', array(
+									'pages' => $pages,
+									'header'=>'',
+									'firstPageLabel' => '<<',
+									'lastPageLabel' => '>>',
+									'firstPageCssClass' => '',
+									'lastPageCssClass' => '',
+									'maxButtonCount' => 8,
+									'nextPageCssClass' => '',
+									'previousPageCssClass' => '',
+									'prevPageLabel' => '<',
+									'nextPageLabel' => '>',
+									'selectedPageCssClass' => 'active',
+									'internalPageCssClass' => '',
+									'hiddenPageCssClass' => 'disabled',
+									'htmlOptions'=>array('class'=>'pagination pull-right')
+								));
+								?>
+								</div>
+							</div>
+						</div>
+						<?php endif;?>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -120,7 +154,7 @@
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time;
+			   location.href="<?php echo $this->createUrl('statements/turnOver' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 			  
 	        });
 		   $('#cx').click(function(){  
@@ -142,7 +176,7 @@
 					   var end_time = $('#end_time').val();
 					   //var cid = $(this).val();
 					   
-					 location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
+					 location.href="<?php echo $this->createUrl('statements/turnOver' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
 					  
 
 			  });
@@ -155,10 +189,10 @@
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 
-			    	   location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
+			    	   location.href="<?php echo $this->createUrl('statements/turnOver' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
+			    	  // location.href="<?php echo $this->createUrl('statements/turnOver' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			      
 			   });

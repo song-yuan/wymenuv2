@@ -215,6 +215,46 @@ class StatementsController extends BackendController
 				'str'=>$str,
 		));
 	}
+	/**
+	 * 
+	 * 员工营业额统计
+	 * 
+	 */
+	public function actionTurnOver(){
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$download = Yii::app()->request->getParam('d',0);
+		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
+		$db = Yii::app()->db;
+		$sql = 'select t.* from (select username,sum(reality_total) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" group by username order by lid desc)t';
+		if($download){
+			$models = $db->createCommand($sql)->queryAll();
+			$this->exportTurnOver($models);
+			exit;
+		}
+		$count = $db->createCommand(str_replace('t.*','count(*)',$sql))->queryScalar();
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+
+		$comName = $this->getComName();
+		$this->render('turnover',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$beginTime,
+				'end_time'=>$endTime,
+				'comName'=>$comName,
+				'str'=>$str,
+		));
+	}
+	/**
+	 * 
+	 * 就餐人数
+	 * 
+	 */
 	private function exportDiningNum($model,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
  		$attributes = array(
 			'id'=>'编号',
@@ -232,6 +272,33 @@ class StatementsController extends BackendController
 			}
 		}
 		$data[] = $arr;
+ 		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
+	}
+	/**
+	 * 
+	 * 员工营业额
+	 * 
+	 */
+	private function exportTurnOver($models,$type=0,$orderStatus = 0,$params=array(),$export = 'xml'){
+ 		$attributes = array(
+			'id'=>'编号',
+			'username'=>'员工名',
+			'total'=>'营业额',
+		);
+ 		$data[1] = array_values($attributes);
+ 		$fields = array_keys($attributes);
+ 		
+		foreach($models as $k=>$model){
+			$arr = array();
+			foreach($fields as $f){
+				if($f == 'id'){
+					$arr[] = $k+1;
+				}else{
+					$arr[] = $model[$f];
+				}
+			}
+			$data[] = $arr;
+		}
  		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
 	}
 /*	private function getCategoryList(){
