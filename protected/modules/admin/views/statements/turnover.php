@@ -90,7 +90,7 @@
 							<?php endforeach;?>
 						<?php else:?>
 						<tr>
-							<td colspan="4"></td>
+							<td colspan="4">没有查询到数据</td>
 						</tr>
 						<?php endif;?>
 						</tbody>

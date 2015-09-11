@@ -86,7 +86,7 @@
 							</tr>
 						<?php else:?>
 						<tr>
-							<td colspan="3"></td>
+							<td colspan="3">没有查询到数据</td>
 						</tr>
 						<?php endif;?>
 						</tbody>
