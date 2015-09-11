@@ -492,6 +492,7 @@ class OrderList
                 if($order->order_status<$orderStatus)
                 {
                     $order->order_status=$orderStatus;
+                    $order->update_at= $time;
                 }
                 $order->taste_memo=$orderTasteMemo;
                 $order->callno=$callId;
