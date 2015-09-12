@@ -29,28 +29,22 @@
                             }else{
                                 joblock=true;
                             }
-//                            var jobid=$(this).attr("jobid");
-                            var address0=$(this).attr("address");
-//                            var dpid="<?php echo $dpid; ?>";
-//                            var orderid="<?php echo $orderid; ?>";
-                            
+                            var jobid=$(this).attr("jobid");
+                            var address=$(this).attr("address");
+                            var dpid="<?php echo $dpid; ?>";
+                            var orderid="<?php echo $orderid; ?>";
+                            var printresulttemp2=false;
                             var index = layer.load(0, {shade: [0.3,'#fff']});
-                            
+                            var jobnum=parseInt($('#failprintjobnum').val());
 //                            for(var itemp=1;itemp<4;itemp++)
 //                            {
-                            Androidwymenuprinter.printNetPing(address0,10);
-                            setTimeout(Androidwymenuprinter.printNetPing(address0,10)
+                            Androidwymenuprinter.printNetPing(address,10);
+                            setTimeout(Androidwymenuprinter.printNetPing(address,10)
                                     ,400);
 //                            setTimeout(alert(1)
 //                                    ,400);
-                            var printfun=function()
+                            var printfun=function(dpid,jobid,orderid)
                             {
-                                var jobid=$(this).attr("jobid");
-                                var address=$(this).attr("address");
-                                var dpid="<?php echo $dpid; ?>";
-                                var orderid="<?php echo $orderid; ?>";
-                                var jobnum=parseInt($('#failprintjobnum').val());
-                                var printresulttemp2=false;
                                 printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address); 
                                 //printresulttemp2=true;
                                 if(printresulttemp2)
@@ -68,14 +62,14 @@
                                 {
                                     alert("再试一次！");
                                 }
-                                if(jobnum===1 && printresulttemp2)
+                                if(jobnum==1 && printresulttemp2)
                                 {
     //                                alert(1);
                                     $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
                                     layer.close(layer_index_printresult2);
                                 }
                             }
-                            setTimeout(printfun,1000);                            
+                            setTimeout(printfun(dpid,jobid,orderid),1000);                            
                        });                      
                         
                     </script>

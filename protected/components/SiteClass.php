@@ -150,7 +150,7 @@ class SiteClass
                     $commandsiteno->execute();
                     /////
                     
-                    $code = SiteClass::getCode($companyId);
+                    $code = "0000";//SiteClass::getCode($companyId);
                     
                     $data = array(
                         'lid'=>$lid,
