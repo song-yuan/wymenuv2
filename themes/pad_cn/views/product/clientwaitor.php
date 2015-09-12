@@ -348,7 +348,7 @@
                                                                                 
                                         if(detaildata[0]=="0")//继续打印
                                         {
-//                                            alert(detaildata[1]);alert(detaildata[2]);
+                                            //alert(detaildata[1]);alert(detaildata[2]);alert(data.dpid);
                                             printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
                                             //printresulttemp=false;
                                             if(printresulttemp)

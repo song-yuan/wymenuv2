@@ -176,13 +176,14 @@ class PadbindController extends Controller
                 $jobid1 = Yii::app()->request->getParam('jobid',"0");
                 $companyid=  str_pad($companyid1, 10,"0",STR_PAD_LEFT);
                 $jobid=str_pad($jobid1, 10,"0",STR_PAD_LEFT);
+                //var_dump($jobid);exit;
 //                Gateway::getOnlineStatus();
 //                $store = Store::instance('wymenu');
 //                $printData = $store->get($companyid."_".$jobid);
 //                if(empty($printData))
 //                {
                     $criteria = new CDbCriteria;
-                    $criteria->condition =  't.dpid='.$companyid.' and t.jobid='.$jobid.' and t.finish_flag=0';
+                    $criteria->condition =  't.dpid='.$companyid.' and t.jobid='.$jobid;//.' and t.finish_flag=0';
                     //$criteria->order = ' t.lid desc ';                    
                     //$siteNo = SiteNo::model()->find($criteria);
                     $orderprintjobs=  OrderPrintjobs::model()->find($criteria);
