@@ -144,31 +144,35 @@ class ProductController extends Controller
                 $address = Yii::app()->request->getParam('address',"0");
                 $orderid = Yii::app()->request->getParam('orderid',"0");
                 $db=Yii::app()->db;
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                $printData = $store->get($dpid."_".$jobid);
-               // var_dump($printData);exit;
-                if(!empty($printData))
-                {
-                    $se=new Sequence("order_printjobs");
-                    $orderjobId = $se->nextval();
-                    $time=date('Y-m-d H:i:s',time());
-                    //插入一条
-                    $orderPrintJob = array(
-                                        'lid'=>$orderjobId,
-                                        'dpid'=>$dpid,
-                                        'create_at'=>$time,
-                                        'orderid'=>$orderid,
-                                        'jobid'=>$jobid,
-                                        'update_at'=>$time,
-                                        'address'=>$address,
-                                        'content'=>$printData,
-                                        'printer_type'=>"0",
-                                        'finish_flag'=>'0',
-                                        'delete_flag'=>'0',
-                                        );
-                    $db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
-                }		
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+//                $printData = $store->get($dpid."_".$jobid);
+//               // var_dump($printData);exit;
+//                if(!empty($printData))
+//                {
+//                    $se=new Sequence("order_printjobs");
+//                    $orderjobId = $se->nextval();
+//                    $time=date('Y-m-d H:i:s',time());
+//                    //插入一条
+//                    $orderPrintJob = array(
+//                                        'lid'=>$orderjobId,
+//                                        'dpid'=>$dpid,
+//                                        'create_at'=>$time,
+//                                        'orderid'=>$orderid,
+//                                        'jobid'=>$jobid,
+//                                        'update_at'=>$time,
+//                                        'address'=>$address,
+//                                        'content'=>$printData,
+//                                        'printer_type'=>"0",
+//                                        'finish_flag'=>'0',
+//                                        'delete_flag'=>'0',
+//                                        );
+//                    $db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
+//                }
+                $printjobsql="update nb_order_printjobs set finish_flag=0".
+                            " where dpid=".$dpid." and orderid=".$orderid.
+                            " and jobid=".$jobid;
+                $db->createCommand($printjobsql)->execute();
 		Yii::app()->end(json_encode(array("status"=>true,"msg"=>"OK")));
 	}
         

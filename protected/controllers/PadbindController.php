@@ -174,11 +174,11 @@ class PadbindController extends Controller
         public function actionGetJob(){
 		$companyid = Yii::app()->request->getParam('companyid',0);
                 $jobid = Yii::app()->request->getParam('jobid',0);                
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                $printData = $store->get($companyid."_".$jobid);
-                if(empty($printData))
-                {
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+//                $printData = $store->get($companyid."_".$jobid);
+//                if(empty($printData))
+//                {
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyid.' and t.jobid='.$jobid.' and t.finish_flag=0';
                     //$criteria->order = ' t.lid desc ';                    
@@ -190,8 +190,9 @@ class PadbindController extends Controller
                     }else{
                         $printData="";
                     }                    
-                }
-                echo $printData;
+//                }
+//                echo $printData;
+                  Yii::app()->end($printData);
 	}
         
         public function actionGetPadList(){
