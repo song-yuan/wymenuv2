@@ -172,8 +172,10 @@ class PadbindController extends Controller
 	}
 	
         public function actionGetJob(){
-		$companyid = Yii::app()->request->getParam('companyid',0);
-                $jobid = Yii::app()->request->getParam('jobid',0);                
+		$companyid1 = Yii::app()->request->getParam('companyid',"0");
+                $jobid1 = Yii::app()->request->getParam('jobid',"0");
+                $companyid=  str_pad($companyid1, 10,"0",STR_PAD_LEFT);
+                $jobid=str_pad($jobid1, 10,"0",STR_PAD_LEFT);
 //                Gateway::getOnlineStatus();
 //                $store = Store::instance('wymenu');
 //                $printData = $store->get($companyid."_".$jobid);

@@ -30,6 +30,7 @@
                                 joblock=true;
                             }
                             var jobid=$(this).attr("jobid");
+//                            alert(jobid);
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
                             var orderid="<?php echo $orderid; ?>";
