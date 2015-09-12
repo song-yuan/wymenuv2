@@ -564,15 +564,29 @@ class ProductController extends Controller
                 $sid = Yii::app()->request->getParam('sid','0');
                 $companyId = Yii::app()->request->getParam('companyId','0');
                 $istemp = Yii::app()->request->getParam('istemp','0');
-                $criteria2 = new CDbCriteria;
-                $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
-                $criteria2->order = ' t.lid desc ';
-                $siteNo = SiteNo::model()->find($criteria2);
-                if(empty($siteNo))
+                $status=0;
+                if($istemp=="0")
                 {
-                    $status="0";
+                    $criteria1 = new CDbCriteria;
+                    $criteria1->condition =  ' t.dpid='.$companyId.' and t.lid='.$sid ;
+                    $site = Site::model()->find($criteria1);
+                    if(empty($site))
+                    {
+                        $status="0";
+                    }else{
+                        $status=$site->status;
+                    }
                 }else{
-                    $status=$siteNo->status;
+                    $criteria2 = new CDbCriteria;
+                    $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria2->order = ' t.lid desc ';
+                    $siteNo = SiteNo::model()->find($criteria2);
+                    if(empty($siteNo))
+                    {
+                        $status="0";
+                    }else{
+                        $status=$siteNo->status;
+                    }
                 }
                 echo json_encode(array("status"=>$status));
                 return true;

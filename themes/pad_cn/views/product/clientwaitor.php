@@ -331,7 +331,7 @@
                         var data=msg;
 	                var printresult=false;
                         var printresultfail=false;
-                        var printresulttemp;
+                        var printresulttemp=true;
                         if(data.status){
                             
 //                            var index = layer.load(0, {shade: [0.3,'#fff']});
