@@ -290,6 +290,7 @@
                         url:getstatusurl,
                         type:'GET',
                         //data:formdata,
+                        cache:false,
                         async:false,
                         dataType: "json",
                         success:function(msg){
@@ -392,6 +393,7 @@
                                                         url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+detaildata[1]+"/address/"+detaildata[2],
                                                         type:'GET',
                                                         //data:formdata,
+                                                        cache:false,
                                                         async:false,
                                                         dataType: "json",
                                                         success:function(msg){
