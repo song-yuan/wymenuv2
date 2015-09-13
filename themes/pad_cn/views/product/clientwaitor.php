@@ -426,6 +426,7 @@
 //                                            if(layer_index_printresult!=0)
 //                                               return;
                                             layer.close(layer_shape_index);
+                                            //alert(successjobids);
                                             $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2/jobId/"+successjobids);                                
                                             layer_index_printresult2=layer.open({
                                                 type: 1,
