@@ -423,10 +423,10 @@
 //                                                }
 //                                            });
                                             //如果有失败任务就打开对话框
+//                                            if(layer_index_printresult!=0)
+//                                               return;
+                                            layer.close(layer_shape_index);
                                             $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2/jobId/"+successjobids);                                
-                                            
-                                            if(layer_index_printresult!=0)
-                                               return;
                                             layer_index_printresult2=layer.open({
                                                 type: 1,
                                                 shade: [0.1,'#fff'],
