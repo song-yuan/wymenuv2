@@ -555,16 +555,16 @@ class ProductController extends Controller
                         $istemp = Yii::app()->request->getPost('istemp','0');
                         //$ret= array('status'=>0,'msg'=>yii::t('app','开台失败11'),'siteid'=>"111");
                         $ret=SiteClass::openSite($companyId,$siteNumber,$istemp,$sid);
-                        if($ret['status']=='1')
-                        {
-                            //send ws msg to server pad;
-                        }
+//                        if($ret['status']=='1')
+//                        {
+//                            //send ws msg to server pad;
+//                        }
 //                        echo json_encode($ret);
 //                        return true;
 		}
                 //$ret=array('status'=>1,'msg'=>yii::t('app','开台成功'),'siteid'=>"df");
-                echo json_encode($ret);
-                        return true;
+                Yii::app()->end(json_encode($ret));
+                        //return true;
 	}
         
         public function actionGetsiteStatus() {
