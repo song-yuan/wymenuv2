@@ -332,6 +332,7 @@
 	                var printresult=false;
                         var printresultfail=false;
                         var printresulttemp=true;
+                        var successjobids="0000000000";
                         if(data.status){
                             
 //                            var index = layer.load(0, {shade: [0.3,'#fff']});
@@ -350,73 +351,86 @@
                                         {
                                             //alert(detaildata[1]);alert(detaildata[2]);alert(data.dpid);
                                             printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                            //printresulttemp=false;
+                                            //printresulttemp=true;
                                             if(printresulttemp)
                                             {
                                                 data.jobs[skey]="1_"+svalue.substring(2);                                                
-                                            }else{
-                                                printresultfail=true;                                                                                               
-                                            }
+                                            }//else{
+                                            //    printresultfail=true;                                                                                               
+                                            //}
                                         }
                                      });                                      
                                 }                               
                                 
 //                                     layer.close(layer_shape_index);
-                                     //alert(language_print_pad_fail);                                     
-                                    if(istemp=="1"&&!printresult)
+                                    if(istemp=="1"&&printresult) 
                                     {
-                                        alert("有打印失败，请去收银台查看1！");
-                                        //如果失败，就把打印任务插入到数据库
-                                        $.ajax({
-                                            url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+data.jobid+"/address/"+data.address,
-                                            type:'GET',
-                                            //data:formdata,
-                                            async:false,
-                                            dataType: "json",
-                                            success:function(msg){
-
-                                            },
-                                            error: function(msg){
-                                                layer.close(layer_shape_index);
-                                                alert("网络故障！")
-                                            }
-                                        });
+                                        successjobids=data.jobid;
                                     }
-                                    //alert(istemp);alert(printresultfail);
-                                    if(istemp=="0"&& printresultfail)
-                                    {
-                                        alert("打印机太忙，已经丢单，请手动打印2！");
+                                     //alert(language_print_pad_fail);                                     
+//                                    if(istemp=="1"&&!printresult)
+//                                    {
+//                                        alert("有打印失败，请去收银台查看1！");
                                         //如果失败，就把打印任务插入到数据库
+//                                        $.ajax({
+//                                            url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+data.jobid+"/address/"+data.address,
+//                                            type:'GET',
+//                                            //data:formdata,
+//                                            async:false,
+//                                            dataType: "json",
+//                                            success:function(msg){
+//
+//                                            },
+//                                            error: function(msg){
+//                                                layer.close(layer_shape_index);
+//                                                alert("网络故障！")
+//                                            }
+//                                        });
+//                                    }
+                                    //alert(istemp);alert(printresultfail);
+                                    if(istemp=="0")
+                                    {
+                                        //alert("打印机太忙，已经丢单，请手动打印2！");
+                                        //将成功的手机起来。
                                         $.each(data.jobs,function(skey,svalue){                                        
                                                 detaildata=svalue.split("_");
-                                                if(detaildata[0]=="0")
-                                                {
-                                                    $.ajax({
-                                                        url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+detaildata[1]+"/address/"+detaildata[2],
-                                                        type:'GET',
-                                                        //data:formdata,
-                                                        cache:false,
-                                                        async:false,
-                                                        dataType: "json",
-                                                        success:function(msg){
-
-                                                        },
-                                                        error: function(msg){
-                                                            layer.close(layer_shape_index);
-                                                            alert("网络故障！")
-                                                        }
-                                                    });
+                                                if(detaildata[0]=="1")
+                                                {                                                    
+                                                    successjobids=successjobids+","+detaildata[1];                                                    
                                                 }
                                             });
+                                        
+                                        //如果失败，就把打印任务插入到数据库
+//                                        $.each(data.jobs,function(skey,svalue){                                        
+//                                                detaildata=svalue.split("_");
+//                                                if(detaildata[0]=="0")
+//                                                {
+//                                                    $.ajax({
+//                                                        url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+detaildata[1]+"/address/"+detaildata[2],
+//                                                        type:'GET',
+//                                                        //data:formdata,
+//                                                        cache:false,
+//                                                        async:false,
+//                                                        dataType: "json",
+//                                                        success:function(msg){
+//
+//                                                        },
+//                                                        error: function(msg){
+//                                                            layer.close(layer_shape_index);
+//                                                            alert("网络故障！")
+//                                                        }
+//                                                    });
+//                                                }
+//                                            });
                                             //如果有失败任务就打开对话框
 //                                            if(layer_index_printresult!=0)
 //                                               return;
-                                            $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2");                                
+                                            $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2/jobId/"+successjobids);                                
                                             layer_index_printresult2=layer.open({
                                                 type: 1,
                                                 shade: [0.1,'#fff'],
                                                 title: false, //不显示标题
-                                                closeBtn:0,
+                                                closeBtn:1,
                                                 area: ['50%', '40%'],
                                                 content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
                                                 cancel: function(index){

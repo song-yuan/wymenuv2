@@ -2000,7 +2000,7 @@ class Helper
                                             'address'=>$printer->address,
                                             'content'=>$contentCode,
                                             'printer_type'=>"0",
-                                            'finish_flag'=>'1',//默认1表示成功，有失败时改成0
+                                            'finish_flag'=>'0',
                                             'delete_flag'=>'0',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
@@ -2118,7 +2118,7 @@ class Helper
                                             'address'=>$printer->address,
                                             'content'=>$contentCodeAll,
                                             'printer_type'=>"0",
-                                            'finish_flag'=>'1',//默认1表示成功，有失败时改成0
+                                            'finish_flag'=>'0',//默认0不成功
                                             'delete_flag'=>'0',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);

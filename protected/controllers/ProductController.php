@@ -479,9 +479,9 @@ class ProductController extends Controller
 	}
         
         public function actionGetFailPrintjobs(){
-		$companyId = Yii::app()->request->getParam('companyId',0);
-                $orderId = Yii::app()->request->getParam('orderId',0);
-                $jobId=Yii::app()->request->getParam('jobId',0);
+		$companyId = Yii::app()->request->getParam('companyId',"0");
+                $orderId = Yii::app()->request->getParam('orderId',"0");
+                $jobId=Yii::app()->request->getParam('jobId',"0");
                 $padtype=Yii::app()->request->getParam('padtype');
                 if($padtype=="1")
                 {
@@ -495,7 +495,7 @@ class ProductController extends Controller
                 {
                     $printjobsql="update nb_order_printjobs set finish_flag=1".
                             " where dpid=".$companyId." and orderid=".$orderId.
-                            " and jobid=".$jobId;
+                            " and jobid in(".$jobId.")";
                     Yii::app()->db->createCommand($printjobsql)->execute();
                 }
                 
