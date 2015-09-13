@@ -2000,7 +2000,7 @@ class Helper
                                             'address'=>$printer->address,
                                             'content'=>$contentCode,
                                             'printer_type'=>"0",
-                                            'finish_flag'=>'0',
+                                            'finish_flag'=>'1',
                                             'delete_flag'=>'0',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
