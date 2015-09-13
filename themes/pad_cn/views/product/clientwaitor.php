@@ -332,7 +332,7 @@
 	                var printresult=false;
                         var printresultfail=false;
                         var printresulttemp=true;
-                        var successjobids="0000000000";
+                        var successjobids="0";
                         if(data.status){
                             
 //                            var index = layer.load(0, {shade: [0.3,'#fff']});
@@ -422,9 +422,7 @@
 //                                                    });
 //                                                }
 //                                            });
-                                            //如果有失败任务就打开对话框
-//                                            if(layer_index_printresult!=0)
-//                                               return;
+                                            //如果有失败任务就打开对话框                                            
                                             layer.close(layer_shape_index);
                                             //alert(successjobids);
                                             $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2/jobId/"+successjobids);                                
