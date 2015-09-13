@@ -493,14 +493,18 @@ class ProductController extends Controller
                 }
                 if($jobId!="0")
                 {
-                    $jobidarr=  explode(",", $jobId);
-                    foreach($jobidarr as $jid)
-                    {
-                        $printjobsql="update nb_order_printjobs set finish_flag=1".
+                    $printjobsql="update nb_order_printjobs set finish_flag=1".
                                 " where dpid=".$companyId." and orderid=".$orderId.
-                                " and jobid =".$jid;
+                                " and jobid in(".$jobId.")";
                         Yii::app()->db->createCommand($printjobsql)->execute();
-                    }
+//                    $jobidarr=  explode(",", $jobId);
+//                    foreach($jobidarr as $jid)
+//                    {
+//                        $printjobsql="update nb_order_printjobs set finish_flag=1".
+//                                " where dpid=".$companyId." and orderid=".$orderId.
+//                                " and jobid =".$jid;
+//                        Yii::app()->db->createCommand($printjobsql)->execute();
+//                    }
                 }
                 
                 $criteria = new CDbCriteria;
