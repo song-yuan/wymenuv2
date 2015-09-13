@@ -144,31 +144,35 @@ class ProductController extends Controller
                 $address = Yii::app()->request->getParam('address',"0");
                 $orderid = Yii::app()->request->getParam('orderid',"0");
                 $db=Yii::app()->db;
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                $printData = $store->get($dpid."_".$jobid);
-               // var_dump($printData);exit;
-                if(!empty($printData))
-                {
-                    $se=new Sequence("order_printjobs");
-                    $orderjobId = $se->nextval();
-                    $time=date('Y-m-d H:i:s',time());
-                    //插入一条
-                    $orderPrintJob = array(
-                                        'lid'=>$orderjobId,
-                                        'dpid'=>$dpid,
-                                        'create_at'=>$time,
-                                        'orderid'=>$orderid,
-                                        'jobid'=>$jobid,
-                                        'update_at'=>$time,
-                                        'address'=>$address,
-                                        'content'=>$printData,
-                                        'printer_type'=>"0",
-                                        'finish_flag'=>'0',
-                                        'delete_flag'=>'0',
-                                        );
-                    $db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
-                }		
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+//                $printData = $store->get($dpid."_".$jobid);
+//               // var_dump($printData);exit;
+//                if(!empty($printData))
+//                {
+//                    $se=new Sequence("order_printjobs");
+//                    $orderjobId = $se->nextval();
+//                    $time=date('Y-m-d H:i:s',time());
+//                    //插入一条
+//                    $orderPrintJob = array(
+//                                        'lid'=>$orderjobId,
+//                                        'dpid'=>$dpid,
+//                                        'create_at'=>$time,
+//                                        'orderid'=>$orderid,
+//                                        'jobid'=>$jobid,
+//                                        'update_at'=>$time,
+//                                        'address'=>$address,
+//                                        'content'=>$printData,
+//                                        'printer_type'=>"0",
+//                                        'finish_flag'=>'0',
+//                                        'delete_flag'=>'0',
+//                                        );
+//                    $db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
+//                }
+                $printjobsql="update nb_order_printjobs set finish_flag=0".
+                            " where dpid=".$dpid." and orderid=".$orderid.
+                            " and jobid=".$jobid;
+                $db->createCommand($printjobsql)->execute();
 		Yii::app()->end(json_encode(array("status"=>true,"msg"=>"OK")));
 	}
         
@@ -475,9 +479,9 @@ class ProductController extends Controller
 	}
         
         public function actionGetFailPrintjobs(){
-		$companyId = Yii::app()->request->getParam('companyId',0);
-                $orderId = Yii::app()->request->getParam('orderId',0);
-                $jobId=Yii::app()->request->getParam('jobId',0);
+		$companyId = Yii::app()->request->getParam('companyId',"0");
+                $orderId = Yii::app()->request->getParam('orderId',"0");
+                $jobId=Yii::app()->request->getParam('jobId',"0");
                 $padtype=Yii::app()->request->getParam('padtype');
                 if($padtype=="1")
                 {
@@ -491,7 +495,7 @@ class ProductController extends Controller
                 {
                     $printjobsql="update nb_order_printjobs set finish_flag=1".
                             " where dpid=".$companyId." and orderid=".$orderId.
-                            " and jobid=".$jobId;
+                            " and jobid in(".$jobId.")";
                     Yii::app()->db->createCommand($printjobsql)->execute();
                 }
                 
@@ -560,15 +564,29 @@ class ProductController extends Controller
                 $sid = Yii::app()->request->getParam('sid','0');
                 $companyId = Yii::app()->request->getParam('companyId','0');
                 $istemp = Yii::app()->request->getParam('istemp','0');
-                $criteria2 = new CDbCriteria;
-                $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
-                $criteria2->order = ' t.lid desc ';
-                $siteNo = SiteNo::model()->find($criteria2);
-                if(empty($siteNo))
+                $status=0;
+                if($istemp=="0")
                 {
-                    $status="0";
+                    $criteria1 = new CDbCriteria;
+                    $criteria1->condition =  ' t.dpid='.$companyId.' and t.lid='.$sid ;
+                    $site = Site::model()->find($criteria1);
+                    if(empty($site))
+                    {
+                        $status="0";
+                    }else{
+                        $status=$site->status;
+                    }
                 }else{
-                    $status=$siteNo->status;
+                    $criteria2 = new CDbCriteria;
+                    $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria2->order = ' t.lid desc ';
+                    $siteNo = SiteNo::model()->find($criteria2);
+                    if(empty($siteNo))
+                    {
+                        $status="0";
+                    }else{
+                        $status=$siteNo->status;
+                    }
                 }
                 echo json_encode(array("status"=>$status));
                 return true;

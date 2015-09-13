@@ -5,9 +5,9 @@
      //var_dump($orderPrintjob);exit;
             ?>
             <li style="height:40px;">                                    
-                任务<?php echo $orderPrintjob['jobid']; ?>打印失败，打印机位置(<?php if(!empty($orderPrintjob->printer->name)) echo $orderPrintjob->printer->name; ?>)
+                任务<?php echo $orderPrintjob->jobid; ?>打印失败，打印机位置(<?php if(!empty($orderPrintjob->printer->name)) echo $orderPrintjob->printer->name; ?>)
                 <input style="float:right;padding: 10px 25px;background-color:greenyellow; " jobid="<?php echo $orderPrintjob->jobid; ?>" 
-                       address="<?php echo $orderPrintjob->address; ?>" type="button" class="reprintjob" value="重新打印">
+                       address="<?php echo $orderPrintjob->address; ?>" type="button" class="reprintfailjobbutton" value="重新打印">
             </li>
         <?php endforeach; ?>   
         </ul>
@@ -22,7 +22,7 @@
                             }
 //                        });
                         
-                        $('.reprintjob').on("click",function(){
+                        $('.reprintfailjobbutton').on("click",function(){
                             if(joblock)
                             {
                                 return;
@@ -30,6 +30,7 @@
                                 joblock=true;
                             }
                             var jobid=$(this).attr("jobid");
+//                            alert(jobid);
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
                             var orderid="<?php echo $orderid; ?>";
@@ -43,7 +44,7 @@
                                     ,400);
 //                            setTimeout(alert(1)
 //                                    ,400);
-                            var printfun=function()
+                            var printfun=function(dpid,jobid,orderid)
                             {
                                 printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address); 
                                 //printresulttemp2=true;
@@ -69,7 +70,7 @@
                                     layer.close(layer_index_printresult2);
                                 }
                             }
-                            setTimeout(printfun,1000);                            
+                            setTimeout(printfun(dpid,jobid,orderid),1000);                            
                        });                      
                         
                     </script>

@@ -516,7 +516,7 @@ class Helper
                 $printret=array();
 		if($hasData){
                     //$printserver='0';
-                    $retcontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
+                    $retcontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver,$order->lid);
                     $retcontent['orderid']=$order->lid;
                     return $retcontent;
 		}else{
@@ -607,7 +607,8 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";                        
                 $retcontent=array();
-		$retcontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);	
+                $orderid="0000000000";//打印日结单时
+		$retcontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver,$orderid);	
                 //$retcontent['orderid']=$order->lid;
                 return $retcontent;
 	}
@@ -648,7 +649,8 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";                        
                 $printret=array();
-		$retccontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);	
+                $orderid="0000000000";
+		$retccontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver,$orderid);	
                 if($retccontent['status'])
                 {
                     return array('status'=>1,'msg'=>yii::t('app','打印成功'));
@@ -1609,7 +1611,7 @@ class Helper
                 foreach ($printercontent_a as $key=>$values) {             //////////////                           
                     //$printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                     $printer2 = $printers_a[$key];
-                    $printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver);
+                    $printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
                     //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
                     array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
                     if(!$printret['status'])
@@ -1876,7 +1878,7 @@ class Helper
                 foreach ($printercontent_a as $key=>$values) {             //////////////                           
                     //$printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                     $printer2 = $printers_a[$key];
-                    $printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver);
+                    $printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
                     //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
                     array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
                     if(!$printret['status'])
@@ -1902,7 +1904,7 @@ class Helper
          * $printserver是否通过打印服务器打印，0表示不通过，数据存储在内存中，由程序通知pad自己去取数据并打印。
          * 1表示通过，指令发出去后，由打印服务器安排打印，程序只能读取打印服务器的返回结果，是异步的。
          */
-        static public function printConetent(Printer $printer,$content,$precode,$sufcode,$printserver)
+        static public function printConetent(Printer $printer,$content,$precode,$sufcode,$printserver,$orderid)
         {
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
@@ -1984,7 +1986,25 @@ class Helper
 //                        $store->set($printer->dpid."_".$jobid,$contentCode,0,120);//should 120测试1200
 //                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
 //                    }else{
-                        $store->set($printer->dpid."_".$jobid,$contentCode,0,300);//should 120测试1200
+                      $seorderprintjobs=new Sequence("order_printjobs");
+                        $orderjobId = $seorderprintjobs->nextval();
+                        $time=date('Y-m-d H:i:s',time());
+                        //插入一条
+                        $orderPrintJob = array(
+                                            'lid'=>$orderjobId,
+                                            'dpid'=>$printer->dpid,
+                                            'create_at'=>$time,
+                                            'orderid'=>$orderid,
+                                            'jobid'=>$jobid,
+                                            'update_at'=>$time,
+                                            'address'=>$printer->address,
+                                            'content'=>$contentCode,
+                                            'printer_type'=>"0",
+                                            'finish_flag'=>'0',
+                                            'delete_flag'=>'0',
+                                            );
+                        Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
+//                        $store->set($printer->dpid."_".$jobid,$contentCode,0,300);//should 120测试1200
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
 //                    }
                 }
@@ -1994,7 +2014,7 @@ class Helper
          * $printserver是否通过打印服务器打印，0表示不通过，数据存储在内存中，由程序通知pad自己去取数据并打印。
          * 1表示通过，指令发出去后，由打印服务器安排打印，程序只能读取打印服务器的返回结果，是异步的。
          */
-        static public function printConetent2(Printer $printer,$contents,$precode,$sufcode,$printserver)
+        static public function printConetent2(Printer $printer,$contents,$precode,$sufcode,$printserver,$orderid)
         {
                 Gateway::getOnlineStatus();
                 $store = Store::instance('wymenu');
@@ -2083,7 +2103,27 @@ class Helper
 //                        $store->set($printer->dpid."_".$jobid,$contentCode,0,120);//should 120测试1200
 //                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
 //                    }else{
-                        $store->set($printer->dpid."_".$jobid,$contentCodeAll,0,300);//should 120测试1200
+                        
+                        $seorderprintjobs=new Sequence("order_printjobs");
+                        $orderjobId = $seorderprintjobs->nextval();
+                        $time=date('Y-m-d H:i:s',time());
+                        //插入一条
+                        $orderPrintJob = array(
+                                            'lid'=>$orderjobId,
+                                            'dpid'=>$printer->dpid,
+                                            'create_at'=>$time,
+                                            'orderid'=>$orderid,
+                                            'jobid'=>$jobid,
+                                            'update_at'=>$time,
+                                            'address'=>$printer->address,
+                                            'content'=>$contentCodeAll,
+                                            'printer_type'=>"0",
+                                            'finish_flag'=>'0',//默认0不成功
+                                            'delete_flag'=>'0',
+                                            );
+                        Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
+                        
+//                        $store->set($printer->dpid."_".$jobid,$contentCodeAll,0,300);//should 120测试1200
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
 //                    }
                 }
