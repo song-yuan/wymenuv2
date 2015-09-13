@@ -596,8 +596,7 @@ class ProductController extends Controller
                         $status=$siteNo->status;
                     }
                 }
-                echo json_encode(array("status"=>$status));
-                return true;
+                Yii::app()->end(json_encode(array("status"=>$status)));                
 		
 	}
 }
