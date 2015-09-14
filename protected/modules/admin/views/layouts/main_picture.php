@@ -49,6 +49,6 @@
 	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/scripts/app.js');?>
 	<script>
 		jQuery(document).ready(function() {
-		   App.init();
+//		   App.init();
 		});
 	</script>
