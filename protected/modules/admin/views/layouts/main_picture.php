@@ -13,8 +13,6 @@
 	<script src="assets/plugins/excanvas.min.js"></script> 
 	<![endif]-->
 	<?php Yii::app()->clientScript->registerCoreScript('jquery');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/jquery-migrate-1.2.1.min.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/plugins/bootstrap/js/bootstrap.min.js');?>
 	<!-- END CORE PLUGINS -->
 	<!-- BEGIN PAGE LEVEL PLUGINS -->
 	<!-- END PAGE LEVEL PLUGINS -->
