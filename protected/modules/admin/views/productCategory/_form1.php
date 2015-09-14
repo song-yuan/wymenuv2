@@ -54,6 +54,7 @@
 			<?php $this->endWidget(); ?>
 			<script>
 			function swfupload_callback(name,path,oldname)  {
+				alert(name);
 				$("#ProductCategoryt_main_picture").val(name);
 				$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 			}
