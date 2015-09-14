@@ -53,9 +53,9 @@ class ProductCategoryController extends BackendController
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $model->update_at=date('Y-m-d H:i:s',time());
-              var_dump($_POST['ProductCategory']);var_dump($model->attributes);exit;
 			if($model->save()){
                                 //var_dump($model);exit;
+                $model = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->lid,':dpid'=>  $this->companyId));
 				if($model->pid!='0'){
 					$parent = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->pid,':dpid'=>  $this->companyId));
 					$model->tree = $parent->tree.','.$model->lid;
@@ -63,7 +63,7 @@ class ProductCategoryController extends BackendController
 					$model->tree = '0,'.$model->lid;
 				}
                                 //var_dump($model);exit;
-				$model->save();
+				$model->update();
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
 			}
