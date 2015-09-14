@@ -15,6 +15,7 @@
 				<h4 class="modal-title"><?php echo yii::t('app','添加商品类目');?></h4>
 			</div>
 			<div class="modal-body">
+				<?php if($model->pid==0):?>
 				<div class="form-group">
 					<?php echo $form->label($model,'main_picture',array('class'=>'col-md-3 control-label')); ?>
 					<div class="col-md-9">
@@ -31,6 +32,7 @@
 						<?php echo $form->error($model,'main_picture'); ?>
 					</div>
 				</div>
+				<?php endif;?>
 				<div class="form-group">
 					<?php echo $form->label($model,'category_name',array('class'=>'col-md-3 control-label')); ?>
 					<div class="col-md-9">

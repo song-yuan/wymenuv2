@@ -48,24 +48,32 @@ class ProductCategoryController extends BackendController
 		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
+			$category = ProductCategory::model()->find('dpid=:dpid and category_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->category_name));
+			if($category){
+				$this->redirect(array('productCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
+			}
                         $se=new Sequence("product_category");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $model->update_at=date('Y-m-d H:i:s',time());
-              var_dump($_POST['ProductCategory']);var_dump($model->attributes);exit;
+                        
 			if($model->save()){
-                                //var_dump($model);exit;
-				if($model->pid!='0'){
+                              //var_dump($model);exit;
+                $self = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->lid,':dpid'=>  $this->companyId));
+				if($self->pid!='0'){
 					$parent = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->pid,':dpid'=>  $this->companyId));
-					$model->tree = $parent->tree.','.$model->lid;
+					$self->tree = $parent->tree.','.$self->lid;
 				} else {
-					$model->tree = '0,'.$model->lid;
+					$self->tree = '0,'.$self->lid;
 				}
                                 //var_dump($model);exit;
-				$model->save();
+				$self->update();
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
+				$this->redirect(array('productCategory/index' , 'id'=>$self->lid,'companyId' => $this->companyId));
+			}else{
+				Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
+				$this->redirect(array('productCategory/index' ,'companyId' => $this->companyId));
 			}
 		}
 		$this->render('_form1' , array(
@@ -74,6 +82,7 @@ class ProductCategoryController extends BackendController
 		));
 	}
 	public function actionUpdate() {
+		$this->layout = '/layouts/main_picture';
 		$id = Yii::app()->request->getParam('id');
 		$model = ProductCategory::model()->find('lid=:id and dpid=:dpid', array(':id' => $id,':dpid'=>  $this->companyId));
                 Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -85,7 +94,7 @@ class ProductCategoryController extends BackendController
 				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
 			}
 		}
-		$this->renderPartial('_form1' , array(
+		$this->render('_form1' , array(
 				'model' => $model,
 				'action' => $this->createUrl('productCategory/update' , array(
 						'companyId'=>$this->companyId,
