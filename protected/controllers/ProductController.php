@@ -546,25 +546,15 @@ class ProductController extends Controller
         
         
         public function actionOpensite() {
-                Yii::app()->language = 'zh_cn';
-                $ret=array();
-                if(Yii::app()->request->isPostRequest) {
-			$sid = Yii::app()->request->getPost('sid');
-                        $siteNumber = Yii::app()->request->getPost('siteNumber');
-                        $companyId = Yii::app()->request->getPost('companyId');
-                        $istemp = Yii::app()->request->getPost('istemp','0');
-                        //$ret= array('status'=>0,'msg'=>yii::t('app','开台失败11'),'siteid'=>"111");
-                        $ret=SiteClass::openSite($companyId,$siteNumber,$istemp,$sid);
-//                        if($ret['status']=='1')
-//                        {
-//                            //send ws msg to server pad;
-//                        }
-//                        echo json_encode($ret);
-//                        return true;
-		}
-                //$ret=array('status'=>1,'msg'=>yii::t('app','开台成功'),'siteid'=>"df");
-                Yii::app()->end(json_encode($ret));
-                        //return true;
+                //Yii::app()->language = 'zh_cn';
+                $sid = Yii::app()->request->getParam('sid');
+                $siteNumber = Yii::app()->request->getParam('siteNumber');
+                $companyId = Yii::app()->request->getParam('companyId');
+                $istemp = Yii::app()->request->getParam('istemp','0');
+                //var_dump($sid,$siteNumber,$companyId,$istemp);exit;
+                //$ret= array('status'=>0,'msg'=>yii::t('app','开台失败11'),'siteid'=>"111");
+                $ret=SiteClass::openSite($companyId,$siteNumber,$istemp,$sid);
+               Yii::app()->end(json_encode($ret));                     
 	}
         
         public function actionGetsiteStatus() {

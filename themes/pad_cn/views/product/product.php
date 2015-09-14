@@ -232,7 +232,7 @@
        //加载所有座位
         $('#clientSitelist').on(event_clicktouchstart,function(){
             var randtime=new Date().getTime()
-            $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>/randtime/"+randtime);
+            $('#divid_client_sitelist').load("/wymenuv2/product/clientSitelist/companyId/<?php echo $this->companyId; ?>/padtype/2/randtime/"+randtime);
             $('.setting-pad-mask').hide();
             $('#divid_client_sitelist').show();
 //            var index = layer.load(0, {shade: [0.3,'#fff']}); //0代表加载的风格，支持0-2
