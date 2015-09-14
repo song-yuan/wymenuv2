@@ -298,7 +298,7 @@
                             //if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                             if('123'.indexOf(msg.status) < 0)
                             {
-                                $('#divid_client_sitelist').load("<?php echo $this->createUrl('product/clientSitelist',array('companyId'=>$this->companyId,'padtype'=>'2'));?>/randtime/"+randtime);            
+                                $('#divid_client_sitelist').load("/wymenuv2/product/clientSitelist/companyId/<?php echo $this->companyId; ?>/padtype/2/randtime/"+randtime);            
                                 layer.close(layer_shape_index);
                                 alert("请先开台后下单！"+"11");
                                 forbidden=true;

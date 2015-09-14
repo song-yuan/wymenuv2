@@ -167,23 +167,23 @@ class SiteClass
                     $db->createCommand()->insert('nb_site_no',$data);
 
                     ///***********insert to order feedback
-                    $sef=new Sequence("order_feedback");
-                    $lidf = $sef->nextval();
-                    $dataf = array(
-                        'lid'=>$lidf,
-                        'dpid'=>$companyId,
-                        'create_at'=>date('Y-m-d H:i:s',time()),
-                        'update_at'=>date('Y-m-d H:i:s',time()),
-                        'is_temp'=>$istemp,
-                        'site_id'=>$site_id,
-                        'is_deal'=>'0',
-                        'feedback_id'=>0,
-                        'order_id'=>0,
-                        'is_order'=>'1',
-                        'feedback_memo'=>'开台',
-                        'delete_flag'=>'0'
-                    );
-                    $db->createCommand()->insert('nb_order_feedback',$dataf);
+//                    $sef=new Sequence("order_feedback");
+//                    $lidf = $sef->nextval();
+//                    $dataf = array(
+//                        'lid'=>$lidf,
+//                        'dpid'=>$companyId,
+//                        'create_at'=>date('Y-m-d H:i:s',time()),
+//                        'update_at'=>date('Y-m-d H:i:s',time()),
+//                        'is_temp'=>$istemp,
+//                        'site_id'=>$site_id,
+//                        'is_deal'=>'0',
+//                        'feedback_id'=>0,
+//                        'order_id'=>0,
+//                        'is_order'=>'1',
+//                        'feedback_memo'=>'开台',
+//                        'delete_flag'=>'0'
+//                    );
+//                    $db->createCommand()->insert('nb_order_feedback',$dataf);
                     ///*************print
                     $transaction->commit(); //提交事务会真正的执行数据库操作
                     return array('status'=>1,'msg'=>yii::t('app','开台成功'),'siteid'=>$site_id);  

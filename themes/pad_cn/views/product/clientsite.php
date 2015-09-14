@@ -105,15 +105,19 @@
             {
                 //alert(!isNaN(siteNumber));
                 var randtime=new Date().getTime()
+                var url='/wymenuv2/product/opensite/companyId/'+'<?php echo $this->companyId; ?>'+'/randtime/'+randtime
+                            +'/sid/'+sid+'/siteNumber/'+siteNumber+'/istemp/'+istemp;
+                //    alert(url);
                  $.ajax({
-                     type:'POST',
+                     type:'GET',
                      dataType:'json',
                      async:false,
-                     data:{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":istemp},
-                     url:'<?php echo $this->createUrl('product/opensite',array());?>/randtime/'+randtime,
+                     cache:false,
+                     // data:{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":istemp},
+                     url:url,
                      'success':function(data){
                             alert(data.msg);
-                             if(data.status=="1")
+                             if(data.status===1)
                              {
                                  layer.close(layer_index); 
                                  $('#divid_client_sitelist').hide();
