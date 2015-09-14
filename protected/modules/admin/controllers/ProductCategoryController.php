@@ -39,6 +39,7 @@ class ProductCategoryController extends BackendController
 		));
 	}
 	public function actionCreate() {
+		$this->layout = '/layouts/main_picture';
 		$pid = Yii::app()->request->getParam('pid',0);
 		$model = new ProductCategory() ;
 		$model->dpid = $this->companyId ;
@@ -67,7 +68,7 @@ class ProductCategoryController extends BackendController
 				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
 			}
 		}
-		$this->renderPartial('_form1' , array(
+		$this->render('_form1' , array(
 				'model' => $model,
 				'action' => $this->createUrl('productCategory/create' , array('companyId'=>$this->companyId))
 		));
