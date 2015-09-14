@@ -192,7 +192,8 @@ class PadbindController extends Controller
                         $printData=$orderprintjobs->content;
                     }else{
                         $printData="";
-                    }                    
+                    } 
+                    $store->set($companyid."_".$jobid,$printData,0,30);
                 }
 //                echo $printData;
                   Yii::app()->end($printData);

@@ -2004,7 +2004,7 @@ class Helper
                                             'delete_flag'=>'0',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
-                        $store->set($printer->dpid."_".$jobid,$contentCode,0,300);//should 120测试1200
+                        $store->set($printer->dpid."_".$jobid,$contentCode,0,30);//should 120测试1200
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
 //                    }
                 }
@@ -2123,7 +2123,7 @@ class Helper
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
                         
-                        $store->set($printer->dpid."_".$jobid,$contentCodeAll,0,300);//should 120测试1200
+                        $store->set($printer->dpid."_".$jobid,$contentCodeAll,0,30);//should 120测试1200
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
 //                    }
                 }
