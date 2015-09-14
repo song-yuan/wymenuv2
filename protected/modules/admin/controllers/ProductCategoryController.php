@@ -48,7 +48,7 @@ class ProductCategoryController extends BackendController
 		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
-			$category = ProductCategory::model()->find('dpid=:dpid and category_name=:name' , array(':dpid'=>  $this->companyId,':name'=>$model->category_name));
+			$category = ProductCategory::model()->find('dpid=:dpid and category_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->category_name));
 			if($category){
 				$this->redirect(array('productCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
 			}
