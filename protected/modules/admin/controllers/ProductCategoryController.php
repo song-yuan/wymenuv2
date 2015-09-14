@@ -9,6 +9,16 @@ class ProductCategoryController extends BackendController
 		}
 		return true;
 	}
+	public function actions() {
+		return array(
+				'upload'=>array(
+						'class'=>'application.extensions.swfupload.SWFUploadAction',
+						//注意这里是绝对路径,.EXT是文件后缀名替代符号
+						'filepath'=>Helper::genFileName().'.EXT',
+						//'onAfterUpload'=>array($this,'saveFile'),
+				)
+		);
+	}
 	public function actionIndex(){
 		//$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
@@ -29,6 +39,7 @@ class ProductCategoryController extends BackendController
 		));
 	}
 	public function actionCreate() {
+		$this->layout = '/layouts/main_picture';
 		$pid = Yii::app()->request->getParam('pid',0);
 		$model = new ProductCategory() ;
 		$model->dpid = $this->companyId ;
@@ -37,12 +48,12 @@ class ProductCategoryController extends BackendController
 		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
-			//var_dump($_POST['ProductCategory'],$model->attributes);exit;
                         $se=new Sequence("product_category");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $model->update_at=date('Y-m-d H:i:s',time());
+              var_dump($_POST['ProductCategory']);var_dump($model->attributes);exit;
 			if($model->save()){
                                 //var_dump($model);exit;
 				if($model->pid!='0'){
@@ -57,7 +68,7 @@ class ProductCategoryController extends BackendController
 				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
 			}
 		}
-		$this->renderPartial('_form1' , array(
+		$this->render('_form1' , array(
 				'model' => $model,
 				'action' => $this->createUrl('productCategory/create' , array('companyId'=>$this->companyId))
 		));
