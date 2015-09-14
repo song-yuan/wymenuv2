@@ -53,7 +53,7 @@ class ProductCategoryController extends BackendController
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $model->update_at=date('Y-m-d H:i:s',time());
-              var_dump($_POST['ProductCategory'],$model->attributes);exit;
+              var_dump($_POST['ProductCategory']);var_dump($model->attributes);exit;
 			if($model->save()){
                                 //var_dump($model);exit;
 				if($model->pid!='0'){
