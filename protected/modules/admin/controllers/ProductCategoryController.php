@@ -65,11 +65,9 @@ class ProductCategoryController extends BackendController
 				}
                                 //var_dump($model);exit;
 				$self->update();
-				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('productCategory/index' , 'id'=>$self->lid,'companyId' => $this->companyId));
+				echo 1;exit;
 			}else{
-				Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
-				$this->redirect(array('productCategory/index' ,'companyId' => $this->companyId));
+				echo 0;exit;
 			}
 		}
 		$this->render('_form1' , array(

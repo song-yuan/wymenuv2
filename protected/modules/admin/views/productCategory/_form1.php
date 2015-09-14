@@ -1,3 +1,4 @@
+			<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/js/product/jquery.form.js');?>
 			<?php $form=$this->beginWidget('CActiveForm', array(
 				'id'=>'GoodsCategory',
 				'action'=>$action,
@@ -49,10 +50,19 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
-				<input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
+				<input type="button" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
 			</div>
 			<?php $this->endWidget(); ?>
 			<script>
+			$(document).ready(function(){
+				$('#create_btn').click(function(){
+					$('#GoodsCategory').ajaxSubmit(function(msg){
+						if(parseInt(msg)){
+							alert(msg);
+						}
+					});
+				});
+			});
 			function swfupload_callback(name,path,oldname)  {
 				$("#ProductCategory_main_picture").val(name);
 				$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
