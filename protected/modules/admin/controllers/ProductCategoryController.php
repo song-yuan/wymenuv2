@@ -9,6 +9,16 @@ class ProductCategoryController extends BackendController
 		}
 		return true;
 	}
+	public function actions() {
+		return array(
+				'upload'=>array(
+						'class'=>'application.extensions.swfupload.SWFUploadAction',
+						//注意这里是绝对路径,.EXT是文件后缀名替代符号
+						'filepath'=>Helper::genFileName().'.EXT',
+						//'onAfterUpload'=>array($this,'saveFile'),
+				)
+		);
+	}
 	public function actionIndex(){
 		//$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
