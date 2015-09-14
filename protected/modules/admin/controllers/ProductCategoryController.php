@@ -64,11 +64,12 @@ class ProductCategoryController extends BackendController
 					$self->tree = '0,'.$self->lid;
 				}
                                 //var_dump($model);exit;
-				if($self->update()){
-					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-					$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
-				}
-				
+				$self->update();
+				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
+			}else{
+				Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
+				$this->redirect(array('productCategory/index' ,'companyId' => $this->companyId));
 			}
 		}
 		$this->render('_form1' , array(
