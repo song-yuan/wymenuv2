@@ -12,8 +12,3 @@
 	<script src="assets/plugins/respond.min.js"></script>
 	<script src="assets/plugins/excanvas.min.js"></script> 
 	<![endif]-->
-	<?php Yii::app()->clientScript->registerCoreScript('jquery');?>
-	<!-- END CORE PLUGINS -->
-	<!-- BEGIN PAGE LEVEL PLUGINS -->
-	<!-- END PAGE LEVEL PLUGINS -->
-	<!-- BEGIN PAGE LEVEL SCRIPTS -->
