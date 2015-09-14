@@ -48,6 +48,10 @@ class ProductCategoryController extends BackendController
 		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
+			$category = ProductCategory::model()->find('dpid=:dpid and category_name=:name' , array(':dpid'=>  $this->companyId,':name'=>$model->category_name));
+			if($category){
+				$this->redirect(array('productCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
+			}
                         $se=new Sequence("product_category");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
@@ -65,9 +69,11 @@ class ProductCategoryController extends BackendController
 				}
                                 //var_dump($model);exit;
 				$self->update();
-				echo 1;exit;
+				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+				$this->redirect(array('productCategory/index' , 'id'=>$self->lid,'companyId' => $this->companyId));
 			}else{
-				echo 0;exit;
+				Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
+				$this->redirect(array('productCategory/index' ,'companyId' => $this->companyId));
 			}
 		}
 		$this->render('_form1' , array(
