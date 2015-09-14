@@ -1,3 +1,4 @@
+			<?php Yii::app()->clientScript->registerCoreScript('jquery');?>
 			<?php $form=$this->beginWidget('CActiveForm', array(
 				'id'=>'GoodsCategory',
 				'action'=>$action,
