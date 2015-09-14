@@ -143,7 +143,7 @@
 					'data':{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php echo $istemp; ?>'},
 					'url':'<?php echo $this->createUrl('defaultSite/opensite',array());?>',
 					'success':function(data){
-						if(data.status == 0) {
+						if(data.status === 0) {
 							alert(data.msg);
 						} else {
 							alert(data.msg);
