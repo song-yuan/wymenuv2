@@ -93,7 +93,7 @@ class ProductCategoryController extends BackendController
 				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
 			}
 		}
-		$this->renderPartial('_form1' , array(
+		$this->render('_form1' , array(
 				'model' => $model,
 				'action' => $this->createUrl('productCategory/update' , array(
 						'companyId'=>$this->companyId,
