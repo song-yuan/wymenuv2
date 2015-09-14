@@ -48,12 +48,12 @@ class ProductCategoryController extends BackendController
 		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
-			//var_dump($_POST['ProductCategory'],$model->attributes);exit;
                         $se=new Sequence("product_category");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $model->update_at=date('Y-m-d H:i:s',time());
+              var_dump($_POST['ProductCategory'],$model->attributes);exit;
 			if($model->save()){
                                 //var_dump($model);exit;
 				if($model->pid!='0'){
