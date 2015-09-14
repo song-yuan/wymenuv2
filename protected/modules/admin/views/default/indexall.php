@@ -1219,7 +1219,7 @@
                             success:function(msg){
                                 var printresultfail=false;
                                 var printresulttemp=true;
-                                var successjobids="0000000000";
+                                var successjobids="0";
                                 //保存成功，刷新
                                 var data=msg;
                                 alert(data.msg);
@@ -1240,7 +1240,7 @@
                                             {
                                                 //alert(data.dpid);alert(detaildata[1]);alert(detaildata[2]);
                                                 printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                                //printresulttemp=true;
+                                                ////printresulttemp=false;
                                                 if(printresulttemp)
                                                 {
                                                     data.jobs[skey]="1_"+svalue.substring(2);
@@ -1250,7 +1250,10 @@
                                             }
                                          }); 
                                          layer.close(layer_flash_index); 
-                                            
+                                        if(!printresultfail)
+                                        {
+                                            alert("厨打成功！");
+                                        }   
                                                 //alert("可能有打印失败，请去打印机处确认，如果失败，请去收银台查看并重打！");
                                             $.each(data.jobs,function(skey,svalue){                                        
                                                 detaildata=svalue.split("_");
@@ -1281,9 +1284,10 @@
 //                                                    });
                                                     
                                                     //如果有失败任务就打开对话框
+                                                    //alert(successjobids);
+                                                    $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid+"/jobId/"+successjobids);                                
                                                     if(layer_index_printresult!=0)
                                                        return;
-                                                    $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid+"/jobId/"+successjobids);                                
                                                     layer_index_printresult=layer.open({
                                                         type: 1,
                                                         shade: false,
@@ -1296,10 +1300,7 @@
                                                         }
                                                     });
                                             }
-                                            if(!printresultfail)
-                                            {
-                                                alert("厨打成功！");
-                                            }                                            
+                                                                                        
                                         
 //                                }else{
 //                                    //alert(data.msg);

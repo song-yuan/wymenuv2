@@ -16,6 +16,22 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
+					<?php echo $form->label($model,'main_picture',array('class'=>'col-md-3 control-label')); ?>
+					<div class="col-md-9">
+						<?php
+								$this->widget('application.extensions.swfupload.SWFUpload',array(
+									'callbackJS'=>'swfupload_callback',
+									'fileTypes'=> '*.jpg',
+									'buttonText'=> yii::t('app','上传类别图片'),
+									'companyId' => $model->dpid,
+									'imgUrlList' => array($model->main_picture),
+								));
+								?>
+								<?php echo $form->hiddenField($model,'main_picture'); ?>
+								<?php echo $form->error($model,'main_picture'); ?>
+					</div>
+				</div>
+				<div class="form-group">
 					<?php echo $form->label($model,'category_name',array('class'=>'col-md-3 control-label')); ?>
 					<div class="col-md-9">
 						<?php echo $form->hiddenField($model,'pid'); ?>
@@ -36,3 +52,9 @@
 				<input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
 			</div>
 			<?php $this->endWidget(); ?>
+			<script>
+			function swfupload_callback(name,path,oldname)  {
+				$("#ProductCategoryt_main_picture").val(name);
+				$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
+			}
+			</script>
