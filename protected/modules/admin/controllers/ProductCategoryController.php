@@ -82,6 +82,7 @@ class ProductCategoryController extends BackendController
 		));
 	}
 	public function actionUpdate() {
+		$this->layout = '/layouts/main_picture';
 		$id = Yii::app()->request->getParam('id');
 		$model = ProductCategory::model()->find('lid=:id and dpid=:dpid', array(':id' => $id,':dpid'=>  $this->companyId));
                 Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
