@@ -1,4 +1,4 @@
-			<?php Yii::app()->clientScript->registerCoreScript('jquery');?>
+			<script type="text/javascript" src="/wymenuv2/plugins/jquery-1.10.2.min.js"></script>
 			<?php $form=$this->beginWidget('CActiveForm', array(
 				'id'=>'GoodsCategory',
 				'action'=>$action,
