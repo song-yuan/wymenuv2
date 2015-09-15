@@ -15,7 +15,7 @@
   <div class="top-left"> 
       
   	<div class="top-left-right">            
-	<span class="category-all"><a href="javascript:;" style="display:inline">分类</a></span>&nbsp;&nbsp;<span class="category-all-name"></span>
+	<span class="category-all">分类</span>&nbsp;&nbsp;<span class="category-all-name"></span>
 	</div>
   </div>
     
