@@ -186,6 +186,7 @@
          	var categoryId = $(this).attr('category-id');
          	$('.blockCategory').hide();
          	$('.blockCategory[p-category="'+categoryId+'"]').show();
+         	$('.category-level1').hide();
          });    
                 ///
                 $.ajax({
