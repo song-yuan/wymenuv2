@@ -49,6 +49,7 @@
 .top-left-right{
 	width:100%;
 	height:100%;
+	line-height:500%;
 	}
 .top-middle{
 	width:18%;
@@ -567,7 +568,7 @@
 
 
 .top-left-right span{
-	font-size:25px;
+	font-size:4.0em;
 	color:rgb(239,68,77);
 }
 .top-left-right span.category-all{
