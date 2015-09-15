@@ -570,6 +570,9 @@
 	font-size:25px;
 	color:rgb(239,68,77);
 }
+.category-all{
+	color:blue;
+}
 .category-level1{
 	position:absolute;
 	left:0;
