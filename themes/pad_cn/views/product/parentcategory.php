@@ -15,17 +15,7 @@
   <div class="top-left"> 
       
   	<div class="top-left-right">            
-	<select name="category" id="pad_category_select">
-		<?php if($parentCategorys):?>
-		<?php foreach($parentCategorys as $categorys):?>
-                        <optgroup class="category-partents" label="<?php echo '——'.$categorys['category_name'].'——';?>" lid="<?php echo $categorys['lid'];?>">
-			<?php foreach($categorys['children'] as $category):?>
-                        <option class="child" value="<?php echo $category['lid'];?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo Helper::truncate_utf8_string($category['category_name'],6);?></option>
-			<?php endforeach;?>
-                        </optgroup>
-		<?php endforeach;?>
-		<?php endif;?>
-	</select>
+	<span class="category-all">分类</span>&nbsp;&nbsp;<span class="category-all-name"></span>
 	</div>
   </div>
     
@@ -44,6 +34,14 @@
            </div>
   	<div class="clear"></div>
   </div>
+</div>
+<div class="category-level1">
+	<?php if($parentCategorys):?>
+		<?php foreach($parentCategorys as $categorys):?>
+		<div class="category-level1-item" category-id="<?php echo $categorys['lid'];?>" category-name="<?php echo $categorys['category_name'];?>"><div class="pad-productbuy" style="height:1.5em;"><div class="inmiddle" style="text-align:center;"><?php echo $categorys['category_name'];?></div></div><img src="<?php echo $categorys['main_picture'];?>"/></div>
+		<?php endforeach;?>
+	<?php endif;?>
+	<div class="clear"></div>
 </div>
 <?php if(Yii::app()->language=='jp'):?>
 <input type="hidden"  name="language" value="1"  />
