@@ -48,7 +48,7 @@
 <div class="category-level1">
 	<?php if($parentCategorys):?>
 		<?php foreach($parentCategorys as $categorys):?>
-		<div class="category-level1-item" category-id="<?php echo $categorys['lid'];?>"><div class="pad-productbuy"><div class="inmiddle" style="text-align:center;"><?php echo $categorys['category-name'];?></div></div><img src="<?php echo $categorys['main_picture'];?>"/></div>
+		<div class="category-level1-item" category-id="<?php echo $categorys['lid'];?>"><div class="pad-productbuy"><div class="inmiddle" style="text-align:center;"><?php echo $categorys['category_name'];?></div></div><img src="<?php echo $categorys['main_picture'];?>"/></div>
 		<?php endforeach;?>
 	<?php endif;?>
 	<div class="clear"></div>
