@@ -570,8 +570,8 @@
 	font-size:25px;
 	color:rgb(239,68,77);
 }
-.category-all{
-	color:blue;
+.top-left-right span.category-all{
+	color:rgb(31,117,231);
 }
 .category-level1{
 	position:absolute;
