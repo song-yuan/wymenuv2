@@ -565,6 +565,10 @@
 }
 
 
+
+.top-left-right span{
+	font-size:18px;
+}
 .category-level1{
 	position:absolute;
 	left:0;
