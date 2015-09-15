@@ -577,6 +577,7 @@
 	height:100%;
 	overflow:scroll;
 	z-index:1005;
+	background-color:white;
 }
 .category-level1-item{
 	float:left;
