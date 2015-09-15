@@ -182,8 +182,13 @@
 			});
 		});
 		
+		$('.category-all').click(function(){
+			$('.category-level1').show();
+		});
          $('.category-level1-item').click(function(){
          	var categoryId = $(this).attr('category-id');
+         	var categoryName = $(this).attr('category-name');
+         	$('.category-all-name').html(categoryName);
          	$('.blockCategory').hide();
          	$('.blockCategory[p-category="'+categoryId+'"]').show();
          	$('.category-level1').hide();
