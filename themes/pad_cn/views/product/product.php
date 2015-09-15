@@ -184,6 +184,7 @@
 		
 		$('.category-all').click(function(){
 			$('.category-level1').show();
+			$('body').scrollTop(0);
 		});
          $('.category-level1-item').click(function(){
          	var categoryId = $(this).attr('category-id');
