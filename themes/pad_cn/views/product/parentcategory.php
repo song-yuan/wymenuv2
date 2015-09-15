@@ -45,6 +45,14 @@
   	<div class="clear"></div>
   </div>
 </div>
+<div class="category-level1">
+	<?php if($parentCategorys):?>
+		<?php foreach($parentCategorys as $categorys):?>
+		<div class="category-level1-item" category-id="<?php echo $categorys['lid'];?>"><img src="<?php echo $categorys['main_picture'];?>"/></div>
+		<?php endforeach;?>
+	<?php endif;?>
+	<div class="clear"></div>
+</div>
 <?php if(Yii::app()->language=='jp'):?>
 <input type="hidden"  name="language" value="1"  />
 <?php else:?>

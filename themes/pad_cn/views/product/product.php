@@ -160,7 +160,7 @@
 		getPicList(type,catgory,1);
 	}	
 	$(document).ready(function(){
-                
+        
 		$('select[name="category"]').change(function(){
 			var val = $(this).val();
 			var obj = $('div[category="'+val+'"]:first');
@@ -181,7 +181,12 @@
 				}
 			});
 		});
-                
+		
+         $('.category-level1-item').click(function(){
+         	var categoryId = $(this).attr('category-id');
+         	$('.blockCategory').hide();
+         	$('.blockCategory[p-category="'+categoryId+'"]').show();
+         });    
                 ///
                 $.ajax({
  			url:'/wymenuv2/padbind/getPadPrinter',

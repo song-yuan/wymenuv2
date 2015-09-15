@@ -133,7 +133,7 @@ class ProductCategory extends CActiveRecord
 	public static function getCategorys($companyId = 0){
 		$totalCatgorys = array();
 		$command = Yii::app()->db;
-		$sql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0 order by order_num DESC';
+		$sql = 'select lid,category_name,main_picture from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0 order by order_num DESC';
 		$parentCategorys = $command->createCommand($sql)->bindValue(':companyId',$companyId)->queryAll();
 		foreach($parentCategorys as $category){
 			$csql = 'select lid, pid, category_name from nb_product_category where dpid=:companyId and pid=:parent_id and delete_flag=0 order by order_num DESC';
