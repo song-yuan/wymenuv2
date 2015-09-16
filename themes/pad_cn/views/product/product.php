@@ -188,6 +188,7 @@
 		});
 		
 		$('.category-all').click(function(){
+			$('.category-all-name').html('');
 			$('.category-level1').show();
 			$('body').scrollTop(0);
 		});
