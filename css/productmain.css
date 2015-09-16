@@ -9,7 +9,6 @@ a{
     width: 100%;
     margin:0 auto;
     min-height: 500px;
-    height: auto !important;
     overflow:scroll;
     position:relative;
 }
