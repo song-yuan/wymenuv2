@@ -143,7 +143,7 @@ class ProductCleanController extends BackendController
 //                                Gateway::sendToClient($clientId,$sendjsondata);
 //                            }
 //                        }
-                    }
+//                    }
                     Yii::app()->end(json_encode(array("status"=>"success")));
                 }else{
                     Yii::app()->end(json_encode(array("status"=>"fail")));
