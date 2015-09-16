@@ -8,9 +8,9 @@ a{
 .page{
     width: 100%;
     margin:0 auto;
-    min-height: 1036px;
+    min-height: 500px;
     height: auto !important;
-    overflow:hidden;
+    overflow:scroll;
     position:relative;
 }
 .mask{

@@ -183,6 +183,7 @@
 		});
 		var windowHeight = $(window).height();
 		$('.category-level1').css('height',windowHeight);
+		$('.page').css('height',windowHeight);
 		
 		$('.category-all').click(function(){
 			$('.category-level1').show();
