@@ -566,7 +566,9 @@
 }
 
 
-
+.blockCategory{
+	display:none;
+}
 .top-left-right span{
 	font-size:4.0em;
 	color:rgb(239,68,77);
