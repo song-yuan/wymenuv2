@@ -182,8 +182,10 @@
 			});
 		});
 		var windowHeight = $(window).height();
+		var fixedTop = $('.fixed-top').height();
 		$('.category-level1').css('height',windowHeight);
 		$('.page').css('height',windowHeight);
+		$('#page_0').css('height',windowHeight-fixedTop);
 		
 		$('.category-all').click(function(){
 			$('.category-level1').show();
