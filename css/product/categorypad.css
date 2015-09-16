@@ -291,7 +291,7 @@
 	top:8.0em;
 	right: 10%;
 	background:white;
-	z-index:1001;
+	z-index:10006;
 	height: 63%;
         overflow-y: scroll;
         box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
