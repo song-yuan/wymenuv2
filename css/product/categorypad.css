@@ -1,5 +1,6 @@
 #page_0{
 	margin-top:8.0em;
+	overflow:scroll;
 }
 
 .ver-text-cover ul{
@@ -57,7 +58,7 @@
 	float:right;
 }
 .top-right{
-	width:50%;
+	width:48%;
 	height:100%;
         //background: #00FFFF;
 	float:left;
@@ -134,7 +135,7 @@
 	top:50px;
 	left:40%;
 	background:white;
-	z-index:1001;
+	z-index:10006;
 	height:183px;
 	bottom:20px;
 	box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
@@ -290,7 +291,7 @@
 	top:8.0em;
 	right: 10%;
 	background:white;
-	z-index:1001;
+	z-index:10006;
 	height: 63%;
         overflow-y: scroll;
         box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
@@ -577,7 +578,7 @@
 .category-level1{
 	position:absolute;
 	left:0;
-	top:0;
+	top:7.0em;
 	width:100%;
 	height:100%;
 	overflow:scroll;
