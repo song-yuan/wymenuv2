@@ -1,7 +1,6 @@
 #page_0{
 	margin-top:8.0em;
 	overflow:scroll;
-	padding-bottom:8.0em;
 }
 
 .ver-text-cover ul{
@@ -585,7 +584,6 @@
 	overflow:scroll;
 	z-index:1005;
 	background-color:white;
-	padding-bottom:8.0em;
 }
 .category-level1-item{
 	float:left;
