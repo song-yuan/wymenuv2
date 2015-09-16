@@ -15,7 +15,7 @@
   <div class="top-left"> 
       
   	<div class="top-left-right">            
-	<span class="category-all">分类</span>&nbsp;&nbsp;<span class="category-all-name"></span>
+	<span class="category-all">首页</span>&nbsp;&nbsp;<span class="category-all-name"></span>
 	</div>
   </div>
     
