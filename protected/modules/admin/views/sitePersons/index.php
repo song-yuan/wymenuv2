@@ -64,7 +64,6 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','公司');?></th>
 								<th><?php echo yii::t('app','范围');?></th>
 								<th>&nbsp;</th>
