@@ -226,9 +226,11 @@
             }
             //alert(optvalue);
             $.ajax({
+                        type:'GET',
  			url:"<?php echo $this->createUrl('productClean/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/storeNumber/"+optvalue,
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
+                        cache:false,
                         dataType:'json',
  			success:function(msg){
                             //alert(msg.status);
