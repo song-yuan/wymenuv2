@@ -351,7 +351,7 @@
                                         {
                                             //alert(detaildata[1]);alert(detaildata[2]);alert(data.dpid);
                                             printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                            //printresulttemp=true;
+                                            //////printresulttemp=false;
                                             if(printresulttemp)
                                             {
                                                 data.jobs[skey]="1_"+svalue.substring(2);                                                
