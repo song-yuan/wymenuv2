@@ -90,19 +90,12 @@
 								<td ><?php echo $model->email;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
-									<div class="btn-group">
-										<a class="btn green" href="#" data-toggle="dropdown">
-										<?php echo yii::t('app','操作');?>
-										<i class="fa fa-angle-down"></i>
-										</a>
-										<ul class="dropdown-menu pull-right">
+									<div class="actions">
                                                                                     <?php if(Yii::app()->params->master_slave=='m') : ?>
-											<li><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a></li>
+                                                                            <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
                                                                                     <?php endif; ?>
-											<li><a href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a></li>
-										</ul>
-									</div>
-									
+                                                                            <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>
+                                                                        </div>	
 								</td>
 							</tr>
 						<?php endforeach;?>

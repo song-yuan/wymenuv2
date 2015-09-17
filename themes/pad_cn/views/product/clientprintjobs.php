@@ -14,6 +14,8 @@
         	<!-- END PAGE -->                  
                     <script type="text/javascript">
                         var joblock=false;
+                        var successjoblist="0";
+                        var jobsuccess=0;
 //                        $(document).ready(function(){
                             $('#failprintjobs').text($('#failprintjobnum').val());
                             if($('#failprintjobnum').val()=="0")
@@ -23,12 +25,15 @@
 //                        });
                         
                         $('.reprintfailjobbutton').on("click",function(){
-                            if(joblock)
-                            {
-                                return;
-                            }else{
-                                joblock=true;
-                            }
+                            var liobj=$(this).parent();
+                            liobj.hide();
+//                            return;
+//                            if(joblock)
+//                            {
+//                                return;
+//                            }else{
+//                                joblock=true;
+//                            }
                             var jobid=$(this).attr("jobid");
 //                            alert(jobid);
                             var address=$(this).attr("address");
@@ -36,37 +41,35 @@
                             var orderid="<?php echo $orderid; ?>";
                             var printresulttemp2=false;
                             var index = layer.load(0, {shade: [0.3,'#fff']});
-                            var jobnum=parseInt($('#failprintjobnum').val());
-//                            for(var itemp=1;itemp<4;itemp++)
-//                            {
+                            var jobnum=parseInt($('#failprintjobnum').val());                            
                             Androidwymenuprinter.printNetPing(address,10);
                             setTimeout(Androidwymenuprinter.printNetPing(address,10)
                                     ,400);
-//                            setTimeout(alert(1)
-//                                    ,400);
                             var printfun=function(dpid,jobid,orderid)
                             {
                                 printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address); 
-                                //printresulttemp2=true;
+                                /////printresulttemp2=true;
                                 if(printresulttemp2)
                                 {
-                                    if(jobnum>1)
-                                    {
-                                        $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
-//                                        break;
-                                    }                                    
+//                                    if(jobnum>1)
+//                                    {
+                                        //$('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
+                                        successjoblist=successjoblist+","+jobid;
+                                        jobsuccess=jobsuccess+1;
+//                                    }                                    
                                 }
                                 
                                 layer.close(index);
-                                joblock=false;
+//                                joblock=false;
                                 if(!printresulttemp2)
                                 {
                                     alert("再试一次！");
+                                    liobj.show();
                                 }
-                                if(jobnum==1 && printresulttemp2)
+                                if(jobnum==jobsuccess && printresulttemp2)
                                 {
-    //                                alert(1);
-                                    $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+jobid);
+                                    //alert(successjoblist);
+                                    $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+dpid+'/orderId/'+orderid+'/padtype/2/jobId/'+successjoblist);
                                     layer.close(layer_index_printresult2);
                                 }
                             }

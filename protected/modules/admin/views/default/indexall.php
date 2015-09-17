@@ -793,6 +793,7 @@
                     var padinfo=Androidwymenuprinter.getPadInfo();
                     padid=padinfo.substr(10,10);
                 }
+                //重新计算
                 var payShouldAccount=$("#payShouldAccount").text();
                 var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/payShouldAccount/"+payShouldAccount;
                 var statu = confirm("<?php echo yii::t('app','确定要打印清单吗？');?>");
@@ -1008,7 +1009,7 @@
                 //设置总额
                 var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
                 $("#payOriginAccount").text(payOriginAccount);
-                var productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
+                var productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));//参与折扣的总额，还有不参与折扣的
                 var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                 var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                 //alert(payOriginAccount);alert(productDisTotal);alert(payDiscountAccount);alert(payMinusAccount);

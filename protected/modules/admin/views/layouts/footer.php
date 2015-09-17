@@ -1,6 +1,6 @@
 	<div class="footer">
 		<div class="footer-inner">
-			2013 &copy; Metronic by keenthemes.
+			2014 &copy; WYMENU by Wuyi China & Gokei Japan.
 		</div>
 		<div class="footer-tools">
 			<span class="go-top">
