@@ -413,7 +413,7 @@
 	max-height:1000px;
 	overflow:scroll;
 	margin:auto auto;
-	z-index:1010;
+	z-index:10010;
 	background:white;
 	border: 6px solid rgba(0,0,0,.3);
     border-radius: 5px;
