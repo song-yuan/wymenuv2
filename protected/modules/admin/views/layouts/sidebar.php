@@ -86,7 +86,9 @@
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'floor') echo 'active';?>"><a href="<?php echo $this->createUrl('floor/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','楼层区域管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'siteType') echo 'active';?>"><a href="<?php echo $this->createUrl('siteType/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌种类设置');?></a></li>
+						<!--
 						<li class="<?php if(Yii::app()->controller->id == 'sitePersons') echo 'active';?>"><a href="<?php echo $this->createUrl('sitePersons/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌人数设置');?></a></li>
+						-->
 						<li class="<?php if(Yii::app()->controller->id == 'site') echo 'active';?>"><a href="<?php echo $this->createUrl('site/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌包厢明细');?></a></li>
 					</ul>
 				</li>
