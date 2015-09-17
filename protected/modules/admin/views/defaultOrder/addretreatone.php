@@ -146,6 +146,7 @@
                                         success:function(result){
                                             var printresultfail=false;
                                             var printresulttemp;
+                                            var successjobids="0";
                                             //alert(result.msg);
                                             data=result;
                                             if(data.status){
@@ -155,16 +156,8 @@
                                                         detaildata=svalue.split("_");
                                                         if(detaildata[0]=="0")//继续打印
                                                         {
-                                                            printresulttemp=false;
-                                                            for(var itemp=1;itemp<4;itemp++)
-                                                            {
-                                                                if(printresulttemp)
-                                                                {
-                                                                    break;
-                                                                }
-                                                                //alert(itemp);
-                                                                printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);                                                            
-                                                            }
+                                                            printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);                                                            
+                                                            //printresulttemp=false;
                                                             if(printresulttemp)
                                                             {
                                                                 data.jobs[skey]="1_"+svalue.substring(2);
@@ -173,55 +166,39 @@
                                                             }
                                                         }
                                                      }); 
-                                                        if(printresultfail)
+                                                     layer.close(layer_flash_index); 
+                                                    if(!printresultfail)
+                                                    {
+                                                        alert("打印成功！");
+                                                    }   
+                                                            //alert("可能有打印失败，请去打印机处确认，如果失败，请去收银台查看并重打！");
+                                                    $.each(data.jobs,function(skey,svalue){                                        
+                                                        detaildata=svalue.split("_");
+                                                        if(detaildata[0]=="1")
                                                         {
-                                                            alert("打印机忙，请手动点击重新打印！");
-                                                            //如果失败，就把打印任务插入到数据库
-                                                            $.each(data.jobs,function(skey,svalue){                                        
-                                                                    detaildata=svalue.split("_");
-                                                                    if(detaildata[0]=="0")
-                                                                    {
-                                                                        $.ajax({
-                                                                            url:'/wymenuv2/product/saveFailJobs/orderid/'+data.orderid+'/dpid/'+data.dpid+'/jobid/'+detaildata[1]+"/address/"+detaildata[2],
-                                                                            type:'GET',
-                                                                            //data:formdata,
-                                                                            async:false,
-                                                                            dataType: "json",
-                                                                            success:function(msg){
-
-                                                                            },
-                                                                            error: function(msg){
-                                                                                alert("网络故障！")
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                });
-                                                                layer.close(layer_flash_index);                                                     
-                                                                //如果有失败任务就打开对话框
-                                                                if(layer_index_printresult!=0)
-                                                                   return;
-                                                                $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid);                                
-                                                                layer_index_printresult=layer.open({
-                                                                    type: 1,
-                                                                    shade: false,
-                                                                    title: false, //不显示标题
-                                                                    area: ['30%', '70%'],
-                                                                    content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-                                                                    cancel: function(index){
-                                                                        layer.close(index);
-                                                                        layer_index_printresult=0;                                                                                                     
-                                                                    }
-                                                                });
-                                                        }else{
-                                                            layer.close(layer_flash_index);
-                                                            //alert("打印成功");
-                                                        }                                            
-                                                        layer.close(layer_flash_index);
-                                            }else{
-                                                alert(data.msg);
-                                                //alert("下单成功，打印失败");
-                                            }
-                                           //以上是打印                                                        
+                                                            successjobids=successjobids+","+detaildata[1];                                                    
+                                                        }
+                                                    });
+                                                    //如果有失败任务就打开对话框
+                                                    $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid+"/jobId/"+successjobids);
+                                                    if(layer_index_printresult!=0)
+                                                       return;
+//                                                                $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid);                                
+                                                    layer_index_printresult=layer.open({
+                                                        type: 1,
+                                                        shade: false,
+                                                        title: false, //不显示标题
+                                                        area: ['30%', '70%'],
+                                                        content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                                                        cancel: function(index){
+                                                            layer.close(index);
+                                                            layer_index_printresult=0;                                                                                                     
+                                                        }
+                                                    });
+                                                }
+                                        },
+                                        error: function(msg){
+                                            alert("保存失败2");
                                         }
                                 });
                                 layer.close(layer_index_retreatbox);
