@@ -17,23 +17,23 @@
 									</div>
 								<?php endif;?>
 								 <div class="form-group">
-										<?php echo $form->label($model, 'simplecode',array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, 'min_persons',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'simplecode',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('simplecode')));?>
-											<?php echo $form->error($model, 'simplecode' )?>
+											<?php echo $form->textField($model, 'min_persons',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('min_persons')));?>
+											<?php echo $form->error($model, 'min_persons' )?>
 										</div>
 									</div>
 									<div class="form-group">
-										<?php echo $form->label($model, 'name',array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, 'max_persons',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('name')));?>
-											<?php echo $form->error($model, 'name' )?>
+											<?php echo $form->textField($model, 'max_persons',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('max_persons')));?>
+											<?php echo $form->error($model, 'max_persons' )?>
 										</div>
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-											<a href="<?php echo $this->createUrl('siteType/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
+											<a href="<?php echo $this->createUrl('sitePersons/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>

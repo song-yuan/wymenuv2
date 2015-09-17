@@ -29,9 +29,10 @@ class SiteType extends CActiveRecord
 			array('name , dpid', 'required'),
 			array('lid, dpid', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>45),
+			array('simplecode', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, name, dpid', 'safe', 'on'=>'search'),
+			array('lid, name, dpid, simplecode', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,6 +57,7 @@ class SiteType extends CActiveRecord
 		return array(
 			'lid' => yii::t('app','位置类型ID'),
 			'name' => yii::t('app','类型名称'),
+			'simplecode' => yii::t('app','简称字符'),
 			'dpid' => yii::t('app','公司'),
 		);
 	}
@@ -80,6 +82,7 @@ class SiteType extends CActiveRecord
 
 		$criteria->compare('lid',$this->lid);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('simplecode',$this->simplecode,true);
 		$criteria->compare('dpid',$this->dpid);
 
 		return new CActiveDataProvider($this, array(
