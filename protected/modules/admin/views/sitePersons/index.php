@@ -53,17 +53,17 @@
 							</ul>
 						</div> 
                                                 <a href="javascript:void(0)" class="btn purple" onclick="document.getElementById('siteType-form').submit();"><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
+                                                -->
                                                 <div class="btn-group">
                                                         <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
                                                 </div>
-                                                -->
-                                                
                                         </div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
+								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','公司');?></th>
 								<th><?php echo yii::t('app','范围');?></th>
 								<th>&nbsp;</th>
@@ -73,6 +73,7 @@
 						<?php if($models):?>
 						<?php foreach ($models as $k=>$model):?>
 							<tr class="odd gradeX">
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="type_id[]" /></td>
 								<td ><?php echo $model->company ? $model->company->company_name : '' ;?></td>
 								<td><a href="" ><?php echo $model->min_persons.'-'.$model->max_persons;?></a></td>
 								<td class="center">
