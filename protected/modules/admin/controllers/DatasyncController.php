@@ -261,7 +261,7 @@ class DatasyncController extends Controller
                     "nb_member_recharge", 
                     "nb_online_pay",
                     "nb_order",
-                    "nb_order_feedback",
+                    //"nb_order_feedback",
                     "nb_order_pay",
                     "nb_order_product",
                     "nb_order_retreat",
@@ -448,9 +448,11 @@ class DatasyncController extends Controller
                     }
                 }
                 
-               //删除同步时间之前的所有的打印记录
+               //删除同步时间之前的所有的打印记录//删除1天谴的消息记录
                $sqldeleteprintjobs = "delete from nb_order_printjobs where dpid=".$dpid." and create_at <= '".$localtime."'";  
                $dblocal->createCommand($sqldeleteprintjobs)->execute(); 
+               $sqldeleteorderfeed = "delete from nb_order_feedback where dpid=".$dpid." and create_at <= '".$localtime."'";  
+               $dblocal->createCommand($sqldeleteorderfeed)->execute(); 
                 //更新dataSync同步记录为成功状态，
                 echo "all success;"."<br>";
                 $sqlsuccess = "update nb_data_sync set sync_result='1' where dpid=".$dpid." and lid=".$lid;                    
