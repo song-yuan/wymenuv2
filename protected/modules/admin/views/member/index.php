@@ -1,3 +1,4 @@
+<script src="plugins/bootbox/bootbox.min.js" type="text/javascript" ></script>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -98,7 +99,7 @@
 									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/consumerRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','消费记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
-                                                                        <a class="deletememberid" href="<?php echo $this->createUrl('member/delete',array('id' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','删除');?></a>
+                                    <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -156,9 +157,12 @@
             });
 	});
         $(".deletememberid").on("click",function(){
-            var statu = confirm("<?php echo yii::t('app','确定要删除吗？');?>");
-            if(!statu){
-                return false;
-            } 
+               var id = $(this).attr('data-id');
+               msg ='确定要删除该会员吗?';
+	       	   bootbox.confirm(msg, function(result) {
+                   if(result){
+                       location.href="<?php echo $this->createUrl('member/delete',array('companyId' => $model->dpid));?>&id="+id;
+                   }
+                }); 
         });
 	</script>
