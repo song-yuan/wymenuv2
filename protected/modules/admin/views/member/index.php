@@ -95,7 +95,7 @@
 								<td ><?php echo $model->all_money;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('member/charge',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
+									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/consumer',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','消费记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
                                                                         <a class="deletememberid" href="<?php echo $this->createUrl('member/delete',array('id' => $model->lid, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','删除');?></a>
