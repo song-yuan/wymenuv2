@@ -124,7 +124,7 @@ class MemberController extends BackendController
 			}
 			$this->redirect(array('member/index','companyId'=>$this->companyId));
 		}
-		$this->renderPartial('charge' , array(
+		$this->render('charge' , array(
 				'model' => $model , 
 		));
 	}
