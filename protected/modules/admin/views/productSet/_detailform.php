@@ -51,6 +51,7 @@
 										<div class="col-md-4">
 											<?php echo $form->dropDownList($model, 'is_select', array('0' => yii::t('app','否') , '1' =>yii::t('app','是')) , array('id'=>'isSelectId', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_select')));?>
 											<?php echo $form->error($model, 'is_select' )?>
+                                                                                    如果选择“是”，同一组中其他菜品将被强制设置成“否”
 										</div>
 									</div>
                                                                         <div class="form-group" <?php if($model->hasErrors('number')) echo 'has-error';?>>

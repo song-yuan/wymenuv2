@@ -424,16 +424,31 @@
                         <div class="tabbable tabbable-custom">
                             <div class="firstCategory">
                                 <ul class="">
+                                        <li lid="productset" class="tabProduct">套餐</li>
                                         <?php 
                                         foreach ($categories as $categorie): 
                                             if($categorie->pid=="0000000000"):?>
                                             <li lid="<?php echo $categorie->lid; ?>" class="tabProduct"><?php echo $categorie->category_name; ?></li>
                                         <?php 
                                             endif;
-                                        endforeach; ?>                                        
-                                        <!--<li typeId="reserve" class="tabtitle"><a href="#tab_1_reserve" data-toggle="tab">套餐</a></li>-->
+                                        endforeach; ?>                                       
+                                        
                                 </ul>
                             </div>
+                                    <div class="tab-content" style="display:none;" lid="productset">                                        
+                                        <div style="width:100%;height:100%;">
+                                            <div class="product_list">
+                                                <ul class="">
+                                                    <?php 
+                                                        foreach ($productSets as $productSet): 
+                                                            ?>
+                                                            <li class="productSetClick" lid="<?php echo $productSet->lid; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
+                                                    <?php                                                         
+                                                    endforeach; ?>                                                    
+                                                </ul>
+                                            </div>                                        												
+                                        </div>
+                                    </div>
                                 <?php 
                                 foreach ($categories as $categorie): 
                                     if($categorie->pid=="0000000000"):?>
@@ -448,7 +463,7 @@
                                                             <?php 
                                                                 foreach ($products as $product): 
                                                                     if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
-                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>"><?php echo $product->product_name; ?></li>                                                                    
+                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
                                                             <?php  endif;                                                         
                                                             endforeach; ?>
                                                     <?php 
