@@ -98,8 +98,10 @@ class MemberController extends BackendController
 		
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		$criteria->addCondition('member_card_id=:memberCardId');
 		$criteria->order = ' lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
+		$criteria->params[':memberCardId']=$member->selfcode;
 		
 		$pages = new CPagination(MemberRecharge::model()->count($criteria));
 		//$pages->setPageSize(1);
