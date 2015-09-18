@@ -92,6 +92,24 @@ class MemberController extends BackendController
 			$this->redirect(array('member/index' , 'companyId' => $companyId)) ;
 		}
 	}
+	public function actionChargeRecord() {
+		$id = Yii::app()->request->getParam('lid');
+		$member = MemberCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		$criteria->order = ' lid desc ';
+		$criteria->params[':dpid']=$this->companyId;
+		
+		$pages = new CPagination(MemberRecharge::model()->count($criteria));
+		//$pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		$models = MemberRecharge::model()->findAll($criteria);
+		$this->render('chargerecord',array(
+				'models'=>$models,
+				'pages' => $pages,
+		));
+	}
 	public function actionCharge() {
 		$model = new MemberRecharge;
 		$model->dpid = $this->companyId;
