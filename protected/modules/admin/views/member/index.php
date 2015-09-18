@@ -161,7 +161,7 @@
                msg ='确定要删除该会员吗?';
 	       	   bootbox.confirm(msg, function(result) {
                    if(result){
-                       location.href="<?php echo $this->createUrl('member/delete',array('companyId' => $model->dpid));?>&id="+id;
+                       location.href="<?php echo $this->createUrl('member/delete',array('companyId' => $model->dpid));?>/id/"+id;
                    }
                 }); 
         });
