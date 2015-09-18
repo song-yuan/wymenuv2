@@ -193,12 +193,20 @@
 			$('body').scrollTop(0);
 		});
          $('.category-level1-item').click(function(){
-         	var categoryId = $(this).attr('category-id');
-         	var categoryName = $(this).attr('category-name');
-         	$('.category-all-name').html(categoryName);
-         	$('.blockCategory').hide();
-         	$('.blockCategory[p-category="'+categoryId+'"]').show();
-         	$('.category-level1').hide();
+         	if($(this).hasClass('isTOP10')){
+         		$('.category-all-name').html('人气 TOP10');
+	         	$('.blockCategory').hide();
+	         	$('.blockCategory.isTop10').show();
+	         	$('.category-level1').hide();
+         	}else{
+         		var categoryId = $(this).attr('category-id');
+	         	var categoryName = $(this).attr('category-name');
+	         	$('.category-all-name').html(categoryName);
+	         	$('.blockCategory').hide();
+	         	$('.blockCategory[p-category="'+categoryId+'"]:not(.isTop10)').show();
+	         	$('.category-level1').hide();
+         	}
+         	
          });    
                 ///
                 $.ajax({
