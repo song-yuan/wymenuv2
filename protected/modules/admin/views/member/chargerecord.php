@@ -1,4 +1,3 @@
-<script src="plugins/bootbox/bootbox.min.js" type="text/javascript" ></script>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -23,63 +22,24 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员管理'),'subhead'=>yii::t('app','会员列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','会员管理'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员管理'),'subhead'=>yii::t('app','会员充值列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','会员管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 		<div class="col-md-12">
-		<?php $form=$this->beginWidget('CActiveForm', array(
-					'id'=>'MemberCard',
-					'clientOptions'=>array(
-						'validateOnSubmit'=>true,
-					),
-					'htmlOptions'=>array(
-						'class'=>'form-inline pull-right'
-					),
-				)); ?>
-			<table id="search-form" class="table">
-				<tr>
-					<td width="15%"><label class="control-label">按卡号查找</label></td>
-					<td width="35%">
-					<div class="input-group">
-					<span class="input-group-addon">会员卡号</span><input type="text" name="id" class="form-control input-medium" value="<?php echo isset($id) && $id ?$id:'';?>"/>
-					</div>
-					</td>
-					<td width="15%">
-					</td>
-					<td width="35%">
-					   <button type="submit" class="btn green">
-							查找 &nbsp; 
-							<i class="m-icon-swapright m-icon-white"></i>
-						</button>
-					</td>
-				</tr>
-			</table>
-		<?php $this->endWidget(); ?>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','会员列表');?></div>
-					<div class="actions">
-						<a href="javascript:;" class="btn green add_btn"><i class="fa fa-plus"></i> <?php echo yii::t('app','充 值');?></a>
-						<a href="<?php echo $this->createUrl('member/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添 加');?></a>
-					</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','会员充值列表');?></div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
 								<th><?php echo yii::t('app','会员卡号');?></th>
-								<th><?php echo yii::t('app','姓名');?></th>
-								<th><?php echo yii::t('app','性别');?></th>
-								<th><?php echo yii::t('app','年龄');?></th>
-								<th><?php echo yii::t('app','联系方式');?></th>
-								<th><?php echo yii::t('app','金额');?></th>
+								<th><?php echo yii::t('app','充值金额');?></th>
+								<th><?php echo yii::t('app','赠送金额');?></th>
 								<th><?php echo yii::t('app','时间');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -88,23 +48,14 @@
 						<?php if($models):?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td ><?php echo $model->selfcode;?></td>
-								<td ><?php echo $model->name;?></td>
-								<td ><?php if($model->sex=='m') echo '男';else echo '女';?></td>
-								<td ><?php echo $model->ages;?></td>
-								<td ><?php echo $model->mobile;?></td>
-								<td ><?php echo $model->all_money;?></td>
+								<td ><?php echo $model->member_card_id;?></td>
+								<td ><?php echo $model->reality_money;?></td>
+								<td ><?php echo $model->give_money;?></td>
 								<td><?php echo $model->create_at;?></td>
-								<td class="center">
-									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
-									<a href="<?php echo $this->createUrl('member/consumerRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','消费记录');?></a>&nbsp;
-									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
-                                    <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a>
-								</td>
 							</tr>
 						<?php endforeach;?>
 						<?php else:?>
-						<td colspan="8">没有找到数据</td>
+						<td colspan="5">没有找到数据</td>
 						<?php endif;?>
 						</tbody>
 					</table>
@@ -157,12 +108,9 @@
             });
 	});
         $(".deletememberid").on("click",function(){
-               var id = $(this).attr('data-id');
-               msg ='确定要删除该会员吗?';
-	       	   bootbox.confirm(msg, function(result) {
-                   if(result){
-                       location.href="<?php echo $this->createUrl('member/delete',array('companyId' => $model->dpid));?>/id/"+id;
-                   }
-                }); 
+            var statu = confirm("<?php echo yii::t('app','确定要删除吗？');?>");
+            if(!statu){
+                return false;
+            } 
         });
 	</script>
