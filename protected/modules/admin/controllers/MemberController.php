@@ -112,6 +112,26 @@ class MemberController extends BackendController
 				'pages' => $pages,
 		));
 	}
+	public function actionConsumerRecord() {
+		$id = Yii::app()->request->getParam('lid');
+		$member = MemberCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		$criteria->addCondition('member_card_id=:memberCardId');
+		$criteria->order = ' lid desc ';
+		$criteria->params[':dpid']=$this->companyId;
+		$criteria->params[':memberCardId']=$member->selfcode;
+		
+		$pages = new CPagination(MemberConsumer::model()->count($criteria));
+		//$pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		$models = MemberConsumer::model()->findAll($criteria);
+		$this->render('consumerrecord',array(
+				'models'=>$models,
+				'pages' => $pages,
+		));
+	}
 	public function actionCharge() {
 		$model = new MemberRecharge;
 		$model->dpid = $this->companyId;
