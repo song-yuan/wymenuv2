@@ -15,7 +15,7 @@
   <div class="top-left"> 
       
   	<div class="top-left-right">            
-	<span class="category-all">首页</span>&nbsp;&nbsp;<span class="category-all-name"></span>
+	<span class="category-all"><?php echo yii::t('app','首页');?></span>&nbsp;&nbsp;<span class="category-all-name"></span>
 	</div>
   </div>
     
@@ -36,6 +36,7 @@
   </div>
 </div>
 <div class="category-level1">
+	<div class="category-level1-item isTOP10" category-id="TOP10" category-name="人气 TOP10"><div class="pad-productbuy" style="height:3.0em;background:white;color:rgb(239,68,77);"><div class="inmiddle" style="text-align:center;font-size:2.0em"><?php echo yii::t('app','人气 TOP10');?></div></div><img src="/img/top10/company_<?php echo $this->companyId;?>/product-top10.jpg"/></div>
 	<?php if($parentCategorys):?>
 		<?php foreach($parentCategorys as $categorys):?>
 		<div class="category-level1-item" category-id="<?php echo $categorys['lid'];?>" category-name="<?php echo $categorys['category_name'];?>"><div class="pad-productbuy" style="height:3.0em;background:white;color:rgb(239,68,77);"><div class="inmiddle" style="text-align:center;font-size:2.0em"><?php echo $categorys['category_name'];?></div></div><img src="<?php echo $categorys['main_picture'];?>"/></div>
