@@ -383,27 +383,30 @@ class OrderList
                     {   
                         //更新库存//失败则返回
                         $productDetailArr=explode(",",$tvalue);
-                        $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$productDetailArr[1],':dpid'=>$companyId));
-                        //return json_encode(array('status'=>true,'msg'=>$productdata->store_number.$productDetailArr[1].$productDetailArr[2]));
-                        if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[2] ))
+                        $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$productDetailArr[2],':dpid'=>$companyId));
+                        //return json_encode(array('status'=>true,'msg'=>$productdata->store_number.$productDetailArr[2].$productDetailArr[3]));
+                        if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[3] ))
                         {
                             $transaction->rollback();
                             return array('status'=>false,'msg'=>$productdata->product_name."数量不足");
                         }
+                        ////////套餐数量判断//////////////////////////
+                        
                         //不是临时挂单就更新库存，更新下单数和点赞数，发送更新库存消息
                         if($orderStatus>1)
                         {
-                            $productdata->order_number=$productdata->order_number+$productDetailArr[3];
-                            $productdata->favourite_number=$productdata->favourite_number+$productDetailArr[3];
+                            $productdata->order_number=$productdata->order_number+$productDetailArr[4];
+                            $productdata->favourite_number=$productdata->favourite_number+$productDetailArr[4];
                             if($productdata->store_number>0)
                             {
-                                $productdata->store_number=$productdata->store_number-$productDetailArr[3];                            
-                                array_push($sellOff,array("product_id"=>sprintf("%010d",$productDetailArr[1]),"type"=>"product","num"=>$productdata->store_number));
+                                $productdata->store_number=$productdata->store_number-$productDetailArr[4];                            
+                                array_push($sellOff,array("product_id"=>sprintf("%010d",$productDetailArr[2]),"type"=>"product","num"=>$productdata->store_number));
                             }
+                            ///套餐数量减////////////
                         }
                         $productdata->save();
                         //return array('status'=>false,'msg'=>"test111333");
-                        if($productDetailArr[2]=="0")
+                        if($productDetailArr[3]=="0")
                         {
                             //插入
                             $orderProductId = $se->nextval();
@@ -413,14 +416,14 @@ class OrderList
                                                 'dpid'=>$companyId,
                                                 'create_at'=>$time,
                                                 'order_id'=>$orderId,
-                                                'set_id'=>0,
-                                                'product_id'=>$productDetailArr[1],
-                                                'offprice'=>$productDetailArr[4],
-                                                'price'=>$productDetailArr[5],
+                                                'set_id'=>$productDetailArr[1],
+                                                'product_id'=>$productDetailArr[2],
+                                                'offprice'=>$productDetailArr[5],
+                                                'price'=>$productDetailArr[6],
                                                 'update_at'=>$time,
-                                                'amount'=>$productDetailArr[3],
-                                                'is_giving'=>$productDetailArr[6],
-                                                'taste_memo'=>$productDetailArr[8],
+                                                'amount'=>$productDetailArr[4],
+                                                'is_giving'=>$productDetailArr[7],
+                                                'taste_memo'=>$productDetailArr[9],
                                                 'product_order_status'=>$orderProductStatus,
                                                 );
                             //return array('status'=>false,'msg'=>"test14444".implode("..",$orderProductData));
@@ -438,7 +441,7 @@ class OrderList
 //                            }
                         //insert taste//delete and insert taste
                         
-                        $orderProductTasteIds=str_replace("|",",",$productDetailArr[7]);
+                        $orderProductTasteIds=str_replace("|",",",$productDetailArr[8]);
                         if(!empty($orderProductTasteIds))
                         {
                             $orderProductTasteIds=substr($orderProductTasteIds, 0,strlen($orderProductTasteIds)-1);

@@ -578,7 +578,7 @@
                 
             </div>
             <!---------------productsetselect------------------>
-            <div id="productsetselect" style="display: none">
+            <div id="productsetselect" style="display: none">                
                 <div  style="margin:10px;">
                     <input style="width:7.0em;" type="button" class="btn green" id="productset_select_sure" value="确定">
                     <input style="width:7.0em; float: right;" type="button" class="btn gray" id="productset_select_cancel" value="取消">
@@ -760,7 +760,10 @@
                     pname=sobj.getAttribute("pname");
                     number=sobj.getAttribute("number");
                     addProductInTempOrder(setid,lid,price,pname,number);
-                });                
+                });  
+                //$("#productTempOrderNum").val(parseInt($("#productTempOrderNum").val())+1);
+                layer.close(layer_productset_click);
+                layer_productset_click=0;
             });
              
             function change0(word)
@@ -1576,6 +1579,7 @@
                             objnum=parseFloat($(sobj).find('span[class="badge"]').text());
                             productCancelSelect($(sobj),objnum);
                         });
+                        //$("#productTempOrderNum").val(parseInt($("#productTempOrderNum").val())-1);
                     }                    
                 }
             });
