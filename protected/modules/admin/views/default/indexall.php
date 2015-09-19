@@ -98,6 +98,10 @@
     //background-color:#78ccf8;
 }
 
+.productSetClick{
+    
+}
+
 .selectedproduct{
     background-color:#add;
 }
@@ -441,8 +445,16 @@
                                                 <ul class="">
                                                     <?php 
                                                         foreach ($productSets as $productSet): 
+                                                            $setdetail="";
+                                                                foreach ($productSet->productsetdetail as $psd): 
+                                                                    $tempdetail="gp".$psd->group_no.",".$psd->product_id.",".$psd->is_select.",".$psd->number.",".$psd->price.",".empty($pn[$psd->product_id])?"":$pn[$psd->product_id];
+                                                                    if(empty($setdetail))
+                                                                        $setdetail=$tempdetail;
+                                                                    else
+                                                                        $setdetail.=";".$tempdetail;                                                                                            
+                                                                endforeach;
                                                             ?>
-                                                            <li class="productSetClick" lid="<?php echo $productSet->lid; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
+                                                            <li class="productSetClick" lid="<?php echo $productSet->lid; ?>" setselect="<?php echo $setdetail; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
                                                     <?php                                                         
                                                     endforeach; ?>                                                    
                                                 </ul>
@@ -562,6 +574,12 @@
             <div id="tastebox" style="display: none">
                 
             </div>
+            <!---------------productsetselect------------------>
+            <div id="productsetselect" style="display: none">
+                <div id="product-set-detail">
+                    
+                </div>
+            </div>
             <!---printRsultList printresult -->
             <div id="printRsultList" style="display: none">
                 <div style="margin:10px;">
@@ -626,6 +644,8 @@
             var layer_index1=0;
             var layer_index2=0;
             var layer_index3=0;
+            var layer_productset_click=0;
+            var layer_pay_others=0;
             //var layer_index_account;
             var layer_index_printresult=0;
             var layer_index_membercard=0;
@@ -667,6 +687,54 @@
                 $('.tab-content[lid='+lid+']').show();
             });
             
+            $('.productSetClick').on(event_clicktouchstart, function(){
+                    var setselect=$(this).attr("setselect");                    
+                    $("#product-set-detail").remove();
+                    $("#productsetselect").append("<div id='product-set-detail'></div>");
+                    $.each(setselect.split(";"),function(setkey,setvalue){
+                        //$psd->group_no."|".$psd->product_id.name"|".$psd->is_select."|".$psd->number."|".$psd->price;
+                        var setdetail=setvalue.split(",");
+                        var instr="";
+                        var active="";
+                        var btngroup=$("#product-set-detail").find("div[groupid='"+setdetail[0]+"'][class='btn-group']");
+                        if(setdetail[2]=="1")
+                        {
+                            active="active";
+                        }
+                        if(typeof btngroup.attr("groupid")=="undefined")
+                        {
+                            instr='<div class="btn-group" groupid='+setdetail[0]+ ' data-toggle="buttons" style="width:95%;margin-top:2px;margin-right:10px;border: 2px solid red;background: rgb(245,230,230);"> '                                                                                       
+                                        +'<label style="width:95%;margin-right: 2px;margin-left:2px;" productid='+setdetail[1]+ ' class="selectTaste btn btn-default '+active+'">'
+                                           +' <input type="checkbox" class="toggle">' +setdetail[5]+"  "+setdetail[3]+" X "+setdetail[4]
+                                        + '</label>'                                                                                    
+                                    + '</div>';
+                            $("#product-set-detail").append(instr);
+                        }else{
+                            instr='<label style="width:95%;margin-right: 2px;margin-left:2px;" productid='+setdetail[1]+ ' class="selectTaste btn btn-default '+active+'">'
+                                           +' <input type="checkbox" class="toggle">' +setdetail[5]+"  "+setdetail[3]+" X "+setdetail[4]
+                                        + '</label>';
+                            btngroup.append(instr);
+                        }
+                    });
+                    if(layer_productset_click!=0)
+                    {
+                        return;
+                    }
+                    //alert(layer_index3);
+                    layer_productset_click=layer.open({
+                     type: 1,
+                     shade: false,
+                     title: false, //不显示标题
+                     area: ['40%', 'auto'],
+                     content: $('#productsetselect'),//$('#productInfo'), //捕获的元素
+                     cancel: function(index){
+                         layer.close(index);
+                         layer_productset_click=0;
+        //                        this.content.show();
+        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                     }
+                 });
+             });
             $('.productClick').on(event_clicktouchstart, function(){
                 var origin_price=$(this).attr("price");
                 var lid=$(this).attr("lid");                //[lid='+lid+']
