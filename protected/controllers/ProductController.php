@@ -520,6 +520,29 @@ class ProductController extends Controller
 		));
 	}
         
+        public function actionSaveFailPrintjobs(){
+		$companyId = Yii::app()->request->getParam('companyId',"0");
+                $orderId = Yii::app()->request->getParam('orderId',"0");
+                $jobId=Yii::app()->request->getParam('jobId',"0");
+                $padtype=Yii::app()->request->getParam('padtype');
+                if($padtype=="1")
+                {
+                    Yii::app()->language = 'jp';
+                    Yii::app()->theme="pad";
+                }else{
+                    Yii::app()->language = 'zh_cn';
+                    Yii::app()->theme="pad_cn";
+                }
+                if($jobId!="0")
+                {
+                    $printjobsql="update nb_order_printjobs set finish_flag=1".
+                                " where dpid=".$companyId." and orderid=".$orderId.
+                                " and jobid in(".$jobId.")";
+                    Yii::app()->db->createCommand($printjobsql)->execute();                        
+                }
+                Yii::app()->end(json_encode(array("status"=>true)));
+	}
+        
         public function actionClientWaitorlist()
 	{
                 //Yii::app()->theme="pad_cn";
