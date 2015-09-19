@@ -1,5 +1,5 @@
 <?php
-/* @var $this ProductController */
+/* @var $this ProductController  */
 	$parentCategorys = ProductCategory::getCategorys($this->companyId);	
 	$result = ProductClass::getCartInfo($this->companyId,$siteNoId);	
 	$resArr = explode(':',$result);

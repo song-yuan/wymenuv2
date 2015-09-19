@@ -1,4 +1,4 @@
-<?php
+<?php 
 class ProductClass
 {
 	public static function getFirstCategoryId($dpid = 0){

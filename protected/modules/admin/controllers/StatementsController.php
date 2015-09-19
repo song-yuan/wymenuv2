@@ -104,13 +104,13 @@ class StatementsController extends BackendController
 //			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 //		}
 		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id';
-		$criteria->with = array('company','order');
+		$criteria->with = array('company','order8');
 		$criteria->condition = ' t.dpid='.$this->companyId ;
 		if($str){
 			$criteria->condition = ' t.dpid in('.$str.')';
 		}
-		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
+		$criteria->addCondition("order8.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("order8.update_at <='$end_time 23:59:59'");
 		if($text==1){
 			$criteria->group ='t.paytype,t.dpid,year(t.update_at)';
 			$criteria->order = 'year(t.update_at) asc,t.dpid asc';

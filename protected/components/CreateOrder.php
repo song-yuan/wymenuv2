@@ -483,7 +483,7 @@ class CreateOrder
                                            $sqladd = 'update nb_product set order_number=order_number+'.$amount.',favourite_number=favourite_number+'.$amount.' where dpid='.$dpid.' and lid='.$goodsArr[0];
                                            $db->createCommand($sqladd)->execute();
 	                	}
-	             	}else{
+	             	}else{ 
 	             		if($result){
 		             		if($result['store_number']==0 || ($result['store_number'] > 0&&$result['store_number'] < $num)){
 		             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！'))));
