@@ -38,7 +38,7 @@ var b64 = new Base64();
 
 /* 质朴长存法  by lifesinger 数字补齐*/
 function pad(num, n) {
-	 var len = num.toString().length;
+	 var len = (''+num).length;
 	    while(len < n) {
 	        num = "0" + num;
 	        len++;
@@ -118,9 +118,9 @@ function showList(items){
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '';
 			if(item.order_id)
-				 trAddinfo +='<div class="clear"></div></div><div class="addCart view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div class="addCart view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			else
-				 trAddinfo +='<div class="clear"></div></div><div class="addCart view" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div class="addCart view" style="float:left" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			
                         tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			rightPicObj.append(tr);
@@ -133,9 +133,9 @@ function showList(items){
             var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject" style="float:left"><div class="subject-left"><div class="order-num"></div><div  class="order-num-right"> '+item.order_number+'</div><div class="favorite-num"></div><div class="favorite-num-right"> '+item.favourite_number+'</div></div><div class="author"><div  class="price-down">￥'+item.original_price+'</div><div class="clear"></div></div>';
 			var trAddinfo = '';
 			if(item.order_id)
-				 trAddinfo +='<div class="clear"></div></div><div class="addCart view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div class="addCart view hasorder" style="float:left" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			else
-				 trAddinfo +='<div class="clear"></div></div><div class="addCart view" style="float:left" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
+				 trAddinfo +='<div class="clear"></div></div><div class="addCart view" style="float:left" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"></div><div class="clear"></div> </div></div>';
 			tr = trHead + trBuy + trPic + trTitle + trAddinfo;
 			leftPicObj.append(tr);
 		}
@@ -175,8 +175,8 @@ function showListPad(items){
 			}
 			
 			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'">';
-				trPic +='<i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_search.png" style="width:3.8em;height:3.5em;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart.png" style="width:3.8em;height:3.5em;"/><br>'+language_diancai+'</i>';
-				trPic +='<i class="icon-hover-3 product-taste" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_taste.png" style="width:3.8em;height:3.5em;"/><br>口味</i><i class="icon-hover-4 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart_m.png" style="width:3.8em;height:3.5em;"/><br>'+language_jiancai+'</i><i class="icon-hover-5 single-num-circel">0</i>';
+				trPic +='<i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_search.png" style="width:3.8em;height:3.5em;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart.png" style="width:3.8em;height:3.5em;"/><br>'+language_diancai+'</i>';
+				trPic +='<i class="icon-hover-3 product-taste" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_taste.png" style="width:3.8em;height:3.5em;"/><br>口味</i><i class="icon-hover-4 delCart" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart_m.png" style="width:3.8em;height:3.5em;"/><br>'+language_jiancai+'</i><i class="icon-hover-5 single-num-circel">0</i>';
 				if(parseInt(item.store_number)==0){
 					trPic += '<div class="sellOff sellOut">'+" "+'已<br/>售完</div>';
 				}else if(parseInt(item.store_number) > 0){
@@ -218,8 +218,8 @@ function showListPad(items){
 			}
 			
 			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'">';
-				trPic +='<i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_search.png" style="width:3.8em;height:3.5em;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart.png" style="width:3.8em;height:3.5em;"/><br>'+language_diancai+'</i>';
-				trPic +='<i class="icon-hover-3 product-taste" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_taste.png" style="width:3.8em;height:3.5em;"/><br>口味</i><i class="icon-hover-4 delCart" product-id="'+item.lid+'" type="'+item.type+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart_m.png" style="width:3.8em;height:3.5em;"/><br>'+language_jiancai+'</i><i class="icon-hover-5 single-num-circel">0</i>';
+				trPic +='<i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_search.png" style="width:3.8em;height:3.5em;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart.png" style="width:3.8em;height:3.5em;"/><br>'+language_diancai+'</i>';
+				trPic +='<i class="icon-hover-3 product-taste" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_taste.png" style="width:3.8em;height:3.5em;"/><br>口味</i><i class="icon-hover-4 delCart" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart_m.png" style="width:3.8em;height:3.5em;"/><br>'+language_jiancai+'</i><i class="icon-hover-5 single-num-circel">0</i>';
 				if(parseInt(item.store_number)==0){
 					trPic += '<div class="sellOff sellOut">'+" "+'已<br/>售完</div>';
 				}else if(parseInt(item.store_number) > 0){

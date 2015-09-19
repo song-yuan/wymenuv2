@@ -198,7 +198,12 @@
 	         	$('.blockCategory').hide();
 	         	$('.blockCategory.isTop10').show();
 	         	$('.category-level1').hide();
-         	}else{
+         	}else if($(this).hasClass('productset')){
+                    $('.category-all-name').html('套餐');
+	            $('.blockCategory').hide();
+	            $('.blockCategory[p-category="00000000套餐"]').show();
+	            $('.category-level1').hide();
+                }else{
          		var categoryId = $(this).attr('category-id');
 	         	var categoryName = $(this).attr('category-name');
 	         	$('.category-all-name').html(categoryName);

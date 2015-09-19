@@ -446,12 +446,15 @@
                                                     <?php 
                                                         foreach ($productSets as $productSet): 
                                                             $setdetail="";
-                                                                foreach ($productSet->productsetdetail as $psd): 
-                                                                    $tempdetail="gp".$psd->group_no.",".$psd->product_id.",".$psd->is_select.",".$psd->number.",".$psd->price.",".empty($pn[$psd->product_id])?"":$pn[$psd->product_id];
-                                                                    if(empty($setdetail))
-                                                                        $setdetail=$tempdetail;
-                                                                    else
-                                                                        $setdetail.=";".$tempdetail;                                                                                            
+                                                                foreach ($productSet->productsetdetail as $psd):
+                                                                    if(!empty($pn[$psd->product_id]))
+                                                                    {
+                                                                        $tempdetail="gp".$psd->group_no.",".$psd->product_id.",".$psd->is_select.",".$psd->number.",".$psd->price.",".$pn[$psd->product_id];
+                                                                        if(empty($setdetail))
+                                                                            $setdetail=$tempdetail;
+                                                                        else
+                                                                            $setdetail.=";".$tempdetail;   
+                                                                    }
                                                                 endforeach;
                                                             ?>
                                                             <li class="productSetClick" lid="<?php echo $productSet->lid; ?>" setselect="<?php echo $setdetail; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
@@ -475,7 +478,7 @@
                                                             <?php 
                                                                 foreach ($products as $product): 
                                                                     if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
-                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
+                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>" name="<?php echo $product->product_name; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
                                                             <?php  endif;                                                         
                                                             endforeach; ?>
                                                     <?php 
@@ -576,9 +579,13 @@
             </div>
             <!---------------productsetselect------------------>
             <div id="productsetselect" style="display: none">
-                <div id="product-set-detail">
-                    
+                <div  style="margin:10px;">
+                    <input style="width:7.0em;" type="button" class="btn green" id="productset_select_sure" value="确定">
+                    <input style="width:7.0em; float: right;" type="button" class="btn gray" id="productset_select_cancel" value="取消">
                 </div>
+                <div id="product-set-detail" style="margin:10px;">
+                    
+                </div>                
             </div>
             <!---printRsultList printresult -->
             <div id="printRsultList" style="display: none">
@@ -690,7 +697,7 @@
             $('.productSetClick').on(event_clicktouchstart, function(){
                     var setselect=$(this).attr("setselect");                    
                     $("#product-set-detail").remove();
-                    $("#productsetselect").append("<div id='product-set-detail'></div>");
+                    $("#productsetselect").append("<div id='product-set-detail'  style='margin:10px;' setid="+$(this).attr("lid")+"></div>");
                     $.each(setselect.split(";"),function(setkey,setvalue){
                         //$psd->group_no."|".$psd->product_id.name"|".$psd->is_select."|".$psd->number."|".$psd->price;
                         var setdetail=setvalue.split(",");
@@ -704,13 +711,13 @@
                         if(typeof btngroup.attr("groupid")=="undefined")
                         {
                             instr='<div class="btn-group" groupid='+setdetail[0]+ ' data-toggle="buttons" style="width:95%;margin-top:2px;margin-right:10px;border: 2px solid red;background: rgb(245,230,230);"> '                                                                                       
-                                        +'<label style="width:95%;margin-right: 2px;margin-left:2px;" productid='+setdetail[1]+ ' class="selectTaste btn btn-default '+active+'">'
+                                        +'<label style="width:95%;margin-right: 2px;margin-left:2px;" productid="'+setdetail[1]+ '" price="'+setdetail[4]+'" pname="'+setdetail[5]+'" number="'+setdetail[3]+'" class="selectSetProduct btn btn-default '+active+'">'
                                            +' <input type="checkbox" class="toggle">' +setdetail[5]+"  "+setdetail[3]+" X "+setdetail[4]
                                         + '</label>'                                                                                    
                                     + '</div>';
                             $("#product-set-detail").append(instr);
                         }else{
-                            instr='<label style="width:95%;margin-right: 2px;margin-left:2px;" productid='+setdetail[1]+ ' class="selectTaste btn btn-default '+active+'">'
+                            instr='<label style="width:95%;margin-right: 2px;margin-left:2px;" productid="'+setdetail[1]+ '" price="'+setdetail[4]+'" pname="'+setdetail[5]+'" number="'+setdetail[3]+'" class="selectSetProduct btn btn-default '+active+'">'
                                            +' <input type="checkbox" class="toggle">' +setdetail[5]+"  "+setdetail[3]+" X "+setdetail[4]
                                         + '</label>';
                             btngroup.append(instr);
@@ -725,7 +732,7 @@
                      type: 1,
                      shade: false,
                      title: false, //不显示标题
-                     area: ['40%', 'auto'],
+                     area: ['30%', 'auto'],
                      content: $('#productsetselect'),//$('#productInfo'), //捕获的元素
                      cancel: function(index){
                          layer.close(index);
@@ -735,14 +742,58 @@
                      }
                  });
              });
-            $('.productClick').on(event_clicktouchstart, function(){
-                var origin_price=$(this).attr("price");
-                var lid=$(this).attr("lid");                //[lid='+lid+']
-                var obj=$('.selectProductA[productid="'+lid+'"][order_status="0"]');//.find('span[class="badge"]');
-                //alert(obj.attr("lid"));
+            
+            $('#productset_select_cancel').on('click',function(){
+                layer.close(layer_productset_click);
+                layer_productset_click=0;
+            });
+            
+            $('#productset_select_sure').on('click',function(){
+                var setid=$("#product-set-detail").attr("setid");
+                var lid="";
+                var price="";
+                var pname="";
+                var number="";
+                $.each($("#product-set-detail").find(".selectSetProduct.active"),function(skey,sobj){
+                    lid=sobj.getAttribute("productid");
+                    price=sobj.getAttribute("price");
+                    pname=sobj.getAttribute("pname");
+                    number=sobj.getAttribute("number");
+                    addProductInTempOrder(setid,lid,price,pname,number);
+                });                
+            });
+             
+            function change0(word)
+            {
+                return word.substr(0,word.length-2)+"0,";
+            }
+
+            $('.selectSetProduct').live('click',"label",function(){
+                $(this).parent().find("label").removeClass("active");
+//                var groupno=$(this).parent().attr("groupid");
+//                var productid=$(this).attr("productid");
+//                var setid=$("#product-set-detail").attr("setid");
+//                var objset=$('.productSetClick').find('lid['+setid+']');
+//                var setselect=objset.attr("setselect");
+//                var reg=groupno+",[0-9]{10},1,";
+//                str = setselect.replace(new RegExp(reg,"g"),change0);
+//                var reg2=groupno+","+productid+",0,";
+//                str = str.replace(new RegExp(reg2,"g"),change1);
+//                objset.attr("setselect",str);
+            }); 
+            
+            function addProductInTempOrder(setid,lid,origin_price,pname,number)
+            {
+                var obj=$('.selectProductA[productid="'+lid+'"][order_status="0"][setid="'+setid+'"]');//.find('span[class="badge"]'); 
+                var taotext="";
+                if(setid!="0000000000")
+                {
+                    taotext="套";
+                }
                 if(typeof obj.attr("lid")== "undefined")
                 {
-                    var appendstr=' <li lid="0000000000"' 
+                    var appendstr=' <li lid="0000000000"'
+                                  +'      setid="'+setid+'"'
                                   +'      productid="'+lid+'"'
                                   +'      order_status="0"' 
                                   +'      is_giving="0" '
@@ -750,22 +801,28 @@
                                   +'       is_retreat="0"' 
                                   +'      tasteids="" tastememo=""' 
                                   +'      class="selectProductA">'
-                                  +'  <span style="background-color:#005580;" class="special badge" content="">'
+                                  +'  <span style="background-color:#005580;" class="special badge" content="">'+taotext
                                   +'      </span>'
-                                  +'  <span style="font-size:20px !important;height:auto;" class="badge">1</span>'
+                                  +'  <span style="font-size:20px !important;height:auto;" class="badge">'+number+'</span>'
                                   +'  <span class="selectProductPrice" style="color:#976125;display:none">'+origin_price+'</span>'
                                   +'  <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>'
                                   +'      <span class="selectProductNowPrice" style="color:#976125">'+origin_price+'</span>'
-                                  +'      <span style="position:absolute;" class="selectProductName">'+$(this).text()+'</span>'
+                                  +'      <span style="position:absolute;" class="selectProductName">'+pname+'</span>'
                                   +'      <img class="selectProductDel" style="position: absolute;right:0.3em; width: 3.0em;height: 2.0em;padding:5px 10px 5px 10px;" '
                                   +'           src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png"> '                                  
                                   +' </li>'
                     $(".selectProduct").append(appendstr);
                 }else{
-                    var curnum = parseFloat(obj.find('span[class="badge"]').text().replace(",",""))+1;                    
+                    var curnum = parseFloat(obj.find('span[class="badge"]').text().replace(",",""))+parseFloat(number);                    
                     obj.find('span[class="badge"]').text(curnum);
                 }
-                
+            }
+            
+            $('.productClick').on(event_clicktouchstart, function(){
+                var origin_price=$(this).attr("price");
+                var lid=$(this).attr("lid");
+                var pname=$(this).attr("name");                
+                addProductInTempOrder("0000000000",lid,origin_price,pname,1);
             });            
            
             
@@ -779,6 +836,7 @@
                 //取得所有未下单状态的单品，没有打印和厨打都是0,1就不能修改了。
                 $(".selectProductA[order_status='0']").each(function(){
                     tempproduct=$(this).attr("lid");
+                    tempproduct=tempproduct+","+$(this).attr("setid");
                     tempproduct=tempproduct+","+$(this).attr("productid");
                     tempproduct=tempproduct+","+$(this).attr("order_status");
                     tempproduct=tempproduct+","+$(this).find("span[class='badge']").text();
@@ -1460,12 +1518,26 @@
                 $(this).addClass("edit_span_select_member");
             });
             
+            function productCancelSelect(obj,num)
+            {
+                var objnum=obj.find('span[class="badge"]');
+                var curnum=parseFloat(objnum.text().replace(",",""));
+                
+                if(curnum-num <=0)
+                {
+                    obj.remove();
+                }else{
+                    objnum.text(curnum-parseFloat(num));
+                }
+            }
+            
             $('.selectProductDel').live(event_clicktouchstart, function(){
                 var orderstatus=$(this).parent().attr("order_status");
                 var curnum = $(this).parent().find('span[class="badge"]').text().replace(",","")
+                var setid=$(this).parent().attr("setid");
                 //alert(curnum);
                 $("#selectproductnumfordelete").val(curnum);
-                if(orderstatus!="0")
+                if(orderstatus!="0")//退菜是单个的
                 {
                     var isretreat=$(this).parent().attr("is_retreat");
                     if(isretreat==1)
@@ -1493,16 +1565,18 @@
                              }
                          }); 
                     }
-                }else{                
-                    var obj=$(this).parent().find('span[class="badge"]');
-                    var curnum=parseFloat(obj.text().replace(",",""));
-                    if(curnum==1)
+                }else{ //下单前减少是整体的           
+                    if(setid=="0000000000")
                     {
-                        $(this).parent().remove();
+                        productCancelSelect($(this).parent(),1);
                     }else{
-                        obj.text(curnum-1);
-                    }
-                    return false;
+                        var objnum=0;
+                        $.each($(".selectProductA[setid="+setid+"]"),function(skey,sobj){
+                            //alert($(sobj));
+                            objnum=parseFloat($(sobj).find('span[class="badge"]').text());
+                            productCancelSelect($(sobj),objnum);
+                        });
+                    }                    
                 }
             });
             
