@@ -289,7 +289,7 @@
             $.ajax({
                         url:getstatusurl,
                         type:'GET',
-                        //data:formdata,
+                        timeout:5000,
                         cache:false,
                         async:false,
                         dataType: "json",
@@ -311,6 +311,14 @@
                             alert("网络可能有问题"+"22");
                             forbidden=true;
                             return;
+                        },
+                        complete : function(XMLHttpRequest,status){
+                            if(status=='timeout'){
+                                layer.close(layer_shape_index);
+                                alert("网络可能有问题"+"33");
+                                forbidden=true;
+                                return;
+                            }
                         }
                     });
             //if(jobid)存在，说明是重新打印，不用下单
@@ -323,6 +331,7 @@
         var formdata=$('#padOrderForm').formSerialize();
             $.ajax({
                     url:$('#padOrderForm').attr('action'),
+                    timeout:5000,
                     type:'POST',
                     data:formdata,
                     async:false,
@@ -499,6 +508,14 @@
                     error: function(msg){
                         layer.close(layer_shape_index);
                         alert(language_client_order_fail);
+                    },
+                    complete : function(XMLHttpRequest,status){
+                        if(status=='timeout'){
+                            layer.close(layer_shape_index);
+                            alert("网络可能有问题"+"33");
+                            forbidden=true;
+                            return;
+                        }
                     }
 	     	});
                 layer.close(layer_shape_index);
