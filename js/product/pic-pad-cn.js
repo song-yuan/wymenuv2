@@ -38,7 +38,12 @@ var b64 = new Base64();
 
 /* 质朴长存法  by lifesinger 数字补齐*/
 function pad(num, n) {
-	return Array(n>num?(n-(''+num).length+1):0).join(0)+num; 
+	 var len = num.toString().length;
+	    while(len < n) {
+	        num = "0" + num;
+	        len++;
+	    }
+	    return num;
 }
 /**
  * 缃戠粶璇锋眰鍑芥暟

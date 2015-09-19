@@ -69,9 +69,10 @@ class ProductClass
 				$product[$k]['is_top10'] = 0;
 			}
 		}
-		$productTop10 = ProductClass::getProductTop10($dpid,$siteNoId);
-		$totalProduct = array_merge($productTop10,$product);
-		return $totalProduct;
+//		$productTop10 = ProductClass::getProductTop10($dpid,$siteNoId);
+//		$totalProduct = array_merge($productTop10,$product);
+//		return $totalProduct;
+		return $product;
 	}
 	//人气 TOP10
 	public static function getProductTop10($dpid = 0,$siteNoId = 0){
