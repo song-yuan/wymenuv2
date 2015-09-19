@@ -424,16 +424,31 @@
                         <div class="tabbable tabbable-custom">
                             <div class="firstCategory">
                                 <ul class="">
+                                        <li lid="productset" class="tabProduct">套餐</li>
                                         <?php 
                                         foreach ($categories as $categorie): 
                                             if($categorie->pid=="0000000000"):?>
                                             <li lid="<?php echo $categorie->lid; ?>" class="tabProduct"><?php echo $categorie->category_name; ?></li>
                                         <?php 
                                             endif;
-                                        endforeach; ?>                                        
-                                        <!--<li typeId="reserve" class="tabtitle"><a href="#tab_1_reserve" data-toggle="tab">套餐</a></li>-->
+                                        endforeach; ?>                                       
+                                        
                                 </ul>
                             </div>
+                                    <div class="tab-content" style="display:none;" lid="productset">                                        
+                                        <div style="width:100%;height:100%;">
+                                            <div class="product_list">
+                                                <ul class="">
+                                                    <?php 
+                                                        foreach ($productSets as $productSet): 
+                                                            ?>
+                                                            <li class="productSetClick" lid="<?php echo $productSet->lid; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
+                                                    <?php                                                         
+                                                    endforeach; ?>                                                    
+                                                </ul>
+                                            </div>                                        												
+                                        </div>
+                                    </div>
                                 <?php 
                                 foreach ($categories as $categorie): 
                                     if($categorie->pid=="0000000000"):?>
@@ -448,7 +463,7 @@
                                                             <?php 
                                                                 foreach ($products as $product): 
                                                                     if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
-                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>"><?php echo $product->product_name; ?></li>                                                                    
+                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
                                                             <?php  endif;                                                         
                                                             endforeach; ?>
                                                     <?php 
@@ -514,7 +529,7 @@
                                                     <DIV class="edit_span edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
                                                     <DIV class="edit_span" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
                                                     <DIV class="edit_span" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
-                                                    
+                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
                                                 </div>    
                                                 <input style="position:absolute;right:3%;bottom: 4%;width:6.0em;height:3.0em;" type="button" class="btn green" id="layer2_close" value="<?php echo yii::t('app',' 关 闭 ');?>">
                                             </div>
@@ -1594,6 +1609,7 @@
                 var payCashAccount=$("#payCashAccount").text();
                 var payMemberAccount=$("#payMemberAccount").text();
                 var payUnionAccount=$("#payUnionAccount").text();
+                var payOthers=$("#payOthers").text();
                 if(selectid=="discount")
                 {   
                     if(nowval!="." && nowval!="00" && nowval!="10" && nowval!="20" && nowval!="50" && nowval!="100")
@@ -1651,6 +1667,7 @@
                     payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
                     payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                     payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
+                    //payOthers=parseFloat($("#payOthers").text().replace(",",""));
                     var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount;
                     if(shouldpaytemp>0)
                     {
@@ -1692,7 +1709,7 @@
                             $("#payCashAccount").html(payCashAccount+nowval);
                         }
                     }                    
-                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payUnionAccount.replace(",",""))).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat(payOthers.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payUnionAccount.replace(",",""))).toFixed(2));
                     
                     var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
@@ -1725,7 +1742,37 @@
                             $("#payUnionAccount").html(payUnionAccount+nowval);
                         }
                     }                    
-                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text().replace(",",""))+parseFloat(payOthers.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+                    
+                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
+                    if(changeaccount>0)
+                    {
+                        $("#payChangeAccount").text(changeaccount.toFixed(2));
+                    }else{
+                        $("#payChangeAccount").text("0.00");
+                    }
+                }else if(selectid=="pay_others")
+                {
+                    if(nowval=="10" || nowval=="20"|| nowval=="50"|| nowval=="100")
+                    {
+                        return;
+                    }
+                    //alert(payMinusAccount);alert(nowval);
+                    if(payOthers=="0.00" || payOthers=="0" || payOthers=="00")
+                    {
+                        if(nowval!=".")
+                        {
+                            $("#payOthers").text(nowval);
+                        }
+                    }else{
+                        if(payOthers.indexOf(".")>0 && nowval==".")
+                        {
+
+                        }else{
+                            $("#payOthers").html(payOthers+nowval);
+                        }
+                    }                    
+                    $("#payRealityAccount").html((parseFloat(payUnionAccount.replace(",",""))+parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
                     
                     var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
@@ -1905,6 +1952,7 @@
                 var payCashAccount=$("#payCashAccount").text();
                 var payMemberAccount=$("#payMemberAccount").text();
                 var payUnionAccount=$("#payUnionAccount").text();
+                var payOthers=$("#payOthers").text();
                 if(selectid=="minus")
                 {
                     if(payMinusAccount=="0.00" || payMinusAccount=="0" || payMinusAccount=="00")
@@ -1954,7 +2002,7 @@
                     }else{
                         $("#payCashAccount").text(payCashAccount.substr(0,payCashAccount.length-1));
                     }
-                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payUnionAccount.replace(",",""))).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat(payOthers.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payUnionAccount.replace(",",""))).toFixed(2));
                     
                     var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
@@ -1978,7 +2026,28 @@
                     }else{
                         $("#payUnionAccount").text(payUnionAccount.substr(0,payUnionAccount.length-1));
                     }
-                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text().replace(",",""))+parseFloat(payOthers.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+                    
+                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
+                    if(changeaccount>0)
+                    {
+                        $("#payChangeAccount").text(changeaccount.toFixed(2));
+                    }else{
+                        $("#payChangeAccount").text("0.00");
+                    }
+                }else if(selectid=="pay_others")
+                {
+                    if(payOthers=="0.00" || payOthers=="0" || payOthers=="00")
+                    {
+                        return false;
+                    }
+                    if(payOthers.length==1)
+                    {
+                        $("#payOthers").text("0.00");
+                    }else{
+                        $("#payOthers").text(payOthers.substr(0,payOthers.length-1));
+                    }
+                    $("#payRealityAccount").html((parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payUnionAccount.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
                     
                     var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
@@ -2002,6 +2071,7 @@
                 var payCashAccount=$("#payCashAccount").text();
                 var payMemberAccount=$("#payMemberAccount").text();
                 var payUnionAccount=$("#payUnionAccount").text();
+                var payOthers=$("#payOthers").text();
                 
                 if(selectid=="discount")
                 {   
@@ -2066,7 +2136,7 @@
                     }else{
                         $("#payCashAccount").text("0.00");
                     }
-                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payUnionAccount.replace(",",""))).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat(payOthers.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payUnionAccount.replace(",",""))).toFixed(2));
                     
                     var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
@@ -2091,7 +2161,29 @@
                         $("#payUnionAccount").text("0.00");
                     }
                     
-                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+                    $("#payRealityAccount").html((parseFloat($("#payUnionAccount").text().replace(",",""))+parseFloat(payOthers.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+                    
+                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
+                    if(changeaccount>0)
+                    {
+                        $("#payChangeAccount").text(changeaccount.toFixed(2));
+                    }else{
+                        $("#payChangeAccount").text("0.00");
+                    }
+                }else if(selectid=="pay_others")
+                {
+                    var offvalue=parseFloat(payShouldAccount.replace(",","")) - parseFloat(payRealityAccount.replace(",",""))
+                    if(parseFloat($("#payOthers").text().replace(",",""))==0)
+                    {
+                        if(offvalue>0)
+                        {
+                            $("#payOthers").text(offvalue.toFixed(2));
+                        }
+                    }else{
+                        $("#payOthers").text("0.00");
+                    }
+                    
+                    $("#payRealityAccount").html((parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payUnionAccount.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
                     
                     var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
@@ -2260,6 +2352,7 @@
                 var payMemberAccount=$("#payMemberAccount").text();
                 var cardno=$("#payMemberAccount").attr("cardno");
                 var payUnionAccount=$("#payUnionAccount").text();
+                var payOthers=$("#payOthers").text();
                 if(parseFloat(payRealityAccount.replace(",","")) < parseFloat(payShouldAccount.replace(",","")))
                 {
                     alert("收款不够");
@@ -2278,8 +2371,9 @@
                                     '&payunionaccount='+payUnionAccount+
                                     '&ordermemo='+ordermemo+
                                     '&payshouldaccount='+payShouldAccount+
-                                   // '&payChangeAccount='+payChangeAccount+
-                                    '&payoriginaccount='+payOriginAccount;                            
+                                    '&payothers='+payOthers+
+                                    '&payoriginaccount='+payOriginAccount; 
+                            //alert(sendjson);
                         $.ajax({
                             url:url,
                             type:'POST',

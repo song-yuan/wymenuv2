@@ -34,11 +34,12 @@ class ProductCategory extends CActiveRecord
 			array('category_name', 'length','min'=>2, 'max'=>45),
 			array('dpid', 'length', 'max'=>10),
                         array('order_num', 'length', 'max'=>4),
+                        array('type', 'length', 'max'=>3),
                         array('tree', 'length', 'max'=>50),
                         array('main_picture', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid,order_num, create_at,tree, category_name, main_picture, dpid, delete_flag', 'safe', 'on'=>'search'),
+			array('lid,order_num, create_at,tree, category_name, main_picture,type, dpid, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +67,7 @@ class ProductCategory extends CActiveRecord
 			'tree'=>'Tree',
 			'category_name' => yii::t('app','产品类别'),
 			'main_picture' => yii::t('app','类别图片'),
+                        'type' => yii::t('app','是否参与排名'),
 			'dpid' => yii::t('app','公司'),
                         'order_num' => yii::t('app','显示顺序'),
 			'delete_flag' => yii::t('app','状态'),
@@ -96,6 +98,7 @@ class ProductCategory extends CActiveRecord
 		$criteria->compare('main_picture',$this->main_picture,true);
 		$criteria->compare('dpid',$this->dpid,true);
                 $criteria->compare('pid',$this->pid,true);
+                $criteria->compare('type',$this->type,true);
                 $criteria->compare('order_num',$this->order_num,true);
                 $criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('delete_flag',$this->delete_flag);

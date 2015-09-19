@@ -99,10 +99,12 @@ class ProductSetController extends BackendController
 		$pwlid = Yii::app()->request->getParam('lid');
                 $criteria = new CDbCriteria;
                 $criteria->with = array('product');
+                $criteria->order =  't.group_no';
                 //$criteria->with = 'printer';
 		$criteria->condition =  't.dpid='.$this->companyId .' and t.set_id='.$pwlid.' and t.delete_flag=0 and product.delete_flag=0';
                 $criteria2 = new CDbCriteria;
 		$criteria2->condition =  't.dpid='.$this->companyId .' and t.lid='.$pwlid.' and t.delete_flag=0';
+                
 		$pages = new CPagination(ProductSetDetail::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -129,9 +131,14 @@ class ProductSetController extends BackendController
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$pslid.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
-                        var_dump($modelsp);exit;
-                        
+                        //var_dump($modelsp);exit;
+                        if($model->is_select=="1")
+                        {
+                            $sqlgroup="update nb_product_set_detail set is_select=0 where group_no=".$model->group_no." and dpid=".$this->companyId." and set_id=".$model->set_id;
+                            Yii::app()->db->createCommand($sqlgroup)->execute(); 
+                        }
 			if($model->save()) {
+                            
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productSet/detailindex','companyId' => $this->companyId,'lid'=>$model->set_id));
 			}

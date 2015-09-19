@@ -48,6 +48,13 @@
                                                 <?php echo $form->error($model, 'order_num' )?>
                                         </div>
                                 </div>
+                                <div class="form-group">
+                                        <?php echo $form->label($model, 'type',array('class' => 'col-md-3 control-label'));?>
+                                        <div class="col-md-4">
+                                                <?php echo $form->dropDownList($model, 'type', array('0' => yii::t('app','是') , '1' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type')));?>
+                                                <?php echo $form->error($model, 'type' )?>
+                                        </div>
+                                </div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>

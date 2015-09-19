@@ -491,6 +491,7 @@ class DefaultOrderController extends BackendController
                 $orderid = Yii::app()->request->getParam('orderid',"0");
                 $orderstatus = Yii::app()->request->getParam('orderstatus',"0");
                 $paycashaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paycashaccount',"0")));
+                $payothers = floatval(str_replace(",","",Yii::app()->request->getPost('payothers',"0")));
                 $paymemberaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paymemberaccount',"0")));
                 $payunionaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payunionaccount',"0")));
                 $payshouldaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payshouldaccount',"0")));
@@ -610,6 +611,23 @@ class DefaultOrderController extends BackendController
                                             'paytype'=>"5",
                                             'payment_method_id'=>"0000000000",
                                             'remark'=>'银联卡付款',//'product_order_status'=>$orderProductStatus,
+                                            );
+                        $db->createCommand()->insert('nb_order_pay',$orderPayData);
+                    }
+                    if($payothers>0)
+                    {
+                        $orderPayId = $se->nextval();
+                        //插入一条
+                        $orderPayData = array(
+                                            'lid'=>$orderPayId,
+                                            'dpid'=>$companyId,
+                                            'create_at'=>$time,
+                                            'order_id'=>$orderid,
+                                            'update_at'=>$time,
+                                            'pay_amount'=>$payothers,
+                                            'paytype'=>"3",
+                                            'payment_method_id'=>"3990000000",
+                                            'remark'=>'大众点评临时',//'product_order_status'=>$orderProductStatus,
                                             );
                         $db->createCommand()->insert('nb_order_pay',$orderPayData);
                     }

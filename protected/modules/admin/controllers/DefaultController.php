@@ -97,7 +97,14 @@ class DefaultController extends BackendController
                 $criteriaps->with="productsetdetail";
 		$criteriaps->order = ' t.lid asc ';		
 		$productSets = ProductSet::model()->findAll($criteriaps);
-                                
+                $setprice=array();
+                foreach ($productSets as $productSet)
+                {
+                    $sqlsetsum="select sum(price) as tprice from nb_product_set_detail where dpid=".$companyId." and set_id=".$productSet->lid." and is_select=1 and delete_flag=0";
+                    $nowval= Yii::app()->db->createCommand($sqlsetsum)->queryScalar();
+                    $setprice[$productSet->lid]=empty($nowval)?"0.00":$nowval;
+                }
+                //var_dump($setprice);exit;                
                 $criteriap = new CDbCriteria;
 		$criteriap->condition =  'delete_flag=0 and t.dpid='.$companyId ;// and is_show=1
 		$criteriap->order = ' t.category_id asc,t.lid asc ';
@@ -114,6 +121,7 @@ class DefaultController extends BackendController
                                 'typeId' => $typeId,
 				"categories"=>$categories,
                                 "productSets"=>$productSets,
+                                'setprice'=>$setprice,
                                 "products"=>$products,
                                 "productidnameArr"=>$productidnameArr
 		));
