@@ -710,7 +710,7 @@
                         }
                         if(typeof btngroup.attr("groupid")=="undefined")
                         {
-                            instr='<div class="btn-group" groupid='+setdetail[0]+ ' data-toggle="buttons" style="width:95%;margin-top:2px;margin-right:10px;border: 2px solid red;background: rgb(245,230,230);"> '                                                                                       
+                            instr='<div class="btn-group" groupid='+setdetail[0]+ ' data-toggle="buttons" style="float:left;width:45%;margin-top:2px;margin-right:10px;border: 2px solid red;background: rgb(245,230,230);"> '                                                                                       
                                         +'<label style="width:95%;margin-right: 2px;margin-left:2px;" productid="'+setdetail[1]+ '" price="'+setdetail[4]+'" pname="'+setdetail[5]+'" number="'+setdetail[3]+'" class="selectSetProduct btn btn-default '+active+'">'
                                            +' <input type="checkbox" class="toggle">' +setdetail[5]+"  "+setdetail[3]+" X "+setdetail[4]
                                         + '</label>'                                                                                    
@@ -732,7 +732,7 @@
                      type: 1,
                      shade: false,
                      title: false, //不显示标题
-                     area: ['30%', 'auto'],
+                     area: ['40%', 'auto'],
                      content: $('#productsetselect'),//$('#productInfo'), //捕获的元素
                      cancel: function(index){
                          layer.close(index);
