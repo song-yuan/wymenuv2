@@ -32,7 +32,7 @@
                             //alert(jobid);alert(address);alert(dpid);alert(orderid);
                             var printresulttemp2=false;
                             printresulttemp2=Androidwymenuprinter.printNetJob(dpid,jobid,address);
-                            ////printresulttemp2=true;
+                            /////printresulttemp2=true;
                             if(printresulttemp2)
                             {
                                     successjoblist=successjoblist+","+jobid;
@@ -59,20 +59,20 @@
                                             //if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                                             if(data.status)
                                             {
-                                                //layer.close(layer_index_printresult2);
+                                                layer.close(layer_index_printresult);
                                             }
                                         },
                                         error: function(msg){
-                                            //layer.close(layer_index_printresult2);
+                                            layer.close(layer_index_printresult);
                                             
                                         },
                                         complete : function(XMLHttpRequest,status){
                                             if(status=='timeout'){
-                                                //layer.close(layer_index_printresult2);
+                                                layer.close(layer_index_printresult);
                                             }
                                         }
                                     });
-                                    //layer.close(layer_index_printresult2);
+                                    layer.close(layer_index_printresult);
                                 }
                             
 //                            if(!printresulttemp2)
