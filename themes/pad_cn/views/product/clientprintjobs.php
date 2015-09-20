@@ -5,7 +5,7 @@
      //var_dump($orderPrintjob);exit;
             ?>
             <li style="height:40px;">                                    
-                任务<?php echo $orderPrintjob->jobid; ?>打印失败，打印机位置(<?php if(!empty($orderPrintjob->printer->name)) echo $orderPrintjob->printer->name; ?>)
+                任务<?php echo $orderPrintjob->create_at; ?>打印失败，打印机位置(<?php if(!empty($orderPrintjob->printer->name)) echo $orderPrintjob->printer->name; ?>)
                 <input style="float:right;padding: 10px 25px;background-color:greenyellow; " jobid="<?php echo $orderPrintjob->jobid; ?>" 
                        address="<?php echo $orderPrintjob->address; ?>" type="button" class="reprintfailjobbutton" value="重新打印">
             </li>
