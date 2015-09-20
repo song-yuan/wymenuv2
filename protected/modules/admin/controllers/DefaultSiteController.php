@@ -91,37 +91,37 @@ class DefaultSiteController extends BackendController
                 $istemp = Yii::app()->request->getParam('istemp','0');
                 $typeId = Yii::app()->request->getParam('typeId','0');
                 $nexpersons="";
-                if($typeId="queue")
+                $queueno="";
+                if($typeId=="queue")
                 {
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.status=0 and t.dpid='.$this->companyId.' and t.stlid='.$istemp.' and t.splid='.$sid ;
                     $criteria->order = ' t.lid ';
                     $queue = QueuePersons::model()->find($criteria);
                     //$queue->status=1;
-                    
+                    $queueno=$queue->queue_no;
                     //var_dump($queue);exit;
                 }else{
                     $criteria2 = new CDbCriteria;
                     $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$this->companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria2->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria2);
+                    if(empty($siteNo))
+                    {
+                        $status="0";
+                    }else{
+                        $status=$siteNo->status;
+                    }
                 }
-//                
- //               var_dump($siteNo);exit;
-                if(empty($siteNo))
-                {
-                    $status="0";
-                }else{
-                    $status=$siteNo->status;
-                }
-		$model=array();
+                $model=array();
+                //var_dump($status);exit;
 		$this->renderPartial('button' , array(
 				'model' => $model,
 				'sid' => $sid,
                                 'status' => $status,                                
                                 'istemp' => $istemp,
                                 'typeId' => $typeId,
-                                'nexpersons'=>$queue->queue_no
+                                'nexpersons'=>$queueno
 		));
 	}
         
