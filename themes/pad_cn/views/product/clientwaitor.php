@@ -525,7 +525,8 @@
          $('#pad-order-submit-subbtn').on('click',function(){
              $('#divid_client_waitorlist').css("display","none");
              layer_shape_index= layer.load(0, {shade: [0.3,'#fff']});
-            setTimeout(clientsaveorder2,300); 
+            setTimeout(clientsaveorder2,300);
+            setTimeout(layer.close(layer_shape_index),10000);
             
         });
         

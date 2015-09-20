@@ -14,7 +14,31 @@ class DefaultSiteController extends BackendController
                 $title=yii::t('app','请选择餐桌');
                 $criteria = new CDbCriteria;
 		$models=array();
-                if($typeId == 'tempsite'){
+                if($typeId == 'queue'){
+//                        $criteria->select = 't.dpid,t.splid,t.type_id,siteType.name as name,sitePersons.min_persons as min,sitePersons.max_persons as max, 0 as queuepersons';
+//                        $criteria->condition =  ' t.delete_flag = 0 and t.dpid='.$compayId ;
+//                        $criteria->with = array("siteType","sitePersons");
+//                        $criteria->order = ' t.type_id desc,t.splid desc ';
+//                        $criteria->distinct = TRUE;
+//                        $models = Site::model()->findAll($criteria);
+//                        var_dump($models);exit;
+                    $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
+                            . 'sp.min_persons as min,sp.max_persons as max, count(qp.lid) as queuepersons, sf.sitenum as sitefree'
+                            . '  from nb_site t'
+                            . ' LEFT JOIN nb_site_type st on t.dpid=st.dpid and t.type_id=st.lid'
+                            . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
+                            . ' LEFT JOIN nb_queue_persons qp on t.dpid=qp.dpid and t.type_id=qp.stlid and t.splid=qp.splid and qp.status=0'
+                            . ' LEFT JOIN (select distinct subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
+                            . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0 and dpid='.$compayId
+                            . ' group by splid,typeid) sf'
+                            . ' on sf.splid=t.splid and sf.typeid=t.type_id'
+                            . ' where t.dpid= '.$compayId
+                            . ' group by dpid,splid,typeid,name,min,max'
+                            . ' order by typeid,min';
+                    $connect = Yii::app()->db->createCommand($sql);
+                    $models = $connect->queryAll();
+                    //var_dump($sql,$models);exit;                    
+                }elseif($typeId == 'tempsite'){
                         $criteria->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId ;
                         $criteria->order = ' t.number desc,t.site_id desc ';
                         //$criteria->group = ' t.number ';
@@ -66,10 +90,22 @@ class DefaultSiteController extends BackendController
                 $status = Yii::app()->request->getParam('status','0');
                 $istemp = Yii::app()->request->getParam('istemp','0');
                 $typeId = Yii::app()->request->getParam('typeId','0');
-                $criteria2 = new CDbCriteria;
-                $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$this->companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
-                $criteria2->order = ' t.lid desc ';
-                $siteNo = SiteNo::model()->find($criteria2);
+                $nexpersons="";
+                if($typeId="queue")
+                {
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.status=0 and t.dpid='.$this->companyId.' and t.stlid='.$istemp.' and t.splid='.$sid ;
+                    $criteria->order = ' t.lid ';
+                    $queue = QueuePersons::model()->find($criteria);
+                    //$queue->status=1;
+                    
+                    //var_dump($queue);exit;
+                }else{
+                    $criteria2 = new CDbCriteria;
+                    $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$this->companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria2->order = ' t.lid desc ';
+                    $siteNo = SiteNo::model()->find($criteria2);
+                }
 //                
  //               var_dump($siteNo);exit;
                 if(empty($siteNo))
@@ -84,7 +120,8 @@ class DefaultSiteController extends BackendController
 				'sid' => $sid,
                                 'status' => $status,                                
                                 'istemp' => $istemp,
-                                'typeId' => $typeId
+                                'typeId' => $typeId,
+                                'nexpersons'=>$queue->queue_no
 		));
 	}
         

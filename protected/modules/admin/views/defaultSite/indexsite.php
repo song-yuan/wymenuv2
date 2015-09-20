@@ -96,8 +96,25 @@
 				
                                                                     <div class="portlet-body site_list">
                                                                                 <ul>
-                                                                                    
-                                                                                    <?php if($typeId == 'tempsite'): ?>
+                                                                                    <?php if($typeId == 'queue'): ?>
+                                                                                        <?php
+                                                                                            if(!empty($models)):
+                                                                                                $temptype=0;
+                                                                                                foreach ($models as $model):?>
+                                                                                                    <?php if($temptype!=$model["typeid"]): ?>
+                                                                                                        <li class="modalaction bg-red" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model["name"]; ?></span></li>
+                                                                                                    <?php 
+                                                                                                        $temptype=$model["typeid"];
+                                                                                                        endif;?>
+                                                                                                        <li class="modalaction <?php if($model["queuepersons"] > 0) echo 'bg-yellow';?>" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" typeId=<?php echo $model["typeid"];?> splid=<?php echo $model["splid"];?>>
+                                                                                                            <span style="font-size: 20px;">空座:<?php echo empty($model["sitefree"])?0:$model["sitefree"]; ?></span>
+                                                                                                            <br><span style="font-size: 20px;">排队:<?php echo $model["queuepersons"]; ?></span>
+                                                                                                            <br><?php echo $model["min"]."-".$model["max"]; ?>
+                                                                                                        </li>
+                                                                                        <?php                                                                                                 
+                                                                                                endforeach;
+                                                                                            endif;?>
+                                                                                    <?php elseif($typeId == 'tempsite'): ?>
                                                                                         <li class="modalaction bg_add" istemp="1" status="0" sid="0" shname="<?php echo yii::t('app','新增临时台');?>"></li>
                                                                                         <?php
                                                                                             if(!empty($models)):

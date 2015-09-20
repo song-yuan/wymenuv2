@@ -5,6 +5,7 @@
  *
  * The followings are the available columns in table 'nb_site':
  * @property string $lid
+ * @property string $splid
  * @property string $serial
  * @property integer $type_id
  * @property string $site_level
@@ -21,6 +22,10 @@
  */
 class Site extends CActiveRecord
 {
+    public $queuepersons;
+    public $name;
+    public $min;
+    public $max;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -38,7 +43,7 @@ class Site extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('serial , type_id ,lid,floor_id, dpid' , 'required'),
-			array('floor_id,type_id, delete_flag, has_minimum_consumption, minimum_consumption_type', 'numerical', 'integerOnly'=>true),
+			array('floor_id,type_id,splid, delete_flag, has_minimum_consumption, minimum_consumption_type', 'numerical', 'integerOnly'=>true),
 			array('period, overtime,buffer', 'numerical'),
 			array('serial', 'length', 'max'=>20),
 			//array('site_level', 'length', 'max'=>20),
@@ -46,7 +51,7 @@ class Site extends CActiveRecord
 			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, serial, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type, minimum_consumption, number, period, overtime, buffer, overtime_fee, floor_id', 'safe', 'on'=>'search'),
+			array('lid, serial,splid, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type, minimum_consumption, number, period, overtime, buffer, overtime_fee, floor_id', 'safe', 'on'=>'search'),
 		);
 	}
 	public function validate($attributes = NULL, $clearErrors = true){
@@ -72,6 +77,7 @@ class Site extends CActiveRecord
 		return array(
 				'isfree' => array(self::HAS_ONE , 'SiteNo' , '' , 'on' => 't.lid=isfree.site_id and t.dpid=isfree.dpid and isfree.status in(2,3,4,5)'),
 				'siteType' => array(self::BELONGS_TO , 'SiteType' ,'','on' =>'t.type_id=siteType.lid and t.dpid=siteType.dpid'),
+                                'sitePersons' => array(self::BELONGS_TO , 'SitePersons' ,'','on' =>'t.splid=sitePersons.lid and t.dpid=sitePersons.dpid'),
                                 'floor' => array(self::BELONGS_TO , 'Floor' ,'','on' =>'t.floor_id=floor.lid and t.dpid=floor.dpid')
 		);
 	}
