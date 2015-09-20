@@ -272,6 +272,7 @@
         if(istemp=="1")
         {
             layer.close(layer_shape_index);
+            layer_shape_index=0;
             alert("请选择座位！");
             return false;
         }
@@ -300,6 +301,7 @@
                             {
                                 $('#divid_client_sitelist').load("/wymenuv2/product/clientSitelist/companyId/<?php echo $this->companyId; ?>/padtype/2/randtime/"+randtime);            
                                 layer.close(layer_shape_index);
+                                layer_shape_index=0;
                                 alert("请先开台后下单！"+"11");
                                 forbidden=true;
                                 $('#divid_client_sitelist').show();
@@ -308,6 +310,7 @@
                         },
                         error: function(msg){
                             layer.close(layer_shape_index);
+                            layer_shape_index=0;
                             alert("网络可能有问题"+"22");
                             forbidden=true;
                             return;
@@ -315,6 +318,7 @@
                         complete : function(XMLHttpRequest,status){
                             if(status=='timeout'){
                                 layer.close(layer_shape_index);
+                                layer_shape_index=0;
                                 alert("网络可能有问题"+"33");
                                 forbidden=true;
                                 return;
@@ -326,6 +330,7 @@
         if(forbidden)
         {
             layer.close(layer_shape_index);
+            layer_shape_index=0;
             return;
         }
         var formdata=$('#padOrderForm').formSerialize();
@@ -371,7 +376,8 @@
                                      });                                      
                                 }                               
                                 
-//                                     layer.close(layer_shape_index);
+                                    layer.close(layer_shape_index);
+                                    layer_shape_index=0;
                                     if(istemp=="1"&&printresult) 
                                     {
                                         successjobids=data.jobid;
@@ -433,6 +439,7 @@
 //                                            });
                                             //如果有失败任务就打开对话框                                            
                                             layer.close(layer_shape_index);
+                                            layer_shape_index=0;
                                             //alert(successjobids);
                                             $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2/jobId/"+successjobids);                                
                                             layer_index_printresult2=layer.open({
@@ -449,6 +456,7 @@
                                             });
                                     }
                                     layer.close(layer_shape_index);
+                                    layer_shape_index=0;
 //	                 if(printresult)
 //	                 {
                             $('#padOrderForm').find('.input-product').each(function(){
@@ -500,18 +508,22 @@
 //	                 }                                                
 	                }else{
                             layer.close(layer_shape_index);
+                            layer_shape_index=0;
 	                    alert(data.msg);
 	                }
                         $('#padOrderForm').resetForm();
                         layer.close(layer_shape_index);
+                        layer_shape_index=0;
                     },
                     error: function(msg){
                         layer.close(layer_shape_index);
+                        layer_shape_index=0;
                         alert(language_client_order_fail);
                     },
                     complete : function(XMLHttpRequest,status){
                         if(status=='timeout'){
                             layer.close(layer_shape_index);
+                            layer_shape_index=0;
                             alert("网络可能有问题"+"33");
                             forbidden=true;
                             return;
@@ -519,14 +531,19 @@
                     }
 	     	});
                 layer.close(layer_shape_index);
+                layer_shape_index=0;
             }//functon到此
     //});on click到此
+        function closeshape(){
+            layer.close(layer_shape_index);
+            layer_shape_index=0;
+        }
         
          $('#pad-order-submit-subbtn').on('click',function(){
              $('#divid_client_waitorlist').css("display","none");
              layer_shape_index= layer.load(0, {shade: [0.3,'#fff']});
             setTimeout(clientsaveorder2,300);
-            setTimeout(layer.close(layer_shape_index),10000);
+            //setTimeout(closeshape,20000);
             
         });
         
