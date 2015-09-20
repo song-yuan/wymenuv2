@@ -164,6 +164,7 @@ class ProductSetController extends BackendController
                 Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
+                        $model->update_at = date('Y-m-d H:i:s',time());                        
                         //只有一个时选中，如果第一个必须选中，后续的，判断是选中，必须取消其他选中
                         $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$model->set_id.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
                         //var_dump($modelsp);exit;
