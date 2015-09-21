@@ -100,7 +100,7 @@ class DefaultController extends BackendController
                 $setprice=array();
                 foreach ($productSets as $productSet)
                 {
-                    $sqlsetsum="select sum(price) as tprice from nb_product_set_detail where dpid=".$companyId." and set_id=".$productSet->lid." and is_select=1 and delete_flag=0";
+                    $sqlsetsum="select sum(price * number) as tprice from nb_product_set_detail where dpid=".$companyId." and set_id=".$productSet->lid." and is_select=1 and delete_flag=0";
                     $nowval= Yii::app()->db->createCommand($sqlsetsum)->queryScalar();
                     $setprice[$productSet->lid]=empty($nowval)?"0.00":$nowval;
                 }                
@@ -116,7 +116,7 @@ class DefaultController extends BackendController
                 {
                     $productidnameArr[$product->lid]=$product->product_name;
                 }
-                var_dump($productSets[0]->productsetdetail);exit;
+                //var_dump($productSets[0]->productsetdetail);exit;
                 $this->render('indexall',array(
                                 'siteTypes' => $siteTypes,
                                 'typeId' => $typeId,

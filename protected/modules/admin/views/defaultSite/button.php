@@ -11,7 +11,12 @@
 			)); ?>
 			
 			<div class="modal-body">
-				<?php if($status=='1') :?>
+				<?php if($typeId=='queue') :?>
+                                        第一个排队号：<?php echo $nexpersons; ?><br>
+                                        <button  id="queuecall" style="width:7.0em;margin:10px; " type="button" nexpersons="<?php echo $nexpersons; ?>" splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php echo yii::t('app','叫号');?></button>
+                                        <button  id="queuepass" style="width:7.0em;margin:10px; " type="button" nexpersons="<?php echo $nexpersons; ?>" splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php echo yii::t('app','过号->下一个');?></button>
+                                        <button  id="queuereply" style="width:7.0em;margin:10px; " type="button" nexpersons="<?php echo $nexpersons; ?>" splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php echo yii::t('app','应答->下一个');?></button>
+                                <?php elseif($status=='1') :?>
                                 <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn grey orderaction"><?php echo yii::t('app','点 单');?></button>
                                 <div class="pull-right">
                                     <button type="button" data-dismiss="modal" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe closesite"><?php echo yii::t('app','撤  台');?></button>

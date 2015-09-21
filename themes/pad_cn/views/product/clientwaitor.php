@@ -272,6 +272,7 @@
         if(istemp=="1")
         {
             layer.close(layer_shape_index);
+            layer_shape_index=0;
             alert("请选择座位！");
             return false;
         }
@@ -289,7 +290,7 @@
             $.ajax({
                         url:getstatusurl,
                         type:'GET',
-                        //data:formdata,
+                        timeout:5000,
                         cache:false,
                         async:false,
                         dataType: "json",
@@ -300,6 +301,7 @@
                             {
                                 $('#divid_client_sitelist').load("/wymenuv2/product/clientSitelist/companyId/<?php echo $this->companyId; ?>/padtype/2/randtime/"+randtime);            
                                 layer.close(layer_shape_index);
+                                layer_shape_index=0;
                                 alert("请先开台后下单！"+"11");
                                 forbidden=true;
                                 $('#divid_client_sitelist').show();
@@ -308,9 +310,19 @@
                         },
                         error: function(msg){
                             layer.close(layer_shape_index);
+                            layer_shape_index=0;
                             alert("网络可能有问题"+"22");
                             forbidden=true;
                             return;
+                        },
+                        complete : function(XMLHttpRequest,status){
+                            if(status=='timeout'){
+                                layer.close(layer_shape_index);
+                                layer_shape_index=0;
+                                alert("网络可能有问题"+"33");
+                                forbidden=true;
+                                return;
+                            }
                         }
                     });
             //if(jobid)存在，说明是重新打印，不用下单
@@ -318,11 +330,13 @@
         if(forbidden)
         {
             layer.close(layer_shape_index);
+            layer_shape_index=0;
             return;
         }
         var formdata=$('#padOrderForm').formSerialize();
             $.ajax({
                     url:$('#padOrderForm').attr('action'),
+                    timeout:5000,
                     type:'POST',
                     data:formdata,
                     async:false,
@@ -345,24 +359,25 @@
                                     $.each(data.jobs,function(skey,svalue){ 
                                         //alert(svalue);
                                         detaildata=svalue.split("_");
-                                        Androidwymenuprinter.printNetPing(detaildata[2],10);
+//                                        Androidwymenuprinter.printNetPing(detaildata[2],10);
                                                                                 
                                         if(detaildata[0]=="0")//继续打印
                                         {
                                             //alert(detaildata[1]);alert(detaildata[2]);alert(data.dpid);
-                                            printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                            //////printresulttemp=false;
+//                                            printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
+                                            printresulttemp=true;
                                             if(printresulttemp)
                                             {
                                                 data.jobs[skey]="1_"+svalue.substring(2);                                                
-                                            }//else{
-                                            //    printresultfail=true;                                                                                               
-                                            //}
+                                            }else{
+                                                printresultfail=true;                                                                                               
+                                            }
                                         }
                                      });                                      
                                 }                               
                                 
-//                                     layer.close(layer_shape_index);
+                                    layer.close(layer_shape_index);
+                                    layer_shape_index=0;
                                     if(istemp=="1"&&printresult) 
                                     {
                                         successjobids=data.jobid;
@@ -424,22 +439,55 @@
 //                                            });
                                             //如果有失败任务就打开对话框                                            
                                             layer.close(layer_shape_index);
+                                            layer_shape_index=0;
                                             //alert(successjobids);
-                                            $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2/jobId/"+successjobids);                                
-                                            layer_index_printresult2=layer.open({
-                                                type: 1,
-                                                shade: [0.1,'#fff'],
-                                                title: false, //不显示标题
-                                                closeBtn:1,
-                                                area: ['50%', '40%'],
-                                                content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-                                                cancel: function(index){
-                                                    layer.close(index);
-                                                    layer_index_printresult2=0;                                                                                                     
-                                                }
-                                            });
+                                            if(printresultfail)
+                                            {
+                                                $('#printRsultListdetailsub').load('/wymenuv2/product/getFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+"/padtype/2/jobId/"+successjobids);                                
+                                                layer_index_printresult2=layer.open({
+                                                    type: 1,
+                                                    shade: [0.1,'#fff'],
+                                                    title: false, //不显示标题
+                                                    closeBtn:1,
+                                                    area: ['50%', '40%'],
+                                                    content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                                                    cancel: function(index){
+                                                        layer.close(index);
+                                                        layer_index_printresult2=0;                                                                                                     
+                                                    }
+                                                });
+                                            }else{
+                                                $.ajax({
+                                                    url:'/wymenuv2/product/saveFailPrintjobs/companyId/'+data.dpid+'/orderId/'+data.orderid+'/padtype/2/jobId/'+successjobids,
+                                                    type:'GET',
+                                                    timeout:5000,
+                                                    cache:false,
+                                                    async:false,
+                                                    dataType: "json",
+                                                    success:function(data){
+                                                        //alert(msg);防止前台开台，但是后台结单或撤台了，就不能继续下单
+                                                        //if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
+                                                        if(data.status)
+                                                        {
+                                                            layer.close(layer_shape_index);
+                                                            layer_shape_index=0;
+                                                        }
+                                                    },
+                                                    error: function(msg){
+                                                        layer.close(layer_shape_index);
+                                                        layer_shape_index=0;
+                                                    },
+                                                    complete : function(XMLHttpRequest,status){
+                                                        if(status=='timeout'){
+                                                            layer.close(layer_shape_index);
+                                                            layer_shape_index=0;
+                                                        }
+                                                    }
+                                                });
+                                            }
                                     }
                                     layer.close(layer_shape_index);
+                                    layer_shape_index=0;
 //	                 if(printresult)
 //	                 {
                             $('#padOrderForm').find('.input-product').each(function(){
@@ -491,24 +539,42 @@
 //	                 }                                                
 	                }else{
                             layer.close(layer_shape_index);
+                            layer_shape_index=0;
 	                    alert(data.msg);
 	                }
                         $('#padOrderForm').resetForm();
                         layer.close(layer_shape_index);
+                        layer_shape_index=0;
                     },
                     error: function(msg){
                         layer.close(layer_shape_index);
+                        layer_shape_index=0;
                         alert(language_client_order_fail);
+                    },
+                    complete : function(XMLHttpRequest,status){
+                        if(status=='timeout'){
+                            layer.close(layer_shape_index);
+                            layer_shape_index=0;
+                            alert("网络可能有问题"+"33");
+                            forbidden=true;
+                            return;
+                        }
                     }
 	     	});
                 layer.close(layer_shape_index);
+                layer_shape_index=0;
             }//functon到此
     //});on click到此
+        function closeshape(){
+            layer.close(layer_shape_index);
+            layer_shape_index=0;
+        }
         
          $('#pad-order-submit-subbtn').on('click',function(){
              $('#divid_client_waitorlist').css("display","none");
              layer_shape_index= layer.load(0, {shade: [0.3,'#fff']});
-            setTimeout(clientsaveorder2,300); 
+            setTimeout(clientsaveorder2,300);
+            //setTimeout(closeshape,20000);
             
         });
         

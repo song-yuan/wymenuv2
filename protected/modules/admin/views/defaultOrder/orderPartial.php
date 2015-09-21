@@ -8,6 +8,7 @@
             </li>
                 <?php foreach ($orderProducts as $orderProduct):?>
                                     <li lid="<?php echo $orderProduct['lid'];?>" 
+                                        setid="<?php echo $orderProduct['set_id'];?>"
                                         productid="<?php echo $orderProduct['product_id'];?>"
                                         order_status="<?php echo $orderProduct['product_order_status'];?>" 
                                         is_giving="<?php echo $orderProduct['is_giving'];?>" 
@@ -20,6 +21,7 @@
                                         <?php  echo $orderProduct['is_giving']==1?'赠':'';
                                                 echo $orderProduct['is_print']==1?'印':'';
                                                 echo $orderProduct['is_retreat']==1?'退':'';
+                                                echo $orderProduct['set_id']=='0000000000'?'':'套';
                                                 if(!empty($orderProduct['taste_memo']) || !empty($tasteids))
                                                 {  echo "味";}
                                         ?></span>

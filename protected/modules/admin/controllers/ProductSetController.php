@@ -161,8 +161,10 @@ class ProductSetController extends BackendController
                 //echo 'ddd';
 		$model = ProductSetDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//var_dump($model);exit;
+                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
+                        $model->update_at = date('Y-m-d H:i:s',time());                        
                         //只有一个时选中，如果第一个必须选中，后续的，判断是选中，必须取消其他选中
                         $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$model->set_id.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
                         //var_dump($modelsp);exit;
@@ -189,9 +191,9 @@ class ProductSetController extends BackendController
         
 	public function actionDetailDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-                $printset = Yii::app()->request->getParam('psid');
+                $printset = Yii::app()->request->getParam('psid');                
 		$ids = Yii::app()->request->getPost('ids');
-                //var_dump($ids);exit;
+                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
