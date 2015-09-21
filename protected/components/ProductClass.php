@@ -67,7 +67,7 @@ class ProductClass
 					$product[$k]['taste'] = array();
 				}
 				if($v['producttype']){
-					$sql = 'select t.*,t1.product_name from nb_product_set_detail t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and set_id=:setId and dpid=:dpid and delete_flag=0';
+					$sql = 'select t.*,t1.product_name from nb_product_set_detail t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.set_id=:setId and t.dpid=:dpid and t.delete_flag=0';
 					$connect = Yii::app()->db->createCommand($sql);
 					$connect->bindValue(':dpid',$dpid);
 					$connect->bindValue(':setId',$v['lid']);
