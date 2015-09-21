@@ -469,9 +469,10 @@
                                                         //if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                                                         if(data.status)
                                                         {
-                                                            layer.close(layer_shape_index);
-                                                            layer_shape_index=0;
+                                                            
                                                         }
+                                                        layer.close(layer_shape_index);
+                                                        layer_shape_index=0;
                                                     },
                                                     error: function(msg){
                                                         layer.close(layer_shape_index);
