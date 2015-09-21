@@ -402,7 +402,7 @@
 .product-taste{
 	float:left;
 }
-.tastepad , .order-tastes{
+.tastepad , .productsetpad, .order-tastes{
 	display:none;
 	position:fixed;
 	top:100px;

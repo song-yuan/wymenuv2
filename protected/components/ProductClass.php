@@ -19,7 +19,7 @@ class ProductClass
 		}
 		//pad 0 非pad 1 pad
 		if($pad){
-			//type 0 普通商品 1 套餐
+			//producttype 0 普通商品 1 套餐
 			$sql = 'select tao.* from ('
                                 . ' select t.*,tc.order_num as order_num,category_name,tc.pid from'
                                 . ' (select lid,dpid,category_id,product_name, original_price, main_picture, rank, store_number, order_number, favourite_number,0 as producttype from nb_product where dpid=:companyId and status=0 and delete_flag=0 and is_show = 1)t'
@@ -65,6 +65,20 @@ class ProductClass
 					}
 				}else{
 					$product[$k]['taste'] = array();
+				}
+				if($product['producttype']){
+					$sql = 'select t.*,t1.product_name from nb_product_set_detail t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and set_id=:setId and dpid=:dpid and delete_flag=0';
+					$connect = Yii::app()->db->createCommand($sql);
+					$connect->bindValue(':dpid',$dpid);
+					$connect->bindValue(':setId',$v['lid']);
+					$productSets = $connect->queryAll();
+					if($productSets){
+						foreach($productSets as $productSet){
+							$productSets[$k]['productset'][$productSet['group_no']] = $productSet;
+						}
+					}else{
+						$productSets[$k]['productset'] = array();
+					}
 				}
 				$product[$k]['is_top10'] = 0;
 			}
