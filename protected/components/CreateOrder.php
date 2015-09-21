@@ -392,6 +392,10 @@ class CreateOrder
 										'product_order_status'=>$orderPorductStatus,
 										);
 					   $db->createCommand()->insert('nb_order_product',$orderProductData);
+					   
+					   $se=new Sequence("order_product");
+                       $orderProductId = $se->nextval();
+					   
 					   $orderPrice +=$productSet['price']*$num;
 					   array_push($printOrderProducts,array('amount'=>$num,'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
 	             	}
@@ -408,7 +412,7 @@ class CreateOrder
  	             			$se=new Sequence("order_taste");
                     		$orderTasteId = $se->nextval();
                     		$orderTasteData = array(
-										'lid'=>$orderProductId,
+										'lid'=>$orderTasteId,
 										'dpid'=>$dpid,
 										'create_at'=>$time,
 										'order_id'=>$orderId,
