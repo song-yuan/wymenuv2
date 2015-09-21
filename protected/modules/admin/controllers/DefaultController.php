@@ -110,13 +110,13 @@ class DefaultController extends BackendController
 		$criteriap->condition =  'delete_flag=0 and t.dpid='.$companyId ;// and is_show=1
 		$criteriap->order = ' t.category_id asc,t.lid asc ';
                 $products =  Product::model()->findAll($criteriap);
-                
+                //var_dump($products);exit;
                 $productidnameArr=array();
                 foreach($products as $product)
                 {
                     $productidnameArr[$product->lid]=$product->product_name;
                 }
-                //var_dump($productSets[0]->productsetdetail);exit;
+                //var_dump($productidnameArr);exit;
                 $this->render('indexall',array(
                                 'siteTypes' => $siteTypes,
                                 'typeId' => $typeId,
