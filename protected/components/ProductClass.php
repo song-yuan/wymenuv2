@@ -74,10 +74,10 @@ class ProductClass
 					$productSets = $connect->queryAll();
 					if($productSets){
 						foreach($productSets as $productSet){
-							$productSets[$k]['productset'][$productSet['group_no']] = $productSet;
+							$product[$k]['productset'][$productSet['group_no']] = $productSet;
 						}
 					}else{
-						$productSets[$k]['productset'] = array();
+						$product[$k]['productset'] = array();
 					}
 				}
 				$product[$k]['is_top10'] = 0;
