@@ -564,7 +564,7 @@
                             <?php endforeach;?>
                             <?php endif;?>
                                <!--     <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座');?></li>-->
-                                <!-- <li typeId="queue" class="tabSite <?php if($typeId == 'queue') echo 'slectliclass';?>"><?php echo yii::t('app','排队');?></li>-->
+                               <!--  <li typeId="queue" class="tabSite <?php if($typeId == 'queue') echo 'slectliclass';?>"><?php echo yii::t('app','排队');?></li>-->
                             </ul>
                         </div>
                             <div class="tab-content" id="tabsiteindex">

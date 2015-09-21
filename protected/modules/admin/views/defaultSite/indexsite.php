@@ -106,7 +106,7 @@
                                                                                                     <?php 
                                                                                                         $temptype=$model["typeid"];
                                                                                                         endif;?>
-                                                                                                        <li class="modalaction <?php if($model["queuepersons"] > 0) echo 'bg-yellow';?>" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" typeId=<?php echo $model["typeid"];?> splid=<?php echo $model["splid"];?>>
+                                                                                                        <li class="modalaction <?php if($model["queuepersons"]>0 && $model["sitefree"]==0) echo 'bg-yellow'; elseif($model["queuepersons"]>0 &&$model["sitefree"]>0) echo 'bg-green';?>" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" typeId=<?php echo $model["typeid"];?> splid=<?php echo $model["splid"];?>>
                                                                                                             <span style="font-size: 20px;">空座:<?php echo empty($model["sitefree"])?0:$model["sitefree"]; ?></span>
                                                                                                             <br><span style="font-size: 20px;">排队:<?php echo $model["queuepersons"]; ?></span>
                                                                                                             <br><?php echo $model["min"]."-".$model["max"]; ?>
