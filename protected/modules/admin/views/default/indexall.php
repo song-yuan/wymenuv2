@@ -658,7 +658,7 @@
             var layer_index_printresult=0;
             var layer_index_membercard=0;
             var layer_index_retreatbox=0;
-            var first_tab="<?php echo $categories[0]['lid']; ?>";
+            var first_tab="<?php echo empty($categories)?"0":$categories[0]['lid']; ?>";
             var ispaybuttonclicked=false;
             //var member_card_pop_flag=0;
             if (typeof Androidwymenuprinter == "undefined") {
