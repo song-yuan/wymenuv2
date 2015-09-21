@@ -265,7 +265,7 @@
                                if (typeof Androidwymenuprinter == "undefined") {
                                     alert("找不到PAD设备");
                                 }else{
-                                    Androidwymenuprinter.queuecall("AM001");                                    
+                                    Androidwymenuprinter.queuecall("AB001");                                    
                                 }                                           
                             });                            
                         </script>
