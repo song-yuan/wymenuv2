@@ -90,7 +90,6 @@ class DefaultSiteController extends BackendController
                 $status = Yii::app()->request->getParam('status','0');
                 $istemp = Yii::app()->request->getParam('istemp','0');
                 $typeId = Yii::app()->request->getParam('typeId','0');
-                $nexpersons="";
                 $queueno="";
                 if($typeId=="queue")
                 {
@@ -98,9 +97,10 @@ class DefaultSiteController extends BackendController
                     $criteria->condition =  't.status=0 and t.dpid='.$this->companyId.' and t.stlid='.$istemp.' and t.splid='.$sid ;
                     $criteria->order = ' t.lid ';
                     $queue = QueuePersons::model()->find($criteria);
-                    //$queue->status=1;
-                    $queueno=$queue->queue_no;
-                    //var_dump($queue);exit;
+                    if(!empty($queue))
+                    {
+                        $queueno=$queue->queue_no;
+                    }
                 }else{
                     $criteria2 = new CDbCriteria;
                     $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$this->companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
