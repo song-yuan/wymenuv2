@@ -206,8 +206,30 @@ function showListPad(items){
 			trTaste +='<div class="clear"></div>';
 			trTaste +='</div></div></div>';
 			
+			//套餐详情
+			var trProductSet = '';
+			if(parseInt(item.producttype)){
+				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-confirm">确 定</div>';
+				trProductSet +='<div class="productset-list" eq="0">';
+				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
+				trProductSet +='<div class="productset-item">';
+				for(var n in item.productset){
+					var productset = item.productset[n];
+					trProductSet +='<div class="productset-group">';
+					for(var m in productset){
+					var productsetItem = productset[m];
+						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+					}
+					trProductSet +='<div class="clear"></div>';
+					trProductSet +='</div>';
+				}
+				trProductSet +='<div class="clear"></div>';
+				trProductSet +='</div></div></div>';
+			}
+			
+			
 			var trEnd = '</div></div>';
-            tr = trHead + trBuy + trPic + trTitle + trTaste + trEnd;
+            tr = trHead + trBuy + trPic + trTitle + trTaste + trProductSet + trEnd;
 			rightPicObj.append(tr);
 		}else{
 			//鍙嶄箣锛屽鏋滃彸渚ч珮搴﹀ぇ锛屽垯杩藉姞鍒板乏渚�
@@ -250,8 +272,29 @@ function showListPad(items){
 			trTaste +='<div class="clear"></div>';
 			trTaste +='</div></div></div>';
 			
+			//套餐详情
+			var trProductSet = '';
+			if(parseInt(item.producttype)){
+				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-confirm">确 定</div>';
+				trProductSet +='<div class="productset-list" eq="0">';
+				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
+				trProductSet +='<div class="productset-item">';
+				for(var n in item.productset){
+					var productset = item.productset[n];
+					trProductSet +='<div class="productset-group">';
+					for(var m in productset){
+						var productsetItem = productset[m];
+						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+					}
+					trProductSet +='<div class="clear"></div>';
+					trProductSet +='</div>';
+				}
+				trProductSet +='<div class="clear"></div>';
+				trProductSet +='</div></div></div>';
+			}
+			
 			var trEnd = '</div></div>';
-			tr = trHead + trBuy + trPic + trTitle + trTaste + trEnd;
+			tr = trHead + trBuy + trPic + trTitle + trTaste + trProductSet + trEnd;
 			leftPicObj.append(tr);
 		}
 	}
