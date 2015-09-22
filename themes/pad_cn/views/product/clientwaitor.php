@@ -452,7 +452,7 @@
                             
                             if(parents.find('.product-taste').hasClass('hasClick')){
 	                             parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
-	                             parents.find('.taste-list').each(function(eq){
+	                             parents.find('.taste-list').each(function(eq,ele){
 	                               if(eq > 0){
 	                                       $(this).remove();
 	                               }else{
