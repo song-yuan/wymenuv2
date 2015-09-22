@@ -210,12 +210,12 @@ function showListPad(items){
 			var trProductSet = '';
 			if(parseInt(item.producttype)){
 				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-confirm">确 定</div>';
-				trProductSet +='<div class="productset-list" eq="0">';
+				trProductSet +='<div class="productset-list">';
 				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
 				trProductSet +='<div class="productset-item">';
 				for(var n in item.productset){
 					var productset = item.productset[n];
-					trProductSet +='<div class="productset-group">';
+					trProductSet +='<div class="productset-group" group-no="'+ n +'">';
 					for(var m in productset){
 					var productsetItem = productset[m];
 						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
@@ -276,12 +276,12 @@ function showListPad(items){
 			var trProductSet = '';
 			if(parseInt(item.producttype)){
 				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-confirm">确 定</div>';
-				trProductSet +='<div class="productset-list" eq="0">';
+				trProductSet +='<div class="productset-list">';
 				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
 				trProductSet +='<div class="productset-item">';
 				for(var n in item.productset){
 					var productset = item.productset[n];
-					trProductSet +='<div class="productset-group">';
+					trProductSet +='<div class="productset-group" group-no="'+ n +'">';
 					for(var m in productset){
 						var productsetItem = productset[m];
 						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
