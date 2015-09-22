@@ -42,6 +42,13 @@ $(document).ready(function(){
     	}
     	
     	var type = _this.attr('type');
+    	//套餐显示详情
+    	if(parseInt(type)){
+    		$('.taste-layer').show();
+	    	$('.productsetpad').hide();
+	    	$(this).parents('.blockCategory').find('.productsetpad').show();
+	    	return;
+    	}
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	var category = parentsBlockCategory.attr('category');//分类id
     	var categoryName = parentsBlockCategory.attr('category-name');//分类 名称
