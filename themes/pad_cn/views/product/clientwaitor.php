@@ -469,9 +469,10 @@
                                                         //if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
                                                         if(data.status)
                                                         {
-                                                            layer.close(layer_shape_index);
-                                                            layer_shape_index=0;
+                                                            
                                                         }
+                                                        layer.close(layer_shape_index);
+                                                        layer_shape_index=0;
                                                     },
                                                     error: function(msg){
                                                         layer.close(layer_shape_index);
@@ -574,7 +575,7 @@
              $('#divid_client_waitorlist').css("display","none");
              layer_shape_index= layer.load(0, {shade: [0.3,'#fff']});
             setTimeout(clientsaveorder2,300);
-            //setTimeout(closeshape,20000);
+            setTimeout(closeshape,30000);
             
         });
         

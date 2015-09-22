@@ -265,7 +265,21 @@
                                if (typeof Androidwymenuprinter == "undefined") {
                                     alert("找不到PAD设备");
                                 }else{
-                                    Androidwymenuprinter.queuecall("AB001");                                    
+                                    var callno=$(this).attr("nexpersons");                                    
+                                    if(callno=="")
+                                    {
+                                        alert("无号可叫！");
+                                        return;
+                                    }
+                                    Androidwymenuprinter.queuecall(callno);                                    
                                 }                                           
-                            });                            
+                            });
+                            
+                            $('#queuepass').on(event_clicktouchstart,function(){
+                               var callno=$(this).attr("nexpersons");
+                               var stlid=$(this).attr("stlid");
+                               var splid=$(this).attr("splid");
+                               
+                               
+                            });
                         </script>
