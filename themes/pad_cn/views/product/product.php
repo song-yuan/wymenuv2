@@ -107,7 +107,7 @@
 <!-- 加入订单动画 -->
 <div class="aniele"></div>
 <!-- 口味的页面  -->
-<div class="taste-layer"></div>
+<div class="taste-all-layer"></div>
 <!-- 全单口味 -->
 <div class="order-tastes" product-id="0">
   <div class="taste-confirm">确 定</div>

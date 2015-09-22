@@ -412,7 +412,7 @@ $(document).ready(function(){
     		layer.msg('没有订单口味!');
     		return;
     	}
-    	$('.taste-layer').show();
+    	$('.taste-all-layer').show();
     	$('.tastepad').hide();
     	$('.order-tastes').show();
     });
@@ -458,9 +458,10 @@ $(document).ready(function(){
     	}
     	
     	
-    	$('.taste-layer').show();
+    	$('.taste-layer').hide();
     	$('.tastepad').hide();
-    	$(this).parents('.blockCategory').find('.tastepad').show();
+    	blockCategory.find('.taste-layer').show();
+    	blockCategory.find('.tastepad').show();
     });
     //点击选择
      $('#forum_list').on(event_clicktouchstart,'.tastepad .taste-select',function(){
