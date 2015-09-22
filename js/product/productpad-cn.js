@@ -624,13 +624,9 @@ $(document).ready(function(){
     	$('.tastepad').hide();
     	$('.order-tastes').hide();
     	$('.taste-layer').hide();
-     });
-     //点击  全单确定
-     $('body').on(event_clicktouchstart,'.taste-all-confirm',function(){
-    	$('.tastepad').hide();
-    	$('.order-tastes').hide();
     	$('.taste-all-layer').hide();
      });
+   
   //  $('.taste-layer').on(event_clicktouchstart,function(){
     //	$('.tastepad').hide();
     //  $(this).hide();
