@@ -80,18 +80,20 @@
                                         success:function(data){
                                             //alert(msg);防止前台开台，但是后台结单或撤台了，就不能继续下单
                                             //if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
-                                            if(data.status)
+                                            //layer.close(layer_index_printresult2);
+                                            if(!data.status)
                                             {
-                                                layer.close(layer_index_printresult2);
+                                                alert("保存失败44");
                                             }
                                         },
                                         error: function(msg){
-                                            layer.close(layer_index_printresult2);
-                                            
+                                            //layer.close(layer_index_printresult2);
+                                            alert("网络错误44");
                                         },
                                         complete : function(XMLHttpRequest,status){
                                             if(status=='timeout'){
-                                                layer.close(layer_index_printresult2);
+                                                //layer.close(layer_index_printresult2);
+                                                alert("超时44");
                                             }
                                         }
                                     });
