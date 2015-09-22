@@ -594,6 +594,10 @@ $(document).ready(function(){
     		});
     	}
     });
+     $('body').on(event_clicktouchstart,'.productset-confirm',function(){
+    	$('.productsetpad').hide();
+    	$('.taste-layer').hide();
+     });
     //选择全单口味
     $('body').on(event_clicktouchstart,'.order-tastes .item',function(){
 
