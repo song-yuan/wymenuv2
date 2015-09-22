@@ -582,7 +582,7 @@ $(document).ready(function(){
     	var groupNo = productsetGroup.attr('group-no');
     	
     	if(!$(this).hasClass('active')){
-    		var str = '<input type="hidden" name="'+productId+',1[1-'+eq+']['+productsetDetailLid+']'+'" value="1"/>';
+    		var str = '<input type="hidden" name="'+productId+',1[1-'+groupNo+']['+productsetDetailLid+']'+'" value="1"/>';
     		$('#padOrderForm').append(str);
     		$(this).addClass('active');
     		$(this).siblings().each(function(){
