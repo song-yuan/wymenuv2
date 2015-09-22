@@ -74,7 +74,7 @@ class ProductClass
 					$productSets = $connect->queryAll();
 					if($productSets){
 						foreach($productSets as $productSet){
-							$product[$k]['productset'][$productSet['group_no']] = $productSet;
+							$product[$k]['productset'][$productSet['group_no']][] = $productSet;
 						}
 					}else{
 						$product[$k]['productset'] = array();
