@@ -213,11 +213,11 @@ function showListPad(items){
 				trProductSet +='<div class="productset-list" eq="0">';
 				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
 				trProductSet +='<div class="productset-item">';
-				for(var k in item.productset){
-					var productset = item.productset[k];
+				for(var n in item.productset){
+					var productset = item.productset[n];
 					trProductSet +='<div class="productset-group">';
-					for(var k in productset){
-					var productsetItem = productset[k];
+					for(var m in productset){
+					var productsetItem = productset[m];
 						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
 					}
 					trProductSet +='<div class="clear"></div>';
@@ -279,11 +279,11 @@ function showListPad(items){
 				trProductSet +='<div class="productset-list" eq="0">';
 				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
 				trProductSet +='<div class="productset-item">';
-				for(var k in item.productset){
-					var productset = item.productset[k];
+				for(var n in item.productset){
+					var productset = item.productset[n];
 					trProductSet +='<div class="productset-group">';
-					for(var k in productset){
-					var productsetItem = productset[k];
+					for(var m in productset){
+						var productsetItem = productset[m];
 						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
 					}
 					trProductSet +='<div class="clear"></div>';
