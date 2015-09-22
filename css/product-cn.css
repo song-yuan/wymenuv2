@@ -421,14 +421,14 @@
    -webkit-background-clip: content;
 }
 
-.taste-list{
+.taste-list,.productset-list{
 	padding:0;
 	margin:0;
 }
 .taste-list:last-child{
 	margin-bottom:50px;
 }
-.taste-title{
+.taste-title,.productset-title{
 	width:100%;
 	height:35px;
 	padding:5px 0;
@@ -437,7 +437,7 @@
 	font-size:20px;
 	border-bottom:solid 2px rgb(229,229,229); 
 }
-.taste-title-l{
+.taste-title-l,.productset-title-l{
 	height:100%;
 	width:48%;
 	padding-left:2%;
@@ -488,15 +488,15 @@
 	background-color: #d84a38;
 	border-radius:5px;
 }
-.taste-item{
+.taste-item,.productset-item{
 	display:none;
 }
-.taste-group{
+.taste-group,.productset-group{
 	float:left;
 	border:solid 1px rgb(229,229,229);
 	margin:5px; 
 }
-.tastepad .item,.order-tastes .item{
+.tastepad .item,.order-tastes .item,.productsetpad .item{
 	min-width:30px;
 	height:30px;
 	padding:5px;
@@ -507,11 +507,11 @@
 	float: left;
 	border:solid 1px rgb(229,229,229); 
 }
-.tastepad .item.active,.order-tastes .item.active{
+.tastepad .item.active,.order-tastes .item.active,.productsetpad .item.active{
 	color:white;
 	background:rgb(103,103,103);
 }
-.taste-confirm{
+.taste-confirm,.productset-confirm{
 	position:absolute;
 	bottom:20px;
 	height:30px;
