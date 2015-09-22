@@ -42,14 +42,17 @@ $(document).ready(function(){
     	}
     	
     	var type = _this.attr('type');
+    	
+    	var parentsBlockCategory = _this.parents('.blockCategory');
     	//套餐显示详情
     	if(parseInt(type)){
-    		$('.taste-layer').show();
+    		$('.taste-layer').hide();
 	    	$('.productsetpad').hide();
-	    	$(this).parents('.blockCategory').find('.productsetpad').show();
+	    	parentsBlockCategory.find('.taste-layer').show();
+	    	parentsBlockCategory.find('.productsetpad').show();
 	    	return;
     	}
-    	var parentsBlockCategory = _this.parents('.blockCategory');
+    	
     	var category = parentsBlockCategory.attr('category');//分类id
     	var categoryName = parentsBlockCategory.attr('category-name');//分类 名称
     	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
