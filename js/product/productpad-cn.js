@@ -572,6 +572,28 @@ $(document).ready(function(){
     		});
     	}
     });
+    //更换套餐明细
+     $('#forum_list').on(event_clicktouchstart,'.productsetpad .item',function(){
+    	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//套餐 ID
+	   	
+	   	var productsetDetailLid = $(this).attr('productset-detail-id');
+    	var productsetGroup = $(this).parents('.productset-group');
+    	var groupNo = productsetGroup.attr('group-no');
+    	
+    	if(!$(this).hasClass('active')){
+    		var str = '<input type="hidden" name="'+productId+',1[1-'+eq+']['+productsetDetailLid+']'+'" value="1"/>';
+    		$('#padOrderForm').append(str);
+    		$(this).addClass('active');
+    		$(this).siblings().each(function(){
+    			if($(this).hasClass('active')){
+		    		var detailId = $(this).attr('productset-detail-id');
+		    		$('input[name="'+productId+',1[1-'+groupNo+']['+detailId+']'+'"]').remove();
+		    		$(this).removeClass('active');
+		    	}
+    		});
+    	}
+    });
     //选择全单口味
     $('body').on(event_clicktouchstart,'.order-tastes .item',function(){
 
