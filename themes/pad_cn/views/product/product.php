@@ -110,7 +110,7 @@
 <div class="taste-all-layer"></div>
 <!-- 全单口味 -->
 <div class="order-tastes" product-id="0">
-  <div class="taste-confirm">确 定</div>
+  <div class="taste-all-confirm">确 定</div>
   <div class="taste-list">
      <div class="taste-title"><div class="taste-title-l">全单口味选择</div>
      <div class="taste-title-r">
