@@ -402,7 +402,7 @@
 .product-taste{
 	float:left;
 }
-.tastepad , .productsetpad, .order-tastes{
+.tastepad{
 	display:none;
 	position:fixed;
 	top:100px;
@@ -420,7 +420,42 @@
     box-shadow: none;
    -webkit-background-clip: content;
 }
-
+ .order-tastes{
+ 	display:none;
+	position:fixed;
+	top:100px;
+	left:0;
+	right:0;
+	width:60%;
+	min-height:600px;
+	max-height:1000px;
+	overflow:scroll;
+	margin:auto auto;
+	z-index:10010;
+	background:white;
+	border: 6px solid rgba(0,0,0,.3);
+    border-radius: 5px;
+    box-shadow: none;
+   -webkit-background-clip: content;
+ }
+ .productsetpad{
+ 	display:none;
+	position:fixed;
+	top:100px;
+	left:0;
+	right:0;
+	width:60%;
+	min-height:600px;
+	max-height:1000px;
+	overflow:scroll;
+	margin:auto auto;
+	z-index:10010;
+	background:white;
+	border: 6px solid rgba(0,0,0,.3);
+    border-radius: 5px;
+    box-shadow: none;
+   -webkit-background-clip: content;
+ }
 .taste-list,.productset-list{
 	padding:0;
 	margin:0;
