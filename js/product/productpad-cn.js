@@ -700,23 +700,27 @@ $(document).ready(function(){
 	    		$(this).find('.active').removeClass('active');
 	    	});
 	    	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
+	    	var singleNums = 0;
+	    	
+			singleNums = parseInt(singleNumObj.html());
 			singleNumObj.html(0);
 			//数量显示
 			singleNumObj.css('display','none');
 	    	$('input[name^="'+productId+'"]').remove();
-	    	
-	    	var total = 0;
-	    		total = parseFloat($('.total-price').html());
-	    	var nums = 0;
-	    		nums = parseInt($('.total-num').html());
-	 		if(nums > 0){
-	 		total -= price;
-	 		if(!parseInt(language)){
-				total = total.toFixed(2);
-			}
-			$('.total-price').html(total);
-			$('.total-num').html(nums-1);
- 		}
+	    	if(parseInt(singleNums)){
+	    		var total = 0;
+		    		total = parseFloat($('.total-price').html());
+		    	var nums = 0;
+		    		nums = parseInt($('.total-num').html());
+		 		if(nums > 0){
+			 		total -= price;
+			 		if(!parseInt(language)){
+						total = total.toFixed(2);
+					}
+					$('.total-price').html(total);
+					$('.total-num').html(nums-1);
+		 		}
+	    	}
  		
 	    	$('.productsetpad').hide();
     		$('.taste-layer').hide();
