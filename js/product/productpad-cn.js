@@ -654,7 +654,7 @@ $(document).ready(function(){
 		}
 		
 		
-    	var price = parseFloat(_this.attr('price'));
+    	var price = parseFloat(productPrice);
     	var total = 0;
     		total = parseFloat($('.total-price').html());
     	var nums = 0;
