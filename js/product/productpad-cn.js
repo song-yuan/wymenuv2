@@ -125,7 +125,7 @@ $(document).ready(function(){
 		$('.total-num').html(nums+1);
                 
                 //alert(padprinterping);
-	if (typeof Androidwymenuprinter != "undefined") {
+		if (typeof Androidwymenuprinter != "undefined") {
                     if(padprinterping!="local")
                     {
                         Androidwymenuprinter.printNetPing(padprinterping,10);
@@ -599,8 +599,81 @@ $(document).ready(function(){
     	}
     });
      $('body').on(event_clicktouchstart,'.productset-confirm',function(){
+     	var _this = $(this);
     	$('.productsetpad').hide();
     	$('.taste-layer').hide();
+    	var parentsBlockCategory = _this.parents('.blockCategory');
+    	
+    	var category = parentsBlockCategory.attr('category');//分类id
+    	var categoryName = parentsBlockCategory.attr('category-name');//分类 名称
+    	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
+    	var productName = parentsBlockCategory.find('.inmiddle').html();//产品 名称
+    	var productPrice = _this.attr('price');//产品 价格
+    	
+    	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
+		var singleNums = 0;
+			singleNums = parseInt(singleNumObj.html());
+		singleNumObj.html(singleNums+1);
+		//数量显示
+		singleNumObj.css('display','block');
+		
+		var str = '';
+		str +='<div class="order-product catory'+category+'">';
+		str +='<div class="product-catory">'+categoryName+'</div>';
+		str +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		str +='</div>';
+		
+		var substr = '';
+		substr +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		if($('.catory'+category).length > 0){
+			var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
+			if(inputNumObj.length > 0){
+				var val = inputNumObj.val();
+				inputNumObj.val(parseInt(val)+1);
+			}else{
+				$('.catory'+category).append(substr);
+			}
+		}else{
+			$('.product-pad-mask .info').append(str);
+		}
+		
+		//把以前选择的口味清除
+		if(parentsBlockCategory.find('.product-taste').hasClass('hasClick')){
+			var eq = singleNums;
+			
+			var str = '<div class="taste-list" eq="'+eq+'">';
+				str +='<div class="taste-title"><div class="taste-title-l">第'+(eq+1)+'道菜口味</div><div class="taste-title-r">';
+				str +='<div class="taste-select">选择</div><div class="taste-none">无</div><div class="clear"></div><input class="input-product " type="hidden" name="taste-num" value="1" />';
+				str +='</div><div class="clear"></div></div>';
+				str +='<div class="taste-item">';
+				str +='</div></div>';
+			parentsBlockCategory.find('.tastepad').append(str);
+		
+			var inputstr = '<input type="hidden" name="'+productId+'[1-'+eq+'][0]" value="1"/>';
+    		$('#padOrderForm').append(inputstr);
+		}
+		
+		
+    	var price = parseFloat(_this.attr('price'));
+    	var total = 0;
+    		total = parseFloat($('.total-price').html());
+    	var nums = 0;
+    		nums = parseInt($('.total-num').html());
+ 		
+		total += price;
+		if(!parseInt(language)){
+			total = total.toFixed(2);
+		}
+		$('.total-price').html(total);
+		$('.total-num').html(nums+1);
+                
+                //alert(padprinterping);
+	if (typeof Androidwymenuprinter != "undefined") {
+                    if(padprinterping!="local")
+                    {
+                        Androidwymenuprinter.printNetPing(padprinterping,10);
+                    }
+                 }	
      });
     //选择全单口味
     $('body').on(event_clicktouchstart,'.order-tastes .item',function(){
