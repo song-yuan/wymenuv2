@@ -546,7 +546,7 @@
 	color:white;
 	background:rgb(103,103,103);
 }
-.taste-confirm,.productset-confirm{
+.taste-confirm{
 	position:absolute;
 	bottom:20px;
 	height:30px;
@@ -561,6 +561,37 @@
 	background-color: #d84a38;
 	border-radius:5px;
 	font-size:25px;
+}
+.productset-bottom{
+	position:absolute;
+	bottom:20px;
+	left:0;
+	right:0;
+	color:white;
+	text-align:center;
+	width: 350px;
+	margin:auto;
+	font-size:25px;
+}
+.productset-confirm{
+	width: 150px;
+	height:30px;
+	line-height:30px;
+	padding:5px;
+	background-color: #d84a38;
+	border-radius:5px;
+	float:left;
+}
+.productset-cancel{
+	width: 150px;
+	height:30px;
+	line-height:30px;
+	padding:5px;
+	background-color: #e5e5e5;
+	border-radius:5px;
+	margin-left:50px;
+	color:#333333;
+	float:left;
 }
 .taste-layer{
   display:none;
