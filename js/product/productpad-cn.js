@@ -693,6 +693,7 @@ $(document).ready(function(){
 	      	var _this = $(this);
 	    	var parentsBlockCategory = _this.parents('.blockCategory');
 	    	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
+	    	var price = parentsBlockCategory.find('.addCart').attr('price');//产品 价格
 	    	
 	    	var productsetGroup = parentsBlockCategory.find('.productset-group');
 	    	productsetGroup.each(function(){
@@ -703,6 +704,20 @@ $(document).ready(function(){
 			//数量显示
 			singleNumObj.css('display','none');
 	    	$('input[name^="'+productId+'"]').remove();
+	    	
+	    	var total = 0;
+	    		total = parseFloat($('.total-price').html());
+	    	var nums = 0;
+	    		nums = parseInt($('.total-num').html());
+	 		if(nums > 0){
+	 		total -= price;
+	 		if(!parseInt(language)){
+				total = total.toFixed(2);
+			}
+			$('.total-price').html(total);
+			$('.total-num').html(nums-1);
+ 		}
+ 		
 	    	$('.productsetpad').hide();
     		$('.taste-layer').hide();
       });
