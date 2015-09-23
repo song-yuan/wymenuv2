@@ -586,13 +586,13 @@ $(document).ready(function(){
     	var groupNo = productsetGroup.attr('group-no');
     	
     	if(!$(this).hasClass('active')){
-    		var str = '<input type="hidden" name="'+productId+',1[1-'+groupNo+']['+productsetDetailLid+']'+'" value="1"/>';
+    		var str = '<input type="hidden" name="'+productId+',1['+groupNo+']['+productsetDetailLid+']'+'" value="1"/>';
     		$('#padOrderForm').append(str);
     		$(this).addClass('active');
     		$(this).siblings().each(function(){
     			if($(this).hasClass('active')){
 		    		var detailId = $(this).attr('productset-detail-id');
-		    		$('input[name="'+productId+',1[1-'+groupNo+']['+detailId+']'+'"]').remove();
+		    		$('input[name="'+productId+',1['+groupNo+']['+detailId+']'+'"]').remove();
 		    		$(this).removeClass('active');
 		    	}
     		});
