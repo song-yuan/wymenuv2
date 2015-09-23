@@ -216,7 +216,7 @@ function showListPad(items){
 			//套餐详情
 			var trProductSet = '';
 			if(parseInt(item.producttype)){
-				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-confirm">确 定</div>';
+				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-bottom"><div class="productset-confirm">确 定</div><div class="productset-cancel">取消</div></div>';
 				trProductSet +='<div class="productset-list">';
 				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
 				trProductSet +='<div class="productset-item">';
@@ -289,7 +289,7 @@ function showListPad(items){
 			//套餐详情
 			var trProductSet = '';
 			if(parseInt(item.producttype)){
-				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-confirm">确 定</div>';
+				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-bottom"><div class="productset-confirm">确 定</div><div class="productset-cancel">取消</div></div>';
 				trProductSet +='<div class="productset-list">';
 				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
 				trProductSet +='<div class="productset-item">';
