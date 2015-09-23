@@ -624,7 +624,7 @@ $(document).ready(function(){
 		str +='</div>';
 		
 		var substr = '';
-		substr +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		substr +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+'" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
 		if($('.catory'+category).length > 0){
 			var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
 			if(inputNumObj.length > 0){
