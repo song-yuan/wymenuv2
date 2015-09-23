@@ -693,6 +693,15 @@ $(document).ready(function(){
 	      	var _this = $(this);
 	    	var parentsBlockCategory = _this.parents('.blockCategory');
 	    	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
+	    	
+	    	var productsetGroup = parentsBlockCategory.find('.productset-group');
+	    	productsetGroup.each(function(){
+	    		$(this).find('.active').removeClass('active');
+	    	});
+	    	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
+			singleNumObj.html(0);
+			//数量显示
+			singleNumObj.css('display','none');
 	    	$('input[name^="'+productId+'"]').remove();
 	    	$('.productsetpad').hide();
     		$('.taste-layer').hide();
