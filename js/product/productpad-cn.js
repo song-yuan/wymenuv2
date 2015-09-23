@@ -606,7 +606,7 @@ $(document).ready(function(){
     	
     	var productsetGroup = parentsBlockCategory.find('.productset-group');
     	productsetGroup.each(function(){
-    		if(!$(this).find('.active')){
+    		if(!$(this).find('.active').length){
     			layer.msg('请选择套餐');
     			return;
     		}
