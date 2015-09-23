@@ -689,7 +689,7 @@ $(document).ready(function(){
                  }	
      });
      //套餐取消
-      $('body').on(event_clicktouchstart,'.productset-confirm',function(){
+      $('body').on(event_clicktouchstart,'.productset-cancel',function(){
 	      	var _this = $(this);
 	    	var parentsBlockCategory = _this.parents('.blockCategory');
 	    	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
