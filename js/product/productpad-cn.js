@@ -688,6 +688,15 @@ $(document).ready(function(){
                     }
                  }	
      });
+     //套餐取消
+      $('body').on(event_clicktouchstart,'.productset-confirm',function(){
+	      	var _this = $(this);
+	    	var parentsBlockCategory = _this.parents('.blockCategory');
+	    	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
+	    	$('input[name^="'+productId+'"]').remove();
+	    	$('.productsetpad').hide();
+    		$('.taste-layer').hide();
+      });
     //选择全单口味
     $('body').on(event_clicktouchstart,'.order-tastes .item',function(){
 
