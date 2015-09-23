@@ -605,12 +605,17 @@ $(document).ready(function(){
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	
     	var productsetGroup = parentsBlockCategory.find('.productset-group');
+    	var flag = true;
     	productsetGroup.each(function(){
     		if(!$(this).find('.active').length){
-    			layer.msg('请选择套餐');
-    			return;
+    			flag = false;
+    			return false;
     		}
     	});
+    	if(!flag){
+    		layer.msg('请选择套餐');
+    		return;
+    	}
     	var category = parentsBlockCategory.attr('category');//分类id
     	var categoryName = parentsBlockCategory.attr('category-name');//分类 名称
     	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
