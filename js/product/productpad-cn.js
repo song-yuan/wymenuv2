@@ -620,7 +620,7 @@ $(document).ready(function(){
 		var str = '';
 		str +='<div class="order-product catory'+category+'">';
 		str +='<div class="product-catory">'+categoryName+'</div>';
-		str +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
+		str +='<div class="product-catory-product">'+productName+'<div class="product-catory-product-right"><input class="set-num input-product" type="text" name="'+productId+'" value="1" price="'+productPrice+'" readonly="true"/> X '+productPrice+'</div></div>';
 		str +='</div>';
 		
 		var substr = '';
