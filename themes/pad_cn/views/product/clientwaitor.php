@@ -444,16 +444,17 @@
                             $('#padOrderForm').find('.input-product').each(function(){
                             var _this = $(this);
                             var productId = _this.attr('name');
-                            var productIdArr = productId.split(","); //字符分割 
-                            productId = productIdArr[0];
                             var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
                             var category = parents.attr('category');//分类id
                             parents.find('.single-num-circel').css('display','none').html(0);
                             
-                            if(parents.find('.product-taste').hasClass('hasClick')){
-	                             parents.find('.product-taste').removeClass('hasClick'); //去掉口味点击类
-	                             parents.find('.taste-list').each(function(eq,ele){
-	                               if(eq > 0){
+                            var productTaste = parents.find('.product-taste');
+                            var productTasteList = parents.find('.taste-list');
+                            if(productTaste.hasClass('hasClick')){
+	                             productTaste.removeClass('hasClick'); //去掉口味点击类
+	                             productTasteList.each(function(){
+	                               var eq = $(this).attr('eq');
+	                               if(parseInt(eq) > 0){
 	                                       $(this).remove();
 	                               }else{
 	                                       $(this).find('.item').removeClass('active'); //去掉第一个口味选中
