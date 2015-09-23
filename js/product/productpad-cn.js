@@ -694,6 +694,7 @@ $(document).ready(function(){
 	    	var parentsBlockCategory = _this.parents('.blockCategory');
 	    	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
 	    	var price = parentsBlockCategory.find('.addCart').attr('price');//产品 价格
+	    	var store = parentsBlockCategory.attr('store');
 	    	
 	    	var productsetGroup = parentsBlockCategory.find('.productset-group');
 	    	productsetGroup.each(function(){
@@ -708,6 +709,10 @@ $(document).ready(function(){
 			singleNumObj.css('display','none');
 	    	$('input[name^="'+productId+'"]').remove();
 	    	if(parseInt(singleNums)){
+	    		if(parseInt(store) >= 0){
+		    		store =parseInt(store) + 1;
+		    		parentsBlockCategory.attr('store',store);
+	    		}
 	    		var total = 0;
 		    		total = parseFloat($('.total-price').html());
 		    	var nums = 0;
