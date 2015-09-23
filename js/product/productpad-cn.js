@@ -608,7 +608,7 @@ $(document).ready(function(){
     	var categoryName = parentsBlockCategory.attr('category-name');//分类 名称
     	var productId = parentsBlockCategory.find('a.product-pic').attr('lid');//产品 ID
     	var productName = parentsBlockCategory.find('.inmiddle').html();//产品 名称
-    	var productPrice = _this.attr('price');//产品 价格
+    	var productPrice = parentsBlockCategory.find('.addCart').attr('price');//产品 价格
     	
     	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
 		var singleNums = 0;
