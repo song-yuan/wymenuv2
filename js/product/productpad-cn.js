@@ -191,6 +191,9 @@ $(document).ready(function(){
     	
     	var productId = _this.attr('product-id');
     	var type = _this.attr('type');
+    	if(parseInt(type)){
+    		$('input[name^="'+productId+'"]').remove();
+    	}
     	var price = parseFloat(_this.attr('price'));
     	var total = 0;
     		total = parseFloat($('.total-price').html());
