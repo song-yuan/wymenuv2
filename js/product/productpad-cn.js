@@ -260,7 +260,7 @@ $(document).ready(function(){
             
  		    $('input[name^="'+productId+'"]').remove();
         });
-        parentsBlockCategory.find('.productset-group').each(function(){
+        parents.find('.productset-group').each(function(){
     			$(this).find('.active').removeClass('active');
     		});
         //清空订单
