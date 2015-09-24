@@ -62,7 +62,11 @@ $(document).ready(function(){
     	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
 		var singleNums = 0;
 			singleNums = parseInt(singleNumObj.html());
-		singleNumObj.html(singleNums+1);
+		
+		//数量不大于1并且不是套餐
+		if(!(singleNums&&parseInt(type))){
+			singleNumObj.html(singleNums+1);
+		}
 		//数量显示
 		singleNumObj.css('display','block');
 		
@@ -117,12 +121,14 @@ $(document).ready(function(){
     	var nums = 0;
     		nums = parseInt($('.total-num').html());
  		
-		total += price;
-		if(!parseInt(language)){
-			total = total.toFixed(2);
+ 		if(!(singleNums&&parseInt(type))){ 
+			total += price;
+			if(!parseInt(language)){
+				total = total.toFixed(2);
+			}
+			$('.total-price').html(total);
+			$('.total-num').html(nums+1);
 		}
-		$('.total-price').html(total);
-		$('.total-num').html(nums+1);
                 
                 //alert(padprinterping);
 		if (typeof Androidwymenuprinter != "undefined") {
