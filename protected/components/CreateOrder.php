@@ -609,7 +609,7 @@ class CreateOrder
 	}
 	//获取套餐明细
 	public static function getSetProductId($dpid,$lid){
-		$sql = 'select product_id,price from nb_product_set_detail where dpid='.$dpid.' and lid='.$lid;
+		$sql = 'select product_id,price,number from nb_product_set_detail where dpid='.$dpid.' and lid='.$lid;
 		$result = Yii::app()->createCommand($sql)->queryRow();
 		return $result;
 	}
