@@ -370,14 +370,15 @@ class CreateOrder
                        $sql = 'select * from nb_product_set where dpid='.$dpid.' and lid='.$goodsArr[0];
                        $result = $db->createCommand($sql)->queryRow();
                        if($result){
-                               if($result['store_number']==0 ||($result['store_number'] > 0&&$result['store_number'] < $num)){
+                               if($result['store_number']==0 ||($result['store_number'] > 0&&$result['store_number'] < $goodsArr[1])){
                                        throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！'))));
                                }
                        }else{
                                throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
                        }
-                       $productSets = self::getSetProductIds($dpid,$goodsArr[0]);
-                       foreach($productSets as $productSet){
+                       //添加选择的套餐明细
+                       foreach($num as $setDetail){
+                       	$productSet = self::getSetProductId($dpid,$setDetail);
 	             		$orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
@@ -387,7 +388,7 @@ class CreateOrder
 										'product_id'=>$productSet['product_id'],
 										'price'=>$productSet['price'],
 										'update_at'=>$time,
-										'amount'=>$num,
+										'amount'=>$productSet['number'],
 										'taste_memo'=>"",
 										'product_order_status'=>$orderPorductStatus,
 										);
@@ -604,5 +605,11 @@ class CreateOrder
 		$sql = 'select product_id,price from nb_product_set_detail where dpid='.$dpid.' and set_id='.$setId.' and is_select=1 and delete_flag=0';
 		$results = Yii::app()->createCommand($sql)->queryAll();
 		return $results;
+	}
+	//获取套餐明细
+	public static function getSetProductId($dpid,$lid){
+		$sql = 'select product_id,price from nb_product_set_detail where dpid='.$dpid.' and lid='.$lid;
+		$result = Yii::app()->createCommand($sql)->queryRow();
+		return $result;
 	}
 }
