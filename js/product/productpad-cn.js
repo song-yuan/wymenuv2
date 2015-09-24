@@ -64,6 +64,9 @@ $(document).ready(function(){
 			singleNums = parseInt(singleNumObj.html());
 		
 		//数量不大于1并且不是套餐
+		alert(parseInt(singleNums) > 0);
+		alert(parseInt(type) > 0);
+		alert(parseInt(singleNums) > 0 && parseInt(type) > 0);
 		if(parseInt(singleNums) > 0 && parseInt(type) > 0){
 			singleNumObj.html(singleNums);
 		}else{
