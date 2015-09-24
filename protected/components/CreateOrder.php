@@ -377,7 +377,6 @@ class CreateOrder
                                throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
                        }
                        //添加选择的套餐明细
-                       var_dump($num);exit;
                        foreach($num as $setDetail){
                        	$detailId = key($setDetail);
                        	$productSet = self::getSetProductId($dpid,$detailId);
@@ -402,6 +401,7 @@ class CreateOrder
 					   $orderPrice +=$productSet['price']*$productSet['number'];
 					   array_push($printOrderProducts,array('amount'=>$productSet['number'],'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
 	             	}
+	             	var_dump($printOrderProducts);exit;
 	             	if($result['store_number'] > 0){
 	             		$sql = 'update nb_product_set set store_number=store_number-1 where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();
