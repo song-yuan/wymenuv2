@@ -379,9 +379,7 @@ class CreateOrder
                        //添加选择的套餐明细
                        foreach($num as $setDetail){
                        	$detailId = key($setDetail);
-                       	var_dump($detailId);
                        	$productSet = self::getSetProductId($dpid,$detailId);
-                       		var_dump($productSet);exit;
 	             		$orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
@@ -606,13 +604,13 @@ class CreateOrder
 	//获取套餐里选中单品的id
 	public static function getSetProductIds($dpid,$setId){
 		$sql = 'select product_id,price from nb_product_set_detail where dpid='.$dpid.' and set_id='.$setId.' and is_select=1 and delete_flag=0';
-		$results = Yii::app()->createCommand($sql)->queryAll();
+		$results = Yii::app()->db->createCommand($sql)->queryAll();
 		return $results;
 	}
 	//获取套餐明细
 	public static function getSetProductId($dpid,$lid){
 		$sql = 'select product_id,price,number from nb_product_set_detail where dpid='.$dpid.' and lid='.$lid;
-		$result = Yii::app()->createCommand($sql)->queryRow();
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		return $result;
 	}
 }
