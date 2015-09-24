@@ -257,12 +257,14 @@ $(document).ready(function(){
                    }
            	     });
              }
-            
- 		    $('input[name^="'+productId+'"]').remove();
-        });
-        parents.find('.productset-group').each(function(){
+             
+            //清空选中套餐
+            parents.find('.productset-group').each(function(){
     			$(this).find('.active').removeClass('active');
     		});
+    		
+ 		    $('input[name^="'+productId+'"]').remove();
+        });
         //清空订单
     	$('#padOrderForm').find('.info').html('');
     	
