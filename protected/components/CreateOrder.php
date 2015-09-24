@@ -393,7 +393,8 @@ class CreateOrder
 										'taste_memo'=>"",
 										'product_order_status'=>$orderPorductStatus,
 										);
-					   $db->createCommand()->insert('nb_order_product',$orderProductData);
+						var_dump($orderProductData);exit;
+					  $db->createCommand()->insert('nb_order_product',$orderProductData);
 					   
 					   $se=new Sequence("order_product");
                        $orderProductId = $se->nextval();
@@ -401,7 +402,6 @@ class CreateOrder
 					   $orderPrice +=$productSet['price']*$productSet['number'];
 					   array_push($printOrderProducts,array('amount'=>$productSet['number'],'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
 	             	}
-	             	var_dump($printOrderProducts);exit;
 	             	if($result['store_number'] > 0){
 	             		$sql = 'update nb_product_set set store_number=store_number-1 where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();
