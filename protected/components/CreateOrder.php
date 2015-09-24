@@ -378,7 +378,8 @@ class CreateOrder
                        }
                        //添加选择的套餐明细
                        foreach($num as $setDetail){
-                       	$productSet = self::getSetProductId($dpid,$setDetail);
+                       	$detailId = key($setDetail);
+                       	$productSet = self::getSetProductId($dpid,$detailId);
 	             		$orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
