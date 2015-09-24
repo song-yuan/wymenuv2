@@ -377,6 +377,7 @@ class CreateOrder
                                throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
                        }
                        //添加选择的套餐明细
+                       var_dump($num);exit;
                        foreach($num as $setDetail){
                        	$detailId = key($setDetail);
                        	$productSet = self::getSetProductId($dpid,$detailId);
