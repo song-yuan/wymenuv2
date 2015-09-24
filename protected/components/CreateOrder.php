@@ -378,7 +378,8 @@ class CreateOrder
                        }
                        //添加选择的套餐明细
                        foreach($num as $setDetail){
-                       	$productSet = self::getSetProductId($dpid,$setDetail);
+                       	$detailId = key($setDetail);
+                       	$productSet = self::getSetProductId($dpid,$detailId);
 	             		$orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
@@ -397,7 +398,7 @@ class CreateOrder
 					   $se=new Sequence("order_product");
                        $orderProductId = $se->nextval();
 					   
-					   $orderPrice +=$productSet['price']*$num;
+					   $orderPrice +=$productSet['price']*$productSet['number'];
 					   array_push($printOrderProducts,array('amount'=>$num,'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
 	             	}
 	             	if($result['store_number'] > 0){
