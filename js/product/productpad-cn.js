@@ -238,8 +238,6 @@ $(document).ready(function(){
  		 	var _this = $(this);
              var productId = _this.attr('name');
              var num = _this.val(); //获取下单数量
-             var productIdArr = productId.split(","); //字符分割 
-             productId = productIdArr[0];
              var parents = $('.blockCategory a[lid="'+productId+'"]').parents('.blockCategory');
              //获取库存
              var store = parents.attr('store');
@@ -262,6 +260,9 @@ $(document).ready(function(){
             
  		    $('input[name^="'+productId+'"]').remove();
         });
+        parentsBlockCategory.find('.productset-group').each(function(){
+    			$(this).find('.active').removeClass('active');
+    		});
         //清空订单
     	$('#padOrderForm').find('.info').html('');
     	
