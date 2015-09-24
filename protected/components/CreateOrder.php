@@ -399,12 +399,12 @@ class CreateOrder
                        $orderProductId = $se->nextval();
 					   
 					   $orderPrice +=$productSet['price']*$productSet['number'];
-					   array_push($printOrderProducts,array('amount'=>$num,'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
+					   array_push($printOrderProducts,array('amount'=>$productSet['number'],'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
 	             	}
 	             	if($result['store_number'] > 0){
-	             		$sql = 'update nb_product_set set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+	             		$sql = 'update nb_product_set set store_number=store_number-'.$productSet['number'].' where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();
-	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-$num));
+	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-$productSet['number']));
 	             	}
  	             }else{
  	             	//单品 如果有口味  num-eq =>array('taste_id1','taste_id2') num 是数量 eq是序号 $goodsArr[0] 产品id
