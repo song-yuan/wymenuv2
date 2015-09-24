@@ -192,6 +192,9 @@ $(document).ready(function(){
     	var productId = _this.attr('product-id');
     	var type = _this.attr('type');
     	if(parseInt(type)){
+    		parentsBlockCategory.find('.productset-group').each(function(){
+    			$(this).find('.active').removeClass('active');
+    		});
     		$('input[name^="'+productId+'"]').remove();
     	}
     	var price = parseFloat(_this.attr('price'));
