@@ -379,7 +379,9 @@ class CreateOrder
                        //添加选择的套餐明细
                        foreach($num as $setDetail){
                        	$detailId = key($setDetail);
+                       	var_dump($detailId);
                        	$productSet = self::getSetProductId($dpid,$detailId);
+                       		var_dump($productSet);exit;
 	             		$orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
@@ -393,7 +395,6 @@ class CreateOrder
 										'taste_memo'=>"",
 										'product_order_status'=>$orderPorductStatus,
 										);
-						var_dump($orderProductData);exit;
 					  $db->createCommand()->insert('nb_order_product',$orderProductData);
 					   
 					   $se=new Sequence("order_product");
