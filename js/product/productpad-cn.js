@@ -655,7 +655,9 @@ $(document).ready(function(){
 			var inputNumObj = $('.catory'+category).find('input[name="'+productId+'"]');
 			if(inputNumObj.length > 0){
 				var val = inputNumObj.val();
-				inputNumObj.val(parseInt(val)+1);
+				if(!singleNums){
+					inputNumObj.val(parseInt(val)+1);
+				}
 			}else{
 				$('.catory'+category).append(substr);
 			}
