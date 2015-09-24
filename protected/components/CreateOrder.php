@@ -397,7 +397,7 @@ class CreateOrder
 					   $se=new Sequence("order_product");
                        $orderProductId = $se->nextval();
 					   
-					   $orderPrice +=$productSet['price']*$num;
+					   $orderPrice +=$productSet['price']*$productSet['number'];
 					   array_push($printOrderProducts,array('amount'=>$num,'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
 	             	}
 	             	if($result['store_number'] > 0){
