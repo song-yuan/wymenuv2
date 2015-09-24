@@ -64,7 +64,7 @@ $(document).ready(function(){
 			singleNums = parseInt(singleNumObj.html());
 		
 		//数量不大于1并且不是套餐
-		if(!(singleNums&&parseInt(type))){
+		if(!(singleNums > 1&&parseInt(type)==1)){
 			singleNumObj.html(singleNums+1);
 		}
 		//数量显示
@@ -121,7 +121,7 @@ $(document).ready(function(){
     	var nums = 0;
     		nums = parseInt($('.total-num').html());
  		
- 		if(!(singleNums&&parseInt(type))){ 
+ 		if(!(singleNums > 1&&parseInt(type)==1)){ 
 			total += price;
 			if(!parseInt(language)){
 				total = total.toFixed(2);
