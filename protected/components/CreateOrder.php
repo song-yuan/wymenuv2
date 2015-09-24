@@ -370,7 +370,7 @@ class CreateOrder
                        $sql = 'select * from nb_product_set where dpid='.$dpid.' and lid='.$goodsArr[0];
                        $result = $db->createCommand($sql)->queryRow();
                        if($result){
-                               if($result['store_number']==0 ||($result['store_number'] > 0&&$result['store_number'] < $goodsArr[1])){
+                               if($result['store_number']==0 ||($result['store_number'] > 0&&$result['store_number'] < 1)){
                                        throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！'))));
                                }
                        }else{
@@ -402,9 +402,9 @@ class CreateOrder
 					   array_push($printOrderProducts,array('amount'=>$productSet['number'],'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
 	             	}
 	             	if($result['store_number'] > 0){
-	             		$sql = 'update nb_product_set set store_number=store_number-'.$productSet['number'].' where dpid='.$dpid.' and lid='.$goodsArr[0];
+	             		$sql = 'update nb_product_set set store_number=store_number-1 where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();
-	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-$productSet['number']));
+	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-1));
 	             	}
  	             }else{
  	             	//单品 如果有口味  num-eq =>array('taste_id1','taste_id2') num 是数量 eq是序号 $goodsArr[0] 产品id
