@@ -173,8 +173,12 @@ function showListPad(items){
 			}else{
 				var trHead = '<div class="blockRight blockCategory" product-id="'+pad(item.lid,10)+'" store="'+item.store_number+'" p-category="'+pad(item.pid,10)+'" category="'+pad(item.category_id,10)+'" category-name="'+item.category_name+'">';
 			}
-			
-			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'">';
+			var trPic = '';
+			if(parseInt(item.producttype)){
+				trPic = '<a class="product-pic" lid="'+item.lid+',1" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'">';
+				}else{
+				trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'">';
+				}
 				trPic +='<i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_search.png" style="width:3.8em;height:3.5em;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart.png" style="width:3.8em;height:3.5em;"/><br>'+language_diancai+'</i>';
 				trPic +='<i class="icon-hover-3 product-taste" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_taste.png" style="width:3.8em;height:3.5em;"/><br>口味</i><i class="icon-hover-4 delCart" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart_m.png" style="width:3.8em;height:3.5em;"/><br>'+language_jiancai+'</i><i class="icon-hover-5 single-num-circel">0</i>';
 				if(parseInt(item.store_number)==0){
@@ -187,6 +191,8 @@ function showListPad(items){
 			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div></div></div>';
 			
 			var trTaste = '';
+			
+			trTaste = '<div class="taste-layer">';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'"><div class="taste-confirm">确 定</div>';
 			trTaste +='<div class="taste-list" eq="0">';
 			trTaste +='<div class="taste-title"><div class="taste-title-l">第1道菜口味</div><div class="taste-title-r">';
@@ -205,17 +211,18 @@ function showListPad(items){
 			}
 			trTaste +='<div class="clear"></div>';
 			trTaste +='</div></div></div>';
+			trTaste +='</div>';
 			
 			//套餐详情
 			var trProductSet = '';
 			if(parseInt(item.producttype)){
-				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-confirm">确 定</div>';
-				trProductSet +='<div class="productset-list" eq="0">';
+				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-bottom"><div class="productset-confirm">确 定</div><div class="productset-cancel">取消</div></div>';
+				trProductSet +='<div class="productset-list">';
 				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
 				trProductSet +='<div class="productset-item">';
 				for(var n in item.productset){
 					var productset = item.productset[n];
-					trProductSet +='<div class="productset-group">';
+					trProductSet +='<div class="productset-group" group-no="'+ n +'">';
 					for(var m in productset){
 					var productsetItem = productset[m];
 						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
@@ -239,7 +246,12 @@ function showListPad(items){
 				var trHead = '<div class="blockRight blockCategory" product-id="'+pad(item.lid,10)+'" store="'+item.store_number+'" p-category="'+pad(item.pid,10)+'" category="'+pad(item.category_id,10)+'" category-name="'+item.category_name+'">';
 			}
 			
-			var trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'">';
+			var trPic = '';
+			if(parseInt(item.producttype)){
+				trPic = '<a class="product-pic" lid="'+item.lid+',1" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'">';
+				}else{
+				trPic = '<a class="product-pic" lid="'+item.lid+'" href="javascript:;"><img style="width:100%;margin:0;" src="'+thumb+'" id="p'+item.lid+'">';
+				}
 				trPic +='<i class="icon-hover-1 view-product-pic" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_search.png" style="width:3.8em;height:3.5em;"/><br>'+language_duotuliulan+'</i><i class="icon-hover-2 addCart" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart.png" style="width:3.8em;height:3.5em;"/><br>'+language_diancai+'</i>';
 				trPic +='<i class="icon-hover-3 product-taste" product-id="'+item.lid+'" ><img src="/wymenuv2/./img/product/icon_taste.png" style="width:3.8em;height:3.5em;"/><br>口味</i><i class="icon-hover-4 delCart" product-id="'+item.lid+'" type="'+item.producttype+'" price="'+item.original_price+'"><img src="/wymenuv2/./img/product/icon_cart_m.png" style="width:3.8em;height:3.5em;"/><br>'+language_jiancai+'</i><i class="icon-hover-5 single-num-circel">0</i>';
 				if(parseInt(item.store_number)==0){
@@ -253,6 +265,7 @@ function showListPad(items){
 			var trTitle = '<div class="pictitle" style="background:rgb(255,255,255);border-top:0px;padding-bottom:0;"><div class="subject-num"><div>'+language_renqi+item.order_number+'&nbsp;￥'+item.original_price+'</div></div></div>';
 			
 			var trTaste = '';
+			trTaste = '<div class="taste-layer">';
 			trTaste +='<div class="tastepad" product-id="'+pad(item.lid,10)+'"><div class="taste-confirm">确 定</div>';
 			trTaste +='<div class="taste-list" eq="0">';
 			trTaste +='<div class="taste-title"><div class="taste-title-l">第1道菜口味</div><div class="taste-title-r">';
@@ -271,17 +284,18 @@ function showListPad(items){
 			}
 			trTaste +='<div class="clear"></div>';
 			trTaste +='</div></div></div>';
+			trTaste +='</div>';
 			
 			//套餐详情
 			var trProductSet = '';
 			if(parseInt(item.producttype)){
-				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-confirm">确 定</div>';
-				trProductSet +='<div class="productset-list" eq="0">';
+				trProductSet +='<div class="productsetpad" productset-id="'+pad(item.lid,10)+'"><div class="productset-bottom"><div class="productset-confirm">确 定</div><div class="productset-cancel">取消</div></div>';
+				trProductSet +='<div class="productset-list">';
 				trProductSet +='<div class="productset-title"><div class="productset-title-l">套餐明细</div></div>';
 				trProductSet +='<div class="productset-item">';
 				for(var n in item.productset){
 					var productset = item.productset[n];
-					trProductSet +='<div class="productset-group">';
+					trProductSet +='<div class="productset-group" group-no="'+ n +'">';
 					for(var m in productset){
 						var productsetItem = productset[m];
 						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 

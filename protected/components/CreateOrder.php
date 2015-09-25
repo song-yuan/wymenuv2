@@ -370,14 +370,16 @@ class CreateOrder
                        $sql = 'select * from nb_product_set where dpid='.$dpid.' and lid='.$goodsArr[0];
                        $result = $db->createCommand($sql)->queryRow();
                        if($result){
-                               if($result['store_number']==0 ||($result['store_number'] > 0&&$result['store_number'] < $num)){
+                               if($result['store_number']==0 ||($result['store_number'] > 0&&$result['store_number'] < 1)){
                                        throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！'))));
                                }
                        }else{
                                throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
                        }
-                       $productSets = self::getSetProductIds($dpid,$goodsArr[0]);
-                       foreach($productSets as $productSet){
+                       //添加选择的套餐明细
+                       foreach($num as $setDetail){
+                       	$detailId = key($setDetail);
+                       	$productSet = self::getSetProductId($dpid,$detailId);
 	             		$orderProductData = array(
 										'lid'=>$orderProductId,
 										'dpid'=>$dpid,
@@ -387,22 +389,22 @@ class CreateOrder
 										'product_id'=>$productSet['product_id'],
 										'price'=>$productSet['price'],
 										'update_at'=>$time,
-										'amount'=>$num,
+										'amount'=>$productSet['number'],
 										'taste_memo'=>"",
 										'product_order_status'=>$orderPorductStatus,
 										);
-					   $db->createCommand()->insert('nb_order_product',$orderProductData);
+					  $db->createCommand()->insert('nb_order_product',$orderProductData);
 					   
 					   $se=new Sequence("order_product");
                        $orderProductId = $se->nextval();
 					   
-					   $orderPrice +=$productSet['price']*$num;
-					   array_push($printOrderProducts,array('amount'=>$num,'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
+					   $orderPrice +=$productSet['price']*$productSet['number'];
+					   array_push($printOrderProducts,array('amount'=>$productSet['number'],'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
 	             	}
 	             	if($result['store_number'] > 0){
-	             		$sql = 'update nb_product_set set store_number=store_number-'.$num.' where dpid='.$dpid.' and lid='.$goodsArr[0];
+	             		$sql = 'update nb_product_set set store_number=store_number-1 where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();
-	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-$num));
+	             		 array_push($sellOff,array("product_id"=>sprintf("%010d",$goodsArr[0]),"type"=>"set","num"=>$result['store_number']-1));
 	             	}
  	             }else{
  	             	//单品 如果有口味  num-eq =>array('taste_id1','taste_id2') num 是数量 eq是序号 $goodsArr[0] 产品id
@@ -602,7 +604,13 @@ class CreateOrder
 	//获取套餐里选中单品的id
 	public static function getSetProductIds($dpid,$setId){
 		$sql = 'select product_id,price from nb_product_set_detail where dpid='.$dpid.' and set_id='.$setId.' and is_select=1 and delete_flag=0';
-		$results = Yii::app()->createCommand($sql)->queryAll();
+		$results = Yii::app()->db->createCommand($sql)->queryAll();
 		return $results;
+	}
+	//获取套餐明细
+	public static function getSetProductId($dpid,$lid){
+		$sql = 'select product_id,price,number from nb_product_set_detail where dpid='.$dpid.' and lid='.$lid;
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		return $result;
 	}
 }
