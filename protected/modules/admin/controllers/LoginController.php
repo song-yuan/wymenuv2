@@ -54,7 +54,7 @@ class LoginController extends BackendController
 		Yii::app()->user->logout();
                 //Yii::app()->user->
 		//$this->redirect(array('index','language'=>$language));
-                $this->redirect('index');
+                $this->redirect('/wymenuv2/admin/login');
 	}
         public function actionUnlock()
         {

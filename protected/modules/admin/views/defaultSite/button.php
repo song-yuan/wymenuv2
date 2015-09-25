@@ -12,9 +12,9 @@
 			
 			<div class="modal-body">
 				<?php if($typeId=='queue') :?>
-                                        第一个排队号：<?php echo $nexpersons; ?><br>
-                                        <button  id="queuecall" style="width:7.0em;margin:10px; " type="button" nexpersons="<?php echo $nexpersons; ?>" splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php echo yii::t('app','叫号');?></button>
-                                        <button  id="queuepass" style="width:7.0em;margin:10px; " type="button" nexpersons="<?php echo $nexpersons; ?>" splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php echo yii::t('app','下一个');?></button>                                        
+                            第一个排队号：<span id="callno"><?php echo $nexpersons; ?></span><br>
+                                        <button  id="queuecall" style="width:7.0em;margin:10px; " type="button"  splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php echo yii::t('app','叫号');?></button>
+                                        <button  id="queuepass" style="width:7.0em;margin:10px; " type="button"  splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php echo yii::t('app','下一个');?></button>                                        
                                 <?php elseif($status=='1') :?>
                                 <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn grey orderaction"><?php echo yii::t('app','点 单');?></button>
                                 <div class="pull-right">
@@ -60,13 +60,16 @@
 			<?php $this->endWidget(); ?>
                         <script type="text/javascript">
                             $(document).ready(function() {
+                                
                                 //alert($('#site_number')[0]);
                                 var sno=$("#site_number");
                                 if(sno.length > 0)
                                 {
                                     sno[0].focus();
                                 }
-                            });
+                                
+                            });                            
+                            
                             
                             function clearolddata(){
                                 $("#tab_sitelist").show();
@@ -262,10 +265,12 @@
                             });
                             
                             $('#queuecall').on(event_clicktouchstart,function(){
+                                var callno=$("#callno").text();
+                                //alert(callno);return;
                                if (typeof Androidwymenuprinter == "undefined") {
                                     alert("找不到PAD设备");
                                 }else{
-                                    var callno=$(this).attr("nexpersons");                                    
+                                                                        
                                     if(callno=="")
                                     {
                                         alert("无号可叫！");
@@ -276,10 +281,35 @@
                             });
                             
                             $('#queuepass').on(event_clicktouchstart,function(){
-                               var callno=$(this).attr("nexpersons");
+                               var statu = confirm("<?php echo yii::t('app','确定下一个吗？如果确定本号码将不能再叫号！');?>");
+                                if(!statu){
+                                    return false;
+                                }
+                               var callno=$("#callno").text();
                                var stlid=$(this).attr("stlid");
                                var splid=$(this).attr("splid");
-                               
-                               
+                               var dpid="<?php echo $this->companyId; ?>";
+                               $.ajax({
+                                    url:"/wymenuv2/admin/defaultSite/nextPerson/companyId/"+dpid+"/stlid/"+stlid+"/splid/"+splid+"/callno/"+callno,
+                                    type:'GET',
+                                    timeout:5000,
+                                    cache:false,
+                                    async:false,
+                                    dataType: "json",
+                                    success:function(msg){
+                                         if(msg.status)
+                                         {
+                                             $("#callno").text(msg.callno);
+                                         }
+                                    },
+                                    error: function(msg){
+                                        alert("网络可能有问题，再试一次！");
+                                    },
+                                    complete : function(XMLHttpRequest,status){
+                                        if(status=='timeout'){
+                                            alert("网络可能有问题，再试一次！");                                            
+                                        }
+                                    }
+                                });
                             });
                         </script>

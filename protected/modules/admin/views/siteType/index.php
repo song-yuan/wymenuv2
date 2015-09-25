@@ -66,6 +66,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','公司');?></th>
 								<th><?php echo yii::t('app','名字');?></th>
+                                                                <th><?php echo yii::t('app','简称');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -76,6 +77,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="type_id[]" /></td>
 								<td ><?php echo $model->company ? $model->company->company_name : '' ;?></td>
 								<td><a href="" ><?php echo $model->name;?></a></td>
+								<td><a href="" ><?php echo $model->simplecode;?></a></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('siteType/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>

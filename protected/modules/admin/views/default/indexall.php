@@ -564,7 +564,7 @@
                             <?php endforeach;?>
                             <?php endif;?>
                                <!--     <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座');?></li>-->
-                               <!--  <li typeId="queue" class="tabSite <?php if($typeId == 'queue') echo 'slectliclass';?>"><?php echo yii::t('app','排队');?></li>-->
+                                <li typeId="queue" class="tabSite <?php if($typeId == 'queue') echo 'slectliclass';?>"><?php echo yii::t('app','排队');?></li>
                             </ul>
                         </div>
                             <div class="tab-content" id="tabsiteindex">
@@ -660,6 +660,7 @@
             var layer_index_retreatbox=0;
             var first_tab="<?php echo empty($categories)?"0":$categories[0]['lid']; ?>";
             var ispaybuttonclicked=false;
+            var intervalQueueList;
             //var member_card_pop_flag=0;
             if (typeof Androidwymenuprinter == "undefined") {
                 event_clicktouchstart="click";
@@ -679,12 +680,26 @@
                 $('#tabsiteindex').load(tabcurrenturl);
             });
             
+            function reloadqueuestate()
+            {
+                if($("#tab_sitelist").css("display")=="block")
+                {
+                    $('#tabsiteindex').load(tabcurrenturl);
+                }
+            }
+            
             $('.tabSite').on(event_clicktouchstart, function(){
                 $('.tabSite').removeClass('slectliclass');
                 $(this).addClass('slectliclass');
                 var typeId=$(this).attr('typeid');
                 tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>'+'/typeId/'+typeId+'/sistemp/'+gsistemp+'/stypeId/'+gstypeid+'/ssid/'+gssid+'/op/'+gop;
                 $('#tabsiteindex').load(tabcurrenturl); 
+                if(typeId=="queue")
+                {
+                    intervalQueueList = setInterval(reloadqueuestate,"15000");
+                }else{
+                    clearTimeout(intervalQueueList); 
+                }
             });
             
             $('.tabProduct').on(event_clicktouchstart, function(){
