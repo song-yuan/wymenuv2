@@ -91,6 +91,8 @@
                                                 confirm("打印失败，是否重新打印？", function(result) {                  
                                                         reprint=result;
                                                 });
+                                            }else{
+                                                reprint=false;
                                             }
                                         }
                                  }else{
