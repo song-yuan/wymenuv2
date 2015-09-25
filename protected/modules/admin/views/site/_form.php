@@ -31,6 +31,13 @@
 											<?php echo $form->error($model, 'floor_id' )?>
 										</div>
 									</div>
+                                                                        <div class="form-group">
+										<?php echo $form->label($model, 'splid',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'splid', array('0' => yii::t('app','-- 请选择 --')) +$sitepersons ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('splid')));?>
+											<?php echo $form->error($model, 'splid' )?>
+										</div>
+									</div>
 									<div class="form-group">
 										<?php echo $form->label($model, 'site_level',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">

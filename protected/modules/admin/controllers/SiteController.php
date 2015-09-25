@@ -19,7 +19,7 @@ class SiteController extends BackendController
                         $typeId = array_search($typeId, $typeKeys) ? $typeId : $typeKeys[0] ;                      
                 }
 		$criteria = new CDbCriteria;
-                $criteria->with = array('siteType', 'floor');
+                $criteria->with = array('siteType', 'floor','sitePersons');
                 $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$this->companyId ;
                 $criteria->order = ' t.type_id asc ';		
                 $models = Site::model()->findAll($criteria);
@@ -55,12 +55,14 @@ class SiteController extends BackendController
 		}
 		$types = $this->getTypes();
                 $floors = $this->getFloors();
+                $sitepersons = $this->getSitePersons();
                 //var_dump($floors);
                 //var_dump($types);exit;
 		$this->render('create' , array(
 				'model' => $model , 
 				'types' => $types ,
-                                'floors'=> $floors
+                                'floors'=> $floors,
+                                'sitepersons'=>$sitepersons
 		));
 	}
 	public function actionUpdate(){
@@ -78,10 +80,13 @@ class SiteController extends BackendController
 		}
 		$types = $this->getTypes();
                 $floors = $this->getFloors();
+                $sitepersons = $this->getSitePersons();
+                //var_dump($sitepersons,$floors);exit;
 		$this->render('update' , array(
 			'model'=>$model,
 			'types' => $types,
-                        'floors'=> $floors
+                        'floors'=> $floors,
+                        'sitepersons'=>$sitepersons
 		));
 	}
 	public function actionDelete(){
@@ -110,5 +115,20 @@ class SiteController extends BackendController
 		$floors = Floor::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
 		$floors = $floors ? $floors : array();
 		return CHtml::listData($floors, 'lid', 'name');
+	}
+        
+        private function getSitePersons(){
+		$sitepersons = SitePersons::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
+		$sitepersons = $sitepersons ? $sitepersons : array();
+                $splist=array();
+                if(!empty($sitepersons))
+                {
+                    foreach($sitepersons as $sp)
+                    {
+                        array_push($splist,array("lid"=>$sp->lid,"persons"=>$sp->min_persons."-".$sp->max_persons));
+                    }
+                }
+               // var_dump($sp)
+		return CHtml::listData($splist, 'lid', 'persons');
 	}
 }

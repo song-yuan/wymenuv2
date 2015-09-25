@@ -96,7 +96,8 @@
 				
                                                                     <div class="portlet-body site_list">
                                                                                 <ul>
-                                                                                    <?php if($typeId == 'queue'): ?>
+                                                                                    <?php $hasfree=0;$haswaiting=0;
+                                                                                            if($typeId == 'queue'): ?>
                                                                                         <?php
                                                                                             if(!empty($models)):
                                                                                                 $temptype=0;
@@ -105,10 +106,15 @@
                                                                                                         <li class="modalaction bg-red" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model["name"]; ?></span></li>
                                                                                                     <?php 
                                                                                                         $temptype=$model["typeid"];
-                                                                                                        endif;?>
-                                                                                                        <li class="modalaction <?php if($model["queuepersons"]>0 && $model["sitefree"]==0) echo 'bg-yellow'; elseif($model["queuepersons"]>0 &&$model["sitefree"]>0) echo 'bg-green';?>" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" typeId=<?php echo $model["typeid"];?> splid=<?php echo $model["splid"];?>>
-                                                                                                            <span style="font-size: 20px;">空座:<?php echo empty($model["sitefree"])?0:$model["sitefree"]; ?></span>
-                                                                                                            <br><span style="font-size: 20px;">排队:<?php echo $model["queuepersons"]; ?></span>
+                                                                                                        endif;
+                                                                                                        $queuepersons=empty($model["queuepersons"])?0:$model["queuepersons"];
+                                                                                                        $sitefree=empty($model["sitefree"])?0:$model["sitefree"];
+                                                                                                        if($queuepersons>0){$haswaiting=1;};
+                                                                                                        if($sitefree>0){$hasfree=1;};
+                                                                                                        ?>
+                                                                                                        <li class="modalaction <?php if($queuepersons>0 && $sitefree==0) echo 'bg-yellow'; elseif($queuepersons>0 && $sitefree>0) echo 'bg-green';?>" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" typeId=<?php echo $model["typeid"];?> splid=<?php echo $model["splid"];?>>
+                                                                                                            <span style="font-size: 20px;">空座:<?php echo $sitefree; ?></span>
+                                                                                                            <br><span style="font-size: 20px;">排队:<?php echo $queuepersons; ?></span>
                                                                                                             <br><?php echo $model["min"]."-".$model["max"]; ?>
                                                                                                         </li>
                                                                                         <?php                                                                                                 
@@ -154,6 +160,26 @@
             gsistemp="<?php echo $sistemp; ?>";
             gstypeid="<?php echo $stypeId; ?>";
             gop="<?php echo $op; ?>";
+            gtypeid="<?php echo $typeId; ?>";
+            ghasfree=<?php echo $hasfree;?>;
+            ghaswaiting=<?php echo $haswaiting;?>;
+            
+            $(document).ready(function(){
+                if(gtypeid=="queue")
+                {
+                    //alert(ghasfree);alert(ghaswaiting);
+                    if(ghasfree>0 && ghaswaiting>0)
+                    {
+                        if (typeof Androidwymenuprinter == "undefined") {
+                            //alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
+                        }else{
+                            Androidwymenuprinter.padAlarm();
+                        }
+                    }
+                }
+            });           
+            
+            
             $('.modalaction').on("click", function(){
                 var $modal = $('#portlet-button');
                 var pxbox = $('#pxbox_button'); 

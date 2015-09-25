@@ -63,6 +63,7 @@
 												<th><?php echo yii::t('app','类型');?></th>
 												<th><?php echo yii::t('app','楼层');?></th>
 												<th><?php echo yii::t('app','等级');?></th>
+												<th><?php echo yii::t('app','人数');?></th>
 												<th>&nbsp;</th>
 											</tr>
 										</thead>
@@ -75,6 +76,7 @@
 												<td ><?php echo $model->siteType->name ;?></td>
 												<td ><?php if(!empty($model->floor->name)) echo $model->floor->name;?></td>
 												<td><?php echo $model->site_level;?></td>
+												<td ><?php if(!empty($model->sitePersons)) echo $model->sitePersons->min_persons."_".$model->sitePersons->max_persons;?></td>
 												<td class="center">
 												<a href="<?php echo $this->createUrl('site/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 												</td>

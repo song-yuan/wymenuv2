@@ -659,6 +659,33 @@ class Helper
                 }
 	}
         
+        //开台时的打印
+        //打印开台号和人数，以后有WiFi的密码等。
+	static public function printQueue(Pad $pad, $cprecode,$printserver,$memo){
+		               
+                $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$pad->dpid));
+		if(empty($printer)) {
+                        return array('status'=>0,'dpid'=>$siteno->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
+		}		
+                $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($pad->dpid),8));
+                if(!empty($memo))
+                {
+                    array_push($listData,"br");
+                    array_push($listData,"11".$memo);                    
+                }
+                array_push($listData,"00");
+                array_push($listData,"br");
+                 
+                $precode=$cprecode;
+                //后面加切纸
+                $sufcode="0A0A0A0A0A0A1D5601";                        
+                $printret=array();
+                $orderid="0000000000";
+		$retccontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver,$orderid);
+                
+                return $retccontent;
+	}
+        
         //打印机测试
 	static public function printCheck(Pad $pad){		
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$pad->dpid));
