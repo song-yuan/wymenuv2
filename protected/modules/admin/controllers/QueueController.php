@@ -41,22 +41,29 @@ class QueueController extends Controller
                     Yii::app()->end(json_encode(array('status'=>false,'msg'=>'店铺或设备不存在！')));
                 }
                 $pad=Pad::model()->with("printer")->find(' t.dpid=:companyId and t.lid=:padid', array(':companyId'=>$companyid,':padid'=>$padid));
+                //var_dump($pad);exit;
                 if(!empty($pad))
                 {
                     //生成新的排队号
                     $siteType=  SiteType::model()->find(" dpid=:dpid and lid=:lid",array(":dpid"=>$companyid,":lid"=>$stlid));
-                    $queuePerson= QueuePersons::model()->findAll(" dpid=".$companyid." and stlid=".$stlid." and splid=".$splid
-                            ." and create_at >='".date('Y-m-d',time())." 00:00:00' and create_at <='".date('Y-m-d',time())." 23:59:59'"
-                            ." order by lid");
+                    //var_dump($siteType);exit;
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  " dpid=".$companyid." and stlid=".$stlid." and splid=".$splid
+                            ." and create_at >='".date('Y-m-d',time())." 00:00:00' and create_at <='"
+                            .date('Y-m-d',time())." 23:59:59'" ;
+                    $criteria->order = ' lid ';		
+                    $queuePerson= QueuePersons::model()->findAll($criteria);
                     if(empty($siteType))
                     {
                         Yii::app()->end(json_encode(array('status'=>false,'msg'=>'座位类型不存在！')));
                     }
+                    //var_dump($queuePerson);exit;
                     if(!empty($queuePerson))
                     {
                         $countsp=count($queuePerson);
                         $queueno=$siteType->simplecode.substr("000".(string)($countsp+1),-3);
-                        for($sti=$countsp-1;$sti>0;$sti--)
+                        
+                        for($sti=$countsp-1;$sti>=0;$sti--)
                         {
                             if($queuePerson[$sti]->status=="0")
                             {
