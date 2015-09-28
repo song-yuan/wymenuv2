@@ -8,7 +8,7 @@ class SiteClass
                             . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
                             . ' LEFT JOIN (select distinct qp.dpid as dpid,qp.stlid as stlid,qp.splid as splid, count(qp.lid) as queuepersons'
                             . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
-                            . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                            . ' and qp.create_at >="'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<="'.date('Y-m-d',time()).' 23:59:59"'
                             . ' group by dpid,stlid,splid) tq'
                             . ' on t.dpid=tq.dpid and t.type_id=tq.stlid and t.splid=tq.splid'
                             . ' LEFT JOIN (select distinct subt.dpid as dpid,subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
