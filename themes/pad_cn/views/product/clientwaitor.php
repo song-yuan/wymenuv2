@@ -276,8 +276,6 @@
             alert("请选择座位！");
             return false;
         }
-        //var username=$('#id_client_waitor_name').val();
-        //alert(username);
         
         var forbidden=false;
         var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
