@@ -280,9 +280,7 @@
         //alert(username);
         
         var forbidden=false;
-        var randtime=new Date().getTime();
-//        alert(randtime);
-//        return;
+        var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
         var getstatusurl=$('#productmasksiteinfo').attr("action")+'/sid/'+sid+"/istemp/"+istemp+"/rand/"+randtime;
         //alert(getstatusurl);
         if(sid!=0)
