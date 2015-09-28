@@ -127,7 +127,7 @@
 					</a>
 					<ul class="dropdown-menu">
                                                 <li>
-                                                    <a href="<?php echo $this->createUrl('queue/index',array("companyId"=>$this->companyId));?>" id="queueindex"><i class="fa fa-move"></i> <?php echo yii::t('app','排队取号');?></a>
+                                                    <a href="javascript:;" id="queueindex"><i class="fa fa-move"></i> <?php echo yii::t('app','排队取号');?></a>
 						</li>
 						<li>
                                                     <a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> <?php echo yii::t('app','全屏显示');?></a>
@@ -271,4 +271,11 @@
                 }
                 getnotificationnum();
             }
+            
+            $('#queueindex').click(function(){
+                //var stlid=$(this).attr('lid');
+                var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
+                var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$this->companyId)); ?>'+'/rand/'+randtime;
+                location.href=url;
+            });
 	</script>
