@@ -46,7 +46,8 @@ class QueueController extends Controller
                     //生成新的排队号
                     $siteType=  SiteType::model()->find(" dpid=:dpid and lid=:lid",array(":dpid"=>$companyid,":lid"=>$stlid));
                     $queuePerson= QueuePersons::model()->findAll(" dpid=".$companyid." and stlid=".$stlid." and splid=".$splid
-                            ." and create_at >='".date('Y-m-d',time())." 00:00:00' and create_at <='".date('Y-m-d',time())." 23:59:59'");
+                            ." and create_at >='".date('Y-m-d',time())." 00:00:00' and create_at <='".date('Y-m-d',time())." 23:59:59'"
+                            ." order by lid");
                     if(empty($siteType))
                     {
                         Yii::app()->end(json_encode(array('status'=>false,'msg'=>'座位类型不存在！')));
