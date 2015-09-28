@@ -51,7 +51,8 @@
 		<script language="JavaScript" type="text/JavaScript">
                     $('.btnSiteType').click(function(){
                         var stlid=$(this).attr('lid');
-                        var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$companyId)); ?>/siteTypelid/'+stlid;
+                        var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
+                        var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$companyId)); ?>/siteTypelid/'+stlid+'/rand/'+randtime;
                         location.href=url;
                     });
                     
