@@ -31,6 +31,12 @@ function addToCart() {
 $(document).ready(function(){
 	var language = $('input[name="language"]').val();
     $('#forum_list').on(event_clicktouchstart,'.addCart',function(){
+        var istemp=$('#id_client_is_temp').val();
+        if(istemp=="1")
+        {
+            alert("请先选择座位！");
+            return false;
+        }
     	var _this = $(this);
     	var store = _this.parents('.blockCategory').attr('store');
     	if(parseInt(store)==0){
