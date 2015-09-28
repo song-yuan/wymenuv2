@@ -91,6 +91,7 @@ class QueueController extends Controller
                         'delete_flag'=>'0'
                     );
                     Yii::app()->db->createCommand()->insert('nb_queue_persons',$data);
+                    $waitingno++;
                     //返回现有的等待人数
                     $precode="";
                     $printserver="0";//
