@@ -226,7 +226,7 @@ function showListPad(items){
 					for(var m in productset){
 						var productsetItem = productset[m];
 						if(parseInt(productsetItem.is_select)==1){
-							trProductSet +='<div class="item active" is-select="1" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+							trProductSet +='<div class="item" is-select="1" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
 						}else{
 							trProductSet +='<div class="item" is-select="0" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
 						}
@@ -303,7 +303,7 @@ function showListPad(items){
 					for(var m in productset){
 						var productsetItem = productset[m];
 						if(parseInt(productsetItem.is_select)==1){
-							trProductSet +='<div class="item active" is-select="1" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+							trProductSet +='<div class="item" is-select="1" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
 						}else{
 							trProductSet +='<div class="item" is-select="0" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
 						}
