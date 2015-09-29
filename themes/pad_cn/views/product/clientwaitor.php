@@ -462,13 +462,8 @@
                             if(productSet.length > 0){
                             	productSet.find('.productset-group').each(function(){
                             		$(this).find('.active').removeClass('active');
-                            		$(this).find('.item').each(function(){
-                            			var isSelect = $(this).attr('is-select');
-                            			if(parseInt(isSelect)==1){
-                            				$(this).addClass('active');
-                            			}
-                            		});
                             	});
+                            	parents.find('.addCart').removeClass('hasClick');
                             }
                              $('input[name^="'+productId+'"]').remove();
 	                     });
