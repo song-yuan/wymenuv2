@@ -231,14 +231,6 @@ class DefaultOrderController extends BackendController
                                 " where dpid=".$companyId." and orderid=".$orderId.
                                 " and jobid in(".$jobId.")";
                         Yii::app()->db->createCommand($printjobsql)->execute();
-//                    $jobidarr=  explode(",", $jobId);
-//                    foreach($jobidarr as $jid)
-//                    {
-//                        $printjobsql="update nb_order_printjobs set finish_flag=1".
-//                                " where dpid=".$companyId." and orderid=".$orderId.
-//                                " and jobid =".$jid;
-//                        Yii::app()->db->createCommand($printjobsql)->execute();
-//                    }
                 }
                 
                 $criteria = new CDbCriteria;
@@ -254,6 +246,20 @@ class DefaultOrderController extends BackendController
 		));
 	}
 
+        public function actionSaveFailJobs()
+	{
+		$jobid = Yii::app()->request->getParam('jobid',"0");
+                $dpid = Yii::app()->request->getParam('dpid',"0000000000");
+                $address = Yii::app()->request->getParam('address',"0");
+                $orderid = Yii::app()->request->getParam('orderid',"0");
+                $db=Yii::app()->db;
+                $printjobsql="update nb_order_printjobs set finish_flag=0".
+                            " where dpid=".$dpid." and orderid=".$orderid.
+                            " and jobid=".$jobid;
+                $db->createCommand($printjobsql)->execute();
+		Yii::app()->end(json_encode(array("status"=>true,"msg"=>"OK")));
+	}
+        
         /*
          * 挂单
          * 传递数据保存，
