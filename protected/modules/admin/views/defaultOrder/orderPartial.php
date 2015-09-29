@@ -80,6 +80,20 @@
                         $(document).ready(function () {
                             $('body').addClass('page-sidebar-closed');
                             $('#site_list_button').val("<?php echo $total['remark'] ;?>(<?php switch($model->order_status) {case 1:{echo yii::t('app','未下单');break;} case 2:{echo yii::t('app','下单未支付');break;} case 3:{echo yii::t('app','已支付');break;} }?>)");
+                            var orderstatus="<?php echo $model->order_status; ?>";
+                            $("#btnswitchsite").hide();
+                            $("#btnunionsite").hide();
+                            $("#btnclosesite").hide();
+                            if(orderstatus=="1"){
+                                $("#btnswitchsite").show();
+                                $("#btnunionsite").show();
+                                $("#btnclosesite").show();
+                            }else if(orderstatus=="2"){
+                                $("#btnswitchsite").show();
+                                $("#btnunionsite").show();
+                            }else if(orderstatus=="3"){
+                                $("#btnswitchsite").show();
+                            }
                             if(syscallid>"Ca000" && syscallid<"Ca999")
                             {
                                 accountmanul();

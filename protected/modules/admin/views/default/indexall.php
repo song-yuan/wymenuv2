@@ -212,42 +212,6 @@
     border:1px solid red;
     background-color:#ED9F9F !important;
 }
-/*
-.calc_num {
-        width: 56%;
-        display: inline-block;
-        margin: 2%;
-    }
-    .calc_button {
-        width: 33%;
-        display: inline-block;
-        margin: 2%;
-    }
-    .calc_num ul li {
-        float: left;
-        width: 20%;
-        height: 100px;
-        border: 1px solid #add;
-        margin: 5px;
-        font-size: 20px;
-        font-weight: 700;
-        background-color: #add;
-        list-style: none;
-        text-align: center;
-        vertical-align: middle;
-      }
-      .calc_button ul li {
-        float: left;
-        width: 40%;
-        height: 100px;
-        border: 1px solid #add;
-        margin: 5px;
-        font-size: 15px;
-        font-weight: 700;        
-        list-style: none;
-        text-align: center;
-        vertical-align: middle;
-      }*/
 </style>
 
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/css/default.css'); ?>
@@ -321,9 +285,9 @@
                 <div class="col-md-4">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
 			<input style="margin:-10px 0 10px 0;" type="button" class="btn green" id="site_list_button" value="<?php echo yii::t('app','临时座');?>">
-			<!--<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="create_btn" value="<?php echo yii::t('app','转台>>');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="create_btn" value="<?php echo yii::t('app','并台>>');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="create_btn" value="<?php echo yii::t('app','撤台>>');?>">-->
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnswitchsite" value="<?php echo yii::t('app','转台>>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnunionsite" value="<?php echo yii::t('app','并台>>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnclosesite" value="<?php echo yii::t('app','撤台>>');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
                 <div class="col-md-8" style="">
@@ -644,6 +608,9 @@
                 
             </div>
         <script type="text/javascript">
+            var gsid=0;
+            var gistemp=0;
+            var gtypeid=0;
             var gssid=0;
             var gsistemp=0;
             var gstypeid=0;
@@ -675,6 +642,7 @@
                 //$('.nav-tabs').find('li[lid='+first_tab+']').addClass("slectliclass");
                 $('.firstCategory').find('li[lid='+first_tab+']').addClass("slectliclass");
                 $('.tab-content[lid='+first_tab+']').show();
+                gtypeid="<?php echo $typeId; ?>"
                 //tab-content
                 tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>';
                 $('#tabsiteindex').load(tabcurrenturl);
@@ -956,10 +924,10 @@
                 //重新计算
                 var payShouldAccount=$("#payShouldAccount").text();
                 var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/payShouldAccount/"+payShouldAccount;
-                var statu = confirm("<?php echo yii::t('app','确定要打印清单吗？');?>");
-                if(!statu){
-                    return false;
-                } 
+//                var statu = confirm("<?php echo yii::t('app','确定要打印清单吗？');?>");
+//                if(!statu){
+//                    return false;
+//                } 
                 //alert(url);
                 $.ajax({
                         url:url,
@@ -2633,8 +2601,8 @@
                                 openaccount('0');
                         }
                  });
-            });
-
+            });          
+            
             $('.selectDiscount').on(event_clicktouchstart,function(){
                 var spanOriginPrice=$("#spanOriginPrice").text();
                 var id=$(this).attr('id');
@@ -2668,6 +2636,64 @@
                     $("#spanNowPrice").text("0.00");
                 }
             });
+            
+            $('#btnclosesite').on(event_clicktouchstart,function(){
+                var statu = confirm("<?php echo yii::t('app','确定撤台吗？');?>");
+                if(!statu){
+                    return false;
+                } 
+               //var sid = $(this).attr('sid');
+               $.ajax({
+                    'type':'POST',
+                    'dataType':'json',
+                    'data':{"sid":gsid,"companyId":'<?php echo $this->companyId; ?>',"istemp":gistemp},
+                    'url':'<?php echo $this->createUrl('defaultSite/closesite',array());?>',
+                    'success':function(data){
+                            if(data.status == 0) {
+                                    alert(data.message);
+                                    return false;
+                            } else {
+                                    alert(data.message);
+                                    $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+gtypeid);
+                                    $('#site_row').show();
+                                    $('#tabsiteindex').show();
+                                    $('#order_row').hide();
+                                    //$('#portlet-button').modal('hide');
+                                    //$("#tab_sitelist").hide();
+                            }
+                    },
+                        'error':function(e){
+                            return false;
+                        }
+                });
+                //return false;                               
+           });
+
+           $('#btnswitchsite').on(event_clicktouchstart,function(){
+               //var sid = $(this).attr('sid');
+               var statu = confirm("<?php echo yii::t('app','确定换台吗？');?>");
+                if(!statu){
+                    return false;
+                }  
+                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'op'=>'switch'));?>/typeId/'+gtypeid+"/sistemp/"+gistemp+"/ssid/"+gsid+"/stypeId/"+gtypeid);
+                //$('#portlet-button').modal('hide');
+                $('#site_row').show();
+                $('#tabsiteindex').show();
+                $('#order_row').hide();
+           });                           
+
+           $('#btnunionsite').on(event_clicktouchstart,function(){
+               //var sid = $(this).attr('sid');
+               var statu = confirm("<?php echo yii::t('app','确定并台吗？');?>");
+                if(!statu){
+                    return false;
+                }  
+                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'op'=>'union'));?>/typeId/'+gtypeid+"/sistemp/"+gistemp+"/ssid/"+gsid+"/stypeId/"+gtypeid);
+                //$('#portlet-button').modal('hide');
+                $('#site_row').show();
+                $('#tabsiteindex').show();
+                $('#order_row').hide();
+           });
         //库存提示
         function sell_off(do_data) {
             //alert(do_data);
