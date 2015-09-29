@@ -224,8 +224,12 @@ function showListPad(items){
 					var productset = item.productset[n];
 					trProductSet +='<div class="productset-group" group-no="'+ n +'">';
 					for(var m in productset){
-					var productsetItem = productset[m];
-						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+						var productsetItem = productset[m];
+						if(parseInt(productsetItem.is_select)==1){
+							trProductSet +='<div class="item" is-select="1" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+						}else{
+							trProductSet +='<div class="item" is-select="0" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+						}
 					}
 					trProductSet +='<div class="clear"></div>';
 					trProductSet +='</div>';
@@ -298,7 +302,11 @@ function showListPad(items){
 					trProductSet +='<div class="productset-group" group-no="'+ n +'">';
 					for(var m in productset){
 						var productsetItem = productset[m];
-						trProductSet +='<div class="item" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+						if(parseInt(productsetItem.is_select)==1){
+							trProductSet +='<div class="item" is-select="1" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+						}else{
+							trProductSet +='<div class="item" is-select="0" productset-id="'+pad(item.lid,10)+'" productset-detail-id="'+productsetItem.lid+'">'+productsetItem.product_name+'</div>'; 
+						}
 					}
 					trProductSet +='<div class="clear"></div>';
 					trProductSet +='</div>';

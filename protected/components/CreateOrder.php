@@ -377,30 +377,31 @@ class CreateOrder
                                throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
                        }
                        //添加选择的套餐明细
-                       foreach($num as $setDetail){
-                       	$detailId = key($setDetail);
-                       	$productSet = self::getSetProductId($dpid,$detailId);
-	             		$orderProductData = array(
-										'lid'=>$orderProductId,
-										'dpid'=>$dpid,
-										'create_at'=>$time,
-										'order_id'=>$orderId,
-										'set_id'=>$goodsArr[0],
-										'product_id'=>$productSet['product_id'],
-										'price'=>$productSet['price'],
-										'update_at'=>$time,
-										'amount'=>$productSet['number'],
-										'taste_memo'=>"",
-										'product_order_status'=>$orderPorductStatus,
-										);
-					  $db->createCommand()->insert('nb_order_product',$orderProductData);
-					   
-					   $se=new Sequence("order_product");
-                       $orderProductId = $se->nextval();
-					   
-					   $orderPrice +=$productSet['price']*$productSet['number'];
-					   array_push($printOrderProducts,array('amount'=>$productSet['number'],'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
-	             	}
+                   		foreach($num as $setDetail){
+	                       	$detailId = key($setDetail);
+	                       	$productSet = self::getSetProductId($dpid,$detailId);
+		             		$orderProductData = array(
+											'lid'=>$orderProductId,
+											'dpid'=>$dpid,
+											'create_at'=>$time,
+											'order_id'=>$orderId,
+											'set_id'=>$goodsArr[0],
+											'product_id'=>$productSet['product_id'],
+											'price'=>$productSet['price'],
+											'update_at'=>$time,
+											'amount'=>$productSet['number'],
+											'taste_memo'=>"",
+											'product_order_status'=>$orderPorductStatus,
+											);
+						  $db->createCommand()->insert('nb_order_product',$orderProductData);
+						   
+						   $se=new Sequence("order_product");
+	                       $orderProductId = $se->nextval();
+						   
+						   $orderPrice +=$productSet['price']*$productSet['number'];
+						   array_push($printOrderProducts,array('amount'=>$productSet['number'],'price'=>$productSet['price'],'product_name'=>ProductClass::getProductName($productSet['product_id'],$dpid)));
+		             	}
+                       
 	             	if($result['store_number'] > 0){
 	             		$sql = 'update nb_product_set set store_number=store_number-1 where dpid='.$dpid.' and lid='.$goodsArr[0];
 	             		 $db->createCommand($sql)->execute();
@@ -603,7 +604,7 @@ class CreateOrder
 	}
 	//获取套餐里选中单品的id
 	public static function getSetProductIds($dpid,$setId){
-		$sql = 'select product_id,price from nb_product_set_detail where dpid='.$dpid.' and set_id='.$setId.' and is_select=1 and delete_flag=0';
+		$sql = 'select product_id,price,number from nb_product_set_detail where dpid='.$dpid.' and set_id='.$setId.' and is_select=1 and delete_flag=0';
 		$results = Yii::app()->db->createCommand($sql)->queryAll();
 		return $results;
 	}

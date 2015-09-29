@@ -446,6 +446,8 @@
                             
                             var productTaste = parents.find('.product-taste');
                             var productTasteList = parents.find('.taste-list');
+                            var productSet = parents.find('.productsetpad');//是否是套餐 存在则是套餐
+                            
                             if(productTaste.hasClass('hasClick')){
 	                             productTaste.removeClass('hasClick'); //去掉口味点击类
 	                             productTasteList.each(function(){
@@ -456,6 +458,12 @@
 	                                       $(this).find('.item').removeClass('active'); //去掉第一个口味选中
 	                               }
 	                       	     });
+                            }
+                            if(productSet.length > 0){
+                            	productSet.find('.productset-group').each(function(){
+                            		$(this).find('.active').removeClass('active');
+                            	});
+                            	parents.find('.addCart').removeClass('hasClick');
                             }
                              $('input[name^="'+productId+'"]').remove();
 	                     });
