@@ -246,7 +246,7 @@ class DefaultOrderController extends BackendController
 		));
 	}
 
-        public function actionSaveFailJobs()
+        public function actionSaveFailPrintjobs()
 	{
 		$jobid = Yii::app()->request->getParam('jobid',"0");
                 $dpid = Yii::app()->request->getParam('dpid',"0000000000");
