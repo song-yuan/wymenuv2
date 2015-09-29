@@ -255,7 +255,7 @@ class DefaultOrderController extends BackendController
                 $db=Yii::app()->db;
                 $printjobsql="update nb_order_printjobs set finish_flag=0".
                             " where dpid=".$dpid." and orderid=".$orderid.
-                            " and jobid=".$jobid;
+                            " and jobid in(".$jobid.")";
                 $db->createCommand($printjobsql)->execute();
 		Yii::app()->end(json_encode(array("status"=>true,"msg"=>"OK")));
 	}
