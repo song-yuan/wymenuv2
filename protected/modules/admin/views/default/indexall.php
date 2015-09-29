@@ -1360,8 +1360,8 @@
                                         if(detaildata[0]=="0")//继续打印
                                         {
                                             //alert(data.dpid);alert(detaildata[1]);alert(detaildata[2]);
-                                            printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
-                                            /////////printresulttemp=true;
+                                            ////////printresulttemp=Androidwymenuprinter.printNetJob(data.dpid,detaildata[1],detaildata[2]);
+                                            printresulttemp=true;
                                             if(printresulttemp)
                                             {
                                                 data.jobs[skey]="1_"+svalue.substring(2);
@@ -1385,7 +1385,7 @@
                                     });
                                     //如果失败，就把打印任务插入到数据库
                                     //如果有失败任务就打开对话框
-                                    //alert(successjobids);
+                                    alert(successjobids);
                                     if(printresultfail)
                                     {
                                         $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid+"/jobId/"+successjobids);                                
