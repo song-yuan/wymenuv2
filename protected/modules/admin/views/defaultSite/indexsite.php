@@ -178,8 +178,7 @@
                     }
                 }
             });           
-            
-            
+
             $('.modalaction').on("click", function(){
                 var $modal = $('#portlet-button');
                 var pxbox = $('#pxbox_button'); 

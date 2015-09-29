@@ -50,7 +50,7 @@
                                         </div>-->
                                     </div>
                                 <div>
-                                    <button id="site_open" style="margin-right: 25px;" type="button" istemp="<?php echo $istemp; ?>" sid="<?php echo $sid; ?>" class="btn green"><?php echo yii::t('app','开台并打印');?></button>
+                                    <!--<button id="site_open" style="margin-right: 25px;" type="button" istemp="<?php echo $istemp; ?>" sid="<?php echo $sid; ?>" class="btn green"><?php echo yii::t('app','开台并打印');?></button>-->
                                     <button id="open_order" type="button" istemp="<?php echo $istemp; ?>" sid="<?php echo $sid; ?>" class="btn green-stripe"><?php echo yii::t('app','开台并点单');?></button>
                                 </div>
                                 <?php endif; ?>
@@ -58,19 +58,8 @@
 			</div>
 			
 			<?php $this->endWidget(); ?>
-                        <script type="text/javascript">
-                            $(document).ready(function() {
-                                
-                                //alert($('#site_number')[0]);
-                                var sno=$("#site_number");
-                                if(sno.length > 0)
-                                {
-                                    sno[0].focus();
-                                }
-                                
-                            });                            
-                            
-                            
+                        <script type="text/javascript">                                                      
+                                                        
                             function clearolddata(){
                                 $("#tab_sitelist").show();
                                 $('#pxbox_button').hide();
@@ -92,10 +81,36 @@
                                 $("#card_pay_span_password").attr("actual","");
                             }
                             
+                            $(document).ready(function() {
+                                //alert($('#site_number')[0]);
+                                var sno=$("#site_number");
+                                if(sno.length > 0)
+                                {
+                                    sno[0].focus();
+                                }
+                                var objs=$(".orderaction");
+                                //alert(objs.length);
+                                if(objs.length>0)
+                                {
+                                    var sid=$(objs[0]).attr("sid");
+                                    var istemp=$(objs[0]).attr("istemp");
+                                    var typeid="<?php echo $typeId; ?>";
+                                    gsid=sid;
+                                    gistemp=istemp;
+                                    gtypeid=typeid;
+                                    //alert(sid);alert(istemp);
+                                    //$(objs[0]).trigger(event_clicktouchstart);
+                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp);
+                                    clearolddata();
+                                }
+                            }); 
+                            
                            $('#site_open').on(event_clicktouchstart,function(){
                                var siteNumber=$('#site_number').val();                               
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
+                               gsid=sid;
+                               gistemp=istemp;
                                var companyid='<?php echo $this->companyId; ?>';
                                var padid="0000000039";
                                if (typeof Androidwymenuprinter == "undefined") {
@@ -143,6 +158,8 @@
                                var siteNumber=$('#site_number').val();                               
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
+                               gsid=sid;
+                               gistemp=istemp;
                                if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 199)
                                {
                                    //alert(!isNaN(siteNumber));
@@ -177,6 +194,9 @@
                                     return false;
                                 } 
                                var sid = $(this).attr('sid');
+                               var istemp = $(this).attr('istemp');
+                               gsid=sid;
+                               gistemp=istemp;
                                $.ajax({
                                     'type':'POST',
                                     'dataType':'json',
@@ -201,7 +221,10 @@
                            });
                            
                            $('.switchsite').on(event_clicktouchstart,function(){
-                               //var sid = $(this).attr('sid');
+                               var sid = $(this).attr('sid');
+                               var istemp = $(this).attr('istemp');
+                               gsid=sid;
+                               gistemp=istemp;
                                var statu = confirm("<?php echo yii::t('app','确定换台吗？');?>");
                                 if(!statu){
                                     return false;
@@ -211,7 +234,10 @@
                            });                           
                            
                            $('.unionsite').on(event_clicktouchstart,function(){
-                               //var sid = $(this).attr('sid');
+                               var sid = $(this).attr('sid');
+                               var istemp = $(this).attr('istemp');
+                               gsid=sid;
+                               gistemp=istemp;
                                var statu = confirm("<?php echo yii::t('app','确定并台吗？');?>");
                                 if(!statu){
                                     return false;
@@ -223,6 +249,8 @@
                            $('.orderaction').on(event_clicktouchstart,function(){
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
+                               gsid=sid;
+                               gistemp=istemp;
                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp);
                                clearolddata();
                            });
