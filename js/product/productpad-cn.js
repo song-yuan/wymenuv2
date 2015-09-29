@@ -52,6 +52,17 @@ $(document).ready(function(){
     	var parentsBlockCategory = _this.parents('.blockCategory');
     	//套餐显示详情
     	if(parseInt(type)){
+    		if(!$(this).hasClass('hasClick')){
+    			parentsBlockCategory.find('.productset-group').each(function(){
+    				$(this).find('.item').each(function(){
+            			var isSelect = $(this).attr('is-select');
+            			if(parseInt(isSelect)==1){
+            				$(this).click();
+            			}
+            		});
+    			});
+    			$(this).addClass('hasClick')
+    		}
     		$('.taste-layer').hide();
 	    	$('.productsetpad').hide();
 	    	parentsBlockCategory.find('.taste-layer').show();
@@ -723,6 +734,8 @@ $(document).ready(function(){
 	    	productsetGroup.each(function(){
 	    		$(this).find('.active').removeClass('active');
 	    	});
+	    	parentsBlockCategory.find('.addCart').removeClass('hasClick'); //去掉点击
+	    	
 	    	var singleNumObj = parentsBlockCategory.find('.single-num-circel');
 	    	var singleNums = 0;
 	    	
