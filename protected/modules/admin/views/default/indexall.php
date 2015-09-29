@@ -1493,8 +1493,9 @@
                 //alert(typeId);
                 tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
                 $('#tabsiteindex').load(tabcurrenturl);
-                $('#site_row').show();
+                $('#pxbox_button').hide();
                 $('#tabsiteindex').show();
+                $('#site_row').show();
                 $('#order_row').hide();
             });
             
@@ -2520,8 +2521,12 @@
                                     //alert(typeId);
                                     tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
                                     $('#tabsiteindex').load(tabcurrenturl);
-                                    $('#site_row').show();
+//                                    $('#site_row').show();
+//                                    $('#tabsiteindex').show();
+//                                    $('#order_row').hide();
+                                    $('#pxbox_button').hide();
                                     $('#tabsiteindex').show();
+                                    $('#site_row').show();
                                     $('#order_row').hide();
                                 }else{
                                     //layer.close(layer_index2);
@@ -2655,8 +2660,9 @@
                             } else {
                                     alert(data.message);
                                     $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+gtypeid);
-                                    $('#site_row').show();
+                                    $('#pxbox_button').hide();
                                     $('#tabsiteindex').show();
+                                    $('#site_row').show();
                                     $('#order_row').hide();
                                     //$('#portlet-button').modal('hide');
                                     //$("#tab_sitelist").hide();
@@ -2677,8 +2683,12 @@
                 }  
                 $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'op'=>'switch'));?>/typeId/'+gtypeid+"/sistemp/"+gistemp+"/ssid/"+gsid+"/stypeId/"+gtypeid);
                 //$('#portlet-button').modal('hide');
-                $('#site_row').show();
+//                $('#site_row').show();
+//                $('#tabsiteindex').show();
+//                $('#order_row').hide();
+                $('#pxbox_button').hide();
                 $('#tabsiteindex').show();
+                $('#site_row').show();
                 $('#order_row').hide();
            });                           
 
@@ -2690,8 +2700,12 @@
                 }  
                 $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'op'=>'union'));?>/typeId/'+gtypeid+"/sistemp/"+gistemp+"/ssid/"+gsid+"/stypeId/"+gtypeid);
                 //$('#portlet-button').modal('hide');
-                $('#site_row').show();
+//                $('#site_row').show();
+//                $('#tabsiteindex').show();
+//                $('#order_row').hide();
+                $('#pxbox_button').hide();
                 $('#tabsiteindex').show();
+                $('#site_row').show();
                 $('#order_row').hide();
            });
         //库存提示
