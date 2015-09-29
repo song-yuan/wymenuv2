@@ -61,7 +61,7 @@
                         <script type="text/javascript">                                                      
                                                         
                             function clearolddata(){
-                                $("#tab_sitelist").show();
+                                $("#tab_sitelist").hide();
                                 $('#pxbox_button').hide();
                                 $('#site_row').hide();
                                 $('#order_row').show();
