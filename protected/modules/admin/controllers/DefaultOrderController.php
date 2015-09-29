@@ -248,16 +248,19 @@ class DefaultOrderController extends BackendController
 
         public function actionSaveFailPrintjobs()
 	{
-		$jobid = Yii::app()->request->getParam('jobId',"0");
-                $dpid = Yii::app()->request->getParam('companyId',"0000000000");
+		$jobId = Yii::app()->request->getParam('jobId',"0");
+                $companyId = Yii::app()->request->getParam('companyId',"0000000000");
                 //$address = Yii::app()->request->getParam('address',"0");
-                $orderid = Yii::app()->request->getParam('orderId',"0");
+                $orderId = Yii::app()->request->getParam('orderId',"0");
                 $db=Yii::app()->db;
-                $printjobsql="update nb_order_printjobs set finish_flag=0".
-                            " where dpid=".$dpid." and orderid=".$orderid.
-                            " and jobid in(".$jobid.")";
-                $db->createCommand($printjobsql)->execute();
-		Yii::app()->end(json_encode(array("status"=>true,"msg"=>"OK")));
+                if($jobId!="0")
+                {
+                    $printjobsql="update nb_order_printjobs set finish_flag=1".
+                                " where dpid=".$companyId." and orderid=".$orderId.
+                                " and jobid in(".$jobId.")";
+                    $db->createCommand($printjobsql)->execute();                        
+                }
+                Yii::app()->end(json_encode(array("status"=>true)));
 	}
         
         /*
