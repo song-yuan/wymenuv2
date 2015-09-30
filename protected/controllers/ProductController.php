@@ -591,22 +591,22 @@ class ProductController extends Controller
                     $criteria1 = new CDbCriteria;
                     $criteria1->condition =  ' t.dpid='.$companyId.' and t.lid='.$sid ;
                     $site = Site::model()->find($criteria1);
-                    if(empty($site))
+                    if($site)
                     {
-                        $status="0";
+                    	$status=$site->status;
                     }else{
-                        $status=$site->status;
+                        $status="0";
                     }
                 }else{
                     $criteria2 = new CDbCriteria;
                     $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria2->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria2);
-                    if(empty($siteNo))
+                    if($siteNo)
                     {
-                        $status="0";
-                    }else{
                         $status=$siteNo->status;
+                    }else{
+                        $status="0";
                     }
                 }
                 Yii::app()->end(json_encode(array("status"=>$status)));                
