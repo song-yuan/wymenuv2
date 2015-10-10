@@ -338,22 +338,20 @@
                                          if(msg.status)
                                          {
                                              $("#callno").text(msg.callno);
-                                             $(".modalaction[typeid='queue'][sid='"+gsid+"'][istemp='"+gistemp+"']").removeClass("bg-yellow");
-                                             $(".modalaction[typeid='queue'][sid='"+gsid+"'][istemp='"+gistemp+"']").removeClass("bg-green");                                                    
+                                             var siteobj=$(".modalaction[typeid='queue'][sid="+gsid+"][istemp="+gistemp+"]");
+                                             siteobj.removeClass("bg-yellow");
+                                             siteobj.removeClass("bg-green");                                                    
                                              //改变背景颜色///
-                                             alert(msg.sitefree);
-                                             alert(msg.queuenum);
                                              if(msg.queuenum>0)
                                              {                                                
                                                  if(msg.sitefree>0)
                                                  {
-                                                     $(".modalaction[typeid='queue'][sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-green");                                                    
+                                                     siteobj.addClass("bg-green");                                                    
                                                  }else{
-                                                     $(".modalaction[typeid='queue'][sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-yellow");                                                    
+                                                     siteobj.addClass("bg-yellow");                                                    
                                                  }
                                              }
-                                             //修改排队数和空位数文字..
-                                             var siteobj=$(".modalaction[typeid='queue'][sid="+gsid+"][istemp="+gistemp+"]");
+                                             //修改排队数和空位数文字..                                             
                                              siteobj.find("span[typename='sitefree']").text("空座："+msg.sitefree);
                                              siteobj.find("span[typename='queuenum']").text("排队："+msg.queuenum);
                                          }

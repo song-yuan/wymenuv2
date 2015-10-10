@@ -137,6 +137,68 @@ class DefaultSiteController extends BackendController
 		));
 	}
         
+        public function actionGetSiteAll()
+	{
+		$typeId = Yii::app()->request->getParam('typeId');
+                $compayId=Yii::app()->request->getParam('companyId');
+                $criteriat = new CDbCriteria;
+                $criteria = new CDbCriteria;
+		$models=array();
+                if($typeId=="queue")
+                {
+                    $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
+                            . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
+                            . '  from nb_site t'
+                            . ' LEFT JOIN nb_site_type st on t.dpid=st.dpid and t.type_id=st.lid'
+                            . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
+                            . ' LEFT JOIN (select distinct qp.dpid as dpid,qp.stlid as stlid,qp.splid as splid, count(qp.lid) as queuepersons'
+                            . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
+                            . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                            . ' group by dpid,stlid,splid) tq'
+                            . ' on t.dpid=tq.dpid and t.type_id=tq.stlid and t.splid=tq.splid'
+                            . ' LEFT JOIN (select distinct subt.dpid as dpid,subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
+                            . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
+                            . ' group by dpid,splid,typeid) sf'
+                            . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
+                            . ' where t.delete_flag=0 and t.dpid= '.$compayId
+                            . ' group by dpid,splid,typeid,name,min,max'
+                            . ' order by typeid,min';
+                    $connect = Yii::app()->db->createCommand($sql);
+                    $models = $connect->queryAll();
+                    //var_dump($queueModels);exit;
+                }elseif($typeId=="tempsite"){
+                        $tempnow = new DateTime(date('Y-m-d H:i:s',time()));
+                        //var_dump($tempnow->format('Y-m-d H:i:s'));
+                        $tempnow->modify("-12 hour");
+                        $begintime=$tempnow->format('Y-m-d H:i:s');
+                        $tempnow->modify("24 hour");
+                        $endtime=$tempnow->format('Y-m-d H:i:s');
+                        //var_dump($begintime,$endtime);exit;
+                        $criteriat->select="t.number,t.status,t.site_id,t.update_at";
+                        $criteriat->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId 
+                               ;// . ' and t.create_at >"'.$begintime .'" and t.create_at<"'.$endtime.'"';
+                        $criteriat->order = ' t.number desc,t.site_id desc ';
+                        $tempmodels = SiteNo::model()->findAll($criteriat);
+                        foreach ($tempmodels as $model)
+                        {
+                            array_push($models,array('number'=>$model->number,'status'=>$model->status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
+                        }
+                        //var_dump($models);exit;
+                }else{
+                        $criteria->select = 't.lid,t.status,t.type_id,t.serial,t.update_at';
+                        //$criteria->with = 'siteType';
+                        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
+                        $criteria->order = ' t.serial asc ';
+                        $sitemodels = Site::model()->findAll($criteria);
+                        foreach ($sitemodels as $model)
+                        {
+                            array_push($models,array('lid'=>$model->lid,'status'=>$model->status,'type_id'=>$model->type_id,'serial'=>$model->serial,'update_at'=>$model->update_at));
+                        }                        
+                }
+		//var_dump(json_encode($models));exit;
+                Yii::app()->end(json_encode($models));
+	}
+        
         public function actionOpSite()
 	{
 		$typeId = Yii::app()->request->getParam('typeId');
