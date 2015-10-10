@@ -19,13 +19,25 @@ class QueueController extends Controller
             }
             //$sitePersons= SiteClass::getSitePersons($companyId, $siteTypelid);
             $sitePersons= SiteClass::getSitePersonsAll($companyId);
-            //var_dump($sitePersons,$siteTypes);exit;
+            //var_dump($sitePersons);exit;
             $this->render('index',array(
                 "companyId"=>$companyId,
                 "siteTypes"=>$siteTypes,
                 'siteTypelid'=>$siteTypelid,
                 "sitePersons"=>$sitePersons
             ));	
+	}
+        
+        /**
+	 * 
+	 * setting the companyId and padId
+	 */
+	public function actionGetSitePersonsAll()
+	{
+            $companyId=Yii::app()->request->getParam('companyid','0');
+            $sitePersons= SiteClass::getSitePersonsAll($companyId);
+            
+            Yii::app()->end(json_encode($sitePersons));	
 	}
         
         public function actionGetSitePersons(){

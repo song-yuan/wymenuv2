@@ -50,9 +50,35 @@
 	</div>
 		<script language="JavaScript" type="text/JavaScript">
                     var intervalQueueList;
+                    var companyid=<?php echo $companyId; ?>;
                     function reloadqueuestate()
                     {
-                        //alert("queue111");
+                        $.ajax({
+                            url:"/wymenuv2/admin/queue/getSitePersonsAll/companyid/"+companyid,
+                            type:'GET',
+                            timeout:5000,
+                            cache:false,
+                            async:false,
+                            dataType: "json",
+                            success:function(msg){
+                                $.each(msg,function(key,value){
+                                    var siteobj=$("input[splid="+value.splid+"][stlid="+value.typeid+"]");
+                                    if(value.queuepersons==null)
+                                    {
+                                        value.queuepersons=0;
+                                    }
+                                    siteobj.val(value.min+'-'+value.max+'人 (等叫:'+value.queuepersons+'组)');
+                                 });
+                            },
+                            error: function(msg){
+                                alert("网络可能有问题，再试一次！");
+                            },
+                            complete : function(XMLHttpRequest,status){
+                                if(status=='timeout'){
+                                    alert("网络可能有问题，再试一次！");                                            
+                                }
+                            }
+                        });
                     }
                     
                     $(document).ready(function(){
@@ -65,6 +91,7 @@
                         //叫号后等叫的人数要减少
                         clearInterval(intervalQueueList);
                         intervalQueueList = setInterval(reloadqueuestate,"15000");
+                        //reloadqueuestate();
                     });
                     
                     $('.btnSiteType').click(function(){

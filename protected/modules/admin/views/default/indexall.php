@@ -645,21 +645,82 @@
                 //site显示时才做这样的操作
                 if($("#tab_sitelist").css("display")=="block")
                 {
-                    //$('#tabsiteindex').load(tabcurrenturl);
-                    //重新修改成用ajax动态加载
-                    if(gtypeid=="queue")
-                    {
-                        //获取排队信息，并更新状态,不存在删减的
-
-                    }else if(gtypeid=="tempsite"){
-                        //获取临时座位信息，并更新状态
-                        //存在删减临时座位的                    
-
-                    }else{
-                        //获取座位信息，并更新状态
-                        //不存在删减座位的
-
-                    }
+                    $.ajax({
+                        url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid,
+                        type:'GET',
+                        timeout:5000,
+                        cache:false,
+                        async:false,
+                        dataType: "json",
+                        success:function(msg){
+                            //$('#tabsiteindex').load(tabcurrenturl);
+                            //重新修改成用ajax动态加载
+                            if(gtypeid=="queue")
+                            {
+                                //获取排队信息，并更新状态,不存在删减的
+                                $.each(msg,function(key,value){
+                                    var siteobj=$(".modalaction[typeid='queue'][sid="+value.splid+"][istemp="+value.typeid+"]");
+                                    siteobj.removeClass("bg-yellow");
+                                    siteobj.removeClass("bg-green");                                                    
+                                    //改变背景颜色///
+                                    if(value.queuepersons>0)
+                                    {                                                
+                                        if(value.sitefree>0)
+                                        {
+                                            siteobj.addClass("bg-green");                                                    
+                                        }else{
+                                            siteobj.addClass("bg-yellow");                                                    
+                                        }
+                                    }
+                                    //修改排队数和空位数文字..
+                                    if(value.sitefree==null)
+                                    {
+                                        value.sitefree=0;
+                                    }
+                                    if(value.queuepersons==null)
+                                    {
+                                        value.queuepersons=0;
+                                    }
+                                    siteobj.find("span[typename='sitefree']").text("空座:"+value.sitefree);
+                                    siteobj.find("span[typename='queuenum']").text("排队:"+value.queuepersons); 
+                                 });
+                            }else if(gtypeid=="tempsite"){
+                                //获取临时座位信息，并更新状态
+                                //存在删减临时座位的,暂不修改，以后添加！！                    
+                                //....
+                            }else{
+                                //获取座位信息，并更新状态
+                                //不存在删减座位的
+                                $.each(msg,function(key,value){
+                                    var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
+                                    siteobj.attr("status",value.status);
+                                    siteobj.find("span[typename=updateat]").html("<br>"+value.update_at);
+                                    siteobj.removeClass("bg-yellow");
+                                    siteobj.removeClass("bg-blue");
+                                    siteobj.removeClass("bg-green");
+                                    if(value.status=="1")
+                                    {
+                                        siteobj.addClass("bg-yellow");
+                                    }else if(value.status=="2")
+                                    {
+                                        siteobj.addClass("bg-blue");
+                                    }else if(value.status=="3")
+                                    {
+                                        siteobj.addClass("bg-green");
+                                    }
+                                });
+                            }
+                            
+                        },
+                        error: function(msg){
+                            alert("网络可能有问题，再试一次！");
+                        },
+                        complete : function(XMLHttpRequest,status){
+                            if(status=='timeout'){
+                                alert("网络可能有问题，再试一次！");                                            
+                            }
+                        }
+                    });               
                 }                
             }
             
