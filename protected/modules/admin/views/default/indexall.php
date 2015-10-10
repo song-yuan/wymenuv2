@@ -616,10 +616,12 @@
             var gstypeid=0;
             var gop=0;
             var tabcurrenturl="";
+            //var tabcurrentlid="";
             var layer_index1=0;
             var layer_index2=0;
             var layer_index3=0;
             var layer_productset_click=0;
+            var layer_order_partial=0;
             var layer_pay_others=0;
             //var layer_index_account;
             var layer_index_printresult=0;
@@ -637,37 +639,62 @@
                 event_clicktouchend="touchend";
             }
             //alert(event_clicktouchstart);
+            
+            function reloadsitestate()
+            {
+                //site显示时才做这样的操作
+                if($("#tab_sitelist").css("display")=="block")
+                {
+                    //$('#tabsiteindex').load(tabcurrenturl);
+                    //重新修改成用ajax动态加载
+                    if(gtypeid=="queue")
+                    {
+                        //获取排队信息，并更新状态,不存在删减的
+
+                    }else if(gtypeid=="tempsite"){
+                        //获取临时座位信息，并更新状态
+                        //存在删减临时座位的                    
+
+                    }else{
+                        //获取座位信息，并更新状态
+                        //不存在删减座位的
+
+                    }
+                }                
+            }
+            
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
                 //$('.nav-tabs').find('li[lid='+first_tab+']').addClass("slectliclass");
                 $('.firstCategory').find('li[lid='+first_tab+']').addClass("slectliclass");
                 $('.tab-content[lid='+first_tab+']').show();
+                //tabcurrentlid=first_tab;
                 gtypeid="<?php echo $typeId; ?>"
                 //tab-content
-                tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>';
+                tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSiteAll',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>';
                 $('#tabsiteindex').load(tabcurrenturl);
+                clearInterval(intervalQueueList);
+                intervalQueueList = setInterval(reloadsitestate,"15000");
             });
             
-            function reloadqueuestate()
+            function sitevisible()
             {
-                if($("#tab_sitelist").css("display")=="block")
-                {
-                    $('#tabsiteindex').load(tabcurrenturl);
-                }
-            }
+                $('#pxbox_button').hide();
+                $('#tabsiteindex').show();
+                $("#tab_sitelist").show();
+                $('#site_row').show();
+                $('#order_row').hide();
+            }           
+            
             
             $('.tabSite').on(event_clicktouchstart, function(){
                 $('.tabSite').removeClass('slectliclass');
                 $(this).addClass('slectliclass');
                 var typeId=$(this).attr('typeid');
-                tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>'+'/typeId/'+typeId+'/sistemp/'+gsistemp+'/stypeId/'+gstypeid+'/ssid/'+gssid+'/op/'+gop;
-                $('#tabsiteindex').load(tabcurrenturl); 
-                if(typeId=="queue")
-                {
-                    intervalQueueList = setInterval(reloadqueuestate,"15000");
-                }else{
-                    clearTimeout(intervalQueueList); 
-                }
+                gtypeid=typeId;
+                $('.modalaction').css('display','none');
+                $('.modalaction[typeid='+gtypeid+']').css('display','block');
+
             });
             
             $('.tabProduct').on(event_clicktouchstart, function(){
@@ -1486,12 +1513,9 @@
                 //刷新座位页面                                    
                 var typeId=$('li[class="tabSite slectliclass"]').attr('typeid');
                 //alert(typeId);
-                tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
-                $('#tabsiteindex').load(tabcurrenturl);
-                $('#pxbox_button').hide();
-                $('#tabsiteindex').show();
-                $('#site_row').show();
-                $('#order_row').hide();
+//                tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
+//                $('#tabsiteindex').load(tabcurrenturl);
+                sitevisible();
             });
             
             //member_card_div
@@ -2514,15 +2538,18 @@
                                     //alert(data.msg);
                                     //刷新座位页面                                    
                                     //alert(typeId);
-                                    tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
-                                    $('#tabsiteindex').load(tabcurrenturl);
+//                                    tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+typeId;
+//                                    $('#tabsiteindex').load(tabcurrenturl);
+//                                    //手动改变座位的状态和颜色
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","4");
+                                    //排队的状态定时刷新//////////////////
 //                                    $('#site_row').show();
 //                                    $('#tabsiteindex').show();
 //                                    $('#order_row').hide();
-                                    $('#pxbox_button').hide();
-                                    $('#tabsiteindex').show();
-                                    $('#site_row').show();
-                                    $('#order_row').hide();
+                                    sitevisible();
                                 }else{
                                     //layer.close(layer_index2);
                                     alert(data.msg);
@@ -2654,11 +2681,13 @@
                                     return false;
                             } else {
                                     alert(data.message);
-                                    $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+gtypeid);
-                                    $('#pxbox_button').hide();
-                                    $('#tabsiteindex').show();
-                                    $('#site_row').show();
-                                    $('#order_row').hide();
+                                    //$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>/typeId/'+gtypeid);
+                                    //更改状态
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","7"); 
+                                    sitevisible();
                                     //$('#portlet-button').modal('hide');
                                     //$("#tab_sitelist").hide();
                             }
@@ -2676,15 +2705,12 @@
                 if(!statu){
                     return false;
                 }  
-                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'op'=>'switch'));?>/typeId/'+gtypeid+"/sistemp/"+gistemp+"/ssid/"+gsid+"/stypeId/"+gtypeid);
-                //$('#portlet-button').modal('hide');
-//                $('#site_row').show();
-//                $('#tabsiteindex').show();
-//                $('#order_row').hide();
-                $('#pxbox_button').hide();
-                $('#tabsiteindex').show();
-                $('#site_row').show();
-                $('#order_row').hide();
+//                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'op'=>'switch'));?>/typeId/'+gtypeid+"/sistemp/"+gistemp+"/ssid/"+gsid+"/stypeId/"+gtypeid);
+                gop='switch';
+                gsistemp=gistemp;
+                gssid=gsid;
+                gstypeid=gtypeid;
+                sitevisible();
            });                           
 
            $('#btnunionsite').on(event_clicktouchstart,function(){
@@ -2693,15 +2719,13 @@
                 if(!statu){
                     return false;
                 }  
-                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'op'=>'union'));?>/typeId/'+gtypeid+"/sistemp/"+gistemp+"/ssid/"+gsid+"/stypeId/"+gtypeid);
+//                $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'op'=>'union'));?>/typeId/'+gtypeid+"/sistemp/"+gistemp+"/ssid/"+gsid+"/stypeId/"+gtypeid);
                 //$('#portlet-button').modal('hide');
-//                $('#site_row').show();
-//                $('#tabsiteindex').show();
-//                $('#order_row').hide();
-                $('#pxbox_button').hide();
-                $('#tabsiteindex').show();
-                $('#site_row').show();
-                $('#order_row').hide();
+                gop='union';
+                gsistemp=gistemp;
+                gssid=gsid;
+                gstypeid=gtypeid;
+                sitevisible();
            });
         //库存提示
         function sell_off(do_data) {

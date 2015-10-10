@@ -600,8 +600,11 @@ class ProductController extends Controller
                 }else{
                     $criteria2 = new CDbCriteria;
                     $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    //$criteria2->condition =  't.status in ("9") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria2->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria2);
+                    //var_dump($siteNo);exit;
+                    //if (empty($siteNo)) echo 'a';exit;
                     if($siteNo)
                     {
                         $status=$siteNo->status;

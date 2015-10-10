@@ -17,8 +17,9 @@ class QueueController extends Controller
             {
                 $siteTypelid=empty($siteTypes)?0:$siteTypes[0]->lid;                
             }
-            $sitePersons= SiteClass::getSitePersons($companyId, $siteTypelid);
-            //var_dump($firstSitePersons,$siteTypes);exit;
+            //$sitePersons= SiteClass::getSitePersons($companyId, $siteTypelid);
+            $sitePersons= SiteClass::getSitePersonsAll($companyId);
+            //var_dump($sitePersons,$siteTypes);exit;
             $this->render('index',array(
                 "companyId"=>$companyId,
                 "siteTypes"=>$siteTypes,
