@@ -12,8 +12,8 @@ class DefaultSiteController extends BackendController
                 $ssid = Yii::app()->request->getParam('ssid','0');
                 $op = Yii::app()->request->getParam('op','0');
                 $title=yii::t('app','请选择餐桌');
-                $criteria = new CDbCriteria;
-		$models=array();
+                $criteria = new CDbCriteria;		
+                $models=array();
                 if($typeId == 'queue'){
                     $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
                             . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
@@ -82,6 +82,109 @@ class DefaultSiteController extends BackendController
 		));
 	}
         
+        public function actionShowSiteAll()
+	{
+		$typeId = Yii::app()->request->getParam('typeId');
+                $compayId=Yii::app()->request->getParam('companyId');
+                $criteriat = new CDbCriteria;
+                $criteria = new CDbCriteria;
+		//$title=yii::t('app','请选择餐桌');
+                    $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
+                            . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
+                            . '  from nb_site t'
+                            . ' LEFT JOIN nb_site_type st on t.dpid=st.dpid and t.type_id=st.lid'
+                            . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
+                            . ' LEFT JOIN (select distinct qp.dpid as dpid,qp.stlid as stlid,qp.splid as splid, count(qp.lid) as queuepersons'
+                            . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
+                            . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                            . ' group by dpid,stlid,splid) tq'
+                            . ' on t.dpid=tq.dpid and t.type_id=tq.stlid and t.splid=tq.splid'
+                            . ' LEFT JOIN (select distinct subt.dpid as dpid,subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
+                            . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
+                            . ' group by dpid,splid,typeid) sf'
+                            . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
+                            . ' where t.delete_flag=0 and t.dpid= '.$compayId
+                            . ' group by dpid,splid,typeid,name,min,max'
+                            . ' order by typeid,min';
+                    $connect = Yii::app()->db->createCommand($sql);
+                    $queueModels = $connect->queryAll();
+                    //var_dump($queueModels);exit;
+                    
+                        $tempnow = new DateTime(date('Y-m-d H:i:s',time()));
+                        //var_dump($tempnow->format('Y-m-d H:i:s'));
+                        $tempnow->modify("-12 hour");
+                        $begintime=$tempnow->format('Y-m-d H:i:s');
+                        $tempnow->modify("24 hour");
+                        $endtime=$tempnow->format('Y-m-d H:i:s');
+                        //var_dump($begintime,$endtime);exit;
+                        $criteriat->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId 
+                                . ' and t.create_at >"'.$begintime .'" and t.create_at<"'.$endtime.'"';
+                        $criteriat->order = ' t.number desc,t.site_id desc ';
+                        $tempsiteModels = SiteNo::model()->findAll($criteriat);
+                        //var_dump($tempsiteModels);exit;
+                
+                        $criteria->with = 'siteType';
+                        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
+                        $criteria->order = ' t.serial asc ';
+                        $models = Site::model()->findAll($criteria);
+                        //var_dump($models);exit;
+                
+		$this->renderPartial('indexsite',array(
+				'models'=>$models,
+				'queueModels' => $queueModels,
+                                'tempsiteModels' => $tempsiteModels,
+                                'typeId'=>$typeId
+		));
+	}
+        
+        public function actionOpSite()
+	{
+		$typeId = Yii::app()->request->getParam('typeId');
+                $compayId=Yii::app()->request->getParam('companyId');
+                $stypeId = Yii::app()->request->getParam('stypeId','0');
+                $sistemp = Yii::app()->request->getParam('sistemp','0');
+                $ssid = Yii::app()->request->getParam('ssid','0');
+                $op = Yii::app()->request->getParam('op','0');
+                $title=yii::t('app','请选择餐桌');
+                $criteria = new CDbCriteria;
+		$models=array();
+                
+                if($op=='switch')
+                {
+                    if($sistemp=='0')
+                    {
+                        $siteTypes = SiteClass::getTypes($this->companyId);
+                        $title=yii::t('app','被换餐桌：').$siteTypes[$stypeId];
+                        $modelsite = Site::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $ssid,':dpid'=>  $this->companyId));
+                        $title=$title.'-->'.$modelsite->serial.'('.$modelsite->site_level.')'.yii::t('app','::请选择目标餐桌');
+                    }else{
+                        $title=yii::t('app','被换餐桌：临时台/排队-->').($ssid%1000).yii::t('app','：：请选择目标餐桌');
+                    }
+                }
+                elseif($op=='union')
+                {
+                    if($sistemp=='0')
+                    {
+                        $siteTypes = SiteClass::getTypes($this->companyId);
+                        $title=yii::t('app','被并餐桌：').$siteTypes[$stypeId];
+                        $modelsite = Site::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $ssid,':dpid'=>  $this->companyId));
+                        $title=$title.'-->'.$modelsite->serial.'('.$modelsite->site_level.')'.yii::t('app','：：请选择目标餐桌');
+                    }else{
+                        $title=yii::t('app','被并餐桌：临时台/排队-->').($ssid%1000).yii::t('app','：：请选择目标餐桌');
+                    }
+                }
+//		$this->renderPartial('indexsite',array(
+//				'typeId' => $typeId,
+//                                'title' => $title,
+//                                'ssid' => $ssid,
+//                                'sistemp' => $sistemp,
+//                                'stypeId'=>$stypeId,
+//                                'op'=>$op
+//		));
+                //直接Yii::app()->end(title,);
+                //或者直接在页面上设置op等。
+	}
+        
         public function actionNextPerson()
 	{
 		$companyId=Yii::app()->request->getParam('companyId');
@@ -89,6 +192,8 @@ class DefaultSiteController extends BackendController
                 $stlid = Yii::app()->request->getParam('stlid','0');
                 $callno = Yii::app()->request->getParam('callno','0');
                 $queueno="";
+                $sitefree=0;
+                $queueNum=0;
                 //Yii::app()->end(json_encode(array("status"=>true,"callno"=>$callno)));
                 $criteria = new CDbCriteria;
                 $criteria->condition =  't.status=0 and t.dpid='.$companyId.' and t.stlid='.$stlid.' and t.splid='.$splid.' and queue_no="'.$callno.'"'
@@ -111,7 +216,20 @@ class DefaultSiteController extends BackendController
                         }
                     }
                 }
-                Yii::app()->end(json_encode(array("status"=>true,"callno"=>$queueno)));
+                $sqlfree='select count(*) as sitenum '
+                            . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
+                            . ' and subt.dpid='.$companyId.' and subt.splid='.$splid.' and subt.type_id='.$stlid;
+                $connectfree = Yii::app()->db->createCommand($sqlfree);
+                $sitefree = $connectfree->queryScalar();
+                
+                $sqlqueue='select count(qp.lid) as queuepersons'
+                            . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
+                            . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                            . ' and qp.dpid='.$companyId.' and qp.splid='.$splid.' and qp.stlid='.$stlid;
+                $connectqueue = Yii::app()->db->createCommand($sqlqueue);
+                $queueNum = $connectqueue->queryScalar();
+                
+                Yii::app()->end(json_encode(array("status"=>true,"callno"=>$queueno,"sitefree"=>$sitefree,"queuenum"=>$queueNum)));
         }
         
         public function actionButton() {
@@ -365,8 +483,7 @@ class DefaultSiteController extends BackendController
                             $commandorder->bindValue(":ssid" , $ssid);
                             $commandorder->bindValue(":sistemp" , $sistemp);
                             $commandorder->bindValue(":companyId" , $companyId);
-                            $commandorder->execute();
-                                                 
+                            $commandorder->execute();                                                 
                             
                             $transaction->commit(); //提交事务会真正的执行数据库操作
                             echo json_encode(array('status'=>1,'message'=>yii::t('app','换台成功')));  

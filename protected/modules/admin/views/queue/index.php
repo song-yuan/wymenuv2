@@ -36,7 +36,7 @@
                                 <div class="queuesitepersonslist">
                                     <?php if(!empty($sitePersons)):
                                         foreach($sitePersons as $sitePerson):?>
-                                    <input splid="<?php echo $sitePerson['splid']; ?>" stlid="<?php echo $sitePerson['typeid']; ?>" personrang="<?php echo $sitePerson['min'].'-'.$sitePerson['max']; ?>" class="btnSitePersons" type="button" value="<?php echo $sitePerson['min'].'-'.$sitePerson['max']; ?>人 (等叫:<?php echo empty($sitePerson['queuepersons'])?'0':$sitePerson['queuepersons']; ?>组)">                                        
+                                        <input splid="<?php echo $sitePerson['splid']; ?>" stlid="<?php echo $sitePerson['typeid']; ?>" personrang="<?php echo $sitePerson['min'].'-'.$sitePerson['max']; ?>" class="btnSitePersons" type="button" value="<?php echo $sitePerson['min'].'-'.$sitePerson['max']; ?>人 (等叫:<?php echo empty($sitePerson['queuepersons'])?'0':$sitePerson['queuepersons']; ?>组)">                                        
                                     <?php    endforeach;
                                     endif; ?>                                    
                                 </div>
@@ -49,11 +49,35 @@
                 <a href="<?php echo $this->createUrl('default/index',array("companyId"=>$companyId));?>"><<点击返回</a>
 	</div>
 		<script language="JavaScript" type="text/JavaScript">
+                    var intervalQueueList;
+                    function reloadqueuestate()
+                    {
+                        //alert("queue111");
+                    }
+                    
+                    $(document).ready(function(){
+                        var sitetypelid="<?php echo $siteTypelid; ?>";
+                        $('.btnSitePersons').css('display','none');
+                        //alert(sitetypelid);
+                        $(".queuesitepersonslist").find("input[stlid="+sitetypelid+"]").each(function(){
+                            $(this).css('display','block');
+                        });
+                        //叫号后等叫的人数要减少
+                        clearInterval(intervalQueueList);
+                        intervalQueueList = setInterval(reloadqueuestate,"15000");
+                    });
+                    
                     $('.btnSiteType').click(function(){
                         var stlid=$(this).attr('lid');
-                        var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
-                        var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$companyId)); ?>/siteTypelid/'+stlid+'/rand/'+randtime;
-                        location.href=url;
+//                        var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
+//                        var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$companyId)); ?>/siteTypelid/'+stlid+'/rand/'+randtime;
+//                        location.href=url;
+                        $('.btnSitePersons').css('display','none');
+                        $(".queuesitepersonslist").find("input[stlid="+stlid+"]").each(function(){
+                            $(this).css('display','block');
+                        });
+                        $('.btnSiteType').removeClass("queueactive");
+                        $(this).addClass("queueactive");
                     });
                     
                     $('.btnSitePersons').click(function(){

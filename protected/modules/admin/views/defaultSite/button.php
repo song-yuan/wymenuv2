@@ -100,7 +100,11 @@
                                     gtypeid=typeid;
                                     //alert(sid);alert(istemp);
                                     //$(objs[0]).trigger(event_clicktouchstart);
-                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp);
+                                    layer_order_partial = layer.load(0, {shade: [0.3,'#fff']});
+                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp
+                                            ,function(){
+                                                layer.close(layer_order_partial);
+                                            });
                                     clearolddata();
                                 }
                             }); 
@@ -135,7 +139,7 @@
 						} else {
 							alert(data.msg+"1");
                                                         //$('#portlet-button').modal('hide');
-							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+							//$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
 //                                                        $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
 //                                                        $('#tabsiteindex').load(tabcurrenturl); 
 //                                                        $("#tab_sitelist").show();
@@ -173,6 +177,8 @@
 							alert(data.msg);
 						} else {
 							alert(data.msg);
+                                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-yellow");
+                                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","1");
                                                         $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+data.siteid+'/istemp/'+istemp);
                                                         clearolddata();
 						}
@@ -200,7 +206,7 @@
                                $.ajax({
                                     'type':'POST',
                                     'dataType':'json',
-                                    'data':{"sid":sid,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php echo $istemp; ?>'},
+                                    'data':{"sid":gsid,"companyId":'<?php echo $this->companyId; ?>',"istemp":gistemp},
                                     'url':'<?php echo $this->createUrl('defaultSite/closesite',array());?>',
                                     'success':function(data){
                                             if(data.status == 0) {
@@ -208,9 +214,11 @@
                                                     return false;
                                             } else {
                                                     alert(data.message);
-                                                    $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
-                                                    //$('#portlet-button').modal('hide');
-                                                    //$("#tab_sitelist").hide();
+                                                    //更改状态
+                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
+                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
+                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","7");                                                    
                                             }
                                     },
                                         'error':function(e){
@@ -230,6 +238,7 @@
                                     return false;
                                 }  
                                 $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'switch','sistemp'=>$istemp,'ssid'=>$sid,'stypeId'=>$typeId));?>');
+                                //换台///需要用ajax请求....
                                 $('#portlet-button').modal('hide');
                            });                           
                            
@@ -243,6 +252,7 @@
                                     return false;
                                 }  
                                 $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId,'op'=>'union','sistemp'=>$istemp,'ssid'=>$sid,'stypeId'=>$typeId));?>');
+                                //换台///需要用ajax请求....
                                 $('#portlet-button').modal('hide');
                            });
                            
@@ -328,6 +338,24 @@
                                          if(msg.status)
                                          {
                                              $("#callno").text(msg.callno);
+                                             $(".modalaction[typeid='queue'][sid='"+gsid+"'][istemp='"+gistemp+"']").removeClass("bg-yellow");
+                                             $(".modalaction[typeid='queue'][sid='"+gsid+"'][istemp='"+gistemp+"']").removeClass("bg-green");                                                    
+                                             //改变背景颜色///
+                                             alert(msg.sitefree);
+                                             alert(msg.queuenum);
+                                             if(msg.queuenum>0)
+                                             {                                                
+                                                 if(msg.sitefree>0)
+                                                 {
+                                                     $(".modalaction[typeid='queue'][sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-green");                                                    
+                                                 }else{
+                                                     $(".modalaction[typeid='queue'][sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-yellow");                                                    
+                                                 }
+                                             }
+                                             //修改排队数和空位数文字..
+                                             var siteobj=$(".modalaction[typeid='queue'][sid="+gsid+"][istemp="+gistemp+"]");
+                                             siteobj.find("span[typename='sitefree']").text("空座："+msg.sitefree);
+                                             siteobj.find("span[typename='queuenum']").text("排队："+msg.queuenum);
                                          }
                                     },
                                     error: function(msg){

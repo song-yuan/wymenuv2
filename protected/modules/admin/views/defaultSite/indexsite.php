@@ -79,7 +79,7 @@
                                                         </div>
 							<div class="portlet box purple" id="tab_sitelist">
 								<div class="portlet-title">
-									<div class="caption"><i class="fa fa-cogs"></i><?php echo $title; ?></div>
+                                                                    <div class="caption"><i class="fa fa-cogs"></i><span id="selectsite">请选择餐桌：</span></div>
                                                                         <div class="col-md-3">
                                                                                 <input id="barscanid" type="text" class="form-control" placeholder="<?php echo yii::t('app','扫描小票条码，快速查看订单');?>">
                                                                                 
@@ -97,13 +97,13 @@
                                                                     <div class="portlet-body site_list">
                                                                                 <ul>
                                                                                     <?php $hasfree=0;$haswaiting=0;
-                                                                                            if($typeId == 'queue'): ?>
+                                                                                            //if($typeId == 'queue'): ?>
                                                                                         <?php
-                                                                                            if(!empty($models)):
+                                                                                            if(!empty($queueModels)):
                                                                                                 $temptype=0;
-                                                                                                foreach ($models as $model):?>
+                                                                                                foreach ($queueModels as $model):?>
                                                                                                     <?php if($temptype!=$model["typeid"]): ?>
-                                                                                                        <li class="modalaction bg-red" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model["name"]; ?></span></li>
+                                                                                                        <li class="modalaction bg-red" typeid="queue" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model["name"]; ?></span></li>
                                                                                                     <?php 
                                                                                                         $temptype=$model["typeid"];
                                                                                                         endif;
@@ -112,34 +112,34 @@
                                                                                                         if($queuepersons>0){$haswaiting=1;};
                                                                                                         if($sitefree>0){$hasfree=1;};
                                                                                                         ?>
-                                                                                                        <li class="modalaction <?php if($queuepersons>0 && $sitefree==0) echo 'bg-yellow'; elseif($queuepersons>0 && $sitefree>0) echo 'bg-green';?>" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" typeId=<?php echo $model["typeid"];?> splid=<?php echo $model["splid"];?>>
-                                                                                                            <span style="font-size: 20px;">空座:<?php echo $sitefree; ?></span>
-                                                                                                            <br><span style="font-size: 20px;">排队:<?php echo $queuepersons; ?></span>
+                                                                                                        <li class="modalaction <?php if($queuepersons>0 && $sitefree==0) echo 'bg-yellow'; elseif($queuepersons>0 && $sitefree>0) echo 'bg-green';?>" typeid="queue" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" splid=<?php echo $model["splid"];?>>
+                                                                                                            <span style="font-size: 20px;" typename="sitefree">空座:<?php echo $sitefree; ?></span>
+                                                                                                            <br><span style="font-size: 20px;" typename="queuenum">排队:<?php echo $queuepersons; ?></span>
                                                                                                             <br><?php echo $model["min"]."-".$model["max"]; ?>
                                                                                                         </li>
                                                                                         <?php                                                                                                 
                                                                                                 endforeach;
                                                                                             endif;?>
-                                                                                    <?php elseif($typeId == 'tempsite'): ?>
-                                                                                        <li class="modalaction bg_add" istemp="1" status="0" sid="0" shname="<?php echo yii::t('app','新增临时台');?>"></li>
+                                                                                    <?php //elseif($typeId == 'tempsite'): ?>
+                                                                                        <li class="modalaction bg_add" typeid="tempsite" istemp="1" status="0" sid="0" shname="<?php echo yii::t('app','新增临时台');?>"></li>
                                                                                         <?php
-                                                                                            if(!empty($models)):
+                                                                                            if(!empty($tempsiteModels)):
                                                                                                 $tempnumber=0;
-                                                                                                foreach ($models as $model):?>
+                                                                                                foreach ($tempsiteModels as $model):?>
                                                                                                     <?php if($tempnumber!=$model->number): ?>
-                                                                                                        <li class="modalaction bg-red" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model->number; ?>人</span></li>
+                                                                                                        <li class="modalaction bg-red" typeid="tempsite" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model->number; ?>人</span></li>
                                                                                                     <?php 
                                                                                                         $tempnumber=$model->number;
                                                                                                         endif;?>
-                                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 20px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo $model->update_at;?></li>
+                                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" typeid="tempsite" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 20px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo $model->update_at;?></li>
                                                                                         <?php                                                                                                 
                                                                                                 endforeach;
                                                                                             endif;?>
-                                                                                    <?php else:?>
+                                                                                    <?php //else:?>
                                                                                         <?php foreach ($models as $model):?>
-                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial;?>"><span style="font-size: 20px;"><?php echo $model->serial;?>&nbsp;</span><?php echo '<br>'.$model->update_at;?></li>
+                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" typeid="<?php echo $model->type_id; ?>" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial;?>"><span style="font-size: 20px;"><?php echo $model->serial;?>&nbsp;</span><?php echo '<br>'.$model->update_at;?></li>
                                                                                         <?php endforeach;?>
-                                                                                    <?php endif;?>
+                                                                                    <?php //endif;?>
                                                                                     
                                                                                        <!-- <li class="modalaction bg-yellow" istemp="0" status="1" sid="1"> 001 </li>
                                                                                         <li class="modalaction bg-blue" istemp="0" status="2" sid="2"> 002 </li>
@@ -156,15 +156,18 @@
 						
 					
         <script type="text/javascript">
-            gssid="<?php echo $ssid; ?>";
-            gsistemp="<?php echo $sistemp; ?>";
-            gstypeid="<?php echo $stypeId; ?>";
-            gop="<?php echo $op; ?>";
+//            gssid="<?php //echo $ssid; ?>";
+//            gsistemp="<?php //echo $sistemp; ?>";
+//            gstypeid="<?php //echo $stypeId; ?>";
+//            gop="<?php //echo $op; ?>";
             gtypeid="<?php echo $typeId; ?>";
             ghasfree=<?php echo $hasfree;?>;
             ghaswaiting=<?php echo $haswaiting;?>;
             
             $(document).ready(function(){
+                //alert(gtypeid);
+                $('.modalaction').css('display','none');
+                $('.modalaction[typeid='+gtypeid+']').css('display','block');                            
                 if(gtypeid=="queue")
                 {
                     //alert(ghasfree);alert(ghaswaiting);
@@ -185,10 +188,16 @@
                 var sid = $(this).attr('sid');
                 var status = $(this).attr('status');
                 var istemp = $(this).attr('istemp');
-                var typeId = '<?php echo $typeId; ?>';
-                var op="<?php echo $op; ?>";
+                var typeId = $(this).attr('typeid');
+                var op=gop;
+//                alert(istemp);
                 var that=$(this);
-                if(op=="switch")
+//                var istemp='0';
+//                if(gtypeid=="tempsite")
+//                {
+//                    istemp='1';
+//                }
+                if(gop=="switch")
                 {
                     if(gsistemp==istemp && gssid==sid)
                     {
@@ -196,7 +205,7 @@
                         if(!statu){
                             return false;
                         }else{
-                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$stypeId));?>');
+                            //清空gistemp deng
                             return true;
                         }
                     }
@@ -216,31 +225,51 @@
                         $.ajax({
                             'type':'POST',
                             'dataType':'json',
-                            'data':{"sid":sid,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php if($typeId=='tempsite') echo '1'; else echo '0'; ?>',"ssid":'<?php echo $ssid; ?>',"sistemp":'<?php echo $sistemp; ?>'},
+                            'data':{"sid":sid,"companyId":'<?php echo $this->companyId; ?>',"istemp":istemp,"ssid":gssid,"sistemp":gsistemp},
                             'url':'<?php echo $this->createUrl('defaultSite/switchsite',array());?>',
                             'success':function(data){
                                     if(data.status == 0) {
                                             alert(data.message);
                                     } else {
+                                            gop="";
+                                            gsid = sid;
+                                            gistemp = istemp;
+                                            gtypeid = typeId;                                            
                                             alert(data.message);
-                                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
-                                            //location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>';
+                                            //手动改变二个台子的颜色和状态
+                                            var sstatus=$(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").attr("status");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-yellow");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-blue");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-green");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").attr("status","6");
+                                            
+                                            $(".modalaction[sid="+sid+"][istemp="+istemp+"]").attr("status",sstatus);
+                                            if(sstatus=="1")
+                                            {
+                                                $(".modalaction[sid="+sid+"][istemp="+istemp+"]").addClass("bg-yellow");
+                                            }else if(sstatus=="2")
+                                            {
+                                                $(".modalaction[sid="+sid+"][istemp="+istemp+"]").addClass("bg-blue");
+                                            }else if(sstatus=="3")
+                                            {
+                                                $(".modalaction[sid="+sid+"][istemp="+istemp+"]").addClass("bg-green");
+                                            }                                                
+//                                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>');
+                                      
                                     }
                             }
                         });
                         return false;
                         
                     }
-                }
-                if(op=="union")
-                {
+                }else if(gop=="union"){
                     if(gsistemp==istemp && gssid==sid)
                     {
                         var statu = confirm("<?php echo yii::t('app','放弃本次并台操作吗？');?>");
                         if(!statu){
                             return false;
                         }else{
-                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$stypeId));?>');
+                            //清空gop gssid gsistemp等
                             return true;
                         }
                     }
@@ -260,35 +289,65 @@
                         $.ajax({
                             'type':'POST',
                             'dataType':'json',
-                            'data':{"sid":sid,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php if($typeId=='tempsite') echo '1'; else echo '0'; ?>',"ssid":'<?php echo $ssid; ?>',"sistemp":'<?php echo $sistemp; ?>'},
+                            'data':{"sid":sid,"companyId":'<?php echo $this->companyId; ?>',"istemp":istemp,"ssid":gssid,"sistemp":gsistemp},
                             'url':'<?php echo $this->createUrl('defaultSite/unionsite',array());?>',
                             'success':function(data){
-                                    if(data.status == 0) {
+                                    if(data.status == 0) {                                            
                                             alert(data.message);
                                     } else {
                                             alert(data.message);
-                                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
-                                            //location.href='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>';
+                                            gop="";
+                                            gsid = sid;
+                                            gistemp = istemp;
+                                            gtypeid = typeId;
+                                            //手动改变二个台子的颜色和状态
+                                            var sstatus=$(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").attr("status");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-yellow");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-blue");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-green");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").attr("status","5");
+                                            $(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-yellow");
+                                            $(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-blue");
+                                            $(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-green");
+                                            var tstatus=$(".modalaction[sid="+sid+"][istemp="+istemp+"]").attr("status");
+                                            //alert(sstatus); alert(tstatus);
+                                            if(sstatus>tstatus)
+                                            {
+                                                //alert(1111);
+                                                $(".modalaction[sid="+sid+"][istemp="+istemp+"]").attr("status",sstatus);
+                                                if(sstatus=="1")
+                                                {
+                                                    $(".modalaction[sid="+sid+"][istemp="+istemp+"]").addClass("bg-yellow");
+                                                }else if(sstatus=="2")
+                                                {
+                                                    $(".modalaction[sid="+sid+"][istemp="+istemp+"]").addClass("bg-blue");
+                                                }else if(sstatus=="3")
+                                                {
+                                                    $(".modalaction[sid="+sid+"][istemp="+istemp+"]").addClass("bg-green");
+                                                }
+                                            }
+//                                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');                                            
                                     }
                             }
                         });
                         return false;                        
                     }
+                }else{
+                        gop="";
+                        gsid = sid;
+                        gistemp = istemp;
+                        gtypeid = typeId;
+                        //alert(istemp);
+                    pxbox.find('.button-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){
+                        
+                        pxbox.children("h4").text(that.attr("shname"));
+                        $("#tab_sitelist").hide();
+                        pxbox.show();
+                        //$('#pxbox_button').hide();
+                    });
                 }
-                //$('#chatAudio')[0].play();
-                //$modal.find('.modal-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){
-                 // $modal.modal();
-                  //$modal.show();
-                //});
-                //alert('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId);
-                //alert(status);
-                pxbox.find('.button-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){
-                    pxbox.children("h4").text(that.attr("shname"));
-                    $("#tab_sitelist").hide();
-                    pxbox.show();
-                    //$('#pxbox_button').hide();
-                });
             });
+            
             
             $('#barscanid').keyup(function(){
                 if($(this).val().length==11)
@@ -320,7 +379,7 @@
             
             $('#site_button_cancel').on(event_clicktouchstart, function(){//site_button_cancel
                 $(this).parent().hide();
-                $('#tabsiteindex').load(tabcurrenturl); 
+                //$('#tabsiteindex').load(tabcurrenturl); 
                 //alert(tabcurrenturl);
                 $("#tab_sitelist").show();
             });
