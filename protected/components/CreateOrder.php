@@ -226,6 +226,11 @@ class CreateOrder
 		unset($goodsIds['client_site_name']);
                 unset($goodsIds['client_reprint']);
                 unset($goodsIds['client_waitor_name']);
+                
+        $siteStatus = $this->getSiteStatus($site_id,$dpid,$isTemp);
+        if(!$siteStatus){
+        	throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','请先开台后下单！'))));
+        }
 		$sellOff = array();
 		$printOrderProducts = array();
 		$time = date('Y-m-d H:i:s',time());
@@ -601,6 +606,32 @@ class CreateOrder
                 throw new Exception($e->getMessage());
                 //return $e->getMessage();
             } 
+	}
+	private function getSiteStatus($siteId,$dpid,$istemp){
+			if($istemp==0){
+                    $criteria1 = new CDbCriteria;
+                    $criteria1->condition =  ' t.dpid='.$dpid.' and t.lid='.$siteId ;
+                    $site = Site::model()->find($criteria1);
+                    if($site)
+                    {
+                    	$status=$site->status;
+                    }else{
+                        $status=0;
+                    }
+                }else{
+                    $criteria2 = new CDbCriteria;
+                    $criteria2->condition =  't.status in ("1","2","3") and t.dpid='.$dpid.' and t.site_id='.$siteId.' and t.is_temp='.$istemp ;
+                    //$criteria2->condition =  't.status in ("9") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+                    $criteria2->order = ' t.lid desc ';
+                    $siteNo = SiteNo::model()->find($criteria2);
+                    if($siteNo)
+                    {
+                        $status=$siteNo->status;
+                    }else{
+                        $status=0;
+                    }
+                }
+            return $status;
 	}
 	//获取套餐里选中单品的id
 	public static function getSetProductIds($dpid,$setId){
