@@ -30,7 +30,7 @@ class ProductClass
                                 . ' from(select n.lid,n.dpid as dpid,0 as category_id,n.set_name as product_name, n.main_picture, n.rank, n.store_number, n.order_number, n.favourite_number, n1.price*n1.number as price,1 as producttype from nb_product_set n'
                                 . ' LEFT JOIN nb_product_set_detail n1 on n.lid=n1.set_id  where n.dpid=n1.dpid and n.dpid=:companyId  and n.delete_flag=0 and n1.delete_flag=0 and n1.is_select=1)r1 group by lid )r'
 //                                . ' LEFT JOIN (select order_id,t4.dpid as dpid,set_id from nb_order_product t4 LEFT JOIN nb_order t5 on t4.order_id=t5.lid and t4.dpid=t5.dpid where t4.dpid = :companyId and t5.site_id=:siteId and t4.delete_flag=0 and t4.product_order_status=0  and t4.set_id > 0)s on r.lid=s.set_id and r.dpid=s.dpid '
-                                . ') tao order by pid ASC, order_num DESC';
+                                . ') tao order by tao.pid ASC, tao.order_num DESC';
 			$connect = Yii::app()->db->createCommand($sql);
 			$connect->bindValue(':companyId',$dpid);
 //			$connect->bindValue(':siteId',$siteId);
