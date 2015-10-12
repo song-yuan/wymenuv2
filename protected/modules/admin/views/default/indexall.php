@@ -709,8 +709,7 @@
                                         siteobj.addClass("bg-green");
                                     }
                                 });
-                            }
-                            
+                            }                            
                         },
                         error: function(msg){
                             alert("网络可能有问题，再试一次！");
