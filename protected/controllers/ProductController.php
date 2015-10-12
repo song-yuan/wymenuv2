@@ -63,10 +63,10 @@ class ProductController extends Controller
 	public function actionProductCategory(){
 		$totalCatgorys = array();
 		$command = Yii::app()->db;
-		$sql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0 order by order_num DESC';
+		$sql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=0 and delete_flag=0 order by lid ASC, order_num DESC';
 		$parentCategorys = $command->createCommand($sql)->bindValue(':companyId',$this->companyId)->queryAll();
 		foreach($parentCategorys as $category){
-			$csql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0 order by order_num DESC';
+			$csql = 'select lid,category_name from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0 order by pid ASC, order_num DESC';
 			$categorys = $command->createCommand($csql)->bindValue(':companyId',$this->companyId)->bindValue(':pid',$category['lid'])->queryAll();
 			$category['children'] = $categorys;
 			array_push($totalCatgorys,$category);
