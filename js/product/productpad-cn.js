@@ -56,7 +56,9 @@ $(document).ready(function(){
     			parentsBlockCategory.find('.productset-group').each(function(){
     				$(this).find('.item').each(function(){
             			var isSelect = $(this).attr('is-select');
+            			alert(parseInt(isSelect)==1);
             			if(parseInt(isSelect)==1){
+            				alert(22);
             				$(this).click();
             			}
             		});
