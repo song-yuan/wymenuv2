@@ -228,7 +228,7 @@ class CreateOrder
                 unset($goodsIds['client_waitor_name']);
                 
         $siteStatus = $this->getSiteStatus($site_id,$dpid,$isTemp);
-        if(!$siteStatus){
+        if(empty($siteStatus)){
         	throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','请先开台后下单！'))));
         }
 		$sellOff = array();
@@ -607,12 +607,12 @@ class CreateOrder
                 //return $e->getMessage();
             } 
 	}
-	private function getSiteStatus($siteId,$dpid,$istemp){
+	public function getSiteStatus($siteId,$dpid,$istemp){
 			if($istemp==0){
                     $criteria1 = new CDbCriteria;
                     $criteria1->condition =  ' t.dpid='.$dpid.' and t.lid='.$siteId ;
                     $site = Site::model()->find($criteria1);
-                    if($site)
+                    if(empty($site))
                     {
                     	$status=$site->status;
                     }else{
@@ -624,7 +624,7 @@ class CreateOrder
                     //$criteria2->condition =  't.status in ("9") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria2->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria2);
-                    if($siteNo)
+                    if(empty($siteNo))
                     {
                         $status=$siteNo->status;
                     }else{
