@@ -227,7 +227,7 @@ class CreateOrder
                 unset($goodsIds['client_reprint']);
                 unset($goodsIds['client_waitor_name']);
                 
-        $siteStatus = $this->getSiteStatus($site_id,$dpid,$isTemp);
+        $siteStatus = self::getSiteStatus($site_id,$dpid,$isTemp);
         if(empty($siteStatus)){
         	throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','请先开台后下单！'))));
         }
@@ -607,7 +607,7 @@ class CreateOrder
                 //return $e->getMessage();
             } 
 	}
-	public function getSiteStatus($siteId,$dpid,$istemp){
+	public static function getSiteStatus($siteId,$dpid,$istemp){
 			if($istemp==0){
                     $criteria1 = new CDbCriteria;
                     $criteria1->condition =  ' t.dpid='.$dpid.' and t.lid='.$siteId ;
