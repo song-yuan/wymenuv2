@@ -30,6 +30,28 @@ function addToCart() {
 }
 $(document).ready(function(){
 	var language = $('input[name="language"]').val();
+	//更换套餐明细
+    $('#forum_list').on(event_clicktouchstart,'.productsetpad .item',function(){
+   	var blockCategory = $(this).parents('.blockCategory');
+	   	var productId = blockCategory.find('a.product-pic').attr('lid');//套餐 ID
+	   	
+	   	var productsetDetailLid = $(this).attr('productset-detail-id');
+   	var productsetGroup = $(this).parents('.productset-group');
+   	var groupNo = productsetGroup.attr('group-no');
+   	
+   	if(!$(this).hasClass('active')){
+   		var str = '<input type="hidden" name="'+productId+'['+groupNo+']['+productsetDetailLid+']'+'" value="1"/>';
+   		$('#padOrderForm').append(str);
+   		$(this).addClass('active');
+   		$(this).siblings().each(function(){
+   			if($(this).hasClass('active')){
+		    		var detailId = $(this).attr('productset-detail-id');
+		    		$('input[name="'+productId+'['+groupNo+']['+detailId+']'+'"]').remove();
+		    		$(this).removeClass('active');
+		    	}
+   		});
+   	}
+   });
     $('#forum_list').on(event_clicktouchstart,'.addCart',function(){
         var istemp=$('#id_client_is_temp').val();
         if(istemp=="1")
@@ -56,9 +78,7 @@ $(document).ready(function(){
     			parentsBlockCategory.find('.productset-group').each(function(){
     				$(this).find('.item').each(function(){
             			var isSelect = $(this).attr('is-select');
-            			alert(parseInt(isSelect)==1);
             			if(parseInt(isSelect)==1){
-            				alert(22);
             				$(this).click();
             			}
             		});
@@ -605,28 +625,7 @@ $(document).ready(function(){
     		});
     	}
     });
-    //更换套餐明细
-     $('#forum_list').on(event_clicktouchstart,'.productsetpad .item',function(){
-    	var blockCategory = $(this).parents('.blockCategory');
-	   	var productId = blockCategory.find('a.product-pic').attr('lid');//套餐 ID
-	   	
-	   	var productsetDetailLid = $(this).attr('productset-detail-id');
-    	var productsetGroup = $(this).parents('.productset-group');
-    	var groupNo = productsetGroup.attr('group-no');
-    	
-    	if(!$(this).hasClass('active')){
-    		var str = '<input type="hidden" name="'+productId+'['+groupNo+']['+productsetDetailLid+']'+'" value="1"/>';
-    		$('#padOrderForm').append(str);
-    		$(this).addClass('active');
-    		$(this).siblings().each(function(){
-    			if($(this).hasClass('active')){
-		    		var detailId = $(this).attr('productset-detail-id');
-		    		$('input[name="'+productId+'['+groupNo+']['+detailId+']'+'"]').remove();
-		    		$(this).removeClass('active');
-		    	}
-    		});
-    	}
-    });
+   
      $('body').on(event_clicktouchstart,'.productset-confirm',function(){
      	var _this = $(this);
     	var parentsBlockCategory = _this.parents('.blockCategory');
