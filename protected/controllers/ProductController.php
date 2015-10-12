@@ -591,7 +591,7 @@ class ProductController extends Controller
                     $criteria1 = new CDbCriteria;
                     $criteria1->condition =  ' t.dpid='.$companyId.' and t.lid='.$sid ;
                     $site = Site::model()->find($criteria1);
-                    if($site)
+                    if(empty($site))
                     {
                     	$status=$site->status;
                     }else{
@@ -605,7 +605,7 @@ class ProductController extends Controller
                     $siteNo = SiteNo::model()->find($criteria2);
                     //var_dump($siteNo);exit;
                     //if (empty($siteNo)) echo 'a';exit;
-                    if($siteNo)
+                    if(empty($siteNo))
                     {
                         $status=$siteNo->status;
                     }else{
