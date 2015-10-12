@@ -612,7 +612,7 @@ class CreateOrder
                     $criteria1 = new CDbCriteria;
                     $criteria1->condition =  ' t.dpid='.$dpid.' and t.lid='.$siteId ;
                     $site = Site::model()->find($criteria1);
-                    if(empty($site))
+                    if(!empty($site))
                     {
                     	$status=$site->status;
                     }else{
@@ -624,7 +624,7 @@ class CreateOrder
                     //$criteria2->condition =  't.status in ("9") and t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
                     $criteria2->order = ' t.lid desc ';
                     $siteNo = SiteNo::model()->find($criteria2);
-                    if(empty($siteNo))
+                    if(!empty($siteNo))
                     {
                         $status=$siteNo->status;
                     }else{
