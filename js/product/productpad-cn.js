@@ -31,7 +31,7 @@ function addToCart() {
 $(document).ready(function(){
 	var language = $('input[name="language"]').val();
 	//更换套餐明细
-    $('#forum_list').on(event_clicktouchstart,'.productsetpad .item',function(){
+    $('#forum_list').on('click','.productsetpad .item',function(){
    	var blockCategory = $(this).parents('.blockCategory');
 	   	var productId = blockCategory.find('a.product-pic').attr('lid');//套餐 ID
 	   	
@@ -79,7 +79,7 @@ $(document).ready(function(){
     				$(this).find('.item').each(function(){
             			var isSelect = $(this).attr('is-select');
             			if(parseInt(isSelect)==1){
-            				$(this).trigger(event_clicktouchstart);
+            				$(this).click();
             			}
             		});
     			});
