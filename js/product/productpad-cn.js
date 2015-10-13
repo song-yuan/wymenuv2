@@ -79,7 +79,7 @@ $(document).ready(function(){
     				$(this).find('.item').each(function(){
             			var isSelect = $(this).attr('is-select');
             			if(parseInt(isSelect)==1){
-            				$(this).trigger(event_clicktouchstart);
+            				$(this).trigger('"'+event_clicktouchstart+'"');
             			}
             		});
     			});
