@@ -211,6 +211,7 @@ $(document).ready(function(){
     	var productId = _this.attr('product-id');
     	var type = _this.attr('type');
     	if(parseInt(type)){
+    		parentsBlockCategory.find('.addCart').removeClass('hasClick'); //去掉点击
     		parentsBlockCategory.find('.productset-group').each(function(){
     			$(this).find('.active').removeClass('active');
     		});
