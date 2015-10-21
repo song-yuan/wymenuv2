@@ -13,7 +13,7 @@ class Helper
                 return Yii::app()->user->companyId ;
             }
 	}
-        
+          
         static public function getCompanyName($companyId) {
             if($companyId)
             {

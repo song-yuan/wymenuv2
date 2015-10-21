@@ -203,9 +203,14 @@
                     {
                         var statu = confirm("<?php echo yii::t('app','放弃本次换台操作吗？');?>");
                         if(!statu){
-                            return false;
+                            return false;//换台操作
                         }else{
                             //清空gistemp deng
+                            //return true;
+                            gop='';
+//                            gsistemp=gistemp;
+//                            gssid=gsid;
+//                            gstypeid=gtypeid;
                             return true;
                         }
                     }
@@ -270,6 +275,11 @@
                             return false;
                         }else{
                             //清空gop gssid gsistemp等
+                            //return true;
+                            gop='';
+//                            gsistemp=gistemp;
+//                            gssid=gsid;
+//                            gstypeid=gtypeid;
                             return true;
                         }
                     }
@@ -282,7 +292,7 @@
                         alert("<?php echo yii::t('app','正在进行并台操作，请选择已经开台、下单的餐桌');?>");
                         return false;
                     }else{
-                        var statu = confirm("<?php echo yii::t('app','确定将该餐桌做为换台目标吗？');?>");
+                        var statu = confirm("<?php echo yii::t('app','确定将该餐桌做为并台目标吗？');?>");
                         if(!statu){
                             return false;
                         }
@@ -306,14 +316,14 @@
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-blue");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-green");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").attr("status","5");
-                                            $(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-yellow");
-                                            $(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-blue");
-                                            $(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-green");
                                             var tstatus=$(".modalaction[sid="+sid+"][istemp="+istemp+"]").attr("status");
                                             //alert(sstatus); alert(tstatus);
                                             if(sstatus>tstatus)
                                             {
                                                 //alert(1111);
+                                            	$(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-yellow");
+                                                $(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-blue");
+                                                $(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-green");
                                                 $(".modalaction[sid="+sid+"][istemp="+istemp+"]").attr("status",sstatus);
                                                 if(sstatus=="1")
                                                 {

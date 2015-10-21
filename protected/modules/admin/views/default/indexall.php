@@ -1473,7 +1473,7 @@
                                     });
                                     //如果失败，就把打印任务插入到数据库
                                     //如果有失败任务就打开对话框
-                                    alert(successjobids);
+                                    //alert(successjobids);
                                     if(printresultfail)
                                     {
                                         $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid+"/jobId/"+successjobids);                                

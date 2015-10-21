@@ -14,7 +14,7 @@ class OrderList
 	public $orderList = array();
 	
 	public function __construct($dpid = 0,$siteNoId = 0){
-		$this->dpid = $dpid;
+		$this->dpid = $dpid; 
 		$this->siteNoId = $siteNoId;
 		$this->db = Yii::app()->db;
 		$this->SiteNo();
