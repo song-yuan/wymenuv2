@@ -937,6 +937,7 @@
             $('#alltaste_btn').on(event_clicktouchstart,function(){
                     var tids=$("#ordertasteall").attr("tid");
                     $(".selectTaste").removeClass("active");
+                    //alert(layer_index3);
                     $.each(tids.split("|"),function(index,data){
                         $(".selectTaste[tasteid="+data+"]").addClass("active");
                     });

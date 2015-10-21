@@ -121,6 +121,7 @@
                             //alert($("#taste_memo_edit").val());
                             $("#ordertastememoall").text($("#taste_memo_edit").val());
                             layer.close(layer_index3);
+                            layer_index3=0;
                         });
                         
                         $('#alltaste_cancel').on(event_clicktouchstart,function(){
