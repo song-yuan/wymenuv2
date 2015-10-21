@@ -385,7 +385,7 @@ class OrderList
                         $productDetailArr=explode(",",$tvalue);
                         $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$productDetailArr[2],':dpid'=>$companyId));
                         //return json_encode(array('status'=>true,'msg'=>$productdata->store_number.$productDetailArr[2].$productDetailArr[3]));
-                        if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[3] ))
+                        if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[4] ))
                         {
                             $transaction->rollback();
                             return array('status'=>false,'msg'=>$productdata->product_name."数量不足");
