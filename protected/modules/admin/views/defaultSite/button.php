@@ -361,7 +361,7 @@
                                     },
                                     complete : function(XMLHttpRequest,status){
                                         if(status=='timeout'){
-                                            alert("网络可能有问题，再试一次！");                                            
+                                            alert("网络可能有问题，再试一次！");                                           
                                         }
                                     }
                                 });
