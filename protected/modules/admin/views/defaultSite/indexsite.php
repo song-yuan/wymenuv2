@@ -206,6 +206,11 @@
                             return false;//换台操作
                         }else{
                             //清空gistemp deng
+                            //return true;
+                            gop='';
+//                            gsistemp=gistemp;
+//                            gssid=gsid;
+//                            gstypeid=gtypeid;
                             return true;
                         }
                     }
@@ -270,6 +275,11 @@
                             return false;
                         }else{
                             //清空gop gssid gsistemp等
+                            //return true;
+                            gop='';
+//                            gsistemp=gistemp;
+//                            gssid=gsid;
+//                            gstypeid=gtypeid;
                             return true;
                         }
                     }
