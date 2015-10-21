@@ -59,7 +59,7 @@ class QueueController extends Controller
                 {
                     //生成新的排队号
                     $siteType=  SiteType::model()->find(" dpid=:dpid and lid=:lid",array(":dpid"=>$companyid,":lid"=>$stlid));
-                    //var_dump($siteType);exit;
+                    $sitePersons= SitePersons::model()->find(" dpid=:dpid and lid=:lid",array(":dpid"=>$companyid,":lid"=>$splid));
                     $criteria = new CDbCriteria;
                     $criteria->condition =  " dpid=".$companyid." and stlid=".$stlid." and splid=".$splid
                             ." and create_at >='".date('Y-m-d',time())." 00:00:00' and create_at <='"
@@ -74,7 +74,7 @@ class QueueController extends Controller
                     if(!empty($queuePerson))
                     {
                         $countsp=count($queuePerson);
-                        $queueno=$siteType->simplecode.substr("000".(string)($countsp+1),-3);
+                        $queueno=$siteType->simplecode.$sitePersons->min_persons.substr("000".(string)($countsp+1),-3);
                         
                         for($sti=$countsp-1;$sti>=0;$sti--)
                         {
