@@ -180,21 +180,49 @@
                                                         }
                                                     });
                                                     //如果有失败任务就打开对话框
-                                                    $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid+"/jobId/"+successjobids);
-                                                    if(layer_index_printresult!=0)
-                                                       return;
-//                                                                $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid);                                
-                                                    layer_index_printresult=layer.open({
-                                                        type: 1,
-                                                        shade: false,
-                                                        title: false, //不显示标题
-                                                        area: ['30%', '70%'],
-                                                        content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-                                                        cancel: function(index){
-                                                            layer.close(index);
-                                                            layer_index_printresult=0;                                                                                                     
+                                                    if(printresultfail)
+                                                    {
+                                                        $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid+"/jobId/"+successjobids);
+                                                        if(layer_index_printresult!=0)
+                                                        {
+                                                            layer.close(layer_index_printresult);
+                                                            layer_index_printresult=0;
+                                                           //return;
                                                         }
-                                                    });
+                                                        layer_index_printresult=layer.open({
+                                                            type: 1,
+                                                            shade: false,
+                                                            title: false, //不显示标题
+                                                            area: ['30%', '70%'],
+                                                            content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                                                            cancel: function(index){
+                                                                layer.close(index);
+                                                                layer_index_printresult=0;                                                                                                     
+                                                            }
+                                                        });
+                                                    }else{
+                                                        $.ajax({
+                                                            url:'<?php echo $this->createUrl('defaultOrder/saveFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid+'/jobId/'+successjobids,
+                                                            type:'GET',
+                                                            timeout:5000,
+                                                            cache:false,
+                                                            async:false,
+                                                            dataType: "json",
+                                                            success:function(data){
+                                                                //alert(msg);防止前台开台，但是后台结单或撤台了，就不能继续下单
+                                                                //if(!(msg.status == "1" || msg.status == "2" || msg.status == "3"))
+
+                                                            },
+                                                            error: function(msg){
+
+                                                            },
+                                                            complete : function(XMLHttpRequest,status){
+                                                                if(status=='timeout'){
+
+                                                                }
+                                                            }
+                                                        });
+                                                    }
                                                 }
                                         },
                                         error: function(msg){
