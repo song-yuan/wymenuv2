@@ -108,12 +108,17 @@
                         $(this).addClass("queueactive");
                     });
                     
+                    function unlock(){
+                        
+                    }
+                    
                     $('.btnSitePersons').click(function(){
                         if(btnlock)
                         {
                             return;
                         }else{
                             btnlock=true;
+                            setTimeout("btnlock=false", 3000);
                         }
                         var stlid=$(this).attr('stlid');
                         var splid=$(this).attr('splid');
@@ -151,7 +156,7 @@
                                             }else{
                                                 printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
                                             }
-
+//                                            printresulttemp=true;
                                             if(!printresulttemp)
                                             {
                                                 var reprint = confirm("打印失败，是否重新打印？");
@@ -163,20 +168,20 @@
                                  }else{
                                      alert(msg.msg);
                                  }
-                                  btnlock=false;
+                                  //btnlock=false;
                             },
                             error: function(msg){
                                 alert("网络可能有问题，再试一次！");
-                                btnlock=false;
+                                //btnlock=false;
                             },
                             complete : function(XMLHttpRequest,status){
                                 if(status=='timeout'){
                                     alert("网络可能有问题，再试一次！");                                            
                                 }
-                                btnlock=false;
+                                //btnlock=false;
                             }
                         });
-                        btnlock=false;
+                        //btnlock=false;
                     });
                 </script>
                 
