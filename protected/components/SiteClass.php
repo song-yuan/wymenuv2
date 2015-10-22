@@ -16,7 +16,7 @@ class SiteClass
                             . ' group by dpid,splid,typeid) sf'
                             . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
                             . ' where t.delete_flag=0 and t.dpid= '.$companyId.' and t.type_id='.$siteTypeLid
-                            . ' group by dpid,splid,typeid,min,max'
+//                            . ' group by dpid,splid,typeid,min,max'
                             . ' order by typeid,min';
                     $connect = Yii::app()->db->createCommand($sql);
                     $models = $connect->queryAll();
@@ -24,8 +24,8 @@ class SiteClass
 	}
         
         public static function getSitePersonsAll($companyId){
-		$sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,'
-                            . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
+		$sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid, '
+                            . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree '
                             . '  from nb_site t'
                             . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
                             . ' LEFT JOIN (select distinct qp.dpid as dpid,qp.stlid as stlid,qp.splid as splid, count(qp.lid) as queuepersons'
@@ -36,9 +36,9 @@ class SiteClass
                             . ' LEFT JOIN (select distinct subt.dpid as dpid,subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
                             . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
                             . ' group by dpid,splid,typeid) sf'
-                            . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
+                            . ' on t.dpid=sf.dpid and t.splid=sf.splid and t.type_id=sf.typeid'
                             . ' where t.delete_flag=0 and t.dpid= '.$companyId
-                            . ' group by dpid,splid,typeid,min,max'
+//                            . ' group by dpid,splid,typeid,min,max'
                             . ' order by typeid,min';
                     $connect = Yii::app()->db->createCommand($sql);
                     $models = $connect->queryAll();
