@@ -54,7 +54,10 @@
                 var statu = confirm("确定切换到："+sname+"？");
                 if(statu){
                 	//获取估清产品
-               		$('.sellOff').remove();
+                	$('.blockCategory').each(function(q){
+                		$(this).attr('store','-1');
+                		$(this).find('.sellOff').remove();
+                	});
                 	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
                 	$.get(url,function(msg){
                 		for(var i in msg){
@@ -213,7 +216,10 @@
             } 
             //开台成功重新获取估清产品
             if(isopensiteclicked){
-            	$('.sellOff').remove();
+            	$('.blockCategory').each(function(q){
+            		$(this).attr('store','-1');
+            		$(this).find('.sellOff').remove();
+            	});
             	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
             	$.get(url,function(msg){
             		for(var i in msg){
