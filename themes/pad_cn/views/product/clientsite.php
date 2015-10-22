@@ -53,7 +53,7 @@
             {
                 var statu = confirm("确定切换到："+sname+"？");
                 if(statu){
-                	var url = '/wymenuv2/product/confirmPadOrder/companyid/<?php echo $compayId;?>';
+                	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
                 	$.get(url,function(msg){
                 		for(var i in msg){
                 			alert(msg[i].lid);
