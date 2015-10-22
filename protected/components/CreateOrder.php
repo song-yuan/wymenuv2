@@ -376,7 +376,7 @@ class CreateOrder
                        $result = $db->createCommand($sql)->queryRow();
                        if($result){
                                if($result['store_number']==0 ||($result['store_number'] > 0&&$result['store_number'] < 1)){
-                                       throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！'))));
+                                       throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['set_name'].'库存不足！仅剩'.$result['store_number'].'份！'))));
                                }
                        }else{
                                throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
@@ -444,7 +444,7 @@ class CreateOrder
 	                		$amount = $numEq[0];
 	                		if($result){
 			             		if($result['store_number']==0 || ($result['store_number'] > 0 && $result['store_number'] < $amount)){
-			             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！'))));
+			             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！仅剩'.$result['store_number'].'份！'))));
 			             		}
 			             	}else{
 			             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
@@ -498,7 +498,7 @@ class CreateOrder
 	             	}else{ 
 	             		if($result){
 		             		if($result['store_number']==0 || ($result['store_number'] > 0&&$result['store_number'] < $num)){
-		             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！'))));
+		             			throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app',$result['product_name'].'库存不足！仅剩'.$result['store_number'].'份！'))));
 		             		}
 		             	}else{
 		             		throw new Exception(json_encode( array('status'=>false,'dpid'=>$dpid,'jobid'=>"0",'type'=>'local','msg'=>yii::t('app','没有找到该产品请清空后重新下单！'))));
