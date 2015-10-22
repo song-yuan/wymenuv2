@@ -311,6 +311,7 @@ class ProductClass
 	}
     public static function getSaleOffProducts($companyId){
          $sql = 'select lid,dpid,store_number from nb_product where dpid=:dpid and is_show=1 and delete_flag=0';
+         echo $sql;exit;
          $result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$companyId)->queryAll();
          return $result;
     }
