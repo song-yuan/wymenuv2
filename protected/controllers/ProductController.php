@@ -400,7 +400,7 @@ class ProductController extends Controller
 	 */
 	public function actionSaleOff() {
 		$saleOff = ProductClass::getSaleOffProducts($this->companyId);
-		return json_encode($saleOff);
+		Yii::app()->end(json_encode($saleOff));
 	}
 	public function actionQrcode(){
 		$orderId = Yii::app()->request->getParam('orderId',0);
