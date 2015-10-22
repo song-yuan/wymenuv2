@@ -51,6 +51,7 @@
 		<script language="JavaScript" type="text/JavaScript">
                     var intervalQueueList;
                     var companyid=<?php echo $companyId; ?>;
+                    var btnlock=false;
                     function reloadqueuestate()
                     {
                         $.ajax({
@@ -107,7 +108,18 @@
                         $(this).addClass("queueactive");
                     });
                     
+                    function unlock(){
+                        
+                    }
+                    
                     $('.btnSitePersons').click(function(){
+                        if(btnlock)
+                        {
+                            return;
+                        }else{
+                            btnlock=true;
+                            setTimeout("btnlock=false", 3000);
+                        }
                         var stlid=$(this).attr('stlid');
                         var splid=$(this).attr('splid');
                         var dpid="<?php echo $companyId; ?>";
@@ -134,7 +146,7 @@
                                  if(msg.status)
                                  {
                                     that.val(personrang+"人(等叫:"+msg.waitingnum+"组)");                                                                        
-                                        var reprint=true
+                                        var reprint=true;
                                         while(reprint)
                                         {
                                             var addressdetail=msg.address.split(".");
@@ -144,11 +156,11 @@
                                             }else{
                                                 printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
                                             }
+//                                            printresulttemp=true;
                                             if(!printresulttemp)
                                             {
-                                                confirm("打印失败，是否重新打印？", function(result) {                  
-                                                        reprint=result;
-                                                });
+                                                var reprint = confirm("打印失败，是否重新打印？");
+                                                
                                             }else{
                                                 reprint=false;
                                             }                                            
@@ -156,16 +168,20 @@
                                  }else{
                                      alert(msg.msg);
                                  }
+                                  //btnlock=false;
                             },
                             error: function(msg){
                                 alert("网络可能有问题，再试一次！");
+                                //btnlock=false;
                             },
                             complete : function(XMLHttpRequest,status){
                                 if(status=='timeout'){
                                     alert("网络可能有问题，再试一次！");                                            
                                 }
+                                //btnlock=false;
                             }
                         });
+                        //btnlock=false;
                     });
                 </script>
                 
