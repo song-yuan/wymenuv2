@@ -399,6 +399,7 @@ class ProductController extends Controller
 	 * 
 	 */
 	public function actionSaleOff() {
+		echo $this->companyId;exit;
 		$saleOff = ProductClass::getSaleOffProducts($this->companyId);
 		return json_encode($saleOff);
 	}
