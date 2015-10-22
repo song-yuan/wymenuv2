@@ -393,6 +393,15 @@ class ProductController extends Controller
 			Yii::app()->end(json_encode($data));
 		}
 	}
+	/**
+	 * 
+	 * 获取估清商品及库存
+	 * 
+	 */
+	public function actionSaleOff() {
+		$saleOff = ProductClass::getSaleOffProducts($this->companyId);
+		return json_encode($saleOff);
+	}
 	public function actionQrcode(){
 		$orderId = Yii::app()->request->getParam('orderId',0);
 		$dpid = Yii::app()->request->getParam('dpid',0);
@@ -474,7 +483,8 @@ class ProductController extends Controller
                 
                 $this->renderPartial('clientsite',array(
 				'models_temp'=>$models_temp,
-				'models_category' => $models_category
+				'models_category' => $models_category,
+				'compayId'=>$compayId
 		));
 	}
         
