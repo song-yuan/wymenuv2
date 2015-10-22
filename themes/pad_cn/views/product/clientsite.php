@@ -139,6 +139,31 @@
                      // data:{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":istemp},
                      url:url,
                      'success':function(data){
+                     		 //开台成功重新获取估清产品
+				            if(isopensiteclicked){
+				            	$('.blockCategory').each(function(q){
+				            		$(this).attr('store','-1');
+				            		$(this).find('.sellOff').remove();
+				            	});
+				            	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
+				            	$.get(url,function(msg){
+				            		for(var i in msg){
+				            			var data = msg[i];
+				            			if(parseInt(data.store_number)==0){
+				            				var blockCategory = $('.blockCategory[product-id="'+data.lid+'"]');
+				            				var str = '<div class="sellOff sellOut"><?php echo yii::t('app',"已售完");?></div>';
+				            				blockCategory.attr('store','0');
+				            				blockCategory.find('a').append(str);
+				            			}else{
+				            				var blockCategory = $('.blockCategory[product-id="'+data.lid+'"]');
+				            				var str = '<div class="sellOff">仅剩<br/>'+data.store_number+'份</div>';
+				            				blockCategory.attr('store',data.store_number);
+				            				blockCategory.find('a').append(str);
+				            			}
+				            			
+				            		}
+				            	},'json');
+				            }             
                             alert(data.msg);
                              if(data.status===1)
                              {
@@ -214,31 +239,6 @@
                      }
                  });
             } 
-            //开台成功重新获取估清产品
-            if(isopensiteclicked){
-            	$('.blockCategory').each(function(q){
-            		$(this).attr('store','-1');
-            		$(this).find('.sellOff').remove();
-            	});
-            	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
-            	$.get(url,function(msg){
-            		for(var i in msg){
-            			var data = msg[i];
-            			if(parseInt(data.store_number)==0){
-            				var blockCategory = $('.blockCategory[product-id="'+data.lid+'"]');
-            				var str = '<div class="sellOff sellOut"><?php echo yii::t('app',"已售完");?></div>';
-            				blockCategory.attr('store','0');
-            				blockCategory.find('a').append(str);
-            			}else{
-            				var blockCategory = $('.blockCategory[product-id="'+data.lid+'"]');
-            				var str = '<div class="sellOff">仅剩<br/>'+data.store_number+'份</div>';
-            				blockCategory.attr('store',data.store_number);
-            				blockCategory.find('a').append(str);
-            			}
-            			
-            		}
-            	},'json');
-            }                             
         });
         
         $('#site_open_cancel').on(event_clicktouchstart,function(){
