@@ -53,10 +53,23 @@
             {
                 var statu = confirm("确定切换到："+sname+"？");
                 if(statu){
+               		$('.sellOff').remove();
                 	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
                 	$.get(url,function(msg){
                 		for(var i in msg){
-                			alert(msg[i].lid);
+                			var data = msg[i];
+                			if(parseInt(data.store_number)==0){
+                				var blockCategory = $('.blockCategory[product-id="'+data.lid+'"]');
+                				var str = '<div class="sellOff sellOut"><?php echo yii::t('app',"已售完");?></div>';
+                				blockCategory.attr('store','0');
+                				blockCategory.find('a').append(str);
+                			}else{
+                				var blockCategory = $('.blockCategory[product-id="'+data.lid+'"]');
+                				var str = '<div class="sellOff">仅剩<br/>'+data.store_number+'份</div>';
+                				blockCategory.attr('store',data.store_number);
+                				blockCategory.find('a').append(str);
+                			}
+                			
                 		}
                 	},'json');
                     $('#divid_client_sitelist').hide();
@@ -196,7 +209,28 @@
         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                      }
                  });
-            }                               
+            } 
+            if(isopensiteclicked){
+            	$('.sellOff').remove();
+            	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
+            	$.get(url,function(msg){
+            		for(var i in msg){
+            			var data = msg[i];
+            			if(parseInt(data.store_number)==0){
+            				var blockCategory = $('.blockCategory[product-id="'+data.lid+'"]');
+            				var str = '<div class="sellOff sellOut"><?php echo yii::t('app',"已售完");?></div>';
+            				blockCategory.attr('store','0');
+            				blockCategory.find('a').append(str);
+            			}else{
+            				var blockCategory = $('.blockCategory[product-id="'+data.lid+'"]');
+            				var str = '<div class="sellOff">仅剩<br/>'+data.store_number+'份</div>';
+            				blockCategory.attr('store',data.store_number);
+            				blockCategory.find('a').append(str);
+            			}
+            			
+            		}
+            	},'json');
+            }                             
         });
         
         $('#site_open_cancel').on(event_clicktouchstart,function(){
