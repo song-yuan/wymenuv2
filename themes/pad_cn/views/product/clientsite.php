@@ -53,6 +53,7 @@
             {
                 var statu = confirm("确定切换到："+sname+"？");
                 if(statu){
+                	//获取估清产品
                		$('.sellOff').remove();
                 	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
                 	$.get(url,function(msg){
@@ -210,6 +211,7 @@
                      }
                  });
             } 
+            //开台成功重新获取估清产品
             if(isopensiteclicked){
             	$('.sellOff').remove();
             	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
