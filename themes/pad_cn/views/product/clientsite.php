@@ -53,6 +53,12 @@
             {
                 var statu = confirm("确定切换到："+sname+"？");
                 if(statu){
+                	var url = '/wymenuv2/product/saleOff/companyid/<?php echo $compayId;?>';
+                	$.get(url,function(msg){
+                		for(var i in msg){
+                			alert(msg[i].lid);
+                		}
+                	},'json');
                     $('#divid_client_sitelist').hide();
                     $('#id_client_is_temp').val(istemp);
                     $('#id_client_site_id').val(sid);
