@@ -24,6 +24,7 @@
                         $('.reprintjob').on("click",function(){
                             var liobj=$(this).parent();
                             liobj.hide();
+                            $('#failprintjobs').text(parseInt($('#failprintjobs').text())-1);
                             var jobid=$(this).attr("jobid");
                             var address=$(this).attr("address");
                             var dpid="<?php echo $dpid; ?>";
@@ -42,6 +43,7 @@
                             {
                                 alert("再试一次！");
                                 liobj.show();
+                                $('#failprintjobs').text(parseInt($('#failprintjobs').text())+1);
                             }
                                 if(jobnum==jobsuccess && printresulttemp2)
                                 {
@@ -60,19 +62,22 @@
                                             if(data.status)
                                             {
                                                 layer.close(layer_index_printresult);
+                                                layer_index_printresult=0;
                                             }
                                         },
                                         error: function(msg){
                                             layer.close(layer_index_printresult);
-                                            
+                                            layer_index_printresult=0;
                                         },
                                         complete : function(XMLHttpRequest,status){
                                             if(status=='timeout'){
                                                 layer.close(layer_index_printresult);
+                                                layer_index_printresult=0;
                                             }
                                         }
                                     });
                                     layer.close(layer_index_printresult);
+                                    layer_index_printresult=0;
                                 }
                             
 //                            if(!printresulttemp2)

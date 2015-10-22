@@ -86,7 +86,7 @@ class QueueController extends Controller
                             }
                         }
                     }else{
-                        $queueno=$siteType->simplecode."001";
+                        $queueno=$siteType->simplecode.$sitePersons->min_persons."001";
                         $waitingno=0;
                     }
                     $se=new Sequence("queue_persons");

@@ -1042,8 +1042,13 @@
                                         layer.close(index);
                                         break;
                                     }
-                                    //alert(itemp);
-                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);                                    
+                                    var addressdetail=data.address.split(".");
+                                    if(addressdetail[0]=="com")
+                                    {
+                                        printresult=Androidwymenuprinter.printComJob(data.dpid,data.jobid,addressdetail[1],addressdetail[2]);
+                                    }else{
+                                        printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+                                    }                                                                        
                                 }
                                 if(!printresult)
                                 {
@@ -1478,7 +1483,11 @@
                                     {
                                         $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+data.orderid+"/jobId/"+successjobids);                                
                                         if(layer_index_printresult!=0)
-                                           return;
+                                        {
+                                            layer.close(layer_index_printresult);
+                                            layer_index_printresult=0;
+                                           //return;
+                                        }
                                         layer_index_printresult=layer.open({
                                             type: 1,
                                             shade: false,
@@ -1531,7 +1540,11 @@
                         if(parseInt($('#failprintjobnum').val())>0)
                         {
                             if(layer_index_printresult!=0)
-                                return;
+                            {
+                                layer.close(layer_index_printresult);
+                                layer_index_printresult=0;
+                               //return;
+                            }
                              layer_index_printresult=layer.open({
                                  type: 1,
                                  shade: false,
@@ -1540,10 +1553,9 @@
                                  content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
                                  cancel: function(index){
                                      layer.close(index);
-                                     layer_index_printresult=0;
-                                                                               
+                                     layer_index_printresult=0;                                                                               
                                  }
-                                });
+                            });
                                 
                         }else{
                            gotoaccount();   
