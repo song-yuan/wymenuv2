@@ -137,7 +137,13 @@
                                         var reprint=true
                                         while(reprint)
                                         {
-                                            printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
+                                            var addressdetail=msg.address.split(".");
+                                            if(addressdetail[0]=="com")
+                                            {
+                                                printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],addressdetail[2]);
+                                            }else{
+                                                printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
+                                            }
                                             if(!printresulttemp)
                                             {
                                                 confirm("打印失败，是否重新打印？", function(result) {                  
