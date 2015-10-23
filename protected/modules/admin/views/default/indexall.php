@@ -1446,7 +1446,10 @@
                                 var data=msg;
                                 //alert(data.msg);
                                 if(data.status){
-                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                               
+                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);   
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-blue");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","2");
                                     var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
                                     $.each(data.jobs,function(skey,svalue){                                        
                                         detaildata=svalue.split("_");
@@ -1467,6 +1470,12 @@
                                     if(!printresultfail)
                                     {
                                         alert("厨打成功！");
+										//修改代码CF
+                                       					$(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-blue");
+                                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","2");
+                                                 				
+                                        //修改下单后座位颜色代码；
                                     }   
                                     //alert("可能有打印失败，请去打印机处确认，如果失败，请去收银台查看并重打！");
                                     $.each(data.jobs,function(skey,svalue){                                        
