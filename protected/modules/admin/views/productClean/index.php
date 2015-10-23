@@ -186,9 +186,10 @@
         //cancelallclean
         
         $("#cancelallclean").on("click",function(){
-            
+            var url="<?php echo $this->createUrl('productClean/resetall',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>";
+            //alert(url);
             $.ajax({
- 			url:"<?php echo $this->createUrl('productClean/resetall',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>",
+ 			url:url,
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
                         dataType:'json',
