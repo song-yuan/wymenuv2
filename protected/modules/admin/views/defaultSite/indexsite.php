@@ -199,6 +199,11 @@
 //                }
                 if(gop=="switch")
                 {
+                    if(typeId=="queue")
+                    {
+                        alert("换台不能选择排队");
+                        return;
+                    }
                     if(gsistemp==istemp && gssid==sid)
                     {
                         var statu = confirm("<?php echo yii::t('app','放弃本次换台操作吗？');?>");
@@ -268,6 +273,11 @@
                         
                     }
                 }else if(gop=="union"){
+                    if(typeId=="queue")
+                    {
+                        alert("并台不能选择排队");
+                        return;
+                    }
                     if(gsistemp==istemp && gssid==sid)
                     {
                         var statu = confirm("<?php echo yii::t('app','放弃本次并台操作吗？');?>");

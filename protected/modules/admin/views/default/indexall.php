@@ -1446,7 +1446,10 @@
                                 var data=msg;
                                 //alert(data.msg);
                                 if(data.status){
-                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                               
+                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);   
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-blue");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","2");
                                     var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
                                     $.each(data.jobs,function(skey,svalue){                                        
                                         detaildata=svalue.split("_");
