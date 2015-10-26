@@ -1046,7 +1046,7 @@
                                     if(addressdetail[0]=="com")
                                     {
                                         var baudrate=parseInt(addressdetail[2]);
-                                               alert(baudrate);
+                                        //       alert(baudrate);
                                         printresult=Androidwymenuprinter.printComJob(data.dpid,data.jobid,addressdetail[1],baudrate);
                                     }else{
                                         printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
