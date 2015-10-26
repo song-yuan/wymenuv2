@@ -1,6 +1,6 @@
 <style>
     .queuesitetypelist input{
-        font-size: 20px;
+        font-size: 18px;
         width: 40%;
         height: 70px;
         background-color: darkseagreen;
@@ -9,7 +9,7 @@
         word-wrap:break-word;
     }
     .queuesitepersonslist input{
-        font-size: 20px;
+        font-size: 15px;
         width: 40%;
         height: 70px;
         background-color:skyblue;
