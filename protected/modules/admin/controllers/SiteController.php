@@ -22,10 +22,10 @@ class SiteController extends BackendController
                 $criteria->with = array('siteType', 'floor','sitePersons');
                 $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$this->companyId ;
                 $criteria->order = ' t.type_id asc ';		
-                $models = Site::model()->findAll($criteria);
                 $pages = new CPagination(Site::model()->count($criteria));
                 $pages->applyLimit($criteria);
                 
+                $models = Site::model()->findAll($criteria);                
 		//var_dump($models);exit;
 		$this->render('index',array(
 				'siteTypes' => $siteTypes,
