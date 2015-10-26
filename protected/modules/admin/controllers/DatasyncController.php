@@ -257,7 +257,7 @@ class DatasyncController extends Controller
                     //"nb_guest_message",
                     //"nb_local_company",
                     "nb_member_card", // ！！！云端添加，充值时，等改变
-                    "nb_member_consumer", 
+                    //"nb_member_consumer", 
                     "nb_member_recharge", 
                     "nb_online_pay",
                     "nb_order",
@@ -284,11 +284,13 @@ class DatasyncController extends Controller
                     "nb_product_special",
                     "nb_product_taste",
                     "nb_product_tempprice",
+                    "nb_queue_persons",
                     "nb_retreat",
                     //"nb_squence",
                     "nb_site",// ！！！云端添加，充值时，等改变
                     "nb_site_no",
                     "nb_site_type",
+                    "nb_site_persons",
                     "nb_taste",
                     "nb_taste_group",
                     "nb_user",
