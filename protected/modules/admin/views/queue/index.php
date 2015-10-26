@@ -154,7 +154,9 @@
                                             var addressdetail=msg.address.split(".");
                                             if(addressdetail[0]=="com")
                                            {
-                                                printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],addressdetail[2]);
+                                               var baudrate=parseInt(addressdetail[2]);
+                                               alert(baudrate);
+                                                printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],baudrate);
                                             }else{
                                                 printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
                                             }
