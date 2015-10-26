@@ -1,19 +1,21 @@
 <style>
     .queuesitetypelist input{
-        font-size: 25px;
+        font-size: 20px;
         width: 40%;
         height: 70px;
         background-color: darkseagreen;
         float: left;
         margin: 2%;
+        word-wrap:break-word;
     }
     .queuesitepersonslist input{
-        font-size: 25px;
+        font-size: 20px;
         width: 40%;
         height: 70px;
         background-color:skyblue;
         float: left;
         margin: 2%;
+        word-wrap:break-word;
     }
     .queueactive{
         background-color: red !important;
@@ -60,7 +62,7 @@
                             timeout:5000,
                             cache:false,
                             async:false,
-                            dataType: "json",
+                            dataType: "json", 
                             success:function(msg){
                                 $.each(msg,function(key,value){
                                     var siteobj=$("input[splid="+value.splid+"][stlid="+value.typeid+"]");
@@ -151,7 +153,7 @@
                                         {
                                             var addressdetail=msg.address.split(".");
                                             if(addressdetail[0]=="com")
-                                            {
+                                           {
                                                 printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],addressdetail[2]);
                                             }else{
                                                 printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
