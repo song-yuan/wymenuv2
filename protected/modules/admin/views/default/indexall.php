@@ -501,13 +501,16 @@
                                                 </div> 
                                               </DIV> 
                                             </div>
-                                            <div style="float: left;width:25%;">
-                                                <div style="width: 85%;margin:1.0em;font-size:1.5em;">
+                                            <div style="float: left;width:25%;height: 100%;">
+                                                <div style="width: 85%;margin:1.0em;font-size:1.5em;height: 100%;">
                                                     实收<span style="text-align:right;" id="payRealityAccount">0.00</span><br>
                                                     找零<span style="text-align:right;" id="payChangeAccount">0.00</span><br>
                                                     <DIV class="edit_span edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
                                                     <DIV class="edit_span" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
                                                     <DIV class="edit_span" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
+                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
+                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
                                                     <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
                                                     <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
                                                     <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
