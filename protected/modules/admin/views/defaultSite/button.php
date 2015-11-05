@@ -13,8 +13,10 @@
 			<div class="modal-body">
 				<?php if($typeId=='queue') :?>
                             第一个排队号：<span id="callno"><?php echo $nexpersons; ?></span><br>
-                                        <button  id="queuecall" style="width:7.0em;margin:10px; " type="button"  splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php echo yii::t('app','叫号');?></button>
-                                        <button  id="queuepass" style="width:7.0em;margin:10px; " type="button"  splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php echo yii::t('app','下一个');?></button>                                        
+                                        <button  id="queuecall" style="width:7.0em;margin:10px; " type="button"  splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green">叫号</button>
+                                        <button  id="queuepass" style="width:7.0em;margin:10px; " type="button"  splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green">下一个</button>
+                                        <button  id="queuemessage" style="width:7.0em;margin:10px; " type="button"  splid="<?php echo $sid; ?>" stlid="<?php echo $istemp; ?>" class="btn green"><?php if(!empty($weixin_openid)){echo '发微信提醒';}else if(!empty($mobile_no)){echo '发短信提醒';}else{echo '无提醒';}?></button>
+                                        
                                 <?php elseif($status=='1') :?>
                                 <button type="button" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn grey orderaction"><?php echo yii::t('app','点 单');?></button>
                                 <div class="pull-right">

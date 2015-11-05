@@ -110,7 +110,11 @@ class DefaultController extends BackendController
 		$criteriap->condition =  'delete_flag=0 and t.dpid='.$companyId ;// and is_show=1
 		$criteriap->order = ' t.category_id asc,t.lid asc ';
                 $products =  Product::model()->findAll($criteriap);
-                //var_dump($products);exit;
+                //var_dump($setprice);exit;                
+                $criteriapo = new CDbCriteria;
+		$criteriapo->condition =  'delete_flag=0 and t.dpid='.$companyId ;// and is_show=1
+		$paymentmethod = PaymentMethod::model()->findAll($criteriapo);
+                //var_dump($paymentmethod);exit;
                 $productidnameArr=array();
                 foreach($products as $product)
                 {
@@ -124,6 +128,7 @@ class DefaultController extends BackendController
                                 "productSets"=>$productSets,
                                 'setprice'=>$setprice,
                                 "products"=>$products,
+                                "paymentmethod"=>$paymentmethod,
                                 "pn"=>$productidnameArr
 		));
 	}

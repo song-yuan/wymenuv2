@@ -11,6 +11,8 @@
  * @property string $stlid
  * @property string $splid
  * @property string $queue_no
+ * @property string $mobile_no
+ * @property string $weixin_openid
  * @property string $status
  * @property string $slid
  */
@@ -35,11 +37,13 @@ class QueuePersons extends CActiveRecord
 			array('lid', 'required'),
 			array('lid, dpid, stlid, splid, slid', 'length', 'max'=>10),
 			array('queue_no', 'length', 'max'=>20),
+                        array('mobile_no', 'length', 'max'=>30),
+                        array('weixin_openid', 'length', 'max'=>50),
 			array('status', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, stlid, splid, queue_no, status, slid', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, stlid, splid, queue_no, mobile_no, weixin_openid, status, slid', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +71,8 @@ class QueuePersons extends CActiveRecord
 			'stlid' => '座位类型的lid',
 			'splid' => '对应座位人数表的id',
 			'queue_no' => '排队号，每天从001开始，前面加上座位类型，如：A001,B010',
+                        'mobile_no'=>'手机号码',
+                        'weixin_openid'=>'微信openID',
 			'status' => '状态，0等位中，1过号，2转移到正式座位',
 			'slid' => '转移到的座位对应的lid',
 		);
@@ -97,6 +103,8 @@ class QueuePersons extends CActiveRecord
 		$criteria->compare('stlid',$this->stlid,true);
 		$criteria->compare('splid',$this->splid,true);
 		$criteria->compare('queue_no',$this->queue_no,true);
+                $criteria->compare('mobile_no',$this->mobile_no,true);
+                $criteria->compare('weixin_openid',$this->weixin_openid,true);
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('slid',$this->slid,true);
 

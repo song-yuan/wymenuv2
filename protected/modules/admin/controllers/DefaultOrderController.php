@@ -507,6 +507,7 @@ class DefaultOrderController extends BackendController
                 $payoriginaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payoriginaccount',"0")));
                 $cardno = Yii::app()->request->getParam('cardno',"0000000000");
                 $ordermemo = Yii::app()->request->getPost('ordermemo',"0");
+                $payotherdetail=Yii::app()->request->getPost('payotherdetail',"");
                 //存数order order_pay 0现金，4会员卡，5银联                         
                 //写入会员卡消费记录，会员卡总额减少
                 $ret;
@@ -623,22 +624,48 @@ class DefaultOrderController extends BackendController
                                             );
                         $db->createCommand()->insert('nb_order_pay',$orderPayData);
                     }
-                    if($payothers>0)
+//                    if($payothers>0)
+//                    {
+//                        $orderPayId = $se->nextval();
+//                        //插入一条
+//                        $orderPayData = array(
+//                                            'lid'=>$orderPayId,
+//                                            'dpid'=>$companyId,
+//                                            'create_at'=>$time,
+//                                            'order_id'=>$orderid,
+//                                            'update_at'=>$time,
+//                                            'pay_amount'=>$payothers,
+//                                            'paytype'=>"3",
+//                                            'payment_method_id'=>"3990000000",
+//                                            'remark'=>'大众点评临时',//'product_order_status'=>$orderProductStatus,
+//                                            );
+//                        $db->createCommand()->insert('nb_order_pay',$orderPayData);
+//                    }
+                    if(strlen($payotherdetail)>0)
                     {
-                        $orderPayId = $se->nextval();
-                        //插入一条
-                        $orderPayData = array(
-                                            'lid'=>$orderPayId,
-                                            'dpid'=>$companyId,
-                                            'create_at'=>$time,
-                                            'order_id'=>$orderid,
-                                            'update_at'=>$time,
-                                            'pay_amount'=>$payothers,
-                                            'paytype'=>"3",
-                                            'payment_method_id'=>"3990000000",
-                                            'remark'=>'大众点评临时',//'product_order_status'=>$orderProductStatus,
-                                            );
-                        $db->createCommand()->insert('nb_order_pay',$orderPayData);
+                        $detailarr=explode("|",$payotherdetail);
+                        foreach ($detailarr as $da)
+                        {
+                            $daarr=explode(",",$da);
+                            if($daarr[0]!="0000000000")
+                            {
+                                $orderPayId = $se->nextval();
+                                //插入一条
+                                $orderPayData = array(
+                                                    'lid'=>$orderPayId,
+                                                    'dpid'=>$companyId,
+                                                    'create_at'=>$time,
+                                                    'order_id'=>$orderid,
+                                                    'update_at'=>$time,
+                                                    'pay_amount'=>$daarr[1],
+                                                    'paytype'=>"3",
+                                                    'payment_method_id'=>$daarr[0],
+                                                    'remark'=>'其他支付',//'product_order_status'=>$orderProductStatus,
+                                                    );
+                                $db->createCommand()->insert('nb_order_pay',$orderPayData);                                
+                                //
+                            }                            
+                        }
                     }
                     $transaction->commit();
                     $ret=json_encode(array('status'=>true,'msg'=>"结单成功"));
