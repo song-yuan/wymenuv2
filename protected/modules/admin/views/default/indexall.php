@@ -199,6 +199,9 @@
     list-style: none;
     text-align: center;
 }
+.edit_span_hide {
+    display: none;
+}
 .edit_span_select {
     border:1px solid red;
     background-color:#ED9F9F !important;    
@@ -471,7 +474,7 @@
                                             
                                             <div style="float: left;width:73%;margin-top: 2.0em;">
                                                 <DIV style="float:left;width:100%;border:0px solid red;">
-                                                 <div style="margin-left:0px;border:0px solid red;" class="calc_num">
+                                                 <div style="margin-left:0px;vertical-align: top;border:0px solid red;" class="calc_num">
                                                      <ul>
                                                          <li>1</li>
                                                          <li>2</li>
@@ -491,12 +494,13 @@
                                                          <li>100</li>
                                                      </ul>
                                                  </div>
-                                                <div style="margin:0px;border:0px solid green;" class="calc_button">
-                                                    <ul style="padding-left:0px;">
+                                                <div style="margin:0px;margin-top: -0px;border:0px solid green;" class="calc_button">
+                                                    <ul style="padding-left:0px;margin-top:-20px;">
                                                         <li id="pay_clearone" style="background-color: #add"><?php echo yii::t('app','退格');?></li>
                                                         <li id="pay_clearall" style="background-color: red"><?php echo yii::t('app','清除/全额');?></li>
                                                         <li id="pay_btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>    
                                                         <li id="printlistaccount" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','打印消费清单');?></li>
+                                                        <li id="layer2_close" class="default" style="background-color: #0a0"><?php echo yii::t('app','关闭');?></li>
                                                     </ul>
                                                 </div> 
                                               </DIV> 
@@ -505,18 +509,31 @@
                                                 <div style="width: 85%;margin:1.0em;font-size:1.5em;height: 100%;">
                                                     实收<span style="text-align:right;" id="payRealityAccount">0.00</span><br>
                                                     找零<span style="text-align:right;" id="payChangeAccount">0.00</span><br>
-                                                    <DIV class="edit_span edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
-                                                    <DIV class="edit_span" selectid="pay_others" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','代金券');?><span  style="text-align:right;" paymethodlist="" id="payOthers" otherdetail="">0.00</span></DIV>
+                                                    <DIV class="edit_span edit_span_normal edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span edit_span_normal" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span edit_span_normal" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
+                                                    <?php 
+                                                    $otherdetail="0000000000,0";
+                                                    if(!empty($paymentmethod))
+                                                    {
+                                                        foreach($paymentmethod as $method)
+                                                        {
+                                                             $otherdetail=$otherdetail."|".$method->lid.",0.00";                                                             
+                                                         }
+                                                    }?>
+                                                    <?php 
+                                                    if(!empty($otherdetail)):                                                        
+                                                    ?>
+                                                    <DIV class="edit_span_show" selectid="pay_others" style="float:left;width:100%;background-color:#006dcc;padding:10px;">其他<span detail="<?php echo $otherdetail;?>" style="text-align:right;" id="payOthers" >0.00</span></DIV>                                                    
+                                                    <?php endif;?>
+                                                    <?php
+                                                    if(!empty($paymentmethod)):
+                                                         foreach($paymentmethod as $method):?>
+                                                    <DIV class="edit_span edit_span_other edit_span_hide" selectid="pay_others_detail" spanid="<?php echo 'paymethod'.$method->lid; ?>" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo $method->name;?><span  style="text-align:right;" id="<?php echo 'paymethod'.$method->lid; ?>" lid="<?php echo $method->lid; ?>">0.00</span></DIV>
+                                                    <?php endforeach;
+                                                    endif;?>
                                                 </div>    
-                                                <input style="position:absolute;right:3%;bottom: 4%;width:6.0em;height:3.0em;" type="button" class="btn green" id="layer2_close" value="<?php echo yii::t('app',' 关 闭 ');?>">
+                                                <!--<input style="position:absolute;right:3%;bottom: 4%;width:6.0em;height:3.0em;" type="button" class="btn green" id="layer2_close" value="<?php echo yii::t('app',' 关 闭 ');?>">-->
                                             </div>
                                         </div>
                                     </div>
@@ -718,11 +735,11 @@
                             }                            
                         },
                         error: function(msg){
-                            alert("网络可能有问题，再试一次！");
+                            //alert("网络可能有问题，再试一次！");
                         },
                         complete : function(XMLHttpRequest,status){
                             if(status=='timeout'){
-                                alert("网络可能有问题，再试一次！");                                            
+                               // alert("网络可能有问题，再试一次！");                                            
                             }
                         }
                     });               
@@ -1834,6 +1851,13 @@
                 {
                     fn_member_card_pay();
                 }
+            });            
+            
+            $('.edit_span_show').on(event_clicktouchstart,function(){
+                $('.edit_span_normal').toggleClass("edit_span_hide");
+                $('.edit_span_other').toggleClass("edit_span_hide");
+                $(".edit_span_normal").removeClass("edit_span_select");
+                $(".edit_span_other").removeClass("edit_span_select");
             });
             
             $('.calc_num').on(event_clicktouchstart,'li',function(){
@@ -1991,29 +2015,81 @@
                     }else{
                         $("#payChangeAccount").text("0.00");
                     }
-                }else if(selectid=="pay_others")
+//                }else if(selectid=="pay_others")
+//                {
+//                    if(nowval=="10" || nowval=="20"|| nowval=="50"|| nowval=="100")
+//                    {
+//                        return;
+//                    }
+//                    //alert(payMinusAccount);alert(nowval);
+//                    if(payOthers=="0.00" || payOthers=="0" || payOthers=="00")
+//                    {
+//                        if(nowval!=".")
+//                        {
+//                            $("#payOthers").text(nowval);
+//                        }
+//                    }else{
+//                        if(payOthers.indexOf(".")>0 && nowval==".")
+//                        {
+//
+//                        }else{
+//                            $("#payOthers").html(payOthers+nowval);
+//                        }
+//                    }                    
+//                    $("#payRealityAccount").html((parseFloat(payUnionAccount.replace(",",""))+parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+//                    
+//                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
+//                    if(changeaccount>0)
+//                    {
+//                        $("#payChangeAccount").text(changeaccount.toFixed(2));
+//                    }else{
+//                        $("#payChangeAccount").text("0.00");
+//                    }
+//                }
+                 }else if(selectid=="pay_others_detail")
                 {
                     if(nowval=="10" || nowval=="20"|| nowval=="50"|| nowval=="100")
                     {
                         return;
                     }
                     //alert(payMinusAccount);alert(nowval);
-                    if(payOthers=="0.00" || payOthers=="0" || payOthers=="00")
+                    var spanid=$(".edit_span_select").attr("spanid");
+                    var spanvalue=$("#"+spanid).text();
+                    //alert(spanid);alert(spanvalue);
+                    if(spanvalue=="0.00" || spanvalue=="0" || spanvalue=="00")
                     {
                         if(nowval!=".")
                         {
-                            $("#payOthers").text(nowval);
+                            $("#"+spanid).text(nowval);
                         }
                     }else{
-                        if(payOthers.indexOf(".")>0 && nowval==".")
+                        if(spanvalue.indexOf(".")>0 && nowval==".")
                         {
 
                         }else{
-                            $("#payOthers").html(payOthers+nowval);
+                            $("#"+spanid).html(spanvalue+nowval);
                         }
                     }                    
-                    $("#payRealityAccount").html((parseFloat(payUnionAccount.replace(",",""))+parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+                    $("#payOthers").html((parseFloat($("#payOthers").text().replace(",",""))+parseFloat($("#"+spanid).text().replace(",",""))-parseFloat(spanvalue.replace(",",""))).toFixed(2));
                     
+                    var otherdetail=$("#payOthers").attr("detail");
+                    spanvalue=$("#"+spanid).text();
+                    var spanlid=$("#"+spanid).attr("lid");
+                    var reg="[0-9]{10},([0-9.])*";
+                    strdetail = otherdetail.replace(new RegExp(reg,"g"),function(word){
+                        var newword=word.split(",");
+                        if(newword[0]==spanlid)
+                        {
+                            var retval=newword[0]+","+spanvalue;
+                            //alert(retval);
+                            return retval;
+                        }else{
+                            return word;
+                        }                       
+                    });
+                    $("#payOthers").attr("detail",strdetail);
+                    
+                    $("#payRealityAccount").html((parseFloat(payUnionAccount.replace(",",""))+parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
                     var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
@@ -2022,7 +2098,6 @@
                         $("#payChangeAccount").text("0.00");
                     }
                 }
-                
             });
             
             $('.calc_dan').on(event_clicktouchstart,'li',function(){
@@ -2275,20 +2350,64 @@
                     }else{
                         $("#payChangeAccount").text("0.00");
                     }
-                }else if(selectid=="pay_others")
-                {
-                    if(payOthers=="0.00" || payOthers=="0" || payOthers=="00")
+//                }else if(selectid=="pay_others")
+//                {
+//                    if(payOthers=="0.00" || payOthers=="0" || payOthers=="00")
+//                    {
+//                        return false;
+//                    }
+//                    if(payOthers.length==1)
+//                    {
+//                        $("#payOthers").text("0.00");
+//                    }else{
+//                        $("#payOthers").text(payOthers.substr(0,payOthers.length-1));
+//                    }
+//                    $("#payRealityAccount").html((parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payUnionAccount.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+//                    
+//                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
+//                    if(changeaccount>0)
+//                    {
+//                        $("#payChangeAccount").text(changeaccount.toFixed(2));
+//                    }else{
+//                        $("#payChangeAccount").text("0.00");
+//                    }
+//                }
+                }else if(selectid=="pay_others_detail")
+                {                    
+                    var spanid=$(".edit_span_select").attr("spanid");
+                    var spanvalue=$("#"+spanid).text();
+                    //alert(spanid);alert(spanvalue);
+                    if(spanvalue=="0.00" || spanvalue=="0" || spanvalue=="00")
                     {
                         return false;
                     }
-                    if(payOthers.length==1)
+                    if(spanvalue.length==1)
                     {
-                        $("#payOthers").text("0.00");
+                        $("#"+spanid).text("0.00");
                     }else{
-                        $("#payOthers").text(payOthers.substr(0,payOthers.length-1));
+                        $("#"+spanid).text(spanvalue.substr(0,spanvalue.length-1));
                     }
-                    $("#payRealityAccount").html((parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payUnionAccount.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
                     
+                    $("#payOthers").html((parseFloat($("#payOthers").text().replace(",",""))+parseFloat($("#"+spanid).text().replace(",",""))-parseFloat(spanvalue.replace(",",""))).toFixed(2));
+                    
+                    var otherdetail=$("#payOthers").attr("detail");
+                    spanvalue=$("#"+spanid).text();
+                    var spanlid=$("#"+spanid).attr("lid");
+                    var reg="[0-9]{10},([0-9.])*";
+                    strdetail = otherdetail.replace(new RegExp(reg,"g"),function(word){
+                        var newword=word.split(",");
+                        if(newword[0]==spanlid)
+                        {
+                            var retval=newword[0]+","+spanvalue;
+                            //alert(retval);
+                            return retval;
+                        }else{
+                            return word;
+                        }                       
+                    });
+                    $("#payOthers").attr("detail",strdetail);
+                    
+                    $("#payRealityAccount").html((parseFloat(payUnionAccount.replace(",",""))+parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
                     var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
@@ -2410,21 +2529,64 @@
                     }else{
                         $("#payChangeAccount").text("0.00");
                     }
-                }else if(selectid=="pay_others")
-                {
+//                }else if(selectid=="pay_others")
+//                {
+//                    var offvalue=parseFloat(payShouldAccount.replace(",","")) - parseFloat(payRealityAccount.replace(",",""))
+//                    if(parseFloat($("#payOthers").text().replace(",",""))==0)
+//                    {
+//                        if(offvalue>0)
+//                        {
+//                            $("#payOthers").text(offvalue.toFixed(2));
+//                        }
+//                    }else{
+//                        $("#payOthers").text("0.00");
+//                    }
+//                    
+//                    $("#payRealityAccount").html((parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payUnionAccount.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+//                    
+//                    var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
+//                    if(changeaccount>0)
+//                    {
+//                        $("#payChangeAccount").text(changeaccount.toFixed(2));
+//                    }else{
+//                        $("#payChangeAccount").text("0.00");
+//                    }
+//                }
+                }else if(selectid=="pay_others_detail")
+                {                    
+                    var spanid=$(".edit_span_select").attr("spanid");
+                    var spanvalue=$("#"+spanid).text();
                     var offvalue=parseFloat(payShouldAccount.replace(",","")) - parseFloat(payRealityAccount.replace(",",""))
-                    if(parseFloat($("#payOthers").text().replace(",",""))==0)
+                    if(parseFloat(spanvalue.replace(",",""))==0)
                     {
                         if(offvalue>0)
                         {
-                            $("#payOthers").text(offvalue.toFixed(2));
+                            $("#"+spanid).text(offvalue.toFixed(2));
                         }
                     }else{
-                        $("#payOthers").text("0.00");
+                        $("#"+spanid).text("0.00");
                     }
+                                        
+                    $("#payOthers").html((parseFloat($("#payOthers").text().replace(",",""))+parseFloat($("#"+spanid).text().replace(",",""))-parseFloat(spanvalue.replace(",",""))).toFixed(2));
                     
-                    $("#payRealityAccount").html((parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payUnionAccount.replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
+                    var otherdetail=$("#payOthers").attr("detail");
+                    spanvalue=$("#"+spanid).text();
+                    var spanlid=$("#"+spanid).attr("lid");
+                    var reg="[0-9]{10},([0-9.])*";
+                    strdetail = otherdetail.replace(new RegExp(reg,"g"),function(word){
+                        var newword=word.split(",");
+                        if(newword[0]==spanlid)
+                        {
+                            var retval=newword[0]+","+spanvalue;
+                            //alert(retval);
+                            return retval;
+                        }else{
+                            return word;
+                        }                       
+                    });
+                    $("#payOthers").attr("detail",strdetail);
                     
+                    $("#payRealityAccount").html((parseFloat(payUnionAccount.replace(",",""))+parseFloat($("#payOthers").text().replace(",",""))+parseFloat(payMemberAccount.replace(",",""))+parseFloat(payCashAccount.replace(",",""))).toFixed(2));
                     var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                     if(changeaccount>0)
                     {
@@ -2593,6 +2755,7 @@
                 var cardno=$("#payMemberAccount").attr("cardno");
                 var payUnionAccount=$("#payUnionAccount").text();
                 var payOthers=$("#payOthers").text();
+                var otherdetail=$("#payOthers").attr("detail");
                 if(parseFloat(payRealityAccount.replace(",","")) < parseFloat(payShouldAccount.replace(",","")))
                 {
                     alert("收款不够");
@@ -2612,8 +2775,10 @@
                                     '&ordermemo='+ordermemo+
                                     '&payshouldaccount='+payShouldAccount+
                                     '&payothers='+payOthers+
-                                    '&payoriginaccount='+payOriginAccount; 
-                            //alert(sendjson);
+                                    '&payoriginaccount='+payOriginAccount+
+                                    '&payotherdetail='+otherdetail; 
+//                            alert(sendjson);
+//                            return;
                         $.ajax({
                             url:url,
                             type:'POST',
