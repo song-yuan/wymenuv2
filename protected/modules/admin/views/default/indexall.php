@@ -154,9 +154,9 @@
         vertical-align: middle;
       }
  .alphabet ul li {
-    	line-height:40px;
+    	//line-height:40px;
         float: left;
-        width: 60px;
+        width: 80px;
         height: 40px;
         border: 1px solid #add;
         margin: 3px;
