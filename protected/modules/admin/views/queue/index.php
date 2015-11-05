@@ -256,7 +256,7 @@
                              type: 1,
                              shade: false,
                              title: false, //不显示标题
-                             area: ['65%', '60%'],
+                             area: ['70%', '90%'],
                              content: $('#mobilenobox'),//$('#productInfo'), //捕获的元素
                              cancel: function(index){
                                  layer.close(index);
