@@ -174,14 +174,15 @@
                                                                     </DIV>
                                                                 </div>
                                                                 <div style="text-align: center;width: 28%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #0099FF;">
-                                                                    <div style="font-size:30px;">等位数4<br>
-                                                                        <input style="margin:1.0em;width: 150px;" type="button" class="btn green" id="member_card_pay_close" value="呼叫"><br>
+                                                                    <div style="font-size:20px;">等位数4<br>
+                                                                        <input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="呼叫"><br>
                                                                         <input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="保留">
                                                                         <input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="下一位">
+                                                                        <input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="关闭">
                                                                     </div><hr>
                                                                     <div style="font-size:15px;">13900001111<input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="短信"></div>
                                                                     <div style="font-size:15px;">shelly<input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="微信"></div><hr>
-                                                                    <img style="width:70%;" src="/wymenuv2/img/top10/company_<?php echo $this->companyId; ?>/wx_barcode.jpg">
+                                                                    <img style="width:60%;" src="/wymenuv2/img/top10/company_<?php echo $this->companyId; ?>/wx_barcode.jpg">
                                                                 </div>
                                                             </div>
                                                         </div>
