@@ -128,13 +128,18 @@
         display: inline-block;
         margin-top: 10px;
     }
-    .calc_button {
+.alphabet {
+        width: 100%;
+        display: inline-block;
+        margin-top: 5px;
+    }
+.calc_button {
         width: 24%;
         display: inline-block;
         margin-top: 10px;
     	margin-left:0px;
     }
-    .calc_num ul li {
+.calc_num ul li {
     	line-height:50px;
         float: left;
         width: 20%;
@@ -142,6 +147,20 @@
         border: 1px solid #add;
         margin: 5px;
         font-size: 20px;
+        font-weight: 700;
+        background-color: #add;
+        list-style: none;
+        text-align: center;
+        vertical-align: middle;
+      }
+ .alphabet ul li {
+    	line-height:40px;
+        float: left;
+        width: 60px;
+        height: 40px;
+        border: 1px solid #add;
+        margin: 3px;
+        font-size: 15px;
         font-weight: 700;
         background-color: #add;
         list-style: none;
@@ -395,6 +414,7 @@
                         <div class="tabbable tabbable-custom">
                             <div class="firstCategory">
                                 <ul class="">
+                                        <li lid="productfind" class="tabProduct">查找</li>
                                         <li lid="productset" class="tabProduct">套餐</li>
                                         <?php 
                                         foreach ($categories as $categorie): 
@@ -406,6 +426,54 @@
                                         
                                 </ul>
                             </div>
+                                    <div class="tab-content" style="display:none;" lid="productfind">                                        
+                                        <div style="width:100%;height:100%;">
+                                            <div class="product_list">
+                                                <div class="alphabet">                                                
+                                                <ul>
+                                                    <li style="width:150px;height:40px;line-height:40px;background-color:red;">ABCDEFGHIJ</li>
+                                                    <li>A</li><li>B</li><li>C</li><li>D</li><li>E</li><li>F</li><li>G</li>
+                                                    <li>H</li><li>I</li><li>J</li><li>K</li><li>L</li><li>M</li><li>N</li>
+                                                    <li>O</li><li>P</li><li>Q</li><li>R</li><li>S</li><li>T</li>
+                                                    <li>U</li><li>V</li><li>W</li><li>X</li><li>Y</li><li>Z</li>
+                                                </ul>
+                                                </div>
+                                                <ul class="">
+                                                    <!--productset list;-->
+                                                    <?php 
+                                                        foreach ($productSets as $productSet): 
+                                                            $setdetail="";
+                                                                foreach ($productSet->productsetdetail as $psd):
+                                                                    if(!empty($pn[$psd->product_id]))
+                                                                    {
+                                                                        $tempdetail="gp".$psd->group_no.",".$psd->product_id.",".$psd->is_select.",".$psd->number.",".$psd->price.",".$pn[$psd->product_id];
+                                                                        if(empty($setdetail))
+                                                                            $setdetail=$tempdetail;
+                                                                        else
+                                                                            $setdetail.=";".$tempdetail;   
+                                                                    }
+                                                                endforeach;
+                                                            ?>
+                                                            <li class="productSetClick" lid="<?php echo $productSet->lid; ?>" setselect="<?php echo $setdetail; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
+                                                    <?php                                                         
+                                                    endforeach; ?>
+                                                   <!-- product list -->
+                                                   <?php 
+                                                        foreach ($categories as $categorie2): 
+                                                            //if($categorie2->pid==$categorie->lid):?>
+                                                            <?php 
+                                                                foreach ($products as $product): 
+                                                                    if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
+                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>" name="<?php echo $product->product_name; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
+                                                            <?php  endif;                                                         
+                                                            endforeach; ?>
+                                                    <?php 
+                                                        //endif;
+                                                    endforeach; ?>
+                                                </ul>
+                                            </div>                                        												
+                                        </div>
+                                    </div>
                                     <div class="tab-content" style="display:none;" lid="productset">                                        
                                         <div style="width:100%;height:100%;">
                                             <div class="product_list">
@@ -784,8 +852,10 @@
                 $('.tabProduct').removeClass('slectliclass');
                 $(this).addClass('slectliclass');
                 var lid=$(this).attr('lid');
-                $('.tab-content').hide();
-                $('.tab-content[lid='+lid+']').show();
+                
+                    $('.tab-content').hide();
+                    $('.tab-content[lid='+lid+']').show();
+                
             });
             
             $('.productSetClick').on(event_clicktouchstart, function(){
