@@ -123,10 +123,11 @@
 					<span class="title"><?php echo yii::t('app','统计报表');?></span>					
 					</a>
 					<ul class="sub-menu">
-						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'salesReport') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/salesReport',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','营业额报表');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'salesReport') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/salesReport',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','支付营业额报表');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'cgReport') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/cgReport',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','分类营业额报表');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'productsalesReport') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/productsalesReport',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','产品销售报表');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'orderReport') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/orderReport',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','订单统计报表');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'orderReport') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/diningNum',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','就餐人数统计报表');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'diningNum') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/diningNum',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','就餐人数统计报表');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'statements' && $this->getAction()->getId() == 'turnOver') echo 'active';?>"><a href="<?php echo $this->createUrl('statements/turnOver',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','员工营业额报表');?></a></li>
 					</ul>
 				</li>
@@ -173,7 +174,7 @@
 					</a>
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'department') echo 'active';?>"><a href="<?php echo $this->createUrl('department/index' , array('companyId' =>$this->companyId));?>"><?php echo yii::t('app','操作间管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'printer') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/index' , array('companyId' =>$this->companyId));?>"><?php echo yii::t('app','打印机管理');?></a></li>
+			    		<li class="<?php if(Yii::app()->controller->id == 'printer') echo 'active';?>"><a href="<?php echo $this->createUrl('printer/index' , array('companyId' =>$this->companyId));?>"><?php echo yii::t('app','打印机管理');?></a></li>
 					</ul>
 				</li>
 				
