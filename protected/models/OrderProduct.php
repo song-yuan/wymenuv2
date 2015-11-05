@@ -73,7 +73,15 @@ class OrderProduct extends CActiveRecord
                 'order' => array(self::BELONGS_TO , 'Order' , '','on'=>'t.dpid=order.dpid and t.order_id=order.lid'),
                 'order8' => array(self::BELONGS_TO , 'Order' , '','on'=>'t.dpid=order8.dpid and t.order_id=order8.lid and order8.order_status=7'),
                 'product'=> array(self::BELONGS_TO , 'Product' , '','on'=>'t.dpid=product.dpid and t.product_id=product.lid'),
-                'productSet'=> array(self::BELONGS_TO , 'ProductSet' , '','on'=>'t.dpid=productSet.dpid and t.set_id=productSet.lid')
+                'productSet'=> array(self::BELONGS_TO , 'ProductSet' , '','on'=>'t.dpid=productSet.dpid and t.set_id=productSet.lid'),
+				'productcg'=>array(self::BELONGS_TO , 'Product' , '','on'=>'t.dpid=product.dpid and t.product_id=product.lid '),
+				
+				
+		
+		
+		
+				
+				
 		);
 	}
 
