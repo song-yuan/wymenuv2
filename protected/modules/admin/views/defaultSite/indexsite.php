@@ -175,7 +175,7 @@
                                                                 </div>
                                                                 <div style="text-align: center;width: 28%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #0099FF;">
                                                                     <div style="font-size:20px;">等位数4<br>
-                                                                        <input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="呼叫"><br>
+                                                                        <input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="呼叫">
                                                                         <input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="保留">
                                                                         <input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="下一位">
                                                                         <input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="关闭">
