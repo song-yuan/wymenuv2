@@ -96,6 +96,7 @@
 				
                                                                     <div class="portlet-body site_list">
                                                                                 <ul>
+                                                                                    <li class="modalaction bg-red" typeid="queue" showbutton="queue_reserve" style="width:4.0em;"><span style="font-size:20px;">保留号码</span></li>
                                                                                     <?php $hasfree=0;$haswaiting=0;
                                                                                             //if($typeId == 'queue'): ?>
                                                                                         <?php
@@ -103,7 +104,7 @@
                                                                                                 $temptype=0;
                                                                                                 foreach ($queueModels as $model):?>
                                                                                                     <?php if($temptype!=$model["typeid"]): ?>
-                                                                                                        <li class="modalaction bg-red" typeid="queue" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model["name"]; ?></span></li>
+                                                                                                        <li class="modalaction bg-blue" typeid="queue" showbutton="no" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model["name"]; ?></span></li>
                                                                                                     <?php 
                                                                                                         $temptype=$model["typeid"];
                                                                                                         endif;
@@ -112,7 +113,7 @@
                                                                                                         if($queuepersons>0){$haswaiting=1;};
                                                                                                         if($sitefree>0){$hasfree=1;};
                                                                                                         ?>
-                                                                                                        <li class="modalaction <?php if($queuepersons>0 && $sitefree==0) echo 'bg-yellow'; elseif($queuepersons>0 && $sitefree>0) echo 'bg-green';?>" typeid="queue" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" splid=<?php echo $model["splid"];?>>
+                                                                                                        <li class="modalaction <?php if($queuepersons>0 && $sitefree==0) echo 'bg-yellow'; elseif($queuepersons>0 && $sitefree>0) echo 'bg-green';?>" typeid="queue" showbutton="queue_call" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" splid=<?php echo $model["splid"];?>>
                                                                                                             <span style="font-size: 20px;" typename="sitefree">空座:<?php echo $sitefree; ?></span>
                                                                                                             <br><span style="font-size: 20px;" typename="queuenum">排队:<?php echo $queuepersons; ?></span>
                                                                                                             <br><?php echo $model["min"]."-".$model["max"]; ?>
@@ -127,42 +128,71 @@
                                                                                                 $tempnumber=0;
                                                                                                 foreach ($tempsiteModels as $model):?>
                                                                                                     <?php if($tempnumber!=$model->number): ?>
-                                                                                                        <li class="modalaction bg-red" typeid="tempsite" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model->number; ?>人</span></li>
+                                                                                                        <li class="modalaction bg-red" typeid="tempsite" showbutton="yes" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model->number; ?>人</span></li>
                                                                                                     <?php 
                                                                                                         $tempnumber=$model->number;
                                                                                                         endif;?>
-                                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" typeid="tempsite" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 20px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo $model->update_at;?></li>
+                                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" typeid="tempsite" showbutton="yes" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 20px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo $model->update_at;?></li>
                                                                                         <?php                                                                                                 
                                                                                                 endforeach;
                                                                                             endif;?>
                                                                                     <?php //else:?>
                                                                                         <?php foreach ($models as $model):?>
-                                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" typeid="<?php echo $model->type_id; ?>" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial;?>"><span style="font-size: 20px;"><?php echo $model->serial;?>&nbsp;</span><span typename="updateat"><?php echo '<br>'.$model->update_at;?></span></li>
+                                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" typeid="<?php echo $model->type_id; ?>" showbutton="yes" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial;?>"><span style="font-size: 20px;"><?php echo $model->serial;?>&nbsp;</span><span typename="updateat"><?php echo '<br>'.$model->update_at;?></span></li>
                                                                                         <?php endforeach;?>
-                                                                                    <?php //endif;?>
-                                                                                    
-                                                                                       <!-- <li class="modalaction bg-yellow" istemp="0" status="1" sid="1"> 001 </li>
-                                                                                        <li class="modalaction bg-blue" istemp="0" status="2" sid="2"> 002 </li>
-                                                                                        <li class="modalaction bg-green" istemp="0" status="3" sid="3"> 003 </li>
-                                                                                        <li class="modalaction" istemp="0" status="0" sid="4"> 004 </li>
-                                                                                        <li class="modalaction" istemp="0" status="0" sid="5"> 005 </li>
-                                                                                        <li class="modalaction" istemp="0" status="0" sid="21">021<br><?php echo yii::t('app','普通包厢普通包厢');?></li>-->
-                                                                                                                                                                               
+                                                                                    <?php //endif;?>                                                                                
                                                                                 </ul>
                                                                         </div>
                                                                     </div>
 							</div>
 							<!-- END EXAMPLE TABLE PORTLET-->												
-						
+                                                        <!-------------queue_reserve----------->
+                                                        <div id="queue_reserve" style="display:none;">
+                                                            <div style="text-align:center;width: 95%;margin:1.0em;">
+                                                                <input style="margin:1.0em;width: 10.0em;" type="button" class="btn green" id="member_card_pay" value="<?php echo yii::t('app','关  闭');?>">
+                                                            </div>
+                                                            <div style="width: 95%;margin:2% 2% 2% 2%;font-size: 1.5em;border:1px solid red;display: inline-block;">
+                                                                <DIV style="float: left;width:80px;padding: 5px;background-color: #0099FF;margin:10px;text-align: center;">A3001</DIV>
+                                                                <DIV style="float: left;width:80px;padding: 5px;background-color: #0099FF;margin:10px;text-align: center;">A3001</DIV>
+                                                                <DIV style="float: left;width:80px;padding: 5px;background-color: #0099FF;margin:10px;text-align: center;">A3001</DIV>
+                                                                <DIV style="float: left;width:80px;padding: 5px;background-color: #0099FF;margin:10px;text-align: center;">A3001</DIV>
+                                                                
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <!-------------queue_call----------->
+                                                        <div id="queue_call" style="display:none;">
+                                                            <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;">
+                                                                <div style="width: 62%;margin:4.0em;font-size: 1.5em;float: left;">
+                                                                    <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;">
+                                                                        <label style="font-size:60px;">请卡座</label><br>
+                                                                        <label style="font-size:90px;color:red;font-weight:900;">A3001号</label><br>
+                                                                        <label style="font-size:60px;">宾客，前来就餐！</label>
+                                                                    </DIV>  
+                                                                    <DIV style="position: absolute;width:60%;font-size: 1.5em;text-align: center;bottom:10px;">
+                                                                        <marquee behavior="scroll">我要点单系统，由上海物易网络科技有限公司提供！</marquee>
+                                                                    </DIV>
+                                                                </div>
+                                                                <div style="text-align: center;width: 28%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #0099FF;">
+                                                                    <div style="font-size:20px;">等位数4<br>
+                                                                        <input style="margin:1.0em;width: 150px;" type="button" class="btn green" id="member_card_pay_close" value="呼叫"><br>
+                                                                        <input style="margin:0.2em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="保留">
+                                                                        <input style="margin:0.2em;width: 80px;" type="button" class="btn green" id="member_card_pay_close" value="下一位">
+                                                                        <input style="margin:0.2em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="关闭">
+                                                                    </div><hr>
+                                                                    <div style="font-size:15px;">13900001111<input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="短信"></div>
+                                                                    <div style="font-size:15px;">shelly<input style="margin:1.0em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="微信"></div><hr>
+                                                                    <img style="width:60%;" src="/wymenuv2/img/top10/company_<?php echo $this->companyId; ?>/wx_barcode.jpg">
+                                                                </div>
+                                                            </div>
+                                                        </div>
 					
         <script type="text/javascript">
-//            gssid="<?php //echo $ssid; ?>";
-//            gsistemp="<?php //echo $sistemp; ?>";
-//            gstypeid="<?php //echo $stypeId; ?>";
-//            gop="<?php //echo $op; ?>";
             gtypeid="<?php echo $typeId; ?>";
             ghasfree=<?php echo $hasfree;?>;
             ghaswaiting=<?php echo $haswaiting;?>;
+            var layer_queue_reserve=0;
+            var layer_queue_call=0;
             
             $(document).ready(function(){
                 //alert(gtypeid);
@@ -190,13 +220,7 @@
                 var istemp = $(this).attr('istemp');
                 var typeId = $(this).attr('typeid');
                 var op=gop;
-//                alert(istemp);
                 var that=$(this);
-//                var istemp='0';
-//                if(gtypeid=="tempsite")
-//                {
-//                    istemp='1';
-//                }
                 if(gop=="switch")
                 {
                     if(typeId=="queue")
@@ -210,12 +234,7 @@
                         if(!statu){
                             return false;//换台操作
                         }else{
-                            //清空gistemp deng
-                            //return true;
                             gop='';
-//                            gsistemp=gistemp;
-//                            gssid=gsid;
-//                            gstypeid=gtypeid;
                             return true;
                         }
                     }
@@ -284,12 +303,7 @@
                         if(!statu){
                             return false;
                         }else{
-                            //清空gop gssid gsistemp等
-                            //return true;
                             gop='';
-//                            gsistemp=gistemp;
-//                            gssid=gsid;
-//                            gstypeid=gtypeid;
                             return true;
                         }
                     }
@@ -353,13 +367,56 @@
                         return false;                        
                     }
                 }else{
-                        gop="";
-                        gsid = sid;
-                        gistemp = istemp;
-                        gtypeid = typeId;
-                        //alert(istemp);
-                    pxbox.find('.button-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){
-                        
+                    gop="";
+                    gsid = sid;
+                    gistemp = istemp;
+                    gtypeid = typeId;
+                    var showbutton=that.attr("showbutton");
+                    //alert(showbutton);
+                    if(showbutton=="no")
+                    {
+                        return;
+                    }
+                    else if(showbutton=="queue_call")
+                    {
+                        if(layer_queue_call!=0)
+                        {
+                            return;
+                        }
+                        //alert(layer_index3);
+                        layer_queue_call=layer.open({
+                         type: 1,
+                         shade: false,
+                         title: false, //不显示标题
+                         area: ['100%', '100%'],
+                         content: $('#queue_call'),//$('#productInfo'), //捕获的元素
+                         cancel: function(index){
+                                layer.close(index);
+                                layer_queue_call=0;            
+                            }
+                        });
+                        return;
+                    }else if(showbutton=="queue_reserve")
+                    {
+                        if(layer_queue_reserve!=0)
+                        {
+                            return;
+                        }
+                        //alert(layer_index3);
+                        layer_queue_reserve=layer.open({
+                         type: 1,
+                         shade: false,
+                         title: false, //不显示标题
+                         area: ['100%', '100%'],
+                         content: $('#queue_reserve'),//$('#productInfo'), //捕获的元素
+                         cancel: function(index){
+                                layer.close(index);
+                                layer_queue_reserve=0;            
+                            }
+                        });
+                        return;
+                    }
+                    pxbox.find('.button-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){                        
                         pxbox.children("h4").text(that.attr("shname"));
                         $("#tab_sitelist").hide();
                         pxbox.show();
