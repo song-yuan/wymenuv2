@@ -353,13 +353,13 @@
                                         while(reprint)
                                         {
                                             var addressdetail=msg.address.split(".");
-                                            alert(msg.jobid);
-                                            if(addressdetail[0]=="com")
+                                           if(addressdetail[0]=="com")
                                            {
                                                var baudrate=parseInt(addressdetail[2]);
                                                //alert(baudrate);
                                                 printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],baudrate);
                                             }else{
+                                                alert(dpid);alert(msg.jobid);alert(msg.address);
                                                 printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
                                             }
 //                                            printresulttemp=true;
