@@ -45,6 +45,7 @@ class QueueController extends Controller
                 $padid = Yii::app()->request->getParam('padid',0);
                 $stlid = Yii::app()->request->getParam('stlid',0);
                 $splid = Yii::app()->request->getParam('splid',0);
+                $mobileno = Yii::app()->request->getParam('mobileno',0);
                 $ret=array();
                 $nowqueueno="000";
                 $queueno="A001";
