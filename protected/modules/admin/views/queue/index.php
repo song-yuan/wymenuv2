@@ -69,9 +69,9 @@
         <!--------mobile no box begin-------->
         <div id="mobilenobox" style="display:none;">
                                         <div>
-                                            <div style="width: 95%;margin:1.0em;font-size: 1.5em;">
-                                                <label style="font-size:1.5em;color: #000088;">温馨提示：</label>用餐人数，<span id="queuepersonrange" style="color:red;"></span>人。
-                                                输入手机号后取号，或扫描二维码自动取号<span style="color:red;font-size:25px;">(未开通)</span>，在到号时，会收到消息通知，如不需要，直接点击取号。
+                                            <div style="width: 95%;margin:1.0em;font-size: 1.2em;">
+                                                <label style="font-size:1.5em;color: #000088;">温馨提示：</label><span id="queuepersonrange" style="color:red;"></span>人。
+                                                输入手机号后取号，或扫描二维码自动取号<span style="color:red;font-size:25px;">(未开通)</span>，到号时，会收到消息通知，如不需要，直接点击取号。
                                             </div>
                                             <div style="float: left;width:38%;height: 100%;">
                                                 <div style="width: 85%;margin:1.0em;font-size:1.5em;height: 100%;">                                                    
@@ -353,6 +353,7 @@
                                         while(reprint)
                                         {
                                             var addressdetail=msg.address.split(".");
+                                            alert(msg.jobid);
                                             if(addressdetail[0]=="com")
                                            {
                                                var baudrate=parseInt(addressdetail[2]);
