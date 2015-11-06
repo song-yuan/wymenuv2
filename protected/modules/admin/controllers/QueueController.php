@@ -100,6 +100,7 @@ class QueueController extends Controller
                         'stlid'=>$stlid,
                         'splid'=>$splid,
                         'queue_no'=>$queueno,
+                        'mobile_no'=>$mobileno,
                         'status'=>'0',
                         'slid'=>"0000000000",
                         'delete_flag'=>'0'
@@ -109,8 +110,8 @@ class QueueController extends Controller
                     //返回现有的等待人数
                     $precode="";
                     $printserver="0";//
-                    $memo="排队号：".$queueno."，（还有".$waitingno."组在等待）";
-                    $ret=Helper::printQueue($pad,$precode,$printserver,$memo);
+                    //$memo="排队号：".$queueno."，（还有".$waitingno."组在等待）";                    
+                    $ret=Helper::printQueue($pad,$precode,$printserver,$queueno,$waitingno,$mobileno,$siteType->name,$sitePersons->min_persons,$sitePersons->max_persons);
                     if($ret['status'])
                     {
                         $ret['waitingnum']=$waitingno;
