@@ -157,7 +157,7 @@
     	//line-height:40px;
         float: left;
         width: 80px;
-        height: 40px;
+        height: 50px;
         border: 1px solid #add;
         margin: 3px;
         font-size: 15px;
@@ -430,14 +430,14 @@
                                         <div style="width:100%;height:100%;">
                                             <div class="product_list">
                                                 <div class="alphabet">                                                
-                                                <ul>
-                                                    <li id="alphabetlist" style="width:180px;height:40px;background-color:red;" deal="none"></li>
-                                                    <li deal="A">A</li><li deal="A">B</li><li deal="A">C</li><li deal="A">D</li><li deal="A">E</li><li deal="A">F</li><li deal="A">G</li>
-                                                    <li deal="A">H</li><li deal="A">I</li><li deal="A">J</li><li deal="A">K</li><li deal="A">L</li><li deal="A">M</li><li deal="A">N</li>
-                                                    <li deal="A">O</li><li deal="A">P</li><li deal="A">Q</li><li deal="A">R</li><li deal="A">S</li><li deal="A">T</li>
-                                                    <li deal="A">U</li><li deal="A">V</li><li deal="A">W</li><li deal="A">X</li><li deal="A">Y</li><li deal="A">Z</li>
-                                                    <li deal="del">删除</li>
-                                                </ul>
+                                                    <ul>
+                                                        <li id="alphabetlist" style="width:180px;background-color:red;" deal="none"></li>
+                                                        <li deal="A">A</li><li deal="A">B</li><li deal="A">C</li><li deal="A">D</li><li deal="A">E</li><li deal="A">F</li><li deal="A">G</li>
+                                                        <li deal="A">H</li><li deal="A">I</li><li deal="A">J</li><li deal="A">K</li><li deal="A">L</li><li deal="A">M</li><li deal="A">N</li>
+                                                        <li deal="A">O</li><li deal="A">P</li><li deal="A">Q</li><li deal="A">R</li><li deal="A">S</li><li deal="A">T</li>
+                                                        <li deal="A">U</li><li deal="A">V</li><li deal="A">W</li><li deal="A">X</li><li deal="A">Y</li><li deal="A">Z</li>
+                                                        <li deal="del" style="width:100px;background-color:#0a0;">删除</li>
+                                                    </ul>
                                                 </div>
                                                 <ul class="">
                                                     <!--productset list;-->
