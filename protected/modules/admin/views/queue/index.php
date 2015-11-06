@@ -70,8 +70,8 @@
         <div id="mobilenobox" style="display:none;">
                                         <div>
                                             <div style="width: 95%;margin:1.0em;font-size: 1.5em;">
-                                                <label style="font-size:1.5em;color: #000088;">温馨提示：</label>用餐人数，3-4人。
-                                                ——输入手机号后取号，或扫描二维码自动取号<span style="color:red;font-size:25px;">(陶然居暂未开通此功能)</span>，在到号时，会收到消息通知，如不需要，直接点击取号。
+                                                <label style="font-size:1.5em;color: #000088;">温馨提示：</label>用餐人数，<span id="queuepersonrange" style="color:red;"></span>人。
+                                                输入手机号后取号，或扫描二维码自动取号<span style="color:red;font-size:25px;">(未开通)</span>，在到号时，会收到消息通知，如不需要，直接点击取号。
                                             </div>
                                             <div style="float: left;width:38%;height: 100%;">
                                                 <div style="width: 85%;margin:1.0em;font-size:1.5em;height: 100%;">                                                    
@@ -147,11 +147,11 @@
                                  });
                             },
                             error: function(msg){
-                                alert("网络可能有问题，再试一次！");
+                                //alert("网络可能有问题，再试一次！");
                             },
                             complete : function(XMLHttpRequest,status){
                                 if(status=='timeout'){
-                                    alert("网络可能有问题，再试一次！");                                            
+                                    //alert("网络可能有问题，再试一次！");                                            
                                 }
                             }
                         });
@@ -209,6 +209,7 @@
                         });
                         $(".btnSitePersons").removeClass("selectsiteperson");
                         $(this).addClass("selectsiteperson");
+                        $("#queuepersonrange").text($(this).attr("personrang"));
                         return;
                         ////////////
                         if(btnlock)
@@ -271,12 +272,12 @@
                                   //btnlock=false;
                             },
                             error: function(msg){
-                                alert("网络可能有问题，再试一次！");
+                                //alert("网络可能有问题，再试一次！");
                                 //btnlock=false;
                             },
                             complete : function(XMLHttpRequest,status){
                                 if(status=='timeout'){
-                                    alert("网络可能有问题，再试一次！");                                            
+                                    //alert("网络可能有问题，再试一次！");                                            
                                 }
                                 //btnlock=false;
                             }
@@ -312,14 +313,14 @@
                     });
                     
                     $('#queueno').on(event_clicktouchstart,function(){
-                        ////////////
-                        if(btnlock)
-                        {
-                            return;
-                        }else{
-                            btnlock=true;
-                            setTimeout("btnlock=false", 3000);
-                        }
+//                        ////////////
+//                        if(btnlock)
+//                        {
+//                            return;
+//                        }else{
+//                            btnlock=true;
+//                            setTimeout("btnlock=false", 3000);
+//                        }
                         var that=$(".selectsiteperson");
                         //alert(that.attr('stlid'));
                         var stlid=that.attr('stlid');
@@ -335,7 +336,7 @@
                             var padinfo=Androidwymenuprinter.getPadInfo();
                             padid=padinfo.substr(10,10);
                         }
-                        var mobileno=$("#queuemobile").text();
+                        var mobileno=$("#queuemobile").text();//格式未做判断，发送短信时再判断。
                         
                         $.ajax({
                             url:"/wymenuv2/admin/queue/getSitePersons/companyid/"+dpid+"/stlid/"+stlid+"/splid/"+splid+'/padid/'+padid+'/mobileno/'+mobileno,
@@ -371,20 +372,27 @@
                                  }else{
                                      alert(msg.msg);
                                  }
+                                 layer.close(layer_index_queueno);
+                                 layer_index_queueno=0;
                                   //btnlock=false;
                             },
                             error: function(msg){
-                                //alert("网络可能有问题，再试一次！");
+                                alert("网络可能有问题，再试一次！");
                                 //btnlock=false;
                             },
                             complete : function(XMLHttpRequest,status){
                                 if(status=='timeout'){
-                                    //alert("网络可能有问题，再试一次！");                                            
+                                    alert("网络可能有问题，再试一次！");                                            
                                 }
                                 //btnlock=false;
                             }
                         });
                         
+                    });
+                    
+                    $('#queueclose').on(event_clicktouchstart,function(){
+                        layer.close(layer_index_queueno);
+                        layer_index_queueno=0;
                     });
                     
                 </script>

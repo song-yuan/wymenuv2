@@ -661,28 +661,43 @@ class Helper
         
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
-	static public function printQueue(Pad $pad, $cprecode,$printserver,$memo){
+	static public function printQueue(Pad $pad, $cprecode,$printserver,$queueno,$waitingno,$mobileno,$sitename,$minpersons,$maxpersons){
 		               
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$pad->dpid));
 		if(empty($printer)) {
                         return array('status'=>0,'dpid'=>$siteno->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}		
                 $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($pad->dpid),8));
-                if(!empty($memo))
-                {
-                    array_push($listData,"br");
-                    array_push($listData,"11".$memo);                    
-                }
+                
+                array_push($listData,"br");
+                array_push($listData,"11"."      等位排号单");            
                 array_push($listData,"00");
                 array_push($listData,"br");
-                 
+                array_push($listData,"00".str_pad('',48,'-'));  
+                array_push($listData,"00"."手机号码:".$mobileno);
+                array_push($listData,"br");
+                array_push($listData,"00"."就餐人数:".$minpersons."-".$maxpersons);
+                array_push($listData,"br");
+                array_push($listData,"00"."领号时间:".date('Y-m-d H:i:s',time()));
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
+                array_push($listData,"2".$sitename.$queueno);
+                array_push($listData,"br");
+                array_push($listData,"00"."您之前还有".$waitingno."桌客人在等待！");
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
+                array_push($listData,"00"."*注意，迎宾叫号时，过号请到服务台！");
+                array_push($listData,"br");
+                array_push($listData,"00"."*留下手机或微信号的，到号时，会有短信或微信通知！");
+                array_push($listData,"br");
+                array_push($listData,"00"."*最终解释权归本店所有！");
+                array_push($listData,"br");
                 $precode=$cprecode;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";                        
                 $printret=array();
                 $orderid="0000000000";
-		$retccontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver,$orderid);
-                
+		$retccontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver,$orderid);                
                 return $retccontent;
 	}
         
