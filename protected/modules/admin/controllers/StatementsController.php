@@ -112,7 +112,7 @@ class StatementsController extends BackendController
 //			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 //		}
 		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id';
-		$criteria->with = array('company','order8');
+		$criteria->with = array('company','order8','paymentMethod');
 		$criteria->condition = ' t.dpid='.$this->companyId ;
 		if($str){
 			$criteria->condition = ' t.dpid in('.$str.')';
@@ -120,13 +120,13 @@ class StatementsController extends BackendController
 		$criteria->addCondition("order8.update_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("order8.update_at <='$end_time 23:59:59'");
 		if($text==1){
-			$criteria->group ='t.paytype,t.dpid,year(t.update_at)';
+			$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.update_at)';
 			$criteria->order = 'year(t.update_at) asc,t.dpid asc';
 		}elseif($text==2){
-			$criteria->group ='t.paytype,t.dpid,month(t.update_at)';
+			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,month(t.update_at)';
 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
-		}else{
-			$criteria->group ='t.paytype,t.dpid,day(t.update_at)';
+		}elseif($text==3){
+			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,day(t.update_at)';
 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 		}
 		//$criteria->order = 't.update_at asc,t.dpid asc';
@@ -171,40 +171,40 @@ class StatementsController extends BackendController
 				//var_dump($text);exit;
 				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
 						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
-						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.')
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
 								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc)k';
 				}
 				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
 						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
-						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
 								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc)k';
 			}elseif ($text==2){
 				if ($str){
 					$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
 							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
-							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.')
+							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
 									group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc)k';
 				}
 				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
 						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
-						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
 								group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc)k';
 			}elseif ($text==3){
 				if ($str){
 					$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
 							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
-							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.')
+							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
 									group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc)k';
 				}
 				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
 						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
-						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
 								group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc)k';
 			}
 		
@@ -355,7 +355,7 @@ class StatementsController extends BackendController
 			exit;
 		}
 		$count = $db->createCommand(str_replace('t.*','count(*)',$sql))->queryScalar();
-		var_dump($count);exit;
+		//var_dump($count);exit;
 		$pages = new CPagination($count);
 		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
@@ -431,6 +431,19 @@ class StatementsController extends BackendController
 		return CHtml::listData($categories, 'lid', 'username');
 	}
 */
+	public function getPaymentName($paymentMethodId){
+		$name='';
+		$sql = 'select t.name from nb_payment_method t where t.delete_flag = 0 and t.lid='.$paymentMethodId;
+		$connect = Yii::app()->db->createCommand($sql);
+		$model = $connect->queryRow();
+		if($model['name']){
+			$name = $model['name'];
+		}
+		
+		//var_dump($name);exit;
+		return $name;
+	}
+	
 	public function getComName(){
 		$uid = Yii::app()->user->id;
 		$sql = 'select t.lid,t.dpid,t1.company_id,t2.company_name from nb_user t left join nb_user_company t1 on(t.dpid = t1.dpid and t.lid = t1.user_id and t1.delete_flag = 0) left join nb_company t2 on(t1.company_id = t2.dpid ) where t.delete_flag = 0 and t.username = "'.$uid.'"';
@@ -1069,27 +1082,27 @@ class StatementsController extends BackendController
 			$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 			$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 			$criteria = new CDbCriteria;
-			$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.reality_total) as all_reality,t.paytype,t.payment_method_id,t.order_status';
-			$criteria->with = array('company','paymentMethod');
-			$criteria->condition = 't.order_status in(3,4,8) and t.dpid='.$this->companyId ;
+			$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id';
+			$criteria->with = array('company','order8','paymentMethod');
+			$criteria->condition = ' t.dpid='.$this->companyId ;
 			if($str){
-				$criteria->condition = ' t.order_status in(3,4,8) and t.dpid in('.$str.')';
+				$criteria->condition = ' t.dpid in('.$str.')';
 			}
-			$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-			$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+			$criteria->addCondition("order8.update_at >='$begin_time 00:00:00'");
+			$criteria->addCondition("order8.update_at <='$end_time 23:59:59'");
 			if($text==1){
-				$criteria->group ='t.paytype,t.dpid,t.payment_method_id,year(t.update_at)';
+				$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.update_at)';
 				$criteria->order = 'year(t.update_at) asc,t.dpid asc';
 			}elseif($text==2){
-				$criteria->group ='t.paytype,t.dpid,t.payment_method_id,month(t.update_at)';
+				$criteria->group ='t.paytype,t.payment_method_id,t.dpid,month(t.update_at)';
 				$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
-			}else{
-				$criteria->group ='t.paytype,t.dpid,t.payment_method_id,day(t.update_at)';
+			}elseif($text==3){
+				$criteria->group ='t.paytype,t.payment_method_id,t.dpid,day(t.update_at)';
 				$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
 			}
 			//$criteria->order = 't.update_at asc';
 			//var_dump($criteria);exit;
-			$model = Order::model()->findAll($criteria);
+			$model = OrderPay::model()->findAll($criteria);
 			//print_r($model);exit;
 			
 			
@@ -1097,7 +1110,7 @@ class StatementsController extends BackendController
 			//设置第1行的行高
 			$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 			//设置第2行的行高
-			$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
+			$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(17);
 			$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
 			//设置字体
 			$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
@@ -1159,14 +1172,7 @@ class StatementsController extends BackendController
 			foreach($model as $v){
 				//print_r($v);
 				if ($text==1){
-					if ($v->payment_method_id!='0000000000') {
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,$v->paymentMethod->name.yii::t('app','(后台)'))
-						->setCellValue('D'.$j,$v->all_reality)
-						->setCellValue('E'.$j);
-				}else switch($v->paytype) {
+					switch($v->paytype) {
 					case 0:
 						$objPHPExcel->setActiveSheetIndex(0)
 						->setCellValue('A'.$j,$v->y_all)
@@ -1195,7 +1201,23 @@ class StatementsController extends BackendController
 						$objPHPExcel->setActiveSheetIndex(0)
 						->setCellValue('A'.$j,$v->y_all)
 						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','后台手动支付'))
+						->setCellValue('C'.$j,$v->paymentMethod->name)
+						->setCellValue('D'.$j,$v->all_reality)
+						->setCellValue('E'.$j);
+					break;
+					case 4:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+						->setCellValue('D'.$j,$v->all_reality)
+						->setCellValue('E'.$j);
+					break;
+					case 5:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
 						->setCellValue('D'.$j,$v->all_reality)
 						->setCellValue('E'.$j);
 					break;
@@ -1208,14 +1230,7 @@ class StatementsController extends BackendController
 						->setCellValue('E'.$j);
 						
 				}}elseif ($text==2){
-					if ($v->payment_method_id!='0000000000') {
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,$v->paymentMethod->name.yii::t('app','(后台)'))
-						->setCellValue('D'.$j,$v->all_reality)
-						->setCellValue('E'.$j);
-				}else switch($v->paytype) {
+					switch($v->paytype) {
 					case 0:
 						$objPHPExcel->setActiveSheetIndex(0)
 						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
@@ -1244,7 +1259,23 @@ class StatementsController extends BackendController
 						$objPHPExcel->setActiveSheetIndex(0)
 						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
 						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','后台手动支付'))
+						->setCellValue('C'.$j,$v->paymentMethod->name)
+						->setCellValue('D'.$j,$v->all_reality)
+						->setCellValue('E'.$j);
+					break;
+					case 4:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+						->setCellValue('D'.$j,$v->all_reality)
+						->setCellValue('E'.$j);
+					break;
+					case 5:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
 						->setCellValue('D'.$j,$v->all_reality)
 						->setCellValue('E'.$j);
 					break;
@@ -1256,14 +1287,7 @@ class StatementsController extends BackendController
 						->setCellValue('D'.$j,$v->all_reality)
 						->setCellValue('E'.$j);
 				}}elseif ($text==3){
-				if ($v->payment_method_id!='0000000000') {
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,$v->paymentMethod->name.yii::t('app','(后台)'))
-						->setCellValue('D'.$j,$v->all_reality)
-						->setCellValue('E'.$j);
-				}else switch($v->paytype) {
+					switch($v->paytype) {
 					case 0:
 						$objPHPExcel->setActiveSheetIndex(0)
 						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
@@ -1292,7 +1316,23 @@ class StatementsController extends BackendController
 						$objPHPExcel->setActiveSheetIndex(0)
 						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
 						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','后台手动支付'))
+						->setCellValue('C'.$j,$v->paymentMethod->name)
+						->setCellValue('D'.$j,$v->all_reality)
+						->setCellValue('E'.$j);
+					break;
+					case 4:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+						->setCellValue('D'.$j,$v->all_reality)
+						->setCellValue('E'.$j);
+					break;
+					case 5:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
 						->setCellValue('D'.$j,$v->all_reality)
 						->setCellValue('E'.$j);
 					break;
@@ -1379,55 +1419,56 @@ class StatementsController extends BackendController
 		$text = Yii::app()->request->getParam('text');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid='.$this->companyId.' group by t1.category_id order by t.update_at asc';
+		//$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid='.$this->companyId.' group by t1.category_id order by t.update_at asc';
 		//var_dump($sql);exit;
-			if ($text==1) {
+		$db = Yii::app()->db;
+		if ($text==1) {
 				if($str){
 				//var_dump($text);exit;
-				$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
-						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name 
-						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.')
-								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc';
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc)k';
 				}
-				$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
-						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name 
-						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')
-								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc';
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc)k';
 			}elseif ($text==2){
 				if ($str){
-					$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
-							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name 
-							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.')
-									group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+					$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
+							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
+							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
+									group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc)k';
 				}
-				$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
-						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name 
-						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')
-								group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc)k';
 			}elseif ($text==3){
 				if ($str){
-					$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
-							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name 
-							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.')
-									group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+					$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
+							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
+							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
+									group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc)k';
 				}
-				$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
-						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name 
-						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )
-						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.')
-								group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name 
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc)k';
 			}
 		$model = Yii::app()->db->createCommand($sql)->queryAll();
 			//var_dump($model);exit;		
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 		//设置第2行的行高
-		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(17);
 		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
 		//设置字体
 		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
@@ -1525,13 +1566,14 @@ class StatementsController extends BackendController
 					//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 					//设置字体水平居中
 					//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-					//$objPHPExcel->getActiveSheet()->getStyle('J'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					//$objPHPExcel->getActiveSheet()->getStyle('A3'.$j.':E3'.$j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 					//设置填充颜色
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
 					//设置字体靠左
+					//$objPHPExcel->getActiveSheet()->getStyle('A3'.$j.':E3'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 					$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':C'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-					$objPHPExcel->getActiveSheet()->getStyle('N'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+					//$objPHPExcel->getActiveSheet()->getStyle('N'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 					//细边框样式引用
 					//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
 					$j++;
@@ -1564,7 +1606,7 @@ class StatementsController extends BackendController
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
 		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(22);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+		//$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(20);
 	
 	
 	

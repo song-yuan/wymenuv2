@@ -170,22 +170,23 @@ class orderManagementController extends BackendController
 //		
 //		$model=  Order::model()->findAll($criteria);
 		//var_dump($model);exit;
-                $criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
+		//$sql ='select t.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all,t1.name from nb_order_pay t left join nb_payment_method t1 on(t.dpid = t1.dpid and t.payment_method_id = t1.lid) where (t.dpid = t1.dpid ) group by t.paytype,t.payment_method_id';
+        $criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
 		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
-		$criteria->with = array("order"); //连接表
+		$criteria->with = array("order","paymentMethod"); //连接表
 		
-                $criteria->addCondition("t.dpid= ".$this->companyId);
+        $criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
-		$criteria->group = "t.paytype";
+		$criteria->group = "t.paytype,t.payment_method_id";
 		
 		$pages = new CPagination(OrderPay::model()->count($criteria));
 		//$pages->PageSize = 10;
 		$pages->applyLimit($criteria);
 		
 		$model=  OrderPay::model()->findAll($criteria);
-                //var_dump($model);exit;
+        //var_dump($model);exit;
 		$this->render('orderDaliyCollect',array(
 				'models'=>$model,
 				'pages'=>$pages,
@@ -196,7 +197,7 @@ class orderManagementController extends BackendController
 		));
 	}
         
-        public function actionOrderDaliyCollectPrint(){
+    public function actionOrderDaliyCollectPrint(){
 		$criteria = new CDbCriteria;
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
@@ -429,7 +430,8 @@ class orderManagementController extends BackendController
 		$criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->addCondition("t.close_account_id=".$id);
 		$criteria->with = array("closeAccount","paymentMethod");
-		$criteria->order = 't.create_at ASC' ;//排序条件
+		//$criteria->group = 't.paymentMethod' ;
+		$criteria->order = 't.update_at ASC' ;//排序条件
 
 		$criteria->distinct = TRUE; //是否唯一查询
 	

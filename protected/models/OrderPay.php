@@ -45,6 +45,7 @@ class OrderPay extends CActiveRecord
                         array('paytype', 'length', 'max'=>1),
 			array('remark', 'length', 'max'=>50),
 			array('create_at', 'safe'),
+			//array('refundgold','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','退款金额必须大于零啊')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, order_id, pay_amount, payment_method_id, remark', 'safe', 'on'=>'search'),
@@ -61,8 +62,8 @@ class OrderPay extends CActiveRecord
 		return array(
 				'company' => array(self::BELONGS_TO , 'Company' ,'' ,'on'=>'t.dpid=company.dpid') ,
 				'order8' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order8.dpid and t.order_id=order8.lid and order8.order_status in (8)') , //not 4,8
-                                'order' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order.dpid and t.order_id=order.lid and order.order_status in (4)') , //not 4,8
-                                'paymentMethod' => array(self::BELONGS_TO , 'PaymentMethod' ,'' ,'on'=>'t.payment_method_id = paymentMethod.lid and t.dpid = paymentMethod.dpid '),
+                'order' => array(self::BELONGS_TO , 'Order' ,'' ,'on'=>'t.dpid=order.dpid and t.order_id=order.lid and order.order_status in (4)') , //not 4,8
+                'paymentMethod' => array(self::BELONGS_TO , 'PaymentMethod' ,'' ,'on'=>'t.payment_method_id = paymentMethod.lid and t.dpid = paymentMethod.dpid '),
 		);
 	}
 
