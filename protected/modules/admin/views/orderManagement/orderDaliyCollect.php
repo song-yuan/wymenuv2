@@ -90,7 +90,16 @@
 								</tr>
 						<?php $a++;$sumall=$sumall+$model->should_all;?>
 						<?php endforeach;?>	
-						<!-- end foreach-->
+						<!-- end foreach--><?php foreach ($moneys as $money):?>
+											<?php if($money):?>
+													<tr>
+													<td><?php echo $a;?></td>
+													<td><?php echo yii::t('app','充值金额');?></td>
+													<td><?php echo $money;//var_dump($money);exit;?></td>
+													<td></td>
+													</tr>
+											<?php endif;?>
+											<?php  endforeach;?>
                                                     <tr class="odd gradeX">
                                                     <td></td>
                                                     <td>合计：</td>
