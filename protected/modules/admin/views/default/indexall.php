@@ -580,7 +580,7 @@
                                                     找零<span style="text-align:right;" id="payChangeAccount">0.00</span><br>
                                                     <DIV class="edit_span edit_span_normal edit_span_select" selectid="pay_cash" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','现金');?><span id="payCashAccount">0.00</span></DIV>
                                                     <DIV class="edit_span edit_span_normal" selectid="pay_union_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','银联卡');?><span style="text-align:right;" id="payUnionAccount">0.00</span></DIV>
-                                                    <DIV class="edit_span edit_span_normal" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" id="payMemberAccount">0.00</span></DIV>
+                                                    <DIV class="edit_span edit_span_normal" selectid="pay_member_card" style="float:left;width:100%;background-color:#9acfea;padding:10px;"><?php echo yii::t('app','会员卡');?><span  style="text-align:right;" cardno="0000000000" cardtotal="0.00" id="payMemberAccount">0.00</span></DIV>
                                                     <?php 
                                                     $otherdetail="0000000000,0";
                                                     if(!empty($paymentmethod))
@@ -1105,7 +1105,10 @@
                 }
                 //重新计算
                 var payShouldAccount=$("#payShouldAccount").text();
-                var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/payShouldAccount/"+payShouldAccount;
+                //var payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                var cardtotal=$('#payMemberAccount').attr("cardtotal");
+                //会员卡的总额
+                var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/payShouldAccount/"+payShouldAccount+"/cardtotal/"+cardtotal;
 //                var statu = confirm("<?php echo yii::t('app','确定要打印清单吗？');?>");
 //                if(!statu){
 //                    return false;
@@ -2783,6 +2786,7 @@
                         {
                             $('#payMemberAccount').text(cardmoney);
                             $('#payMemberAccount').attr("cardno",cardno);
+                            $('#payMemberAccount').attr("cardtotal",data.msg);
                             $("#payRealityAccount").text((parseFloat($("#payCashAccount").text().replace(",",""))+parseFloat($("#payMemberAccount").text().replace(",",""))+parseFloat($("#payUnionAccount").text().replace(",",""))).toFixed(2));
                             var changeaccount=parseFloat($("#payRealityAccount").text().replace(",",""))-parseFloat($("#payShouldAccount").text().replace(",",""));
                             if(changeaccount>0)

@@ -426,7 +426,7 @@ class Helper
         
         //收银台打印清单写入到redis
         //send by workerman encode by GBK or shift-JIS
-	static public function printList(Order $order,$orderProducts , Pad $pad, $cprecode,$printserver,$memo){
+	static public function printList(Order $order,$orderProducts , Pad $pad, $cprecode,$printserver,$memo,$cardtotal){
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
 		if(empty($printer)) {
                         return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
@@ -501,9 +501,16 @@ class Helper
                     //array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
                     //        .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,2)
-                            .yii::t('app','优惠价：').number_format($order->reality_total,2));                    
+                    array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,2));
+                    array_push($listData,"br");
+                    array_push($listData,"11".yii::t('app','优惠价：').number_format($order->reality_total,2));
+                    if($cardtotal>0)
+                    {
+                        array_push($listData,"br");
+                        array_push($listData,"11".yii::t('app','会员卡总额：').number_format($cardtotal,2));
+                    }
                 }
+                
                 array_push($listData,"br");
                 array_push($listData,"00".$order->username);
                 array_push($listData,"00"."   ".date('Y-m-d H:i:s',time()));
