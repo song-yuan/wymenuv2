@@ -520,6 +520,10 @@ class DefaultOrderController extends BackendController
                 {
                     Yii::app()->end(json_encode(array('status'=>false,'msg'=>"云端不能操作本地数据")));                    
                 }
+                if(Yii::app()->user->role > '2')
+                {
+                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"您没有权限操作此功能")));  
+                }
                 $transaction = $db->beginTransaction();
                 try{
                     $order=Order::model()->with("company")->find(" t.lid=:lid and t.dpid=:dpid",array(":lid"=>$orderid,":dpid"=>$companyId));
@@ -816,7 +820,8 @@ class DefaultOrderController extends BackendController
                                 //$orderProducts= //传递要打印的菜品，这里是已经下单的
                                 //$ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
                                 $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
-                                $ret=Helper::printList($order,$orderProducts , $pad,$precode,$printserver,$memo);
+                                $cardtotal=0;
+                                $ret=Helper::printList($order,$orderProducts , $pad,$precode,$printserver,$memo,$cardtotal);
                             }
                             Yii::app()->end(json_encode(array("status"=>"success")));
                             //$this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
@@ -1014,7 +1019,8 @@ class DefaultOrderController extends BackendController
                                 $printserver="1"; 
                                 //$orderProducts= //传递要打印的菜品，这里是已经下单的
                                 $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
-                                $ret=Helper::printList($order,$orderProducts , $pad,$precode,$printserver,$memo);
+                                $cardtotal=0;
+                                $ret=Helper::printList($order,$orderProducts , $pad,$precode,$printserver,$memo,$cardtotal);
                             }//$ret=array('status'=>false,'dpid'=>"0000000011",'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
                             $this->redirect(array('default/index' , 'companyId' => $this->companyId,'typeId'=>$typeId));
                             
@@ -2287,7 +2293,8 @@ class DefaultOrderController extends BackendController
                     //Yii::app()->end(json_encode(Helper::printList($order , $padid)));
                     $printserver="1";
                     $memo="";
-                    $ret=Helper::printList($order , $pad,$precode,$printserver,$memo);
+                    $cardtotal=0;
+                    $ret=Helper::printList($order , $pad,$precode,$printserver,$memo,$cardtotal);
                 }else{
                     $ret=array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD不存在！'));
                 }
