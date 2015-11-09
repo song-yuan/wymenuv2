@@ -436,6 +436,7 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',"0");
                 $padId = Yii::app()->request->getParam('padId',"0");
                 $payShouldAccount=Yii::app()->request->getParam('payShouldAccount',"0");
+                $cardtotal=Yii::app()->request->getParam('cardtotal',0);
                 $order=new Order();
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 if($orderId !='0')
@@ -458,6 +459,7 @@ class DefaultOrderController extends BackendController
                         $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
                     }
                     $order->should_total=$total['total'];
+                    //$order->should_total=$payShouldAccount;//用传递过来的
                     $order->reality_total=$payShouldAccount;
                 }
                 
@@ -467,7 +469,7 @@ class DefaultOrderController extends BackendController
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
                 $memo="清单";
-                $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo);
+                $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo,$cardtotal);
                 Yii::app()->end(json_encode($printList));
         }
         
@@ -479,18 +481,19 @@ class DefaultOrderController extends BackendController
                 $sql;
                 if(empty($password))
                 {
-                    $sql = "SELECT count(*) from nb_member_card where dpid=".$companyId." and haspassword=0 and (rfid='".$cardno."' or selfcode='".$cardno."') and delete_flag=0";
+                    $sql = "SELECT all_money from nb_member_card where dpid=".$companyId." and haspassword=0 and (rfid='".$cardno."' or selfcode='".$cardno."') and delete_flag=0 limit 0,1";
                 }else{
-                    $sql = "SELECT count(*) from nb_member_card where dpid=".$companyId." and password_hash='".MD5($password)."' and (rfid='".$cardno."' or selfcode='".$cardno."') and delete_flag=0";
+                    $sql = "SELECT all_money from nb_member_card where dpid=".$companyId." and password_hash='".MD5($password)."' and (rfid='".$cardno."' or selfcode='".$cardno."') and delete_flag=0 limit 0,1";
                 }
                 $command=$db->createCommand($sql);
                 $nowval= $command->queryScalar();
+                //var_dump($nowval);exit;
                 $ret;
-                if($nowval>0)
+                if($nowval===false)
                 {
-                    $ret=json_encode(array('status'=>true,'msg'=>$nowval));
+                    $ret=json_encode(array('status'=>false,'msg'=>$nowval));                    
                 }else{
-                    $ret=json_encode(array('status'=>false,'msg'=>$nowval));
+                    $ret=json_encode(array('status'=>true,'msg'=>$nowval));
                 }
                 Yii::app()->end($ret);                
 	}
