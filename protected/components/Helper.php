@@ -589,7 +589,7 @@ class Helper
                             $payname="支付宝支付";
                             break;
                         case 3:
-                            $payname="后台手动支付";
+                            if ($model->payment_method_id){$payname = $model->paymentMethod->name;}else $payname="其他代金券";
                             break;
                         case 4:
                             $payname="会员卡支付";

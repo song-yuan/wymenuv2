@@ -206,11 +206,11 @@ class orderManagementController extends BackendController
 		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
 		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
-		$criteria->with = array("order"); //连接表
+		$criteria->with = array("order","paymentMethod"); //连接表
 		$criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
-		$criteria->group = "t.paytype";
+		$criteria->group = "t.paytype,t.payment_method_id";
 		
 		$models=  OrderPay::model()->findAll($criteria);
                 if(count($models)==0)
@@ -279,6 +279,7 @@ class orderManagementController extends BackendController
                         $precode="";
                         $memo="日结对账单";
                         $ret = Helper::printCloseAccount($this->companyId,$models , $pad,$precode,"0",$memo);
+                        //var_dump($ret);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			//echo 1;
 		}catch (Exception $e) {
