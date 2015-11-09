@@ -128,13 +128,18 @@
         display: inline-block;
         margin-top: 10px;
     }
-    .calc_button {
+.alphabet {
+        width: 100%;
+        display: inline-block;
+        margin-top: 5px;
+    }
+.calc_button {
         width: 24%;
         display: inline-block;
         margin-top: 10px;
     	margin-left:0px;
     }
-    .calc_num ul li {
+.calc_num ul li {
     	line-height:50px;
         float: left;
         width: 20%;
@@ -142,6 +147,20 @@
         border: 1px solid #add;
         margin: 5px;
         font-size: 20px;
+        font-weight: 700;
+        background-color: #add;
+        list-style: none;
+        text-align: center;
+        vertical-align: middle;
+      }
+ .alphabet ul li {
+    	//line-height:40px;
+        float: left;
+        width: 80px;
+        height: 50px;
+        border: 1px solid #add;
+        margin: 3px;
+        font-size: 15px;
         font-weight: 700;
         background-color: #add;
         list-style: none;
@@ -395,6 +414,7 @@
                         <div class="tabbable tabbable-custom">
                             <div class="firstCategory">
                                 <ul class="">
+                                        <li lid="productfind" class="tabProduct">查找</li>
                                         <li lid="productset" class="tabProduct">套餐</li>
                                         <?php 
                                         foreach ($categories as $categorie): 
@@ -406,6 +426,55 @@
                                         
                                 </ul>
                             </div>
+                                    <div class="tab-content" style="display:none;" lid="productfind">                                        
+                                        <div style="width:100%;height:100%;">
+                                            <div class="product_list">
+                                                <div class="alphabet">                                                
+                                                    <ul>
+                                                        <li id="alphabetlist" style="width:180px;background-color:red;" deal="none"></li>
+                                                        <li deal="A">A</li><li deal="A">B</li><li deal="A">C</li><li deal="A">D</li><li deal="A">E</li><li deal="A">F</li><li deal="A">G</li>
+                                                        <li deal="A">H</li><li deal="A">I</li><li deal="A">J</li><li deal="A">K</li><li deal="A">L</li><li deal="A">M</li><li deal="A">N</li>
+                                                        <li deal="A">O</li><li deal="A">P</li><li deal="A">Q</li><li deal="A">R</li><li deal="A">S</li><li deal="A">T</li>
+                                                        <li deal="A">U</li><li deal="A">V</li><li deal="A">W</li><li deal="A">X</li><li deal="A">Y</li><li deal="A">Z</li>
+                                                        <li deal="del" style="width:100px;background-color:#0a0;">删除</li>
+                                                    </ul>
+                                                </div>
+                                                <ul class="">
+                                                    <!--productset list;-->
+                                                    <?php 
+                                                        foreach ($productSets as $productSet): 
+                                                            $setdetail="";
+                                                                foreach ($productSet->productsetdetail as $psd):
+                                                                    if(!empty($pn[$psd->product_id]))
+                                                                    {
+                                                                        $tempdetail="gp".$psd->group_no.",".$psd->product_id.",".$psd->is_select.",".$psd->number.",".$psd->price.",".$pn[$psd->product_id];
+                                                                        if(empty($setdetail))
+                                                                            $setdetail=$tempdetail;
+                                                                        else
+                                                                            $setdetail.=";".$tempdetail;   
+                                                                    }
+                                                                endforeach;
+                                                            ?>
+                                                            <li class="productSetClick" search="search" lid="<?php echo $productSet->lid; ?>" simplecode="<?php echo $productSet->simple_code;?>" setselect="<?php echo $setdetail; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
+                                                    <?php                                                         
+                                                    endforeach; ?>
+                                                   <!-- product list -->
+                                                   <?php 
+                                                        foreach ($categories as $categorie2): 
+                                                            //if($categorie2->pid==$categorie->lid):?>
+                                                            <?php 
+                                                                foreach ($products as $product): 
+                                                                    if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
+                                                                    <li class="productClick" search="search" lid="<?php echo $product->lid; ?>" simplecode="<?php echo $product->simple_code;?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>" name="<?php echo $product->product_name; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
+                                                            <?php  endif;                                                         
+                                                            endforeach; ?>
+                                                    <?php 
+                                                        //endif;
+                                                    endforeach; ?>
+                                                </ul>
+                                            </div>                                        												
+                                        </div>
+                                    </div>
                                     <div class="tab-content" style="display:none;" lid="productset">                                        
                                         <div style="width:100%;height:100%;">
                                             <div class="product_list">
@@ -784,8 +853,10 @@
                 $('.tabProduct').removeClass('slectliclass');
                 $(this).addClass('slectliclass');
                 var lid=$(this).attr('lid');
-                $('.tab-content').hide();
-                $('.tab-content[lid='+lid+']').show();
+                
+                    $('.tab-content').hide();
+                    $('.tab-content[lid='+lid+']').show();
+                
             });
             
             $('.productSetClick').on(event_clicktouchstart, function(){
@@ -1858,6 +1929,31 @@
                 $('.edit_span_other').toggleClass("edit_span_hide");
                 $(".edit_span_normal").removeClass("edit_span_select");
                 $(".edit_span_other").removeClass("edit_span_select");
+            });
+            
+            $('.alphabet').on(event_clicktouchstart,'li',function(){
+                var alpha=$(this).text();
+                var deal=$(this).attr("deal");
+                var alphalist=$("#alphabetlist").text();
+                if(deal=="A")
+                {
+                    alphalist=alphalist+alpha;
+                    $("#alphabetlist").text(alphalist);
+                }else if(deal=="del")
+                {
+                    alphalist=alphalist.substr(0,alphalist.length-1);
+                    $("#alphabetlist").text(alphalist);
+                }else if(deal=="none")
+                {
+                    return;
+                }
+                if(alphalist.length>0)
+                {
+                    $("li[search='search']").hide();
+                    $("li[search='search'][simplecode^='"+alphalist+"']").show();
+                }else{
+                    $("li[search='search']").show();
+                }
             });
             
             $('.calc_num').on(event_clicktouchstart,'li',function(){
