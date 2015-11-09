@@ -86,7 +86,7 @@
                                                                     <?php switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
                                                                         case 1: echo  yii::t('app','微信支付');break; 
                                                                         case 2: echo  yii::t('app','支付宝支付');break; 
-                                                                        case 3: echo  yii::t('app','后台手动支付');break;  
+                                                                        case 3: echo  $model->paymentMethod->name;break;  
                                                                         case 4: echo  yii::t('app','会员卡支付');break;  
                                                                         case 5: echo  yii::t('app','银联卡支付');break;  
                                                                         default :echo ''; }?>

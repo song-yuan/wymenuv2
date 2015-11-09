@@ -42,7 +42,7 @@
                                 <div class="form-group">
 										<?php echo $form->label($model, '退款金额',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<input type="text" class="form-control" name="OrderPay[pay_amount]" value=""/>
+											<input type="text" class="form-control" id="refundgold" name="OrderPay[pay_amount]" value=""/>
 										</div>
 									</div>
 									<div class="form-group">

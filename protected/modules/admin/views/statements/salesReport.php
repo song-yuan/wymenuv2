@@ -99,12 +99,15 @@
 								<tr class="odd gradeX">
 								<td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
 								<td><?php echo $model->company->company_name;?></td>
-								<td><?php switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
+								<td><?php 
+									switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
                                                                 case 1: echo  yii::t('app','微信支付');break; 
                                                                 case 2: echo  yii::t('app','支付宝支付');break; 
-                                                                case 3: echo  yii::t('app','后台手动支付');break; 
+                                                                case 3: echo  $model->paymentMethod->name;break;
                                                                 case 4: echo  yii::t('app','会员卡支付');break; 
-                                                                case 5: echo  yii::t('app','银联支付');break;  default :echo ''; }?></td>								
+                                                                case 5: echo  yii::t('app','银联支付');break;  default :echo ''; }
+											
+										?></td>
 								
 								<td><?php echo $model->all_reality;?></td>
 								<td><?php ?></td>
