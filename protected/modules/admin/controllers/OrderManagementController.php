@@ -210,7 +210,7 @@ class orderManagementController extends BackendController
 		$criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
-		$criteria->group = "t.paytype";
+		$criteria->group = "t.paytype,t.payment_method_id";
 		
 		$models=  OrderPay::model()->findAll($criteria);
                 if(count($models)==0)
