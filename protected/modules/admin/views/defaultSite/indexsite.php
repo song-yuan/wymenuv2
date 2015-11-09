@@ -162,7 +162,7 @@
                                                         </div>
                                                         <!-------------queue_call----------->
                                                         <div id="queue_call" style="display:none;">
-                                                            <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;">
+                                                            <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;overflow:scroll;">
                                                                 <div style="width: 62%;margin:4.0em;font-size: 1.5em;float: left;">
                                                                     <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;">
                                                                         <label style="font-size:60px;">请卡座</label><br>
@@ -415,7 +415,7 @@
                         //alert(layer_index3);
                         layer_queue_call=layer.open({
                          type: 1,
-                         shade: false,
+                         shade: true,
                          title: false, //不显示标题
                          area: ['100%', '100%'],
                          content: $('#queue_call'),//$('#productInfo'), //捕获的元素
