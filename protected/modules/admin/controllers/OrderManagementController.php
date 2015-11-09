@@ -144,10 +144,16 @@ class orderManagementController extends BackendController
 	}
 	
 	public function actionOrderDaliyCollect(){
-		$criteria = new CDbCriteria;
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		
+		$money = "0";
+		$db = Yii::app()->db;
+		$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		$money = Yii::app()->db->createCommand($sql)->queryRow();
+		//var_dump($models);exit;
+		//var_dump($money);exit;
+		$criteria = new CDbCriteria;
+
 		//$sql = "select t2.company_name, t1.name, t.lid, t.dpid, t.payment_method_id, t.update_at, sum(t.should_total) as should_all from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId ." group by t.payment_method_id " ;
 		//var_dump($sql);exit;
 		//$connect = Yii::app()->db->createCommand($sql);
@@ -192,6 +198,7 @@ class orderManagementController extends BackendController
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
+				'moneys'=>$money,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));
