@@ -507,7 +507,7 @@ class Helper
                     if($cardtotal>0)
                     {
                         array_push($listData,"br");
-                        array_push($listData,"11".yii::t('app','会员卡总额：').number_format($cardtotal,2));
+                        array_push($listData,"11".yii::t('app','会员卡余额：').number_format($cardtotal,2));
                     }
                 }
                 

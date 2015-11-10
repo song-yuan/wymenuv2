@@ -162,7 +162,7 @@
                                                         </div>
                                                         <!-------------queue_call----------->
                                                         <div id="queue_call" style="display:none;">
-                                                            <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;">
+                                                            <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;overflow:scroll;">
                                                                 <div style="width: 62%;margin:4.0em;font-size: 1.5em;float: left;">
                                                                     <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;">
                                                                         <label style="font-size:60px;">请卡座</label><br>
@@ -174,6 +174,35 @@
                                                                     </DIV>
                                                                 </div>
                                                                 <div style="text-align: center;width: 28%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #0099FF;">
+                                                                    <div class="site_list">
+                                                                    <ul>
+                                                                        <li class="modalaction bg-red" typeid="queue" showbutton="queue_reserve" style="width:4.0em;"><span style="font-size:20px;">保留号码</span></li>
+                                                                        <?php $hasfree=0;$haswaiting=0;
+                                                                                //if($typeId == 'queue'): ?>
+                                                                            <?php
+                                                                                if(!empty($queueModels)):
+                                                                                    $temptype=0;
+                                                                                    foreach ($queueModels as $model):?>
+                                                                                        <?php if($temptype!=$model["typeid"]): ?>
+                                                                                            <li class="modalaction bg-blue" typeid="queue" showbutton="no" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model["name"]; ?></span></li>
+                                                                                        <?php 
+                                                                                            $temptype=$model["typeid"];
+                                                                                            endif;
+                                                                                            $queuepersons=empty($model["queuepersons"])?0:$model["queuepersons"];
+                                                                                            $sitefree=empty($model["sitefree"])?0:$model["sitefree"];
+                                                                                            if($queuepersons>0){$haswaiting=1;};
+                                                                                            if($sitefree>0){$hasfree=1;};
+                                                                                            ?>
+                                                                                            <li class="modalaction <?php if($queuepersons>0 && $sitefree==0) echo 'bg-yellow'; elseif($queuepersons>0 && $sitefree>0) echo 'bg-green';?>" typeid="queue" showbutton="queue_call" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" splid=<?php echo $model["splid"];?>>
+                                                                                                <span style="font-size: 20px;" typename="sitefree">空座:<?php echo $sitefree; ?></span>
+                                                                                                <br><span style="font-size: 20px;" typename="queuenum">排队:<?php echo $queuepersons; ?></span>
+                                                                                                <br><?php echo $model["min"]."-".$model["max"]; ?>
+                                                                                            </li>
+                                                                            <?php                                                                                                 
+                                                                                    endforeach;
+                                                                                endif;?>
+                                                                    </ul>
+                                                                    </div>
                                                                     <div style="font-size:20px;">等位数4<br>
                                                                         <input style="margin:1.0em;width: 150px;" type="button" class="btn green" id="member_card_pay_close" value="呼叫"><br>
                                                                         <input style="margin:0.2em;width: 70px;" type="button" class="btn green" id="member_card_pay_close" value="保留">
@@ -386,7 +415,7 @@
                         //alert(layer_index3);
                         layer_queue_call=layer.open({
                          type: 1,
-                         shade: false,
+                         shade: true,
                          title: false, //不显示标题
                          area: ['100%', '100%'],
                          content: $('#queue_call'),//$('#productInfo'), //捕获的元素
