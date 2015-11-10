@@ -210,6 +210,12 @@ class orderManagementController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
                 $padid= Yii::app()->request->getParam('padid');
 		$ret=array();
+		
+		$money = "0";
+		$db = Yii::app()->db;
+		$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		$money = Yii::app()->db->createCommand($sql)->queryRow();
+		//添加
 		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
 		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
@@ -285,7 +291,7 @@ class orderManagementController extends BackendController
                          //前面加 barcode
                         $precode="";
                         $memo="日结对账单";
-                        $ret = Helper::printCloseAccount($this->companyId,$models , $pad,$precode,"0",$memo);
+                        $ret = Helper::printCloseAccount($this->companyId,$models ,$money, $pad,$precode,"0",$memo);//添加$money
                         //var_dump($ret);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			//echo 1;
