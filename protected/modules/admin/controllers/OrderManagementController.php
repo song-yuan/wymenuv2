@@ -292,7 +292,8 @@ class orderManagementController extends BackendController
                         $precode="";
                         $memo="日结对账单";
                         $ret = Helper::printCloseAccount($this->companyId,$models ,$money, $pad,$precode,"0",$memo);//添加$money
-                        //var_dump($ret);exit;
+                        var_dump($ret);exit;
+                        //var_dump($money);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作
 			//echo 1;
 		}catch (Exception $e) {
