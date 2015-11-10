@@ -607,15 +607,13 @@ class Helper
                // foreach ($money as $moneys){
                // 	$payname="";
                 //	if($moneys){
-                //	$payname = "充值金额";//}
+                	$payname = "充值金额";//}
                 //	array_push($listData,"11".str_pad($payname,7).$moneys);
                 //	array_push($listData,"br");
                 //	$sumall=$sumall+$moneys->all_money;
                // }//添加
-                array_push($listData,"11".str_pad($payname,7).$money);
-                array_push($listData,"br");
 		array_push($listData,"00".str_pad('',48,'-')); 
-                array_push($listData,"11".str_pad("合计：",7).$sumall+$money);
+                array_push($listData,"11".str_pad("合计：",7).$sumall);
                 array_push($listData,"br");
                 array_push($listData,"00".str_pad('',48,'-'));   
 		array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));                    
