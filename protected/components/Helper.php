@@ -604,6 +604,8 @@ class Helper
                     array_push($listData,"br");
                     $sumall=$sumall+$model->should_all;
                 }
+                	$payname="充值金额";
+                	
                // foreach ($money as $moneys){
                // 	$payname="";
                 //	if($moneys){
