@@ -607,7 +607,7 @@ class Helper
                // foreach ($money as $moneys){
                // 	$payname="";
                 //	if($moneys){
-                	$payname = "充值金额";//}
+                //	$payname = "充值金额";//}
                 //	array_push($listData,"11".str_pad($payname,7).$moneys);
                 //	array_push($listData,"br");
                 //	$sumall=$sumall+$moneys->all_money;
