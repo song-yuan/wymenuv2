@@ -226,7 +226,7 @@
                                                                             <td style="width:35%;float: left;">雅座(3-4人)</td>
                                                                             <td style="width:15%;float: left;">3/2</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                <div style="width:100%;">
+                                                                                <div style="width:100%;text-align:right;">
                                                                                     <div class="imgcall" style="width:30%;float:left;">
                                                                                     <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
                                                                                     </div>
@@ -243,7 +243,7 @@
                                                                             <td style="width:35%;float: left;">雅座雅座雅座(3-4人)</td>
                                                                             <td style="width:15%;float: left;">3/2</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                <div style="width:100%;">
+                                                                                <div style="width:100%;text-align:right;">
                                                                                     <div class="imgcall" style="width:30%;float:left;">
                                                                                     <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
                                                                                     </div>
@@ -260,7 +260,7 @@
                                                                             <td style="width:35%;float: left;">雅座(3-4人)</td>
                                                                             <td style="width:15%;float: left;">300/200</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                <div style="width:100%;">
+                                                                                <div style="width:100%;text-align:right;">
                                                                                     <div class="imgcall" style="width:30%;float:left;">
                                                                                     <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
                                                                                     </div>
@@ -300,8 +300,7 @@
                                                                                     endforeach;
                                                                                 endif;?>
                                                                     </ul>
-                                                                    </div>
-                                                                    
+                                                                    </div>                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>
