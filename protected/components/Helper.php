@@ -705,8 +705,12 @@ class Helper
                 array_push($listData,"00"."您之前还有".$waitingno."桌客人在等待！");
                 array_push($listData,"br");
                 array_push($listData,"00".str_pad('',48,'-'));
-                array_push($listData,"00"."*注意，迎宾叫号时，过号请到服务台！");
-                array_push($listData,"br");
+                $queuememo=Company::getQueueMemo($pad->dpid);
+                if(!empty($queuememo))
+                {
+                    array_push($listData,"00"."*注意，"+$queuememo);
+                    array_push($listData,"br");
+                }
                 array_push($listData,"00"."*留下手机或微信号的，到号时，会有短信或微信通知！");
                 array_push($listData,"br");
                 array_push($listData,"00"."*最终解释权归本店所有！");

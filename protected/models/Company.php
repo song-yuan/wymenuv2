@@ -145,4 +145,13 @@ class Company extends CActiveRecord
             $nowval= $command->queryScalar();
             return $nowval;
         }
+        
+        static public function getQueueMemo($dpid){
+            $db = Yii::app()->db;
+            $sql = "SELECT queuememo from nb_company where dpid=:dpid";
+            $command=$db->createCommand($sql);
+            $command->bindValue(":dpid" , $dpid);
+            $nowval= $command->queryScalar();
+            return $nowval;
+        }
 }
