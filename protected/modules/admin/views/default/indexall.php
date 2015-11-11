@@ -593,7 +593,7 @@
                                                     <?php 
                                                     if(!empty($otherdetail)):                                                        
                                                     ?>
-                                                    <DIV class="edit_span_show" selectid="pay_others" style="float:left;width:100%;background-color:#006dcc;padding:10px;">其他<span detail="<?php echo $otherdetail;?>" style="text-align:right;" id="payOthers" >0.00</span></DIV>                                                    
+                                                    <DIV class="edit_span_show" selectid="pay_others" style="float:left;width:100%;background-color:#006dcc;padding:10px;">其他<span detail="<?php echo $otherdetail;?>" detailorigin="<?php echo $otherdetail;?>" style="text-align:right;" id="payOthers" >0.00</span></DIV>                                                    
                                                     <?php endif;?>
                                                     <?php
                                                     if(!empty($paymentmethod)):

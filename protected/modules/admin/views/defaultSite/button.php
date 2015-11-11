@@ -39,11 +39,15 @@
                                     <button type="button" data-dismiss="modal" sid="<?php echo $sid; ?>" istemp="<?php echo $istemp; ?>" class="btn red-stripe switchsite"><?php echo yii::t('app','转  台');?></button>
                                 </div>
                                 <?php else :?>
-                                    <div>
+                                    <div>                                        
                                         <label class="col-md-3 control-label"><?php echo yii::t('app','人数');?></label>
-                                        <div class="col-md-3">
-                                            <input class="form-control" placeholder="<?php echo yii::t('app','请输入人数');?>" name="siteNumber" id="site_number" type="text" maxlength="3" style="width:55px;" value="1">
+                                        
+                                        <div class="col-md-4">
+                                            <label id="open_site_minus" style="font-size: 1.0em;padding: 8px; margin: 7px; border: 1px;">━</label>
+                                            <label style="font-size:1.5em; padding: 5px;" name="siteNumber" id="site_number">4</label>
+                                            <label id="open_site_plus" style="font-size: 1.0em;padding: 8px; margin: 7px; border: 1px;">╋</label>
                                         </div>
+                                        
                                         <!--<label class="col-md-3 control-label"><?php echo yii::t('app','小孩');?></label>
                                         <div style="">
                                             <label id="open_site_minus" style="padding: 4px; margin: 4px; border: 1px;">-1</label>
@@ -76,7 +80,13 @@
                                 $("#payMemberAccount").text("0.00");
                                 $("#payUnionAccount").text("0.00");
                                 $("#payOthers").text("0.00");
-                                $("#payOthers").attr("otherdetail","");
+                                //$("#payOthers").attr("otherdetail","");
+                                $("#payOthers").attr("detail",$("#payOthers").attr("detailorigin"));
+                                $('.edit_span_normal').removeClass("edit_span_hide");
+                                $('.edit_span_other').addClass("edit_span_hide");
+                                $(".edit_span_other").each(function(){
+                                    $("#"+$(this).attr("spanid")).text("0.00");
+                                });
                                 $("#card_pay_span_card").text("");
                                 $("#card_pay_span_card").attr("actual","");
                                 $("#card_pay_span_password").text("");
@@ -85,11 +95,11 @@
                             
                             $(document).ready(function() {
                                 //alert($('#site_number')[0]);
-                                var sno=$("#site_number");
-                                if(sno.length > 0)
-                                {
-                                    sno[0].focus();
-                                }
+//                                var sno=$("#site_number");
+//                                if(sno.length > 0)
+//                                {
+//                                    sno[0].focus();
+//                                }
                                 var objs=$(".orderaction");
                                 //alert(objs.length);
                                 if(objs.length>0)
@@ -112,7 +122,7 @@
                             }); 
                             
                            $('#site_open').on(event_clicktouchstart,function(){
-                               var siteNumber=$('#site_number').val();                               
+                               var siteNumber=$('#site_number').text();                               
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
                                gsid=sid;
@@ -160,8 +170,22 @@
                                }                               
                            });
                            
+                           $('#open_site_plus').on(event_clicktouchend,function(){
+                                var num = parseInt($("#site_number").text());
+                                     num = num + 1;
+                                     $("#site_number").text(num);                          
+                             });
+
+                             $('#open_site_minus').on(event_clicktouchend,function(){
+                                var num = parseInt($("#site_number").text());
+                                     num = num - 1;
+                                     if(num < 0)
+                                         num=0;
+                                     $("#site_number").text(num);                          
+                             });
+                           
                            $('#open_order').on(event_clicktouchstart,function(){
-                               var siteNumber=$('#site_number').val();                               
+                               var siteNumber=$('#site_number').text();                               
                                var sid = $(this).attr('sid');
                                var istemp = $(this).attr('istemp');
                                gsid=sid;
