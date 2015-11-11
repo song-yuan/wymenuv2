@@ -47,3 +47,17 @@
 			<!-- END PAGE CONTENT-->    
 		</div>
 		<!-- END PAGE -->  
+		
+<script type="text/javascript">
+		 $('#TJ').on('click',function() {
+			var text = document.getElementById("refundgold");
+					//this.value=this.value.replace(/\D/g,'');
+					if(text.value<=0){
+  						alert("退款金额不得小于零啊。。。");
+						return false;
+					}
+		 });
+</script>
+		
+		
+		
