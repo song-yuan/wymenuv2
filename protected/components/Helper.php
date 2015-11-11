@@ -604,15 +604,16 @@ class Helper
                     array_push($listData,"br");
                     $sumall=$sumall+$model->should_all;
                 }
-                	$payname="充值金额";
+                	//$payname="充值金额";
                 	
                // foreach ($money as $moneys){
                // 	$payname="";
-                //	if($moneys){
-                //	$payname = "充值金额";//}
-                //	array_push($listData,"11".str_pad($payname,7).$moneys);
-                //	array_push($listData,"br");
-                //	$sumall=$sumall+$moneys->all_money;
+                	if(!empty($money)){
+	                	$payname = "充值金额:";//}
+	                	array_push($listData,"11".$payname.$money['all_money']);
+	                	array_push($listData,"br");
+	                	$sumall=$sumall+$money['all_money'];
+                	}
                // }//添加
 		array_push($listData,"00".str_pad('',48,'-')); 
                 array_push($listData,"11".str_pad("合计：",7).$sumall);
