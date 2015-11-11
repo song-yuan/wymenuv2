@@ -45,7 +45,7 @@ class OrderPay extends CActiveRecord
                         array('paytype', 'length', 'max'=>1),
 			array('remark', 'length', 'max'=>50),
 			array('create_at', 'safe'),
-			array('pay_amount','compare','compareValue'=>'0','operator'=>'<','message'=>yii::t('app','退款金额必须大于零啊')),
+			//array('pay_amount','compare','compareValue'=>'0','operator'=>'<','message'=>yii::t('app','退款金额必须大于零啊')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, order_id, pay_amount, payment_method_id, remark', 'safe', 'on'=>'search'),
