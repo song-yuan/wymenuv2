@@ -203,50 +203,50 @@
                                                         <!-------------queue_call----------->
                                                         <div id="queue_call" style="display:none;">
                                                             <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;overflow:scroll;">
-                                                                <div style="width: 62%;margin:4.0em;font-size: 1.5em;float: left;">
+                                                                <div style="width: 52%;margin:4.0em;font-size: 1.5em;float: left;">
                                                                     <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;">
                                                                         <label style="font-size:60px;">请卡座</label><br>
                                                                         <label style="font-size:90px;color:red;font-weight:900;">A3001号</label><br>
                                                                         <label style="font-size:60px;">宾客，前来就餐！</label>
                                                                     </DIV>  
-                                                                    <DIV style="position: absolute;width:60%;font-size: 1.5em;text-align: center;bottom:10px;">
+                                                                    <DIV style="position: absolute;width:50%;font-size: 1.5em;text-align: center;bottom:10px;">
                                                                         <marquee behavior="scroll">我要点单系统，由上海物易网络科技有限公司提供！</marquee>
                                                                     </DIV>
                                                                 </div>
-                                                                <div style="text-align: center;width: 28%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #add;">
+                                                                <div style="text-align: center;width: 38%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #add;">
                                                                     <table style="width:100%;">
                                                                         <tr class="queueinfolist">
                                                                             <td style="width:35%;float: left;">座位类型</td>
                                                                             <td style="width:15%;float: left;">等/空</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                历史记录>>
+                                                                                过号记录>>
                                                                             </td>
                                                                         </tr>
                                                                         <tr class="queueinfolist">
                                                                             <td style="width:35%;float: left;">雅座(3-4人)</td>
                                                                             <td style="width:15%;float: left;">3/2</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img class="imgcall" src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img class="imgeat" src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img class="imgpass" src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
                                                                             </td>
                                                                         </tr>
                                                                         <tr class="queueinfolist">
                                                                             <td style="width:35%;float: left;">雅座雅座雅座(3-4人)</td>
                                                                             <td style="width:15%;float: left;">3/2</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img class="imgcall" src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img class="imgeat" src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img class="imgpass" src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
                                                                             </td>
                                                                         </tr>
                                                                         <tr class="queueinfolist">
                                                                             <td style="width:35%;float: left;">雅座(3-4人)</td>
                                                                             <td style="width:15%;float: left;">300/200</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img class="imgcall" src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img class="imgeat" src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img class="imgpass" src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
                                                                             </td>
                                                                         </tr>                                                                        
                                                                     </table>
@@ -314,7 +314,9 @@
                     }
                 }
             });           
-
+            
+            
+            
             $('.modalaction').on("click", function(){
                 var $modal = $('#portlet-button');
                 var pxbox = $('#pxbox_button'); 
@@ -562,6 +564,18 @@
                 //$('#tabsiteindex').load(tabcurrenturl); 
                 //alert(tabcurrenturl);
                 $("#tab_sitelist").show();
+            });
+            
+            $('.imgcall').on(event_clicktouchstart, function(){
+                alert("imgcall");
+            });
+            
+            $('.imgeat').on(event_clicktouchstart, function(){
+                alert("imgeat");
+            });
+            
+            $('.imgpass').on(event_clicktouchstart, function(){
+                alert("imgpass");
             });
 	</script>
 	<!-- END PAGE CONTENT-->
