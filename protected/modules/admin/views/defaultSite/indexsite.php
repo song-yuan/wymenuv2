@@ -207,7 +207,7 @@
                                                                     <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;">
                                                                         <label style="font-size:60px;">请卡座</label><br>
                                                                         <label style="font-size:90px;color:red;font-weight:900;">A3001号</label><br>
-                                                                        <label style="font-size:60px;">宾客，前来就餐！</label>
+                                                                        <label style="font-size:60px;">前来就餐！</label>
                                                                     </DIV>  
                                                                     <DIV style="position: absolute;width:50%;font-size: 1.5em;text-align: center;bottom:10px;">
                                                                         <marquee behavior="scroll">我要点单系统，由上海物易网络科技有限公司提供！</marquee>
@@ -226,27 +226,51 @@
                                                                             <td style="width:35%;float: left;">雅座(3-4人)</td>
                                                                             <td style="width:15%;float: left;">3/2</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                <img class="imgcall" src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img class="imgeat" src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img class="imgpass" src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <div style="width:100%;">
+                                                                                    <div class="imgcall" style="width:30%;float:left;">
+                                                                                    <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                                                                    </div>
+                                                                                    <div class="imgeat" style="width:30%;float:left;">
+                                                                                    <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                                                                    </div>
+                                                                                    <div class="imgpass" style="width:30%;float:left;">
+                                                                                    <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                                                                    </div>
+                                                                                </div>
                                                                             </td>
                                                                         </tr>
                                                                         <tr class="queueinfolist">
                                                                             <td style="width:35%;float: left;">雅座雅座雅座(3-4人)</td>
                                                                             <td style="width:15%;float: left;">3/2</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                <img class="imgcall" src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img class="imgeat" src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img class="imgpass" src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <div style="width:100%;">
+                                                                                    <div class="imgcall" style="width:30%;float:left;">
+                                                                                    <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                                                                    </div>
+                                                                                    <div class="imgeat" style="width:30%;float:left;">
+                                                                                    <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                                                                    </div>
+                                                                                    <div class="imgpass" style="width:30%;float:left;">
+                                                                                    <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                                                                    </div>
+                                                                                </div>
                                                                             </td>
                                                                         </tr>
                                                                         <tr class="queueinfolist">
                                                                             <td style="width:35%;float: left;">雅座(3-4人)</td>
                                                                             <td style="width:15%;float: left;">300/200</td>
                                                                             <td style="width:50%;float: left;">
-                                                                                <img class="imgcall" src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img class="imgeat" src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
-                                                                                <img class="imgpass" src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <div style="width:100%;">
+                                                                                    <div class="imgcall" style="width:30%;float:left;">
+                                                                                    <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                                                                    </div>
+                                                                                    <div class="imgeat" style="width:30%;float:left;">
+                                                                                    <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                                                                    </div>
+                                                                                    <div class="imgpass" style="width:30%;float:left;">
+                                                                                    <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                                                                    </div>
+                                                                                </div>
                                                                             </td>
                                                                         </tr>                                                                        
                                                                     </table>
