@@ -35,6 +35,7 @@
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'productCategory') echo 'active';?>"><a href="<?php echo $this->createUrl('productCategory/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','产品分类');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'product') echo 'active';?>"><a href="<?php echo $this->createUrl('product/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','单品管理');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productSim') echo 'active';?>"><a href="<?php echo $this->createUrl('productSim/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','菜品简写管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productAddition') echo 'active';?>"><a href="<?php echo $this->createUrl('productAddition/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','加菜管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','套餐管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productTempprice') echo 'active';?>"><a href="<?php echo $this->createUrl('productTempprice/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','时价菜管理');?></a></li>

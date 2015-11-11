@@ -23,7 +23,7 @@ class ProductController extends BackendController
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
 		$criteria->with = array('company','category');
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
 		if($categoryId){
 			$criteria->condition.=' and t.category_id = '.$categoryId;
 		}
