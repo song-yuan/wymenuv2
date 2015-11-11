@@ -82,7 +82,7 @@
                                                 <!--<input style="position:absolute;right:3%;bottom: 4%;width:6.0em;height:3.0em;" type="button" class="btn green" id="layer2_close" value="<?php echo yii::t('app',' 关 闭 ');?>">-->
                                             </div>
                                             <div style="float: left;width:60%;margin-top: 2.0em;">
-                                                <DIV class="edit_span" selectid="minus" style="margin-left: 15%;width:70%;font-size:1.5em;">手机号码：<span style="background-color:#9acfea;display:-moz-inline-box;display:inline-block;width: 50%;" id="queuemobile">13</span></DIV>
+                                                <DIV class="edit_span" selectid="minus" style="margin-left: 15%;width:70%;font-size:1.5em;">手机号码：<span style="background-color:#9acfea;display:-moz-inline-box;display:inline-block;width: 50%;" id="queuemobile">1</span></DIV>
                                                 <DIV style="float:left;width:100%;border:0px solid red;">
                                                  <div style="margin-left:0px;border:0px solid red;" class="mobileinput">
                                                      <ul>
@@ -194,6 +194,7 @@
                             return;
                         }
                         //出现收银界面
+                        $("#queuemobile").text("1");
                         layer_index_queueno=layer.open({
                              type: 1,
                              shade: false,
@@ -285,7 +286,7 @@
                         //btnlock=false;
                     });
                     
-                    $('.mobileinput').on(event_clicktouchstart,'li',function(){
+                    $('.mobileinput').on(event_clicktouchend,'li',function(){
                         var num=$(this).text();
                         var deal=$(this).attr("deal");
                         var mobileno=$("#queuemobile").text();
@@ -359,7 +360,7 @@
                                                //alert(baudrate);
                                                 printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],baudrate);
                                             }else{
-                                                alert(dpid);alert(msg.jobid);alert(msg.address);
+                                                //alert(dpid);alert(msg.jobid);alert(msg.address);
                                                 printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
                                             }
 //                                            printresulttemp=true;
