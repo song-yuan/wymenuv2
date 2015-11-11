@@ -1,34 +1,53 @@
-<style type="text/css">
-        
-        .popBox1{
-            margin: 50px auto;
-            text-align: center;
-            width: 40em;
-            height: 20em;
-            border: 1px solid red;
-            background: rgb(245,230,230);
-            z-index: 11000;
-            display: none;
-        }
-        .popBox1 h4{
-            margin: 0.5em 0em;
-        }
-        .popBox1 span{
-            display: inline-block;
-            width: 5em;
-            line-height: 3em;
-            font-weight: bold;
-            color: #fff;
-            margin: 1em 1em;
-            margin-bottom: 3em;
-            font-size: 1em;
-            background: rgb(201,65,65);
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .clear{
-            clear: both;
-        }
+<style type="text/css">        
+    .popBox1{
+        margin: 50px auto;
+        text-align: center;
+        width: 40em;
+        height: 20em;
+        border: 1px solid red;
+        background: rgb(245,230,230);
+        z-index: 11000;
+        display: none;
+    }
+    .popBox1 h4{
+        margin: 0.5em 0em;
+    }
+    .popBox1 span{
+        display: inline-block;
+        width: 5em;
+        line-height: 3em;
+        font-weight: bold;
+        color: #fff;
+        margin: 1em 1em;
+        margin-bottom: 3em;
+        font-size: 1em;
+        background: rgb(201,65,65);
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .clear{
+        clear: both;
+    }
+    .queue_list {
+            padding-right:10px;
+    }
+    .queue_list {
+            display:inline-block;
+    }
+    .queue_list ul {
+            padding-left:5px;
+            padding-left:0px;
+    }
+    .queue_list ul li {
+            float:left;
+            width:8.0em;
+            height:6.0em;			
+            border: 1px solid #add;
+            margin:5px;
+            list-style:none;
+            text-align:center;
+            vertical-align:middle;
+    }
     </style>
    
                                                         <div class="popBox1" id="pxbox_button">
