@@ -194,6 +194,7 @@
                             return;
                         }
                         //出现收银界面
+                        $("#queuemobile").text("1");
                         layer_index_queueno=layer.open({
                              type: 1,
                              shade: false,
@@ -285,7 +286,7 @@
                         //btnlock=false;
                     });
                     
-                    $('.mobileinput').on(event_clicktouchstart,'li',function(){
+                    $('.mobileinput').on(event_clicktouchend,'li',function(){
                         var num=$(this).text();
                         var deal=$(this).attr("deal");
                         var mobileno=$("#queuemobile").text();
@@ -359,7 +360,7 @@
                                                //alert(baudrate);
                                                 printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],baudrate);
                                             }else{
-                                                alert(dpid);alert(msg.jobid);alert(msg.address);
+                                                //alert(dpid);alert(msg.jobid);alert(msg.address);
                                                 printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
                                             }
 //                                            printresulttemp=true;
