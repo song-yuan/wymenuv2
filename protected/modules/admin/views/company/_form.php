@@ -64,6 +64,13 @@
 											<?php echo $form->error($model, 'address' )?>
 										</div>
 									</div>
+									<div class="form-group">
+										<?php echo $form->label($model, 'queuememo',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'queuememo',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('queuememo')));?>
+											<?php echo $form->error($model, 'queuememo' )?>
+										</div>
+									</div>
 									
 									<div class="form-group">
 										<?php echo $form->label($model, 'homepage',array('class' => 'col-md-3 control-label'));?>

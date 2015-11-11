@@ -16,6 +16,7 @@
  * @property integer $create_at
  * @property integer $delete_flag
  * @property string $description
+ * @property string $queuememo
  * @property string $printer_id
  */
 class Company extends CActiveRecord
@@ -42,6 +43,7 @@ class Company extends CActiveRecord
 			array('logo, domain, homepage', 'length', 'max'=>255),
 			array('contact_name, mobile, telephone', 'length', 'max'=>20),
 			array('description','length'),
+			array('queuememo','length'),
 			array('address','length'),
 			array('company_name, logo, contact_name, mobile' , 'required'),
 			array('email', 'length', 'min'=>6, 'max'=>40,'message'=>yii::t('app','请输入4到20的电子邮件')),
@@ -51,7 +53,7 @@ class Company extends CActiveRecord
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('dpid, company_name, logo,token, contact_name, mobile, telephone, email, homepage, domain, create_at, delete_flag, description', 'safe', 'on'=>'search'),
+			array('dpid, company_name, logo,token, contact_name, mobile, telephone, email, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,6 +87,7 @@ class Company extends CActiveRecord
 			'create_at' => yii::t('app','创建时间'),
 			'delete_flag' => yii::t('app','状态'),
 			'description' => yii::t('app','公司描述'),
+			'queuememo' => yii::t('app','取号打印小票备注'),
 			'printer_id' => yii::t('app','打印机ID'),
 		);
 	}
@@ -119,6 +122,7 @@ class Company extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('description',$this->description,true);
+		$criteria->compare('queuememo',$this->queuememo,true);
 		$criteria->compare('printer_id',$this->printer_id,true);
 
 		return new CActiveDataProvider($this, array(
