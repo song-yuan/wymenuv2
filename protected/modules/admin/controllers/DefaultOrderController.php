@@ -654,7 +654,7 @@ class DefaultOrderController extends BackendController
                         foreach ($detailarr as $da)
                         {
                             $daarr=explode(",",$da);
-                            if($daarr[0]!="0000000000")
+                            if($daarr[0]!="0000000000" && floatval($daarr[1])>0)
                             {
                                 $orderPayId = $se->nextval();
                                 //插入一条

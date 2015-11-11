@@ -255,8 +255,8 @@
         $('#open_site_minus').on(event_clicktouchend,function(){
            var num = parseInt($("#site_number").text());
 		num = num - 1;
-                if(num < 0)
-                    num=0;
+                if(num < 1)
+                    num=1;
 		$("#site_number").text(num);                          
         });
         
