@@ -48,6 +48,27 @@
             text-align:center;
             vertical-align:middle;
     }
+    .queueinfolist{
+        height:40px;
+	width:100%;
+	border:1px solid #858fa6;
+	background:#4a5775;
+	/* CSS3 Styling */
+	background:-moz-linear-gradient(top, #606c88, #3f4c6b);
+	background:-webkit-gradient(linear, left top, left bottom, from(#606c88), to(#3f4c6b));
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	-moz-box-shadow:0px 0px 5px #000;
+	-webkit-box-shadow:0px 0px 5px #000;
+	box-shadow:0px 0px 5px #000;
+	/* Text Styling */
+	font-family:'AirstreamRegular', Georgia, 'Times New Roman', serif;
+	color:#e5edff;
+	text-shadow:0px 0px 5px rgba(0, 0, 0, 0.75);
+	font-size:20px;
+        margin-bottom: 3px;
+    }
     </style>
    
                                                         <div class="popBox1" id="pxbox_button">
@@ -192,8 +213,44 @@
                                                                         <marquee behavior="scroll">我要点单系统，由上海物易网络科技有限公司提供！</marquee>
                                                                     </DIV>
                                                                 </div>
-                                                                <div style="text-align: center;width: 28%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #0099FF;">
-                                                                    <div class="site_list">
+                                                                <div style="text-align: center;width: 28%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #add;">
+                                                                    <table style="width:100%;">
+                                                                        <tr class="queueinfolist">
+                                                                            <td style="width:35%;float: left;">座位类型</td>
+                                                                            <td style="width:15%;float: left;">等/空</td>
+                                                                            <td style="width:50%;float: left;">
+                                                                                历史记录>>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr class="queueinfolist">
+                                                                            <td style="width:35%;float: left;">雅座(3-4人)</td>
+                                                                            <td style="width:15%;float: left;">3/2</td>
+                                                                            <td style="width:50%;float: left;">
+                                                                                <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr class="queueinfolist">
+                                                                            <td style="width:35%;float: left;">雅座雅座雅座(3-4人)</td>
+                                                                            <td style="width:15%;float: left;">3/2</td>
+                                                                            <td style="width:50%;float: left;">
+                                                                                <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr class="queueinfolist">
+                                                                            <td style="width:35%;float: left;">雅座(3-4人)</td>
+                                                                            <td style="width:15%;float: left;">300/200</td>
+                                                                            <td style="width:50%;float: left;">
+                                                                                <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;">
+                                                                                <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;">
+                                                                            </td>
+                                                                        </tr>                                                                        
+                                                                    </table>
+                                                                    <div class="queue_list">                                                                        
                                                                     <ul>
                                                                         <li class="modalaction bg-red" typeid="queue" showbutton="queue_reserve" style="width:4.0em;"><span style="font-size:20px;">保留号码</span></li>
                                                                         <?php $hasfree=0;$haswaiting=0;
@@ -213,9 +270,7 @@
                                                                                             if($sitefree>0){$hasfree=1;};
                                                                                             ?>
                                                                                             <li class="modalaction <?php if($queuepersons>0 && $sitefree==0) echo 'bg-yellow'; elseif($queuepersons>0 && $sitefree>0) echo 'bg-green';?>" typeid="queue" showbutton="queue_call" status="q" sid="<?php echo $model["splid"]; ?>"  istemp="<?php echo $model["typeid"]; ?>" splid=<?php echo $model["splid"];?>>
-                                                                                                <span style="font-size: 20px;" typename="sitefree">空座:<?php echo $sitefree; ?></span>
-                                                                                                <br><span style="font-size: 20px;" typename="queuenum">排队:<?php echo $queuepersons; ?></span>
-                                                                                                <br><?php echo $model["min"]."-".$model["max"]; ?>
+                                                                                                <span style="font-size: 20px;" typename="sitefreelist"><?php echo $model["min"]."-".$model["max"]; ?>(<?php echo $sitefree; ?>/<?php echo $queuepersons; ?>)</span>                                                                                                
                                                                                             </li>
                                                                             <?php                                                                                                 
                                                                                     endforeach;
