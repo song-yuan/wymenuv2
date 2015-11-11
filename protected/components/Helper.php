@@ -708,10 +708,10 @@ class Helper
                 $queuememo=Company::getQueueMemo($pad->dpid);
                 if(!empty($queuememo))
                 {
-                    array_push($listData,"00"."*注意，"+$queuememo);
+                    array_push($listData,"00"."*注意，".$queuememo);
                     array_push($listData,"br");
                 }
-                array_push($listData,"00"."*留下手机或微信号的，到号时，会有短信或微信通知！");
+                array_push($listData,"00"."*留下手机或微信号，到号时，会有短信或微信通知！");
                 array_push($listData,"br");
                 array_push($listData,"00"."*最终解释权归本店所有！");
                 array_push($listData,"br");
