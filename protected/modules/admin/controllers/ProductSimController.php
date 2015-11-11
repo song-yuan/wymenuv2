@@ -44,8 +44,9 @@ public function actionUpdate(){
 		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
-                        $py=new Pinyin();
-                        $model->simple_code = $py->py($model->product_name);
+                        //var_dump($model);exit;
+                        //$py=new Pinyin();
+                        //$model->simple_code = $py->py($model->product_name);
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
