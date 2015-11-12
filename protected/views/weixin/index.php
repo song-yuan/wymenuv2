@@ -1,6 +1,6 @@
 <?php
 
-new Server();
+new Server($companyId);
 
 ?>
 

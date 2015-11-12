@@ -4,7 +4,8 @@ class WeixinController extends Controller
 {
 	public function actionIndex()
 	{
-		$this->render('index');
+		$companyId = Yii::app()->request->getParam('companyId');
+		$this->render('index',array('companyId'=>$companyId));
 	}
 	public function actionNotify()
 	{
