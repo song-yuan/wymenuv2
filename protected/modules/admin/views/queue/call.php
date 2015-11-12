@@ -22,6 +22,7 @@
     .queueinfolist{
         height:40px;
 	width:100%;
+        line-height: 40px;
 	border:1px solid #858fa6;
 	background:#4a5775;
 	/* CSS3 Styling */
@@ -37,13 +38,12 @@
 	font-family:'AirstreamRegular', Georgia, 'Times New Roman', serif;
 	color:#e5edff;
 	text-shadow:0px 0px 5px rgba(0, 0, 0, 0.75);
-	font-size:20px;
+	font-size:15px;
         margin-bottom: 3px;
     }
-
-</style>
-			
-        <div id="queue_call_layer" style="background: url(../../img/bg-white-lock.png) repeat;">
+    
+</style>		
+        <div id="queue_call_layer" style="background: url(wymenuv2/img/bg-white-lock.png) repeat;">
                 <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;overflow:scroll;">
                     <div style="width: 52%;margin:4.0em;font-size: 1.5em;float: left;">
                         <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;margin-top:1.0em;">
@@ -84,6 +84,7 @@
                                 </td>
                             </tr>
                         </table>
+                        
                         <table id="queue_call_list" style="width:100%;">
                             <tr class="queueinfolist">
                                 <td style="width:40%;float: left;">座位类型</td>
@@ -106,7 +107,11 @@
                                                 ?>
                                                 <tr class="queueinfolist">
                                                     <td style="width:40%;float: left;font-size:15px;"><?php echo $model["name"]."/".$model["min"]."-".$model["max"];?></td>
-                                                    <td style="width:20%;float: left;"><?php echo $queuepersons."/".$sitefree; ?></td>
+                                                    <td style="width:20%;float: left;">
+                                                        <div style="float:left;border: 2px solid green;background-color:#F00;height:40px;">
+                                                            <span style="color:#00FFFFFF;padding: 5px;"><?php echo $queuepersons."00";?></span></div>
+                                                        <div style="float:left;border: 2px solid green;background-color:#858fa6;height:40px;">
+                                                            <span style="color:#00FFFFFF;padding: 5px;"><?php echo $sitefree."00"; ?></span></div></td>
                                                     <td style="width:40%;float: left;">
                                                         <div style="width:100%;text-align:right;">
                                                             <div class="imgcall" style="width:30%;float:left;">
