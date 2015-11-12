@@ -34,17 +34,14 @@
 <!-- BEGIN BODY -->
 <body class="login">
 	<!-- BEGIN LOGO -->
-	<div style="text-align: center;">
-                <h1 style="color:white;"><?php echo yii::t('app','排队取号');?></h1> 
-                
-        </div>
+	
 	<!-- END LOGO -->
 	<!-- BEGIN LOGIN -->
-        <div class="content" style="width:95% !important;">
+        
 		<!-- BEGIN LOGIN FORM -->
 		<?php echo $content ;?>
 		<!-- END REGISTRATION FORM -->
-	</div>
+	
 	<!-- END LOGIN -->
 	
 	<!-- END COPYRIGHT -->
