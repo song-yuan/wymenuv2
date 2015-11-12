@@ -45,8 +45,9 @@
 </style>		
         <div id="queue_call_layer" style="background: url(wymenuv2/img/bg-white-lock.png) repeat;">
                 <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;overflow:scroll;">
-                    <div style="width: 52%;margin:4.0em;font-size: 1.5em;float: left;">
-                        <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;margin-top:1.0em;">
+                    <div style="width: 52%;margin:3.0em;font-size: 1.5em;float: left;">
+                        <div style="display:none;">
+                        <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;margin-top:2.0em;">
                             <label style="font-size:40px;">请卡座</label><br>
                             <label style="font-size:90px;color:red;font-weight:900;">A3001号</label><br>
                             <label style="font-size:40px;">前来就餐！</label>
@@ -54,6 +55,10 @@
                         <DIV style="position: absolute;width:50%;font-size: 1.5em;text-align: center;bottom:10px;">
                             <marquee behavior="scroll"><a style="color:#ffffff" href="<?php echo $this->createUrl('default/index',array("companyId"=>$companyId));?>">我要点单系统，由上海物易网络科技有限公司提供！</a></marquee>
                         </DIV>
+                        </div>
+                        <div style="width:60%;margin-left:20%;margin-top:7%;">
+                        <img src="/wymenuv2/img/top10/company_<?php echo $companyId; ?>/wx_barcode.jpg">
+                        </div>
                     </div>
                     <div style="text-align: center;width: 38%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #add;overflow:scroll;">
                         
@@ -63,6 +68,7 @@
                                     <a id="queue_call_btn" class="btn blue" style="margin-right: 9%;"><i class="fa fa-archive"></i>排队叫号>></a>
                                 </td>
                             </tr>
+                            
                             <tr class="queueinfolist">
                                 <td style="width:23%;font-size:15px;"><?php echo "A3002";?></td>
                                 <td style="width:10%;">
@@ -109,9 +115,9 @@
                                                     <td style="width:40%;float: left;font-size:15px;"><?php echo $model["name"]."/".$model["min"]."-".$model["max"];?></td>
                                                     <td style="width:22%;float: left;">
                                                         <div style="float:left;border: 2px solid green;background-color:#F00;width:50%;">
-                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $queuepersons."00";?></span></div>
+                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $queuepersons;?></span></div>
                                                         <div style="float:left;border: 2px solid green;background-color:#858fa6;width:50%;">
-                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $sitefree."00"; ?></span></div></td>
+                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $sitefree; ?></span></div></td>
                                                     <td style="width:38%;float: left;">
                                                         <div style="width:100%;text-align:right;">
                                                             <div class="imgcall" style="width:30%;float:left;">
