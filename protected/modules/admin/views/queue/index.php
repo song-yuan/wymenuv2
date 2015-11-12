@@ -41,11 +41,11 @@
         vertical-align: middle;
       }
       .queueinfolist{
-        height:60px;
+        height:50px;
 	width:100%;
 	border:1px solid #858fa6;
 	background:#4a5775;
-        line-height: 60px;
+        line-height: 50px;
 	/* CSS3 Styling */
 	background:-moz-linear-gradient(top, #606c88, #3f4c6b);
 	background:-webkit-gradient(linear, left top, left bottom, from(#606c88), to(#3f4c6b));
@@ -85,7 +85,7 @@
                                                     <td style="width:70%;float: left;"><?php echo $model["name"]."(".$model["min"]."-".$model["max"]."人)";?></td>
                                                     <td style="width:30%;float: left;">
                                                         <div style="border: 2px solid green;background-color:#F00;">
-                                                            <span style="color:#00FFFFFF;padding: 5px;"><?php echo $queuepersons."00";?></span></div>
+                                                            <span style="color:#00FFFFFF;padding: 5px;"><?php echo $queuepersons;?></span></div>
                                                     </td>
                                                     
                                                 </tr>                                                                                            
