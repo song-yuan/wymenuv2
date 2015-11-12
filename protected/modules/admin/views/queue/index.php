@@ -98,28 +98,7 @@
 			<div style="text-align: center;margin-left:20%;">
                                 <h1 style="color:white;"><?php echo yii::t('app','排队取号');?></h1>                 
                         </div>
-			<div style="width: 100%;display: none;">
-                            <div style="width: 40%;float: left;">
-                                <h3 class="form-title" style="color:red;">①选择座位类型</h3>
-                                <div class="queuesitetypelist">
-                                    <?php if(!empty($siteTypes)):
-                                        foreach($siteTypes as $siteType):?>
-                                        <input type="button" lid="<?php echo $siteType->lid; ?>" class="btnSiteType <?php if($siteType->lid==$siteTypelid) echo 'queueactive'; ?>" value="<?php echo $siteType->name; ?>">
-                                    <?php    endforeach;
-                                    endif; ?>                                    
-                                </div>
-                            </div>
-                            <div style="width: 60%;float: left;">
-                                <h3 class="form-title" style="color:#000000;">②选择人数自动出号</h3>
-                                <div class="queuesitepersonslist">
-                                    <?php if(!empty($sitePersons)):
-                                        foreach($sitePersons as $sitePerson):?>
-                                        <input splid="<?php echo $sitePerson['splid']; ?>" stlid="<?php echo $sitePerson['typeid']; ?>" personrang="<?php echo $sitePerson['min'].'-'.$sitePerson['max']; ?>" class="btnSitePersons" type="button" value="<?php echo $sitePerson['min'].'-'.$sitePerson['max']; ?>人 (等叫:<?php echo empty($sitePerson['queuepersons'])?'0':$sitePerson['queuepersons']; ?>组)">                                        
-                                    <?php    endforeach;
-                                    endif; ?>                                    
-                                </div>
-                            </div>
-                        </div>
+			
                         
         <!--------mobile no box begin-------->
         <div id="mobilenobox" style="display:block;width:70%;margin-left:28%;">
