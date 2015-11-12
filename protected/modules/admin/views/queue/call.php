@@ -20,9 +20,9 @@
             vertical-align:middle;
     }
     .queueinfolist{
-        height:60px;
+        height:50px;
 	width:100%;
-        line-height: 60px;
+        line-height: 50px;
 	border:1px solid #858fa6;
 	background:#4a5775;
 	/* CSS3 Styling */
@@ -108,10 +108,10 @@
                                                 <tr class="queueinfolist">
                                                     <td style="width:40%;float: left;font-size:15px;"><?php echo $model["name"]."/".$model["min"]."-".$model["max"];?></td>
                                                     <td style="width:22%;float: left;">
-                                                        <div style="float:left;border: 2px solid green;background-color:#F00;">
-                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $queuepersons;?></span></div>
-                                                        <div style="float:left;border: 2px solid green;background-color:#858fa6;">
-                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $sitefree; ?></span></div></td>
+                                                        <div style="float:left;border: 2px solid green;background-color:#F00;width:50%;">
+                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $queuepersons."00";?></span></div>
+                                                        <div style="float:left;border: 2px solid green;background-color:#858fa6;width:50%;">
+                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $sitefree."00"; ?></span></div></td>
                                                     <td style="width:38%;float: left;">
                                                         <div style="width:100%;text-align:right;">
                                                             <div class="imgcall" style="width:30%;float:left;">
