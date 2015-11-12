@@ -433,9 +433,6 @@
 //                            }
 //                        });
                         return;
-                    }else
-                    {                        
-                        return;
                     }
                     pxbox.find('.button-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){                        
                         pxbox.children("h4").text(that.attr("shname"));
