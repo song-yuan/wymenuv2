@@ -41,11 +41,11 @@
         vertical-align: middle;
       }
       .queueinfolist{
-        height:40px;
+        height:60px;
 	width:100%;
 	border:1px solid #858fa6;
 	background:#4a5775;
-        line-height: 40px;
+        line-height: 60px;
 	/* CSS3 Styling */
 	background:-moz-linear-gradient(top, #606c88, #3f4c6b);
 	background:-webkit-gradient(linear, left top, left bottom, from(#606c88), to(#3f4c6b));

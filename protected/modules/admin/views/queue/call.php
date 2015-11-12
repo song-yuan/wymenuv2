@@ -20,9 +20,9 @@
             vertical-align:middle;
     }
     .queueinfolist{
-        height:40px;
+        height:60px;
 	width:100%;
-        line-height: 40px;
+        line-height: 60px;
 	border:1px solid #858fa6;
 	background:#4a5775;
 	/* CSS3 Styling */
@@ -55,7 +55,7 @@
                             <marquee behavior="scroll"><a style="color:#ffffff" href="<?php echo $this->createUrl('default/index',array("companyId"=>$companyId));?>">我要点单系统，由上海物易网络科技有限公司提供！</a></marquee>
                         </DIV>
                     </div>
-                    <div style="text-align: center;width: 38%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #add;">
+                    <div style="text-align: center;width: 38%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #add;overflow:scroll;">
                         
                         <table id="queue_pass_list" style="width:100%;display: none;">
                             <tr class="queueinfolist">                                
@@ -109,9 +109,9 @@
                                                     <td style="width:40%;float: left;font-size:15px;"><?php echo $model["name"]."/".$model["min"]."-".$model["max"];?></td>
                                                     <td style="width:22%;float: left;">
                                                         <div style="float:left;border: 2px solid green;background-color:#F00;">
-                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $queuepersons."00";?></span></div>
+                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $queuepersons;?></span></div>
                                                         <div style="float:left;border: 2px solid green;background-color:#858fa6;">
-                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $sitefree."00"; ?></span></div></td>
+                                                            <span style="color:#00FFFFFF;padding: 3px;"><?php echo $sitefree; ?></span></div></td>
                                                     <td style="width:38%;float: left;">
                                                         <div style="width:100%;text-align:right;">
                                                             <div class="imgcall" style="width:30%;float:left;">
