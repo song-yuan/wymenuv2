@@ -126,9 +126,9 @@
 					<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-                                                <li>
+                                               <!--<li>
                                                     <a href="javascript:;" id="queueindex"><i class="fa fa-move"></i> <?php echo yii::t('app','排队取号');?></a>
-						</li>
+						</li>-->
 						<li>
                                                     <a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> <?php echo yii::t('app','全屏显示');?></a>
 						</li>
@@ -272,10 +272,10 @@
                 getnotificationnum();
             }
             
-            $('#queueindex').click(function(){
-                //var stlid=$(this).attr('lid');
-                var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
-                var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$this->companyId)); ?>'+'/rand/'+randtime;
-                location.href=url;
-            });
+//            $('#queueindex').click(function(){
+//                //var stlid=$(this).attr('lid');
+//                var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
+//                var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$this->companyId)); ?>'+'/rand/'+randtime;
+//                location.href=url;
+//            });
 	</script>

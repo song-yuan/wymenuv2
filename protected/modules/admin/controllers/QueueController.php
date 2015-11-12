@@ -19,15 +19,65 @@ class QueueController extends Controller
             }
             //$sitePersons= SiteClass::getSitePersons($companyId, $siteTypelid);
             $sitePersons= SiteClass::getSitePersonsAll($companyId);
+            $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
+                    . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
+                    . '  from nb_site t'
+                    . ' LEFT JOIN nb_site_type st on t.dpid=st.dpid and t.type_id=st.lid'
+                    . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
+                    . ' LEFT JOIN (select distinct qp.dpid as dpid,qp.stlid as stlid,qp.splid as splid, count(qp.lid) as queuepersons'
+                    . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
+                    . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                    . ' group by dpid,stlid,splid) tq'
+                    . ' on t.dpid=tq.dpid and t.type_id=tq.stlid and t.splid=tq.splid'
+                    . ' LEFT JOIN (select distinct subt.dpid as dpid,subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
+                    . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
+                    . ' group by dpid,splid,typeid) sf'
+                    . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
+                    . ' where t.delete_flag=0 and t.dpid= '.$companyId
+                    . ' group by dpid,splid,typeid,name,min,max'
+                    . ' order by typeid,min';
+            $connect = Yii::app()->db->createCommand($sql);
+            $queueModels = $connect->queryAll();
 //            var_dump($sitePersons);exit;
             $this->render('index',array(
                 "companyId"=>$companyId,
                 "siteTypes"=>$siteTypes,
                 'siteTypelid'=>$siteTypelid,
-                "sitePersons"=>$sitePersons
+                "sitePersons"=>$sitePersons,
+                'queueModels'=>$queueModels
             ));	
 	}
-        
+        /**
+	 * 
+	 * setting the companyId and padId
+	 */
+	public function actionCall()
+	{
+            $companyId=Yii::app()->request->getParam('companyId','0');
+            $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
+                    . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
+                    . '  from nb_site t'
+                    . ' LEFT JOIN nb_site_type st on t.dpid=st.dpid and t.type_id=st.lid'
+                    . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
+                    . ' LEFT JOIN (select distinct qp.dpid as dpid,qp.stlid as stlid,qp.splid as splid, count(qp.lid) as queuepersons'
+                    . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
+                    . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                    . ' group by dpid,stlid,splid) tq'
+                    . ' on t.dpid=tq.dpid and t.type_id=tq.stlid and t.splid=tq.splid'
+                    . ' LEFT JOIN (select distinct subt.dpid as dpid,subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
+                    . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
+                    . ' group by dpid,splid,typeid) sf'
+                    . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
+                    . ' where t.delete_flag=0 and t.dpid= '.$companyId
+                    . ' group by dpid,splid,typeid,name,min,max'
+                    . ' order by typeid,min';
+            $connect = Yii::app()->db->createCommand($sql);
+            $queueModels = $connect->queryAll();
+            $this->render('call',array(
+                "companyId"=>$companyId,
+                'queueModels' => $queueModels
+            ));	
+	}
         /**
 	 * 
 	 * setting the companyId and padId

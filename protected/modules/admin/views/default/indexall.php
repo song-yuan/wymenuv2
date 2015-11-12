@@ -620,7 +620,7 @@
                             <?php endforeach;?>
                             <?php endif;?>
                                <!--     <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座');?></li>-->
-                                <li typeId="queue" class="tabSite <?php if($typeId == 'queue') echo 'slectliclass';?>"><?php echo yii::t('app','排队');?></li>
+                                <li typeId="others" class="tabSite <?php if($typeId == 'others') echo 'slectliclass';?>">其他</li>
                             </ul>
                         </div>
                             <div class="tab-content" id="tabsiteindex">
@@ -747,11 +747,11 @@
                         success:function(msg){
                             //$('#tabsiteindex').load(tabcurrenturl);
                             //重新修改成用ajax动态加载
-                            if(gtypeid=="queue")
+                            if(gtypeid=="others")
                             {
                                 //获取排队信息，并更新状态,不存在删减的
                                 $.each(msg,function(key,value){
-                                    var siteobj=$(".modalaction[typeid='queue'][sid="+value.splid+"][istemp="+value.typeid+"]");
+                                    var siteobj=$(".modalaction[typeid='others'][sid="+value.splid+"][istemp="+value.typeid+"]");
                                     siteobj.removeClass("bg-yellow");
                                     siteobj.removeClass("bg-green");                                                    
                                     //改变背景颜色///
@@ -3082,6 +3082,8 @@
                 gstypeid=gtypeid;
                 sitevisible();
            });
+           
+           
         //库存提示
         function sell_off(do_data) {
             //alert(do_data);
