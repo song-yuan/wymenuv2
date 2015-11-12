@@ -84,7 +84,7 @@
                                                 <tr class="queueinfolist">
                                                     <td style="width:70%;float: left;"><?php echo $model["name"]."(".$model["min"]."-".$model["max"]."人)";?></td>
                                                     <td style="width:30%;float: left;">
-                                                        <div style="border: 2px solid green;background-color:#F00;height:40px;">
+                                                        <div style="border: 2px solid green;background-color:#F00;">
                                                             <span style="color:#00FFFFFF;padding: 5px;"><?php echo $queuepersons."00";?></span></div>
                                                     </td>
                                                     
