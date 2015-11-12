@@ -146,8 +146,9 @@
                                             </div>
                                             <div style="float: left;width:38%;height: 100%;">
                                                 <div style="text-align:center;width: 85%;margin:1.0em;font-size:1.5em;height: 100%;">                                                    
-                                                    <img style="width:80%;margin-left:10%;" src="/wymenuv2/img/top10/company_<?php echo $companyId; ?>/wx_barcode.jpg">
-                                                    <input style="width:80%;margin-left:10%;margin-top:5%;height:1.5em;font-size: 1.5em;" type="button" class="btn green" id="queueno" value="取  号">                                                    
+                                                    <input style="width:80%;margin-left:10%;height:1.5em;font-size: 1.5em;" type="button" class="btn green" id="queueno" value="取  号">                                                    
+                                                    <img style="width:80%;margin-left:10%;margin-top:7%;" src="/wymenuv2/img/top10/company_<?php echo $companyId; ?>/wx_barcode.jpg">
+                                                    
                                                 </div>    
                                                 <!--<input style="position:absolute;right:3%;bottom: 4%;width:6.0em;height:3.0em;" type="button" class="btn green" id="layer2_close" value="<?php echo yii::t('app',' 关 闭 ');?>">-->
                                             </div>
