@@ -18,7 +18,8 @@
         word-wrap:break-word;
     }
     .queueactive{
-        background-color: red !important;
+        color: red !important;
+        //font-size: 23px !important;
     }
     .mobileinput {
         width: 96%;
@@ -63,7 +64,7 @@
         margin-bottom: 3px;
     }
 </style>
-            <div style="text-align: center;width: 25%;position: absolute;top:0px;bottom: 0px;left: 0px;border:1px solid red;background-color: #add;">
+            <div style="text-align: center;width: 25%;position: absolute;top:0px;bottom: 0px;left: 0px;border:1px solid red;background-color: #add;overflow:scroll;">
                         <table style="width:100%;">
                             <tr class="queueinfolist">
                                 <td style="width:70%;float: left;">座位类型</td>
@@ -81,10 +82,10 @@
                                                 if($queuepersons>0){$haswaiting=1;};
                                                 if($sitefree>0){$hasfree=1;};
                                                 ?>
-                                                <tr class="queueinfolist">
+                                                <tr class="queueinfolist" splid="<?php echo $model['splid']; ?>" stlid="<?php echo $model['typeid']; ?>">
                                                     <td style="width:70%;float: left;"><?php echo $model["name"]."(".$model["min"]."-".$model["max"]."人)";?></td>
                                                     <td style="width:30%;float: left;">
-                                                        <div style="border: 2px solid green;background-color:#F00;">
+                                                        <div style="border: 2px solid green;background-color:green;">
                                                             <span style="color:#00FFFFFF;padding: 5px;"><?php echo $queuepersons;?></span></div>
                                                     </td>
                                                     
@@ -223,17 +224,20 @@
                         //reloadqueuestate();
                     });
                     
-                    $('.btnSiteType').click(function(){
-                        var stlid=$(this).attr('lid');
-//                        var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
-//                        var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$companyId)); ?>/siteTypelid/'+stlid+'/rand/'+randtime;
-//                        location.href=url;
-                        $('.btnSitePersons').css('display','none');
-                        $(".queuesitepersonslist").find("input[stlid="+stlid+"]").each(function(){
-                            $(this).css('display','block');
-                        });
-                        $('.btnSiteType').removeClass("queueactive");
+                    $('.queueinfolist').click(function(){
+                        //alert(1);
+//                        var stlid=$(this).attr('lid');
+////                        var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
+////                        var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$companyId)); ?>/siteTypelid/'+stlid+'/rand/'+randtime;
+////                        location.href=url;
+//                        $('.btnSitePersons').css('display','none');
+//                        $(".queuesitepersonslist").find("input[stlid="+stlid+"]").each(function(){
+//                            $(this).css('display','block');
+//                        });
+                        $('.queueinfolist').removeClass("queueactive");
                         $(this).addClass("queueactive");
+                        //alert($(this).children('td').eq(0).text());
+                        $('#queuepersonrange').text($(this).children('td').eq(0).text());
                     });
                     
                     function unlock(){
@@ -264,78 +268,7 @@
                         $(".btnSitePersons").removeClass("selectsiteperson");
                         $(this).addClass("selectsiteperson");
                         $("#queuepersonrange").text($(this).attr("personrang"));
-                        return;
-                        ////////////
-                        if(btnlock)
-                        {
-                            return;
-                        }else{
-                            btnlock=true;
-                            setTimeout("btnlock=false", 3000);
-                        }
-                        var stlid=$(this).attr('stlid');
-                        var splid=$(this).attr('splid');
-                        var dpid="<?php echo $companyId; ?>";
-                        var personrang=$(this).attr('personrang');
-                        var that=$(this);
-                        var printresulttemp=false;
-                        var padid="0000000046";
-                        if (typeof Androidwymenuprinter == "undefined") {
-                            alert("找不到PAD设备");
-                            //return false;
-                        }else{
-                            var padinfo=Androidwymenuprinter.getPadInfo();
-                            padid=padinfo.substr(10,10);
-                        }
-                        //alert(stlid);alert(splid);alert(dpid);alert(personrang);
-                        $.ajax({
-                            url:"/wymenuv2/admin/queue/getSitePersons/companyid/"+dpid+"/stlid/"+stlid+"/splid/"+splid+'/padid/'+padid,
-                            type:'GET',
-                            timeout:5000,
-                            cache:false,
-                            async:false,
-                            dataType: "json",
-                            success:function(msg){
-                                 if(msg.status)
-                                 {
-                                    that.val(personrang+"人(等叫:"+msg.waitingnum+"组)");                                                                        
-                                        var reprint=true;
-                                        while(reprint)
-                                        {
-                                            var addressdetail=msg.address.split(".");
-                                            if(addressdetail[0]=="com")
-                                           {
-                                               var baudrate=parseInt(addressdetail[2]);
-                                               //alert(baudrate);
-                                                printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],baudrate);
-                                            }else{
-                                                printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
-                                            }
-//                                            printresulttemp=true;
-                                            if(!printresulttemp)
-                                            {
-                                                var reprint = confirm("打印失败，是否重新打印？");
-                                                
-                                            }else{
-                                                reprint=false;
-                                            }                                            
-                                        }
-                                 }else{
-                                     alert(msg.msg);
-                                 }
-                                  //btnlock=false;
-                            },
-                            error: function(msg){
-                                //alert("网络可能有问题，再试一次！");
-                                //btnlock=false;
-                            },
-                            complete : function(XMLHttpRequest,status){
-                                if(status=='timeout'){
-                                    //alert("网络可能有问题，再试一次！");                                            
-                                }
-                                //btnlock=false;
-                            }
-                        });
+                        return;                        
                         //btnlock=false;
                     });
                     
@@ -367,20 +300,20 @@
                     });
                     
                     $('#queueno').on(event_clicktouchstart,function(){
-//                        ////////////
-//                        if(btnlock)
-//                        {
-//                            return;
-//                        }else{
-//                            btnlock=true;
-//                            setTimeout("btnlock=false", 3000);
-//                        }
-                        var that=$(".selectsiteperson");
+                        ////////////
+                        if(btnlock)
+                        {
+                            return;
+                        }else{
+                            btnlock=true;
+                            setTimeout("btnlock=false", 3000);
+                        }
+                        var that=$(".queueactive");
                         //alert(that.attr('stlid'));
                         var stlid=that.attr('stlid');
                         var splid=that.attr('splid');
                         var dpid="<?php echo $companyId; ?>";
-                        var personrang=that.attr('personrang');
+                        //var personrang=that.attr('personrang');
                         var printresulttemp=false;
                         var padid="0000000046";
                         if (typeof Androidwymenuprinter == "undefined") {
@@ -391,7 +324,7 @@
                             padid=padinfo.substr(10,10);
                         }
                         var mobileno=$("#queuemobile").text();//格式未做判断，发送短信时再判断。
-                        
+                        //alert(stlid);alert(splid);alert(mobileno);
                         $.ajax({
                             url:"/wymenuv2/admin/queue/getSitePersons/companyid/"+dpid+"/stlid/"+stlid+"/splid/"+splid+'/padid/'+padid+'/mobileno/'+mobileno,
                             type:'GET',
@@ -402,7 +335,9 @@
                             success:function(msg){
                                  if(msg.status)
                                  {
-                                    that.val(personrang+"人(等叫:"+msg.waitingnum+"组)");                                                                        
+                                    //that.val(personrang+"人(等叫:"+msg.waitingnum+"组)"); 
+                                    //alert(msg.waitingnum);
+                                        that.children('td').eq(1).find("span").text(msg.waitingnum);
                                         var reprint=true;
                                         while(reprint)
                                         {
@@ -443,12 +378,7 @@
                             }
                         });
                         
-                    });
-                    
-                    $('#queueclose').on(event_clicktouchstart,function(){
-                        layer.close(layer_index_queueno);
-                        layer_index_queueno=0;
-                    });
+                    });                   
                     
                 </script>
                 
