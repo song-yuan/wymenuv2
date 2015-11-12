@@ -21,7 +21,7 @@ class WeixinController extends BackendController
         	if($model->save()){
         		Yii::app()->user->setFlash('success' ,yii::t('app', '设置成功'));
         	}else{
-        		$this->redirect(array('admin/weixin/index','companyId'=>$this->companyId));
+        		$this->redirect(array('/admin/weixin/index','companyId'=>$this->companyId));
         	}
         }
 		$this->render('index',array(
