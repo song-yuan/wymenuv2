@@ -56,12 +56,40 @@
                         </DIV>
                     </div>
                     <div style="text-align: center;width: 38%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #add;">
-                        <table style="width:100%;">
+                        
+                        <table id="queue_pass_list" style="width:100%;display: none;">
+                            <tr class="queueinfolist">                                
+                                <td colspan="6" style="text-align:right;">                                                                                
+                                    <a id="queue_call_btn" class="btn blue" style="margin-right: 9%;"><i class="fa fa-archive"></i>排队叫号>></a>
+                                </td>
+                            </tr>
                             <tr class="queueinfolist">
-                                <td style="width:35%;float: left;">座位类型</td>
-                                <td style="width:15%;float: left;">等/空</td>
-                                <td style="width:50%;float: left;">                                                                                
-                                    <a id="order_list" class="btn blue"><i class="fa fa-archive"></i>过号记录>></a>
+                                <td style="width:23%;font-size:15px;"><?php echo "A3002";?></td>
+                                <td style="width:10%;">
+                                    <div class="imgeat" style="width:30%;float:left;">
+                                        <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                    </div>
+                                </td>
+                                <td style="width:23%;font-size:15px;"><?php echo "A3001";?></td>
+                                <td style="width:10%;">
+                                    <div class="imgeat" style="width:30%;float:left;">
+                                        <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                    </div>
+                                </td>
+                                <td style="width:23%;font-size:15px;"><?php echo "A3001";?></td>
+                                <td style="width:10%;">
+                                    <div class="imgeat" style="width:30%;float:left;">
+                                        <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <table id="queue_call_list" style="width:100%;">
+                            <tr class="queueinfolist">
+                                <td style="width:40%;float: left;">座位类型</td>
+                                <td style="width:20%;float: left;">等/空</td>
+                                <td style="width:40%;float: left;">                                                                                
+                                    <a id="queue_pass_btn" class="btn blue"><i class="fa fa-archive"></i>过号记录>></a>
                                 </td>
                             </tr>
                             <?php $hasfree=0;$haswaiting=0;
@@ -77,9 +105,9 @@
                                                 if($sitefree>0){$hasfree=1;};
                                                 ?>
                                                 <tr class="queueinfolist">
-                                                    <td style="width:35%;float: left;font-size:15px;"><?php echo $model["name"]."/".$model["min"]."-".$model["max"];?></td>
-                                                    <td style="width:15%;float: left;"><?php echo $queuepersons."/".$sitefree; ?></td>
-                                                    <td style="width:50%;float: left;">
+                                                    <td style="width:40%;float: left;font-size:15px;"><?php echo $model["name"]."/".$model["min"]."-".$model["max"];?></td>
+                                                    <td style="width:20%;float: left;"><?php echo $queuepersons."/".$sitefree; ?></td>
+                                                    <td style="width:40%;float: left;">
                                                         <div style="width:100%;text-align:right;">
                                                             <div class="imgcall" style="width:30%;float:left;">
                                                             <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
@@ -155,12 +183,6 @@
                         intervalQueueList = setInterval(reloadqueuestate,"15000");
                         //reloadqueuestate();
                     });
-                    
-                    
-                    
-                    function unlock(){
-                        
-                    }
                     
                     $('.btnSitePersons').click(function(){
                         
@@ -367,9 +389,13 @@
                         
                     });
                     
-                    $('#queueclose').on(event_clicktouchstart,function(){
-                        layer.close(layer_index_queueno);
-                        layer_index_queueno=0;
+                    $('#queue_pass_btn').on(event_clicktouchstart,function(){
+                        $('#queue_call_list').hide();
+                        $('#queue_pass_list').show();
+                    });
+                    $('#queue_call_btn').on(event_clicktouchstart,function(){
+                        $('#queue_pass_list').hide();
+                        $('#queue_call_list').show();                        
                     });
                     
                 </script>

@@ -153,6 +153,9 @@
                                                 <!--<input style="position:absolute;right:3%;bottom: 4%;width:6.0em;height:3.0em;" type="button" class="btn green" id="layer2_close" value="<?php echo yii::t('app',' 关 闭 ');?>">-->
                                             </div>
                                         </div>
+                                        <DIV style="position: absolute;width:60%;font-size: 2.0em;text-align: center;bottom:10px;">
+                                            <marquee behavior="scroll"><a style="color:#ffffff" href="<?php echo $this->createUrl('default/index',array("companyId"=>$companyId));?>">我要点单系统，由上海物易网络科技有限公司提供！</a></marquee>
+                                        </DIV>
                                     </div>
             </div>
         </div>
