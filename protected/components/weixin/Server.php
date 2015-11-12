@@ -11,20 +11,30 @@
  */
 
 class Server {
-    public $token = 'zhouchao';
+	public $brandId;
+    public $token;
     
     /**
      * 初始化
      * 公众帐号接口信息中URL
      * 通过brandId,我们连接数据库查处出该品牌的token
      */
-    public function __construct() {
+    public function __construct($brandId) {
+    	$this->brandId = $brandId;
+        $this->token();
         $this->checkSignature();
         $this->joinWeixinServer();
         $this->postArr();
         $this->responseMsg();
     }
     
+     /**
+     * 通过$this->brandId的值，从数据库yk_public_account获取该品牌的 token
+     * 因Token参与到加密算法，是区分大小写的，因此TOKEN全部为大写，小写当然也是可以的，规定大写用来避免混乱问题。
+     */
+    public function token() {
+        $this->token = Token::get($this->brandId);
+    }
    /**
      * 微信通信验证
      */
