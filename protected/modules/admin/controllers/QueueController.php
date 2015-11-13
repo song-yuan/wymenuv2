@@ -45,13 +45,47 @@ class QueueController extends Controller
 	public function actionSetQueueStatus()
 	{
             $companyId=Yii::app()->request->getParam('companyId','0');
+            $splid = Yii::app()->request->getParam('splid','0');
+            $stlid = Yii::app()->request->getParam('stlid','0');
             $status=Yii::app()->request->getParam('status','0');
-            $lid=Yii::app()->request->getParam('lid','0');
+            $lid=Yii::app()->request->getParam('lid','0');            
+            
             $sql = "update nb_queue_persons set status=".$status
                     ." where dpid=".$companyId." and lid=".$lid;
             $connect = Yii::app()->db->createCommand($sql);
             $connect->execute();
-            Yii::app()->end(json_encode(array('status'=>true)));	
+            
+            $queueno="00000";
+            $queuelid="0000000000";
+            $sitefree=0;
+            $queueNum=0;
+            
+            $criteria2 = new CDbCriteria;
+            $criteria2->condition =  't.status=0 and t.dpid='.$companyId.' and t.stlid='.$stlid.' and t.splid='.$splid
+                    .' and t.create_at <="'.date('Y-m-d',time()).' 23:59:59" and t.create_at >= "'.date('Y-m-d',time()).' 00:00:00"' ;
+            $criteria2->order = ' t.lid ';
+            $queue2 = QueuePersons::model()->find($criteria2);
+            if(!empty($queue2))
+            {
+                $queueno=$queue2->queue_no;
+                $queuelid=$queue2->lid;
+            }
+                        
+            $sqlfree='select count(*) as sitenum '
+                        . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
+                        . ' and subt.dpid='.$companyId.' and subt.splid='.$splid.' and subt.type_id='.$stlid;
+            $connectfree = Yii::app()->db->createCommand($sqlfree);
+            $sitefree = $connectfree->queryScalar();
+
+            $sqlqueue='select count(qp.lid) as queuepersons'
+                        . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
+                        . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                        . ' and qp.dpid='.$companyId.' and qp.splid='.$splid.' and qp.stlid='.$stlid;
+            $connectqueue = Yii::app()->db->createCommand($sqlqueue);
+            $queueNum = $connectqueue->queryScalar();
+
+            Yii::app()->end(json_encode(array("status"=>true,"callno"=>$queueno,"queuelid"=>$queuelid,"sitefree"=>$sitefree,"queuenum"=>$queueNum)));
+            	
 	}
         
         /**
@@ -92,7 +126,7 @@ class QueueController extends Controller
                 $splid = Yii::app()->request->getParam('splid','0');
                 $stlid = Yii::app()->request->getParam('stlid','0');
                 $callno = Yii::app()->request->getParam('callno','0');
-                $queueno="000000";
+                $queueno="00000";
                 $queuelid="0000000000";
                 $sitefree=0;
                 $queueNum=0;
@@ -163,9 +197,31 @@ class QueueController extends Controller
 	public function actionGetSitePersonsAll()
 	{
             $companyId=Yii::app()->request->getParam('companyid','0');
-            $sitePersons= SiteClass::getSitePersonsAll($companyId);
             
-            Yii::app()->end(json_encode($sitePersons));	
+            $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as stlid,st.name as name,'
+                    . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
+                    . '  from nb_site t'
+                    . ' LEFT JOIN nb_site_type st on t.dpid=st.dpid and t.type_id=st.lid'
+                    . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
+                    . ' LEFT JOIN (select distinct qp.dpid as dpid,qp.stlid as stlid,qp.splid as splid, count(qp.lid) as queuepersons'
+                    . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
+                    . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                    . ' group by dpid,stlid,splid) tq'
+                    . ' on t.dpid=tq.dpid and t.type_id=tq.stlid and t.splid=tq.splid'
+                    . ' LEFT JOIN (select distinct subt.dpid as dpid,subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
+                    . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
+                    . ' group by dpid,splid,typeid) sf'
+                    . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
+                    . ' where t.delete_flag=0 and t.dpid= '.$companyId
+                    . ' group by dpid,splid,typeid,name,min,max'
+                    . ' order by stlid,min';
+            $connect = Yii::app()->db->createCommand($sql);
+            $queueModels = $connect->queryAll();
+            
+            Yii::app()->end(json_encode($queueModels));
+//            $sitePersons= SiteClass::getSitePersonsAll($companyId);
+//            
+//            Yii::app()->end(json_encode($sitePersons));	
 	}
         
         public function actionGetSitePersons(){
