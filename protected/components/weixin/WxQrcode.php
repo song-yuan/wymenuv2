@@ -57,7 +57,7 @@ class WxQrcode {
 		    $scene->update();
 			return $sceneId;
 		}else{
-				$sql ='select max(scene_id) as maxId from nb_scene where brand_id = '.$this->brandId;
+				$sql ='select max(scene_id) as maxId from nb_scene where dpid = '.$this->brandId;
 				$maxSceneArr = $this->db->createCommand($sql)->queryRow();
 				
 				$maxSceneId = $maxSceneArr['maxId'];
@@ -104,7 +104,7 @@ class WxQrcode {
 	 * 二维码存储路径
 	 */
     public function genDir(){
-   		$path = Yii::app()->basePath.'/../upload';
+   		$path = Yii::app()->basePath.'/wymenuv2/./uploads';
    		if($this->brandId){
    			$path .= '/company_'.$this->brandId;
    			if(!is_dir($path)){
@@ -132,7 +132,7 @@ class WxQrcode {
 		$dir = $this->genDir();
 		$dir = substr($this->genDir(),strpos($this->genDir(),'upload'));
 		
-		$fileName = $dir.'/'.Until::genFileName().'.jpg';
+		$fileName = $dir.'/'.Helper::genFileName().'.jpg';
 		
 		file_put_contents($fileName,$qrcodeContents);
 		return $fileName;
