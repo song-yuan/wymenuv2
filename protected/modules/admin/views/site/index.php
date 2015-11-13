@@ -59,6 +59,7 @@
 										<thead>
 											<tr>
 												<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+												<th><?php echo yii::t('app','二维码');?></th>
 												<th><?php echo yii::t('app','座位号');?></th>
 												<th><?php echo yii::t('app','类型');?></th>
 												<th><?php echo yii::t('app','楼层');?></th>
@@ -72,6 +73,7 @@
 										<?php foreach ($models as $model):?>
 											<tr class="odd gradeX">
 												<td><input type="checkbox" class="checkboxes"  value="<?php echo $model->lid;?>" name="ids[]" /></td>
+												<td ><img style="width:100px;" src="<?php echo $model->qrcode;?>" /><br /><a class="btn btn-xs blue" onclick="genQrcode(this);" href="javascript:;" lid="<?php echo $model->lid;?>"><i class="fa fa-qrcode"></i> 生成二维码</a></td>
 												<td ><?php echo $model->serial ;?></td>
 												<td ><?php echo $model->siteType->name ;?></td>
 												<td ><?php if(!empty($model->floor->name)) echo $model->floor->name;?></td>
@@ -128,6 +130,17 @@
 		<?php $this->endWidget(); ?>	
 </div>
 	<script type="text/javascript">
+	function genQrcode(that){
+		id = $(that).attr('lid');
+		var $parent = $(that).parent();
+		$.get('<?php echo $this->createUrl('/admin/site/genWxQrcode',array('companyId'=>$this->companyId));?>/id/'+id,function(data){
+			if(data.status){
+				$parent.find('img').remove();
+				$parent.prepend('<img style="width:100px;" src="'+data.qrcode+'">');
+			}
+			alert(data.msg);
+		},'json');
+	}
 	$(document).ready(function(){
 		$('#site-form').submit(function(){
 			if(!$('.checkboxes:checked').length){
