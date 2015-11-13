@@ -1539,12 +1539,10 @@ class Helper
                                     $printer = $printers_a[$key];
                                     $productids="";
                                     //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试2");
-                                    //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                                     //组装头
                                     $listDataHeader = array("22".Helper::setPrinterTitle($order->company->company_name,8));
                                     //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3");
                                     array_push($listDataHeader,"br");
-                                    //array_push($listData,"22"."---分菜单---"); 
                                     array_push($listDataHeader,"22"."<".$printerway->name.">");
                                     array_push($listDataHeader,"00");
                                     array_push($listDataHeader,"br");                                    
@@ -1577,7 +1575,6 @@ class Helper
                                     $orderTastes=  OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=1',  array(':orderid'=>$order->lid,':dpid'=>$order->dpid));
                                     $orderTasteEx = $order->taste_memo; 
                                     $listDataTail =array("00".str_pad('',48,'-')); 
-                                    //array_push($listData,"00".str_pad('',48,'-'));
                                     $strAllTaste= yii::t('app',"全单口味：").$orderTasteEx;
                                     $existTaste=0;
                                     if(!empty($orderTasteEx))
