@@ -106,6 +106,26 @@ class SiteController extends BackendController
 			$this->redirect(array('site/index' , 'companyId' => $companyId)) ;
 		}
 	}
+	/**
+	 * 生成座位二维码
+	 */
+	public function actionGenWxQrcode(){
+		$id = (int)Yii::app()->request->getParam('id',0);
+		
+		$model = Site::model()->find('lid=:lid and dpid=:dpid',array(':dpid'=>$this->companyId,':lid'=>$id));
+		$data = array('msg'=>'请求失败！','status'=>false,'qrcode'=>'');
+
+		$wxQrcode = new WxQrcode($this->companyId);
+		$qrcode = $wxQrcode->getQrcode(WxQrcode::SITE_QRCODE,$model->lid,strtotime('2050-01-01 00:00:00'));
+		
+		if($qrcode){
+			$model->saveAttributes(array('qrcode'=>$qrcode));
+			$data['msg'] = '生成二维码成功！';
+			$data['status'] = true;
+			$data['qrcode'] = $qrcode;
+		}
+		Yii::app()->end(json_encode($data));
+	}
 	private function getTypes(){
 		$types = SiteType::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
 		$types = $types ? $types : array();
