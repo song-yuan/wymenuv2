@@ -165,86 +165,30 @@
 							<!-- END EXAMPLE TABLE PORTLET-->												
                                                         
                                                         <!-------------queue_call----------->
-                                                        <div id="queue_call_layer" style="display:none;">
-                                                            <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;overflow:scroll;">
-                                                                <div style="width: 52%;margin:4.0em;font-size: 1.5em;float: left;">
-                                                                    <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;">
-                                                                        <label style="font-size:60px;">请卡座</label><br>
-                                                                        <label style="font-size:90px;color:red;font-weight:900;">A3001号</label><br>
-                                                                        <label style="font-size:60px;">前来就餐！</label>
-                                                                    </DIV>  
-                                                                    <DIV style="position: absolute;width:50%;font-size: 1.5em;text-align: center;bottom:10px;">
-                                                                        <marquee behavior="scroll">我要点单系统，由上海物易网络科技有限公司提供！</marquee>
-                                                                    </DIV>
-                                                                </div>
-                                                                <div style="text-align: center;width: 38%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #add;">
-                                                                    <table style="width:100%;">
-                                                                        <tr class="queueinfolist">
-                                                                            <td style="width:35%;float: left;">座位类型</td>
-                                                                            <td style="width:15%;float: left;">等/空</td>
-                                                                            <td style="width:50%;float: left;">                                                                                
-                                                                                <a id="order_list" class="btn blue"><i class="fa fa-archive"></i>过号记录>></a>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <?php $hasfree=0;$haswaiting=0;
-                                                                                //if($typeId == 'queue'): ?>
-                                                                            <?php
-                                                                                if(!empty($queueModels)):
-                                                                                    $temptype=0;
-                                                                                    foreach ($queueModels as $model):?>
-                                                                                        <?php                                                                                             
-                                                                                            $queuepersons=empty($model["queuepersons"])?0:$model["queuepersons"];
-                                                                                            $sitefree=empty($model["sitefree"])?0:$model["sitefree"];
-                                                                                            if($queuepersons>0){$haswaiting=1;};
-                                                                                            if($sitefree>0){$hasfree=1;};
-                                                                                            ?>
-                                                                                            <tr class="queueinfolist">
-                                                                                                <td style="width:35%;float: left;"><?php echo $model["name"]."(".$model["min"]."-".$model["max"]."人)";?></td>
-                                                                                                <td style="width:15%;float: left;"><?php echo $queuepersons."/".$sitefree; ?></td>
-                                                                                                <td style="width:50%;float: left;">
-                                                                                                    <div style="width:100%;text-align:right;">
-                                                                                                        <div class="imgcall" style="width:30%;float:left;">
-                                                                                                        <img src="/wymenuv2/img/queue/call.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
-                                                                                                        </div>
-                                                                                                        <div class="imgeat" style="width:30%;float:left;">
-                                                                                                        <img src="/wymenuv2/img/queue/eat.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
-                                                                                                        </div>
-                                                                                                        <div class="imgpass" style="width:30%;float:left;">
-                                                                                                        <img src="/wymenuv2/img/queue/pass.png" style="width:40px;height:40px;padding:5px;margin:0 5px 0 5px;">
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </td>
-                                                                                            </tr>                                                                                            
-                                                                            <?php                                                                                                 
-                                                                                    endforeach;
-                                                                                endif;?>                                                                                                                                                
-                                                                    </table>                                                                                                                                        
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        
 					
         <script type="text/javascript">
             gtypeid="<?php echo $typeId; ?>";
-            ghasfree=<?php echo $hasfree;?>;
-            ghaswaiting=<?php echo $haswaiting;?>;
+            //ghasfree=<?php //echo $hasfree;?>;
+            //ghaswaiting=<?php //echo $haswaiting;?>;
             var layer_queue_call=0;
             
             $(document).ready(function(){
                 //alert(gtypeid);
                 $('.modalaction').css('display','none');
                 $('.modalaction[typeid='+gtypeid+']').css('display','block');                            
-                if(gtypeid=="others")
-                {
-                    //alert(ghasfree);alert(ghaswaiting);
-                    if(ghasfree>0 && ghaswaiting>0)
-                    {
-                        if (typeof Androidwymenuprinter == "undefined") {
-                            //alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
-                        }else{
-                            Androidwymenuprinter.padAlarm();
-                        }
-                    }
-                }
+//                if(gtypeid=="others")
+//                {
+//                    //alert(ghasfree);alert(ghaswaiting);
+//                    if(ghasfree>0 && ghaswaiting>0)
+//                    {
+//                        if (typeof Androidwymenuprinter == "undefined") {
+//                            //alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
+//                        }else{
+//                            Androidwymenuprinter.padAlarm();
+//                        }
+//                    }
+//                }
             });           
             
             

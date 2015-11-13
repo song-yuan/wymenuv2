@@ -1534,18 +1534,21 @@ class Helper
                             }
                         }else{ ////如果不是整体，分开打印    //////////////
                             foreach ($printer2orderproducts_a as $key=>$values) {
-                                
+                                    //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
+                                    
                                     $printer = $printers_a[$key];
                                     $productids="";
+                                    //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试2");
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                                     //组装头
                                     $listDataHeader = array("22".Helper::setPrinterTitle($order->company->company_name,8));
-                                    array_push($listData,"br");
-                                    //array_push($listData,"22"."---分菜单---"); 
-                                    array_push($listData,"22"."<".$printerway->name.">");
-                                    array_push($listDataHeader,"00");
+                                    //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3");
                                     array_push($listDataHeader,"br");
-
+                                    //array_push($listData,"22"."---分菜单---"); 
+                                    array_push($listDataHeader,"22"."<".$printerway->name.">");
+                                    array_push($listDataHeader,"00");
+                                    array_push($listDataHeader,"br");                                    
+                                    
                                     if($reprint)
                                     {
                                         $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
