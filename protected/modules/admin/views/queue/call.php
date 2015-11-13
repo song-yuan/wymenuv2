@@ -46,49 +46,25 @@
         <div id="queue_call_layer" style="background: url(wymenuv2/img/bg-white-lock.png) repeat;">
                 <div style="width: 100%;background-color: #00FFFFFF;display: inline-block;height:100%;position: fixed;overflow:scroll;">
                     <div style="width: 52%;margin:3.0em;font-size: 1.5em;float: left;">
-                        <div style="display:none;">
-                        <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;margin-top:2.0em;">
-                            <label style="font-size:40px;">请卡座</label><br>
-                            <label style="font-size:90px;color:red;font-weight:900;">A3001号</label><br>
-                            <label style="font-size:40px;">前来就餐！</label>
-                        </DIV>  
+                        <div id="queue_call_content" style="display:none;">
+                            <DIV style="float:left;width:95%;font-size: 1.5em;text-align: center;margin-top:2.0em;">
+                                <label style="font-size:40px;">请<span id="callsitetypename"></span></label><br>
+                                <label style="font-size:90px;color:red;font-weight:900;"><span id="callqueueno" lid="0000000000">A3001</span>号</label><br>
+                                <label style="font-size:40px;">前来就餐！</label>
+                            </DIV> 
+                        </div>
                         <DIV style="position: absolute;width:50%;font-size: 1.5em;text-align: center;bottom:10px;">
                             <marquee behavior="scroll"><a style="color:#ffffff" href="<?php echo $this->createUrl('default/index',array("companyId"=>$companyId));?>">我要点单系统，由上海物易网络科技有限公司提供！</a></marquee>
                         </DIV>
-                        </div>
-                        <div style="width:60%;margin-left:20%;margin-top:7%;">
-                        <img src="/wymenuv2/img/top10/company_<?php echo $companyId; ?>/wx_barcode.jpg">
+                        
+                        <div id="queue_call_img" style="width:60%;margin-left:20%;margin-top:7%;">
+                            <img src="/wymenuv2/img/top10/company_<?php echo $companyId; ?>/wx_barcode.jpg">
                         </div>
                     </div>
                     <div style="text-align: center;width: 38%;position: absolute;top:0px;bottom: 0px;right: 0px;border:1px solid red;background-color: #add;overflow:scroll;">
                         
                         <table id="queue_pass_list" style="width:100%;display: none;">
-                            <tr class="queueinfolist">                                
-                                <td colspan="6" style="text-align:right;">                                                                                
-                                    <a id="queue_call_btn" class="btn blue" style="margin-right: 9%;"><i class="fa fa-archive"></i>排队叫号>></a>
-                                </td>
-                            </tr>
                             
-                            <tr class="queueinfolist">
-                                <td style="width:23%;font-size:15px;"><?php echo "A3002";?></td>
-                                <td style="width:10%;">
-                                    <div class="imgeat" style="width:30%;float:left;">
-                                        <img src="/wymenuv2/img/queue/eat.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
-                                    </div>
-                                </td>
-                                <td style="width:23%;font-size:15px;"><?php echo "A3001";?></td>
-                                <td style="width:10%;">
-                                    <div class="imgeat" style="width:30%;float:left;">
-                                        <img src="/wymenuv2/img/queue/eat.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
-                                    </div>
-                                </td>
-                                <td style="width:23%;font-size:15px;"><?php echo "A3001";?></td>
-                                <td style="width:10%;">
-                                    <div class="imgeat" style="width:30%;float:left;">
-                                        <img src="/wymenuv2/img/queue/eat.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
-                                    </div>
-                                </td>
-                            </tr>
                         </table>
                         
                         <table id="queue_call_list" style="width:100%;">
@@ -112,15 +88,19 @@
                                                 if($sitefree>0){$hasfree=1;};
                                                 ?>
                                                 <tr class="queueinfolist">
-                                                    <td style="width:40%;float: left;font-size:15px;"><?php echo $model["name"]."/".$model["min"]."-".$model["max"];?></td>
+                                                    <td style="width:40%;float: left;font-size:15px;line-height:25px;">
+                                                        
+                                                        <?php echo $model["name"]."/".$model["min"]."-".$model["max"];?>
+                                                        :<span>OOOOO</span>                                                        
+                                                    </td>
                                                     <td style="width:22%;float: left;">
-                                                        <div style="float:left;border: 2px solid green;background-color:#F00;width:50%;">
+                                                        <div style="float:left;border: 2px solid green;background-color:#f00;width:50%;">
                                                             <span style="color:#00FFFFFF;padding: 3px;"><?php echo $queuepersons;?></span></div>
                                                         <div style="float:left;border: 2px solid green;background-color:#858fa6;width:50%;">
                                                             <span style="color:#00FFFFFF;padding: 3px;"><?php echo $sitefree; ?></span></div></td>
                                                     <td style="width:38%;float: left;">
                                                         <div style="width:100%;text-align:right;">
-                                                            <div class="imgcall" style="width:30%;float:left;">
+                                                            <div class="imgcall" style="width:30%;float:left;" stlid="<?php echo $model["stlid"] ?>" splid="<?php echo $model["splid"] ?>" >
                                                             <img src="/wymenuv2/img/queue/call.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
                                                             </div>
                                                             <div class="imgeat" style="width:30%;float:left;">
@@ -157,6 +137,7 @@
                         event_clicktouchstart="touchstart";
                         event_clicktouchend="touchend";
                     }
+                    
                     function reloadqueuestate()
                     {
                         $.ajax({
@@ -185,66 +166,131 @@
                                 }
                             }
                         });
+//                        if(ghasfree>0 && ghaswaiting>0)
+//                        {
+//                            if (typeof Androidwymenuprinter == "undefined") {
+//                                //alert("<?php echo yii::t('app','无法获取PAD设备信息，请在PAD中运行该程序！');?>");
+//                            }else{
+//                                Androidwymenuprinter.padAlarm();
+//                            }
+//                        }
                     }
                     
-                    $(document).ready(function(){
-                        
+                    $(document).ready(function(){                        
                         //叫号后等叫的人数要减少
                         clearInterval(intervalQueueList);
                         intervalQueueList = setInterval(reloadqueuestate,"15000");
                         //reloadqueuestate();
                     });
+                                        
+                    $('#queue_pass_btn').on(event_clicktouchstart,function(){
+                        $('#queue_call_list').hide();
+                        $('#queue_pass_list').load("/wymenuv2/admin/queue/getPassCall/companyId/<?php echo $companyId;?>")
+                        $('#queue_pass_list').show();
+                    });
+                    $('#queue_call_btn').live(event_clicktouchstart,function(){
+                        $('#queue_pass_list').hide();
+                        $('#queue_call_list').show();                        
+                    });
                     
-                    $('.btnSitePersons').click(function(){
-                        
-                        if(layer_index_queueno!=0)
-                        {
-                            return;
-                        }
-                        //出现收银界面
-                        $("#queuemobile").text("1");
-                        layer_index_queueno=layer.open({
-                             type: 1,
-                             shade: false,
-                             title: false, //不显示标题
-                             area: ['70%', '90%'],
-                             content: $('#mobilenobox'),//$('#productInfo'), //捕获的元素
-                             cancel: function(index){
-                                 layer.close(index);
-                                 layer_index_queueno=0;
-                //                        this.content.show();
-                //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
-                             }
-                        });
-                        $(".btnSitePersons").removeClass("selectsiteperson");
-                        $(this).addClass("selectsiteperson");
-                        $("#queuepersonrange").text($(this).attr("personrang"));
-                        return;
-                        ////////////
-                        if(btnlock)
-                        {
-                            return;
-                        }else{
-                            btnlock=true;
-                            setTimeout("btnlock=false", 3000);
-                        }
-                        var stlid=$(this).attr('stlid');
-                        var splid=$(this).attr('splid');
+                    $('.imgcall').on(event_clicktouchstart,function(){
+                        var lid=$("#callqueueno").attr("lid");
                         var dpid="<?php echo $companyId; ?>";
-                        var personrang=$(this).attr('personrang');
-                        var that=$(this);
-                        var printresulttemp=false;
-                        var padid="0000000046";
-                        if (typeof Androidwymenuprinter == "undefined") {
-                            alert("找不到PAD设备");
-                            //return false;
-                        }else{
-                            var padinfo=Androidwymenuprinter.getPadInfo();
-                            padid=padinfo.substr(10,10);
+                        //alert(lid);alert($(this).parents("tr").children('td').eq(1).html());
+                        if(lid=="0000000000")//取最新的并叫号
+                        {
+                            var stlid=$(this).attr("stlid");
+                            var splid=$(this).attr("splid");
+                            var that=$(this);
+                            $.ajax({
+                                 url:"/wymenuv2/admin/queue/nextPerson/companyId/"+dpid+"/stlid/"+stlid+"/splid/"+splid+"/callno/"+callno,
+                                 type:'GET',
+                                 timeout:5000,
+                                 cache:false,
+                                 async:false,
+                                 dataType: "json",
+                                 success:function(msg){
+                                     //alert(msg.callno);alert(msg.queuelid);
+                                      if(msg.status)
+                                      {
+                                          $("#callqueueno").text(msg.callno);
+                                          $("#callqueueno").attr("lid",msg.queuelid);
+                                          lid=msg.queuelid;
+                                          that.parents("tr").children('td').eq(0).find("span").text(msg.callno);
+                                          var div1=that.parents("tr").children('td').eq(1).children('div').eq(0);
+                                          div1.find("span").text(msg.queuenum);
+                                          if(msg.queuenum>0)
+                                          {
+                                              div1.css("background-color","#F00");
+                                          }else{
+                                              div1.css("background-color","");
+                                          }
+                                          var div2=that.parents("tr").children('td').eq(1).children('div').eq(1);
+                                          div2.find("span").text(msg.sitefree);
+                                          if(msg.sitefree>0)
+                                          {
+                                              div2.css("background-color","#858fa6");
+                                          }else{
+                                              div2.css("background-color","");
+                                          }
+//                                          var siteobj=$(".modalaction[typeid='queue'][sid="+gsid+"][istemp="+gistemp+"]");
+//                                          siteobj.removeClass("bg-yellow");
+//                                          siteobj.removeClass("bg-green");                                                    
+                                          //改变背景颜色///
+                                          
+//                                          if(msg.queuenum>0)
+//                                          {                                                
+//                                              if(msg.sitefree>0)
+//                                              {
+//                                                  siteobj.addClass("bg-green");                                                    
+//                                              }else{
+//                                                  siteobj.addClass("bg-yellow");                                                    
+//                                              }
+//                                          }
+                                          //修改排队数和空位数文字..                                             
+//                                          siteobj.find("span[typename='sitefree']").text("空座："+msg.sitefree);
+//                                          siteobj.find("span[typename='queuenum']").text("排队："+msg.queuenum);
+                                      }
+                                 },
+                                 error: function(msg){
+                                     alert("网络可能有问题，再试一次！");
+                                 },
+                                 complete : function(XMLHttpRequest,status){
+                                     if(status=='timeout'){
+                                         alert("网络可能有问题，再试一次！");                                           
+                                     }
+                                 }
+                             });
                         }
-                        //alert(stlid);alert(splid);alert(dpid);alert(personrang);
-                        $.ajax({
-                            url:"/wymenuv2/admin/queue/getSitePersons/companyid/"+dpid+"/stlid/"+stlid+"/splid/"+splid+'/padid/'+padid,
+                        //开始叫号
+                        
+                        var callno=$("#callqueueno").text();
+                        //alert(callno);return;
+                        if(lid=="0000000000")
+                        {
+                            alert("无号可叫！");
+                            return;
+                        }
+                        $("#queue_call_content").show();
+                        $("#queue_call_img").hide();
+                       if (typeof Androidwymenuprinter == "undefined") {
+                            alert("找不到PAD设备");
+                        }else{                            
+                            Androidwymenuprinter.queuecall(callno);                                    
+                        }                                           
+                    });
+
+                    $('#queuepass').on(event_clicktouchstart,function(){
+                       var statu = confirm("<?php echo yii::t('app','确定下一个吗？如果确定本号码将不能再叫号！');?>");
+                        if(!statu){
+                            return false;
+                        }
+                       var callno=$("#callno").text();
+                       var stlid=$(this).attr("stlid");
+                       var splid=$(this).attr("splid");
+                       var dpid="<?php echo $companyId; ?>";
+                       $.ajax({
+                            url:"/wymenuv2/admin/defaultSite/nextPerson/companyId/"+dpid+"/stlid/"+stlid+"/splid/"+splid+"/callno/"+callno,
                             type:'GET',
                             timeout:5000,
                             cache:false,
@@ -253,138 +299,57 @@
                             success:function(msg){
                                  if(msg.status)
                                  {
-                                    that.val(personrang+"人(等叫:"+msg.waitingnum+"组)");                                                                        
-                                        var reprint=true;
-                                        while(reprint)
-                                        {
-                                            var addressdetail=msg.address.split(".");
-                                            if(addressdetail[0]=="com")
-                                           {
-                                               var baudrate=parseInt(addressdetail[2]);
-                                               //alert(baudrate);
-                                                printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],baudrate);
-                                            }else{
-                                                printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
-                                            }
-//                                            printresulttemp=true;
-                                            if(!printresulttemp)
-                                            {
-                                                var reprint = confirm("打印失败，是否重新打印？");
-                                                
-                                            }else{
-                                                reprint=false;
-                                            }                                            
-                                        }
-                                 }else{
-                                     alert(msg.msg);
+                                     $("#callno").text(msg.callno);
+                                     var siteobj=$(".modalaction[typeid='queue'][sid="+gsid+"][istemp="+gistemp+"]");
+                                     siteobj.removeClass("bg-yellow");
+                                     siteobj.removeClass("bg-green");                                                    
+                                     //改变背景颜色///
+                                     if(msg.queuenum>0)
+                                     {                                                
+                                         if(msg.sitefree>0)
+                                         {
+                                             siteobj.addClass("bg-green");                                                    
+                                         }else{
+                                             siteobj.addClass("bg-yellow");                                                    
+                                         }
+                                     }
+                                     //修改排队数和空位数文字..                                             
+                                     siteobj.find("span[typename='sitefree']").text("空座："+msg.sitefree);
+                                     siteobj.find("span[typename='queuenum']").text("排队："+msg.queuenum);
                                  }
-                                  //btnlock=false;
                             },
                             error: function(msg){
-                                //alert("网络可能有问题，再试一次！");
-                                //btnlock=false;
+                                alert("网络可能有问题，再试一次！");
                             },
                             complete : function(XMLHttpRequest,status){
                                 if(status=='timeout'){
-                                    //alert("网络可能有问题，再试一次！");                                            
+                                    alert("网络可能有问题，再试一次！");                                           
                                 }
-                                //btnlock=false;
                             }
                         });
-                        //btnlock=false;
                     });
                     
-                    $('.mobileinput').on(event_clicktouchend,'li',function(){
-                        var num=$(this).text();
-                        var deal=$(this).attr("deal");
-                        var mobileno=$("#queuemobile").text();
-                        if(deal=="A")
-                        {
-                            if(mobileno.length<11)
-                            {
-                                mobileno=mobileno+num;
-                                $("#queuemobile").text(mobileno);
-                            }
-                        }else if(deal=="delone")
-                        {
-                            if(mobileno.length>1)
-                            {                              
-                                mobileno=mobileno.substr(0,mobileno.length-1);
-                                $("#queuemobile").text(mobileno);
-                            }
-                        }else if(deal=="delall")
-                        {
-                            $("#queuemobile").text("1");
-                        }else
+                    $('.imgeat').live(event_clicktouchstart,function(){
+                        var lid=$("#callqueueno").attr("lid");
+                        var dpid="<?php echo $companyId; ?>";
+                        //alert(lid);
+                        if(lid=="0000000000")
                         {
                             return;
                         }
-                    });
-                    
-                    $('#queueno').on(event_clicktouchstart,function(){
-//                        ////////////
-//                        if(btnlock)
-//                        {
-//                            return;
-//                        }else{
-//                            btnlock=true;
-//                            setTimeout("btnlock=false", 3000);
-//                        }
-                        var that=$(".selectsiteperson");
-                        //alert(that.attr('stlid'));
-                        var stlid=that.attr('stlid');
-                        var splid=that.attr('splid');
-                        var dpid="<?php echo $companyId; ?>";
-                        var personrang=that.attr('personrang');
-                        var printresulttemp=false;
-                        var padid="0000000046";
-                        if (typeof Androidwymenuprinter == "undefined") {
-                            alert("找不到PAD设备");
-                            //return false;
-                        }else{
-                            var padinfo=Androidwymenuprinter.getPadInfo();
-                            padid=padinfo.substr(10,10);
-                        }
-                        var mobileno=$("#queuemobile").text();//格式未做判断，发送短信时再判断。
-                        
                         $.ajax({
-                            url:"/wymenuv2/admin/queue/getSitePersons/companyid/"+dpid+"/stlid/"+stlid+"/splid/"+splid+'/padid/'+padid+'/mobileno/'+mobileno,
+                            url:"/wymenuv2/admin/queue/setQueueStatus/companyId/"+dpid+"/lid/"+lid+"/status/2",
                             type:'GET',
                             timeout:5000,
                             cache:false,
                             async:false,
                             dataType: "json",
                             success:function(msg){
-                                 if(msg.status)
-                                 {
-                                    that.val(personrang+"人(等叫:"+msg.waitingnum+"组)");                                                                        
-                                        var reprint=true;
-                                        while(reprint)
-                                        {
-                                            var addressdetail=msg.address.split(".");
-                                           if(addressdetail[0]=="com")
-                                           {
-                                               var baudrate=parseInt(addressdetail[2]);
-                                               //alert(baudrate);
-                                                printresulttemp=Androidwymenuprinter.printComJob(dpid,msg.jobid,addressdetail[1],baudrate);
-                                            }else{
-                                                //alert(dpid);alert(msg.jobid);alert(msg.address);
-                                                printresulttemp=Androidwymenuprinter.printNetJob(dpid,msg.jobid,msg.address);
-                                            }
-//                                            printresulttemp=true;
-                                            if(!printresulttemp)
-                                            {
-                                                var reprint = confirm("打印失败，是否重新打印？");                                                
-                                            }else{
-                                                reprint=false;
-                                            }                                            
-                                        }
-                                 }else{
-                                     alert(msg.msg);
-                                 }
-                                 layer.close(layer_index_queueno);
-                                 layer_index_queueno=0;
-                                  //btnlock=false;
+                                $("#callqueueno").attr("lid","0000000000");
+                                $("#callqueueno").text("00000");
+                                $("#callsitetypename").text("00000");
+                                $("#queue_call_content").hide();
+                                $("#queue_call_img").show();
                             },
                             error: function(msg){
                                 alert("网络可能有问题，再试一次！");
@@ -396,18 +361,7 @@
                                 }
                                 //btnlock=false;
                             }
-                        });
-                        
+                        });                            
                     });
-                    
-                    $('#queue_pass_btn').on(event_clicktouchstart,function(){
-                        $('#queue_call_list').hide();
-                        $('#queue_pass_list').show();
-                    });
-                    $('#queue_call_btn').on(event_clicktouchstart,function(){
-                        $('#queue_pass_list').hide();
-                        $('#queue_call_list').show();                        
-                    });
-                    
                 </script>
                 

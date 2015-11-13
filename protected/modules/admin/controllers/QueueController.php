@@ -11,14 +11,7 @@ class QueueController extends Controller
 	public function actionIndex()
 	{
             $companyId=Yii::app()->request->getParam('companyId','0');
-            $siteTypelid=Yii::app()->request->getParam('siteTypelid','0');
-            $siteTypes = SiteType::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $companyId)) ;
-            if($siteTypelid=='0')
-            {
-                $siteTypelid=empty($siteTypes)?0:$siteTypes[0]->lid;                
-            }
-            //$sitePersons= SiteClass::getSitePersons($companyId, $siteTypelid);
-            $sitePersons= SiteClass::getSitePersonsAll($companyId);
+            
             $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
                     . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
                     . '  from nb_site t'
@@ -40,13 +33,27 @@ class QueueController extends Controller
             $queueModels = $connect->queryAll();
 //            var_dump($sitePersons);exit;
             $this->render('index',array(
-                "companyId"=>$companyId,
-                "siteTypes"=>$siteTypes,
-                'siteTypelid'=>$siteTypelid,
-                "sitePersons"=>$sitePersons,
+                "companyId"=>$companyId,                
                 'queueModels'=>$queueModels
             ));	
 	}
+        
+        /**
+	 * 
+	 * setting the companyId and padId
+	 */
+	public function actionSetQueueStatus()
+	{
+            $companyId=Yii::app()->request->getParam('companyId','0');
+            $status=Yii::app()->request->getParam('status','0');
+            $lid=Yii::app()->request->getParam('lid','0');
+            $sql = "update nb_queue_persons set status=".$status
+                    ." where dpid=".$companyId." and lid=".$lid;
+            $connect = Yii::app()->db->createCommand($sql);
+            $connect->execute();
+            Yii::app()->end(json_encode(array('status'=>true)));	
+	}
+        
         /**
 	 * 
 	 * setting the companyId and padId
@@ -54,7 +61,7 @@ class QueueController extends Controller
 	public function actionCall()
 	{
             $companyId=Yii::app()->request->getParam('companyId','0');
-            $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
+            $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as stlid,st.name as name,'
                     . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
                     . '  from nb_site t'
                     . ' LEFT JOIN nb_site_type st on t.dpid=st.dpid and t.type_id=st.lid'
@@ -70,7 +77,7 @@ class QueueController extends Controller
                     . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
                     . ' where t.delete_flag=0 and t.dpid= '.$companyId
                     . ' group by dpid,splid,typeid,name,min,max'
-                    . ' order by typeid,min';
+                    . ' order by stlid,min';
             $connect = Yii::app()->db->createCommand($sql);
             $queueModels = $connect->queryAll();
             $this->render('call',array(
@@ -78,6 +85,77 @@ class QueueController extends Controller
                 'queueModels' => $queueModels
             ));	
 	}
+        
+        public function actionNextPerson()
+	{
+		$companyId=Yii::app()->request->getParam('companyId');
+                $splid = Yii::app()->request->getParam('splid','0');
+                $stlid = Yii::app()->request->getParam('stlid','0');
+                $callno = Yii::app()->request->getParam('callno','0');
+                $queueno="000000";
+                $queuelid="0000000000";
+                $sitefree=0;
+                $queueNum=0;
+                //Yii::app()->end(json_encode(array("status"=>true,"callno"=>$callno)));
+//                $criteria = new CDbCriteria;
+//                $criteria->condition =  't.status=0 and t.dpid='.$companyId.' and t.stlid='.$stlid.' and t.splid='.$splid.' and queue_no="'.$callno.'"'
+//                        .' and create_at <="'.date('Y-m-d',time()).' 23:59:59" and create_at >= "'.date('Y-m-d',time()).' 00:00:00"' ;
+//                $criteria->order = ' t.lid ';
+//                $queue = QueuePersons::model()->find($criteria);
+//                if(!empty($queue))
+//                {
+//                    $queue->status=2;
+//                    if($queue->save())
+//                    {
+                        $criteria2 = new CDbCriteria;
+                        $criteria2->condition =  't.status=0 and t.dpid='.$companyId.' and t.stlid='.$stlid.' and t.splid='.$splid
+                                .' and t.create_at <="'.date('Y-m-d',time()).' 23:59:59" and t.create_at >= "'.date('Y-m-d',time()).' 00:00:00"' ;
+                        $criteria2->order = ' t.lid ';
+                        $queue2 = QueuePersons::model()->find($criteria2);
+                        if(!empty($queue2))
+                        {
+                            $queueno=$queue2->queue_no;
+                            $queuelid=$queue2->lid;
+                        }
+//                    }
+//                }
+                $sqlfree='select count(*) as sitenum '
+                            . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
+                            . ' and subt.dpid='.$companyId.' and subt.splid='.$splid.' and subt.type_id='.$stlid;
+                $connectfree = Yii::app()->db->createCommand($sqlfree);
+                $sitefree = $connectfree->queryScalar();
+                
+                $sqlqueue='select count(qp.lid) as queuepersons'
+                            . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
+                            . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                            . ' and qp.dpid='.$companyId.' and qp.splid='.$splid.' and qp.stlid='.$stlid;
+                $connectqueue = Yii::app()->db->createCommand($sqlqueue);
+                $queueNum = $connectqueue->queryScalar();
+                
+                Yii::app()->end(json_encode(array("status"=>true,"callno"=>$queueno,"queuelid"=>$queuelid,"sitefree"=>$sitefree,"queuenum"=>$queueNum)));
+        }
+        
+        /**
+	 * 
+	 * setting the companyId and padId
+	 */
+	public function actionGetPassCall()
+	{
+            $companyId=Yii::app()->request->getParam('companyId','0');
+            $sql = 'select qp.lid as lid,qp.dpid as dpid,qp.queue_no as queue_no'
+                    . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=3 '
+                    . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                    . ' and qp.dpid='.$companyId
+                    . ' order by qp.queue_no';
+                    
+            $connect = Yii::app()->db->createCommand($sql);
+            $queueModels = $connect->queryAll();
+            $this->renderpartial('callpass',array(
+                "companyId"=>$companyId,
+                'queueModels' => $queueModels
+            ));	
+	}
+        
         /**
 	 * 
 	 * setting the companyId and padId

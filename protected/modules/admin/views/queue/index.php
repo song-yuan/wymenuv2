@@ -87,8 +87,7 @@
                                                     <td style="width:30%;float: left;">
                                                         <div style="border: 2px solid green;background-color:green;">
                                                             <span style="color:#00FFFFFF;padding: 5px;"><?php echo $queuepersons;?></span></div>
-                                                    </td>
-                                                    
+                                                    </td>                                                    
                                                 </tr>                                                                                            
                                 <?php                                                                                                 
                                         endforeach;
@@ -171,12 +170,14 @@
                             dataType: "json", 
                             success:function(msg){
                                 $.each(msg,function(key,value){
-                                    var siteobj=$("input[splid="+value.splid+"][stlid="+value.typeid+"]");
+                                    var siteobj=$(".queueinfolist[splid="+value.splid+"][stlid="+value.typeid+"]");
                                     if(value.queuepersons==null)
                                     {
                                         value.queuepersons=0;
                                     }
-                                    siteobj.val(value.min+'-'+value.max+'人 (等叫:'+value.queuepersons+'组)');
+                                    //alert(value.queuepersons);
+                                    siteobj.children('td').eq(1).find("span").text(value.queuepersons);
+                                    //alert(siteobj.children('td').eq(1).find("span").text());
                                  });
                             },
                             error: function(msg){
@@ -190,13 +191,7 @@
                         });
                     }
                     
-                    $(document).ready(function(){
-                        var sitetypelid="<?php echo $siteTypelid; ?>";
-                        $('.btnSitePersons').css('display','none');
-                        //alert(sitetypelid);
-                        $(".queuesitepersonslist").find("input[stlid="+sitetypelid+"]").each(function(){
-                            $(this).css('display','block');
-                        });
+                    $(document).ready(function(){                       
                         //叫号后等叫的人数要减少
                         clearInterval(intervalQueueList);
                         intervalQueueList = setInterval(reloadqueuestate,"15000");
@@ -317,6 +312,7 @@
                                     //that.val(personrang+"人(等叫:"+msg.waitingnum+"组)"); 
                                     //alert(msg.waitingnum);
                                         that.children('td').eq(1).find("span").text(msg.waitingnum);
+                                        $("#queuemobile").text("1");
                                         var reprint=true;
                                         while(reprint)
                                         {
