@@ -99,7 +99,7 @@
                                                         <div style="float:left;border: 2px solid green;background-color:#858fa6;width:50%;">
                                                             <span style="color:#00FFFFFF;padding: 3px;"><?php echo $sitefree; ?></span></div></td>
                                                     <td style="width:38%;float: left;">
-                                                        <div style="width:100%;text-align:right;">
+                                                        <div style="width:100%;text-align:right;" lid="0000000000" queueno="00000">
                                                             <div class="imgcall" style="width:30%;float:left;" stlid="<?php echo $model["stlid"] ?>" splid="<?php echo $model["splid"] ?>" >
                                                             <img src="/wymenuv2/img/queue/call.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
                                                             </div>
@@ -194,7 +194,9 @@
                     });
                     
                     $('.imgcall').on(event_clicktouchstart,function(){
-                        var lid=$("#callqueueno").attr("lid");
+                        //var lid=$("#callqueueno").attr("lid");
+                        var lid=$(this).parents("div").attr("lid");
+                        //alert(lid);
                         var dpid="<?php echo $companyId; ?>";
                         //alert(lid);alert($(this).parents("tr").children('td').eq(1).html());
                         if(lid=="0000000000")//取最新的并叫号
@@ -213,9 +215,12 @@
                                      //alert(msg.callno);alert(msg.queuelid);
                                       if(msg.status)
                                       {
-                                          $("#callqueueno").text(msg.callno);
-                                          $("#callqueueno").attr("lid",msg.queuelid);
+                                          //$("#callqueueno").text(msg.callno);
+                                          //$("#callqueueno").attr("lid",msg.queuelid);
+                                          that.parents("div").attr("lid",msg.queuelid);
+                                          that.parents("div").attr("queueno",msg.callno);
                                           lid=msg.queuelid;
+                                          //alert(lid);                                          
                                           that.parents("tr").children('td').eq(0).find("span").text(msg.callno);
                                           var div1=that.parents("tr").children('td').eq(1).children('div').eq(0);
                                           div1.find("span").text(msg.queuenum);
@@ -269,8 +274,14 @@
                         if(lid=="0000000000")
                         {
                             alert("无号可叫！");
+                            $("#queue_call_content").hide();
+                            $("#queue_call_img").show();
                             return;
                         }
+                        $("#callqueueno").text(that.parents("div").attr("queueno"));
+                        $("#callqueueno").attr("lid",that.parents("div").attr("lid"));
+                        $("#queue_call_content").show();
+                        $("#queue_call_img").hide();
                         $("#queue_call_content").show();
                         $("#queue_call_img").hide();
                        if (typeof Androidwymenuprinter == "undefined") {
