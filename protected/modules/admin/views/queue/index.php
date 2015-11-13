@@ -31,7 +31,7 @@
     	line-height:50px;
         float: left;
         width: 28%;
-        height: 2.5em;
+        height: 2.4em;
         border: 1px solid #add;
         margin: 5px;
         font-size: 20px;
@@ -102,7 +102,7 @@
         <!--------mobile no box begin-------->
         <div id="mobilenobox" style="display:block;width:70%;margin-left:28%;">
                                         <div>
-                                            <div style="width: 95%;margin:1.0em;font-size: 1.2em;">
+                                            <div style="width: 95%;margin:0.2em;font-size: 1.2em;">
                                                 <label style="font-size:1.5em;color: #000088;">温馨提示：</label><span id="queuepersonrange" style="color:red;"></span>人。
                                                 输入手机号后取号，或扫描二维码自动取号<span style="color:red;font-size:25px;">(未开通)</span>，到号时，会收到消息通知，如不需要，直接点击取号。
                                             </div>                                            
