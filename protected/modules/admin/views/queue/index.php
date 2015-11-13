@@ -83,7 +83,7 @@
                                                 if($sitefree>0){$hasfree=1;};
                                                 ?>
                                                 <tr class="queueinfolist" splid="<?php echo $model['splid']; ?>" stlid="<?php echo $model['typeid']; ?>">
-                                                    <td style="width:70%;float: left;"><?php echo $model["name"]."(".$model["min"]."-".$model["max"]."人)";?></td>
+                                                    <td style="width:70%;float: left;line-height:25px;"><?php echo $model["name"]."(".$model["min"]."-".$model["max"]."人)";?></td>
                                                     <td style="width:30%;float: left;">
                                                         <div style="border: 2px solid green;background-color:green;">
                                                             <span style="color:#00FFFFFF;padding: 5px;"><?php echo $queuepersons;?></span></div>
