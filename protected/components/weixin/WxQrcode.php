@@ -104,7 +104,7 @@ class WxQrcode {
 	 * 二维码存储路径
 	 */
     public function genDir(){
-   		$path = Yii::app()->basePath.'/wymenuv2/./uploads';
+   		$path = Yii::app()->basePath.'/../uploads';
    		if($this->brandId){
    			$path .= '/company_'.$this->brandId;
    			if(!is_dir($path)){
