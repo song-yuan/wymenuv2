@@ -83,7 +83,7 @@
                                                 if($sitefree>0){$hasfree=1;};
                                                 ?>
                                                 <tr class="queueinfolist" splid="<?php echo $model['splid']; ?>" stlid="<?php echo $model['typeid']; ?>">
-                                                    <td style="width:70%;float: left;"><?php echo $model["name"]."(".$model["min"]."-".$model["max"]."人)";?></td>
+                                                    <td style="width:70%;float: left;line-height:25px;"><?php echo $model["name"]."(".$model["min"]."-".$model["max"]."人)";?></td>
                                                     <td style="width:30%;float: left;">
                                                         <div style="border: 2px solid green;background-color:green;">
                                                             <span style="color:#00FFFFFF;padding: 5px;"><?php echo $queuepersons;?></span></div>
@@ -106,7 +106,7 @@
                                                 <label style="font-size:1.5em;color: #000088;">温馨提示：</label><span id="queuepersonrange" style="color:red;"></span>人。
                                                 输入手机号后取号，或扫描二维码自动取号<span style="color:red;font-size:25px;">(未开通)</span>，到号时，会收到消息通知，如不需要，直接点击取号。
                                             </div>                                            
-                                            <div style="float: left;width:60%;margin-top: 2.0em;">
+                                            <div style="float: left;width:60%;margin-top: 1.0em;">
                                                 <DIV class="edit_span" selectid="minus" style="margin-left: 15%;width:70%;font-size:1.5em;">手机号码：<span style="background-color:#9acfea;display:-moz-inline-box;display:inline-block;width: 50%;" id="queuemobile">1</span></DIV>
                                                 <DIV style="float:left;width:100%;border:0px solid red;">
                                                  <div style="margin-left:0px;border:0px solid red;" class="mobileinput">
@@ -128,7 +128,7 @@
                                               </DIV> 
                                             </div>
                                             <div style="float: left;width:38%;height: 100%;">
-                                                <div style="text-align:center;width: 85%;margin:1.0em;font-size:1.5em;height: 100%;">                                                    
+                                                <div style="text-align:center;width: 85%;margin:0.2em;font-size:1.5em;height: 100%;">                                                    
                                                     <input style="width:80%;margin-left:10%;height:1.5em;font-size: 1.5em;" type="button" class="btn green" id="queueno" value="取  号">                                                    
                                                     <img style="width:80%;margin-left:10%;margin-top:7%;" src="/wymenuv2/img/top10/company_<?php echo $companyId; ?>/wx_barcode.jpg">
                                                     
