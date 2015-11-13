@@ -700,7 +700,9 @@ class Helper
                 array_push($listData,"00"."领号时间:".date('Y-m-d H:i:s',time()));
                 array_push($listData,"br");
                 array_push($listData,"00".str_pad('',48,'-'));
-                array_push($listData,"22".$sitename.$queueno);
+                array_push($listData,"22"."  ".$sitename);
+                array_push($listData,"br");
+                array_push($listData,"22"."  ".$queueno);
                 array_push($listData,"br");
                 array_push($listData,"00"."您之前还有".$waitingno."桌客人在等待！");
                 array_push($listData,"br");
