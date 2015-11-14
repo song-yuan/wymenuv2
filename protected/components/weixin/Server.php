@@ -84,6 +84,7 @@ class Server {
 			$time = time();
             //添加关注，自动回复
             if($this->event == 'subscribe') {
+            	$this->text('欢迎关注我要点单官方微信！'.$this->postArr['EventKey']);
             	$this->subscribe(); // 注册用户，暂未回复  ，目前只在此处注册用户
                 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
                 	$this->sceneRun();
