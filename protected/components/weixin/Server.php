@@ -27,6 +27,7 @@ class Server {
        	 	$this->joinWeixinServer();
         }
         $this->postArr();
+        $this->brandUser();
         $this->responseMsg();
     }
     
@@ -141,7 +142,6 @@ class Server {
   	public function sceneRun() {
   		$this->sceneId();
 		$this->scene();
-		$this->text('欢迎关注我要点单官方微信！'.$this->scene['dpid']);exit;
 		$this->sceneScanLog();
 	   	if(time() < $this->scene['expire_time']) {	//场景未过期
 	   		// 推送消息：非门店场景推送场景消息
