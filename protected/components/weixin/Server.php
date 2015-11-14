@@ -139,7 +139,6 @@ class Server {
      * 首先要写入记录到yk_scene_scan_log表，因为下面的输出终止程序的执行。
      */
   	public function sceneRun() {
-  		$this->text('欢迎关注我要点单官方微信！');exit;
   		$this->sceneId();
 		$this->scene();
 		$this->sceneScanLog();
@@ -202,6 +201,7 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
+		$this->text('欢迎关注我要点单官方微信！'.$this->sceneId);exit;
 		$sql = 'SELECT * FROM nb_scene 
 				WHERE scene_id = ' .$this->sceneId. '
 				AND dpid =' .$this->brandId;
