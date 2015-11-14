@@ -100,12 +100,23 @@
 								<td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
 								<td><?php echo $model->company->company_name;?></td>
 								<td><?php 
+								//if($model->paytype==0){echo yii::t('app','现金支付');
 									switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
-                                                                case 1: echo  yii::t('app','微信支付');break; 
-                                                                case 2: echo  yii::t('app','支付宝支付');break; 
-                                                                case 3: echo  $model->paymentMethod->name;break;
-                                                                case 4: echo  yii::t('app','会员卡支付');break; 
-                                                                case 5: echo  yii::t('app','银联支付');break;  default :echo ''; }
+                                                             case 1: echo  yii::t('app','微信支付');break; 
+                                                             case 2: echo  yii::t('app','支付宝支付');break; 
+                                                             case 3: echo  $model->paymentMethod->name;break;
+                                                                //case 4: echo  yii::t('app','会员卡支付');break; 
+                                                             case 5: echo  yii::t('app','银联支付');break;   }
+                                                                
+								//}elseif ($model->paytype==1){
+								//	echo yii::t('app','微信支付');
+								//}elseif ($model->paytype==2){
+								//	echo yii::t('app','支付宝支付');
+								//}elseif ($model->paytype==3){
+								//	echo  $model->paymentMethod->name;
+								///}elseif ($model->paytype==5){
+								//	echo yii::t('app','银联支付');
+								//}
 											
 										?></td>
 								
@@ -115,6 +126,18 @@
 							</tr>
 						<?php $a++;?>
 						<?php endforeach;?>	
+						<?php foreach ($money as $moneys):?>
+						<?php 
+						if(!empty($moneys)):?>
+						<tr class="odd gradeX">
+						<td><?php if($text==1){echo $moneys['y_all'];}elseif($text==2){ echo $moneys['y_all'].-$moneys['m_all'];}else{echo $moneys['y_all'].-$moneys['m_all'].-$moneys['d_all'];}?></td>
+						<td><?php echo $moneys['company_name'];?></td>
+						<td><?php echo yii::t('app','会员卡支付');?></td>
+						<td><?php echo $moneys['all_huiyuan'];?></td>
+						<td><?php echo yii::t('app','请注意这是会员卡支付（每一页的数据都是一样的）');?></td>
+						</tr>
+						<?php endif;?>
+						<?php endforeach;?>
 						<!-- end foreach-->
 						<?php endif;?>
 						</tbody>
