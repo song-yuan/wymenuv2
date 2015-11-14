@@ -86,7 +86,6 @@ class Server {
 			$time = time();
             //添加关注，自动回复
             if($this->event == 'subscribe') {
-            	$this->text('aaaa');exit;
             	$this->subscribe(); // 注册用户
                 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
                 	$this->sceneRun();
@@ -97,7 +96,6 @@ class Server {
               
             //场景事件推送 此处注意参数必须加引号
 			else if($this->event == 'scan'){
-				$this->text('aaaa');exit;
 				$this->sceneRun();
 			}
 			
