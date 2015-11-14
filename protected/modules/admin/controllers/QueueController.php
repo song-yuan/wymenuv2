@@ -4,7 +4,7 @@ class QueueController extends Controller
 {
 	public $layout = '/layouts/queue';
         
-	/**
+	/**getSitePersons
 	 * 
 	 * setting the companyId and padId
 	 */
