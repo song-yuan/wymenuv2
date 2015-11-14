@@ -21,7 +21,6 @@ class Server {
      */
     public function __construct($brandId) {
     	$this->brandId = $brandId;
-    	echo $this->brandId;exit;
         if(isset($_GET['echostr'])){
         	$this->token();
         	$this->checkSignature();
@@ -87,7 +86,7 @@ class Server {
 			$time = time();
             //添加关注，自动回复
             if($this->event == 'subscribe') {
-            	$this->text($time);exit;
+            	$this->text('aaaa');exit;
             	$this->subscribe(); // 注册用户
                 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
                 	$this->sceneRun();
@@ -98,7 +97,7 @@ class Server {
               
             //场景事件推送 此处注意参数必须加引号
 			else if($this->event == 'scan'){
-				$this->text($time);exit;
+				$this->text('aaaa');exit;
 				$this->sceneRun();
 			}
 			
@@ -208,7 +207,7 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
-		$sql = 'SELECT * FROM yk_scene 
+		$sql = 'SELECT * FROM nb_scene 
 				WHERE scene_id = ' .$this->sceneId. '
 				AND dpid =' .$this->brandId;
 		$this->scene = Yii::app()->db->createCommand($sql)->queryRow();
@@ -270,7 +269,7 @@ class Server {
      * 当普通用户取消关注公众帐号时，需要在yk_brand_user中把unsubscribe设置为1
      */
     public function unsubscribe() {
-    	$sql = 'update yk_brand_user set unsubscribe = 1, unsubscribe_time =  ' . time() . ' where openid = "' . $this->postArr['FromUserName'] .'"';
+    	$sql = 'update nb_brand_user set unsubscribe = 1, unsubscribe_time =  ' . time() . ' where openid = "' . $this->postArr['FromUserName'] .'"';
         Yii::app()->db->createCommand($sql)->execute();
     }
     
