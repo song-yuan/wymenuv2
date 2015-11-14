@@ -73,7 +73,7 @@
 										<?php foreach ($models as $model):?>
 											<tr class="odd gradeX">
 												<td><input type="checkbox" class="checkboxes"  value="<?php echo $model->lid;?>" name="ids[]" /></td>
-												<td ><img style="width:100px;" src="<?php echo '/wymenuv2/./'.$model->qrcode;?>" /><br /><a class="btn btn-xs blue" onclick="genQrcode(this);" href="javascript:;" lid="<?php echo $model->lid;?>"><i class="fa fa-qrcode"></i> 生成二维码</a></td>
+												<td ><?php if($model->qrcode):?><img style="width:100px;" src="<?php echo '/wymenuv2/./'.$model->qrcode;?>" /><?php endif;?><br /><a class="btn btn-xs blue" onclick="genQrcode(this);" href="javascript:;" lid="<?php echo $model->lid;?>"><i class="fa fa-qrcode"></i> 生成二维码</a></td>
 												<td ><?php echo $model->serial ;?></td>
 												<td ><?php echo $model->siteType->name ;?></td>
 												<td ><?php if(!empty($model->floor->name)) echo $model->floor->name;?></td>
