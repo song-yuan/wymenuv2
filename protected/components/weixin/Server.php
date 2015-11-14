@@ -21,9 +21,11 @@ class Server {
      */
     public function __construct($brandId) {
     	$this->brandId = $brandId;
-        $this->token();
-        $this->checkSignature();
-        $this->joinWeixinServer();
+        if(isset($_GET['echostr'])){
+        	$this->token();
+        	$this->checkSignature();
+       	 	$this->joinWeixinServer();
+        }
         $this->postArr();
         $this->responseMsg();
     }
@@ -84,16 +86,19 @@ class Server {
 			$time = time();
             //添加关注，自动回复
             if($this->event == 'subscribe') {
-            	$this->subscribe(); // 注册用户，暂未回复  ，目前只在此处注册用户
+            	$this->subscribe(); // 注册用户
                 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
                 	$this->sceneRun();
-                }else 
+                }else {
                 	echo $this->generalResponse();
+                }
             }
               
             //场景事件推送 此处注意参数必须加引号
-			else if($this->event == 'scan')
+			else if($this->event == 'scan'){
 				$this->sceneRun();
+			}
+			
             
        		//取消关注，自动回复
 			else if($this->event == 'unsubscribe') {
@@ -160,25 +165,23 @@ class Server {
 	 * 根据场景进行回复消息
 	 */
 	public function sceneResponse() {
-//		$tableArr = array(
-//			1=>array('title', 'intro', 'pic', 'nb_site', 'lid'),
-//		);
-//		$sceneType = $this->scene['type'];
-//		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title, '.$tableArr[$sceneType][1].' as description, '.$tableArr[$sceneType][2].' as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
-//		$query = Yii::app()->db->createCommand($sql)->queryRow();
-//		$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
-//
-//		if($query) { 
-//			$urlArr = array(
-//				2=>array('market/brands/discountlistinfo', 'id'),
-//			);
-//			if($sceneType == 8) {
-//				JoinWall::insert($this->scene['id'], $this->userId);
-//				return $this->text($query['description']);
-//			}
-//			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->scene['id']));
-//			return $this->news(array($query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
-//		}else
+		$this->text('欢迎关注我要点单官方微信！');exit;
+		$tableArr = array(
+			1=>array('site_level', '欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
+		);
+		$sceneType = $this->scene['type'];
+		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title, '.$tableArr[$sceneType][1].' as description, '.$tableArr[$sceneType][2].' as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
+		$this->text($sql);
+		$query = Yii::app()->db->createCommand($sql)->queryRow();
+		$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
+
+		if($query) { 
+			$urlArr = array(
+				1=>array('weixin/product','id'),
+			);
+			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->scene['id']));
+			return $this->news(array($query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
+		}else
 			return $this->generalResponse();
 	}
 	
@@ -199,7 +202,7 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
-		$sql = 'SELECT * FROM yk_scene 
+		$sql = 'SELECT * FROM nb_scene 
 				WHERE scene_id = ' .$this->sceneId. '
 				AND dpid =' .$this->brandId;
 		$this->scene = Yii::app()->db->createCommand($sql)->queryRow();
@@ -261,7 +264,7 @@ class Server {
      * 当普通用户取消关注公众帐号时，需要在yk_brand_user中把unsubscribe设置为1
      */
     public function unsubscribe() {
-    	$sql = 'update yk_brand_user set unsubscribe = 1, unsubscribe_time =  ' . time() . ' where openid = "' . $this->postArr['FromUserName'] .'"';
+    	$sql = 'update nb_brand_user set unsubscribe = 1, unsubscribe_time =  ' . time() . ' where openid = "' . $this->postArr['FromUserName'] .'"';
         Yii::app()->db->createCommand($sql)->execute();
     }
     

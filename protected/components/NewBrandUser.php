@@ -47,7 +47,7 @@ class NewBrandUser {
         	'dpid'=>$this->brandId,
         	'openid'=>$this->openId,
         	'card_id'=>$this->newBrandUserCardId(),
-        	'user_rank'=>null,
+        	'user_rank'=>1,
         	'create_time'=>$time,
         	'update_time'=>$time, 	
         );
@@ -63,7 +63,7 @@ class NewBrandUser {
      * 如果该品牌之前没有会员卡号（没有会员），则用会员卡号的规则，写入第一个会员卡号。规则：(10000 + $brandId)*1000000000 + 801;
      */
     public function newBrandUserCardId() {
-        $sql = 'SELECT max(card_id) as maxCardId FROM yk_brand_user WHERE brand_id = ' . $this->brandId;
+        $sql = 'SELECT max(card_id) as maxCardId FROM nb_brand_user WHERE dpid = ' . $this->brandId;
         $data = Yii::app()->db->createCommand($sql)->queryRow(); 
         if($data['maxCardId'] >= 10000000000000) 
 			return $data['maxCardId'] + 1;
