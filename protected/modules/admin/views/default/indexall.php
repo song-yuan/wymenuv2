@@ -1723,6 +1723,12 @@
                 var orderstatus=$(this).parent().attr("order_status");
                 var curnum = $(this).parent().find('span[class="badge"]').text().replace(",","")
                 var setid=$(this).parent().attr("setid");
+                var oprole="<?php echo Yii::app()->user->role; ?>";
+                if(oprole > '2')
+                {
+                    alert("没有退菜权限！");
+                    return;
+                }
                 //alert(curnum);
                 $("#selectproductnumfordelete").val(curnum);
                 if(orderstatus!="0")//退菜是单个的

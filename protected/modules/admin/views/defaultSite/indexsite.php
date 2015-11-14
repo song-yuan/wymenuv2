@@ -359,23 +359,11 @@
                         return;
                     }
                     else if(showbutton=="queue_call")
-                    {
-//                        if(layer_queue_call!=0)
-//                        {
-//                            return;
-//                        }
-//                        layer_queue_call=layer.open({
-//                         type: 1,
-//                         shade: true,
-//                         //closeBtn: false,
-//                         title: false, //不显示标题
-//                         area: ['100%', '100%'],
-//                         content: $('#queue_call_layer'),//$('#productInfo'), //捕获的元素
-//                         cancel: function(index){
-//                                layer.close(index);
-//                                layer_queue_call=0;            
-//                            }
-//                        });
+                    {                        
+                        return;
+                    }
+                    else if(showbutton=="queue_take")
+                    {                        
                         return;
                     }
                     pxbox.find('.button-content').load('<?php echo $this->createUrl('defaultSite/button',array('companyId'=>$this->companyId));?>/sid/'+sid+'/status/'+status+'/istemp/'+istemp+'/typeId/'+typeId, '', function(){                        

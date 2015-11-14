@@ -15,21 +15,21 @@
                             <tr class="queueinfolist">
                                 <td style="width:23%;font-size:15px;"><?php echo $model["queue_no"];?></td>
                                 <td style="width:10%;">
-                                    <div class="imgeat" lid="<?php echo $model["lid"]; ?>" style="width:30%;float:left;">
+                                    <div class="imgeat2" lid="<?php echo $model["lid"]; ?>" style="width:30%;float:left;">
                                         <img src="/wymenuv2/img/queue/eat.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
                                     </div>
                                 </td>
                             <?php elseif($rowd==1): ?>
                                 <td style="width:23%;font-size:15px;"><?php echo $model["queue_no"];?></td>
                                 <td style="width:10%;">
-                                    <div class="imgeat" lid="<?php echo $model["lid"]; ?>" style="width:30%;float:left;">
+                                    <div class="imgeat2" lid="<?php echo $model["lid"]; ?>" style="width:30%;float:left;">
                                         <img src="/wymenuv2/img/queue/eat.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
                                     </div>
                                 </td>
                             <?php elseif($rowd==2): ?>
                                 <td style="width:23%;font-size:15px;"><?php echo $model["queue_no"];?></td>
                                 <td style="width:10%;">
-                                    <div class="imgeat" lid="<?php echo $model["lid"]; ?>" style="width:30%;float:left;">
+                                    <div class="imgeat2" lid="<?php echo $model["lid"]; ?>" style="width:30%;float:left;">
                                         <img src="/wymenuv2/img/queue/eat.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
                                     </div>
                                 </td>                                
@@ -41,13 +41,13 @@
                         if($rowd==0):?>
                                 <td style="width:23%;font-size:15px;">00000</td>
                                 <td style="width:10%;">
-                                    <div class="imgeat" lid="0000000000" style="width:30%;float:left;">
+                                    <div class="imgeat2" lid="0000000000" style="width:30%;float:left;">
                                         <img src="/wymenuv2/img/queue/eat.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
                                     </div>
                                 </td>
                                 <td style="width:23%;font-size:15px;">00000</td>
                                 <td style="width:10%;">
-                                    <div class="imgeat" lid="0000000000" style="width:30%;float:left;">
+                                    <div class="imgeat2" lid="0000000000" style="width:30%;float:left;">
                                         <img src="/wymenuv2/img/queue/eat.png" style="width:60px;padding:5px;margin:0 5px 0 5px;">
                                     </div>
                                 </td>                                
@@ -66,20 +66,20 @@
                         $('.imgeat2').live(event_clicktouchstart,function(){
                             var lid=$(this).attr("lid");
                             var dpid="<?php echo $companyId; ?>";
+                            //alert(lid);
                             if(lid=="0000000000")
                             {
                                 return;
                             }
                             $.ajax({
-                                url:"/wymenuv2/admin/queue/setQueueStatus/companyId/"+dpid+"/lid/"+lid+"/status/2",
+                                url:"/wymenuv2/admin/queue/setQueueStatus/companyId/"+dpid+"/stlid/0000000000/splid/0000000000/lid/"+lid+"/status/2",
                                 type:'GET',
                                 timeout:5000,
                                 cache:false,
                                 async:false,
                                 dataType: "json",
                                 success:function(msg){
-                                     $('#queue_pass_list').hide();
-                                    //$('#queue_pass_list').load("/wymenuv2/admin/queue/getPassCall/companyId/<?php echo $companyId;?>")
+                                    $('#queue_pass_list').hide();
                                     $('#queue_call_list').show();
                                 },
                                 error: function(msg){
