@@ -165,7 +165,7 @@ class Server {
 	 * 根据场景进行回复消息
 	 */
 	public function sceneResponse() {
-		$this->text('欢迎关注我要点单官方微信！');
+		$this->text('欢迎关注我要点单官方微信！');exit;
 		$tableArr = array(
 			1=>array('site_level', '欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
 		);
