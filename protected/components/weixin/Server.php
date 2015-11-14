@@ -175,7 +175,7 @@ class Server {
 
 		if($query) { 
 			$urlArr = array(
-				2=>array('weixin/product','id'),
+				1=>array('weixin/product','id'),
 			);
 			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->scene['id']));
 			return $this->news(array($query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
