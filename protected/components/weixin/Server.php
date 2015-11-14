@@ -21,8 +21,8 @@ class Server {
      */
     public function __construct($brandId) {
     	$this->brandId = $brandId;
-        $this->token();
         if(isset($_GET['echostr'])){
+        	$this->token();
         	$this->checkSignature();
        	 	$this->joinWeixinServer();
         }
@@ -86,6 +86,7 @@ class Server {
 			$time = time();
             //添加关注，自动回复
             if($this->event == 'subscribe') {
+            	$this->text($time);exit;
             	$this->subscribe(); // 注册用户
                 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
                 	$this->sceneRun();
