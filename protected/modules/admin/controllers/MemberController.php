@@ -10,6 +10,13 @@ class MemberController extends BackendController
 		return true;
 	}
 	public function actionIndex() {
+                if(Yii::app()->user->role > '2')
+                {
+                    $this->redirect(array('default/error2',
+                                     'companyId'=>$this->companyId,
+                                     'title' => "没有权限"                               
+                             ));  
+                }
 		$id = 0;
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
