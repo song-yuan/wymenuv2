@@ -170,6 +170,7 @@ class Server {
 		);
 		$sceneType = $this->scene['type'];
 		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title, '.$tableArr[$sceneType][1].' as description, '.$tableArr[$sceneType][2].' as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
+		$this->text($sql);
 		$query = Yii::app()->db->createCommand($sql)->queryRow();
 		$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 
