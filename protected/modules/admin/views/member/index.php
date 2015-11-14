@@ -148,8 +148,9 @@
 	<!-- END PAGE CONTENT-->
 	<script>
 	jQuery(document).ready(function(){
-		 var $modal = $('.modal');
-   		 $('.add_btn').on('click', function(){
+            var $modal = $('.modal');
+            $('.add_btn').on('click', function(){
+                     
 	    	pid = $(this).attr('pid');
 	        $modal.find('.modal-content').load('<?php echo $this->createUrl('member/charge' , array('companyId' => $this->companyId));?>', '', function(){
 	          $modal.modal();
