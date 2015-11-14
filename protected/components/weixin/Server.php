@@ -165,11 +165,11 @@ class Server {
 	 * 根据场景进行回复消息
 	 */
 	public function sceneResponse() {
+		$this->text('欢迎关注我要点单官方微信！');
 		$tableArr = array(
 			1=>array('site_level', '欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
 		);
 		$sceneType = $this->scene['type'];
-		$this->text('欢迎关注我要点单官方微信！'.$sceneType);
 		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title, '.$tableArr[$sceneType][1].' as description, '.$tableArr[$sceneType][2].' as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
 		$this->text($sql);
 		$query = Yii::app()->db->createCommand($sql)->queryRow();
