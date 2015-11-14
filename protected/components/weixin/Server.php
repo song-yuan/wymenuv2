@@ -21,6 +21,7 @@ class Server {
      */
     public function __construct($brandId) {
     	$this->brandId = $brandId;
+    	echo $this->brandId;exit;
         if(isset($_GET['echostr'])){
         	$this->token();
         	$this->checkSignature();
