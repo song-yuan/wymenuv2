@@ -139,7 +139,7 @@
                     }else{
                         //alert("touch");
                         event_clicktouchstart="touchstart";
-                        event_clicktouchend="touchend";
+                        event_clicktouchend="touchend"; 
                     }
                     
                     function reloadqueuestate()

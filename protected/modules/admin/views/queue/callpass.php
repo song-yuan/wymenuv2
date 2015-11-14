@@ -64,13 +64,17 @@
 
                         <script language="JavaScript" type="text/JavaScript">
                         $('.imgeat2').live(event_clicktouchstart,function(){
+                            var statu = confirm("<?php echo yii::t('app','确定就餐吗？如果确定本号码将不能再叫号！');?>");
+                            if(!statu){
+                                return false;
+                            }
                             var lid=$(this).attr("lid");
                             var dpid="<?php echo $companyId; ?>";
                             //alert(lid);
                             if(lid=="0000000000")
                             {
                                 return;
-                            }
+                            } 
                             $.ajax({
                                 url:"/wymenuv2/admin/queue/setQueueStatus/companyId/"+dpid+"/stlid/0000000000/splid/0000000000/lid/"+lid+"/status/2",
                                 type:'GET',

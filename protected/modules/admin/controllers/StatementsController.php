@@ -92,6 +92,36 @@ class StatementsController extends BackendController
 		$text = Yii::app()->request->getParam('text');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
+		$db = Yii::app()->db;
+		if($text==1){
+			if($str){
+				$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$str.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc';
+				$money = Yii::app()->db->createCommand($sql)->queryAll();
+			}else{
+			$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc';
+				$money = Yii::app()->db->createCommand($sql)->queryAll();
+			}
+		}elseif ($text==2){
+			if($str){
+				$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$str.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+				$money = Yii::app()->db->createCommand($sql)->queryAll();
+			}else{
+				$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+				$money = Yii::app()->db->createCommand($sql)->queryAll();
+			}
+		}elseif ($text==3){
+			if($str){
+				$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$str.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+				$money = Yii::app()->db->createCommand($sql)->queryAll();
+			}else{
+				$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+				$money = Yii::app()->db->createCommand($sql)->queryAll();
+			}
+		}
+		//$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		//$money = Yii::app()->db->createCommand($sql)->queryRow();
+		//var_dump($money);exit;
 		$criteria = new CDbCriteria;
 //		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.reality_total) as all_reality,t.paytype,t.payment_method_id,t.order_status';
 //		$criteria->with = array('company','paymentMethod');
@@ -113,9 +143,9 @@ class StatementsController extends BackendController
 //		}
 		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id';
 		$criteria->with = array('company','order8','paymentMethod');
-		$criteria->condition = ' t.dpid='.$this->companyId ;
+		$criteria->condition = 't.paytype != 4 and t.dpid='.$this->companyId ;
 		if($str){
-			$criteria->condition = ' t.dpid in('.$str.')';
+			$criteria->condition = 't.paytype != 4 and t.dpid in('.$str.')';
 		}
 		$criteria->addCondition("order8.update_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("order8.update_at <='$end_time 23:59:59'");
@@ -146,6 +176,7 @@ class StatementsController extends BackendController
 				'text'=>$text,
 				'str'=>$str,
 				'comName'=>$comName,
+				'money'=>$money,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));
@@ -1081,12 +1112,40 @@ class StatementsController extends BackendController
 			$text = Yii::app()->request->getParam('text');
 			$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 			$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+			
+			$db = Yii::app()->db;
+			if($text==1){
+				if($str){
+					$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$str.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc';
+					$money = Yii::app()->db->createCommand($sql)->queryAll();
+				}else{
+					$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,year(t.update_at) order by year(t.update_at) asc,t.dpid asc';
+					$money = Yii::app()->db->createCommand($sql)->queryAll();
+				}
+			}elseif ($text==2){
+				if($str){
+					$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$str.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+					$money = Yii::app()->db->createCommand($sql)->queryAll();
+				}else{
+					$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+					$money = Yii::app()->db->createCommand($sql)->queryAll();
+				}
+			}elseif ($text==3){
+				if($str){
+					$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$str.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+					$money = Yii::app()->db->createCommand($sql)->queryAll();
+				}else{
+					$sql='select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_huiyuan,t.paytype,t.payment_method_id,t1.company_name from nb_order_pay t left join nb_company t1 on (t.dpid = t1.dpid) where t.paytype = 4 and t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" group by t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+					$money = Yii::app()->db->createCommand($sql)->queryAll();
+				}
+			}
+			
 			$criteria = new CDbCriteria;
 			$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id';
 			$criteria->with = array('company','order8','paymentMethod');
-			$criteria->condition = ' t.dpid='.$this->companyId ;
+			$criteria->condition = 't.paytype !=4 and t.dpid='.$this->companyId ;
 			if($str){
-				$criteria->condition = ' t.dpid in('.$str.')';
+				$criteria->condition = 't.paytype !=4 and t.dpid in('.$str.')';
 			}
 			$criteria->addCondition("order8.update_at >='$begin_time 00:00:00'");
 			$criteria->addCondition("order8.update_at <='$end_time 23:59:59'");
@@ -1205,14 +1264,6 @@ class StatementsController extends BackendController
 						->setCellValue('D'.$j,$v->all_reality)
 						->setCellValue('E'.$j);
 					break;
-					case 4:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
-						->setCellValue('D'.$j,$v->all_reality)
-						->setCellValue('E'.$j);
-					break;
 					case 5:
 						$objPHPExcel->setActiveSheetIndex(0)
 						->setCellValue('A'.$j,$v->y_all)
@@ -1263,17 +1314,9 @@ class StatementsController extends BackendController
 						->setCellValue('D'.$j,$v->all_reality)
 						->setCellValue('E'.$j);
 					break;
-					case 4:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
-						->setCellValue('D'.$j,$v->all_reality)
-						->setCellValue('E'.$j);
-					break;
 					case 5:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
 						->setCellValue('D'.$j,$v->all_reality)
@@ -1320,17 +1363,9 @@ class StatementsController extends BackendController
 						->setCellValue('D'.$j,$v->all_reality)
 						->setCellValue('E'.$j);
 					break;
-					case 4:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
-						->setCellValue('D'.$j,$v->all_reality)
-						->setCellValue('E'.$j);
-					break;
 					case 5:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
 						->setCellValue('D'.$j,$v->all_reality)
@@ -1368,6 +1403,40 @@ class StatementsController extends BackendController
 				$objPHPExcel->getActiveSheet()->getStyle('N'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 				//细边框样式引用
 				//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
+			$j++;
+		}
+		foreach ($money as $w){
+			//print_r($w);
+			if($text==1){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$j,$w['y_all'])
+				->setCellValue('B'.$j,$w['company_name'])
+				->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+				->setCellValue('D'.$j,$w['all_huiyuan'])
+				->setCellValue('E'.$j);
+			}
+			elseif($text==2){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$j,$w['y_all'].'-'.$w['m_all'])
+				->setCellValue('B'.$j,$w['company_name'])
+				->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+				->setCellValue('D'.$j,$w['all_huiyuan'])
+				->setCellValue('E'.$j);
+			}
+			elseif($text==3){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$j,$w['y_all'].'-'.$w['m_all'].'-'.$w['d_all'])
+				->setCellValue('B'.$j,$w['company_name'])
+				->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+				->setCellValue('D'.$j,$w['all_huiyuan'])
+				->setCellValue('E'.$j);
+			}
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('5ef130');
+			//设置字体靠左
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':C'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objPHPExcel->getActiveSheet()->getStyle('N'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			
 			$j++;
 		}	
 		//大边框样式引用
