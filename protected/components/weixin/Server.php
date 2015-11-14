@@ -167,7 +167,7 @@ class Server {
 	 */
 	public function sceneResponse() {
 		$tableArr = array(
-			1=>array('site_level', '欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
+			1=>array('serial', '欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
 		);
 		$sceneType = $this->scene['type'];
 		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title, "'.$tableArr[$sceneType][1].'" as description, "'.$tableArr[$sceneType][2].'" as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
@@ -179,7 +179,7 @@ class Server {
 				1=>array('weixin/product','id'),
 			);
 			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->scene['id']));
-			return $this->news(array($query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
+			return $this->news(array('桌号:'.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
 		}else
 			return $this->generalResponse();
 	}
