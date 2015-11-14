@@ -139,6 +139,7 @@ class Server {
      * 首先要写入记录到yk_scene_scan_log表，因为下面的输出终止程序的执行。
      */
   	public function sceneRun() {
+  		$this->text('欢迎关注我要点单官方微信！');exit;
   		$this->sceneId();
 		$this->scene();
 		$this->sceneScanLog();
@@ -165,7 +166,6 @@ class Server {
 	 * 根据场景进行回复消息
 	 */
 	public function sceneResponse() {
-		$this->text('欢迎关注我要点单官方微信！');exit;
 		$tableArr = array(
 			1=>array('site_level', '欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
 		);
