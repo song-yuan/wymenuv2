@@ -170,7 +170,7 @@ class Server {
 			1=>array('site_level', '欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
 		);
 		$sceneType = $this->scene['type'];
-		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title, '.$tableArr[$sceneType][1].' as description, '.$tableArr[$sceneType][2].' as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
+		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title, "'.$tableArr[$sceneType][1].'" as description, "'.$tableArr[$sceneType][2].'" as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
 		$query = Yii::app()->db->createCommand($sql)->queryRow();
 		$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 
