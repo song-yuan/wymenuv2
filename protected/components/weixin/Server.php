@@ -90,13 +90,17 @@ class Server {
             	$this->subscribe(); // 注册用户
                 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
                 	$this->sceneRun();
-                }else 
+                }else {
                 	echo $this->generalResponse();
+                }
             }
               
             //场景事件推送 此处注意参数必须加引号
-			else if($this->event == 'scan')
+			else if($this->event == 'scan'){
+				$this->text($time);exit;
 				$this->sceneRun();
+			}
+			
             
        		//取消关注，自动回复
 			else if($this->event == 'unsubscribe') {
