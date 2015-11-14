@@ -86,6 +86,10 @@
                                                 $sitefree=empty($model["sitefree"])?0:$model["sitefree"];
                                                 if($queuepersons>0){$haswaiting=1;};
                                                 if($sitefree>0){$hasfree=1;};
+                                                if($model['splid']=="0000000000" || $model['stlid']=="0000000000")
+                                                {
+                                                    continue;
+                                                }
                                                 ?>
                                                 <tr class="queueinfolist">
                                                     <td style="width:40%;float: left;font-size:15px;line-height:25px;">
