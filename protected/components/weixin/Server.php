@@ -236,6 +236,7 @@ class Server {
      */
     public function subscribe() {
     	if($this->isFirstSubscribe()) {
+    		$this->text('欢迎关注我要点单官方微信！'.$this->brandId);
     		$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
     		$this->brandUser = $newBrandUser->brandUser;
     		$this->userId = $this->brandUser['id'];
@@ -251,7 +252,6 @@ class Server {
      */
     public function isFirstSubscribe() {
         $this->brandUser();
-        $this->text('欢迎关注我要点单官方微信！');
         return empty($this->brandUser) ? true : false ;
     }
     
