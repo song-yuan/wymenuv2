@@ -81,6 +81,10 @@
                                                 $sitefree=empty($model["sitefree"])?0:$model["sitefree"];
                                                 if($queuepersons>0){$haswaiting=1;};
                                                 if($sitefree>0){$hasfree=1;};
+                                                if($model['splid']=="0000000000" || $model['typeid']=="0000000000")
+                                                {
+                                                    continue;
+                                                }
                                                 ?>
                                                 <tr class="queueinfolist" splid="<?php echo $model['splid']; ?>" stlid="<?php echo $model['typeid']; ?>">
                                                     <td style="width:70%;float: left;line-height:25px;"><?php echo $model["name"]."(".$model["min"]."-".$model["max"]."人)";?></td>
