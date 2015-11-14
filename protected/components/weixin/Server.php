@@ -141,6 +141,7 @@ class Server {
   	public function sceneRun() {
   		$this->sceneId();
 		$this->scene();
+		$this->text('欢迎关注我要点单官方微信！'.$this->scene['dpid']);exit;
 		$this->sceneScanLog();
 	   	if(time() < $this->scene['expire_time']) {	//场景未过期
 	   		// 推送消息：非门店场景推送场景消息
@@ -205,7 +206,6 @@ class Server {
 				WHERE scene_id = ' .$this->sceneId. '
 				AND dpid =' .$this->brandId;
 		$this->scene = Yii::app()->db->createCommand($sql)->queryRow();
-		$this->text('欢迎关注我要点单官方微信！'.$this->scene['dpid']);exit;
 		if(!$this->scene)
 			throw new Exception('该品牌没有此场景信息');
 	}
