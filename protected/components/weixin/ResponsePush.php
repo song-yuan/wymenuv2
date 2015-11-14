@@ -36,10 +36,7 @@ class ResponsePush {
 	 */
 	public static function news($fromUserName, $toUserName, $arr, $brandId) {
 		if(ArrayUtil::depth($arr) == 1) {	// 一维数组，图文一条条目
-			if(isset($v['title']))
-				return sprintf(PushTemplates::NEWS, $fromUserName, $toUserName, time(),   $arr['title'], $arr['description'], Brand::fullPicUrl($arr['pic_url'], $brandId), URLOauth::redirect($brandId, $arr['url']));
-			else
-				return sprintf(PushTemplates::NEWS, $fromUserName, $toUserName, time(),   $arr[0], $arr[1], Brand::fullPicUrl($arr[2], $brandId), URLOauth::redirect($brandId, $arr[3]));
+				return sprintf(PushTemplates::NEWS, $fromUserName, $toUserName, time(), $arr[0], $arr[1], $arr[2], $arr[3]);
 		}else {	// 二维数组，图文多条条目
 			$item = "<item>
 				 <Title><![CDATA[%s]]></Title> 
@@ -50,9 +47,9 @@ class ResponsePush {
 			$itemStr = '';
 			foreach($arr as $v) {
 				if(isset($v['title'])) 
-					$itemStr .= sprintf($item, $v['title'], $v['description'], Brand::fullPicUrl($v['pic_url'], $brandId), URLOauth::redirect($brandId, $v['url']));
+					$itemStr .= sprintf($item, $v['title'], $v['description'], $v['pic_url'], $v['url']);
 				else
-					$itemStr .= sprintf($item, $v[0], $v[1], Brand::fullPicUrl($v[2], $brandId), URLOauth::redirect($brandId, $v[3]));
+					$itemStr .= sprintf($item, $v[0], $v[1], $v[2], $v[3]);
 			}
 			// 注意，不能在此处 $tbl . $itemStr ."</Articles>..."，然后再sprintf因此URLOauth中的网址包含了转义字符%s等，造成sprintf参数太少的错误
 			$tbl =  "<xml>
