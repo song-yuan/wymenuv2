@@ -213,7 +213,8 @@
                                         
                     $('#queue_pass_btn').on(event_clicktouchstart,function(){
                         $('#queue_call_list').hide();
-                        $('#queue_pass_list').load("/wymenuv2/admin/queue/getPassCall/companyId/<?php echo $companyId;?>")
+                        var randtime=new Date().getTime()+""+Math.round(Math.random()*100);
+                        $('#queue_pass_list').load("/wymenuv2/admin/queue/getPassCall/companyId/<?php echo $companyId;?>/rand/"+randtime);
                         $('#queue_pass_list').show();
                     });
                     
