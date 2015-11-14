@@ -86,7 +86,6 @@ class Server {
 			$time = time();
             //添加关注，自动回复
             if($this->event == 'subscribe') {
-            	$this->text('欢迎关注我要点单官方微信！');exit;
             	$this->subscribe(); // 注册用户
                 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
                 	$this->sceneRun();
@@ -198,7 +197,6 @@ class Server {
     		$this->sceneId = substr($this->postArr['EventKey'], 8);
    		else if($this->event == 'scan') 
    			$this->sceneId = $this->postArr['EventKey'];
-   			$this->text('欢迎关注我要点单官方微信！'.$this->sceneId);
 	}
 		
 	/**
@@ -253,6 +251,7 @@ class Server {
      */
     public function isFirstSubscribe() {
         $this->brandUser();
+        $this->text('欢迎关注我要点单官方微信！');
         return empty($this->brandUser) ? true : false ;
     }
     
