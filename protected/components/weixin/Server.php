@@ -172,7 +172,7 @@ class Server {
 		
 		$sceneType = $this->scene['type'];
 		if($sceneType==1){
-			Yii::app()->session['qrcode-'.$this->userId] = $this->userId;
+			Yii::app()->session['qrcode-'.$this->userId] = $this->sceneId;
 		}
 		
 		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title, "'.$tableArr[$sceneType][1].'" as description, "'.$tableArr[$sceneType][2].'" as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
