@@ -251,7 +251,7 @@ class Server {
      * @return Boolean 如果是如此关注返回true，否则返回失败
      */
     public function isFirstSubscribe() {
-        $this->brandUser();
+    	$this->brandUser();
         return empty($this->brandUser) ? true : false ;
     }
     
