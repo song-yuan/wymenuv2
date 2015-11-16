@@ -206,10 +206,8 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
-		$this->text('欢迎关注我要点单官方微信！'.$this->sceneId);
-		$sql = 'SELECT * FROM nb_scene 
-				WHERE scene_id = ' .$this->sceneId. '
-				AND dpid =' .$this->brandId;
+		$sql = 'SELECT * FROM nb_scene WHERE scene_id = ' .$this->sceneId. ' AND dpid =' .$this->brandId;
+		$this->text($sql);
 		$this->scene = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!$this->scene)
 			throw new Exception('该品牌没有此场景信息');
