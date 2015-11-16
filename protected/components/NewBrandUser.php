@@ -58,7 +58,7 @@ class NewBrandUser {
         Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
         $this->userId = $lastInsertId = Yii::app()->db->getLastInsertID();
         
-         $this->brandUser = BrandUser::get($lastInsertId);
+         $this->brandUser = BrandUser::get($lastInsertId,$this->brandId);
     }
 	
 	/**
