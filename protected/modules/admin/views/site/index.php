@@ -136,7 +136,7 @@
 		$.get('<?php echo $this->createUrl('/admin/site/genWxQrcode',array('companyId'=>$this->companyId));?>/id/'+id,function(data){
 			if(data.status){
 				$parent.find('img').remove();
-				$parent.prepend('<img style="width:100px;" src="'+data.qrcode+'">');
+				$parent.prepend('<img style="width:100px;" src="/wymenuv2/./'+data.qrcode+'">');
 			}
 			alert(data.msg);
 		},'json');

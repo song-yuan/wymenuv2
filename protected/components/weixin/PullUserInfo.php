@@ -67,6 +67,9 @@ class PullUserInfo {
 				'nickname'=>$this->response->nickname,
 				'head_icon'=>$this->response->headimgurl,
 				'sex'=>$this->response->sex,
+				'country'=>$this->response->country,
+				'province'=>$this->response->province,
+				'city'=>$this->response->city,
 			);
 			Yii::app()->db->createCommand()->update('nb_brand_user', $updateArr, 'lid='.$this->userId.' and dpid='.$this->brandId);
 			
