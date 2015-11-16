@@ -33,6 +33,10 @@ class WeixinController extends BackendController
 		));
 	}
 	public function actionMenu() {
+		$newBrandUser = new NewBrandUser('ddfdaerer', 0000000006);
+    	$brandUser = $newBrandUser->brandUser;
+    	var_dump($brandUser);exit;
+		exit;
 		$data = ' {
 				     "button":[
 				     {	
