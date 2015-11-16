@@ -16,7 +16,11 @@ class WeixinController extends BackendController
         }
         if(Yii::app()->request->isPostRequest){
         	$postData = Yii::app()->request->getPost('WeixinServiceAccount');
-        	$postData['dpid'] = $this->companyId;
+        	$se=new Sequence("weixin_service_account");
+            $postData['lid'] = $se->nextval();
+            $postData['dpid'] = $this->companyId;
+            $postData['create_at'] = date('Y-m-d H:i:s',time());
+            $postData['update_at'] = date('Y-m-d H:i:s',time());
         	$model->attributes = $postData;
         	if($model->save()){
         		Yii::app()->user->setFlash('success' ,yii::t('app', '设置成功'));

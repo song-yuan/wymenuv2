@@ -4,13 +4,14 @@
  * This is the model class for table "nb_scene".
  *
  * The followings are the available columns in table 'nb_scene':
- * @property integer $dpid
+ * @property string $lid
+ * @property string $dpid
+ * @property string $create_at
+ * @property string $update_at
  * @property integer $scene_id
  * @property integer $type
  * @property integer $id
  * @property integer $expire_time
- * @property integer $create_time
- * @property integer $update_time
  */
 class Scene extends CActiveRecord
 {
@@ -40,11 +41,13 @@ class Scene extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('dpid, scene_id', 'required'),
-			array('dpid, scene_id, type, id, expire_time, create_time, update_time', 'numerical', 'integerOnly'=>true),
+			array('update_at, scene_id, expire_time', 'required'),
+			array('scene_id, type, id, expire_time', 'numerical', 'integerOnly'=>true),
+			array('lid, dpid', 'length', 'max'=>10),
+			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('dpid, scene_id, type, id, expire_time, create_time, update_time', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, scene_id, type, id, expire_time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,13 +68,14 @@ class Scene extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
+			'lid' => 'Lid',
 			'dpid' => 'Dpid',
+			'create_at' => 'Create At',
+			'update_at' => 'Update At',
 			'scene_id' => 'Scene',
 			'type' => 'Type',
 			'id' => 'ID',
 			'expire_time' => 'Expire Time',
-			'create_time' => 'Create Time',
-			'update_time' => 'Update Time',
 		);
 	}
 
@@ -86,13 +90,14 @@ class Scene extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('dpid',$this->dpid);
+		$criteria->compare('lid',$this->lid,true);
+		$criteria->compare('dpid',$this->dpid,true);
+		$criteria->compare('create_at',$this->create_at,true);
+		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('scene_id',$this->scene_id);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('id',$this->id);
 		$criteria->compare('expire_time',$this->expire_time);
-		$criteria->compare('create_time',$this->create_time);
-		$criteria->compare('update_time',$this->update_time);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
