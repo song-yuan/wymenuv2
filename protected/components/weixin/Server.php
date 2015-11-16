@@ -72,10 +72,10 @@ class Server {
      * 此处memcache()方法是设置用于登录的$this->login
      */
     public function brandUser() {
-    	$this->text('欢迎关注我要点单官方微信！');
         $sql = 'select * from nb_brand_user where openid = "' . $this->postArr['FromUserName'] . '"';
         $this->brandUser = Yii::app()->db->createCommand($sql)->queryRow();
         $this->userId = $this->brandUser ? $this->brandUser['id'] : null;
+        $this->text('欢迎关注我要点单官方微信！');
     }    
 	/**
 	 * 响应微信服务器
