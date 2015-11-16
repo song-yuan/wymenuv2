@@ -206,6 +206,7 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
+		$this->text('欢迎关注我要点单官方微信！'.$this->sceneId );
 		$sql = 'SELECT * FROM nb_scene 
 				WHERE scene_id = ' .$this->sceneId. '
 				AND dpid =' .$this->brandId;
