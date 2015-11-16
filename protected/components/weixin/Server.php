@@ -221,9 +221,8 @@ class Server {
 			$time = time();
 			$se = new Sequence("scene_scan_log");
             $lid = $se->nextval();
-			$sql = 'INSERT INTO nb_scene_scan_log(lid, dpid, create_at, update_at, scene_id, user_id) VALUES(' . $lid . ','.$this->brandId.', '.date('Y-m-d H:i:s',$time).', '.date('Y-m-d H:i:s',$time).','.$this->sceneId.' , '.$this->userId.')';
+			$sql = 'INSERT INTO nb_scene_scan_log(lid, dpid, create_at, update_at, scene_id, user_id) VALUES(' . $lid . ','.$this->brandId.', "'.date('Y-m-d H:i:s',$time).'","'.date('Y-m-d H:i:s',$time).'",'.$this->sceneId.' , '.$this->userId.')';
 			Yii::app()->db->createCommand($sql)->execute();
-		
 		}
 	}
     
