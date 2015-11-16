@@ -239,7 +239,7 @@ class Server {
     	if($this->isFirstSubscribe()) {
     		$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
     		$this->brandUser = $newBrandUser->brandUser;
-    		$this->userId = $this->brandUser['id'];
+    		$this->userId = $this->brandUser['lid'];
     	}else {
             if($this->brandUser['unsubscribe'])
             	$this->cancelUnsubscribe();
