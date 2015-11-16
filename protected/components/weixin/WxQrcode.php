@@ -31,7 +31,7 @@ class WxQrcode {
 		    $scene->update();
 			return $sceneId;
 		}else{
-			    $sql ='select max(scene_id) as maxId from yk_scene where dpid = '.$this->brandId;
+			    $sql ='select max(scene_id) as maxId from nb_scene where dpid = '.$this->brandId;
 				$maxSceneArr = $this->db->createCommand($sql)->queryRow();
 				
 				$maxSceneId = $maxSceneArr['maxId'];
