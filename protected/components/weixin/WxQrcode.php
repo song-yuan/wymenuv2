@@ -31,11 +31,17 @@ class WxQrcode {
 		    $scene->update();
 			return $sceneId;
 		}else{
+			    $sql ='select max(scene_id) as maxId from yk_scene where dpid = '.$this->brandId;
+				$maxSceneArr = $this->db->createCommand($sql)->queryRow();
+				
+				$maxSceneId = $maxSceneArr['maxId'];
+				$newSceneId = $maxSceneId+1;
+				
 				$scene = new Scene;
 				$time = time();
 				$se=new Sequence("scene");
             	$lid = $se->nextval();
-				$scene->attributes = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$lid,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime);
+				$scene->attributes = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$newSceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime);
 				$scene->save();				
 		}
 		return $scene->scene_id;

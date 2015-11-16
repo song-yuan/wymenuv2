@@ -199,7 +199,6 @@ class Server {
     		$this->sceneId = substr($this->postArr['EventKey'], 8);
    		else if($this->event == 'scan') 
    			$this->sceneId = $this->postArr['EventKey'];
-   	   $this->text('欢迎关注我要点单官方微信！'.$this->sceneId);
 	}
 		
 	/**

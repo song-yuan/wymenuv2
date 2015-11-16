@@ -43,13 +43,16 @@ class NewBrandUser {
      */
     public function newBrandUser() {
   		$time = time();
+  		$se = new Sequence("brand_user");
+        $lid = $se->nextval();
         $insertBrandUserArr = array(
+        	'lid'=>$lid,
         	'dpid'=>$this->brandId,
         	'openid'=>$this->openId,
         	'card_id'=>$this->newBrandUserCardId(),
-        	'user_rank'=>1,
-        	'create_time'=>$time,
-        	'update_time'=>$time, 	
+        	'user_level_lid'=>1,
+        	'create_at'=>date('Y-m-d H:i:s',$time),
+        	'update_at'=>date('Y-m-d H:i:s',$time), 	
         );
         
         Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
