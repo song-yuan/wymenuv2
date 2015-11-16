@@ -21,32 +21,6 @@ class WxQrcode {
 		$this->account = WeixinServiceAccount::model()->find('dpid=:brandId',array(':brandId'=>$this->brandId));
 	}
 	/**
-	 * 生成access token
-	 */
-	public function genAccessToken(){
-		$accessTokenUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET';
-		if(!$this->account){
-			return false;
-		}
-		if($this->isOverdue()){
-			$accessTokenUrl = strtr($accessTokenUrl,array('APPID'=>$this->account['appid'],'APPSECRET'=>$this->account['appsecret']));
-			$result = json_decode(file_get_contents($accessTokenUrl),true);
-			if(!isset($result['access_token'])){
-				return false;
-			}
-			$this->account->expire = time()+$result['expires_in'];
-			$this->account->access_token = $result['access_token'];
-			$this->account->save();
-		}
-		return $this->account->access_token;
-	}
-	/**
-	 * token是否过期
-	 */
-	public function isOverdue(){
-		return $this->account->expire < time();
-	}
-	/**
 	 * 获取场景ID
 	 */
 	public function getSceneId($type,$id,$expireTime = null){
@@ -57,15 +31,11 @@ class WxQrcode {
 		    $scene->update();
 			return $sceneId;
 		}else{
-				$sql ='select max(scene_id) as maxId from nb_scene where dpid = '.$this->brandId;
-				$maxSceneArr = $this->db->createCommand($sql)->queryRow();
-				
-				$maxSceneId = $maxSceneArr['maxId'];
-				$newSceneId = $maxSceneId+1;
-				
 				$scene = new Scene;
 				$time = time();
-				$scene->attributes = array('dpid'=>$this->brandId,'scene_id'=>$newSceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime,'create_time'=>$time,'update_time'=>$time);
+				$se=new Sequence("scene");
+            	$lid = $se->nextval();
+				$scene->attributes = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$lid,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime);
 				$scene->save();				
 		}
 		return $scene->scene_id;
@@ -74,7 +44,8 @@ class WxQrcode {
 	 * 生成限制二维码
 	 */
 	public function getLimitQrcodeTicket($sceneId){
-		$accessToken = $this->genAccessToken();
+		 $accessTokenObj = new AccessToken($this->brandId);
+         $accessToken = $accessTokenObj->accessToken;
 		if(!$accessToken){
 			return false;
 		}
