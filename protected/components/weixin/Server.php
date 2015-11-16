@@ -240,7 +240,6 @@ class Server {
     		$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
     		$this->brandUser = $newBrandUser->brandUser;
     		$this->userId = $this->brandUser['lid'];
-    		 $this->text('欢迎关注我要点单官方微信！'.$this->userId);
     	}else {
             if($this->brandUser['unsubscribe'])
             	$this->cancelUnsubscribe();
