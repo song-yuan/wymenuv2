@@ -206,6 +206,7 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
+		$this->text('欢迎关注我要点单官方微信！'.$this->sceneId);
 		$sql = 'SELECT * FROM nb_scene WHERE scene_id = ' .$this->sceneId. ' AND dpid =' .$this->brandId;
 		$this->scene = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!$this->scene)
@@ -251,7 +252,6 @@ class Server {
      * @return Boolean 如果是如此关注返回true，否则返回失败
      */
     public function isFirstSubscribe() {
-    	$this->brandUser();
         return empty($this->brandUser) ? true : false ;
     }
     
