@@ -206,7 +206,6 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
-		$this->text('欢迎关注我要点单官方微信！'.$this->sceneId);
 		$sql = 'SELECT * FROM nb_scene WHERE scene_id = ' .$this->sceneId. ' AND dpid =' .$this->brandId;
 		$this->scene = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!$this->scene)
@@ -222,6 +221,7 @@ class Server {
 			$time = time();
 			$se = new Sequence("scene_scan_log");
             $lid = $se->nextval();
+            $this->text('欢迎关注我要点单官方微信！'.$this->userId.'dd'.$lid);
 			$sql = 'INSERT INTO nb_scene_scan_log(lid, dpid, create_at, update_at, scene_id, user_id) VALUES(' . $lid . ','.$this->brandId.', "'.date('Y-m-d H:i:s',$time).'","'.date('Y-m-d H:i:s',$time).'",'.$this->sceneId.' , '.$this->userId.')';
 			Yii::app()->db->createCommand($sql)->execute();
 		}
