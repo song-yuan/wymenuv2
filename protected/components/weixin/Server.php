@@ -206,6 +206,7 @@ class Server {
 	 * @return Mixed array or null
 	 */
 	public function scene() {
+		$this->text('欢迎关注我要点单官方微信！'.$this->sceneId);
 		$sql = 'SELECT * FROM nb_scene 
 				WHERE scene_id = ' .$this->sceneId. '
 				AND dpid =' .$this->brandId;
@@ -219,7 +220,6 @@ class Server {
      * 1.如果是渠道，同时插入到yk_promote_log表，因为scene_id日后可能不再关联这个渠道。
      */
 	public function sceneScanLog() {
-		$this->text('欢迎关注我要点单官方微信！'.$this->sceneId);
 		if($this->sceneId) {
 			$time = time();
 			$se = new Sequence("scene_scan_log");
