@@ -73,9 +73,8 @@ class Server {
      */
     public function brandUser() {
         $sql = 'select * from nb_brand_user where openid = "' . $this->postArr['FromUserName'] . '"';
-        $this->text($sql);
         $this->brandUser = Yii::app()->db->createCommand($sql)->queryRow();
-        $this->userId = $this->brandUser ? $this->brandUser['id'] : null;
+        $this->userId = $this->brandUser ? $this->brandUser['lid'] : null;
     }    
 	/**
 	 * 响应微信服务器
