@@ -50,7 +50,6 @@ class NewBrandUser {
         	'dpid'=>$this->brandId,
         	'openid'=>$this->openId,
         	'card_id'=>$this->newBrandUserCardId(),
-        	'user_level_lid'=>1,
         	'create_at'=>date('Y-m-d H:i:s',$time),
         	'update_at'=>date('Y-m-d H:i:s',$time), 	
         );
