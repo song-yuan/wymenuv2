@@ -10,7 +10,7 @@ class WeixinController extends BackendController
 		return true;
 	}
 	public function actionIndex() {
-        $model = WeixinServiceAccount::model()->findByPk($this->companyId);
+        $model = WeixinServiceAccount::model()->find('dpid=:dpid',array(':dpid'=>$this->companyId));
         if(!$model){
         	$model = new WeixinServiceAccount;
         }

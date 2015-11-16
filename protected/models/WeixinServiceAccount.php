@@ -52,7 +52,7 @@ class WeixinServiceAccount extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, appid, appsecret, expire, key', 'required'),
+			array('update_at, appid, appsecret', 'required'),
 			array('expire, multi_customer_service_status, ticket_expire', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('token, original_id', 'length', 'max'=>45),
