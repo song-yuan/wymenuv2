@@ -62,14 +62,13 @@ class PullUserInfo {
 	 */
 	public function update() {
 		if(!empty($this->response->nickname)) {
-			$time = time();
 			//更改yk_brand_user表
 			$updateArr = array(
 				'nickname'=>$this->response->nickname,
 				'head_icon'=>$this->response->headimgurl,
-				'update_time'=>$time
+				'sex'=>$this->response->sex,
 			);
-			Yii::app()->db->createCommand()->update('nb_brand_user', $updateArr, 'id='.$this->userId);
+			Yii::app()->db->createCommand()->update('nb_brand_user', $updateArr, 'lid='.$this->userId.' and dpid='.$this->brandId);
 			
 			$this->result = 1;
 		}
