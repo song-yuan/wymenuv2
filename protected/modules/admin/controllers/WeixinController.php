@@ -57,10 +57,9 @@ class WeixinController extends BackendController
 			$res_in = Yii::app()->db->createCommand($insert_sql)->execute();
 			
 			$menujson = Menu::getMenuJson($this->companyId);
-			var_dump($menujson);exit;
 			$wxSdk = new WxSdk($this->companyId);
-			$result = $wxSdk ->create_menu($menujson);
-		
+			$result = $wxSdk->createMenu($menujson);
+
 			if($result['errmsg']=="ok"){
 				Yii::app()->admin->setFlash('success','菜单发布成功');
 			}else{
