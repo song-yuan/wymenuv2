@@ -10,19 +10,22 @@ class MallController extends Controller
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId;
-		$this->weixinServiceAccount();
 		
-		$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
-		$userInfo = $baseInfo->getSnsapiBase();
-		$openid = $userInfo['openid'];
-		
-		$this->brandUser($openid);
-		if(!$this->brandUser){
-			$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
-    		$this->brandUser = $newBrandUser->brandUser;
+		//如果微信浏览器
+		if(Helper::isMicroMessenger()){
+			$this->weixinServiceAccount();
+			$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
+			$userInfo = $baseInfo->getSnsapiBase();
+			$openid = $userInfo['openid'];
+			
+			$this->brandUser($openid);
+			if(!$this->brandUser){
+				$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
+	    		$this->brandUser = $newBrandUser->brandUser;
+			}
+	
+			Yii::app()->session['userId'] = $this->brandUser['lid'];
 		}
-		var_dump($this->brandUser);exit;
-		Yii::app()->session['userId'] = $this->brandUser['lid'];
 	}
 	public function actionIndex()
 	{

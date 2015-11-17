@@ -39,6 +39,12 @@ class Helper
 		}
 		return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
 	}
+	/**
+	 * 判断是不是微信浏览器
+	 */
+	public static function isMicroMessenger() {
+		return stripos($_SERVER['HTTP_USER_AGENT'], 'microMessenger') !== false ? true : false;
+	}
 	static public function getCategories($companyId,$pid=0){
 		$command = Yii::app()->db->createCommand('select * from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0');
 		$command->bindValue(':companyId',$companyId);
