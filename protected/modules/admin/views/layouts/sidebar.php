@@ -141,7 +141,6 @@
 						<li class="<?php if(Yii::app()->controller->id == 'member' && in_array($this->getAction()->getId(),array('index','create','update','charge'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','会员列表');?></a></li>
 					</ul>
 				</li>
-				<!--
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('weixin'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-comments"></i> 
@@ -149,9 +148,9 @@
 					</a>
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('index'))) echo 'active';?>"><a href="<?php echo $this->createUrl('weixin/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','公众号设置');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('menu'))) echo 'active';?>"><a href="<?php echo $this->createUrl('weixin/menu',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','发布菜单');?></a></li>
 					</ul>
 				</li>
-				-->
 				<!--
 				<li class="<?php if(Yii::app()->controller->id == 'order') echo 'active';?>">
 					<a href="<?php echo $this->createUrl('order/index' , array('companyId' =>$this->companyId));?>">
