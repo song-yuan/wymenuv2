@@ -156,7 +156,7 @@ class Menu extends CActiveRecord
 					}elseif($svalue['type']==1){
 						$arrMenu['button'][$i]['sub_button'][$j]['type'] = "view";
 						$arrMenu['button'][$i]['sub_button'][$j]['name'] = $svalue['name'];
-						$arrMenu['button'][$i]['sub_button'][$j]['url'] = $value['value'];
+						$arrMenu['button'][$i]['sub_button'][$j]['url'] = $svalue['value'];
 					}
 					$j++;
 				}
