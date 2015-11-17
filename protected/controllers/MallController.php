@@ -29,7 +29,8 @@ class MallController extends Controller
 	}
 	public function actionIndex()
 	{
-		
+		$product = new WxProduct($this->companyId);
+		var_dump($product->productList);exit;
 		$this->render('index',array('companyId'=>$this->companyId));
 	}
 	private function weixinServiceAccount() {	
