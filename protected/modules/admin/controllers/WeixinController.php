@@ -57,6 +57,7 @@ class WeixinController extends BackendController
 			$res_in = Yii::app()->db->createCommand($insert_sql)->execute();
 			
 			$menujson = Menu::getMenuJson($this->companyId);
+			var_dump($menujson);exit;
 			$wxSdk = new WxSdk($this->companyId);
 			$result = $wxSdk ->create_menu($menujson);
 		
