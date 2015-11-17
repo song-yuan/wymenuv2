@@ -23,6 +23,7 @@ return array(
 		'application.components.*',
 		'application.components.weixinpay.*',
 		'application.components.weixin.*',
+		'application.components.mall.*',
                 'application.components.alipaydp.lib.*',
 		'application.extensions.redis.*',
 		'application.extensions.qrcode.*',
