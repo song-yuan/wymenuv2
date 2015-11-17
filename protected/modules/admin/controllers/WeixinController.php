@@ -59,11 +59,11 @@ class WeixinController extends BackendController
 			$menujson = Menu::getMenuJson($this->companyId);
 			$wxSdk = new WxSdk($this->companyId);
 			$result = $wxSdk->createMenu($menujson);
-
+			
 			if($result['errmsg']=="ok"){
 				Yii::app()->user->setFlash('success','菜单发布成功');
 			}else{
-				Yii::app()->user->setFlash('error','菜单发布失败');
+				Yii::app()->user->setFlash('error','菜单发布失败'.$result['errmsg']);
 			}	
 			$this->redirect(array('/admin/weixin/menu','companyId'=>$this->companyId));
 		}
