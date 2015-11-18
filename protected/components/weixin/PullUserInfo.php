@@ -45,7 +45,7 @@ class PullUserInfo {
 	 * 此处注意传递的userId直接是openId，则直接赋值给$this->openId
 	 */
 	public function openId() {
-		$this->openId = BrandUser::openId($this->userId,$this->brandId);
+		$this->openId = WxBrandUser::openId($this->userId,$this->brandId);
 	}
 	
 	/**

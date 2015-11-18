@@ -4,7 +4,7 @@
  *
  */
  
-class BrandUser {
+class WxBrandUser {
 	
 	/**
 	 * 返回brandUser数组
