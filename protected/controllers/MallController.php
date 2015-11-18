@@ -10,7 +10,7 @@ class MallController extends Controller
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId;
-		
+		$this->userId = null;
 		//如果微信浏览器
 		if(Helper::isMicroMessenger()){
 			$this->weixinServiceAccount();
@@ -23,13 +23,12 @@ class MallController extends Controller
 				$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
 	    		$this->brandUser = $newBrandUser->brandUser;
 			}
-	
-			Yii::app()->session['userId'] = $this->brandUser['lid'];
+			$this->userId = $this->brandUser['lid'];
 		}
 	}
 	public function actionIndex()
 	{
-		$product = new WxProduct($this->companyId);
+		$product = new WxProduct($this->companyId,$this->userId);
 		var_dump($product->productList);exit;
 		$this->render('index',array('companyId'=>$this->companyId));
 	}
