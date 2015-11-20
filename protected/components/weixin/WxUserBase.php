@@ -32,8 +32,9 @@
 		    $code = $_GET['code'];
 			$snsapiBase = $this->getOpenidFromMp($code);
 			if(!isset($snsapiBase['openid'])){
-				$code = $_GET['code'];
-				echo $code;
+				$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+				$url = $this->__CreateOauthUrlForCode($baseUrl,'snsapi_base');
+				echo $baseUrl;
 			    exit();
 			}
 			return $snsapiBase;
