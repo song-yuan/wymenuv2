@@ -33,8 +33,9 @@
 			$snsapiBase = $this->getOpenidFromMp($code);
 			if(!isset($snsapiBase['openid'])){
 				$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+				$baseUrl = strrpos($baseUrl,'code');
 				$url = $this->__CreateOauthUrlForCode($baseUrl,'snsapi_base');
-				echo $baseUrl;
+				header("Location: $url");
 			    exit();
 			}
 			return $snsapiBase;
@@ -61,6 +62,12 @@
 			$snsapiUserinfo = '';
 			if(isset($snsapiBase['openid'])){
 				$snsapiUserinfo = $this->getUserInfoFromMp($snsapiBase['openid'],$snsapiBase['access_token']);
+			}else{
+				$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+				$baseUrl = strrpos($baseUrl,'code');
+				$url = $this->__CreateOauthUrlForCode($baseUrl,'snsapi_userinfo');
+				header("Location: $url");
+			    exit();
 			}
 			return $snsapiUserinfo;
 		}
