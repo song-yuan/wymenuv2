@@ -34,7 +34,9 @@
 			if(!isset($snsapiBase['openid'])){
 				$baseUrl = urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 				$baseUrl = substr($baseUrl,strrpos($baseUrl,'code'));
+				echo $baseUrl;
 				$url = $this->__CreateOauthUrlForCode($baseUrl,'snsapi_base');
+				echo $url;exit;
 				header("Location: $url");
 			    exit();
 			}
