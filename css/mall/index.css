@@ -9,7 +9,7 @@ body{ background-color:#E5E5E5;}
 .nav-lf{ position:absolute; left:0; width:1rem; height: 95%; background-color:#E5E5E5; font-size:0.15rem; text-align:center;}
 .nav-lf ul li{ position:relative; width:1rem; height:0.4rem; line-height:0.4rem;}
 .nav-lf ul li b{ position:absolute; top:0.05rem; right:0.05rem; display:none; width:0.2rem; height:0.2rem; line-height:0.2rem; font-size:0.15rem; color:#fff; background-color:#FF5151; border-radius:0.1rem;}
-.container{ position:absolute; right:0; width:3rem; height: 95%;;overflow-y: scroll;}
+.container{ position:absolute; right:0; width:3rem; height: 92%;;overflow-y: scroll;}
 .current{ background-color:#fff;}
 .sticky {position: fixed;top: 0;	animation:thedrop 1s 1;	-moz-animation:thedrop 1s 1;-webkit-animation:thedrop 1s 1;  background-color:#E5E5E5; font-size:0.15rem;}
 .sticky .nav-above {position: absolute;	top:0;left:1em;	right:1em;height:15px;}
@@ -23,8 +23,9 @@ body{ background-color:#E5E5E5;}
 .prt-lt .lt-ct p{ font-size:0.18rem; white-space: nowrap;text-overflow:ellipsis; overflow:hidden;}
 .prt-lt .lt-ct p.pr{ margin-top:0.2rem; color:#FF5151;}
 .prt-lt .lt-rt{ position:absolute; bottom:0.1rem; right:0.1rem; width:0.9rem; height:0.3rem;}
-.prt-lt .lt-rt input.minus,.prt-lt .lt-rt input.result{ float:left; width:24px; height:24px; font-size:20px; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
-.prt-lt .lt-rt input.add{ float:right; width:24px; height:24px; font-size:20px; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
+.prt-lt .lt-rt input.minus{ float:left; width:24px; height:24px; font-size:20px; line-height:24px; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
+.prt-lt .lt-rt input.result{ float:left; width:calc(0.9rem - 52px);width:-moz-calc(0.9rem - 52px);width:-webkit-calc(0.9rem - 52px); height:24px; font-size:20px; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
+.prt-lt .lt-rt input.add{ float:right; width:24px; height:24px; font-size:20px; line-height:24px; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
 .prt-lt .lt-rt input.minus,.prt-lt .lt-rt input.add{border-radius: 100%;color:#FF5151;}
 .prt-lt .lt-rt input.result{ border:none;}
 input {outline:none;}
