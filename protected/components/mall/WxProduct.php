@@ -9,23 +9,34 @@ class WxProduct
 {
 	public $companyId;
 	public $userId;
-	public $productList = array();
+	public $categorys = array();
+	public $categoryProductLists = array();
 	
-	public function __construct($companyId,$userId = null){
+	public function __construct($companyId){
 		$this->companyId = $companyId;
-		$this->userId = $userId;
+		$this->getCategory();
 		$this->productList();
-		$this->productPrice();
+	}
+	public function getCategory(){
+		$this->categorys = WxCategory::get($this->companyId);
+		$this->categoryProductLists = $this->categorys;
 	}
 	public function productList(){
-		$sql = 'select * from nb_product where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid';
-		$this->productList = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->companyId)->queryAll();
-	}
-	public function productPrice(){
-		foreach($this->productList as $k=>$product){
-			$productPrice = new WxProductPrice($product['lid'],$product['dpid'],$this->userId);
-			$this->productList[$k]['original_price'] = $productPrice->price;
-			$this->productList[$k]['promotion'] = $productPrice->promotion;
+		foreach($this->categoryProductLists as $k=>$category){
+			$childrenCategorys = WxCategory::getChrildrenIds($this->companyId,$category['lid']);
+			if(!empty($childrenCategorys)){
+				$categoryIds = join(',',$childrenCategorys);
+			}else{
+				$categoryIds = $category['lid'];
+			}
+			$sql = 'select * from nb_product where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.') order by lid desc';
+		    $categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->companyId)->queryAll();
+		    foreach($categoryProducts as $j=>$product){
+		    	$productPrice = new WxProductPrice($product['lid'],$product['dpid']);
+				$categoryProducts[$j]['price'] = $productPrice->price;
+				$categoryProducts[$j]['promotion'] = $productPrice->promotion;
+		    }
+		    $this->categoryProductLists[$k]['product_list'] = $categoryProducts;
 		}
 	}
 }
