@@ -31,6 +31,11 @@
 			//获取code码，以获取openid
 		    $code = $_GET['code'];
 			$snsapiBase = $this->getOpenidFromMp($code);
+			if(!isset($snsapiBase['openid'])){
+				$code = $_GET['code'];
+				echo $code;
+			    exit();
+			}
 			return $snsapiBase;
 		}
 	}
