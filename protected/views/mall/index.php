@@ -29,9 +29,10 @@
             <p class="pr">¥<span class="price"><?php echo $product['price'];?></span></p>
         </div>
         <div class="lt-rt">
-        	<input type="button" class="minus zero"  value="-">
-            <input type="text" class="result zero" disabled value="0">
+        	<input type="button" class="minus zero" value="-">
+            <input type="text" class="result zero" product-id="<?php echo $product['lid'];?>" promote-id="-1" disabled value="0">
             <input type="button" class="add" value="+">
+            <div class="clear"></div>
         </div>
     </div>
     <?php endforeach;?>
@@ -75,25 +76,49 @@ $(function(){
 
     $(".add").click(function(){
         var t=$(this).parent().find('input[class*=result]');
-        t.val(parseInt(t.val())+1);
-        if(parseInt(t.val()) > 0){
-            $(this).parent().find(".minus").removeClass('zero');
-            t.removeClass('zero');
-        }
-        setTotal(); 
+        var productId = t.attr('product-id');
+        var promoteId = t.attr('promote-id');
+        $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId));?>',
+        	data:{productId:productId,promoteId:promoteId},
+        	success:function(msg){
+        		if(msg.status){
+        			 t.val(parseInt(t.val())+1);
+			        if(parseInt(t.val()) > 0){
+			            $(this).parent().find(".minus").removeClass('zero');
+			            t.removeClass('zero');
+			        }
+			        setTotal();
+        		}else{
+        			alert(msg.msg);
+        		}
+        	}
+        });
     });
      
     $(".minus").click(function(){ 
         var t=$(this).parent().find('input[class*=result]');
-        if(parseInt(t.val())==1){
-            $(this).addClass('zero');
-            t.addClass('zero');
-        }
-        t.val(parseInt(t.val())-1);
-        if(parseInt(t.val())<0){ 
-        t.val(0); 
-    } 
-    setTotal(); 
+        var productId = t.attr('product-id');
+        var promoteId = t.attr('promote-id');
+        $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId));?>',
+        	data:{productId:productId,promoteId:promoteId},
+        	success:function(msg){
+        		if(msg.status){
+    			  if(parseInt(t.val())==1){
+			         $(this).addClass('zero');
+			         t.addClass('zero');
+			       }
+			       t.val(parseInt(t.val())-1);
+			       if(parseInt(t.val())<0){ 
+			           t.val(0); 
+			   	    } 
+			    	setTotal(); 
+        		}else{
+        			alert(msg.msg);
+        		}
+        	}
+        });
    });
  
 function setTotal(){ 
