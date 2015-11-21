@@ -22,10 +22,17 @@ class WxCart
 		$this->userId = $userId;
 		$this->siteId = $siteId;
 		$this->productArr = $productArr;
+		$this->isCart();
 	}
 	public function isCart(){
 		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and site_id=:siteId and privation_promotion_id=:privationPromotionId';
-		$this->cart = Yii::app()->db->createCommand($sql)->queryRow();
+		$this->cart = Yii::app()->db->createCommand($sql)
+					  ->bindValue(':dpid',$this->dpid)
+					  ->bindValue(':userId',$this->userId)
+					  ->bindValue(':productId',$this->productArr['product_id'])
+					  ->bindValue(':siteId',$this->siteId)
+					  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
+					  ->queryRow();
 	}
 	public function addCart(){
 		$success = false;
@@ -50,7 +57,9 @@ class WxCart
 	        }
 		}else{
 			$sql = 'update nb_cart set num=num+1 where lid=:lid and dpid=:dpid';
-			$result = Yii::app()->db->createCommand($sql)->execute();
+			$result = Yii::app()->db->createCommand($sql)
+					  ->bindValue(':dpid',$this->dpid)
+					  ->bindValue(':lid',$this->cart['lid'])->execute();
 			if($result){
 	        	$success = true;
 	        }
@@ -62,13 +71,17 @@ class WxCart
 		$time = time();
 		if($this->cart['num'] > 1){
 			$sql = 'update nb_cart set num=num-1 where lid=:lid and dpid=:dpid';
-			$result = Yii::app()->db->createCommand($sql)->execute();
+			$result = Yii::app()->db->createCommand($sql)
+					  ->bindValue(':dpid',$this->dpid)
+					  ->bindValue(':lid',$this->cart['lid'])->execute();
 	        if($result){
 	        	$success = true;
 	        }
 		}else{
-			$sql = 'delete nb_cart where lid=:lid and dpid=:dpid';
-			$result = Yii::app()->db->createCommand($sql)->execute();
+			$sql = 'delete from nb_cart where lid=:lid and dpid=:dpid';
+			$result = Yii::app()->db->createCommand($sql) 
+					  ->bindValue(':dpid',$this->dpid)
+					  ->bindValue(':lid',$this->cart['lid'])->execute();
 			if($result){
 	        	$success = true;
 	        }
