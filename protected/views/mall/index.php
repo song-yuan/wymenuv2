@@ -85,14 +85,15 @@ $(function(){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
 			        if(parseInt(t.val()) > 0){
-			            $(this).parent().find(".minus").removeClass('zero');
+			            t.siblings(".minus").removeClass('zero');
 			            t.removeClass('zero');
 			        }
 			        setTotal();
         		}else{
         			alert(msg.msg);
         		}
-        	}
+        	},
+        	dataType:'json'
         });
     });
      
@@ -106,8 +107,8 @@ $(function(){
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){
-			         $(this).addClass('zero');
-			         t.addClass('zero');
+			          t.siblings(".minus").addClass('zero');
+			          t.addClass('zero');
 			       }
 			       t.val(parseInt(t.val())-1);
 			       if(parseInt(t.val())<0){ 
@@ -117,7 +118,8 @@ $(function(){
         		}else{
         			alert(msg.msg);
         		}
-        	}
+        	},
+        	dataType:'json'
         });
    });
  
