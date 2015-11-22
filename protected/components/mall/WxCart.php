@@ -17,12 +17,14 @@ class WxCart
 	public $productArr = array();
 	public $cart = array();
 	
-	public function __construct($dpid,$userId,$productArr,$siteId = null){
+	public function __construct($dpid,$userId,$productArr = array(),$siteId = null){
 		$this->dpid = $dpid;
 		$this->userId = $userId;
 		$this->siteId = $siteId;
 		$this->productArr = $productArr;
-		$this->isCart();
+		if(!empty($this->productArr)){
+			$this->isCart();
+		}
 	}
 	public function isCart(){
 		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and site_id=:siteId and privation_promotion_id=:privationPromotionId';
@@ -33,6 +35,20 @@ class WxCart
 					  ->bindValue(':siteId',$this->siteId)
 					  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 					  ->queryRow();
+	}
+	public function getCart(){
+		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
+		$results = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$this->dpid)
+				  ->bindValue(':userId',$this->userId)
+				  ->bindValue(':siteId',$this->siteId)
+				  ->queryAll();
+		foreach($results as $k=>$result){
+			$productPrice = new WxProductPrice($result['product_id'],$result['dpid']);
+			$results[$k]['price'] = $productPrice->price;
+			$results[$k]['promotion'] = $productPrice->promotion;
+		}
+		return $results;
 	}
 	public function addCart(){
 		$success = false;

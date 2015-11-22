@@ -38,6 +38,19 @@ class MallController extends Controller
 	}
 	/**
 	 * 
+	 * 购物车
+	 * 
+	 */
+	public function actionCart()
+	{
+		$siteId = Yii::app()->session['qrcode-'.$this->userId];
+		
+		$cartObj = new WxCart($this->companyId,$this->userId,$productArr = array(),$siteId);
+		$carts = $cartObj->getCart();
+		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts));
+	}
+	/**
+	 * 
 	 * 添加购物车
 	 * 
 	 */
