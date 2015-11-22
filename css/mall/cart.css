@@ -1,0 +1,48 @@
+body{ background-color:#E5E5E5;}
+.section{width: 80%;margin:0 auto; padding: 20px 0 10px 0; border-bottom: 1px dashed #FF5151;font-size: 15px;}
+.prt-cat{width: 100%;margin:5px 0;}
+.prt{margin:2px 0;}
+.prt-lt{float: left;width: 33%;}
+.prt-mt{float: left;width: 33%;}
+.prt-rt{float: left;width: 33%;}
+.prt-rt input.minus,.prt-rt input.result{ float:left; width:0.28rem; height:0.28rem; font-size:0.18rem; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
+.prt-rt input.add{ float:left; width:0.28rem; height:0.28rem; font-size:0.18rem; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
+.prt-rt input.minus,.prt-rt input.add{border-radius: 100%;color:#FF5151;}
+.prt-rt input.result{ border:none;background-color:#E5E5E5;}
+input {outline:none;}
+footer{width: 100%;}
+footer .ft-llt{ float:left; width:25%; height:100%; background-color:#39B867;}
+footer .ft-llt p{ font-size:0.2rem; color:#fff; text-align:center;}
+footer .ft-lmt{ float:left; width:50%; height:100%;}
+footer .ft-lmt p{font-size:0.18rem;text-align: center;}
+footer .ft-rrt{ float:right; width:25%; height:100%; background-color:#39B867;}
+footer .ft-rrt p{ font-size:0.2rem; color:#fff; text-align:center;}
+.jq{ width:3rem; height:0.8rem;}
+
+.total{ color:#FF5151;}
+.nm{ color:#868B92;}
+.support{ width:3rem; height:0.4rem; margin-bottom:0.45rem; background-color:#fff;}
+.support p{ line-height:0.4rem; text-align:center; font-size:0.15rem; color:#CCCCCC;}
+
+.margin-top20{margin-top: 20px;}
+.order-address{padding:15px 25px;height: 60px;font-size: 18px;color: white;background: rgb(141,97,77) url(../images/icon_arrow.png) no-repeat right;}
+.order-address .info{width: 100%;height: 30px;line-height: 30px;}
+.info .name{padding-left: 20px;}
+.info .mobile{padding-left: 20px;}
+.order-address .address{width: 100%;height: 30px;line-height: 30px;}
+.order-time{padding: 25px;font-size: 18px;background: white url(../images/icon_arrow.png) no-repeat right;}
+.order-time .time-lt{float: left;width: 50%;text-align: left;}
+.order-time .time-rt{float: left;width: 50%;text-align: right;color: rgb(199,93,48);}
+.pay-type{padding: 25px;font-size: 18px;background: white;}
+.pay-type img {height: 50px;}
+.pay-type .pay-ico{float: left;}
+.pay-type .pay-info{float: left;}
+.pay-type .check_ico{float: right;width:32px;height:32px;margin-top:9px;background:url(../images/ico_004.png) no-repeat right;}
+
+.order-preferential{padding: 25px;font-size: 18px;background: white;}
+.order-preferential .preferential-lt{float: left;width: 50%;text-align: left;}
+.order-preferential .preferential-rt{float: left;width: 50%;text-align: right;color: rgb(199,93,48);}
+.order-info{padding: 10px 25px;background: white;}
+.order-desc{width: 100%;font-size: 18px;}
+.order-desc .info-lt{float: left;width: 50%;text-align: left;}
+.order-desc .info-rt{float: left;width: 50%;text-align: right;color: rgb(199,93,48);}
