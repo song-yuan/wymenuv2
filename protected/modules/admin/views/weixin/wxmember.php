@@ -14,7 +14,7 @@
 			<?php $this->endContent();?>
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->
-			<?php $this->widget('application.modules.brand.components.widgets.PageHeader', array('head'=>'会员列表','subhead'=>'会员列表','breadcrumbs'=>array(array('word'=>'会员管理','url'=>''),array('word'=>'会员列表','url'=>''),)));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'会员列表','subhead'=>'会员列表','breadcrumbs'=>array(array('word'=>'会员管理','url'=>''),array('word'=>'会员列表','url'=>''),)));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
@@ -58,7 +58,7 @@
 											<?php else:?>
 											<a href="javascript:;"><span class="glyphicon glyphicon-chevron-down">更多查找条件</span></a>
 											<?php endif;?>
-											<input type="hidden" name="more" id="more" value="<?php echo isset($more) && $more?1:0;?>"/>
+											<input type="hidden" name="more" id="more" value="<?php //echo isset($more) && $more?1:0;?>"/>
 										</div>
 									</td>
 								</tr>
@@ -68,18 +68,18 @@
 										<div class="form-group" style="disabled:true;">
 											<div class="input-group">
 												<span class="input-group-addon">来源门店</span>
-												<?php if($objects):?>
+												<?php //if($objects):?>
 												<select class="form-control" name="original_shop">
 													<option value="">--请选择实体店--</option>
-													<?php foreach($objects as $region):?>
-													<optgroup label="<?php echo $region->region_name;?>">
-													<?php foreach($region->shop as $shop):?>
-													<option value="1_<?php echo $shop->shop_id;?>" <?php if(isset($original_shop) && ('1_'.$shop->shop_id == $original_shop)) echo 'selected';?>><?php echo $shop->shop_name;?></option>
-													<?php endforeach;?>
+													<?php //foreach($objects as $region):?>
+													<optgroup label="<?php //echo $region->region_name;?>">
+													<?php //foreach($region->shop as $shop):?>
+													<option value="1_<?php //echo $shop->shop_id;?>" <?php // if(isset($original_shop) && ('1_'.$shop->shop_id == $original_shop)) echo 'selected';?>><?php //echo $shop->shop_name;?></option>
+													<?php //endforeach;?>
 													</optgroup>
-													<?php endforeach;?>
+													<?php //endforeach;?>
 												</select>
-												<?php endif;?>
+												<?php //endif;?>
 												</div>
 										</div>
 									</td>
@@ -90,31 +90,32 @@
 												<span class="input-group-addon">来源渠道</span>
 												<select class="form-control" name="promote">
 													<option value="">--请选择渠道--</option>
-													<?php if($promotes):?>
-													<?php foreach($promotes as $promote):?>
-													<option value="<?php echo $promote['type'].'_'.$promote['promote_id'];?>" <?php if(isset($promoteType) && ($promoteType == $promote['type'].'_'.$promote['promote_id'])) echo 'selected';?>><?php echo $promote['channel_name'];?></option>
-													<?php endforeach;?>
-													<?php endif;?>
+													<?php //if($promotes):?>
+													<?php //foreach($promotes as
+                                                                                                        // $promote):?>
+													<option value="<?php //echo $promote['type'].'_'.$promote['promote_id'];?>" <?php //if(isset($promoteType) && ($promoteType == $promote['type'].'_'.$promote['promote_id'])) echo 'selected';?>><?php //echo $promote['channel_name'];?></option>
+													<?php //endforeach;?>
+													<?php //endif;?>
 												</select>
 												
 												</div>
 										</div>
 									</td>
 								</tr>
-								<tr class="more-condition" style="display:<?php echo isset($more) && $more?'':'none';?>;">
+								<tr class="more-condition" style="display:<?php //echo isset($more) && $more?'':'none';?>;">
 								  <td><label class="control-label">按来源活动查找</label></td>
 									<td> 
 										<div class="form-group" style="disabled:true;">
 											<div class="input-group">
 												<span class="input-group-addon">来源活动</span>
-												<?php if($activites):?>
+												<?php //if($activites):?>
 												<select class="form-control" name="active">
 													<option value="">--请选择活动--</option>
-													<?php foreach($activites as $activite):?>
-													<option value="<?php echo $activite['type'].'_'.$activite['id'];?>" <?php if(isset($activeType) && ($activeType == $activite['type'].'_'.$activite['id'])) echo 'selected';?>><?php echo $activite['title'];?></option>
-													<?php endforeach;?>
+													<?php //foreach($activites as $activite):?>
+													<option value="<?php// echo $activite['type'].'_'.$activite['id'];?>" <?php //if(isset($activeType) && ($activeType == $activite['type'].'_'.$activite['id'])) echo 'selected';?>><?php// echo $activite['title'];?></option>
+													<?php// endforeach;?>
 												</select>
-												<?php endif;?>
+												<?php //endif;?>
 												</div>
 										</div>
 									</td>
@@ -122,7 +123,7 @@
 									<td> 
 										<div class="form-group">
 											<div class="input-group date-picker input-daterange">
-												<span class="input-group-addon">关注时间</span><input type="text" class="form-control input-small" name="from" value="<?php echo isset($from)&&$from?$from:'';?>"><span class="input-group-addon">~</span><input type="text" class="form-control input-small" name="to" value="<?php echo isset($to)&&$to?$to:'';?>">
+												<span class="input-group-addon">关注时间</span><input type="text" class="form-control input-small" name="from" value="<?php //echo isset($from)&&$from?$from:'';?>"><span class="input-group-addon">~</span><input type="text" class="form-control input-small" name="to" value="<?php //echo isset($to)&&$to?$to:'';?>">
 											</div>
 										</div>
 									</td>
@@ -144,15 +145,17 @@
 							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
-										<th width="10%">会员卡号</th>
-										<th width="10%">微信名</th>
-										<th width="10%">手机号码</th>
-										<th width="10%">会员等级</th>
-										<th width="10%"><a href="javascript:;" onclick="sort(1,<?php echo $sort?0:1;?>);">消费额 <i class="fa <?php echo $order==1?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
-										<th width="15%">来源门店</th>
-										<th width="15%">来源活动/来源渠道</th>
-										<th width="10%"><a href="javascript:;" onclick="sort(3,<?php echo $sort?0:1;?>);">消费积分 <i class="fa <?php echo $order==3?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
-										<th width="10%"><a href="javascript:;" onclick="sort(4,<?php echo $sort?0:1;?>);">活动积分 <i class="fa <?php echo $order==4?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
+                                                                                <th width="8%">卡号</th>
+                                                                                <th width="10%">名称</th>
+                                                                                <th width="4%">性别</th>
+                                                                                <th width="10%">出生日期</th>
+                                                                                <th width="6%">等级</th>
+										<th width="8%">微信分组</th>
+                                                                                <th width="10%">地区</th>
+										<th width="8%">手机号</th>				
+                                                                                <th width="10%"><a href="javascript:;" onclick="sort(1,<?php //echo $sort?0:1;?>);">消费额 <i class="fa <?php //echo $order==1?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
+										<th width="10%"><a href="javascript:;" onclick="sort(3,<?php //echo $sort?0:1;?>);">消费积分 <i class="fa <?php //echo $order==3?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
+										<th width="10%"><a href="javascript:;" onclick="sort(4,<?php //echo $sort?0:1;?>);">余额返现 <i class="fa <?php //echo $order==4?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
 										<th width="6%">操作</th>
 									</tr>
 								</thead>
@@ -160,17 +163,19 @@
 									<?php if($models):?>
 									<?php foreach($models as $model):?>
 										<tr>
-											<td><?php echo substr($model['card_id'],5);?></td>
-											<td><?php echo $model['nickname'];?></td>
-											<td><?php echo $model['mobile'];?></td>
-											<td><?php echo $model['rank_name'];?></td>
-											<td><?php echo $model['deal_cost']/100;?></td>
-											<td><?php echo $model['from_shop_name'];?></td>
-											<td><?php echo BrandUser::getOriginal($model['id']);?></td>
-											<td><?php echo $model['rest_consume_point'];?><a class="btn default btn-xs blue points-edit" title="编辑" data-id="<?php echo $model['id'];?>" point="<?php echo $model['rest_consume_point'];?>" href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
-											<td><?php echo $model['rest_activity_point'];?></td>
+                                                                                    <td><?php echo substr($model['card_id'],5);?></td>
+                                                                                    <td><?php echo $model['user_name'];?></td>
+                                                                                    <td><?php echo $model['sex'];?></td>
+                                                                                    <td><?php echo $model['user_birthday'];?></td>
+                                                                                        <td><?php echo $model['user_level_lid'];?></td>
+											<td><?php echo $model['weixin_group'];?></td>
+                                                                                        <td><?php echo $model['country'];?><br><?php echo $model['province'];?><br><?php echo $model['city'];?></td>											
+											<td><?php echo $model['mobile_num'];?></td>
+											<td><?php ?></td>											
+											<td><?php //echo $model['rest_consume_point'];?><a class="btn default btn-xs blue points-edit" title="编辑" data-id="<?php echo $model['lid'];?>" point="<?php //echo $model['rest_consume_point'];?>" href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
+											<td><?php //echo $model['rest_activity_point'];?></td>
 											<td class="button-column">
-												<a class="btn default btn-xs blue" title="查看" href="<?php echo $this->createUrl('/brand/member/view',array('cid'=>$this->companyId,'id'=>$model['id']));?>"><i class="fa fa-search"></i> 查 看</a>
+												<a class="btn default btn-xs blue" title="查看" href="<?php echo $this->createUrl('/brand/member/view',array('cid'=>$this->companyId,'id'=>$model['lid']));?>"><i class="fa fa-search"></i> 查 看</a>
 											</td>
 										</tr>
 									<?php endforeach;?>	

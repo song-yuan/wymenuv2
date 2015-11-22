@@ -31,12 +31,12 @@ class BrandUserLevel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, level_name', 'required'),
+			array('level_name', 'required'),
 			array('min_total_points, max_total_points', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('level_name', 'length', 'max'=>50),
 			array('delete_flag', 'length', 'max'=>2),
-			array('create_at', 'safe'),
+			array('create_at,update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, level_name, min_total_points, max_total_points, delete_flag', 'safe', 'on'=>'search'),

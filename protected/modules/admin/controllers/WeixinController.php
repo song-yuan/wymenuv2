@@ -76,14 +76,14 @@ class WeixinController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',"0000000000");
                 
 		$criteria = new CDbCriteria;
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId;
+		$criteria->condition =  ' t.dpid='.$companyId;
 		
 		$pages = new CPagination(BrandUser::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = BrandUser::model()->findAll($criteria);
 		
-		var_dump($models);exit;
+		//var_dump($models);exit;
 		$this->render('wxmember',array(
 				'models'=>$models,
 				'pages'=>$pages
