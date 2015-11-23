@@ -31,7 +31,7 @@ class MallController extends Controller
 	}
 	public function actionIndex()
 	{
-		$product = new WxProduct($this->companyId);
+		$product = new WxProduct($this->companyId,$this->userId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
 		$this->render('index',array('companyId'=>$this->companyId,'categorys'=>$categorys,'models'=>$products));
