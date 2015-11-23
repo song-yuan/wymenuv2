@@ -51,6 +51,34 @@ class MallController extends Controller
 	}
 	/**
 	 * 
+	 * 生成订单
+	 * 
+	 */
+	public function actionGeneralOrder()
+	{
+		$siteId = Yii::app()->session['qrcode-'.$this->userId];
+		
+		$orderObj = new WxOrder($this->companyId,$this->userId,$siteId);
+		$orderId = $orderObj->createOrder();
+		$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
+	}
+	/**
+	 * 
+	 * 
+	 * 订单
+	 * 
+	 */
+	 public function actionOrder()
+	 {
+		$siteId = Yii::app()->session['qrcode-'.$this->userId];
+		$orderId = Yii::app()->request->getParam('orderId');
+		
+		$order = WxOrder::getOrder($orderId,$this->companyId);
+		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts));
+	 }
+	/**
+	 * 
 	 * 添加购物车
 	 * 
 	 */
