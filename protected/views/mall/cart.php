@@ -27,13 +27,13 @@
 
 <footer>
     <div class="ft-llt">
-        <p><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId))?>">返回</a></p>
+        <p><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>">返回</a></p>
     </div>
     <div class="ft-lmt">
         <p>￥<span id="total" class="total">0.00</span></span></p>
     </div>
     <div class="ft-rrt">
-        <p><a href="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId))?>">选好了</a></p>
+        <p><a href="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">确认下单</a></p>
     </div>
     <div class="clear"></div>
 </footer>
