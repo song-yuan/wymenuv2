@@ -17,10 +17,10 @@
 	<?php endforeach;?>
 </div>
 <footer>
-    <div class="ft-lmt">
+    <div class="ft-lt">
         <p>￥<span id="total" class="total"><?php echo $order['should_total']?></span></p>
     </div>
-    <div class="ft-rrt">
+    <div class="ft-rt">
         <p><a href="#">去付款</a></p>
     </div>
     <div class="clear"></div>
