@@ -98,7 +98,7 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select t.price,t.num,t1.product_name,t1.main_picture from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid';
+		$sql = 'select t.price,t.amount,t1.product_name,t1.main_picture from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':orderId',$orderId)
 				  ->bindValue(':dpid',$dpid)
