@@ -70,7 +70,7 @@ class WeixinRecharge extends CActiveRecord
 			'recharge_money' => '充值的金额',
 			'recharge_pointback' => '返积分',
 			'recharge_cashback' => '返现',
-			'is_available' => '0表示有效，1表示无效',
+			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
 		);
 	}

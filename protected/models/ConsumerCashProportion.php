@@ -69,11 +69,11 @@ class ConsumerCashProportion extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '最近一次更新时间',
 			'ccp_name' => '名称',
-			'point_type' => '0历史积分，1有效积分',
-			'min_available_point' => '只要达到最低积分需求，就按照这个比例来计算',
-			'max_available_point' => '最高积分，区间必须批次覆盖',
-			'proportion_points' => '消费返现比例，计算结果四舍五入',
-			'is_available' => '0表示有效，1表示无效',
+			'point_type' => '类型',//0历史积分，1有效积分
+			'min_available_point' => '最低积分',//只要达到最低积分需求，就按照这个比例来计算
+			'max_available_point' => '最高积分',//，区间必须批次覆盖
+			'proportion_points' => '消费返现比例',//，计算结果四舍五入
+			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
 		);
 	}
