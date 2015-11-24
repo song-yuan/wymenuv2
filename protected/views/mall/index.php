@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('Your Title Here');
+	$this->setPageTitle('点单');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
@@ -29,8 +29,8 @@
             <p class="pr">¥<span class="price"><?php echo $product['price'];?></span></p>
         </div>
         <div class="lt-rt">
-        	<input type="button" class="minus zero" value="-">
-            <input type="text" class="result zero" product-id="<?php echo $product['lid'];?>" promote-id="-1" disabled value="0">
+        	<input type="button" class="minus <?php if(!$product['num']) echo 'zero';?>" value="-">
+            <input type="text" class="result <?php if(!$product['num']) echo 'zero';?>" product-id="<?php echo $product['lid'];?>" promote-id="-1" disabled value="<?php echo $product['num']?$product['num']:0;?>">
             <input type="button" class="add" value="+">
             <div class="clear"></div>
         </div>
@@ -46,7 +46,7 @@
         <p>合计:<span id="total" class="total">0.00元</span><span class="nm">(<label class="share"></label>份)</span></p>
     </div>
     <div class="ft-rt">
-    	<p><a href="cart.html">选好了</a></p>
+    	<p><a href="<?php echo $this->createUrl('/mall/cart',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
     </div>
     <div class="clear"></div>
 </footer>

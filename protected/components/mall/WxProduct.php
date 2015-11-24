@@ -9,11 +9,14 @@ class WxProduct
 {
 	public $companyId;
 	public $userId;
+	public $siteId;
 	public $categorys = array();
 	public $categoryProductLists = array();
 	
-	public function __construct($companyId){
+	public function __construct($companyId,$userId,$siteId){
 		$this->companyId = $companyId;
+		$this->userId = $userId;
+		$this->siteId = $siteId;
 		$this->getCategory();
 		$this->productList();
 	}
@@ -29,8 +32,8 @@ class WxProduct
 			}else{
 				$categoryIds = $category['lid'];
 			}
-			$sql = 'select * from nb_product where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.') order by lid desc';
-		    $categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->companyId)->queryAll();
+			$sql = 'select m.*,n.num from (select * from nb_product where status=0 and is_show=1 and delete_flag=0 and dpid=:dpid and category_id in ('.$categoryIds.'))m left join nb_cart n on m.lid=n.product_id and n.user_id=:userId and n.site_id=:siteId order by m.lid desc';
+		    $categoryProducts = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->companyId)->bindValue(':userId',$this->userId)->bindValue(':siteId',$this->siteId)->queryAll();
 		    foreach($categoryProducts as $j=>$product){
 		    	$productPrice = new WxProductPrice($product['lid'],$product['dpid']);
 				$categoryProducts[$j]['price'] = $productPrice->price;

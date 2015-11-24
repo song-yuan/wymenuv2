@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css">
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <?php foreach($models as $model):?>
 <div class="section">
@@ -26,13 +27,13 @@
 
 <footer>
     <div class="ft-llt">
-        <p><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId))?>">修改商品</a></p>
+        <p><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>">返回</a></p>
     </div>
     <div class="ft-lmt">
         <p>￥<span id="total" class="total">0.00</span></span></p>
     </div>
     <div class="ft-rrt">
-        <p><a href="order.html">确认商品</a></p>
+        <p><a href="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">确认下单</a></p>
     </div>
     <div class="clear"></div>
 </footer>

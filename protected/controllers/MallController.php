@@ -2,8 +2,15 @@
 
 class MallController extends Controller
 {
+	/**
+	 * 
+	 * type点单类型 1 堂吃 2 外卖
+	 * 
+	 */
 	public $companyId;
 	public $userId = -1;
+	public $siteId = -1;
+	public $type = 2;
 	public $weixinServiceAccount;
 	public $brandUser;
 	public $layout = '/layouts/mallmain';
@@ -11,27 +18,32 @@ class MallController extends Controller
 	public function init() 
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
+		$type = Yii::app()->request->getParam('type',1);
 		$this->companyId = $companyId;
+		$this->type = $type;
 //		如果微信浏览器
-//		if(Helper::isMicroMessenger()){
-//			$this->weixinServiceAccount();
-//			$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
-//			$userInfo = $baseInfo->getSnsapiBase();
-//			$openid = $userInfo['openid'];
-//			
-//			$this->brandUser($openid);
-//			if(!$this->brandUser){
-//				$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
-//	    		$this->brandUser = $newBrandUser->brandUser;
-//			}
-//			$this->userId = $this->brandUser['lid'];
-//		}
-		$this->userId = 0000000000;
-		Yii::app()->session['qrcode-'.$this->userId] = 0000000000;
+		if(Helper::isMicroMessenger()){
+			$this->weixinServiceAccount();
+			$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
+			$userInfo = $baseInfo->getSnsapiBase();
+			$openid = $userInfo['openid'];
+			
+			$this->brandUser($openid);
+			if(!$this->brandUser){
+				$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
+	    		$this->brandUser = $newBrandUser->brandUser;
+			}
+			$this->userId = $this->brandUser['lid'];
+		}
+		if($this->type==1){
+			$this->userId = 0000000000;
+			Yii::app()->session['qrcode-'.$this->userId] = 0000000000;
+			$this->siteId = Yii::app()->session['qrcode-'.$this->userId];
+		}
 	}
 	public function actionIndex()
 	{
-		$product = new WxProduct($this->companyId);
+		$product = new WxProduct($this->companyId,$this->userId,$this->siteId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
 		$this->render('index',array('companyId'=>$this->companyId,'categorys'=>$categorys,'models'=>$products));
@@ -43,12 +55,35 @@ class MallController extends Controller
 	 */
 	public function actionCart()
 	{
-		$siteId = Yii::app()->session['qrcode-'.$this->userId];
-		
-		$cartObj = new WxCart($this->companyId,$this->userId,$productArr = array(),$siteId);
+		$cartObj = new WxCart($this->companyId,$this->userId,$productArr = array(),$this->siteId);
 		$carts = $cartObj->getCart();
 		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts));
 	}
+	/**
+	 * 
+	 * 生成订单
+	 * 
+	 */
+	public function actionGeneralOrder()
+	{
+		$orderObj = new WxOrder($this->companyId,$this->userId,$this->siteId,$this->type);
+		$orderId = $orderObj->createOrder();
+		$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
+	}
+	/**
+	 * 
+	 * 
+	 * 订单
+	 * 
+	 */
+	 public function actionOrder()
+	 {
+		$orderId = Yii::app()->request->getParam('orderId');
+		
+		$order = WxOrder::getOrder($orderId,$this->companyId);
+		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts));
+	 }
 	/**
 	 * 
 	 * 添加购物车
@@ -59,10 +94,15 @@ class MallController extends Controller
 		if($this->userId < 0){
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众号我要点单进行点餐')));
 		}
-		if(isset(Yii::app()->session['qrcode-'.$this->userId])){
-			$siteId = Yii::app()->session['qrcode-'.$this->userId];
+		
+		if($this->type==1){
+			if($this->siteId < 0){
+				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
+			}else{
+				$siteId = $this->siteId;
+			}
 		}else{
-			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
+			$siteId = $this->siteId;
 		}
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
@@ -85,8 +125,8 @@ class MallController extends Controller
 		if($this->userId < 0){
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众号我要点单进行点餐')));
 		}
-		if(isset(Yii::app()->session['qrcode-'.$this->userId])){
-			$siteId = Yii::app()->session['qrcode-'.$this->userId];
+		if($this->type==1 && $this->siteId >= 0){
+			$siteId = $this->siteId;
 		}else{
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
 		}
