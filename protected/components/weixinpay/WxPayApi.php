@@ -46,7 +46,7 @@ class WxPayApi
 		
 		$orderId = $inputObj->GetOut_trade_no();
 		
-		$orderIdArr = explode('-',$this->values['out_trade_no']);
+		$orderIdArr = explode('-',$orderId);
 		$dpid = $orderIdArr[1];
 		$account = WxAccount::get($dpid);
 		$appId = $account['appid'];
