@@ -18,9 +18,9 @@
 	$input->SetNotify_url($notifyUrl);
 	$input->SetTrade_type("JSAPI");
 	$input->SetOpenid($openId);
-	var_dump($input);exit;
-	$orderInfo = WxPayApi::unifiedOrder($input);
 	
+	$orderInfo = WxPayApi::unifiedOrder($input);
+	var_dump($orderInfo);exit;
 	$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 ?>
 
