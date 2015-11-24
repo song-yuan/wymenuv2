@@ -31,7 +31,7 @@ class NewBrandUser {
 		} catch(Exception $e) {
 			$this->errorMessage = $e->getMessage();
 			$transaction->rollBack();
-			echo '<meta charset=utf8/>';
+			header("Content-Type: text/html; charset=UTF-8");
 			var_dump($this->errorMessage );exit;
 		}
 		
