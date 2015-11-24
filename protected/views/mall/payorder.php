@@ -5,6 +5,7 @@
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
+	$tools = new JsApiPay();
 	$openId = WxBrandUser::openId($this->userId,$this->companyId);
 	//②、统一下单
 	$input = new WxPayUnifiedOrder();
