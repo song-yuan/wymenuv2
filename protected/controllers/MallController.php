@@ -27,7 +27,6 @@ class MallController extends Controller
 			$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
 			$userInfo = $baseInfo->getSnsapiBase();
 			$openid = $userInfo['openid'];
-			var_dump($this->weixinServiceAccount);var_dump($openid);exit;
 			
 			$this->brandUser($openid);
 			if(!$this->brandUser){
