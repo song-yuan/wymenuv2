@@ -56,9 +56,9 @@ class NewBrandUser {
         $result = Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
         var_dump($result);
         $this->userId = $lastInsertId = Yii::app()->db->getLastInsertID();
-        var_dump($lastInsertId);
+        var_dump($lastInsertId);exit;
         $this->brandUser = WxBrandUser::get($lastInsertId,$this->brandId);
-        var_dump($this->brandUser);exit;
+       
     }
 	
 	/**
