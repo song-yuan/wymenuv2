@@ -24,7 +24,8 @@
  * @property string $create_at
  * @property string $update_at
  * @property integer $consume_point_history
- * @property string $consume_point
+ * @property string $consume_total_money
+ * * @property string $remain_money
  * @property integer $scene_type
  * @property integer $weixin_group
  */
@@ -48,7 +49,7 @@ class BrandUser extends CActiveRecord
 		return array(
 			array('dpid, user_name, card_id, update_at, scene_type', 'required'),
 			array('dpid, unsubscribe, unsubscribe_time, consume_point_history, scene_type, weixin_group', 'numerical', 'integerOnly'=>true),
-			array('lid, user_level_lid, consume_point', 'length', 'max'=>10),
+			array('lid, user_level_lid, consume_total_money,remain_money', 'length', 'max'=>10),
 			array('user_name, mobile_num', 'length', 'max'=>45),
 			array('password', 'length', 'max'=>50),
 			array('nickname', 'length', 'max'=>30),
@@ -59,7 +60,7 @@ class BrandUser extends CActiveRecord
 			array('user_birthday, create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, user_name, password, nickname, head_icon, mobile_num, sex, card_id, user_level_lid, user_birthday, openid, country, province, city, unsubscribe, unsubscribe_time, create_at, update_at, consume_point_history, consume_point, scene_type, weixin_group', 'safe', 'on'=>'search'),
+			array('lid, dpid, user_name, password, nickname, head_icon, mobile_num, sex, card_id, user_level_lid, user_birthday, openid, country, province, city, unsubscribe, unsubscribe_time, create_at, update_at, consume_point_history, consume_total_money,remain_money, scene_type, weixin_group', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,6 +72,7 @@ class BrandUser extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'level' => array(self::BELONGS_TO , 'BrandUserLevel' ,'','on'=> 't.user_level_lid=level.lid and level.dpid=t.dpid'),
 		);
 	}
 
@@ -92,15 +94,16 @@ class BrandUser extends CActiveRecord
 			'user_level_lid' => '对应（brand_user_level）会员等级lid',
 			'user_birthday' => '会员生日',
 			'openid' => 'openid',
-			'country' => 'Country',
-			'province' => 'Province',
-			'city' => 'City',
+			'country' => '国家',
+			'province' => '省份',
+			'city' => '城市',
 			'unsubscribe' => '0未取消关注 1取消关注',
 			'unsubscribe_time' => '取消关注时间',
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
 			'consume_point_history' => '消费历史积分总数',
-			'consume_point' => '当前持有的消费积分',
+			'consume_total_money' => '消费总金额',
+                        'remain_money' => '剩余金额',
 			'scene_type' => '0 自动关注,1扫码关注',
 			'weixin_group' => '所在微信分组',
 		);
@@ -144,7 +147,8 @@ class BrandUser extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('consume_point_history',$this->consume_point_history);
-		$criteria->compare('consume_point',$this->consume_point,true);
+		$criteria->compare('consume_total_money',$this->consume_total_money,true);
+                $criteria->compare('remain_money',$this->remain_money,true);
 		$criteria->compare('scene_type',$this->scene_type);
 		$criteria->compare('weixin_group',$this->weixin_group);
 

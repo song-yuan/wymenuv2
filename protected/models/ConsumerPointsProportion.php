@@ -9,7 +9,7 @@
  * @property string $create_at
  * @property string $update_at
  * @property string $cpp_name
- * @property string $proportion_psoint
+ * @property string $proportion_points
  * @property string $is_available
  * @property string $delete_flag
  */
@@ -34,12 +34,12 @@ class ConsumerPointsProportion extends CActiveRecord
 			array('update_at, cpp_name', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('cpp_name', 'length', 'max'=>50),
-			array('proportion_psoint', 'length', 'max'=>6),
+			array('proportion_points', 'length', 'max'=>6),
 			array('is_available, delete_flag', 'length', 'max'=>2),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, cpp_name, proportion_psoint, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, cpp_name, proportion_points, is_available, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,8 +65,8 @@ class ConsumerPointsProportion extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '最近一次更新时间',
 			'cpp_name' => '名称',
-			'proportion_psoint' => '消费积分比例，是一个decimal的数据',
-			'is_available' => '是否有效，；表示有效，1表示无效',
+			'proportion_points' => '消费积分比例',//，是一个decimal的数据
+			'is_available' => '是否有效',//，；表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
 		);
 	}
@@ -94,7 +94,7 @@ class ConsumerPointsProportion extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('cpp_name',$this->cpp_name,true);
-		$criteria->compare('proportion_psoint',$this->proportion_psoint,true);
+		$criteria->compare('proportion_points',$this->proportion_points,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 

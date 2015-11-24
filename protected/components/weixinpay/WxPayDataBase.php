@@ -102,11 +102,22 @@ class WxPayDataBase
 	 */
 	public function MakeSign()
 	{
+		$key = '';
+		if(isset($_GET['companyId'])){
+			$dpid = $_GET['companyId'];
+			$account = WxAccount::get($dpid);
+			$key = $account['key'];
+		}elseif(isset($this->values['out_trade_no'])){
+			$orderIdArr = explode('-',$this->values['out_trade_no']);
+			$dpid = $orderIdArr[1];
+			$account = WxAccount::get($dpid);
+			$key = $account['key'];
+		}
 		//签名步骤一：按字典序排序参数
 		ksort($this->values);
 		$string = $this->ToUrlParams();
 		//签名步骤二：在string后加入KEY
-		$string = $string . "&key=".WxPayConfig::KEY;
+		$string = $string . "&key=".$key;
 		//签名步骤三：MD5加密
 		$string = md5($string);
 		//签名步骤四：所有字符转为大写

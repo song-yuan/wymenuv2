@@ -36,7 +36,7 @@ class WeixinRecharge extends CActiveRecord
 			array('update_at, wr_name', 'required'),
 			array('lid, dpid, recharge_money, recharge_cashback', 'length', 'max'=>10),
 			array('wr_name', 'length', 'max'=>50),
-			array('recharge_pointback', 'length', 'max'=>4),
+			array('recharge_pointback', 'length', 'max'=>10),
 			array('is_available, delete_flag', 'length', 'max'=>2),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
@@ -70,7 +70,7 @@ class WeixinRecharge extends CActiveRecord
 			'recharge_money' => '充值的金额',
 			'recharge_pointback' => '返积分',
 			'recharge_cashback' => '返现',
-			'is_available' => '0表示有效，1表示无效',
+			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
 		);
 	}

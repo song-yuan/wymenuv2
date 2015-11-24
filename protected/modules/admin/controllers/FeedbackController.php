@@ -62,7 +62,6 @@ class FeedbackController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Feedback');
 			$model->update_at=date('Y-m-d H:i:s',time());
-                        $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('feedback/index' , 'allflag'=>$allflag, 'companyId' => $this->companyId));

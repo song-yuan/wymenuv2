@@ -64,9 +64,9 @@ class PointsValid extends CActiveRecord
 			'dpid' => '店铺时间',
 			'create_at' => 'Create At',
 			'update_at' => '最近一次更新时间',
-			'valid_name' => '有效期名称',
-			'valid_days' => '有效期，按天数进行计算',
-			'is_available' => '0表示有效，1表示无效',
+			'valid_name' => '名称',
+			'valid_days' => '有效期',//，按天数进行计算
+			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
 		);
 	}

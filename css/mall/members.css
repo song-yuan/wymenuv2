@@ -1,0 +1,529 @@
+.toparea {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+}
+
+.toparea .info {
+	position: absolute;
+	left: 45%;
+	z-index: 100;
+}
+
+
+.withtop {
+	margin-top: 115px;
+}
+.maininfo {
+	background-image: url(../images/mem_head_bg.jpg);
+	background-size: 100% auto;
+	height: 95px;
+}
+
+.members_info .maininfo {
+	
+	background-color: white;
+}
+
+.avatar {
+	width: 80px;
+	height: 80px;
+	border: 2px white solid;
+	border-radius: 41px;
+}
+
+.maininfo .left {
+	width: 35%;
+	text-align: right;
+}
+
+.maininfo .info {
+		width: 50%;
+		line-height: 1.5em;
+		padding-top: 10px;
+}
+
+.maininfo button {
+	border-radius: 10px;
+	height: 20px;
+	width: 90px;
+	background-color: rgba(0,0,0,0.4);
+	color: white;
+	font-size: 0.8em;
+	text-align: left;
+	padding-left: 10px;
+	padding-right: 10px;
+	background-image: url(../images/arrow_small_white.png);
+	background-position: right center;
+	background-size: auto 12px;
+	background-repeat: no-repeat;
+}
+
+.update button {
+	-webkit-box-shadow: 0px 0px 5px 2px rgba(255, 255, 255, .75);
+	-moz-box-shadow: 0px 0px 5px 2px rgba(255, 255, 255, .75);
+	box-shadow: 0px 0px 5px 2px rgba(255, 255, 255, .75);
+}
+
+.listset span.dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	display: inline-block;
+	margin-bottom: 1px;
+	margin-left: 15px;
+
+}
+
+.listset {
+	background-color: white;
+	margin-bottom: 10px;
+	padding: 0px 5px;
+}
+
+.listnopadding {
+	padding: 0px;
+}
+
+.listset div {
+	border-bottom: 1px solid #cacaca !important;
+	padding: 13px 5px;
+	position: relative;
+	font-size: 1em;
+}
+
+.listnopadding div {
+	padding: 13px 10px;
+}
+
+.listset div:last-child {
+	border-bottom: 0px !important;
+}
+
+.listset div a {
+	display: block;
+}
+
+.members .bignotice {
+	padding: 100px 0px 40px;
+}
+
+
+
+
+
+.my_points > div {
+	padding: 10px;
+}
+
+.my_points div.tabmain {
+	padding: 0px;
+}
+
+.rulelink {
+	text-align: right;
+	font-size: 0.8em;
+}
+
+.my_points .circles {
+	text-align: center;
+	width: 100%;
+}
+
+.my_points .circles > span {
+	width: 35%;
+	display: inline-block;
+	margin: 10px 20px;
+	text-align: center;
+	font-size: 0.9em;
+	position: relative;
+}
+
+.my_points .circles > span img {
+	width: 100%;
+	height: auto;
+}
+
+.my_points .act_points {
+	color: #f0414a;
+}
+
+.my_points .buy_points {
+	color: #f0b841;
+}
+
+.my_points .point_num {
+	position: absolute;
+	left: 30%;
+	top: 30%;
+}
+
+.point_tab {
+	text-align: center;
+}
+.point_tab li {
+	display: inline-block;
+	text-align: center;
+	width: 45%;
+}
+
+.point_tab li .current {
+	border-bottom: 1px solid white;
+	display: inline-block;
+	height: 35;
+}
+
+.listsetdot ul {
+	background-color: white;
+	padding: 0px 10px !important;
+	margin-bottom: 7px;
+}
+
+.listsetdot > div,.listsetdot > ul > li {
+	border-bottom: 1px dashed #ededed;
+	padding: 15px 5px;
+}
+
+.listsetdot > div:last-child, .listsetdot > ul >li:last-child {
+	border-bottom: 0px;
+}
+
+.listsetdot > div span,.listsetdot > ul>li span {
+	margin-right: 15px;
+	display: inline-block;
+}
+
+
+.listsetdot > ul>li span.pointsnum {
+	text-align: center;
+	min-width: 40px;
+}
+
+.listsetdot > ul>li span {
+	font-size: 0.9em;
+}
+
+.listsetdot .tabmain {
+	position: relative;
+
+}
+
+.point_rdme ul li {
+	list-style: decimal;
+	list-style-position: inside;
+}
+
+.rulelink a img {
+	height: 15px;
+	width: auto;
+	vertical-align: middle;
+}
+
+
+
+
+
+.shop_tab {
+	background-color: #ebeae7;
+	position: absolute !important;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	width: 35%;
+	height: 100%;
+}
+
+.shoplist {
+	position: absolute !important;
+	left: 35%;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	height: 100%;
+}
+
+.shop_tab ul li span {
+	height: 20px; 
+	padding: 15px 15px;
+	border-bottom: 1px solid #ceccca;
+	display: block;
+}
+
+
+
+.shop_tab ul li span.current {
+	background-color: white;
+}
+
+
+.shoplist ul {
+}
+
+.shoplist ul li {
+	padding: 25px 15px;
+}
+
+.shoplist ul li.current {
+	background-color: #d9d9d9;
+}
+
+.shoplist .shopname {
+	font-size: 1.2em;
+	margin-bottom: 10px;
+}
+
+.shoplist .add {
+	text-indent: -35px;
+	padding-left: 35px;
+}
+
+.shoplist label {
+	display: block;
+}
+
+.shoplist input {
+	display: none;
+}
+
+
+.baract {
+	background-color: #f3940c;
+}
+
+.font_act {
+	color: #f3940c;
+}
+
+.barbuy {
+	background-color: #81a8cf;
+}
+
+.font_buy {
+	color: #81a8cf;
+}
+
+
+.members_info .other {
+	margin-bottom: 7px;
+	font-size: 0.8em !important;
+	line-height: 1.5em;
+	padding-top: 0px;
+}
+
+.members_info .info, .members_udpate .info {
+	font-size: 0.8em !important;
+	line-height: 1.5em;
+	padding-bottom: 80px;
+}
+
+.bar {
+	background-color: white;
+	padding-top: 0px;
+}
+
+.bar .container {
+	display: inline-block;
+	width: 60%;
+	border-radius: 2px;
+	background-color: #dcdcdc;
+}
+
+.bar .container div {	
+	height: 10px;
+}
+
+.bar span {
+	font-size: 0.7em;
+	display: inline-block;
+	padding: 5px;
+	width: 15%;
+}
+
+.members_update .bttnbar_nostyle
+{
+	box-shadow: 0px 0px 0px 0px rgba(50, 50, 50, 0) !important;
+	background-color: transparent !important;
+
+}
+
+.updateinfo {
+	margin-bottom: 10px;
+	background-color: white;
+	padding-bottom: 15px;
+}
+
+.members_udpate button {
+	width: 70%;
+}
+
+
+
+
+
+
+.addlist > li {
+	margin-bottom: 8px;
+	background-color: white;
+	padding: 10px;
+	line-height: 1.2em;
+}
+
+.my_address .tools {
+	background-color: white;
+	padding: 0px 10px;
+}
+
+.my_address .tools li {
+	border-bottom: 1px solid #cccccc;
+	padding: 10px 0px;
+	font-size: 0.8em;
+	padding-left: 25px;
+}
+
+
+
+
+.my_address .tools li:last-child {
+	border-bottom: 0px;
+}
+
+.my_address .tools a {
+	display: block;
+}
+
+
+.my_address .addlist input[type="radio"] + label {
+	background-image: url('../images/round_unchk.png');
+	background-repeat: no-repeat;
+	background-size: 20px 20px;
+	padding-right: 25px;
+	background-position: right;
+	display: block;
+}
+
+.my_address .addlist input[type="radio"]:checked + label {
+	background-image: url('../images/round_chk.png');
+	display: block;
+
+}
+
+.addlist label span {
+	display: block;
+}
+
+.my_address .addlist input[type="radio"] {
+	display: none;
+}
+
+.tools .shareicon {
+	background-image: url('../../../images/member2.0/icon_share2.png');
+	
+
+}
+
+.my_address .tools li {
+	background-size: 20px 20px;
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
+
+.tools .addicon {
+	background-image: url('../images/icon_add.png');
+
+}
+
+
+
+.swipe-out .delete-btn {
+        padding: 6px 8px;
+        height: 65px;
+        background-color: #f5342f;
+        color: #fff;
+        font: bold 14px/20px "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+
+.delete-btn div {
+	display: inline-block;
+	min-width: 40px;
+	height: 65px;
+	background-size: 20px 20px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	position: relative;
+}
+
+
+.bttndelete {
+	background-image: url('../images/icon_delete.png');
+}
+
+.bttnedit {
+	background-image: url('../images/icon_edit.png');
+}
+
+.bttnedit a {
+	display: block;
+	height: 65px;
+	
+}
+
+
+.add_address ul.complete_add {
+	padding: 0px 10px;
+	background-color: white;
+	font-size: 0.9em;
+}
+
+.add_address .complete_add li {
+	padding: 10px 0px;
+	border-bottom: 1px #e3e3e3 solid;
+	overflow: hidden;
+}
+
+.add_address .complete_add li:last-child {
+	border-bottom: 0px;
+}
+
+.add_address .complete_add li label {
+	width: 80px;
+	display: inline-block;
+}
+
+.add_address .complete_add li input[type="text"] {
+	border: 0px;
+	 font-size: 0.9em;
+}
+
+.add_address .bttnbar  button {
+	min-width: 90px;
+	padding: 5px 10px;
+	margin: 0px 10px;
+}
+
+.add_address .complete_add li div {
+	height: 30px;
+	line-height: 30px;
+}
+
+.add_address .complete_add li div.right label {
+	width: 55px !important;
+}
+
+.members .overlay {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	z-index: 99;
+	display: none;
+}
+
+.update .overlay {
+	display: block;
+}
+
