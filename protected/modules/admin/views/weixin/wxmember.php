@@ -1,11 +1,4 @@
-		<script type="text/javascript" src="metronic/plugins/select2/select2.min.js"></script>
-		<script type="text/javascript" src="metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-		<script type="text/javascript" src="metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
-		<link rel="stylesheet" type="text/css" href="metronic/plugins/select2/select2_metro.css" />
 		
-		<link href="metronic/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
-		<script src="metronic/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript" ></script>
-		<script src="metronic/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript" ></script>
 		<!-- END SIDEBAR -->
 		<!-- BEGIN PAGE -->
 		    <div class="page-content">
@@ -19,10 +12,10 @@
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
-					<ul class="nav nav-tabs">
+					<!--<ul class="nav nav-tabs">
 						<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/member/index',array('cid'=>$this->companyId));?>'" data-toggle="tab">已关注会员</a></li>
 						<li><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/member/unSubList',array('cid'=>$this->companyId));?>'" data-toggle="tab">未关注会员</a></li>
-					</ul>
+					</ul>-->
 					<?php $form=$this->beginWidget('CActiveForm', array(
 						'id'=>'Promote',
 						'clientOptions'=>array(
@@ -35,99 +28,158 @@
 					<div class="col-md-12">
 						<div class="table-responsive">
 							<style>
-							#search-form tr,#search-form tr td{border:none !important;}
-							</style>
-							<table id="search-form" class="table">
-								<tr>
-									<td width="15%"><label class="control-label">按号码查找</label></td>
-									<td width="35%">
-									<div class="input-group">
-									<span class="input-group-addon">会员卡号</span><input type="text" name="id" class="form-control input-medium" value="<?php echo isset($id) && $id ?$id:'';?>"/>
-									</div>
-									</td>
-									<td width="15%">
-									</td>
-									<td width="35%">
-									   <button type="submit" class="btn green">
-											查找 &nbsp; 
-											<i class="m-icon-swapright m-icon-white"></i>
-										</button>
-										<div style="text-align:center;display:inline;width:50%;float:right;">
-											<?php if(isset($more) && $more):?>
-											<a href="javascript:;"><span class="glyphicon glyphicon-chevron-up">收起</span></a>
-											<?php else:?>
-											<a href="javascript:;"><span class="glyphicon glyphicon-chevron-down">更多查找条件</span></a>
-											<?php endif;?>
-											<input type="hidden" name="more" id="more" value="<?php //echo isset($more) && $more?1:0;?>"/>
+							.more-condition
+                                                        {margin-bottom: 15px !important;}
+							</style>							
+                                                                 
+										<div class="form-group more-condition" style="float:left;width:150px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+                                                                                    <div class="input-group" style="width:95%;">
+												<span class="input-group-addon">性别</span>
+												<select class="form-control" name="findsex">
+                                                                                                        <option value="%">全部</option>
+													<option value="0">未知</option>
+                                                                                                        <option value="1">男</option>
+                                                                                                        <option value="2">女</option>
+												</select>												
+											</div>
 										</div>
-									</td>
-								</tr>
-								<tr class="more-condition" style="display:<?php echo isset($more) && $more?'':'none';?>;">
-									<td><label class="control-label">按来源门店查找</label></td>
-									<td> 
-										<div class="form-group" style="disabled:true;">
-											<div class="input-group">
-												<span class="input-group-addon">来源门店</span>
-												<?php //if($objects):?>
-												<select class="form-control" name="original_shop">
-													<option value="">--请选择实体店--</option>
-													<?php //foreach($objects as $region):?>
-													<optgroup label="<?php //echo $region->region_name;?>">
-													<?php //foreach($region->shop as $shop):?>
-													<option value="1_<?php //echo $shop->shop_id;?>" <?php // if(isset($original_shop) && ('1_'.$shop->shop_id == $original_shop)) echo 'selected';?>><?php //echo $shop->shop_name;?></option>
-													<?php //endforeach;?>
-													</optgroup>
-													<?php //endforeach;?>
-												</select>
-												<?php //endif;?>
-												</div>
+									
+										<div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">年龄</span>
+												<input type="text" maxlength="2" class="form-control" name="agefrom" value="0"><span class="input-group-addon">~</span><input type="text" maxlength="2" class="form-control" name="ageto" value="100">
+											</div>
+										</div>									 
+										<div class="form-group more-condition" style="float:left;width:280px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">出生日期</span>
+												<input type="text" maxlength="5" class="form-control" name="birthfrom" value="01-01"><span class="input-group-addon">~</span><input type="text" maxlength="5" class="form-control" name="birthto" value="12-31">
+											</div>
 										</div>
-									</td>
-									<td><label class="control-label">按来源渠道查找</label></td>
-									<td> 
-										<div class="form-group" style="disabled:true;">
-											<div class="input-group">
-												<span class="input-group-addon">来源渠道</span>
-												<select class="form-control" name="promote">
-													<option value="">--请选择渠道--</option>
-													<?php //if($promotes):?>
-													<?php //foreach($promotes as
-                                                                                                        // $promote):?>
-													<option value="<?php //echo $promote['type'].'_'.$promote['promote_id'];?>" <?php //if(isset($promoteType) && ($promoteType == $promote['type'].'_'.$promote['promote_id'])) echo 'selected';?>><?php //echo $promote['channel_name'];?></option>
-													<?php //endforeach;?>
-													<?php //endif;?>
+									 
+										<div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">会员等级</span>
+												<select class="form-control" name="finduserlevel">
+													<option value="0">--全体--</option>
+													<?php if(!empty($userlevels)):?>
+													<?php foreach($userlevels as
+                                                                                                         $userlevel):?>
+													<option value="<?php echo $userlevel->lid;?>" <?php if($userlevel->lid==$finduserlevel) echo 'selected';?>><?php echo $userlevel->level_name;?></option>
+													<?php endforeach;?>
+													<?php endif;?>
+												</select>												
+											</div>
+										</div>
+                                                                                <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">微信分组</span>
+												<select class="form-control" name="findweixingroup">
+													<option value="0">--全体--</option>
+													<?php if(!empty($weixingroups)):?>
+													<?php foreach($weixingroups as
+                                                                                                         $weixingroup):?>
+													<option value="<?php echo $weixingroup['id'];?>" <?php if($weixingroup['id']==$findweixingroup) echo 'selected';?>><?php echo $weixingroup['name'];?></option>
+													<?php endforeach;?>
+													<?php endif;?>
 												</select>
 												
 												</div>
 										</div>
-									</td>
-								</tr>
-								<tr class="more-condition" style="display:<?php //echo isset($more) && $more?'':'none';?>;">
-								  <td><label class="control-label">按来源活动查找</label></td>
-									<td> 
-										<div class="form-group" style="disabled:true;">
-											<div class="input-group">
-												<span class="input-group-addon">来源活动</span>
-												<?php //if($activites):?>
-												<select class="form-control" name="active">
-													<option value="">--请选择活动--</option>
-													<?php //foreach($activites as $activite):?>
-													<option value="<?php// echo $activite['type'].'_'.$activite['id'];?>" <?php //if(isset($activeType) && ($activeType == $activite['type'].'_'.$activite['id'])) echo 'selected';?>><?php// echo $activite['title'];?></option>
-													<?php// endforeach;?>
+                                                        
+                                                                                <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">国家</span>
+												<select class="form-control" name="findcountry">
+													<option value="0">--全体--</option>
+													<?php if(!empty($modelcountrys)):?>
+													<?php foreach($modelcountrys as
+                                                                                                         $key=>$modelcountry):?>
+													<option value="<?php echo $modelcountry['country'];?>" <?php if($modelcountry['country']==$findcountry) echo 'selected';?>><?php echo $modelcountry['country'];?></option>
+													<?php endforeach;?>
+													<?php endif;?>
 												</select>
-												<?php //endif;?>
+												
 												</div>
 										</div>
-									</td>
-									<td><label class="control-label">按关注时间查找</label></td>
-									<td> 
-										<div class="form-group">
-											<div class="input-group date-picker input-daterange">
-												<span class="input-group-addon">关注时间</span><input type="text" class="form-control input-small" name="from" value="<?php //echo isset($from)&&$from?$from:'';?>"><span class="input-group-addon">~</span><input type="text" class="form-control input-small" name="to" value="<?php //echo isset($to)&&$to?$to:'';?>">
+                                                        
+                                                                                <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">省份</span>
+												<select class="form-control" name="findprovince">
+													<option value="0">--全体--</option>
+													<?php if(!empty($modelprovinces)):?>
+													<?php foreach($modelprovinces as
+                                                                                                         $key=>$modelprovince):?>
+                                                                                                        <option country="<?php echo $findcountry; ?>"
+                                                                                                            style="display:<?php if($modelprovince['country']==$findcountry){echo "";}else{ echo "none";} ?>"
+                                                                                                                value="<?php echo $modelprovince['province'];?>" 
+                                                                                                                <?php if($modelprovince['province']==$findprovince && $modelprovince['country']==$findcountry) echo 'selected';?>>
+                                                                                                                    <?php echo $modelprovince['province'];?></option>
+													<?php endforeach;?>
+													<?php endif;?>
+												</select>
+												
+												</div>
+										</div>
+                                                        
+                                                                                <div class="form-group more-condition" style="float:left;width:200px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">市区</span>
+												<select class="form-control" name="findcity">
+													<option value="0">--全体--</option>
+													<?php if(!empty($modelcitys)):?>
+													<?php foreach($modelcitys as
+                                                                                                         $key=>$modelcity):?>
+													<option country="<?php echo $findcountry; ?>" province="<?php echo $findprovince ?>"
+                                                                                                            style="display:<?php if($modelcity['country']==$findcountry && $modelcity['province']==$findprovince){echo "";}else{ echo "none";} ?>"
+                                                                                                            value="<?php echo $modelcity['city'];?>" 
+                                                                                                                <?php if($modelcity['city']==$findcity && $modelcity['province']==$findprovince && $modelcity['country']==$findcountry) echo 'selected';?>>
+                                                                                                                    <?php echo $modelcity['city'];?></option>
+													<?php endforeach;?>
+													<?php endif;?>
+												</select>												
+												</div>
+										</div>
+                                                                                <div class="form-group more-condition" style="float:left;width:350px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">消费总额</span>
+                                                                                                <input type="text" maxlength="10" class="form-control" name="consumetotalfrom" value="0"><span class="input-group-addon">~</span><input type="text" maxlength="10" class="form-control" name="consumetotalto" value="9999999999">
 											</div>
 										</div>
-									</td>
-								</tr>
+                                                                                <div class="form-group more-condition" style="float:left;width:350px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">积分</span>
+												<input type="text" maxlength="10" class="form-control" name="pointfrom" value="0"><span class="input-group-addon">~</span><input type="text" maxlength="10" class="form-control" name="pointto" value="9999999999">
+											</div>
+										</div>
+                                                                                <div class="form-group more-condition" style="float:left;width:350px;disabled:true;display:<?php echo isset($more) && $more?'':'none';?>;">
+											<div class="input-group" style="width:95%;">
+												<span class="input-group-addon">余额</span>
+												<input type="text" maxlength="10" class="form-control" name="remainfrom" value="0"><span class="input-group-addon">~</span><input type="text" maxlength="10" class="form-control" name="remainto" value="9999999999">
+											</div>
+										</div>
+									
+                                                                    <div style="clear:both;"></div>
+                                                                    
+                                                                    <div class="input-group" style="float:left;width:450px;margin-bottom:15px;">
+                                                                        <span class="input-group-addon">会员卡号或电话号码</span><input type="text" name="id" class="form-control" style="width:200px;" value="<?php echo isset($id) && $id ?$id:'';?>"/>
+                                                                        <button type="submit" class="btn green">
+                                                                                查找 &nbsp; 
+                                                                                <i class="m-icon-swapright m-icon-white"></i>
+                                                                        </button>
+                                                                    </div>                                                                    									
+                                                                    
+                                                                    <div style="text-align:center;display:inline;width:200px;float:left;margin-bottom:15px;">                                                                                    
+                                                                            <?php if(isset($more) && $more):?>
+                                                                                <a href="javascript:;"><span class="glyphicon glyphicon-chevron-up">收起</span></a>
+                                                                                <?php else:?>
+                                                                                <a href="javascript:;"><span class="glyphicon glyphicon-chevron-down">更多查找条件</span></a>
+                                                                                <?php endif;?>
+                                                                                <input type="hidden" name="more" id="more" value="<?php echo isset($more) && $more?1:0;?>"/>                                                                                    
+                                                                    </div>
+                                                                   
+								
 							</table>
 						</div>
 					</div>
@@ -138,24 +190,27 @@
 							<div class="actions">
 								<a href="javascript:;" class="btn blue" onclick="exportFile();">
 									<i class="fa fa-pencil"></i> 导出Excel文件
-								</a>							
+								</a>
+                                                                <a href="javascript:;" class="btn red">
+									<i class="fa fa-pencil"></i> 手动群发
+								</a>
 							</div>
 						</div>					
 						<div class="portlet-body">
 							<table class="table table-bordered table-hover">
 								<thead>
 									<tr>
-                                                                                <th width="8%">卡号</th>
+                                                                                <th width="6%">卡号</th>
                                                                                 <th width="10%">名称</th>
-                                                                                <th width="4%">性别</th>
+                                                                                <th width="6%">性别</th>
                                                                                 <th width="10%">出生日期</th>
                                                                                 <th width="6%">等级</th>
 										<th width="8%">微信分组</th>
-                                                                                <th width="10%">地区</th>
+                                                                                <th width="12%">地区</th>
 										<th width="8%">手机号</th>				
-                                                                                <th width="10%"><a href="javascript:;" onclick="sort(1,<?php //echo $sort?0:1;?>);">消费额 <i class="fa <?php //echo $order==1?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
-										<th width="10%"><a href="javascript:;" onclick="sort(3,<?php //echo $sort?0:1;?>);">消费积分 <i class="fa <?php //echo $order==3?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
-										<th width="10%"><a href="javascript:;" onclick="sort(4,<?php //echo $sort?0:1;?>);">余额返现 <i class="fa <?php //echo $order==4?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
+                                                                                <th width="10%"><a href="javascript:;" onclick="sort(1,<?php echo $sort?0:1;?>);">消费总额 <i class="fa <?php echo $order==1?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
+										<th width="10%"><a href="javascript:;" onclick="sort(2,<?php echo $sort?0:1;?>);">积分 <i class="fa <?php echo $order==2?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
+										<th width="10%"><a href="javascript:;" onclick="sort(3,<?php echo $sort?0:1;?>);">余额 <i class="fa <?php echo $order==3?($sort?'fa-chevron-circle-down':'fa-chevron-circle-up'):'fa-chevron-circle-down';?>"></i></a></th>
 										<th width="6%">操作</th>
 									</tr>
 								</thead>
@@ -163,20 +218,21 @@
 									<?php if($models):?>
 									<?php foreach($models as $model):?>
 										<tr>
-                                                                                    <td><?php echo substr($model['card_id'],5);?></td>
+                                                                                    <td><?php echo substr($model['card_id'],-5,5);?></td>
                                                                                     <td><?php echo $model['user_name'];?></td>
-                                                                                    <td><?php echo $model['sex'];?></td>
-                                                                                    <td><?php echo $model['user_birthday'];?></td>
-                                                                                        <td><?php echo $model['user_level_lid'];?></td>
-											<td><?php echo $model['weixin_group'];?></td>
-                                                                                        <td><?php echo $model['country'];?><br><?php echo $model['province'];?><br><?php echo $model['city'];?></td>											
-											<td><?php echo $model['mobile_num'];?></td>
-											<td><?php ?></td>											
-											<td><?php //echo $model['rest_consume_point'];?><a class="btn default btn-xs blue points-edit" title="编辑" data-id="<?php echo $model['lid'];?>" point="<?php //echo $model['rest_consume_point'];?>" href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
-											<td><?php //echo $model['rest_activity_point'];?></td>
-											<td class="button-column">
-												<a class="btn default btn-xs blue" title="查看" href="<?php echo $this->createUrl('/brand/member/view',array('cid'=>$this->companyId,'id'=>$model['lid']));?>"><i class="fa fa-search"></i> 查 看</a>
-											</td>
+                                                                                    <td><?php switch ($model['sex']){case 0:echo "未知"; break; case 1:echo "男";break; case 2:echo "女";};?></td>
+                                                                                    <td><?php echo substr($model['user_birthday'],0,10);?></td>
+                                                                                    <td><?php if(!empty($model->level)) echo $model->level->level_name;?></td>
+                                                                                    <td><?php if(!empty($weixingroup[$model['weixin_group']])) {echo $weixingroup[$model['weixin_group']];} else {echo $model['weixin_group'];}?></td>
+                                                                                    <td><?php echo $model['country'];?> <?php echo $model['province'];?> <?php echo $model['city'];?></td>											
+                                                                                    <td><?php echo $model['mobile_num'];?></td>
+                                                                                    <td><?php echo $model['consume_total_money'];?><a class="btn default btn-xs blue pointsnum" title="详细列表" data-id="<?php echo $model['lid'];?>" point="<?php echo $model['consume_total_money'];?>" href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
+                                                                                    <td><?php echo $model['consume_point_history'];?><a class="btn default btn-xs blue pointsnum" title="详细列表" data-id="<?php echo $model['lid'];?>" point="<?php echo $model['consume_point_history'];?>" href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
+                                                                                    <td><?php echo $model['remain_money'];?><a class="btn default btn-xs blue pointsnum" title="详细列表" data-id="<?php echo $model['lid'];?>" point="<?php echo $model['remain_money'];?>" href="javascript:;" style="float:right;"><i class="fa fa-edit"></i></a></td>
+                                                                                    
+                                                                                    <td class="button-column">
+                                                                                        <a class="btn default btn-xs blue" title="详细" href="<?php echo $this->createUrl('/admin/weixin/memberdetail',array('cid'=>$this->companyId,'id'=>$model['lid']));?>"><i class="fa fa-search"></i>详细</a>
+                                                                                    </td>
 										</tr>
 									<?php endforeach;?>	
 									<?php else:?>
@@ -248,13 +304,15 @@
 	    }
 		function sort(o,s){
 			var url = $('#Promote').attr('action');
-			oIndex = url.indexOf('&o=');
+			oIndex = url.indexOf('/o/');
 			if(oIndex >0){
-				var reg = new RegExp("([\\w\\/\\.\\?]*)&o=\\d+&s=\\d+","i");
-				url = url.replace(reg,"$1&o="+o+"&s="+s);
+				var reg = new RegExp("([\\w\\/\\.]*)\\/o\\/\\d+\\/s\\/\\d+","i");
+                                alert(reg);
+				url = url.replace(reg,"$1\/o\/"+o+"\/s\/"+s);
 			} else {
-				url += '&o='+o+'&s='+s;
+				url += '/o/'+o+'/s/'+s;
 			}
+                        alert(url)
 			$('#Promote').attr('action',url);
 			$('#Promote').submit();
 		}
@@ -268,17 +326,17 @@
 			location.href=url;
 		}
 		jQuery(document).ready(function() {       
-		   App.init();
-		   checkSelect();
-	       if (jQuery().datepicker) {
-	           $('.date-picker').datepicker({
-	           		format: 'yyyy-mm-dd',
-	            	language: 'zh-CN',
-	                rtl: App.isRTL(),
-	                autoclose: true
-	            });
-	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-	       }
+		   //App.init();
+		   //checkSelect();
+                    if (jQuery().datepicker) {
+                        $('.date-picker').datepicker({
+                                     format: 'yyyy-mm-dd',
+                             language: 'zh-CN',
+                             rtl: App.isRTL(),
+                             autoclose: true
+                         });
+                         $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+                    }
 		   $('#promote_btn li').click(function(){
 		   		var str = $(this).find('a').html() + '<i class="fa fa-angle-down"></i>';
 		   		var type = $(this).attr('originaltype');

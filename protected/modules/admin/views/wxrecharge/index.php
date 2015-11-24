@@ -49,7 +49,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>会员等级</div>
+					<div class="caption"><i class="fa fa-globe"></i>充值模板</div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('wxrecharge/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                                                 <a href="javascript:void(0)" class="btn red" onclick="document.getElementById('branduserlevel-form').submit();"><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
