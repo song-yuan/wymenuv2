@@ -6,7 +6,6 @@
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
 	$tools = new JsApiPay();
-	var_dump($this->userId);var_dump($this->companyId);exit;
 	$openId = WxBrandUser::openId($this->userId,$this->companyId);
 	//②、统一下单
 	$input = new WxPayUnifiedOrder();

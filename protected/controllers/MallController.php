@@ -34,11 +34,12 @@ class MallController extends Controller
 	    		$this->brandUser = $newBrandUser->brandUser;
 			}
 			$this->userId = $this->brandUser['lid'];
-		}
-		if($this->type==1){
-			$this->userId = 0000000000;
-			Yii::app()->session['qrcode-'.$this->userId] = 0000000000;
-			$this->siteId = Yii::app()->session['qrcode-'.$this->userId];
+		}else{
+			if($this->type==1){
+				$this->userId = 0000000000;
+				Yii::app()->session['qrcode-'.$this->userId] = 0000000000;
+				$this->siteId = Yii::app()->session['qrcode-'.$this->userId];
+		    }
 		}
 	}
 	public function actionIndex()
