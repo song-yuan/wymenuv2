@@ -38,8 +38,8 @@
 						<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','套餐管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSim') echo 'active';?>"><a href="<?php echo $this->createUrl('productSim/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','菜品简写管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productAddition') echo 'active';?>"><a href="<?php echo $this->createUrl('productAddition/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','加菜管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','套餐管理');?></a></li>
-						<!--<li class="<?php if(Yii::app()->controller->id == 'productTempprice') echo 'active';?>"><a href="<?php echo $this->createUrl('productTempprice/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','时价菜管理');?></a></li>
+						<!--<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','套餐管理');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'productTempprice') echo 'active';?>"><a href="<?php echo $this->createUrl('productTempprice/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','时价菜管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSpecial') echo 'active';?>"><a href="<?php echo $this->createUrl('productSpecial/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','特价菜管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSales') echo 'active';?>"><a href="<?php echo $this->createUrl('productSales/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','优惠活动管理');?></a></li>-->
 						<li class="<?php if(Yii::app()->controller->id == 'productClean') echo 'active';?>"><a href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId,'typeId'=>'product'));?>"><?php echo yii::t('app','沽清列表');?></a></li>
@@ -80,7 +80,7 @@
 						<li class="<?php if(Yii::app()->controller->id == 'orderManagement' && in_array($this->getAction()->getId(),array('index',''))) echo 'active';?>"><a href="<?php echo $this->createUrl('orderManagement/index',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>"><?php echo yii::t('app','历史订单');?></a></li>
 					</ul>
 				</li>
-                                <li class="<?php if(in_array(Yii::app()->controller->id , array('weixin','member','wxlevel'))) echo 'active';?>">
+                                <li class="<?php if(in_array(Yii::app()->controller->id , array('weixin','member','wxlevel','wxcashback','wxpoint','wxpointvalid','wxrecharge'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-comments"></i> 
 					<span class="title"><?php echo yii::t('app','微信及会员管理');?></span>					
@@ -88,9 +88,9 @@
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('index'))) echo 'active';?>"><a href="<?php echo $this->createUrl('weixin/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','公众号设置');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('menu'))) echo 'active';?>"><a href="<?php echo $this->createUrl('weixin/menu',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','发布菜单');?></a></li>
-                                                <li class="<?php if(Yii::app()->controller->id == 'wxlevel' && in_array($this->getAction()->getId(),array('index','create','update'))) echo 'active';?>"><a href="<?php echo $this->createUrl('wxlevel/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','微信会员设置');?></a></li><!--等级、积分有效期、积分比例、返现的比率、充值阶梯-->
+                                                <li class="<?php if(in_array(Yii::app()->controller->id,array('wxlevel','wxcashback','wxpoint','wxpointvalid','wxrecharge')) && in_array($this->getAction()->getId(),array('index','create','update'))) echo 'active';?>"><a href="<?php echo $this->createUrl('wxlevel/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','微信会员设置');?></a></li><!--等级、积分有效期、积分比例、返现的比率、充值阶梯-->
                                                 <li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('wxmember'))) echo 'active';?>"><a href="<?php echo $this->createUrl('weixin/wxmember',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','微信会员列表');?></a></li><!--会员信息、历史积分、余额、相关营销品（优惠、代金券）、积分记录、充值记录、返现记录、订单记录等-->
-                                                <li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('index','create','update','charge'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','手动群发');?></a></li><!--检索会员人群，选择优惠活动，并发送-->
+                                                <!--<li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('index','create','update','charge'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','手动群发');?></a></li>--><!--检索会员人群，选择优惠活动，并发送-->
                                                 <li class="<?php if(Yii::app()->controller->id == 'member' && in_array($this->getAction()->getId(),array('index','create','update','charge'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','传统卡会员列表');?></a></li>
 					</ul>
 				</li>

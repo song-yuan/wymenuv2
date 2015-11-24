@@ -36,7 +36,7 @@ class WeixinRecharge extends CActiveRecord
 			array('update_at, wr_name', 'required'),
 			array('lid, dpid, recharge_money, recharge_cashback', 'length', 'max'=>10),
 			array('wr_name', 'length', 'max'=>50),
-			array('recharge_pointback', 'length', 'max'=>4),
+			array('recharge_pointback', 'length', 'max'=>10),
 			array('is_available, delete_flag', 'length', 'max'=>2),
 			array('create_at', 'safe'),
 			// The following rule is used by search().

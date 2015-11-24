@@ -40,7 +40,7 @@
 										<div class="col-md-4">
 											<?php echo $form->dropDownList($model, 'is_available', array( '0' =>yii::t('app','是'),'1' => yii::t('app','否') ) , array('id'=>'is_available', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
 											<?php echo $form->error($model, 'is_available' )?>
-                                                                                    如果选择“是”，其他项将被强制设置成“否”
+                                                                                    
 										</div>
 									</div>
 									<div class="form-actions fluid">

@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','微信会员设置'),'subhead'=>yii::t('app','添加充值返现模板'),'breadcrumbs'=>array(array('word'=>yii::t('app','微信会员设置'),'url'=>$this->createUrl('wxcashback/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加消费返现模板'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','微信会员设置'),'subhead'=>yii::t('app','添加消费返现比例模板'),'breadcrumbs'=>array(array('word'=>yii::t('app','微信会员设置'),'url'=>$this->createUrl('wxcashback/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加消费返现比例模板'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i>添加会员等级</div>
+							<div class="caption"><i class="fa fa-reorder"></i>添加消费返现比例模板</div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
