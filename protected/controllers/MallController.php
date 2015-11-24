@@ -30,7 +30,7 @@ class MallController extends Controller
 			
 			$this->brandUser($openid);
 			if(!$this->brandUser){
-				$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
+				$newBrandUser = new NewBrandUser($openid, $this->brandId);
 	    		$this->brandUser = $newBrandUser->brandUser;
 			}
 			$this->userId = $this->brandUser['lid'];
