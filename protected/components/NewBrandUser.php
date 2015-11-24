@@ -31,8 +31,6 @@ class NewBrandUser {
 		} catch(Exception $e) {
 			$this->errorMessage = $e->getMessage();
 			$transaction->rollBack();
-			header("Content-Type: text/html; charset=UTF-8");
-			var_dump($this->errorMessage );exit;
 		}
 		
 	}
@@ -56,9 +54,11 @@ class NewBrandUser {
         	'update_at'=>date('Y-m-d H:i:s',$time), 	
         );
         $result = Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
-        
+        var_dump($result);
         $this->userId = $lastInsertId = Yii::app()->db->getLastInsertID();
+        var_dump($lastInsertId);
         $this->brandUser = WxBrandUser::get($lastInsertId,$this->brandId);
+        var_dump($this->brandUser);exit;
     }
 	
 	/**
