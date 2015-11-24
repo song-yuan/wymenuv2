@@ -4,12 +4,8 @@
 	
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
-	echo $notifyUrl;
-	echo $orderId;
 	//①、获取用户openid
 	$openId = WxBrandUser::openId($this->userId,$this->companyId);
-	echo $openId;
-	exit;
 	//②、统一下单
 	$input = new WxPayUnifiedOrder();
 	$input->SetBody("点餐订单");
@@ -22,6 +18,7 @@
 	$input->SetNotify_url($notifyUrl);
 	$input->SetTrade_type("JSAPI");
 	$input->SetOpenid($openId);
+	var_dump($input);exit;
 	$orderInfo = WxPayApi::unifiedOrder($input);
 	
 	$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
