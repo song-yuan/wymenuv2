@@ -53,9 +53,7 @@ class NewBrandUser {
         	'create_at'=>date('Y-m-d H:i:s',$time),
         	'update_at'=>date('Y-m-d H:i:s',$time), 	
         );
-        var_dump($insertBrandUserArr);
         $result = Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
-        var_dump($result);exit;
         $this->userId = $lastInsertId = Yii::app()->db->getLastInsertID();
         
          $this->brandUser = WxBrandUser::get($lastInsertId,$this->brandId);
