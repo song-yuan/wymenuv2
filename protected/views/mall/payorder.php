@@ -2,11 +2,14 @@
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('订单');
 	
-	$url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
+	echo $notifyUrl;
+	echo $orderId;
 	//①、获取用户openid
 	$openId = WxBrandUser::openId($this->userId,$this->companyId);
+	echo $openId;
+	exit;
 	//②、统一下单
 	$input = new WxPayUnifiedOrder();
 	$input->SetBody("点餐订单");
