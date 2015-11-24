@@ -51,7 +51,7 @@ class WxOrder
 		        	'update_at'=>date('Y-m-d H:i:s',$time), 
 		        	'user_id'=>$this->userId,
 		        	'site_id'=>$this->siteId,
-		        	'order_status'=>2,
+		        	'order_status'=>1,
 		        	'order_type'=>$this->type
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
@@ -104,6 +104,10 @@ class WxOrder
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
 	    return $orderProduct;
+	}
+	public static function updateOrderStatus($orderId,$dpid){
+		$sql = 'update nb_order set order_status=3,paytype=1 where lid='.$orderId.' and dpid='.$dpid;
+		Yii::app()->db->createCommand($sql)->execute();
 	}
 	
 }

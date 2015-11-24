@@ -84,6 +84,20 @@ class MallController extends Controller
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts));
 	 }
+	 /**
+	 * 
+	 * 
+	 * 支付订单
+	 * 
+	 */
+	 public function actionPayOrder()
+	 {
+		$orderId = Yii::app()->request->getParam('orderId');
+		
+		$order = WxOrder::getOrder($orderId,$this->companyId);
+		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		$this->render('payorder',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts));
+	 }
 	/**
 	 * 
 	 * 添加购物车
@@ -143,11 +157,9 @@ class MallController extends Controller
 		}
 	}
 	private function weixinServiceAccount() {	
-		$sql = 'select * from nb_weixin_service_account where dpid = '.$this->companyId;
-		$this->weixinServiceAccount = Yii::app()->db->createCommand($sql)->queryRow();
+		$this->weixinServiceAccount = WxAccount::get($this->companyId);
 	}
 	private function brandUser($openId) {	
-		$sql = 'select * from nb_brand_user where openid = "'.$openId.'"';
-		$this->brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		$this->brandUser = WxBrandUser::getFromOpenId($openId);
 	}
 }
