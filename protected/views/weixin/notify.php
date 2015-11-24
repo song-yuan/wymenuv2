@@ -1,6 +1,7 @@
 <?php
 
-new Notify();
+$notify = new Notify();
+$notify->Handle(false);
 
 ?>
 
