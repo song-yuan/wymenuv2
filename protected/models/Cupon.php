@@ -38,7 +38,7 @@ class Cupon extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, cupon_title, main_picture, cupon_abstract, cupon_memo, cupon_money, min_consumer, change_point', 'required'),
+			array('lid, dpid', 'required'),
 			array('change_point', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, cupon_money, min_consumer', 'length', 'max'=>10),
 			array('cupon_title', 'length', 'max'=>50),
