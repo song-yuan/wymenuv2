@@ -31,6 +31,7 @@ class NewBrandUser {
 		} catch(Exception $e) {
 			$this->errorMessage = $e->getMessage();
 			$transaction->rollBack();
+			var_dump($this->errorMessage );exit;
 		}
 		
 	}
@@ -51,12 +52,12 @@ class NewBrandUser {
         	'openid'=>$this->openId,
         	'card_id'=>$this->newBrandUserCardId(),
         	'create_at'=>date('Y-m-d H:i:s',$time),
-//        	'update_at'=>date('Y-m-d H:i:s',$time), 	
+        	'update_at'=>date('Y-m-d H:i:s',$time), 	
         );
         $result = Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
-       
+        
         $this->userId = $lastInsertId = Yii::app()->db->getLastInsertID();
-         $this->brandUser = WxBrandUser::get($lastInsertId,$this->brandId);
+        $this->brandUser = WxBrandUser::get($lastInsertId,$this->brandId);
     }
 	
 	/**
