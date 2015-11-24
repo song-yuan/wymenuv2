@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','微信会员设置'),'subhead'=>yii::t('app','修改充值返现比例'),'breadcrumbs'=>array(array('word'=>yii::t('app','微信会员设置'),'url'=>$this->createUrl('wxcashback/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改消费现比例'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','微信会员设置'),'subhead'=>yii::t('app','修改消费返现比例'),'breadcrumbs'=>array(array('word'=>yii::t('app','微信会员设置'),'url'=>$this->createUrl('wxcashback/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改消费返现比例'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
