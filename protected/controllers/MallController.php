@@ -13,8 +13,18 @@ class MallController extends Controller
 	public $brandUser;
 	public $layout = '/layouts/mallmain';
 	
+	
+	public function init() 
+	{
+		$companyId = Yii::app()->request->getParam('companyId');
+		$type = Yii::app()->request->getParam('type',1);
+		$this->companyId = $companyId;
+		$this->type = $type;
+	}
+	
 	public function beforeAction($actin){
 		if(in_array($actin->id,array('index','cart','order','payOrder'))){
+			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
 				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
@@ -26,49 +36,18 @@ class MallController extends Controller
 					$newBrandUser = new NewBrandUser($openid, $this->companyId);
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
-				var_dump($this->brandUser);exit;
 				$userId = $this->brandUser['lid'];
 				Yii::app()->session['userId'] = $userId;
 				Yii::app()->session['qrcode-'.$userId] = 0000000000;
 			}
 		}
 	}
-	public function init() 
-	{
-		$companyId = Yii::app()->request->getParam('companyId');
-		$type = Yii::app()->request->getParam('type',1);
-		$this->companyId = $companyId;
-		$this->type = $type;
-//		如果微信浏览器
-//		if(Helper::isMicroMessenger()){
-//			if($this->oauth){
-//				$this->weixinServiceAccount();
-//				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
-//				$userInfo = $baseInfo->getSnsapiBase();
-//				$openid = $userInfo['openid'];
-//				
-//				$this->brandUser($openid);
-//				if(!$this->brandUser){
-//					$newBrandUser = new NewBrandUser($openid, $this->companyId);
-//		    		$this->brandUser = $newBrandUser->brandUser;
-//				}
-//				$userId = $this->brandUser['lid'];
-//				Yii::app()->session['userId'] = $userId;
-//				Yii::app()->session['qrcode-'.$userId] = 0000000000;
-//			}
-//		}else{
-//			if($this->type==1){
-//				$this->userId = 0000000000;
-//				Yii::app()->session['qrcode-'.$this->userId] = 0000000000;
-//				$this->siteId = Yii::app()->session['qrcode-'.$this->userId];
-//		    }
-//		}
-	}
 	public function actionIndex()
 	{
+		
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
-		
+		echo $userId; echo $siteId;exit;
 		$product = new WxProduct($this->companyId,$userId,$siteId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
