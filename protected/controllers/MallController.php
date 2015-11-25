@@ -13,7 +13,7 @@ class MallController extends Controller
 	public $brandUser;
 	public $layout = '/layouts/mallmain';
 	
-	public function init() 
+	public function beforeAction($action) 
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
 		$type = Yii::app()->request->getParam('type',1);
@@ -21,8 +21,7 @@ class MallController extends Controller
 		$this->type = $type;
 //		如果微信浏览器
 		if(Helper::isMicroMessenger()){
-			echo $this->getId();exit;
-			if(in_array($this->getId(),array('index','cart','order','payOrder'))){
+			if(in_array($action->id,array('index','cart','order','payOrder'))){
 				$this->weixinServiceAccount();
 				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
 				$userInfo = $baseInfo->getSnsapiBase();
