@@ -17,6 +17,7 @@ class MallController extends Controller
 		if(in_array($actin->id,array('index','cart','order','payOrder'))){
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
+				var_dump($this->weixinServiceAccount);exit;
 				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
 				$userInfo = $baseInfo->getSnsapiBase();
 				$openid = $userInfo['openid'];
