@@ -425,18 +425,12 @@ class WxPayApi
 		//获取通知的数据
 		$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 		//如果返回成功则验证签名
-		
-		$myfile = fopen("/tmp/notify1.txt", "w") or die("Unable to open file!");
-		fwrite($myfile, $xml);
 		try {
 			$result = WxPayResults::Init($xml);
-			fwrite($myfile, json_encode($result));
 		} catch (WxPayException $e){
 			$msg = $e->errorMessage();
-			fwrite($myfile, $msg);
 			return false;
 		}
-		fclose($myfile);
 		return call_user_func($callback, $result);
 	}
 	
