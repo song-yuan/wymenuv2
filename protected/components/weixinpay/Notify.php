@@ -45,13 +45,8 @@ class Notify extends WxPayNotify
 	}
 	
 	public function checkNotify($data){
-		$myfile = fopen("/tmp/notify2.txt", "w") or die("Unable to open file!");
-		fwrite($myfile, 'son checkNotify');
-		$sql = 'SELECT (SELECT count(*) FROM nb_notify WHERE transaction_id = "' .$data['transaction_id']. '") + (SELECT count(*) FROM yk_notify WHERE out_trade_no= "' .$data['out_trade_no']. '") as count';
-		fwrite($myfile, $sql);
+		$sql = 'SELECT (SELECT count(*) FROM nb_notify WHERE transaction_id = "' .$data['transaction_id']. '") + (SELECT count(*) FROM nb_notify WHERE out_trade_no= "' .$data['out_trade_no']. '") as count';
 		$count = Yii::app()->db->createCommand($sql)->queryRow();
-		fwrite($myfile, json_encode($count));
-		fclose($myfile);
 		if(!$count['count']){
 			$this->insertNotify($data);
 		}
