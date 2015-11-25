@@ -26,7 +26,6 @@ class MallController extends Controller
 		if(in_array($actin->id,array('index','cart','order','payOrder'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
-				echo 33;
 				$this->weixinServiceAccount();
 				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
 				$userInfo = $baseInfo->getSnsapiBase();
