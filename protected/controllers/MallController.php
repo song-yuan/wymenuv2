@@ -11,23 +11,11 @@ class MallController extends Controller
 	public $type = 1;
 	public $weixinServiceAccount;
 	public $brandUser;
-	public $oauth = false;
 	public $layout = '/layouts/mallmain';
 	
 	public function beforeAction($actin){
 		if(in_array($actin->id,array('index','cart','order','payOrder'))){
-			$this->oauth = true;
-		}
-	}
-	public function init() 
-	{
-		$companyId = Yii::app()->request->getParam('companyId');
-		$type = Yii::app()->request->getParam('type',1);
-		$this->companyId = $companyId;
-		$this->type = $type;
-//		如果微信浏览器
-		if(Helper::isMicroMessenger()){
-			if($this->oauth){
+			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
 				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
 				$userInfo = $baseInfo->getSnsapiBase();
@@ -42,7 +30,32 @@ class MallController extends Controller
 				Yii::app()->session['userId'] = $userId;
 				Yii::app()->session['qrcode-'.$userId] = 0000000000;
 			}
-		}else{
+		}
+	}
+	public function init() 
+	{
+		$companyId = Yii::app()->request->getParam('companyId');
+		$type = Yii::app()->request->getParam('type',1);
+		$this->companyId = $companyId;
+		$this->type = $type;
+//		如果微信浏览器
+//		if(Helper::isMicroMessenger()){
+//			if($this->oauth){
+//				$this->weixinServiceAccount();
+//				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
+//				$userInfo = $baseInfo->getSnsapiBase();
+//				$openid = $userInfo['openid'];
+//				
+//				$this->brandUser($openid);
+//				if(!$this->brandUser){
+//					$newBrandUser = new NewBrandUser($openid, $this->companyId);
+//		    		$this->brandUser = $newBrandUser->brandUser;
+//				}
+//				$userId = $this->brandUser['lid'];
+//				Yii::app()->session['userId'] = $userId;
+//				Yii::app()->session['qrcode-'.$userId] = 0000000000;
+//			}
+//		}else{
 //			if($this->type==1){
 //				$this->userId = 0000000000;
 //				Yii::app()->session['qrcode-'.$this->userId] = 0000000000;
