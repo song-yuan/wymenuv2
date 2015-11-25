@@ -102,11 +102,12 @@ class MallController extends Controller
 	 */
 	 public function actionPayOrder()
 	 {
+	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('payorder',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts));
+		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts));
 	 }
 	/**
 	 * 

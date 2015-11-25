@@ -6,7 +6,7 @@
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
 	$tools = new JsApiPay();
-	$openId = WxBrandUser::openId($this->userId,$this->companyId);
+	$openId = WxBrandUser::openId($userId,$this->companyId);
 	//②、统一下单
 	$input = new WxPayUnifiedOrder();
 	$input->SetBody("点餐订单");
