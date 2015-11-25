@@ -34,7 +34,7 @@
 </footer>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#payorder').click(fucntion(){
+	$('#payorder').click(function(){
 		var status = $(this).attr('order-status');
 		if(parseInt(status)!=2){
 			alert('服务员确认后才能付款!');
