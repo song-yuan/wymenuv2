@@ -38,18 +38,16 @@ class MallController extends Controller
 				}
 				$userId = $this->brandUser['lid'];
 				Yii::app()->session['userId'] = $userId;
-				var_dump(Yii::app()->session['userId']);
 				Yii::app()->session['qrcode-'.$userId] = 0000000000;
-				var_dump(Yii::app()->session['qrcode-'.$userId]);exit;
 			}
 		}
 	}
 	public function actionIndex()
 	{
-		
 		$userId = Yii::app()->session['userId'];
+		echo $userId;exit;
 		$siteId = Yii::app()->session['qrcode-'.$userId];
-		echo $userId; echo $siteId;exit;
+		
 		$product = new WxProduct($this->companyId,$userId,$siteId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
