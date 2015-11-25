@@ -26,6 +26,7 @@ class MallController extends Controller
 					$newBrandUser = new NewBrandUser($openid, $this->companyId);
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
+				var_dump($this->brandUser);exit;
 				$userId = $this->brandUser['lid'];
 				Yii::app()->session['userId'] = $userId;
 				Yii::app()->session['qrcode-'.$userId] = 0000000000;
