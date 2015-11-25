@@ -23,6 +23,7 @@
 	$orderInfo = WxPayApi::unifiedOrder($input);
 	
 	$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
+	var_dump($jsApiParameters);
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
