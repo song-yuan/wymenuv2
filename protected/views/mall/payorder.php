@@ -50,7 +50,7 @@
         <p>￥<span id="total" class="total"><?php echo $order['should_total']?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a href="javascript:;" onclick="callpay()">去付款</a></p>
+        <p><a href="javascript:;" onclick="callpay()">付款</a></p>
     </div>
     <div class="clear"></div>
 </footer>
