@@ -44,6 +44,7 @@ class MallController extends Controller
 	}
 	public function actionIndex()
 	{
+		var_dump(Yii::app()->session['userId']);exit;
 		$userId = Yii::app()->session['userId'];
 		echo $userId;exit;
 		$siteId = Yii::app()->session['qrcode-'.$userId];
