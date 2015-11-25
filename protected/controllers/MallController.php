@@ -63,7 +63,7 @@ class MallController extends Controller
 //				Yii::app()->session['qrcode-'.$this->userId] = 0000000000;
 //				$this->siteId = Yii::app()->session['qrcode-'.$this->userId];
 //		    }
-		}
+//		}
 	}
 	public function actionIndex()
 	{
