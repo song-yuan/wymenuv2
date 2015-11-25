@@ -37,7 +37,8 @@ class Notify extends WxPayNotify
 			$msg = "订单查询失败";
 			return false;
 		}
-		
+		//记录通知 并更改订单状态
+		$this->checkNotify($data);
 		
 		return true;
 	}
