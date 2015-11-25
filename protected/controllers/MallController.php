@@ -26,6 +26,7 @@ class MallController extends Controller
 		if(in_array($actin->id,array('index','cart','order','payOrder'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
+				echo 33;
 				$this->weixinServiceAccount();
 				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
 				$userInfo = $baseInfo->getSnsapiBase();
@@ -41,12 +42,11 @@ class MallController extends Controller
 				Yii::app()->session['qrcode-'.$userId] = 0000000000;
 			}
 		}
+		return true;
 	}
 	public function actionIndex()
 	{
-		var_dump(Yii::app()->session['userId']);exit;
 		$userId = Yii::app()->session['userId'];
-		echo $userId;exit;
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
 		$product = new WxProduct($this->companyId,$userId,$siteId);
