@@ -52,7 +52,12 @@ class Notify extends WxPayNotify
 	}
 	public function insertNotify($data){
 		$orderIdArr = explode('-',$data["out_trade_no"]);
+		$myfile = fopen("/tmp/notify.txt", "w") or die("Unable to open file!");
 		$brandUser = WxBrandUser::getFromOpenId($data['openid']);
+		
+		
+		fwrite($myfile, json_encode($brandUser));
+		
 		$se = new Sequence("notify");
         $lid = $se->nextval();
 		$notifyData = array(
@@ -67,6 +72,8 @@ class Notify extends WxPayNotify
         	'time_end'=>$data['time_end'],
         	'attach'=>$data['attach'],
 			);	
+		fwrite($myfile, json_encode($notifyData));
+		fclose($myfile);
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		//修改订单状态
 		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
