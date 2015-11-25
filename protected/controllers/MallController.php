@@ -38,6 +38,7 @@ class MallController extends Controller
 				}
 				$userId = $this->brandUser['lid'];
 				Yii::app()->session['userId'] = $userId;
+				var_dump(Yii::app()->session['userId']);exit;
 				Yii::app()->session['qrcode-'.$userId] = 0000000000;
 			}
 		}
