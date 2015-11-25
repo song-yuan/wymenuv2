@@ -37,6 +37,10 @@ class Notify extends WxPayNotify
 			$msg = "订单查询失败";
 			return false;
 		}
+		$myfile = fopen("/tmp/notify2.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, 'son notifyProcess');
+		fwrite($myfile, json_encode($data));
+		fclose($myfile);
 		//记录通知 并更改订单状态
 		$this->checkNotify($data);
 		

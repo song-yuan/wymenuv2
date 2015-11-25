@@ -43,6 +43,9 @@ class WxPayNotify extends WxPayNotifyReply
 	public function NotifyProcess($data, &$msg)
 	{
 		//TODO 用户基础该类之后需要重写该方法，成功的时候返回true，失败返回false
+		$myfile = fopen("/tmp/notify3.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, 'parents notifyProcess');
+		fclose($myfile);
 		return true;
 	}
 	
@@ -55,6 +58,9 @@ class WxPayNotify extends WxPayNotifyReply
 	final public function NotifyCallBack($data)
 	{
 		$msg = "OK";
+		$myfile = fopen("/tmp/notify4.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, 'parents NotifyCallBack');
+		fclose($myfile);
 		$result = $this->NotifyProcess($data, $msg);
 		
 		if($result == true){
