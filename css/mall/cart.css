@@ -5,9 +5,9 @@ body{ background-color:#E5E5E5;}
 .prt-lt{float: left;width: 33%;}
 .prt-mt{float: left;width: 33%;}
 .prt-rt{float: left;width: 33%;}
-.prt-rt input.minus,.prt-rt input.result{ float:left; width:0.28rem; height:0.28rem; font-size:0.18rem; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
-.prt-rt input.add{ float:left; width:0.28rem; height:0.28rem; font-size:0.18rem; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
-.prt-rt input.minus,.prt-rt input.add{border-radius: 100%;color:#FF5151;}
+.prt-rt div.minus,.prt-rt input.result{ float:left; width:0.28rem; height:0.28rem; font-size:0.18rem; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
+.prt-rt div.add{ float:left; width:0.28rem; height:0.28rem; font-size:0.18rem; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
+.prt-rt div.minus,.prt-rt div.add{border-radius: 100%;color:#FF5151;}
 .prt-rt input.result{ border:none;background-color:#E5E5E5;}
 input {outline:none;}
 footer{width: 100%;}
