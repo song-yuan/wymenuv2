@@ -16,9 +16,9 @@
         <div class="prt-lt"><?php echo $model['product_name']?></div>
         <div class="prt-mt">￥<span class="price"><?php echo $model['price']?></span></div>
         <div class="prt-rt">
-            <div class="minus">-</div>
+            <input type="button" class="minus"  value="-">
             <input type="text" class="result" product-id="<?php echo $model['product_id'];?>" promote-id="<?php echo $model['privation_promotion_id']?>" disabled value="<?php echo $model['num']?>">
-            <div class="add">+</div>
+            <input type="button" class="add" value="+">
         </div>
         <div class="clear"></div>
     </div>
