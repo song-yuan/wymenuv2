@@ -39,16 +39,16 @@ class PrivatePromotion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, change_point', 'required'),
+			array('lid, dpid', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('promotion_title', 'length', 'max'=>50),
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
 			array('promotion_type, change_point, can_cupon, is_available, delete_flag', 'length', 'max'=>2),
-			array('order_num', 'length', 'max'=>3),
+			//array('order_num', 'length', 'max'=>3),
 			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, change_point, can_cupon, begin_time, end_time, order_num, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, change_point, can_cupon, begin_time, end_time,  is_available, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,7 +82,7 @@ class PrivatePromotion extends CActiveRecord
 			'can_cupon' => '是否能使用代金券，0表示能用，1表示不能用',
 			'begin_time' => '开始时间',
 			'end_time' => '结束时间',
-			'order_num' => '单个订单的数量限制',
+			//'order_num' => '单个订单的数量限制',
 			'is_available' => '是否生效，0表示生效，1表示无效。',
 			'delete_flag' => '0表示存在，1表示删除。',
 		);
@@ -119,7 +119,7 @@ class PrivatePromotion extends CActiveRecord
 		$criteria->compare('can_cupon',$this->can_cupon,true);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
-		$criteria->compare('order_num',$this->order_num,true);
+		//$criteria->compare('order_num',$this->order_num,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 

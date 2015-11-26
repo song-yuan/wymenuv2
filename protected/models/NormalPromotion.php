@@ -40,13 +40,13 @@ class NormalPromotion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, to_group, order_num, is_available', 'required'),
+			array('lid,dpid', 'required'),
 			array('order_num', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, group_id', 'length', 'max'=>10),
 			array('promotion_title', 'length', 'max'=>50),
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
 			array('promotion_type, can_cupon, to_group, is_available, delete_flag', 'length', 'max'=>2),
-			array('create_at, begin_time, end_time', 'safe'),
+			array('create_at,update_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, can_cupon, begin_time, end_time, to_group, group_id, order_num, is_available, delete_flag', 'safe', 'on'=>'search'),

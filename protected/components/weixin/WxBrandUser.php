@@ -24,6 +24,15 @@ class WxBrandUser {
 		$brandUser = self:: get($userId,$dpid);
 		return $brandUser['openid'];
 	}
+	/**
+	 * 通过openid查找用户
+	 * 
+	 */
+	public static function getFromOpenId($openId) {
+		$sql = 'select * from nb_brand_user where openid = "'.$openId.'"';
+		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		return $brandUser;
+	}
 }
 
  

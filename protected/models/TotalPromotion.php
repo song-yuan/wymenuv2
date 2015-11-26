@@ -8,7 +8,7 @@
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $is_narmal_promotion
+ * @property string $is_normal_promotion
  * @property string $is_private_promotion
  * @property string $is_cupon
  * @property string $is_cash
@@ -16,6 +16,7 @@
  */
 class TotalPromotion extends CActiveRecord
 {
+	public $a;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -34,11 +35,11 @@ class TotalPromotion extends CActiveRecord
 		return array(
 			array('update_at', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('is_narmal_promotion, is_private_promotion, is_cupon, is_cash, delete_flag', 'length', 'max'=>2),
+			array('is_normal_promotion, is_private_promotion, is_cupon, is_cash, delete_flag', 'length', 'max'=>2),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_narmal_promotion, is_private_promotion, is_cupon, is_cash, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_normal_promotion, is_private_promotion, is_cupon, is_cash, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,7 +64,7 @@ class TotalPromotion extends CActiveRecord
 			'dpid' => '店铺ID',
 			'create_at' => '创建时间',
 			'update_at' => '最近一次更新时间',
-			'is_narmal_promotion' => '0表示普通优惠有效，1表示无效',
+			'is_normal_promotion' => '0表示普通优惠有效，1表示无效',
 			'is_private_promotion' => '0表示专享优惠有效，1表示无效',
 			'is_cupon' => '0表示代金券有效，1表示无效',
 			'is_cash' => '0表示返现和充值有效，1表示无效',
@@ -93,7 +94,7 @@ class TotalPromotion extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('is_narmal_promotion',$this->is_narmal_promotion,true);
+		$criteria->compare('is_normal_promotion',$this->is_normal_promotion,true);
 		$criteria->compare('is_private_promotion',$this->is_private_promotion,true);
 		$criteria->compare('is_cupon',$this->is_cupon,true);
 		$criteria->compare('is_cash',$this->is_cash,true);

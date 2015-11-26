@@ -25,10 +25,22 @@
 </div>
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total"><?php echo $order['should_total']?></span></p>
+        <p>￥<span id="total" class="total"><?php echo $order['should_total'];?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a href="#">去付款</a></p>
+        <p><a id="payorder" order-status="<?php echo $order['order_status'];?>" href="javascript:;">去付款</a></p>
     </div>
     <div class="clear"></div>
 </footer>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#payorder').click(function(){
+		var status = $(this).attr('order-status');
+		if(parseInt(status)!=2){
+			alert('服务员确认后才能付款!');
+		}else{
+			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>'
+		}
+	});
+});
+</script>

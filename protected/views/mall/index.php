@@ -111,7 +111,7 @@ $(function(){
 			          t.addClass('zero');
 			       }
 			       t.val(parseInt(t.val())-1);
-			       if(parseInt(t.val())<0){ 
+			       if(parseInt(t.val()) < 0){ 
 			           t.val(0); 
 			   	    } 
 			    	setTotal(); 
