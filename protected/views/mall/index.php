@@ -9,14 +9,41 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <div class="nav-lf">
 <ul id="nav">
+  <?php if(!empty($promotions)):?>
+  <li class="current"><a href="#st-1;?>">特价菜</a><b></b></li>
+  <?php endif;?>
   <?php foreach($categorys as $k=>$category):?>
-  <li class="<?php if($k==0):?>current<?php endif;?>"><a href="#st<?php echo $category['lid'];?>"><?php echo $category['category_name'];?></a><b></b></li>
+  <li class="<?php if($k==0&&empty($promotions)):?>current<?php endif;?>"><a href="#st<?php echo $category['lid'];?>"><?php echo $category['category_name'];?></a><b></b></li>
   <?php endforeach;?>
 </ul>
 </div>
 
 
 <div id="container" class="container">
+<!-- 特价优惠  -->
+<?php if(!empty($promotions)):?>
+<?php foreach($promotions as $promotion):?>
+<div class="section" id="st-1">
+    <div class="prt-title"><?php echo $promotion['promotion_title'];?></div>
+    <?php foreach($promotion['productList'] as $promotionProduct):?>
+  	<div class="prt-lt">
+    	<div class="lt-lt"><img src="<?php echo $promotionProduct['main_picture'];?>"></div>
+        <div class="lt-ct">
+        	<p><?php echo $promotionProduct['product_name'];?></p>
+            <p class="pr">¥<span class="price"><?php echo $promotionProduct['price'];?></span></p>
+        </div>
+        <div class="lt-rt">
+        	<div class="minus <?php if(!$promotionProduct['num']) echo 'zero';?>">-</div>
+            <input type="tcext" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
+            <div class="add">+</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <?php endforeach;?>
+  </div>
+<?php endforeach;?>
+<?php endif;?>
+<!-- end特价优惠  -->
 
 <?php foreach($models as $model):?>
   <div class="section" id="st<?php echo $model['lid'];?>">
