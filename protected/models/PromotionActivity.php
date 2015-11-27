@@ -36,7 +36,7 @@ class PromotionActivity extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, activity_title, main_picture, activity_memo, activity_abstract', 'required'),
+			array('lid, dpid', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('activity_title', 'length', 'max'=>50),
 			array('main_picture, activity_abstract', 'length', 'max'=>255),

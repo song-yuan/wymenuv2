@@ -36,10 +36,10 @@
 		<div class="col-md-12">
 		<div class="tabbable tabbable-custom">
 			<ul class="nav nav-tabs">
-				<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">整体设置</a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">普通优惠</a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">特价优惠</a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">代金券</a></li>
+				<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','整体设置');?></a></li>
+				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','普通优惠');?></a></li>
+				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
+				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
 			</ul>
 		
 			<!--  <div class="tab-content">
@@ -47,7 +47,7 @@
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','活动整体设置');?></div>
+								<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','优惠活动整体设置');?></div>
 								<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
@@ -62,13 +62,13 @@
 			</div>-->
 			  <div class="tab-content">
 				<div class="col-md-12">
-				
+				<?php if($a=="1"):{?>
 				<?php if($models) :{?>
 				<?php foreach ($models as $model):?>
 				<?php ?>
 				<?php $form=$this->beginWidget('CActiveForm', array(
-						'id' => 'cupon-form',
-						'action' => $this->createUrl('cupon/update' , array('lid' => $model->lid ,'companyId' => $this->companyId)),
+						'id' => 'totalpromotion-form',
+						'action' => $this->createUrl('cashcard/update' , array('lid' => $model->lid ,'companyId' => $this->companyId)),
 						'errorMessageCssClass' => 'help-block',
 						'htmlOptions' => array(
 							'class' => 'form-horizontal',
@@ -172,11 +172,73 @@
 									<a href="<php echo $this->createUrl('cashcard/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>" class="btn blue"><?php echo yii::t('app','编辑');?></a>
 								</div>
 							</div> -->
+				<?php $this->endWidget(); ?>
+				<?php endforeach;?>
+				<?php }endif;?>
+				<?php }elseif ($a=="2"):{?>
+						
+					<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','优惠活动整体设置');?></div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse"></a>
+							</div>
+						</div>
+						<div class="portlet-body form">
+							<?php $form=$this->beginWidget('CActiveForm', array(
+								'id' => 'totalpromotion-form',
+								'action' => $this->createUrl('cashcard/create' , array('lid' => $model->lid ,'companyId' => $this->companyId)),
+								'errorMessageCssClass' => 'help-block',
+								'htmlOptions' => array(
+									'class' => 'form-horizontal',
+									'enctype' => 'multipart/form-data'
+								),
+							)); ?>
+							<div class="form-body">
+									<div class="form-group">
+										<?php echo $form->label($model, yii::t('app','普通优惠是否有效'),array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_normal_promotion', array('0' => yii::t('app','有效') , '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_normal_promotion')));?>
+											<?php echo $form->error($model, 'is_normal_promotion' )?>
+										</div>
+									</div><!-- 普通优惠是否有效 -->
+									<div class="form-group">
+										<?php echo $form->label($model, yii::t('app','特价优惠是否有效'),array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_private_promotion', array('0' => yii::t('app','有效') , '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_private_promotion')));?>
+											<?php echo $form->error($model, 'is_private_promotion' )?>
+										</div>
+									</div><!-- 特价优惠是否有效 -->
+									<div class="form-group">
+										<?php echo $form->label($model, yii::t('app','代金券是否有效'),array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_cupon', array('0' => yii::t('app','有效') , '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_cupon')));?>
+											<?php echo $form->error($model, 'is_cupon' )?>
+										</div>
+									</div><!-- 代金券是否有效 -->
+									<div class="form-group">
+										<?php echo $form->label($model, yii::t('app','返现和充值是否有效'),array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_cash', array('0' => yii::t('app','有效') , '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_cash')));?>
+											<?php echo $form->error($model, 'is_cash' )?>
+										</div>
+									</div><!-- 返现和充值是否有效 -->
+										
+										<div class="form-actions fluid">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="col-md-offset-3 col-md-9">
+														<button type="submit" class="btn blue"><?php echo yii::t('app','首次设置并保存');?></button>
+													</div>
+												</div>
+											</div>
+										</div>
+							</div>
+						</div>
+					</div>
+						
 							<?php $this->endWidget(); ?>
-							<?php endforeach;?>
 							<?php }endif;?>
-							
-							
 							 
 							
 							

@@ -22,14 +22,14 @@
 						
 									<div class="form-group" >
 									<?php if($model->hasErrors('total')) echo 'has-error';?>
-										<?php echo $form->label($model, yii::t('app','发送红包个数'),array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, yii::t('app','红包发送个数'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'total',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('total')));?>
 											<?php echo $form->error($model, 'total' )?>
 										</div>
 									</div><!-- 活动摘要 -->
 									<div class="form-group">
-											<label class="control-label col-md-3"><?php echo yii::t('app','活动有效期限');?></label>
+											<label class="control-label col-md-3"><?php echo yii::t('app','红包领用截止日期');?></label>
 											<div class="col-md-4">
 												<!-- <div class="input-group date form_datetime" data-date="2012-12-21T15:25:00Z">                                       
 													<input type="text" size="16" readonly class="form-control">
@@ -52,7 +52,7 @@
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-											<a href="<?php echo $this->createUrl('normalpromotion/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
+											<a href="<?php echo $this->createUrl('wxRedpacket/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
