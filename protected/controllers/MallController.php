@@ -37,6 +37,7 @@ class MallController extends Controller
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
 				$userId = $this->brandUser['lid'];
+				var_dump($this->brandUser);exit;
 				Yii::app()->session['userId'] = $userId;
 				if($this->type==1){
 					//堂吃
