@@ -64,6 +64,7 @@ class ProductSet extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                      'productsetdetail' => array(self::HAS_MANY , 'ProductSetDetail' ,'' ,'on'=>'t.lid = productsetdetail.set_id and t.dpid = productsetdetail.dpid and productsetdetail.delete_flag=0 '),
+				'PrivatePromotionDetail' => array(self::BELONGS_TO , 'PrivatePromotionDetail' ,'','on'=> 't.lid=PrivatePromotionDetail.product_id and PrivatePromotionDetail.dpid=t.dpid and PrivatePromotionDetail.delete_flag=0'),		
 		);
 	}
 
