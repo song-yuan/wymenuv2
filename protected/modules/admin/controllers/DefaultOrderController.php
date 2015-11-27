@@ -473,6 +473,44 @@ class DefaultOrderController extends BackendController
                 Yii::app()->end(json_encode($printList));
         }
         
+        public function actionPausePrintlist(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getParam('orderId',"0");
+                $padId = Yii::app()->request->getParam('padId',"0");
+                $order=new Order();
+                if($orderId !='0')
+                {
+                    $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    if(empty($order))
+                    {
+                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                    }
+                    $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                    $criteria->order = ' t.lid desc ';                    
+                    $siteNo = SiteNo::model()->find($criteria);
+                    if($order->is_temp=='1')
+                    {
+                        $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+                    }else{
+                        $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
+                    }
+                    $order->should_total=0;
+                    $order->reality_total=0;
+                }
+                
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
+                $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+            	 //前面加 barcode
+                $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
+                $cardtotal=0;
+                $memo="挂单清单";
+                $printList = Helper::printList($order,$orderProducts ,$pad,$precode,"0",$memo,$cardtotal);
+                Yii::app()->end(json_encode($printList));
+        }
+        
         public function actionMemberCardPassword(){
 		$companyId = Yii::app()->request->getParam('companyId',"0");
                 $password = Yii::app()->request->getParam('passWord',"0");
