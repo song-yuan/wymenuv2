@@ -126,6 +126,7 @@
                                                                         </div>
                                                                         <div class="actions">
                                                                             
+                                                                            <a id="manul_fresh" class="btn green"><i class="fa fa-cogs"></i> <?php echo yii::t('app','手动刷新');?></a>
                                                                             <a id="order_list" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','点单界面');?></a>
                                                                             <a  href="<?php echo $this->createUrl('orderManagement/notPay',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>" class='btn green'  ><?php echo yii::t('app','今日订单');?></a>
                                                                             <a  href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId,'typeId'=>'product','from'=>'home'));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','快速沽清');?></a>
@@ -149,13 +150,19 @@
                                                                                                     <?php 
                                                                                                         $tempnumber=$model->number;
                                                                                                         endif;?>
-                                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" typeid="tempsite" showbutton="yes" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 20px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo $model->update_at;?></li>
+                                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" typeid="tempsite" showbutton="yes" istemp="1" status=<?php echo $model->status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 20px;"><?php echo $model->site_id%1000;?>&nbsp;</span><br><?php echo substr($model->update_at,5,11);?></li>
                                                                                         <?php                                                                                                 
                                                                                                 endforeach;
                                                                                             endif;?>
                                                                                     <?php //else:?>
                                                                                         <?php foreach ($models as $model):?>
-                                                                                                        <li class="modalaction <?php if($model->status=='1') echo 'bg-yellow'; elseif($model->status=='2') echo 'bg-blue'; elseif($model->status=='3') echo 'bg-green';?>" typeid="<?php echo $model->type_id; ?>" showbutton="yes" istemp="0" status=<?php echo $model->status;?> sid=<?php echo $model->lid;?> shname="<?php echo $model->serial;?>"><span style="font-size: 20px;"><?php echo $model->serial;?>&nbsp;</span><span typename="updateat"><?php echo '<br>'.$model->update_at;?></span></li>
+                                                                                                        <li class="modalaction <?php if($model["status"]=='1') echo 'bg-yellow'; elseif($model["status"]=='2') echo 'bg-blue'; elseif($model["status"]=='3') echo 'bg-green';?>"
+                                                                                                            typeid="<?php echo$model["type_id"]; ?>" showbutton="yes" istemp="0" status=<?php echo $model["status"];?> sid=<?php echo $model["lid"];?>
+                                                                                                            shname="<?php echo $model["serial"];?>"><span style="font-size: 20px;"><?php echo $model["serial"];?>&nbsp;</span><span typename="updateat">
+                                                                                                                <?php echo '<br>'.substr($model["update_at"],5,11);?></span>
+                                                                                                            <div style="width: 100%;background-color:<?php if($model["newitem"]>0){echo "green"; }else{ echo "";}?>;height:40%;
+                                                                                                                 display:<?php if($model["order_type"]=="1"||$model["order_type"]=="2"){echo "block";}else{echo "none";}?>">
+                                                                                                                <img style="height:90%;" src="<?php echo Yii::app()->request->baseUrl;?>/img/weixin.png" >印</div></li>
                                                                                         <?php endforeach;?>
                                                                                     <?php //endif;?>                                                                                
                                                                                 </ul>
@@ -191,6 +198,100 @@
 //                }
             });           
             
+            $('#manul_fresh').on("click",function(){
+                //alert(111);
+                //site显示时才做这样的操作
+                if($("#tab_sitelist").css("display")=="block")
+                {
+                    $.ajax({
+                        url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid,
+                        type:'GET',
+                        timeout:5000,
+                        cache:false,
+                        async:false,
+                        dataType: "json",
+                        success:function(msg){
+                            //$('#tabsiteindex').load(tabcurrenturl);
+                            //重新修改成用ajax动态加载
+                            if(gtypeid=="others")
+                            {
+                                //获取排队信息，并更新状态,不存在删减的
+                                $.each(msg,function(key,value){
+                                    var siteobj=$(".modalaction[typeid='others'][sid="+value.splid+"][istemp="+value.typeid+"]");
+                                    siteobj.removeClass("bg-yellow");
+                                    siteobj.removeClass("bg-green");                                                    
+                                    //改变背景颜色///
+                                    if(value.queuepersons>0)
+                                    {                                                
+                                        if(value.sitefree>0)
+                                        {
+                                            siteobj.addClass("bg-green");                                                    
+                                        }else{
+                                            siteobj.addClass("bg-yellow");                                                    
+                                        }
+                                    }
+                                    //修改排队数和空位数文字..
+                                    if(value.sitefree==null)
+                                    {
+                                        value.sitefree=0;
+                                    }
+                                    if(value.queuepersons==null)
+                                    {
+                                        value.queuepersons=0;
+                                    }
+                                    siteobj.find("span[typename='sitefree']").text("空座:"+value.sitefree);
+                                    siteobj.find("span[typename='queuenum']").text("排队:"+value.queuepersons); 
+                                 });
+                            }else if(gtypeid=="tempsite"){
+                                //获取临时座位信息，并更新状态
+                                //存在删减临时座位的,暂不修改，以后添加！！                    
+                                //....
+                            }else{
+                                //获取座位信息，并更新状态
+                                //不存在删减座位的
+                                $.each(msg,function(key,value){
+                                    var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
+                                    siteobj.attr("status",value.status);
+                                    siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
+                                    siteobj.removeClass("bg-yellow");
+                                    siteobj.removeClass("bg-blue");
+                                    siteobj.removeClass("bg-green");
+                                    if(value.status=="1")
+                                    {
+                                        siteobj.addClass("bg-yellow");
+                                    }else if(value.status=="2")
+                                    {
+                                        siteobj.addClass("bg-blue");
+                                    }else if(value.status=="3")
+                                    {
+                                        siteobj.addClass("bg-green");
+                                    }
+                                    if("12".indexOf(value.order_type)>=0)
+                                    {
+                                        siteobj.find("div").show();
+                                    }else{
+                                        siteobj.find("div").hide();
+                                    }
+                                    if(value.newitem > 0)
+                                    {
+                                        siteobj.find("div").css("background-color","green");
+                                    }else{
+                                        siteobj.find("div").css("background-color","");
+                                    }
+                                });
+                            }                            
+                        },
+                        error: function(msg){
+                            //alert("网络可能有问题，再试一次！");
+                        },
+                        complete : function(XMLHttpRequest,status){
+                            if(status=='timeout'){
+                               // alert("网络可能有问题，再试一次！");                                            
+                            }
+                        }
+                    });               
+                }
+            });
             
             
             $('.modalaction').on("click", function(){
@@ -396,12 +497,12 @@
                 }
                 $('#site_row').hide();
                 $('#order_row').show();
-            });
+            });           
+            
             
             $(document).ready(function () {
                 //$('#barscanid').val("222");
-                $('#barscanid').focus();
-                
+                $('#barscanid').focus();                
             });
             
             $('#site_button_cancel').on(event_clicktouchstart, function(){//site_button_cancel
