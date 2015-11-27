@@ -42,10 +42,22 @@ class DefaultSiteController extends BackendController
                         $models = SiteNo::model()->findAll($criteria);
                         //var_dump($models);exit;
                 }else{
-                        $criteria->with = 'siteType';
-                        $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$compayId ;
-                        $criteria->order = ' t.serial asc ';
-                        $models = Site::model()->findAll($criteria);
+//                        $criteria->with = 'siteType';
+//                        $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$compayId ;
+//                        $criteria->order = ' t.serial asc ';
+//                        $models = Site::model()->findAll($criteria);
+                        $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
+                                . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem "
+                                . " from nb_site t "
+                                . " LEFT JOIN (select t1.site_id,t1.order_type,t1.dpid,count(t2.product_order_status) as newitem from"
+                                . " nb_order t1 left join nb_order_product t2 on t1.dpid=t2.dpid and t1.lid=t2.order_id and t2.product_order_status='0' "
+                                . " where t1.is_temp='0'and t1.order_status in ('1','2','3')"
+                                . " and t1.order_type in ('1','2') group by t1.site_id,t1.order_type,t1.dpid)"
+                                . " twx on twx.dpid=t.dpid and t.lid=twx.site_id"
+                                . " where t.delete_flag='0' and t.dpid=".$compayId
+                                . " order by t.serial ASC";
+                        $connect = Yii::app()->db->createCommand($sql);
+                        $models = $connect->queryAll();  
                 }
                 if($op=='switch')
                 {
@@ -123,10 +135,22 @@ class DefaultSiteController extends BackendController
                         $tempsiteModels = SiteNo::model()->findAll($criteriat);
                         //var_dump($tempsiteModels);exit;
                 
-                        $criteria->with = 'siteType';
-                        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
-                        $criteria->order = ' t.serial asc ';
-                        $models = Site::model()->findAll($criteria);
+//                        $criteria->with = 'siteType';
+//                        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
+//                        $criteria->order = ' t.serial asc ';
+//                        $models = Site::model()->findAll($criteria);
+                        $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
+                                . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem "
+                                . " from nb_site t "
+                                . " LEFT JOIN (select t1.site_id,t1.order_type,t1.dpid,count(t2.product_order_status) as newitem from"
+                                . " nb_order t1 left join nb_order_product t2 on t1.dpid=t2.dpid and t1.lid=t2.order_id and t2.product_order_status='0' "
+                                . " where t1.is_temp='0'and t1.order_status in ('1','2','3')"
+                                . " and t1.order_type in ('1','2') group by t1.site_id,t1.order_type,t1.dpid)"
+                                . " twx on twx.dpid=t.dpid and t.lid=twx.site_id"
+                                . " where t.delete_flag='0' and t.dpid=".$compayId
+                                . " order by t.serial ASC";
+                        $connect = Yii::app()->db->createCommand($sql);
+                        $models = $connect->queryAll(); 
                         //var_dump($models);exit;
                 
 		$this->renderPartial('indexsite',array(
@@ -185,15 +209,27 @@ class DefaultSiteController extends BackendController
                         }
                         //var_dump($models);exit;
                 }else{
-                        $criteria->select = 't.lid,t.status,t.type_id,t.serial,t.update_at';
-                        //$criteria->with = 'siteType';
-                        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
-                        $criteria->order = ' t.serial asc ';
-                        $sitemodels = Site::model()->findAll($criteria);
-                        foreach ($sitemodels as $model)
-                        {
-                            array_push($models,array('lid'=>$model->lid,'status'=>$model->status,'type_id'=>$model->type_id,'serial'=>$model->serial,'update_at'=>$model->update_at));
-                        }                        
+//                        $criteria->select = 't.lid,t.status,t.type_id,t.serial,t.update_at';
+//                        //$criteria->with = 'siteType';
+//                        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
+//                        $criteria->order = ' t.serial asc ';
+//                        $sitemodels = Site::model()->findAll($criteria);
+                          $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
+                                . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem "
+                                . " from nb_site t "
+                                . " LEFT JOIN (select t1.site_id,t1.order_type,t1.dpid,count(t2.product_order_status) as newitem from"
+                                . " nb_order t1 left join nb_order_product t2 on t1.dpid=t2.dpid and t1.lid=t2.order_id and t2.product_order_status='0' "
+                                . " where t1.is_temp='0'and t1.order_status in ('1','2','3')"
+                                . " and t1.order_type in ('1','2') group by t1.site_id,t1.order_type,t1.dpid)"
+                                . " twx on twx.dpid=t.dpid and t.lid=twx.site_id"
+                                . " where t.delete_flag='0' and t.dpid=".$compayId
+                                . " order by t.serial ASC";
+//                        foreach ($sitemodels as $model)
+//                        {
+//                            array_push($models,array('lid'=>$model->lid,'status'=>$model->status,'type_id'=>$model->type_id,'serial'=>$model->serial,'update_at'=>$model->update_at));
+//                        } 
+                        $models= Yii::app()->db->createCommand($sql)->queryAll();
+                        //var_dump($models);exit;
                 }
 		//var_dump(json_encode($models));exit;
                 Yii::app()->end(json_encode($models));
