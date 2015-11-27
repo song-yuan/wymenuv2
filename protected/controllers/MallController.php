@@ -27,6 +27,7 @@ class MallController extends Controller
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
+				var_dump($this->weixinServiceAccount);exit;
 				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
 				$userInfo = $baseInfo->getSnsapiBase();
 				$openid = $userInfo['openid'];
@@ -37,7 +38,6 @@ class MallController extends Controller
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
 				$userId = $this->brandUser['lid'];
-				var_dump($this->brandUser);exit;
 				Yii::app()->session['userId'] = $userId;
 				if($this->type==1){
 					//堂吃
