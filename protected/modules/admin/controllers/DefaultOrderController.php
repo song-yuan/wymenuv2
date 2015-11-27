@@ -477,14 +477,10 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',0);
                 $orderId = Yii::app()->request->getParam('orderId',"0");
                 $padId = Yii::app()->request->getParam('padId',"0");
-                $payShouldAccount=Yii::app()->request->getParam('payShouldAccount',"0");
-                $cardtotal=Yii::app()->request->getParam('cardtotal',0);
                 $order=new Order();
-                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 if($orderId !='0')
                 {
                     $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
-                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
                     if(empty($order))
                     {
                         Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
@@ -501,17 +497,17 @@ class DefaultOrderController extends BackendController
                         $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
                     }
                     $order->should_total=$total['total'];
-                    //$order->should_total=$payShouldAccount;//用传递过来的
-                    $order->reality_total=$payShouldAccount;
+                    $order->reality_total=$total['total'];
                 }
                 
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
-                $memo="清单";
-                $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo,$cardtotal);
+                $orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
+                $cardtotal=0;
+                $memo="挂单清单";
+                $printList = Helper::printList($order,$orderProducts ,$pad,$precode,"0",$memo,$cardtotal);
                 Yii::app()->end(json_encode($printList));
         }
         
