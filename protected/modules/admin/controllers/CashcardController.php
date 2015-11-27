@@ -72,7 +72,7 @@ class CashcardController extends BackendController
     	$pages->applyLimit($criteria);
     	$models = TotalPromotion::model()->findALL($criteria);
     	//var_dump($models);exit;
-    	if ($models) {
+    	if (!empty($models)) {
     		$a="1";
     		$this->render('index',array(
     	    	'models'=>$models,
@@ -82,7 +82,7 @@ class CashcardController extends BackendController
     	}else {
     		$a="2";
     		$model = new TotalPromotion();
-    		$model->dpid = $this->companyId ;
+    		$model->dpid = $this->companyId;
     		//$models = (array)$models;
     		//$model->create_time = time();
     		//var_dump($models);exit;

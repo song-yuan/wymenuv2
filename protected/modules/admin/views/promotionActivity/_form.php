@@ -12,11 +12,11 @@
 								<div class="form-body">
 														
 									<div class="form-group ">
-									<?php if($model->hasErrors('promotion_title')) echo 'has-error';?>
-										<?php echo $form->label($model, yii::t('app','标题'),array('class' => 'col-md-3 control-label'));?>
+									<?php if($model->hasErrors('activity_title')) echo 'has-error';?>
+										<?php echo $form->label($model, yii::t('app','活动名称'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'promotion_title',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_title')));?>
-											<?php echo $form->error($model, 'promotion_title' )?>
+											<?php echo $form->textField($model, 'activity_title',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('activity_title')));?>
+											<?php echo $form->error($model, 'activity_title' )?>
 										</div>
 									</div><!-- 活动标题 -->
 									<div class="form-group">
@@ -38,57 +38,30 @@
 									</div><!-- 主图片 -->
 						
 									<div class="form-group" >
-									<?php if($model->hasErrors('promotion_abstract')) echo 'has-error';?>
-										<?php echo $form->label($model, yii::t('app','摘要'),array('class' => 'col-md-3 control-label'));?>
+									<?php if($model->hasErrors('activity_abstract')) echo 'has-error';?>
+										<?php echo $form->label($model, yii::t('app','活动摘要'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'promotion_abstract',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_abstract')));?>
-											<?php echo $form->error($model, 'promotion_abstract' )?>
+											<?php echo $form->textField($model, 'activity_abstract',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('activity_abstract')));?>
+											<?php echo $form->error($model, 'activity_abstract' )?>
 										</div>
 									</div><!-- 活动摘要 -->
-									<div class="form-group">
-										<?php echo $form->label($model, yii::t('app','类型'),array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'promotion_type', array('0' => yii::t('app','独享') , '1' => yii::t('app','共享')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_type')));?>
-											<?php echo $form->error($model, 'promotion_type' )?>
-										</div>
-									</div><!-- 活动类型 -->
-									<div class="form-group" >
-									<?php if($model->hasErrors('change_point')) echo 'has-error';?>
-										<?php echo $form->label($model, yii::t('app','兑换该特价活动所需的积分'),array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->textField($model, 'change_point',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('change_point')));?>
-											<?php echo $form->error($model, 'change_point' )?>
-										</div>
-									</div><!-- 需要的积分 -->
+									
+									
                                     <div class="form-group">
-										<?php echo $form->label($model, yii::t('app','是否可用代金券'),array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, yii::t('app','是否关注即推送'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'can_cupon', array('0' => yii::t('app','可以使用代金券') , '1' => yii::t('app','不能使用代金券')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('can_cupon')));?>
-											<?php echo $form->error($model, 'can_cupon' )?>
+											<?php echo $form->dropDownList($model, 'is_first_push', array('0' => yii::t('app','是') , '1' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_first_push')));?>
+											<?php echo $form->error($model, 'is_first_push' )?>
 										</div>
 									</div><!-- 是否可用代金券 -->
-                                    <div class="form-group">
-										<?php echo $form->label($model, yii::t('app','活动针对对象'),array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'to_group', array('0' => yii::t('app','所有人') , '1' => yii::t('app','关注微信的人群') ,'2' => yii::t('app','会员')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
-											<?php echo $form->error($model, 'to_group' )?>
-										</div>
-									</div><!-- 活动实施对象 -->
+                                  
 									<div class="form-group">
-										<?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, yii::t('app','是否扫码推送'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','生效') , '1' => yii::t('app','不生效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
-											<?php echo $form->error($model, 'is_available' )?>
+											<?php echo $form->dropDownList($model, 'is_scan_push', array('0' => yii::t('app','是') , '1' => yii::t('app','否')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_scan_push')));?>
+											<?php echo $form->error($model, 'is_scan_push' )?>
 										</div>
 									</div><!-- 活动是否生效 -->
-									<div class="form-group" >
-									<?php if($model->hasErrors('order_num')) echo 'has-error';?>
-										<?php echo $form->label($model, yii::t('app','单个订单的数量限制'),array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->textField($model, 'order_num',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('order_num')));?>
-											<?php echo $form->error($model, 'order_num' )?>
-										</div>
-									</div><!-- 需要的积分 -->
                                     <div class="form-group">
 											<label class="control-label col-md-3"><?php echo yii::t('app','活动有效期限');?></label>
 											<div class="col-md-4">
@@ -114,19 +87,19 @@
 									<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','图文说明'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">
-											<?php echo $form->textArea($model, 'promotion_memo' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_memo')));?>
-											<?php echo $form->error($model, 'promotion_memo' )?>
+											<?php echo $form->textArea($model, 'activity_memo' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('activity_memo')));?>
+											<?php echo $form->error($model, 'activity_memo' )?>
 										</div>
 									</div><!-- 图文说明 -->
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-											<a href="<?php echo $this->createUrl('privatepromotion/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
+											<a href="<?php echo $this->createUrl('promotionActivity/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
 							<?php $this->widget('ext.kindeditor.KindEditorWidget',array(
-								'id'=>'PrivatePromotion_promotion_memo',	//Textarea id
+								'id'=>'PromotionActivity_activity_memo',	//Textarea id
 								'language'=>'zh_CN',
 								// Additional Parameters (Check http://www.kindsoft.net/docs/option.html)
 								'items' => array(
@@ -177,7 +150,7 @@
 	
 		function swfupload_callback(name,path,oldname)  {
 			//alert(6789);
-			$("#PrivatePromotion_main_picture").val(name);
+			$("#PromotionActivity_main_picture").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 		}
 	</script>
