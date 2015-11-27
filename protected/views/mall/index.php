@@ -34,7 +34,7 @@
         </div>
         <div class="lt-rt">
         	<div class="minus <?php if(!$promotionProduct['num']) echo 'zero';?>">-</div>
-            <input type="text" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
+            <input type="tcext" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
             <div class="add">+</div>
             <div class="clear"></div>
         </div>
