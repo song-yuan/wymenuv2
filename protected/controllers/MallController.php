@@ -8,12 +8,11 @@ class MallController extends Controller
 	 * 
 	 */
 	public $companyId;
-	public $userId = -1;
-	public $siteId = -1;
-	public $type = 2;
+	public $type = 1;
 	public $weixinServiceAccount;
 	public $brandUser;
 	public $layout = '/layouts/mallmain';
+	
 	
 	public function init() 
 	{
@@ -21,29 +20,35 @@ class MallController extends Controller
 		$type = Yii::app()->request->getParam('type',1);
 		$this->companyId = $companyId;
 		$this->type = $type;
-//		如果微信浏览器
-		if(Helper::isMicroMessenger()){
-			$this->weixinServiceAccount();
-			$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
-			$userInfo = $baseInfo->getSnsapiBase();
-			$openid = $userInfo['openid'];
-			
-			$this->brandUser($openid);
-			if(!$this->brandUser){
-				$newBrandUser = new NewBrandUser($openid, $this->companyId);
-	    		$this->brandUser = $newBrandUser->brandUser;
+	}
+	
+	public function beforeAction($actin){
+		if(in_array($actin->id,array('index','cart','order','payOrder'))){
+			//如果微信浏览器
+			if(Helper::isMicroMessenger()){
+				$this->weixinServiceAccount();
+				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
+				$userInfo = $baseInfo->getSnsapiBase();
+				$openid = $userInfo['openid'];
+				
+				$this->brandUser($openid);
+				if(!$this->brandUser){
+					$newBrandUser = new NewBrandUser($openid, $this->companyId);
+		    		$this->brandUser = $newBrandUser->brandUser;
+				}
+				$userId = $this->brandUser['lid'];
+				Yii::app()->session['userId'] = $userId;
+				Yii::app()->session['qrcode-'.$userId] = 0000000000;
 			}
-			$this->userId = $this->brandUser['lid'];
 		}
-		if($this->type==1){
-			$this->userId = 0000000000;
-			Yii::app()->session['qrcode-'.$this->userId] = 0000000000;
-			$this->siteId = Yii::app()->session['qrcode-'.$this->userId];
-		}
+		return true;
 	}
 	public function actionIndex()
 	{
-		$product = new WxProduct($this->companyId,$this->userId,$this->siteId);
+		$userId = Yii::app()->session['userId'];
+		$siteId = Yii::app()->session['qrcode-'.$userId];
+		
+		$product = new WxProduct($this->companyId,$userId,$siteId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
 		$this->render('index',array('companyId'=>$this->companyId,'categorys'=>$categorys,'models'=>$products));
@@ -55,7 +60,10 @@ class MallController extends Controller
 	 */
 	public function actionCart()
 	{
-		$cartObj = new WxCart($this->companyId,$this->userId,$productArr = array(),$this->siteId);
+		$userId = Yii::app()->session['userId'];
+		$siteId = Yii::app()->session['qrcode-'.$userId];
+		
+		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
 		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts));
 	}
@@ -66,7 +74,10 @@ class MallController extends Controller
 	 */
 	public function actionGeneralOrder()
 	{
-		$orderObj = new WxOrder($this->companyId,$this->userId,$this->siteId,$this->type);
+		$userId = Yii::app()->session['userId'];
+		$siteId = Yii::app()->session['qrcode-'.$userId];
+		
+		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type);
 		$orderId = $orderObj->createOrder();
 		$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 	}
@@ -79,7 +90,6 @@ class MallController extends Controller
 	 public function actionOrder()
 	 {
 		$orderId = Yii::app()->request->getParam('orderId');
-		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts));
@@ -92,11 +102,12 @@ class MallController extends Controller
 	 */
 	 public function actionPayOrder()
 	 {
+	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('payorder',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts));
+		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts));
 	 }
 	/**
 	 * 
@@ -105,24 +116,24 @@ class MallController extends Controller
 	 */
 	public function actionAddCart()
 	{
-		if($this->userId < 0){
+		$userId = Yii::app()->session['userId'];
+		$siteId = Yii::app()->session['qrcode-'.$userId];
+		
+		if($userId < 0){
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众号我要点单进行点餐')));
 		}
 		
 		if($this->type==1){
-			if($this->siteId < 0){
+			if($siteId < 0){
 				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
-			}else{
-				$siteId = $this->siteId;
 			}
-		}else{
-			$siteId = $this->siteId;
 		}
+		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		
 		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId);
-		$cart = new WxCart($this->companyId,$this->userId,$productArr,$siteId);
+		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		if($cart->addCart()){
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
 		}else{
@@ -136,20 +147,24 @@ class MallController extends Controller
 	 */
 	public function actionDeleteCart()
 	{
-		if($this->userId < 0){
+		$userId = Yii::app()->session['userId'];
+		$siteId = Yii::app()->session['qrcode-'.$userId];
+		
+		if($userId < 0){
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众号我要点单进行点餐')));
 		}
-		if($this->type==1 && $this->siteId >= 0){
-			$siteId = $this->siteId;
-		}else{
-			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
+		
+		if($this->type==1){
+			if($siteId < 0){
+				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
+			}
 		}
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
 		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId);
 		
-		$cart = new WxCart($this->companyId,$this->userId,$productArr,$siteId);
+		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		if($cart->deleteCart()){
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
 		}else{

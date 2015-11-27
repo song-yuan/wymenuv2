@@ -29,9 +29,9 @@
             <p class="pr">¥<span class="price"><?php echo $product['price'];?></span></p>
         </div>
         <div class="lt-rt">
-        	<input type="button" class="minus <?php if(!$product['num']) echo 'zero';?>" value="-">
+        	<div class="minus <?php if(!$product['num']) echo 'zero';?>">-</div>
             <input type="text" class="result <?php if(!$product['num']) echo 'zero';?>" product-id="<?php echo $product['lid'];?>" promote-id="-1" disabled value="<?php echo $product['num']?$product['num']:0;?>">
-            <input type="button" class="add" value="+">
+            <div class="add">+</div>
             <div class="clear"></div>
         </div>
     </div>
@@ -111,7 +111,7 @@ $(function(){
 			          t.addClass('zero');
 			       }
 			       t.val(parseInt(t.val())-1);
-			       if(parseInt(t.val())<0){ 
+			       if(parseInt(t.val()) < 0){ 
 			           t.val(0); 
 			   	    } 
 			    	setTotal(); 

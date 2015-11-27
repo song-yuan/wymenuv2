@@ -431,7 +431,6 @@ class WxPayApi
 			$msg = $e->errorMessage();
 			return false;
 		}
-		
 		return call_user_func($callback, $result);
 	}
 	

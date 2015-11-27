@@ -6,7 +6,7 @@
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
 	$tools = new JsApiPay();
-	$openId = WxBrandUser::openId($this->userId,$this->companyId);
+	$openId = WxBrandUser::openId($userId,$this->companyId);
 	//②、统一下单
 	$input = new WxPayUnifiedOrder();
 	$input->SetBody("点餐订单");
@@ -50,7 +50,7 @@
         <p>￥<span id="total" class="total"><?php echo $order['should_total']?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a href="javascript:;" onclick="callpay()">去付款</a></p>
+        <p><a href="javascript:;" onclick="callpay()">付款</a></p>
     </div>
     <div class="clear"></div>
 </footer>
@@ -63,10 +63,9 @@
 			'getBrandWCPayRequest',
 			<?php echo $jsApiParameters; ?>,
 			function(res){
-				alert(res.err_msg);
 				 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 				 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
-				 	
+				 	alert('支付成功');
 				 }else{
 				 	//支付失败或取消支付
 				 	

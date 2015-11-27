@@ -313,8 +313,9 @@
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
                 <div class="col-md-8" style="">
-			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
-                        <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsave_btn" value="<?php echo yii::t('app','挂单--');?>">
+			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsaveprint_btn" value="<?php echo yii::t('app','挂单打印');?>">
+                        <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsave_btn" value="<?php echo yii::t('app','挂单');?>">
 			<!--<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printlist_btn" value="<?php echo yii::t('app','打印清单');?>">-->
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="alltaste_btn" value="<?php echo yii::t('app','全单设定');?>">
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printerKitchen" value="<?php echo yii::t('app','下单&厨打&收银&结单');?>">
@@ -786,7 +787,7 @@
                                 $.each(msg,function(key,value){
                                     var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
                                     siteobj.attr("status",value.status);
-                                    siteobj.find("span[typename=updateat]").html("<br>"+value.update_at);
+                                    siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
                                     siteobj.removeClass("bg-yellow");
                                     siteobj.removeClass("bg-blue");
                                     siteobj.removeClass("bg-green");
@@ -799,6 +800,18 @@
                                     }else if(value.status=="3")
                                     {
                                         siteobj.addClass("bg-green");
+                                    }
+                                    if("12".indexOf(value.order_type)>=0)
+                                    {
+                                        siteobj.find("div").show();
+                                    }else{
+                                        siteobj.find("div").hide();
+                                    }
+                                    if(value.newitem > 0)
+                                    {
+                                        siteobj.find("div").css("background-color","green");
+                                    }else{
+                                        siteobj.find("div").css("background-color","");
                                     }
                                 });
                             }                            
@@ -814,6 +827,7 @@
                     });               
                 }                
             }
+            
             
             $(document).ready(function() {
                 $('body').addClass('page-sidebar-closed');
@@ -1091,6 +1105,60 @@
 	     	});
                    
             });
+            
+            //tempsaveprint_btn
+            $('#tempsaveprint_btn').on(event_clicktouchstart,function(){
+                var orderid=$(".selectProduct").attr("orderid");
+                var padid="0000000046";
+                if (typeof Androidwymenuprinter == "undefined") {
+                    alert("找不到PAD设备");
+                    //return false;
+                }else{
+                    var padinfo=Androidwymenuprinter.getPadInfo();
+                    padid=padinfo.substr(10,10);
+                }
+                var url="<?php echo $this->createUrl('defaultOrder/pausePrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
+                $.ajax({
+                        url:url,
+                        type:'GET',
+                        data:"",
+                        async:false,
+                        dataType: "json",
+                        success:function(msg){
+                            var data=msg;
+                            var printresult=false;
+                            if(data.status){
+                                var index = layer.load(0, {shade: [0.3,'#fff']});
+                                for(var itemp=1;itemp<4;itemp++)
+                                {
+                                    if(printresult)
+                                    {
+                                        layer.close(index);
+                                        break;
+                                    }
+                                    var addressdetail=data.address.split(".");
+                                    if(addressdetail[0]=="com")
+                                    {
+                                        var baudrate=parseInt(addressdetail[2]);
+                                        printresult=Androidwymenuprinter.printComJob(data.dpid,data.jobid,addressdetail[1],baudrate);
+                                    }else{
+                                        printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);
+                                    }                                                                        
+                                }
+                                if(!printresult)
+                                {
+                                    alert("再试一次！");
+                                }
+                                layer.close(index);
+                            }else{
+                                alert(data.msg);                                
+                            }                                            
+                        },
+                        error: function(msg){
+                            alert("保存失败2");
+                        }
+                    });                 
+            })
             
             //printlist_btn
             $('#printlistaccount').on(event_clicktouchstart,function(){

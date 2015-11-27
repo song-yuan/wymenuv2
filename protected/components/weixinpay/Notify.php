@@ -38,12 +38,14 @@ class Notify extends WxPayNotify
 			return false;
 		}
 		
+		//记录通知 并更改订单状态
+		$this->checkNotify($data);
 		
 		return true;
 	}
 	
 	public function checkNotify($data){
-		$sql = 'SELECT (SELECT count(*) FROM nb_notify WHERE transaction_id = "' .$data['transaction_id']. '") + (SELECT count(*) FROM yk_notify WHERE out_trade_no= "' .$data['out_trade_no']. '") as count';
+		$sql = 'SELECT (SELECT count(*) FROM nb_notify WHERE transaction_id = "' .$data['transaction_id']. '") + (SELECT count(*) FROM nb_notify WHERE out_trade_no= "' .$data['out_trade_no']. '") as count';
 		$count = Yii::app()->db->createCommand($sql)->queryRow();
 		if(!$count['count']){
 			$this->insertNotify($data);
@@ -52,6 +54,7 @@ class Notify extends WxPayNotify
 	public function insertNotify($data){
 		$orderIdArr = explode('-',$data["out_trade_no"]);
 		$brandUser = WxBrandUser::getFromOpenId($data['openid']);
+		
 		$se = new Sequence("notify");
         $lid = $se->nextval();
 		$notifyData = array(

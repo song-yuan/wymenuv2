@@ -12,4 +12,4 @@ footer .ft-rt p{ font-size:0.2rem; color:#fff; text-align:center;}
 .jq{ width:3rem; height:0.8rem;}
 .clear{clear: both;}
 .zero{display: none;}
-input{ -webkit-appearance: none;}
+input[type="submit"], input[type="reset"], input[type="button"], button { -webkit-appearance: none; }
