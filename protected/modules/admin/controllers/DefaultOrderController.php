@@ -496,8 +496,8 @@ class DefaultOrderController extends BackendController
                     }else{
                         $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
                     }
-                    $order->should_total=$total['total'];
-                    $order->reality_total=$total['total'];
+                    $order->should_total=0;
+                    $order->reality_total=0;
                 }
                 
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));

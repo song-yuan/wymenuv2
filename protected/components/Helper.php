@@ -507,9 +507,15 @@ class Helper
                     //array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
                     //        .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,2));
-                    array_push($listData,"br");
-                    array_push($listData,"11".yii::t('app','优惠价：').number_format($order->reality_total,2));
+                    if($order->should_total>0)
+                    {
+                        array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,2));
+                        array_push($listData,"br");
+                    }
+                    if($order->reality_total>0)
+                    {
+                        array_push($listData,"11".yii::t('app','优惠价：').number_format($order->reality_total,2));
+                    }
                     if($cardtotal>0)
                     {
                         array_push($listData,"br");
