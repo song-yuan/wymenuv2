@@ -199,7 +199,6 @@
             });           
             
             $('#manul_fresh').on("click",function(){
-                //alert(111);
                 //site显示时才做这样的操作
                 if($("#tab_sitelist").css("display")=="block")
                 {
@@ -275,6 +274,7 @@
                                     if(value.newitem > 0)
                                     {
                                         siteobj.find("div").css("background-color","green");
+                                        //需要打印
                                     }else{
                                         siteobj.find("div").css("background-color","");
                                     }
