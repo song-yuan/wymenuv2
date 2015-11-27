@@ -27,11 +27,10 @@ class MallController extends Controller
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
-				var_dump($this->weixinServiceAccount);exit;
 				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
 				$userInfo = $baseInfo->getSnsapiBase();
 				$openid = $userInfo['openid'];
-				
+				var_dump($userInfo);exit;
 				$this->brandUser($openid);
 				if(!$this->brandUser){
 					$newBrandUser = new NewBrandUser($openid, $this->companyId);
