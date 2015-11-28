@@ -39,6 +39,10 @@ class MallController extends Controller
 				Yii::app()->session['userId'] = $userId;
 				if($this->type==1){
 					//堂吃
+					$scaned = WxScanLog::get($this->companyId,$userId);
+					if(!empty($scaned)){
+						Yii::app()->session['qrcode-'.$userId] = $scaned['scene_id'];
+					}
 					if(!isset(Yii::app()->session['qrcode-'.$userId])){
 						Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
 					}
