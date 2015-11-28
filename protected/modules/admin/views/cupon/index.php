@@ -90,7 +90,7 @@
                                 <th><?php echo yii::t('app','是否有效');?></th>
                                 <!--<th><?php echo yii::t('app','支付方式');?></th>-->
                                 <th><?php echo yii::t('app','编辑');?></th>                                                                
-                                <th><?php echo yii::t('app','编辑明细');?></th>
+                                <!-- <th><?php echo yii::t('app','编辑明细');?></th> -->
                                 <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
@@ -112,8 +112,8 @@
 								<td><?php switch ($model->is_available){case 0:echo yii::t('app','有效');break;case 1:echo yii::t('app','无效');break;default:echo '';break;} ?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('cupon/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
-								<td class="center">
-								<!-- <a href="<?php echo $this->createUrl('cupon/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a> --> </td>
+								<!-- <td class="center">
+								<a href="<?php echo $this->createUrl('cupon/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a> </td> -->
 								 <td><?php echo '';?></td>
 								</tr>
 						

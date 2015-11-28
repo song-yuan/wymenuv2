@@ -17,6 +17,8 @@
  * @property string $can_cupon
  * @property string $begin_time
  * @property string $end_time
+ * @property string $to_group
+ * @property string $group_id
  * @property string $order_num
  * @property string $is_available
  * @property string $delete_flag
@@ -40,10 +42,10 @@ class PrivatePromotion extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, dpid', 'required'),
-			array('lid, dpid', 'length', 'max'=>10),
+			array('lid, dpid,order_num,group_id', 'length', 'max'=>10),
 			array('promotion_title', 'length', 'max'=>50),
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
-			array('promotion_type, change_point, can_cupon, is_available, delete_flag', 'length', 'max'=>2),
+			array('to_group,promotion_type, change_point, can_cupon, is_available, delete_flag', 'length', 'max'=>2),
 			//array('order_num', 'length', 'max'=>3),
 			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
@@ -82,7 +84,9 @@ class PrivatePromotion extends CActiveRecord
 			'can_cupon' => '是否能使用代金券，0表示能用，1表示不能用',
 			'begin_time' => '开始时间',
 			'end_time' => '结束时间',
-			//'order_num' => '单个订单的数量限制',
+			'to_group' => '0表示所有人，1表示关注微信的人群，2表示会员等级，3表示会员个人',
+			'group_id' => '表示会员的id',
+			'order_num' => '单个订单的数量限制',
 			'is_available' => '是否生效，0表示生效，1表示无效。',
 			'delete_flag' => '0表示存在，1表示删除。',
 		);
@@ -119,7 +123,9 @@ class PrivatePromotion extends CActiveRecord
 		$criteria->compare('can_cupon',$this->can_cupon,true);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
-		//$criteria->compare('order_num',$this->order_num,true);
+		$criteria->compare('to_group',$this->to_group,true);
+		$criteria->compare('group_id',$this->group_id,true);
+		$criteria->compare('order_num',$this->order_num,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 
