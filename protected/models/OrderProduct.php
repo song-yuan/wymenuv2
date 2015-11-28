@@ -10,6 +10,7 @@
  * @property string $update_at
  * @property string $order_id
  * @property string $set_id
+ * @property string $private_promotion_lid
  * @property string $product_id
  * @property string $is_retreat
  * @property string $is_print
@@ -51,13 +52,13 @@ class OrderProduct extends CActiveRecord
 		return array(
 			array('lid, dpid, order_id', 'required'),
 			array('lid, dpid, order_id', 'numerical', 'integerOnly'=>true),
-			array('main_id,set_id, product_id, price, weight', 'length', 'max'=>10),
+			array('main_id,set_id,private_promotion_lid, product_id, price, weight', 'length', 'max'=>10),
 			array('is_print, is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
 			//array('taste_memo', 'length', 'max'=>50),
 			array('create_at, offprice, amount, zhiamount', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, order_id, main_id, set_id, product_id, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, order_id, main_id, set_id,private_promotion_lid, product_id, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -99,6 +100,7 @@ class OrderProduct extends CActiveRecord
 			'update_at' => yii::t('app','更新时间'),
 			'order_id' => yii::t('app','订单'),
 			'set_id' => yii::t('app','套餐编号'),
+                        'private_promotion_lid' => yii::t('app','专享活动ID'),
                         'main_id' => yii::t('app','主菜'),
 			'product_id' => yii::t('app','产品编号'),
 			'is_retreat' => '0非退菜，1退菜',
@@ -140,6 +142,7 @@ class OrderProduct extends CActiveRecord
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('order_id',$this->order_id,true);
 		$criteria->compare('set_id',$this->set_id,true);
+                $criteria->compare('private_promotion_lid',$this->set_id,true);
                 $criteria->compare('main_id',$this->main_id,true);
 		$criteria->compare('product_id',$this->product_id,true);
 		$criteria->compare('is_retreat',$this->is_retreat,true);

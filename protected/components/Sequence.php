@@ -64,6 +64,10 @@ class Sequence {
         $command=$db->createCommand($sql);
         $command->bindValue(":table" , $this->table);
 	$nowval= $command->queryScalar();
+        if($nowval==0)
+        {
+            $nowval++;
+        }
         if(Yii::app()->params->cloud_local=="c")
         {
             if($nowval%2==1)

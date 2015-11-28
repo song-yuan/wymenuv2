@@ -46,12 +46,13 @@ class Site extends CActiveRecord
 			array('floor_id,type_id,splid, delete_flag, has_minimum_consumption, minimum_consumption_type', 'numerical', 'integerOnly'=>true),
 			array('period, overtime,buffer', 'numerical'),
 			array('serial', 'length', 'max'=>20),
+                        array('qrcode', 'length', 'max'=>255),
 			//array('site_level', 'length', 'max'=>20),
 			array('floor_id','compare','compareValue'=>'0','operator'=>'>','message'=>'楼层必须选择'),
 			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, serial,splid, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type, minimum_consumption, number, period, overtime, buffer, overtime_fee, floor_id', 'safe', 'on'=>'search'),
+			array('lid, serial,splid, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type,qr_code, minimum_consumption, number, period, overtime, buffer, overtime_fee, floor_id,qrcode', 'safe', 'on'=>'search'),
 		);
 	}
 	public function validate($attributes = NULL, $clearErrors = true){
@@ -105,6 +106,7 @@ class Site extends CActiveRecord
 			'overtime_fee' =>yii::t('app', '超时费（元）'),
                         'floor_id' =>yii::t('app', '楼层'),
                         'Status' =>yii::t('app', '座位状态'),
+                        'qrcode' =>yii::t('app', '二维码'),
 		);
 	}
 
@@ -143,6 +145,7 @@ class Site extends CActiveRecord
 		$criteria->compare('overtime_fee',$this->overtime_fee,true);
                 $criteria->compare('floor_id',$this->floor_id,true);
                 $criteria->compare('status',$this->status,true);
+                $criteria->compare('qrcode',$this->qrcode,true);
                 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
