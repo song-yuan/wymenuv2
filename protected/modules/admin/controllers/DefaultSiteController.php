@@ -209,11 +209,24 @@ class DefaultSiteController extends BackendController
                         }
                         //var_dump($models);exit;
                 }else{
-//                        $criteria->select = 't.lid,t.status,t.type_id,t.serial,t.update_at';
-//                        //$criteria->with = 'siteType';
-//                        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
-//                        $criteria->order = ' t.serial asc ';
-//                        $sitemodels = Site::model()->findAll($criteria);
+                    //如果是本地模式，先从云端取有没有微信订单，有的话，加入到本地，然后打印。
+                    if(Yii::app()->params['cloud_local']=='l')
+                    {
+                        $synctalbe=array(
+                            "nb_order",
+                            "nb_order_product",
+                            "nb_close_account_detail"
+                            );
+                        ////特殊的更新
+                        $syncSpecialTalbe=array(
+                            "nb_site"=>array("status","number"),  //本地状态同步过去
+                            "nb_member_card"=>array("all_money"), //本地金额同步过去
+                            "nb_product"=>array("store_number","order_number","favourite_number") //本地库存产品下单数量，人气同步过去
+                        );
+                        WxOrder::WxOrderSync($synctalbe,$syncSpecialTalbe);
+                    }
+                    //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
+                    
                           $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
                                 . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem "
                                 . " from nb_site t "
@@ -224,10 +237,6 @@ class DefaultSiteController extends BackendController
                                 . " twx on twx.dpid=t.dpid and t.lid=twx.site_id"
                                 . " where t.delete_flag='0' and t.dpid=".$compayId
                                 . " order by t.serial ASC";
-//                        foreach ($sitemodels as $model)
-//                        {
-//                            array_push($models,array('lid'=>$model->lid,'status'=>$model->status,'type_id'=>$model->type_id,'serial'=>$model->serial,'update_at'=>$model->update_at));
-//                        } 
                         $models= Yii::app()->db->createCommand($sql)->queryAll();
                         //var_dump($models);exit;
                 }

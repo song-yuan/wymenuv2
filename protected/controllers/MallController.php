@@ -30,7 +30,6 @@ class MallController extends Controller
 				$baseInfo = new WxUserBase($this->weixinServiceAccount['appid'],$this->weixinServiceAccount['appsecret']);
 				$userInfo = $baseInfo->getSnsapiBase();
 				$openid = $userInfo['openid'];
-				
 				$this->brandUser($openid);
 				if(!$this->brandUser){
 					$newBrandUser = new NewBrandUser($openid, $this->companyId);
@@ -38,7 +37,23 @@ class MallController extends Controller
 				}
 				$userId = $this->brandUser['lid'];
 				Yii::app()->session['userId'] = $userId;
-				Yii::app()->session['qrcode-'.$userId] = 0000000000;
+				if($this->type==1){
+					//堂吃
+					$scaned = WxScanLog::get($this->companyId,$userId);
+					if(!empty($scaned)){
+						Yii::app()->session['qrcode-'.$userId] = $scaned['scene_id'];
+					}
+					if(!isset(Yii::app()->session['qrcode-'.$userId])){
+						Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
+					}
+				}else{
+					Yii::app()->session['qrcode-'.$userId] = -1;
+				}
+			}else{
+				//pc 浏览
+				$userId =-1;
+				Yii::app()->session['userId'] = $userId;
+				Yii::app()->session['qrcode-'.$userId] = -1;
 			}
 		}
 		return true;
@@ -47,11 +62,13 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
-		
+		//特价菜
+		$promotion = new WxPromotion($this->companyId,$userId);
+		//普通优惠
 		$product = new WxProduct($this->companyId,$userId,$siteId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
-		$this->render('index',array('companyId'=>$this->companyId,'categorys'=>$categorys,'models'=>$products));
+		$this->render('index',array('companyId'=>$this->companyId,'categorys'=>$categorys,'models'=>$products,'promotions'=>$promotion->promotionProductList));
 	}
 	/**
 	 * 

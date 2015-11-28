@@ -10,6 +10,7 @@
  * @property string $update_at
  * @property string $order_id
  * @property string $set_id
+ * @property string $private_promotion_lid
  * @property string $product_id
  * @property string $is_retreat
  * @property string $is_print
@@ -51,13 +52,13 @@ class OrderProduct extends CActiveRecord
 		return array(
 			array('lid, dpid, order_id', 'required'),
 			array('lid, dpid, order_id', 'numerical', 'integerOnly'=>true),
-			array('main_id,set_id, product_id, price, weight', 'length', 'max'=>10),
+			array('main_id,set_id,private_promotion_lid, product_id, price, weight', 'length', 'max'=>10),
 			array('is_print, is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
 			//array('taste_memo', 'length', 'max'=>50),
 			array('create_at, offprice, amount, zhiamount', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, order_id, main_id, set_id, product_id, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, order_id, main_id, set_id,private_promotion_lid, product_id, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -99,6 +100,7 @@ class OrderProduct extends CActiveRecord
 			'update_at' => yii::t('app','更新时间'),
 			'order_id' => yii::t('app','订单'),
 			'set_id' => yii::t('app','套餐编号'),
+                        'private_promotion_lid' => yii::t('app','专享活动ID'),
                         'main_id' => yii::t('app','主菜'),
 			'product_id' => yii::t('app','产品编号'),
 			'is_retreat' => '0非退菜，1退菜',
@@ -140,6 +142,7 @@ class OrderProduct extends CActiveRecord
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('order_id',$this->order_id,true);
 		$criteria->compare('set_id',$this->set_id,true);
+                $criteria->compare('private_promotion_lid',$this->set_id,true);
                 $criteria->compare('main_id',$this->main_id,true);
 		$criteria->compare('product_id',$this->product_id,true);
 		$criteria->compare('is_retreat',$this->is_retreat,true);
@@ -192,6 +195,18 @@ class OrderProduct extends CActiveRecord
 				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
                                 left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
 				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.is_print=1 and t.product_order_status=1 and t.is_retreat=0 and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id';
+		return $db->createCommand($sql)->queryAll();
+	}
+        
+        //挂单的产品
+        static public function getHasPauseProducts($orderId,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select t.*,t1.product_name,t1.original_price,t1.is_temp_price,t1.is_special,t1.is_discount,
+                                t1.product_unit,t1.weight_unit,t1.is_weight_confirm,t1.printer_way_id,t2.category_name,t3.set_name from nb_order_product t
+				left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid
+				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
+                                left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
+				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.product_order_status=0 and t.is_retreat=0 and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id';
 		return $db->createCommand($sql)->queryAll();
 	}
         
