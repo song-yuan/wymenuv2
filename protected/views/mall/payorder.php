@@ -45,6 +45,15 @@
 	</div>
 	<?php endif;?>
 </div>
+
+<div class="order-paytype">
+<div class="select-type">选择支付方式</div>
+<div class="paytype">
+	<div class="item on" paytype="1">微信支付</div>
+	<div class="item" paytype="2" style="border:none;">余额支付</div>
+</di>
+</di>
+
 <footer>
     <div class="ft-lt">
         <p>￥<span id="total" class="total"><?php echo $order['should_total']?></span></p>
