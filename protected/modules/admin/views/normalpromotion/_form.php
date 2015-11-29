@@ -59,13 +59,62 @@
 											<?php echo $form->error($model, 'can_cupon' )?>
 										</div>
 									</div><!-- 是否可用代金券 -->
-                                    <div class="form-group">
+									
+									
+									<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','活动针对对象'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'to_group', array('0' => yii::t('app','所有人') , '1' => yii::t('app','关注微信的人群') ,'2' => yii::t('app','会员')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
+											<?php echo $form->dropDownList($model, 'to_group', array( '1' => yii::t('app','关注微信人群'), '2' => yii::t('app','会员等级') , '3' => yii::t('app','会员个人')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
 											<?php echo $form->error($model, 'to_group' )?>
 										</div>
-									</div><!-- 活动实施对象 -->
+									</div>
+                                    <!-- <div class="form-group">
+										<?php echo $form->label($model, yii::t('app','活动针对对象'),array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'to_group', array('1' => yii::t('app','关注微信的人群') , '2' => yii::t('app','会员等级') ,'3' => yii::t('app','会员个人')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
+											<?php echo $form->error($model, 'to_group' )?>
+										</div>
+									</div><!-- 活动实施对象 --
+									 -->
+									<?php if($model->to_group=="2"):{?>
+									<div id="yincang" style="display: ;" class="form-group ">
+										<label class="col-md-3 control-label"><?php echo yii::t('app','会员等级');?></label>
+										<div class="col-md-4" style="border:1px solid red;">
+										<?php if($brdulvs) :{?>
+										<?php $i=1;?>
+										<?php foreach ($brdulvs as $brdulv):?>
+										
+											<tr class="odd gradeX">
+												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" value="<?php echo $brdulv->lid;?>" name="chk" /></td>
+												<td><?php echo $i,$brdulv->level_name; ?></td>
+												
+											</tr>
+										<?php $i=$i+1;?>
+										<?php endforeach;?>
+										<?php }endif;?>
+										</div>
+										<input type="hidden" id="hidden1" name="hidden1" value="" />
+									</div>
+								<?php }elseif($model->to_group!="2"):{?>
+										<div id="yincang" style="display:none ;" class="form-group ">
+										<label class="col-md-3 control-label"><?php echo yii::t('app','会员等级');?></label>
+										<div class="col-md-4" style="border:1px solid red;">
+										<?php if($brdulvs) :{?>
+										<?php $i=1;?>
+										<?php foreach ($brdulvs as $brdulv):?>
+										
+											<tr class="odd gradeX">
+												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" value="<?php echo $brdulv->lid;?>" name="chk" /></td>
+												<td><?php echo $i,$brdulv->level_name; ?></td>
+												
+											</tr>
+										<?php $i=$i+1;?>
+										<?php endforeach;?>
+										<?php }endif;?>
+										</div>
+										<input type="hidden" id="hidden1" name="hidden1" value="" />
+									</div>
+								<?php }endif;?>
 									<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -104,7 +153,7 @@
 									</div><!-- 图文说明 -->
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
 											<a href="<?php echo $this->createUrl('normalpromotion/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
@@ -123,7 +172,68 @@
 								),
 							)); ?>
 							
-	<script>
+	<script type="text/javascript">
+
+	 $(document).ready(function(){ 
+		 $('#NormalPromotion_to_group').change(function(){ 
+		 //alert($(this).children('option:selected').val()); 
+		 var p1=$(this).children('option:selected').val();//这就是selected的值 
+			//alert(p1);
+			 if(p1=="2"){
+				 $("#yincang").show();
+			 }else{
+				$("#yincang").hide();
+				 }
+		
+		 }) 
+		 }); 
+		 
+//	 	 function aa() {
+//	 		 //alert(222);
+//	          $(".chk").click(function() {
+//	              var aa = document.getElementsByName("chk");
+//	              var ss = "";
+//	              alert(22);
+//	              for (var i = 0; i < aa.length; i++) {
+//	                  if (aa[i].checked) {
+//	                      ss += aa[i].value;
+//	                  }
+//	              }
+//	              $("#txt").val(ss);
+//	              alert(22);
+//	          });
+//	      };
+
+	     $("#su").on('click',function() {
+	         alert(11);
+	         var p1 = $('#NormalPromotion_to_group').children('option:selected').val();
+	         var aa = document.getElementsByName("chk");
+	         var str=new Array();
+	         alert(p1);
+	         //var ss = "";
+	       // if(aa.checked){
+	         if(p1=='2'){
+	         for (var i = 0; i < aa.length; i++) {
+	             if (aa[i].checked) {
+	                 str += aa[i].value +',';
+	             }
+	         }
+	         if(str!=''){
+	         str = str.substr(0,str.length-1);//除去最后一个“，”
+	         }else{
+	        	 alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
+	        	 return false;
+	        	 }
+	         }
+	         //else{
+	        //	 alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
+	          //   }
+	         alert(str);
+	      //  }else{
+	        //alert(str);}
+	         $("#hidden1").val(str);
+	         $("#normalpromotion-form").submit();
+	     });
 // 	   $('#category_container').on('change','.category_selecter',function(){
 // 	   		var id = $(this).val();
 // 	   		var $parent = $(this).parent();

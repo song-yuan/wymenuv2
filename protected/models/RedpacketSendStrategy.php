@@ -14,6 +14,7 @@
  * @property string $send_type
  * @property string $is_available
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class RedpacketSendStrategy extends CActiveRecord
 {
@@ -36,10 +37,11 @@ class RedpacketSendStrategy extends CActiveRecord
 			array('update_at', 'required'),
 			array('lid, dpid, redpacket_lid, min_money, max_money', 'length', 'max'=>10),
 			array('send_type, is_available, delete_flag', 'length', 'max'=>2),
+				array('is_sync','length','max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, redpacket_lid, min_money, max_money, send_type, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, redpacket_lid, min_money, max_money, send_type, is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,6 +72,7 @@ class RedpacketSendStrategy extends CActiveRecord
 			'send_type' => '0为结单时发送，1为其他发送（后续补充）',
 			'is_available' => '是否生效；0为生效，1Wie无效',
 			'delete_flag' => '0为存在，1为删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -101,6 +104,7 @@ class RedpacketSendStrategy extends CActiveRecord
 		$criteria->compare('send_type',$this->send_type,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

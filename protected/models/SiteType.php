@@ -7,6 +7,7 @@
  * @property integer $lid
  * @property integer $dpid
  * @property string $name
+ * @property string $is_sync
  */
 class SiteType extends CActiveRecord
 {
@@ -29,10 +30,11 @@ class SiteType extends CActiveRecord
 			array('name , dpid', 'required'),
 			array('lid, dpid', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>45),
+				array('is_sync','length','max'=>50),
 			array('simplecode', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, name, dpid, simplecode', 'safe', 'on'=>'search'),
+			array('lid, name, dpid, simplecode, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,6 +61,7 @@ class SiteType extends CActiveRecord
 			'name' => yii::t('app','类型名称'),
 			'simplecode' => yii::t('app','简称字符'),
 			'dpid' => yii::t('app','公司'),
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -84,6 +87,7 @@ class SiteType extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('simplecode',$this->simplecode,true);
 		$criteria->compare('dpid',$this->dpid);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -15,6 +15,7 @@
  * @property string $printer_type
  * @property string $finish_flag
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class OrderPrintjobs extends CActiveRecord
 {
@@ -40,9 +41,10 @@ class OrderPrintjobs extends CActiveRecord
 			array('printer_type', 'length', 'max'=>2),
 			array('finish_flag, delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, jobid, orderid, address, content, printer_type, finish_flag, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, is_sync, update_at, jobid, orderid, address, content, printer_type, finish_flag, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,6 +77,7 @@ class OrderPrintjobs extends CActiveRecord
 			'printer_type' => '0网络，1本地',
 			'finish_flag' => '0没有完成，1已经重新打印完成',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -107,6 +110,7 @@ class OrderPrintjobs extends CActiveRecord
 		$criteria->compare('printer_type',$this->printer_type,true);
 		$criteria->compare('finish_flag',$this->finish_flag,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

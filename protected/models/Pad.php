@@ -13,6 +13,7 @@
  * @property string $server_address
  * @property string $pad_type
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class Pad extends CActiveRecord
 {
@@ -38,9 +39,10 @@ class Pad extends CActiveRecord
 			array('server_address', 'length', 'max'=>70),
 			array('pad_type, delete_flag,is_bind', 'length', 'max'=>1),
 			array('create_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, name, printer_id, server_address, pad_type,is_bind, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, name, printer_id, server_address, pad_type,is_bind, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,6 +74,7 @@ class Pad extends CActiveRecord
 			'pad_type' =>yii::t('app', '类型'),
                         'is_bind' => yii::t('app','绑定'),
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -102,6 +105,7 @@ class Pad extends CActiveRecord
 		$criteria->compare('server_address',$this->server_address,true);
 		$criteria->compare('pad_type',$this->pad_type,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

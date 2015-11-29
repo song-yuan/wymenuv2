@@ -41,7 +41,7 @@
 													</span>
 												</div> -->
 												 <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-													 <?php echo $form->textField($model,'end_time',array('class' => 'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_time'))); ?>
+													 <?php echo $form->textField($model,'end_time',array('class' => 'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('end_time'))); ?><!-- placeholder表示文本框内的文字提示 -->
 												 </div> 
 												<!-- /input-group -->
 												

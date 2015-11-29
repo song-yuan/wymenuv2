@@ -1,25 +1,27 @@
 <?php
 
 /**
- * This is the model class for table "nb_payment_method".
+ * This is the model class for table "nb_normal_branduser".
  *
- * The followings are the available columns in table 'nb_payment_method':
+ * The followings are the available columns in table 'nb_normal_branduser':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $name
+ * @property string $normal_promotion_id
+ * @property string $to_group
+ * @property string $brand_user_lid
  * @property string $delete_flag
  * @property string $is_sync
  */
-class PaymentMethod extends CActiveRecord
+class NormalBranduser extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_payment_method';
+		return 'nb_normal_branduser';
 	}
 
 	/**
@@ -30,14 +32,14 @@ class PaymentMethod extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name', 'required'),
-			array('lid, dpid', 'length', 'max'=>10),
-			array('name, is_sync', 'length', 'max'=>50),
-			array('delete_flag', 'length', 'max'=>1),
-			array('create_at', 'safe'),
+			array('lid, dpid', 'required'),
+			array('lid, dpid, normal_promotion_id, brand_user_lid', 'length', 'max'=>10),
+			array('to_group, delete_flag', 'length', 'max'=>2),
+			array('create_at, update_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, name, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, is_sync, update_at, normal_promotion_id, to_group, brand_user_lid, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,12 +60,14 @@ class PaymentMethod extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'lid' => '自身id，统一dpid下递增',
+			'lid' => 'Lid',
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
-			'update_at' => '更新时间',
-			'name' => '支付方式名称',
-			'delete_flag' => 'Delete Flag',
+			'update_at' => '最后一次更新时间',
+			'normal_promotion_id' => '活动id',
+			'to_group' => '0表示所有人，1表示关注微信，2表示会员等级，3表示会员个人。',
+			'brand_user_lid' => '对象id，会员等级lid',
+			'delete_flag' => '0表示存在，1表示删除',
 				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
@@ -90,7 +94,9 @@ class PaymentMethod extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('name',$this->name,true);
+		$criteria->compare('normal_promotion_id',$this->normal_promotion_id,true);
+		$criteria->compare('to_group',$this->to_group,true);
+		$criteria->compare('brand_user_lid',$this->brand_user_lid,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
@@ -103,7 +109,7 @@ class PaymentMethod extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return PaymentMethod the static model class
+	 * @return NormalBranduser the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

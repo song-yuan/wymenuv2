@@ -12,6 +12,7 @@
  * @property integer $min_total_points
  * @property integer $max_total_points
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class BrandUserLevel extends CActiveRecord
 {
@@ -34,12 +35,12 @@ class BrandUserLevel extends CActiveRecord
 			array('level_name', 'required'),
 			array('min_total_points, max_total_points', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('level_name', 'length', 'max'=>50),
+			array('level_name, is_sync', 'length', 'max'=>50),
 			array('delete_flag', 'length', 'max'=>2),
 			array('create_at,update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, level_name, min_total_points, max_total_points, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, level_name, min_total_points, is_sync, max_total_points, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +69,7 @@ class BrandUserLevel extends CActiveRecord
 			'min_total_points' => '当前等级的最低积分',
 			'max_total_points' => '当前等级的最高积分',
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -97,6 +99,7 @@ class BrandUserLevel extends CActiveRecord
 		$criteria->compare('min_total_points',$this->min_total_points);
 		$criteria->compare('max_total_points',$this->max_total_points);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -12,6 +12,7 @@
  * @property string $name
  * @property string $allflae
  * @property string $delete_flag
+ *  @property string $is_sync
  */
 class Taste extends CActiveRecord
 {
@@ -34,12 +35,12 @@ class Taste extends CActiveRecord
 			array('name', 'required'),
 			//array('lid', 'numerical', 'integerOnly'=>true),
 			array('lid,dpid, taste_group_id', 'length', 'max'=>10),
-			array('name', 'length', 'max'=>50),
+			array('name, is_sync', 'length', 'max'=>50),
 			array('allflae, delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, taste_group_id, create_at, name, allflae, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, taste_group_id, create_at, name, allflae, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +69,7 @@ class Taste extends CActiveRecord
 			'name' => '口味描述',
 			'allflae' => '1整单口味，0不是',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -97,6 +99,7 @@ class Taste extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('allflae',$this->allflae,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

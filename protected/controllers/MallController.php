@@ -63,7 +63,7 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		//特价菜
-		$promotion = new WxPromotion($this->companyId,$userId);
+		$promotion = new WxPromotion($this->companyId,$userId,$siteId);
 		//普通优惠
 		$product = new WxProduct($this->companyId,$userId,$siteId);
 		$categorys = $product->categorys;
@@ -121,7 +121,11 @@ class MallController extends Controller
 	 {
 	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
+		$paytype = Yii::app()->request->getParam('paytype');
 		
+		if($paytype == 1){
+			$this->redirect(array('/mall/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+		}
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts));
@@ -187,6 +191,17 @@ class MallController extends Controller
 		}else{
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请重新操作')));
 		}
+	}
+	/**
+	 * 
+	 * 获取订单状态
+	 * 
+	 */
+	public function actionGetOrderStatus()
+	{
+		$orderId = Yii::app()->request->getParam('orderId');
+		$order = WxOrder::getOrder($orderId,$this->companyId);
+		Yii::app()->end($order['order_status']);
 	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);

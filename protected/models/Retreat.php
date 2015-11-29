@@ -11,6 +11,7 @@
  * @property string $name
  * @property string $tip
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class Retreat extends CActiveRecord
 {
@@ -32,12 +33,12 @@ class Retreat extends CActiveRecord
 		return array(
 			array('name', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('name, tip', 'length', 'max'=>50),
+			array('name, tip, is_sync', 'length', 'max'=>50),
 			array('delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, name, tip, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, name, tip, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,6 +66,7 @@ class Retreat extends CActiveRecord
 			'name' => yii::t('app','退菜理由'),
 			'tip' => yii::t('app','提示信息'),
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -93,6 +95,7 @@ class Retreat extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('tip',$this->tip,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -13,6 +13,7 @@
  * @property string $is_cupon
  * @property string $is_cash
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class TotalPromotion extends CActiveRecord
 {
@@ -35,11 +36,12 @@ class TotalPromotion extends CActiveRecord
 		return array(
 			array('update_at', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
+				array('is_sync','length','max'=>50),
 			array('is_normal_promotion, is_private_promotion, is_cupon, is_cash, delete_flag', 'length', 'max'=>2),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_normal_promotion, is_private_promotion, is_cupon, is_cash, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_normal_promotion, is_private_promotion, is_cupon, is_cash, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,6 +71,7 @@ class TotalPromotion extends CActiveRecord
 			'is_cupon' => '0表示代金券有效，1表示无效',
 			'is_cash' => '0表示返现和充值有效，1表示无效',
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -99,6 +102,7 @@ class TotalPromotion extends CActiveRecord
 		$criteria->compare('is_cupon',$this->is_cupon,true);
 		$criteria->compare('is_cash',$this->is_cash,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

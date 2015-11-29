@@ -25,6 +25,7 @@
  * @property string $is_giving
  * @property string $delete_flag
  * @property string $product_order_status
+ * @property string $is_sync
  */
 class OrderProduct extends CActiveRecord
 {
@@ -56,9 +57,10 @@ class OrderProduct extends CActiveRecord
 			array('is_print, is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
 			//array('taste_memo', 'length', 'max'=>50),
 			array('create_at, offprice, amount, zhiamount', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, order_id, main_id, set_id,private_promotion_lid, product_id, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, order_id, main_id, set_id,private_promotion_lid, product_id, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, delete_flag, product_order_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -115,6 +117,7 @@ class OrderProduct extends CActiveRecord
 			'is_giving' => yii::t('app','赠送'),
 			'delete_flag' => '1删除，0未删除',
 			'product_order_status' => '0未下单、1已下单',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -157,6 +160,7 @@ class OrderProduct extends CActiveRecord
 		$criteria->compare('is_giving',$this->is_giving,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('product_order_status',$this->product_order_status,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

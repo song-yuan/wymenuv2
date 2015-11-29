@@ -12,6 +12,7 @@
  * @property string $valid_days
  * @property string $is_available
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class PointsValid extends CActiveRecord
 {
@@ -33,13 +34,13 @@ class PointsValid extends CActiveRecord
 		return array(
 			array('update_at, valid_name, valid_days', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('valid_name', 'length', 'max'=>50),
+			array('valid_name, is_sync', 'length', 'max'=>50),
 			array('valid_days', 'length', 'max'=>7),
 			array('is_available, delete_flag', 'length', 'max'=>2),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, valid_name, valid_days, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, valid_name, valid_days, is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +69,7 @@ class PointsValid extends CActiveRecord
 			'valid_days' => '有效期',//，按天数进行计算
 			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -97,6 +99,7 @@ class PointsValid extends CActiveRecord
 		$criteria->compare('valid_days',$this->valid_days,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

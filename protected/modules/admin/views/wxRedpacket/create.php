@@ -67,8 +67,10 @@
 		</div>
 		<!-- END PAGE -->  
 	<script type="text/javascript">
-    	$(function () {
+
+    
         	$(".ui_timepicker").datetimepicker({
+            	
          		//showOn: "button",
           		//buttonImage: "./css/images/icon_calendar.gif",
            		//buttonImageOnly: true,
@@ -77,8 +79,8 @@
             	stepHour: 1,
            		stepMinute: 1,
             	stepSecond: 1
-        })
-    });
+        });
+    
 //    		jQuery(document).ready(function(){
 // 		    if (jQuery().datepicker) {
 // 	            $('.date-picker').datepicker({
@@ -91,7 +93,8 @@
 	            
 //            }
 // 		});
-// 		jQuery(document).ready(function() {       
+		jQuery(document).ready(function() {  
+			$("#ui-datepicker-div").css("top","40 !important");     
 // 		   // initiate layout and plugins
 // 		    App.init();
 // 	        if (jQuery().datepicker) {
@@ -104,7 +107,7 @@
 // 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
 // 	        }
 
-// 		});
+		});
 		
 		</script>  
 		

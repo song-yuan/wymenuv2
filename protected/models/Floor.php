@@ -30,9 +30,10 @@ class Floor extends CActiveRecord
 			array('lid, dpid', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>45),
                         array('manager', 'length', 'max'=>20),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid,manager, name, dpid', 'safe', 'on'=>'search'),
+			array('lid,manager, name, is_sync, dpid', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,6 +60,7 @@ class Floor extends CActiveRecord
 			'name' => yii::t('app','楼层名称'),
                         'manager' => yii::t('app','负责人'),
 			'dpid' => yii::t('app','公司'),
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -84,6 +86,8 @@ class Floor extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('dpid',$this->dpid);
                 $criteria->compare('manager',$this->manager,true);
+                $criteria->compare('is_sync',$this->is_sync,true);
+                
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
