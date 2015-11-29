@@ -177,8 +177,11 @@ class PadbindController extends Controller
                 $companyid=  str_pad($companyid1, 10,"0",STR_PAD_LEFT);
                 $jobid=str_pad($jobid1, 10,"0",STR_PAD_LEFT);
                 //var_dump($jobid);exit;
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                
                 $printData = $store->get($companyid."_".$jobid);
                 if(empty($printData))
                 {
@@ -195,6 +198,7 @@ class PadbindController extends Controller
                     } 
                     $store->set($companyid."_".$jobid,$printData,0,30);
                 }
+                $store->close();
 //                echo $printData;
                   Yii::app()->end($printData);
 	}

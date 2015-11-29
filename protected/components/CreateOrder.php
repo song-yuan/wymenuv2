@@ -581,25 +581,28 @@ class CreateOrder
 //            }								
  			$transaction->commit();	
                         //估清产品通知
-			if(!empty($sellOff)){
-				Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('0','1','2')",array(":dpid"=>$dpid));
-                //var_dump($pads);exit;
-                $sendjsondata=json_encode(array("company_id"=>$dpid,
-                    "do_id"=>"sell_off",
-                    "do_data"=>$sellOff));
-                //var_dump($sendjsondata);exit;
-                foreach($pads as $pad)
-                {
-                    $clientId=$store->get("padclient_".$dpid.$pad->lid);
-                    //var_dump($clientId,$print_data);exit;
-                    if(!empty($clientId))
-                    {                            
-                        Gateway::sendToClient($clientId,$sendjsondata);
-                    }
-                } 
-			}
+//			if(!empty($sellOff)){
+//				Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+//                $store=new Memcache;
+//                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
+                
+//                $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('0','1','2')",array(":dpid"=>$dpid));
+//                //var_dump($pads);exit;
+//                $sendjsondata=json_encode(array("company_id"=>$dpid,
+//                    "do_id"=>"sell_off",
+//                    "do_data"=>$sellOff));
+//                //var_dump($sendjsondata);exit;
+//                foreach($pads as $pad)
+//                {
+//                    $clientId=$store->get("padclient_".$dpid.$pad->lid);
+//                    //var_dump($clientId,$print_data);exit;
+//                    if(!empty($clientId))
+//                    {                            
+//                        Gateway::sendToClient($clientId,$sendjsondata);
+//                    }
+//                } 
+//			}
  			return json_encode($printList);
 		 } catch (Exception $e) {
                 $transaction->rollback(); //如果操作失败, 数据回滚

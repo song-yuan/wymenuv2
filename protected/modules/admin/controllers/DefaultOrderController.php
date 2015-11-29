@@ -1850,9 +1850,13 @@ class DefaultOrderController extends BackendController
                         }
                         $transaction->commit();
                         //var_dump(json_encode($jobids));exit;
-                        Gateway::getOnlineStatus();
-                        $store = Store::instance('wymenu');
-                        $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);                        
+//                        Gateway::getOnlineStatus();
+//                        $store = Store::instance('wymenu');
+                        $store=new Memcache;
+                        $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                
+                        $store->set("kitchenjobs_".$companyId."_".$orderId,json_encode($jobids),0,300);    
+                        $store->close();
                         $ret=array('status'=>true,'allnum'=>count($jobids),'msg'=>yii::t('app','打印任务正常发布'));
                 } catch (Exception $e) {
                         $transaction->rollback(); //如果操作失败, 数据回滚
@@ -2108,8 +2112,11 @@ class DefaultOrderController extends BackendController
                 $errornum=0;
                 $notsurenum=0;
                 
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                
                 $joblist=json_decode($store->get("kitchenjobs_".$companyId."_".$orderId),true);
                 foreach ($joblist as $job_orderproduct_id)
                 {
@@ -2146,6 +2153,7 @@ class DefaultOrderController extends BackendController
                     $finished=true;
                 }
                 $ret=array('finished'=>$finished,'successnum'=>$successnum,'errornum'=>$errornum,'notsurenum'=>$notsurenum);
+                $store->close();
                 Yii::app()->end(json_encode($ret));
                 //get status from memcache
                 //if error change product kitchen status in db
@@ -2167,8 +2175,11 @@ class DefaultOrderController extends BackendController
                 $errornum=0;
                 $notsurenum=0;
                 
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                
                 $joblist=json_decode($store->get("kitchenjobs_".$companyId."_".$orderId),true);
                 if(!empty($joblist))
                 {
@@ -2214,6 +2225,7 @@ class DefaultOrderController extends BackendController
                     $finished=true;
                 }
                 $ret=array('finished'=>$finished,'successnum'=>$successnum,'errornum'=>$errornum,'notsurenum'=>$notsurenum);
+                $store->close();
                 Yii::app()->end(json_encode($ret));
                 //get status from memcache
                 //if error change product kitchen status in db
@@ -2228,9 +2240,11 @@ class DefaultOrderController extends BackendController
                 $db = Yii::app()->db;
                 
                 //$jobstatus=false;
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                                
                 $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
                 //var_dump($jobresult);exit;
                 if(empty($jobresult))
@@ -2256,7 +2270,7 @@ class DefaultOrderController extends BackendController
                         $ret=array('status'=>false,'msg'=>yii::t('app','打印机执行任务失败'));
                     }
                 }     
-                
+                $store->close();
                 Yii::app()->end(json_encode($ret));
                 //get status from memcache
                 //if error change product kitchen status in db
@@ -2349,10 +2363,13 @@ class DefaultOrderController extends BackendController
                 $companyId = Yii::app()->request->getParam('companyId');
                 $jobid =  Yii::app()->request->getParam('jobid');
                 
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
                 
                 $jobresult=$store->get('job_'.$companyId."_".$jobid.'_result');
+                $store->close();
                 //var_dump($jobresult);exit;
                 if(empty($jobresult))
                 {
