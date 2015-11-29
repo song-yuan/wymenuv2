@@ -1618,7 +1618,9 @@
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-blue");
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","2");
                                     var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
-                                    $.each(data.jobs,function(skey,svalue){                                        
+                                    //alert(data.allnum);
+                                    $.each(data.jobs,function(skey,svalue){  
+                                        alert(svalue);
                                         detaildata=svalue.split("_");
                                         if(detaildata[0]=="0")//继续打印
                                         {
@@ -1638,7 +1640,7 @@
                                     {
                                         alert("厨打成功！");
 										//修改代码CF
-                                       					$(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                       			$(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
                                                         $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-blue");
                                                         $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","2");
                                                  				

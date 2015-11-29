@@ -1334,9 +1334,12 @@ class Helper
                 } 
                 //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试13");                        
                 //var_dump(json_encode($jobids));exit;
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids),0,300);                        
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids),0,300);
+                $store->close();
                 $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids),'msg'=>'打印任务正常发布',"jobs"=>$jobids);
                 //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
                 //更新菜品状态为已打印
@@ -1678,7 +1681,7 @@ class Helper
                             }
                         }
                 } 
-                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试13");
+                //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试13");
                 //整体打印
                 $jobids2=array();
                 $precode="";
@@ -1699,9 +1702,13 @@ class Helper
                     }
                 }               
                 //var_dump(json_encode($jobids));exit;
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids2),0,300);                        
+                //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
+                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids2),0,300);    
+                $store->close();
                 $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'msg'=>'打印任务正常发布',"jobs"=>$jobids2);
                 //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
                 //更新菜品状态为已打印
@@ -1966,9 +1973,12 @@ class Helper
                     }
                 }               
                 //var_dump(json_encode($jobids));exit;
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
-                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids2),0,300);                        
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
+                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids2),0,300);       
+                $store->close();
                 $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'msg'=>'打印任务正常发布',"jobs"=>$jobids2);
                 //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
                 //更新菜品状态为已打印
@@ -1985,8 +1995,10 @@ class Helper
          */
         static public function printConetent(Printer $printer,$content,$precode,$sufcode,$printserver,$orderid)
         {
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
                 $contentCode="";
                 //内容编码
                 if($printer->language=='1')//zh-cn GBK
@@ -2035,26 +2047,26 @@ class Helper
                     {
                         return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','网络打印的打印机必须是网络打印机！'));
                     }
-                    $print_data=array(
-                        "do_id"=>"ipPrintContent",
-                        "company_id"=>$printer->dpid,
-                        "job_id"=>$jobid,
-                        "printer"=>$printer->address,
-                        //"content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
-                        "content"=>$contentCode
-                    );
-                    //$store = Store::instance('wymenu');
-                    //echo 'ss';exit;
-                    $clientId=$store->get("client_".$printer->dpid);
-                    //var_dump($clientId,$print_data);exit;
-                    if(!empty($clientId))
-                    {
-                        Gateway::sendToClient($clientId,json_encode($print_data));
-                        //Gateway::sendToAll(json_encode($print_data));
-                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','msg'=>'');
-                    }else{
-                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','打印服务器找不到！'));
-                    }   
+//                    $print_data=array(
+//                        "do_id"=>"ipPrintContent",
+//                        "company_id"=>$printer->dpid,
+//                        "job_id"=>$jobid,
+//                        "printer"=>$printer->address,
+//                        //"content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
+//                        "content"=>$contentCode
+//                    );
+//                    //$store = Store::instance('wymenu');
+//                    //echo 'ss';exit;
+//                    $clientId=$store->get("client_".$printer->dpid);
+//                    //var_dump($clientId,$print_data);exit;
+//                    if(!empty($clientId))
+//                    {
+//                        Gateway::sendToClient($clientId,json_encode($print_data));
+//                        //Gateway::sendToAll(json_encode($print_data));
+//                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','msg'=>'');
+//                    }else{
+//                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','打印服务器找不到！'));
+//                    }   
                     ///////////////////
                     ///打印任务不再发送，返回job编号，有pad自己去取                   
                     
@@ -2083,10 +2095,11 @@ class Helper
                                             'delete_flag'=>'0',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
-                        $store->set($printer->dpid."_".$jobid,$contentCode,0,30);//should 120测试1200
+                        $store->set($printer->dpid."_".$jobid,$contentCode,0,30);//should 120测试1200                        
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
 //                    }
                 }
+                $store->close();
         }
         
         /*
@@ -2095,8 +2108,11 @@ class Helper
          */
         static public function printConetent2(Printer $printer,$contents,$precode,$sufcode,$printserver,$orderid)
         {
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+            $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                
                 $contentCode="";
                 $contentCodeAll="";
                 
@@ -2148,30 +2164,30 @@ class Helper
                 $jobid = $se->nextval();
                 if($printserver=='1')//通过打印服务器打印
                 {
-                    if($printer->printer_type!='0')//not net
-                    {
-                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','网络打印的打印机必须是网络打印机！'));
-                    }
-                    $print_data=array(
-                        "do_id"=>"ipPrintContent",
-                        "company_id"=>$printer->dpid,
-                        "job_id"=>$jobid,
-                        "printer"=>$printer->address,
-                        //"content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
-                        "content"=>$contentCode
-                    );
-                    //$store = Store::instance('wymenu');
-                    //echo 'ss';exit;
-                    $clientId=$store->get("client_".$printer->dpid);
-                    //var_dump($clientId,$print_data);exit;
-                    if(!empty($clientId))
-                    {
-                        Gateway::sendToClient($clientId,json_encode($print_data));
-                        //Gateway::sendToAll(json_encode($print_data));
-                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','msg'=>'');
-                    }else{
-                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','打印服务器找不到！'));
-                    }   
+//                    if($printer->printer_type!='0')//not net
+//                    {
+//                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','网络打印的打印机必须是网络打印机！'));
+//                    }
+//                    $print_data=array(
+//                        "do_id"=>"ipPrintContent",
+//                        "company_id"=>$printer->dpid,
+//                        "job_id"=>$jobid,
+//                        "printer"=>$printer->address,
+//                        //"content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
+//                        "content"=>$contentCode
+//                    );
+//                    //$store = Store::instance('wymenu');
+//                    //echo 'ss';exit;
+//                    $clientId=$store->get("client_".$printer->dpid);
+//                    //var_dump($clientId,$print_data);exit;
+//                    if(!empty($clientId))
+//                    {
+//                        Gateway::sendToClient($clientId,json_encode($print_data));
+//                        //Gateway::sendToAll(json_encode($print_data));
+//                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','msg'=>'');
+//                    }else{
+//                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','打印服务器找不到！'));
+//                    }   
                     ///////////////////
                     ///打印任务不再发送，返回job编号，有pad自己去取                   
 
@@ -2206,7 +2222,7 @@ class Helper
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
 //                    }
                 }
-
+                $store->close();
         }
         
         static public function  GrabImage($baseurl,$filename="") { 
