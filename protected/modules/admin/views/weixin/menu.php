@@ -97,7 +97,6 @@
 			
 			<script>
 			jQuery(document).ready(function() {
-				App.init();
 				$('.level1').find('.type').each(function(){
 					if($(this).val()==0){
 						$(this).parent('td').prev().children('select').val(0);
