@@ -64,7 +64,6 @@ class MallController extends Controller
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		//特价菜
 		$promotion = new WxPromotion($this->companyId,$userId,$siteId);
-		var_dump($promotion);exit;
 		//普通优惠
 		$product = new WxProduct($this->companyId,$userId,$siteId);
 		$categorys = $product->categorys;
