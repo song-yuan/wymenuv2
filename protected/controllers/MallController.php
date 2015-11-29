@@ -80,9 +80,10 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
+		$site = WxSite::get($siteId,$this->companyId);
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
-		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts));
+		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'site'=>$site));
 	}
 	/**
 	 * 
@@ -93,6 +94,15 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
+		
+		$searil = Yii::app()->request->getParam('searil');
+		
+		$site = WxSite::get($searil,$this->companyId);
+		if(!$site){
+			$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
+		}else{
+			WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
+		}
 		
 		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type);
 		$orderId = $orderObj->createOrder();
@@ -106,10 +116,14 @@ class MallController extends Controller
 	 */
 	 public function actionOrder()
 	 {
+	 	$userId = Yii::app()->session['userId'];
+	 	$siteId = Yii::app()->session['qrcode-'.$userId];
 		$orderId = Yii::app()->request->getParam('orderId');
+		
+		$site = WxSite::get($siteId,$this->companyId);
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts));
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site));
 	 }
 	 /**
 	 * 
@@ -124,8 +138,10 @@ class MallController extends Controller
 		$paytype = Yii::app()->request->getParam('paytype');
 		
 		if($paytype == 1){
+			WxOrder::updatePayType($orderId,$this->companyId,0);
 			$this->redirect(array('/mall/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
+		WxOrder::updatePayType($orderId,$this->companyId);
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts));
