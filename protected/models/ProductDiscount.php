@@ -18,6 +18,7 @@
  * @property string $reason
  * @property string $begin_time
  * @property string $end_time
+ * @property string $is_sync
  */
 class ProductDiscount extends CActiveRecord
 {
@@ -41,11 +42,11 @@ class ProductDiscount extends CActiveRecord
 			array('order_number, favourite_number, all_count', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, product_id, price_discount', 'length', 'max'=>10),
 			array('is_set, is_discount', 'length', 'max'=>1),
-			array('reason', 'length', 'max'=>50),
+			array('reason, is_sync', 'length', 'max'=>50),
 			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, product_id, is_set, price_discount, is_discount, order_number, favourite_number, all_count, reason, begin_time, end_time', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, product_id, is_set, price_discount, is_discount, order_number, favourite_number, all_count, reason, begin_time, end_time, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,6 +83,7 @@ class ProductDiscount extends CActiveRecord
 			'reason' => 'Reason',
 			'begin_time' => 'Begin Time',
 			'end_time' => 'End Time',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -117,6 +119,7 @@ class ProductDiscount extends CActiveRecord
 		$criteria->compare('reason',$this->reason,true);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

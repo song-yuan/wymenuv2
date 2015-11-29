@@ -9,6 +9,7 @@
  * @property string $company_id
  * @property string $code
  * @property string $create_time
+ * @property string $is_sync
  */
 class Cart extends CActiveRecord
 {
@@ -30,9 +31,10 @@ class Cart extends CActiveRecord
 		return array(
 			array('product_id, product_num, code', 'required'),
 			array('product_id, company_id, code, product_num, create_time', 'length', 'max'=>10),
+			array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('cart_id, product_id, company_id, code, product_num, create_time', 'safe', 'on'=>'search'),
+			array('cart_id, product_id, company_id, code, product_num, is_sync, create_time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -60,6 +62,7 @@ class Cart extends CActiveRecord
 			'code' => 'Code',
 			'product_num' => 'Product Num',
 			'create_time' => 'Create Time',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -87,6 +90,7 @@ class Cart extends CActiveRecord
 		$criteria->compare('code',$this->code,true);
 		$criteria->compare('product_num',$this->prodcut_num,true);
 		$criteria->compare('create_time',$this->create_time,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

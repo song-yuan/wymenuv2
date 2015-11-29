@@ -12,6 +12,7 @@
  * @property string $promotion_type
  * @property string $promotion_lid
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class RedpacketDetail extends CActiveRecord
 {
@@ -34,10 +35,11 @@ class RedpacketDetail extends CActiveRecord
 			array('update_at, promotion_type', 'required'),
 			array('lid, dpid, redpacket_lid, promotion_lid', 'length', 'max'=>10),
 			array('promotion_type, delete_flag', 'length', 'max'=>2),
+				array('is_sync','length','max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, redpacket_lid, promotion_type, promotion_lid, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, redpacket_lid, promotion_type, promotion_lid, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +68,7 @@ class RedpacketDetail extends CActiveRecord
 			'promotion_type' => '0表示代金券，1表示专享优惠',
 			'promotion_lid' => '代金券id或者专享券的id',
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -95,6 +98,7 @@ class RedpacketDetail extends CActiveRecord
 		$criteria->compare('promotion_type',$this->promotion_type,true);
 		$criteria->compare('promotion_lid',$this->promotion_lid,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

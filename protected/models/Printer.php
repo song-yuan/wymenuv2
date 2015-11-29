@@ -11,6 +11,7 @@
  * @property string $language
  * @property string $brand
  * @property string $remark
+ * @property string $is_sync
  */
 class Printer extends CActiveRecord
 {
@@ -35,9 +36,10 @@ class Printer extends CActiveRecord
 			array('remark, brand', 'length', 'max'=>45),
                         array('language,printer_type', 'length', 'max'=>2),
                         array('name,address', 'length', 'max'=>64),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, name, address, create_at,language,printer_type,brand,remark', 'safe', 'on'=>'search'),
+			array('lid, dpid, name, address, create_at,language,printer_type,brand,remark,is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +68,7 @@ class Printer extends CActiveRecord
 			'brand' => yii::t('app','品牌'),
                         'printer_type' => yii::t('app','类型'),
 			'remark' => yii::t('app','备注'),
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -94,6 +97,7 @@ class Printer extends CActiveRecord
 		$criteria->compare('printer_type',$this->printer_type,true);
 		$criteria->compare('brand',$this->brand,true);
 		$criteria->compare('remark',$this->remark,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

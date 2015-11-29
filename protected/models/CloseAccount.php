@@ -13,6 +13,7 @@
  * @property string $end_time
  * @property string $close_day
  * @property string $all_money
+ *  @property string $is_sync
  */
 class CloseAccount extends CActiveRecord
 {
@@ -35,9 +36,10 @@ class CloseAccount extends CActiveRecord
 			array('update_at', 'required'),
 			array('lid, dpid, user_id, all_money', 'length', 'max'=>10),
 			array('create_at, begin_time, end_time, close_day', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, user_id, begin_time, end_time, close_day, all_money', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, user_id, begin_time, is_sync, end_time, close_day, all_money', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +70,7 @@ class CloseAccount extends CActiveRecord
 			'end_time' => 'End Time',
 			'close_day' => '结算日，这段时间的结算属于这个结算日的',
 			'all_money' => 'All Money',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -98,6 +101,7 @@ class CloseAccount extends CActiveRecord
 		$criteria->compare('end_time',$this->end_time,true);
 		$criteria->compare('close_day',$this->close_day,true);
 		$criteria->compare('all_money',$this->all_money,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

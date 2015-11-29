@@ -39,9 +39,10 @@ class GuestMessage extends CActiveRecord
 			array('is_temp, is_deal, msg_level, delete_flag', 'length', 'max'=>1),
 			array('msg_type', 'length', 'max'=>3),
 			array('create_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, site_id, is_temp, msg_type, content, is_deal, msg_level, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, site_id, is_temp, msg_type, content, is_deal, msg_level, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +75,7 @@ class GuestMessage extends CActiveRecord
 			'is_deal' => '0未查看，1已查看',
 			'msg_level' => '0普通消息，1重要消息，2严重消息',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -106,6 +108,7 @@ class GuestMessage extends CActiveRecord
 		$criteria->compare('is_deal',$this->is_deal,true);
 		$criteria->compare('msg_level',$this->msg_level,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

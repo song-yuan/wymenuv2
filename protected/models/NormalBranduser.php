@@ -12,6 +12,7 @@
  * @property string $to_group
  * @property string $brand_user_lid
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class NormalBranduser extends CActiveRecord
 {
@@ -35,9 +36,10 @@ class NormalBranduser extends CActiveRecord
 			array('lid, dpid, normal_promotion_id, brand_user_lid', 'length', 'max'=>10),
 			array('to_group, delete_flag', 'length', 'max'=>2),
 			array('create_at, update_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, normal_promotion_id, to_group, brand_user_lid, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, is_sync, update_at, normal_promotion_id, to_group, brand_user_lid, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +68,7 @@ class NormalBranduser extends CActiveRecord
 			'to_group' => '0表示所有人，1表示关注微信，2表示会员等级，3表示会员个人。',
 			'brand_user_lid' => '对象id，会员等级lid',
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -95,6 +98,7 @@ class NormalBranduser extends CActiveRecord
 		$criteria->compare('to_group',$this->to_group,true);
 		$criteria->compare('brand_user_lid',$this->brand_user_lid,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

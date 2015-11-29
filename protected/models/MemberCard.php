@@ -19,6 +19,7 @@
  * @property string $ages
  * @property string $all_money
  * @property string $delete_flag
+ *  @property string $is_sync
  */
 class MemberCard extends CActiveRecord
 {
@@ -56,9 +57,10 @@ class MemberCard extends CActiveRecord
 			array('haspassword, sex, delete_flag', 'length', 'max'=>1),
 			array('password_hash', 'length', 'max'=>60),
 			array('create_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, selfcode, rfid, name, mobile, email, haspassword, password_hash, sex, ages, all_money, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, selfcode, rfid, name, mobile, email, haspassword, password_hash, sex, ages, all_money, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -95,6 +97,7 @@ class MemberCard extends CActiveRecord
 			'ages' => '年龄',
 			'all_money' => '总金额',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -124,6 +127,7 @@ class MemberCard extends CActiveRecord
 		$criteria->compare('ages',$this->ages,true);
 		$criteria->compare('all_money',$this->all_money,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -13,6 +13,7 @@
  * @property string $pic_path
  * @property integer $pic_show_order
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class ProductPicture extends CActiveRecord
 {
@@ -37,10 +38,11 @@ class ProductPicture extends CActiveRecord
 			array('lid, dpid, product_id', 'length', 'max'=>10),
 			array('is_set, delete_flag', 'length', 'max'=>1),
 			array('pic_path', 'length', 'max'=>255),
+				array('is_sync','length','max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, product_id, is_set, pic_path, pic_show_order, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, product_id, is_set, pic_path, pic_show_order, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,6 +72,7 @@ class ProductPicture extends CActiveRecord
 			'pic_path' => 'Pic Path',
 			'pic_show_order' => 'Pic Show Order',
 			'delete_flag' => '1删除，0未删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -100,6 +103,7 @@ class ProductPicture extends CActiveRecord
 		$criteria->compare('pic_path',$this->pic_path,true);
 		$criteria->compare('pic_show_order',$this->pic_show_order);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

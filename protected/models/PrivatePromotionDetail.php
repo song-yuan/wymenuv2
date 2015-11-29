@@ -15,6 +15,7 @@
  * @property string $promotion_discount
  * @property integer $order_num
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class PrivatePromotionDetail extends CActiveRecord
 {
@@ -39,10 +40,11 @@ class PrivatePromotionDetail extends CActiveRecord
 			array('lid, dpid, private_promotion_id, product_id, promotion_money', 'length', 'max'=>10),
 			array('promotion_discount', 'length', 'max'=>6),
 			array('delete_flag', 'length', 'max'=>2),
+				array('is_sync','length','max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, private_promotion_id, product_id, is_set, promotion_money, promotion_discount, order_num, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, private_promotion_id, product_id, is_set, promotion_money, promotion_discount, order_num, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +76,7 @@ class PrivatePromotionDetail extends CActiveRecord
 			'promotion_discount' => '优惠折扣',
 			'order_num' => '单个订单的数量限制',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -106,6 +109,7 @@ class PrivatePromotionDetail extends CActiveRecord
 		$criteria->compare('promotion_discount',$this->promotion_discount,true);
 		$criteria->compare('order_num',$this->order_num);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
