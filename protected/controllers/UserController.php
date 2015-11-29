@@ -5,6 +5,7 @@ class UserController extends Controller
 
 	public $companyId;
 	public $brandUser;
+	public $weixinServiceAccount;
 	public $layout = '/layouts/mallmain';
 	
 	
