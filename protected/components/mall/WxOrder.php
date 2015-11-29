@@ -109,5 +109,54 @@ class WxOrder
 		$sql = 'update nb_order set order_status=3,paytype=1 where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
+	/**
+	 * 
+	 * 更改订单支付方式
+	 * 
+	 * 
+	 */
+	 public static function updatePayType($orderId,$dpid,$paytype = 1){
+		$sql = 'update nb_order set paytype='.$paytype.' where lid='.$orderId.' and dpid='.$dpid;
+		Yii::app()->db->createCommand($sql)->execute();
+	}
+	/**
+	 * 
+	 * 微信支付 通知时 使用该方法
+	 * order——pay表记录支付数据
+	 * 
+	 */
+	 public static function insertOrderPay($order){
+	 	$time = time();
+	 	
+	 	$se = new Sequence("order_pay");
+	    $orderPayId = $se->nextval();
+	    $insertOrderPayArr = array(
+	        	'lid'=>$orderPayId,
+	        	'dpid'=>$order['dpid'],
+	        	'create_at'=>date('Y-m-d H:i:s',$time),
+	        	'update_at'=>date('Y-m-d H:i:s',$time), 
+	        	'order_id'=>$order['lid'],
+	        	'pay_amount'=>$order['should_total'],
+	        	'paytype'=>1
+	        );
+		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
+		if($order['cupon_branduser_lid']){
+			$se = new Sequence("order_pay");
+		    $orderPayId = $se->nextval();
+		    $insertOrderPayArr = array(
+		        	'lid'=>$orderPayId,
+		        	'dpid'=>$order['dpid'],
+		        	'create_at'=>date('Y-m-d H:i:s',$time),
+		        	'update_at'=>date('Y-m-d H:i:s',$time), 
+		        	'order_id'=>$order['lid'],
+		        	'pay_amount'=>$order['should_total'],
+		        	'paytype'=>9,
+		        	'paytype_id'=>$order['cupon_branduser_lid']
+		     );
+			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
+			$sql = 'update nb_cupon_branduser set is_used=1 where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
+			Yii::app()->db->createCommand($sql)->execute();
+		}
+	 }
 	
 }

@@ -8,6 +8,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <div class="order-title">我的订单</div>
+<div class="order-site">桌号:<?php echo $site['serial'];?></div>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">

@@ -10,7 +10,7 @@
 	//②、统一下单
 	$input = new WxPayUnifiedOrder();
 	$input->SetBody("点餐订单");
-	$input->SetAttach("点餐订单");
+//	$input->SetAttach("点餐订单");
 	$input->SetOut_trade_no($orderId);
 	$input->SetTotal_fee($order['should_total']*100);
 	$input->SetTime_start(date("YmdHis"));
