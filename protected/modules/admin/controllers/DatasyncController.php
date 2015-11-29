@@ -4,6 +4,9 @@ class DatasyncController extends Controller
         //图片上传只让他们从云端上传
         //本地下载图片
 	public function actionIndex(){
+            //echo strtotime("2015-11-11 12:00:00");
+            var_dump(strtotime("2015-11-11 12:80:00"));
+            
 //            $se=new Sequence("sqlcmd_sync");
 //            var_dump($se->nextval());exit;
                         
@@ -363,7 +366,7 @@ class DatasyncController extends Controller
                             //云端插入$localspecialdata
                             
                             //$dbcloud->createCommand($sqlsuccess)->execute();
-                            $transactionspecial = $dblocal->beginTransaction();
+                            $transactionspecial = $dbcloud->beginTransaction();
                             try {
                                 $dbcloud->createCommand("delete from ".$t." where dpid=".$dpid." and lid in ".$deletelist2)->execute();
                                 //$dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid%2=0 and create_at>='".$cloudtime."'")->execute();
