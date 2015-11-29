@@ -142,9 +142,27 @@ class MallController extends Controller
 			$this->redirect(array('/mall/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
 		WxOrder::updatePayType($orderId,$this->companyId);
+		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts));
+		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$this->brandUser));
+	 }
+	 /**
+	 * 
+	 * 
+	 * 余额支付订单
+	 * 
+	 */
+	 public function actionPayOrderByYue()
+	 {
+		$orderId = Yii::app()->request->getParam('orderId');
+		$order = WxOrder::getOrder($orderId,$this->companyId);
+		if($order['order_status'] < 3){
+			WxOrder::insertOrderPay($order,10);
+			WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+		}
+		
+		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 	 }
 	/**
 	 * 

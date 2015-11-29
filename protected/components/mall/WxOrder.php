@@ -105,6 +105,14 @@ class WxOrder
 				  ->queryAll();
 	    return $orderProduct;
 	}
+	public static function getUserOrderList($userId,$dpid){
+		$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId order by lid desc';
+		$orderList = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':userId',$userId)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryAll();
+	    return $orderList;
+	}
 	public static function updateOrderStatus($orderId,$dpid){
 		$sql = 'update nb_order set order_status=3,paytype=1 where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
@@ -125,7 +133,7 @@ class WxOrder
 	 * order——pay表记录支付数据
 	 * 
 	 */
-	 public static function insertOrderPay($order){
+	 public static function insertOrderPay($order,$paytype = 1){
 	 	$time = time();
 	 	
 	 	$se = new Sequence("order_pay");
@@ -137,7 +145,7 @@ class WxOrder
 	        	'update_at'=>date('Y-m-d H:i:s',$time), 
 	        	'order_id'=>$order['lid'],
 	        	'pay_amount'=>$order['should_total'],
-	        	'paytype'=>1
+	        	'paytype'=>$paytype
 	        );
 		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 		if($order['cupon_branduser_lid']){

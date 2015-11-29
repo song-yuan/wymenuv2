@@ -59,7 +59,7 @@
         <p>￥<span id="total" class="total"><?php echo $order['should_total']?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a href="javascript:;" onclick="callpay()">付款</a></p>
+        <p><a href="javascript:;" id="payOrder">付款</a></p>
     </div>
     <div class="clear"></div>
 </footer>
@@ -96,4 +96,14 @@
 		    jsApiCall();
 		}
 	}
+	$(document).ready(function(){
+		$('#payOrder').click(function(){
+			var paytype = $('.paytype .on').attr('paytype');
+			if(parseInt(paytype)==1){
+				callpay();
+			}else{
+				
+			}
+		});
+	})
 </script>
