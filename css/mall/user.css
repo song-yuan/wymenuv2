@@ -1,5 +1,7 @@
 body{ background-color:#E5E5E5;}
-.prolist li{padding:10px;height:30px;}
-.prolist li .item{float:left;width:25%;}
+.prolist li{padding:10px;height:30px;line-height:30px;background:white;}
+.prolist li .item{float:left;text-align:center;}
 .ispay{background:red;color:white;}
+.col-4{width:40%;}
+.col-2{width:20%;}
 .clear{clear:both;}
