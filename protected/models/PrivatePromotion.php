@@ -22,6 +22,7 @@
  * @property string $order_num
  * @property string $is_available
  * @property string $delete_flag
+ *  @property string $is_sync
  */
 class PrivatePromotion extends CActiveRecord
 {
@@ -43,14 +44,14 @@ class PrivatePromotion extends CActiveRecord
 		return array(
 			array('lid, dpid', 'required'),
 			array('lid, dpid,order_num,group_id', 'length', 'max'=>10),
-			array('promotion_title', 'length', 'max'=>50),
+			array('promotion_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
 			array('to_group,promotion_type, change_point, can_cupon, is_available, delete_flag', 'length', 'max'=>2),
 			//array('order_num', 'length', 'max'=>3),
 			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, change_point, can_cupon, begin_time, end_time,  is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, change_point, can_cupon, begin_time, end_time,  is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,6 +90,7 @@ class PrivatePromotion extends CActiveRecord
 			'order_num' => '单个订单的数量限制',
 			'is_available' => '是否生效，0表示生效，1表示无效。',
 			'delete_flag' => '0表示存在，1表示删除。',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -128,6 +130,7 @@ class PrivatePromotion extends CActiveRecord
 		$criteria->compare('order_num',$this->order_num,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

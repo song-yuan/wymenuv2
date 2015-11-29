@@ -7,6 +7,7 @@
  * @property string $id
  * @property string $company_id
  * @property string $macid
+ *  @property string $is_sync
  */
 class CompanyWifi extends CActiveRecord
 {
@@ -28,10 +29,10 @@ class CompanyWifi extends CActiveRecord
 		return array(
 			array('dpid,macid,wifi_name,max_number' , 'required'),
 			array('dpid', 'length', 'max'=>10),
-			array('macid, wifi_name', 'length', 'max'=>50),
+			array('macid, wifi_name, is_sync', 'length', 'max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, dpid, wifi_name, macid, max_number', 'safe', 'on'=>'search'),
+			array('id, dpid, wifi_name, is_sync, macid, max_number', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,7 +59,8 @@ class CompanyWifi extends CActiveRecord
 			'macid' => yii::t('app','公司WIFI MAC ID'),
 			'wifi_name' => yii::t('app','wifi名称'),
 			'max_number' => yii::t('app','最大接入数'),
-			'current_num' => yii::t('app','现接入数')
+			'current_num' => yii::t('app','现接入数'),
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -83,6 +85,7 @@ class CompanyWifi extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('company_id',$this->dpid,true);
 		$criteria->compare('macid',$this->macid,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -10,6 +10,7 @@
  * @property string $update_at
  * @property integer $min_persons
  * @property integer $max_persons
+ * @property string $is_sync
  */
 class SitePersons extends CActiveRecord
 {
@@ -42,10 +43,11 @@ class SitePersons extends CActiveRecord
 			array('lid, dpid', 'required'),
 			array('min_persons, max_persons', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
+				array('is_sync','length','max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, min_persons, max_persons', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, min_persons, max_persons, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,6 +75,7 @@ class SitePersons extends CActiveRecord
 			'update_at' => 'Update At',
 			'min_persons' => yii::t('app','最少人数'),
 			'max_persons' => yii::t('app','最大人数'),
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -93,6 +96,7 @@ class SitePersons extends CActiveRecord
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('min_persons',$this->min_persons);
 		$criteria->compare('max_persons',$this->max_persons);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

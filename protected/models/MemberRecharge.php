@@ -12,6 +12,7 @@
  * @property string $reality_money
  * @property string $give_money
  * @property string $delete_flag
+ * * @property string $is_sync
  */
 class MemberRecharge extends CActiveRecord
 {
@@ -45,9 +46,10 @@ class MemberRecharge extends CActiveRecord
 			array('lid, dpid, member_card_id, reality_money, give_money', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, member_card_id, reality_money, give_money, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, is_sync, update_at, member_card_id, reality_money, give_money, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,6 +78,7 @@ class MemberRecharge extends CActiveRecord
 			'reality_money' => '充值金额',
 			'give_money' => '赠送金额',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -98,6 +101,7 @@ class MemberRecharge extends CActiveRecord
 		$criteria->compare('reality_money',$this->reality_money,true);
 		$criteria->compare('give_money',$this->give_money,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

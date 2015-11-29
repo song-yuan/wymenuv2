@@ -12,6 +12,7 @@
  * @property integer $type
  * @property integer $id
  * @property integer $expire_time
+ * @property string $is_sync
  */
 class Scene extends CActiveRecord
 {
@@ -44,10 +45,11 @@ class Scene extends CActiveRecord
 			array('update_at, scene_id, expire_time', 'required'),
 			array('scene_id, type, id, expire_time', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
+				array('is_sync','length','max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, scene_id, type, id, expire_time', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, scene_id, type, id, expire_time, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,6 +78,7 @@ class Scene extends CActiveRecord
 			'type' => 'Type',
 			'id' => 'ID',
 			'expire_time' => 'Expire Time',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -98,6 +101,7 @@ class Scene extends CActiveRecord
 		$criteria->compare('type',$this->type);
 		$criteria->compare('id',$this->id);
 		$criteria->compare('expire_time',$this->expire_time);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

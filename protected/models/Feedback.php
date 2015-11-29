@@ -12,6 +12,7 @@
  * @property string $tip
  * @property string $allflag
  * @property string $delete_flag
+ * * @property string $is_sync
  */
 class Feedback extends CActiveRecord
 {
@@ -33,12 +34,12 @@ class Feedback extends CActiveRecord
 		return array(
 			array('name, tip', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('name, tip', 'length', 'max'=>50),
+			array('name, tip, is_sync', 'length', 'max'=>50),
 			array('allflag, delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, name, tip, allflag, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, name, tip, allflag, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +68,7 @@ class Feedback extends CActiveRecord
 			'tip' => yii::t('app','提示信息'),
 			'allflag' => yii::t('app','1整单反馈，0不是'),
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -95,6 +97,7 @@ class Feedback extends CActiveRecord
 		$criteria->compare('tip',$this->tip,true);
 		$criteria->compare('allflag',$this->allflag,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

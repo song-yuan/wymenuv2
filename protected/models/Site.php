@@ -19,6 +19,7 @@
  * @property double $overtime
  * @property double $buffer
  * @property string $overtime_fee
+ * @property string $is_sync
  */
 class Site extends CActiveRecord
 {
@@ -47,12 +48,13 @@ class Site extends CActiveRecord
 			array('period, overtime,buffer', 'numerical'),
 			array('serial', 'length', 'max'=>20),
                         array('qrcode', 'length', 'max'=>255),
+				array('is_sync','length','max'=>50),
 			//array('site_level', 'length', 'max'=>20),
 			array('floor_id','compare','compareValue'=>'0','operator'=>'>','message'=>'楼层必须选择'),
 			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, serial,splid, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type,qr_code, minimum_consumption, number, period, overtime, buffer, overtime_fee, floor_id,qrcode', 'safe', 'on'=>'search'),
+			array('lid, serial,splid, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type,qr_code, minimum_consumption, number, period, overtime, buffer, overtime_fee, floor_id,qrcode, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 	public function validate($attributes = NULL, $clearErrors = true){
@@ -107,6 +109,7 @@ class Site extends CActiveRecord
                         'floor_id' =>yii::t('app', '楼层'),
                         'Status' =>yii::t('app', '座位状态'),
                         'qrcode' =>yii::t('app', '二维码'),
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -146,6 +149,7 @@ class Site extends CActiveRecord
                 $criteria->compare('floor_id',$this->floor_id,true);
                 $criteria->compare('status',$this->status,true);
                 $criteria->compare('qrcode',$this->qrcode,true);
+                $criteria->compare('is_sync',$this->is_sync,true);
                 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

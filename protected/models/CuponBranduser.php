@@ -15,6 +15,7 @@
  * @property string $is_used
  * @property string $used_time
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class CuponBranduser extends CActiveRecord
 {
@@ -36,11 +37,12 @@ class CuponBranduser extends CActiveRecord
 		return array(
 			array('update_at, cupon_source, is_used', 'required'),
 			array('lid, dpid, cupon_id, source_id, brand_user_id', 'length', 'max'=>10),
-			array('cupon_source, is_used, delete_flag', 'length', 'max'=>2),
+			array('cupon_source, to_group, is_used, delete_flag', 'length', 'max'=>2),
 			array('create_at, used_time', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, cupon_id, cupon_source, source_id, brand_user_id, is_used, used_time, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, to_group, cupon_id, is_sync, cupon_source, source_id, brand_user_id, is_used, used_time, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,10 +70,12 @@ class CuponBranduser extends CActiveRecord
 			'cupon_id' => '代金券id',
 			'cupon_source' => '优惠券来源；0活动，1红包领取',
 			'source_id' => '活动或者红包id',
+				'to_group' => '0表示所有人，1表示关注微信，2表示会员等级，3表示会员个人',
 			'brand_user_id' => '会员id',
 			'is_used' => '是否已经使用；0表示尚未使用，1表示已经使用',
 			'used_time' => '使用时间',
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -100,10 +104,12 @@ class CuponBranduser extends CActiveRecord
 		$criteria->compare('cupon_id',$this->cupon_id,true);
 		$criteria->compare('cupon_source',$this->cupon_source,true);
 		$criteria->compare('source_id',$this->source_id,true);
+		$criteria->compare('to_group',$this->to_group,true);
 		$criteria->compare('brand_user_id',$this->brand_user_id,true);
 		$criteria->compare('is_used',$this->is_used,true);
 		$criteria->compare('used_time',$this->used_time,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

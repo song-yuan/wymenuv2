@@ -16,6 +16,7 @@
  * @property string $status
  * @property string $create_at
  * @property string $update_at
+ * @property string $is_sync
  */
 class User extends CActiveRecord
 {
@@ -42,7 +43,7 @@ class User extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('username ,mobile,mobile,role,password_hash', 'required'),
-			array('username', 'length', 'max'=>50),
+			array('username, is_sync', 'length', 'max'=>50),
 			array('username' , 'unique' , 'message'=>'用户名已经存在'),
 			array('mobile', 'length', 'max'=>20),
 			array('password_hash', 'length','min'=>6, 'max'=>60),
@@ -51,7 +52,7 @@ class User extends CActiveRecord
 			array('dpid, role, status', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, username, password_hash, password_reset_token, staff_no, dpid, email, auth_key, role, status, create_at, update_at', 'safe', 'on'=>'search'),
+			array('lid, username, password_hash, is_sync, password_reset_token, staff_no, dpid, email, auth_key, role, status, create_at, update_at', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -86,6 +87,7 @@ class User extends CActiveRecord
 			'status' => yii::t('app','状态'),
 			'create_at' => yii::t('app','创建时间'),
 			'update_at' => yii::t('app','修改时间'),
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -119,6 +121,7 @@ class User extends CActiveRecord
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

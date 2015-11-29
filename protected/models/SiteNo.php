@@ -15,6 +15,7 @@
  * @property string $waiter_id
  * @property integer $number
  * @property string $code
+ * @property string $is_sync
  */
 class SiteNo extends CActiveRecord
 {
@@ -38,10 +39,11 @@ class SiteNo extends CActiveRecord
 			array('number', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, site_id, waiter_id, code', 'length', 'max'=>10),
 			array('is_temp, status, delete_flag', 'length', 'max'=>1),
+				array('is_sync','length','max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, site_id, is_temp, status, delete_flag, waiter_id, number, code', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, site_id, is_temp, status, delete_flag, waiter_id, number, code, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +76,7 @@ class SiteNo extends CActiveRecord
 			'waiter_id' => '服务员id',
 			'number' => 'Number',
 			'code' => 'Code',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -106,6 +109,7 @@ class SiteNo extends CActiveRecord
 		$criteria->compare('waiter_id',$this->waiter_id,true);
 		$criteria->compare('number',$this->number);
 		$criteria->compare('code',$this->code,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

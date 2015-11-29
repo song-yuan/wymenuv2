@@ -23,6 +23,7 @@
  * @property integer $multi_customer_service_status
  * @property string $ticket
  * @property integer $ticket_expire
+ * @property string $is_sync
  */
 class WeixinServiceAccount extends CActiveRecord
 {
@@ -58,13 +59,13 @@ class WeixinServiceAccount extends CActiveRecord
 			array('token, original_id', 'length', 'max'=>45),
 			array('appid, appsecret, certificate, rootca, apiclient_key, ticket', 'length', 'max'=>255),
 			array('access_token', 'length', 'max'=>1000),
-			array('partner_id', 'length', 'max'=>50),
+			array('partner_id, is_sync', 'length', 'max'=>50),
 			array('key', 'length', 'max'=>32),
 			array('operator', 'length', 'max'=>30),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, token, original_id, appid, appsecret, expire, access_token, partner_id, key, operator, certificate, rootca, apiclient_key, multi_customer_service_status, ticket, ticket_expire', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, token, original_id, appid, appsecret, expire, access_token, partner_id, key, operator, certificate, rootca, apiclient_key, multi_customer_service_status, ticket, ticket_expire', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -104,6 +105,7 @@ class WeixinServiceAccount extends CActiveRecord
 			'multi_customer_service_status' => 'Multi Customer Service Status',
 			'ticket' => 'Ticket',
 			'ticket_expire' => 'Ticket Expire',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -137,6 +139,7 @@ class WeixinServiceAccount extends CActiveRecord
 		$criteria->compare('multi_customer_service_status',$this->multi_customer_service_status);
 		$criteria->compare('ticket',$this->ticket,true);
 		$criteria->compare('ticket_expire',$this->ticket_expire);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -17,6 +17,7 @@
  * @property string $is_first_push
  * @property string $is_scan_push
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class PromotionActivity extends CActiveRecord
 {
@@ -38,13 +39,13 @@ class PromotionActivity extends CActiveRecord
 		return array(
 			array('lid, dpid', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('activity_title', 'length', 'max'=>50),
+			array('activity_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, activity_abstract', 'length', 'max'=>255),
 			array('is_first_push, is_scan_push, delete_flag', 'length', 'max'=>2),
 			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, activity_title, main_picture, activity_memo, activity_abstract, begin_time, end_time, is_first_push, is_scan_push, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, activity_title, main_picture, activity_memo, activity_abstract, begin_time, end_time, is_first_push, is_scan_push, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -78,6 +79,7 @@ class PromotionActivity extends CActiveRecord
 			'is_first_push' => '0表示关注推送，1表示不推送',
 			'is_scan_push' => '0表示扫码推送，1表示不推送',
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -112,6 +114,7 @@ class PromotionActivity extends CActiveRecord
 		$criteria->compare('is_first_push',$this->is_first_push,true);
 		$criteria->compare('is_scan_push',$this->is_scan_push,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

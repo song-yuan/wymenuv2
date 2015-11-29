@@ -15,6 +15,7 @@
  * @property integer $number
  * @property string $is_select
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class ProductSetDetail extends CActiveRecord
 {
@@ -38,11 +39,12 @@ class ProductSetDetail extends CActiveRecord
 			array('group_no, number', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, set_id, product_id, price', 'length', 'max'=>10),
 			array('is_select, delete_flag', 'length', 'max'=>1),
+				array('is_sync','length','max'=>50),
 			array('product_id','compare','compareValue'=>'0','operator'=>'>','message'=>'必须选择产品'),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, set_id, product_id, price, group_no, number, is_select, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, set_id, product_id, price, group_no, number, is_select, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,6 +78,7 @@ class ProductSetDetail extends CActiveRecord
 			'number' =>yii::t('app', '数量'),
 			'is_select' =>yii::t('app', '组中默认项'),
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -108,6 +111,7 @@ class ProductSetDetail extends CActiveRecord
 		$criteria->compare('number',$this->number);
 		$criteria->compare('is_select',$this->is_select,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

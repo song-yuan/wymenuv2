@@ -18,6 +18,7 @@
  * @property string $description
  * @property string $queuememo
  * @property string $printer_id
+ * @property string $is_sync
  */
 class Company extends CActiveRecord
 {
@@ -39,7 +40,7 @@ class Company extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('printer_id, delete_flag', 'numerical', 'integerOnly'=>true),
-			array('company_name, email', 'length', 'max'=>50),
+			array('company_name, email, is_sync', 'length', 'max'=>50),
 			array('logo, domain, homepage', 'length', 'max'=>255),
 			array('contact_name, mobile, telephone', 'length', 'max'=>20),
 			array('description','length'),
@@ -53,7 +54,7 @@ class Company extends CActiveRecord
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('dpid, company_name, logo,token, contact_name, mobile, telephone, email, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
+			array('dpid, company_name, logo,token, contact_name, is_sync, mobile, telephone, email, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -89,6 +90,7 @@ class Company extends CActiveRecord
 			'description' => yii::t('app','公司描述'),
 			'queuememo' => yii::t('app','取号打印小票备注'),
 			'printer_id' => yii::t('app','打印机ID'),
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -124,6 +126,7 @@ class Company extends CActiveRecord
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('queuememo',$this->queuememo,true);
 		$criteria->compare('printer_id',$this->printer_id,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

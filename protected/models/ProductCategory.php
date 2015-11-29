@@ -10,6 +10,7 @@
  * @property string $category_name
  * @property string $company_id
  * @property integer $delete_flag
+ * @property string $is_sync
  */
 class ProductCategory extends CActiveRecord
 {
@@ -35,11 +36,11 @@ class ProductCategory extends CActiveRecord
 			array('dpid', 'length', 'max'=>10),
                         array('order_num', 'length', 'max'=>4),
                         array('type', 'length', 'max'=>3),
-                        array('tree', 'length', 'max'=>50),
+                        array('tree, is_sync', 'length', 'max'=>50),
                         array('main_picture', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid,order_num, create_at,tree, category_name, main_picture,type, dpid, delete_flag', 'safe', 'on'=>'search'),
+			array('lid,order_num, create_at,tree, category_name, main_picture,type, dpid, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,6 +73,7 @@ class ProductCategory extends CActiveRecord
                         'order_num' => yii::t('app','显示顺序'),
 			'delete_flag' => yii::t('app','状态'),
                         'create_at' => yii::t('app','更新时间'),
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -102,6 +104,7 @@ class ProductCategory extends CActiveRecord
                 $criteria->compare('order_num',$this->order_num,true);
                 $criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

@@ -13,6 +13,7 @@
  * @property string $name
  * @property integer $type
  * @property string $value
+ * @property string $is_sync
  */
 class Menu extends CActiveRecord
 {
@@ -48,9 +49,10 @@ class Menu extends CActiveRecord
 			array('name', 'length', 'max'=>40),
 			array('value', 'length', 'max'=>255),
 			array('create_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, horizontal, vertical, name, type, value', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, is_sync, update_at, horizontal, vertical, name, type, value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,6 +82,7 @@ class Menu extends CActiveRecord
 			'name' => 'Name',
 			'type' => 'Type',
 			'value' => 'Value',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -103,6 +106,7 @@ class Menu extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('value',$this->value,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
