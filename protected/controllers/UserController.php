@@ -60,6 +60,20 @@ class UserController extends Controller
 		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId);
 		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists));
 	}
+	/**
+	 * 
+	 * 订单详情
+	 * 
+	 */
+	public function actionOrderInfo()
+	{
+		$userId = Yii::app()->session['userId'];
+		$orderId = Yii::app()->request->getParam('orderId');
+		$order = WxOrder::getOrder($orderId,$this->companyId);
+		$site = $site = WxSite::get($order['site_id'],$this->companyId);
+		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site));
+	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
 	}
