@@ -1,7 +1,10 @@
 body{ background-color:#E5E5E5;}
 .prolist li{padding:10px;height:30px;line-height:30px;background:white;}
 .prolist li .item{float:left;text-align:center;}
+li:last-child{margin-bottom:0px;}
 .ispay{background:red;color:white;}
 .col-4{width:40%;}
 .col-2{width:20%;}
+.mar-bm-2{margin-bottom:2px;}
+.mar-bm-1{margin-bottom:1px;}
 .clear{clear:both;}
