@@ -13,6 +13,7 @@
  * @property integer $list_no
  * @property string $memo
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class PrinterWay extends CActiveRecord
 {
@@ -35,13 +36,13 @@ class PrinterWay extends CActiveRecord
 			array('name', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
                         array('list_no', 'length', 'max'=>3),
-			array('name', 'length', 'max'=>50),
+			array('name,is_sync', 'length', 'max'=>50),
 			array('memo', 'length', 'max'=>100),
 			array('is_onepaper,delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, name, memo, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, name, memo, delete_flag,is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,6 +72,7 @@ class PrinterWay extends CActiveRecord
                         'list_no'=>yii::t('app','打印份数'),
 			'memo' => yii::t('app','说明'),
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -101,6 +103,7 @@ class PrinterWay extends CActiveRecord
                 $criteria->compare('list_no',$this->name,true);
 		$criteria->compare('memo',$this->memo,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

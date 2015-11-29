@@ -15,6 +15,7 @@
  * @property string $weixin_openid
  * @property string $status
  * @property string $slid
+ * @property string $is_sync
  */
 class QueuePersons extends CActiveRecord
 {
@@ -38,12 +39,12 @@ class QueuePersons extends CActiveRecord
 			array('lid, dpid, stlid, splid, slid', 'length', 'max'=>10),
 			array('queue_no', 'length', 'max'=>20),
                         array('mobile_no', 'length', 'max'=>30),
-                        array('weixin_openid', 'length', 'max'=>50),
+                        array('weixin_openid, is_sync', 'length', 'max'=>50),
 			array('status', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, stlid, splid, queue_no, mobile_no, weixin_openid, status, slid', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, stlid, splid, queue_no, mobile_no, weixin_openid, status, slid, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,6 +76,7 @@ class QueuePersons extends CActiveRecord
                         'weixin_openid'=>'微信openID',
 			'status' => '状态，0等位中，1过号，2转移到正式座位',
 			'slid' => '转移到的座位对应的lid',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -107,6 +109,7 @@ class QueuePersons extends CActiveRecord
                 $criteria->compare('weixin_openid',$this->weixin_openid,true);
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('slid',$this->slid,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

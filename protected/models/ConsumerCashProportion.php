@@ -15,6 +15,7 @@
  * @property string $proportion_points
  * @property string $is_available
  * @property string $delete_flag
+ *  @property string $is_sync
  */
 class ConsumerCashProportion extends CActiveRecord
 {
@@ -36,14 +37,14 @@ class ConsumerCashProportion extends CActiveRecord
 		return array(
 			array('update_at, ccp_name, point_type, min_available_point, max_available_point', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('ccp_name', 'length', 'max'=>50),
+			array('ccp_name, is_sync ', 'length', 'max'=>50),
 			array('point_type, is_available, delete_flag', 'length', 'max'=>2),
 			array('min_available_point, max_available_point', 'length', 'max'=>7),
 			array('proportion_points', 'length', 'max'=>6),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, ccp_name, point_type, min_available_point, max_available_point, proportion_points, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, ccp_name, point_type, min_available_point, max_available_point, proportion_points, is_available, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,6 +76,7 @@ class ConsumerCashProportion extends CActiveRecord
 			'proportion_points' => '消费返现比例',//，计算结果四舍五入
 			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -107,6 +109,7 @@ class ConsumerCashProportion extends CActiveRecord
 		$criteria->compare('proportion_points',$this->proportion_points,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

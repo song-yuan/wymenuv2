@@ -16,6 +16,7 @@
  * @property string $get_time
  * @property string $ursed_time
  * @property string $delete_flag
+ * * @property string $is_sync
  */
 class PrivateBranduser extends CActiveRecord
 {
@@ -39,10 +40,11 @@ class PrivateBranduser extends CActiveRecord
 			array('cupon_source, source_id', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, private_promotion_id, brand_user_lid', 'length', 'max'=>10),
 			array('is_used, delete_flag', 'length', 'max'=>2),
+				array('is_sync','length','max'=>50),
 			array('create_at, get_time, ursed_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, private_promotion_id, brand_user_lid, cupon_source, source_id, is_used, get_time, ursed_time, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, private_promotion_id, brand_user_lid, cupon_source, source_id, is_used, get_time, ursed_time, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,6 +77,7 @@ class PrivateBranduser extends CActiveRecord
 			'get_time' => '如果用户领用，则记录领用时间',
 			'ursed_time' => '使用时间',
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -108,6 +111,7 @@ class PrivateBranduser extends CActiveRecord
 		$criteria->compare('get_time',$this->get_time,true);
 		$criteria->compare('ursed_time',$this->ursed_time,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

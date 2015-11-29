@@ -13,6 +13,7 @@
  * @property integer $total
  * @property string $end_time
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class Redpacket extends CActiveRecord
 {
@@ -35,12 +36,12 @@ class Redpacket extends CActiveRecord
 			array('update_at, redpacket_name', 'required'),
 			array('total', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, send_userlid', 'length', 'max'=>10),
-			array('redpacket_name', 'length', 'max'=>50),
+			array('redpacket_name, is_sync', 'length', 'max'=>50),
 			array('delete_flag', 'length', 'max'=>2),
 			array('create_at, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, redpacket_name, send_userlid, total, end_time, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, redpacket_name, send_userlid, total, end_time, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,6 +71,7 @@ class Redpacket extends CActiveRecord
 			'total' => '共发送红包的个数',
 			'end_time' => '红包领取结束时间',
 			'delete_flag' => '0表示存在，1表示删除',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -100,6 +102,7 @@ class Redpacket extends CActiveRecord
 		$criteria->compare('total',$this->total);
 		$criteria->compare('end_time',$this->end_time,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

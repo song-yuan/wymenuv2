@@ -16,6 +16,7 @@
  * @property integer $favourite_number
  * @property string $begin_time
  * @property string $end_time
+ * @property string $is_sync
  */
 class ProductSpecial extends CActiveRecord
 {
@@ -39,10 +40,11 @@ class ProductSpecial extends CActiveRecord
 			array('order_number, all_count, favourite_number', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, product_id, price', 'length', 'max'=>10),
 			array('is_set', 'length', 'max'=>1),
+				array('is_sync','length','max'=>50),
 			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, product_id, is_set, price, order_number, all_count, favourite_number, begin_time, end_time', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, product_id, is_sync, is_set, price, order_number, all_count, favourite_number, begin_time, end_time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -77,6 +79,7 @@ class ProductSpecial extends CActiveRecord
 			'favourite_number' => '特价菜期间的点赞数量',
 			'begin_time' => 'Begin Time',
 			'end_time' => 'End Time',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -110,6 +113,7 @@ class ProductSpecial extends CActiveRecord
 		$criteria->compare('favourite_number',$this->favourite_number);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

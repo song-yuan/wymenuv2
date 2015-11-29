@@ -12,6 +12,7 @@
  * @property string $order_id
  * @property string $is_order
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class OrderTaste extends CActiveRecord
 {
@@ -35,9 +36,10 @@ class OrderTaste extends CActiveRecord
 			array('lid, dpid, taste_id, order_id', 'length', 'max'=>10),
 			array('is_order, delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, taste_id, order_id, is_order, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, taste_id, order_id, is_order, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +69,7 @@ class OrderTaste extends CActiveRecord
 			'order_id' => 'Order',
 			'is_order' => '1是全单口味，order_id就是订单lid，0不是全单，对应订单明细lid',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -96,6 +99,7 @@ class OrderTaste extends CActiveRecord
 		$criteria->compare('order_id',$this->order_id,true);
 		$criteria->compare('is_order',$this->is_order,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

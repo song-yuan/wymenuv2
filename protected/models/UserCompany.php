@@ -11,6 +11,7 @@
  * @property string $company_id
  * @property string $user_id
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class UserCompany extends CActiveRecord
 {
@@ -33,10 +34,11 @@ class UserCompany extends CActiveRecord
 			array('lid', 'required'),
 			array('lid, dpid, company_id, user_id', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>1),
+				array('is_sync','length','max'=>50),
 			array('create_at,update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, company_id, user_id, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, company_id, user_id, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,6 +68,7 @@ class UserCompany extends CActiveRecord
 			'company_id' => yii::t('app','被管理店铺'),
 			'user_id' => '用户id',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -93,6 +96,7 @@ class UserCompany extends CActiveRecord
 		$criteria->compare('company_id',$this->company_id,true);
 		$criteria->compare('user_id',$this->user_id,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

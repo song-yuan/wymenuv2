@@ -11,6 +11,7 @@
  * @property string $taste_group_id
  * @property string $product_id
  * @property string $delete_flag
+ * @property string $is_sync
  */
 class ProductTaste extends CActiveRecord
 {
@@ -33,10 +34,11 @@ class ProductTaste extends CActiveRecord
 			array('update_at', 'required'),
 			array('lid, dpid, taste_group_id, product_id', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>1),
+				array('is_sync','length','max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, taste_group_id, product_id, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, taste_group_id, product_id, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +66,7 @@ class ProductTaste extends CActiveRecord
 			'taste_group_id' => 'Taste',
 			'product_id' => 'Product',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -92,6 +95,7 @@ class ProductTaste extends CActiveRecord
 		$criteria->compare('taste_group_id',$this->taste_group_id,true);
 		$criteria->compare('product_id',$this->product_id,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

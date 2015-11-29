@@ -16,6 +16,7 @@
  * @property string $is_order
  * @property string $feedback_memo
  * @property string $delete_flag
+ *  @property string $is_sync
  */
 class OrderFeedback extends CActiveRecord
 {
@@ -38,11 +39,11 @@ class OrderFeedback extends CActiveRecord
 			array('feedback_memo', 'required'),
 			array('lid, dpid, site_id, feedback_id, order_id', 'length', 'max'=>10),
 			array('is_temp, is_deal, is_order, delete_flag', 'length', 'max'=>1),
-			array('feedback_memo', 'length', 'max'=>50),
+			array('feedback_memo, is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, site_id, is_temp, is_deal, feedback_id, order_id, is_order, feedback_memo, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, is_sync, update_at, site_id, is_temp, is_deal, feedback_id, order_id, is_order, feedback_memo, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -75,6 +76,7 @@ class OrderFeedback extends CActiveRecord
 			'is_order' => '1是全单反馈，order_id就是订单lid，0不是全单，对应订单明细lid',
 			'feedback_memo' => 'Feedback Memo',
 			'delete_flag' => 'Delete Flag',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -108,6 +110,7 @@ class OrderFeedback extends CActiveRecord
 		$criteria->compare('is_order',$this->is_order,true);
 		$criteria->compare('feedback_memo',$this->feedback_memo,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

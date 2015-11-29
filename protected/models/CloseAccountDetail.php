@@ -12,6 +12,7 @@
  * @property string $paytype
  * @property string $payment_method_id
  * @property string $all_money
+ *  @property string $is_sync
  */
 class CloseAccountDetail extends CActiveRecord
 {
@@ -39,9 +40,10 @@ class CloseAccountDetail extends CActiveRecord
 			array('lid, dpid, close_account_id, payment_method_id, all_money', 'length', 'max'=>10),
 			array('paytype', 'length', 'max'=>1),
 			array('create_at', 'safe'),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, close_account_id, paytype, payment_method_id, all_money', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, close_account_id, is_sync, paytype, payment_method_id, all_money', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -73,6 +75,7 @@ class CloseAccountDetail extends CActiveRecord
 			'paytype' => '0现金支付1微信2支付宝3后台手动支付',
 			'payment_method_id' => 'Payment Method',
 			'all_money' => 'All Money',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -102,6 +105,7 @@ class CloseAccountDetail extends CActiveRecord
 		$criteria->compare('paytype',$this->paytype,true);
 		$criteria->compare('payment_method_id',$this->payment_method_id,true);
 		$criteria->compare('all_money',$this->all_money,true);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

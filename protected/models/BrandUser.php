@@ -28,6 +28,7 @@
  * * @property string $remain_money
  * @property integer $scene_type
  * @property integer $weixin_group
+ * @property integer $is_sync
  */
 class BrandUser extends CActiveRecord
 {
@@ -51,7 +52,7 @@ class BrandUser extends CActiveRecord
 			array('dpid, unsubscribe, unsubscribe_time, consume_point_history, scene_type, weixin_group', 'numerical', 'integerOnly'=>true),
 			array('lid, user_level_lid, consume_total_money,remain_money', 'length', 'max'=>10),
 			array('user_name, mobile_num', 'length', 'max'=>45),
-			array('password', 'length', 'max'=>50),
+			array('password, is_sync', 'length', 'max'=>50),
 			array('nickname', 'length', 'max'=>30),
 			array('head_icon, openid', 'length', 'max'=>255),
 			array('sex', 'length', 'max'=>1),
@@ -60,7 +61,7 @@ class BrandUser extends CActiveRecord
 			array('user_birthday, create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, user_name, password, nickname, head_icon, mobile_num, sex, card_id, user_level_lid, user_birthday, openid, country, province, city, unsubscribe, unsubscribe_time, create_at, update_at, consume_point_history, consume_total_money,remain_money, scene_type, weixin_group', 'safe', 'on'=>'search'),
+			array('lid, dpid, user_name, password, nickname, head_icon, mobile_num, sex, is_sync, card_id, user_level_lid, user_birthday, openid, country, province, city, unsubscribe, unsubscribe_time, create_at, update_at, consume_point_history, consume_total_money,remain_money, scene_type, weixin_group', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -106,6 +107,7 @@ class BrandUser extends CActiveRecord
                         'remain_money' => '剩余金额',
 			'scene_type' => '0 自动关注,1扫码关注',
 			'weixin_group' => '所在微信分组',
+			'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -151,6 +153,7 @@ class BrandUser extends CActiveRecord
                 $criteria->compare('remain_money',$this->remain_money,true);
 		$criteria->compare('scene_type',$this->scene_type);
 		$criteria->compare('weixin_group',$this->weixin_group);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

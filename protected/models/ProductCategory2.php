@@ -10,6 +10,7 @@
  * @property string $category_name
  * @property string $dpid
  * @property integer $delete_flag
+ *  @property string $is_sync
  */
 class ProductCategory2 extends CActiveRecord
 {
@@ -33,9 +34,10 @@ class ProductCategory2 extends CActiveRecord
 			array('pid,parent_id,delete_flag', 'numerical', 'integerOnly'=>true),
 			array('category_name', 'length','min'=>2, 'max'=>45),
 			array('dpid,parent_id', 'length', 'max'=>10),
+				array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, category_name,pid,parent_id, dpid, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, category_name,pid,parent_id, dpid, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,6 +67,7 @@ class ProductCategory2 extends CActiveRecord
 			'category_name' => '产品类别',
 			'dpid' => '公司',
 			'delete_flag' => '状态',
+				'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
@@ -90,6 +93,7 @@ class ProductCategory2 extends CActiveRecord
 		$criteria->compare('category_name',$this->category_name,true);
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
+		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
