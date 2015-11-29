@@ -21,7 +21,7 @@ return array(
                /////////////cloud_local/////////////
                //c是云端系统，表示本系统运行在云端，不需要和下位系统同步，所有的同步是下位系统发出的。
                //l是本地系统，表示本系统运行在本地，需要同步
-                'cloud_local'=>'c',
+                'cloud_local'=>'l',
                 //c is （cloud） can add company 
                 //l only local） can import company data from master
                 ////////////////////////////////////////
@@ -49,12 +49,14 @@ return array(
                         //'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
                         // uncomment the following lines to use a MySQL database
                         //'connectionString' => 'mysql:host=52.68.233.6;dbname=nb_wymenu',
-                        'connectionString' => 'mysql:host=121.42.12.97;dbname=nb_wymenu',
+                        //'connectionString' => 'mysql:host=121.42.12.97;dbname=nb_wymenu',
                        // 'connectionString' => 'mysql:host=120.27.29.4;dbname=nb_wymenu',
                        // 'connectionString' => 'mysql:host=192.168.1.37;dbname=nb_wymenu',
+                        'connectionString' => 'mysql:host=192.168.63.8;dbname=nb_wymenu',
                         'emulatePrepare' => true,
                         'username' => 'root',
-                        'password' => 'MYmenu123',
+                        //'password' => 'MYmenu123',
+                        'password' => 'wuyunjie887',
                         'charset' => 'utf8',
                         'class' => 'CDbConnection' // DO NOT FORGET THIS!
                 ),
@@ -72,5 +74,10 @@ return array(
                 'is_super_local'=>true,
                 'super_location_function'=>array(
                     'account'=>true,
+                ),
+                //memcache的定义
+                'memcache'=>array(
+                    'server'=>'192.168.63.8',
+                    'port'=>11211,
                 ),
 );

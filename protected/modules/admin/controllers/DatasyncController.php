@@ -5,7 +5,10 @@ class DatasyncController extends Controller
         //本地下载图片
 	public function actionIndex(){
             //echo strtotime("2015-11-11 12:00:00");
-            var_dump(strtotime("2015-11-11 12:80:00"));
+            $store=new Memcache;
+            $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']); 
+            $store->set("kitchenjobs_","234234",0,300); 
+            echo $store->get("kitchenjobs_");
             
 //            $se=new Sequence("sqlcmd_sync");
 //            var_dump($se->nextval());exit;

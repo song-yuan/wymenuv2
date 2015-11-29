@@ -122,28 +122,28 @@ class ProductCleanController extends BackendController
 		$command=$db->createCommand($sql);
                 if($command->execute())
                 {
-                    Gateway::getOnlineStatus();
-                    $store = Store::instance('wymenu');
-                    $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>  $this->companyId));
-                    //var_dump($pads);exit;
-                    if(!empty($pads))
-                    {
-                        $sendjsondata=json_encode(array("company_id"=>  $this->companyId,
-                            "do_id"=>"sell_off",
-                            "do_data"=>array(array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
-                                //,array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
-                                )));
-                        //var_dump($sendjsondata);exit;
-                        foreach($pads as $pad)
-                        {
-                            $clientId=$store->get("padclient_".$this->companyId.$pad->lid);
-                            //var_dump($clientId,$print_data);exit;
-                            if(!empty($clientId))
-                            {                            
-                                Gateway::sendToClient($clientId,$sendjsondata);
-                            }
-                        }
-                    }
+//                    Gateway::getOnlineStatus();
+//                    $store = Store::instance('wymenu');
+//                    $pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>  $this->companyId));
+//                    //var_dump($pads);exit;
+//                    if(!empty($pads))
+//                    {
+//                        $sendjsondata=json_encode(array("company_id"=>  $this->companyId,
+//                            "do_id"=>"sell_off",
+//                            "do_data"=>array(array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
+//                                //,array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
+//                                )));
+//                        //var_dump($sendjsondata);exit;
+//                        foreach($pads as $pad)
+//                        {
+//                            $clientId=$store->get("padclient_".$this->companyId.$pad->lid);
+//                            //var_dump($clientId,$print_data);exit;
+//                            if(!empty($clientId))
+//                            {                            
+//                                Gateway::sendToClient($clientId,$sendjsondata);
+//                            }
+//                        }
+//                    }
                     Yii::app()->end(json_encode(array("status"=>"success")));
                 }else{
                     Yii::app()->end(json_encode(array("status"=>"fail")));

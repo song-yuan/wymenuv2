@@ -66,8 +66,11 @@ class SiteClass
 		$code= SiteClass::getRandChar(6);
                 //var_dump($code);exit;
                 //return $code;/*apc should be deleted*/
-                Gateway::getOnlineStatus();
-                $store = Store::instance('wymenu');
+//                Gateway::getOnlineStatus();
+//                $store = Store::instance('wymenu');
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                
                 $ret = $store->get($companyId.$code);
                 while(!empty($ret))
                 {
@@ -85,14 +88,19 @@ class SiteClass
                     }
                     apc_store($companyId.$code,'1',0);//永久存储用apc_delete($key)删除
                 }*/
+                $store->close();
                 return $code;
 	}
         
         public static function deleteCode($companyId,$code)
         {		
-            Gateway::getOnlineStatus();
-            $store = Store::instance('wymenu');
+//            Gateway::getOnlineStatus();
+//            $store = Store::instance('wymenu');
+            $store=new Memcache;
+            $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                
             $ret = $store->delete($companyId.$code);
+            $store->close();
             /*if(Yii::app()->params->has_cache)
             {
                 $ccode = apc_delete($companyId.$code);                    
