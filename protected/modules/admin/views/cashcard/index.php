@@ -175,7 +175,7 @@
 				<?php $this->endWidget(); ?>
 				<?php endforeach;?>
 				<?php }endif;?>
-				<?php }elseif ($a=="2"):{?>
+				<?php }elseif($a=="2"):{?>
 						
 					<div class="portlet box blue">
 						<div class="portlet-title">

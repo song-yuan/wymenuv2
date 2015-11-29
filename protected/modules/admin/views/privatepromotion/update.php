@@ -44,7 +44,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model,'brdulvs'=>$brdulvs)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>
@@ -56,7 +56,9 @@
 		
 	<script type="text/javascript">
     	$(function () {
+    		
         	$(".ui_timepicker").datetimepicker({
+       			// position: "center","center" ,
          		//showOn: "button",
           		//buttonImage: "./css/images/icon_calendar.gif",
            		//buttonImageOnly: true,
@@ -66,43 +68,9 @@
            		stepMinute: 1,
             	stepSecond: 1
         })
-    });
+    })
    
-// 		jQuery(document).ready(function(){
-// 		    if (jQuery().datepicker) {
-// 	            $('.date-picker').datepicker({
-// 	            	format: 'yyyy-mm-dd',
-// 	            	language: 'zh-CN',
-// 	                rtl: App.isRTL(),
-// 	                autoclose: true
-// 	            });
-// 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-	            
-//            }
-// 		});
 
-    	
-// 		jQuery(document).ready(function() {       
-// 		   // initiate layout and plugins
-// 		    App.init();
-// 	        if (jQuery().datepicker) {
-// 	            $('.date-picker').datepicker({
-// 	            	format: 'yyyy-mm-dd',
-// 	            	language: 'zh-CN',
-// 	                rtl: App.isRTL(),
-// 	                autoclose: true
-// 	            });
-// 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-// 	        }
-
-// 		});
-	
-		
-// 		jQuery(document).ready(function() {       
-// 		   // initiate layout and plugins
-// 		   App.init();
-// 		   FormComponents.init();
-// 		});
 
 	    </script>
 

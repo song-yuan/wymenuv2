@@ -53,12 +53,12 @@ class Order extends CActiveRecord
 			array('lid, dpid, payment_method_id, site_id,user_id, number', 'numerical', 'integerOnly'=>true),
 			array('should_total,reality_total,callno', 'length', 'max'=>10),
 			array('is_temp, order_status, lock_status', 'length', 'max'=>1),
-                        array('paytype,order_type,auto_print', 'length', 'max'=>1),
-			array('remark, username, taste_memo', 'length', 'max'=>50),
+                        array('paytype,order_type', 'length', 'max'=>1),
+			array('remark, username, taste_memo,is_sync', 'length', 'max'=>50),
 			//array('create_at,pay_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at,paytype, update_at,username,payment_method_id, pay_time, site_id,user_id, is_temp, number, order_status,order_type,auto_print, lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at,paytype, update_at,username,payment_method_id, pay_time, site_id,user_id, is_temp, number, order_status,order_type,is_sync,lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -96,7 +96,7 @@ class Order extends CActiveRecord
 			'callno' => yii::t('app','呼叫器编号'),
                         'paytype' => yii::t('app','支付方式'),
                         'order_type' => yii::t('app','0pad1微信堂食2微信外卖'),
-                        'auto_print' => yii::t('app','0不自动打印1自动打印'),
+                        'is_sync' => yii::t('app','是否同步'),
                         'payment_method_id'=>yii::t('app','支付方式'),//后台手动支付方式
                         'payment_time'=>yii::t('app','支付时间'),
 			'reality_total' =>yii::t('app', '实付金额'),
@@ -135,7 +135,7 @@ class Order extends CActiveRecord
 		$criteria->compare('number',$this->number);
 		$criteria->compare('order_status',$this->order_status,true);
                 $criteria->compare('order_type',$this->order_type,true);
-                $criteria->compare('auto_print',$this->auto_print,true);
+                $criteria->compare('is_sync',$this->is_sync,true);
 		$criteria->compare('lock_status',$this->lock_status,true);
 		$criteria->compare('should_total',$this->should_total,true);
 		$criteria->compare('reality_total',$this->reality_total,true);
