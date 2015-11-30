@@ -81,6 +81,7 @@ class MallController extends Controller
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
 		$site = WxSite::get($siteId,$this->companyId);
+		var_dump($site);exit;
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
 		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'site'=>$site));
