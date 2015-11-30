@@ -178,9 +178,9 @@ class Server {
 
 		if($query) { 
 			$urlArr = array(
-				1=>array('weixin/product','id'),
+				1=>array('mall/index','companyId'),
 			);
-			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->scene['id']));
+			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId));
 			return $this->news(array('桌号:'.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
 		}else
 			return $this->generalResponse();
