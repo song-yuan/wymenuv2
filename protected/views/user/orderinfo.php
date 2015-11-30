@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/user.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
 
 <div class="order-title">我的订单</div>
@@ -35,6 +36,9 @@
 </div>
 <script>
 $(document).ready(function(){
+	<?php if(isset($msg)&&$msg):?>
+	layer.msg('<?php echo $msg;?>');
+	<?php endif;?>
 	$('.specialbttn').click(function(){
 		location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'paytype'=>2));?>';
 	});

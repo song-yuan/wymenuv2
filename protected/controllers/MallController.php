@@ -98,12 +98,13 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
-		
+		$msg = '';
 		if($this->type==1){
 			$serial = Yii::app()->request->getParam('serial');
 			$site = WxSite::getBySerial($serial,$this->companyId);
 			if(!$site){
-				$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
+				$msg = '输入正确的座位号!';
+				$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'msg'=>$msg));
 			}else{
 				WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
 			}
@@ -161,13 +162,22 @@ class MallController extends Controller
 	 public function actionPayOrderByYue()
 	 {
 		$orderId = Yii::app()->request->getParam('orderId');
+		$msg = '';
+		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		if($order['order_status'] < 3){
-			WxOrder::insertOrderPay($order,10);
-			WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+			$transaction=Yii::app()->db->beginTransaction();
+			try{
+				WxOrder::insertOrderPay($order,10);
+				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+				$transaction->commit();
+			}catch (Exception $e) {
+				$transaction->rollback();
+				$msg = $e->getMessage();
+			}
 		}
 		
-		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'msg'=>$msg));
 	 }
 	/**
 	 * 
