@@ -220,7 +220,7 @@ class PrivatepromotionController extends BackendController
 		$categoryId = Yii::app()->request->getParam('cid',"");
 		$fromId = Yii::app()->request->getParam('from','sidebar');
 		$csinquery=Yii::app()->request->getPost('csinquery',"");
-		//var_dump($csinquery);exit;
+		//var_dump($typeId);exit;
 		$db = Yii::app()->db;
 		if($typeId=='product')
 		{
@@ -241,11 +241,13 @@ class PrivatepromotionController extends BackendController
 // 			$criteria = new CDbCriteria;
 // 			$criteria->with = array('company','category','PrivatePromotionDetail');
 // 			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-// 			//var_dump($criteria);exit;
+ 			//var_dump($$categoryId);exit;
 			if(!empty($categoryId)){
+				//var_dump($typeId);exit;
 				//$criteria->condition.=' and t.category_id = '.$categoryId;
 				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_product t left join nb_private_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.is_set = 0 and t1.delete_flag = 0 and t1.private_promotion_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.category_id = '.$categoryId.' ) k';
-					
+				
+				//var_dump($sql);exit;
 			}
 	
 			elseif(!empty($csinquery)){
@@ -256,6 +258,7 @@ class PrivatepromotionController extends BackendController
 				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_product t left join nb_private_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.is_set = 0 and t1.delete_flag = 0 and t1.private_promotion_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.') k' ;
 					
 			}
+			//var_dump($sql);exit;
 			$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 			//var_dump($count);exit;
 			$pages = new CPagination($count);
