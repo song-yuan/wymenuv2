@@ -36,6 +36,27 @@ class WxCart
 					  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 					  ->queryRow();
 	}
+	public function checkPromotion(){
+		if($this->productArr['privation_promotion_id']){
+			$sqla = 'select count(*) as count from nb_cart where dapid=:dpid and user_id=:userId and privation_promotion_id=:privationPromotionId';
+			$resulta = Yii::app()->db->createCommand($sqla)
+					  ->bindValue(':dpid',$this->dpid)
+					  ->bindValue(':userId',$this->userId)
+					  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
+					  ->queryRow();
+					  
+			$sql = 'select t.order_num as product_num,t1.order_num from nb_private_promotion_detail t,nb_private_promotion t1 where t.private_promotion_id=t1.lid and t.dpid=t1.dpid and t.private_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0';
+			$result = Yii::app()->db->createCommand($sql)
+						  ->bindValue(':dpid',$this->dpid)
+						  ->bindValue(':productId',$this->productArr['product_id'])
+						  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
+						  ->queryRow();
+			if($resulta['count']>=$result['order_num'] ||$result['product_num'] >= $this->cart['num']){
+				return array('status'=>false,'msg'=>'超过活动商品数量!');
+			}
+				return array('status'=>true,'msg'=>'OK');
+		}
+	}
 	public function getCart(){
 		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
 		$results = Yii::app()->db->createCommand($sql)

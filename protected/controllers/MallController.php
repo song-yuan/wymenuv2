@@ -192,6 +192,15 @@ class MallController extends Controller
 		
 		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
+		
+		//检查活动商品数量
+		if($promoteId){
+			$chek = $cart->checkPromotion();
+			if(!$chek['status']){
+				Yii::app()->end(json_encode($chek));
+			}	
+		}
+		
 		if($cart->addCart()){
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
 		}else{

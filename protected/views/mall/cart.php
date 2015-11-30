@@ -7,6 +7,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
+
 <div class="site_no">桌号:<input type="text" class="serial" value="<?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="请在这里输入座位号" /></div>
 <?php foreach($models as $model):?>
 <div class="section">
@@ -66,7 +68,7 @@ $(function(){
 		if(serial){
 			location.href = '<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>&serial='+serial;
 		}else{
-			alert('请输入座位号!');
+			layer.msg('请输入座位号!');
 		}
 	});
 	
@@ -86,7 +88,7 @@ $(function(){
 			        }
 			        setTotal();
         		}else{
-        			alert(msg.msg);
+        			layer.msg(msg.msg);
         		}
         	},
         	dataType:'json'
@@ -112,7 +114,7 @@ $(function(){
 			   	    } 
 			    	setTotal(); 
         		}else{
-        			alert(msg.msg);
+        			layer.msg(msg.msg);
         		}
         	},
         	dataType:'json'
