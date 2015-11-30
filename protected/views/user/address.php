@@ -9,7 +9,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
-<section class="my_address bg_lgrey2">
+<body class="my_address bg_lgrey2">
 	<?php if($addresss):?>
 	<ul class="addlist" id="list">
 		<?php foreach($addresss as $k=>$address):?>
@@ -29,7 +29,7 @@
 			<li class="addicon"><a href="<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId));?>">添加收货地址</a></li>
 		</ul>
 	</div>
-</section>
+</body>
 
 <script>
 var list = document.getElementById("list");
