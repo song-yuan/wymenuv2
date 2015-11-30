@@ -14,7 +14,7 @@
 					</a>
 				</li>
                                 <?php if(Yii::app()->user->role < '3') : ?>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' ,'payMethod', 'companyWifi', 'user'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' ,'payMethod', 'companyWifi', 'user' ,'synchronous' ))) echo 'active';?>">
 					<a href="">
                                             <i class="fa fa-cog"></i> 
 					<span class="title"><?php echo yii::t('app','基础信息');?></span>					
@@ -24,7 +24,7 @@
 						<li class="<?php if(Yii::app()->controller->id == 'companyWifi') echo 'active';?>"><a href="<?php echo $this->createUrl('companyWifi/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','店铺WIFI设定');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'payMethod') echo 'active';?>""><a href="<?php echo $this->createUrl('payMethod/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','支付方式设定');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'user') echo 'active';?>"><a href="<?php echo $this->createUrl('user/index' , array('companyId' =>$this->companyId));?>"><?php echo yii::t('app','操作员管理');?></a></li>
-						<li class=""><a href=""><?php echo yii::t('app','基础数据同步设定');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'synchronous') echo 'active';?>"><a href="<?php echo $this->createUrl('synchronous/index' , array('companyId' =>$this->companyId , 'type' => "auto"));?>"><?php echo yii::t('app','基础数据同步设定');?></a></li>
 					</ul>
 				</li>
                                 <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productAddition','productSet','productSim','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice'))) echo 'active';?>">

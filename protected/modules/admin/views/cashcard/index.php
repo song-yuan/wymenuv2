@@ -42,24 +42,6 @@
 				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
 			</ul>
 		
-			<!--  <div class="tab-content">
-			
-					<div class="col-md-12">
-						<div class="portlet box blue">
-							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','优惠活动整体设置');?></div>
-								<div class="tools">
-								<a href="javascript:;" class="collapse"></a>
-							</div>
-						</div>
-						<div class="portlet-body form">
-							<!-- BEGIN FORM--
-							<php echo $this->renderPartial('_form', array('model'=>$model)); ?>
-							<!-- END FORM-- 
-						</div>
-					</div>
-				</div>
-			</div>-->
 			  <div class="tab-content">
 				<div class="col-md-12">
 				<?php if($a=="1"):{?>
