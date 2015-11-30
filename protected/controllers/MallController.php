@@ -52,9 +52,9 @@ class MallController extends Controller
 				}
 			}else{
 				//pc 浏览
-				$userId =-1;
+				$userId = 2;
 				Yii::app()->session['userId'] = $userId;
-				Yii::app()->session['qrcode-'.$userId] = -1;
+				Yii::app()->session['qrcode-'.$userId] = 24;
 			}
 		}
 		return true;
@@ -194,7 +194,7 @@ class MallController extends Controller
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		
 		//检查活动商品数量
-		if($promoteId){
+		if($promoteId > 0){
 			$chek = $cart->checkPromotion();
 			if(!$chek['status']){
 				Yii::app()->end(json_encode($chek));

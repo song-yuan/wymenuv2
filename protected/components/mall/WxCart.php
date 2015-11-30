@@ -37,8 +37,8 @@ class WxCart
 					  ->queryRow();
 	}
 	public function checkPromotion(){
-		if($this->productArr['privation_promotion_id']){
-			$sqla = 'select count(*) as count from nb_cart where dapid=:dpid and user_id=:userId and privation_promotion_id=:privationPromotionId';
+		if($this->productArr['privation_promotion_id'] > 0){
+			$sqla = 'select count(*) as count from nb_cart where dpid=:dpid and user_id=:userId and privation_promotion_id=:privationPromotionId';
 			$resulta = Yii::app()->db->createCommand($sqla)
 					  ->bindValue(':dpid',$this->dpid)
 					  ->bindValue(':userId',$this->userId)
