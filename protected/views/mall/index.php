@@ -11,7 +11,7 @@
 <div class="nav-lf">
 <ul id="nav">
   <?php if(!empty($promotions)):?>
-  <li class="current"><a href="#st-1;?>">特价菜</a><b></b></li>
+  <li class="current"><a href="#st-1">特价菜</a><b></b></li>
   <?php endif;?>
   <?php foreach($categorys as $k=>$category):?>
   <li class="<?php if($k==0&&empty($promotions)):?>current<?php endif;?>"><a href="#st<?php echo $category['lid'];?>"><?php echo $category['category_name'];?></a><b></b></li>
@@ -81,7 +81,7 @@
 
 
 <script> 
-$(function(){ 
+$(document).ready(function(){ 
     $('#nav li').click(function(){
         $('#nav').find('li').removeClass('current');
         $(this).addClass('current');
