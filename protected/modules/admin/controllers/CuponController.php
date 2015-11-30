@@ -84,15 +84,57 @@ class CuponController extends BackendController
 	public function actionCreate(){
 		$model = new Cupon();
 		$model->dpid = $this->companyId ;
+		$brdulvs = $this->getBrdulv();
 		//$model->create_time = time();
 		//var_dump($model);exit;
+		
 		if(Yii::app()->request->isPostRequest) {
+			$db = Yii::app()->db;
+			//$transaction = $db->beginTranstaction();
+			//try{
+			//var_dump(Yii::app()->request->getPost('Cupon'));exit;
 			$model->attributes = Yii::app()->request->getPost('Cupon');
+			$groupID = Yii::app()->request->getParam('hidden1');
+			$gropids = array();
+			$gropids = explode(',',$groupID);
+			//$db = Yii::app()->db;
+		
 			$se=new Sequence("cupon");
 			$model->lid = $se->nextval();
+			if(!empty($groupID)){
+				//$sql = 'delete from nb_normal_branduser where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
+				//$command=$db->createCommand($sql);
+				//$command->execute();
+				foreach ($gropids as $gropid){
+					$userid = new Sequence("cupon_branduser");
+					$id = $userid->nextval();
+					$data = array(
+							'lid'=>$id,
+							'dpid'=>$this->companyId,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'cupon_source'=>'0',
+							'source_id'=>$model->lid,
+							'to_group'=>"2",
+							'brand_user_lid'=>$gropid,
+							'delete_flag'=>'0'
+					);
+					$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
+					//var_dump($gropid);
+				}
+			}
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
+			//var_dump($model);exit;
+			//$transaction->commit(); //提交事务会真正的执行数据库操作
+			//return true;
+			//}catch (Exception $e) {
+			//	$transaction->rollback(); //如果操作失败, 数据回滚
+			//Yii::app()->end(json_encode(array("status"=>"fail")));
+			//	return false;
+			//}
+		
 			//$py=new Pinyin();
 			//$model->simple_code = $py->py($model->product_name);
 			//var_dump($model);exit;
@@ -101,26 +143,90 @@ class CuponController extends BackendController
 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId ));
 			}
 		}
+		
 		//$categories = $this->getCategoryList();
 		//$departments = $this->getDepartments();
 		//echo 'ss';exit;
 		$this->render('create' , array(
 				'model' => $model ,
+				'brdulvs'=>$brdulvs,
 				//'categories' => $categories
 		));
-	}
+		}		
+// 		if(Yii::app()->request->isPostRequest) {
+// 			$model->attributes = Yii::app()->request->getPost('Cupon');
+// 			$se=new Sequence("cupon");
+// 			$model->lid = $se->nextval();
+// 			$model->create_at = date('Y-m-d H:i:s',time());
+// 			$model->update_at = date('Y-m-d H:i:s',time());
+// 			$model->delete_flag = '0';
+// 			//$py=new Pinyin();
+// 			//$model->simple_code = $py->py($model->product_name);
+// 			//var_dump($model);exit;
+// 			if($model->save()){
+// 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+// 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId ));
+// 			}
+// 		}
+// 		//$categories = $this->getCategoryList();
+// 		//$departments = $this->getDepartments();
+// 		//echo 'ss';exit;
+// 		$this->render('create' , array(
+// 				'model' => $model ,
+// 				//'categories' => $categories
+// 		));
+
 	
 	/**
 	 * 编辑活动
 	 */
 	public function actionUpdate(){
+		
 		$lid = Yii::app()->request->getParam('lid');
 		//echo 'ddd';
+		//$groupID = Yii::app()->request->getParam('str');
+		//var_dump($groupID);exit;
+		$brdulvs = $this->getBrdulv();
 		$model = Cupon::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Cupon');
+			$groupID = Yii::app()->request->getParam('hidden1');
+			$gropids = array();
+			$gropids = explode(',',$groupID);
+			$db = Yii::app()->db;
+			if(!empty($groupID)){
+				$sql = 'delete from nb_cupon_branduser where source_id='.$lid.' and dpid='.$this->companyId;
+				$command=$db->createCommand($sql);
+				$command->execute();
+				foreach ($gropids as $gropid){
+					$se = new Sequence("cupon");
+					$id = $se->nextval();
+					$data = array(
+							'lid'=>$id,
+							'dpid'=>$this->companyId,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'cupon_source'=>'0',
+							'source_id'=>$model->lid,
+							'to_group'=>"2",
+							'brand_user_lid'=>$gropid,
+							'delete_flag'=>'0'
+					);
+					$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
+					//var_dump($gropid);exit;
+				}
+			}else{
+				$sql = 'update nb_cupon_branduser set delete_flag = 1 where source_id='.$lid.' and dpid='.$this->companyId;
+				$command=$db->createCommand($sql);
+				$command->execute();
+			}
+			//print_r(explode(',',$groupID));
+			//var_dump($gropid);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
+			//$gropid = array();
+			//$gropid = (dexplode(',',$groupID));
+			//var_dump(dexplode(',',$groupID));exit;
 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
@@ -129,7 +235,24 @@ class CuponController extends BackendController
 		}
 		$this->render('update' , array(
 				'model'=>$model,
+				'brdulvs'=>$brdulvs,
 		));
+// 		$lid = Yii::app()->request->getParam('lid');
+// 		//echo 'ddd';
+// 		$model = Cupon::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
+// 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+// 		if(Yii::app()->request->isPostRequest) {
+// 			$model->attributes = Yii::app()->request->getPost('Cupon');
+// 			$model->update_at=date('Y-m-d H:i:s',time());
+// 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
+// 			if($model->save()){
+// 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
+// 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId));
+// 			}
+// 		}
+// 		$this->render('update' , array(
+// 				'model'=>$model,
+// 		));
 	}
 // 	public function actionCre()
 // 	{
@@ -188,6 +311,20 @@ class CuponController extends BackendController
 // 		));
 // 	}
 
+	private function getBrdulv(){
+		$criteria = new CDbCriteria;
+		$criteria->with = '';
+		$criteria->condition = ' t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.min_total_points asc ' ;
+		$brdules = BrandUserLevel::model()->findAll($criteria);
+		if(!empty($brdules)){
+			return $brdules;
+		}
+		// 		else{
+		// 			return flse;
+		// 		}
+	}
+	
 	public function actionUpdate1($id)
 	{
 		$request = Yii::app()->request;

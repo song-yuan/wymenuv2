@@ -43,10 +43,10 @@ class PrivatePromotion extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('lid, dpid', 'required'),
-			array('lid, dpid,order_num,group_id', 'length', 'max'=>10),
+			array('lid, dpid, order_num, group_id, change_point,', 'length', 'max'=>10),
 			array('promotion_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
-			array('to_group,promotion_type, change_point, can_cupon, is_available, delete_flag', 'length', 'max'=>2),
+			array('to_group,promotion_type, can_cupon, is_available, delete_flag', 'length', 'max'=>2),
 			//array('order_num', 'length', 'max'=>3),
 			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
@@ -63,6 +63,7 @@ class PrivatePromotion extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'PrivateBranduser' => array(self::BELONGS_TO , 'PrivateBranduser' ,'' ,'on'=>'PrivateBranduser.to_group = 2 and t.dpid = PrivateBranduser.dpid and PrivateBranduser.private_promotion_id=t.lid') ,
 		);
 	}
 

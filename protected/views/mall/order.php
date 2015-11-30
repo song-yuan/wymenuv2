@@ -7,8 +7,14 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
+
 <div class="order-title">我的订单</div>
+<?php if($this->type==1):?>
 <div class="order-site">桌号:<?php echo $site['serial'];?></div>
+<?php else:?>
+
+<?php endif;?>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
@@ -16,12 +22,12 @@
 		<div class="clear"></div>
 	</div>
 	<?php endforeach;?>
-	<?php if($order['reality_total'] - $order['should_total']):?>
 	<div class="ht1"></div>
 	<div class="item">
 		<div class="lt">合计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
 	</div>
+	<?php if($order['reality_total'] - $order['should_total']):?>
 	<div class="item">
 		<div class="lt">优惠金额:</div><div class="rt">￥<?php echo $order['reality_total'] - $order['should_total'];?></div>
 		<div class="clear"></div>
@@ -54,14 +60,18 @@ $(document).ready(function(){
 		$(this).addClass('on');
 	});
 	$('#payorder').click(function(){
-		$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',function(msg){
-			if(parseInt(msg) < 2){
-				alert('服务员确认后才能付款!');
-			}else{
-				var paytype = $('.on').attr('paytype');
-				location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>&paytype='+paytype;
-			}
-		})
+		var paytype = $('.on').attr('paytype');
+		if(parseInt(paytype)==2){
+			$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',function(msg){
+				if(parseInt(msg) < 2){
+					layer.msg('服务员确认后才能付款!');
+				}else{
+					location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>&paytype='+paytype;
+				}
+			});
+		}else{
+			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>&paytype='+paytype;
+		}
 	});
 });
 </script>

@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','打印机管理'),'subhead'=>yii::t('app','打印机方式明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','打印机方式管理'),'url'=>''),array('word'=>yii::t('app','打印机方式明细管理'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','营销活动管理'),'subhead'=>yii::t('app','营销活动明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销活动管理'),'url'=>''),array('word'=>yii::t('app','营销活动明细管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('promotionActivity/index' , array('companyId' => $this->companyId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('printerWay/detaildelete' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid)),
+				'action' => $this->createUrl('promotionActivity/detailindex' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -37,63 +37,65 @@
 				),
 		)); ?>
 		<div class="col-md-12">
+		<div class="tabbable tabbable-custom">
+                            <ul class="nav nav-tabs">
+                                    <li class="<?php if($typeID=='normal'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'normal' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','普通优惠营销活动');?></a></li>
+                                    <li class="<?php if($typeID=='private'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'private' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','特价优惠营销活动');?></a></li>
+                                    <li class="<?php if($typeID=='cupon'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'cupon' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','代金券营销活动');?></a></li>
+                            
+                            </ul>
+                            <div class="tab-content">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
+			<?php if($typeID=="normal"){ ?>
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo $pwmodel->name ;?>-><?php echo yii::t('app','打印方式明细列表');?></div>
-					<div class="actions">
-						<a href="<?php echo $this->createUrl('printerWay/detailcreate' , array('companyId' => $this->companyId,'pwid'=>$pwmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<!-- <div class="btn-group">
-							<a class="btn green" href="#" data-toggle="dropdown">
-							<i class="fa fa-cogs"></i> Tools
-							<i class="fa fa-angle-down"></i>
-							</a>
-							<ul class="dropdown-menu pull-right">
-								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></a></li>
-							</ul>
-						</div> -->
-                                                <div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
-						</div>
-					</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','普通优惠');?><p><?php echo yii::t('app','(*注：只显示生效的优惠)');?></p></div>
+					
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
-					<?php if(!empty($models)):?>
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','楼层区域');?></th>
-                                                                <th><?php echo yii::t('app','打印机');?></th>
-                                                             <!--   <th><?php echo yii::t('app','打印份数');?></th> -->
-								<th>&nbsp;</th>                                                                
+								<th><?php echo yii::t('app','序号');?></th>
+								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th ><?php echo yii::t('app','图片');?></th>
+								<th><?php echo yii::t('app','摘要');?></th>
+								<th><?php echo yii::t('app','添加代金券');?></th>
 							</tr>
 						</thead>
 						<tbody>
-						
+						<?php if($models) :?>
+						<?php $i=1;?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php if($model->floor_id!='0') echo $model->floor->name; else echo yii::t('app','临时区域');?></td>
-								<td><?php if(!empty($model->printer)) echo $model->printer->name; else echo "";?></td>
-                                                                <!-- <td><?php echo $model->list_no;?></td> -->
-								<td class="center">
-								<a href="<?php echo $this->createUrl('printerWay/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
-								</td>             
+								<td><?php echo $i;?></td>
+								<td style="width:20%"><?php echo $model['promotion_title'];?></td>
+								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
+								<td ><?php echo $model['promotion_abstract'];?></td>
+                                <td>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio-list">
+                                                <label class="radio-inline">
+                                                <div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>" >
+                                                
+                                                <input type="checkbox" class="toggle" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="1" <?php if(!empty($model['promotion_lid'])){ echo "checked";}else{echo '';}?>>
+                                                </div>
+                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','确定修改');?> >
+                                                </label>
+											</div>
+										</div>
+									</div>
+								</td>
+                                                                
 							</tr>
+							<?php $i=$i+1;?>
 						<?php endforeach;?>
-						</tbody>
-						<?php else:?>
-						<tr><td><?php echo yii::t('app','还没有添加详细打印方案');?></td></tr>
 						<?php endif;?>
+						</tbody>
 					</table>
 		
-					<div class="form-actions fluid">
-						<div class="col-md-offset-3 col-md-9">
-									<!--<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>-->
-									<a href="<?php echo $this->createUrl('printerWay/index' , array('companyId' => $pwmodel->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
-						</div>
-					</div>
+					
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -132,4 +134,347 @@
 		</div>
             <?php $this->endWidget(); ?>
 	</div>
+	</div>
 	<!-- END PAGE CONTENT-->
+		<SCRIPT type="text/javascript">
+
+	 $(".clear_btn").on("click",function(){
+         var vid=$(this).attr("id").substr(12,10);
+         //alert(vid);
+         //var arr=document.getElementsByName("optionsRadios"+vid);
+         var chx=document.getElementById("optionsCheck"+vid);
+        // var optid;
+         //var optvalue;
+         var activityID = "<?php echo $activityID;?>";
+         var typeID = "<?php echo $typeID;?>";
+         //alert(activityID);
+         var checkvalue = '0';
+
+			if(chx.checked)
+				{
+				checkvalue= '1';
+				}
+			//alert(optid);
+			//alert(optvalue);
+         //alert(checkvalue);
+        // alert(promotionID);
+         $.ajax({
+                     type:'GET',
+			url:"<?php echo $this->createUrl('promotionActivity/store',array('companyId'=>$this->companyId));?>/id/"+vid+"/activityID/"+activityID+"/typeID/"+typeID+"/chk/"+checkvalue+"/page/",
+			async: false,
+			//data:"companyId="+company_id+'&padId='+pad_id,
+                     cache:false,
+                     dataType:'json',
+			success:function(msg){
+                         //alert(msg.status);
+                         if(msg.status=="success")
+                         {
+                             alert("<?php echo yii::t('app','修改成功'); ?>");
+                             
+                             location.reload();
+                         }else{
+                             alert("<?php echo yii::t('app','修改失败'); ?>"+"1")
+                             location.reload();
+                         }
+			},
+                     error:function(){
+				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+     });
+	</SCRIPT>
+	<?php }elseif ($typeID=="private"){ ?>
+					<div class="portlet box purple">
+				<div class="portlet-title">
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','特价优惠');?><p><?php echo yii::t('app','(*注：只显示生效的优惠)');?></p></div>
+					
+				</div>
+				<div class="portlet-body" id="table-manage">
+					<table class="table table-striped table-bordered table-hover" id="sample_1">
+						<thead>
+							<tr>
+								<th><?php echo yii::t('app','序号');?></th>
+								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th ><?php echo yii::t('app','图片');?></th>
+								<th><?php echo yii::t('app','摘要');?></th>
+								<th><?php echo yii::t('app','添加代金券');?></th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php if($models) :?>
+						<?php $i=1;?>
+						<?php foreach ($models as $model):?>
+							<tr class="odd gradeX">
+								<td><?php echo $i;?></td>
+								<td style="width:20%"><?php echo $model['promotion_title'];?></td>
+								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
+								<td ><?php echo $model['promotion_abstract'];?></td>
+                                <td>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio-list">
+                                                <label class="radio-inline">
+                                                <div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>" >
+                                                
+                                                <input type="checkbox" class="toggle" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="1" <?php if(!empty($model['promotion_lid'])){ echo "checked";}else{echo '';}?>>
+                                                </div>
+                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','确定修改');?> >
+                                                </label>
+											</div>
+										</div>
+									</div>
+								</td>
+                                                                
+							</tr>
+							<?php $i=$i+1;?>
+						<?php endforeach;?>
+						<?php endif;?>
+						</tbody>
+					</table>
+		
+					
+						<?php if($pages->getItemCount()):?>
+						<div class="row">
+							<div class="col-md-5 col-sm-12">
+								<div class="dataTables_info">
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
+								</div>
+							</div>
+							<div class="col-md-7 col-sm-12">
+								<div class="dataTables_paginate paging_bootstrap">
+								<?php $this->widget('CLinkPager', array(
+									'pages' => $pages,
+									'header'=>'',
+									'firstPageLabel' => '<<',
+									'lastPageLabel' => '>>',
+									'firstPageCssClass' => '',
+									'lastPageCssClass' => '',
+									'maxButtonCount' => 8,
+									'nextPageCssClass' => '',
+									'previousPageCssClass' => '',
+									'prevPageLabel' => '<',
+									'nextPageLabel' => '>',
+									'selectedPageCssClass' => 'active',
+									'internalPageCssClass' => '',
+									'hiddenPageCssClass' => 'disabled',
+									'htmlOptions'=>array('class'=>'pagination pull-right')
+								));
+								?>
+								</div>
+							</div>
+						</div>
+						<?php endif;?>					
+					
+				</div>
+			</div>
+			<!-- END EXAMPLE TABLE PORTLET-->
+		</div>
+            <?php $this->endWidget(); ?>
+	</div>
+	</div>
+	<!-- END PAGE CONTENT-->
+		<SCRIPT type="text/javascript">
+
+	 $(".clear_btn").on("click",function(){
+         var vid=$(this).attr("id").substr(12,10);
+         //alert(vid);
+         //var arr=document.getElementsByName("optionsRadios"+vid);
+         var chx=document.getElementById("optionsCheck"+vid);
+        // var optid;
+         //var optvalue;
+         var activityID = "<?php echo $activityID;?>";
+         var typeID = "<?php echo $typeID;?>";
+         //alert(activityID);
+         var checkvalue = '0';
+
+			if(chx.checked)
+				{
+				checkvalue= '1';
+				}
+			//alert(optid);
+			//alert(optvalue);
+         //alert(checkvalue);
+        // alert(promotionID);
+         $.ajax({
+                     type:'GET',
+			url:"<?php echo $this->createUrl('promotionActivity/storeprivate',array('companyId'=>$this->companyId));?>/id/"+vid+"/activityID/"+activityID+"/typeID/"+typeID+"/chk/"+checkvalue+"/page/",
+			async: false,
+			//data:"companyId="+company_id+'&padId='+pad_id,
+                     cache:false,
+                     dataType:'json',
+			success:function(msg){
+                         //alert(msg.status);
+                         if(msg.status=="success")
+                         {
+                             alert("<?php echo yii::t('app','修改成功'); ?>");
+                             
+                             location.reload();
+                         }else{
+                             alert("<?php echo yii::t('app','修改失败'); ?>"+"1")
+                             location.reload();
+                         }
+			},
+                     error:function(){
+				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+     });
+	</SCRIPT>
+	<?php }elseif ($typeID == "cupon"){?>
+				<div class="portlet box purple">
+				<div class="portlet-title">
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','代金券优惠');?><p><?php echo yii::t('app','(*注：只显示生效的代金券)');?></p></div>
+					
+				</div>
+				<div class="portlet-body" id="table-manage">
+					<table class="table table-striped table-bordered table-hover" id="sample_1">
+						<thead>
+							<tr>
+								<th><?php echo yii::t('app','序号');?></th>
+								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th ><?php echo yii::t('app','图片');?></th>
+								<th><?php echo yii::t('app','摘要');?></th>
+								<th><?php echo yii::t('app','添加代金券');?></th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php if($models) :?>
+						<?php $i=1;?>
+						<?php foreach ($models as $model):?>
+							<tr class="odd gradeX">
+								<td><?php echo $i;?></td>
+								<td style="width:20%"><?php echo $model['cupon_title'];?></td>
+								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
+								<td ><?php echo $model['cupon_abstract'];?></td>
+                                <td>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio-list">
+                                                <label class="radio-inline">
+                                                <div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>" >
+                                                
+                                                <input type="checkbox" class="toggle" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="1" <?php if(!empty($model['promotion_lid'])){ echo "checked";}else{echo '';}?>>
+                                                </div>
+                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','确定修改');?> >
+                                                </label>
+											</div>
+										</div>
+									</div>
+								</td>
+                                                                
+							</tr>
+							<?php $i=$i+1;?>
+						<?php endforeach;?>
+						<?php endif;?>
+						</tbody>
+					</table>
+		
+					
+						<?php if($pages->getItemCount()):?>
+						<div class="row">
+							<div class="col-md-5 col-sm-12">
+								<div class="dataTables_info">
+									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
+								</div>
+							</div>
+							<div class="col-md-7 col-sm-12">
+								<div class="dataTables_paginate paging_bootstrap">
+								<?php $this->widget('CLinkPager', array(
+									'pages' => $pages,
+									'header'=>'',
+									'firstPageLabel' => '<<',
+									'lastPageLabel' => '>>',
+									'firstPageCssClass' => '',
+									'lastPageCssClass' => '',
+									'maxButtonCount' => 8,
+									'nextPageCssClass' => '',
+									'previousPageCssClass' => '',
+									'prevPageLabel' => '<',
+									'nextPageLabel' => '>',
+									'selectedPageCssClass' => 'active',
+									'internalPageCssClass' => '',
+									'hiddenPageCssClass' => 'disabled',
+									'htmlOptions'=>array('class'=>'pagination pull-right')
+								));
+								?>
+								</div>
+							</div>
+						</div>
+						<?php endif;?>					
+					
+				</div>
+			</div>
+			<!-- END EXAMPLE TABLE PORTLET-->
+		</div>
+            <?php $this->endWidget(); ?>
+	</div>
+	</div>
+	<!-- END PAGE CONTENT-->
+		<SCRIPT type="text/javascript">
+
+	 $(".clear_btn").on("click",function(){
+         var vid=$(this).attr("id").substr(12,10);
+         //alert(vid);
+         //var arr=document.getElementsByName("optionsRadios"+vid);
+         var chx=document.getElementById("optionsCheck"+vid);
+        // var optid;
+         //var optvalue;
+         var activityID = "<?php echo $activityID;?>";
+         var typeID = "<?php echo $typeID;?>";
+         //alert(activityID);
+         var checkvalue = '0';
+
+			if(chx.checked)
+				{
+				checkvalue= '1';
+				}
+			//alert(optid);
+			//alert(optvalue);
+         //alert(checkvalue);
+        // alert(promotionID);
+         $.ajax({
+                     type:'GET',
+			url:"<?php echo $this->createUrl('promotionActivity/store',array('companyId'=>$this->companyId));?>/id/"+vid+"/activityID/"+activityID+"/typeID/"+typeID+"/chk/"+checkvalue+"/page/",
+			async: false,
+			//data:"companyId="+company_id+'&padId='+pad_id,
+                     cache:false,
+                     dataType:'json',
+			success:function(msg){
+                         //alert(msg.status);
+                         if(msg.status=="success")
+                         {
+                             alert("<?php echo yii::t('app','修改成功'); ?>");
+                             
+                             location.reload();
+                         }else{
+                             alert("<?php echo yii::t('app','修改失败'); ?>"+"1")
+                             location.reload();
+                         }
+			},
+                     error:function(){
+				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+     });
+	</SCRIPT>
+	<?php }else{?>
+	<div class="portlet box purple">
+				<div class="portlet-title">
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?></div>
+					
+				</div>
+				<div class="portlet-body" id="table-manage">
+					<table class="table table-striped table-bordered table-hover" id="sample_1">
+						<thead>
+							<tr>
+								<th><?php echo yii::t('app','序号');?></th>
+								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th ><?php echo yii::t('app','图片');?></th>
+								<th><?php echo yii::t('app','摘要');?></th>
+								<th><?php echo yii::t('app','添加代金券');?></th>
+							</tr>
+						</thead>
+						<tbody>
+						<td><?php echo yii::t('app','没有发现数据！！！');?></td>
+						</tbody>
+	<?php }?>

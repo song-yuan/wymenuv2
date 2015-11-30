@@ -35,7 +35,7 @@ class CuponBranduser extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, cupon_source, is_used', 'required'),
+			array('lid, dpid, is_used', 'required'),
 			array('lid, dpid, cupon_id, source_id, brand_user_id', 'length', 'max'=>10),
 			array('cupon_source, to_group, is_used, delete_flag', 'length', 'max'=>2),
 			array('create_at, used_time', 'safe'),

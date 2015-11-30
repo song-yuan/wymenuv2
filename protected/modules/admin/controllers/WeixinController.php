@@ -51,7 +51,7 @@ class WeixinController extends BackendController
 	            $dpid = $this->companyId;
 	            $create_at = date('Y-m-d H:i:s',time());
 	            $update_at = date('Y-m-d H:i:s',time());
-				$sql = $sql."(".$lid.",".$dpid.",'".$create_at."','".$update_at."',".$menu['h'].",".$menu['v'].",'".$menu['name']."',".$menu['type'].",'".$menu['value']."'),";	
+				$sql = $sql."(".$lid.",".$dpid.",'".$create_at."','".$update_at."',".$menu['h'].",".$menu['v'].",'".$menu['name']."',".$menu['type'].",'".$menu['value']."','111'),";	
 			}
 			$insert_sql = rtrim($sql,',');
 			$res_in = Yii::app()->db->createCommand($insert_sql)->execute();
