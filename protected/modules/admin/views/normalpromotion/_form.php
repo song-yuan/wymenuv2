@@ -61,12 +61,12 @@
 									</div><!-- 是否可用代金券 -->
 									
 									
-									<div class="form-group">
+									<!-- <div class="form-group">
 										<?php echo $form->label($model, yii::t('app','活动针对对象'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'to_group', array( '1' => yii::t('app','关注微信人群'), '2' => yii::t('app','会员等级') , '3' => yii::t('app','会员个人')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
+											<?php echo $form->dropDownList($model, 'to_group', array( '0' => yii::t('app','所有人'), '2' => yii::t('app','会员等级') ) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('to_group')));?>
 											<?php echo $form->error($model, 'to_group' )?>
-										</div>
+										</div> -->
 									</div>
                                     <!-- <div class="form-group">
 										<?php echo $form->label($model, yii::t('app','活动针对对象'),array('class' => 'col-md-3 control-label'));?>
@@ -76,7 +76,7 @@
 										</div>
 									</div><!-- 活动实施对象 --
 									 -->
-									<?php if($model->to_group=="2"):{?>
+									<!--<?php if($model->to_group=="2"):{?>
 									<div id="yincang" style="display: ;" class="form-group ">
 										<label class="col-md-3 control-label"><?php echo yii::t('app','会员等级');?></label>
 										<div class="col-md-4" style="border:1px solid red;">
@@ -114,7 +114,7 @@
 										</div>
 										<input type="hidden" id="hidden1" name="hidden1" value="" />
 									</div>
-								<?php }endif;?>
+								<?php }endif;?>-->
 									<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -205,13 +205,20 @@
 //	      };
 
 	     $("#su").on('click',function() {
-	         alert(11);
+	         //alert(11);
 	         var p1 = $('#NormalPromotion_to_group').children('option:selected').val();
+	         var begintime = $('#NormalPromotion_begin_time').val();
+	         var endtime = $('#NormalPromotion_end_time').val();
 	         var aa = document.getElementsByName("chk");
 	         var str=new Array();
-	         alert(p1);
+	         //alert(begintime);
+	         //alert(endtime);
 	         //var ss = "";
 	       // if(aa.checked){
+	         if(endtime<=begintime){
+	        	 alert("<?php echo yii::t('app','活动结束时间应该大于开始时间!!!');?>");
+	        	 return false;
+	         }
 	         if(p1=='2'){
 	         for (var i = 0; i < aa.length; i++) {
 	             if (aa[i].checked) {
@@ -228,7 +235,7 @@
 	         //else{
 	        //	 alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
 	          //   }
-	         alert(str);
+	        // alert(str);
 	      //  }else{
 	        //alert(str);}
 	         $("#hidden1").val(str);

@@ -55,7 +55,7 @@
 		<div class="tabbable tabbable-custom">
 			<ul class="nav nav-tabs">
 				<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxRedpacket/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','微信红包设置');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxRedpacket/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','红包发送规则设置');?></a></li>
+				<!--  <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxRedpacket/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','红包发送规则设置');?></a></li> -->
 				<!-- <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/gift',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
 				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/wxcard',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
 			 --></ul>
@@ -102,6 +102,7 @@
 								<th><?php echo yii::t('app','红包领用截止日期');?></th>
                                 <th><?php echo yii::t('app','编辑');?></th>                                                                
                                 <th><?php echo yii::t('app','编辑明细');?></th>
+                                <th><?php echo yii::t('app','发送规则设置');?></th>
                                 <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
@@ -120,7 +121,10 @@
 								<td class="center">
 								<a href="<?php echo $this->createUrl('wxRedpacket/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
 								<td class="center">
-								<!-- <a href="<?php echo $this->createUrl('wxRedpacket/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a> --> </td>
+								<a href="<?php echo $this->createUrl('wxRedpacket/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a></td>
+								
+								 <td class="center">
+								<a href="<?php echo $this->createUrl('wxRedpacket/detailrules',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','规则设置');?></a></td>
 								 <td><?php echo '';?></td>
 								</tr>
 						

@@ -32,7 +32,7 @@ class PromotionActivityDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, promotion_type', 'required'),
+			array('lid, dpid', 'required'),
 			array('lid, dpid, activity_lid, promotion_lid', 'length', 'max'=>10),
 			array('promotion_type, delete_flag', 'length', 'max'=>2),
 				array('is_sync','length','max'=>50),

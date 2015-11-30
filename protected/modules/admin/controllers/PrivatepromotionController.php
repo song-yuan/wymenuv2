@@ -91,6 +91,7 @@ class PrivatepromotionController extends BackendController
 							'update_at'=>date('Y-m-d H:i:s',time()),
 							'private_promotion_id'=>$model->lid,
 							'to_group'=>"2",
+							'is_used'=>"1",
 							'brand_user_lid'=>$gropid,
 							'cupon_source'=>'0',
 							'delete_flag'=>'0'
@@ -161,6 +162,7 @@ class PrivatepromotionController extends BackendController
 						'update_at'=>date('Y-m-d H:i:s',time()),
 						'private_promotion_id'=>$lid,
 						'to_group'=>"2",
+						'is_used'=>"1",
 						'brand_user_lid'=>$gropid,
 						'cupon_source'=>'0',
 						'delete_flag'=>'0'
@@ -405,8 +407,9 @@ class PrivatepromotionController extends BackendController
 						'private_promotion_id'=>$promotionID,
 						'product_id'=>$id,
 						'is_set'=>0,
+						'is_discount'=>0,
 						'promotion_money'=>$proNum,
-						'promotion_discount'=>0.00,
+						'promotion_discount'=>'',
 						'order_num'=>$order_num,
 						'delete_flag'=>'0'
 				);
@@ -429,7 +432,8 @@ class PrivatepromotionController extends BackendController
 					'private_promotion_id'=>$promotionID,
 					'product_id'=>$id,
 					'is_set'=>0,
-					'promotion_money'=>0.00,
+					'is_discount'=>1,
+					'promotion_money'=>'',
 					'promotion_discount'=>$proNum,
 					'order_num'=>$order_num,
 					'delete_flag'=>'0'
@@ -455,8 +459,9 @@ class PrivatepromotionController extends BackendController
 						'private_promotion_id'=>$promotionID,
 						'product_id'=>$id,
 						'is_set'=>1,
+						'is_discount'=>0,
 						'promotion_money'=>$proNum,
-						'promotion_discount'=>0.00,
+						'promotion_discount'=>'',
 						'order_num'=>$order_num,
 						'delete_flag'=>'0'
 				);
@@ -475,7 +480,8 @@ class PrivatepromotionController extends BackendController
 						'private_promotion_id'=>$promotionID,
 						'product_id'=>$id,
 						'is_set'=>1,
-						'promotion_money'=>0.00,
+						'is_discount'=>1,
+						'promotion_money'=>'',
 						'promotion_discount'=>$proNum,
 						'order_num'=>$order_num,
 						'delete_flag'=>'0'
