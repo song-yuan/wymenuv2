@@ -14,7 +14,7 @@ class WxScanLog
 		return $categorys;
 	}
 	public static function getScene($dpid,$sceneId){
-		$sql = 'select * from nb_scene_scan where dpid=:dpid and scene_id=:sceneId order by lid desc';
+		$sql = 'select * from nb_scene where dpid=:dpid and scene_id=:sceneId order by lid desc';
 		$categorys = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':sceneId',$sceneId)->queryRow();
 		return $categorys;
 	}
