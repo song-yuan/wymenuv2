@@ -68,8 +68,10 @@
 										<div class="col-md-12">
 											<div class="radio-list">
                                                 <label class="radio-inline">
-                                                <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="1" <?php if(!empty($model['promotion_lid'])){ echo "checked";}else{echo "";}?>> <?php echo yii::t('app','勾选添加');?>
-                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','确定修改');?> >
+                                                <div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>" >
+                                                <input type="checkbox" class="toggle" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="1" <?php if(!empty($model['promotion_lid'])){ echo "checked";}else{echo "";}?>>
+                                                </div>
+                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','确定添加');?> >
                                                 </label>
 											</div>
 										</div>

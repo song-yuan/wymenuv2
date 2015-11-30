@@ -30,7 +30,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','添加营销活动'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销活动'),'url'=>''),array('word'=>yii::t('app','添加营销活动'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('privatepromotion/index' , array('companyId' => $this->companyId,)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','添加营销活动'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销活动'),'url'=>''),array('word'=>yii::t('app','添加营销活动'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('promotionActivity/index' , array('companyId' => $this->companyId,)))));?>
 		
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->

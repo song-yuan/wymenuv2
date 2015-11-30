@@ -68,41 +68,7 @@
         })
     });
    
-// 		jQuery(document).ready(function(){
-// 		    if (jQuery().datepicker) {
-// 	            $('.date-picker').datepicker({
-// 	            	format: 'yyyy-mm-dd',
-// 	            	language: 'zh-CN',
-// 	                rtl: App.isRTL(),
-// 	                autoclose: true
-// 	            });
-// 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-	            
-//            }
-// 		});
 
-    	
-// 		jQuery(document).ready(function() {       
-// 		   // initiate layout and plugins
-// 		    App.init();
-// 	        if (jQuery().datepicker) {
-// 	            $('.date-picker').datepicker({
-// 	            	format: 'yyyy-mm-dd',
-// 	            	language: 'zh-CN',
-// 	                rtl: App.isRTL(),
-// 	                autoclose: true
-// 	            });
-// 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-// 	        }
-
-// 		});
-	
-		
-// 		jQuery(document).ready(function() {       
-// 		   // initiate layout and plugins
-// 		   App.init();
-// 		   FormComponents.init();
-// 		});
 
 	    </script>
 
