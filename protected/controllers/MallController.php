@@ -139,7 +139,7 @@ class MallController extends Controller
 		
 		if($paytype == 1){
 			WxOrder::updatePayType($orderId,$this->companyId,0);
-			$this->redirect(array('/mall/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
 		WxOrder::updatePayType($orderId,$this->companyId);
 		
