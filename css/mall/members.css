@@ -17,7 +17,7 @@
 	margin-top: 115px;
 }
 .maininfo {
-	background-image: url(../images/mem_head_bg.jpg);
+	background-image: url(../../img/mall/mem_head_bg.jpg);
 	background-size: 100% auto;
 	height: 95px;
 }
@@ -55,7 +55,7 @@
 	text-align: left;
 	padding-left: 10px;
 	padding-right: 10px;
-	background-image: url(../images/arrow_small_white.png);
+	background-image: url(../../img/mall/arrow_small_white.png);
 	background-position: right center;
 	background-size: auto 12px;
 	background-repeat: no-repeat;
@@ -395,7 +395,7 @@
 
 
 .my_address .addlist input[type="radio"] + label {
-	background-image: url('../images/round_unchk.png');
+	background-image: url('../../img/mall/round_unchk.png');
 	background-repeat: no-repeat;
 	background-size: 20px 20px;
 	padding-right: 25px;
@@ -404,7 +404,7 @@
 }
 
 .my_address .addlist input[type="radio"]:checked + label {
-	background-image: url('../images/round_chk.png');
+	background-image: url('../../img/mall/round_chk.png');
 	display: block;
 
 }
@@ -418,7 +418,7 @@
 }
 
 .tools .shareicon {
-	background-image: url('../../../images/member2.0/icon_share2.png');
+	background-image: url('../../../../img/mall/member2.0/icon_share2.png');
 	
 
 }
@@ -431,7 +431,7 @@
 
 
 .tools .addicon {
-	background-image: url('../images/icon_add.png');
+	background-image: url('../../img/mall/icon_add.png');
 
 }
 
@@ -458,11 +458,11 @@
 
 
 .bttndelete {
-	background-image: url('../images/icon_delete.png');
+	background-image: url('../../img/mall/icon_delete.png');
 }
 
 .bttnedit {
-	background-image: url('../images/icon_edit.png');
+	background-image: url('../../img/mall/icon_edit.png');
 }
 
 .bttnedit a {
