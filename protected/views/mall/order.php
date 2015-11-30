@@ -10,7 +10,11 @@
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
 <div class="order-title">我的订单</div>
+<?php if($this->type==1):?>
 <div class="order-site">桌号:<?php echo $site['serial'];?></div>
+<?php else:?>
+
+<?php endif;?>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">

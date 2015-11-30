@@ -46,8 +46,9 @@ class UserController extends Controller
 	public function actionIndex()
 	{
 		$userId = Yii::app()->session['userId'];
-		//特价菜
-		$this->render('index',array('companyId'=>$this->companyId));
+		$user = WxBrandUser::get($userId,$this->companyId);
+		
+		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user));
 	}
 	/**
 	 * 
@@ -73,6 +74,18 @@ class UserController extends Controller
 		$site = $site = WxSite::get($order['site_id'],$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site));
+	}
+	public function actionAddress()
+	{
+		$userId = Yii::app()->session['userId'];
+	
+		$this->render('address',array('companyId'=>$this->companyId));
+	}
+	public function actionAddAddress()
+	{
+		$userId = Yii::app()->session['userId'];
+	
+		$this->render('addaddress',array('companyId'=>$this->companyId));
 	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);

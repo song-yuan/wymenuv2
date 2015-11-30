@@ -99,12 +99,14 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
-		$serial = Yii::app()->request->getParam('serial');
-		$site = WxSite::getBySerial($serial,$this->companyId);
-		if(!$site){
-			$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
-		}else{
-			WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
+		if($this->type==1){
+			$serial = Yii::app()->request->getParam('serial');
+			$site = WxSite::getBySerial($serial,$this->companyId);
+			if(!$site){
+				$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
+			}else{
+				WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
+			}
 		}
 		
 		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type);
