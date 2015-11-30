@@ -12,7 +12,7 @@
 								<div class="form-body">
 														
 									<div class="form-group ">
-									<?php if($model->hasErrors('promotion_title')) echo 'has-error';?>
+									
 										<?php echo $form->label($model, yii::t('app','标题'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'promotion_title',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_title')));?>
@@ -91,7 +91,7 @@
 										<?php foreach ($brdulvs as $brdulv):?>
 										
 											<tr class="odd gradeX">
-												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" value="<?php echo $brdulv->lid;?>" name="chk" /></td>
+												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes " <?php if(!empty($userlvs)){foreach ($userlvs as $userlv){if($userlv['brand_user_lid'] == $brdulv->lid) echo 'checked' ;}}else echo "123";?>   value="<?php echo $brdulv->lid;?>" name="chk" /></td>
 												<td><?php echo $i,$brdulv->level_name; ?></td>
 												
 											</tr>
@@ -110,7 +110,7 @@
 										<?php foreach ($brdulvs as $brdulv):?>
 										
 											<tr class="odd gradeX">
-												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" value="<?php echo $brdulv->lid;?>" name="chk" /></td>
+												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" check="" value="<?php echo $brdulv->lid;?>" name="chk" /><?php echo $brdulv->lid;?></td>
 												<td><?php echo $i,$brdulv->level_name; ?></td>
 												
 											</tr>

@@ -141,7 +141,24 @@ class PrivatepromotionController extends BackendController
 		//var_dump($groupID);exit;
 		$brdulvs = $this->getBrdulv();
 		$model = PrivatePromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//var_dump($model);exit;
+		$db = Yii::app()->db;
+		$sql = 'select t1.brand_user_lid from nb_private_promotion t left join nb_private_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.private_promotion_id = t.lid)where t.lid = '.$lid.' and t.dpid = '.$this->companyId;
+		$command = $db->createCommand($sql);
+		$userlvs = $command->queryAll();
+		//var_dump($userlvs);exit;
+		//var_dump($sql);exit;
+// 		$criteria = new CDbCriteria;
+// 		$criteria->select = 't.brand_user_lid';
+// 		$criteria->with = 'PrivateBranduser';
+// 		$criteria->condition =  't.delete_flag=0 and t.lid='.$lid.' and t.dpid='.$this->companyId ;
+// 		$criteria->order = ' t.lid asc ';
+		
+// 		$model = PrivatePromotion::model()->find($criteria);
+// 		$model = (object)$model;
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//var_dump($model);exit;
+		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PrivatePromotion');
 			$groupID = Yii::app()->request->getParam('hidden1');
@@ -190,6 +207,7 @@ class PrivatepromotionController extends BackendController
 		$this->render('update' , array(
 				'model'=>$model,
 				'brdulvs'=>$brdulvs,
+				'userlvs'=>$userlvs,
 		));
 	}
 

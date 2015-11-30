@@ -44,7 +44,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'brdulvs'=>$brdulvs)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model,'brdulvs'=>$brdulvs,'userlvs'=>$userlvs)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

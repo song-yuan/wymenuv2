@@ -105,7 +105,7 @@
 												</label>
                                                 <label class="radio-inline">
                                                 <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['order_num'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
-                                                <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['order_num'])) echo $model['order_num']; else echo yii::t('app','无限制'); ?>" >
+                                                <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['order_num'])) echo $model['order_num']; else echo yii::t('app','无限制'); ?>" onfocus=" if (value =='无限制'){value = ''}"  >
                                                 <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
                                                 </label>
 											</div>
@@ -251,10 +251,10 @@
 				{
 				checkvalue= $("#checknum"+vid).val();
 				}
-			alert(optid);
-			alert(optvalue);
-            alert(checkvalue);
-            alert(promotionID);
+			//alert(optid);
+			//alert(optvalue);
+           // alert(checkvalue);
+            //alert(promotionID);
             $.ajax({
                         type:'GET',
  			url:"<?php echo $this->createUrl('normalpromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/order_num/"+checkvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
@@ -265,7 +265,8 @@
  			success:function(msg){
                             //alert(msg.status);
                             if(msg.status=="success")
-                            {alert("<?php echo $promotionID;?>")
+                            {
+                                //alert("<?php echo $promotionID;?>")
                                 alert("<?php echo yii::t('app','成功'); ?>");
                                 
                                 location.reload();

@@ -63,6 +63,7 @@ class PrivatePromotion extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'PrivateBranduser' => array(self::BELONGS_TO , 'PrivateBranduser' ,'' ,'on'=>'PrivateBranduser.to_group = 2 and t.dpid = PrivateBranduser.dpid and PrivateBranduser.private_promotion_id=t.lid') ,
 		);
 	}
 

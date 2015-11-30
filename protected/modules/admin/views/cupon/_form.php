@@ -195,13 +195,19 @@
 		 
 
 	     $("#su").on('click',function() {
-	         alert(11);
+	        // alert(11);
 	         var p1 = $('#Cupon_to_group').children('option:selected').val();
 	         var aa = document.getElementsByName("chk");
+	         var begintime = $('#Cupon_begin_time').val();
+	         var endtime = $('#Cupon_end_time').val();
 	         var str=new Array();
-	         alert(p1);
+	        // alert(p1);
 	         //var ss = "";
 	       // if(aa.checked){
+	         if(endtime<=begintime){
+	           	 alert("<?php echo yii::t('app','活动结束时间应该大于开始时间!!!');?>");
+	           	 return false;
+	            }
 	         if(p1=='2'){
 	         for (var i = 0; i < aa.length; i++) {
 	             if (aa[i].checked) {
@@ -218,7 +224,7 @@
 	         //else{
 	        //	 alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
 	          //   }
-	         alert(str);
+	        // alert(str);
 	      //  }else{
 	        //alert(str);}
 	         $("#hidden1").val(str);
