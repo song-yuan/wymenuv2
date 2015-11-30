@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('个人中心');
+	$this->setPageTitle('地址列表');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
@@ -10,25 +10,20 @@
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
 <section class="my_address bg_lgrey2">
+	<?php if($addresss):?>
 	<ul class="addlist" id="list">
+		<?php foreach($addresss as $k=>$address):?>
 		<li id="myadd1">
-			<input type="radio" id="add1" name="addresslist" value="" checked>
-			<label for="add1">
-			<span class="user">收货人：Renee</span>
-			<span class="font_l small">收货地址：上海市虹口区广纪路738号明珠创意园738号…</span>
+			<input type="radio" id="add<?php echo $k+1;?>" name="addresslist" value="" checked>
+			<label for="add<?php echo $k+1;?>">
+			<span class="user">收货人：<?php echo $address['name'];?></span>
+			<span class="font_l small">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
 			</label>
 	
 		</li>
-	
-		<li id="myadd2">
-			<input type="radio" id="add2" name="addresslist" value="" >
-			<label for="add2">
-			<span class="user">收货人：Renee</span>
-			<span class="font_l small">收货地址：上海市虹口区广纪路738号明珠创意园738号…</span>
-			</label>
-	
-		</li>
+		<?php endforeach;?>
 	</ul>
+	<?php endif;?>
 	<div class="tools">
 		<ul>
 			<li class="addicon"><a href="<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId));?>">添加收货地址</a></li>

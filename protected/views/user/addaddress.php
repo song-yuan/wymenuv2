@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('个人中心');
+	$this->setPageTitle('新增地址');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
@@ -9,7 +9,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
-<section class="my_address bg_lgrey2">
+<section class="add_address bg_lgrey2">
 	<form action="">
 		<ul class="complete_add">
 			<li><label for="name">收货人</label><input type="text" placeholder="名字" value=""></li> 

@@ -78,8 +78,8 @@ class UserController extends Controller
 	public function actionAddress()
 	{
 		$userId = Yii::app()->session['userId'];
-	
-		$this->render('address',array('companyId'=>$this->companyId));
+		$addresss = WxAddress::get($userId,$this->companyId);
+		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss));
 	}
 	public function actionAddAddress()
 	{
