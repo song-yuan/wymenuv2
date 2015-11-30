@@ -52,9 +52,9 @@ class MallController extends Controller
 				}
 			}else{
 				//pc 浏览
-				$userId =-1;
+				$userId = 2;
 				Yii::app()->session['userId'] = $userId;
-				Yii::app()->session['qrcode-'.$userId] = -1;
+				Yii::app()->session['qrcode-'.$userId] = 24;
 			}
 		}
 		return true;
@@ -99,12 +99,14 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
-		$serial = Yii::app()->request->getParam('serial');
-		$site = WxSite::getBySerial($serial,$this->companyId);
-		if(!$site){
-			$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
-		}else{
-			WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
+		if($this->type==1){
+			$serial = Yii::app()->request->getParam('serial');
+			$site = WxSite::getBySerial($serial,$this->companyId);
+			if(!$site){
+				$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
+			}else{
+				WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
+			}
 		}
 		
 		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type);
@@ -192,6 +194,15 @@ class MallController extends Controller
 		
 		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
+		
+		//检查活动商品数量
+		if($promoteId > 0){
+			$chek = $cart->checkPromotion();
+			if(!$chek['status']){
+				Yii::app()->end(json_encode($chek));
+			}	
+		}
+		
 		if($cart->addCart()){
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
 		}else{
