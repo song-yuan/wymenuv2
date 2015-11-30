@@ -54,14 +54,18 @@ $(document).ready(function(){
 		$(this).addClass('on');
 	});
 	$('#payorder').click(function(){
-		$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',function(msg){
-			if(parseInt(msg) < 2){
-				alert('服务员确认后才能付款!');
-			}else{
-				var paytype = $('.on').attr('paytype');
-				location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>&paytype='+paytype;
-			}
-		})
+		var paytype = $('.on').attr('paytype');
+		if(parseInt(paytype)==2){
+			$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',function(msg){
+				if(parseInt(msg) < 2){
+					alert('服务员确认后才能付款!');
+				}else{
+					location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>&paytype='+paytype;
+				}
+			});
+		}else{
+			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>&paytype='+paytype;
+		}
 	});
 });
 </script>
