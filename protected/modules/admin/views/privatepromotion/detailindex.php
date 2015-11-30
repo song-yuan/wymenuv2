@@ -101,6 +101,7 @@
 												<label class="radio-inline">
 												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>2" value="1" <?php if($model['promotion_discount']>'0.00') echo "checked";?>> <?php echo yii::t('app','折扣');?>
 												<input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum1<?php echo $model['lid'];?>" value="<?php if(!empty($model['promotion_discount'])) echo $model['promotion_discount']; else echo "0.00"; ?>" >
+												<a style="color: red;"><?php echo yii::t('app','例：88折填写为0.88');?></a>
 												</label>
                                                 <label class="radio-inline">
                                                 <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['order_num'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
@@ -232,18 +233,26 @@
             if(optid=="0")
             	{
                 optvalue= $("#idleftnum0"+vid).val();
+                if(optvalue<'0'){
+                	alert("<?php echo yii::t('app','该数值应大于0！！！'); ?>")
+                	return false;
+                    }
             }else if(optid=="1")
                 {
             	optvalue= $("#idleftnum1"+vid).val();
+           	 if(optvalue>'1'||optvalue<'0'){
+              	alert("<?php echo yii::t('app','该数值应小于1大于0！！！'); ?>")
+              	return false;
+                  }
                 }
 			if(chx.checked)
 				{
 				checkvalue= $("#checknum"+vid).val();
 				}
-			alert(optid);
-			alert(optvalue);
-            alert(checkvalue);
-            alert(promotionID);
+			//alert(optid);
+			//alert(optvalue);
+            //alert(checkvalue);
+            //alert(promotionID);
             $.ajax({
                         type:'GET',
  			url:"<?php echo $this->createUrl('privatepromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/order_num/"+checkvalue+"/proID/"+optid+"/cid/"+cid+"/page/",

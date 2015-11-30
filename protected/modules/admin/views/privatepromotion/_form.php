@@ -200,32 +200,24 @@
 			 }
 	
 	 }) 
-	 }); 
-	 
-// 	 function aa() {
-// 		 //alert(222);
-//          $(".chk").click(function() {
-//              var aa = document.getElementsByName("chk");
-//              var ss = "";
-//              alert(22);
-//              for (var i = 0; i < aa.length; i++) {
-//                  if (aa[i].checked) {
-//                      ss += aa[i].value;
-//                  }
-//              }
-//              $("#txt").val(ss);
-//              alert(22);
-//          });
-//      };
+	 });
 
      $("#su").on('click',function() {
          //alert(11);
          var p1 = $('#PrivatePromotion_to_group').children('option:selected').val();
+         var begintime = $('#PrivatePromotion_begin_time').val();
+         var endtime = $('#PrivatePromotion_end_time').val();
          var aa = document.getElementsByName("chk");
          var str=new Array();
-         alert(p1);
+         //alert(p1);
          //var ss = "";
        // if(aa.checked){
+         //alert(begintime);
+         //alert(endtime);
+         if(endtime<=begintime){
+        	 alert("<?php echo yii::t('app','活动结束时间应该大于开始时间!!!');?>");
+        	 return false;
+         }
          if(p1=='2'){
          for (var i = 0; i < aa.length; i++) {
              if (aa[i].checked) {
@@ -242,36 +234,13 @@
          //else{
         //	 alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
           //   }
-         alert(str);
+         //alert(str);
       //  }else{
         // alert(str);}
          $("#hidden1").val(str);
          $("#privatepromotion-form").submit();
      });
-//      function aa(){
-//     	 var r=document.getElementsByName("r"); 
-//     	 for(var i=0;i<r.length;i++){
-//     	 if(r[i].checked){
-//     	 alert(r[i].value+","+r[i].nextSibling.nodeValue);
-//     	 		}
-//     	 	} 
-//     	 }
-
-     
-// 	 $(document).ready(function(){ 
-		 
-// 		 //alert($(this).children('option:selected').val()); 
-// 		 var checkboxval=$(this).children('option:selected').val();//这就是selected的值 
-// 			//alert(p1);
-// 			 if(p1=="2"){
-// 				 $("#yincang").show();
-// 			 }else{
-// 				$("#yincang").hide();
-// 				 }
-		
-		
-// 		 }); 
-		  
+ 
 	
 		function swfupload_callback(name,path,oldname)  {
 			//alert(6789);
