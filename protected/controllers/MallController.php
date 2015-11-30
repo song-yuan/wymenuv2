@@ -41,7 +41,8 @@ class MallController extends Controller
 					//堂吃
 					$scaned = WxScanLog::get($this->companyId,$userId);
 					if(!empty($scaned)){
-						Yii::app()->session['qrcode-'.$userId] = $scaned['scene_id'];
+						$scene = WxScanLog::getScene($this->companyId,$scaned['scene_id']);
+						Yii::app()->session['qrcode-'.$userId] = $scene['id'];
 					}
 					if(!isset(Yii::app()->session['qrcode-'.$userId])){
 						Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
@@ -83,6 +84,9 @@ class MallController extends Controller
 		$site = WxSite::get($siteId,$this->companyId);
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
+		if(empty($carts)){
+			$this->redirect(array('/mall/index','companyId'=>$this->companyId));
+		}
 		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'site'=>$site));
 	}
 	/**
@@ -95,9 +99,8 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
-		$searil = Yii::app()->request->getParam('searil');
-		
-		$site = WxSite::get($searil,$this->companyId);
+		$serial = Yii::app()->request->getParam('serial');
+		$site = WxSite::getBySerial($serial,$this->companyId);
 		if(!$site){
 			$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
 		}else{
@@ -139,7 +142,7 @@ class MallController extends Controller
 		
 		if($paytype == 1){
 			WxOrder::updatePayType($orderId,$this->companyId,0);
-			$this->redirect(array('/mall/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
 		WxOrder::updatePayType($orderId,$this->companyId);
 		
