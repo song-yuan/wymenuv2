@@ -30,7 +30,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','代金券查询'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','添加代金券'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('cupon/index' , array('companyId' => $this->companyId,)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','添加微信红包'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','微信红包设置'),'url'=>''),array('word'=>yii::t('app','添加微信红包'),'url'=>''))));?>
 		
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -38,24 +38,24 @@
 				<div class="col-md-12">
 				<div class="tabbable tabbable-custom">
 					<ul class="nav nav-tabs">
-					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">整体设置</a></li>
-					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">普通优惠</a></li>
-					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">特价优惠</a></li>
-					<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">代金券</a></li>
-				</ul>
+					<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxRedpacket/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','红包发送规则设置');?></a></li>
+					<!--  <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxRedpacket/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','红包发送规则设置');?></a></li>-->
+				<!--  <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/gift',array('companyId'=>$this->companyId));?>'" data-toggle="tab">特价优惠</a></li>
+					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/wxcard',array('companyId'=>$this->companyId));?>'" data-toggle="tab">代金券</a></li>
+				--></ul>
 				<div class="tab-content">
 			
 					<div class="col-md-12">
 						<div class="portlet box blue">
 							<div class="portlet-title">
-								<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加代金券');?></div>
+								<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','红包发送规则设置');?></div>
 								<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'brdulvs'=>$brdulvs)); ?>
+							<?php echo $this->renderPartial('_detailform', array('model'=>$model)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>
@@ -67,8 +67,10 @@
 		</div>
 		<!-- END PAGE -->  
 	<script type="text/javascript">
-    	$(function () {
+
+    
         	$(".ui_timepicker").datetimepicker({
+            	
          		//showOn: "button",
           		//buttonImage: "./css/images/icon_calendar.gif",
            		//buttonImageOnly: true,
@@ -77,8 +79,8 @@
             	stepHour: 1,
            		stepMinute: 1,
             	stepSecond: 1
-        })
-    });
+        });
+    
 //    		jQuery(document).ready(function(){
 // 		    if (jQuery().datepicker) {
 // 	            $('.date-picker').datepicker({
@@ -91,7 +93,8 @@
 	            
 //            }
 // 		});
-// 		jQuery(document).ready(function() {       
+		jQuery(document).ready(function() {  
+			$("#ui-datepicker-div").css("top","40 !important");     
 // 		   // initiate layout and plugins
 // 		    App.init();
 // 	        if (jQuery().datepicker) {
@@ -104,7 +107,7 @@
 // 	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
 // 	        }
 
-// 		});
+		});
 		
 		</script>  
 		
