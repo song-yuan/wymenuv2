@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <div class="nav-lf">
 <ul id="nav">
   <?php if(!empty($promotions)):?>
@@ -117,7 +118,7 @@ $(function(){
 			        }
 			        setTotal();
         		}else{
-        			alert(msg.msg);
+        			layer.msg(msg.msg);
         		}
         	},
         	dataType:'json'
@@ -143,7 +144,7 @@ $(function(){
 			   	    } 
 			    	setTotal(); 
         		}else{
-        			alert(msg.msg);
+        			layer.msg(msg.msg);
         		}
         	},
         	dataType:'json'

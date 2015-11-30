@@ -7,6 +7,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
+
 <div class="order-title">我的订单</div>
 <div class="order-site">桌号:<?php echo $site['serial'];?></div>
 <div class="order-info">
@@ -58,7 +60,7 @@ $(document).ready(function(){
 		if(parseInt(paytype)==2){
 			$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',function(msg){
 				if(parseInt(msg) < 2){
-					alert('服务员确认后才能付款!');
+					layer.msg('服务员确认后才能付款!');
 				}else{
 					location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>&paytype='+paytype;
 				}
