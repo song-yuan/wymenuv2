@@ -96,10 +96,8 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
-		$searil = Yii::app()->request->getParam('searil');
-		var_dump($searil);
-		$site = WxSite::get($searil,$this->companyId);
-		var_dump($site);exit;
+		$serial = Yii::app()->request->getParam('serial');
+		$site = WxSite::get($serial,$this->companyId);
 		if(!$site){
 			$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
 		}else{
