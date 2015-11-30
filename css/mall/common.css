@@ -107,7 +107,7 @@ html,body {
 	text-align: left;
 }
 .arrowright {
-	background-image: url(../images/arrowright.png);
+	background-image: url(../../img/mall/arrowright.png);
 	background-size: auto 25px;
 
 	background-repeat: no-repeat;
@@ -116,7 +116,7 @@ html,body {
 }
 
 .arrowdown {
-	background-image: url(../images/arrowdown.png);
+	background-image: url(../../img/mall/arrowdown.png);
 	background-size: 25px auto;
 	background-repeat: no-repeat;
 	background-position: right center;
@@ -335,7 +335,7 @@ button#navoverlay {
   	-moz-transform: translateZ(0);
   	-webkit-transform: translateZ(0);
   	transform: translateZ(0);
-  	background-image: url("../../../images/member2.0/bttnnavoverlay.png");
+  	background-image: url("../../img/mall/bttnnavoverlay.png");
   	background-size: 100% 100%;
   	opacity: 0.55;
   	z-index: 10001;
@@ -850,22 +850,22 @@ top: 0px;
 }
 
 .productdetail .bttnbar button.addtocart {
-		background-image: url(../../../images/member2.0/shopcart_grey.png);
+		background-image: url(../../img/mall/shopcart_grey.png);
 		background-size: 30px 30px;
 }
 
 .productdetail .bttnbar button.addtocart:active {
-		background-image: url(../../../images/member2.0/shopcart_white.png);
+		background-image: url(../../img/mall/shopcart_white.png);
 
 }
 
 .productdetail .bttnbar button.buynow {
-		background-image: url(../../../images/member2.0/shopbag_grey.png);
+		background-image: url(../../img/mall/shopbag_grey.png);
 		background-size: 30px 30px;
 }
 
 .productdetail .bttnbar button.buynow:active {
-		background-image: url(../../../images/member2.0/shopbag_white.png);
+		background-image: url(../../img/mall/shopbag_white.png);
 
 }
 
@@ -934,7 +934,7 @@ top: 0px;
 	padding-left: 25px;
 	height: 100%;
 	padding-right: 20px;
-	background-image: url(../../../images/member2.0/icon_location.png);
+	background-image: url(../../img/mall/icon_location.png);
 	background-size: 25px auto; 
 	background-repeat: no-repeat;
 }
@@ -1325,7 +1325,7 @@ input.usethis:checked + label {
 }
 
 .paymethod input[type="radio"] + label {
-	background-image: url('../../../images/member2.0/round_unchk.png');
+	background-image: url('../../img/mall/round_unchk.png');
 	background-repeat: no-repeat;
 	background-size: 20px 20px;
 	background-position: right;
@@ -1333,7 +1333,7 @@ input.usethis:checked + label {
 }
 
 .paymethod input[type="radio"]:checked + label {
-	background-image: url('../../../images/member2.0/round_chk.png');
+	background-image: url('../../img/mall/round_chk.png');
 }
 
 .bignotice img {
@@ -1366,7 +1366,7 @@ input.usethis:checked + label {
 	margin-right: 3px;
 	width:18px;
     height:18px;
-	background-image: url('../../../images/member2.0/arrowdown_l.png');
+	background-image: url('../../img/mall/arrowdown_l.png');
 	background-position: left center;
 	background-size: 18px auto;
 	background-repeat: no-repeat;
@@ -1524,7 +1524,7 @@ input.usethis:checked + label {
 
 
 .infoarea {
-	background-image: url('../../../images/member2.0/bg_wave1.png');
+	background-image: url('../../img/mall/bg_wave1.png');
 	background-size: 90% auto;
 	background-position: top center;
 	height: 45%;
@@ -1754,7 +1754,7 @@ option {
 }
 
 .normalform select {
-     background-image: url('../../../images/member2.0/arrowdown.png');
+     background-image: url('../../img/mall/arrowdown.png');
      background-repeat: no-repeat;
      background-position: right center;
      background-size: 18px auto;
@@ -1775,7 +1775,7 @@ option {
 }
 
 .normalform.withtext select {
-     background-image: url('../../../images/member2.0/arrowdown.png');
+     background-image: url('../../img/mall/arrowdown.png');
      background-repeat: no-repeat;
      background-position: right center;
      background-size: 18px auto;
@@ -1832,7 +1832,7 @@ option {
 
 
 .asc:after {	
-	background-image: url("../../../images/member2.0/icon_order.png");
+	background-image: url("../../img/mall/icon_order.png");
 	background-size: auto 15px;
 	background-repeat: no-repeat;
 	background-position: 1px 0px;
@@ -1844,7 +1844,7 @@ option {
 }
 
 .desc:after {	
-	background-image: url("../../../images/member2.0/icon_order.png");
+	background-image: url("../../img/mall/icon_order.png");
 	background-size: auto 15px;
 	background-repeat: no-repeat;
 	background-position: 1px 2px;
@@ -2002,7 +2002,7 @@ input#checkall {
 	z-index: 9999;
 	color: white;
 	text-align: center;
-	background-image: url("../../../images/member2.0/shareicon.png");
+	background-image: url("../../img/mall/shareicon.png");
 	background-position: right 70px center;
 	background-repeat: no-repeat;
 	background-size: 30px 30px;
@@ -2067,7 +2067,7 @@ input#checkall {
 	background-repeat: no-repeat;
 	background-size: 20px 20px;
 	background-position: left center;
-	background-image: url('../../../images/member2.0/round_unchk.png');
+	background-image: url('../../img/mall/round_unchk.png');
 
 }
 
@@ -2075,7 +2075,7 @@ input#checkall {
 
 
 .choosed {
-	background-image: url('../../../images/member2.0/round_chk.png');
+	background-image: url('../../img/mall/round_chk.png');
 	
 }
 
@@ -2359,14 +2359,14 @@ input#checkall {
 }
 
 .service_detail .answer .chatarrow {
-	background-image: url(../../../images/member2.0/chatarrowblue.png);
+	background-image: url(../../img/mall/chatarrowblue.png);
 	background-size: 100% auto;
 	left: -7px;
 	bottom: -7px;
 }
 
 .service_detail .apply .chatarrow {
-	background-image: url(../../../images/member2.0/chatarrowgrey.png);
+	background-image: url(../../img/mall/chatarrowgrey.png);
 	background-size: 100% auto;
 	right: -7px;
 	bottom: -7px;

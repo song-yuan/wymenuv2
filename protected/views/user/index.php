@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/common.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/members.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
-<section class="members bg_lgrey2">
+<body class="members bg_lgrey2">
 	<div class="toparea">
 		<div class="maininfo">
 		<div class="left">
@@ -42,4 +42,4 @@
 	<div class="listset">
 		<div class="arrowright"><a href="#">现金券</a></div>
 	</div>
-</section">
+</body">
