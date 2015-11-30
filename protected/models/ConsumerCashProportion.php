@@ -37,9 +37,11 @@ class ConsumerCashProportion extends CActiveRecord
 		return array(
 			array('update_at, ccp_name, point_type, min_available_point, max_available_point', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('ccp_name, is_sync ', 'length', 'max'=>50),
+			array('ccp_name, is_sync', 'length', 'max'=>50),
 			array('point_type, is_available, delete_flag', 'length', 'max'=>2),
-			array('min_available_point, max_available_point', 'length', 'max'=>7),
+			array('min_available_point, max_available_point', 'length', 'max'=>10),
+                        array('proportion_points','compare','compareValue'=>'9999','operator'=>'<','message'=>yii::t('app','比例数值太大')),
+			array('min_available_point','compare','compareValue'=>'max_available_point','operator'=>'<','message'=>yii::t('app','最小积分大于最大积分')),			
 			array('proportion_points', 'length', 'max'=>6),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
@@ -76,7 +78,7 @@ class ConsumerCashProportion extends CActiveRecord
 			'proportion_points' => '消费返现比例',//，计算结果四舍五入
 			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
-				'is_sync' => yii::t('app','是否同步'),
+                        'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 

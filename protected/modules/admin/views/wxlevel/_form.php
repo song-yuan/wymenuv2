@@ -17,14 +17,14 @@
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'min_total_points',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'min_total_points',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('min_total_points')));?>
+											<?php echo $form->textField($model, 'min_total_points',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('min_total_points')));?>
 											<?php echo $form->error($model, 'min_total_points' )?>
 										</div>
 									</div>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'max_total_points',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'max_total_points',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('max_total_points')));?>
+											<?php echo $form->textField($model, 'max_total_points',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('max_total_points')));?>
 											<?php echo $form->error($model, 'max_total_points' )?>
 										</div>
 									</div>

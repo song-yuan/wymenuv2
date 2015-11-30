@@ -192,10 +192,14 @@
 									
                                                                     <hr class="more-condition" style="color:#000;width:100%;size:6;display: <?php echo isset($more) && $more?'':'none';?>;">
                                                                     
-                                                                    <div class="input-group" style="float:left;width:450px;margin-bottom:15px;">
+                                                                    <div class="input-group" style="float:left;width:650px;margin-bottom:15px;">
                                                                         <span class="input-group-addon">会员卡号或电话号码</span><input type="text" name="cardmobile" class="form-control" style="width:200px;" value="<?php echo $cardmobile;?>"/>
                                                                         <button type="submit" class="btn green">
                                                                                 查找 &nbsp; 
+                                                                                <i class="m-icon-swapright m-icon-white"></i>
+                                                                        </button>
+                                                                        <button type="button" class="btn gray" style="margin-left:20px;" onclick="location.href='<?php echo $this->createUrl('weixin/wxmember',array('companyId' => $this->companyId));?>'">
+                                                                                复位 &nbsp; 
                                                                                 <i class="m-icon-swapright m-icon-white"></i>
                                                                         </button>
                                                                     </div>                                                                    									

@@ -137,13 +137,13 @@ class WeixinController extends BackendController
                         $yearnow=date('Y',time());
                         $yearbegin=$yearnow-$ageto;
                         $yearend=$yearnow-$agefrom;
-                        $sql.= " and substring(t.user_birthday,1,4) >= '".$yearbegin."' and substring(t.user_birthday,1,4) <= '".$yearend."'";
-                        $sql.= " and substring(t.user_birthday,6,5) >= '".$birthfrom."' and substring(t.user_birthday,6,5) <= '".$birthto."'";
-                        $sql.=" and ifnull(tpt.pointvalidtotal,0) > ".$pointfrom." and ifnull(tpt.pointvalidtotal,0)<".$pointto;
-                        $sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(tct.consumetotal,0) > "
-                                .$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(tct.consumetotal,0) <".$remainto;
-                        $sql.=" and ifnull(tct.consumetotal,0) > ".$consumetotalfrom." and ifnull(tct.consumetotal,0)<".$consumetotalto;
-                        $sql.=" and ifnull(tct.consumetimes,0) > ".$timesfrom." and ifnull(tct.consumetimes,0)<".$timesto;
+                        $sql.= " and substring(ifnull(t.user_birthday,'1919-06-26'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1919-06-26'),1,4) <= '".$yearend."'";
+                        $sql.= " and substring(ifnull(t.user_birthday,'1919-06-26'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1919-06-26'),6,5) <= '".$birthto."'";
+                        $sql.=" and ifnull(tpt.pointvalidtotal,0) >= ".$pointfrom." and ifnull(tpt.pointvalidtotal,0)<=".$pointto;
+                        $sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(tct.consumetotal,0) >= "
+                                .$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(tct.consumetotal,0) <=".$remainto;
+                        $sql.=" and ifnull(tct.consumetotal,0) >= ".$consumetotalfrom." and ifnull(tct.consumetotal,0)<=".$consumetotalto;
+                        $sql.=" and ifnull(tct.consumetimes,0) >= ".$timesfrom." and ifnull(tct.consumetimes,0)<=".$timesto;
                         
                 $sort=" ASC";
                 if($s=="1")
@@ -167,6 +167,7 @@ class WeixinController extends BackendController
 		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
+                //echo $sql;exit;
 //		$pages->applyLimit($criteria);                
 //                $criteria->with =  array("level");                
 //		$models = BrandUser::model()->findAll($criteria);
@@ -174,10 +175,10 @@ class WeixinController extends BackendController
                 //检索条件会员等级
                 $criteriauserlevel = new CDbCriteria;
 		$criteriauserlevel->condition =  ' t.delete_flag=0 and t.dpid='.$companyId;
-		$userlevels = BrandUserLevel::model()->findAll($criteriauserlevel);                
+		$userlevels = BrandUserLevel::model()->findAll($criteriauserlevel);
                 
                 //一下为测试，要调用微信接口，去具体的数据
-                $weixingroups=array(array("id"=>"100","name"=>"普通"),array("id"=>"200","name"=>"测试"));
+                $weixingroups=array(array("id"=>"100","name"=>"分组1"),array("id"=>"200","name"=>"分组2"));
                 
                 //获取国家、省、市
                 $sqlcountry="select distinct country from nb_brand_user where dpid=".$companyId;

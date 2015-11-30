@@ -36,6 +36,7 @@ class ConsumerPointsProportion extends CActiveRecord
 			array('lid, dpid', 'length', 'max'=>10),
 			array('cpp_name, is_sync', 'length', 'max'=>50),
 			array('proportion_points', 'length', 'max'=>6),
+                        array('proportion_points','compare','compareValue'=>'9999','operator'=>'<','message'=>yii::t('app','比例数值太大')),
 			array('is_available, delete_flag', 'length', 'max'=>2),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
