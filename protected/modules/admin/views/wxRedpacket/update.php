@@ -39,7 +39,7 @@
 				<div class="tabbable tabbable-custom">
 					<ul class="nav nav-tabs">
 					<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxRedpacket/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','微信红包设置');?></a></li>
-					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxRedpacket/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','红包发送规则设置');?></a></li>
+				<!--<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxRedpacket/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','红包发送规则设置');?></a></li>-->
 				<!--  <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/gift',array('companyId'=>$this->companyId));?>'" data-toggle="tab">特价优惠</a></li>
 					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/wxcard',array('companyId'=>$this->companyId));?>'" data-toggle="tab">代金券</a></li>
 				--></ul>

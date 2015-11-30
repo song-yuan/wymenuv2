@@ -182,7 +182,8 @@
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('normalpromotion/detailindex' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid;
+			var promotionID='<?php echo $promotionID;?>';
+			location.href="<?php echo $this->createUrl('normalpromotion/detailindex' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid+"/promotionID/"+promotionID;
 		});
 	});
         

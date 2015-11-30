@@ -182,7 +182,9 @@
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('privatepromotion/detailindex' , array('companyId'=>$this->companyId,'typeId'=>'product'));?>/cid/"+cid;
+			//alert(cid);
+			var promotionID='<?php echo $promotionID;?>';
+			location.href="<?php echo $this->createUrl('privatepromotion/detailindex' , array('companyId'=>$this->companyId,'typeId'=>"product"));?>/cid/"+cid+"/promotionID/"+promotionID;
 		});
 	});
         
