@@ -25,14 +25,14 @@
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'min_available_point',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'min_available_point',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('min_available_point')));?>
+											<?php echo $form->textField($model, 'min_available_point',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('min_available_point')));?>
 											<?php echo $form->error($model, 'min_available_point' )?>
 										</div>
 									</div>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'max_available_point',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'max_available_point',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('max_available_point')));?>
+											<?php echo $form->textField($model, 'max_available_point',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('max_available_point')));?>
 											<?php echo $form->error($model, 'max_available_point' )?>
 										</div>
 									</div>
@@ -41,6 +41,7 @@
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'proportion_points',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('proportion_points')));?>
 											<?php echo $form->error($model, 'proportion_points' )?>
+                                                                                    消费一元钱，获得多少返现的比例；如：消费一元获得0.01元，此处就填0.01
 										</div>
 									</div>
                                                                         <div class="form-group">

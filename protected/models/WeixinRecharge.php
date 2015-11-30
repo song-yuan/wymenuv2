@@ -39,6 +39,9 @@ class WeixinRecharge extends CActiveRecord
 			array('wr_name, is_sync', 'length', 'max'=>50),
 			array('recharge_pointback', 'length', 'max'=>10),
 			array('is_available, delete_flag', 'length', 'max'=>2),
+                        array('recharge_pointback','compare','compareValue'=>'999999999','operator'=>'<','message'=>yii::t('app','返积分金额太大')),
+			array('recharge_cashback','compare','compareValue'=>'99999999','operator'=>'<','message'=>yii::t('app','返现金额太大')),
+			array('recharge_money','compare','compareValue'=>'99999999','operator'=>'<','message'=>yii::t('app','充值金额太大')),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.

@@ -38,6 +38,7 @@ class BrandUserLevel extends CActiveRecord
 			array('level_name, is_sync', 'length', 'max'=>50),
 			array('delete_flag', 'length', 'max'=>2),
 			array('create_at,update_at', 'safe'),
+                        array('min_total_points','compare','compareValue'=>'max_total_points','operator'=>'>','message'=>yii::t('app','最低积分大于最高积分')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, level_name, min_total_points, is_sync, max_total_points, delete_flag', 'safe', 'on'=>'search'),

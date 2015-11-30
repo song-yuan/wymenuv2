@@ -161,7 +161,7 @@
                                                                                                             shname="<?php echo $model["serial"];?>"><span style="font-size: 20px;"><?php echo $model["serial"];?>&nbsp;</span><span typename="updateat">
                                                                                                                 <?php echo '<br>'.substr($model["update_at"],5,11);?></span>
                                                                                                             <div style="width: 100%;background-color:<?php if($model["newitem"]>0){echo "green"; }else{ echo "";}?>;height:40%;
-                                                                                                                 display:<?php if($model["order_type"]=="1"||$model["order_type"]=="2"){echo "block";}else{echo "none";}?>">
+                                                                                                                 display:<?php if(stripos("12",$model["order_type"])!==false){echo "block";}else{echo "none";}?>">
                                                                                                                 <img style="height:90%;" src="<?php echo Yii::app()->request->baseUrl;?>/img/weixin.png" >印</div></li>
                                                                                         <?php endforeach;?>
                                                                                     <?php //endif;?>                                                                                
