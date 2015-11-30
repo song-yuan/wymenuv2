@@ -169,7 +169,6 @@
 			location.href=url;
 		}
 		jQuery(document).ready(function() {       
-		   App.init();
 	       if (jQuery().datepicker) {
 	           $('.date-picker').datepicker({
 	           		format: 'yyyy-mm-dd',

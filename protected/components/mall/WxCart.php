@@ -104,4 +104,8 @@ class WxCart
 		}
 		return $success;
 	}
+	public static function updateSiteId($userId,$dpid,$siteId){
+		$sql = 'updater nb_cart set site_id='.$siteId.' where dpid='.$dpid.' and user_id='.$userId.' and site_id!='.$siteId;
+		Yii::app()->db->createCommand($sql)->execute();
+	}
 }

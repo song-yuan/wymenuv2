@@ -10,7 +10,7 @@
 	//②、统一下单
 	$input = new WxPayUnifiedOrder();
 	$input->SetBody("点餐订单");
-	$input->SetAttach("点餐订单");
+//	$input->SetAttach("点餐订单");
 	$input->SetOut_trade_no($orderId);
 	$input->SetTotal_fee($order['should_total']*100);
 	$input->SetTime_start(date("YmdHis"));
@@ -45,12 +45,21 @@
 	</div>
 	<?php endif;?>
 </div>
+
+<div class="order-paytype">
+<div class="select-type">选择支付方式</div>
+<div class="paytype">
+	<div class="item on" paytype="1">微信支付</div>
+	<div class="item" paytype="2" style="border:none;">余额支付</div>
+</di>
+</di>
+
 <footer>
     <div class="ft-lt">
         <p>￥<span id="total" class="total"><?php echo $order['should_total']?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a href="javascript:;" onclick="callpay()">付款</a></p>
+        <p><a href="javascript:;" id="payOrder">付款</a></p>
     </div>
     <div class="clear"></div>
 </footer>
@@ -87,4 +96,14 @@
 		    jsApiCall();
 		}
 	}
+	$(document).ready(function(){
+		$('#payOrder').click(function(){
+			var paytype = $('.paytype .on').attr('paytype');
+			if(parseInt(paytype)==1){
+				callpay();
+			}else{
+				
+			}
+		});
+	})
 </script>

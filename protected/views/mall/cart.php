@@ -1,12 +1,13 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('确认订单');
+	$this->setPageTitle('购物车');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<div class="site_no">桌号:<input type="text" class="serial" value="<?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="请在这里输入座位号" /></div>
 <?php foreach($models as $model):?>
 <div class="section">
 	<!--
@@ -33,7 +34,7 @@
         <p>￥<span id="total" class="total">0.00</span></span></p>
     </div>
     <div class="ft-rrt">
-        <p><a href="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">确认下单</a></p>
+        <p><a class="checkOrder" href="javascript:;">确认下单</a></p>
     </div>
     <div class="clear"></div>
 </footer>
@@ -60,7 +61,15 @@ $(function(){
         });
        
     });
-
+	$('.checkOrder').click(function(){
+		var serial = $('.serial').val();
+		if(serial){
+			location.href = '<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>&serial='+serial;
+		}else{
+			alert('请输入座位号!');
+		}
+	});
+	
     $(".add").click(function(){
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');

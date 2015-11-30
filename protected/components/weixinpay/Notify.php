@@ -70,6 +70,9 @@ class Notify extends WxPayNotify
         	'attach'=>$data['attach'],
 			);	
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
+		//orderpay表插入数据
+		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
+		WxOrder::insertOrderPay($order);
 		//修改订单状态
 		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
 	}

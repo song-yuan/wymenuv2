@@ -64,7 +64,6 @@ class MallController extends Controller
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		//特价菜
 		$promotion = new WxPromotion($this->companyId,$userId,$siteId);
-		var_dump($promotion);exit;
 		//普通优惠
 		$product = new WxProduct($this->companyId,$userId,$siteId);
 		$categorys = $product->categorys;
@@ -81,9 +80,10 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		
+		$site = WxSite::get($siteId,$this->companyId);
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
-		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts));
+		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'site'=>$site));
 	}
 	/**
 	 * 
@@ -94,6 +94,15 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
+		
+		$searil = Yii::app()->request->getParam('searil');
+		
+		$site = WxSite::get($searil,$this->companyId);
+		if(!$site){
+			$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
+		}else{
+			WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
+		}
 		
 		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type);
 		$orderId = $orderObj->createOrder();
@@ -107,10 +116,14 @@ class MallController extends Controller
 	 */
 	 public function actionOrder()
 	 {
+	 	$userId = Yii::app()->session['userId'];
+	 	$siteId = Yii::app()->session['qrcode-'.$userId];
 		$orderId = Yii::app()->request->getParam('orderId');
+		
+		$site = WxSite::get($siteId,$this->companyId);
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts));
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site));
 	 }
 	 /**
 	 * 
@@ -122,10 +135,34 @@ class MallController extends Controller
 	 {
 	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
+		$paytype = Yii::app()->request->getParam('paytype');
+		
+		if($paytype == 1){
+			WxOrder::updatePayType($orderId,$this->companyId,0);
+			$this->redirect(array('/mall/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+		}
+		WxOrder::updatePayType($orderId,$this->companyId);
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts));
+		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$this->brandUser));
+	 }
+	 /**
+	 * 
+	 * 
+	 * 余额支付订单
+	 * 
+	 */
+	 public function actionPayOrderByYue()
+	 {
+		$orderId = Yii::app()->request->getParam('orderId');
+		$order = WxOrder::getOrder($orderId,$this->companyId);
+		if($order['order_status'] < 3){
+			WxOrder::insertOrderPay($order,10);
+			WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+		}
+		
+		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 	 }
 	/**
 	 * 
@@ -188,6 +225,17 @@ class MallController extends Controller
 		}else{
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请重新操作')));
 		}
+	}
+	/**
+	 * 
+	 * 获取订单状态
+	 * 
+	 */
+	public function actionGetOrderStatus()
+	{
+		$orderId = Yii::app()->request->getParam('orderId');
+		$order = WxOrder::getOrder($orderId,$this->companyId);
+		Yii::app()->end($order['order_status']);
 	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);

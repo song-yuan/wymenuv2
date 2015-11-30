@@ -223,7 +223,7 @@ class DefaultSiteController extends BackendController
                             "nb_member_card"=>array("all_money"), //本地金额同步过去
                             "nb_product"=>array("store_number","order_number","favourite_number") //本地库存产品下单数量，人气同步过去
                         );
-                        WxOrder::WxOrderSync($synctalbe,$syncSpecialTalbe);
+                        DataSync::FlagSync($synctalbe,$syncSpecialTalbe);
                     }
                     //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
                     
