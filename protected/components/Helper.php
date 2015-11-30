@@ -1702,7 +1702,7 @@ class Helper
                     }
                 }               
                 //var_dump(json_encode($jobids));exit;
-                //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
+                //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'type'=>'none','msg'=>"测试14".count($jobids2));
 //                Gateway::getOnlineStatus();
 //                $store = Store::instance('wymenu');
                 $store=new Memcache;

@@ -19,7 +19,9 @@
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'proportion_points',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('proportion_points')));?>
 											<?php echo $form->error($model, 'proportion_points' )?>
+                                                                                    消费一元钱，获得多少积分的比例；如：消费一元获得0.01积分，此处就填0.01
 										</div>
+                                                                            
 									</div>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'is_available',array('class' => 'col-md-3 control-label'));?>
