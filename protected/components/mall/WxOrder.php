@@ -21,6 +21,7 @@ class WxOrder
 		$this->siteId = $siteId;
 		$this->type = $type;
 		$this->getCart();
+		$this->orderOpenSite();
 	}
 	public function getCart(){
 		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
@@ -35,6 +36,9 @@ class WxOrder
 			$results[$k]['promotion'] = $productPrice->promotion;
 		}
 		$this->cart = $results;
+	}
+	public function orderOpenSite(){
+		SiteClass::openSite($this->dpid,1,0,$this->siteId);
 	}
 	public function createOrder(){
 		$time = time();
