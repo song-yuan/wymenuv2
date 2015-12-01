@@ -29,7 +29,7 @@
     </div>
 </div>
 <?php endforeach;?>
-
+<div class="bottom"></div>
 <footer>
     <div class="ft-llt">
         <p><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId,'type'=>$this->type));?>">返回</a></p>
