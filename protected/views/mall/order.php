@@ -34,17 +34,18 @@
 	</div>
 	<?php endif;?>
 </div>
+
 <div class="order-copun">
 	<div class="copun-lt">优惠券</div><div class="copun-rt"></div><div class="clear"></div></div>
 </div>
 <div class="order-paytype">
-<div class="select-type">选择支付方式</div>
-<div class="paytype">
-	<div class="item on" paytype="2">线上支付</div>
-	<div class="item" paytype="1" style="border:none;">现金支付</div>
+	<div class="select-type">选择支付方式</div>
+	<div class="paytype">
+		<div class="item on" paytype="2">线上支付</div>
+		<div class="item" paytype="1" style="border:none;">现金支付</div>
+	</div>
 </di>
-</di>
-<div class="bottom"></div>
+
 <footer>
     <div class="ft-lt">
         <p>￥<span id="total" class="total"><?php echo $order['should_total'];?></span></p>
