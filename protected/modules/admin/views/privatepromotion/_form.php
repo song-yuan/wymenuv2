@@ -110,7 +110,7 @@
 										<?php foreach ($brdulvs as $brdulv):?>
 										
 											<tr class="odd gradeX">
-												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" check="" value="<?php echo $brdulv->lid;?>" name="chk" /><?php echo $brdulv->lid;?></td>
+												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" check="" value="<?php echo $brdulv->lid;?>" name="chk" /></td>
 												<td><?php echo $i,$brdulv->level_name; ?></td>
 												
 											</tr>
