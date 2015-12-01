@@ -38,7 +38,7 @@
 									</div><!-- 是否可用代金券 -->
                                     <div class="form-group">
 									<?php if($model->hasErrors('is_available')) echo 'has-error';?>
-										<?php echo $form->label($model, yii::t('app','选择发送事件'),array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, yii::t('app','是否生效'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->dropDownList($model, 'is_available', array('0' => yii::t('app','生效') , '1' => yii::t('app','不生效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
 											<?php echo $form->error($model, 'is_available' )?>

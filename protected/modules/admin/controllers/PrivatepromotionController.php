@@ -646,7 +646,21 @@ class PrivatepromotionController extends BackendController
 // 			return flse;
 // 		}				
 	}
-	
+	public function getProductSetPrice($productSetId,$dpid){
+		$proSetPrice = '';
+		$sql = 'select sum(t.price*t.number) as all_setprice,t.set_id from nb_product_set_detail t where t.set_id ='.$productSetId.' and t.dpid ='.$dpid.' and t.delete_flag = 0 and is_select = 1 ';
+		$connect = Yii::app()->db->createCommand($sql);
+		//	$connect->bindValue(':site_id',$siteId);
+		//	$connect->bindValue(':dpid',$dpid);
+		$proSetPrice = $connect->queryRow();
+		//var_dump($proSetPrice);exit;
+		if(!empty($proSetPrice)){
+			return $proSetPrice['all_setprice'] ;
+		}
+		else{
+			return flse;
+		}
+	}
 	
 
 	protected function performAjaxValidation($model)
