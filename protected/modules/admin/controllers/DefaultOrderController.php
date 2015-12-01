@@ -230,7 +230,7 @@ class DefaultOrderController extends BackendController
                     $printjobsql="update nb_order_printjobs set finish_flag=1".
                                 " where dpid=".$companyId." and orderid=".$orderId.
                                 " and jobid in(".$jobId.")";
-                        Yii::app()->db->createCommand($printjobsql)->execute();
+                    Yii::app()->db->createCommand($printjobsql)->execute();
                 }
                 
                 $criteria = new CDbCriteria;
@@ -239,10 +239,12 @@ class DefaultOrderController extends BackendController
                 //$siteNo = SiteNo::model()->find($criteria);
                 $orderprintjobs=  OrderPrintjobs::model()->with("printer")->findAll($criteria);
                 //var_dump($orderprintjobs);exit;
+                $order_status=Yii::app()->db->createCommand("select order_status from nb_order where dpid=".$companyId." and lid=".$orderId)->queryScalar();
                 $this->renderPartial('orderPrintjobs' , array(
 				'orderPrintjobs'=>$orderprintjobs,
 				'dpid' => $companyId,
-                                'orderid'=>$orderId
+                                'orderid'=>$orderId,
+                                'order_status'=>$order_status
 		));
 	}
 

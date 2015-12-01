@@ -161,7 +161,8 @@
                                                                                                             shname="<?php echo $model["serial"];?>"><span style="font-size: 20px;"><?php echo $model["serial"];?>&nbsp;</span><span typename="updateat">
                                                                                                                 <?php echo '<br>'.substr($model["update_at"],5,11);?></span>
                                                                                                             <div style="width: 100%;background-color:<?php if($model["newitem"]>0){echo "green"; }else{ echo "";}?>;height:40%;
-                                                                                                                 display:<?php if(stripos("12",$model["order_type"])!==false){echo "block";}else{echo "none";}?>">
+                                                                                                                 display:<?php if((stripos("12",$model["order_type"])!==false)
+                                                                                                                         &&(stripos("123",$model["status"])!==false)){echo "block";}else{echo "none";}?>">
                                                                                                                 <img style="height:90%;" src="<?php echo Yii::app()->request->baseUrl;?>/img/weixin.png" >印</div></li>
                                                                                         <?php endforeach;?>
                                                                                     <?php //endif;?>                                                                                
@@ -201,7 +202,12 @@
             $('#manul_fresh').on("click",function(){
                 //site显示时才做这样的操作
                 if($("#tab_sitelist").css("display")=="block")
-                {
+                {                    
+                    //首先检查是否有失败的打印任务
+                    
+                    //网络连接有错误要报错
+                    
+                    //然后才同步打印
                     $.ajax({
                         url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid,
                         type:'GET',
@@ -265,7 +271,8 @@
                                     {
                                         siteobj.addClass("bg-green");
                                     }
-                                    if("12".indexOf(value.order_type)>=0)
+                                    if(("12".indexOf(value.order_type)>=0)
+                                            && ("123".indexOf(value.status)>=0))
                                     {
                                         siteobj.find("div").show();
                                     }else{
@@ -282,11 +289,11 @@
                             }                            
                         },
                         error: function(msg){
-                            //alert("网络可能有问题，再试一次！");
+                            alert("网络可能有问题，再试一次！");
                         },
                         complete : function(XMLHttpRequest,status){
                             if(status=='timeout'){
-                               // alert("网络可能有问题，再试一次！");                                            
+                                alert("网络可能有问题，再试一次！");                                            
                             }
                         }
                     });               

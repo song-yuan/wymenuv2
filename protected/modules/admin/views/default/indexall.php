@@ -738,6 +738,9 @@
                 //site显示时才做这样的操作
                 if($("#tab_sitelist").css("display")=="block")
                 {
+                    //首先检查是否有失败的云端下单打印任务，
+                    
+                    //然后再数据同步，并打印
                     $.ajax({
                         url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid,
                         type:'GET',
@@ -801,7 +804,8 @@
                                     {
                                         siteobj.addClass("bg-green");
                                     }
-                                    if("12".indexOf(value.order_type)>=0)
+                                    if("12".indexOf(value.order_type)>=0
+                                            && ("123".indexOf(value.status)>=0))
                                     {
                                         siteobj.find("div").show();
                                     }else{
@@ -810,6 +814,8 @@
                                     if(value.newitem > 0)
                                     {
                                         siteobj.find("div").css("background-color","green");
+                                        //需要打印
+                                        //然后再打印本机器
                                     }else{
                                         siteobj.find("div").css("background-color","");
                                     }
@@ -1620,7 +1626,7 @@
                                     var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
                                     //alert(data.allnum);
                                     $.each(data.jobs,function(skey,svalue){  
-                                        alert(svalue);
+                                        //alert(svalue);
                                         detaildata=svalue.split("_");
                                         if(detaildata[0]=="0")//继续打印
                                         {
@@ -1736,9 +1742,43 @@
                             });
                                 
                         }else{
-                           gotoaccount();   
-                         }
-                    // });
+                           if($("#accountbeforeorderstatus").val()==3)
+                           {
+                               //已付款，直接去结单
+                               bootbox.confirm("<?php echo yii::t('app','已支付完成,确定结单吗？');?>", function(result) {                    
+                                if(result){
+                                    var url="<?php echo $this->createUrl('defaultOrder/orderAccountDirect',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;                                    
+                                    $.ajax({
+                                        url:url,
+                                        type:'POST',
+                                        data:"",
+                                        async:false,
+                                        dataType: "json",
+                                        success:function(msg){
+                                            var data=msg;
+                                            if(data.status){                                                
+                                                //手动改变座位的状态和颜色
+                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
+                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
+                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","4");
+                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").find("div").hide();                                                
+                                                sitevisible();
+                                            }else{
+                                                alert("结单失败1，请重试！");
+                                            }
+                                        },
+                                        error: function(msg){
+                                            alert("结单失败2，请重试！");                                            
+                                        }
+                                    });
+                                }
+                            });
+                           }else{
+                               //弹出收银界面
+                                gotoaccount();  
+                            }
+                        }
                     });
                 }
             });
@@ -2976,6 +3016,7 @@
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","4");
+                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").find("div").hide();
                                     //排队的状态定时刷新//////////////////
 //                                    $('#site_row').show();
 //                                    $('#tabsiteindex').show();

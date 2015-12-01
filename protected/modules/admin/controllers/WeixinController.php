@@ -108,7 +108,7 @@ class WeixinController extends BackendController
                 $sql="select t.lid,t.dpid,t.card_id,t.user_name,t.nickname,t.sex,t.user_birthday,tl.level_name,t.weixin_group,t.country "
                         .",t.province,t.city,t.mobile_num,ifnull(tct.consumetotal,0) as consumetotal,"
                         . "ifnull(tct.consumetimes,0) as consumetimes,ifnull(tpt.pointvalidtotal,0) as pointvalidtotal"
-                        . ",ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(tct.consumetotal,0) as remaintotal"
+                        . ",ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) as remaintotal"
                         . " from nb_brand_user t "
                         . " LEFT JOIN (select dpid,user_id,sum(reality_total) as consumetotal,count(*) as consumetimes from nb_order"
                         . " where order_type in ('1','2') and order_status in ('3','4','8') and update_at>='$datefrom 00:00:00' and update_at <='$dateto 23:59:59'"
@@ -119,6 +119,9 @@ class WeixinController extends BackendController
                         . " from nb_recharge_record group by dpid,user_id) trt on t.dpid=trt.dpid and t.lid=trt.user_id"
                         . " LEFT JOIN (select dpid, brand_user_lid as user_id,sum(cashback_num) as cashbacktotal"
                         . " from nb_cashback_record group by dpid,user_id) tcbt on tcbt.dpid=t.dpid and tcbt.user_id=t.lid"
+                        . " LEFT JOIN (select to1.dpid, to1.user_id, sum(top.pay_amount) as wxpay"
+                        . " from nb_order to1 LEFT JOIN nb_order_pay top ON top.dpid=to1.dpid and top.order_id=to1.lid and top.paytype='10'"
+                        . " group by dpid,user_id) twxp on twxp.dpid=t.dpid and twxp.user_id=t.lid"
                         . " LEFT JOIN nb_brand_user_level tl on tl.dpid=t.dpid and tl.lid=t.user_level_lid "
                         . " where t.dpid=".$companyId
                         . " and t.sex like '".$findsex."'"
@@ -140,8 +143,8 @@ class WeixinController extends BackendController
                         $sql.= " and substring(ifnull(t.user_birthday,'1919-06-26'),1,4) >= '".$yearbegin."' and substring(ifnull(t.user_birthday,'1919-06-26'),1,4) <= '".$yearend."'";
                         $sql.= " and substring(ifnull(t.user_birthday,'1919-06-26'),6,5) >= '".$birthfrom."' and substring(ifnull(t.user_birthday,'1919-06-26'),6,5) <= '".$birthto."'";
                         $sql.=" and ifnull(tpt.pointvalidtotal,0) >= ".$pointfrom." and ifnull(tpt.pointvalidtotal,0)<=".$pointto;
-                        $sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(tct.consumetotal,0) >= "
-                                .$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(tct.consumetotal,0) <=".$remainto;
+                        $sql.=" and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) >= "
+                                .$remainfrom." and ifnull(trt.rechargetotal,0)+ifnull(tcbt.cashbacktotal,0)-ifnull(twxp.wxpay,0) <=".$remainto;
                         $sql.=" and ifnull(tct.consumetotal,0) >= ".$consumetotalfrom." and ifnull(tct.consumetotal,0)<=".$consumetotalto;
                         $sql.=" and ifnull(tct.consumetimes,0) >= ".$timesfrom." and ifnull(tct.consumetimes,0)<=".$timesto;
                         

@@ -87,25 +87,13 @@ class DatasyncController extends Controller
         'nb_weixin_recharge',
         'nb_weixin_service_account',                
     ); 
-    ////特殊的更新,云端的数据，但是在本地更新了，一下内容要传递到云端
+    
+    ////特殊的更新,云端的数据，但是在本地更新了，以下内容要传递到云端
     public $syncSpecialTalbe=array(
-        "nb_site"=>array("status","number"),  //本地状态同步过去
         "nb_member_card"=>array("all_money"), //本地金额同步过去
-        "nb_product"=>array("status","store_number","order_number","favourite_number"), //本地库存产品下单数量，人气同步过去
+        "nb_product"=>array("status"), //本地库存产品下单数量，人气同步过去
         "nb_queue_persons"=>array("update_at","status"), //排队的状态，云端微信的排队，本地修改后，状态和更新日期都上传
         "nb_order_product"=>array("is_retreat","price","is_giving","is_print","delete_flag","product_order_status")
-    );
-    ///site site_no order的status和number有点特殊,一个座位云端开台了，本地也开台怎么办
-    //以最新大的状态数据为准
-    
-    //nb_order的 should_total reality_total的，如果是云端的这二个数据可能本地产生，也可能云端产生
-    //云端的订单一定在云端产生，但是可能产生退菜或某个菜折扣，所以reality_total的就变化
-    //如果状态是2则是，这二个数据还没有产生，或可以修改。
-    //状态3、4为准，谁大这二个数据就跟谁。
-    public $syncStatusCompare=array(
-        "nb_site"=>array("number"),  //本地状态同步过去
-        "nb_site_no"=>array("number"),  //本地状态同步过去
-        "nb_order"=>array("reality_total","should_total") //本地库存产品下单数量，人气同步过去
     );
     
     //nb_order_taste nb_product_printerway每次修改都是删除就得插入新的，所以同步时也应该删除所有旧的，插入新的。
@@ -114,9 +102,26 @@ class DatasyncController extends Controller
         'nb_product_printerway'
     );
     
-    //nb_product 的库存数量、历史数量等属于增量数据，需要执行累加sql；
-    public $syncDataAdd=array(
+    //nb_product 的库存数量、历史数量等属于增量数据，需要执行累加sql,同步时这些数据不同步；
+    //remain_money暂时不去管他，因为remain_money也必须在云端操作，即时普通转成微信的也要云端操作
+    //order_number,favourite_number从订单表中去，应该。库存将来要有库存表
+    //这些数据，必须云端一致，即无论啥时候更新，从云端传递到本地。
+    public $syncDataSql=array(
         "nb_product"=>array("store_number","order_number","favourite_number") //本地库存产品下单数量，人气同步过去
+        //"nb_brand_user"=>array('remain_money')
+    );
+    
+    //status;;;;
+    ///site site_no order的status和number有点特殊,一个座位云端开台了，本地也开台怎么办
+    //以最新大的状态数据为准 ，如果二个值相等，以本地为准   
+    //nb_order的 should_total reality_total的，如果是云端的这二个数据可能本地产生，也可能云端产生
+    //云端的订单一定在云端产生，但是可能产生退菜或某个菜折扣，所以reality_total的就变化
+    //如果状态是2则是，这二个数据还没有产生，或可以修改。
+    //状态3、4为准，谁大这二个数据就跟谁。
+    public $syncStatusCompare=array(
+        "nb_site"=>array("status"=>"123"),  //本地状态同步过去array("number")
+        "nb_site_no"=>array("status"=>"123"),  //本地状态同步过去array("number")
+        "nb_order"=>array("order_status"=>"123") //本地库存产品下单数量，人气同步过去array("reality_total","should_total")
     );
     
         //图片上传只让他们从云端上传
@@ -128,10 +133,19 @@ class DatasyncController extends Controller
 //            $store->set("kitchenjobs_","234234",0,300); 
 //            echo $store->get("kitchenjobs_");
             
-            $tempnow = new DateTime(date('Y-m-d H:i:s',time()));
-            echo $tempnow->format('Y-m-d H:i:s');
-            $tempnow->modify("-1 day");
-            echo $tempnow->format('Y-m-d H:i:s');
+//            $tempnow = new DateTime(date('Y-m-d H:i:s',time()));
+//            echo $tempnow->format('Y-m-d H:i:s');
+//            $tempnow->modify("-1 day");
+//            echo $tempnow->format('Y-m-d H:i:s');
+            
+            try
+            {
+                $dbcloud=Yii::app()->dbcloud;
+                $dblocal=Yii::app()->dblocal;            
+            } catch (Exception $ex) {
+                echo $ex->getMessage();
+                return;
+            }
             
 //            $se=new Sequence("sqlcmd_sync");
 //            var_dump($se->nextval());exit;
@@ -607,7 +621,6 @@ class DatasyncController extends Controller
         public function actionFlagSync(){
             $dpid = Yii::app()->request->getParam('dpid',0);
             $isnow=false;//是否立刻同步
-            DataSync::FlagSync($dpid,$this->synctalbe,$this->syncSpecialTalbe,$isnow);
             //db
             $dbcloud;
             $dblocal;
@@ -619,6 +632,8 @@ class DatasyncController extends Controller
                 echo $ex->getMessage();
                 return;
             }
+            DataSync::FlagSync($dpid,$isnow);
+            
             //删除同步时间之前的所有的打印记录//删除1天谴的消息记录
             //$cloudtime=date()
             $tempnow = new DateTime(date('Y-m-d H:i:s',time()));
@@ -645,8 +660,6 @@ class DatasyncController extends Controller
             $date = Yii::app()->request->getParam('date','2015-08-15 19:00:00');
             
             $isnow=false;//是否立刻同步
-            DataSync::timeSync($dpid, $date, $this->synctalbe,$this->syncSpecialTalbe, $isnow);
-            
             //db
             $dbcloud;
             $dblocal;
@@ -658,6 +671,8 @@ class DatasyncController extends Controller
                 echo $ex->getMessage();
                 return;
             }
+            DataSync::timeSync($dpid, $date, $isnow);            
+            
             //删除同步时间之前的所有的打印记录//删除1天谴的消息记录
             //$cloudtime=date()
             $tempnow = new DateTime(date('Y-m-d H:i:s',time()));

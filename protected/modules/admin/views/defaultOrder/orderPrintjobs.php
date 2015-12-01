@@ -1,5 +1,6 @@
 	<!-- BEGIN PAGE -->  
         <input type="hidden" value="<?PHP echo count($orderPrintjobs); ?>" id="failprintjobnum"> 
+        <input type="hidden" value="<?PHP echo count($order_status); ?>" id="accountbeforeorderstatus">
         <ul>
             
         <?php foreach ($orderPrintjobs as $orderPrintjob):

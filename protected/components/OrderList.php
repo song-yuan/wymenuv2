@@ -396,11 +396,19 @@ class OrderList
                         if($orderStatus>1)
                         {
                             $productdata->order_number=$productdata->order_number+$productDetailArr[4];
-                            $productdata->favourite_number=$productdata->favourite_number+$productDetailArr[4];
+                            $productdata->favourite_number=$productdata->favourite_number+$productDetailArr[4];                            
                             if($productdata->store_number>0)
                             {
                                 $productdata->store_number=$productdata->store_number-$productDetailArr[4];                            
                                 array_push($sellOff,array("product_id"=>sprintf("%010d",$productDetailArr[2]),"type"=>"product","num"=>$productdata->store_number));
+                            }
+                            //确保和云端的数量同步
+                            if(Yii::app()->params['cloud_local']=='l')
+                            {
+                                DataSync::cloudFirt($companyId, "update nb_product set order_number=order_number+".$productDetailArr[4].
+                                        ",favourite_number=favourite_number+".$productDetailArr[4].
+                                        ",store_number=store_number-".$productDetailArr[4].
+                                        " where dpid=".$companyId." and lid=".$productdata->lid);
                             }
                             ///套餐数量减////////////
                         }
