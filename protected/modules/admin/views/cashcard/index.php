@@ -67,28 +67,28 @@
 							<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','普通优惠是否有效'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_normal_promotion', array('0' => yii::t('app','有效') , '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_normal_promotion')));?>
+											<?php echo $form->dropDownList($model, 'is_normal_promotion', array('0' => yii::t('app','所有普通优惠对客人可用') , '1' => yii::t('app','禁止客人使用所有普通优惠')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_normal_promotion')));?>
 											<?php echo $form->error($model, 'is_normal_promotion' )?>
 										</div>
 									</div><!-- 普通优惠是否有效 -->
 							<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','特价优惠是否有效'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_private_promotion', array('0' => yii::t('app','有效') , '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_private_promotion')));?>
+											<?php echo $form->dropDownList($model, 'is_private_promotion', array('0' => yii::t('app','所有特价优惠对客人可用') , '1' => yii::t('app','禁止客人使用所有特价优惠')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_private_promotion')));?>
 											<?php echo $form->error($model, 'is_private_promotion' )?>
 										</div>
 									</div><!-- 特价优惠是否有效 -->
 							<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','代金券是否有效'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_cupon', array('0' => yii::t('app','有效') , '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_cupon')));?>
+											<?php echo $form->dropDownList($model, 'is_cupon', array('0' => yii::t('app','所有代金券带客人可用') , '1' => yii::t('app','禁止客人使用代金券')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_cupon')));?>
 											<?php echo $form->error($model, 'is_cupon' )?>
 										</div>
 									</div><!-- 代金券是否有效 -->
 							<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','充值返现是否有效'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_cash', array('0' => yii::t('app','有效') , '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_cash')));?>
+											<?php echo $form->dropDownList($model, 'is_cash', array('0' => yii::t('app','充值返现对客人可用') , '1' => yii::t('app','充值不返现')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_cash')));?>
 											<?php echo $form->error($model, 'is_cash' )?>
 										</div>
 									</div><!-- 充值返现是否有效 -->		
