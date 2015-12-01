@@ -123,11 +123,10 @@ class MallController extends Controller
 	 public function actionOrder()
 	 {
 	 	$userId = Yii::app()->session['userId'];
-	 	$siteId = Yii::app()->session['qrcode-'.$userId];
 		$orderId = Yii::app()->request->getParam('orderId');
 		
-		$site = WxSite::get($siteId,$this->companyId);
 		$order = WxOrder::getOrder($orderId,$this->companyId);
+		$site = WxSite::get($order['site_id'],$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site));
 	 }
