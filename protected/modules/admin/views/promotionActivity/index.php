@@ -104,7 +104,7 @@
                                 <th><?php echo yii::t('app','是否扫码推送');?></th>
                     
                                 <th><?php echo yii::t('app','编辑');?></th>                                                                
-                                <th><?php echo yii::t('app','编辑明细');?></th>
+                                <th><?php echo yii::t('app','添加营销品');?></th>
                                 <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
@@ -125,7 +125,7 @@
 								<td class="center">
 								<a href="<?php echo $this->createUrl('promotionActivity/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('promotionActivity/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid, 'typeID'=>'normal'));?>"><?php echo yii::t('app','编辑明细');?></a></td>
+								<a href="<?php echo $this->createUrl('promotionActivity/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid, 'typeID'=>'normal'));?>"><?php echo yii::t('app','添加营销品');?></a></td>
 								 <td><?php echo '';?></td>
 								</tr>
 						

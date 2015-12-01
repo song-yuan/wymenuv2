@@ -91,7 +91,7 @@
 										<?php foreach ($brdulvs as $brdulv):?>
 										
 											<tr class="odd gradeX">
-												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" value="<?php echo $brdulv->lid;?>" name="chk" /></td>
+												<td><input type="checkbox" id="<?php echo $i;?>" class="checkboxes" <?php if(!empty($userlvs)){foreach ($userlvs as $userlv){if($userlv['brand_user_lid'] == $brdulv->lid) echo 'checked' ;}}else echo "123";?> value="<?php echo $brdulv->lid;?>" name="chk" /></td>
 												<td><?php echo $i,$brdulv->level_name; ?></td>
 												
 											</tr>

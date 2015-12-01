@@ -294,10 +294,48 @@ class PromotionActivityController extends BackendController
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			Yii::app()->end(json_encode(array("status"=>"fail")));
 			return false;
-		}
-	
-	
-			
+		}		
 	}
+	
+	private function getBrdulv(){
+		$criteria = new CDbCriteria;
+		$criteria->with = '';
+		$criteria->condition = ' t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.min_total_points asc ' ;
+		$brdules = BrandUserLevel::model()->findAll($criteria);
+		if(!empty($brdules)){
+			return $brdules;
+		}
+		// 		else{
+		// 			return flse;
+		// 		}
+	}
+	
+	public function getLvName($proID,$dpid,$type){
+		$LvNames = "";
+		if($type=="cupon"){
+			//	echo 'ABC';
+			$sql = 'select t1.level_name from nb_cupon_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid) where t.to_group = 2 and t.cupon_id ='.$proID.' and t.dpid ='.$dpid;
+			$connect = Yii::app()->db->createCommand($sql);
+			//	$connect->bindValue(':site_id',$siteId);
+			//	$connect->bindValue(':dpid',$dpid);
+			$LvNames = $connect->queryAll();
+			
+		}elseif ($type=="private"){
+			$sql = 'select t1.level_name from nb_private_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid) where t.to_group = 2 and t.private_promotion_id ='.$proID.' and t.dpid ='.$dpid;
+			$connect = Yii::app()->db->createCommand($sql);
+			//	$connect->bindValue(':site_id',$siteId);
+			//	$connect->bindValue(':dpid',$dpid);
+			$LvNames = $connect->queryAll();
+				
+		}
+		//if($siteId && $dpid){
+		//$sql = 'select order.site_id, order.dpid,site.type_id, site.serial, site_type.name from nb_order, nb_site, nb_site_type where order.site_id = site.lid and order.dpid = site.dpid';
+		//$conn = Yii::app()->db->createCommand($sql);
+	
+		//}
+		return $LvNames;
+	}
+	
 	
 }
