@@ -99,7 +99,7 @@
 												<input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php if(!empty($model['promotion_money'])) echo $model['promotion_money']; else echo '0.00'; ?>" onfocus=" if (value =='0.00'){value = ''}" onblur="if (value ==''){value='0.00'}" >
 												</label>
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>2" value="1" <?php if($model['promotion_discount']>'0.00') echo "checked";?>> <?php echo yii::t('app','折扣');?>
+												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>2" value="1" <?php if($model['promotion_discount']>'0.00' && $model['promotion_discount']<'1.00') echo "checked";?>> <?php echo yii::t('app','折扣');?>
 												<input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum1<?php echo $model['lid'];?>" value="<?php if(!empty($model['promotion_discount'])) echo $model['promotion_discount']; else echo '1.00'; ?>" onfocus=" if (value =='1.00'){value = ''}" onblur="if (value ==''){value='1.00'}" >
 												<a style="color: red;"><?php echo yii::t('app','例：88折填写为0.88');?></a>
 												</label>
