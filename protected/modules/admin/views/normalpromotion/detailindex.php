@@ -78,8 +78,11 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th style="width:10%"><?php echo yii::t('app','名称');?></th>
 								<th ><?php echo yii::t('app','图片');?></th>
+								<?php if($typeId=='product') :?>
+								<th><?php echo yii::t('app','原价');?></th>
+								<?php endif;?>
 								<th><?php echo yii::t('app','状态');?></th>
 							</tr>
 						</thead>
@@ -88,19 +91,22 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
-								<td style="width:20%"><?php if($typeId=='product') echo $model['product_name']; else echo $model['set_name'];?></td>
+								<td style="width:10%"><?php if($typeId=='product') echo $model['product_name']; else echo $model['set_name'];?></td>
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
-                                                                <td>
+								<?php if($typeId=='product') :?>
+								<td ><?php echo $model['original_price'];?></td>
+								<?php endif;?>
+                                <td>
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio-list">
 												<label class="radio-inline">
 												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>1" value="0" checked="checked" <?php if($model['promotion_money']>'0.00') echo "checked";?> > <?php echo yii::t('app','优惠');?>
-												<input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php if(!empty($model['promotion_money'])) echo $model['promotion_money']; else echo ""; ?>" >
+												<input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php if(!empty($model['promotion_money'])) echo $model['promotion_money']; else echo '0.00'; ?>" onfocus=" if (value =='0.00'){value = ''}" onblur="if (value ==''){value='0.00'}" >
 												</label>
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>2" value="1" <?php if($model['promotion_discount']>'0.00') echo "checked";?>> <?php echo yii::t('app','折扣');?>
-												<input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum1<?php echo $model['lid'];?>" value="<?php if(!empty($model['promotion_discount'])) echo $model['promotion_discount']; else echo ""; ?>" >
+												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>2" value="1" <?php if($model['promotion_discount']>'0.00'&& $model['promotion_discount']<'1.00') echo "checked";?>> <?php echo yii::t('app','折扣');?>
+												<input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum1<?php echo $model['lid'];?>" value="<?php if(!empty($model['promotion_discount'])) echo $model['promotion_discount']; else echo '1.00'; ?>" onfocus=" if (value =='1.00'){value = ''}" onblur="if (value ==''){value='1.00'}" >
 												<a style="color: red;"><?php echo yii::t('app','例：88折填写为0.88');?></a>
 												</label>
                                                 <label class="radio-inline">

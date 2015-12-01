@@ -368,7 +368,7 @@ class NormalpromotionController extends BackendController
 								'is_set'=>0,
 								'is_discount'=>0,
 								'promotion_money'=>$proNum,
-								'promotion_discount'=>'',
+								'promotion_discount'=>'1.00',
 								'order_num'=>$order_num,
 								'delete_flag'=>'0'
 						);
@@ -392,7 +392,7 @@ class NormalpromotionController extends BackendController
 								'product_id'=>$id,
 								'is_set'=>0,
 								'is_discount'=>1,
-								'promotion_money'=>'',
+								'promotion_money'=>'0.00',
 								'promotion_discount'=>$proNum,
 								'order_num'=>$order_num,
 								'delete_flag'=>'0'
@@ -420,7 +420,7 @@ class NormalpromotionController extends BackendController
 								'is_set'=>1,
 								'is_discount'=>0,
 								'promotion_money'=>$proNum,
-								'promotion_discount'=>'',
+								'promotion_discount'=>'1.00',
 								'order_num'=>$order_num,
 								'delete_flag'=>'0'
 						);
@@ -440,7 +440,7 @@ class NormalpromotionController extends BackendController
 								'product_id'=>$id,
 								'is_set'=>1,
 								'is_discount'=>1,
-								'promotion_money'=>'',
+								'promotion_money'=>'0.00',
 								'promotion_discount'=>$proNum,
 								'order_num'=>$order_num,
 								'delete_flag'=>'0'

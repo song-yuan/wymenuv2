@@ -21,20 +21,32 @@ class WxOrder
 		$this->siteId = $siteId;
 		$this->type = $type;
 		$this->getCart();
+		if($this->type==1){
+			$this->orderOpenSite();
+		}
 	}
 	public function getCart(){
-		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
+		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
 				  ->bindValue(':siteId',$this->siteId)
 				  ->queryAll();
 		foreach($results as $k=>$result){
-			$productPrice = new WxProductPrice($result['product_id'],$result['dpid']);
-			$results[$k]['price'] = $productPrice->price;
-			$results[$k]['promotion'] = $productPrice->promotion;
+			if($result['privation_promotion_id'] > 0){
+				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['privation_promotion_id'],$result['to_group']);
+				$results[$k]['price'] = $productPrice['price'];
+				$results[$k]['promotion'] = $productPrice;
+			}else{
+				$productPrice = new WxProductPrice($result['product_id'],$result['dpid']);
+				$results[$k]['price'] = $productPrice->price;
+				$results[$k]['promotion'] = $productPrice->promotion;
+			}
 		}
 		$this->cart = $results;
+	}
+	public function orderOpenSite(){
+		SiteClass::openSite($this->dpid,1,0,$this->siteId);
 	}
 	public function createOrder(){
 		$time = time();
@@ -135,7 +147,17 @@ class WxOrder
 	 */
 	 public static function insertOrderPay($order,$paytype = 1){
 	 	$time = time();
-	 	
+	 	if($paytype==10){
+	 		$user = WxBrandUser::get($order['user_id'],$order['dpid']);
+	 		if(!$user){
+	 			throw new Exception('不存在该会员!');
+	 		}
+	 		if($user['remain_money'] < $order['should_total']){
+	 			throw new Exception('余额不足!');
+	 		}
+	 		self::reduceYue($order['user_id'],$order['dpid'],$order['should_total']);
+	 		
+	 	}
 	 	$se = new Sequence("order_pay");
 	    $orderPayId = $se->nextval();
 	    $insertOrderPayArr = array(
@@ -166,5 +188,13 @@ class WxOrder
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 	 }
-	
+	/**
+	 * 
+	 * 扣除会员余额
+	 * 
+	 */
+	 public static function reduceYue($userId,$dpid,$total){
+	 	$sql = 'update from nb_brand_user set remain_money = remain_money-'.$total.' where lid='.$userId.' and dpid='.$dpid;
+	 	Yii::app()->db->createCommand($sql)->execute();
+	 }
 }

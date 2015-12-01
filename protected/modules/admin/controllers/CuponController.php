@@ -113,8 +113,9 @@ class CuponController extends BackendController
 							'dpid'=>$this->companyId,
 							'create_at'=>date('Y-m-d H:i:s',time()),
 							'update_at'=>date('Y-m-d H:i:s',time()),
+							'cupon_id'=>$model->lid,
 							'cupon_source'=>'0',
-							'source_id'=>$model->lid,
+							//'source_id'=>$model->lid,
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
 							'delete_flag'=>'0'
@@ -189,6 +190,12 @@ class CuponController extends BackendController
 		$brdulvs = $this->getBrdulv();
 		$model = Cupon::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		
+		$db = Yii::app()->db;
+		$sql = 'select t1.brand_user_lid from nb_cupon t left join nb_cupon_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.cupon_id = t.lid)where t.lid = '.$lid.' and t.dpid = '.$this->companyId;
+		$command = $db->createCommand($sql);
+		$userlvs = $command->queryAll();
+		//var_dump($userlvs);exit;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Cupon');
 			$groupID = Yii::app()->request->getParam('hidden1');
@@ -196,7 +203,7 @@ class CuponController extends BackendController
 			$gropids = explode(',',$groupID);
 			$db = Yii::app()->db;
 			if(!empty($groupID)){
-				$sql = 'delete from nb_cupon_branduser where source_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'delete from nb_cupon_branduser where cupon_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 				foreach ($gropids as $gropid){
@@ -207,8 +214,9 @@ class CuponController extends BackendController
 							'dpid'=>$this->companyId,
 							'create_at'=>date('Y-m-d H:i:s',time()),
 							'update_at'=>date('Y-m-d H:i:s',time()),
+							'cupon_id'=>$model->lid,
 							'cupon_source'=>'0',
-							'source_id'=>$model->lid,
+							//'source_id'=>$model->lid,
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
 							'delete_flag'=>'0'
@@ -236,6 +244,7 @@ class CuponController extends BackendController
 		$this->render('update' , array(
 				'model'=>$model,
 				'brdulvs'=>$brdulvs,
+				'userlvs'=>$userlvs,
 		));
 // 		$lid = Yii::app()->request->getParam('lid');
 // 		//echo 'ddd';

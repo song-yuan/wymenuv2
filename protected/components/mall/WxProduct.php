@@ -42,4 +42,14 @@ class WxProduct
 		    $this->categoryProductLists[$k]['product_list'] = $categoryProducts;
 		}
 	}
+	/**
+	 * 
+	 * 获取产品
+	 * 
+	 */
+	 public static function getProduct($productId,$dpid){
+	 	$sql = 'select * from nb_product where lid=:lid and dpid=:dpid';
+	 	$product = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':lid',$productId)->queryRow();
+	 	return $product;
+	 }
 }

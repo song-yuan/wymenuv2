@@ -98,12 +98,13 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
-		
+		$msg = '';
 		if($this->type==1){
 			$serial = Yii::app()->request->getParam('serial');
 			$site = WxSite::getBySerial($serial,$this->companyId);
 			if(!$site){
-				$this->redirect(array('/mall/cart','companyId'=>$this->companyId));
+				$msg = '输入正确的座位号!';
+				$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'msg'=>$msg));
 			}else{
 				WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
 			}
@@ -122,11 +123,10 @@ class MallController extends Controller
 	 public function actionOrder()
 	 {
 	 	$userId = Yii::app()->session['userId'];
-	 	$siteId = Yii::app()->session['qrcode-'.$userId];
 		$orderId = Yii::app()->request->getParam('orderId');
 		
-		$site = WxSite::get($siteId,$this->companyId);
 		$order = WxOrder::getOrder($orderId,$this->companyId);
+		$site = WxSite::get($order['site_id'],$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site));
 	 }
@@ -161,13 +161,22 @@ class MallController extends Controller
 	 public function actionPayOrderByYue()
 	 {
 		$orderId = Yii::app()->request->getParam('orderId');
+		$msg = '';
+		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		if($order['order_status'] < 3){
-			WxOrder::insertOrderPay($order,10);
-			WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+			$transaction=Yii::app()->db->beginTransaction();
+			try{
+				WxOrder::insertOrderPay($order,10);
+				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+				$transaction->commit();
+			}catch (Exception $e) {
+				$transaction->rollback();
+				$msg = $e->getMessage();
+			}
 		}
 		
-		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'msg'=>$msg));
 	 }
 	/**
 	 * 
@@ -191,8 +200,9 @@ class MallController extends Controller
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
+		$toGroup = Yii::app()->request->getParam('toGroup');
 		
-		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId);
+		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		
 		//检查活动商品数量
@@ -231,7 +241,9 @@ class MallController extends Controller
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
-		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId);
+		$toGroup = Yii::app()->request->getParam('toGroup');
+		
+		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		if($cart->deleteCart()){

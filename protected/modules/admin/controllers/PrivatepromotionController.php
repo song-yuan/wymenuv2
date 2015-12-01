@@ -221,7 +221,7 @@ class PrivatepromotionController extends BackendController
 		$ids = Yii::app()->request->getPost('ids');
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_normal_promotion set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_private_promotion set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('privatepromotion/index' , 'companyId' => $companyId)) ;
 		} else {
@@ -430,7 +430,7 @@ class PrivatepromotionController extends BackendController
 						'is_set'=>0,
 						'is_discount'=>0,
 						'promotion_money'=>$proNum,
-						'promotion_discount'=>'',
+						'promotion_discount'=>'1.00',
 						'order_num'=>$order_num,
 						'delete_flag'=>'0'
 				);
@@ -454,7 +454,7 @@ class PrivatepromotionController extends BackendController
 					'product_id'=>$id,
 					'is_set'=>0,
 					'is_discount'=>1,
-					'promotion_money'=>'',
+					'promotion_money'=>'0.00',
 					'promotion_discount'=>$proNum,
 					'order_num'=>$order_num,
 					'delete_flag'=>'0'
@@ -482,7 +482,7 @@ class PrivatepromotionController extends BackendController
 						'is_set'=>1,
 						'is_discount'=>0,
 						'promotion_money'=>$proNum,
-						'promotion_discount'=>'',
+						'promotion_discount'=>'1.00',
 						'order_num'=>$order_num,
 						'delete_flag'=>'0'
 				);
@@ -502,7 +502,7 @@ class PrivatepromotionController extends BackendController
 						'product_id'=>$id,
 						'is_set'=>1,
 						'is_discount'=>1,
-						'promotion_money'=>'',
+						'promotion_money'=>'0.00',
 						'promotion_discount'=>$proNum,
 						'order_num'=>$order_num,
 						'delete_flag'=>'0'
@@ -646,7 +646,21 @@ class PrivatepromotionController extends BackendController
 // 			return flse;
 // 		}				
 	}
-	
+	public function getProductSetPrice($productSetId,$dpid){
+		$proSetPrice = '';
+		$sql = 'select sum(t.price*t.number) as all_setprice,t.set_id from nb_product_set_detail t where t.set_id ='.$productSetId.' and t.dpid ='.$dpid.' and t.delete_flag = 0 and is_select = 1 ';
+		$connect = Yii::app()->db->createCommand($sql);
+		//	$connect->bindValue(':site_id',$siteId);
+		//	$connect->bindValue(':dpid',$dpid);
+		$proSetPrice = $connect->queryRow();
+		//var_dump($proSetPrice);exit;
+		if(!empty($proSetPrice)){
+			return $proSetPrice['all_setprice'] ;
+		}
+		else{
+			return flse;
+		}
+	}
 	
 
 	protected function performAjaxValidation($model)

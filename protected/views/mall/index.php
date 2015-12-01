@@ -11,7 +11,7 @@
 <div class="nav-lf">
 <ul id="nav">
   <?php if(!empty($promotions)):?>
-  <li class="current"><a href="#st-1;?>">特价菜</a><b></b></li>
+  <li class="current"><a href="#st-1">特价菜</a><b></b></li>
   <?php endif;?>
   <?php foreach($categorys as $k=>$category):?>
   <li class="<?php if($k==0&&empty($promotions)):?>current<?php endif;?>"><a href="#st<?php echo $category['lid'];?>"><?php echo $category['category_name'];?></a><b></b></li>
@@ -35,7 +35,7 @@
         </div>
         <div class="lt-rt">
         	<div class="minus <?php if(!$promotionProduct['num']) echo 'zero';?>">-</div>
-            <input type="tcext" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
+            <input type="tcext" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" to-group="<?php echo $promotion['to_group'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
             <div class="add">+</div>
             <div class="clear"></div>
         </div>
@@ -58,7 +58,7 @@
         </div>
         <div class="lt-rt">
         	<div class="minus <?php if(!$product['num']) echo 'zero';?>">-</div>
-            <input type="text" class="result <?php if(!$product['num']) echo 'zero';?>" product-id="<?php echo $product['lid'];?>" promote-id="-1" disabled value="<?php echo $product['num']?$product['num']:0;?>">
+            <input type="text" class="result <?php if(!$product['num']) echo 'zero';?>" product-id="<?php echo $product['lid'];?>" promote-id="-1" to-group="-1" disabled value="<?php echo $product['num']?$product['num']:0;?>">
             <div class="add">+</div>
             <div class="clear"></div>
         </div>
@@ -81,7 +81,7 @@
 
 
 <script> 
-$(function(){ 
+$(document).ready(function(){ 
     $('#nav li').click(function(){
         $('#nav').find('li').removeClass('current');
         $(this).addClass('current');
@@ -106,9 +106,10 @@ $(function(){
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
+        var toGroup = t.attr('to-group');
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId));?>',
-        	data:{productId:productId,promoteId:promoteId},
+        	data:{productId:productId,promoteId:promoteId,toGroup:toGroup},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
@@ -129,9 +130,10 @@ $(function(){
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
+        var toGroup = t.attr('to-group');
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId));?>',
-        	data:{productId:productId,promoteId:promoteId},
+        	data:{productId:productId,promoteId:promoteId,toGroup:toGroup},
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){

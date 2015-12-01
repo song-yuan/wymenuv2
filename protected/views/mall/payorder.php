@@ -29,6 +29,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
+
 <div class="order-title">订单详情</div>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
@@ -50,13 +52,13 @@
 <div class="select-type">选择支付方式</div>
 <div class="paytype">
 	<div class="item on" paytype="1">微信支付</div>
-	<div class="item" paytype="2" style="border:none;">余额支付</div>
+	<div class="item" paytype="2" remain-money="<?php echo $user['remain_money'];?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo $user['remain_money'];?></span></div>
 </di>
 </di>
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total"><?php echo $order['should_total']?></span></p>
+        <p>￥<span id="total" class="total" should-total="<?php echo $order['should_total'];?>"><?php echo $order['should_total'];?></span></p>
     </div>
     <div class="ft-rt">
         <p><a href="javascript:;" id="payOrder">付款</a></p>
@@ -97,12 +99,25 @@
 		}
 	}
 	$(document).ready(function(){
+		$('.paytype .item').click(function(){
+			var paytype = $(this).attr('paytype');
+			if(parseInt(paytype)==2){
+				var remainMoney = $(this).attr('remain-money');
+				var shouldTotal = $('#total').attr('should-total');
+				if(remainMoney < shouldTotal){
+					layer.msg('余额不足!');
+					return;
+				}
+			}
+			$('.item').removeClass('on');
+			$(this).addClass('on');
+		});
 		$('#payOrder').click(function(){
 			var paytype = $('.paytype .on').attr('paytype');
 			if(parseInt(paytype)==1){
 				callpay();
 			}else{
-				
+				location.href = '<?php echo $this->createUrl('/mall/payOrderByYue',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
 			}
 		});
 	})
