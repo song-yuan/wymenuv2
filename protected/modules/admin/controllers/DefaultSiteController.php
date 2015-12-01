@@ -58,6 +58,7 @@ class DefaultSiteController extends BackendController
                                 . " order by t.serial ASC";
                         $connect = Yii::app()->db->createCommand($sql);
                         $models = $connect->queryAll();  
+                        //var_dump($models);exit;
                 }
                 if($op=='switch')
                 {
@@ -227,16 +228,16 @@ class DefaultSiteController extends BackendController
                     }
                     //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
                     
-                          $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
-                                . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem "
-                                . " from nb_site t "
-                                . " LEFT JOIN (select t1.site_id,t1.order_type,t1.dpid,count(t2.product_order_status) as newitem from"
-                                . " nb_order t1 left join nb_order_product t2 on t1.dpid=t2.dpid and t1.lid=t2.order_id and t2.product_order_status='0' "
-                                . " where t1.is_temp='0'and t1.order_status in ('1','2','3')"
-                                . " and t1.order_type in ('1','2') group by t1.site_id,t1.order_type,t1.dpid)"
-                                . " twx on twx.dpid=t.dpid and t.lid=twx.site_id"
-                                . " where t.delete_flag='0' and t.dpid=".$compayId
-                                . " order by t.serial ASC";
+                        $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
+                              . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem "
+                              . " from nb_site t "
+                              . " LEFT JOIN (select t1.site_id,t1.order_type,t1.dpid,count(t2.product_order_status) as newitem from"
+                              . " nb_order t1 left join nb_order_product t2 on t1.dpid=t2.dpid and t1.lid=t2.order_id and t2.product_order_status='0' "
+                              . " where t1.is_temp='0'and t1.order_status in ('1','2','3')"
+                              . " and t1.order_type in ('1','2') group by t1.site_id,t1.order_type,t1.dpid)"
+                              . " twx on twx.dpid=t.dpid and t.lid=twx.site_id"
+                              . " where t.delete_flag='0' and t.dpid=".$compayId
+                              . " order by t.serial ASC";
                         $models= Yii::app()->db->createCommand($sql)->queryAll();
                         //var_dump($models);exit;
                 }
