@@ -44,6 +44,7 @@
 	<div class="item" paytype="1" style="border:none;">现金支付</div>
 </di>
 </di>
+<div class="bottom"></div>
 <footer>
     <div class="ft-lt">
         <p>￥<span id="total" class="total"><?php echo $order['should_total'];?></span></p>
