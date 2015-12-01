@@ -45,26 +45,10 @@
 
 
 <script> 
-$(function(){ 
-    $('#nav li').click(function(){
-        $('#nav').find('li').removeClass('current');
-        $(this).addClass('current');
-        var href = $(this).find('a').attr('href');
-        $(href).scrollTop();
-    });
-    $('#container').scroll(function(){
-        $('.section').each(function(){
-            var height = $(this).height();
-            var top = $(this).offset().top;
-            if(top <= 0 && (top+height) > 0){
-                var id = $(this).attr('id');
-                $('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
-                $('a[href=#'+id+']').parent('li').addClass('current');
-                return false;
-            }
-        });
-       
-    });
+$(document).ready(function(){ 
+	<?php if(isset($msg)&&$msg):?>
+	layer.msg('<?php echo $msg;?>');
+	<?php endif;?>
 	$('.checkOrder').click(function(){
 		var serial = $('.serial').val();
 		if(serial){

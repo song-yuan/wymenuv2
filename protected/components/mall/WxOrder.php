@@ -135,7 +135,17 @@ class WxOrder
 	 */
 	 public static function insertOrderPay($order,$paytype = 1){
 	 	$time = time();
-	 	
+	 	if($paytype==10){
+	 		$user = WxBrandUser::get($order['user_id'],$order['dpid']);
+	 		if(!$user){
+	 			throw new Exception('不存在该会员!');
+	 		}
+	 		if($user['remain_money'] < $order['should_total']){
+	 			throw new Exception('余额不足!');
+	 		}
+	 		self::reduceYue($order['user_id'],$order['dpid'],$order['should_total']);
+	 		
+	 	}
 	 	$se = new Sequence("order_pay");
 	    $orderPayId = $se->nextval();
 	    $insertOrderPayArr = array(
@@ -166,5 +176,13 @@ class WxOrder
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 	 }
-	
+	/**
+	 * 
+	 * 扣除会员余额
+	 * 
+	 */
+	 public static function reduceYue($userId,$dpid,$total){
+	 	$sql = 'update from nb_brand_user set remain_money = remain_money-'.$total.' where lid='.$userId.' and dpid='.$dpid;
+	 	Yii::app()->db->createCommand($sql)->execute();
+	 }
 }
