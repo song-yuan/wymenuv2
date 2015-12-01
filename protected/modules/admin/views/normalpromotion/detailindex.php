@@ -78,8 +78,11 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th style="width:10%"><?php echo yii::t('app','名称');?></th>
 								<th ><?php echo yii::t('app','图片');?></th>
+								<?php if($typeId=='product') :?>
+								<th><?php echo yii::t('app','原价');?></th>
+								<?php endif;?>
 								<th><?php echo yii::t('app','状态');?></th>
 							</tr>
 						</thead>
@@ -88,9 +91,12 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
-								<td style="width:20%"><?php if($typeId=='product') echo $model['product_name']; else echo $model['set_name'];?></td>
+								<td style="width:10%"><?php if($typeId=='product') echo $model['product_name']; else echo $model['set_name'];?></td>
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
-                                                                <td>
+								<?php if($typeId=='product') :?>
+								<td ><?php echo $model['original_price'];?></td>
+								<?php endif;?>
+                                <td>
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio-list">
