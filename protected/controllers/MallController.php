@@ -123,11 +123,10 @@ class MallController extends Controller
 	 public function actionOrder()
 	 {
 	 	$userId = Yii::app()->session['userId'];
-	 	$siteId = Yii::app()->session['qrcode-'.$userId];
 		$orderId = Yii::app()->request->getParam('orderId');
 		
-		$site = WxSite::get($siteId,$this->companyId);
 		$order = WxOrder::getOrder($orderId,$this->companyId);
+		$site = WxSite::get($order['site_id'],$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site));
 	 }
@@ -201,8 +200,9 @@ class MallController extends Controller
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
+		$toGroup = Yii::app()->request->getParam('toGroup');
 		
-		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId);
+		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		
 		//检查活动商品数量
@@ -241,7 +241,9 @@ class MallController extends Controller
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
-		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId);
+		$toGroup = Yii::app()->request->getParam('toGroup');
+		
+		$productArr = array('product_id'=>$productId,'num'=>1,'privation_promotion_id'=>$promoteId,'to_group'=>$toGroup);
 		
 		$cart = new WxCart($this->companyId,$userId,$productArr,$siteId);
 		if($cart->deleteCart()){
