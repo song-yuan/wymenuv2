@@ -51,23 +51,29 @@ class WxCart
 						  ->bindValue(':productId',$this->productArr['product_id'])
 						  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 						  ->queryRow();
-			if($resulta['count']>=$result['order_num'] ||$result['product_num'] >= $this->cart['num']){
+			if($resulta['count'] >= $result['order_num'] || (isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
 				return array('status'=>false,'msg'=>'超过活动商品数量!');
 			}
 				return array('status'=>true,'msg'=>'OK');
 		}
 	}
 	public function getCart(){
-		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
+		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
 				  ->bindValue(':siteId',$this->siteId)
 				  ->queryAll();
 		foreach($results as $k=>$result){
-			$productPrice = new WxProductPrice($result['product_id'],$result['dpid']);
-			$results[$k]['price'] = $productPrice->price;
-			$results[$k]['promotion'] = $productPrice->promotion;
+			if($result['privation_promotion_id'] > 0){
+				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['privation_promotion_id'],$result['to_group']);
+				$results[$k]['price'] = $productPrice['price'];
+				$results[$k]['promotion'] = $productPrice;
+			}else{
+				$productPrice = new WxProductPrice($result['product_id'],$result['dpid']);
+				$results[$k]['price'] = $productPrice->price;
+				$results[$k]['promotion'] = $productPrice->promotion;
+			}
 		}
 		return $results;
 	}
@@ -86,7 +92,8 @@ class WxCart
 	        	'product_id'=>$this->productArr['product_id'],
 	        	'num'=>$this->productArr['num'],
 	        	'site_id'=>$this->siteId,
-	        	'privation_promotion_id'=>$this->productArr['privation_promotion_id'],	
+	        	'privation_promotion_id'=>$this->productArr['privation_promotion_id'],
+	        	'to_group'=>$this->productArr['to_group'],	
 	        );
 			$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
 	        if($result){
