@@ -221,7 +221,7 @@ class PrivatepromotionController extends BackendController
 		$ids = Yii::app()->request->getPost('ids');
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_normal_promotion set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_private_promotion set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('privatepromotion/index' , 'companyId' => $companyId)) ;
 		} else {
