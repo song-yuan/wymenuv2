@@ -4,6 +4,7 @@ html {  width: 100%; height: 100%; font-family: 'Heiti SC', 'Microsoft YaHei'; f
 body {  width:100%; height: 100%; margin: 0; -webkit-user-select: none; position: relative; background-color:#fff;}
 a:hover,a:link,a:visited,a{ color:inherit; text-decoration:none;}
 ul,li{list-style:none}
+footer{width: 100%;}
 footer{ position:fixed; bottom:0; width:4rem; height:50px; line-height:50px; background-color:#ECECEC;}
 footer .ft-lt{ float:left; width:2.749rem; height:100%;}
 footer .ft-lt p{ float:left; margin-left:0.15rem; font-size:0.18rem;}
