@@ -81,7 +81,7 @@ class WxOrder
 								'product_id'=>$cart['product_id'],
 								'price'=>$cart['price'],
 								'amount'=>$cart['num'],
-								'product_order_status'=>1,
+								'product_order_status'=>0,
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 				 $orderPrice +=  $cart['price']*$cart['num'];
