@@ -321,7 +321,7 @@
          var activityID = "<?php echo $activityID;?>";
          var typeID = "<?php echo $typeID;?>";
          //alert(activityID);
-         var checkvalue = '0';
+         var checkvalue = '';
 
 			if(chx.checked)
 				{
