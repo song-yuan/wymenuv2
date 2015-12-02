@@ -51,7 +51,8 @@
 								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
 								<th ><?php echo yii::t('app','图片');?></th>
 								<th><?php echo yii::t('app','摘要');?></th>
-								<th><?php echo yii::t('app','添加代金券');?></th>
+								<th><?php echo yii::t('app','针对消费群体');?></th>
+								<th><?php echo yii::t('app','添加代金券营销品');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -63,6 +64,31 @@
 								<td style="width:20%"><?php echo $model['cupon_title'];?></td>
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
 								<td ><?php echo $model['cupon_abstract'];?></td>
+								<td >
+                                
+                               		<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio-list">
+                                                <label class="radio-inline">
+                                                 <?php switch ($model['to_group']){case 0: echo yii::t('app','所有人');break;case 1: echo yii::t('app','关注微信的人群');break;case 2: echo yii::t('app','会员等级');break;case 3: echo yii::t('app','会员个人');break;default: echo "";break;}?>
+                          						 </label>	
+                                                 <?php if($model['to_group']=="2") :?>
+                                                 <?php $LvNames = $this->getLvName($model['lid'],$model['dpid']);?>
+                                                 
+                                                 <?php if(!empty($LvNames)) :?>
+                                                 <?php foreach ($LvNames as $LvName) :?>
+													<div class="col-md-12">
+										
+													<li><?php echo $LvName['level_name']?></li>
+										
+													</div>
+													<?php endforeach;?>
+													<?php endif;?>
+													<?php endif;?>
+											</div>
+										</div>
+									</div>
+								</td>
                                 <td>
 									<div class="form-group">
 										<div class="col-md-12">

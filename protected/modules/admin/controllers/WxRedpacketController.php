@@ -60,6 +60,7 @@ class WxRedpacketController extends BackendController
 	public function actionCreate(){
 		$model = new Redpacket();
 		$model->dpid = $this->companyId ;
+		$is_sync = DataSync::getInitSync();
 		//$model->create_time = time();
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
@@ -69,6 +70,7 @@ class WxRedpacketController extends BackendController
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
+			$model->is_sync = $is_sync;
 			//$py=new Pinyin();
 			//$model->simple_code = $py->py($model->product_name);
 			//var_dump($model);exit;
@@ -89,12 +91,14 @@ class WxRedpacketController extends BackendController
 	 */
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
+		$is_sync = DataSync::getInitSync();
 		//echo 'ddd';
 		$model = Redpacket::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Redpacket');
 			$model->update_at=date('Y-m-d H:i:s',time());
+			$model->is_sync=$is_sync;
 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
@@ -114,9 +118,10 @@ class WxRedpacketController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+		$is_sync = DataSync::getInitSync();
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_redpacket set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_redpacket set delete_flag="1", is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('wxRedpacket/index' , 'companyId' => $companyId)) ;
 		} else {
@@ -153,12 +158,13 @@ class WxRedpacketController extends BackendController
 
 		public function actionDetailrules(){
 			$redpkID = Yii::app()->request->getParam('lid');
-			
+			$is_sync = DataSync::getInitSync();
 			$model = RedpacketSendStrategy::model()->find('redpacket_lid=:redpkID and dpid=:dpid', array(':redpkID' => $redpkID,':dpid'=> $this->companyId));
 			//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 			if(empty($model)){
 			$model = new RedpacketSendStrategy();
 			$model->dpid = $this->companyId ;
+			
 			//$model->create_time = time();
 			//var_dump($model);exit;
 			if(Yii::app()->request->isPostRequest) {
@@ -170,6 +176,7 @@ class WxRedpacketController extends BackendController
 				$model->create_at = date('Y-m-d H:i:s',time());
 				$model->update_at = date('Y-m-d H:i:s',time());
 				$model->delete_flag = '0';
+				$model->is_sync = $is_sync;
 				//$py=new Pinyin();
 				//$model->simple_code = $py->py($model->product_name);
 				//var_dump($model);exit;
@@ -183,6 +190,7 @@ class WxRedpacketController extends BackendController
 			
 			$model->attributes = Yii::app()->request->getPost('RedpacketSendStrategy');
 			$model->update_at=date('Y-m-d H:i:s',time());
+			$model->is_sync=$is_sync;
 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
@@ -200,6 +208,7 @@ class WxRedpacketController extends BackendController
 			$chk = Yii::app()->request->getParam('chk');
 			$id = Yii::app()->request->getParam('id');
 			$dpid = $this->companyId;
+			$is_sync = DataSync::getInitSync();
 			$db = Yii::app()->db;
 			$transaction = $db->beginTransaction();
 			try{
@@ -208,8 +217,10 @@ class WxRedpacketController extends BackendController
 				//$create_at = date('Y-m-d H:i:s',time());
 				//$update_at = date('Y-m-d H:i:s',time());
 				
-				$sql = 'delete from nb_redpacket_detail where promotion_lid = '.$id.' and dpid='.$dpid.' and redpacket_lid='.$redpkID;
+				//$sql = 'delete from nb_redpacket_detail where promotion_lid = '.$id.' and dpid='.$dpid.' and redpacket_lid='.$redpkID;
 				//var_dump($sql);exit;
+				$sql = 'update nb_redpacket_detail set delete_flag = "1", is_sync ='.$is_sync.' where promotion_lid = '.$id.' and dpid='.$dpid.' and redpacket_lid='.$redpkID;
+				
 				$command=$db->createCommand($sql);
 				$command->execute();
 				if(!empty($chk)){
@@ -223,6 +234,7 @@ class WxRedpacketController extends BackendController
 						'promotion_lid'=>$id,
 
 						'delete_flag'=>'0',
+							'is_sync'=>$is_sync,
 						);
 				$command = $db->createCommand()->insert('nb_redpacket_detail',$data);
 				}
@@ -235,6 +247,24 @@ class WxRedpacketController extends BackendController
 				return false;
 			}		
 		
+
+			
+		}
+		
+		public function getLvName($proID,$dpid){
+				//$LvNames = "";
+			
+				//	echo 'ABC';
+				$sql = 'select t1.level_name from nb_cupon_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid) where t.to_group = 2 and t.cupon_id ='.$proID.' and t.dpid ='.$dpid;
+				$connect = Yii::app()->db->createCommand($sql);
+				//	$connect->bindValue(':site_id',$siteId);
+				//	$connect->bindValue(':dpid',$dpid);
+				$LvNames = $connect->queryAll();
+				if(!empty($LvNames)){
+					return $LvNames;
+				}else {
+					return $LvNames = "";
+				}
 
 			
 		}
