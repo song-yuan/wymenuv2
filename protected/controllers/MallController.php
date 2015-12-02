@@ -127,8 +127,9 @@ class MallController extends Controller
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$site = WxSite::get($order['site_id'],$this->companyId);
+		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site));
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons));
 	 }
 	 /**
 	 * 
@@ -141,12 +142,16 @@ class MallController extends Controller
 	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
 		$paytype = Yii::app()->request->getParam('paytype');
+		$cuponId = Yii::app()->request->getParam('cupon');
 		
 		if($paytype == 1){
 			WxOrder::updatePayType($orderId,$this->companyId,0);
 			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
 		WxOrder::updatePayType($orderId,$this->companyId);
+		if($cuponId){
+			WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
+		}
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
