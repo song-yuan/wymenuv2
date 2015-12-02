@@ -27,7 +27,9 @@ class WxQrcode {
 		$scene = Scene::model()->find('dpid=:brandId and type=:type and id=:id',array(':brandId'=>$this->brandId,':type'=>$type,':id'=>$id));
 		$sceneId = $scene?$scene->scene_id:false;
 		if($sceneId){
+			$isSync = DataSync::getAfterSync();
 			$scene->expire_time = $expireTime;
+			$scene->is_sync = $isSync;
 		    $scene->update();
 			return $sceneId;
 		}else{
@@ -39,9 +41,10 @@ class WxQrcode {
 				
 				$scene = new Scene;
 				$time = time();
+				$isSync = DataSync::getAfterSync();
 				$se=new Sequence("scene");
             	$lid = $se->nextval();
-				$scene->attributes = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$newSceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime);
+				$scene->attributes = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$newSceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime,'is_sync'=>$isSync);
 				$scene->save();				
 		}
 		return $scene->scene_id;
