@@ -1717,7 +1717,8 @@ class DefaultOrderController extends BackendController
                                     $productIdlist=explode(',',$selsetlist);
                                     //$setid=Yii::app()->request->getPost('OrderProduct');
                                     //var_dump($setid['set_id']);exit;
-                                    $db->createCommand('delete from nb_order_product where set_id=:setid and dpid=:dpid')->execute(array(':setid'=>$orderProduct->set_id,':dpid'=>$companyId));
+                                    //$db->createCommand('delete from nb_order_product where set_id=:setid and dpid=:dpid')->execute(array(':setid'=>$orderProduct->set_id,':dpid'=>$companyId));
+                                    $db->createCommand('update nb_order_product set delete_flag="1" where set_id=:setid and dpid=:dpid')->execute(array(':setid'=>$orderProduct->set_id,':dpid'=>$companyId));
                                     foreach ($productIdlist as $productId){
                                         //var_dump($productId);exit;
                                         $sorderProduct = new OrderProduct();

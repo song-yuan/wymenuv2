@@ -7,7 +7,7 @@ class DatasyncController extends Controller
         'nb_brand_user',
         'nb_brand_user_level',
         //'nb_c_login',
-        'nb_cart',
+        //'nb_cart',
         'nb_cashback_record',
         'nb_close_account',
         'nb_close_account_detail',
@@ -98,8 +98,10 @@ class DatasyncController extends Controller
     
     //nb_order_taste nb_product_printerway每次修改都是删除就得插入新的，所以同步时也应该删除所有旧的，插入新的。
     public $syncCloudDel=array(
-        'nb_order_taste',
-        'nb_product_printerway'
+        //'nb_order_taste',
+        'nb_product_printerway',
+        'nb_product_taste',
+        'nb_product_picture'
     );
     
     //nb_product 的库存数量、历史数量等属于增量数据，需要执行累加sql,同步时这些数据不同步；
@@ -137,7 +139,7 @@ class DatasyncController extends Controller
 //            echo $tempnow->format('Y-m-d H:i:s');
 //            $tempnow->modify("-1 day");
 //            echo $tempnow->format('Y-m-d H:i:s');
-            
+            echo DataSync::getAfterSync();exit;
             try
             {
                 $dbcloud=Yii::app()->dbcloud;
@@ -181,6 +183,7 @@ class DatasyncController extends Controller
         private function clientDownImg($company_id){
             //$company_id = Yii::app()->request->getParam('companyId',0);
             ob_start(); 
+            //datasync/serverImglist是一个请求action地址，去读取服务器的文件目录
             readfile(Yii::app()->params['masterdomain'].'admin/datasync/serverImglist/companyId/'.$company_id); 
             $serverimgs = ob_get_contents(); 
             ob_end_clean(); 
