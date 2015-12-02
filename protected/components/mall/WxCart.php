@@ -92,14 +92,14 @@ class WxCart
 	        	'site_id'=>$this->siteId,
 	        	'privation_promotion_id'=>$this->productArr['privation_promotion_id'],
 	        	'to_group'=>$this->productArr['to_group'],
-	        	'is_sync'=>DataSync::getAfterSync(),	
+	        	'is_sync'=>DataSync::getInitSync(),	
 	        );
 			$result = Yii::app()->db->createCommand()->insert('nb_cart', $insertCartArr);
 	        if($result){
 	        	$success = true;
 	        }
 		}else{
-			$isSync = DataSync::getAfterSync();
+			$isSync = DataSync::getInitSync();
 			$sql = 'update nb_cart set num=num+1,is_sync='.$isSync.' where lid=:lid and dpid=:dpid';
 			$result = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
@@ -114,7 +114,7 @@ class WxCart
 		$success = false;
 		$time = time();
 		if($this->cart['num'] > 1){
-			$isSync = DataSync::getAfterSync();
+			$isSync = DataSync::getInitSync();
 			$sql = 'update nb_cart set num=num-1,is_sync='.$isSync.' where lid=:lid and dpid=:dpid';
 			$result = Yii::app()->db->createCommand($sql)
 					  ->bindValue(':dpid',$this->dpid)
@@ -134,7 +134,7 @@ class WxCart
 		return $success;
 	}
 	public static function updateSiteId($userId,$dpid,$siteId){
-		$isSync = DataSync::getAfterSync();
+		$isSync = DataSync::getInitSync();
 		$sql = 'update nb_cart set site_id='.$siteId.',is_sync='.$isSync.' where dpid='.$dpid.' and user_id='.$userId.' and site_id!='.$siteId;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
