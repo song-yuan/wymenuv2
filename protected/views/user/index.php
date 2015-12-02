@@ -35,11 +35,11 @@
 	</div>
 	-->
 	<div class="listset">
-		<div class="arrowright"><a href="#">余额 <span class="small font_l"> <?php echo $user['remain_money'];?></span></a>
+		<div class="arrowright"><a href="javascript:;">余额 <span class="small font_l"> <?php echo $user['remain_money'];?></span></a>
 		</div>
 	</div>
 	
 	<div class="listset">
-		<div class="arrowright"><a href="#">现金券</a></div>
+		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/cupon',array('companyId'=>$this->companyId));?>">现金券</a></div>
 	</div>
 </body">

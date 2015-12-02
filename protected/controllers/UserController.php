@@ -87,6 +87,12 @@ class UserController extends Controller
 	
 		$this->render('addaddress',array('companyId'=>$this->companyId));
 	}
+	public function actionCupon()
+	{
+		$userId = Yii::app()->session['userId'];
+		$cupons = WxCupon::getUserAllCupon($userId,$this->companyId);
+		$this->render('cupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
+	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
 	}
