@@ -12,22 +12,55 @@ class SynchronousController extends BackendController
 		);
 	}
 	public function actionIndex(){
-		$companyId = Yii::app()->request->getParam('companyId');
-		$type = Yii::app()->request->getParam('type');
-		$criteria = new CDbCriteria;
-        $criteria->condition = ' delete_flag=0 and dpid='.$companyId ;
-                
-		//var_dump($criteria);exit;
+		$dpid = Yii::app()->request->getParam('companyId');
+		$type = Yii::app()->request->getParam('type','manul');
+                $action = Yii::app()->request->getParam('action','0');
+                $dt=Yii::app()->request->getParam('dt','2015-08-15 19:00:00');
+                $result="";
+                /////////////////////////////////
+                if($action==1)
+                {
+                    $isnow=true;//是否立刻同步
+                    //db
+                    $dbcloud;
+                    $dblocal;
+                    try
+                    {
+                        $dbcloud=Yii::app()->dbcloud;
+                        $dblocal=Yii::app()->dblocal;            
+                    } catch (Exception $ex) {
+                        echo $ex->getMessage();
+                        return;
+                    }
+                    if($type='manul')
+                    {
+                        DataSync::FlagSync($dpid,$isnow);
+                    }else{
+                        DataSync::timeSync($dpid, $dt, $isnow);  
+                    }
+
+                    //删除同步时间之前的所有的打印记录//删除1天谴的消息记录
+                    //$cloudtime=date()
+                    $tempnow = new DateTime(date('Y-m-d H:i:s',time()));
+                    $tempnow->modify("-1 day");
+                    $localtime=$tempnow->format('Y-m-d H:i:s');
+
+                    $sqldeleteprintjobs = "delete from nb_order_printjobs where dpid=".$dpid." and create_at <= '".$localtime."'";  
+                    $dblocal->createCommand($sqldeleteprintjobs)->execute(); 
+                    $dbcloud->createCommand($sqldeleteprintjobs)->execute(); 
+                    $sqldeleteorderfeed = "delete from nb_order_feedback where dpid=".$dpid." and create_at <= '".$localtime."'";  
+                    $dblocal->createCommand($sqldeleteorderfeed)->execute(); 
+                    $dbcloud->createCommand($sqldeleteorderfeed)->execute(); 
+
+                    //下载图片
+                    DataSync::clientDownImg($dpid);
+                }
+                /////////////////////////////////
 		
-		$pages = new CPagination(Company::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$models = Company::model()->findAll($criteria);
-		//var_dump($models);exit;
-		$this->render('index',array(
-				'models'=> $models,
-				'pages'=>$pages,
+		$this->render('index',array(				
 				'type'=>$type,
+                                'dt'=>$dt,
+                                'result'=>$result,
 		));
 	}
 	public function actionCreate(){

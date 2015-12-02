@@ -203,7 +203,8 @@ class CuponController extends BackendController
 			$gropids = explode(',',$groupID);
 			$db = Yii::app()->db;
 			if(!empty($groupID)){
-				$sql = 'delete from nb_cupon_branduser where cupon_id='.$lid.' and dpid='.$this->companyId;
+				//$sql = 'delete from nb_cupon_branduser where cupon_id='.$lid.' and dpid='.$this->companyId;
+                                $sql = 'update nb_cupon_branduser set delete_flag="1" where cupon_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 				foreach ($gropids as $gropid){

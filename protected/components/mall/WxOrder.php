@@ -141,6 +141,24 @@ class WxOrder
 	}
 	/**
 	 * 
+	 * 插入订单代金券表
+	 * 并减少订单相应的金额
+	 * 
+	 */
+	public static function updateOrderCupon($orderId,$dpid,$cuponBranduserLid){
+		$now = date('Y-m-d H:i:s',time());
+		$order = self::getOrder($orderId,$dpid);
+		$sql = 'select t1.cupon_money from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cuponBranduserLid.
+				' and t1.begin_time <= '.$now.' and '.$now.' <= t1.end_time and t1.delete_flag=0 and t1.is_available=0';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if($result){
+			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money']:0;
+			$sql = 'update nb_order set cupon_branduser_lid='.$cuponBranduserLid.',should_total='.$money.' where lid='.$orderId.' and dpid='.$dpid;
+			Yii::app()->db->createCommand($sql)->execute();
+		}
+	}
+	/**
+	 * 
 	 * 微信支付 通知时 使用该方法
 	 * order——pay表记录支付数据
 	 * 

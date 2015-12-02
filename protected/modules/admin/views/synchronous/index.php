@@ -37,20 +37,19 @@
 		<div class="col-md-12">
 		<div class="tabbable tabbable-custom">
 			<ul class="nav nav-tabs">
-				<li class="<?php if($type == "auto") echo "active";?>"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('synchronous/index',array('companyId'=>$this->companyId ,'type'=>"auto"));?>'" data-toggle="tab"><?php echo yii::t('app','自动同步');?></a></li>
-				<li class="<?php if($type == "shou") echo "active";?>"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('synchronous/index',array('companyId'=>$this->companyId ,'type'=>"shou"));?>'" data-toggle="tab"><?php echo yii::t('app','手动同步');?></a></li>
+				<li class="<?php if($type == "manul") echo "active";?>"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('synchronous/index',array('companyId'=>$this->companyId ,'type'=>"manul"));?>'" data-toggle="tab"><?php echo yii::t('app','手动同步');?></a></li>
+				<li class="<?php if($type == "force") echo "active";?>"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('synchronous/index',array('companyId'=>$this->companyId ,'type'=>"force"));?>'" data-toggle="tab"><?php echo yii::t('app','强制同步');?></a></li>
 			</ul>
 		
 
 			<div class="tab-content">
 				<div class="col-md-12">
 				
-				<?php if(!empty($models)) :?>
-				<?php foreach ($models as $model) :?>
-					<?php if($type=="auto") {?>
+				
+					<?php if($type=="manul") {?>
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','自动同步');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','手动同步');?></div>
 						</div>
 						<div class="portlet-body form">
 						<div class="form-body">		
@@ -59,16 +58,16 @@
 						</div>
 							<div class="form-actions fluid">
 								<div class="col-md-offset-3 col-md-9">
-									<button type="submit" class="btn blue"><?php echo yii::t('app','自动同步');?></button>
+									<button type="button" id="manulsync" class="btn blue"><?php echo yii::t('app','手动同步');?></button>
 								</div>
 							</div>
 						</div>
 						</div>
 						</div>
-					<?php }elseif ($type=="shou"){?>
+					<?php }elseif ($type=="force"){?>
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','手动同步设定');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','强制同步设定');?></div>
 						</div>
 						<div class="portlet-body form">
 						<div class="form-body">		
@@ -89,15 +88,14 @@
 						</div>
 							<div class="form-actions fluid">
 								<div class="col-md-offset-3 col-md-9">
-									<button type="submit" class="btn blue"><?php echo yii::t('app','手动同步');?></button>
+									<button type="button" id="forcesync" class="btn blue"><?php echo yii::t('app','强制同步');?></button>
 								</div>
 							</div>
 						</div>
 						</div>
 						</div>
 					<?php }?>
-				<?php endforeach;?>
-				<?php endif;?>
+				
 				</div>
 			</div>
 		</div>
@@ -106,18 +104,27 @@
 </div>	<!-- END EXAMPLE TABLE PORTLET-->
 	<script type="text/javascript">
     	$(function () {
-        	$(".ui_timepicker").datetimepicker({
-         		//showOn: "button",
-          		//buttonImage: "./css/images/icon_calendar.gif",
-           		//buttonImageOnly: true,
-            	showSecond: true,
-            	timeFormat: 'hh:mm:ss',
-            	stepHour: 1,
-           		stepMinute: 1,
-            	stepSecond: 1
+            $(".ui_timepicker").datetimepicker({
+                    //showOn: "button",
+                    //buttonImage: "./css/images/icon_calendar.gif",
+                    //buttonImageOnly: true,
+            showSecond: true,
+            timeFormat: 'hh:mm:ss',
+            stepHour: 1,
+                    stepMinute: 1,
+            stepSecond: 1
+            })
+        });
+        
+        $("#manulsync").on("click",function(){
+            location.href="<?php echo $this->createUrl('synchronous/index',array('companyId'=>$this->companyId ,'type'=>"manul",'action'=>'1'));?>";
         })
-    });
+        
+        $("#forcesync").on("click",function(){
+            var dt=$("#begin_time").val();
+            location.href="<?php echo $this->createUrl('synchronous/index',array('companyId'=>$this->companyId ,'type'=>"force",'action'=>'1'));?>/dt/"+dt;
+        })
 
-	    </script>			
+	</script>			
 
 

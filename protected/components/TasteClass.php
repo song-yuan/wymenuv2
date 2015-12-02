@@ -116,7 +116,8 @@ class TasteClass
 	public static function save($dpid, $type, $id = 0, $tastesIds = array(), $tastMemo=null){
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
-			$sql = 'delete from nb_order_taste where dpid=:dpid and is_order=:type and order_id=:orderId';
+			//$sql = 'delete from nb_order_taste where dpid=:dpid and is_order=:type and order_id=:orderId';
+                        $sql = 'update nb_order_taste set delete_flag="1" where dpid=:dpid and is_order=:type and order_id=:orderId';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':dpid',$dpid);
 			$conn->bindValue(':type',$type);
@@ -162,7 +163,7 @@ class TasteClass
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
 			$sql = 'delete from nb_product_taste where dpid=:dpid and product_id=:productId';
-			$conn = Yii::app()->db->createCommand($sql);
+                        $conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':dpid',$dpid);
 			$conn->bindValue(':productId',$productId);
 			$conn->execute();
