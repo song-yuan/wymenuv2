@@ -66,6 +66,7 @@
 <?php foreach($cupons as $coupon):?>
 	<div class="item" cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
 <?php endforeach;?>
+<div class="item" cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 <?php endif;?>
 </div>
 <script type="text/javascript">
@@ -94,8 +95,11 @@ $(document).ready(function(){
 		}
 		money = money.toFixed(2);
 		$('#total').html(money);
-		
-		$('.cupon').find('.copun-rt').html('满'+minMoney+'减'+cuponMoney);
+		if(parseInt(cuponMoney)==0&&parseInt(minMoney)==0){
+			$('.cupon').find('.copun-rt').html('请选择代金券');
+		}else{
+			$('.cupon').find('.copun-rt').html('满'+minMoney+'减'+cuponMoney);
+		}
 	});
 	$('.cupon').click(function(){
 		if($(this).hasClass('disabled')){

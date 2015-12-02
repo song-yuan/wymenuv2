@@ -62,11 +62,10 @@ class MallController extends Controller
 	public function actionIndex()
 	{
 		$userId = Yii::app()->session['userId'];
-		$siteId = Yii::app()->session['qrcode-'.$userId];
 		//特价菜
-		$promotion = new WxPromotion($this->companyId,$userId,$siteId);
+		$promotion = new WxPromotion($this->companyId,$userId);
 		//普通优惠
-		$product = new WxProduct($this->companyId,$userId,$siteId);
+		$product = new WxProduct($this->companyId,$userId);
 		$categorys = $product->categorys;
 		$products = $product->categoryProductLists;
 		$this->render('index',array('companyId'=>$this->companyId,'categorys'=>$categorys,'models'=>$products,'promotions'=>$promotion->promotionProductList));
@@ -111,6 +110,10 @@ class MallController extends Controller
 		}
 		
 		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type);
+		if(!$orderObj->cart){
+			$msg = '下单失败,请重新下单';
+			$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'msg'=>$msg));
+		}
 		$orderId = $orderObj->createOrder();
 		$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 	}
@@ -197,11 +200,11 @@ class MallController extends Controller
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众号我要点单进行点餐')));
 		}
 		
-		if($this->type==1){
-			if($siteId < 0){
-				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
-			}
-		}
+//		if($this->type==1){
+//			if($siteId < 0){
+//				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
+//			}
+//		}
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
@@ -238,11 +241,11 @@ class MallController extends Controller
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请关注微信公众号我要点单进行点餐')));
 		}
 		
-		if($this->type==1){
-			if($siteId < 0){
-				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
-			}
-		}
+//		if($this->type==1){
+//			if($siteId < 0){
+//				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
+//			}
+//		}
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
