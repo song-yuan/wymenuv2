@@ -21,45 +21,9 @@ class CashcardController extends BackendController
     	return true;
     }
     
-//     public function actionIndex() {
-//     	$model = WeixinServiceAccount::model()->find('dpid=:dpid',array(':dpid'=>$this->companyId));
-//     	if(!$model){
-//     		$model = new WeixinServiceAccount;
-//     	}
-//     	if(Yii::app()->request->isPostRequest){
-//     		$postData = Yii::app()->request->getPost('WeixinServiceAccount');
-//     		$se=new Sequence("weixin_service_account");
-//     		$postData['lid'] = $se->nextval();
-//     		$postData['dpid'] = $this->companyId;
-//     		$postData['create_at'] = date('Y-m-d H:i:s',time());
-//     		$postData['update_at'] = date('Y-m-d H:i:s',time());
-//     		$model->attributes = $postData;
-//     		if($model->save()){
-//     			Yii::app()->user->setFlash('success' ,yii::t('app', '设置成功'));
-//     		}else{
-//     			$this->redirect(array('/admin/cashcard/index','companyId'=>$this->companyId));
-//     		}
-//     	}
-//     	$this->render('index',array(
-//     			'model'=>$model,
-//     	));
-//     }
-    
+
     
     public function actionIndex(){
-    	//$brand = Yii::app()->admin->getBrand($this->companyId);
-
-    	//$criteria->params[':brandId'] = $brand->brand_id;
-//     	$db = Yii::app()->db;
-//     	$sql = 'select t.* from nb_total_promotion t where t.delete_flag = 0 order by t.update_at desc';
-//     	$models = Yii::app()->db->createCommand($sql)->queryAll();
-//     	$count = $db->createCommand(str_replace('t.*','count(*)',$sql))->queryScalar();
-//     	$pages = new CPagination($count);
-//     	$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
-//     	$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-//     	$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
-//     	$models = $pdata->queryAll();
-
     	
     	$criteria = new CDbCriteria;
     	$criteria->select = 't.*';
@@ -83,25 +47,7 @@ class CashcardController extends BackendController
     		$a="2";
     		$model = new TotalPromotion();
     		$model->dpid = $this->companyId;
-    		//$models = (array)$models;
-    		//$model->create_time = time();
-    		//var_dump($models);exit;
-//     		if(Yii::app()->request->isPostRequest) {
-//     			$model->attributes = Yii::app()->request->getPost('TotalPromotion');
-//     			$se=new Sequence("total_promotion");
-//     			$model->lid = $se->nextval();
-//     			$model->create_at = date('Y-m-d H:i:s',time());
-//     			$model->update_at = date('Y-m-d H:i:s',time());
-//     			$model->delete_flag = '0';
-//     			//$py=new Pinyin();
-//     			//$model->simple_code = $py->py($model->product_name);
-//     			//var_dump($model);exit;
-//     			if($model->save()){
-//     				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-//     				$this->redirect(array('cashcard/index' , 'companyId' => $this->companyId ));
-//     			}
-//     		}
-    		//var_dump($models);exit;
+		//var_dump($models);exit;
     		$this->render('index' , array(
     				'model' => $model,
     				'a'=>$a,
@@ -112,73 +58,7 @@ class CashcardController extends BackendController
     	//var_dump($models);exit;
     	}
     	  
-    	//$lid = null;
-//     	$lid = Yii::app()->request->getParam('lid');
-//     	if($lid!= null){
-//     		//echo 'ddd';
-//     		$model = TotalPromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-//     		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
-//     		if(Yii::app()->request->isPostRequest) {
-//     			$model->attributes = Yii::app()->request->getPost('Totalpromotion');
-//     			$model->update_at=date('Y-m-d H:i:s',time());
-//     			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
-//     			if($model->save()){
-//     				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
-//     				$this->redirect(array('cashcard/index' , 'companyId' => $this->companyId));
-//     			}
-//     		}
-//     		$this->render('index' , array(
-//     				'model'=>$model,
-//     		));
-    	
-//     	}else {
-    	
-//     			$model = new TotalPromotion();
-//     			$model->dpid = $this->companyId ;
-//     			//$model->create_time = time();
-    	 
-//     			if(Yii::app()->request->isPostRequest) {
-//     				$model->attributes = Yii::app()->request->getPost('TotalPromotion');
-//     				$se=new Sequence("total_promotion");
-//     				$model->lid = $se->nextval();
-//     				$model->create_at = date('Y-m-d H:i:s',time());
-//     				$model->update_at = date('Y-m-d H:i:s',time());
-//     				$model->delete_flag = '0';
-//     				//$py=new Pinyin();
-//     				//$model->simple_code = $py->py($model->product_name);
-//     				//var_dump($model);exit;
-//     				if($model->save()){
-//     					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-//     					$this->redirect(array('cashcard/index' , 'companyId' => $this->companyId ));
-//     				}
-//     			}
-//     			//$categories = $this->getCategoryList();
-//     			//$departments = $this->getDepartments();
-//     			//echo 'ss';exit;
-//     			$this->render('index' , array(
-//     					'model' => $model ,
-//     					//'categories' => $categories
-//     			));
-//     			} 
-//		}
-//     	//$brand = Yii::app()->admin->getBrand($this->companyId);
-//     	$criteria = new CDbCriteria;
-//     	$criteria->select = 't.*';
-//     	$criteria->order = ' create_at desc';
-//     	//$criteria->addCondition('brand_id=:brandId');
-//     	//$criteria->addCondition('delete_flag=0');
-//     	//$criteria->params[':brandId'] = $brand->brand_id;
-    
-//     	$pages = new CPagination(TotalPromotion::model()->count($criteria));
-//     	$pages->applyLimit($criteria);
-//     	$models = TotalPromotion::model()->findAll($criteria);
-    	 
-//     	$this->render('index',array(
-//     			'models'=>$models,
-//     			'pages'=>$pages,
-//     	));
- //   }
-    
+ 
     
     
 	public function saveFile($event){
@@ -200,6 +80,7 @@ class CashcardController extends BackendController
 		
 		$model = new TotalPromotion();
 		$model->dpid = $this->companyId ;
+		$is_sync = DataSync::getInitSync();
 		//$model->create_time = time();
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
@@ -209,6 +90,7 @@ class CashcardController extends BackendController
 		$model->create_at = date('Y-m-d H:i:s',time());
 		$model->update_at = date('Y-m-d H:i:s',time());
 		$model->delete_flag = '0';
+		$model->is_sync = $is_sync;
 		//$py=new Pinyin();
 		//$model->simple_code = $py->py($model->product_name);
 		//var_dump($model);exit;
@@ -284,6 +166,7 @@ class CashcardController extends BackendController
 	public function actionUpdate()
 	{
 		$lid = Yii::app()->request->getParam('lid');
+		$is_sync = DataSync::getInitSync();
 		    //var_dump($lid);exit;	
 		    		//echo 'ddd';
 		   $model = TotalPromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
@@ -291,6 +174,7 @@ class CashcardController extends BackendController
 		   if(Yii::app()->request->isPostRequest) {
 		   $model->attributes = Yii::app()->request->getPost('TotalPromotion');
 		   $model->update_at=date('Y-m-d H:i:s',time());
+		   $model->is_sync = $is_sync;
 		   //($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 		   if($model->save()){
 		    	Yii::app()->user->setFlash('success' , yii::t('app','haha! 修改成功'));

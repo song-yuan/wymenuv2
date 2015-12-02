@@ -63,7 +63,7 @@ class NormalpromotionController extends BackendController
 		$brdulvs = $this->getBrdulv();
 		//$model->create_time = time();
 		//var_dump($model);exit;
-		
+		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
 			$db = Yii::app()->db;
 			//$transaction = $db->beginTransaction();
@@ -72,6 +72,7 @@ class NormalpromotionController extends BackendController
 			$groupID = Yii::app()->request->getParam('hidden1');
 			$gropids = array();
 			$gropids = explode(',',$groupID);
+			
 			//$db = Yii::app()->db;
 		
 			$se=new Sequence("normal_promotion");
@@ -83,6 +84,7 @@ class NormalpromotionController extends BackendController
 				foreach ($gropids as $gropid){
 					$userid = new Sequence("normal_branduser");
 					$id = $userid->nextval();
+					
 					$data = array(
 							'lid'=>$id,
 							'dpid'=>$this->companyId,
@@ -91,7 +93,8 @@ class NormalpromotionController extends BackendController
 							'normal_promotion_id'=>$model->lid,
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
-							'delete_flag'=>'0'
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync,
 					);
 					$command = $db->createCommand()->insert('nb_normal_branduser',$data);
 					//var_dump($gropid);exit;
@@ -100,6 +103,7 @@ class NormalpromotionController extends BackendController
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
+			$model->is_sync = $is_sync;
 				
 			//$transaction->commit(); //提交事务会真正的执行数据库操作
 			//return true;
@@ -127,34 +131,7 @@ class NormalpromotionController extends BackendController
 				//'categories' => $categories
 		));
 	}	
-// 		$model = new NormalPromotion();
-// 		$model->dpid = $this->companyId ;
-// 		$brdulvs = $this->getBrdulv();
-// 		//$model->create_time = time();
-// 		//var_dump($model);exit;
-// 		if(Yii::app()->request->isPostRequest) {
-// 			$model->attributes = Yii::app()->request->getPost('NormalPromotion');
-// 			$se=new Sequence("normal_promotion");
-// 			$model->lid = $se->nextval();
-// 			$model->create_at = date('Y-m-d H:i:s',time());
-// 			$model->update_at = date('Y-m-d H:i:s',time());
-// 			$model->delete_flag = '0';
-// 			//$py=new Pinyin();
-// 			//$model->simple_code = $py->py($model->product_name);
-// 			//var_dump($model);exit;
-// 			if($model->save()){
-// 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-// 				$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId ));
-// 			}
-// 		}
-// 		//$categories = $this->getCategoryList();
-// 		//$departments = $this->getDepartments();
-// 		//echo 'ss';exit;
-// 		$this->render('create' , array(
-// 				'model' => $model ,
-// 				//'categories' => $categories
-// 		));
-	
+
 	
 	/**
 	 * 编辑活动
@@ -168,6 +145,11 @@ class NormalpromotionController extends BackendController
 		$brdulvs = $this->getBrdulv();
 		$model = NormalPromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		$sync = DataSync::getInitSync();
+		//$db = Yii::app()->db;
+// 		$transaction = $db->beginTransaction();
+// 		try
+// 		{
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('NormalPromotion');
 			$groupID = Yii::app()->request->getParam('hidden1');
@@ -175,12 +157,15 @@ class NormalpromotionController extends BackendController
 			$gropids = explode(',',$groupID);
 			$db = Yii::app()->db;
 			if(!empty($groupID)){
-				$sql = 'delete from nb_normal_branduser where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
+				
+				//$sql = 'delete from nb_normal_branduser where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'update nb_normal_branuser set delete_flag = "1",is_sync ='.$sync.' where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 				foreach ($gropids as $gropid){
 					$se = new Sequence("normal_branduser");
 					$id = $se->nextval();
+					$is_sync = DataSync::getInitSync();
 					$data = array(
 							'lid'=>$id,
 							'dpid'=>$this->companyId,
@@ -189,13 +174,15 @@ class NormalpromotionController extends BackendController
 							'normal_promotion_id'=>$lid,
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
-							'delete_flag'=>'0'
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync,
 					);
 					$command = $db->createCommand()->insert('nb_normal_branduser',$data);
 					//var_dump($gropid);exit;
 				}
 			}else{
-				$sql = 'update nb_normal_branduser set delete_flag = 1 where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
+				//$is_sync = DataSync::getInitSync();
+				$sql = 'update nb_normal_branduser set delete_flag = 1,is_sync ='.$is_sync.' where normal_promotion_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 			}
@@ -206,10 +193,12 @@ class NormalpromotionController extends BackendController
 			//$gropid = (dexplode(',',$groupID));
 			//var_dump(dexplode(',',$groupID));exit;
 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
+			//$transaction->commit(); //提交事务会真正的执行数据库操作
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
 				$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId));
 			}
+				//return true;
 		}
 		$this->render('update' , array(
 				'model'=>$model,
@@ -340,7 +329,8 @@ class NormalpromotionController extends BackendController
 			$db = Yii::app()->db;
 			$transaction = $db->beginTransaction();
 			try
-			{
+			{	
+				$is_sync = DataSync::getInitSync();
 				$se=new Sequence("normal_promotion_detail");
 				$lid = $se->nextval();
 				//$create_at = date('Y-m-d H:i:s',time());
@@ -352,12 +342,15 @@ class NormalpromotionController extends BackendController
 		
 				if($typeId=='product')
 				{
-					$sql = 'delete from nb_normal_promotion_detail where is_set=0 and dpid='.$dpid.' and normal_promotion_id='.$promotionID.' and product_id='.$id;
+					//$sql = 'delete from nb_normal_promotion_detail where is_set=0 and dpid='.$dpid.' and normal_promotion_id='.$promotionID.' and product_id='.$id;
 					//var_dump($sql);exit;
+					$sql = 'update nb_normal_promotion_detail set delete_flag = "1", is_sync ='.$is_sync.' where is_set=0 and dpid='.$dpid.' and normal_promotion_id='.$promotionID.' and product_id='.$id;
+						
 					$command=$db->createCommand($sql);
 					$command->execute();
 						
 					if($proID=='0'){
+						
 						$data = array(
 								'lid'=>$lid,
 								'dpid'=>$dpid,
@@ -370,7 +363,8 @@ class NormalpromotionController extends BackendController
 								'promotion_money'=>$proNum,
 								'promotion_discount'=>'1.00',
 								'order_num'=>$order_num,
-								'delete_flag'=>'0'
+								'delete_flag'=>'0',
+								'is_sync'=>$is_sync,
 						);
 						//$db->createCommand()->insert('normal_promotion_detail',$data);
 		
@@ -381,7 +375,7 @@ class NormalpromotionController extends BackendController
 						// 			$sql = 'delete from nb_normal_promotion_detail where is_set=0 and dpid='.$dpid.' and normal_promotion_id='.$promotionID.' and product_id='.$id;
 						// 			$command=$db->createCommand($sql);
 						// 			$command->execute();
-		
+						//$is_sync = DataSync::getInitSync();
 						//$sql='insert nb_normal_promotion_detail set is_set="0", product_id = '.$id.', promotion_discount = '.$proNum.', order_num = "'.$order_num.'" where lid='.$id.' and dpid='.$this->companyId;
 						$data = array(
 								'lid'=>$lid,
@@ -395,7 +389,8 @@ class NormalpromotionController extends BackendController
 								'promotion_money'=>'0.00',
 								'promotion_discount'=>$proNum,
 								'order_num'=>$order_num,
-								'delete_flag'=>'0'
+								'delete_flag'=>'0',
+								'is_sync'=>$is_sync,
 						);
 						//$db->createCommand()->insert('nb_normal_promotion_detail',$data);
 		
@@ -403,13 +398,15 @@ class NormalpromotionController extends BackendController
 					}
 					//var_dump($sql);exit;
 				}else{
-					$sql = 'delete from nb_normal_promotion_detail where is_set=1 and dpid='.$dpid.' and normal_promotion_id='.$promotionID.' and product_id='.$id;
+					//$sql = 'delete from nb_normal_promotion_detail where is_set=1 and dpid='.$dpid.' and normal_promotion_id='.$promotionID.' and product_id='.$id;
+					$sql = 'update nb_normal_promotion_detail set delete_flag = "1", is_sync ='.$is_sync.' where is_set=1 and dpid='.$dpid.' and normal_promotion_id='.$promotionID.' and product_id='.$id;
+						
 					$command=$db->createCommand($sql);
 					$command->execute();
 						
 					if($proID=='0')
 					{
-							
+						//$is_sync = DataSync::getInitSync();
 						$data = array(
 								'lid'=>$lid,
 								'dpid'=>$dpid,
@@ -422,14 +419,15 @@ class NormalpromotionController extends BackendController
 								'promotion_money'=>$proNum,
 								'promotion_discount'=>'1.00',
 								'order_num'=>$order_num,
-								'delete_flag'=>'0'
+								'delete_flag'=>'0',
+								'is_sync'=>$is_sync,
 						);
 							
 					}elseif($proID=='1'){
 						// 				$sql = 'delete from nb_normal_promotion_detail where is_set=1 and dpid='.$dpid.' and normal_promotion_id='.$promotionID.' and product_id='.$id;
 						// 				$command=$db->createCommand($sql);
 						// 				$command->execute();
-							
+						//$is_sync = DataSync::getInitSync();
 						//$sql='insert nb_normal_promotion_detail set is_set="1", product_id = '.$id.', promotion_discount = '.$proNum.', order_num = '.$order_num.' where lid='.$id.' and dpid='.$this->companyId;
 						$data = array(
 								'lid'=>$lid,
@@ -443,7 +441,8 @@ class NormalpromotionController extends BackendController
 								'promotion_money'=>'0.00',
 								'promotion_discount'=>$proNum,
 								'order_num'=>$order_num,
-								'delete_flag'=>'0'
+								'delete_flag'=>'0',
+								'is_sync'=>$is_sync
 						);
 					}
 				}//Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID)));
@@ -508,179 +507,6 @@ class NormalpromotionController extends BackendController
 				return $optionsReturn;
 			}			
 			//var_dump($sc);exit;
-			//$db = Yii::app()->db;
-			/*if(empty($sc))
-			 {
-			$sql = "SELECT 0 as isset,lid,dpid,product_name as name,simple_code as cs,main_picture as pic , status from nb_product where delete_flag=0 and is_show=1 and dpid=".$this->companyId
-			. " union ".
-			"SELECT 1 as isset,lid,dpid,set_name as name,simple_code as cs,main_picture as pic ,status from nb_product_set where delete_flag=0 and dpid=".$this->companyId
-			;
-			}else{
-			$sql = "SELECT 0 as isset,lid,dpid,product_name as name,simple_code as cs,main_picture as pic , status from nb_product where delete_flag=0 and is_show=1 and dpid=".$this->companyId." and simple_code like '%".$sc."%'"
-			. " union ".
-			"SELECT 1 as isset,lid,dpid,set_name as name,simple_code as cs,main_picture as pic ,status from nb_product_set where delete_flag=0 and dpid=".$this->companyId." and simple_code like '%".$sc."%'"
-			;
-			}
-			$command=$db->createCommand($sql);
-			//$command->bindValue(":table" , $this->table);
-			$models= $command->queryAll();
-			//var_dump($models);exit;
-			$criteria = new CDbCriteria;
-			$pages = new CPagination(count($models));
-			//	    $pages->setPageSize(1);
-			$pages->applyLimit($criteria);
-			$this->render('index',array(
-			'models'=>$models,
-			'pages'=>$pages
-			));*/
-
-// 		$lid = Yii::app()->request->getParam('lid');
-// 		//echo 'ddd';
-// 		$model = NormalPromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-// 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
-// 		if(Yii::app()->request->isPostRequest) {
-// 			$model->attributes = Yii::app()->request->getPost('NormalPromotion');
-// 			$model->update_at=date('Y-m-d H:i:s',time());
-// 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
-// 			if($model->save()){
-// 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
-// 				$this->redirect(array('normalpromotion/index' , 'companyId' => $this->companyId));
-// 			}
-// 		}
-// 		$this->render('update' , array(
-// 				'model'=>$model,
-// 		));
-//	}
-// 	public function actionCre()
-// 	{
-// 		$brand = Yii::app()->admin->getBrand($this->companyId);
-// 		$request = Yii::app()->request;
-// 		$model = new Cashcard;
-// 		$model->brand_id = $brand->brand_id;
-// 		$model->group_id = Yii::app()->admin->admin_user_id;
-// 		$objects = Yii::app()->admin->getRegions($this->companyId);
-	
-// 		if($request->isPostRequest)
-// 		{	
-// 			$postData = $request->getPost('Cashcard');
-// 			$postData['create_time'] = time();
-// 			$shopIds = $request->getPost('shopId');
-			
-// 			$model->attributes = $postData;
-// 			$allShopids = Yii::app()->admin->getShopIds($this->companyId);
-			
-// 			$transaction = Yii::app()->db->beginTransaction();
-// 			if($model->valid($shopIds)){
-// 				$diffShopIds = array_diff($allShopids,$shopIds);
-// 				try{
-// 					if(empty($diffShopIds)){
-// 						$model->shop_flag = 0;
-// 						$model->save(false);
-// 					}else{
-// 						$model->shop_flag = 1;
-// 						$model->save(false);
-// 						//save gift shop
-// 						$cashcardManage = new CashcardManage($model);
-// 						$cashcardManage->saveCashcardShop($shopIds);
-						
-// 						$regionAdminIds = array();
-// 						$shopAdminIds = Yii::app()->admin->getShopOwnerIds($shopIds);
-// 						if(Yii::app()->admin->role_type < AdminWebUser::REGION_ADMIN){
-// 						$regionAdminIds = Yii::app()->admin->getRegionOwnerIds($shopIds);
-// 					  }
-// 						$systemMessage = new SystemMessageManage();
-// 						$title = Yii::app()->admin->admin_user_name.' 添加了现金券['.$model->title.']';
-// 						$systemMessage->sendMessage(array_merge($regionAdminIds,$shopAdminIds),$title,'');
-// 					}
-					
-// 					$transaction->commit();
-					
-// 					Yii::app()->admin->setFlash('success','创建成功！');
-// 					$this->redirect(array('index','cid'=>$this->companyId));
-// 				} catch(Exception $e){
-// 					$transaction->rollback();
-// 				}
-// 			}
-// 		}
-// 		$this->render('create',array(
-// 			'model'=>$model,
-// 			'objects'=>$objects,
-// 		));
-// 	}
-
-// 	public function actionUpdate1($id)
-// 	{
-// 		$request = Yii::app()->request;
-// 		$model=$this->loadModel($id);
-// 		$objects = Yii::app()->admin->getRegions($this->companyId);
-// 		$cashcardManage = new CashcardManage($model);
-// 		$selectedShopIds = $cashcardManage->getSelectedShopIds();
-		
-// 		if(isset($model->cash)){
-// 			$model->cash /= 100;
-// 		}
-// 		if(isset($model->order_consume)){
-// 			$model->order_consume /= 100;
-// 		}
-// 		if(!$model->isAdmin()){
-// 			Yii::app()->admin->setFlash('error','你没有权限修改');
-// 			$this->redirect(array('index','cid'=>$this->companyId));
-// 		}
-// 		if($request->isPostRequest)
-// 		{
-// 			$postData = $request->getPost('Cashcard');
-// 			if($postData['is_exclusive'] == 0) $postData['order_consume'] = 0;
-// 			if($postData['exchangeable'] == 0) $postData['consume_point'] = $postData['activity_point'] = 0;
-			
-			
-// 			$shopIds = $request->getPost('shopId');
-			
-// 			$model->attributes=$postData;
-			
-// 			$allShopids = Yii::app()->admin->getShopIds($this->companyId);//判断是否全部选择 如果全部选择 shop_flag = 0
-// 			$transaction = Yii::app()->db->beginTransaction();
-// 			if($model->valid($shopIds)){
-// 				$diffShopIds = array_diff($allShopids,$shopIds);
-// 				try{
-// 					if(empty($diffShopIds)){
-// 						$model->shop_flag = 0;
-// 						$model->save(false);
-// 						$cashcardManage->delete($id);
-// 					}else{
-// 						$model->shop_flag = 1;
-// 						$model->save(false);
-// 						//save gift shop
-// 						$cashcardManage->saveCashcardShop($shopIds);
-						
-// 						$regionAdminIds = array();
-// 						$shopAdminIds = Yii::app()->admin->getShopOwnerIds($shopIds);
-// 						if(Yii::app()->admin->role_type < AdminWebUser::REGION_ADMIN){
-// 							$regionAdminIds = Yii::app()->admin->getRegionOwnerIds($shopIds);
-// 						}
-// 						$systemMessage = new SystemMessageManage();
-// 						$title = Yii::app()->admin->admin_user_name.' 修改了现金券['.$model->title.']';
-// 						$systemMessage->sendMessage(array_merge($regionAdminIds,$shopAdminIds),$title,'');
-// 					}
-// 					$transaction->commit();
-// 					Yii::app()->admin->setFlash('success','编辑成功！');
-// 					$this->redirect(array('index','cid'=>$this->companyId));
-// 				} catch(Exception $e){
-// 					$transaction->rollback();
-// 				}
-// 			}else{
-// 				$model->start_time = strtotime($model->start_time);
-// 				$model->end_time = strtotime($model->end_time)+3600*24;
-// 			}
-// 		}
-
-// 		$model->start_time = $model->start_time ?date('Y-m-d',$model->start_time):'';
-// 		$model->end_time = $model->end_time ?date('Y-m-d',$model->end_time-3600*24):'';
-// 		$this->render('update',array(
-// 			'model'=>$model,
-// 			'objects'=>$objects,
-// 			'selectedShopIds'=>$selectedShopIds
-// 		));
-// 	}
 
 	/**
 	 * 删除现金券
@@ -688,9 +514,10 @@ class NormalpromotionController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+		$is_sync = DataSync::getInitSync();
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_normal_promotion set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_normal_promotion set delete_flag=1, is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('normalpromotion/index' , 'companyId' => $companyId)) ;
 		} else {
@@ -711,15 +538,22 @@ class NormalpromotionController extends BackendController
 	 * @throws CHttpException
 	 */
 	
-
-// 	public function loadModel($id)
-// 	{
-// 		$model=Cashcard::model()->findByPk($id);
-// 		if($model===null)
-// 			throw new CHttpException(404,'The requested page does not exist.');
-// 		return $model;
-// 	}
-
+	public function getProductSetPrice($productSetId,$dpid){
+		$proSetPrice = '';
+		$sql = 'select sum(t.price*t.number) as all_setprice,t.set_id from nb_product_set_detail t where t.set_id ='.$productSetId.' and t.dpid ='.$dpid.' and t.delete_flag = 0 and is_select = 1 ';
+		$connect = Yii::app()->db->createCommand($sql);
+		//	$connect->bindValue(':site_id',$siteId);
+		//	$connect->bindValue(':dpid',$dpid);
+		$proSetPrice = $connect->queryRow();
+		//var_dump($proSetPrice);exit;
+		if(!empty($proSetPrice)){
+			return $proSetPrice['all_setprice'] ;
+		}
+		else{
+			return flse;
+		}
+	}
+	
 
 	/*
 	 *
@@ -727,12 +561,4 @@ class NormalpromotionController extends BackendController
 	*
 	* */
 
-// 	protected function performAjaxValidation($model)
-// 	{
-// 		if(isset($_POST['ajax']) && $_POST['ajax']==='cashcard-form')
-// 		{
-// 			echo CActiveForm::validate($model);
-// 			Yii::app()->end();
-// 		}
-// 	}
 }

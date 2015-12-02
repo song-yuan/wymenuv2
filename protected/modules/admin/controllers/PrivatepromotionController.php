@@ -64,7 +64,7 @@ class PrivatepromotionController extends BackendController
 		$brdulvs = $this->getBrdulv();
 		//$model->create_time = time();
 		//var_dump($model);exit;
-
+		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
 			$db = Yii::app()->db;
 			//$transaction = $db->beginTransaction();
@@ -94,7 +94,8 @@ class PrivatepromotionController extends BackendController
 							'is_used'=>"1",
 							'brand_user_lid'=>$gropid,
 							'cupon_source'=>'0',
-							'delete_flag'=>'0'
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync,
 					);
 					$command = $db->createCommand()->insert('nb_private_branduser',$data);
 					//var_dump($gropid);exit;
@@ -103,7 +104,7 @@ class PrivatepromotionController extends BackendController
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
-			
+			$model->is_sync = $is_sync;
 			//$transaction->commit(); //提交事务会真正的执行数据库操作
 			//return true;
 			//}catch (Exception $e) {
@@ -140,6 +141,7 @@ class PrivatepromotionController extends BackendController
 		//$groupID = Yii::app()->request->getParam('str');
 		//var_dump($groupID);exit;
 		$brdulvs = $this->getBrdulv();
+		$is_sync = DataSync::getInitSync();
 		$model = PrivatePromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//var_dump($model);exit;
 		$db = Yii::app()->db;
@@ -166,7 +168,9 @@ class PrivatepromotionController extends BackendController
 			$gropids = explode(',',$groupID);
 			$db = Yii::app()->db;
 			if(!empty($groupID)){
-				$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
+				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where private_promotion_id='.$lid.' and dpid='.$this->companyId;
+				
 				$command=$db->createCommand($sql);
 				$command->execute();
 				foreach ($gropids as $gropid){
@@ -182,19 +186,21 @@ class PrivatepromotionController extends BackendController
 						'is_used'=>"1",
 						'brand_user_lid'=>$gropid,
 						'cupon_source'=>'0',
-						'delete_flag'=>'0'
+						'delete_flag'=>'0',
+						'is_sync'=>$is_sync
 						);
 				$command = $db->createCommand()->insert('nb_private_branduser',$data);
 				//var_dump($gropid);exit;
 			}
 			}else{
-				$sql = 'update nb_private_branduser set delete_flag = 1 where private_promotion_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where private_promotion_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 			}
 			//print_r(explode(',',$groupID));
 			//var_dump($gropid);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
+			$model->is_sync = $is_sync;
 			//$gropid = array();
 			//$gropid = (dexplode(',',$groupID));
 			//var_dump(dexplode(',',$groupID));exit;
@@ -219,9 +225,10 @@ class PrivatepromotionController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+		$is_sync = DataSync::getInitSync();
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_private_promotion set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_private_promotion set delete_flag="1",is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('privatepromotion/index' , 'companyId' => $companyId)) ;
 		} else {
@@ -403,6 +410,7 @@ class PrivatepromotionController extends BackendController
 		$transaction = $db->beginTransaction();
 		try 
 		{
+			$is_sync = DataSync::getInitSync();
 			$se=new Sequence("private_promotion_detail");
 			$lid = $se->nextval();
 			//$create_at = date('Y-m-d H:i:s',time());
@@ -414,8 +422,10 @@ class PrivatepromotionController extends BackendController
 		
 		if($typeId=='product')
 		{
-			$sql = 'delete from nb_private_promotion_detail where is_set=0 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
+			//$sql = 'delete from nb_private_promotion_detail where is_set=0 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
 			//var_dump($sql);exit;
+			$sql = 'update nb_private_promotion_detail set delete_flag = "1",is_sync ='.$is_sync.' where is_set=0 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
+				
 			$command=$db->createCommand($sql);
 			$command->execute();
 			
@@ -432,7 +442,8 @@ class PrivatepromotionController extends BackendController
 						'promotion_money'=>$proNum,
 						'promotion_discount'=>'1.00',
 						'order_num'=>$order_num,
-						'delete_flag'=>'0'
+						'delete_flag'=>'0',
+						'is_sync'=>$is_sync
 				);
 				//$db->createCommand()->insert('private_promotion_detail',$data);
 				
@@ -457,7 +468,8 @@ class PrivatepromotionController extends BackendController
 					'promotion_money'=>'0.00',
 					'promotion_discount'=>$proNum,
 					'order_num'=>$order_num,
-					'delete_flag'=>'0'
+					'delete_flag'=>'0',
+					'is_sync'=>$is_sync
 			);
 			//$db->createCommand()->insert('nb_private_promotion_detail',$data);
 		
@@ -465,7 +477,9 @@ class PrivatepromotionController extends BackendController
 		}
 		//var_dump($sql);exit;
 		}else{
-			$sql = 'delete from nb_private_promotion_detail where is_set=1 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
+			//$sql = 'delete from nb_private_promotion_detail where is_set=1 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
+			$sql = 'update nb_private_promotion_detail set delete_flag ="1",is_sync ='.$is_sync.' where is_set=1 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
+				
 			$command=$db->createCommand($sql);
 			$command->execute();
 			
@@ -484,7 +498,8 @@ class PrivatepromotionController extends BackendController
 						'promotion_money'=>$proNum,
 						'promotion_discount'=>'1.00',
 						'order_num'=>$order_num,
-						'delete_flag'=>'0'
+						'delete_flag'=>'0',
+						'is_sync'=>$is_sync
 				);
 			
 			}elseif($proID=='1'){
@@ -505,7 +520,8 @@ class PrivatepromotionController extends BackendController
 						'promotion_money'=>'0.00',
 						'promotion_discount'=>$proNum,
 						'order_num'=>$order_num,
-						'delete_flag'=>'0'
+						'delete_flag'=>'0',
+						'is_sync'=>$is_sync
 				);
 			}
 		}//Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID)));

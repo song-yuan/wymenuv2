@@ -130,7 +130,7 @@
 								<td class="center">
 								<a href="<?php echo $this->createUrl('privatepromotion/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('privatepromotion/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product'));?>"><?php echo yii::t('app','编辑明细');?></a></td>
+								<a href="<?php echo $this->createUrl('privatepromotion/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product'));?>"><?php echo yii::t('app','设置活动优惠产品');?></a></td>
 								 <td><?php echo '';?></td>
 								</tr>
 						

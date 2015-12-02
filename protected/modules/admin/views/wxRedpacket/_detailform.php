@@ -20,14 +20,14 @@
 											<?php echo $form->error($model, 'min_money' )?>
 										</div>
 									</div><!-- 活动摘要 -->
-									<div class="form-group" >
+									<!-- <div class="form-group" >
 									<?php if($model->hasErrors('max_money')) echo 'has-error';?>
 										<?php echo $form->label($model, yii::t('app','使用该红包时的最高消费'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'max_money',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('max_money')));?>
 											<?php echo $form->error($model, 'max_money' )?>
 										</div>
-									</div><!-- 活动摘要 -->
+									</div> --><!-- 活动摘要 -->
 									<div class="form-group">
 									<?php if($model->hasErrors('send_type')) echo 'has-error';?>
 										<?php echo $form->label($model, yii::t('app','选择发送事件'),array('class' => 'col-md-3 control-label'));?>
