@@ -64,7 +64,8 @@ class WxOrder
 		        	'user_id'=>$this->userId,
 		        	'site_id'=>$this->siteId,
 		        	'order_status'=>1,
-		        	'order_type'=>$this->type
+		        	'order_type'=>$this->type,
+		        	'is_sync'=>DataSync::getAfterSync(),
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
 			
@@ -82,12 +83,14 @@ class WxOrder
 								'price'=>$cart['price'],
 								'amount'=>$cart['num'],
 								'product_order_status'=>0,
+								'is_sync'=>DataSync::getAfterSync(),
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 				 $orderPrice +=  $cart['price']*$cart['num'];
 				 $realityPrice += $cart['original_price']*$cart['num'];
 			}
-			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.' where lid='.$orderId.' and dpid='.$this->dpid;
+			$isSync = DataSync::getAfterSync();
+			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 			
 			//清空购物车
@@ -126,7 +129,8 @@ class WxOrder
 	    return $orderList;
 	}
 	public static function updateOrderStatus($orderId,$dpid){
-		$sql = 'update nb_order set order_status=3,paytype=1 where lid='.$orderId.' and dpid='.$dpid;
+		$isSync = DataSync::getAfterSync();
+		$sql = 'update nb_order set order_status=3,paytype=1,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
@@ -136,7 +140,8 @@ class WxOrder
 	 * 
 	 */
 	 public static function updatePayType($orderId,$dpid,$paytype = 1){
-		$sql = 'update nb_order set paytype='.$paytype.' where lid='.$orderId.' and dpid='.$dpid;
+	 	$isSync = DataSync::getAfterSync();
+		$sql = 'update nb_order set paytype='.$paytype.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
@@ -152,8 +157,9 @@ class WxOrder
 				' and t1.begin_time <= '.$now.' and '.$now.' <= t1.end_time and t1.delete_flag=0 and t1.is_available=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result){
+			$isSync = DataSync::getAfterSync();
 			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money']:0;
-			$sql = 'update nb_order set cupon_branduser_lid='.$cuponBranduserLid.',should_total='.$money.' where lid='.$orderId.' and dpid='.$dpid;
+			$sql = 'update nb_order set cupon_branduser_lid='.$cuponBranduserLid.',should_total='.$money.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 	}
@@ -185,7 +191,8 @@ class WxOrder
 	        	'update_at'=>date('Y-m-d H:i:s',$time), 
 	        	'order_id'=>$order['lid'],
 	        	'pay_amount'=>$order['should_total'],
-	        	'paytype'=>$paytype
+	        	'paytype'=>$paytype,
+	        	'is_sync'=>DataSync::getAfterSync(),
 	        );
 		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 		if($order['cupon_branduser_lid']){
@@ -199,10 +206,13 @@ class WxOrder
 		        	'order_id'=>$order['lid'],
 		        	'pay_amount'=>$order['should_total'],
 		        	'paytype'=>9,
-		        	'paytype_id'=>$order['cupon_branduser_lid']
+		        	'paytype_id'=>$order['cupon_branduser_lid'],
+		        	'is_sync'=>DataSync::getAfterSync(),
 		     );
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
-			$sql = 'update nb_cupon_branduser set is_used=1 where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
+			
+			$isSync = DataSync::getAfterSync();
+			$sql = 'update nb_cupon_branduser set is_used=1,is_sync='.$isSync.' where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 	 }
@@ -212,7 +222,11 @@ class WxOrder
 	 * 
 	 */
 	 public static function reduceYue($userId,$dpid,$total){
-	 	$sql = 'update from nb_brand_user set remain_money = remain_money-'.$total.' where lid='.$userId.' and dpid='.$dpid;
-	 	Yii::app()->db->createCommand($sql)->execute();
+	 	$isSync = DataSync::getAfterSync();
+	 	$sql = 'update from nb_brand_user set remain_money = remain_money-'.$total.',is_sync='.$isSync.' where lid='.$userId.' and dpid='.$dpid;
+	 	$result = Yii::app()->db->createCommand($sql)->execute();
+	 	if(!$result){
+	 		throw new Exception('支付失败');
+	 	}
 	 }
 }
