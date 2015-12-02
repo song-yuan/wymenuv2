@@ -52,7 +52,7 @@ class NewBrandUser {
         	'card_id'=>$this->newBrandUserCardId(),
         	'create_at'=>date('Y-m-d H:i:s',$time),
         	'update_at'=>date('Y-m-d H:i:s',$time), 
-        	'is_sync'=>DataSync::getAfterSync(),	
+        	'is_sync'=>DataSync::getInitSync(),	
         );
         $result = Yii::app()->db->createCommand()->insert('nb_brand_user', $insertBrandUserArr);
        

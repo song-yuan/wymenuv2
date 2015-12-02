@@ -52,7 +52,7 @@ class AccessToken {
 		$url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' .trim($this->weixinServiceAccount['appid']). '&secret=' .trim($this->weixinServiceAccount['appsecret']);
 		if($weixinServerReturn = Curl::https($url)) {
 			$accessTokenStdClass = json_decode($weixinServerReturn);
-			$isSync = DataSync::getAfterSync();
+			$isSync = DataSync::getInitSync();
 			$sql = 'UPDATE nb_weixin_service_account set expire = ' . strtotime('2 hours'). ', access_token = "' .$accessTokenStdClass->access_token . '",is_sync='.$isSync.' 
 					WHERE dpid = ' .$this->brandId;
 			Yii::app()->db->createCommand($sql)->execute();
@@ -79,7 +79,7 @@ class AccessToken {
 		$url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token='.$this->accessToken;
 		if($weixinServerReturn = Curl::https($url)) {
 			$ticketStdClass = json_decode($weixinServerReturn);
-			$isSync = DataSync::getAfterSync();
+			$isSync = DataSync::getInitSync();
 			$sql = 'UPDATE nb_weixin_service_account set ticket_expire = ' . strtotime('2 hours'). ', ticket = "' .$ticketStdClass->ticket . '",is_sync='.$isSync.' 
 					WHERE dpid = ' .$this->brandId;
 			Yii::app()->db->createCommand($sql)->execute();
