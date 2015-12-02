@@ -137,7 +137,7 @@ class WxRedpacketController extends BackendController
 			$redpkID = Yii::app()->request->getParam('lid');
 			$db = Yii::app()->db;
 		
-			$sql = 'select k.* from(select t1.promotion_lid, t.* from nb_cupon t left join nb_redpacket_detail t1 on(t1.dpid = t.dpid and t1.redpacket_lid ='.$redpkID.' and t.lid = t1.promotion_lid ) where t.delete_flag = 0 and t.dpid='.$this->companyId.') k';
+			$sql = 'select k.* from(select t1.promotion_lid, t.* from nb_cupon t left join nb_redpacket_detail t1 on(t1.dpid = t.dpid and t1.redpacket_lid ='.$redpkID.' and t.lid = t1.promotion_lid and t1.delete_flag = 0) where t.delete_flag = 0 and t.dpid='.$this->companyId.') k';
 			//var_dump($sql);exit;
 			$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 			//var_dump($count);exit;
@@ -234,7 +234,7 @@ class WxRedpacketController extends BackendController
 						'promotion_lid'=>$id,
 
 						'delete_flag'=>'0',
-							'is_sync'=>$is_sync,
+							'is_sync'=>11,
 						);
 				$command = $db->createCommand()->insert('nb_redpacket_detail',$data);
 				}
