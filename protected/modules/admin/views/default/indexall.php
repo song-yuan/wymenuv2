@@ -852,8 +852,8 @@
                                             var baudrate=parseInt(addressdetail[2]);
                                             printresult=Androidwymenuprinter.printComJob(value.dpid,value.jobid,addressdetail[1],baudrate);
                                         }else{
-                                            //printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
-                                            printresult=true;
+                                            printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
+                                            //printresult=true;
                                         }                                                                        
                                     }
                                 });
