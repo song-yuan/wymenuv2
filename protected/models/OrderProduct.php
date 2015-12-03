@@ -210,7 +210,7 @@ class OrderProduct extends CActiveRecord
 				left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid
 				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
                                 left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
-				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.product_order_status=0 and t.is_retreat=0 and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id';
+				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.product_order_status in("0","9") and t.is_retreat=0 and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id';
 		return $db->createCommand($sql)->queryAll();
 	}
         
@@ -219,6 +219,15 @@ class OrderProduct extends CActiveRecord
 		$sql = "select sum(price*(IF(weight>0,weight,amount))) as total from nb_order_product where delete_flag=0 and product_order_status=1 and is_giving=0 and is_retreat=0 and order_id=".$orderId." and dpid=".$dpid;
 		$ret= $db->createCommand($sql)->queryScalar();
                 return empty($ret)?0:$ret;
+	}
+        
+        static public function getPauseTotal($orderId,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as total,ifnull(sum(tp.original_price),0.00) as originaltotal from nb_order_product t,nb_product tp"
+                        . " where t.dpid=tp.dpid and t.product_id=tp.lid and t.delete_flag=0 "
+                        . " and t.is_giving=0 and t.is_retreat=0 and t.order_id=".$orderId." and t.dpid=".$dpid;
+		$ret= $db->createCommand($sql)->queryRow();
+                return $ret;
 	}
         
         static public function getDisTotal($orderId,$dpid){
