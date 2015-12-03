@@ -48,6 +48,7 @@ class WxOrder
 	}
 	public function getSite(){
 		$site = WxSite::get($this->siteId,$this->dpid);
+                var_dump($site);exit;
 		if($site['status'] == 0){
 			$this->orderOpenSite();
 		}elseif($site['status'] == 1){

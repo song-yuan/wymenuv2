@@ -176,7 +176,6 @@ class SiteClass
                     if($istemp=="0")
                     {
                         $sqlsite="update nb_site set status=1,number=:number where lid=:sid and dpid=:companyId";
-                        echo $sqlsite;exit;
                         $commandsite=$db->createCommand($sqlsite);
                         $commandsite->bindValue(":number" , $siteNumber);
                         $commandsite->bindValue(":sid" , $sid);
