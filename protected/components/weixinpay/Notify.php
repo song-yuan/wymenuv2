@@ -75,5 +75,9 @@ class Notify extends WxPayNotify
 		WxOrder::insertOrderPay($order);
 		//修改订单状态
 		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
+		//修改座位状态
+		if($order['order_type']==1){
+			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+		}
 	}
 }
