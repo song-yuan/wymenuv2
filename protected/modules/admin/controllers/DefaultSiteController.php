@@ -168,7 +168,10 @@ class DefaultSiteController extends BackendController
                 $compayId=Yii::app()->request->getParam('companyId');
                 $criteriat = new CDbCriteria;
                 $criteria = new CDbCriteria;
+                $status=true;
 		$models=array();
+                try{                    
+                
                 if($typeId=="queue")
                 {
                     $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
@@ -216,16 +219,17 @@ class DefaultSiteController extends BackendController
                         $synctalbe=array(
                             "nb_order",
                             "nb_order_product",
-                            "nb_close_account_detail"
+                            'nb_order_pay',
+                            'nb_order_taste',
                             );
-                        ////特殊的更新
-                        $syncSpecialTalbe=array(
-                            "nb_site"=>array("status","number"),  //本地状态同步过去
-                            "nb_member_card"=>array("all_money"), //本地金额同步过去
-                            "nb_product"=>array("store_number","order_number","favourite_number") //本地库存产品下单数量，人气同步过去
-                        );
-                        DataSync::FlagSync($synctalbe,$syncSpecialTalbe);
+                        $isnow=true;
+                        
+                       if(!DataSync::FlagSync($compayId,$synctalbe,$isnow))
+                       {
+                           throw new Exception(json_encode( array('status'=>false)));
+                       }
                     }
+                    //echo "22";
                     //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
                     
                         $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
@@ -241,8 +245,14 @@ class DefaultSiteController extends BackendController
                         $models= Yii::app()->db->createCommand($sql)->queryAll();
                         //var_dump($models);exit;
                 }
-		//var_dump(json_encode($models));exit;
-                Yii::app()->end(json_encode($models));
+                } catch (Exception $ex) {
+                    echo $ex->getMessage();
+                    $status=false;
+                }
+                $status=true;
+		var_dump(array("status"=>$status,"models"=>$models));exit;
+                //array_push($models, array("status"=>$status));
+                Yii::app()->end(json_encode(array("status"=>$status,"models"=>$models)));
 	}
         
         public function actionOpSite()

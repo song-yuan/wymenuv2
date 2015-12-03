@@ -58,6 +58,9 @@
 						</div>
 							<div class="form-actions fluid">
 								<div class="col-md-offset-3 col-md-9">
+                                                                    同步前的准备条件：<br>
+                                                                    1：从云端将相应的公司信息copy到本地，公司信息编号部分云端本地，从1开始递增<br>
+                                                                    2：请先确认本地建立了company_<?php echo $this->companyId;?>文件夹，并且是可读写；<br>                                                                    
 									<button type="button" id="manulsync" class="btn blue"><?php echo yii::t('app','手动同步');?></button>
 								</div>
 							</div>
