@@ -311,7 +311,7 @@ class DefaultSiteController extends BackendController
         {
             $companyId=Yii::app()->request->getParam('companyId','0000000000');
             $successjobs=Yii::app()->request->getParam('successjobs','0000000000');
-            Yii::app()->db->createCommand("delete from nb_order_printjobs where dpid=".$compayId." and jobid in (".$successjobs.")")->execute();
+            Yii::app()->db->createCommand("delete from nb_order_printjobs where dpid=".$companyId." and jobid in (".$successjobs.")")->execute();
         }
         
         public function actionOpSite()
