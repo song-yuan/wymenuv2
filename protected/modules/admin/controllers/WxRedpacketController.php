@@ -255,7 +255,7 @@ class WxRedpacketController extends BackendController
 				//$LvNames = "";
 			
 				//	echo 'ABC';
-				$sql = 'select t1.level_name from nb_cupon_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid) where t.to_group = 2 and t.cupon_id ='.$proID.' and t.dpid ='.$dpid;
+				$sql = 'select t1.level_name from nb_cupon_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid and t1.delete_flag = 0) where t.delete_flag = 0 and  t.to_group = 2 and t.cupon_id ='.$proID.' and t.dpid ='.$dpid;
 				$connect = Yii::app()->db->createCommand($sql);
 				//	$connect->bindValue(':site_id',$siteId);
 				//	$connect->bindValue(':dpid',$dpid);
