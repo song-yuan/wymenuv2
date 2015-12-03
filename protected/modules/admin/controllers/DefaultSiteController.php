@@ -166,84 +166,153 @@ class DefaultSiteController extends BackendController
 	{
 		$typeId = Yii::app()->request->getParam('typeId');
                 $compayId=Yii::app()->request->getParam('companyId');
+                $padId=Yii::app()->request->getParam('padId');
                 $criteriat = new CDbCriteria;
                 $criteria = new CDbCriteria;
+                $status=true;
 		$models=array();
-                if($typeId=="queue")
-                {
-                    $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
-                            . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
-                            . '  from nb_site t'
-                            . ' LEFT JOIN nb_site_type st on t.dpid=st.dpid and t.type_id=st.lid'
-                            . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
-                            . ' LEFT JOIN (select distinct qp.dpid as dpid,qp.stlid as stlid,qp.splid as splid, count(qp.lid) as queuepersons'
-                            . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
-                            . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
-                            . ' group by dpid,stlid,splid) tq'
-                            . ' on t.dpid=tq.dpid and t.type_id=tq.stlid and t.splid=tq.splid'
-                            . ' LEFT JOIN (select distinct subt.dpid as dpid,subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
-                            . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
-                            . ' group by dpid,splid,typeid) sf'
-                            . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
-                            . ' where t.delete_flag=0 and t.dpid= '.$compayId
-                            . ' group by dpid,splid,typeid,name,min,max'
-                            . ' order by typeid,min';
-                    $connect = Yii::app()->db->createCommand($sql);
-                    $models = $connect->queryAll();
-                    //var_dump($queueModels);exit;
-                }elseif($typeId=="tempsite"){
-                        $tempnow = new DateTime(date('Y-m-d H:i:s',time()));
-                        //var_dump($tempnow->format('Y-m-d H:i:s'));
-                        $tempnow->modify("-12 hour");
-                        $begintime=$tempnow->format('Y-m-d H:i:s');
-                        $tempnow->modify("24 hour");
-                        $endtime=$tempnow->format('Y-m-d H:i:s');
-                        //var_dump($begintime,$endtime);exit;
-                        $criteriat->select="t.number,t.status,t.site_id,t.update_at";
-                        $criteriat->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId 
-                               ;// . ' and t.create_at >"'.$begintime .'" and t.create_at<"'.$endtime.'"';
-                        $criteriat->order = ' t.number desc,t.site_id desc ';
-                        $tempmodels = SiteNo::model()->findAll($criteriat);
-                        foreach ($tempmodels as $model)
-                        {
-                            array_push($models,array('number'=>$model->number,'status'=>$model->status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
-                        }
-                        //var_dump($models);exit;
-                }else{
-                    //如果是本地模式，先从云端取有没有微信订单，有的话，加入到本地，然后打印。
-                    if(Yii::app()->params['cloud_local']=='l')
+                $modeljobs=array();
+                try{
+                    if($typeId=="queue")
                     {
-                        $synctalbe=array(
-                            "nb_order",
-                            "nb_order_product",
-                            "nb_close_account_detail"
-                            );
-                        ////特殊的更新
-                        $syncSpecialTalbe=array(
-                            "nb_site"=>array("status","number"),  //本地状态同步过去
-                            "nb_member_card"=>array("all_money"), //本地金额同步过去
-                            "nb_product"=>array("store_number","order_number","favourite_number") //本地库存产品下单数量，人气同步过去
-                        );
-                        DataSync::FlagSync($synctalbe,$syncSpecialTalbe);
-                    }
-                    //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
-                    
+                        $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
+                                . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
+                                . '  from nb_site t'
+                                . ' LEFT JOIN nb_site_type st on t.dpid=st.dpid and t.type_id=st.lid'
+                                . ' LEFT JOIN nb_site_persons sp on t.dpid=sp.dpid and t.splid=sp.lid'
+                                . ' LEFT JOIN (select distinct qp.dpid as dpid,qp.stlid as stlid,qp.splid as splid, count(qp.lid) as queuepersons'
+                                . '  from nb_queue_persons qp where qp.delete_flag=0 and qp.status=0 '
+                                . ' and qp.create_at >"'.date('Y-m-d',time()).' 00:00:00"' .' and qp.create_at<"'.date('Y-m-d',time()).' 23:59:59"'
+                                . ' group by dpid,stlid,splid) tq'
+                                . ' on t.dpid=tq.dpid and t.type_id=tq.stlid and t.splid=tq.splid'
+                                . ' LEFT JOIN (select distinct subt.dpid as dpid,subt.splid as splid,subt.type_id as typeid,count(*) as sitenum '
+                                . 'from nb_site subt where subt.status not in(1,2,3) and subt.delete_flag=0'
+                                . ' group by dpid,splid,typeid) sf'
+                                . ' on sf.dpid=t.dpid and sf.splid=t.splid and sf.typeid=t.type_id'
+                                . ' where t.delete_flag=0 and t.dpid= '.$compayId
+                                . ' group by dpid,splid,typeid,name,min,max'
+                                . ' order by typeid,min';
+                        $connect = Yii::app()->db->createCommand($sql);
+                        $models = $connect->queryAll();
+                        //var_dump($queueModels);exit;
+                    }elseif($typeId=="tempsite"){
+                            $tempnow = new DateTime(date('Y-m-d H:i:s',time()));
+                            //var_dump($tempnow->format('Y-m-d H:i:s'));
+                            $tempnow->modify("-12 hour");
+                            $begintime=$tempnow->format('Y-m-d H:i:s');
+                            $tempnow->modify("24 hour");
+                            $endtime=$tempnow->format('Y-m-d H:i:s');
+                            //var_dump($begintime,$endtime);exit;
+                            $criteriat->select="t.number,t.status,t.site_id,t.update_at";
+                            $criteriat->condition =  't.delete_flag = 0 and t.status in ("1","2","3") and t.is_temp = 1 and t.dpid='.$compayId 
+                                   ;// . ' and t.create_at >"'.$begintime .'" and t.create_at<"'.$endtime.'"';
+                            $criteriat->order = ' t.number desc,t.site_id desc ';
+                            $tempmodels = SiteNo::model()->findAll($criteriat);
+                            foreach ($tempmodels as $model)
+                            {
+                                array_push($models,array('number'=>$model->number,'status'=>$model->status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
+                            }
+                            //var_dump($models);exit;
+                    }else{
+                        //如果是本地模式，先从云端取有没有微信订单，有的话，加入到本地，然后打印。
+                        if(Yii::app()->params['cloud_local']=='l')
+                        {
+                            $synctalbe=array(
+                                "nb_order",
+                                "nb_order_product",
+                                'nb_order_pay',
+                                'nb_order_taste',
+                                );
+                            $isnow=true;
+
+                           if(!DataSync::FlagSync($compayId,$synctalbe,$isnow))
+                           {
+                               throw new Exception(json_encode( array('status'=>false)));
+                           }
+                        }
+                        //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
+
                         $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
                               . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem "
                               . " from nb_site t "
                               . " LEFT JOIN (select t1.site_id,t1.order_type,t1.dpid,count(t2.product_order_status) as newitem from"
-                              . " nb_order t1 left join nb_order_product t2 on t1.dpid=t2.dpid and t1.lid=t2.order_id and t2.product_order_status='0' "
+                              . " nb_order t1 left join nb_order_product t2 on t1.dpid=t2.dpid and t1.lid=t2.order_id and t2.product_order_status in('0','9') "
                               . " where t1.is_temp='0'and t1.order_status in ('1','2','3')"
                               . " and t1.order_type in ('1','2') group by t1.site_id,t1.order_type,t1.dpid)"
                               . " twx on twx.dpid=t.dpid and t.lid=twx.site_id"
                               . " where t.delete_flag='0' and t.dpid=".$compayId
                               . " order by t.serial ASC";
                         $models= Yii::app()->db->createCommand($sql)->queryAll();
-                        //var_dump($models);exit;
+                            //var_dump($models);exit;
+                        $sqljoborder="select distinct order_id from nb_order_product where product_order_status='9' and dpid=".$compayId." order by order_id";
+                        $modeljoborder=Yii::app()->db->createCommand($sqljoborder)->queryAll();                        
+                        $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$compayId,'lid'=>$padId));
+                        //var_dump($padId,$pad);exit;
+                        //前面加 barcode
+                        $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                        $cardtotal=0;
+                        $memo="挂单清单";
+                        $temporderid=0;
+                        //$orderProducts=array();
+                        $modelprinterjob=array();
+                        if(!empty($modeljoborder))
+                        {
+                            //var_dump($modeljoborder);exit;
+                            foreach ($modeljoborder as $mjo)
+                            {
+                                if($mjo["order_id"] !='0000000000')
+                                {
+                                    $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$mjo["order_id"],':dpid'=>$compayId));
+                                    if(empty($order))
+                                    {
+                                        //throw new Exception(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                                        continue;
+                                    }
+                                    $productTotalarray = OrderProduct::getPauseTotal($order->lid,$order->dpid);
+                                    //var_dump($productTotalarray);exit;
+                                    $total=$productTotalarray["total"];
+                                    $originaltotal=$productTotalarray["originaltotal"]; 
+                                    $criteria = new CDbCriteria;
+                                    $criteria->condition =  't.dpid='.$compayId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                                    $criteria->order = ' t.lid desc ';                    
+                                    $siteNo = SiteNo::model()->find($criteria);
+                                    if($order->is_temp=='0')
+                                    {
+                                        $total = Helper::calOrderConsume($order,$siteNo, $total);
+                                    }
+                                    $order->should_total=$originaltotal;
+                                    $order->reality_total=$total["total"];
+                                    //var_dump($order);exit;
+                                    $orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
+                                    //var_dump($orderProducts);exit;
+                                    $printList = Helper::printPauseList($order,$orderProducts,$pad,$precode,"0",$memo,$cardtotal);
+                                    if($printList["status"])
+                                    {
+                                        array_push($modelprinterjob,$printList);
+                                    }
+                                }                               
+                            }
+                            //var_dump($modelprinterjob);exit;
+                        }
+                        //去modeljobs
+                        $modeljobs= Yii::app()->db->createCommand("select orderid,jobid,address from nb_order_printjobs where dpid=".$compayId." and is_sync='10000'")->queryAll();
+                    }
+                } catch (Exception $ex) {
+                    echo $ex->getMessage();
+                    $status=false;
                 }
-		//var_dump(json_encode($models));exit;
-                Yii::app()->end(json_encode($models));
+                $status=true;
+		//var_dump(array("status"=>$status,"models"=>$models));exit;
+                //array_push($models, array("status"=>$status));
+                Yii::app()->end(json_encode(array("status"=>$status,"models"=>$models,"modeljobs"=>$modeljobs)));
 	}
+        
+        public function actionFinshPauseJobs()
+        {
+            $companyId=Yii::app()->request->getParam('companyId','0000000000');
+            $successjobs=Yii::app()->request->getParam('successjobs','0000000000');
+            Yii::app()->db->createCommand("delete from nb_order_printjobs where dpid=".$compayId." and jobid in (".$successjobs.")")->execute();
+        }
         
         public function actionOpSite()
 	{
