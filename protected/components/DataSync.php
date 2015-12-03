@@ -2,89 +2,89 @@
 class DataSync
 {
     public static $synctalbe=array(
-//        'nb_b_login',
-//        'nb_brand_user',
-//        'nb_brand_user_level',
-//        //'nb_c_login',
-//        //'nb_cart',
-//        'nb_cashback_record',
-//        'nb_close_account',
-//        'nb_close_account_detail',
-//        //('nb_company'),
-//        //('nb_company_wifi'),
-//        'nb_consumer_cash_proportion',
-//        'nb_consumer_points_proportion',
-//        'nb_cupon',
-//        'nb_cupon_branduser',
-//        //'nb_data_sync'),
-//        'nb_feedback',
-//        'nb_floor',
-//        //('nb_guest_message'),
-//        //('nb_local_company'),
-//        'nb_member_card',
-//        //'nb_member_consumer',
-//        'nb_member_recharge',
-//        'nb_menu',
-//        'nb_normal_branduser',
-//        'nb_normal_promotion',
-//        'nb_normal_promotion_detail',
-//        'nb_notify',
-//        'nb_online_pay',
-//        'nb_order',
-//        //'nb_order_feedback',
-//        'nb_order_pay',
-//        //('nb_order_printjobs'),
-//        'nb_order_product',
-//        'nb_order_retreat',
+        //'nb_b_login',
+        'nb_brand_user',
+        'nb_brand_user_level',
+        //'nb_c_login',
+        //'nb_cart',
+        'nb_cashback_record',
+        'nb_close_account',
+        'nb_close_account_detail',
+        //('nb_company'),
+        //('nb_company_wifi'),
+        'nb_consumer_cash_proportion',
+        'nb_consumer_points_proportion',
+        'nb_cupon',
+        'nb_cupon_branduser',
+        //'nb_data_sync'),
+        'nb_feedback',
+        'nb_floor',
+        //('nb_guest_message'),
+        //('nb_local_company'),
+        'nb_member_card',
+        //'nb_member_consumer',
+        'nb_member_recharge',
+        'nb_menu',
+        'nb_normal_branduser',
+        'nb_normal_promotion',
+        'nb_normal_promotion_detail',
+        'nb_notify',
+        'nb_online_pay',
+        'nb_order',
+        //'nb_order_feedback',
+        'nb_order_pay',
+        //('nb_order_printjobs'),
+        'nb_order_product',
+        'nb_order_retreat',
         'nb_order_taste',
-//        'nb_pad',
-//        'nb_pad_printerlist',
-//        'nb_payment_method',
-//        'nb_point_record',
-//        'nb_points_valid',
-//        'nb_printer',
-//        'nb_printer_way',
-//        'nb_printer_way_detail',
-//        'nb_private_branduser',
-//        'nb_private_promotion',
-//        'nb_private_promotion_detail',
-//        'nb_product',
-//        'nb_product_addition',
+        'nb_pad',
+        'nb_pad_printerlist',
+        'nb_payment_method',
+        'nb_point_record',
+        'nb_points_valid',
+        'nb_printer',
+        'nb_printer_way',
+        'nb_printer_way_detail',
+        'nb_private_branduser',
+        'nb_private_promotion',
+        'nb_private_promotion_detail',
+        'nb_product',
+        'nb_product_addition',
         'nb_product_category',
 //        //'nb_product_discount',
 //        //'nb_product_out',
-//        'nb_product_picture',
-//        'nb_product_printerway',
-//        'nb_product_set',
-//        'nb_product_set_detail',
-//        //'nb_product_special',
-//        'nb_product_taste',
-//        //'nb_product_tempprice',
-//        'nb_promotion_activity',
-//        'nb_promotion_activity_detail',
-//        //'nb_promotion_total',
-//        'nb_queue_persons',
-//        'nb_recharge_record',
-//        'nb_redpacket',
-//        'nb_redpacket_detail',
-//        'nb_redpacket_send_strategy',
-//        'nb_retreat',
-//        'nb_scene',
-//        'nb_scene_scan_log',
-//        //'nb_sequence',
-//        'nb_shift_detail',
-//        'nb_site',
-//        'nb_site_no',
-//        'nb_site_persons',//座位人数分类
-//        'nb_site_type',
-//        //'nb_sqlcmd_sync',
-//        'nb_taste',
-//        'nb_taste_group',
-//        'nb_total_promotion',//优惠整体效果
-//        'nb_user',
-//        'nb_user_company',
-//        'nb_weixin_recharge',
-//        'nb_weixin_service_account',                
+        'nb_product_picture',
+        'nb_product_printerway',
+        'nb_product_set',
+        'nb_product_set_detail',
+        //'nb_product_special',
+        'nb_product_taste',
+        //'nb_product_tempprice',
+        'nb_promotion_activity',
+        'nb_promotion_activity_detail',
+        //'nb_promotion_total',
+        'nb_queue_persons',
+        'nb_recharge_record',
+        'nb_redpacket',
+        'nb_redpacket_detail',
+        'nb_redpacket_send_strategy',
+        'nb_retreat',
+        'nb_scene',
+        'nb_scene_scan_log',
+        //'nb_sequence',
+        'nb_shift_detail',
+        'nb_site',
+        'nb_site_no',
+        'nb_site_persons',//座位人数分类
+        'nb_site_type',
+        //'nb_sqlcmd_sync',
+        'nb_taste',
+        'nb_taste_group',
+        'nb_total_promotion',//优惠整体效果
+        'nb_user',
+        'nb_user_company',
+        'nb_weixin_recharge',
+        'nb_weixin_service_account',                
     ); 
     
     ////特殊的更新,云端的数据，但是在本地更新了，以下内容要传递到云端
@@ -125,9 +125,9 @@ class DataSync
     //本地和云端同时修改，但是有个状态大，则谁大谁有效
     ////////////////////////////////////////////////////////////
     public static $syncStatusCompare=array(
-        "nb_site"=>array("status"=>"123"),  //本地状态同步过去array("number")
-        "nb_site_no"=>array("status"=>"123"),  //本地状态同步过去array("number")
-        "nb_order"=>array("order_status"=>"123") //本地库存产品下单数量，人气同步过去array("reality_total","should_total")
+        "nb_site"=>array("status"=>"123"),  //云端只能产生1、3状态
+        "nb_site_no"=>array("status"=>"123"),  //云端只能产生1、3状态
+        "nb_order"=>array("order_status"=>"123") //云端只能产生1、3状态
     );
 
     
@@ -151,7 +151,7 @@ class DataSync
         return substr_replace($allflag, "0", Yii::app()->params['sync_localnum']-1,1);
     }
 
-    public static function execSync($dpid,$sql1,$sql2,$isnow)
+    public static function execSync($dpid,$synctalbev,$sql_1,$sql_2,$isnow)
     {
         //云端则不需要同步
         if(Yii::app()->params['cloud_local']=='c')
@@ -162,7 +162,7 @@ class DataSync
         if(!$isnow)
         {
             $randtime=rand(1,60);
-            echo $randtime;
+            //osy//echo $randtime;
             sleep($randtime);
         }
         //db
@@ -174,19 +174,26 @@ class DataSync
             $dbcloud=Yii::app()->dbcloud;
             $dblocal=Yii::app()->dblocal;            
         } catch (Exception $ex) {
-            echo $ex->getMessage();
-            return;//数据库连接异常会直接返回
+            //osy//echo $ex->getMessage();
+            return false;//数据库连接异常会直接返回
         }
         //先同步云端必须要更新的sql
         //echo 'cloudfirstsync';exit;
+        //var_dump(DataSync::cloudFirstSync($dpid));exit;
         if(!DataSync::cloudFirstSync($dpid))
         {
-            return;
+            return false;
         }
-        echo 'beginsync<br>';
-        foreach (DataSync::$synctalbe as $t)
+//        $synctalbeinstance=DataSync::$synctalbe;
+//        if(!empty($synctalbev))
+//        {
+//            $synctalbeinstance=$synctalbev;
+//        }
+        //osy//echo 'beginsync<br>';
+        //var_dump($synctalbev);exit;
+        foreach ($synctalbev as $t)
         {
-            echo $t."<br>";
+            //osy//echo $t."<br>";
             $deletelist1="";
             $deletelist2="";
             $clouddataarr=array();
@@ -198,18 +205,18 @@ class DataSync
             $localnum=Yii::app()->params['sync_localnum'];
             
              //////////*******开始操作syncCloudDel内表*************///////////
-            $sql1=str_replace("#tablename#",$t,$sql1);
-            echo "sql1:".$sql1."<br>";
+            $sql1=str_replace("#tablename#",$t,$sql_1);
+            //osy//echo "sql1:".$sql1."<br>";
             if(in_array($t,DataSync::$syncCloudDel))
             {
-                echo 'syncclouddel'."<br>";
+                //osy//echo 'syncclouddel'."<br>";
                 $modifyrows=$dbcloud->createCommand($sql1)->queryScalar();
                 if($modifyrows==0)
                 {
-                    echo $t."syncCloudDel no modify!<br>";
+                    //osy//echo $t."syncCloudDel no modify!<br>";
                     continue;
                 }
-                echo $t."syncCloudDel has modify!<br>";
+                //osy//echo $t."syncCloudDel has modify!<br>";
                 $clouddata=$dbcloud->createCommand("select * from ".$t." where dpid=".$dpid)->queryAll();
                 $transactionlocal = $dblocal->beginTransaction();
                 try {
@@ -227,8 +234,11 @@ class DataSync
                             $localnum."+1,length(is_sync)-".$localnum.")) where dpid=".$dpid." and lid in ".$deletelist1)->execute();
                     $transactionlocal->commit();
                 } catch (Exception $ex) {
-                    echo $ex->getMessage();
-                    $transactionlocal->rollback();                   
+                    //echo $ex->getMessage();
+                    $transactionlocal->rollback();
+                    //return false;
+                    throw $ex;
+                    return false;
                 }
                 //删除完，然后下载，执行下一个表
                 continue;
@@ -236,13 +246,9 @@ class DataSync
             //////////*******结束操作syncCloudDel内表*************///////////
             
              //////////*******开始获取数据*************///////////
-            //根据is_sync取远端要更新的数据数据
-//            $sql1 = "select * from ".$t." where lid%2=0 and dpid=".$dpid." and substring(is_sync,".
-//                    $localnum.",1) = '1'";
-            //var_dump($sql1);exit;
-            
+            //根据is_sync取远端要更新的数据数据            
             $clouddata=$dbcloud->createCommand($sql1)->queryAll();  
-            echo "cloud -> local:".$t.":".count($clouddata)."<br>";
+            //osy//echo "cloud -> local:".$t.":".count($clouddata)."<br>";
             if(!empty($clouddata))
             {
                 $deletelist1="(";
@@ -252,11 +258,30 @@ class DataSync
                     $clouddataarr[$cdata['lid']]=$cdata;
                 }
                 $deletelist1=$deletelist1."0000000000".")";
+                //如果DataSync::$syncSpecialTalbe[$t]统一从本地取               
+                if(!empty(DataSync::$syncSpecialTalbe[$t]))
+                {
+                   $sqldatasql="select * from ".$t." where dpid=".$dpid." and lid in ".$deletelist1;
+                   $clouddataforlocal=$dblocal->createCommand("select * from ".$t." where dpid=".$dpid." and lid in ".$deletelist1)->queryAll();
+                   if(!empty($clouddataforlocal))
+                   {
+                        foreach ($clouddataforlocal as $clcd) 
+                        {
+                            foreach (DataSync::$syncSpecialTalbe[$t] as $field)
+                            {
+                                if(!empty($clouddataarr[$clcd["lid"]]))
+                                {
+                                      $clouddataarr[$clcd["lid"]][$field]=$clcd[$field];
+                                }
+                            }
+                         }
+                   }                   
+                }            
             }            
             
             //云端的数据在本地被更新过的取出来
             $cloudlocaldata=$dblocal->createCommand($sql1)->queryAll();
-            echo "cloud local-> cloud:".$t.":".count($cloudlocaldata)."<br>";            
+            //osy//echo "cloud local-> cloud:".$t.":".count($cloudlocaldata)."<br>";            
            //本地要保留的，并且更新云端的
            if(!empty($cloudlocaldata))
            {               
@@ -266,15 +291,34 @@ class DataSync
                    $deletelist2=$deletelist2.$sdata['lid'].",";
                    $cloudlocaldataarr[$sdata['lid']]=$sdata;
                }
-               $deletelist2=$deletelist2."0000000000".")";
+               $deletelist2=$deletelist2."0000000000".")";               
+               //如果DataSync::$syncDataSql[$t]统一从云端取               
+               if(!empty(DataSync::$syncDataSql[$t]))
+                {
+                   $sqldatasql="select * from ".$t." where dpid=".$dpid." and lid in ".$deletelist2;
+                   $cloudlocalclouddata=$dbcloud->createCommand("select * from ".$t." where dpid=".$dpid." and lid in ".$deletelist2)->queryAll();
+                   if(!empty($cloudlocalclouddata))
+                   {
+                        foreach ($cloudlocalclouddata as $clcd) 
+                        {
+                            foreach (DataSync::$syncDataSql[$t] as $field)
+                            {
+                                if(!empty($cloudlocaldataarr[$clcd["lid"]]))
+                                {
+                                      $cloudlocaldataarr[$clcd["lid"]][$field]=$clcd[$field];
+                                }
+                            }
+                         }
+                   }                   
+                }
            }
             //////////*******结束获取数据*************///////////
            
-           //////////*******开始处理特殊字段*************///////////
+           //////////*******开始处理数据冲突时候的特殊字段*************///////////
            foreach($cloudlocaldataarr as $clda)
            {
                if(empty($clouddataarr[$clda['lid']]))
-               {
+               {                   
                    continue;
                }
                 $copyfrom="cloud";//数据copy方向，默认是cloud,即除了特殊字段，都是云端覆盖本地，如果是local
@@ -282,57 +326,47 @@ class DataSync
                 //判断当前表是否在$syncStatusCompare
                 if(!empty(DataSync::$syncStatusCompare[$t]))
                 {
-                    echo "syncStatusCompare"."<br>";
-                    foreach ($syncStatusCompare[$t] as $key => $value) {
-                        if((stripos($value,$clda[$key])!==false)
-                                && (stripos($value,$clouddataarr[$clda['lid']][$key])!==false))
-                        {
-                            if($clda[$key]==$clouddataarr[$clda['lid']][$key])
-                            {
-                                //相等时，按照默认，如果是云端的数据，就从cloud，本地的就是local
-                                //$copyfrom="equal";
-                            }elseif($clda[$key]>$clouddataarr[$clda['lid']][$key]){
+                    //osy//echo "syncStatusCompare"."<br>";
+                    foreach (DataSync::$syncStatusCompare[$t] as $key => $value) {
+                        if($clda[$key]>$clouddataarr[$clda['lid']][$key]){
                                 $copyfrom="local";
-                            } 
-                        }
+                        } 
+//                        if(stripos($value,$clda[$key])!==false)
+//                        {
+//                            if(stripos($value,$clouddataarr[$clda['lid']][$key])!==false)
+//                            {
+//                                
+//                            }
+//                            if($clda[$key]==$clouddataarr[$clda['lid']][$key])
+//                            {
+//                                //相等时，按照默认，如果是云端的数据，就从cloud，本地的就是local
+//                                //$copyfrom="equal";
+//                            }elseif($clda[$key]>$clouddataarr[$clda['lid']][$key]){
+//                                $copyfrom="local";
+//                            } 
+//                        }
                     }
                 }  
-                echo "copyfrom:".$copyfrom."<br>";
+                //osy//echo "copyfrom:".$copyfrom."<br>";
                 if($copyfrom=="cloud")
                 {
                     $tempdata=$cloudlocaldataarr[$clda["lid"]];
                     $cloudlocaldataarr[$clda["lid"]]=$clouddataarr[$clda["lid"]];
                     //本地数据为准，要更新到云端的
-                    if(!empty($syncSpecialTalbe[$t]))
-                    {                    
-                        foreach ($syncSpecialTalbe[$t] as $field)
-                        {
-                            $cloudlocaldataarr[$clda["lid"]][$field]=$tempdata[$field];
-                            $clouddataarr[$clda["lid"]][$field]=$tempdata[$field];
-                        }
-                    }
-                    if(!empty($syncDataSql[$t]))
-                    {
-                        foreach ($syncDataSql[$t] as $field)
-                        {
-                            //$cloudlocaldataarr[$clda["lid"]][$field]=$tempdata[$field];
-                            $clouddataarr[$clda["lid"]][$field]=$tempdata[$field];
-                        }
-                    }
+//                    if(!empty(DataSync::$syncSpecialTalbe[$t]))
+//                    {                    
+//                        foreach (DataSync::$syncSpecialTalbe[$t] as $field)
+//                        {
+//                            $cloudlocaldataarr[$clda["lid"]][$field]=$tempdata[$field];
+//                            $clouddataarr[$clda["lid"]][$field]=$tempdata[$field];
+//                        }
+//                    }
                     //云端数据为准，要更新到本地
                 }elseif ($copyfrom=="local") {
                     $tempdata=$clouddataarr[$clda["lid"]];
                     $clouddataarr[$clda["lid"]]=$cloudlocaldataarr[$clda["lid"]];
                     //本地要更新到云端的
                     //云端数据为准，要更新到本地
-                    if(!empty($syncDataSql[$t]))
-                    {
-                        foreach ($syncDataSql[$t] as $field)
-                        {
-                            $cloudlocaldataarr[$clda["lid"]][$field]=$tempdata[$field];
-                            //$clouddataarr[$clda["lid"]][$field]=$tempdata[$field];
-                        }
-                    }
                 }else{//相等，就不更新，相互调换一下，执行更新后相当于没有更新
                     $tempdata=$clouddataarr[$clda["lid"]];
                     $clouddataarr[$clda["lid"]]=$cloudlocaldataarr[$clda["lid"]];
@@ -344,28 +378,44 @@ class DataSync
             //////////*******开始更新*************///////////
             if(!empty($cloudlocaldataarr))
             {
-                echo "begin copy cloudlocal to local<br>";
+                //osy//echo "begin copy cloudlocal to cloud<br>";
                 $transactioncloud = $dbcloud->beginTransaction();
                 try {
                     $dbcloud->createCommand("delete from ".$t." where dpid=".$dpid." and lid in ".$deletelist2)->execute();
-                    //$dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid%2=0 and create_at>='".$cloudtime."'")->execute();
+                    //如果有必须和云端一直的数据，要回写
+                   //$dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid%2=0 and create_at>='".$cloudtime."'")->execute();
+                    //var_dump($cloudlocaldataarr);exit;
                     foreach($cloudlocaldataarr as $lsd)
                     {
                         $lsd["is_sync"]=  DataSync::getAfterSync();
                         $dbcloud->createCommand()->insert($t,$lsd);
+                        //回写本地
+                        if(!empty(DataSync::$syncDataSql[$t]))
+                        {
+                            //不是同时更新的，要回写
+                            if(empty($clouddataarr[$lsd["lid"]]))
+                            {
+                                $dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid in (".$lsd["lid"].")")->execute();
+                                $dblocal->createCommand()->insert($t,$lsd);
+                            }
+                        }
                     }
+                    
                     //dblocal更新is_sync标志
                     $dblocal->createCommand("update ".$t." set is_sync=CONCAT(substring(is_sync,1,".$localnum."-1),0,substring(is_sync,".
                             $localnum."+1,length(is_sync)-".$localnum.")) where dpid=".$dpid." and lid in ".$deletelist2)->execute();
                     $transactioncloud->commit();
                 } catch (Exception $ex) {
-                    echo $ex->getMessage();
-                    $transactioncloud->rollback();                              
+                    //echo $ex->getMessage();
+                    $transactioncloud->rollback();
+                    //return false;
+                    throw $ex;
+                    return false;
                 }            
             }
             if(!empty($clouddataarr))
             {
-                echo "begin copy cloud to cloud<br>";
+                //osy//echo "begin copy cloud to local<br>";
                 $transactionlocal = $dblocal->beginTransaction();
                 try {
                     $dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid in ".$deletelist1)->execute();
@@ -374,6 +424,16 @@ class DataSync
                     {
                         $cd["is_sync"]=  DataSync::getAfterSync();
                         $dblocal->createCommand()->insert($t,$cd);
+                        //回写云端
+                        if(!empty(DataSync::$syncSpecialTalbe[$t]))
+                        {
+                            //不是同时更新的，要回写
+                            if(empty($cloudlocaldataarr[$cd["lid"]]))
+                            {
+                                $dbcloud->createCommand("delete from ".$t." where dpid=".$dpid." and lid in (".$cd["lid"].")")->execute();
+                                $dbcloud->createCommand()->insert($t,$cd);
+                            }
+                        }
                     }
                     //dbcloud更新is_sync标志
                     $dbcloud->createCommand("update ".$t." set is_sync=CONCAT(substring(is_sync,1,".$localnum."-1),0,substring(is_sync,".
@@ -381,8 +441,11 @@ class DataSync
                                        
                     $transactionlocal->commit();
                 } catch (Exception $ex) {
-                    echo $ex->getMessage();
-                    $transactionlocal->rollback();                                     
+                    //echo $ex->getMessage();
+                    $transactionlocal->rollback(); 
+                    //return false;
+                    throw $ex;
+                    return false;
                 }
             }
              //////////*******结束更新*************///////////
@@ -398,10 +461,10 @@ class DataSync
             //根据is_sync取远端要更新的数据数据
 //            $sql3 = "select * from ".$t." where lid%2=1 and dpid=".$dpid." and substring(is_sync,".
 //                    Yii::app()->params['sync_localnum'].",1) = '1'";
-            $sql2=str_replace("#tablename#",$t,$sql2);
-            echo "sql2".$sql2."<br>";
+            $sql2=str_replace("#tablename#",$t,$sql_2);
+            //osy//echo "sql2".$sql2."<br>";
             $localdata=$dblocal->createCommand($sql2)->queryAll(); 
-            echo "local->cloud data num is :".count($localdata)."<br>";
+            //osy//echo "local->cloud data num is :".count($localdata)."<br>";
             if(!empty($localdata))
             {                
                 $deletelist3="(";
@@ -411,11 +474,32 @@ class DataSync
                     $localdataarr[$cdata['lid']]=$cdata;
                 }
                 $deletelist3=$deletelist3."0000000000".")";
+                //如果DataSync::$syncDataSql[$t]统一从云端取               
+               if(!empty(DataSync::$syncDataSql[$t]))
+                {
+                   $sqlall="select * from ".$t." where dpid=".$dpid." and lid in ".$deletelist3;                   
+                   $localclouddataall=$dbcloud->createCommand($sqlall)->queryAll();
+                   
+                   if(!empty($localclouddataall))
+                   {
+                        foreach ($localclouddataall as $clcd) 
+                        {
+                             foreach (DataSync::$syncDataSql[$t] as $field)
+                              {
+                                  if(!empty($localdataarr[$clcd["lid"]]))
+                                  {
+                                        $localdataarr[$clcd["lid"]][$field]=$clcd[$field];
+                                  }
+                              }
+                         }
+                   }
+                   //var_dump($localclouddataall);exit;
+                }
             }            
             
-            //云端的数据在本地被更新过的取出来
+            //本地的数据在云端被更新过的取出来
             $localclouddata=$dbcloud->createCommand($sql2)->queryAll();
-            echo "localcloud->local data num is :".count($localclouddata)."<br>";
+            //osy//echo "localcloud->local data num is :".count($localclouddata)."<br>";
             //本地要保留的，并且更新云端的
            if(!empty($localclouddata))
            {               
@@ -426,10 +510,28 @@ class DataSync
                    $localclouddataarr[$sdata['lid']]=$sdata;
                }
                $deletelist4=$deletelist4."0000000000".")";
+               if(!empty(DataSync::$syncSpecialTalbe[$t]))
+                {
+                   $sqldatasql="select * from ".$t." where dpid=".$dpid." and lid in ".$deletelist4;
+                   $localclouddataforlocal=$dblocal->createCommand("select * from ".$t." where dpid=".$dpid." and lid in ".$deletelist4)->queryAll();
+                   if(!empty($localclouddataforlocal))
+                   {
+                        foreach ($localclouddataforlocal as $clcd) 
+                        {
+                            foreach (DataSync::$syncSpecialTalbe[$t] as $field)
+                            {
+                                if(!empty($localclouddataarr[$clcd["lid"]]))
+                                {
+                                      $localclouddataarr[$clcd["lid"]][$field]=$clcd[$field];
+                                }
+                            }
+                         }
+                   }                   
+                }
            }
             //////////*******结束获取数据*************///////////
            
-           //////////*******开始处理特殊字段*************///////////
+           //////////*******开始处理数据冲突时候的特殊字段*************///////////
            foreach($localclouddataarr as $clda)
            {
                if(empty($localdataarr[$clda['lid']]))
@@ -442,55 +544,57 @@ class DataSync
                 if(!empty(DataSync::$syncStatusCompare[$t]))
                 {
                     foreach (DataSync::$syncStatusCompare[$t] as $key => $value) {
-                        if((stripos($value,$clda[$key])!==false)
-                                && (stripos($value,$localdataarr[$clda['lid']][$key])!==false))
-                        {
-                            if($clda[$key]==$localdataarr[$clda['lid']][$key])
-                            {
-                                //相等时，按照默认，如果是云端的数据，就从cloud，本地的就是local
-                                //$copyfrom="equal";
-                            }elseif($clda[$key]>$localdataarr[$clda['lid']][$key]){
-                                $copyfrom="cloud";
-                            } 
+                        if($clda[$key]>$localdataarr[$clda['lid']][$key]){
+                            $copyfrom="cloud";
                         }
+//                        if((stripos($value,$clda[$key])!==false)
+//                                && (stripos($value,$localdataarr[$clda['lid']][$key])!==false))
+//                        {
+//                            if($clda[$key]==$localdataarr[$clda['lid']][$key])
+//                            {
+//                                //相等时，按照默认，如果是云端的数据，就从cloud，本地的就是local
+//                                //$copyfrom="equal";
+//                            }elseif($clda[$key]>$localdataarr[$clda['lid']][$key]){
+//                                $copyfrom="cloud";
+//                            } 
+//                        }
                     }
                 }
-                echo "copyfrom is ;".$copyfrom."<br>";                
+                //osy//echo "copyfrom is ;".$copyfrom."<br>";                
                 if($copyfrom=="cloud")
                 {
                     $tempdata=$localdataarr[$clda["lid"]];
                     $localdataarr[$clda["lid"]]=$localclouddataarr[$clda["lid"]];
                     //本地数据为准，要更新到云端的
-                    if(!empty(DataSync::$syncSpecialTalbe[$t]))
-                    {                    
-                        foreach (DataSync::$syncSpecialTalbe[$t] as $field)
-                        {
-                            $localdataarr[$clda["lid"]][$field]=$tempdata[$field];
-                            $localclouddataarr[$clda["lid"]][$field]=$tempdata[$field];
-                        }
-                    }
-                    if(!empty(DataSync::$syncDataSql[$t]))
-                    {
-                        foreach (DataSync::$syncDataSql[$t] as $field)
-                        {
-                            //$localclouddataarr[$clda["lid"]][$field]=$tempdata[$field];
-                            $localdataarr[$clda["lid"]][$field]=$tempdata[$field];
-                        }
-                    }
-                    //云端数据为准，要更新到本地
+//                    if(!empty(DataSync::$syncSpecialTalbe[$t]))
+//                    {                    
+//                        foreach (DataSync::$syncSpecialTalbe[$t] as $field)
+//                        {
+//                            $localdataarr[$clda["lid"]][$field]=$tempdata[$field];
+//                            $localclouddataarr[$clda["lid"]][$field]=$tempdata[$field];
+//                        }
+//                    }
+//                    if(!empty(DataSync::$syncDataSql[$t]))
+//                    {
+//                        foreach (DataSync::$syncDataSql[$t] as $field)
+//                        {
+//                            //$localclouddataarr[$clda["lid"]][$field]=$tempdata[$field];
+//                            $localdataarr[$clda["lid"]][$field]=$tempdata[$field];
+//                        }
+//                    }                    
                 }elseif ($copyfrom=="local") {
                     $tempdata=$localclouddataarr[$clda["lid"]];
                     $localclouddataarr[$clda["lid"]]=$localdataarr[$clda["lid"]];
                     //本地要更新到云端的
                     //云端数据为准，要更新到本地
-                    if(!empty(DataSync::$syncDataSql[$t]))
-                    {
-                        foreach (DataSync::$syncDataSql[$t] as $field)
-                        {
-                            $localclouddataarr[$clda["lid"]][$field]=$tempdata[$field];
-                            //$localdataarr[$clda["lid"]][$field]=$tempdata[$field];
-                        }
-                    }
+//                    if(!empty(DataSync::$syncDataSql[$t]))
+//                    {
+//                        foreach (DataSync::$syncDataSql[$t] as $field)
+//                        {
+//                            $localclouddataarr[$clda["lid"]][$field]=$tempdata[$field];
+//                            //$localdataarr[$clda["lid"]][$field]=$tempdata[$field];
+//                        }
+//                    }
                 }else{//相等，就不更新，相互调换一下，执行更新后相当于没有更新
                     $tempdata=$localclouddataarr[$clda["lid"]];
                     $localclouddataarr[$clda["lid"]]=$localdataarr[$clda["lid"]];
@@ -502,7 +606,7 @@ class DataSync
             //////////*******开始更新*************///////////
             if(!empty($localclouddataarr))
             {
-                echo "copy localcloud->local:".count($localclouddata)."<br>";
+                //osy//echo "copy localcloud->local:".count($localclouddata)."<br>";
                 $transactionlocal = $dblocal->beginTransaction();
                 try {
                     $dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid in ".$deletelist4)->execute();
@@ -511,39 +615,69 @@ class DataSync
                     {
                         $lsd["is_sync"]=  DataSync::getAfterSync();
                         $dblocal->createCommand()->insert($t,$lsd);
+                        //回写云端
+                        if(!empty(DataSync::$syncSpecialTalbe[$t]))
+                        {
+                            //不是同时更新的，要回写
+                            if(empty($localdataarr[$lsd["lid"]]))
+                            {
+                                $dbcloud->createCommand("delete from ".$t." where dpid=".$dpid." and lid in (".$lsd["lid"].")")->execute();
+                                $dbcloud->createCommand()->insert($t,$lsd);
+                            }
+                        }
                     }
                     //dblocal更新is_sync标志
                     $dbcloud->createCommand("update ".$t." set is_sync=CONCAT(substring(is_sync,1,".$localnum."-1),0,substring(is_sync,".
                             $localnum."+1,length(is_sync)-".$localnum.")) where dpid=".$dpid." and lid in ".$deletelist4)->execute();
                     $transactionlocal->commit();
                 } catch (Exception $ex) {
-                    echo $ex->getMessage();
-                    $transactionlocal->rollback();                                   
+                    //echo $ex->getMessage();
+                    $transactionlocal->rollback();
+                    throw $ex;
+                    return false;
                 }            
             }
             if(!empty($localdataarr))
             {
-                echo "copy local->cloud:".count($localdataarr)."<br>";
+                //osy//echo "copy local->cloud:".count($localdataarr)."<br>";
                 $transactioncloud = $dbcloud->beginTransaction();
                 try {
                     $dbcloud->createCommand("delete from ".$t." where dpid=".$dpid." and lid in ".$deletelist3)->execute();
+                    //如果有必须和云端一直的数据，要回写
+//                    if(!empty(DataSync::$syncDataSql[$t]))
+//                    {
+//                        $dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid in ".$deletelist3)->execute();
+//                    }                    
                     //$dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid%2=0 and create_at>='".$cloudtime."'")->execute();
                     foreach($localdataarr as $cd)
                     {
                         $cd["is_sync"]=  DataSync::getAfterSync();
                         $dbcloud->createCommand()->insert($t,$cd);
+                        //回写本地
+                        if(!empty(DataSync::$syncDataSql[$t]))
+                        {
+                            //不是同时更新的，要回写
+                            if(empty($localclouddataarr[$cd["lid"]]))
+                            {
+                                $dblocal->createCommand("delete from ".$t." where dpid=".$dpid." and lid in (".$cd["lid"].")")->execute();
+                                $dblocal->createCommand()->insert($t,$cd);
+                            }
+                        }
                     }
                     //dbcloud更新is_sync标志
                     $dblocal->createCommand("update ".$t." set is_sync=CONCAT(substring(is_sync,1,".$localnum."-1),0,substring(is_sync,".
                             $localnum."+1,length(is_sync)-".$localnum.")) where dpid=".$dpid." and lid in ".$deletelist3)->execute();                   
                     $transactioncloud->commit();
                 } catch (Exception $ex) {
-                    echo $ex->getMessage();
-                    $transactioncloud->rollback();                                 
+                    //echo $ex->getMessage();
+                    $transactioncloud->rollback(); 
+                    //return false;
+                    throw $ex;
+                    return false;
                 }
             } 
         }
-        exit;
+       return true;
     }
 
     /**
@@ -552,14 +686,14 @@ class DataSync
      * @param type $syncSpecialTalbe 特殊表特殊字段，如果云端有，本地也有，这几个字段以本地为准
      * @param type $isnow 是否立刻同步，还是随机延迟几十秒再同步，防止高并发
      */
-    public static function FlagSync($dpid,$isnow=true){
-        echo "flagsync";
+    public static function FlagSync($dpid,$synctalbe=array(),$isnow=true){
+        //osy//echo "flagsync";
         $localnum=Yii::app()->params['sync_localnum'];
         $sql1 = "select * from #tablename# where lid%2=0 and dpid=".$dpid." and substring(is_sync,".
              $localnum.",1) = '1'";
         $sql2 = "select * from #tablename# where lid%2=1 and dpid=".$dpid." and substring(is_sync,".
              $localnum.",1) = '1'";
-        DataSync::execSync($dpid, $sql1, $sql2,$isnow);
+        return DataSync::execSync($dpid,$synctalbe, $sql1, $sql2,$isnow);
     }
     
     /**
@@ -584,7 +718,7 @@ class DataSync
         $localtime= $specialTime;
         $sql1 = "select * from ".$t." where lid%2=0 and dpid=".$dpid." and update_at >= '".$cloudtime."'";
         $sql2 = "select * from ".$t." where lid%2=1 and dpid=".$dpid." and update_at >= '".$localtime."'";
-        DataSync::execSync($dpid, $sql1, $sql2,$isnow);                   
+        DataSync::execSync($dpid,  DataSync::$synctalbe, $sql1, $sql2,$isnow);                   
     }
     
     /**
@@ -610,10 +744,10 @@ class DataSync
             $filesnames3=array_diff($fna, $filesnames2);
             foreach($filesnames3 as $akey=>$avalue)
             {
-                GrabImage(Yii::app()->params->masterdomain,"uploads/company_".$company_id."/".$avalue);
+                DataSync::GrabImage(Yii::app()->params->masterdomain,"uploads/company_".$company_id."/".$avalue);
             }
         } catch (Exception $ex) {
-            echo "下载文件异常";
+            //osy//echo "下载文件异常";
         }
     }
     
@@ -718,7 +852,7 @@ class DataSync
             $transactioncloud->commit();
             return true;
         } catch (Exception $ex) {
-            echo $ex->getMessage();
+            //osy//echo $ex->getMessage();
             $transactioncloud->rollback();
             return false;
         }

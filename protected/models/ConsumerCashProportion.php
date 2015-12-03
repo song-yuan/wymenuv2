@@ -41,7 +41,7 @@ class ConsumerCashProportion extends CActiveRecord
 			array('point_type, is_available, delete_flag', 'length', 'max'=>2),
 			array('min_available_point, max_available_point', 'length', 'max'=>10),
                         array('proportion_points','compare','compareValue'=>'9999','operator'=>'<','message'=>yii::t('app','比例数值太大')),
-			array('min_available_point','compare','compareValue'=>'max_available_point','operator'=>'<','message'=>yii::t('app','最小积分大于最大积分')),			
+			array('min_available_point','compare','compareAttribute'=>'max_available_point','operator'=>'<','message'=>yii::t('app','最小积分大于最大积分')),			
 			array('proportion_points', 'length', 'max'=>6),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
