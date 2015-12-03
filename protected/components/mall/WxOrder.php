@@ -14,6 +14,7 @@ class WxOrder
 	public $siteId;
 	public $type;
 	public $cart = array();
+	public $order = false;
 	
 	public function __construct($dpid,$userId,$siteId = null,$type = 1){
 		$this->dpid = $dpid;
@@ -22,7 +23,7 @@ class WxOrder
 		$this->type = $type;
 		$this->getCart();
 		if($this->type==1){
-			$this->orderOpenSite();
+			$this->getSite();
 		}
 	}
 	public function getCart(){
@@ -45,6 +46,14 @@ class WxOrder
 		}
 		$this->cart = $results;
 	}
+	public function getSite(){
+		$site = WxSite::get($this->siteId,$this->dpid);
+		if($site['status'] == 0){
+			$this->orderOpenSite();
+		}elseif($site['status'] == 1){
+			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
+		}
+	}
 	public function orderOpenSite(){
 		SiteClass::openSite($this->dpid,1,0,$this->siteId);
 	}
@@ -54,20 +63,26 @@ class WxOrder
 		$realityPrice = 0;
 		$transaction = Yii::app()->db->beginTransaction();
  		try {
-			$se = new Sequence("order");
-		    $orderId = $se->nextval();
-		    $insertOrderArr = array(
-		        	'lid'=>$orderId,
-		        	'dpid'=>$this->dpid,
-		        	'create_at'=>date('Y-m-d H:i:s',$time),
-		        	'update_at'=>date('Y-m-d H:i:s',$time), 
-		        	'user_id'=>$this->userId,
-		        	'site_id'=>$this->siteId,
-		        	'order_status'=>1,
-		        	'order_type'=>$this->type,
-		        	'is_sync'=>DataSync::getInitSync(),
-		        );
-			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
+ 			if($this->type==1 && $this->order){
+ 				$orderId = $this->order['lid'];
+ 				$orderPrice = $this->order['should_total'];
+ 				$realityPrice = $this->order['reality_total'];
+ 			}else{
+ 				$se = new Sequence("order");
+			    $orderId = $se->nextval();
+			    $insertOrderArr = array(
+			        	'lid'=>$orderId,
+			        	'dpid'=>$this->dpid,
+			        	'create_at'=>date('Y-m-d H:i:s',$time),
+			        	'update_at'=>date('Y-m-d H:i:s',$time), 
+			        	'user_id'=>$this->userId,
+			        	'site_id'=>$this->siteId,
+			        	'order_status'=>1,
+			        	'order_type'=>$this->type,
+			        	'is_sync'=>DataSync::getInitSync(),
+			        );
+				$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
+ 			}
 			
 			foreach($this->cart as $cart){
 				$se = new Sequence("order_product");
@@ -108,6 +123,19 @@ class WxOrder
 		$sql = 'select * from nb_order where lid=:lid and dpid=:dpid';
 		$order = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':lid',$orderId)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryRow();
+	    return $order;
+	}
+	/**
+	 * 
+	 * 通过siteid获取订单未支付
+	 * 
+	 */
+	public static function getOrderBySiteId($siteId,$dpid){
+		$sql = 'select * from nb_order where site_id=:siteId and dpid=:dpid and order_status=1';
+		$order = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':siteId',$siteId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
 	    return $order;
