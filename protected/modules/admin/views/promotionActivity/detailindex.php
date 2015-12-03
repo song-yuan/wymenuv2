@@ -49,7 +49,7 @@
 			<?php if($typeID=="normal"){ ?>
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','普通优惠');?><p><?php echo yii::t('app','(*注：只显示生效的优惠)');?></p></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','普通优惠');?><p><?php echo yii::t('app','(*注：只显示生效和未过期的优惠)');?></p></div>
 					
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -196,7 +196,7 @@
 	<?php }elseif ($typeID=="private"){ ?>
 					<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','特价优惠');?><p><?php echo yii::t('app','(*注：只显示生效的优惠)');?></p></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','特价优惠');?><p><?php echo yii::t('app','(*注：只显示生效和未过期的优惠)');?></p></div>
 					
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -359,7 +359,7 @@
 	<?php }elseif ($typeID == "cupon"){?>
 				<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','代金券优惠');?><p><?php echo yii::t('app','(*注：只显示生效的代金券)');?></p></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','代金券优惠');?><p><?php echo yii::t('app','(*注：只显示生效和未过期的代金券)');?></p></div>
 					
 				</div>
 				<div class="portlet-body" id="table-manage">
