@@ -234,7 +234,7 @@ class WxRedpacketController extends BackendController
 						'promotion_lid'=>$id,
 
 						'delete_flag'=>'0',
-							'is_sync'=>11,
+							'is_sync'=>$is_sync,
 						);
 				$command = $db->createCommand()->insert('nb_redpacket_detail',$data);
 				}
