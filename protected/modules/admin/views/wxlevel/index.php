@@ -49,7 +49,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i>会员等级</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','会员等级');?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('wxlevel/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                                                 <a href="javascript:void(0)" class="btn red" onclick="document.getElementById('branduserlevel-form').submit();"><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
@@ -113,7 +113,10 @@
 							</div>
 						</div>
 						<?php endif;?>					
-					
+							<div class="alert alert-danger">
+								<strong> 注:</strong> 每一等级的最低积分要比前一等级的最高积分大一。<br/>
+								<strong> 例:</strong> 等级一的最低积分为0，最高积分为100；等级二的最低积分就必须设置成101。<br/>
+							</div>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
