@@ -145,7 +145,7 @@ class PrivatepromotionController extends BackendController
 		$model = PrivatePromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//var_dump($model);exit;
 		$db = Yii::app()->db;
-		$sql = 'select t1.brand_user_lid from nb_private_promotion t left join nb_private_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.private_promotion_id = t.lid)where t.lid = '.$lid.' and t.dpid = '.$this->companyId;
+		$sql = 'select t1.brand_user_lid from nb_private_promotion t left join nb_private_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.private_promotion_id = t.lid and t1.delete_flag = 0) where t.delete_flag = 0 and t.lid = '.$lid.' and t.dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$userlvs = $command->queryAll();
 		//var_dump($userlvs);exit;
@@ -169,7 +169,7 @@ class PrivatepromotionController extends BackendController
 			$db = Yii::app()->db;
 			if(!empty($groupID)){
 				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
-				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where private_promotion_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where delete_flag = 0 and private_promotion_id='.$lid.' and dpid='.$this->companyId;
 				
 				$command=$db->createCommand($sql);
 				$command->execute();
@@ -193,7 +193,7 @@ class PrivatepromotionController extends BackendController
 				//var_dump($gropid);exit;
 			}
 			}else{
-				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where private_promotion_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where delete_flag = 0 and private_promotion_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 			}
