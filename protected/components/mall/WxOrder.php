@@ -65,6 +65,8 @@ class WxOrder
  		try {
  			if($this->type==1 && $this->order){
  				$orderId = $this->order['lid'];
+ 				$orderPrice = $this->order['should_total'];
+ 				$realityPrice = $this->order['reality_total'];
  			}else{
  				$se = new Sequence("order");
 			    $orderId = $se->nextval();
