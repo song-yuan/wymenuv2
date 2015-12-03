@@ -295,7 +295,7 @@ class DefaultSiteController extends BackendController
                             //var_dump($modelprinterjob);exit;
                         }
                         //去modeljobs
-                        $modeljobs= Yii::app()->db->createCommand("select orderid,jobid,address from nb_order_printjobs where dpid=".$compayId." and is_sync='10000'")->queryAll();
+                        $modeljobs= Yii::app()->db->createCommand("select dpid,jobid,address from nb_order_printjobs where dpid=".$compayId." and is_sync='10000'")->queryAll();
                     }
                 } catch (Exception $ex) {
                     echo $ex->getMessage();
