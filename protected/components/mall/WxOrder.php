@@ -49,7 +49,7 @@ class WxOrder
 	public function getSite(){
 		$site = WxSite::get($this->siteId,$this->dpid);
                 var_dump($site);exit;
-		if($site['status'] == 0){
+		if(!in_array($site['status'],array(1,2,3))){
 			$this->orderOpenSite();
 		}elseif($site['status'] == 1){
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
