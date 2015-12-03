@@ -82,7 +82,7 @@ class WxOrder
 								'product_id'=>$cart['product_id'],
 								'price'=>$cart['price'],
 								'amount'=>$cart['num'],
-								'product_order_status'=>0,
+								'product_order_status'=>9,
 								'is_sync'=>DataSync::getInitSync(),
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
