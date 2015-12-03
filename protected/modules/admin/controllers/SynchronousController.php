@@ -34,7 +34,7 @@ class SynchronousController extends BackendController
                     }
                     if($type='manul')
                     {
-                        DataSync::FlagSync($dpid,$isnow);
+                        DataSync::FlagSync($dpid,DataSync::$synctalbe,$isnow);
                     }else{
                         DataSync::timeSync($dpid, $dt, $isnow);  
                     }
