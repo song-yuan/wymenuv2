@@ -183,7 +183,7 @@
 				}
 			//alert(optid);
 			//alert(optvalue);
-         alert(checkvalue);
+         //alert(checkvalue);
         // alert(promotionID);
          $.ajax({
                      type:'GET',
