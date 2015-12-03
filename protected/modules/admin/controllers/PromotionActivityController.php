@@ -114,6 +114,7 @@ class PromotionActivityController extends BackendController
 
 	public function actionDetailindex(){
 			$typeID = Yii::app()->request->getParam('typeID');
+			$data = date('Y-m-d H:i:s',time());
 			//var_dump($typeID);exit;
 			$activityID = Yii::app()->request->getParam('lid');
 			if (empty($activityID)){
@@ -124,7 +125,7 @@ class PromotionActivityController extends BackendController
 // 			}
 			$db = Yii::app()->db;
 			if($typeID=="normal"){
-				$sql = 'select k.* from(select t1.promotion_lid, t.* from nb_normal_promotion t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.delete_flag = 0 and is_available = 0) k';
+				$sql = 'select k.* from(select t1.promotion_lid, t.* from nb_normal_promotion t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.end_time >="'.$data.'" and t.delete_flag = 0 and is_available = 0) k';
 				$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 				//var_dump($sql);exit;
 				$pages = new CPagination($count);
@@ -133,7 +134,7 @@ class PromotionActivityController extends BackendController
 				$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 				$models = $pdata->queryAll();
 			}elseif($typeID=="private"){
-				$sql = 'select l.* from(select t1.promotion_lid,t.* from nb_private_promotion t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.delete_flag = 0 and is_available = 0) l';
+				$sql = 'select l.* from(select t1.promotion_lid,t.* from nb_private_promotion t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.end_time >="'.$data.'" and t.delete_flag = 0 and is_available = 0) l';
 				$count = $db->createCommand(str_replace('l.*','count(*)',$sql))->queryScalar();
 				//var_dump($sql);exit;
 				$pages = new CPagination($count);
@@ -142,7 +143,7 @@ class PromotionActivityController extends BackendController
 				$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 				$models = $pdata->queryAll();
 			}elseif($typeID=="cupon"){
-				$sql = 'select j.* from(select t1.promotion_lid,t.* from nb_cupon t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.delete_flag = 0 and is_available = 0) j';
+				$sql = 'select j.* from(select t1.promotion_lid,t.* from nb_cupon t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.end_time >="'.$data.'" and t.delete_flag = 0 and is_available = 0) j';
 				$count = $db->createCommand(str_replace('j.*','count(*)',$sql))->queryScalar();
 				//var_dump($sql);exit;
 				$pages = new CPagination($count);
@@ -330,14 +331,14 @@ class PromotionActivityController extends BackendController
 		$LvNames = "";
 		if($type=="cupon"){
 			//	echo 'ABC';
-			$sql = 'select t1.level_name from nb_cupon_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid) where t.to_group = 2 and t.cupon_id ='.$proID.' and t.dpid ='.$dpid;
+			$sql = 'select t1.level_name from nb_cupon_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid and t1.delete_flag = 0) where t.delete_flag  = 0 and  t.to_group = 2 and t.cupon_id ='.$proID.' and t.dpid ='.$dpid;
 			$connect = Yii::app()->db->createCommand($sql);
 			//	$connect->bindValue(':site_id',$siteId);
 			//	$connect->bindValue(':dpid',$dpid);
 			$LvNames = $connect->queryAll();
 			
 		}elseif ($type=="private"){
-			$sql = 'select t1.level_name from nb_private_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid) where t.to_group = 2 and t.private_promotion_id ='.$proID.' and t.dpid ='.$dpid;
+			$sql = 'select t1.level_name from nb_private_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid and t1.delete_flag = 0) where t.delete_flag = 0 and  t.to_group = 2 and t.private_promotion_id ='.$proID.' and t.dpid ='.$dpid;
 			$connect = Yii::app()->db->createCommand($sql);
 			//	$connect->bindValue(':site_id',$siteId);
 			//	$connect->bindValue(':dpid',$dpid);

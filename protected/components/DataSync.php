@@ -98,6 +98,9 @@ class DataSync
     //nb_order_taste nb_product_printerway每次修改都是删除就得插入新的，所以同步时也应该删除所有旧的，插入新的。
     public static $syncCloudDel=array(
         //'nb_order_taste',
+        'nb_printer',
+        'nb_printer_way',
+        'nb_printer_way_detail',
         'nb_product_printerway',
         'nb_product_taste',
         'nb_product_picture'
