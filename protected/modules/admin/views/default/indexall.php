@@ -830,11 +830,12 @@
                                     });
                                 }
                                 //开始打印任务
+                                //alert("34234");
                                 var printresult=false;
                                 var successjobs="00000000";
                                 if(typeof(Androidwymenuprinter)=="undefined")
                                 {
-                                    return;
+                                    //return;
                                 }
                                 $.each(msg.modeljobs,function(key,value){
                                     printresult=false;
@@ -851,10 +852,12 @@
                                             var baudrate=parseInt(addressdetail[2]);
                                             printresult=Androidwymenuprinter.printComJob(value.dpid,value.jobid,addressdetail[1],baudrate);
                                         }else{
-                                            printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
+                                            //printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
+                                            printresult=true;
                                         }                                                                        
                                     }
                                 });
+                                //alert(successjobs);
                                 if("00000000"!=successjobs)
                                 {
                                     $.ajax({
