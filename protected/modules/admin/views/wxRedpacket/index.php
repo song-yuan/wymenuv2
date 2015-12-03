@@ -101,7 +101,7 @@
 								<th><?php echo yii::t('app','红包发送个数');?></th>
 								<th><?php echo yii::t('app','红包领用截止日期');?></th>
                                 <th><?php echo yii::t('app','编辑');?></th>                                                                
-                                <th><?php echo yii::t('app','编辑明细');?></th>
+                                <th><?php echo yii::t('app','添加代金券');?></th>
                                 <th><?php echo yii::t('app','发送规则设置');?></th>
                                 <th><?php echo yii::t('app','备注');?></th>
 								
@@ -121,7 +121,7 @@
 								<td class="center">
 								<a href="<?php echo $this->createUrl('wxRedpacket/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('wxRedpacket/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a></td>
+								<a href="<?php echo $this->createUrl('wxRedpacket/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','添加代金券营销品');?></a></td>
 								
 								 <td class="center">
 								<a href="<?php echo $this->createUrl('wxRedpacket/detailrules',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','规则设置');?></a></td>

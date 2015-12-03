@@ -49,7 +49,7 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
                                     <?php if($typeId=='product') :?>
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','特价活动产品设置');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','普通活动产品设置');?></div>
 					<div class="actions">						
                                             <div style="margin-top:-5px !important;" class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
@@ -60,7 +60,7 @@
 						</div>-->
 					</div>
                                         <?php else :?>
-                                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐特价活动设置');?></div>
+                                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐活动优惠设置');?></div>
                                         <?php endif;?>
                                             <div class="col-md-3 pull-right">
 												<div class="input-group">
@@ -82,6 +82,8 @@
 								<th ><?php echo yii::t('app','图片');?></th>
 								<?php if($typeId=='product') :?>
 								<th><?php echo yii::t('app','原价');?></th>
+								<?php elseif($typeId=='set') :?>
+								<th><?php echo yii::t('app','套餐默认价格');?></th>
 								<?php endif;?>
 								<th><?php echo yii::t('app','状态');?></th>
 							</tr>
@@ -95,6 +97,8 @@
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
 								<?php if($typeId=='product') :?>
 								<td ><?php echo $model['original_price'];?></td>
+								<?php elseif($typeId=="set") :?>
+								<td ><?php echo $this->getProductSetPrice($model['lid'],$model['dpid']);?></td>
 								<?php endif;?>
                                 <td>
 									<div class="form-group">
