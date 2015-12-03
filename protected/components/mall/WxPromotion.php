@@ -33,7 +33,7 @@ class WxPromotion
 				if($product['is_discount']==0){
 					$products[$j]['price'] = ($product['original_price'] - $product['promotion_money']) > 0 ? $product['original_price'] - $product['promotion_money'] : 0;
 				}else{
-					$products[$j]['price'] = ($product['original_price']*$product['promotion_discount']) > 0 ? $product['original_price']*$product['promotion_discount'] : 0;
+					$products[$j]['price'] = ($product['original_price']*$product['promotion_discount']) > 0 ? number_format($product['original_price']*$product['promotion_discount']/100,2) : 0;
 				}
 			}
 			$results[$k]['productList'] = $products;
@@ -63,7 +63,7 @@ class WxPromotion
 	 			if($promotion['is_discount']==0){
 	 				return array('is_discount'=>0,'price'=>($product['original_price'] - $product['promotion_money']) > 0 ? $product['original_price'] - $product['promotion_money'] : 0);
 	 			}else{
-	 				return array('is_discount'=>0,'price'=>($product['original_price']*$product['promotion_discount']) > 0 ? $product['original_price']*$product['promotion_discount'] : 0);
+	 				return array('is_discount'=>0,'price'=>($product['original_price']*$product['promotion_discount']) > 0 ? number_format($product['original_price']*$product['promotion_discount']/100,2) : 0);
 	 			}
 	 		}else{
 	 			return array('is_discount'=>-1,'price'=>$product['original_price']);
