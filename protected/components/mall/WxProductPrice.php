@@ -60,7 +60,7 @@ class WxProductPrice
 					   	 $this->promotion['is_discount'] = $promotion['is_discount'];
 					   }
 					}
-					$this->price = $this->price >0 ? $this->price : 0;
+					$this->price = $this->price >0 ? $this->price : number_format(0,2);
 					$this->promotion['price'] = $this->price;
 				}
 				
@@ -77,7 +77,7 @@ class WxProductPrice
 					   //打折
 					   $this->price = number_format($this->price*$allPromotion['promotion_discount']/10,2);
 					}
-					$this->price = $this->price >0 ? $this->price : 0;
+					$this->price = $this->price >0 ? $this->price : number_format(0,2);
 					$this->promotion['price'] = $this->price;
 					if(!$this->price){
 						break;
