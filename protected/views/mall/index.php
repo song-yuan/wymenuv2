@@ -95,8 +95,6 @@ $(document).ready(function(){
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
             if(top < 0){
-            	alert(id);
-           		alert(top);alert(top + height);
             	if(top + height <= 0){
             		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
                		$('a[href=#'+id+']').parent('li').next().addClass('current');
