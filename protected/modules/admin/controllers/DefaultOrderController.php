@@ -112,6 +112,7 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',0);
                 $syscallId = Yii::app()->request->getParam('syscallId',0);
                 $autoaccount = Yii::app()->request->getParam('autoaccount',0);
+                $padId = Yii::app()->request->getParam('padId',"0000000000");
                 $order=new Order();
                 $siteNo=new SiteNo();
                 $site=new Site();
@@ -144,7 +145,7 @@ class DefaultOrderController extends BackendController
                     $siteNo = SiteNo::model()->find($criteria);
                     //var_dump($siteNo);exit;
                 }
-                //var_dump($order);exit;
+                //var_dump($order);exit;                
                 if(empty($order))
                 {
                     Until::validOperate($companyId,$this);                    
@@ -162,6 +163,9 @@ class DefaultOrderController extends BackendController
                     //var_dump($order);exit;
                     $order->save();
                 }
+                //检查是否有自动打印的东西，order_product product_order_status
+                OrderProduct::setPauseJobs($companyId,$padId);
+                ////////////////
                 $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,'1',$companyId);
 		//$orderProducts = OrderProduct::model()->findAll('dpid=:dpid and order_id=:orderid',array(':dpid'=>$companyId,':orderid'=>$order->order_id));
 		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
