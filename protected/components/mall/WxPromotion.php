@@ -39,7 +39,6 @@ class WxPromotion
 			}
 			$results[$k]['productList'] = $products;
 		}
-		var_dump($results);exit;
 		$this->promotionProductList = $results;
 	}
 	/**
