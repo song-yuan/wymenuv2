@@ -94,7 +94,7 @@ $(document).ready(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
-            if(top < 0 && parseInt(top) + parseInt(top) > 5){
+            if(top < 0 && (parseInt(top) + parseInt(top)) > 5){
         		 $('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
             	 $('a[href=#'+id+']').parent('li').addClass('current');
             	 return false;
