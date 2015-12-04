@@ -48,7 +48,7 @@ class WxOrder
 	}
 	public function getSite(){
 		$site = WxSite::get($this->siteId,$this->dpid);
-		if($site['status'] == 0){
+		if(!in_array($site['status'],array(1,2,3))){
 			$this->orderOpenSite();
 		}elseif($site['status'] == 1){
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
@@ -141,7 +141,7 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select t.price,t.amount,t1.product_name,t1.main_picture from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid';
+		$sql = 'select t.price,t.amount,t1.product_name,t1.main_picture from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.delete_flag=0';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':orderId',$orderId)
 				  ->bindValue(':dpid',$dpid)

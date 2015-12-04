@@ -1461,7 +1461,7 @@ class Helper
                 $printer2orderproducts_a=array();
                 $jobids=array();
                 $printercontent_a=array();
-                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"dddd");        
+                //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"dddd");        
                 //$orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
                 //$orderProductTasteEx = $orderProduct->taste_memo;
                 //var_dump($orderProductTasteEx);exit;
@@ -1796,22 +1796,31 @@ class Helper
                 foreach ($printercontent_a as $key=>$values) {             //////////////                           
                     //$printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                     $printer2 = $printers_a[$key];
+                    //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"before printConetent2");
                     $printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
+                    //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"after printConetent2");
                     //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
-                    array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
                     if(!$printret['status'])
                     {
                         return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
                     }
+                    array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
+                    
                 }               
                 //var_dump(json_encode($jobids));exit;
                 //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'type'=>'none','msg'=>"测试14".count($jobids2));
 //                Gateway::getOnlineStatus();
 //                $store = Store::instance('wymenu');
-                $store=new Memcache;
-                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
-                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids2),0,300);    
-                $store->close();
+                //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"memcache初始化失败");
+                try{
+                    $store=new Memcache;
+                    $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
+                    $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids2),0,300);    
+                    $store->close();
+                }  catch (Exception $e)
+                {
+                    return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"memcache初始化失败444");        
+                }
                 $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'msg'=>'打印任务正常发布',"jobs"=>$jobids2);
                 //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
                 //更新菜品状态为已打印
@@ -2069,11 +2078,12 @@ class Helper
                     $printer2 = $printers_a[$key];
                     $printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
                     //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
-                    array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
                     if(!$printret['status'])
                     {
                         return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
                     }
+                    array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
+                    
                 }               
                 //var_dump(json_encode($jobids));exit;
 //                Gateway::getOnlineStatus();
@@ -2302,9 +2312,16 @@ class Helper
         {
 //                Gateway::getOnlineStatus();
 //                $store = Store::instance('wymenu');
-            $store=new Memcache;
+            //return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'none','msg'=>yii::t('app',Yii::app()->params['memcache']['server'].Yii::app()->params['memcache']['port']));
+            try{
+                $store=new Memcache;
                 $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
-                
+                //$store=memcache_connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                //return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'none','msg'=>'memcache初始化失败');                
+            }catch(Exception $e)
+            {
+                return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'none','msg'=>yii::t('app','memcache初始化失败22！'));
+            }
                 $contentCode="";
                 $contentCodeAll="";
                 

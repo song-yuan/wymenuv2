@@ -374,8 +374,8 @@ class OrderList
                 }
                 ///先删除所有为下单的临时菜品，后插入
                 //不能删除，否则无法同步
-                //$sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
-                $sql='update nb_order_product set delete_flag="1" where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
+                $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
+                //$sql='update nb_order_product set delete_flag="1" where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
                 $result = $db->createCommand($sql)->execute();                            
                     //return array('status'=>false,'msg'=>"test11");
                 //插入订单单品
@@ -421,7 +421,13 @@ class OrderList
                         if($productDetailArr[3]=="0")
                         {
                             //插入
-                            $orderProductId = $se->nextval();
+                            $orderProductId="";
+                            if($productDetailArr[0]=="0000000000")
+                            {
+                                $orderProductId = $se->nextval();
+                            }else{
+                                $orderProductId = $productDetailArr[0];
+                            }                            
                             //插入一条
                             $orderProductData = array(
                                                 'lid'=>$orderProductId,
@@ -452,14 +458,21 @@ class OrderList
 //                                $orderProductData->save();
 //                            }
                         //insert taste//delete and insert taste
-                        
+                        //return array('status'=>false,'msg'=>"nbproductinsert after");
                         $orderProductTasteIds=str_replace("|",",",$productDetailArr[8]);
                         if(!empty($orderProductTasteIds))
                         {
                             $orderProductTasteIds=substr($orderProductTasteIds, 0,strlen($orderProductTasteIds)-1);
                             $orderProductTasteArr=explode(",",$orderProductTasteIds);
-                            //$sql2 = 'delete from nb_order_taste where dpid='.$companyId.' and is_order=0 and order_id = '.$productDetailArr[0];
-                            $sql2 = 'update nb_order_taste set delete_flag="1" where dpid='.$companyId.' and is_order=0 and order_id = '.$productDetailArr[0];
+                            $modelids=$db->createCommand("select taste_id,lid from nb_order_taste where dpid=".$companyId." and is_order=0 and order_id = ".$productDetailArr[0])->queryAll();
+                            $modelids1=array();
+                            foreach ($modelids as $id)
+                            {
+                                //array_push($modelids1, $id["lid"]);
+                                $modelids1[$id["taste_id"]]=$id["lid"];
+                            }
+                            $sql2 = 'delete from nb_order_taste where dpid='.$companyId.' and is_order=0 and order_id = '.$productDetailArr[0];
+                            //$sql2 = 'update nb_order_taste set delete_flag="1" where dpid='.$companyId.' and is_order=0 and order_id = '.$productDetailArr[0];
                             //return json_encode(array('status'=>true,'msg'=>$orderProductTasteIds));
                             $result = $db->createCommand($sql2)->execute();
                             //重新插入  
@@ -467,7 +480,13 @@ class OrderList
                             {
                                 foreach($orderProductTasteArr as $tvalue)
                                 {    
-                                    $orderProductTasteId = $setaste->nextval();
+                                    $orderProductTasteId="";
+                                    if(!empty($modelids1[$tvalue]))
+                                    {
+                                        $orderProductTasteId=$modelids1[$tvalue];
+                                    }else{
+                                        $orderProductTasteId = $setaste->nextval();
+                                    }
                                     //return json_encode(array('status'=>false,'msg'=>$productDetailArr[0]."|".$tvalue."|".$orderTasteId));                                
 
                                     $orderProductTasteAll = array(
@@ -484,6 +503,7 @@ class OrderList
                                 }
                             }
                         }
+                        //return array('status'=>false,'msg'=>"after taste insert");
                     }
                 }
 
@@ -513,6 +533,7 @@ class OrderList
                 $order->taste_memo=$orderTasteMemo;
                 $order->callno=$callId;
                 $order->save();
+                //return array('status'=>false,'msg'=>"after order save");
                 //删除全单口味
                 $orderTasteIds=str_replace("|",",",$orderTasteIds);
                 if(!empty($orderTasteIds))
@@ -520,8 +541,15 @@ class OrderList
                     //return json_encode(array('status'=>false,'msg'=>$orderTasteIds));
                     $orderTasteIds=substr($orderTasteIds, 0,strlen($orderTasteIds)-1);
                     $orderTasteArr=explode(",",$orderTasteIds);
-                    //$sql = 'delete from nb_order_taste where dpid='.$companyId.' and is_order=1 and order_id ='.$orderId;
-                    $sql = 'update nb_order_taste set delete_flag="1" where dpid='.$companyId.' and is_order=1 and order_id ='.$orderId;
+                    $modelids=$db->createCommand("select taste_id,lid from nb_order_taste where dpid=".$companyId." and is_order=1 and order_id =".$orderId)->queryAll();
+                    $modelids1=array();
+                    foreach ($modelids as $id)
+                    {
+                        //array_push($modelids1, $id["lid"]);
+                        $modelids1[$id["taste_id"]]=$id["lid"];
+                    }
+                    $sql = 'delete from nb_order_taste where dpid='.$companyId.' and is_order=1 and order_id ='.$orderId;
+                    //$sql = 'update nb_order_taste set delete_flag="1" where dpid='.$companyId.' and is_order=1 and order_id ='.$orderId;
                     $result = $db->createCommand($sql)->execute();
                     //重新插入                        
                     //return json_encode(array('status'=>false,'msg'=>"test3"));
@@ -529,8 +557,14 @@ class OrderList
                     if(!empty($orderTasteArr))
                     {
                         foreach($orderTasteArr as $tvalue)
-                        {                            
-                            $orderTasteId = $setaste->nextval();
+                        {
+                            $orderTasteId="";
+                            if(!empty($modelids1[$tvalue]))
+                            {
+                                $orderTasteId=$modelids1[$tvalue];
+                            }else{
+                                $orderTasteId = $setaste->nextval();
+                            }
                             $orderTasteAll = array(
                                                     'lid'=>$orderTasteId,
                                                     'dpid'=>$companyId,
@@ -545,14 +579,16 @@ class OrderList
                         }
                     }
                 }
-                
+                //return array('status'=>false,'msg'=>"after order taste save");
 //                if(!$savejson["status"])
 //                {
 //                    $ret=json_encode($savejson);
 //                }else{
                 if($orderStatus>1)
                 {
+                    //return array('status'=>false,'msg'=>"before printkitchen all");
                     $ret=  Helper::printKitchenAll3($order,$site,$siteNo,false);
+                    //return array('status'=>false,'msg'=>"after printkitchen all");
                     if(!$ret['status'])
                     {
                         $transaction->rollback();

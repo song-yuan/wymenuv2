@@ -101,7 +101,14 @@
 //                                    sno[0].focus();
 //                                }
                                 var objs=$(".orderaction");
-                                //alert(objs.length);
+                                var padid="0000000046";
+                                if (typeof Androidwymenuprinter == "undefined") {
+                                    //alert("找不到PAD设备");
+                                    //return false;
+                                }else{
+                                    var padinfo=Androidwymenuprinter.getPadInfo();
+                                    padid=padinfo.substr(10,10);
+                                }
                                 if(objs.length>0)
                                 {
                                     var sid=$(objs[0]).attr("sid");
@@ -113,7 +120,7 @@
                                     //alert(sid);alert(istemp);
                                     //$(objs[0]).trigger(event_clicktouchstart);
                                     layer_order_partial = layer.load(0, {shade: [0.3,'#fff']});
-                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp
+                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>'+'/sid/'+sid+'/istemp/'+istemp+"/padId/"+padid
                                             ,function(){
                                                 layer.close(layer_order_partial);
                                             });
