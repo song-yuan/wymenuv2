@@ -32,13 +32,14 @@ class WxPromotion
 			foreach($products as $j=>$product){
 //				$products[$j]['price'] = self::getPromotionPrice($this->dpid,$this->userId,$product['product_id'],$result['private_promotion_id'],$result['to_group']);
 				if($product['is_discount']==0){
-					$products[$j]['price'] = ($product['original_price'] - $product['promotion_money']) > 0 ? $product['original_price'] - $product['promotion_money'] : 0;
+					$products[$j]['price'] = ($product['original_price'] - $product['promotion_money']) > 0 ? number_format($product['original_price'] - $product['promotion_money'],2) : 0;
 				}else{
 					$products[$j]['price'] = ($product['original_price']*$product['promotion_discount']) > 0 ? number_format($product['original_price']*$product['promotion_discount']/10,2) : 0;
 				}
 			}
 			$results[$k]['productList'] = $products;
 		}
+		var_dump($results);exit;
 		$this->promotionProductList = $results;
 	}
 	/**
@@ -62,7 +63,7 @@ class WxPromotion
 	 		$promotion = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$result['private_promotion_id'])->bindValue(':productId',$productId)->queryRow();
 	 		if($promotion){
 	 			if($promotion['is_discount']==0){
-	 				return array('is_discount'=>0,'price'=>($product['original_price'] - $promotion['promotion_money']) > 0 ? $product['original_price'] - $promotion['promotion_money'] : 0);
+	 				return array('is_discount'=>0,'price'=>($product['original_price'] - $promotion['promotion_money']) > 0 ? number_format($product['original_price'] - $promotion['promotion_money'],2) : 0);
 	 			}else{
 	 				return array('is_discount'=>1,'price'=>($product['original_price']*$promotion['promotion_discount']) > 0 ? number_format($product['original_price']*$promotion['promotion_discount']/10,2) : 0);
 	 			}
