@@ -835,7 +835,7 @@
                                 var successjobs="00000000";
                                 if(typeof(Androidwymenuprinter)=="undefined")
                                 {
-                                    //return;
+                                    return;
                                 }
                                 $.each(msg.modeljobs,function(key,value){
                                     printresult=false;
@@ -1136,7 +1136,7 @@
                     //var orderid=$(".selectProduct").attr("orderid");
                    //var orderstatus="1";
                    var sendjson=getallproductinfo();
-                   //alert(sendjson);
+                   //alert(sendjson);return;
                    var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/1";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
@@ -1652,6 +1652,7 @@
                 {                    
                         //取得数据
                         var sendjson=getallproductinfo();
+                        //alert(sendjson);return;
                         var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>/orderid/"+orderid+"/orderstatus/2";
                         var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
                          if(!statu){
@@ -1697,10 +1698,10 @@
                                     if(!printresultfail)
                                     {
                                         alert("厨打成功！");
-										//修改代码CF
-                                       			$(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
-                                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-blue");
-                                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","2");
+					//修改代码CF
+                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-blue");
+                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","2");
                                                  				
                                         //修改下单后座位颜色代码；
                                     }   

@@ -254,4 +254,57 @@ class OrderProduct extends CActiveRecord
                         . " where t1.order_detail_id=".$orderId." and t.dpid=".$dpid.' and t1.delete_flag=0';
 		return $db->createCommand($sql)->queryAll();
 	}
+        
+        static public function setPauseJobs($compayId,$padId){
+		$sqljoborder="select distinct order_id from nb_order_product where product_order_status='9' and dpid=".$compayId." order by order_id";
+                $modeljoborder=Yii::app()->db->createCommand($sqljoborder)->queryAll();                        
+                //var_dump($padId,$pad);exit;
+                //前面加 barcode
+                $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $cardtotal=0;
+                $memo="挂单清单";
+                $temporderid=0;
+                //$orderProducts=array();
+                //$modelprinterjob=array();
+                if(!empty($modeljoborder))
+                {
+                    $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$compayId,'lid'=>$padId));
+                    //var_dump($modeljoborder);exit;
+                    foreach ($modeljoborder as $mjo)
+                    {
+                        if($mjo["order_id"] !='0000000000')
+                        {
+                            $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$mjo["order_id"],':dpid'=>$compayId));
+                            if(empty($order))
+                            {
+                                //throw new Exception(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                                continue;
+                            }
+                            $productTotalarray = OrderProduct::getPauseTotal($order->lid,$order->dpid);
+                            //var_dump($productTotalarray);exit;
+                            $total=$productTotalarray["total"];
+                            $originaltotal=$productTotalarray["originaltotal"]; 
+                            $criteria = new CDbCriteria;
+                            $criteria->condition =  't.dpid='.$compayId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                            $criteria->order = ' t.lid desc ';                    
+                            $siteNo = SiteNo::model()->find($criteria);
+                            if($order->is_temp=='0')
+                            {
+                                $total = Helper::calOrderConsume($order,$siteNo, $total);
+                            }
+                            $order->should_total=$originaltotal;
+                            $order->reality_total=$total["total"];
+                            //var_dump($order);exit;
+                            $orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
+                            //var_dump($orderProducts);exit;
+                            $printList = Helper::printPauseList($order,$orderProducts,$pad,$precode,"0",$memo,$cardtotal);
+//                                    if($printList["status"])
+//                                    {
+//                                        array_push($modelprinterjob,$printList);
+//                                    }
+                        }                               
+                    }
+                    //var_dump($modelprinterjob);exit;
+                }
+	}
 }
