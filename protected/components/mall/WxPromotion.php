@@ -30,10 +30,11 @@ class WxPromotion
 			$sql = 'select m.*,n.num from (select t.product_id,t.is_set,t.is_discount,t.promotion_money,t.promotion_discount,t.order_num,t1.product_name,t1.main_picture,t1.original_price from nb_private_promotion_detail t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.private_promotion_id=:promotionId and t.delete_flag=0)m left join nb_cart n on m.product_id=n.product_id and n.user_id=:userId and privation_promotion_id=:promotionId';
 			$products = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$this->dpid)->bindValue(':userId',$this->user['lid'])->bindValue(':promotionId',$result['private_promotion_id'])->queryAll();
 			foreach($products as $j=>$product){
+//				$products[$j]['price'] = self::getPromotionPrice($this->dpid,$this->userId,$product['product_id'],$result['private_promotion_id'],$result['to_group']);
 				if($product['is_discount']==0){
-					$products[$j]['price'] = ($product['original_price'] - $product['promotion_money']) > 0 ? $product['original_price'] - $product['promotion_money'] : 0;
+					$products[$j]['price'] = ($product['original_price'] - $product['promotion_money']) > 0 ? number_format($product['original_price'] - $product['promotion_money'],2) : 0;
 				}else{
-					$products[$j]['price'] = ($product['original_price']*$product['promotion_discount']) > 0 ? number_format($product['original_price']*$product['promotion_discount']/100,2) : 0;
+					$products[$j]['price'] = ($product['original_price']*$product['promotion_discount']) > 0 ? number_format($product['original_price']*$product['promotion_discount']/10,2) : 0;
 				}
 			}
 			$results[$k]['productList'] = $products;
@@ -50,20 +51,20 @@ class WxPromotion
 	 	$user = WxBrandUser::get($userId,$dpid);
 	 	$product = WxProduct::getProduct($productId,$dpid);
 	 	if($toGroup == 2){
-	 		$sql = 'select t.private_promotion_id,t1.promotion_title,t1.promotion_type,t1.order_num from nb_private_branduser t,nb_private_promotion t1 where t.private_promotion_id=t1.lid and t.dpid=t1.dpid and t.brand_user_lid=:userLevelId and t.dpid=:dpid and t1.begin_time <= :now and :now <= t1.end_time and t.is_used=1 and t.to_group=2 and t.delete_flag=0';
-	 		$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':userLevelId',$user['user_level_lid'])->bindValue(':now',$now)->queryAll();
-	 	}elseif($toGroup == 2){
+	 		$sql = 'select t.private_promotion_id,t1.promotion_title,t1.promotion_type,t1.order_num from nb_private_branduser t,nb_private_promotion t1 where t.private_promotion_id=t1.lid and t.dpid=t1.dpid and t.private_promotion_id=:privatePromotionId and t.brand_user_lid=:userLevelId and t.dpid=:dpid and t1.begin_time <= :now and :now <= t1.end_time and t.is_used=1 and t.to_group=2 and t.delete_flag=0';
+	 		$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':privatePromotionId',$promotionId)->bindValue(':userLevelId',$user['user_level_lid'])->bindValue(':now',$now)->queryRow();
+	 	}elseif($toGroup == 3){
 	 		$sql = 'select t.private_promotion_id,t.to_group,t1.promotion_title,t1.promotion_type,t1.order_num from nb_private_branduser t,nb_private_promotion t1 where t.private_promotion_id=t1.lid and t.dpid=t1.dpid and t.brand_user_lid=:userId and t.dpid=:dpid and t1.begin_time <= :now and :now <= t1.end_time and t.is_used=1 and t.to_group=3 and t.delete_flag=0';
-	 		$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':userId',$user['lid'])->bindValue(':now',$now)->queryAll();
+	 		$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':privatePromotionId',$promotionId)->bindValue(':userId',$user['lid'])->bindValue(':now',$now)->queryRow();
 	 	}
 	 	if($result){
 	 		$sql = 'select * from nb_private_promotion_detail where dpid=:dpid and private_promotion_id=:promotionId and product_id=:productId and delete_flag=0';
 	 		$promotion = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$result['private_promotion_id'])->bindValue(':productId',$productId)->queryRow();
 	 		if($promotion){
 	 			if($promotion['is_discount']==0){
-	 				return array('is_discount'=>0,'price'=>($product['original_price'] - $product['promotion_money']) > 0 ? $product['original_price'] - $product['promotion_money'] : 0);
+	 				return array('is_discount'=>0,'price'=>($product['original_price'] - $promotion['promotion_money']) > 0 ? number_format($product['original_price'] - $promotion['promotion_money'],2) : 0);
 	 			}else{
-	 				return array('is_discount'=>0,'price'=>($product['original_price']*$product['promotion_discount']) > 0 ? number_format($product['original_price']*$product['promotion_discount']/100,2) : 0);
+	 				return array('is_discount'=>1,'price'=>($product['original_price']*$promotion['promotion_discount']) > 0 ? number_format($product['original_price']*$promotion['promotion_discount']/10,2) : 0);
 	 			}
 	 		}else{
 	 			return array('is_discount'=>-1,'price'=>$product['original_price']);
