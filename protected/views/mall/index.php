@@ -35,7 +35,7 @@
         </div>
         <div class="lt-rt">
         	<div class="minus <?php if(!$promotionProduct['num']) echo 'zero';?>">-</div>
-            <input type="tcext" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" to-group="<?php echo $promotion['to_group'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
+            <input type="text" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" to-group="<?php echo $promotion['to_group'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
             <div class="add">+</div>
             <div class="clear"></div>
         </div>
@@ -164,22 +164,26 @@ function setTotal(){
     });
 
     <!--计算菜种-->
-    var nIn = $("li.current a").attr("href");
-    $(nIn+" input[type='text']").each(function() {
-    	if($(this).val()!=0){
-    		n++;
-    	}
+    $('li').each(function(){
+    	var nIn = $(this).find("a").attr("href");
+	    $(nIn+" input[type='text']").each(function() {
+	    	if($(this).val()!=0){
+	    		n++;
+	    	}
+	    });
+	    if(n>0){
+    		$(this).find("b").html(n).show();		
+	    }else{
+	    	$(this).find("b").hide();		
+	    }
+	    n = 0;	
     });
 
     <!--计算总份数-->
     $("input[type='text']").each(function(){
     	v += parseInt($(this).val());
     });
-    if(n>0){
-    	$(".current b").html(n).show();		
-    	}else{
-    	$(".current b").hide();		
-    		}	
+    
     $(".share").html(v);
     $("#total").html(s.toFixed(2)); 
 } 
