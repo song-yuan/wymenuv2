@@ -61,10 +61,18 @@ class WxCart
 					}
 				}
 			}
-			if(($result['order_num']!=0 && $resulta['count'] >= $result['order_num']) || $result['product_num']!=0 && (isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
-				return array('status'=>false,'msg'=>'超过活动商品数量!');
+			if($result['order_num']==0){
+				if($result['product_num']!=0 && (isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
+					return array('status'=>false,'msg'=>'超过活动商品数量1!');
+				}
 			}
-				return array('status'=>true,'msg'=>'OK');
+			
+			if($result['product_num']==0){
+				if($result['order_num']!=0 && $resulta['count'] >= $result['order_num']){
+					return array('status'=>false,'msg'=>'超过活动商品数量2!');
+				}
+			}
+			return array('status'=>true,'msg'=>'OK');
 		}
 	}
 	public function getCart(){
