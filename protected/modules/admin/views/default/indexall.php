@@ -1674,7 +1674,7 @@
                                 var successjobids="0";
                                 //保存成功，刷新
                                 var data=msg;
-                                //alert(data.msg);
+                                //alert('1111'+data.msg);
                                 if(data.status){
                                     $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);   
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
