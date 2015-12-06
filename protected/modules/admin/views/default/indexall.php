@@ -1186,7 +1186,7 @@
                     var padinfo=Androidwymenuprinter.getPadInfo();
                     padid=padinfo.substr(10,10);
                 }
-                var url="<?php echo $this->createUrl('defaultOrder/pausePrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/orderList/"+orderList;
+                var url="<?php echo $this->createUrl('defaultOrder/pausePrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
                 $.ajax({
                         url:url,
                         type:'GET',
