@@ -42,6 +42,15 @@ class WxPromotion
 		$this->promotionProductList = $results;
 	}
 	/**
+	 * 获取活动信息
+	 * 
+	 */
+	 public static function getPromotion($dpid,$promotionId){
+	 	$sql = 'select * from  nb_private_promotion where dpid=:dpid and lid=:lid';
+	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':lid',$promotionId)->queryRow();
+	 	return $result;
+	 }
+	/**
 	 * 
 	 * 产品特价活动价格
 	 * 
