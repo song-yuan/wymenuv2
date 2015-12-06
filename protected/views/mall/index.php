@@ -108,9 +108,12 @@ $(document).ready(function(){
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
+        
+        var timestamp=new Date().getTime()
+        var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId));?>',
-        	data:{productId:productId,promoteId:promoteId,toGroup:toGroup},
+        	data:{productId:productId,promoteId:promoteId,toGroup:toGroup,random:random},
         	success:function(msg){
         		if(msg.status){
         			 t.val(parseInt(t.val())+1);
@@ -132,9 +135,12 @@ $(document).ready(function(){
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
+        
+        var timestamp=new Date().getTime()
+        var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
         $.ajax({
         	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId));?>',
-        	data:{productId:productId,promoteId:promoteId,toGroup:toGroup},
+        	data:{productId:productId,promoteId:promoteId,toGroup:toGroup,random:random},
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){

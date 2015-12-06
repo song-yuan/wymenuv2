@@ -44,18 +44,18 @@ class WxCart
 					  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 					  ->queryRow();
 					  
-			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type from nb_private_promotion_detail t,nb_private_promotion t1 where t.private_promotion_id=t1.lid and t.dpid=t1.dpid and t.private_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0';
+			$sql = 'select t.order_num as product_num,t1.order_num,t1.promotion_type from nb_private_promotion_detail t,nb_private_promotion t1 where t.private_promotion_id=t1.lid and t.dpid=t1.dpid and t.private_promotion_id=:privationPromotionId and t.dpid=:dpid and t.product_id=:productId and t.is_set=0 and t.delete_flag=0';
 			$result = Yii::app()->db->createCommand($sql)
 						  ->bindValue(':dpid',$this->dpid)
 						  ->bindValue(':productId',$this->productArr['product_id'])
 						  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 						  ->queryRow();
-			if($result['promotion_type']==1){
+			if($result['promotion_type']==0){
 				$cartPromotions = $this->getCartPromotion();
 				if(!empty($cartPromotions)){
 					foreach($cartPromotions as $promotion){
 						$privatePromotion = WxPromotion::getPromotion($this->dpid,$promotion['privation_promotion_id']);
-						if($privatePromotion['promotion_type']==1){
+						if($privatePromotion['promotion_type']==0){
 							return array('status'=>false,'msg'=>'已经参加其他活动!');
 						}
 					}
@@ -87,10 +87,11 @@ class WxCart
 		return $results;
 	}
 	public function getCartPromotion(){
-		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and privation_promotion_id > 0';
+		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and privation_promotion_id > 0 and privation_promotion_id!=:privationPromotionId';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
+				  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 				  ->queryAll();
 		return $results;
 	}
