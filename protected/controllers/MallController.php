@@ -23,7 +23,7 @@ class MallController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','cart','order','payOrder'))){
+		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -187,6 +187,31 @@ class MallController extends Controller
 		
 		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'msg'=>$msg));
 	 }
+	 /**
+	 * 
+	 * 营销活动的明细列表
+	 * 
+	 */
+	 public function actionCupon()
+	{
+		$userId = Yii::app()->session['userId'];
+		$activeId = Yii::app()->request->getParam('activeId');//promotion_activity的lid
+		$activeDetails = WxPromotionActivity::getDetail($this->companyId,$activeId);
+		$this->render('cupon',array('companyId'=>$this->companyId,'cupons'=>$activeDetails,'userId'=>$userId));
+	}
+	/**
+	 * 
+	 * 活动领取页面
+	 * 
+	 */
+	 public function actionCuponInfo()
+	{
+		$userId = Yii::app()->session['userId'];
+		$activeDetailId = Yii::app()->request->getParam('detailid');//promotion_activity的lid
+		$deatil = WxPromotionActivity::getDetailItem($this->companyId,$activeDetailId);
+		$lid = WxPromotionActivity::sent($this->companyId,$userId,$deatil['promotion_type'],$deatil['promotion_lid'],$deatil['activity_lid']);
+		$this->render('cuponinfo',array('companyId'=>$this->companyId,'ptype'=>$deatil['promotion_type'],'lid'=>$lid));
+	}
 	/**
 	 * 
 	 * 添加购物车
@@ -261,6 +286,7 @@ class MallController extends Controller
 			Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请重新操作')));
 		}
 	}
+	
 	/**
 	 * 
 	 * 获取订单状态
@@ -271,6 +297,24 @@ class MallController extends Controller
 		$orderId = Yii::app()->request->getParam('orderId');
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		Yii::app()->end($order['order_status']);
+	}
+	/**
+	 * 
+	 * 领券
+	 * 
+	 */
+	public function actionGetCupon()
+	{
+		$lid = Yii::app()->request->getParam('lid');
+		$type = Yii::app()->request->getParam('type');
+		
+		$result = WxPromotionActivity::getPromotionActivity($this->companyId,$lid,$type);
+		if($result){
+			$msg = '领取成功';
+		}else{
+			$msg = '领取失败,请重新领取';
+		}
+		Yii::app()->end($msg);
 	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
