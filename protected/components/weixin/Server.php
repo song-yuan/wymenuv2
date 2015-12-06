@@ -174,13 +174,12 @@ class Server {
 	 * 根据场景进行回复消息
 	 */
 	public function sceneResponse() {
+		$subPushs = array();
 		$promotionPushs = WxPromotionActivity::getScanPush($this->brandId);
     	if(!empty($promotionPushs)){
-    		$subPushs = array();
     		foreach($promotionPushs as $push){
     			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
     		}
-    		return $this->news($subPushs);
     	}
 		
 		$tableArr = array(
@@ -201,7 +200,11 @@ class Server {
 			);
 			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId));
 			$typeName = isset($siteType['name'])?$siteType['name']:'';
-			return $this->news(array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
+			$siteArr = array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
+			if(!empty($subPushs)){
+				array_push($siteArr,$subPushs);
+			}
+			return $this->news($siteArr);
 		}else
 			return $this->generalResponse();
 	}
