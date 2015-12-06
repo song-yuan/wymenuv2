@@ -1,13 +1,13 @@
 body{ background-color:#E5E5E5;}
 a:link,a:hover,a:visited {color:black;}
-.prolist li{padding:10px;height:30px;line-height:30px;background:white;}
+.prolist li{padding:10px;min-height:30px;line-height:30px;background:white;height:auto;}
 .prolist li .item{float:left;text-align:center;}
 li:last-child{margin-bottom:0px;}
 .ispay{background:red;color:white;}
 .col-4{width:40%;}
 .col-2{width:20%;}
 .mar-bm-2{margin-bottom:2px;}
-.mar-bm-1{margin-bottom:1px;}
+.mar-bm-1{margin-bottom:5px;}
 
 .order-title{padding:10px;height:30px;line-height:30px;margin-bottom:1px;font-size:20px;text-align:center;background:rgb(255,255,255);}
 .order-site{padding:10px;height:30px;line-height:30px;margin-bottom:1px;font-size:18px;background:rgb(255,255,255);}
