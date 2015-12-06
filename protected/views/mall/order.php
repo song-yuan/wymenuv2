@@ -33,7 +33,7 @@
 	</div>
 	<?php if($order['reality_total'] - $order['should_total']):?>
 	<div class="item">
-		<div class="lt">优惠金额:</div><div class="rt">￥<?php echo $order['reality_total'] - $order['should_total'];?></div>
+		<div class="lt">优惠金额:</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
