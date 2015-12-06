@@ -443,7 +443,7 @@ class DefaultOrderController extends BackendController
                         $site = Site::model()->with("siteType")->find($criteria2);
                     }
                 }
-                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$orderList)));
                 $savejson=OrderList::createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
                 //$jobids=array();
                 //Yii::app()->end(json_encode($savejson));
