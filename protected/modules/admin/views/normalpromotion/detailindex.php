@@ -51,8 +51,11 @@
                                     <?php if($typeId=='product') :?>
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','普通活动产品设置');?></div>
 					<div class="actions">						
-                                            <div style="margin-top:-5px !important;" class="btn-group">
+                        <div style="margin-top:-5px !important;" class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+						</div>
+						<div class="btn-group" style="left:3%;">
+							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
 						</div>
 						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
@@ -62,6 +65,7 @@
                                         <?php else :?>
                                         <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐活动优惠设置');?></div>
                                         <?php endif;?>
+                                        
                                             <div class="col-md-3 pull-right">
 												<div class="input-group">
                                                     <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">

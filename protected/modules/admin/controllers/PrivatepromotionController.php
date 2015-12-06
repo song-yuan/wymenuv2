@@ -655,13 +655,76 @@ class PrivatepromotionController extends BackendController
 			Yii::app()->db->createCommand('update nb_private_promotion_detail set delete_flag="1", is_sync ='.$is_sync.' where product_id ='.$ids.' and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			Yii::app()->end(json_encode(array("status"=>"success")));
-			//$this->redirect(array('normalpromotion/detailindex' , 'companyId' => $companyId)) ;
+			//$this->redirect(array('privatepromotion/detailindex' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要移除的项目'));
 			$this->redirect(array('privatepromotion/detailindex' , 'companyId' => $companyId)) ;
 		}
 	}
 	
+	
+	
+	public function actionPromotiondetail(){
+		$sc = Yii::app()->request->getPost('csinquery');
+		$promotionID = Yii::app()->request->getParam('lid');
+		//$typeId = Yii::app()->request->getParam('typeId');
+		$categoryId = Yii::app()->request->getParam('cid',"");
+		$fromId = Yii::app()->request->getParam('from','sidebar');
+		$csinquery=Yii::app()->request->getPost('csinquery',"");
+		//var_dump($csinquery);exit;
+		$db = Yii::app()->db;
+			
+			
+		if(empty($promotionID)){
+			$promotionID = Yii::app()->request->getParam('promotionID');
+		}
+		if(empty($promotionID)){
+			echo "操作有误！请点击右上角的返回继续编辑";
+			exit;
+		}
+	
+		if(!empty($categoryId)){
+			//$criteria->condition.=' and t.category_id = '.$categoryId;
+			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.private_promotion_id,t1.*
+							from nb_private_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id  and t1.delete_flag = 0 )
+							where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.private_promotion_id = '.$promotionID.' and t1.category_id = '.$categoryId.' ) k';
+	
+		}
+	
+		elseif(!empty($csinquery)){
+			//$criteria->condition.=' and t.simple_code like "%'.strtoupper($csinquery).'%"';
+			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.private_promotion_id,t1.*
+							from nb_private_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
+									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.private_promotion_id = '.$promotionID.' and t1.simple_code like "%'.strtoupper($csinquery).'%" ) k';
+	
+		}else{
+			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.private_promotion_id,t1.*
+							from nb_private_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
+									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.private_promotion_id = '.$promotionID.') k' ;
+	
+		}
+		//$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_private_promotion_detail t1  where t1.is_set = 0 and t1.private_promotion_id ='.$promotionID.' t1.delete_flag = 0 and t1.dpid='.$this->companyId.') k' ;
+	
+	
+		//var_dump($sql);exit;
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		$categories = $this->getCategories();
+		$this->render('promotiondetail',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'categories'=>$categories,
+				'categoryId'=>$categoryId,
+				//'typeId' => $typeId,
+				'promotionID'=>$promotionID
+		));
+			
+	}
 	
 	/*
 	 * 
