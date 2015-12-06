@@ -36,4 +36,23 @@ class WxCupon
 				  ->queryAll();
 	    return $cupon;
 	}
+	public static function getCuponList($dpid){
+		$now = date('Y-m-d H:i:s',time());
+		$sql = 'select * from nb_cupon where dpid=:dpid and begin_time <=:now and :now <= end_time and delete_flag=0';
+		$cupon = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':now',$now)
+				  ->queryAll();
+	    return $cupon;
+	}
+	public static function getCupon($dpid,$cuponId){
+		$now = date('Y-m-d H:i:s',time());
+		$sql = 'select * from nb_cupon where lid=:lid and dpid=:dpid and begin_time <=:now and :now <= end_time and delete_flag=0';
+		$cupon = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':lid',$cuponId)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':now',$now)
+				  ->queryRow();
+	    return $cupon;
+	}
 }
