@@ -51,7 +51,10 @@ class WxCart
 						  ->bindValue(':productId',$this->productArr['product_id'])
 						  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 						  ->queryRow();
-			if($resulta['count'] >= $result['order_num'] || (isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
+			if($result['order_num']){
+				
+			}
+			if(($result['order_num']!=0 && $resulta['count'] >= $result['order_num']) || $result['product_num']!=0 && (isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
 				return array('status'=>false,'msg'=>'超过活动商品数量!');
 			}
 				return array('status'=>true,'msg'=>'OK');
