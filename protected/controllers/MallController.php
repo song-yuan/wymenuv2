@@ -106,6 +106,7 @@ class MallController extends Controller
 				$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'msg'=>$msg));
 			}else{
 				WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
+				$siteId = $site['lid'];
 			}
 		}
 		
