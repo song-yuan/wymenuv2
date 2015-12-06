@@ -1476,7 +1476,7 @@ class Helper
                 $orderProducts = OrderProduct::model()->with('product')->findAll(' t.order_id in ('.$orderList.') and t.dpid='.$order->dpid.' and t.is_print=0 and t.delete_flag=0');
                 if(empty($orderProducts)) 
                 {
-                    return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
+                    return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"noorderproduct");//yii::t('app','没有要打印的菜品！')
                 }
                 //foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
                 $printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));

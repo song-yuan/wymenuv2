@@ -202,7 +202,7 @@ class OrderProduct extends CActiveRecord
 		return $db->createCommand($sql)->queryAll();
 	}
         
-        //挂单的产品
+        //单个订单挂单的产品
         static public function getHasPauseProducts($orderId,$dpid){
 		$db = Yii::app()->db;
 		$sql = "select t.*,t1.product_name,t1.original_price,t1.is_temp_price,t1.is_special,t1.is_discount,
@@ -212,7 +212,8 @@ class OrderProduct extends CActiveRecord
                                 left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
 				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.product_order_status in("0","9") and t.is_retreat=0 and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id';
 		return $db->createCommand($sql)->queryAll();
-	}
+	}       
+        
         
         //原价，产品原价
 	static public function getTotal($orderlist,$dpid){
@@ -224,11 +225,49 @@ class OrderProduct extends CActiveRecord
                 return empty($ret)?0:$ret;
 	}
         
+        //订单产品原价
+	static public function getOriginalTotal($orderlist,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as total"
+                        . ",ifnull(sum(tp.original_price*(IF(t.weight>0,t.weight,t.amount))),0.00) as originaltotal"
+                        . " from nb_order_product t,nb_product tp"
+                        . " where t.dpid=tp.dpid and t.product_id=tp.lid and t.delete_flag=0 and t.product_order_status=1"
+                        . " and t.is_giving=0 and t.is_retreat=0 and t.order_id in (".$orderlist.") and t.dpid=".$dpid;
+		$ret= $db->createCommand($sql)->queryRow();
+                return $ret;
+	}
+        
+        //订单产品原价
+	static public function getPayTotal($orderlist,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as paytotal"
+                        . " from nb_order_product t"
+                        . " where t.delete_flag=0 and t.product_order_status=2"
+                        . " and t.is_giving=0 and t.is_retreat=0 and t.order_id in (".$orderlist.") and t.dpid=".$dpid;
+		$ret= $db->createCommand($sql)->queryScalar();
+                return $ret;
+	}
+        
+        //单个订单的挂单总价
         static public function getPauseTotal($orderId,$dpid){
 		$db = Yii::app()->db;
-		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as total,ifnull(sum(tp.original_price*(IF(t.weight>0,t.weight,t.amount))),0.00) as originaltotal from nb_order_product t,nb_product tp"
+		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as total"
+                        . ",ifnull(sum(tp.original_price*(IF(t.weight>0,t.weight,t.amount))),0.00) as originaltotal"
+                        . " from nb_order_product t,nb_product tp"
                         . " where t.dpid=tp.dpid and t.product_id=tp.lid and t.delete_flag=0 "
                         . " and t.is_giving=0 and t.is_retreat=0 and t.order_id=".$orderId." and t.dpid=".$dpid;
+		$ret= $db->createCommand($sql)->queryRow();
+                return $ret;
+	}
+        
+        //多个订单的挂单总价
+        static public function getPauseTotalAll($orderList,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as total"
+                        . ",ifnull(sum(tp.original_price*(IF(t.weight>0,t.weight,t.amount))),0.00) as originaltotal"
+                        . " from nb_order_product t,nb_product tp"
+                        . " where t.dpid=tp.dpid and t.product_id=tp.lid and t.delete_flag=0 "
+                        . " and t.is_giving=0 and t.is_retreat=0 and t.order_id in(".$orderList.") and t.dpid=".$dpid;
 		$ret= $db->createCommand($sql)->queryRow();
                 return $ret;
 	}
