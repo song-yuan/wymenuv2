@@ -55,12 +55,12 @@ class WxProductPrice
 						}
 					}else{
 					   //打折
-					   if($this->price > $this->product['original_price']*$promotion['promotion_discount']/10){
-					   	 $this->price = number_format($this->product['original_price']*$promotion['promotion_discount']/10,2);
+					   if($this->price > $this->product['original_price']*$promotion['promotion_discount']){
+					   	 $this->price = number_format($this->product['original_price']*$promotion['promotion_discount'],2);
 					   	 $this->promotion['is_discount'] = $promotion['is_discount'];
 					   }
 					}
-					$this->price = $this->price >0 ? $this->price : 0;
+					$this->price = $this->price >0 ? $this->price : number_format(0,2);
 					$this->promotion['price'] = $this->price;
 				}
 				
@@ -70,14 +70,14 @@ class WxProductPrice
 				$sql = 'select t.product_id,t.is_set,t.is_discount,t.promotion_money,t.promotion_discount,t.order_num from nb_normal_promotion_detail t,nb_normal_promotion t1 where t.normal_promotion_id=t1.lid and t.dpid=t1.dpid and t.product_id=:productId and t.dpid=:dpid and t.is_set=0 and t.delete_flag=0 and t1.delete_flag=0 and t1.is_available=0 and t1.begin_time <= :now and t1.end_time >=:now and t1.promotion_type=1';
 				$allNarmanPromotions = Yii::app()->db->createCommand($sql)->bindValue(':productId',$this->productId)->bindValue(':dpid',$this->dpid)->bindValue(':now',$formatTime)->queryAll();
 				foreach($allNarmanPromotions as $allPromotion){
-					if($promotion['is_discount']){
+					if($allPromotion['is_discount']==0){
 						//优惠
-						$this->price = number_format($this->price - $allPromotion['promotion_money'],2);				
+						$this->price = number_format($this->price - $allPromotion['promotion_money'],2);
 					}else{
 					   //打折
-					   $this->price = number_format($this->price*$allPromotion['promotion_discount']/10,2);
+					   $this->price = number_format($this->price*$allPromotion['promotion_discount'],2);
 					}
-					$this->price = $this->price >0 ? $this->price : 0;
+					$this->price = $this->price >0 ? $this->price : number_format(0,2);
 					$this->promotion['price'] = $this->price;
 					if(!$this->price){
 						break;

@@ -172,16 +172,19 @@ class Server {
 		
 		$sceneType = $this->scene['type'];
 		
-		$sql = 'SELECT '.$tableArr[$sceneType][0].' as title, "'.$tableArr[$sceneType][1].'" as description, "'.$tableArr[$sceneType][2].'" as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
+		$sql = 'SELECT type_id,'.$tableArr[$sceneType][0].' as title, "'.$tableArr[$sceneType][1].'" as description, "'.$tableArr[$sceneType][2].'" as imgUrl FROM '.$tableArr[$sceneType][3].' WHERE dpid = ' .$this->brandId. ' AND '.$tableArr[$sceneType][4].' = ' .$this->scene['id'];
 		$query = Yii::app()->db->createCommand($sql)->queryRow();
 		$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 
 		if($query) { 
+			$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$this->brandId;
+			$siteType = Yii::app()->db->createCommand($sql)->queryRow();
 			$urlArr = array(
 				1=>array('mall/index','companyId'),
 			);
 			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId));
-			return $this->news(array('桌号:'.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
+			$typeName = isset($siteType['name'])?$siteType['name']:'';
+			return $this->news(array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
 		}else
 			return $this->generalResponse();
 	}

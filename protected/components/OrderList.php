@@ -354,7 +354,7 @@ class OrderList
 		return $price.':'.$num;
 	}
         
-        public static function createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,Order $order,Site $site,SiteNo $siteNo)
+        public static function createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,Order $order,Site $site,SiteNo $siteNo)
         {
             $sellOff = array();                
             //////////////
@@ -374,7 +374,7 @@ class OrderList
                 }
                 ///先删除所有为下单的临时菜品，后插入
                 //不能删除，否则无法同步
-                $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
+                $sql = 'delete from nb_order_product where dpid='.$companyId.' and product_order_status=0 and order_id in ('.$orderList.")";
                 //$sql='update nb_order_product set delete_flag="1" where dpid='.$companyId.' and product_order_status=0 and order_id ='.$orderId;
                 $result = $db->createCommand($sql)->execute();                            
                     //return array('status'=>false,'msg'=>"test11");
@@ -387,9 +387,9 @@ class OrderList
                     {   
                         //更新库存//失败则返回
                         $productDetailArr=explode(",",$tvalue);
-                        $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$productDetailArr[2],':dpid'=>$companyId));
-                        //return json_encode(array('status'=>true,'msg'=>$productdata->store_number.$productDetailArr[2].$productDetailArr[3]));
-                        if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[4] ))
+                        $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$productDetailArr[3],':dpid'=>$companyId));
+                        //return json_encode(array('status'=>true,'msg'=>$productdata->store_number.$productDetailArr[3].$productDetailArr[4]));
+                        if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[5] ))
                         {
                             $transaction->rollback();
                             return array('status'=>false,'msg'=>$productdata->product_name."数量不足");
@@ -399,26 +399,26 @@ class OrderList
                         //不是临时挂单就更新库存，更新下单数和点赞数，发送更新库存消息
                         if($orderStatus>1)
                         {
-                            $productdata->order_number=$productdata->order_number+$productDetailArr[4];
-                            $productdata->favourite_number=$productdata->favourite_number+$productDetailArr[4];                            
+                            $productdata->order_number=$productdata->order_number+$productDetailArr[5];
+                            $productdata->favourite_number=$productdata->favourite_number+$productDetailArr[5];                            
                             if($productdata->store_number>0)
                             {
-                                $productdata->store_number=$productdata->store_number-$productDetailArr[4];                            
-                                array_push($sellOff,array("product_id"=>sprintf("%010d",$productDetailArr[2]),"type"=>"product","num"=>$productdata->store_number));
+                                $productdata->store_number=$productdata->store_number-$productDetailArr[5];                            
+                                array_push($sellOff,array("product_id"=>sprintf("%010d",$productDetailArr[3]),"type"=>"product","num"=>$productdata->store_number));
                             }
                             //确保和云端的数量同步
                             if(Yii::app()->params['cloud_local']=='l')
                             {
-                                DataSync::cloudFirt($companyId, "update nb_product set order_number=order_number+".$productDetailArr[4].
-                                        ",favourite_number=favourite_number+".$productDetailArr[4].
-                                        ",store_number=store_number-".$productDetailArr[4].
+                                DataSync::cloudFirt($companyId, "update nb_product set order_number=order_number+".$productDetailArr[5].
+                                        ",favourite_number=favourite_number+".$productDetailArr[5].
+                                        ",store_number=store_number-".$productDetailArr[5].
                                         " where dpid=".$companyId." and lid=".$productdata->lid);
                             }
                             ///套餐数量减////////////
                         }
                         $productdata->save();
                         //return array('status'=>false,'msg'=>"test111333");
-                        if($productDetailArr[3]=="0")
+                        if($productDetailArr[4]=="0")
                         {
                             //插入
                             $orderProductId="";
@@ -427,21 +427,27 @@ class OrderList
                                 $orderProductId = $se->nextval();
                             }else{
                                 $orderProductId = $productDetailArr[0];
-                            }                            
+                            }
+                            //orderid
+                            $orderTempId=$productDetailArr[1];
+                            if($orderTempId)
+                            {
+                                $orderTempId=$orderId;
+                            }
                             //插入一条
                             $orderProductData = array(
                                                 'lid'=>$orderProductId,
                                                 'dpid'=>$companyId,
                                                 'create_at'=>$time,
-                                                'order_id'=>$orderId,
-                                                'set_id'=>$productDetailArr[1],
-                                                'product_id'=>$productDetailArr[2],
-                                                'offprice'=>$productDetailArr[5],
-                                                'price'=>$productDetailArr[6],
+                                                'order_id'=>$orderTempId,
+                                                'set_id'=>$productDetailArr[2],
+                                                'product_id'=>$productDetailArr[3],
+                                                'offprice'=>$productDetailArr[6],
+                                                'price'=>$productDetailArr[7],
                                                 'update_at'=>$time,
-                                                'amount'=>$productDetailArr[4],
-                                                'is_giving'=>$productDetailArr[7],
-                                                'taste_memo'=>$productDetailArr[9],
+                                                'amount'=>$productDetailArr[5],
+                                                'is_giving'=>$productDetailArr[8],
+                                                'taste_memo'=>$productDetailArr[10],
                                                 'product_order_status'=>$orderProductStatus,
                                                 );
                             //return array('status'=>false,'msg'=>"test14444".implode("..",$orderProductData));
@@ -459,7 +465,8 @@ class OrderList
 //                            }
                         //insert taste//delete and insert taste
                         //return array('status'=>false,'msg'=>"nbproductinsert after");
-                        $orderProductTasteIds=str_replace("|",",",$productDetailArr[8]);
+                        $orderProductTasteIds=str_replace("|",",",$productDetailArr[9]);
+                        //return array('status'=>false,'msg'=>$orderProductTasteIds);
                         if(!empty($orderProductTasteIds))
                         {
                             $orderProductTasteIds=substr($orderProductTasteIds, 0,strlen($orderProductTasteIds)-1);
@@ -533,9 +540,10 @@ class OrderList
                 $order->taste_memo=$orderTasteMemo;
                 $order->callno=$callId;
                 $order->save();
-                //return array('status'=>false,'msg'=>"after order save");
+                
                 //删除全单口味
                 $orderTasteIds=str_replace("|",",",$orderTasteIds);
+                //return array('status'=>false,'msg'=>$orderTasteIds);
                 if(!empty($orderTasteIds))
                 {
                     //return json_encode(array('status'=>false,'msg'=>$orderTasteIds));
@@ -586,8 +594,8 @@ class OrderList
 //                }else{
                 if($orderStatus>1)
                 {
-                    //return array('status'=>false,'msg'=>"before printkitchen all");
-                    $ret=  Helper::printKitchenAll3($order,$site,$siteNo,false);
+                    //return array('status'=>false,'msg'=>"before printkitchen all".$orderList);
+                    $ret=  Helper::printKitchenAll3($order,$orderList,$site,$siteNo,false);
                     //return array('status'=>false,'msg'=>"after printkitchen all");
                     if(!$ret['status'])
                     {

@@ -7,7 +7,7 @@
                                                                     <?php 
                                                                     $tastes=TasteClass::gettastes($tastegroup['lid'],$this->companyId);
                                                                     foreach ($tastes as $taste):?> 
-                                                                    <label tasteid="<?php echo $taste['lid']; ?>" group="tastegroup_<?php echo $tastegroup['lid']; ?>" class="selectTaste btn btn-default <?php if(in_array($taste['lid'],$orderTastes)) echo 'active';?>">
+                                                                    <label tasteid="<?php echo $taste['lid']; ?>" group="tastegroup_<?php echo $tastegroup['lid']; ?>" class="selectTaste btn btn-default<?php if(in_array($taste['lid'],$orderTastes)) echo 'active';?>">
                                                                         <input type="checkbox" class="toggle"> <?php echo $taste['name'];?>
                                                                     </label>
                                                                     <?php endforeach;?> 

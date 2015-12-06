@@ -142,12 +142,19 @@ class DefaultSiteController extends BackendController
 //                        $models = Site::model()->findAll($criteria);
                         $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
                                 . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem "
+                                . ",IFNULL(minstatus.min_status,-1)+1 as min_status,IFNULL(minstatus.max_status,-1)+1 as max_status "
                                 . " from nb_site t "
                                 . " LEFT JOIN (select t1.site_id,t1.order_type,t1.dpid,count(t2.product_order_status) as newitem from"
                                 . " nb_order t1 left join nb_order_product t2 on t1.dpid=t2.dpid and t1.lid=t2.order_id and t2.product_order_status='0' "
                                 . " where t1.is_temp='0'and t1.order_status in ('1','2','3')"
                                 . " and t1.order_type in ('1','2') group by t1.site_id,t1.order_type,t1.dpid)"
-                                . " twx on twx.dpid=t.dpid and t.lid=twx.site_id"
+                                . " twx on twx.dpid=t.dpid and t.lid=twx.site_id "
+                                . " LEFT JOIN (select tt1.site_id,tt1.dpid,min(tt2.product_order_status) as min_status"
+                                . ",max(tt2.product_order_status) as max_status from nb_order tt1 left join nb_order_product tt2"
+                                . " on tt1.dpid=tt2.dpid and tt1.lid=tt2.order_id"
+                                . " where tt1.is_temp='0'and tt1.order_status in ('1','2','3')"
+                                . "  group by tt1.site_id,tt1.dpid)"
+                                . " minstatus on  minstatus.dpid=t.dpid and t.lid=minstatus.site_id"
                                 . " where t.delete_flag='0' and t.dpid=".$compayId
                                 . " order by t.serial ASC";
                         $connect = Yii::app()->db->createCommand($sql);
@@ -233,13 +240,20 @@ class DefaultSiteController extends BackendController
                         //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
 
                         $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
-                              . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem "
+                              . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem"
+                                . ",IFNULL(minstatus.min_status,-1)+1 as min_status,IFNULL(minstatus.max_status,-1)+1 as max_status "
                               . " from nb_site t "
                               . " LEFT JOIN (select t1.site_id,t1.order_type,t1.dpid,count(t2.product_order_status) as newitem from"
                               . " nb_order t1 left join nb_order_product t2 on t1.dpid=t2.dpid and t1.lid=t2.order_id and t2.product_order_status in('0','9') "
                               . " where t1.is_temp='0'and t1.order_status in ('1','2','3')"
                               . " and t1.order_type in ('1','2') group by t1.site_id,t1.order_type,t1.dpid)"
-                              . " twx on twx.dpid=t.dpid and t.lid=twx.site_id"
+                              . " twx on twx.dpid=t.dpid and t.lid=twx.site_id "
+                              . " LEFT JOIN (select tt1.site_id,tt1.dpid,min(tt2.product_order_status) as min_status"
+                                . ",max(tt2.product_order_status) as max_status from nb_order tt1 left join nb_order_product tt2"
+                                . " on tt1.dpid=tt2.dpid and tt1.lid=tt2.order_id"
+                                . " where tt1.is_temp='0'and tt1.order_status in ('1','2','3')"
+                                . "  group by tt1.site_id,tt1.dpid)"
+                                . " minstatus on  minstatus.dpid=t.dpid and t.lid=minstatus.site_id"
                               . " where t.delete_flag='0' and t.dpid=".$compayId
                               . " order by t.serial ASC";
                         $models= Yii::app()->db->createCommand($sql)->queryAll();
@@ -485,6 +499,12 @@ class DefaultSiteController extends BackendController
                         $istemp = Yii::app()->request->getPost('istemp','0');
                         Until::validOperate($companyId, $this);
                         $db = Yii::app()->db;
+                        $maxstatus=  OrderProduct::getMaxStatus($sid,$istemp, $companyId);
+                        
+                        if($maxstatus=="2" || $maxstatus=="3")
+                        {
+                            Yii::app()->end(json_encode(array('status'=>0,'message'=>yii::t('app','不能撤台了'))));                             
+                        }
                         $transaction = $db->beginTransaction();
                         try {  
                             if($istemp=="0")
@@ -495,15 +515,18 @@ class DefaultSiteController extends BackendController
                                 $commandsite->bindValue(":companyId" , $companyId);
                                 $commandsite->execute();
                             }
-
-                            $sqlsiteno="update nb_site_no set status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and status in ('1','2')";
+                            
+                            //下单厨打、收银结单时，必须更改整体的状态,
+                            //由于前面加了单品的状态的判断，所以不可能产生2,3整体状态时撤台，
+                            //但是撤去的时候，仍然要去除这个脏数据。
+                            $sqlsiteno="update nb_site_no set status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and status in ('1','2','3')";
                             $commandsiteno=$db->createCommand($sqlsiteno);
                             $commandsiteno->bindValue(":sid" , $sid);
                             $commandsiteno->bindValue(":istemp" , $istemp);
                             $commandsiteno->bindValue(":companyId" , $companyId);
                             $commandsiteno->execute();
                             
-                            $sqlorder="update nb_order set order_status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and order_status in ('1','2')";
+                            $sqlorder="update nb_order set order_status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and order_status in ('1','2','3')";
                             $commandorder=$db->createCommand($sqlorder);
                             $commandorder->bindValue(":sid" , $sid);
                             $commandorder->bindValue(":istemp" , $istemp);
@@ -547,6 +570,7 @@ class DefaultSiteController extends BackendController
                         $istemp = Yii::app()->request->getPost('istemp','0');
                         $ssid = Yii::app()->request->getPost('ssid',0);
                         $sistemp = Yii::app()->request->getPost('sistemp','0');
+                        
                         Until::validOperate($companyId, $this);
                         //echo json_encode(array('status'=>0,'message'=>$sid.'dd'.$companyId.'dd'.$istemp.'dd'.$ssid.'dd'.$sistemp));exit;
                         $db = Yii::app()->db;
@@ -631,6 +655,11 @@ class DefaultSiteController extends BackendController
                         $istemp = Yii::app()->request->getPost('istemp','0');
                         $ssid = Yii::app()->request->getPost('ssid',0);
                         $sistemp = Yii::app()->request->getPost('sistemp','0');
+                        $maxstatus=  OrderProduct::getMaxStatus($sid,$istemp, $companyId);
+                        if($maxstatus=="3")
+                        {
+                            Yii::app()->end(json_encode(array('status'=>0,'message'=>yii::t('app','不能并台了'))));                             
+                        }
                         Until::validOperate($companyId, $this);
                         //echo json_encode(array('status'=>0,'message'=>$sid.'dd'.$companyId.'dd'.$istemp.'dd'.$ssid.'dd'.$sistemp));exit;
                         $db = Yii::app()->db;
@@ -684,58 +713,60 @@ class DefaultSiteController extends BackendController
                             $smodelsn->is_temp=$modelsn->is_temp;
                             $smodelsn->save();
                             //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
+                            //因为一个座位对应多个订单，所以，原订单无所谓变更，直接将源订单指向这个座位就行
                             //更新目标订单状态和人数
-                            $tocriteria = new CDbCriteria;
-                            $tocriteria->condition =  ' t.order_status in ("1","2") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
-                            $tocriteria->order = ' t.lid desc ';
-                            $torder = Order::model()->find($tocriteria);
-                            if(empty($torder))
-                            {
-                                //新生成订单
-                                $torder=new Order();
-                                $se=new Sequence("order");
-                                $torder->lid = $se->nextval();
-                                $torder->dpid=$companyId;
-                                $torder->username=Yii::app()->user->name;
-                                $torder->create_at = date('Y-m-d H:i:s',time());
-                                $torder->lock_status = '0';
-                                $torder->site_id = $sid;
-                                $torder->is_temp = $istemp;
-                                $torder->order_status=$status;
-                                $torder->number=$modelsn->number+$number;
-                                $torder->save();
-                            }else{
-                                if($status > $torder->order_status)
-                                {
-                                    $torder->order_status=$status;
-                                }
-                                $torder->number=$torder->number+$number;
-                                $torder->save();
-                            }
+//                            $tocriteria = new CDbCriteria;
+//                            $tocriteria->condition =  ' t.order_status in ("1","2") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+//                            $tocriteria->order = ' t.lid desc ';
+//                            $torder = Order::model()->find($tocriteria);
+//                            if(empty($torder))
+//                            {
+//                                //新生成订单
+//                                $torder=new Order();
+//                                $se=new Sequence("order");
+//                                $torder->lid = $se->nextval();
+//                                $torder->dpid=$companyId;
+//                                $torder->username=Yii::app()->user->name;
+//                                $torder->create_at = date('Y-m-d H:i:s',time());
+//                                $torder->lock_status = '0';
+//                                $torder->site_id = $sid;
+//                                $torder->is_temp = $istemp;
+//                                $torder->order_status=$status;
+//                                $torder->number=$modelsn->number+$number;
+//                                $torder->save();
+//                            }else{
+//                                if($status > $torder->order_status)
+//                                {
+//                                    $torder->order_status=$status;
+//                                }
+//                                $torder->number=$torder->number+$number;
+//                                $torder->save();
+//                            }
                             //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
                             //...
                             //更新源订单状态
-                            $socriteria = new CDbCriteria;
-                            $socriteria->condition =  ' t.order_status in ("1","2") and  t.dpid='.$companyId.' and t.site_id='.$ssid.' and t.is_temp='.$sistemp ;
-                            $socriteria->order = ' t.lid desc ';
-                            $sorder = Order::model()->find($socriteria);
-                            if(!empty($sorder))
-                            {
-                                $sorder->order_status="5";
-                                $sorder->save();
-                            }
-                            //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
-                            //...
-                            //更新源订单明细，指向目标订单。
-                            if(!empty($sorder))
-                            {
-                                $sqlorder="update nb_order_product set order_id=:torderid where dpid=:companyId and order_id=:sorderid";
-                                $commandorder=$db->createCommand($sqlorder);
-                                $commandorder->bindValue(":torderid" , $torder->lid);
-                                $commandorder->bindValue(":sorderid" , $sorder->lid);
-                                $commandorder->bindValue(":companyId" , $companyId);
-                                $commandorder->execute();   
-                            }
+                            
+//                            $socriteria = new CDbCriteria;
+//                            $socriteria->condition =  ' t.order_status in ("1","2") and  t.dpid='.$companyId.' and t.site_id='.$ssid.' and t.is_temp='.$sistemp ;
+//                            $socriteria->order = ' t.lid desc ';
+//                            $sorder = Order::model()->find($socriteria);
+//                            if(!empty($sorder))
+//                            {
+//                                $sorder->order_status="5";
+//                                $sorder->save();
+//                            }
+//                            //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
+//                            //...
+//                            //更新源订单明细，指向目标订单。
+//                            if(!empty($sorder))
+//                            {
+//                                $sqlorder="update nb_order_product set order_id=:torderid where dpid=:companyId and order_id=:sorderid";
+//                                $commandorder=$db->createCommand($sqlorder);
+//                                $commandorder->bindValue(":torderid" , $torder->lid);
+//                                $commandorder->bindValue(":sorderid" , $sorder->lid);
+//                                $commandorder->bindValue(":companyId" , $companyId);
+//                                $commandorder->execute();   
+//                            }
                             //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
 //                            $sqlorder="update nb_order set is_temp=:istemp,site_id=:sid where site_id=:ssid and is_temp=:sistemp and dpid=:companyId and order_status in ('1','2','3')";
 //                            $commandorder=$db->createCommand($sqlorder);
@@ -745,6 +776,16 @@ class DefaultSiteController extends BackendController
 //                            $commandorder->bindValue(":sistemp" , $sistemp);
 //                            $commandorder->bindValue(":companyId" , $companyId);
 //                            $commandorder->execute();
+//                            
+                            //更改指向
+                            $sqlorder="update nb_order set is_temp=:istemp,site_id=:sid where site_id=:ssid and is_temp=:sistemp and dpid=:companyId and order_status in ('1','2','3')";
+                            $commandorder=$db->createCommand($sqlorder);
+                            $commandorder->bindValue(":sid" , $sid);
+                            $commandorder->bindValue(":istemp" , $istemp);
+                            $commandorder->bindValue(":ssid" , $ssid);
+                            $commandorder->bindValue(":sistemp" , $sistemp);
+                            $commandorder->bindValue(":companyId" , $companyId);
+                            $commandorder->execute();
                             $transaction->commit(); //提交事务会真正的执行数据库操作
                             echo json_encode(array('status'=>1,'message'=>yii::t('app','并台成功')));  
                             return true;

@@ -1,5 +1,7 @@
 	<!-- BEGIN PAGE -->  
-        <ul class="selectProduct" orderid="<?php echo $model->lid; ?>">
+        <ul class="selectProduct" orderid="<?php echo $model->lid; ?>"
+            productdistotal="<?php echo $productDisTotal; ?>" 
+            orderlist="<?php echo $orderlist; ?>">
             <input type="hidden" value="<?php echo $productDisTotal; ?>" id="productDisTotal">
             <span id="order_status" orderStatus="<?php echo $model->order_status; ?>">
                                         *<?php echo $model->create_at;?></span>
@@ -8,6 +10,7 @@
             </li>
                 <?php foreach ($orderProducts as $orderProduct):?>
                                     <li lid="<?php echo $orderProduct['lid'];?>" 
+                                        orderid="<?php echo $orderProduct['order_id'];?>" 
                                         setid="<?php echo $orderProduct['set_id'];?>"
                                         productid="<?php echo $orderProduct['product_id'];?>"
                                         order_status="<?php echo $orderProduct['product_order_status'];?>" 
@@ -22,7 +25,7 @@
                                                 echo $orderProduct['is_print']==1?'印':'';
                                                 echo $orderProduct['is_retreat']==1?'退':'';
                                                 echo $orderProduct['set_id']=='0000000000'?'':'套';
-                                                if(!empty($orderProduct['taste_memo']) || !empty($tasteids))
+                                                if(!empty($orderProduct['taste_memo']) || !empty($tasteidsOrderProducts[$orderProduct['lid']]))
                                                 {  echo "味";}
                                         ?></span>
                                     <span style="font-size:20px !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>
@@ -79,21 +82,22 @@
                         var scanon=false;
                         $(document).ready(function () {
                             $('body').addClass('page-sidebar-closed');
-                            $('#site_list_button').val("<?php echo $total['remark'] ;?>(<?php switch($model->order_status) {case 1:{echo yii::t('app','未下单');break;} case 2:{echo yii::t('app','下单未支付');break;} case 3:{echo yii::t('app','已支付');break;} }?>)");
+                            //var maxstatus="<?php //echo $maxstatus; ?>";
+                            $('#site_list_button').val("<?php echo $total['remark'] ;?>(<?php switch($model->order_status) {case 1:{echo yii::t('app','挂单');break;} case 2:{echo yii::t('app','厨打');break;} case 3:{echo yii::t('app','支付');break;} }?>)");
                             var orderstatus="<?php echo $model->order_status; ?>";
-                            $("#btnswitchsite").hide();
-                            $("#btnunionsite").hide();
-                            $("#btnclosesite").hide();
-                            if(orderstatus=="1"){
-                                $("#btnswitchsite").show();
-                                $("#btnunionsite").show();
-                                $("#btnclosesite").show();
-                            }else if(orderstatus=="2"){
-                                $("#btnswitchsite").show();
-                                $("#btnunionsite").show();
-                            }else if(orderstatus=="3"){
-                                $("#btnswitchsite").show();
-                            }
+//                            $("#btnswitchsite").hide();
+//                            $("#btnunionsite").hide();
+//                            $("#btnclosesite").hide();
+//                            if(maxstatus=="1"){
+//                                $("#btnswitchsite").show();
+//                                $("#btnunionsite").show();
+//                                $("#btnclosesite").show();
+//                            }else if(maxstatus=="2"){
+//                                $("#btnswitchsite").show();
+//                                $("#btnunionsite").show();
+//                            }else if(maxstatus=="3"){
+//                                $("#btnswitchsite").show();
+//                            }
                             if(syscallid>"Ca000" && syscallid<"Ca999")
                             {
                                 accountmanul();

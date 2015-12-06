@@ -797,23 +797,24 @@
                                 {
                                     $.each(msg.models,function(key,value){
                                         var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
-                                        siteobj.attr("status",value.status);
+                                        siteobj.attr("status",value.min_status);
+                                        siteobj.attr("maxstatus",value.max_status);
                                         siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
                                         siteobj.removeClass("bg-yellow");
                                         siteobj.removeClass("bg-blue");
                                         siteobj.removeClass("bg-green");
-                                        if(value.status=="1")
+                                        if(value.min_status=="1")
                                         {
                                             siteobj.addClass("bg-yellow");
-                                        }else if(value.status=="2")
+                                        }else if(value.min_status=="2")
                                         {
                                             siteobj.addClass("bg-blue");
-                                        }else if(value.status=="3")
+                                        }else if(value.min_status=="3")
                                         {
                                             siteobj.addClass("bg-green");
                                         }
                                         if("12".indexOf(value.order_type)>=0
-                                                && ("123".indexOf(value.status)>=0))
+                                                && ("123".indexOf(value.min_status)>=0))
                                         {
                                             siteobj.find("div").show();
                                         }else{
@@ -1033,6 +1034,7 @@
                 if(typeof obj.attr("lid")== "undefined")
                 {
                     var appendstr=' <li lid="0000000000"'
+                                  +'      orderid="0000000000"'
                                   +'      setid="'+setid+'"'
                                   +'      productid="'+lid+'"'
                                   +'      order_status="0"' 
@@ -1071,11 +1073,13 @@
                 //取得整体订单的tasteids tastememo
                 var ordertasteids=$("#ordertasteall").attr("tid");
                 var ordertastememo=$("#ordertastememoall").text();
+                var orderlist=$(".selectProduct").attr("orderlist");
                 var productlist="";
                 var tempproduct="";
                 //取得所有未下单状态的单品，没有打印和厨打都是0,1就不能修改了。
                 $(".selectProductA[order_status='0']").each(function(){
                     tempproduct=$(this).attr("lid");
+                    tempproduct=tempproduct+","+$(this).attr("orderid");
                     tempproduct=tempproduct+","+$(this).attr("setid");
                     tempproduct=tempproduct+","+$(this).attr("productid");
                     tempproduct=tempproduct+","+$(this).attr("order_status");
@@ -1096,7 +1100,8 @@
                 //包括单品列表、单品口味列表，口味备注等
                 return '&productlist='+productlist+
                         '&ordertasteids='+ordertasteids+
-                        '&ordertastememo='+ordertastememo;                 
+                        '&ordertastememo='+ordertastememo+
+                        '&orderlist='+orderlist;                 
             }
             
             
@@ -1670,7 +1675,7 @@
                                 var successjobids="0";
                                 //保存成功，刷新
                                 var data=msg;
-                                //alert(data.msg);
+                                //alert('1111'+data.msg);
                                 if(data.status){
                                     $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);   
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
@@ -2491,6 +2496,7 @@
                 $("#productTaste").find("label[class='selectTaste btn btn-default active']").each(function(){
                     tasteids=tasteids+$(this).attr("tasteid")+"|";
                 });
+                //alert(tasteids);//return;
                 obj.attr("tasteids",tasteids);
                 obj.attr("tastememo",tastememo);
                 //(tasteids);alert(tastememo);
@@ -3212,6 +3218,7 @@
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","7"); 
+                                    $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").css("display","");
                                     sitevisible();
                                     //$('#portlet-button').modal('hide');
                                     //$("#tab_sitelist").hide();
