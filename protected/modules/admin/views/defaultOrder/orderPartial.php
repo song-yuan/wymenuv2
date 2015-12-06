@@ -2,14 +2,14 @@
         <ul class="selectProduct" orderid="<?php echo $model->lid; ?>"
             productdistotal="<?php echo $productDisTotal; ?>" 
             orderlist="<?php echo $orderlist; ?>">
-            <!--<input type="hidden" value="<?php //echo $productDisTotal; ?>" id="productDisTotal">-->
+            <input type="hidden" value="<?php echo $productDisTotal; ?>" id="productDisTotal">
             <span id="order_status" orderStatus="<?php echo $model->order_status; ?>">
                                         *<?php echo $model->create_at;?></span>
             <li lid="0000000000" class="selectProductA">
-                    原价<span id="order_should_pay"><?php echo number_format($model->should_total, 2);?></span>元
-                    现价<span id="order_reality_pay"><?php echo $model->reality_total;?></span>元<br>
-                    参折<span id="productDisTotal"><?php echo $productDisTotal;?></span>元
-                    已付<span id="order_pay_pay"><?php echo $model->pay_total;?></span>元
+                    原价<span id="order_should_pay"><?php echo number_format($model->should_total, 2);?></span>元/
+                    现价<span id="order_reality_pay"><?php echo number_format($model->reality_total, 2);?></span>元<br>
+                    已付<span id="order_has_pay"><?php echo number_format($model->pay_total, 2);?></span>元/
+                    应付<span id="order_remain_pay"><?php echo number_format($model->reality_total-$model->pay_total, 2);?></span>元                    
             </li>
                 <?php foreach ($orderProducts as $orderProduct):?>
                                     <li lid="<?php echo $orderProduct['lid'];?>" 
