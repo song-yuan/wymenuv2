@@ -50,7 +50,18 @@ class WxCart
 						  ->bindValue(':productId',$this->productArr['product_id'])
 						  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 						  ->queryRow();
-			if($resulta['count'] >= $result['order_num'] || (isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
+			if($result['promotion_type']==1){
+				$cartPromotions = $this->getCartPromotion();
+				if(!empty($cartPromotions)){
+					foreach($cartPromotions as $promotion){
+						$privatePromotion = WxPromotion::getPromotion($this->dpid,$promotion['privation_promotion_id']);
+						if($privatePromotion['promotion_type']==1){
+							return array('status'=>false,'msg'=>'已经参加其他活动!');
+						}
+					}
+				}
+			}
+			if(($result['order_num']!=0 && $resulta['count'] >= $result['order_num']) || $result['product_num']!=0 && (isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
 				return array('status'=>false,'msg'=>'超过活动商品数量!');
 			}
 				return array('status'=>true,'msg'=>'OK');
@@ -73,6 +84,14 @@ class WxCart
 				$results[$k]['promotion'] = $productPrice->promotion;
 			}
 		}
+		return $results;
+	}
+	public function getCartPromotion(){
+		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and privation_promotion_id > 0';
+		$results = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$this->dpid)
+				  ->bindValue(':userId',$this->userId)
+				  ->queryAll();
 		return $results;
 	}
 	public function addCart(){
