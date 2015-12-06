@@ -163,11 +163,11 @@ class Order extends CActiveRecord
 		return parent::model($className);
 	}
         
-        static public function getOrderList($siteNo){
+        static public function getOrderList($dpid,$site_id,$is_temp){
             $orderlist="0000000000";
-            if(!empty($siteNo))
-            {
-		$sqlorderlist="select lid from nb_order where order_status in ('1','2','3') and dpid=".$siteNo->dpid." and is_temp=".$siteNo->is_temp." and site_id=".$siteNo->site_id;
+//            if(!empty($siteNo))
+//            {
+		$sqlorderlist="select lid from nb_order where order_status in ('1','2','3') and dpid=".$dpid." and is_temp=".$is_temp." and site_id=".$site_id;
                 $orderlistmodel=Yii::app()->db->createCommand($sqlorderlist)->queryAll();
                 
                 if(!empty($orderlistmodel))
@@ -177,7 +177,7 @@ class Order extends CActiveRecord
                         $orderlist.=",".$ol["lid"];
                     }
                 }
-            }
+//            }
             return $orderlist;
 	}
 }

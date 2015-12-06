@@ -1464,13 +1464,14 @@
 //            });
             function gotoaccount(){
                 //设置总额
-                var payOriginAccount=parseFloat($("#order_should_pay").text().replace(",",""));
+                var payOriginAccount=parseFloat($("#order_reality_pay").text().replace(",",""));
+                 var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
                 $("#payOriginAccount").text(payOriginAccount);
                 var productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));//参与折扣的总额，还有不参与折扣的
                 var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                 var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                 //alert(payOriginAccount);alert(productDisTotal);alert(payDiscountAccount);alert(payMinusAccount);
-                $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+ productDisTotal*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+ productDisTotal*payDiscountAccount/100 - payMinusAccount-payHasAccount).toFixed(2));
                 if(layer_index2!=0)
                 {
                     return;
@@ -1797,42 +1798,42 @@
                                                 });
 
                                             }else{
-                                               if($("#accountbeforeorderstatus").val()==3)
-                                               {
-                                                   //已付款，直接去结单
-                                                   bootbox.confirm("<?php echo yii::t('app','已支付完成,确定结单吗？');?>", function(result) {                    
-                                                    if(result){
-                                                        var url="<?php echo $this->createUrl('defaultOrder/orderAccountDirect',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;                                    
-                                                        $.ajax({
-                                                            url:url,
-                                                            type:'POST',
-                                                            data:"",
-                                                            async:false,
-                                                            dataType: "json",
-                                                            success:function(msg){
-                                                                var data=msg;
-                                                                if(data.status){                                                
-                                                                    //手动改变座位的状态和颜色
-                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
-                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
-                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
-                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","4");
-                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").find("div").hide();                                                
-                                                                    sitevisible();
-                                                                }else{
-                                                                    alert("结单失败1，请重试！");
-                                                                }
-                                                            },
-                                                            error: function(msg){
-                                                                alert("结单失败2，请重试！");                                            
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                               }else{
+//                                               if($("#accountbeforeorderstatus").val()==3)
+//                                               {
+//                                                   //已付款，直接去结单
+//                                                   bootbox.confirm("<?php echo yii::t('app','已支付完成,确定结单吗？');?>", function(result) {                    
+//                                                    if(result){
+//                                                        var url="<?php echo $this->createUrl('defaultOrder/orderAccountDirect',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;                                    
+//                                                        $.ajax({
+//                                                            url:url,
+//                                                            type:'POST',
+//                                                            data:"",
+//                                                            async:false,
+//                                                            dataType: "json",
+//                                                            success:function(msg){
+//                                                                var data=msg;
+//                                                                if(data.status){                                                
+//                                                                    //手动改变座位的状态和颜色
+//                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+//                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
+//                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
+//                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","4");
+//                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").find("div").hide();                                                
+//                                                                    sitevisible();
+//                                                                }else{
+//                                                                    alert("结单失败1，请重试！");
+//                                                                }
+//                                                            },
+//                                                            error: function(msg){
+//                                                                alert("结单失败2，请重试！");                                            
+//                                                            }
+//                                                        });
+//                                                    }
+//                                                });
+//                                               }else{
                                                    //弹出收银界面
                                                     gotoaccount();  
-                                                }
+//                                                }
                                             }
                                         });
                                     }else{
@@ -2075,6 +2076,7 @@
             
             $('#cancel_zero').on(event_clicktouchstart,function(){
                 var payRealityAccount=$("#payRealityAccount").text();
+                var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
                 var payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
                 var productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                 var payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
@@ -2084,7 +2086,7 @@
                 if($(this).hasClass("edit_span_select_zero"))
                 {
                     $(this).removeClass("edit_span_select_zero");
-                    $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                    $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount-payHasAccount).toFixed(2));
                     
                 }else{
                     $(this).addClass("edit_span_select_zero");
@@ -2148,6 +2150,7 @@
                 var nowval=$(this).text();
                 var selectid=$(".edit_span_select").attr("selectid");
                 var payOriginAccount=$("#payOriginAccount").text();
+                var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
                 var payDiscountAccount=$("#payDiscountAccount").text();
                 var productDisTotal=$("#productDisTotal").val();
                 var payMinusAccount=$("#payMinusAccount").text();
@@ -2175,7 +2178,7 @@
                         payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                         payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                         //payOriginAccount*payDiscountAccount/100 productDisTotal*payDiscountAccount/100
-                        $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                        $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount-payHasAccount).toFixed(2));
                         if(cancel_zero)
                         {
                             payShouldAccount=$("#payShouldAccount").text();
@@ -2213,10 +2216,11 @@
                     }                    
                     $("#payDiscountAccount").text("100%");
                     payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                    payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
                     payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                     payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                     //payOthers=parseFloat($("#payOthers").text().replace(",",""));
-                    var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount;
+                    var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount-payHasAccount;
                     if(shouldpaytemp>0)
                     {
                         $("#payShouldAccount").text(shouldpaytemp.toFixed(2));
@@ -2543,6 +2547,7 @@
             $('#pay_clearone').on(event_clicktouchstart,function(){
                 var selectid=$(".edit_span_select").attr("selectid");
                 var payOriginAccount=$("#payOriginAccount").text();
+                var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
                 var productDisTotal=$("#productDisTotal").val();
                 var payDiscountAccount=$("#payDiscountAccount").text();
                 var payMinusAccount=$("#payMinusAccount").text();
@@ -2570,7 +2575,7 @@
                     productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                     payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                     payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                    var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount;
+                    var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount-payHasAccount;
                     if(shouldpaytemp>0)
                     {
                         $("#payShouldAccount").text(shouldpaytemp.toFixed(2));
@@ -2706,6 +2711,7 @@
             $('#pay_clearall').on(event_clicktouchstart,function(){
                 var selectid=$(".edit_span_select").attr("selectid");
                 var payOriginAccount=$("#payOriginAccount").text();
+                var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
                 var productDisTotal=$("#productDisTotal").val();
                 var payDiscountAccount=$("#payDiscountAccount").text();
                 var payMinusAccount=$("#payMinusAccount").text();
@@ -2725,7 +2731,7 @@
                         productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                         payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                         payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                        $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount).toFixed(2));
+                        $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount-payHasAccount).toFixed(2));
                         if(cancel_zero)
                         {
                             payShouldAccount=$("#payShouldAccount").text();
@@ -2748,7 +2754,7 @@
                     productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                     payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
                     payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
-                    var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount;
+                    var shouldpaytemp=(payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount-payHasAccount;
                     if(shouldpaytemp>0)
                     {
                         $("#payShouldAccount").text(shouldpaytemp.toFixed(2));
@@ -3036,6 +3042,7 @@
                 //var payChangeAccount=$("#payChangeAccount").text();
                 var payShouldAccount=$("#payShouldAccount").text();
                 var payOriginAccount=$("#payOriginAccount").text();
+                var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
                 var payRealityAccount=$("#payRealityAccount").text();
                 var payMemberAccount=$("#payMemberAccount").text();
                 var cardno=$("#payMemberAccount").attr("cardno");
