@@ -798,6 +798,7 @@
                                     $.each(msg.models,function(key,value){
                                         var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
                                         siteobj.attr("status",value.min_status);
+                                        siteobj.attr("maxstatus",value.max_status);
                                         siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
                                         siteobj.removeClass("bg-yellow");
                                         siteobj.removeClass("bg-blue");

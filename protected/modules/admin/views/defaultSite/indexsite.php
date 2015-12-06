@@ -157,7 +157,7 @@
                                                                                     <?php //else:?>
                                                                                         <?php foreach ($models as $model):?>
                                                                                                         <li class="modalaction <?php if($model["min_status"]=='1') echo 'bg-yellow'; elseif($model["min_status"]=='2') echo 'bg-blue'; elseif($model["min_status"]=='3') echo 'bg-green';?>"
-                                                                                                            typeid="<?php echo$model["type_id"]; ?>" showbutton="yes" istemp="0" status=<?php echo $model["min_status"];?> sid=<?php echo $model["lid"];?>
+                                                                                                            typeid="<?php echo$model["type_id"]; ?>" showbutton="yes" istemp="0" status=<?php echo $model["min_status"];?> maxstatus=<?php echo $model["max_status"];?> sid=<?php echo $model["lid"];?>
                                                                                                             shname="<?php echo $model["serial"];?>"><span style="font-size: 20px;"><?php echo $model["serial"];?>&nbsp;</span><span typename="updateat">
                                                                                                                 <?php echo '<br>'.substr($model["update_at"],5,11);?></span>
                                                                                                             <div style="width: 100%;background-color:<?php if($model["newitem"]>0){echo "green"; }else{ echo "";}?>;height:40%;
@@ -267,6 +267,7 @@
                                 $.each(msg.models,function(key,value){
                                     var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
                                     siteobj.attr("status",value.min_status);
+                                    siteobj.attr("maxstatus",value.max_status);
                                     siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
                                     siteobj.removeClass("bg-yellow");
                                     siteobj.removeClass("bg-blue");
@@ -429,7 +430,8 @@
                                             //alert(isblock);alert(isbackground);
                                             $(".modalaction[sid="+sid+"][istemp="+istemp+"]").find("div").css("background-color",isbackground);
                                             $(".modalaction[sid="+sid+"][istemp="+istemp+"]").find("div").css("display",isblock);
-                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").css("display","");
+                                            //alert("222");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").hide();
 //                                            $('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId));?>');
                                       
                                     }
@@ -487,7 +489,7 @@
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-blue");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-green");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").attr("status","5");
-                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").css("display","");
+                                            $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").hide();
                                             var tstatus=$(".modalaction[sid="+sid+"][istemp="+istemp+"]").attr("status");
                                             var isblock=$(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").css("display");
                                             var isbackground=$(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").css("background-color");
@@ -500,7 +502,7 @@
                                                 $(".modalaction[sid="+sid+"][istemp="+istemp+"]").find("div").css("background-color",isbackground);
                                             }        
                                             //alert(sstatus); alert(tstatus);
-                                            if(sstatus<tstatus)
+                                            if(sstatus < tstatus)
                                             {
                                                 //alert(1111);
                                             	$(".modalaction[sid="+sid+"][istemp="+istemp+"]").removeClass("bg-yellow");
