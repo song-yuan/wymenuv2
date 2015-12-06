@@ -31,7 +31,7 @@
     	<div class="lt-lt"><img src="<?php echo $promotionProduct['main_picture'];?>"></div>
         <div class="lt-ct">
         	<p><?php echo $promotionProduct['product_name'];?></p>
-            <p class="pr">¥<span class="price"><?php echo $promotionProduct['price'];?></span></p>
+            <p class="pr">¥<span class="price"><?php echo $promotionProduct['price'];?></span> <?php if($promotionProduct['price']!=$promotionProduct['original_price']):?><span class="oprice"><strike>¥<?php echo $promotionProduct['original_price'];?></strike></span><?php endif;?></p>
         </div>
         <div class="lt-rt">
         	<div class="minus <?php if(!$promotionProduct['num']) echo 'zero';?>">-</div>
@@ -54,7 +54,7 @@
     	<div class="lt-lt"><img src="<?php echo $product['main_picture'];?>"></div>
         <div class="lt-ct">
         	<p><?php echo $product['product_name'];?></p>
-            <p class="pr">¥<span class="price"><?php echo $product['price'];?></span></p>
+            <p class="pr">¥<span class="price"><?php echo $product['price'];?></span><?php if($product['price']!=$product['original_price']):?><span class="oprice"><strike>¥<?php echo $product['original_price'];?></strike></span><?php endif;?></p>
         </div>
         <div class="lt-rt">
         	<div class="minus <?php if(!$product['num']) echo 'zero';?>">-</div>
@@ -83,20 +83,21 @@
 <script> 
 $(document).ready(function(){ 
     $('#nav li').click(function(){
+    	var _this = $(this);
         $('#nav').find('li').removeClass('current');
-        $(this).addClass('current');
-        var href = $(this).find('a').attr('href');
+        _this.addClass('current');
+        var href = _this.find('a').attr('href');
         $(href).scrollTop();
     });
     $('#container').scroll(function(){
         $('.section').each(function(){
-            var height = $(this).height();
+        	var id = $(this).attr('id');
             var top = $(this).offset().top;
-            if(top <= 0 && (top+height) > 0){
-                var id = $(this).attr('id');
-                $('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
-                $('a[href=#'+id+']').parent('li').addClass('current');
-                return false;
+            var height = $(this).outerHeight();
+            if(top < 0 && (parseInt(top) + parseInt(height)) > 5){
+        		 $('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
+            	 $('a[href=#'+id+']').parent('li').addClass('current');
+            	 return false;
             }
         });
        
