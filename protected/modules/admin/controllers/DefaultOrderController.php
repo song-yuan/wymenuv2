@@ -167,6 +167,9 @@ class DefaultOrderController extends BackendController
                 //检查是否有自动打印的东西，order_product product_order_status
                 OrderProduct::setPauseJobs($companyId,$padId);
                 //var_dump($order); exit;
+                //固定台的最大的status
+                //$maxstatus=  OrderProduct::getMaxStatus($siteNo->site_id, $companyId);
+                //var_dump($maxstatus); exit;
                 ////////取得该座位对应的所有的订单ID列表////////
                 $sqlorderlist="select lid from nb_order where order_status in ('1','2','3') and dpid=".$companyId." and is_temp=".$siteNo->is_temp." and site_id=".$siteNo->site_id;
                 $orderlistmodel=Yii::app()->db->createCommand($sqlorderlist)->queryAll();
@@ -227,6 +230,7 @@ class DefaultOrderController extends BackendController
                                 'productDisTotal'=>$productDisTotal,
 				'total' => $total,
                                 'orderlist'=>$orderlist,
+                                //'maxstatus'=>$maxstatus,
 				//'paymentMethods'=>$paymentMethods,
                                 'typeId' => $typeId,
                                 'syscallId'=>$syscallId,
