@@ -479,27 +479,42 @@ class DefaultOrderController extends BackendController
                     {
                         Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
                     }
-                    $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                    //$productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                     $criteria->order = ' t.lid desc ';                    
                     $siteNo = SiteNo::model()->find($criteria);
-                    if($order->is_temp=='1')
-                    {
-                        $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
-                    }else{
-                        $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
-                    }
-                    $order->should_total=$total['total'];
-                    //$order->should_total=$payShouldAccount;//用传递过来的
-                    $order->reality_total=$payShouldAccount;
-                }
+                    $orderList=Order::getOrderList($companyId, $order->site_id, $order->is_temp);
                 
+                    $productTotalarray = OrderProduct::getOriginalTotal($orderList,$companyId);
+                    //var_dump($productTotalarray);exit;
+                    //现价
+                    $nowTotal=$productTotalarray["total"];
+                    //原价
+                    $originaltotal=$productTotalarray["originaltotal"];
+                    //已支付
+                    $paytotal=OrderProduct::getPayTotal($orderList,$companyId);
+    //                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+                    //参与折扣的总额
+                    $productDisTotal = OrderProduct::getDisTotal($orderList,$order->dpid);
+                    //var_dump($productTotal);exit;
+                    if($siteNo->is_temp=='1')
+                    {
+                        $total = array('total'=>$nowTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+                    }else{
+                        $total = Helper::calOrderConsume($order,$siteNo, $nowTotal);
+                    }
+                    $order->should_total=$originaltotal;
+                    $order->reality_total=$payShouldAccount;//$total['total'];
+                    $order->pay_total=$paytotal;
+                    $order->pay_discount_total=$productDisTotal;
+                    
+                }
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
+                $orderProducts = OrderProduct::getHasOrderProductsAll($orderList,$order->dpid);
                 $memo="清单";
                 $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo,$cardtotal);
                 Yii::app()->end(json_encode($printList));
