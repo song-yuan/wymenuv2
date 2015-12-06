@@ -47,10 +47,49 @@
                                     
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
 											<a href="<?php echo $this->createUrl('discount/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
-							
+<script>
+$("#su").on('click',function() {
+    //alert(11);
+    var dsc = $('#Discount_discount_num').val();
+    //var begintime = $('#NormalPromotion_begin_time').val();
+    //var endtime = $('#NormalPromotion_end_time').val();
+    //var aa = document.getElementsByName("chk");
+    //var str=new Array();
+    //alert(begintime);
+    //alert(endtime);
+    //var ss = "";
+  // if(aa.checked){
+    if(dsc>'1'||dsc<'0'){
+   	 alert("<?php echo yii::t('app','折扣数值应该在0~1之间，例如：88折应填写为0.88');?>");
+   	 return false;
+    }
+    //if(p1=='2'){
+    //for (var i = 0; i < aa.length; i++) {
+     //   if (aa[i].checked) {
+       //     str += aa[i].value +',';
+        //}
+    //}
+    //if(str!=''){
+    //str = str.substr(0,str.length-1);//除去最后一个“，”
+    //}else{
+   	 //alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
+   	 //return false;
+   	 //}
+    //}
+    //else{
+   //	 alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
+     //   }
+   // alert(str);
+ //  }else{
+   //alert(str);}
+    //$("#hidden1").val(str);
+    $("#discount-form").submit();
+});
+
+</script>			
 							

@@ -91,8 +91,7 @@ $(document).ready(function(){
         	success:function(msg){
         		if(msg.status){
     			  if(parseInt(t.val())==1){
-			          t.siblings(".minus").addClass('zero');
-			          t.addClass('zero');
+			          t.parents('.section').remove();
 			       }
 			       t.val(parseInt(t.val())-1);
 			       if(parseInt(t.val())<0){ 
