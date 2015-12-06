@@ -202,7 +202,7 @@ class Server {
 			$typeName = isset($siteType['name'])?$siteType['name']:'';
 			$siteArr = array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
 			if(!empty($subPushs)){
-				$siteArr = array_merge($siteArr,$subPushs);
+				array_push($siteArr,$subPushs);
 			}
 			return $this->news($siteArr);
 		}else
