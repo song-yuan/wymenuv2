@@ -736,13 +736,19 @@
             function reloadsitestate()
             {
                 //site显示时才做这样的操作
-                if($("#tab_sitelist").css("display")=="block")
+                if($("#tab_sitelist").css("display")=="block" || (gtypeid!="others" && gtypeid!="tempsite"))
                 {
-                    //首先检查是否有失败的云端下单打印任务，
-                    
-                    //然后再数据同步，并打印
+                    //alert(111);
+                    var padid="0000000046";
+                    if (typeof Androidwymenuprinter == "undefined") {
+                        //alert("找不到PAD设备");
+                        //return false;
+                    }else{
+                        var padinfo=Androidwymenuprinter.getPadInfo();
+                        padid=padinfo.substr(10,10);
+                    }
                     $.ajax({
-                        url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid,
+                        url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid+"/padId/"+padid,
                         type:'GET',
                         timeout:5000,
                         cache:false,
@@ -754,7 +760,7 @@
                             if(gtypeid=="others")
                             {
                                 //获取排队信息，并更新状态,不存在删减的
-                                $.each(msg,function(key,value){
+                                $.each(msg.models,function(key,value){
                                     var siteobj=$(".modalaction[typeid='others'][sid="+value.splid+"][istemp="+value.typeid+"]");
                                     siteobj.removeClass("bg-yellow");
                                     siteobj.removeClass("bg-green");                                                    
@@ -787,39 +793,85 @@
                             }else{
                                 //获取座位信息，并更新状态
                                 //不存在删减座位的
-                                $.each(msg,function(key,value){
-                                    var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
-                                    siteobj.attr("status",value.status);
-                                    siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
-                                    siteobj.removeClass("bg-yellow");
-                                    siteobj.removeClass("bg-blue");
-                                    siteobj.removeClass("bg-green");
-                                    if(value.status=="1")
+                                if($("#tab_sitelist").css("display")=="block")
+                                {
+                                    $.each(msg.models,function(key,value){
+                                        var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
+                                        siteobj.attr("status",value.status);
+                                        siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
+                                        siteobj.removeClass("bg-yellow");
+                                        siteobj.removeClass("bg-blue");
+                                        siteobj.removeClass("bg-green");
+                                        if(value.status=="1")
+                                        {
+                                            siteobj.addClass("bg-yellow");
+                                        }else if(value.status=="2")
+                                        {
+                                            siteobj.addClass("bg-blue");
+                                        }else if(value.status=="3")
+                                        {
+                                            siteobj.addClass("bg-green");
+                                        }
+                                        if("12".indexOf(value.order_type)>=0
+                                                && ("123".indexOf(value.status)>=0))
+                                        {
+                                            siteobj.find("div").show();
+                                        }else{
+                                            siteobj.find("div").hide();
+                                        }
+                                        if(value.newitem > 0)
+                                        {
+                                            siteobj.find("div").css("background-color","green");
+                                            //需要打印
+                                            //然后再打印本机器
+                                        }else{
+                                            siteobj.find("div").css("background-color","");
+                                        }
+                                    });
+                                }
+                                //开始打印任务
+                                //alert("34234");
+                                var printresult=false;
+                                var successjobs="00000000";
+                                if(typeof(Androidwymenuprinter)=="undefined")
+                                {
+                                    return;
+                                }
+                                $.each(msg.modeljobs,function(key,value){
+                                    printresult=false;
+                                    for(var itemp=1;itemp<4;itemp++)
                                     {
-                                        siteobj.addClass("bg-yellow");
-                                    }else if(value.status=="2")
-                                    {
-                                        siteobj.addClass("bg-blue");
-                                    }else if(value.status=="3")
-                                    {
-                                        siteobj.addClass("bg-green");
-                                    }
-                                    if("12".indexOf(value.order_type)>=0
-                                            && ("123".indexOf(value.status)>=0))
-                                    {
-                                        siteobj.find("div").show();
-                                    }else{
-                                        siteobj.find("div").hide();
-                                    }
-                                    if(value.newitem > 0)
-                                    {
-                                        siteobj.find("div").css("background-color","green");
-                                        //需要打印
-                                        //然后再打印本机器
-                                    }else{
-                                        siteobj.find("div").css("background-color","");
+                                        if(printresult)
+                                        {
+                                            successjobs=successjobs+","+value.jobid;
+                                            break;
+                                        }
+                                        var addressdetail=value.address.split(".");
+                                        if(addressdetail[0]=="com")
+                                        {
+                                            var baudrate=parseInt(addressdetail[2]);
+                                            printresult=Androidwymenuprinter.printComJob(value.dpid,value.jobid,addressdetail[1],baudrate);
+                                        }else{
+                                            printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
+                                            //printresult=true;
+                                        }                                                                        
                                     }
                                 });
+                                //alert(successjobs);
+                                if("00000000"!=successjobs)
+                                {
+                                    $.ajax({
+                                        url:"/wymenuv2/admin/defaultSite/finshPauseJobs/companyId/<?php echo $this->companyId; ?>/successjobs/"+successjobs,
+                                        type:'GET',
+                                        timeout:5000,
+                                        cache:false,
+                                        async:false,
+                                        dataType: "json",
+                                        success:function(msg){
+
+                                        }
+                                    });
+                                }
                             }                            
                         },
                         error: function(msg){
@@ -981,6 +1033,7 @@
                 if(typeof obj.attr("lid")== "undefined")
                 {
                     var appendstr=' <li lid="0000000000"'
+                                  +'      orderid="0000000000"'
                                   +'      setid="'+setid+'"'
                                   +'      productid="'+lid+'"'
                                   +'      order_status="0"' 
@@ -1019,11 +1072,13 @@
                 //取得整体订单的tasteids tastememo
                 var ordertasteids=$("#ordertasteall").attr("tid");
                 var ordertastememo=$("#ordertastememoall").text();
+                var orderlist=$(".selectProduct").attr("orderlist");
                 var productlist="";
                 var tempproduct="";
                 //取得所有未下单状态的单品，没有打印和厨打都是0,1就不能修改了。
                 $(".selectProductA[order_status='0']").each(function(){
                     tempproduct=$(this).attr("lid");
+                    tempproduct=tempproduct+","+$(this).attr("orderid");
                     tempproduct=tempproduct+","+$(this).attr("setid");
                     tempproduct=tempproduct+","+$(this).attr("productid");
                     tempproduct=tempproduct+","+$(this).attr("order_status");
@@ -1044,7 +1099,8 @@
                 //包括单品列表、单品口味列表，口味备注等
                 return '&productlist='+productlist+
                         '&ordertasteids='+ordertasteids+
-                        '&ordertastememo='+ordertastememo;                 
+                        '&ordertastememo='+ordertastememo+
+                        '&orderlist='+orderlist;                 
             }
             
             
@@ -1084,7 +1140,7 @@
                     //var orderid=$(".selectProduct").attr("orderid");
                    //var orderstatus="1";
                    var sendjson=getallproductinfo();
-                   //alert(sendjson);
+                   //alert(sendjson);return;
                    var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/1";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
@@ -1600,6 +1656,7 @@
                 {                    
                         //取得数据
                         var sendjson=getallproductinfo();
+                        //alert(sendjson);return;
                         var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>/orderid/"+orderid+"/orderstatus/2";
                         var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
                          if(!statu){
@@ -1645,10 +1702,10 @@
                                     if(!printresultfail)
                                     {
                                         alert("厨打成功！");
-										//修改代码CF
-                                       			$(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
-                                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-blue");
-                                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","2");
+					//修改代码CF
+                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").addClass("bg-blue");
+                                        $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","2");
                                                  				
                                         //修改下单后座位颜色代码；
                                     }   
@@ -2438,6 +2495,7 @@
                 $("#productTaste").find("label[class='selectTaste btn btn-default active']").each(function(){
                     tasteids=tasteids+$(this).attr("tasteid")+"|";
                 });
+                //alert(tasteids);//return;
                 obj.attr("tasteids",tasteids);
                 obj.attr("tastememo",tastememo);
                 //(tasteids);alert(tastememo);

@@ -569,6 +569,109 @@ class Helper
 		}*/
 	}
         
+        //收银台打印清单写入到redis
+        //send by workerman encode by GBK or shift-JIS
+	static public function printPauseList(Order $order,$orderProducts, Pad $pad, $cprecode,$printserver,$memo,$cardtotal){
+                $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$order->dpid));
+		if(empty($printer)) {
+                        return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
+		}
+		$hasData=false;
+		//$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
+                ///site error because tempsite and reserve**************
+                //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
+                $listData = array("22".  Helper::setPrinterTitle($order->company->company_name,8));
+                if(!empty($memo))
+                {
+                    array_push($listData,"br");
+                    array_push($listData,"11".$memo);                    
+                }
+                array_push($listData,"00");
+                array_push($listData,"br");
+                $strSite="";
+                if($order->is_temp==0)
+                {
+                    $site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
+                    $siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
+                    //$strSite=str_pad(yii::t('app','座号：').$siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                    array_push($listData,"00".yii::t('app','座号：'));
+                    array_push($listData,"11".$siteType->name.' '.$site->serial);
+                    //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
+                }else{
+                    //$strSite=str_pad(yii::t('app','座号：临时座').$order->site_id%10000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
+                    array_push($listData,"00".yii::t('app','座号：临时座'));
+                    array_push($listData,"11".$order->site_id%10000);
+                    //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
+                }
+                array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
+		if(!empty($order->callno))
+                {
+                    //$strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
+                    //array_push($listData,$strcall);
+                    array_push($listData,"00"."   ".yii::t('app','呼叫号：'));
+                    array_push($listData,"11".$order->callno);
+                }
+		//$listKey = $order->dpid.'_'.$printer->ip_address;                	
+		array_push($listData,"br");
+		//array_push($listData,"00".$strSite);                
+		array_push($listData,"00".str_pad('',48,'-'));                
+		
+		foreach ($orderProducts as $product) {
+                    //var_dump($product);exit;
+                    if($product['amount']<1)
+                    {
+                        continue;
+                    }
+                    $hasData=true;
+                    if(Yii::app()->language=='jp')
+                    {
+                        //array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
+                    }else{
+                        //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
+                        //array_push($listData,"00".str_pad($product['amount']." X ".number_format($product['price'],2),13,' ')." ".Helper::setProductName($product['product_name'],24,16));
+                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
+                    }
+                    array_push($listData,"br");
+		}
+		array_push($listData,"00".str_pad('',48,'-'));
+                //var_dump($listData);exit;
+                if(Yii::app()->language=='jp')
+                {
+                    array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,0)
+                        .yii::t('app','现价：').number_format($order->reality_total,0));                    
+                }else{
+                    if($order->should_total>0)
+                    {
+                        array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,2));
+                        array_push($listData,"br");
+                    }
+                    if($order->reality_total>0)
+                    {
+                        array_push($listData,"11".yii::t('app','现价：').number_format($order->reality_total,2));
+                    }                    
+                }
+                
+                array_push($listData,"br");
+                array_push($listData,"00".$order->username);
+                array_push($listData,"00"."   ".date('Y-m-d H:i:s',time()));
+                array_push($listData,"br");
+                array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
+                $precode=$cprecode;
+                //后面加切纸
+                $sufcode="0A0A0A0A0A0A1D5601";                        
+                //var_dump($listData);exit;
+                $printret=array();
+		if($hasData){
+                    //$printserver='0';
+                    $retcontent= Helper::printPauseConetent($printer,$listData,$precode,$sufcode,$printserver,$order->lid);
+                    $retcontent['orderid']=$order->lid;
+                    return $retcontent;
+		}else{
+                    return array('status'=>false,'orderid'=>$order->lid, 'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
+                }                
+	}
+        
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
 	static public function printCloseAccount($dpid,$models,$money,Pad $pad, $cprecode,$printserver,$memo){
@@ -1352,13 +1455,13 @@ class Helper
         
         //2015/9/4更新
         //在2的基础上将同一个打印机的任务一次输出，减少打印机的连接请求
-	static public function printKitchenAll3(Order $order,Site $site,  SiteNo $siteNo , $reprint){		
+	static public function printKitchenAll3(Order $order,$orderList,Site $site,  SiteNo $siteNo , $reprint){		
                 $printers_a=array();
                 $orderproducts_a=array();
                 $printer2orderproducts_a=array();
                 $jobids=array();
                 $printercontent_a=array();
-                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"dddd");        
+                //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"dddd");        
                 //$orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
                 //$orderProductTasteEx = $orderProduct->taste_memo;
                 //var_dump($orderProductTasteEx);exit;
@@ -1370,7 +1473,7 @@ class Helper
                 {
                     $floor_id=$site->floor_id;
                 }
-                $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id=:id and t.dpid=:dpid and t.is_print=0 and t.delete_flag=0' , array(':id'=>$order->lid,':dpid'=>$order->dpid));
+                $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id in (:id) and t.dpid=:dpid and t.is_print=0 and t.delete_flag=0' , array(':id'=>$orderList,':dpid'=>$order->dpid));
                 if(empty($orderProducts)) 
                 {
                     return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
@@ -1693,26 +1796,35 @@ class Helper
                 foreach ($printercontent_a as $key=>$values) {             //////////////                           
                     //$printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
                     $printer2 = $printers_a[$key];
+                    //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"before printConetent2");
                     $printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
+                    //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"after printConetent2");
                     //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
-                    array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
                     if(!$printret['status'])
                     {
                         return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
                     }
+                    array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
+                    
                 }               
                 //var_dump(json_encode($jobids));exit;
                 //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'type'=>'none','msg'=>"测试14".count($jobids2));
 //                Gateway::getOnlineStatus();
 //                $store = Store::instance('wymenu');
-                $store=new Memcache;
-                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
-                $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids2),0,300);    
-                $store->close();
+                //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"memcache初始化失败");
+                try{
+                    $store=new Memcache;
+                    $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
+                    $store->set("kitchenjobs_".$order->dpid."_".$order->lid,json_encode($jobids2),0,300);    
+                    $store->close();
+                }  catch (Exception $e)
+                {
+                    return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"memcache初始化失败444");        
+                }
                 $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'msg'=>'打印任务正常发布',"jobs"=>$jobids2);
                 //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
                 //更新菜品状态为已打印
-                $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$order->dpid." and order_id =".$order->lid;
+                $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$order->dpid." and order_id in (".$orderList.")";
                 $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
                 $commandorderproduct->execute();
                 
@@ -1966,11 +2078,12 @@ class Helper
                     $printer2 = $printers_a[$key];
                     $printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
                     //array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
-                    array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
                     if(!$printret['status'])
                     {
                         return array('status'=>false,'allnum'=>count($jobids),'msg'=>$printret['msg']);
                     }
+                    array_push($jobids2,"0_".$printret['jobid']."_".$printret['address']);
+                    
                 }               
                 //var_dump(json_encode($jobids));exit;
 //                Gateway::getOnlineStatus();
@@ -2102,6 +2215,95 @@ class Helper
                 $store->close();
         }
         
+        static public function printPauseConetent(Printer $printer,$content,$precode,$sufcode,$printserver,$orderid)
+        {
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
+                $contentCode="";
+                //内容编码
+                if($printer->language=='1')//zh-cn GBK
+                {
+                    foreach($content as $line)
+                    {
+                        //$strcontent=mb_convert_encoding($line,"GBK","UTF-8");
+                        //$contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
+                        $strcontent=mb_convert_encoding(substr($line,2),"GBK","UTF-8");
+                        $strfontsize=substr($line,0,2);
+                        if($strfontsize=="br")
+                        {
+                            $contentCode.="0A";
+                        }else{                            
+                            $contentCode.="1D21".$strfontsize.strtoupper(implode('',unpack('H*', $strcontent)));
+                        }
+                    }
+                }elseif($printer->language=='2')//日文 shift-jis
+                {
+                    $contentCode.="1C43011C26";//日文前导符号
+                    foreach($content as $line)
+                    {
+                        //$strcontent=mb_convert_encoding($line,"SJIS","UTF-8");
+                        //$contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
+                        $strcontent=mb_convert_encoding(substr($line,2),"SJIS","UTF-8");
+                        $strfontsize=substr($line,0,2);
+                        if($strfontsize=="br")
+                        {
+                            $contentCode.="0A";
+                        }else{                            
+                            $contentCode.="1D21".$strfontsize.strtoupper(implode('',unpack('H*', $strcontent)));
+                        }
+                    }
+                }else
+                {
+                    return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'none','msg'=>yii::t('app','无法确定打印机语言！'));
+                }
+                //加barcode和切纸
+                $contentCode=$precode.$contentCode.$sufcode;
+                //任务构建
+                $se=new Sequence("printer_job_id");
+                $jobid = $se->nextval();
+                if($printserver=='1')//通过打印服务器打印
+                {
+                    if($printer->printer_type!='0')//not net
+                    {
+                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','网络打印的打印机必须是网络打印机！'));
+                    }
+                    
+                }else{//主动的同步打印 0
+                    $db=Yii::app()->db;
+                    $transactionnow=$db->beginTransaction();
+                    try{
+                        $seorderprintjobs=new Sequence("order_printjobs");
+                        $orderjobId = $seorderprintjobs->nextval();
+                        $time=date('Y-m-d H:i:s',time());
+                        //插入一条
+                        $orderPrintJob = array(
+                                            'lid'=>$orderjobId,
+                                            'dpid'=>$printer->dpid,
+                                            'create_at'=>$time,
+                                            'orderid'=>$orderid,
+                                            'jobid'=>$jobid,
+                                            'update_at'=>$time,
+                                            'address'=>$printer->address,
+                                            'content'=>$contentCode,
+                                            'printer_type'=>"0",
+                                            'finish_flag'=>'1',
+                                            'delete_flag'=>'0',
+                                            'is_sync'=>'10000',
+                                            );
+                        $db->createCommand("delete from nb_order_printjobs where dpid=".$printer->dpid." and orderid=".$orderid." and is_sync='10000'")->execute();
+                        $db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
+                        $db->createCommand("update nb_order_product set product_order_status='0' where dpid=".$printer->dpid." and order_id=".$orderid." and product_order_status='9'")->execute();
+                        $store->set($printer->dpid."_".$jobid,$contentCode,0,30);//should 120测试1200                        
+                        $transactionnow->commit();
+                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
+                    }catch( Exception $ex){
+                        $transactionnow->rollback();
+                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','数据库更新异常！'));
+                    }
+                }
+                $store->close();
+        }
+        
         /*
          * $printserver是否通过打印服务器打印，0表示不通过，数据存储在内存中，由程序通知pad自己去取数据并打印。
          * 1表示通过，指令发出去后，由打印服务器安排打印，程序只能读取打印服务器的返回结果，是异步的。
@@ -2110,9 +2312,16 @@ class Helper
         {
 //                Gateway::getOnlineStatus();
 //                $store = Store::instance('wymenu');
-            $store=new Memcache;
+            //return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'none','msg'=>yii::t('app',Yii::app()->params['memcache']['server'].Yii::app()->params['memcache']['port']));
+            try{
+                $store=new Memcache;
                 $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
-                
+                //$store=memcache_connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);
+                //return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'none','msg'=>'memcache初始化失败');                
+            }catch(Exception $e)
+            {
+                return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'none','msg'=>yii::t('app','memcache初始化失败22！'));
+            }
                 $contentCode="";
                 $contentCodeAll="";
                 

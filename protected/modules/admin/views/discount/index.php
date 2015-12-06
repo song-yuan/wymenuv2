@@ -38,13 +38,13 @@
 			<!-- /.modal -->
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','普通优惠查询'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','普通优惠查询'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','微信红包'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','微信红包设置'),'url'=>''),array('word'=>yii::t('app','微信红包查询'),'url'=>''))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 		<div class="row">
 		<?php $form=$this->beginWidget('CActiveForm', array(
-				'id' => 'normalpromotion-form',
-				'action' => $this->createUrl('normalpromotion/delete' , array('companyId' => $this->companyId,)),
+				'id' => 'wxredpacket-form',
+				'action' => $this->createUrl('discount/delete' , array('companyId' => $this->companyId,)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -54,40 +54,24 @@
 		<div class="col-md-12">
 		<div class="tabbable tabbable-custom">
 			<ul class="nav nav-tabs">
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','整体设置');?></a></li>
-				<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','普通优惠');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
-			</ul>
+				<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('discount/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','折扣模板设置');?></a></li>
+				<!--  <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxRedpacket/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','红包发送规则设置');?></a></li> -->
+				<!-- <li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/gift',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
+				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/wxcard',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
+			 --></ul>
 		<div class="tab-content">
 			<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','普通优惠活动');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','折扣模板设置');?></div>
 					<div class="actions">
 					<!-- <p><input type="text" name="datetime" class="ui_timepicker" value=""></p> -->
-						<a href="<?php echo $this->createUrl('normalpromotion/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加普通优惠活动');?></a>
+						<a href="<?php echo $this->createUrl('discount/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加折扣');?></a>
 						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除活动');?></button>
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除折扣');?></button>
 						</div>
 					</div>
-					<!-- <div class="btn-group">
-							 <input type="text" class="form-control" name="订单号" id="Did" placeholder="" value="<?php echo yii::t('app','店铺：');?><?php echo Helper::getCompanyName($this->companyId);?>"  onfocus=this.blur()> 
-					</div>
-                    <div class="btn-group">
-				
-						<div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-							<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo ""; ?>">  
-							<span class="input-group-addon">~</span>
-							   <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo "";?>">           
-						</div>  
-			         </div>	
-					
-					    <div class="btn-group">
-							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-							<!--  <a href="#" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','打 印');?></a>		  --
-					    </div>		 -->
 					
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -95,16 +79,11 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','活动名称');?></th>
-								<th><?php echo yii::t('app','活动摘要');?></th>
-								<th><?php echo yii::t('app','活动类型');?></th>
-								<th><?php echo yii::t('app','是否可用代金券');?></th>
-								<th><?php echo yii::t('app','活动开始日期');?></th>
-                                <th><?php echo yii::t('app','活动结束日期');?></th>
-                                <th><?php echo yii::t('app','是否生效');?></th>
-                                <!--<th><?php echo yii::t('app','支付方式');?></th>-->
+								<th><?php echo yii::t('app','折扣名称');?></th>
+								<th><?php echo yii::t('app','折扣描述');?></th>
+								<th><?php echo yii::t('app','折扣数值');?></th>
                                 <th><?php echo yii::t('app','编辑');?></th>                                                                
-                                <th><?php echo yii::t('app','编辑明细');?></th>
+                                <th><?php echo yii::t('app','是否生效');?></th>
                                 <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
@@ -116,18 +95,14 @@
 						<?php foreach ($models as $model):?>
 								<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td><?php echo $model->promotion_title; ?></td>
-								<td><?php echo $model->promotion_abstract;?></td>
-								<td><?php switch ($model->promotion_type){case 0:echo yii::t('app','独享');break;case 1:echo yii::t('app','共享');break;default:echo '';break;} ?></td>
-								<td><?php switch ($model->can_cupon){case 0:echo yii::t('app','该活动可以使用代金券');break;case 1:echo yii::t('app','该活动不能使用代金券');break;default:echo '';break;} ;?></td>
-								<td><?php echo $model->begin_time;?></td>
-								<td><?php echo $model->end_time;?></td>
-								<td><?php switch ($model->is_available){case 0:echo yii::t('app','生效');break;case 1:echo yii::t('app','不生效');break;default:echo '';break;} ?></td>
+								<td><?php echo $model->discount_name; ?></td>
+								<td><?php echo $model->discount_abstract;?></td>
+								<td><?php echo $model->discount_num;?></td>
+								<td><?php echo $model->is_available;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('normalpromotion/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
-								<td class="center">
-								<a href="<?php echo $this->createUrl('normalpromotion/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product'));?>"><?php echo yii::t('app','设置活动优惠产品');?></a></td>
-								 <td><?php echo '';?></td>
+								<a href="<?php echo $this->createUrl('discount/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								</td>
+								<td><?php echo '';?></td>
 								</tr>
 						
 						<?php endforeach;?>	
@@ -177,10 +152,11 @@
 		<?php $this->endWidget(); ?>
 		</div>
 					<!-- END EXAMPLE TABLE PORTLET-->
-</div>				
+</div>	
+</div>			
  <script type="text/javascript">
 		$(document).ready(function(){
-			$('#normalpromotion-form').submit(function(){
+			$('#wxredpacket-form').submit(function(){
 				if(!$('.checkboxes:checked').length){
 					alert("<?php echo yii::t('app','请选择要删除的项');?>");
 					return false;

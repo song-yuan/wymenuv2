@@ -1,5 +1,5 @@
 <?php
-class WxRedpacketController extends BackendController
+class DiscountController extends BackendController
 {
 
 	public function actions() {
@@ -31,9 +31,9 @@ class WxRedpacketController extends BackendController
     	$criteria->addCondition('delete_flag=0');
     	//$criteria->params[':brandId'] = $brand->brand_id;
     
-    	$pages = new CPagination(Redpacket::model()->count($criteria));
+    	$pages = new CPagination(Discount::model()->count($criteria));
     	$pages->applyLimit($criteria);
-    	$models = Redpacket::model()->findAll($criteria);
+    	$models = Discount::model()->findAll($criteria);
     	 
     	$this->render('index',array(
     			'models'=>$models,
@@ -58,14 +58,14 @@ class WxRedpacketController extends BackendController
 	 * 创建活动，并发送系统消息
 	 */
 	public function actionCreate(){
-		$model = new Redpacket();
+		$model = new Discount();
 		$model->dpid = $this->companyId ;
 		$is_sync = DataSync::getInitSync();
 		//$model->create_time = time();
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('Redpacket');
-			$se=new Sequence("redpacket");
+			$model->attributes = Yii::app()->request->getPost('Discount');
+			$se=new Sequence("discount");
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
@@ -76,7 +76,7 @@ class WxRedpacketController extends BackendController
 			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('wxRedpacket/index' , 'companyId' => $this->companyId ));
+				$this->redirect(array('discount/index' , 'companyId' => $this->companyId ));
 			}
 		}
 		
@@ -93,16 +93,17 @@ class WxRedpacketController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$is_sync = DataSync::getInitSync();
 		//echo 'ddd';
-		$model = Redpacket::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		$model = Discount::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('Redpacket');
-			$model->update_at=date('Y-m-d H:i:s',time());
-			$model->is_sync=$is_sync;
+			$model->attributes = Yii::app()->request->getPost('Discount');
+			//$model->update_at=date('Y-m-d H:i:s',time());
+			//$model->is_sync=$is_sync;
+			//var_dump($model);exit;
 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
-				$this->redirect(array('wxRedpacket/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('discount/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('update' , array(
@@ -121,12 +122,12 @@ class WxRedpacketController extends BackendController
 		$is_sync = DataSync::getInitSync();
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_redpacket set delete_flag="1", is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_discount set delete_flag="1", is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('wxRedpacket/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('discount/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('wxRedpacket/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('discount/index' , 'companyId' => $companyId)) ;
 		}
 	}
 

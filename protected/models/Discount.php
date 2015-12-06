@@ -1,30 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "nb_consumer_cash_proportion".
+ * This is the model class for table "nb_discount".
  *
- * The followings are the available columns in table 'nb_consumer_cash_proportion':
+ * The followings are the available columns in table 'nb_discount':
  * @property string $lid
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property string $ccp_name
- * @property string $point_type
- * @property string $min_available_point
- * @property string $max_available_point
- * @property string $proportion_points
+ * @property string $discount_name
+ * @property string $discount_abstract
+ * @property string $discount_num
  * @property string $is_available
  * @property string $delete_flag
- *  @property string $is_sync
+ * @property string $is_sync
  */
-class ConsumerCashProportion extends CActiveRecord
+class Discount extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'nb_consumer_cash_proportion';
+		return 'nb_discount';
 	}
 
 	/**
@@ -35,18 +33,16 @@ class ConsumerCashProportion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, ccp_name, point_type, min_available_point, max_available_point', 'required'),
+			array('lid, dpid', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('ccp_name, is_sync', 'length', 'max'=>50),
-			array('point_type, is_available, delete_flag', 'length', 'max'=>2),
-			array('min_available_point, max_available_point', 'length', 'max'=>10),
-                        array('proportion_points','compare','compareValue'=>'9999','operator'=>'<','message'=>yii::t('app','比例数值太大')),
-			array('min_available_point','compare','compareAttribute'=>'max_available_point','operator'=>'<','message'=>yii::t('app','最小积分大于最大积分')),			
-			array('proportion_points', 'length', 'max'=>6),
-			array('create_at', 'safe'),
+			array('discount_name, is_sync', 'length', 'max'=>50),
+			array('discount_abstract', 'length', 'max'=>255),
+			array('discount_num', 'length', 'max'=>5),
+			array('is_available, delete_flag', 'length', 'max'=>2),
+			array('create_at, update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, ccp_name, point_type, min_available_point, max_available_point, proportion_points, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, discount_name, discount_abstract, discount_num, is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,16 +65,14 @@ class ConsumerCashProportion extends CActiveRecord
 		return array(
 			'lid' => 'Lid',
 			'dpid' => '店铺id',
-			'create_at' => 'Create At',
-			'update_at' => '最近一次更新时间',
-			'ccp_name' => '名称',
-			'point_type' => '类型',//0历史积分，1有效积分
-			'min_available_point' => '最低积分',//只要达到最低积分需求，就按照这个比例来计算
-			'max_available_point' => '最高积分',//，区间必须批次覆盖
-			'proportion_points' => '消费返现比例',//，计算结果四舍五入
-			'is_available' => '是否有效',//0表示有效，1表示无效
-			'delete_flag' => '0表示存在，1表示删除',
-                        'is_sync' => yii::t('app','是否同步'),
+			'create_at' => '添加时间',
+			'update_at' => '更新时间',
+			'discount_name' => '名称',
+			'discount_abstract' => '摘要',
+			'discount_num' => '折扣数值',
+			'is_available' => '0表示有效，1表示无效',
+			'delete_flag' => '删除标志，1表示删除',
+			'is_sync' => '同步标志',
 		);
 	}
 
@@ -104,11 +98,9 @@ class ConsumerCashProportion extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('ccp_name',$this->ccp_name,true);
-		$criteria->compare('point_type',$this->point_type,true);
-		$criteria->compare('min_available_point',$this->min_available_point,true);
-		$criteria->compare('max_available_point',$this->max_available_point,true);
-		$criteria->compare('proportion_points',$this->proportion_points,true);
+		$criteria->compare('discount_name',$this->discount_name,true);
+		$criteria->compare('discount_abstract',$this->discount_abstract,true);
+		$criteria->compare('discount_num',$this->discount_num,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
@@ -122,7 +114,7 @@ class ConsumerCashProportion extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ConsumerCashProportion the static model class
+	 * @return Discount the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

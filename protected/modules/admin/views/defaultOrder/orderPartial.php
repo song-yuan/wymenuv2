@@ -1,5 +1,7 @@
 	<!-- BEGIN PAGE -->  
-        <ul class="selectProduct" orderid="<?php echo $model->lid; ?>">
+        <ul class="selectProduct" orderid="<?php echo $model->lid; ?>"
+            productdistotal="<?php echo $productDisTotal; ?>" 
+            orderlist="<?php echo $orderlist; ?>">
             <input type="hidden" value="<?php echo $productDisTotal; ?>" id="productDisTotal">
             <span id="order_status" orderStatus="<?php echo $model->order_status; ?>">
                                         *<?php echo $model->create_at;?></span>
@@ -8,6 +10,7 @@
             </li>
                 <?php foreach ($orderProducts as $orderProduct):?>
                                     <li lid="<?php echo $orderProduct['lid'];?>" 
+                                        orderid="<?php echo $orderProduct['order_id'];?>" 
                                         setid="<?php echo $orderProduct['set_id'];?>"
                                         productid="<?php echo $orderProduct['product_id'];?>"
                                         order_status="<?php echo $orderProduct['product_order_status'];?>" 
@@ -22,7 +25,7 @@
                                                 echo $orderProduct['is_print']==1?'印':'';
                                                 echo $orderProduct['is_retreat']==1?'退':'';
                                                 echo $orderProduct['set_id']=='0000000000'?'':'套';
-                                                if(!empty($orderProduct['taste_memo']) || !empty($tasteids))
+                                                if(!empty($orderProduct['taste_memo']) || !empty($tasteidsOrderProducts[$orderProduct['lid']]))
                                                 {  echo "味";}
                                         ?></span>
                                     <span style="font-size:20px !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>

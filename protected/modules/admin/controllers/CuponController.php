@@ -21,30 +21,6 @@ class CuponController extends BackendController
     	return true;
     }
     
-//     public function actionIndex() {
-//     	$model = WeixinServiceAccount::model()->find('dpid=:dpid',array(':dpid'=>$this->companyId));
-//     	if(!$model){
-//     		$model = new WeixinServiceAccount;
-//     	}
-//     	if(Yii::app()->request->isPostRequest){
-//     		$postData = Yii::app()->request->getPost('WeixinServiceAccount');
-//     		$se=new Sequence("weixin_service_account");
-//     		$postData['lid'] = $se->nextval();
-//     		$postData['dpid'] = $this->companyId;
-//     		$postData['create_at'] = date('Y-m-d H:i:s',time());
-//     		$postData['update_at'] = date('Y-m-d H:i:s',time());
-//     		$model->attributes = $postData;
-//     		if($model->save()){
-//     			Yii::app()->user->setFlash('success' ,yii::t('app', '设置成功'));
-//     		}else{
-//     			$this->redirect(array('/admin/cashcard/index','companyId'=>$this->companyId));
-//     		}
-//     	}
-//     	$this->render('index',array(
-//     			'model'=>$model,
-//     	));
-//     }
-    
     
     public function actionIndex(){
     	//$brand = Yii::app()->admin->getBrand($this->companyId);
@@ -87,7 +63,7 @@ class CuponController extends BackendController
 		$brdulvs = $this->getBrdulv();
 		//$model->create_time = time();
 		//var_dump($model);exit;
-		
+		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
 			$db = Yii::app()->db;
 			//$transaction = $db->beginTranstaction();
@@ -108,6 +84,7 @@ class CuponController extends BackendController
 				foreach ($gropids as $gropid){
 					$userid = new Sequence("cupon_branduser");
 					$id = $userid->nextval();
+					
 					$data = array(
 							'lid'=>$id,
 							'dpid'=>$this->companyId,
@@ -118,15 +95,18 @@ class CuponController extends BackendController
 							//'source_id'=>$model->lid,
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
-							'delete_flag'=>'0'
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync,
 					);
 					$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
 					//var_dump($gropid);
 				}
 			}
+			//$sync = DataSync::getInitSync();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
+			$model->is_sync = $is_sync;
 			//var_dump($model);exit;
 			//$transaction->commit(); //提交事务会真正的执行数据库操作
 			//return true;
@@ -154,28 +134,6 @@ class CuponController extends BackendController
 				//'categories' => $categories
 		));
 		}		
-// 		if(Yii::app()->request->isPostRequest) {
-// 			$model->attributes = Yii::app()->request->getPost('Cupon');
-// 			$se=new Sequence("cupon");
-// 			$model->lid = $se->nextval();
-// 			$model->create_at = date('Y-m-d H:i:s',time());
-// 			$model->update_at = date('Y-m-d H:i:s',time());
-// 			$model->delete_flag = '0';
-// 			//$py=new Pinyin();
-// 			//$model->simple_code = $py->py($model->product_name);
-// 			//var_dump($model);exit;
-// 			if($model->save()){
-// 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-// 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId ));
-// 			}
-// 		}
-// 		//$categories = $this->getCategoryList();
-// 		//$departments = $this->getDepartments();
-// 		//echo 'ss';exit;
-// 		$this->render('create' , array(
-// 				'model' => $model ,
-// 				//'categories' => $categories
-// 		));
 
 	
 	/**
@@ -192,10 +150,11 @@ class CuponController extends BackendController
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		
 		$db = Yii::app()->db;
-		$sql = 'select t1.brand_user_lid from nb_cupon t left join nb_cupon_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.cupon_id = t.lid)where t.lid = '.$lid.' and t.dpid = '.$this->companyId;
+		$sql = 'select t1.brand_user_lid from nb_cupon t left join nb_cupon_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.cupon_id = t.lid and t1.delete_flag = 0)where t.delete_flag = 0 and t.lid = '.$lid.' and t.dpid = '.$this->companyId;
 		$command = $db->createCommand($sql);
 		$userlvs = $command->queryAll();
 		//var_dump($userlvs);exit;
+		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Cupon');
 			$groupID = Yii::app()->request->getParam('hidden1');
@@ -203,12 +162,14 @@ class CuponController extends BackendController
 			$gropids = explode(',',$groupID);
 			$db = Yii::app()->db;
 			if(!empty($groupID)){
-				$sql = 'delete from nb_cupon_branduser where cupon_id='.$lid.' and dpid='.$this->companyId;
+				//$sql = 'delete from nb_cupon_branduser where cupon_id='.$lid.' and dpid='.$this->companyId;
+                $sql = 'update nb_cupon_branduser set delete_flag="1",is_sync ='.$is_sync.' where cupon_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 				foreach ($gropids as $gropid){
 					$se = new Sequence("cupon");
 					$id = $se->nextval();
+					
 					$data = array(
 							'lid'=>$id,
 							'dpid'=>$this->companyId,
@@ -219,19 +180,21 @@ class CuponController extends BackendController
 							//'source_id'=>$model->lid,
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
-							'delete_flag'=>'0'
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync,
 					);
 					$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
 					//var_dump($gropid);exit;
 				}
 			}else{
-				$sql = 'update nb_cupon_branduser set delete_flag = 1 where source_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'update nb_cupon_branduser set delete_flag = "1", is_sync ='.$is_sync.' where source_id='.$lid.' and dpid='.$this->companyId;
 				$command=$db->createCommand($sql);
 				$command->execute();
 			}
 			//print_r(explode(',',$groupID));
 			//var_dump($gropid);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
+			$model->is_sync=$is_sync;
 			//$gropid = array();
 			//$gropid = (dexplode(',',$groupID));
 			//var_dump(dexplode(',',$groupID));exit;
@@ -246,79 +209,9 @@ class CuponController extends BackendController
 				'brdulvs'=>$brdulvs,
 				'userlvs'=>$userlvs,
 		));
-// 		$lid = Yii::app()->request->getParam('lid');
-// 		//echo 'ddd';
-// 		$model = Cupon::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-// 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
-// 		if(Yii::app()->request->isPostRequest) {
-// 			$model->attributes = Yii::app()->request->getPost('Cupon');
-// 			$model->update_at=date('Y-m-d H:i:s',time());
-// 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
-// 			if($model->save()){
-// 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
-// 				$this->redirect(array('cupon/index' , 'companyId' => $this->companyId));
-// 			}
-// 		}
-// 		$this->render('update' , array(
-// 				'model'=>$model,
-// 		));
+
 	}
-// 	public function actionCre()
-// 	{
-// 		$brand = Yii::app()->admin->getBrand($this->companyId);
-// 		$request = Yii::app()->request;
-// 		$model = new Cashcard;
-// 		$model->brand_id = $brand->brand_id;
-// 		$model->group_id = Yii::app()->admin->admin_user_id;
-// 		$objects = Yii::app()->admin->getRegions($this->companyId);
-	
-// 		if($request->isPostRequest)
-// 		{	
-// 			$postData = $request->getPost('Cashcard');
-// 			$postData['create_time'] = time();
-// 			$shopIds = $request->getPost('shopId');
-			
-// 			$model->attributes = $postData;
-// 			$allShopids = Yii::app()->admin->getShopIds($this->companyId);
-			
-// 			$transaction = Yii::app()->db->beginTransaction();
-// 			if($model->valid($shopIds)){
-// 				$diffShopIds = array_diff($allShopids,$shopIds);
-// 				try{
-// 					if(empty($diffShopIds)){
-// 						$model->shop_flag = 0;
-// 						$model->save(false);
-// 					}else{
-// 						$model->shop_flag = 1;
-// 						$model->save(false);
-// 						//save gift shop
-// 						$cashcardManage = new CashcardManage($model);
-// 						$cashcardManage->saveCashcardShop($shopIds);
-						
-// 						$regionAdminIds = array();
-// 						$shopAdminIds = Yii::app()->admin->getShopOwnerIds($shopIds);
-// 						if(Yii::app()->admin->role_type < AdminWebUser::REGION_ADMIN){
-// 						$regionAdminIds = Yii::app()->admin->getRegionOwnerIds($shopIds);
-// 					  }
-// 						$systemMessage = new SystemMessageManage();
-// 						$title = Yii::app()->admin->admin_user_name.' 添加了现金券['.$model->title.']';
-// 						$systemMessage->sendMessage(array_merge($regionAdminIds,$shopAdminIds),$title,'');
-// 					}
-					
-// 					$transaction->commit();
-					
-// 					Yii::app()->admin->setFlash('success','创建成功！');
-// 					$this->redirect(array('index','cid'=>$this->companyId));
-// 				} catch(Exception $e){
-// 					$transaction->rollback();
-// 				}
-// 			}
-// 		}
-// 		$this->render('create',array(
-// 			'model'=>$model,
-// 			'objects'=>$objects,
-// 		));
-// 	}
+
 
 	private function getBrdulv(){
 		$criteria = new CDbCriteria;
@@ -414,9 +307,11 @@ class CuponController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+		$is_sync = DataSync::getInitSync();
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_cupon set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			
+			Yii::app()->db->createCommand('update nb_cupon set delete_flag=1, is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('cupon/index' , 'companyId' => $companyId)) ;
 		} else {

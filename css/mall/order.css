@@ -9,11 +9,15 @@ body{ background-color:#E5E5E5;}
 .order-info .item .rt{width:30%;height:100%;float:right;font-size:15px;}
 .order-info .ht1{width:100%;height:1px;background-color:#E5E5E5;}
 .order-copun{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
-.order-copun .copun-lt{float:left;width:30%;}
-.order-copun .copun-rt{float:left;width:70%;}
+.order-copun .copun-lt{float:left;width:65%;}
+.order-copun .copun-rt{float:left;width:35%;color:#FF5151;}
 .order-paytype{font-size:16px;}
+.user-cupon{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:100;}
 .order-paytype .select-type{padding:10px 10px 0;margin-top:5px;color:#FF5151}
 .order-paytype .paytype{padding:10px;background:rgb(255,255,255);}
-.order-paytype .item{padding:5px 0;border-bottom:1px solid #E5E5E5;background:url(../../img/mall/round_unchk.png) right center no-repeat; background-size: 20px 20px;}
-.order-paytype .on{background:url(../../img/mall/round_chk.png) right center no-repeat; background-size: 20px 20px;}
+.order-paytype .item,.user-cupon .item{padding:5px 0;border-bottom:1px solid #E5E5E5;background:url(../../img/mall/round_unchk.png) right center no-repeat; background-size: 20px 20px;}
+.order-paytype .on,.user-cupon .on{background:url(../../img/mall/round_chk.png) right center no-repeat; background-size: 20px 20px;}
 .bottom{width:100%;height:100px;background-color:#E5E5E5;}
+
+
+.arrowright { background-image: url(../../img/mall/arrowright.png);background-size: auto 25px;background-repeat: no-repeat;background-position: right center;}

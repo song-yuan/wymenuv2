@@ -31,11 +31,11 @@
     	<div class="lt-lt"><img src="<?php echo $promotionProduct['main_picture'];?>"></div>
         <div class="lt-ct">
         	<p><?php echo $promotionProduct['product_name'];?></p>
-            <p class="pr">¥<span class="price"><?php echo $promotionProduct['price'];?></span></p>
+            <p class="pr">¥<span class="price"><?php echo $promotionProduct['price'];?></span> <?php if($promotionProduct['price']!=$promotionProduct['original_price']):?><span class="oprice"><strike>¥<?php echo $promotionProduct['original_price'];?></strike></span><?php endif;?></p>
         </div>
         <div class="lt-rt">
         	<div class="minus <?php if(!$promotionProduct['num']) echo 'zero';?>">-</div>
-            <input type="tcext" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" to-group="<?php echo $promotion['to_group'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
+            <input type="text" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" to-group="<?php echo $promotion['to_group'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
             <div class="add">+</div>
             <div class="clear"></div>
         </div>
@@ -54,7 +54,7 @@
     	<div class="lt-lt"><img src="<?php echo $product['main_picture'];?>"></div>
         <div class="lt-ct">
         	<p><?php echo $product['product_name'];?></p>
-            <p class="pr">¥<span class="price"><?php echo $product['price'];?></span></p>
+            <p class="pr">¥<span class="price"><?php echo $product['price'];?></span><?php if($product['price']!=$product['original_price']):?><span class="oprice"><strike>¥<?php echo $product['original_price'];?></strike></span><?php endif;?></p>
         </div>
         <div class="lt-rt">
         	<div class="minus <?php if(!$product['num']) echo 'zero';?>">-</div>
@@ -83,20 +83,21 @@
 <script> 
 $(document).ready(function(){ 
     $('#nav li').click(function(){
+    	var _this = $(this);
         $('#nav').find('li').removeClass('current');
-        $(this).addClass('current');
-        var href = $(this).find('a').attr('href');
+        _this.addClass('current');
+        var href = _this.find('a').attr('href');
         $(href).scrollTop();
     });
     $('#container').scroll(function(){
         $('.section').each(function(){
-            var height = $(this).height();
+        	var id = $(this).attr('id');
             var top = $(this).offset().top;
-            if(top <= 0 && (top+height) > 0){
-                var id = $(this).attr('id');
-                $('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
-                $('a[href=#'+id+']').parent('li').addClass('current');
-                return false;
+            var height = $(this).outerHeight();
+            if(top < 0 && (parseInt(top) + parseInt(height)) > 5){
+        		 $('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
+            	 $('a[href=#'+id+']').parent('li').addClass('current');
+            	 return false;
             }
         });
        
@@ -164,22 +165,26 @@ function setTotal(){
     });
 
     <!--计算菜种-->
-    var nIn = $("li.current a").attr("href");
-    $(nIn+" input[type='text']").each(function() {
-    	if($(this).val()!=0){
-    		n++;
-    	}
+    $('li').each(function(){
+    	var nIn = $(this).find("a").attr("href");
+	    $(nIn+" input[type='text']").each(function() {
+	    	if($(this).val()!=0){
+	    		n++;
+	    	}
+	    });
+	    if(n>0){
+    		$(this).find("b").html(n).show();		
+	    }else{
+	    	$(this).find("b").hide();		
+	    }
+	    n = 0;	
     });
 
     <!--计算总份数-->
     $("input[type='text']").each(function(){
     	v += parseInt($(this).val());
     });
-    if(n>0){
-    	$(".current b").html(n).show();		
-    	}else{
-    	$(".current b").hide();		
-    		}	
+    
     $(".share").html(v);
     $("#total").html(s.toFixed(2)); 
 } 

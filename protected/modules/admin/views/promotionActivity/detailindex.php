@@ -39,9 +39,9 @@
 		<div class="col-md-12">
 		<div class="tabbable tabbable-custom">
                             <ul class="nav nav-tabs">
-                                    <li class="<?php if($typeID=='normal'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'normal' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','普通优惠营销活动');?></a></li>
-                                    <li class="<?php if($typeID=='private'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'private' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','特价优惠营销活动');?></a></li>
-                                    <li class="<?php if($typeID=='cupon'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'cupon' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','代金券营销活动');?></a></li>
+                                    <li class="<?php if($typeID=='normal'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'normal' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加普通优惠营销品');?></a></li>
+                                    <li class="<?php if($typeID=='private'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'private' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加特价优惠营销品');?></a></li>
+                                    <li class="<?php if($typeID=='cupon'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'cupon' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加代金券营销品');?></a></li>
                             
                             </ul>
                             <div class="tab-content">
@@ -49,7 +49,7 @@
 			<?php if($typeID=="normal"){ ?>
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','普通优惠');?><p><?php echo yii::t('app','(*注：只显示生效的优惠)');?></p></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','普通优惠');?><p><?php echo yii::t('app','(*注：只显示生效和未过期的优惠)');?></p></div>
 					
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -61,7 +61,7 @@
 								<th ><?php echo yii::t('app','图片');?></th>
 								<th><?php echo yii::t('app','摘要');?></th>
 								<!-- <th><?php echo yii::t('app','针对消费群体');?></th> -->
-								<th><?php echo yii::t('app','添加活动');?></th>
+								<th><?php echo yii::t('app','是否添加营销品');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -196,7 +196,7 @@
 	<?php }elseif ($typeID=="private"){ ?>
 					<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','特价优惠');?><p><?php echo yii::t('app','(*注：只显示生效的优惠)');?></p></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','特价优惠');?><p><?php echo yii::t('app','(*注：只显示生效和未过期的优惠)');?></p></div>
 					
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -208,7 +208,7 @@
 								<th ><?php echo yii::t('app','图片');?></th>
 								<th><?php echo yii::t('app','摘要');?></th>
 								<th><?php echo yii::t('app','针对消费群体');?></th>
-								<th><?php echo yii::t('app','添加特价活动');?></th>
+								<th><?php echo yii::t('app','是否添加营销品');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -321,7 +321,7 @@
          var activityID = "<?php echo $activityID;?>";
          var typeID = "<?php echo $typeID;?>";
          //alert(activityID);
-         var checkvalue = '0';
+         var checkvalue = '';
 
 			if(chx.checked)
 				{
@@ -359,7 +359,7 @@
 	<?php }elseif ($typeID == "cupon"){?>
 				<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','代金券优惠');?><p><?php echo yii::t('app','(*注：只显示生效的代金券)');?></p></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','代金券优惠');?><p><?php echo yii::t('app','(*注：只显示生效和未过期的代金券)');?></p></div>
 					
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -371,7 +371,7 @@
 								<th ><?php echo yii::t('app','图片');?></th>
 								<th><?php echo yii::t('app','摘要');?></th>
 								<th><?php echo yii::t('app','针对消费群体');?></th>
-								<th><?php echo yii::t('app','添加代金券');?></th>
+								<th><?php echo yii::t('app','是否添加营销品');?></th>
 							</tr>
 						</thead>
 						<tbody>

@@ -50,17 +50,17 @@ class WxProductPrice
 					if($promotion['is_discount']){
 						//优惠
 						if($this->price > ($this->product['original_price'] - $promotion['promotion_money'])){
-							$this->price = $this->product['original_price'] - $promotion['promotion_money'];
+							$this->price = number_format($this->product['original_price'] - $promotion['promotion_money'],2);
 							$this->promotion['is_discount'] = $promotion['is_discount'];
 						}
 					}else{
 					   //打折
-					   if($this->price > $this->product['original_price']*$promotion['promotion_discount']/100){
-					   	 $this->price = $this->product['original_price']*$promotion['promotion_discount']/100;
+					   if($this->price > $this->product['original_price']*$promotion['promotion_discount']){
+					   	 $this->price = number_format($this->product['original_price']*$promotion['promotion_discount'],2);
 					   	 $this->promotion['is_discount'] = $promotion['is_discount'];
 					   }
 					}
-					$this->price = $this->price >0 ? $this->price : 0;
+					$this->price = $this->price >0 ? $this->price : number_format(0,2);
 					$this->promotion['price'] = $this->price;
 				}
 				
@@ -72,12 +72,12 @@ class WxProductPrice
 				foreach($allNarmanPromotions as $allPromotion){
 					if($promotion['is_discount']){
 						//优惠
-						$this->price = $this->price - $allPromotion['promotion_money'];				
+						$this->price = number_format($this->price - $allPromotion['promotion_money'],2);				
 					}else{
 					   //打折
-					   $this->price = $this->price*$allPromotion['promotion_discount']/100;
+					   $this->price = number_format($this->price*$allPromotion['promotion_discount'],2);
 					}
-					$this->price = $this->price >0 ? $this->price : 0;
+					$this->price = $this->price >0 ? $this->price : number_format(0,2);
 					$this->promotion['price'] = $this->price;
 					if(!$this->price){
 						break;

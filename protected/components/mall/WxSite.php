@@ -25,4 +25,9 @@ class WxSite
 				  ->queryRow();
 	    return $site;
 	}
+	public static function updateSiteStatus($siteId,$dpid,$status){
+		$isSync = DataSync::getInitSync();
+		$sql = 'update nb_site set status='.$status.',is_sync='.$isSync.' where lid='.$siteId.' and dpid='.$dpid;
+		Yii::app()->db->createCommand($sql)->execute();
+	}
 }

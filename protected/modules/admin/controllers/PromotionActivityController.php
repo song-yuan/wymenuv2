@@ -59,6 +59,7 @@ class PromotionActivityController extends BackendController
 	public function actionCreate(){
 		$model = new PromotionActivity();
 		$model->dpid = $this->companyId ;
+		$is_sync = DataSync::getInitSync();
 		//$model->create_time = time();
 		//var_dump($model);exit;
 		if(Yii::app()->request->isPostRequest) {
@@ -68,6 +69,7 @@ class PromotionActivityController extends BackendController
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
+			$model->is_sync = $is_sync;
 
 			//var_dump($model);exit;
 			if($model->save()){
@@ -89,12 +91,14 @@ class PromotionActivityController extends BackendController
 	 */
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
+		$is_sync = DataSync::getInitSync();
 		//echo 'ddd';
 		$model = PromotionActivity::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PromotionActivity');
 			$model->update_at=date('Y-m-d H:i:s',time());
+			$model->is_sync = $is_sync;
 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
@@ -110,6 +114,7 @@ class PromotionActivityController extends BackendController
 
 	public function actionDetailindex(){
 			$typeID = Yii::app()->request->getParam('typeID');
+			$data = date('Y-m-d H:i:s',time());
 			//var_dump($typeID);exit;
 			$activityID = Yii::app()->request->getParam('lid');
 			if (empty($activityID)){
@@ -120,7 +125,7 @@ class PromotionActivityController extends BackendController
 // 			}
 			$db = Yii::app()->db;
 			if($typeID=="normal"){
-				$sql = 'select k.* from(select t1.promotion_lid, t.* from nb_normal_promotion t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.delete_flag = 0 and is_available = 0) k';
+				$sql = 'select k.* from(select t1.promotion_lid, t.* from nb_normal_promotion t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.end_time >="'.$data.'" and t.delete_flag = 0 and is_available = 0) k';
 				$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 				//var_dump($sql);exit;
 				$pages = new CPagination($count);
@@ -129,7 +134,7 @@ class PromotionActivityController extends BackendController
 				$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 				$models = $pdata->queryAll();
 			}elseif($typeID=="private"){
-				$sql = 'select l.* from(select t1.promotion_lid,t.* from nb_private_promotion t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.delete_flag = 0 and is_available = 0) l';
+				$sql = 'select l.* from(select t1.promotion_lid,t.* from nb_private_promotion t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.end_time >="'.$data.'" and t.delete_flag = 0 and is_available = 0) l';
 				$count = $db->createCommand(str_replace('l.*','count(*)',$sql))->queryScalar();
 				//var_dump($sql);exit;
 				$pages = new CPagination($count);
@@ -138,7 +143,7 @@ class PromotionActivityController extends BackendController
 				$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 				$models = $pdata->queryAll();
 			}elseif($typeID=="cupon"){
-				$sql = 'select j.* from(select t1.promotion_lid,t.* from nb_cupon t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.delete_flag = 0 and is_available = 0) j';
+				$sql = 'select j.* from(select t1.promotion_lid,t.* from nb_cupon t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.end_time >="'.$data.'" and t.delete_flag = 0 and is_available = 0) j';
 				$count = $db->createCommand(str_replace('j.*','count(*)',$sql))->queryScalar();
 				//var_dump($sql);exit;
 				$pages = new CPagination($count);
@@ -164,9 +169,10 @@ class PromotionActivityController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
+		$is_sync = DataSync::getInitSync();
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_promotion_activity set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_promotion_activity set delete_flag="1", is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('promotionActivity/index' , 'companyId' => $companyId)) ;
 		} else {
@@ -181,6 +187,7 @@ class PromotionActivityController extends BackendController
 		$chk = Yii::app()->request->getParam('chk');
 		$id = Yii::app()->request->getParam('id');
 		$dpid = $this->companyId;
+		$is_sync = DataSync::getInitSync();
 		
 		$db = Yii::app()->db;
 		$transaction = $db->beginTransaction();
@@ -190,8 +197,10 @@ class PromotionActivityController extends BackendController
 			//$create_at = date('Y-m-d H:i:s',time());
 			//$update_at = date('Y-m-d H:i:s',time());
 	
-			$sql = 'delete from nb_promotion_activity_detail where promotion_lid = '.$id.' and dpid='.$dpid.' and activity_lid='.$activityID;
+			//$sql = 'delete from nb_promotion_activity_detail where promotion_lid = '.$id.' and dpid='.$dpid.' and activity_lid='.$activityID;
 			//var_dump($sql);exit;
+			$sql = 'update nb_promotion_activity_detail set delete_flag = "1", is_sync ='.$is_sync.' where promotion_lid = '.$id.' and dpid='.$dpid.' and activity_lid='.$activityID;
+				
 			$command=$db->createCommand($sql);
 			$command->execute();
 			if($typeID=="normal"){
@@ -206,6 +215,7 @@ class PromotionActivityController extends BackendController
 						'promotion_lid'=>$id,
 	
 						'delete_flag'=>'0',
+						'is_sync'=>$is_sync
 				);//Yii::app()->end(json_encode(array("status"=>"success")));
 				$command = $db->createCommand()->insert('nb_promotion_activity_detail',$data);
 			}
@@ -221,6 +231,7 @@ class PromotionActivityController extends BackendController
 							'promotion_lid'=>$id,
 				
 							'delete_flag'=>'0',
+							'is_sync'=>$is_sync
 					);//Yii::app()->end(json_encode(array("status"=>"success")));
 					$command = $db->createCommand()->insert('nb_promotion_activity_detail',$data);
 				}
@@ -236,6 +247,7 @@ class PromotionActivityController extends BackendController
 							'promotion_lid'=>$id,
 				
 							'delete_flag'=>'0',
+							'is_sync'=>$is_sync
 					);//Yii::app()->end(json_encode(array("status"=>"success")));
 					$command = $db->createCommand()->insert('nb_promotion_activity_detail',$data);
 				}
@@ -259,6 +271,7 @@ class PromotionActivityController extends BackendController
 		$chk = Yii::app()->request->getParam('chk');
 		$id = Yii::app()->request->getParam('id');
 		$dpid = $this->companyId;
+		$is_sync = DataSync::getInitSync();
 	
 		$db = Yii::app()->db;
 		$transaction = $db->beginTransaction();
@@ -268,8 +281,10 @@ class PromotionActivityController extends BackendController
 			//$create_at = date('Y-m-d H:i:s',time());
 			//$update_at = date('Y-m-d H:i:s',time());
 	
-			$sql = 'delete from nb_promotion_activity_detail where promotion_lid = '.$id.' and dpid='.$dpid.' and activity_lid='.$activityID;
+			//$sql = 'delete from nb_promotion_activity_detail where promotion_lid = '.$id.' and dpid='.$dpid.' and activity_lid='.$activityID;
 			//var_dump($sql);exit;
+			$sql = 'update nb_promotion_activity_detail set delete_flag = "1", is_sync ='.$is_sync.' where promotion_lid = '.$id.' and dpid='.$dpid.' and activity_lid='.$activityID;
+				
 			$command=$db->createCommand($sql);
 			$command->execute();
 				
@@ -284,6 +299,7 @@ class PromotionActivityController extends BackendController
 						'promotion_lid'=>$id,
 	
 						'delete_flag'=>'0',
+						'is_sync'=>$is_sync
 				);//Yii::app()->end(json_encode(array("status"=>"success")));
 				$command = $db->createCommand()->insert('nb_promotion_activity_detail',$data);
 			}
@@ -315,14 +331,14 @@ class PromotionActivityController extends BackendController
 		$LvNames = "";
 		if($type=="cupon"){
 			//	echo 'ABC';
-			$sql = 'select t1.level_name from nb_cupon_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid) where t.to_group = 2 and t.cupon_id ='.$proID.' and t.dpid ='.$dpid;
+			$sql = 'select t1.level_name from nb_cupon_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid and t1.delete_flag = 0) where t.delete_flag  = 0 and  t.to_group = 2 and t.cupon_id ='.$proID.' and t.dpid ='.$dpid;
 			$connect = Yii::app()->db->createCommand($sql);
 			//	$connect->bindValue(':site_id',$siteId);
 			//	$connect->bindValue(':dpid',$dpid);
 			$LvNames = $connect->queryAll();
 			
 		}elseif ($type=="private"){
-			$sql = 'select t1.level_name from nb_private_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid) where t.to_group = 2 and t.private_promotion_id ='.$proID.' and t.dpid ='.$dpid;
+			$sql = 'select t1.level_name from nb_private_branduser t left join nb_brand_user_level t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid and t1.delete_flag = 0) where t.delete_flag = 0 and  t.to_group = 2 and t.private_promotion_id ='.$proID.' and t.dpid ='.$dpid;
 			$connect = Yii::app()->db->createCommand($sql);
 			//	$connect->bindValue(':site_id',$siteId);
 			//	$connect->bindValue(':dpid',$dpid);

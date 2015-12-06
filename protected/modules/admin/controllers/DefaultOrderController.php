@@ -112,6 +112,7 @@ class DefaultOrderController extends BackendController
                 $orderId = Yii::app()->request->getParam('orderId',0);
                 $syscallId = Yii::app()->request->getParam('syscallId',0);
                 $autoaccount = Yii::app()->request->getParam('autoaccount',0);
+                $padId = Yii::app()->request->getParam('padId',"0000000000");
                 $order=new Order();
                 $siteNo=new SiteNo();
                 $site=new Site();
@@ -133,6 +134,7 @@ class DefaultOrderController extends BackendController
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                     $criteria->order = ' t.lid desc ';                    
                     $siteNo = SiteNo::model()->find($criteria);
+                    //如果不是临时台，需要讲固定台的多个订单合并，所以要取出
                 }else{
                     $criteria = new CDbCriteria;
                     $criteria->condition =  ' t.order_status in ("1","2","3") and  t.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
@@ -144,7 +146,7 @@ class DefaultOrderController extends BackendController
                     $siteNo = SiteNo::model()->find($criteria);
                     //var_dump($siteNo);exit;
                 }
-                //var_dump($order);exit;
+                //var_dump($order);exit;                
                 if(empty($order))
                 {
                     Until::validOperate($companyId,$this);                    
@@ -162,11 +164,28 @@ class DefaultOrderController extends BackendController
                     //var_dump($order);exit;
                     $order->save();
                 }
-                $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,'1',$companyId);
-		//$orderProducts = OrderProduct::model()->findAll('dpid=:dpid and order_id=:orderid',array(':dpid'=>$companyId,':orderid'=>$order->order_id));
-		$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
-                $allOrderProductTastes=  TasteClass::getOrderTasteKV($order->lid,'2',$companyId);
-                //var_dump($orderProducts); exit;
+                //检查是否有自动打印的东西，order_product product_order_status
+                OrderProduct::setPauseJobs($companyId,$padId);
+                //var_dump($order); exit;
+                ////////取得该座位对应的所有的订单ID列表////////
+                $sqlorderlist="select lid from nb_order where order_status in ('1','2','3') and dpid=".$companyId." and is_temp=".$siteNo->is_temp." and site_id=".$siteNo->site_id;
+                $orderlistmodel=Yii::app()->db->createCommand($sqlorderlist)->queryAll();
+                $orderlist="0000000000";
+                if(!empty($orderlistmodel))
+                {
+                    foreach ($orderlistmodel as $ol)
+                    {
+                        $orderlist.=",".$ol["lid"];
+                    }
+                }
+                //var_dump($orderlist); exit;
+		//////////////
+                //订单已经选择的口味
+                $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,$orderlist,'1',$companyId);
+                //所有订单明细
+                $orderProducts = OrderProduct::getOrderProducts($orderlist,$companyId);
+                //单品口味
+                $allOrderProductTastes=  TasteClass::getOrderTasteKV($order->lid,$orderlist,'2',$companyId);
                 $tasteidsOrderProducts=array();
                 foreach($allOrderProductTastes as $orderProductTaste)
                 {
@@ -179,8 +198,8 @@ class DefaultOrderController extends BackendController
                     }
                 }
                 //var_dump($tasteidsOrderProducts);exit;
-                $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
-                $productDisTotal = OrderProduct::getDisTotal($order->lid,$order->dpid);
+                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+                $productDisTotal = OrderProduct::getDisTotal($orderlist,$order->dpid);
                 //var_dump($productTotal);exit;
                 if($siteNo->is_temp=='1')
                 {
@@ -193,8 +212,9 @@ class DefaultOrderController extends BackendController
 		//var_dump($total);exit;
 		//$paymentMethods = $this->getPaymentMethodList();
                 $tastegroups= TasteClass::getAllOrderTasteGroup($companyId, '1');
-                $orderTastes=  TasteClass::getOrderTaste($order->lid, '1', $companyId);
-                $tasteMemo = TasteClass::getOrderTasteMemo($order->lid, '1', $companyId);
+                //所有可选择的全单口味
+                $orderTastes=  TasteClass::getOrderTaste($orderlist, '1', $companyId);
+                $tasteMemo = TasteClass::getOrderTasteMemo($orderlist, '1', $companyId);
                 //var_dump(array_column($allOrderProductTastes, "lid"));exit;
                 //var_dump($tasteMemo);exit;
 		$this->renderPartial('orderPartial' , array(
@@ -206,6 +226,7 @@ class DefaultOrderController extends BackendController
 				'productTotal' => $productTotal ,
                                 'productDisTotal'=>$productDisTotal,
 				'total' => $total,
+                                'orderlist'=>$orderlist,
 				//'paymentMethods'=>$paymentMethods,
                                 'typeId' => $typeId,
                                 'syscallId'=>$syscallId,
@@ -279,6 +300,7 @@ class DefaultOrderController extends BackendController
                 $productList = Yii::app()->request->getPost('productlist',"0");
                 $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
+                $orderList=Yii::app()->request->getPost('orderlist',"0");
                 $callId=Yii::app()->request->getParam('callId',"0");
                 //返回json挂单成功或失败
                 //如果orderId是0，表示是临时台，
@@ -341,7 +363,7 @@ class DefaultOrderController extends BackendController
                     }
                 }
                 //返回json挂单成功或失败
-                Yii::app()->end(json_encode(OrderList::createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo)));
+                Yii::app()->end(json_encode(OrderList::createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo)));
 	}
         
         /*
@@ -358,6 +380,7 @@ class DefaultOrderController extends BackendController
                 $productList = Yii::app()->request->getPost('productlist',"0");
                 $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
+                $orderList=Yii::app()->request->getPost('orderlist',"0");
                 $callId=Yii::app()->request->getParam('callId',"0");
                 //返回json挂单成功或失败gi
                 //如果orderId是0，表示是临时台，
@@ -421,7 +444,7 @@ class DefaultOrderController extends BackendController
                     }
                 }
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));
-                $savejson=OrderList::createOrder($companyId,$orderId,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
+                $savejson=OrderList::createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
                 //$jobids=array();
                 //Yii::app()->end(json_encode($savejson));
 //                if(!$savejson["status"])
@@ -1717,7 +1740,8 @@ class DefaultOrderController extends BackendController
                                     $productIdlist=explode(',',$selsetlist);
                                     //$setid=Yii::app()->request->getPost('OrderProduct');
                                     //var_dump($setid['set_id']);exit;
-                                    $db->createCommand('delete from nb_order_product where set_id=:setid and dpid=:dpid')->execute(array(':setid'=>$orderProduct->set_id,':dpid'=>$companyId));
+                                    //$db->createCommand('delete from nb_order_product where set_id=:setid and dpid=:dpid')->execute(array(':setid'=>$orderProduct->set_id,':dpid'=>$companyId));
+                                    $db->createCommand('update nb_order_product set delete_flag="1" where set_id=:setid and dpid=:dpid')->execute(array(':setid'=>$orderProduct->set_id,':dpid'=>$companyId));
                                     foreach ($productIdlist as $productId){
                                         //var_dump($productId);exit;
                                         $sorderProduct = new OrderProduct();

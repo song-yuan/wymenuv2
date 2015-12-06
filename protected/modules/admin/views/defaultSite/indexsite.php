@@ -203,25 +203,35 @@
                 //site显示时才做这样的操作
                 if($("#tab_sitelist").css("display")=="block")
                 {                    
-                    //首先检查是否有失败的打印任务
-                    
-                    //网络连接有错误要报错
-                    
-                    //然后才同步打印
+                    var padid="0000000046";
+                    if (typeof Androidwymenuprinter == "undefined") {
+                        alert("找不到PAD设备");
+                        //return false;
+                    }else{
+                        var padinfo=Androidwymenuprinter.getPadInfo();
+                        padid=padinfo.substr(10,10);
+                    }
                     $.ajax({
-                        url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid,
+                        url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid+"/padId/"+padid,
                         type:'GET',
                         timeout:5000,
                         cache:false,
                         async:false,
                         dataType: "json",
                         success:function(msg){
+                            //网络连接有错误要报错
+                             if(!msg.status)
+                             {
+                                 alert("网络故障，请稍后重试!");
+                                 return;
+                             }
+                            
                             //$('#tabsiteindex').load(tabcurrenturl);
                             //重新修改成用ajax动态加载
                             if(gtypeid=="others")
                             {
                                 //获取排队信息，并更新状态,不存在删减的
-                                $.each(msg,function(key,value){
+                                $.each(msg.models,function(key,value){
                                     var siteobj=$(".modalaction[typeid='others'][sid="+value.splid+"][istemp="+value.typeid+"]");
                                     siteobj.removeClass("bg-yellow");
                                     siteobj.removeClass("bg-green");                                                    
@@ -254,7 +264,7 @@
                             }else{
                                 //获取座位信息，并更新状态
                                 //不存在删减座位的
-                                $.each(msg,function(key,value){
+                                $.each(msg.models,function(key,value){
                                     var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
                                     siteobj.attr("status",value.status);
                                     siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
@@ -286,6 +296,47 @@
                                         siteobj.find("div").css("background-color","");
                                     }
                                 });
+                                //开始打印任务
+                                var printresult=false;
+                                var successjobs="00000000";
+                                if(typeof(Androidwymenuprinter)=="undefined")
+                                {
+                                    //return;
+                                }
+                                $.each(msg.modeljobs,function(key,value){
+                                    printresult=false;
+                                    for(var itemp=1;itemp<4;itemp++)
+                                    {
+                                        if(printresult)
+                                        {
+                                            successjobs=successjobs+","+value.jobid;
+                                            break;
+                                        }
+                                        var addressdetail=value.address.split(".");
+                                        if(addressdetail[0]=="com")
+                                        {
+                                            var baudrate=parseInt(addressdetail[2]);
+                                            printresult=Androidwymenuprinter.printComJob(value.dpid,value.jobid,addressdetail[1],baudrate);
+                                        }else{
+                                            //alert(value.dpid);alert(value.jobid);alert(value.address);
+                                            printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
+                                        }                                                                        
+                                    }
+                                });
+                                if("00000000"!=successjobs)
+                                {
+                                    $.ajax({
+                                        url:"/wymenuv2/admin/defaultSite/finshPauseJobs/companyId/<?php echo $this->companyId; ?>/successjobs/"+successjobs,
+                                        type:'GET',
+                                        timeout:5000,
+                                        cache:false,
+                                        async:false,
+                                        dataType: "json",
+                                        success:function(msg){
+
+                                        }
+                                    });
+                                }
                             }                            
                         },
                         error: function(msg){

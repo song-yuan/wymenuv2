@@ -52,17 +52,17 @@ class TasteClass
 	}
 	
 	//订单口味 type = 1 全单口味 2 订单产品口味
-	public static function getOrderTaste($orderId,$type,$dpid){
+	public static function getOrderTaste($orderlist,$type,$dpid){
 		$result = array();
 		if($type==1){
-			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and t.dpid=:dpid and t.is_order=1';
+			$sql = 'select t.taste_id from nb_order_taste t where t.order_id in (:orderId) and t.dpid=:dpid and t.is_order=1';
 			$conn = Yii::app()->db->createCommand($sql);
-			$conn->bindValue(':orderId',$orderId);
+			$conn->bindValue(':orderId',$orderlist);
                         $conn->bindValue(':dpid',$dpid);
 		}elseif($type==2){
-			$sql = 'select t.taste_id from nb_order_taste t where t.order_id=:orderId and t.dpid=:dpid and t.is_order=0';
+			$sql = 'select t.taste_id from nb_order_taste t where t.order_id in (:orderId) and t.dpid=:dpid and t.is_order=0';
 			$conn = Yii::app()->db->createCommand($sql);
-			$conn->bindValue(':orderId',$orderId);
+			$conn->bindValue(':orderId',$orderlist);
                         $conn->bindValue(':dpid',$dpid);
 		}
 		$results = $conn->queryAll();
@@ -73,19 +73,31 @@ class TasteClass
 	}
         
         //订单口味 type = 1 全单口味 2 订单产品口味
-	public static function getOrderTasteKV($orderId,$type,$dpid){
+        //如果是全单口味，将一座位的多个订单的整体teaste合并到最新的订单
+	public static function getOrderTasteKV($orderId,$orderlist,$type,$dpid){
 		$result = array();
 		if($type==1){
-			$sql = 'select t.order_id as id,t.taste_id as tasteid,t1.name as name from nb_order_taste t left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid where t.order_id=:orderId and t.dpid=:dpid and t.is_order=1';
+                        //将这一个桌子的订单的全局口味，全部对应当前订单。
+                        $sqlup="update nb_order_taste set order_id=".$orderId." where dpid=".$dpid." and order_id in (".$orderlist.")";
+                        $connup=Yii::app()->db->createCommand($sqlup);
+                        $connup->execute();
+                        //去除重复的
+			$sql = 'select distinct t.order_id as id,t.taste_id as tasteid,t1.name as name from nb_order_taste t'
+                                . ' left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid where t.order_id'
+                                . ' in ('.$orderId.') and t.dpid='.$dpid.' and t.is_order=1';
 			$conn = Yii::app()->db->createCommand($sql);
-			$conn->bindValue(':orderId',$orderId);
-                        $conn->bindValue(':dpid',$dpid);
+			//$conn->bindValue(':orderId',$orderlist);
+                        //$conn->bindValue(':dpid',$dpid);
 		}elseif($type==2){
-			$sql = 'select t.order_id as id,t.taste_id as tasteid,t1.name as name from nb_order_taste t left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid  where t.order_id in (select lid from nb_order_product where dpid=:ddpid and order_id = :orderId) and t.dpid=:dpid and t.is_order=0';
+			$sql = 'select t.order_id as id,t.taste_id as tasteid,t1.name as name from nb_order_taste t'
+                                . ' left join nb_taste t1 on t.dpid=t1.dpid and t.taste_id=t1.lid'
+                                . '  where t.order_id in (select lid from nb_order_product'
+                                . ' where dpid='.$dpid.' and order_id in ('.$orderlist.')) and t.dpid='.$dpid.' and t.is_order=0';
 			$conn = Yii::app()->db->createCommand($sql);
-			$conn->bindValue(':orderId',$orderId);
-                        $conn->bindValue(':dpid',$dpid);
-                        $conn->bindValue(':ddpid',$dpid);
+                        //echo $sql;exit;
+//			$conn->bindValue(':orderId',$orderlist);
+//                        $conn->bindValue(':dpid',$dpid);
+//                        $conn->bindValue(':ddpid',$dpid);
 		}
 		$results = $conn->queryAll();
                 //$idst=array_column($results, 'id');
@@ -96,17 +108,17 @@ class TasteClass
 	}
         
 	//订单口味 type = 1 全单口味 2 订单产品口味
-	public static function getOrderTasteMemo($orderId,$type,$dpid){
+	public static function getOrderTasteMemo($orderlist,$type,$dpid){
 		$result = array();
 		if($type==1){
-			$sql = 'select t.taste_memo from nb_order t where t.lid=:orderId and t.dpid=:dpid';
+			$sql = 'select t.taste_memo from nb_order t where t.lid in (:orderId) and t.dpid=:dpid';
 			$conn = Yii::app()->db->createCommand($sql);
-			$conn->bindValue(':orderId',$orderId);
+			$conn->bindValue(':orderId',$orderlist);
                         $conn->bindValue(':dpid',$dpid);
 		}elseif($type==2){
-			$sql = 'select t.taste_memo from nb_order_product t where t.lid=:orderId and t.dpid=:dpid';
+			$sql = 'select t.taste_memo from nb_order_product t where t.lid in (:orderId) and t.dpid=:dpid';
 			$conn = Yii::app()->db->createCommand($sql);
-			$conn->bindValue(':orderId',$orderId);
+			$conn->bindValue(':orderId',$orderlist);
                         $conn->bindValue(':dpid',$dpid);
 		}
 		$result = $conn->queryRow();
@@ -116,7 +128,8 @@ class TasteClass
 	public static function save($dpid, $type, $id = 0, $tastesIds = array(), $tastMemo=null){
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
-			$sql = 'delete from nb_order_taste where dpid=:dpid and is_order=:type and order_id=:orderId';
+			//$sql = 'delete from nb_order_taste where dpid=:dpid and is_order=:type and order_id=:orderId';
+                        $sql = 'update nb_order_taste set delete_flag="1" where dpid=:dpid and is_order=:type and order_id=:orderId';
 			$conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':dpid',$dpid);
 			$conn->bindValue(':type',$type);
@@ -162,7 +175,7 @@ class TasteClass
 		$transaction = Yii::app()->db->beginTransaction();
 		try {
 			$sql = 'delete from nb_product_taste where dpid=:dpid and product_id=:productId';
-			$conn = Yii::app()->db->createCommand($sql);
+                        $conn = Yii::app()->db->createCommand($sql);
 			$conn->bindValue(':dpid',$dpid);
 			$conn->bindValue(':productId',$productId);
 			$conn->execute();
