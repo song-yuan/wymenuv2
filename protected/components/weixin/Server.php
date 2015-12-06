@@ -183,7 +183,8 @@ class Server {
 				1=>array('mall/index','companyId'),
 			);
 			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId));
-			return $this->news(array('桌号:'.isset($siteType['name'])?$siteType['name']:''.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
+			$typeName = isset($siteType['name'])?$siteType['name']:'';
+			return $this->news(array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl));
 		}else
 			return $this->generalResponse();
 	}
