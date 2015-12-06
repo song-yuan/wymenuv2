@@ -1455,7 +1455,7 @@ class Helper
         
         //2015/9/4更新
         //在2的基础上将同一个打印机的任务一次输出，减少打印机的连接请求
-	static public function printKitchenAll3(Order $order,Site $site,  SiteNo $siteNo , $reprint){		
+	static public function printKitchenAll3(Order $order,$orderList,Site $site,  SiteNo $siteNo , $reprint){		
                 $printers_a=array();
                 $orderproducts_a=array();
                 $printer2orderproducts_a=array();
@@ -1473,7 +1473,7 @@ class Helper
                 {
                     $floor_id=$site->floor_id;
                 }
-                $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id=:id and t.dpid=:dpid and t.is_print=0 and t.delete_flag=0' , array(':id'=>$order->lid,':dpid'=>$order->dpid));
+                $orderProducts = OrderProduct::model()->with('product')->findAll('t.order_id in (:id) and t.dpid=:dpid and t.is_print=0 and t.delete_flag=0' , array(':id'=>$orderList,':dpid'=>$order->dpid));
                 if(empty($orderProducts)) 
                 {
                     return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>yii::t('app','没有要打印的菜品！'));
@@ -1824,7 +1824,7 @@ class Helper
                 $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'msg'=>'打印任务正常发布',"jobs"=>$jobids2);
                 //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
                 //更新菜品状态为已打印
-                $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$order->dpid." and order_id =".$order->lid;
+                $sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$order->dpid." and order_id in (".$orderList.")";
                 $commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
                 $commandorderproduct->execute();
                 

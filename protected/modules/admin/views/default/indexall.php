@@ -1033,6 +1033,7 @@
                 if(typeof obj.attr("lid")== "undefined")
                 {
                     var appendstr=' <li lid="0000000000"'
+                                  +'      orderid="0000000000"'
                                   +'      setid="'+setid+'"'
                                   +'      productid="'+lid+'"'
                                   +'      order_status="0"' 
@@ -1071,11 +1072,13 @@
                 //取得整体订单的tasteids tastememo
                 var ordertasteids=$("#ordertasteall").attr("tid");
                 var ordertastememo=$("#ordertastememoall").text();
+                var orderlist=$(".selectProduct").attr("orderlist");
                 var productlist="";
                 var tempproduct="";
                 //取得所有未下单状态的单品，没有打印和厨打都是0,1就不能修改了。
                 $(".selectProductA[order_status='0']").each(function(){
                     tempproduct=$(this).attr("lid");
+                    tempproduct=tempproduct+","+$(this).attr("orderid");
                     tempproduct=tempproduct+","+$(this).attr("setid");
                     tempproduct=tempproduct+","+$(this).attr("productid");
                     tempproduct=tempproduct+","+$(this).attr("order_status");
@@ -1096,7 +1099,8 @@
                 //包括单品列表、单品口味列表，口味备注等
                 return '&productlist='+productlist+
                         '&ordertasteids='+ordertasteids+
-                        '&ordertastememo='+ordertastememo;                 
+                        '&ordertastememo='+ordertastememo+
+                        '&orderlist='+orderlist;                 
             }
             
             
@@ -2491,6 +2495,7 @@
                 $("#productTaste").find("label[class='selectTaste btn btn-default active']").each(function(){
                     tasteids=tasteids+$(this).attr("tasteid")+"|";
                 });
+                //alert(tasteids);//return;
                 obj.attr("tasteids",tasteids);
                 obj.attr("tastememo",tastememo);
                 //(tasteids);alert(tastememo);
