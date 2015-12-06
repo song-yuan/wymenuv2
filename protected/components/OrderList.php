@@ -594,7 +594,7 @@ class OrderList
 //                }else{
                 if($orderStatus>1)
                 {
-                    //return array('status'=>false,'msg'=>"before printkitchen all");
+                    //return array('status'=>false,'msg'=>"before printkitchen all".$orderList);
                     $ret=  Helper::printKitchenAll3($order,$orderList,$site,$siteNo,false);
                     //return array('status'=>false,'msg'=>"after printkitchen all");
                     if(!$ret['status'])
