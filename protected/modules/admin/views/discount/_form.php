@@ -88,7 +88,7 @@ $("#su").on('click',function() {
  //  }else{
    //alert(str);}
     //$("#hidden1").val(str);
-    $("#normalpromotion-form").submit();
+    $("#discount-form").submit();
 });
 
 </script>			
