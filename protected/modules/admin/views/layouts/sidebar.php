@@ -108,6 +108,18 @@
                         <!--  <li class="<?php if(Yii::app()->controller->id == 'cashcard' && in_array($this->getAction()->getId(),array('xxx'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','效果分析');?></a></li><!--每个活动/红包，营销品，发送多少，看的人多少，领用多少，使用多少-->
 					 </ul>
 				</li>
+				<!-- <li class="<?php if(in_array(Yii::app()->controller->id , array('customerFlow','salesanalysis','actanalysis','redpacketanalysis'))) echo 'active';?>">
+					<a href="">
+					<i class="fa fa-comments"></i> 
+					<span class="title"><?php echo yii::t('app','营销分析');?></span>
+					</a>
+					<ul class="sub-menu">
+						<li class="<?php if(Yii::app()->controller->id == 'customerFlow' && in_array($this->getAction()->getId(),array('index'))) echo 'active';?>"><a href="<?php echo $this->createUrl('customerFlow/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','客流分析');?></a></li><!--整体设置，普通优惠、专享优惠、代金券--
+                        <!-- <li class="<?php if(Yii::app()->controller->id == 'salesanalysis' && in_array($this->getAction()->getId(),array('index'))) echo 'active';?>"><a href="<?php echo $this->createUrl('customerFlow/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','销售额分析');?></a></li><!--管理（概要和明细）、发送规则--
+                        <li class="<?php if(Yii::app()->controller->id == 'actanalysis' && in_array($this->getAction()->getId(),array('index'))) echo 'active';?>"><a href="<?php echo $this->createUrl('customerFlow/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','活动分析');?></a></li><!--营销活动管理，添加营销品--
+                        <li class="<?php if(Yii::app()->controller->id == 'redpacketanalysis' && in_array($this->getAction()->getId(),array('index'))) echo 'active';?>"><a href="<?php echo $this->createUrl('customerFlow/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','折扣模板');?></a></li><!--营销活动管理，添加营销品--
+                    </ul>
+				</li>-->
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType', 'floor','sitePersons'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-building"></i> 
