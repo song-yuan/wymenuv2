@@ -723,6 +723,7 @@
             var first_tab="<?php echo empty($categories)?"0":$categories[0]['lid']; ?>";
             var ispaybuttonclicked=false;
             var intervalQueueList;
+            var reloadsitestatelock=false;
             //var member_card_pop_flag=0;
             if (typeof Androidwymenuprinter == "undefined") {
                 event_clicktouchstart="click";
@@ -735,6 +736,11 @@
             
             function reloadsitestate()
             {
+                if(reloadsitestatelock)
+                {
+                    return;
+                }
+                reloadsitestatelock=true;
                 //site显示时才做这样的操作
                 if($("#tab_sitelist").css("display")=="block" || (gtypeid!="others" && gtypeid!="tempsite"))
                 {
@@ -889,7 +895,8 @@
                             }
                         }
                     });               
-                }                
+                }
+                reloadsitestatelock=false;
             }
             
             
