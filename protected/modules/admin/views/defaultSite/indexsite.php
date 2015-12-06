@@ -156,8 +156,8 @@
                                                                                             endif;?>
                                                                                     <?php //else:?>
                                                                                         <?php foreach ($models as $model):?>
-                                                                                                        <li class="modalaction <?php if($model["min_status"]=='1') echo 'bg-yellow'; elseif($model["min_status"]=='2') echo 'bg-blue'; elseif($model["min_status"]=='3') echo 'bg-green';?>"
-                                                                                                            typeid="<?php echo$model["type_id"]; ?>" showbutton="yes" istemp="0" status=<?php echo $model["min_status"];?> maxstatus=<?php echo $model["max_status"];?> sid=<?php echo $model["lid"];?>
+                                                                                                        <li class="modalaction <?php if($model["min_status"]=='1'||$model["status"]=="1") echo 'bg-yellow'; elseif($model["min_status"]=='2') echo 'bg-blue'; elseif($model["min_status"]=='3') echo 'bg-green';?>"
+                                                                                                            typeid="<?php echo$model["type_id"]; ?>" showbutton="yes" istemp="0" status=<?php if($model["min_status"]=="0"&& $model["status"]=="1"){echo "1";}elseif($model["min_status"]=="1"){echo "1";};?> maxstatus=<?php echo $model["max_status"];?> sid=<?php echo $model["lid"];?>
                                                                                                             shname="<?php echo $model["serial"];?>"><span style="font-size: 20px;"><?php echo $model["serial"];?>&nbsp;</span><span typename="updateat">
                                                                                                                 <?php echo '<br>'.substr($model["update_at"],5,11);?></span>
                                                                                                             <div style="width: 100%;background-color:<?php if($model["newitem"]>0){echo "green"; }else{ echo "";}?>;height:40%;
@@ -266,13 +266,18 @@
                                 //不存在删减座位的
                                 $.each(msg.models,function(key,value){
                                     var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
-                                    siteobj.attr("status",value.min_status);
+                                    var nowstatus=value.min_status;
+                                    if(value.min_status=="1" || value.status=="1")
+                                    {
+                                        nowstatus=1;
+                                    }
+                                    siteobj.attr("status",nowstatus);
                                     siteobj.attr("maxstatus",value.max_status);
                                     siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
                                     siteobj.removeClass("bg-yellow");
                                     siteobj.removeClass("bg-blue");
                                     siteobj.removeClass("bg-green");
-                                    if(value.min_status=="1")
+                                    if(value.min_status=="1" || value.status=="1")
                                     {
                                         siteobj.addClass("bg-yellow");
                                     }else if(value.min_status=="2")
@@ -485,19 +490,20 @@
                                             gtypeid = typeId;
                                             //手动改变二个台子的颜色和状态
                                             var sstatus=$(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").attr("status");
+                                            var tstatus=$(".modalaction[sid="+sid+"][istemp="+istemp+"]").attr("status");
+                                            var isblock=$(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").css("display");
+                                            var isbackground=$(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").css("background-color");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-yellow");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-blue");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-green");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").attr("status","5");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").hide();
-                                            var tstatus=$(".modalaction[sid="+sid+"][istemp="+istemp+"]").attr("status");
-                                            var isblock=$(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").css("display");
-                                            var isbackground=$(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").css("background-color");
+                                            alert(isbackground);
                                             if(isblock=="block")
                                             {
-                                                $(".modalaction[sid="+sid+"][istemp="+istemp+"]").find("div").css("display",isblock);
+                                                $(".modalaction[sid="+sid+"][istemp="+istemp+"]").find("div").show();
                                             }
-                                            if(isbackground=="green")
+                                            if(isbackground!="none")
                                             {
                                                 $(".modalaction[sid="+sid+"][istemp="+istemp+"]").find("div").css("background-color",isbackground);
                                             }        

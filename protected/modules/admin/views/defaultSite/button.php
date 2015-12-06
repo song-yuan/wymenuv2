@@ -251,7 +251,8 @@
                                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
                                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
                                                     $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
-                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","7");                                                    
+                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","7");  
+                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").find("div").hide();
                                             }
                                     },
                                         'error':function(e){

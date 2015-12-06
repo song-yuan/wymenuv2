@@ -796,14 +796,19 @@
                                 if($("#tab_sitelist").css("display")=="block")
                                 {
                                     $.each(msg.models,function(key,value){
-                                        var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
-                                        siteobj.attr("status",value.min_status);
+                                        var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");                                        
+                                        var nowstatus=value.min_status;
+                                        if(value.min_status=="1" || value.status=="1")
+                                        {
+                                            nowstatus=1;
+                                        }
+                                        siteobj.attr("status",nowstatus);
                                         siteobj.attr("maxstatus",value.max_status);
                                         siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
                                         siteobj.removeClass("bg-yellow");
                                         siteobj.removeClass("bg-blue");
                                         siteobj.removeClass("bg-green");
-                                        if(value.min_status=="1")
+                                        if(value.min_status=="1" || value.status=="1")
                                         {
                                             siteobj.addClass("bg-yellow");
                                         }else if(value.min_status=="2")
