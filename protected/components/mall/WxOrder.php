@@ -163,6 +163,16 @@ class WxOrder
 	}
 	/**
 	 * 
+	 * 更改订单产品表状态
+	 * 
+	 */
+	public static function updateOrderProductStatus($orderId,$dpid){
+		$isSync = DataSync::getInitSync();
+		$sql = 'update nb_order_product set product_order_status=2,is_sync='.$isSync.' where order_id='.$orderId.' and dpid='.$dpid.' and delete_flag=0';
+		Yii::app()->db->createCommand($sql)->execute();
+	}
+	/**
+	 * 
 	 * 更改订单支付方式
 	 * 
 	 * 
