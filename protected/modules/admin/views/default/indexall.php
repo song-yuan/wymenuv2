@@ -1177,6 +1177,7 @@
             //tempsaveprint_btn
             $('#tempsaveprint_btn').on(event_clicktouchstart,function(){
                 var orderid=$(".selectProduct").attr("orderid");
+                var orderList=$(".selectProduct").attr("orderlist");
                 var padid="0000000046";
                 if (typeof Androidwymenuprinter == "undefined") {
                     alert("找不到PAD设备");
@@ -1185,7 +1186,7 @@
                     var padinfo=Androidwymenuprinter.getPadInfo();
                     padid=padinfo.substr(10,10);
                 }
-                var url="<?php echo $this->createUrl('defaultOrder/pausePrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
+                var url="<?php echo $this->createUrl('defaultOrder/pausePrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/orderList/"+orderList;
                 $.ajax({
                         url:url,
                         type:'GET',
@@ -1657,9 +1658,9 @@
                     //return false;
                 }
                  //有新品
-                if($(".selectProductA[order_status='0']").length>0)
-//                if(true)
-                {                    
+//                if($(".selectProductA[order_status='0']").length>0)
+////                if(true)
+//                {                    
                         //取得数据
                         var sendjson=getallproductinfo();
                         //alert(sendjson);return;
@@ -1770,7 +1771,73 @@
                                         });
                                     }
                                 }else{
-                                    alert(data.msg);
+                                    if(data.msg=="noorderproduct")
+                                    {
+                                        //判断有没有失败的任务。
+                                        $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+orderid
+                                        ,function(){                        
+                                            if(parseInt($('#failprintjobnum').val())>0)
+                                            {
+                                                if(layer_index_printresult!=0)
+                                                {
+                                                    layer.close(layer_index_printresult);
+                                                    layer_index_printresult=0;
+                                                   //return;
+                                                }
+                                                 layer_index_printresult=layer.open({
+                                                     type: 1,
+                                                     shade: false,
+                                                     title: false, //不显示标题
+                                                     area: ['30%', '70%'],
+                                                     content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                                                     cancel: function(index){
+                                                         layer.close(index);
+                                                         layer_index_printresult=0;                                                                               
+                                                     }
+                                                });
+
+                                            }else{
+                                               if($("#accountbeforeorderstatus").val()==3)
+                                               {
+                                                   //已付款，直接去结单
+                                                   bootbox.confirm("<?php echo yii::t('app','已支付完成,确定结单吗？');?>", function(result) {                    
+                                                    if(result){
+                                                        var url="<?php echo $this->createUrl('defaultOrder/orderAccountDirect',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;                                    
+                                                        $.ajax({
+                                                            url:url,
+                                                            type:'POST',
+                                                            data:"",
+                                                            async:false,
+                                                            dataType: "json",
+                                                            success:function(msg){
+                                                                var data=msg;
+                                                                if(data.status){                                                
+                                                                    //手动改变座位的状态和颜色
+                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
+                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
+                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
+                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","4");
+                                                                    $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").find("div").hide();                                                
+                                                                    sitevisible();
+                                                                }else{
+                                                                    alert("结单失败1，请重试！");
+                                                                }
+                                                            },
+                                                            error: function(msg){
+                                                                alert("结单失败2，请重试！");                                            
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                               }else{
+                                                   //弹出收银界面
+                                                    gotoaccount();  
+                                                }
+                                            }
+                                        });
+                                    }else{
+                                        alert(data.msg);
+                                    }
                                     //alert("下单成功，打印失败");
                                 }
                                //以上是打印
@@ -1780,70 +1847,9 @@
                                 alert("保存失败2");
                             }
                         });
-                }else{ //没有新品
-                //判断有没有失败的任务。
-                    $('#printRsultListdetailsub').load('<?php echo $this->createUrl('defaultOrder/getFailPrintjobs',array('companyId'=>$this->companyId));?>/orderId/'+orderid
-                    ,function(){                        
-                        if(parseInt($('#failprintjobnum').val())>0)
-                        {
-                            if(layer_index_printresult!=0)
-                            {
-                                layer.close(layer_index_printresult);
-                                layer_index_printresult=0;
-                               //return;
-                            }
-                             layer_index_printresult=layer.open({
-                                 type: 1,
-                                 shade: false,
-                                 title: false, //不显示标题
-                                 area: ['30%', '70%'],
-                                 content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-                                 cancel: function(index){
-                                     layer.close(index);
-                                     layer_index_printresult=0;                                                                               
-                                 }
-                            });
-                                
-                        }else{
-                           if($("#accountbeforeorderstatus").val()==3)
-                           {
-                               //已付款，直接去结单
-                               bootbox.confirm("<?php echo yii::t('app','已支付完成,确定结单吗？');?>", function(result) {                    
-                                if(result){
-                                    var url="<?php echo $this->createUrl('defaultOrder/orderAccountDirect',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;                                    
-                                    $.ajax({
-                                        url:url,
-                                        type:'POST',
-                                        data:"",
-                                        async:false,
-                                        dataType: "json",
-                                        success:function(msg){
-                                            var data=msg;
-                                            if(data.status){                                                
-                                                //手动改变座位的状态和颜色
-                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-yellow");
-                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-blue");
-                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").removeClass("bg-green");
-                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").attr("status","4");
-                                                $(".modalaction[sid="+gsid+"][istemp="+gistemp+"]").find("div").hide();                                                
-                                                sitevisible();
-                                            }else{
-                                                alert("结单失败1，请重试！");
-                                            }
-                                        },
-                                        error: function(msg){
-                                            alert("结单失败2，请重试！");                                            
-                                        }
-                                    });
-                                }
-                            });
-                           }else{
-                               //弹出收银界面
-                                gotoaccount();  
-                            }
-                        }
-                    });
-                }
+//                }else{ //没有新品
+//                
+//                }
             });
             
             $('#print_box_close_failjobs').on(event_clicktouchstart, function(){               

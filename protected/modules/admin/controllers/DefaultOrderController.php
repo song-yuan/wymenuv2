@@ -201,19 +201,28 @@ class DefaultOrderController extends BackendController
                     }
                 }
                 //var_dump($tasteidsOrderProducts);exit;
-                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+                $productTotalarray = OrderProduct::getOriginalTotal($orderlist,$companyId);
+                //var_dump($productTotalarray);exit;
+                //现价
+                $nowTotal=$productTotalarray["total"];
+                //原价
+                $originaltotal=$productTotalarray["originaltotal"];
+                //已支付
+                $paytotal=OrderProduct::getPayTotal($orderlist,$companyId);
+//                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+                //参与折扣的总额
                 $productDisTotal = OrderProduct::getDisTotal($orderlist,$order->dpid);
                 //var_dump($productTotal);exit;
                 if($siteNo->is_temp=='1')
                 {
-                    $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+                    $total = array('total'=>$nowTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
                 }else{
-                    $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
+                    $total = Helper::calOrderConsume($order,$siteNo, $nowTotal);
                 }
-                $order->should_total=$total['total'];
-		//var_dump($order);exit;
-		//var_dump($total);exit;
-		//$paymentMethods = $this->getPaymentMethodList();
+                $order->should_total=$originaltotal;
+		$order->reality_total=$total['total'];
+                $order->pay_total=$paytotal;
+                //$paymentMethods = $this->getPaymentMethodList();
                 $tastegroups= TasteClass::getAllOrderTasteGroup($companyId, '1');
                 //所有可选择的全单口味
                 $orderTastes=  TasteClass::getOrderTaste($orderlist, '1', $companyId);
@@ -226,7 +235,7 @@ class DefaultOrderController extends BackendController
                                 'allOrderTastes'=>$allOrderTastes,
                                 'allOrderProductTastes'=>$allOrderProductTastes,
                                 //'orderProduct' => $orderProduct,
-				'productTotal' => $productTotal ,
+				//'productTotal' => $productTotal ,
                                 'productDisTotal'=>$productDisTotal,
 				'total' => $total,
                                 'orderlist'=>$orderlist,
@@ -506,6 +515,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',0);
                 $orderId = Yii::app()->request->getParam('orderId',"0");
                 $padId = Yii::app()->request->getParam('padId',"0");
+                $orderList=Yii::app()->request->getParam('orderList',"0");
                 $order=new Order();
                 if($orderId !='0')
                 {
@@ -514,7 +524,12 @@ class DefaultOrderController extends BackendController
                     {
                         Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
                     }
-                    $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                    $productTotalarray = OrderProduct::getPauseTotalAll($orderList,$order->dpid);
+                    //var_dump($productTotalarray);exit;
+                    $productTotal=$productTotalarray["total"];
+                    $originaltotal=$productTotalarray["originaltotal"]; 
+                    
+                    //$productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                     $criteria->order = ' t.lid desc ';                    
@@ -525,8 +540,8 @@ class DefaultOrderController extends BackendController
                     }else{
                         $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
                     }
-                    $order->should_total=0;
-                    $order->reality_total=0;
+                    $order->should_total=$originaltotal;
+                    $order->reality_total=$total["total"];
                 }
                 
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
