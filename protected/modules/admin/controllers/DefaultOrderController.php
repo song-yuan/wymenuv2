@@ -171,8 +171,8 @@ class DefaultOrderController extends BackendController
                 //$maxstatus=  OrderProduct::getMaxStatus($siteNo->site_id, $companyId);
                 //var_dump($maxstatus); exit;
                 ////////取得该座位对应的所有的订单ID列表////////
-                $orderlist=Order::getOrderList($siteNo);
-                //var_dump($orderlist); exit;
+                $orderlist=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
+                //var_dump($siteNo); exit;
 		//////////////
                 //订单已经选择的口味
                 $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,$orderlist,'1',$companyId);
@@ -367,7 +367,7 @@ class DefaultOrderController extends BackendController
                         $site = Site::model()->with("siteType")->find($criteria2);
                     }
                 }
-                $orderList=Order::getOrderList($siteNo);
+                $orderList=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
                 //返回json挂单成功或失败
                 Yii::app()->end(json_encode(OrderList::createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo)));
 	}
@@ -449,7 +449,7 @@ class DefaultOrderController extends BackendController
                         $site = Site::model()->with("siteType")->find($criteria2);
                     }
                 }
-                $orderList=Order::getOrderList($siteNo);
+                $orderList=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$orderList)));
                 $savejson=OrderList::createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
                 //$jobids=array();
@@ -525,7 +525,7 @@ class DefaultOrderController extends BackendController
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                     $criteria->order = ' t.lid desc ';                    
                     $siteNo = SiteNo::model()->find($criteria);
-                    $orderList=Order::getOrderList($siteNo);
+                    $orderList=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
                     $productTotalarray = OrderProduct::getPauseTotalAll($orderList,$companyId);
                     //var_dump($productTotalarray);exit;
                     $productTotal=$productTotalarray["total"];
@@ -547,7 +547,7 @@ class DefaultOrderController extends BackendController
                 $orderProducts = OrderProduct::getHasPauseProductsAll($orderList,$order->dpid);
                 $cardtotal=0;
                 $memo="挂单清单";
-                // Yii::app()->end(json_encode(array('status'=>false,'msg'=>"222")));
+                 Yii::app()->end(json_encode(array('status'=>false,'msg'=>  count($orderProducts))));
                 $printList = Helper::printList($order,$orderProducts ,$pad,$precode,"0",$memo,$cardtotal);
                 Yii::app()->end(json_encode($printList));
         }
@@ -606,19 +606,23 @@ class DefaultOrderController extends BackendController
                 $transaction = $db->beginTransaction();
                 try{
                     $order=Order::model()->with("company")->find(" t.lid=:lid and t.dpid=:dpid",array(":lid"=>$orderid,":dpid"=>$companyId));
-                    if($order->order_status > "3")
-                    {
-                        $transaction->rollback();
-                        $ret=json_encode(array('status'=>false,'msg'=>"已经结单"));
-                        Yii::app()->end($ret);
-                    }
-                    $order->should_total=$payoriginaccount;
-                    $order->reality_total=$payshouldaccount;
-                    $order->update_at=$time;
-                    $order->order_status=$orderstatus;
-                    $order->remark=$order->remark+$ordermemo;
-                    $order->save();
-                    
+//                    if($order->order_status > "3")
+//                    {
+//                        $transaction->rollback();
+//                        $ret=json_encode(array('status'=>false,'msg'=>"已经结单"));
+//                        Yii::app()->end($ret);
+//                    }
+                    $orderList=Order::getOrderList($companyId, $order->site_id, $order->is_temp);
+//                    $order->should_total=$payoriginaccount;
+//                    $order->reality_total=$payshouldaccount;
+//                    $order->update_at=$time;
+//                    $order->order_status=$orderstatus;
+//                    $order->remark=$order->remark+$ordermemo;
+//                    $order->save();
+                    $ordersql="update nb_order set order_status=".$orderstatus.",remark='".$ordermemo
+                            ."' where dpid=".$companyId." and site_id=".$order->site_id
+                            ." and is_temp=".$order->is_temp." and order_status in ('1','2','3')";
+                    $db->createCommand($ordersql)->execute();
 //                    $criteria = new CDbCriteria;
 //                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
 //                    $criteria->order = ' t.lid desc ';                    
@@ -628,7 +632,7 @@ class DefaultOrderController extends BackendController
                     //为了删除脏数据，这里用全部的update
                     $sitenosql="update nb_site_no set status=".$orderstatus.
                             " where dpid=".$companyId." and site_id=".$order->site_id.
-                            " and is_temp=".$order->is_temp;
+                            " and is_temp=".$order->is_temp." and status in ('1','2','3')";
                     $db->createCommand($sitenosql)->execute();
                                         
                     //order site 和 siteno都需要更新状态 所以要取出来
@@ -757,7 +761,7 @@ class DefaultOrderController extends BackendController
                     $ret=json_encode(array('status'=>true,'msg'=>"结单成功"));
                 } catch (Exception $ex) {
                     $transaction->rollback();
-                    $ret=json_encode(array('status'=>false,'msg'=>"结单失败"));
+                    $ret=json_encode(array('status'=>false,'msg'=>$ex->getMessage()));
                     
                 }                
                 Yii::app()->end($ret);                
