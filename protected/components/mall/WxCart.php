@@ -87,10 +87,11 @@ class WxCart
 		return $results;
 	}
 	public function getCartPromotion(){
-		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and privation_promotion_id > 0';
+		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and privation_promotion_id > 0 and privation_promotion_id!=:privationPromotionId';
 		$results = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':userId',$this->userId)
+				  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 				  ->queryAll();
 		return $results;
 	}
