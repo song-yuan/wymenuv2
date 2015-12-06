@@ -50,12 +50,12 @@ class WxCart
 						  ->bindValue(':productId',$this->productArr['product_id'])
 						  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 						  ->queryRow();
-			if($result['promotion_type']==1){
+			if($result['promotion_type']==0){
 				$cartPromotions = $this->getCartPromotion();
 				if(!empty($cartPromotions)){
 					foreach($cartPromotions as $promotion){
 						$privatePromotion = WxPromotion::getPromotion($this->dpid,$promotion['privation_promotion_id']);
-						if($privatePromotion['promotion_type']==1){
+						if($privatePromotion['promotion_type']==0){
 							return array('status'=>false,'msg'=>'已经参加其他活动!');
 						}
 					}
