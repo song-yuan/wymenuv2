@@ -65,6 +65,10 @@ class WxCart
 				if($result['product_num']!=0 && (isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
 					return array('status'=>false,'msg'=>'超过活动商品数量!');
 				}
+			}else{
+				if($result['product_num']!=0 && (isset($this->cart['num'])?$this->cart['num']:0) >= $result['product_num']){
+					return array('status'=>false,'msg'=>'超过活动商品数量!');
+				}
 			}
 			
 			if($result['product_num']==0){
