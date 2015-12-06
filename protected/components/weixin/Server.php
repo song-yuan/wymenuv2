@@ -177,7 +177,7 @@ class Server {
 		$query['description'] = mb_substr(preg_replace('/\s/', '', strip_tags($query['description'])), 0, 60, 'utf-8');
 
 		if($query) { 
-			$sql = 'select * from nb_site_type where lid=:lid and dpid=:dpid';
+			$sql = 'select * from nb_site_type where lid='.$query['type_id'].' and dpid='.$query['dpid'];
 			$siteType = Yii::app()->db->createCommand($sql)->queryRow();
 			$urlArr = array(
 				1=>array('mall/index','companyId'),
