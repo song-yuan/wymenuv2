@@ -175,12 +175,6 @@ class Server {
 	 */
 	public function sceneResponse() {
 		$subPushs = array();
-		$promotionPushs = WxPromotionActivity::getScanPush($this->brandId);
-    	if(!empty($promotionPushs)){
-    		foreach($promotionPushs as $push){
-    			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
-    		}
-    	}
 		
 		$tableArr = array(
 			1=>array('serial', '欢迎前来就餐', 'http://menu.wymenu.com/wymenuv2/img/pages/earth.jpg', 'nb_site', 'lid'),
@@ -201,10 +195,15 @@ class Server {
 			$redirectUrl = Yii::app()->createAbsoluteUrl($urlArr[$sceneType][0], array($urlArr[$sceneType][1]=>$this->brandId));
 			$typeName = isset($siteType['name'])?$siteType['name']:'';
 			$siteArr = array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
-			if(!empty($subPushs)){
-				array_push($siteArr,$subPushs);
-			}
-			return $this->news($siteArr);
+			
+			array_push($subPushs,$siteArr);
+			$promotionPushs = WxPromotionActivity::getScanPush($this->brandId);
+	    	if(!empty($promotionPushs)){
+	    		foreach($promotionPushs as $push){
+	    			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
+	    		}
+	    	}
+			return $this->news($subPushs);
 		}else
 			return $this->generalResponse();
 	}
