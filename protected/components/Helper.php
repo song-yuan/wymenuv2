@@ -514,8 +514,13 @@ class Helper
                     }
                     if($order->reality_total>0)
                     {
-                        array_push($listData,"11".yii::t('app','优惠价：').number_format($order->reality_total,2));
+                        array_push($listData,"11".yii::t('app','现价：').number_format($order->reality_total,2));
                     }
+                    if($order->pay_total>0)
+                    {
+                        array_push($listData,"11".yii::t('app','已付：').number_format($order->pay_total,2));
+                    }
+                    
                     if($cardtotal>0)
                     {
                         array_push($listData,"br");
