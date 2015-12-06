@@ -100,7 +100,7 @@
 								<th><?php echo yii::t('app','活动类型');?></th>
 								<th><?php echo yii::t('app','兑换积分');?></th>
 								<th><?php echo yii::t('app','是否可用代金券');?></th>
-								<th><?php echo yii::t('app','数量上限');?></th>
+								<th><?php echo yii::t('app','菜品种类上限');?></th>
 								<th><?php echo yii::t('app','活动开始日期');?></th>
                                 <th><?php echo yii::t('app','活动结束日期');?></th>
                                 <th><?php echo yii::t('app','是否生效');?></th>
