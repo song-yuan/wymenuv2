@@ -498,7 +498,7 @@
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").removeClass("bg-green");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").attr("status","5");
                                             $(".modalaction[sid="+gssid+"][istemp="+gsistemp+"]").find("div").hide();
-                                            alert(isbackground);
+                                            //alert(isbackground);
                                             if(isblock=="block")
                                             {
                                                 $(".modalaction[sid="+sid+"][istemp="+istemp+"]").find("div").show();

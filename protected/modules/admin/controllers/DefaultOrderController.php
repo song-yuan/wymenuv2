@@ -171,16 +171,7 @@ class DefaultOrderController extends BackendController
                 //$maxstatus=  OrderProduct::getMaxStatus($siteNo->site_id, $companyId);
                 //var_dump($maxstatus); exit;
                 ////////取得该座位对应的所有的订单ID列表////////
-                $sqlorderlist="select lid from nb_order where order_status in ('1','2','3') and dpid=".$companyId." and is_temp=".$siteNo->is_temp." and site_id=".$siteNo->site_id;
-                $orderlistmodel=Yii::app()->db->createCommand($sqlorderlist)->queryAll();
-                $orderlist="0000000000";
-                if(!empty($orderlistmodel))
-                {
-                    foreach ($orderlistmodel as $ol)
-                    {
-                        $orderlist.=",".$ol["lid"];
-                    }
-                }
+                $orderlist=Order::getOrderList($siteNo);
                 //var_dump($orderlist); exit;
 		//////////////
                 //订单已经选择的口味
@@ -313,8 +304,9 @@ class DefaultOrderController extends BackendController
                 $productList = Yii::app()->request->getPost('productlist',"0");
                 $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
-                $orderList=Yii::app()->request->getPost('orderlist',"0");
+                //$orderList=Yii::app()->request->getPost('orderlist',"0");
                 $callId=Yii::app()->request->getParam('callId',"0");
+                
                 //返回json挂单成功或失败
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
@@ -375,6 +367,7 @@ class DefaultOrderController extends BackendController
                         $site = Site::model()->with("siteType")->find($criteria2);
                     }
                 }
+                $orderList=Order::getOrderList($siteNo);
                 //返回json挂单成功或失败
                 Yii::app()->end(json_encode(OrderList::createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo)));
 	}
@@ -393,7 +386,7 @@ class DefaultOrderController extends BackendController
                 $productList = Yii::app()->request->getPost('productlist',"0");
                 $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
-                $orderList=Yii::app()->request->getPost('orderlist',"0");
+                //$orderList=Yii::app()->request->getPost('orderlist',"0");
                 $callId=Yii::app()->request->getParam('callId',"0");
                 //返回json挂单成功或失败gi
                 //如果orderId是0，表示是临时台，
@@ -456,6 +449,7 @@ class DefaultOrderController extends BackendController
                         $site = Site::model()->with("siteType")->find($criteria2);
                     }
                 }
+                $orderList=Order::getOrderList($siteNo);
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$orderList)));
                 $savejson=OrderList::createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
                 //$jobids=array();
@@ -515,7 +509,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',0);
                 $orderId = Yii::app()->request->getParam('orderId',"0");
                 $padId = Yii::app()->request->getParam('padId',"0");
-                $orderList=Yii::app()->request->getParam('orderList',"0");
+                //$orderList=Yii::app()->request->getParam('orderList',"0");
                 $order=new Order();
                 if($orderId !='0')
                 {
@@ -524,16 +518,18 @@ class DefaultOrderController extends BackendController
                     {
                         Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
                     }
-                    $productTotalarray = OrderProduct::getPauseTotalAll($orderList,$order->dpid);
-                    //var_dump($productTotalarray);exit;
-                    $productTotal=$productTotalarray["total"];
-                    $originaltotal=$productTotalarray["originaltotal"]; 
+                    
                     
                     //$productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                     $criteria->order = ' t.lid desc ';                    
                     $siteNo = SiteNo::model()->find($criteria);
+                    $orderList=Order::getOrderList($siteNo);
+                    $productTotalarray = OrderProduct::getPauseTotalAll($orderList,$companyId);
+                    //var_dump($productTotalarray);exit;
+                    $productTotal=$productTotalarray["total"];
+                    $originaltotal=$productTotalarray["originaltotal"]; 
                     if($order->is_temp=='1')
                     {
                         $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
@@ -548,9 +544,10 @@ class DefaultOrderController extends BackendController
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                $orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
+                $orderProducts = OrderProduct::getHasPauseProductsAll($orderList,$order->dpid);
                 $cardtotal=0;
                 $memo="挂单清单";
+                // Yii::app()->end(json_encode(array('status'=>false,'msg'=>"222")));
                 $printList = Helper::printList($order,$orderProducts ,$pad,$precode,"0",$memo,$cardtotal);
                 Yii::app()->end(json_encode($printList));
         }
