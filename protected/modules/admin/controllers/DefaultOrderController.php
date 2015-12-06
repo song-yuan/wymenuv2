@@ -171,17 +171,8 @@ class DefaultOrderController extends BackendController
                 //$maxstatus=  OrderProduct::getMaxStatus($siteNo->site_id, $companyId);
                 //var_dump($maxstatus); exit;
                 ////////取得该座位对应的所有的订单ID列表////////
-                $sqlorderlist="select lid from nb_order where order_status in ('1','2','3') and dpid=".$companyId." and is_temp=".$siteNo->is_temp." and site_id=".$siteNo->site_id;
-                $orderlistmodel=Yii::app()->db->createCommand($sqlorderlist)->queryAll();
-                $orderlist="0000000000";
-                if(!empty($orderlistmodel))
-                {
-                    foreach ($orderlistmodel as $ol)
-                    {
-                        $orderlist.=",".$ol["lid"];
-                    }
-                }
-                //var_dump($orderlist); exit;
+                $orderlist=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
+                //var_dump($siteNo); exit;
 		//////////////
                 //订单已经选择的口味
                 $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,$orderlist,'1',$companyId);
@@ -201,19 +192,28 @@ class DefaultOrderController extends BackendController
                     }
                 }
                 //var_dump($tasteidsOrderProducts);exit;
-                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+                $productTotalarray = OrderProduct::getOriginalTotal($orderlist,$companyId);
+                //var_dump($productTotalarray);exit;
+                //现价
+                $nowTotal=$productTotalarray["total"];
+                //原价
+                $originaltotal=$productTotalarray["originaltotal"];
+                //已支付
+                $paytotal=OrderProduct::getPayTotal($orderlist,$companyId);
+//                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+                //参与折扣的总额
                 $productDisTotal = OrderProduct::getDisTotal($orderlist,$order->dpid);
                 //var_dump($productTotal);exit;
                 if($siteNo->is_temp=='1')
                 {
-                    $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+                    $total = array('total'=>$nowTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
                 }else{
-                    $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
+                    $total = Helper::calOrderConsume($order,$siteNo, $nowTotal);
                 }
-                $order->should_total=$total['total'];
-		//var_dump($order);exit;
-		//var_dump($total);exit;
-		//$paymentMethods = $this->getPaymentMethodList();
+                $order->should_total=$originaltotal;
+		$order->reality_total=$total['total'];
+                $order->pay_total=$paytotal;
+                //$paymentMethods = $this->getPaymentMethodList();
                 $tastegroups= TasteClass::getAllOrderTasteGroup($companyId, '1');
                 //所有可选择的全单口味
                 $orderTastes=  TasteClass::getOrderTaste($orderlist, '1', $companyId);
@@ -226,7 +226,7 @@ class DefaultOrderController extends BackendController
                                 'allOrderTastes'=>$allOrderTastes,
                                 'allOrderProductTastes'=>$allOrderProductTastes,
                                 //'orderProduct' => $orderProduct,
-				'productTotal' => $productTotal ,
+				//'productTotal' => $productTotal ,
                                 'productDisTotal'=>$productDisTotal,
 				'total' => $total,
                                 'orderlist'=>$orderlist,
@@ -304,8 +304,9 @@ class DefaultOrderController extends BackendController
                 $productList = Yii::app()->request->getPost('productlist',"0");
                 $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
-                $orderList=Yii::app()->request->getPost('orderlist',"0");
+                //$orderList=Yii::app()->request->getPost('orderlist',"0");
                 $callId=Yii::app()->request->getParam('callId',"0");
+                
                 //返回json挂单成功或失败
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
@@ -366,6 +367,7 @@ class DefaultOrderController extends BackendController
                         $site = Site::model()->with("siteType")->find($criteria2);
                     }
                 }
+                $orderList=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
                 //返回json挂单成功或失败
                 Yii::app()->end(json_encode(OrderList::createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo)));
 	}
@@ -384,7 +386,7 @@ class DefaultOrderController extends BackendController
                 $productList = Yii::app()->request->getPost('productlist',"0");
                 $orderTasteIds=Yii::app()->request->getPost('ordertasteids',"0");//只传递新追加的
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
-                $orderList=Yii::app()->request->getPost('orderlist',"0");
+                //$orderList=Yii::app()->request->getPost('orderlist',"0");
                 $callId=Yii::app()->request->getParam('callId',"0");
                 //返回json挂单成功或失败gi
                 //如果orderId是0，表示是临时台，
@@ -447,6 +449,7 @@ class DefaultOrderController extends BackendController
                         $site = Site::model()->with("siteType")->find($criteria2);
                     }
                 }
+                $orderList=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$orderList)));
                 $savejson=OrderList::createOrder($companyId,$orderId,$orderList,$orderStatus,$productList,$orderTasteIds,$orderTasteMemo,$callId,$order,$site,$siteNo);
                 //$jobids=array();
@@ -476,27 +479,42 @@ class DefaultOrderController extends BackendController
                     {
                         Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
                     }
-                    $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                    //$productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                     $criteria->order = ' t.lid desc ';                    
                     $siteNo = SiteNo::model()->find($criteria);
-                    if($order->is_temp=='1')
-                    {
-                        $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
-                    }else{
-                        $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
-                    }
-                    $order->should_total=$total['total'];
-                    //$order->should_total=$payShouldAccount;//用传递过来的
-                    $order->reality_total=$payShouldAccount;
-                }
+                    $orderList=Order::getOrderList($companyId, $order->site_id, $order->is_temp);
                 
+                    $productTotalarray = OrderProduct::getOriginalTotal($orderList,$companyId);
+                    //var_dump($productTotalarray);exit;
+                    //现价
+                    $nowTotal=$productTotalarray["total"];
+                    //原价
+                    $originaltotal=$productTotalarray["originaltotal"];
+                    //已支付
+                    $paytotal=OrderProduct::getPayTotal($orderList,$companyId);
+    //                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+                    //参与折扣的总额
+                    $productDisTotal = OrderProduct::getDisTotal($orderList,$order->dpid);
+                    //var_dump($productTotal);exit;
+                    if($siteNo->is_temp=='1')
+                    {
+                        $total = array('total'=>$nowTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+                    }else{
+                        $total = Helper::calOrderConsume($order,$siteNo, $nowTotal);
+                    }
+                    $order->should_total=$originaltotal;
+                    $order->reality_total=$payShouldAccount;//$total['total'];
+                    $order->pay_total=$paytotal;
+                    $order->pay_discount_total=$productDisTotal;
+                    
+                }
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                $orderProducts = OrderProduct::getHasOrderProducts($order->lid,$order->dpid);
+                $orderProducts = OrderProduct::getHasOrderProductsAll($orderList,$order->dpid);
                 $memo="清单";
                 $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo,$cardtotal);
                 Yii::app()->end(json_encode($printList));
@@ -506,6 +524,7 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',0);
                 $orderId = Yii::app()->request->getParam('orderId',"0");
                 $padId = Yii::app()->request->getParam('padId',"0");
+                //$orderList=Yii::app()->request->getParam('orderList',"0");
                 $order=new Order();
                 if($orderId !='0')
                 {
@@ -514,28 +533,36 @@ class DefaultOrderController extends BackendController
                     {
                         Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
                     }
-                    $productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                    
+                    
+                    //$productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                     $criteria = new CDbCriteria;
                     $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                     $criteria->order = ' t.lid desc ';                    
                     $siteNo = SiteNo::model()->find($criteria);
+                    $orderList=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
+                    $productTotalarray = OrderProduct::getPauseTotalAll($orderList,$companyId);
+                    //var_dump($productTotalarray);exit;
+                    $productTotal=$productTotalarray["total"];
+                    $originaltotal=$productTotalarray["originaltotal"]; 
                     if($order->is_temp=='1')
                     {
                         $total = array('total'=>$productTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
                     }else{
                         $total = Helper::calOrderConsume($order,$siteNo, $productTotal);
                     }
-                    $order->should_total=0;
-                    $order->reality_total=0;
+                    $order->should_total=$originaltotal;
+                    $order->reality_total=$total["total"];
                 }
                 
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
             	 //前面加 barcode
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
-                $orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
+                $orderProducts = OrderProduct::getHasPauseProductsAll($orderList,$order->dpid);
                 $cardtotal=0;
                 $memo="挂单清单";
+                 Yii::app()->end(json_encode(array('status'=>false,'msg'=>  count($orderProducts))));
                 $printList = Helper::printList($order,$orderProducts ,$pad,$precode,"0",$memo,$cardtotal);
                 Yii::app()->end(json_encode($printList));
         }
@@ -594,19 +621,23 @@ class DefaultOrderController extends BackendController
                 $transaction = $db->beginTransaction();
                 try{
                     $order=Order::model()->with("company")->find(" t.lid=:lid and t.dpid=:dpid",array(":lid"=>$orderid,":dpid"=>$companyId));
-                    if($order->order_status > "3")
-                    {
-                        $transaction->rollback();
-                        $ret=json_encode(array('status'=>false,'msg'=>"已经结单"));
-                        Yii::app()->end($ret);
-                    }
-                    $order->should_total=$payoriginaccount;
-                    $order->reality_total=$payshouldaccount;
-                    $order->update_at=$time;
-                    $order->order_status=$orderstatus;
-                    $order->remark=$order->remark+$ordermemo;
-                    $order->save();
-                    
+//                    if($order->order_status > "3")
+//                    {
+//                        $transaction->rollback();
+//                        $ret=json_encode(array('status'=>false,'msg'=>"已经结单"));
+//                        Yii::app()->end($ret);
+//                    }
+                    $orderList=Order::getOrderList($companyId, $order->site_id, $order->is_temp);
+//                    $order->should_total=$payoriginaccount;
+//                    $order->reality_total=$payshouldaccount;
+//                    $order->update_at=$time;
+//                    $order->order_status=$orderstatus;
+//                    $order->remark=$order->remark+$ordermemo;
+//                    $order->save();
+                    $ordersql="update nb_order set order_status=".$orderstatus.",remark='".$ordermemo
+                            ."' where dpid=".$companyId." and site_id=".$order->site_id
+                            ." and is_temp=".$order->is_temp." and order_status in ('1','2','3')";
+                    $db->createCommand($ordersql)->execute();
 //                    $criteria = new CDbCriteria;
 //                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
 //                    $criteria->order = ' t.lid desc ';                    
@@ -616,7 +647,7 @@ class DefaultOrderController extends BackendController
                     //为了删除脏数据，这里用全部的update
                     $sitenosql="update nb_site_no set status=".$orderstatus.
                             " where dpid=".$companyId." and site_id=".$order->site_id.
-                            " and is_temp=".$order->is_temp;
+                            " and is_temp=".$order->is_temp." and status in ('1','2','3')";
                     $db->createCommand($sitenosql)->execute();
                                         
                     //order site 和 siteno都需要更新状态 所以要取出来
@@ -745,7 +776,7 @@ class DefaultOrderController extends BackendController
                     $ret=json_encode(array('status'=>true,'msg'=>"结单成功"));
                 } catch (Exception $ex) {
                     $transaction->rollback();
-                    $ret=json_encode(array('status'=>false,'msg'=>"结单失败"));
+                    $ret=json_encode(array('status'=>false,'msg'=>$ex->getMessage()));
                     
                 }                
                 Yii::app()->end($ret);                

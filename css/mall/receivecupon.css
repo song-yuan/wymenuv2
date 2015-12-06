@@ -1,0 +1,124 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {margin:0; padding:0; font-family:Arial, "微软雅黑", sans-serif;white-space:normal;}
+html {-webkit-text-size-adjust: none;}
+*:focus {outline: none;}
+ul,li {list-style:none;}
+img {border:none;}
+a {text-decoration:none;}
+body {font-size:12px; background:#383838;}
+.clear {font-size:0; width:0; height:0; clear:both;}
+
+
+/*完善信息页面*/
+.topbox{ width:auto; height:auto}
+.topbox img{ width:100%;}
+.regbox{ width:300px; height:auto; margin:0 auto; background:#66b251; border-radius:4px; padding-bottom:20px;}
+.ttbox{ width:300px;  padding-top:18px; text-align:center; color:#FFFFFF; font-size:16px;}
+.ttbox input{ padding-left: 10px;color: #777;}
+.ttbox img{margin-top:0px;}
+.ttbox1{ width:260px; height:18px; padding-top:18px; text-align:center; color:#FFFFFF; font-size:20px;margin-left: 20px;line-height: 30px;padding-bottom: 10px;}
+.ttbox3{ width:300px; height:35px; padding-top:18px; text-align:center; color:#FFFFFF; font-size:16px;}
+.ttbox input{ width:230px; height:27px;}
+.ttbox3 a{ display:block; width:150px; height:25px; background:#ffe613; border-radius:4px; margin:0 auto; padding-top:7px; color:#915a13;}
+.guize{ width:300px; height:auto; margin:0 auto; color:#FFFFFF; line-height:22px; padding-top:15px;padding-bottom: 30px;}
+.gztt{ display:block; font-size:18px; width:300px; height:10px; }
+
+
+/*获奖页面*/
+.huojiang{ width:100%; margin:0 auto; position:relative; margin-top:200px;}
+.huojiang img{ width:100%;}
+.youhuiquan{position:absolute;width:275px; height:181px;  top:8%; left:0; bottom:0; right:0; margin:auto;}
+.fenxianganniu{ width:auto; height:auto; text-align:center; padding-top:20px;}
+.fenxianganniu a{ padding:10px 20px 10px 20px; background:#ffe613; color:#603d0f; border-radius:4px; font-size:16px;}
+
+
+/*分享页面*/
+.fenxiang{ width:auto;}
+.fenxiang img{ width:100%;}
+
+.fenxiangtt{ width:auto; margin:0px 10px 10px 10px; border-bottom:1px solid #999999; padding-bottom:20px; text-align:center; font-size:16px; color:#FFFFFF; line-height:25px;}
+
+.weixintt{ width:250px;  text-align:center; color:#FFFFFF; margin:0 auto; font-size:17px; position:relative; padding-left:50px;  padding-top:18px;}
+.weixinicon{ position:absolute; left:5px; top:5px;}
+
+.cly{ color:#fffc00;}
+
+.weixinicon img{ width:90%;}
+
+.jingcai{ width:230px; height:auto; text-align:left; color:#FFFFFF; font-size:14px; padding-top:20px; margin:0 auto; line-height:22px; padding-left:70px;}
+.wx{ width:auto; padding:10px 30px 30px 30px;text-align:center;}
+.wx img{ width:100%;}
+
+
+/*抽奖界面*/
+.cj_box{ width:302px; height:auto; margin:0 auto; padding-bottom:20px;}
+.cj_box li{float:left;padding-right:4px;}
+.cj_box li img{display:block;}
+.cj_box .pt5{padding-top:5px;}
+.cj_box .fr{float:right;}
+.cj_box .on{opacity:0.6;}
+.cj_box  .btn{cursor:pointer;}
+.active{opacity:1!important;}
+#huojiang { width: 100%; height: 100%; position: absolute;top:1%;left:0;margin:auto; z-index: 10;}
+#jieguo { width: 100%; height: 100%; position: absolute;top:0;left:0;margin:auto; z-index: 10;}
+.on{opacity:0.1;}
+.lottery-unit{opacity:0.4;}
+
+
+/*1.红包来源首页*/
+.navboxw{ width:auto; height:40px; background:#ec493c; }
+.bigbox{ width:320px; height:auto; margin:0 auto;}
+.topnav{ width:320px; height:40px; margin:0 auto;}
+.topnavleft{ width:40px; height:40px; padding-left:10px; float:left;}
+.topnavright{ width:220px; height:30px; padding-right:50px; text-align:center; float:left; padding-top:10px; color:#FFFFFF; font-size:18px;}
+
+/*4.我的红包*/
+.hbtopbox{ width:300px; height:55px; padding-top:20px; border-bottom:#FF0000 1px solid; margin:0 auto; padding-bottom:10px;}
+.hbtopboxleft{ width:150px; height:55px; float:left; font-size:20px;}
+.bhtopboxright{ width:150px; height:50px; float:left; text-align:right; padding-top:5px;}
+.red20{ color:#FF0000; font-size:20px;}
+
+.hbconbox{ width:300px; height:auto ;text-align:center; padding:10px 0 10px 0; margin:0 auto; border-bottom:#CCCCCC 1px solid;}
+.hbconbox p{font-size:16px;padding:10px 0px 0px 0px;}
+.hbconboxleft{ width:190px; height:auto; float:left; text-align:right;  padding-top:10px; padding-right:10px;}
+.hbconboxright{ width:90px; height:auto; float:left; text-align:left; font-size:18px; padding-top:5px; padding-left:10px;}
+.zheng_money{color:green;}
+.fushu_money{color:red;}
+
+
+// 查询 输入 手机
+
+/*注册*/
+.yuzhuce{position:fixed; left:0px;bottom:120px;}
+.login_main{width:80%; padding:10px;position:fixed;left:8%;bottom:200px;background-color:#000;opacity:0.6;filter:alpha(80);border-radius:15px;
+text-align:center;
+}
+.login_baoming{color:#fff;text-align:center;font-size:20px;font-weight:bold;padding-top:10px;padding-right: 70px;}
+.login_close{text-align:right;padding-right:10px;}
+.login_close a{color:#fff;text-decoration:none;}
+.inputstyle{
+width: 70%;
+height: 28px;
+border:1px solid #fff;
+text-indent:30px;
+background-color:#fff;
+margin-bottom:5px;
+color:#908188;
+border:none;
+}
+.name_style2{background: url(../images/name.jpg) no-repeat 10px 6px;}
+.tel_style2{background: url(../images/tell.jpg) no-repeat 10px 6px;}
+.email_style2{background: url(../images/email.jpg) no-repeat 10px 6px;}
+.submit{background:url(../images/tijiao.png) no-repeat;width:95px;height:30px;border:none;margin:0px 0px 20px 0px;cursor:pointer;padding-right: 188px}
+
+
+
+
+
+
+
+
+
+

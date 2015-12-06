@@ -71,6 +71,26 @@ input { line-height: normal; }
 .wrap .click_hf .huifu img{ width:100%;}
 
 
+.topbox img {width: 100%;}
+.index {
+    margin: 10px 10px 5px 10px;
+    background: #FD9C62;
+    box-shadow: 1px 1px 3px #0E0101;
+    padding: 5px 10px;
+    border-radius: 5px;
+    position: relative;
+}
+.index .index_box .titl_h {
+    color: #0C0C0C;
+}
+.index .index_box .titl h1 {
+    color: #f90404;
+    font-size: 16px;
+    margin: 7px 0;
+    text-decoration: none;
+}
+
+
 
 
 

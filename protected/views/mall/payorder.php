@@ -42,7 +42,7 @@
 	<?php if($order['reality_total'] - $order['should_total']):?>
 	<div class="ht1"></div>
 	<div class="item">
-		<div class="lt">优惠金额</div><div class="rt">￥<?php echo $order['reality_total'] - $order['should_total'];?></div>
+		<div class="lt">优惠金额</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
@@ -76,7 +76,8 @@
 			function(res){
 				 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 				 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
-				 	alert('支付成功');
+				 	layer.msg('支付成功!');
+				 	location.href = '<?php echo $this->createUrl('/user/orderInfo',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
 				 }else{
 				 	//支付失败或取消支付
 				 	

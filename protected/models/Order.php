@@ -33,6 +33,8 @@ class Order extends CActiveRecord
         public $reality_all;
         public $all_total;
         public $all_money;
+        public $pay_total;
+        public $pay_discount_total;
         /**
 	 * @return string the associated database table name
 	 */
@@ -160,5 +162,23 @@ class Order extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+        
+        static public function getOrderList($dpid,$site_id,$is_temp){
+            $orderlist="0000000000";
+//            if(!empty($siteNo))
+//            {
+		$sqlorderlist="select lid from nb_order where order_status in ('1','2','3') and dpid=".$dpid." and is_temp=".$is_temp." and site_id=".$site_id;
+                $orderlistmodel=Yii::app()->db->createCommand($sqlorderlist)->queryAll();
+                
+                if(!empty($orderlistmodel))
+                {
+                    foreach ($orderlistmodel as $ol)
+                    {
+                        $orderlist.=",".$ol["lid"];
+                    }
+                }
+//            }
+            return $orderlist;
 	}
 }
