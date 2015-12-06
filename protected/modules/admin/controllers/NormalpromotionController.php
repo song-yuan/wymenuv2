@@ -319,7 +319,7 @@ class NormalpromotionController extends BackendController
 			$dpid = $this->companyId;
 			//$promotion_money = Yii::app()->request->getParam('promotion_money');
 			//$promotion_discount = Yii::app()->request->getParam('promotion_discount');
-			$order_num = Yii::app()->request->getParam('order_num');
+			//$order_num = Yii::app()->request->getParam('order_num');
 			$is_set = Yii::app()->request->getParam('is_set');
 			//$db = Yii::app()->db;
 			//Yii::app()->end(json_encode(array("status"=>"success")));
@@ -363,7 +363,7 @@ class NormalpromotionController extends BackendController
 								'is_discount'=>0,
 								'promotion_money'=>$proNum,
 								'promotion_discount'=>'1.00',
-								'order_num'=>$order_num,
+								'order_num'=>'0',
 								'delete_flag'=>'0',
 								'is_sync'=>$is_sync,
 						);
@@ -389,7 +389,7 @@ class NormalpromotionController extends BackendController
 								'is_discount'=>1,
 								'promotion_money'=>'0.00',
 								'promotion_discount'=>$proNum,
-								'order_num'=>$order_num,
+								'order_num'=>'0',
 								'delete_flag'=>'0',
 								'is_sync'=>$is_sync,
 						);
@@ -419,7 +419,7 @@ class NormalpromotionController extends BackendController
 								'is_discount'=>0,
 								'promotion_money'=>$proNum,
 								'promotion_discount'=>'1.00',
-								'order_num'=>$order_num,
+								'order_num'=>'0',
 								'delete_flag'=>'0',
 								'is_sync'=>$is_sync,
 						);
@@ -441,7 +441,7 @@ class NormalpromotionController extends BackendController
 								'is_discount'=>1,
 								'promotion_money'=>'0.00',
 								'promotion_discount'=>$proNum,
-								'order_num'=>$order_num,
+								'order_num'=>'0',
 								'delete_flag'=>'0',
 								'is_sync'=>$is_sync
 						);
@@ -466,6 +466,22 @@ class NormalpromotionController extends BackendController
 			}		
 		}		
 		
+		
+		public function actionDetaildelete(){
+			$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+			$ids = Yii::app()->request->getParam('id');
+			$is_sync = DataSync::getInitSync();
+			//        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+			if(!empty($ids)) {
+				Yii::app()->db->createCommand('update nb_normal_promotion_detail set delete_flag="1", is_sync ='.$is_sync.' where product_id ='.$ids.' and dpid = :companyId')
+				->execute(array( ':companyId' => $this->companyId));
+				Yii::app()->end(json_encode(array("status"=>"success")));
+				//$this->redirect(array('normalpromotion/detailindex' , 'companyId' => $companyId)) ;
+			} else {
+				Yii::app()->user->setFlash('error' , yii::t('app','请选择要移除的项目'));
+				$this->redirect(array('normalpromotion/detailindex' , 'companyId' => $companyId)) ;
+			}
+		}
 			private function getBrdulv(){
 				$criteria = new CDbCriteria;
 				$criteria->with = '';
