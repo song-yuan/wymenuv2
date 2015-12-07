@@ -258,6 +258,21 @@ class DefaultOrderController extends BackendController
                     Yii::app()->db->createCommand($printjobsql)->execute();
                 }
                 
+                $order=Order::model()->find(" dpid=".$companyId." and lid=".$orderId);
+                //var_dump($tasteidsOrderProducts);exit;
+                $orderlist=Order::getOrderList($companyId,$order->site_id,$order->is_temp);
+                $productTotalarray = OrderProduct::getOriginalTotal($orderlist,$companyId);
+                //var_dump($productTotalarray);exit;
+                //现价
+                $nowTotal=$productTotalarray["total"];
+                //原价
+                $originaltotal=$productTotalarray["originaltotal"];
+                //已支付
+                $paytotal=OrderProduct::getPayTotal($orderlist,$companyId);
+//                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+                //参与折扣的总额
+                $productDisTotal = OrderProduct::getDisTotal($orderlist,$order->dpid);
+                //var_dump($productTotal);exit;
                 $criteria = new CDbCriteria;
                 $criteria->condition =  't.dpid='.$companyId.' and t.orderid='.$orderId.' and t.finish_flag=0';
                 $criteria->order = ' t.lid desc ';                    
@@ -269,7 +284,11 @@ class DefaultOrderController extends BackendController
 				'orderPrintjobs'=>$orderprintjobs,
 				'dpid' => $companyId,
                                 'orderid'=>$orderId,
-                                'order_status'=>$order_status
+                                'order_status'=>$order_status,
+                                'nowTotal'=>$nowTotal,
+                                'originaltotal'=>$originaltotal,
+                                'paytotal'=>$paytotal,
+                                'productDisTotal'=>$productDisTotal
 		));
 	}
 
