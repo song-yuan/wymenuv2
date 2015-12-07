@@ -62,6 +62,7 @@ class Notify extends WxPayNotify
 		$se = new Sequence("notify");
         $lid = $se->nextval();
         fwrite($myfile, $lid);
+        fwrite($myfile, json_encode($data));
 		$notifyData = array(
 			'lid'=>$lid,
         	'dpid'=>$orderIdArr[1],
