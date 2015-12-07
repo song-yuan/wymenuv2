@@ -88,14 +88,6 @@ class Server {
             //添加关注，自动回复
             if($this->event == 'subscribe') {
             	$this->subscribe(); // 注册用户
-            	$promotionPushs = WxPromotionActivity::getSubPush($this->brandId);
-            	if(!empty($promotionPushs)){
-            		$subPushs = array();
-            		foreach($promotionPushs as $push){
-            			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
-            		}
-            		return $this->news($subPushs);
-            	}
                 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
                 	$this->sceneRun();
                 }else {
@@ -197,12 +189,23 @@ class Server {
 			$siteArr = array('桌号:'.$typeName.$query['title'], $query['description'], $query['imgUrl'], $redirectUrl);
 			
 			array_push($subPushs,$siteArr);
-			$promotionPushs = WxPromotionActivity::getScanPush($this->brandId);
-	    	if(!empty($promotionPushs)){
-	    		foreach($promotionPushs as $push){
-	    			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
-	    		}
-	    	}
+	    	
+	    	 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
+	    	 	$promotionPushs = WxPromotionActivity::getSubPush($this->brandId);
+	        	if(!empty($promotionPushs)){
+	        		$subPushs = array();
+	        		foreach($promotionPushs as $push){
+	        			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
+	        		}
+	        	}
+	    	 }else{
+	    	 	$promotionPushs = WxPromotionActivity::getScanPush($this->brandId);
+		    	if(!empty($promotionPushs)){
+		    		foreach($promotionPushs as $push){
+		    			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
+		    		}
+		    	}
+	    	 }
 			return $this->news($subPushs);
 		}else
 			return $this->generalResponse();
