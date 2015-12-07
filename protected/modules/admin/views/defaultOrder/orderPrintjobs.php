@@ -1,9 +1,10 @@
 	<!-- BEGIN PAGE -->  
         <input type="hidden" value="<?PHP echo count($orderPrintjobs); ?>" id="failprintjobnum"> 
         <input type="hidden" value="<?PHP echo count($order_status); ?>" id="accountbeforeorderstatus">
-        <input type="hidden" value="<?PHP echo count($order_status); ?>" id="accountordershouldpay">
-        <input type="hidden" value="<?PHP echo count($order_status); ?>" id="accountorderrealitypay">
-        <input type="hidden" value="<?PHP echo count($order_status); ?>" id="accountorderhaspay">
+        <input type="hidden" value="<?PHP echo number_format($originaltotal, 2); ?>" id="accountordershouldpay">
+        <input type="hidden" value="<?PHP echo number_format($nowTotal, 2); ?>" id="accountorderrealitypay">
+        <input type="hidden" value="<?PHP echo number_format($paytotal, 2); ?>" id="accountorderhaspay">
+        <input type="hidden" value="<?PHP echo number_format($productDisTotal, 2); ?>" id="accountorderdistotal">
         <ul>
             
         <?php foreach ($orderPrintjobs as $orderPrintjob):
@@ -22,7 +23,10 @@
                         var jobsuccess=0;
                         $(document).ready(function(){
                             $('#failprintjobs').text($('#failprintjobnum').val());
-                            
+                            $("#order_should_pay").text($('#accountordershouldpay').val());
+                            $("#order_reality_pay").text($('#accountorderrealitypay').val());
+                            $("#order_has_pay").text($('#accountorderhaspay').val());
+                            $("#productDisTotal").val($('#accountorderdistotal').val());                            
                         });
                         
                         $('.reprintjob').on("click",function(){
