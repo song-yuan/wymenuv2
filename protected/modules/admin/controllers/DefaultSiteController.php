@@ -225,6 +225,7 @@ class DefaultSiteController extends BackendController
                         if(Yii::app()->params['cloud_local']=='l')
                         {
                             $synctalbe=array(
+                            	"nb_product",
                                 "nb_order",
                                 "nb_order_product",
                                 'nb_order_pay',
