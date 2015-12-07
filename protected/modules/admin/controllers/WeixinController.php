@@ -181,6 +181,7 @@ class WeixinController extends BackendController
 		$userlevels = BrandUserLevel::model()->findAll($criteriauserlevel);
                 
                 //一下为测试，要调用微信接口，去具体的数据
+                ////////////////////////////调用接口，从数据库取出微信分组数据，对应相应的名称，整合成数组。cf
                 $weixingroups=array(array("id"=>"100","name"=>"分组1"),array("id"=>"200","name"=>"分组2"));
                 
                 //获取国家、省、市
