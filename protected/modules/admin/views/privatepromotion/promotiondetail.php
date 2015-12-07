@@ -311,13 +311,13 @@
 
 
         $("#yichu").on("click",function(){
-            alert(111);
+            //alert(111);
             var aa = document.getElementsByName("idchk");
             var str=new Array();
             for (var i = 0; i < aa.length; i++) {
             if (aa[i].checked){
                 str += aa[i].value +',';
-                alert(str);
+                //alert(str);
             }
             }
             if(str!=''){
