@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'normalpromotiondetail-form',
-				'action' => $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId,'promotionID'=>$promotionID)),
+				'action' => $this->createUrl('normalpromotion/promotiondetail', array('companyId' => $this->companyId,'promotionID'=>$promotionID)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -51,13 +51,13 @@
                                     
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','查看已添加菜品并设置');?></div>
 					<div class="actions">						
-                                            <div style="margin-top:-5px !important;" class="btn-group">
+                        <div style="margin-top:-5px !important;" class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
-						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','历史记录');?></button>
-						</div>-->
+							<button type="button" id="yichu"  class="btn red" style="padding:6px 10px;margin-top:2px;" ><i class="fa fa-ban"></i> <?php echo yii::t('app','勾选批量移除');?></button>
+						</div>
+						
 					</div>
                                             <div class="col-md-3 pull-right">
 												<div class="input-group">
@@ -87,7 +87,7 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="idchk" /></td>
 								<td style="width:10%"><?php echo $model['product_name'];?></td>
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
 								
@@ -305,5 +305,51 @@
  			},
  		});
         });
-        
+
+        $("#yichu").on("click",function(){
+            //alert(111);
+            var aa = document.getElementsByName("idchk");
+            var str=new Array();
+            for (var i = 0; i < aa.length; i++) {
+            if (aa[i].checked){
+                str += aa[i].value +',';
+                //alert(str);
+            }
+            }
+            if(str!=''){
+                str = str.substr(0,str.length-1);//除去最后一个“，”
+                }else{
+               	 alert("<?php echo yii::t('app','请勾选相应的菜品再进行一键移除！！！');?>");
+               	 return false;
+               	 }
+            //str = str.substr(0,str.length-1);//除去最后一个“，”
+            //alert(str);
+            //var vid=$(this).attr("id").substr(12,10);
+            //alert(vid);
+
+            $.ajax({
+                        type:'GET',
+ 			url:"<?php echo $this->createUrl('normalpromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+str+"/page/",
+ 			async: false,
+ 			//data:"companyId="+company_id+'&padId='+pad_id,
+                        cache:false,
+                        dataType:'json',
+ 			success:function(msg){
+                            //alert(msg.status);
+                            if(msg.status=="success")
+                            {
+                                
+                                alert("<?php echo yii::t('app','成功'); ?>");
+                                
+                                location.reload();
+                            }else{
+                                alert("<?php echo yii::t('app','失败'); ?>"+"1")
+                                location.reload();
+                            }
+ 			},
+                        error:function(){
+ 				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+ 			},
+ 		});
+        });
 	</script>	
