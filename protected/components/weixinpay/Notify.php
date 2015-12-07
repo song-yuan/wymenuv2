@@ -52,8 +52,15 @@ class Notify extends WxPayNotify
 		}
 	}
 	public function insertNotify($data){
+		$myfile = fopen("/tmp/newfile.txt", "w");
+		$txt = "Bill Gates\n";
+		fwrite($myfile, $txt);
 		$orderIdArr = explode('-',$data["out_trade_no"]);
 		$brandUser = WxBrandUser::getFromOpenId($data['openid']);
+		fwrite($myfile, $data["out_trade_no"]);
+		$txt = "Steve Jobs\n";
+		fwrite($myfile, $txt);
+		fclose($myfile);
 		
 		$se = new Sequence("notify");
         $lid = $se->nextval();
