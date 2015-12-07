@@ -58,9 +58,6 @@ class Notify extends WxPayNotify
 		$orderIdArr = explode('-',$data["out_trade_no"]);
 		$brandUser = WxBrandUser::getFromOpenId($data['openid']);
 		fwrite($myfile, $data["out_trade_no"]);
-		$txt = "Steve Jobs\n";
-		fwrite($myfile, $txt);
-		fclose($myfile);
 		
 		$se = new Sequence("notify");
         $lid = $se->nextval();
@@ -78,16 +75,25 @@ class Notify extends WxPayNotify
         	'is_sync'=>DataSync::getInitSync(),
 			);	
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
+		$txt = "Steve Jobs\n";
+		fwrite($myfile, $txt);
+		
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
+		fwrite($myfile, '1');
 		WxOrder::insertOrderPay($order,1);
+		fwrite($myfile, '2');
 		//修改订单状态
 		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
+		fwrite($myfile, '3');
 		//修改订单产品状态
 		WxOrder::updateOrderProductStatus($orderIdArr[0],$orderIdArr[1]);
+		fwrite($myfile, '4');
 		//修改座位状态
 		if($order['order_type']==1){
 			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+			fwrite($myfile, '5');
 		}
+		fclose($myfile);
 	}
 }
