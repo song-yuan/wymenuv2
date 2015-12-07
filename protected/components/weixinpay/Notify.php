@@ -68,11 +68,12 @@ class Notify extends WxPayNotify
         	'total_fee'=>$data['total_fee'],
         	'time_end'=>$data['time_end'],
         	'attach'=>$data['attach'],
+        	'is_sync'=>DataSync::getInitSync(),
 			);	
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
-		WxOrder::insertOrderPay($order);
+		WxOrder::insertOrderPay($order,1);
 		//修改订单状态
 		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
 		//修改订单产品状态
