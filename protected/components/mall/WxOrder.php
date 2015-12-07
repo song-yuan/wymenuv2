@@ -137,7 +137,7 @@ class WxOrder
 		$order = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':lid',$orderId)
 				  ->bindValue(':dpid',$dpid)
-				  ->queryRow();
+				  ->queryAll();
 	    return $order;
 	}
 	/**
