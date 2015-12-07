@@ -129,6 +129,19 @@ class WxOrder
 	}
 	/**
 	 * 
+	 * 获取未付款的 订单产品
+	 * 
+	 */
+	 public static function getNoPayOrderProduct($orderId,$dpid){
+		$sql = 'select * from nb_order where order_id=:lid and dpid=:dpid and delete_flag=0 and product_order_status=0';
+		$order = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':lid',$orderId)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryRow();
+	    return $order;
+	}
+	/**
+	 * 
 	 * 通过siteid获取订单未支付
 	 * 
 	 */

@@ -196,7 +196,12 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$activeId = Yii::app()->request->getParam('activeId');//promotion_activity的lid
-		$activeDetails = WxPromotionActivity::getDetail($this->companyId,$activeId);
+		$active = WxPromotionActivity::getActivity($this->companyId,$activeId);
+		if($active){
+			$activeDetails = WxPromotionActivity::getDetail($this->companyId,$activeId);
+		}else{
+			$activeDetails = array();
+		}
 		$this->render('cupon',array('companyId'=>$this->companyId,'cupons'=>$activeDetails,'userId'=>$userId));
 	}
 	/**
