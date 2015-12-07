@@ -52,17 +52,11 @@ class Notify extends WxPayNotify
 		}
 	}
 	public function insertNotify($data){
-		$myfile = fopen("/tmp/newfile.txt", "w");
-		$txt = "Bill Gates\n";
-		fwrite($myfile, $txt);
 		$orderIdArr = explode('-',$data["out_trade_no"]);
 		$brandUser = WxBrandUser::getFromOpenId($data['openid']);
-		fwrite($myfile, $data["out_trade_no"]);
 		
 		$se = new Sequence("notify");
         $lid = $se->nextval();
-        fwrite($myfile, $lid);
-        fwrite($myfile, json_encode($data));
 		$notifyData = array(
 			'lid'=>$lid,
         	'dpid'=>$orderIdArr[1],
@@ -73,30 +67,21 @@ class Notify extends WxPayNotify
         	'transaction_id'=>$data['transaction_id'],
         	'total_fee'=>$data['total_fee'],
         	'time_end'=>$data['time_end'],
-        	'attach'=>$data['attach'],
+        	'attach'=>isset($data['attach'])?$data['attach']:'',
         	'is_sync'=>DataSync::getInitSync(),
 			);	
-		fwrite($myfile, json_encode($notifyData));
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
-		$txt = "Steve Jobs\n";
-		fwrite($myfile, $txt);
 		
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
-		fwrite($myfile, '1');
 		WxOrder::insertOrderPay($order,1);
-		fwrite($myfile, '2');
 		//修改订单状态
 		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
-		fwrite($myfile, '3');
 		//修改订单产品状态
 		WxOrder::updateOrderProductStatus($orderIdArr[0],$orderIdArr[1]);
-		fwrite($myfile, '4');
 		//修改座位状态
 		if($order['order_type']==1){
 			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
-			fwrite($myfile, '5');
 		}
-		fclose($myfile);
 	}
 }
