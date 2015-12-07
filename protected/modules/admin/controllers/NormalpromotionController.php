@@ -473,7 +473,7 @@ class NormalpromotionController extends BackendController
 			$is_sync = DataSync::getInitSync();
 			//        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 			if(!empty($ids)) {
-				Yii::app()->db->createCommand('update nb_normal_promotion_detail set delete_flag="1", is_sync ='.$is_sync.' where product_id ='.$ids.' and dpid = :companyId')
+				Yii::app()->db->createCommand('update nb_normal_promotion_detail set delete_flag="1", is_sync ='.$is_sync.' where product_id in('.$ids.') and dpid = :companyId')
 				->execute(array( ':companyId' => $this->companyId));
 				Yii::app()->end(json_encode(array("status"=>"success")));
 				//$this->redirect(array('normalpromotion/detailindex' , 'companyId' => $companyId)) ;

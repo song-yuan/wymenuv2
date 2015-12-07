@@ -1,10 +1,10 @@
 	<!-- BEGIN PAGE -->  
         <input type="hidden" value="<?PHP echo count($orderPrintjobs); ?>" id="failprintjobnum"> 
         <input type="hidden" value="<?PHP echo count($order_status); ?>" id="accountbeforeorderstatus">
-        <input type="hidden" value="<?PHP echo $originaltotal; ?>" id="accountordershouldpay">
-        <input type="hidden" value="<?PHP echo $nowTotal; ?>" id="accountorderrealitypay">
-        <input type="hidden" value="<?PHP echo $paytotal; ?>" id="accountorderhaspay">
-        <input type="hidden" value="<?PHP echo $productDisTotal; ?>" id="accountorderdistotal">
+        <input type="hidden" value="<?PHP echo number_format($originaltotal, 2); ?>" id="accountordershouldpay">
+        <input type="hidden" value="<?PHP echo number_format($nowTotal, 2); ?>" id="accountorderrealitypay">
+        <input type="hidden" value="<?PHP echo number_format($paytotal, 2); ?>" id="accountorderhaspay">
+        <input type="hidden" value="<?PHP echo number_format($productDisTotal, 2); ?>" id="accountorderdistotal">
         <ul>
             
         <?php foreach ($orderPrintjobs as $orderPrintjob):
