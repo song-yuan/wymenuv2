@@ -39,7 +39,7 @@
 		<div class="col-md-12">
 		<div class="tabbable tabbable-custom">
                             <ul class="nav nav-tabs">
-                                    <li class="<?php if($typeID=='normal'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'normal' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加普通优惠营销品');?></a></li>
+                                    <!-- <li class="<?php if($typeID=='normal'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'normal' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加普通优惠营销品');?></a></li> -->
                                     <li class="<?php if($typeID=='private'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'private' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加特价优惠营销品');?></a></li>
                                     <li class="<?php if($typeID=='cupon'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'cupon' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加代金券营销品');?></a></li>
                             

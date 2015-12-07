@@ -125,7 +125,7 @@
 								<td class="center">
 								<a href="<?php echo $this->createUrl('promotionActivity/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('promotionActivity/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid, 'typeID'=>'normal'));?>"><?php echo yii::t('app','添加营销品');?></a></td>
+								<a href="<?php echo $this->createUrl('promotionActivity/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid, 'typeID'=>'private'));?>"><?php echo yii::t('app','添加营销品');?></a></td>
 								 <td><?php echo '';?></td>
 								</tr>
 						
