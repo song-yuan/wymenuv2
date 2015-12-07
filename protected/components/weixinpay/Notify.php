@@ -74,6 +74,7 @@ class Notify extends WxPayNotify
         	'attach'=>$data['attach'],
         	'is_sync'=>DataSync::getInitSync(),
 			);	
+		fwrite($myfile, json_encode($notifyData));
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
 		$txt = "Steve Jobs\n";
 		fwrite($myfile, $txt);
