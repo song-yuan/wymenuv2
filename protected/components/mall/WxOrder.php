@@ -134,7 +134,7 @@ class WxOrder
 	 * 
 	 */
 	 public static function getNoPayOrderProduct($orderId,$dpid){
-		$sql = 'select * from nb_order where order_id=:lid and dpid=:dpid and delete_flag=0 and product_order_status=0';
+		$sql = 'select * from nb_order_product where order_id=:lid and dpid=:dpid and delete_flag=0 and product_order_status=0';
 		$order = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':lid',$orderId)
 				  ->bindValue(':dpid',$dpid)
