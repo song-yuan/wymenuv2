@@ -155,7 +155,7 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select t.price,t.amount,t1.product_name,t1.main_picture from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.delete_flag=0';
+		$sql = 'select t.price,t.amount,t1.product_name,t1.main_picture,t1.original_price from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.delete_flag=0';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':orderId',$orderId)
 				  ->bindValue(':dpid',$dpid)
@@ -181,15 +181,17 @@ class WxOrder
 	 */
 	public static function updateOrderTotal($order){
 		$total = 0;
+		$oTotal = 0;
 		$orderId = $order['lid'];
 		$dpid = $order['dpid'];
 		$orderProducts = self::getOrderProduct($orderId,$dpid);
 		foreach($orderProducts as $product){
 			$total += $product['price']*$product['amount'];
+			$oTotal += $product['original_price']*$product['amount'];
 		}
 		if($total!=$order['should_total']){
 			$isSync = DataSync::getInitSync();
-			$sql = 'update nb_order set should_total='.$total.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+			$sql = 'update nb_order set should_total='.$total.',reality_total='.$oTotal.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 		return $total;
