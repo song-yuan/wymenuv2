@@ -125,6 +125,7 @@ class WxOrder
 				  ->bindValue(':lid',$orderId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
+		self::updateOrderTotal($order);
 	    return $order;
 	}
 	/**
@@ -167,7 +168,31 @@ class WxOrder
 				  ->bindValue(':userId',$userId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
+		foreach($orderList as $k=>$order){
+			$total = self::updateOrderTotal($order);
+			$orderList[$k]['should_total'] = $total;
+		}
 	    return $orderList;
+	}
+	/**
+	 * 
+	 * 查询订单总价是否与订单产品总价
+	 * 
+	 */
+	public static function updateOrderTotal($order){
+		$total = 0;
+		$orderId = $order['lid'];
+		$dpid = $order['dpid'];
+		$orderProducts = self::getOrderProduct($orderId,$dpid);
+		foreach($orderProducts as $product){
+			$total += $product['price']*$product['amount'];
+		}
+		if($total!=$order['should_total']){
+			$isSync = DataSync::getInitSync();
+			$sql = 'update nb_order set should_total='.$total.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+			Yii::app()->db->createCommand($sql)->execute();
+		}
+		return $total;
 	}
 	public static function updateOrderStatus($orderId,$dpid){
 		$isSync = DataSync::getInitSync();
