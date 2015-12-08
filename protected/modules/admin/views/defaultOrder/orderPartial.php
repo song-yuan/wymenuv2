@@ -36,7 +36,7 @@
                                     <span class="selectProductDiscount" style="color:#976125;display:none"><?php echo $orderProduct['offprice'];?></span>
                                     <span class="selectProductNowPrice" style="color:#976125"><?php echo number_format($orderProduct['price'],2);?></span>
                                     <span style="position:absolute;" class="selectProductName"><?php echo $orderProduct['product_name'];?></span>
-                                    <img class="selectProductDel" style="position: absolute;right:0.3em; width: 3.0em;height: 2.0em;padding:5px 10px 5px 10px;" 
+                                    <img class="selectProductDel" style="position: absolute;right:0.3em; width: 2.5em;height: 2.0em;padding:5px 10px 5px 10px;" 
                                          src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">                                   
                                    </li>
                 <?php endforeach;?>
