@@ -58,7 +58,7 @@
 }
 .navigation li {
     border-bottom:1px solid #ED9F9F;    /* 添加下划线 */
-    font-size: 18px;
+    font-size: 1.2em;
 }
 .navigation li{
     display:block;                        /* 区块显示 */
@@ -304,15 +304,15 @@
 	<!-- BEGIN PAGE HEADER-->
         <div  id="order_row" style="display:none;">
         <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-5">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
 			<input style="margin:-10px 0 10px 0;" type="button" class="btn green" id="site_list_button" value="<?php echo yii::t('app','临时座');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnswitchsite" value="<?php echo yii::t('app','转台>>');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnunionsite" value="<?php echo yii::t('app','并台>>');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnclosesite" value="<?php echo yii::t('app','撤台>>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnswitchsite" value="<?php echo yii::t('app','转台>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnunionsite" value="<?php echo yii::t('app','并台>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnclosesite" value="<?php echo yii::t('app','撤台>');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
-                <div class="col-md-8" style="">
+                <div class="col-md-7" style="">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
                         <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsaveprint_btn" value="<?php echo yii::t('app','挂单打印');?>">
                         <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsave_btn" value="<?php echo yii::t('app','挂单');?>">
@@ -1057,7 +1057,7 @@
                                   +'      class="selectProductA">'
                                   +'  <span style="background-color:#005580;" class="special badge" content="">'+taotext
                                   +'      </span>'
-                                  +'  <span style="font-size:20px !important;height:auto;" class="badge">'+number+'</span>'
+                                  +'  <span style="font-size:1.3em !important;height:auto;" class="badge">'+number+'</span>'
                                   +'  <span class="selectProductPrice" style="color:#976125;display:none">'+origin_price+'</span>'
                                   +'  <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>'
                                   +'      <span class="selectProductNowPrice" style="color:#976125">'+origin_price+'</span>'

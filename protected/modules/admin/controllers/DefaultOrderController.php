@@ -169,11 +169,15 @@ class DefaultOrderController extends BackendController
                 //var_dump($order); exit;
                 //固定台的最大的status
                 //$maxstatus=  OrderProduct::getMaxStatus($siteNo->site_id, $companyId);
-                //var_dump($maxstatus); exit;
                 ////////取得该座位对应的所有的订单ID列表////////
                 $orderlist=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
                 //var_dump($siteNo); exit;
-		//////////////
+		//var_dump($maxstatus); exit;
+                $productPauseTotalarray = OrderProduct::getPauseTotalAll($orderlist,$companyId);
+                //var_dump($productTotalarray);exit;
+//                $productTotal=$productTotalarray["total"];
+//                $originaltotal=$productTotalarray["originaltotal"];
+                //////////////
                 //订单已经选择的口味
                 $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,$orderlist,'1',$companyId);
                 //所有订单明细
@@ -238,7 +242,8 @@ class DefaultOrderController extends BackendController
                                 'tastegroups'=>$tastegroups,
                                 'orderTastes'=>$orderTastes,
                                 'tasteMemo'=>$tasteMemo,
-                                'tasteidsOrderProducts'=>$tasteidsOrderProducts
+                                'tasteidsOrderProducts'=>$tasteidsOrderProducts,
+                                'productPauseTotalarray'=>$productPauseTotalarray
                                 //'categories' => $categories
                                 //'products' => $productslist,
                                 //'setlist' => $setlist

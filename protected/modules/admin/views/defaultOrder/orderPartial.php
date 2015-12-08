@@ -31,7 +31,7 @@
                                                 if(!empty($orderProduct['taste_memo']) || !empty($tasteidsOrderProducts[$orderProduct['lid']]))
                                                 {  echo "味";}
                                         ?></span>
-                                    <span style="font-size:20px !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>
+                                    <span style="font-size:1.3em !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>
                                     <span class="selectProductPrice" style="color:#976125;display:none"><?php echo number_format($orderProduct['original_price'],2);?></span>
                                     <span class="selectProductDiscount" style="color:#976125;display:none"><?php echo $orderProduct['offprice'];?></span>
                                     <span class="selectProductNowPrice" style="color:#976125"><?php echo number_format($orderProduct['price'],2);?></span>
@@ -41,7 +41,10 @@
                                    </li>
                 <?php endforeach;?>
         </ul>
-        全单设定：
+        <span style="font-size:1.2em;">
+            原价合计:<?php echo $productPauseTotalarray["originaltotal"];?>  /现价合计:<?php echo $productPauseTotalarray["total"]; ?>
+        </span><br>
+            全单设定：
             <?php 
             $ordertastename="";
             $ordertasteid="";
