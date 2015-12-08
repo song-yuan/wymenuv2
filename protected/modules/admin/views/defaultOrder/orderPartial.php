@@ -42,7 +42,7 @@
                 <?php endforeach;?>
         </ul>
         <span style="font-size:1.2em;">
-            原价合计:<?php echo $productPauseTotalarray["originaltotal"];?>  /现价合计:<?php echo $productPauseTotalarray["total"]; ?>
+            原价合计:<?php echo number_format($productPauseTotalarray["originaltotal"],2);?>  /现价合计:<?php echo number_format($productPauseTotalarray["total"],2); ?>
         </span><br>
             全单设定：
             <?php 
