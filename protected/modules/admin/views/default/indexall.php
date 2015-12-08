@@ -327,7 +327,7 @@
 	
 	<div class="row">
 		
-                <div class="col-md-3">
+                <div class="col-md-4">
                         <div class="navigation" id="orderdetailauto" style="">
                             <ul orderid="0000000000" class="selectProduct">
                                 <span id="order_create_at">2004/12/12 12:00:00</span>
@@ -411,7 +411,7 @@
                             </div>
                 </div>	
             
-                <div class="col-md-9">			
+                <div class="col-md-8">			
                         <div class="tabbable tabbable-custom">
                             <div class="firstCategory">
                                 <ul class="">
@@ -1062,7 +1062,7 @@
                                   +'  <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>'
                                   +'      <span class="selectProductNowPrice" style="color:#976125">'+origin_price+'</span>'
                                   +'      <span style="position:absolute;" class="selectProductName">'+pname+'</span>'
-                                  +'      <img class="selectProductDel" style="position: absolute;right:0.3em; width: 3.0em;height: 2.0em;padding:5px 10px 5px 10px;" '
+                                  +'      <img class="selectProductDel" style="position: absolute;right:0.3em; width: 2.5em;height: 2.0em;padding:5px 10px 5px 10px;" '
                                   +'           src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png"> '                                  
                                   +' </li>'
                     $(".selectProduct").append(appendstr);
