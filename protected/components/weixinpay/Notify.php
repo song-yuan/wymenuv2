@@ -52,15 +52,8 @@ class Notify extends WxPayNotify
 		}
 	}
 	public function insertNotify($data){
-		$myfile = fopen("/tmp/newfile.txt", "w");
-		$txt = "Bill Gates\n";
-		fwrite($myfile, $txt);
 		$orderIdArr = explode('-',$data["out_trade_no"]);
 		$brandUser = WxBrandUser::getFromOpenId($data['openid']);
-		fwrite($myfile, $data["out_trade_no"]);
-		$txt = "Steve Jobs\n";
-		fwrite($myfile, $txt);
-		fclose($myfile);
 		
 		$se = new Sequence("notify");
         $lid = $se->nextval();
@@ -74,10 +67,11 @@ class Notify extends WxPayNotify
         	'transaction_id'=>$data['transaction_id'],
         	'total_fee'=>$data['total_fee'],
         	'time_end'=>$data['time_end'],
-        	'attach'=>$data['attach'],
+        	'attach'=>isset($data['attach'])?$data['attach']:'',
         	'is_sync'=>DataSync::getInitSync(),
 			);	
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
+		
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
 		WxOrder::insertOrderPay($order,1);

@@ -91,7 +91,7 @@ class DatasyncController extends Controller
     ////特殊的更新,云端的数据，但是在本地更新了，以下内容要传递到云端
     public $syncSpecialTalbe=array(
         "nb_member_card"=>array("all_money"), //本地金额同步过去
-        "nb_product"=>array("status"), //本地沽清状态
+        "nb_product"=>array("status","store_number"), //本地沽清状态
         "nb_queue_persons"=>array("update_at","status"), //排队的状态，云端微信的排队，本地修改后，状态和更新日期都上传
         "nb_order_product"=>array("is_retreat","price","is_giving","is_print","delete_flag","product_order_status")
     );

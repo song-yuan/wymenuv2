@@ -18,6 +18,16 @@ class WxPromotionActivity
 				  ->queryAll();
 	    return $cupon;
 	}
+	public static function getActivity($dpid,$activityId){
+		$now = date('Y-m-d H:i:s',time());
+		$sql = 'select * from nb_promotion_activity where dpid=:dpid and lid=:activityId and begin_time <=:now and :now <= end_time and delete_flag=0';
+		$activity = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':activityId',$activityId)
+				  ->bindValue(':now',$now)
+				  ->queryRow();
+		return $activity;
+	}
 	public static function getDetail($dpid,$activityId){
 		$now = date('Y-m-d H:i:s',time());
 		$sql = 'select * from nb_promotion_activity_detail where dpid=:dpid and activity_lid=:activityId and promotion_type > 0 and delete_flag=0';

@@ -51,8 +51,11 @@
                                     
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','查看已添加菜品并设置');?></div>
 					<div class="actions">						
-                                            <div style="margin-top:-5px !important;" class="btn-group">
+                        <div style="margin-top:-5px !important;" class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+						</div>
+						<div class="btn-group">
+							<button type="button" id="yichu"  class="btn red" style="padding:6px 10px;margin-top:2px;" ><i class="fa fa-ban"></i> <?php echo yii::t('app','勾选批量移除');?></button>
 						</div>
 						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
@@ -87,7 +90,7 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="idchk" /></td>
 								<td style="width:10%"><?php echo $model['product_name'];?></td>
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
 								
@@ -107,9 +110,9 @@
 												<a style="color: red;"><?php echo yii::t('app','例：88折填写为0.88');?></a>
 												</label>
                                                 <label class="radio-inline">
-                                                <!--  <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['order_num'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
+                                                <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['order_num'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
                                                 <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['order_num'])) echo $model['order_num']; else echo yii::t('app','无限制'); ?>" onfocus=" if (value =='无限制'){value = ''}" onblur="if (value ==''){value='无限制'}" >
-                                                --><input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
+                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
                                                 <input type="button" name="delete<?php echo $model['lid'];?>" id="delete<?php echo $model['lid'];?>" class="clear_red" value=<?php echo yii::t('app','移除');?> >
                                                 </label>
 											</div>
@@ -283,6 +286,54 @@
             $.ajax({
                         type:'GET',
  			url:"<?php echo $this->createUrl('privatepromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+vid+"/page/",
+ 			async: false,
+ 			//data:"companyId="+company_id+'&padId='+pad_id,
+                        cache:false,
+                        dataType:'json',
+ 			success:function(msg){
+                            //alert(msg.status);
+                            if(msg.status=="success")
+                            {
+                                
+                                alert("<?php echo yii::t('app','成功'); ?>");
+                                
+                                location.reload();
+                            }else{
+                                alert("<?php echo yii::t('app','失败'); ?>"+"1")
+                                location.reload();
+                            }
+ 			},
+                        error:function(){
+ 				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+ 			},
+ 		});
+        });
+
+
+        $("#yichu").on("click",function(){
+            //alert(111);
+            var aa = document.getElementsByName("idchk");
+            var str=new Array();
+            for (var i = 0; i < aa.length; i++) {
+            if (aa[i].checked){
+                str += aa[i].value +',';
+                //alert(str);
+            }
+            }
+            if(str!=''){
+                str = str.substr(0,str.length-1);//除去最后一个“，”
+                }else{
+               	 alert("<?php echo yii::t('app','请勾选相应的菜品再进行一键移除！！！');?>");
+               	 return false;
+               	 }
+            //str = str.substr(0,str.length-1);//除去最后一个“，”
+            //alert(str);
+            //var vid=$(this).attr("id").substr(12,10);
+            //alert(vid);
+
+            $.ajax({
+                        type:'GET',
+ 			url:"<?php echo $this->createUrl('privatepromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+str+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
                         cache:false,
