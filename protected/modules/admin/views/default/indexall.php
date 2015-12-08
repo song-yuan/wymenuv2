@@ -756,7 +756,7 @@
                     $.ajax({
                         url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid+"/padId/"+padid,
                         type:'GET',
-                        timeout:5000,
+                        timeout:1000,
                         cache:false,
                         async:false,
                         dataType: "json",
@@ -875,7 +875,7 @@
                                     $.ajax({
                                         url:"/wymenuv2/admin/defaultSite/finshPauseJobs/companyId/<?php echo $this->companyId; ?>/successjobs/"+successjobs,
                                         type:'GET',
-                                        timeout:5000,
+                                        timeout:2000,
                                         cache:false,
                                         async:false,
                                         dataType: "json",
@@ -910,8 +910,8 @@
                 //tab-content
                 tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSiteAll',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>';
                 $('#tabsiteindex').load(tabcurrenturl);
-                clearInterval(intervalQueueList);
-                intervalQueueList = setInterval(reloadsitestate,"15000");
+//                clearInterval(intervalQueueList);
+//                intervalQueueList = setInterval(reloadsitestate,"15000");
             });
             
             function sitevisible()
