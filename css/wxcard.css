@@ -23,7 +23,7 @@ p{margin:0;padding:0;}
 	font-weight:600;
 	background-color: #cfd1d8;
 	color: #fff;
-	background: url("../../images/card_control_z23182d.png") 0 -84px repeat-x;
+	background: url("../img/card_control_z23182d.png") 0 -84px repeat-x;
 }
 .media_preview_area .msg_card_inner {
 	padding-bottom: 150px;
@@ -137,10 +137,10 @@ a {
 	overflow: hidden;
 }
 .icon18_common.edit_gray {
-	background: url("../../images/base_z231ecc.png") 0 -5310px no-repeat;
+	background: url("../img/base_z231ecc.png") 0 -5310px no-repeat;
 }
 .icon18_common.edit_gray:hover, a:hover .icon18_common.edit_gray {
-	background: url("../../images/base_z231ecc.png") 0 -5338px no-repeat;
+	background: url("../img/base_z231ecc.png") 0 -5338px no-repeat;
 }
 .msg_card_section.shop .deco {
 	position: absolute;
@@ -148,7 +148,7 @@ a {
 	left: 0;
 	width: 100%;
 	height: 5px;
-	background: url(../../images/card_tpl_deco218877.png) repeat-x;
+	background: url(../img/card_tpl_deco218877.png) repeat-x;
 }
 .msg_card_section.dispose {
 	border-bottom: 1px solid #e7e7eb;
@@ -186,7 +186,7 @@ ul, ol {
 	right: 5px;
 	width: 16px;
 	height: 15px;
-	background: url("../../images/card_control_z23182d.png") 0 -421px no-repeat;
+	background: url("../img/card_control_z23182d.png") 0 -421px no-repeat;
 }
 .list li.last_li .li_panel {
 	border-bottom: 0;
