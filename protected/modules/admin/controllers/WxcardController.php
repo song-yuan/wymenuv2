@@ -157,7 +157,7 @@ class WxcardController extends BackendController{
 			}
 			$cardJson = $card->toJson();
 			$url = 'https://api.weixin.qq.com/card/create?access_token='.$accessToken;
-			$result = $wxSdk->https_request($url,$cardJson);
+			$result = Curl::httpsRequest($url,$cardJson);
 			$result = json_decode($result);
 			if($result->errmsg=="ok"){
 				$transaction=Yii::app()->db->beginTransaction();
@@ -228,14 +228,15 @@ class WxcardController extends BackendController{
 		}
 		//获取卡券颜色列表
 		$url = 'https://api.weixin.qq.com/card/getcolors?access_token='.$accessToken;
-		$data = $wxSdk->https_request($url);
+		$data = Curl::httpsRequest($url);
 		$dataObj = json_decode($data);
 		if($dataObj->errmsg=="ok"){
 			$colors = $dataObj->colors;
 		}else{
 			Yii::app()->user->setFlash('error',$dataObj->errmsg);
-			$this->redirect(array('/brand/wxcard/index','cid'=>$this->companyId));
+			$this->redirect(array('/admin/wxcard/index','companyId'=>$this->companyId));
 		}
+//		$colors = array();
 		$this->render('create',array(
 			'model'=>$model,'colors'=>$colors,'type'=>$type,
 		));

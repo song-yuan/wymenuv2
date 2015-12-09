@@ -1,17 +1,17 @@
 		<?php 
 			$baseUrl = Yii::app()->baseUrl;
 		?>
-		<link rel="stylesheet" type="text/css" href="plugins/bootstrap-fileupload/bootstrap-fileupload.css" />
-		<link rel="stylesheet" type="text/css" href="css/wxcard.css" />
-		<script type="text/javascript" src="plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-		<script type="text/javascript" src="plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
-		<link rel="stylesheet" type="text/css" href="plugins/jquery-multi-select/css/multi-select.css" />
-		<script type="text/javascript" src="plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
-		<script type="text/javascript" src="plugins/jquery-multi-select/js/jquery.quicksearch.js"></script>   
+		<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/plugins/bootstrap-fileupload/bootstrap-fileupload.css" />
+		<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wxcard.css" />
+		<script type="text/javascript" src="<?php echo $baseUrl;?>/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+		<script type="text/javascript" src="<?php echo $baseUrl;?>/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
+		<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/plugins/jquery-multi-select/css/multi-select.css" />
+		<script type="text/javascript" src="<?php echo $baseUrl;?>/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+		<script type="text/javascript" src="<?php echo $baseUrl;?>/plugins/jquery-multi-select/js/jquery.quicksearch.js"></script>   
 		
-		<link href="plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
-		<script src="plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript" ></script>
-		<script src="plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript" ></script>
+		<link href="<?php echo $baseUrl;?>/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+		<script src="<?php echo $baseUrl;?>/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript" ></script>
+		<script src="<?php echo $baseUrl;?>/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript" ></script>
 		<!-- BEGIN PAGE -->  
 		<div class="page-content">
 			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -41,7 +41,7 @@
 			<?php $this->endContent();?>
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.brand.components.widgets.PageHeader', array('head'=>'营销管理','subhead'=>'添加卡券','breadcrumbs'=>array(array('word'=>'营销管理','url'=>''),array('word'=>'微信卡券','url'=>$this->createUrl('/brand/wxcard',array('cid'=>$this->companyId))),array('word'=>'添加卡券','url'=>'')),'back'=>array('word'=>'返回','url'=>array('/brand/wxcard','cid'=>$this->companyId))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'营销管理','subhead'=>'添加卡券','breadcrumbs'=>array(array('word'=>'营销管理','url'=>''),array('word'=>'微信卡券','url'=>$this->createUrl('/brand/wxcard',array('cid'=>$this->companyId))),array('word'=>'添加卡券','url'=>'')),'back'=>array('word'=>'返回','url'=>array('/brand/wxcard','cid'=>$this->companyId))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
@@ -97,7 +97,6 @@
 		} 
 		jQuery(document).ready(function() {       
 		   // initiate layout and plugins
-		    App.init();
 			jQuery(document).ready(function(){
 				if( jQuery("#Gift_gift_pic_large").val()){
 			           jQuery("#thumbnails_1").html("<img src='"+jQuery("#Gift_gift_pic_large").val()+"?"+(new Date()).getTime()+"' />"); 
@@ -178,7 +177,7 @@
 			});
 			var $modal = $('#ajax-modal');
 			$('#js_add_shop').click(function(){
-		        $modal.load('<?php echo $this->createUrl('/brand/wxcard/addShop',array('cid'=>$this->companyId));?>', '', function(){
+		        $modal.load('<?php echo $this->createUrl('/admin/wxcard/addShop',array('companyId'=>$this->companyId));?>', '', function(){
 	              $modal.modal();
 		        });
 			});
@@ -207,13 +206,13 @@
 			});
 			//上传图片
 			$('.cover').change(function(){
-				var url = '<?php echo $this->createUrl('/brand/wxcard/uploadfile',array('cid'=>$this->companyId));?>';
+				var url = '<?php echo $this->createUrl('/admin/wxcard/uploadfile',array('companyId'=>$this->companyId));?>';
 				$('#WeixinCard').attr('action',url);
 				$('#WeixinCard').ajaxSubmit(function(msg){
 				  if(msg==0){
 				  	 alert('上传图片格式不正确!');
 				  }else{
-					var url = '<?php echo $this->createUrl('/brand/wxcard/create',array('cid'=>$this->companyId,'type'=>$type));?>';
+					var url = '<?php echo $this->createUrl('/admin/wxcard/create',array('companyId'=>$this->companyId,'type'=>$type));?>';
 					$('#WeixinCard').attr('action',url);
 					var hide = $('.cover').parents('.form-group').find('input[type=hidden]');
 					hide.attr('name','logo');

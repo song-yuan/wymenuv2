@@ -1,3 +1,6 @@
+<?php 
+	$baseUrl = Yii::app()->baseUrl;
+?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/plugins/bootstrap-fileupload/bootstrap-fileupload.css" />
 <script type="text/javascript" src="<?php echo $baseUrl;?>/plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/product/jquery.form.js"></script> 
@@ -20,7 +23,7 @@
 			<div class="shop_panel" id="js_color_preview">
 				<div class="logo_area group">
 					<span class="logo l">
-					<img id="js_logo_url_preview" src="">
+					<img id="js_logo_url_preview" src="<?php echo $baseUrl;?>/img/150x150.gif">
 					</span>
 					<p id="js_brand_name_preview"></p>
 				</div>
@@ -102,7 +105,7 @@
 						<div class="col-md-8">
 						  <div class="fileupload fileupload-new" data-provides="fileupload">
 							<div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
-								<img src="images/150x150.gif" alt="" />
+								<img src="<?php echo $baseUrl;?>/img/150x150.gif" alt="" width="200"/>
 							</div>
 							<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
 								<div>
@@ -123,9 +126,11 @@
 						<label class="control-label col-md-2 label-right">卡券颜色</label>
 						<div class="col-md-4">
 						 <select class="form-control" name="color">
+						 <?php if($colors):?>
 						 <?php foreach($colors as $color):?>
 							<option value="<?php echo $color->name?>" style="background-color:<?php echo $color->value?>"></option>
 						 <?php endforeach;?>
+						 <?php endif;?>
 						</select>
 						</div>
 						<input type="hidden" name="color_val" value="" />
