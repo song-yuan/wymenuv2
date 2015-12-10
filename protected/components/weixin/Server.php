@@ -118,11 +118,24 @@ class Server {
                 
         	//菜单事件
         	else if($this->event == 'click') {
-                 if($this->postArr['EventKey']=="MENUMAIN") {
+                 if($this->postArr['EventKey']=="click") {
                  	echo $this->generalResponse();
                  }
             }
             
+            //微信卡券事件
+        	else if($this->event == 'card_pass_check') {
+				WxCardResult::cardPassCheck($this->postArr);
+            }
+            else if($this->event == 'card_not_pass_check') {
+				WxCardResult::cardNotPassCheck($this->postArr);
+            }
+            else if($this->event == 'user_get_card') {
+				WxCardResult::getCard($this->postArr);
+            }
+            else if($this->event == 'user_del_card') {
+				WxCardResult::delCard($this->postArr);
+            }
                  
             // 消息回复,类型包括：文本、图片、语音、视频
 			else if( !empty($this->postArr['MsgType']) && ($this->postArr['MsgType'] == 'text' || $this->postArr['MsgType'] == 'image' || $this->postArr['MsgType'] == 'voice' || $this->postArr['MsgType'] == 'video') ) {
@@ -193,7 +206,6 @@ class Server {
 	    	 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
 	    	 	$promotionPushs = WxPromotionActivity::getSubPush($this->brandId);
 	        	if(!empty($promotionPushs)){
-	        		$subPushs = array();
 	        		foreach($promotionPushs as $push){
 	        			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
 	        		}

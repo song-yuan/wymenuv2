@@ -13,14 +13,16 @@ class WxOrder
 	public $userId;
 	public $siteId;
 	public $type;
+	public $number;
 	public $cart = array();
 	public $order = false;
 	
-	public function __construct($dpid,$userId,$siteId = null,$type = 1){
+	public function __construct($dpid,$userId,$siteId = null,$type = 1,$number = 1){
 		$this->dpid = $dpid;
 		$this->userId = $userId;
 		$this->siteId = $siteId;
 		$this->type = $type;
+		$this->number = $number;
 		$this->getCart();
 		if($this->type==1){
 			$this->getSite();
@@ -55,7 +57,7 @@ class WxOrder
 		}
 	}
 	public function orderOpenSite(){
-		SiteClass::openSite($this->dpid,1,0,$this->siteId);
+		SiteClass::openSite($this->dpid,$this->number,0,$this->siteId);
 	}
 	public function createOrder(){
 		$time = time();

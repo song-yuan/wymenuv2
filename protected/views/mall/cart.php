@@ -10,8 +10,14 @@
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
 <?php if($this->type==1):?>
-<div class="site_no">桌号:<input type="text" class="serial" value="<?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="请在这里输入座位号" /></div>
+<div class="site_no">桌号:<input type="text" class="serial" value="<?php if($siteType){echo $siteType['name'];}?><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" />人数:<input type="text" class="number" value="" placeholder="输入人数" /></div>
 <?php endif;?>
+<div class="section" style="padding-top:0;color:#FF5151;">
+    <div class="prt">
+        <div class="prt-rt" id="clearCart" style="float:right;padding-right:30px;text-align:right; background-image: url(<?php echo $baseUrl;?>/img/icon_delete.png);background-size: auto 25px;background-repeat: no-repeat; background-position: right center;">清空全部</div>
+        <div class="clear"></div>
+    </div>
+</div>
 <?php foreach($models as $model):?>
 <div class="section">
 	<!--
@@ -51,10 +57,23 @@ $(document).ready(function(){
 	<?php endif;?>
 	$('.checkOrder').click(function(){
 		var serial = $('.serial').val();
-		if(serial){
-			location.href = '<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>&serial='+serial;
+		var number = $('.number').val();
+		if(serial && number){
+			if(!isNaN(number)||(parseInt(number)!=number)||number < 0){
+				layer.msg('输入人数为大于0的整数!');
+				return;
+			}
+			location.href = '<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>&serial='+serial+'&number='+number;
 		}else{
-			layer.msg('请输入座位号!');
+			if(!serial){
+				layer.msg('请输入座位号!');
+				return;
+			}
+			if(!number){
+				layer.msg('请输入人数!');
+				return;
+			}
+			
 		}
 	});
 	
@@ -105,7 +124,20 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
- 
+  
+  $('#clearCart').click(function(){
+  		  $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'all'=>1));?>',
+        	success:function(msg){
+        		if(msg.status){
+			        location.href = '<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId));?>';
+        		}else{
+        			layer.msg(msg.msg);
+        		}
+        	},
+        	dataType:'json'
+        });
+  });
 function setTotal(){ 
     var s=0;
     var v=0;

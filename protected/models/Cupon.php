@@ -41,14 +41,14 @@ class Cupon extends CActiveRecord
 		return array(
 			array('lid, dpid', 'required'),
 			array('change_point', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid, cupon_money, min_consumer', 'length', 'max'=>10),
+			array('lid, dpid, cupon_money,begin_day, end_day, min_consumer', 'length', 'max'=>10),
 			array('cupon_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, cupon_abstract', 'length', 'max'=>255),
-			array('is_available, delete_flag, to_group', 'length', 'max'=>2),
+			array('is_available,time_type, delete_flag, to_group', 'length', 'max'=>2),
 			array('create_at, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, cupon_title, is_sync, main_picture, to_group, cupon_abstract, cupon_memo, cupon_money, min_consumer, change_point, begin_time, end_time, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, time_type,begin_day,end_day,update_at, cupon_title, is_sync, main_picture, to_group, cupon_abstract, cupon_memo, cupon_money, min_consumer, change_point, begin_time, end_time, is_available, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,8 +81,11 @@ class Cupon extends CActiveRecord
 			'cupon_money' => '金额',
 			'min_consumer' => '最低消费',
 			'change_point' => '0表示不需要积分，直接领取；>0表示需要兑换的积分',
+				'time_type' => '限定类型',
 			'begin_time' => '开始时间',
 			'end_time' => '结束时间',
+				'begin_day' => '几日后有效',
+				'end_day' => '有效期天数',
 			'is_available' => '0表示有效，1表示无效',
 			'delete_flag' => '0表示存在，1表示删除',
 				'is_sync' => yii::t('app','是否同步'),
@@ -119,8 +122,11 @@ class Cupon extends CActiveRecord
 		$criteria->compare('cupon_money',$this->cupon_money,true);
 		$criteria->compare('min_consumer',$this->min_consumer,true);
 		$criteria->compare('change_point',$this->change_point);
+		//$criteria->compare('time_type',$this->time_type,true);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
+		//$criteria->compare('begin_day',$this->begin_day,true);
+		//$criteria->compare('end_day',$this->end_day,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);

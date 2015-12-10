@@ -35,6 +35,11 @@ class WxSdk {
         $res = Curl::httpsRequest($url, $data);
         return json_decode($res, true);
     }
+     //获取access_token
+     public function getAccessToken()
+     {
+         return $this->access_token;
+     }
     //查询用户分组
      public function queryGroup()
     {
