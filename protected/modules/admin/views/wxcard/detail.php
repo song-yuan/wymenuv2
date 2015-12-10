@@ -1,4 +1,6 @@
 		<?php 
+			$baseUrl = Yii::app()->baseUrl;
+			
 			$isCash = 0;
 		 	if($cardInfo->card_type=="CASH"){
 		 		$isCash = 1;
@@ -10,14 +12,8 @@
 		 		$defaultDetail = $cardInfo->general_coupon->default_detail;
 		 	}
 		?>
-		<link rel="stylesheet" type="text/css" href="metronic/plugins/bootstrap-fileupload/bootstrap-fileupload.css" />
-		<link rel="stylesheet" type="text/css" href="metronic/css/wxcarddetail.css" />
+		<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/wxcarddetail.css" />
 		
-		<script type="text/javascript" src="metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-		<script type="text/javascript" src="metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
-		<link rel="stylesheet" type="text/css" href="metronic/plugins/jquery-multi-select/css/multi-select.css" />
-		<script type="text/javascript" src="metronic/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
-		<script type="text/javascript" src="metronic/plugins/jquery-multi-select/js/jquery.quicksearch.js"></script>   
 		<!-- BEGIN PAGE -->  
 		<div class="page-content">
 			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -264,27 +260,3 @@
 			<!-- END PAGE CONTENT-->    
 		</div>
 		<!-- END PAGE -->  
-		<script>
-		jQuery(document).ready(function() {       
-		   // initiate layout and plugins
-		    App.init();
-			jQuery(document).ready(function(){
-				if( jQuery("#Gift_gift_pic_large").val()){
-			           jQuery("#thumbnails_1").html("<img src='"+jQuery("#Gift_gift_pic_large").val()+"?"+(new Date()).getTime()+"' />"); 
-				}
-			});
-	        if (jQuery().datepicker) {
-	            $('.date-picker').datepicker({
-	            	format: 'yyyy.mm.dd',
-	            	language: 'zh-CN',
-	                rtl: App.isRTL(),
-	                autoclose: true
-	            });
-	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-	        }
-		});
-		function swfupload_callback1(name,path,oldname)  {
-			jQuery("#Gift_gift_pic_large").val(name);
-			jQuery("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
-		}
-		</script>

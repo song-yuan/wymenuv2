@@ -4,7 +4,7 @@
    * 
    */
   
-   $path="upload/company_".$brand->brand_id."/weixin/card/"; //上传路径 
+   $path="upload/company_".$dpid."/weixin/card/"; //上传路径 
   if(!file_exists($path)) 
 	{ 
 	  //检查是否有该文件夹，如果没有就创建，并给予最高权限 

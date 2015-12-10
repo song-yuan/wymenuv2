@@ -48,7 +48,7 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="col-md-offset-3 col-md-9">
-								<button type="submit" id="offline_confirm" class="btn green" onclick="jQuery.get('<?php echo $this->createUrl('/brand/wxcard/confirmCard',array('cid'=>$this->companyId,'code'=>$code));?>',function(data){alert(data.msg);if(data.status){$('#offline_confirm').remove();}},'json');"> 确认核销</button>
+								<button type="submit" id="offline_confirm" class="btn green" onclick="jQuery.get('<?php echo $this->createUrl('/admin/wxcard/confirmCard',array('companyId'=>$this->companyId,'code'=>$code));?>',function(data){alert(data.msg);if(data.status){$('#offline_confirm').remove();}},'json');"> 确认核销</button>
 								<button type="button" class="btn default" onclick="jQuery('#offlineOrderForm').empty();jQuery('#dealCode').val('');"> 取 消 </button>                              
 							</div>
 						</div>

@@ -87,7 +87,53 @@ class AccessToken {
 		}else
 			throw new Exception('无法从微信服务器获取ticket的信息');
 	}
-	
+	/**
+	 * 微信卡券 jsticket
+	 * 
+	 */
+	public function jsCardTicket() {
+		$sql = 'select * from nb_weixin_card_ticket where dpid='.$this->brandId;
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if($result){
+			if(time() > $result['expire_time'])
+				$jsCardTicket = $this->newCardTicket();
+		    else
+				$jsCardTicket = $result['ticket'];
+		}else{
+			$jsCardTicket = $this->newCardTicket();
+		}
+		return $jsCardTicket;
+	}
+	public function newCardTicket() {
+		$url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='.$this->accessToken.'&type=wx_card';
+		if($weixinServerReturn = Curl::https($url)) {
+			$ticketStdClass = json_decode($weixinServerReturn);
+			$sql = 'select * from nb_weixin_card_ticket where dpid='.$this->brandId;
+			$result = Yii::app()->db->createCommand($sql)->queryRow();
+			if($result){
+				$isSync = DataSync::getInitSync();
+				$sql = 'UPDATE nb_weixin_card_ticket set expire_time = ' . strtotime('2 hours'). ', ticket = "' .$ticketStdClass->ticket . '",is_sync='.$isSync.' 
+					WHERE dpid = ' .$this->brandId;
+				Yii::app()->db->createCommand($sql)->execute();
+			}else{
+				$time = time();
+				$se = new Sequence("weixin_card_ticket");
+			    $lid = $se->nextval();
+				$data = array(
+							'lid'=>$lid,
+							'dpid'=>$this->brandId,
+							'create_at'=>date('Y-m-d H:i:s',$time),
+		        			'update_at'=>date('Y-m-d H:i:s',$time), 
+							'ticket'=>$ticketStdClass->ticket,
+							'expire_time'=>strtotime('2 hours'),
+							'is_sync'=>DataSync::getInitSync(),	
+							);
+				Yii::app()->db->createCommand($sql)->insert('nb_weixin_card_ticket',$data);
+			}
+			return $ticketStdClass->ticket;
+		}else
+			throw new Exception('无法从微信服务器获取ticket的信息');
+	}
 	
 }
 
