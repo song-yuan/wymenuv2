@@ -1,11 +1,4 @@
-		<script type="text/javascript" src="metronic/plugins/select2/select2.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="metronic/plugins/select2/select2_metro.css" />
-		<script src="metronic/plugins/bootbox/bootbox.min.js" type="text/javascript" ></script>
-		
-		<link href="metronic/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
-		<script src="metronic/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript" ></script>
-		<script src="metronic/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript" ></script>
-		<!-- END SIDEBAR -->
+	
 		<!-- BEGIN PAGE -->
 		<div class="page-content">
 			<!-- BEGIN STYLE CUSTOMIZER -->
@@ -19,10 +12,11 @@
 			<div class="row">
 				<div class="col-md-12">
 					<ul class="nav nav-tabs">
-						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/cashcard',array('cid'=>$this->companyId));?>'" data-toggle="tab">商城抵用券</a></li>
-						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/giftcard',array('cid'=>$this->companyId));?>'" data-toggle="tab">门店兑换券</a></li>
-						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/gift',array('cid'=>$this->companyId));?>'" data-toggle="tab">礼品兑换</a></li>
-						<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/brand/wxcard',array('cid'=>$this->companyId));?>'" data-toggle="tab">微信卡券</a></li>
+						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','整体设置');?></a></li>
+						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','普通优惠');?></a></li>
+						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
+						<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
+						<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','微信卡券');?></a></li>
 					</ul>
 				</div>
 				<div class="row">
@@ -68,7 +62,7 @@
 		jQuery(document).ready(function() {       
 		   App.init();
 		    $('#btn_search').click(function(){
-                $.get('<?php echo $this->createUrl('/brand/wxcard/getwxcard',array('cid'=>$this->companyId));?>&code='+$('#dealCode').val(),function(data){
+                $.get('<?php echo $this->createUrl('/admin/wxcard/getwxcard',array('companyId'=>$this->companyId));?>&code='+$('#dealCode').val(),function(data){
                     if(data.status){
                         $('#offlineOrderForm').html(data.html);
                     } 
