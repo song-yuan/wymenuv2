@@ -47,8 +47,8 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$user = WxBrandUser::get($userId,$this->companyId);
-		
-		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user));
+		$userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
+		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user,'userLevel'=>$userLevel));
 	}
 	/**
 	 * 
