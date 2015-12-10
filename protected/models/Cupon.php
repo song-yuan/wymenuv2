@@ -122,11 +122,11 @@ class Cupon extends CActiveRecord
 		$criteria->compare('cupon_money',$this->cupon_money,true);
 		$criteria->compare('min_consumer',$this->min_consumer,true);
 		$criteria->compare('change_point',$this->change_point);
-		$criteria->compare('time_type',$this->time_type,true);
+		//$criteria->compare('time_type',$this->time_type,true);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
-		$criteria->compare('begin_day',$this->begin_day,true);
-		$criteria->compare('end_day',$this->end_day,true);
+		//$criteria->compare('begin_day',$this->begin_day,true);
+		//$criteria->compare('end_day',$this->end_day,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);

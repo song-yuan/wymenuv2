@@ -82,8 +82,8 @@
 								<th><?php echo yii::t('app','折扣名称');?></th>
 								<th><?php echo yii::t('app','折扣描述');?></th>
 								<th><?php echo yii::t('app','折扣数值');?></th>
-                                <th><?php echo yii::t('app','编辑');?></th>                                                                
-                                <th><?php echo yii::t('app','是否生效');?></th>
+								<th><?php echo yii::t('app','是否生效');?></th>
+                                <th><?php echo yii::t('app','编辑');?></th>
                                 <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
@@ -98,7 +98,7 @@
 								<td><?php echo $model->discount_name; ?></td>
 								<td><?php echo $model->discount_abstract;?></td>
 								<td><?php echo $model->discount_num;?></td>
-								<td><?php echo $model->is_available;?></td>
+								<td><?php switch( $model->is_available){case 0:echo yii::t('app','生效');break;case 1:echo yii::t('app','不生效');break;default:echo "";break;}?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('discount/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>

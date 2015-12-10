@@ -434,6 +434,68 @@ public function actionPayallReport(){
 				//'categoryId'=>$categoryId
 		));
 	}
+	
+	/**
+	 * 产品销售报表
+	 *
+	 **/
+	public function actionCeshiproductReport(){
+		//$uid = Yii::app()->user->id;
+		$str = Yii::app()->request->getParam('str');
+		//var_dump($str);exit();
+		$text = Yii::app()->request->getParam('text');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		//$catId = Yii::app()->request->getParam('cid',0);
+		//var_dump($catId);exit;
+		$criteria = new CDbCriteria;
+		//$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.update_at,t.lid,t.dpid,t1.dpid,t.product_id,t1.lid,t1.product_name,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total from nb_order_product t left join nb_product t1 on(t1.lid = t.product_id and t.dpid = t1.dpid ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=1 group by t.product_id,t.amount,is_retreat,month(t.create_at)';
+		//var_dump($sql);exit;
+		$criteria->select ='year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.update_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
+		$criteria->with = array('company','product');
+	
+		$criteria->condition = 't.is_retreat=0 and t.product_order_status=1 and t.delete_flag=0 and t.dpid='.$this->companyId;
+		if($str){
+			$criteria->condition = 't.is_retreat=0 and t.product_order_status=1 and t.delete_flag=0 and t.dpid in('.$str.')';
+		}
+		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+	
+		if($text==1){
+			$criteria->group ='t.product_id,year(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,t.dpid asc';
+		}elseif($text==2){
+			$criteria->group ='t.product_id,month(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+		}else{
+			$criteria->group ='t.product_id,day(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+		}
+	
+		//$criteria->order = 't.update_at asc,t.dpid asc';
+	
+		$pages = new CPagination(OrderProduct::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		$models = OrderProduct::model()->findAll($criteria);
+		//var_dump($models);exit();
+		$comName = $this->getComName();
+		//$a=array_keys($comName);
+		//var_dump($a);exit;
+		// var_dump($comName);exit;
+	
+	
+		$this->render('ceshiproductReport',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				//'catId'=>$catId
+		));
+	}
 	/**
 	 * 
 	 * 订单统计报表
