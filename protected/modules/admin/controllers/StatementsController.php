@@ -444,6 +444,7 @@ public function actionPayallReport(){
 		$str = Yii::app()->request->getParam('str');
 		//var_dump($str);exit();
 		$text = Yii::app()->request->getParam('text');
+		$ordertype = Yii::app()->request->getParam('ordertype');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		//$catId = Yii::app()->request->getParam('cid',0);
@@ -452,24 +453,39 @@ public function actionPayallReport(){
 		//$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.update_at,t.lid,t.dpid,t1.dpid,t.product_id,t1.lid,t1.product_name,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total from nb_order_product t left join nb_product t1 on(t1.lid = t.product_id and t.dpid = t1.dpid ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=1 group by t.product_id,t.amount,is_retreat,month(t.create_at)';
 		//var_dump($sql);exit;
 		$criteria->select ='year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.update_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
-		$criteria->with = array('company','product');
+		$criteria->with = array('company','product','order');
 	
 		$criteria->condition = 't.is_retreat=0 and t.product_order_status=1 and t.delete_flag=0 and t.dpid='.$this->companyId;
 		if($str){
 			$criteria->condition = 't.is_retreat=0 and t.product_order_status=1 and t.delete_flag=0 and t.dpid in('.$str.')';
+		}
+		if($ordertype==1){
+			$criteria->addCondition("order.order_type =0");
+		}
+		if($ordertype==2){
+			$criteria->addCondition("order.order_type =1");
+		}
+		if($ordertype==3){
+			$criteria->addCondition("order.order_type =2");
+		}
+		if($ordertype==4){
+			$criteria->addCondition("order.order_type =3");
+		}
+		if($ordertype==5){
+			$criteria->addCondition("t.set_id !=0");
 		}
 		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
 	
 		if($text==1){
 			$criteria->group ='t.product_id,year(t.update_at)';
-			$criteria->order = 'year(t.update_at) asc,t.dpid asc';
+			$criteria->order = 'year(t.update_at) asc,sum(t.amount) desc,t.dpid asc';
 		}elseif($text==2){
 			$criteria->group ='t.product_id,month(t.update_at)';
-			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,sum(t.amount) desc,t.dpid asc';
 		}else{
 			$criteria->group ='t.product_id,day(t.update_at)';
-			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,sum(t.amount) desc,t.dpid asc';
 		}
 	
 		//$criteria->order = 't.update_at asc,t.dpid asc';
@@ -493,6 +509,7 @@ public function actionPayallReport(){
 				'text'=>$text,
 				'str'=>$str,
 				'comName'=>$comName,
+				'ordertype'=>$ordertype,
 				//'catId'=>$catId
 		));
 	}
