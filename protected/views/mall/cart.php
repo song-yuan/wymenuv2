@@ -10,7 +10,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
 <?php if($this->type==1):?>
-<div class="site_no">桌号:<input type="text" class="serial" value="<?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="请在这里输入座位号" /></div>
+<div class="site_no">桌号:<input type="text" class="serial" value="<?php if($siteType){echo $siteType['name'];}?><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" />人数:<input type="text" class="number" value="" placeholder="输入人数" /></div>
 <?php endif;?>
 <?php foreach($models as $model):?>
 <div class="section">
@@ -51,10 +51,19 @@ $(document).ready(function(){
 	<?php endif;?>
 	$('.checkOrder').click(function(){
 		var serial = $('.serial').val();
-		if(serial){
-			location.href = '<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>&serial='+serial;
+		var number = $('.number').val();
+		if(serial && number){
+			location.href = '<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>&serial='+serial+'&number='+number;
 		}else{
-			layer.msg('请输入座位号!');
+			if(!serial){
+				layer.msg('请输入座位号!');
+				return;
+			}
+			if(!number){
+				layer.msg('请输入人数!');
+				return;
+			}
+			
 		}
 	});
 	

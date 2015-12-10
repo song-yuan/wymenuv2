@@ -56,7 +56,7 @@ class WxCart
 					foreach($cartPromotions as $promotion){
 						$privatePromotion = WxPromotion::getPromotion($this->dpid,$promotion['privation_promotion_id']);
 						if($privatePromotion['promotion_type']==0){
-							return array('status'=>false,'msg'=>'已经参加其他活动!');
+							return array('status'=>false,'msg'=>'本活动不与其他活动同时使用!');
 						}
 					}
 				}
