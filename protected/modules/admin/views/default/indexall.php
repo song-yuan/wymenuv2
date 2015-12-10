@@ -852,15 +852,15 @@
                                 var successjobs="00000000";
                                 if(typeof(Androidwymenuprinter)=="undefined")
                                 {
-                                    return;
+                                    //return;
                                 }
                                 var times=0;
                                 $.each(msg.ret9arr,function(key,value){
-                                    setTimeout("Androidwymenuprinter.ordercall("+value+")", 6000*times+1000 );
+                                    setTimeout("Androidwymenuprinter.ordercall('"+value+"')", 6000*times+1000 );
                                     times++;
                                 });
                                 $.each(msg.ret8arr,function(key,value){
-                                    setTimeout("Androidwymenuprinter.paycall("+value+")", 6000*times+1000 );
+                                    setTimeout("Androidwymenuprinter.paycall('"+value+"')", 6000*times+1000 );
                                     times++;
                                 });
 //                                $.each(msg.modeljobs,function(key,value){
