@@ -911,6 +911,7 @@
                     });               
                 }
                 reloadsitestatelock=false;
+                setTimeout(reloadsitestate,"15000");
             }
             
             
@@ -924,8 +925,9 @@
                 //tab-content
                 tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSiteAll',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>';
                 $('#tabsiteindex').load(tabcurrenturl);
-                clearInterval(intervalQueueList);
-                intervalQueueList = setInterval(reloadsitestate,"15000");
+                //clearInterval(intervalQueueList);
+                //intervalQueueList = setInterval(reloadsitestate,"15000");
+                setTimeout(reloadsitestate,"15000");
             });
             
             function sitevisible()
