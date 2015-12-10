@@ -289,6 +289,15 @@ class MallController extends Controller
 //				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
 //			}
 //		}
+		$all = Yii::app()->request->getParam('all',0);
+		if($all){
+			$result = WxCart::clearCart($userId,$this->companyId);
+			if($result){
+				Yii::app()->end(json_encode(array('status'=>true,'msg'=>'清空成功!')));
+			}else{
+				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'清空失败,请重新操作!')));
+			}
+		}
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');
