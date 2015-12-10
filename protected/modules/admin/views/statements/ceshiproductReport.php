@@ -36,7 +36,14 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品销售报表');?></div>
 				<div class="actions">
-				
+					<select id="ordertype" class="btn yellow" >
+					<option value="0" <?php if ($ordertype==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
+					<option value="1" <?php if ($ordertype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>
+					<option value="2" <?php if ($ordertype==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信堂食');?></option>
+					<option value="3" <?php if ($ordertype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','外卖');?></option>
+					<option value="4" <?php if ($ordertype==4){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信外卖');?></option>
+					<option value="5" <?php if ($ordertype==5){?> selected="selected" <?php }?> ><?php echo yii::t('app','套餐');?></option>
+					</select>
 					<select id="text" class="btn yellow" >
 					<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
 					<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
@@ -85,6 +92,7 @@
 								</th>
 								<!-- <th><div class=""><php echo CHtml::dropdownlist('selectUser',$catId,$comName,array('class'=>'form-control'));?></div></th> -->
                                 <th><?php echo yii::t('app','单品名称');?></th>
+                                <th><?php echo yii::t('app','排名');?></th>
                                 <th><?php echo yii::t('app','销量');?></th>
                                 <th><?php echo yii::t('app','销售金额');?></th>                                                        
                                 <th><?php echo yii::t('app','折扣金额');?></th>
@@ -105,10 +113,11 @@
 								<td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
 								<td><?php echo $model->company->company_name;?></td>
 								<td><?php echo $model->product->product_name;?></td>
+								<td><?php echo $a+$pages->getCurrentPage()*10;?></td>
 								<td><?php echo $model->all_total;?></td>
-								<td><?php echo $model->all_jiage;?></td>
-								<td><?php echo $model->all_jiage-$model->all_price;?></td>
-								<td><?php echo $model->all_price;?></td>
+								<td><?php echo sprintf("%.2f",$model->all_jiage);?></td>
+								<td><?php echo sprintf("%.2f",$model->all_jiage-$model->all_price);?></td>
+								<td><?php echo sprintf("%.2f",$model->all_price);?></td>
 								<td><?php echo sprintf("%.2f",$model->all_jiage/$model->all_total);?></td>
 								<td><?php echo sprintf("%.2f",$model->all_price/$model->all_total);?></td>
 								<td></td>
@@ -179,12 +188,13 @@
 			  // alert($('#begin_time').val()); 
 			  // alert($('#end_time').val()); 
 			  // alert(111);
+			   var ordertype = $('#ordertype').val();
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
 			  // var cid = $(this).val();
 			 // alert ($('#text').val());
-			   location.href="<?php echo $this->createUrl('statements/productsalesReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype;
 			  
 	        });
 		   $('#selectUser').change(function(){
@@ -192,7 +202,7 @@
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/productsalesReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			});
 			$('#cx').click(function(){  
 				   // var obj = document.getElementById('accept');
@@ -215,7 +225,7 @@
 						   var text = $('#text').val();
 						   var cid = $(this).val();
 						   
-						 location.href="<?php echo $this->createUrl('statements/productsalesReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+						 location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 						  
 					//alert($('#cked').val());
 //	  			    if(obj.checked) {
@@ -233,7 +243,8 @@
 				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-
+							alert("<?php echo "然而你并没有权限！！！";?>");
+							return false;
 			    	   location.href="<?php echo $this->createUrl('statements/productsalesExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			       else{
