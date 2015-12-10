@@ -12,6 +12,12 @@
 <?php if($this->type==1):?>
 <div class="site_no">桌号:<input type="text" class="serial" value="<?php if($siteType){echo $siteType['name'];}?><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" />人数:<input type="text" class="number" value="" placeholder="输入人数" /></div>
 <?php endif;?>
+<div class="section" style="padding-top:0;color:#FF5151;">
+    <div class="prt">
+        <div class="prt-rt" id="clearCart" style="float:right;padding-left:30px; background-image: url(<?php echo $baseUrl;?>/img/icon_delete.png);background-size: auto 25px;background-repeat: no-repeat; background-position: left center;">清空全部</div>
+        <div class="clear"></div>
+    </div>
+</div>
 <?php foreach($models as $model):?>
 <div class="section">
 	<!--
@@ -53,6 +59,10 @@ $(document).ready(function(){
 		var serial = $('.serial').val();
 		var number = $('.number').val();
 		if(serial && number){
+			if(!isNaN(number)||(parseInt(number)!=number)||number < 0){
+				layer.msg('输入人数为大于0的整数!');
+				return;
+			}
 			location.href = '<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>&serial='+serial+'&number='+number;
 		}else{
 			if(!serial){
@@ -114,7 +124,20 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
- 
+  
+  $('#clearCart').click(function(){
+  		  $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/deleteCart',array('companyId'=>$this->companyId,'all'=>1));?>',
+        	success:function(msg){
+        		if(msg.status){
+			        location.href = '<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId));?>';
+        		}else{
+        			layer.msg(msg.msg);
+        		}
+        	},
+        	dataType:'json'
+        });
+  });
 function setTotal(){ 
     var s=0;
     var v=0;
