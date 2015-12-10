@@ -288,7 +288,7 @@
                                               div2.css("background-color","");
                                           }
                                           queuecall(msg.callno,msg.queuelid);
-                                   }
+                                   } 
                                  },
                                  error: function(msg){
                                      alert("网络可能有问题，再试一次！");
