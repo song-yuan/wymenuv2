@@ -1712,6 +1712,19 @@ class DefaultOrderController extends BackendController
 		));
 	}
         
+        public function actionSelectAllDiscount() {
+                $companyId=Yii::app()->request->getParam('companyId','0');
+                //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
+                //$db=Yii::app()->db;
+                $alldiscounts = Discount::model()->findAll(' dpid=:dpid and delete_flag = 0',array(':dpid'=>$companyId)); 
+                
+                //$alldiscountslist=CHtml::listData($alldiscounts, 'lid', 'discount_name','discount_num');
+                //var_dump($alldiscountslist);exit;
+                $this->renderPartial('selectalldiscount' , array(
+				'alldiscounts'=>$alldiscounts
+		));
+	}
+        
         public function actionEditRetreat() {
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $orderRetreatId=Yii::app()->request->getParam('orderRetreatId','0');
@@ -1787,8 +1800,7 @@ class DefaultOrderController extends BackendController
                         //var_dump($selsetlist,$isset);exit;
                         $db = Yii::app()->db;
                         $transaction = $db->beginTransaction();
-                        try {  
-                            
+                        try {                           
                             if($isset==0)
                             {                        
                                 

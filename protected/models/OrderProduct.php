@@ -332,6 +332,108 @@ class OrderProduct extends CActiveRecord
 		return $db->createCommand($sql)->queryAll();
 	}
         
+        static public function setOrderCall($dpid){
+            $db = Yii::app()->db;
+            $retarr=array();
+            $temparr=array();
+            $lidlistarr=array("0000000000"=>"0000000000");
+            //$lidlisttemp="";
+            $lidlistproduct="0000000000";
+            $transaction = $db->beginTransaction();
+            try {
+		$sqlorderproduct="select tp.lid,tp.order_id,t.site_id,t.is_temp from nb_order_product tp"
+                        . " LEFT JOIN nb_order t on t.dpid=tp.dpid and t.lid=tp.order_id"
+                        . " where tp.product_order_status='9' and tp.dpid="
+                        .$dpid." order by tp.order_id";                
+                $modelorderproduct=$db->createCommand($sqlorderproduct)->queryAll();
+                foreach ( $modelorderproduct as $mop)
+                {
+                    if($mop["is_temp"]=="1")
+                    {
+                        $lidlistproduct.=",".$mop["lid"];
+                        $temparr[$mop["order_id"]]="临时座位".$mop["lid"]%1000;
+                    }else{
+                        $lidlistproduct.=",".$mop["lid"];
+                        $lidlistarr[$mop["order_id"]]=$mop["site_id"];
+                    }
+                }
+                
+                $db->createCommand("update nb_order_product set product_order_status='0'"
+                        . " where lid in (".$lidlistproduct.") and product_order_status='9'"
+                        . " and dpid=".$dpid)->execute();
+                
+                $sqlsite="select concat(ifnull(tt.name,''),ifnull(t.serial,'')) as name from nb_site t "
+                        . " LEFT JOIN nb_site_type tt on t.type_id=tt.lid and t.dpid =tt.dpid"
+                        . " where t.dpid=".$dpid." and t.lid in (".implode(",",$lidlistarr).")";
+                //var_dump($sqlsite);exit;
+                $modelsite=$db->createCommand($sqlsite)->queryAll();
+                //var_dump($modelsite);exit;
+                foreach ($modelsite as $value) {
+                    array_push($retarr, $value["name"]);
+                }  
+                foreach ($temparr as $value) {
+                    array_push($retarr, $value);
+                } 
+                //var_dump($retarr);exit;                
+                $transaction->commit();
+                            
+            } catch (Exception $e) {
+                $transaction->rollback();
+            }
+            return $retarr;
+	}
+        
+        static public function setPayCall($dpid){
+            $db = Yii::app()->db;
+            $retarr=array();
+            $temparr=array();
+            $lidlistarr=array("0000000000"=>"0000000000");
+            //$lidlisttemp="";
+            $lidlistproduct="0000000000";
+            $transaction = $db->beginTransaction();
+            try {
+		$sqlorderproduct="select tp.lid,tp.order_id,t.site_id,t.is_temp from nb_order_product tp"
+                        . " LEFT JOIN nb_order t on t.dpid=tp.dpid and t.lid=tp.order_id"
+                        . " where tp.product_order_status='8' and tp.dpid="
+                        .$dpid." order by tp.order_id";                
+                $modelorderproduct=$db->createCommand($sqlorderproduct)->queryAll();
+                foreach ( $modelorderproduct as $mop)
+                {
+                    if($mop["is_temp"]=="1")
+                    {
+                        $lidlistproduct.=",".$mop["lid"];
+                        $temparr[$mop["order_id"]]="临时座位".$mop["lid"]%1000;
+                    }else{
+                        $lidlistproduct.=",".$mop["lid"];
+                        $lidlistarr[$mop["order_id"]]=$mop["site_id"];
+                    }
+                }
+                
+                $db->createCommand("update nb_order_product set product_order_status='1'"
+                        . " where lid in (".$lidlistproduct.") and product_order_status='8'"
+                        . " and dpid=".$dpid)->execute();
+                
+                $sqlsite="select concat(ifnull(tt.name,''),ifnull(t.serial,'')) as name from nb_site t "
+                        . " LEFT JOIN nb_site_type tt on t.type_id=tt.lid and t.dpid =tt.dpid"
+                        . " where t.dpid=".$dpid." and t.lid in (".implode(",",$lidlistarr).")";
+                //var_dump($sqlsite);exit;
+                $modelsite=$db->createCommand($sqlsite)->queryAll();
+                //var_dump($modelsite);exit;
+                foreach ($modelsite as $value) {
+                    array_push($retarr, $value["name"]);
+                }  
+                foreach ($temparr as $value) {
+                    array_push($retarr, $value);
+                } 
+                //var_dump($retarr);exit;                
+                $transaction->commit();
+                            
+            } catch (Exception $e) {
+                $transaction->rollback();
+            }
+            return $retarr;
+	}
+        
         static public function setPauseJobs($compayId,$padId){
 		$sqljoborder="select distinct order_id from nb_order_product where product_order_status='9' and dpid=".$compayId." order by order_id";
                 $modeljoborder=Yii::app()->db->createCommand($sqljoborder)->queryAll();                        

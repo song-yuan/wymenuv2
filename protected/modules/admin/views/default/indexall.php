@@ -536,7 +536,7 @@
                                         <div>
                                             <div style="width: 95%;margin:1.0em;font-size: 1.5em;">
                                                     <DIV style="float:left;width:27%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','总额');?><span id="payOriginAccount">10000.23</span></DIV>
-                                                    <DIV class="edit_span" selectid="discount" style="float:left;width:15%;background-color:#9acfea;"><?php echo yii::t('app','折扣');?><span id="payDiscountAccount">100%</span></DIV>
+                                                    <DIV id="payDiscountAccountDiv" class="edit_span" selectid="discount" style="float:left;width:15%;background-color:#9acfea;"><?php echo yii::t('app','折扣');?><span id="payDiscountAccount">100%</span></DIV>
                                                     <DIV class="edit_span" selectid="minus" style="float:left;width:20%;background-color:#9acfea;"><?php echo yii::t('app','优惠');?><span id="payMinusAccount">0</span></DIV>
                                                     <DIV class="" id="cancel_zero" style="float:left;width:10%;background-color:#9acfea;"><?php echo yii::t('app','抹零');?></DIV>
                                                     <DIV style="float:left;width:27%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','应付');?><span id="payShouldAccount">10000.23</span></DIV>
@@ -700,6 +700,10 @@
             <div id="retreatbox" style="display: none">
                 
             </div>
+            <!---------------折扣类型选择------------------>
+            <div id="alldiscountselect" style="display: none">
+                
+            </div>
         <script type="text/javascript">
             var gsid=0;
             var gistemp=0;
@@ -720,6 +724,7 @@
             var layer_index_printresult=0;
             var layer_index_membercard=0;
             var layer_index_retreatbox=0;
+            var layer_index_selectalldiscount=0;
             var first_tab="<?php echo empty($categories)?"0":$categories[0]['lid']; ?>";
             var ispaybuttonclicked=false;
             var intervalQueueList;
@@ -849,41 +854,50 @@
                                 {
                                     return;
                                 }
-                                $.each(msg.modeljobs,function(key,value){
-                                    printresult=false;
-                                    for(var itemp=1;itemp<4;itemp++)
-                                    {
-                                        if(printresult)
-                                        {
-                                            successjobs=successjobs+","+value.jobid;
-                                            break;
-                                        }
-                                        var addressdetail=value.address.split(".");
-                                        if(addressdetail[0]=="com")
-                                        {
-                                            var baudrate=parseInt(addressdetail[2]);
-                                            printresult=Androidwymenuprinter.printComJob(value.dpid,value.jobid,addressdetail[1],baudrate);
-                                        }else{
-                                            printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
-                                            //printresult=true;
-                                        }                                                                        
-                                    }
+                                var times=1;
+                                $.each(msg.ret9arr,function(key,value){
+                                    setTimeout("Androidwymenuprinter.ordercall("+value+")", 6000*times );
+                                    times++;
                                 });
-                                //alert(successjobs);
-                                if("00000000"!=successjobs)
-                                {
-                                    $.ajax({
-                                        url:"/wymenuv2/admin/defaultSite/finshPauseJobs/companyId/<?php echo $this->companyId; ?>/successjobs/"+successjobs,
-                                        type:'GET',
-                                        timeout:2000,
-                                        cache:false,
-                                        async:false,
-                                        dataType: "json",
-                                        success:function(msg){
-
-                                        }
-                                    });
-                                }
+                                $.each(msg.ret8arr,function(key,value){
+                                    setTimeout("Androidwymenuprinter.paycall("+value+")", 6000*times );
+                                    times++;
+                                });
+//                                $.each(msg.modeljobs,function(key,value){
+//                                    printresult=false;
+//                                    for(var itemp=1;itemp<4;itemp++)
+//                                    {
+//                                        if(printresult)
+//                                        {
+//                                            successjobs=successjobs+","+value.jobid;
+//                                            break;
+//                                        }
+//                                        var addressdetail=value.address.split(".");
+//                                        if(addressdetail[0]=="com")
+//                                        {
+//                                            var baudrate=parseInt(addressdetail[2]);
+//                                            printresult=Androidwymenuprinter.printComJob(value.dpid,value.jobid,addressdetail[1],baudrate);
+//                                        }else{
+//                                            printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
+//                                            //printresult=true;
+//                                        }                                                                        
+//                                    }
+//                                });
+//                                //alert(successjobs);
+//                                if("00000000"!=successjobs)
+//                                {
+//                                    $.ajax({
+//                                        url:"/wymenuv2/admin/defaultSite/finshPauseJobs/companyId/<?php echo $this->companyId; ?>/successjobs/"+successjobs,
+//                                        type:'GET',
+//                                        timeout:2000,
+//                                        cache:false,
+//                                        async:false,
+//                                        dataType: "json",
+//                                        success:function(msg){
+//
+//                                        }
+//                                    });
+//                                }
                             }                            
                         },
                         error: function(msg){
@@ -1943,8 +1957,8 @@
                                  layer_index_retreatbox=0;
                 //                        this.content.show();
                 //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
-                             }
-                         }); 
+                            }
+                        }); 
                     }
                 }else{ //下单前减少是整体的           
                     if(setid=="0000000000")
@@ -2070,6 +2084,28 @@
                  });  
              });
              
+             $('#payDiscountAccountDiv').on("click",function(){
+                //var lid=$(this).attr("lid");
+                $('#alldiscountselect').load("<?php echo $this->createUrl('defaultOrder/selectAllDiscount',array('companyId'=>$this->companyId));?>");
+                if(layer_index_selectalldiscount!=0)
+                {
+                    return;
+                }
+                layer_index_selectalldiscount=layer.open({
+                     type: 1,
+                     shade: false,
+                     title: false, //不显示标题
+                     area: ['60%', '40%'],
+                     content: $('#alldiscountselect'), //捕获的元素
+                     cancel: function(index){
+                         layer.close(index);
+                         layer_index_selectalldiscount=0;
+        //                        this.content.show();
+        //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                    }
+                }); 
+             });
+             
              $('#btn-reprint').on(event_clicktouchstart,function(){
                 var lid =$("#spanLid").text();
                 var orderid=$(".selectProduct").attr("orderid");
@@ -2170,6 +2206,7 @@
                 var payOthers=$("#payOthers").text();
                 if(selectid=="discount")
                 {   
+                    return;
                     if(nowval!="." && nowval!="00" && nowval!="10" && nowval!="20" && nowval!="50" && nowval!="100")
                     {
                         if(parseFloat(payDiscountAccount.replace(",",""))*10>100)
@@ -2221,7 +2258,7 @@
                             $("#payMinusAccount").html(payMinusAccount+nowval);
                         }
                     }                    
-                    $("#payDiscountAccount").text("100%");
+                    //$("#payDiscountAccount").text("100%");
                     payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
                     payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
                     payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
@@ -2577,7 +2614,7 @@
                     }else{
                         $("#payMinusAccount").text(payMinusAccount.substr(0,payMinusAccount.length-1));
                     }
-                    $("#payDiscountAccount").text("100%");
+                    //$("#payDiscountAccount").text("100%");
                     payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
                     productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                     payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
@@ -2732,7 +2769,7 @@
                 
                 if(selectid=="discount")
                 {   
-                    
+                        
                         $("#payDiscountAccount").text("100%");
                         payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
                         productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
