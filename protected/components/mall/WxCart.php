@@ -172,6 +172,7 @@ class WxCart
 	public static function clearCart($userId,$dpid){
 		$sql = 'delete from nb_cart where dpid='.$dpid.' and user_id='.$userId;
 		$result = Yii::app()->db->createCommand($sql)->execute();
+		return $result;
 	}
 	public static function updateSiteId($userId,$dpid,$siteId){
 		$isSync = DataSync::getInitSync();
