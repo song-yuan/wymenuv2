@@ -312,12 +312,12 @@
                                 var times=1;
                                 $.each(msg.ret9arr,function(key,value){
                                     alert(value);
-                                    setTimeout("Androidwymenuprinter.ordercall("+value+")", 6000*times );
+                                    setTimeout("Androidwymenuprinter.ordercall('"+value+"')", 6000*times );
                                     times++;
                                 });
                                 $.each(msg.ret8arr,function(key,value){
                                     alert(value);
-                                    setTimeout("Androidwymenuprinter.paycall("+value+")", 6000*times );
+                                    setTimeout("Androidwymenuprinter.paycall('"+value+"')", 6000*times );
                                     times++;
                                 });
 //                                $.each(msg.modeljobs,function(key,value){
