@@ -60,7 +60,6 @@
 		</div>
 	<script>
 		jQuery(document).ready(function() {       
-		   App.init();
 		    $('#btn_search').click(function(){
                 $.get('<?php echo $this->createUrl('/admin/wxcard/getwxcard',array('companyId'=>$this->companyId));?>&code='+$('#dealCode').val(),function(data){
                     if(data.status){

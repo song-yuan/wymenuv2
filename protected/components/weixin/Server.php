@@ -206,7 +206,6 @@ class Server {
 	    	 if(!empty($this->postArr['EventKey']) && (strpos($this->postArr['EventKey'], 'qrscene_')!==false)) {
 	    	 	$promotionPushs = WxPromotionActivity::getSubPush($this->brandId);
 	        	if(!empty($promotionPushs)){
-	        		$subPushs = array();
 	        		foreach($promotionPushs as $push){
 	        			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
 	        		}
