@@ -18,7 +18,7 @@
 		<div class="info">
 			<span><?php echo $user['nickname'];?></span><br>
 			<span class="small">会员卡号：<?php echo substr($user['card_id'],5);?></span><br>
-			<button type="button" class="bttnupdate">普通会员</button>
+			<button type="button" class="bttnupdate"><?php if($userLevel):?><?php echo $userLevel['level_name'];?><?php else:?>普通会员<?php endif;?></button>
 		</div>
 	</div>
 	

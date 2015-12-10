@@ -16,7 +16,16 @@ class WxBrandUser {
 			throw new Exception('不存在该会员信息');
 		return $brandUser;
 	}
-	
+	/**
+	 * 返回brandUser数组
+	 */
+	public static function getUserLevel($userLevelId,$dpid) {
+		$sql = 'SELECT * FROM nb_brand_user WHERE lid = ' .$userLevelId .' and dpid = '.$dpid.' and delete_flag=0';
+		$brandUserLevel = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!$brandUserLevel)
+			throw new Exception('不存在该会员等级信息');
+		return $brandUserLevel;
+	}
 	/**
 	 * 返回对应的openId 
 	 */
