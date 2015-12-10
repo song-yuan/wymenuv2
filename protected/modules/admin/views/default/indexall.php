@@ -854,13 +854,13 @@
                                 {
                                     return;
                                 }
-                                var times=1;
+                                var times=0;
                                 $.each(msg.ret9arr,function(key,value){
-                                    setTimeout("Androidwymenuprinter.ordercall("+value+")", 6000*times );
+                                    setTimeout("Androidwymenuprinter.ordercall("+value+")", 6000*times+1000 );
                                     times++;
                                 });
                                 $.each(msg.ret8arr,function(key,value){
-                                    setTimeout("Androidwymenuprinter.paycall("+value+")", 6000*times );
+                                    setTimeout("Androidwymenuprinter.paycall("+value+")", 6000*times+1000 );
                                     times++;
                                 });
 //                                $.each(msg.modeljobs,function(key,value){
@@ -924,8 +924,8 @@
                 //tab-content
                 tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSiteAll',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>';
                 $('#tabsiteindex').load(tabcurrenturl);
-//                clearInterval(intervalQueueList);
-//                intervalQueueList = setInterval(reloadsitestate,"15000");
+                clearInterval(intervalQueueList);
+                intervalQueueList = setInterval(reloadsitestate,"15000");
             });
             
             function sitevisible()
