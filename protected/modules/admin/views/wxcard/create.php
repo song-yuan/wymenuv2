@@ -218,7 +218,7 @@
 					hide.attr('name','logo');
 					hide.val(msg);
 					$('form').removeAttr('target');
-					$('#js_logo_url_preview').attr('src',msg);
+					$('#js_logo_url_preview').attr('src',<?php echo $baseUrl.'/';?>msg);
 				  }
 				});
 			});

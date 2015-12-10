@@ -3,9 +3,8 @@
    * statuse 0 图片格式不对 1 上传成功
    * 
    */
-   $baseUrl = Yii::app()->baseUrl;
   
-   $path=$baseUrl."/uploads/company_".$dpid."/weixin/card/"; //上传路径 
+   $path="/uploads/company_".$dpid."/weixin/card/"; //上传路径 
   if(!file_exists($path)) 
 	{ 
 	  //检查是否有该文件夹，如果没有就创建，并给予最高权限 
