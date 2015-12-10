@@ -8,36 +8,24 @@
 class WxCardQrcode {
 	public $db;
 	public $account;
-	public $brand;
+	public $dpid;
 	
-	public function __construct(Brand $brand,$cardId = null){
+	public function __construct($dpid,$cardId = null){
 		$this->db = Yii::app()->db;
-		$this->brand = $brand;
 		$this->cardId = $cardId;
-		$this->getWxAccount($this->brand->brand_id);
+		$this->dpid = $dpid;
+		$this->getWxAccount($dpid);
 	}
 	public function getWxAccount($brandId){
-		$this->account = WeixinServiceAccount::model()->find('brand_id=:brandId',array(':brandId'=>$this->brand->brand_id));
+		$this->account = WeixinServiceAccount::model()->find('dpid=:brandId',array(':brandId'=>$this->dpid));
 	}
 	/**
 	 * 生成access token
 	 */
 	public function genAccessToken(){
-		$accessTokenUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET';
-		if(!$this->account){
-			return false;
-		}
-		if($this->isOverdue()){
-			$accessTokenUrl = strtr($accessTokenUrl,array('APPID'=>$this->account['appid'],'APPSECRET'=>$this->account['appsecret']));
-			$result = json_decode(file_get_contents($accessTokenUrl),true);
-			if(!isset($result['access_token'])){
-				return false;
-			}
-			$this->account->expire = time()+$result['expires_in'];
-			$this->account->access_token = $result['access_token'];
-			$this->account->save();
-		}
-		return $this->account->access_token;
+		$wxSdk = new AccessToken($this->dpid);
+      	$accessToken = $wxSdk->accessToken;
+      	return $accessToken;
 	}
 	/**
 	 * token是否过期
@@ -49,42 +37,27 @@ class WxCardQrcode {
 	 * 获取场景ID
 	 */
 	public function getSceneId($type,$id,$expireTime = null){
-		$scene = Scene::model()->find('brand_id=:brandId and type=:type and id=:id',array(':brandId'=>$this->brand->brand_id,':type'=>$type,':id'=>$id));
+		$scene = Scene::model()->find('dpid=:brandId and type=:type and id=:id',array(':brandId'=>$this->dpid,':type'=>$type,':id'=>$id));
 		$sceneId = $scene?$scene->scene_id:false;
 		if($sceneId){
+			$isSync = DataSync::getAfterSync();
 			$scene->expire_time = $expireTime;
+			$scene->is_sync = $isSync;
 		    $scene->update();
 			return $sceneId;
 		}else{
-				$sql ='select max(scene_id) as maxId from yk_scene where brand_id = '.$this->brand->brand_id;
+				$sql ='select max(scene_id) as maxId from nb_scene where dpid = '.$this->brandId;
 				$maxSceneArr = $this->db->createCommand($sql)->queryRow();
 				
 				$maxSceneId = $maxSceneArr['maxId'];
-				if($maxSceneId>=100000){
-					$scene = Scene::model()->find('brand_id=:brandId and expire_time <:expire_time',array(':brandId'=>$this->brand->brand_id,':type'=>$type,':expire_time'=>time()));
-					if($scene){
-						$scene->saveAttributes(array('id'=>$id,'expire_time'=>$expireTime));
-					}else{
-						for($i=0;$i<50;$i++){
-							$sql = 'select scene_id from yk_scene where brand_id = '.$this->brand->brand_id.'limit '.($i*2000).',2000';
-							$allSceneId = $this->db->createCommand($sql)->queryAll();
-							$id = 1;
-							foreach($allSceneId as $value){
-								if($value==$id){
-									$id++;
-								}else{
-									$newSceneId = $id;
-									break 2;
-								}
-							}
-						}
-					}
-				}else{
-					$newSceneId = $maxSceneId+1;
-				}
+				$newSceneId = $maxSceneId+1;
+				
 				$scene = new Scene;
 				$time = time();
-				$scene->attributes = array('brand_id'=>$this->brand->brand_id,'scene_id'=>$newSceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime,'create_time'=>$time,'update_time'=>$time);
+				$isSync = DataSync::getAfterSync();
+				$se=new Sequence("scene");
+            	$lid = $se->nextval();
+				$scene->attributes = array('lid'=>$lid,'dpid'=>$this->brandId,'create_at'=>date('Y-m-d H:i:s',$time),'update_at'=>date('Y-m-d H:i:s',$time),'scene_id'=>$newSceneId,'type'=>$type,'id'=>$id,'expire_time'=>$expireTime,'is_sync'=>$isSync);
 				$scene->save();				
 			}
 			return $scene->scene_id;
@@ -115,8 +88,8 @@ class WxCardQrcode {
 	 */
     public function genDir(){
    		$path = Yii::app()->basePath.'/../upload';
-   		if($this->brand->company_id){
-   			$path .= '/company_'.$this->brand->company_id;
+   		if($this->dpid){
+   			$path .= '/company_'.$this->dpid;
    			if(!is_dir($path)){
    				mkdir($path, 0777,true);
    			}

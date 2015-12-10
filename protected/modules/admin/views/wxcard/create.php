@@ -41,7 +41,7 @@
 			<?php $this->endContent();?>
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'营销管理','subhead'=>'添加卡券','breadcrumbs'=>array(array('word'=>'营销管理','url'=>''),array('word'=>'微信卡券','url'=>$this->createUrl('/brand/wxcard',array('cid'=>$this->companyId))),array('word'=>'添加卡券','url'=>'')),'back'=>array('word'=>'返回','url'=>array('/brand/wxcard','cid'=>$this->companyId))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'营销管理','subhead'=>'添加卡券','breadcrumbs'=>array(array('word'=>'营销管理','url'=>''),array('word'=>'微信卡券','url'=>$this->createUrl('/brand/wxcard',array('cid'=>$this->companyId))),array('word'=>'添加卡券','url'=>'')),'back'=>array('word'=>'返回','url'=>array('/admin/wxcard/index','companyId'=>$this->companyId))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">

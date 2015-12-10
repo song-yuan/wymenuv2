@@ -91,10 +91,11 @@ class WxcardController extends BackendController{
       	$type = Yii::app()->request->getParam('type',0);
       	$model = new WeixinCard;
       	
-      	$wxSdk = new WxSdk($this->companyId);
-      	$accessToken = $wxSdk->getAccessToken();
       	if(Yii::app()->request->isPostRequest)
 		{
+			$wxSdk = new AccessToken($this->companyId);
+      		$accessToken = $wxSdk->accessToken;
+      		
 			$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
      		$url = "$protocol$_SERVER[HTTP_HOST]";
 	        $logoUrl = $url.'/'.$_POST['logo'];
@@ -215,7 +216,7 @@ class WxcardController extends BackendController{
 					$transaction->commit();
 				}catch (Exception $e) {
             		$transaction->rollback();
-            		$msg = '云卡服务器创建失败,请去微信后台!';
+            		$msg = '创建失败,请去微信后台!';
             		Yii::app()->user->setFlash('error',$msg);
             		$this->redirect(array('/brand/wxcard/index','cid'=>$this->companyId));
        			 }
@@ -226,17 +227,23 @@ class WxcardController extends BackendController{
 			
 			$this->redirect(array('/admin/wxcard/index','companyId'=>$this->companyId));
 		}
-		//获取卡券颜色列表
-		$url = 'https://api.weixin.qq.com/card/getcolors?access_token='.$accessToken;
-		$data = Curl::httpsRequest($url);
-		$dataObj = json_decode($data);
-		if($dataObj->errmsg=="ok"){
-			$colors = $dataObj->colors;
-		}else{
-			Yii::app()->user->setFlash('error',$dataObj->errmsg);
-			$this->redirect(array('/admin/wxcard/index','companyId'=>$this->companyId));
-		}
-//		$colors = array();
+		
+		$colors = array(
+						array('name'=>'Color010','value'=>'#63b359'),
+						array('name'=>'Color020','value'=>'#2c9f67'),
+						array('name'=>'Color030','value'=>'#509fc9'),
+						array('name'=>'Color040','value'=>'#5885cf'),
+						array('name'=>'Color050','value'=>'#9062c0'),
+						array('name'=>'Color060','value'=>'#d09a45'),
+						array('name'=>'Color070','value'=>'#e4b138'),
+						array('name'=>'Color080','value'=>'#ee903c'),
+						array('name'=>'Color081','value'=>'#f08500'),
+						array('name'=>'Color082','value'=>'#a9d92d'),
+						array('name'=>'Color090','value'=>'#dd6549'),
+						array('name'=>'Color100','value'=>'#cc463d'),
+						array('name'=>'Color101','value'=>'#cf3e36'),
+						array('name'=>'Color102','value'=>'#5E6671'),
+						);
 		$this->render('create',array(
 			'model'=>$model,'colors'=>$colors,'type'=>$type,
 		));
@@ -259,11 +266,10 @@ class WxcardController extends BackendController{
        */
       public function actionDetail(){
       	$id = Yii::app()->request->getParam('id');
-		$brand = Yii::app()->admin->getBrand($this->companyId);
-		$wxCard = WeixinCard::model()->findByPk($id);
+		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
-		$wxSdk = new WxSdk($brand->brand_id);
-      	$accessToken = $wxSdk->getAccessToken();
+		$wxSdk = new AccessToken($this->companyId);
+      	$accessToken = $wxSdk->accessToken;
       	$url = 'https://api.weixin.qq.com/card/get?access_token='.$accessToken;
       	$postData = '{"card_id":"'.$wxCard->card_id.'"}';
       	$result = $wxSdk->https_request($url,$postData);
@@ -273,7 +279,7 @@ class WxcardController extends BackendController{
 			$this->render('detail',array('cardInfo'=>$result->card));
 		}else{
 			Yii::app()->user->setFlash('error',$dataObj->errmsg);
-			$this->redirect(array('/brand/wxcard/index','cid'=>$this->companyId));
+			$this->redirect(array('/admin/wxcard/index','cid'=>$this->companyId));
 		}
       }
       /**
@@ -282,38 +288,38 @@ class WxcardController extends BackendController{
        * 
        */
     public function actionDelete(){
-       	$id = Yii::app()->request->getParam('id');
-		$brand = Yii::app()->admin->getBrand($this->companyId);
+        $id = Yii::app()->request->getParam('id');
+		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
-		$wxCard = WeixinCard::model()->findByPk($id);
-		$wxSdk = new WxSdk($brand->brand_id);
-      	$accessToken = $wxSdk->getAccessToken();
+		$wxSdk = new AccessToken($this->companyId);
+      	$accessToken = $wxSdk->accessToken;
+      	
       	$url = 'https://api.weixin.qq.com/card/delete?access_token='.$accessToken;
       	$postData = '{"card_id":"'.$wxCard->card_id.'"}';
       	$result = $wxSdk->https_request($url,$postData);
 		$result = json_decode($result);
 //		var_dump($result->card->cash);exit;
 		if($result->errmsg=="ok"){
+			$isSync = DataSync::getAfterSync();
 			$wxCard->delete_flag = 1;
-			$wxCard->save();
+			$wxCard->is_sync = $isSync;
+			$wxCard->update();
 			Yii::app()->admin->setFlash('success','删除成功!');
 		}else{
 			Yii::app()->admin->setFlash('error',$dataObj->errmsg);
 		}
-		$this->redirect(array('/brand/wxcard/index','cid'=>$this->companyId));
+		$this->redirect(array('/admin/wxcard/index','cid'=>$this->companyId));
      }
      //卡券统计
       public function actionCardUser(){
        	$id = Yii::app()->request->getParam('id');
-		$brand = Yii::app()->admin->getBrand($this->companyId);
-		
-		$wxCard = WeixinCard::model()->findByPk($id);
+		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$criteria = new CDbCriteria;
-		$criteria->with = array('brandUser','friendUser');
-		$criteria->order = ' t.id desc';
-		$criteria->addCondition('t.card_id=:cardId');
-		$criteria->addCondition('t.delete_flag=0');
+		
+		$criteria->order = ' lid desc';
+		$criteria->addCondition('card_id=:cardId');
+		$criteria->addCondition('delete_flag=0');
 		$criteria->params[':cardId'] = $wxCard->card_id;
 		
 	    $pages = new CPagination(WeixinCardUser::model()->count($criteria));
@@ -326,17 +332,15 @@ class WxcardController extends BackendController{
       }
       //卡券核销
       public function actionConsume(){
-		$brand = Yii::app()->admin->getBrand($this->companyId);
-		
-		$this->render('consume',array('brand'=>$brand));
+		$this->render('consume',array('companyId'=>$this->companyId));
       }
        //卡券 查询code
       public function actionGetwxcard(){
       	$code = Yii::app()->request->getParam('code');
-		$brand = Yii::app()->admin->getBrand($this->companyId);
 		
-		$wxSdk = new WxSdk($brand->brand_id);
-      	$accessToken = $wxSdk->getAccessToken();
+		$wxSdk = new AccessToken($this->companyId);
+      	$accessToken = $wxSdk->accessToken;
+      	
       	$url = 'https://api.weixin.qq.com/card/code/get?access_token='.$accessToken;
       	$postData = '{"code":"'.$code.'"}';
       	$result = $wxSdk->https_request($url,$postData);
@@ -359,10 +363,9 @@ class WxcardController extends BackendController{
        //卡券 消耗code
       public function actionConfirmCard(){
       	$code = Yii::app()->request->getParam('code');
-		$brand = Yii::app()->admin->getBrand($this->companyId);
-		
-		$wxSdk = new WxSdk($brand->brand_id);
-      	$accessToken = $wxSdk->getAccessToken();
+      	
+		$wxSdk = new AccessToken($this->companyId);
+      	$accessToken = $wxSdk->accessToken;
       	$url = 'https://api.weixin.qq.com/card/code/consume?access_token='.$accessToken;
       	$postData = '{"code":"'.$code.'"}';
       	$result = $wxSdk->https_request($url,$postData);
@@ -382,12 +385,11 @@ class WxcardController extends BackendController{
 	 */
 	public function actionPrintWeixinCard(){
 		$id = Yii::app()->request->getParam('id');
-		$brand = Yii::app()->admin->getBrand($this->companyId);
-		$wxCard = WeixinCard::model()->findByPk($id);
+		$wxCard =  WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$data = array('msg'=>'请求失败！','status'=>false,'qrcode'=>'');
-		$wxCardQrcode = new WxCardQrcode($brand,$wxCard->card_id);
-		$qrcode = $wxCardQrcode->getQrcode(12,1,time()+7*24*3600);
+		$wxCardQrcode = new WxCardQrcode($this->companyId,$wxCard->card_id);
+		$qrcode = $wxCardQrcode->getQrcode(12,$id,time()+7*24*3600);
 		if($qrcode){
 			$wxCard->saveAttributes(array('qrcode'=>$qrcode));
 			$data['msg'] = '生成二维码成功！';
@@ -406,8 +408,7 @@ class WxcardController extends BackendController{
 		var_dump($result);exit;
 	}
 	public function actionUploadfile(){
-		$brand = Yii::app()->admin->getBrand($this->companyId);
-		$this->renderPartial('uploadfile',array('brand'=>$brand));
+		$this->renderPartial('uploadfile',array('dpid'=>$this->companyId));
 	}
 } 
 ?>

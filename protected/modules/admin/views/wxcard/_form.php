@@ -126,11 +126,9 @@
 						<label class="control-label col-md-2 label-right">卡券颜色</label>
 						<div class="col-md-4">
 						 <select class="form-control" name="color">
-						 <?php if($colors):?>
 						 <?php foreach($colors as $color):?>
-							<option value="<?php echo $color->name?>" style="background-color:<?php echo $color->value?>"></option>
+							<option value="<?php echo $color['name'];?>" style="background-color:<?php echo $color['value'];?>"></option>
 						 <?php endforeach;?>
-						 <?php endif;?>
 						</select>
 						</div>
 						<input type="hidden" name="color_val" value="" />
