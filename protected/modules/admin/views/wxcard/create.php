@@ -206,6 +206,7 @@
 			});
 			//上传图片
 			$('.cover').change(function(){
+				var baseUrl = '<?php echo $baseUrl.'/';?>';
 				var url = '<?php echo $this->createUrl('/admin/wxcard/uploadfile',array('companyId'=>$this->companyId));?>';
 				$('#WeixinCard').attr('action',url);
 				$('#WeixinCard').ajaxSubmit(function(msg){
@@ -218,7 +219,7 @@
 					hide.attr('name','logo');
 					hide.val(msg);
 					$('form').removeAttr('target');
-					$('#js_logo_url_preview').attr('src',<?php echo $baseUrl.'/';?>msg);
+					$('#js_logo_url_preview').attr('src',baseUrl+msg);
 				  }
 				});
 			});
