@@ -26,6 +26,7 @@ class OrderPay extends CActiveRecord
         public $reality_all;
         public $all_total;
         public $all_huiyuan;
+        public $all_num;
 	/**
 	 * @return string the associated database table name
 	 */

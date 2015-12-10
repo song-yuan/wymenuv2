@@ -289,6 +289,151 @@ class StatementsController extends BackendController
 				//'categoryId'=>$categoryId
 		));
 	}
+	
+	public function actionIncomeReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$download = Yii::app()->request->getParam('d');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$comName = $this->getComName();
+		$db = Yii::app()->db;
+	
+		//$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid='.$this->companyId.' group by t1.category_id order by t.update_at asc';
+		//var_dump($sql);exit;
+		if ($text==1) {
+			if($str){
+				//var_dump($text);exit;
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+			}
+			$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+		}elseif ($text==2){
+			if ($str){
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
+									group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+			}
+			$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+		}elseif ($text==3){
+			if ($str){
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
+									group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+			}
+			$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+		}
+		if($download){
+			$models = $db->createCommand($sql)->queryAll();
+			//var_dump($models);exit;
+			$this->exportIncomeReport($models,$text);
+			exit;
+		}
+		//$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid='.$this->companyId.' group by t1.category_id order by t.update_at asc';
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		//$models = Yii::app()->db->createCommand($sql)->queryAll();
+		//var_dump($models);exit;
+		//$comName = $this->getComName();
+	
+		$this->render('incomeReport',array(
+		'models'=>$models,
+		'pages'=>$pages,
+		'begin_time'=>$begin_time,
+		'end_time'=>$end_time,
+		'text'=>$text,
+		'str'=>$str,
+		//'catname'=>$Catname,
+		'comName'=>$comName,
+		//'categories'=>$categories,
+		//'categoryId'=>$categoryId
+		));
+	}
+	
+	/*
+	 * 收款统计报表（支付方式）
+	 */
+public function actionPayallReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$download = Yii::app()->request->getParam('d');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
+
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
+		$criteria->with = array('company','order8','paymentMethod');
+		$criteria->condition = ' t.dpid='.$this->companyId ;
+		if($str){
+			$criteria->condition = ' and t.dpid in('.$str.')';
+		}
+		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+// 		$criteria->addCondition("order8.update_at >='$begin_time 00:00:00'");
+// 		$criteria->addCondition("order8.update_at <='$end_time 23:59:59'");
+		if($text==1){
+			$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+		}elseif($text==2){
+			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,month(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+		}elseif($text==3){
+			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,day(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+		}
+		//$criteria->order = 't.update_at asc,t.dpid asc';
+		//$criteria->group = 't.paytype,t.payment_method_id';
+		if($download){
+			//$model = OrderPay::model()->findAll($criteria);
+			//var_dump($models);exit;
+			$this->actionPayallExport($criteria,$text);
+			exit;
+		}
+		$pages = new CPagination(OrderPay::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		//var_dump($criteria);exit;
+	    $model = OrderPay::model()->findAll($criteria);
+	   	//var_dump($model);exit;
+	    $comName = $this->getComName();
+		$this->render('payallReport',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				//'money'=>$money,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
 	/**
 	 * 
 	 * 订单统计报表
@@ -354,6 +499,7 @@ class StatementsController extends BackendController
 		$sql = 'select sum(number) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59"';
 		if($download){
 			$model = Yii::app()->db->createCommand($sql)->queryRow();
+			//var_dump($models);exit;
 			$this->exportDiningNum($model);
 			exit;
 		}
@@ -426,6 +572,64 @@ class StatementsController extends BackendController
 		}
 		$data[] = $arr;
  		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
+	}
+	
+	
+	private function exportIncomeReport($models,$text,$params=array(),$export = 'xml'){
+		if($text == 1){
+		$attributes = array(
+				
+				'id'=>'序号',
+				'y_all'=>'年',
+				'company_name'=>'店铺',
+			'category_name'=>'菜品二级分类',
+ 				'all_price'=>'金额',
+ 				'all_num'=>'单数',
+				
+		);
+		}
+		elseif ($text==2){
+			$attributes = array(
+			
+					'id'=>'序号',
+					'y_all'=>'年',
+					'm_all'=>'月',
+					'company_name'=>'店铺',
+					'category_name'=>'菜品二级分类',
+					'all_price'=>'金额',
+					'all_num'=>'单数',
+					
+			);
+		}
+		elseif ($text==3){
+			$attributes = array(
+			
+					'id'=>'序号',
+					'y_all'=>'年',
+					'm_all'=>'月',
+					'd_all'=>'日',
+					'company_name'=>'店铺',
+					'category_name'=>'菜品二级分类',
+					'all_price'=>'金额',
+					'all_num'=>'单数',
+			);
+		}
+		$data[1] = array_values($attributes);
+		$fields = array_keys($attributes);
+			
+	foreach($models as $k=>$model){
+			$arr = array();
+			foreach($fields as $f){
+				if($f == 'id'){
+					$arr[] = $k+1;
+				}else{
+					$arr[] = $model[$f];
+				}
+			}
+			$data[] = $arr;
+		}
+		//$data[] = $arr;
+		Until::exportFile($data,$export,$fileName=date('Y_m_d_H_i_s'));
 	}
 	/**
 	 * 
@@ -1688,6 +1892,749 @@ class StatementsController extends BackendController
 		$objWriter->save('php://output');
 	
 	}	
+	
+	
+	public function actionIncomeExport(){
+		$objPHPExcel = new PHPExcel();
+	$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$download = Yii::app()->request->getParam('d');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$comName = $this->getComName();
+		$db = Yii::app()->db;
+	
+		//$sql = 'select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t1.dpid,t1.lid,t2.lid,t2.dpid,t2.category_name,t3.company_name from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid )where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid='.$this->companyId.' group by t1.category_id order by t.update_at asc';
+		//var_dump($sql);exit;
+		if ($text==1) {
+			if($str){
+				//var_dump($text);exit;
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+			}
+			$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,year(t.update_at) order by year(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+		}elseif ($text==2){
+			if ($str){
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
+									group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+			}
+			$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,month(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+		}elseif ($text==3){
+			if ($str){
+				$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+							t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+							where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$str.') and t4.order_status = 8
+									group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+			}
+			$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.amount) as all_num,
+						t.lid,t.dpid,t.update_at,t.product_id,t.price,sum(t.price) as all_price,t1.category_id,t2.category_name,t3.company_name
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status = 1 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status = 8
+								group by t1.category_id,t.dpid,day(t.update_at) order by year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,sum(t.price) desc,t.dpid asc)k';
+		}
+		$model = Yii::app()->db->createCommand($sql)->queryAll();
+		//var_dump($model);exit;
+		//设置第1行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+		//设置第2行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(17);
+		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+		//设置字体
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		$styleArray1 = array(
+				'font' => array(
+						'bold' => true,
+						'color'=>array(
+								'rgb' => '000000',
+						),
+						'size' => '20',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		$styleArray2 = array(
+				'font' => array(
+						'color'=>array(
+								'rgb' => 'ff0000',
+						),
+						'size' => '16',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		// 			//大边框样式 边框加粗
+					$lineBORDER = array(
+							'borders' => array(
+									'outline' => array(
+											'style' => PHPExcel_Style_Border::BORDER_THICK,
+											'color' => array('argb' => '000000'),
+									),
+							),
+					);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+		//细边框样式
+					$linestyle = array(
+							'borders' => array(
+									'outline' => array(
+											'style' => PHPExcel_Style_Border::BORDER_THIN,
+											'color' => array('argb' => 'FF000000'),
+									),
+							),
+					);
+			
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1',yii::t('app','营业收入报表（产品分类）'))
+		->setCellValue('A2',yii::t('app','报表生成时间：').date('Y-m-d h:i:s',time()))
+		->setCellValue('A3',yii::t('app','时间'))
+		->setCellValue('B3',yii::t('app','店铺名称'))
+		->setCellValue('C3',yii::t('app','产品分类'))
+		->setCellValue('D3',yii::t('app','单数'))
+		->setCellValue('E3',yii::t('app','金额统计'))
+		->setCellValue('F3',yii::t('app','备注'));
+		$j=4;
+		foreach($model as $v){
+			//var_dump($v);exit;
+			//print_r($v);exit;
+			if ($text==1){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$j,$v['y_all'])
+				->setCellValue('B'.$j,$v['company_name'])
+				->setCellValue('C'.$j,$v['category_name'])
+				->setCellValue('D'.$j,$v['all_num'])
+				->setCellValue('E'.$j,$v['all_price'])
+				->setCellValue('F'.$j);
+			}elseif ($text==2){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$j,$v['y_all'].'-'.$v['m_all'])
+				->setCellValue('B'.$j,$v['company_name'])
+				->setCellValue('C'.$j,$v['category_name'])
+				->setCellValue('D'.$j,$v['all_num'])
+				->setCellValue('E'.$j,$v['all_price'])
+				->setCellValue('F'.$j);
+			}elseif ($text==3){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$j,$v['y_all'].'-'.$v['m_all'].'-'.$v['d_all'])
+				->setCellValue('B'.$j,$v['company_name'])
+				->setCellValue('C'.$j,$v['category_name'])
+				->setCellValue('D'.$j,$v['all_num'])
+				->setCellValue('E'.$j,$v['all_price'])
+				->setCellValue('F'.$j);
+			}
+			//单元格高度自适应
+			//$objPHPExcel->getActiveSheet()->getDefaultRowDimension('A'.$i.':N'.$j)->setRowHeight(-1);
+			//单元格换行
+			//            $objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setWrapText(true);
+			//            $objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
+			//长度不够显示的时候换行
+			//$objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setShrinkToFit(true);
+			//$objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
+			//使用数组定义L列的样式
+			//$objPHPExcel->getActiveSheet()->getStyle('L'.$j)->applyFromArray($styleArray2);
+			//设置字体垂直居中
+			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+			//设置字体水平居中
+			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			//$objPHPExcel->getActiveSheet()->getStyle('A3'.$j.':E3'.$j)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			//设置填充颜色
+			$objPHPExcel->getActiveSheet()->getStyle('A2:F'.$j)->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
+			//设置字体靠左
+			$objPHPExcel->getActiveSheet()->getStyle('D'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':D'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objPHPExcel->getActiveSheet()->getStyle('E'.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+			//$objPHPExcel->getActiveSheet()->getStyle('N'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			//细边框样式引用
+			//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
+			$j++;
+		}
+		//大边框样式引用
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F'.$j)->applyFromArray($lineBORDER);
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
+		//单元格加粗，居中：
+	
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+	
+	
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+	
+	
+	
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="营业收入报表（产品分类）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+	
+	}
+	//导出支付方式的报表
+	public function actionPayallExport(){
+			$objPHPExcel = new PHPExcel();
+	$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$download = Yii::app()->request->getParam('d');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
+
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
+		$criteria->with = array('company','order8','paymentMethod');
+		$criteria->condition = ' t.dpid='.$this->companyId ;
+		if($str){
+			$criteria->condition = ' and t.dpid in('.$str.')';
+		}
+		$criteria->addCondition("order8.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("order8.update_at <='$end_time 23:59:59'");
+		if($text==1){
+			$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+		}elseif($text==2){
+			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,month(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+		}elseif($text==3){
+			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,day(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+		}
+			//$criteria->order = 't.update_at asc';
+			//var_dump($criteria);exit;
+			$model = OrderPay::model()->findAll($criteria);
+			//print_r($model);exit;
+			
+			
+			
+			//设置第1行的行高
+			$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+			//设置第2行的行高
+			$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(17);
+			$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+			//设置字体
+			$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+			$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+			$styleArray1 = array(
+					'font' => array(
+							'bold' => true,
+							'color'=>array(
+									'rgb' => '000000',
+							),
+							'size' => '20',
+					),
+					'alignment' => array(
+							'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+							'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					),
+			);
+			$styleArray2 = array(
+					'font' => array(
+							'color'=>array(
+									'rgb' => 'ff0000',
+							),
+							'size' => '16',
+					),
+					'alignment' => array(
+							'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+							'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+					),
+			);
+			//大边框样式 边框加粗
+			$lineBORDER = array(
+					'borders' => array(
+							'outline' => array(
+									'style' => PHPExcel_Style_Border::BORDER_THICK,
+									'color' => array('argb' => '000000'),
+							),
+					),
+			);
+			//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+			//细边框样式
+			$linestyle = array(
+					'borders' => array(
+							'outline' => array(
+									'style' => PHPExcel_Style_Border::BORDER_THIN,
+									'color' => array('argb' => 'FF000000'),
+							),
+					),
+			);
+			
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A1',yii::t('app','营业收入报表（支付方式）'))
+			->setCellValue('A2',yii::t('app','报表生成时间：').date('Y-m-d h:i:s',time()))
+			->setCellValue('A3',yii::t('app','时间'))
+			->setCellValue('B3',yii::t('app','店铺名称'))
+			->setCellValue('C3',yii::t('app','支付方式'))
+			->setCellValue('D3',yii::t('app','单数'))
+			->setCellValue('E3',yii::t('app','金额统计'))
+			->setCellValue('F3',yii::t('app','备注'));
+			$j=4;
+			foreach($model as $v){
+				//print_r($v);
+				if ($text==1){
+					switch($v->paytype) {
+					case 0:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','现金支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 1:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','微信支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 2:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','支付宝支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 3:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,$v->paymentMethod->name)
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 4:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 5:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 5:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 6:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',''))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 7:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',''))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 8:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',''))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 9:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','微信代金券'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 10:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','微信会员余额'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					default :
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',""))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						
+				}}elseif ($text==2){
+					switch($v->paytype) {
+					case 0:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','现金支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 1:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','微信支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 2:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','支付宝支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 3:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,$v->paymentMethod->name)
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 4:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 5:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 6:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',''))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 7:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',''))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 8:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',''))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 9:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','微信代金券'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 10:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','微信会员余额'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					default :
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',""))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+				}}elseif ($text==3){
+					switch($v->paytype) {
+					case 0:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','现金支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 1:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','微信支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 2:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','支付宝支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 3:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,$v->paymentMethod->name)
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						case 4:
+							$objPHPExcel->setActiveSheetIndex(0)
+							->setCellValue('A'.$j,$v->y_all)
+							->setCellValue('B'.$j,$v->company->company_name)
+							->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+							->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+							break;
+					break;
+					case 5:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+					break;
+					case 6:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',''))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 7:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',''))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 8:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',''))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 9:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','微信代金券'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					case 10:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','微信会员余额'))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+						break;
+					default :
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app',""))
+						->setCellValue('D'.$j,$v->all_num)
+						->setCellValue('E'.$j,$v->all_reality)
+						->setCellValue('F'.$j);
+				}
+				}
+				$objPHPExcel->getActiveSheet()->getStyle('A2:F'.$j)->applyFromArray($linestyle);
+				$objPHPExcel->getActiveSheet()->getStyle('A3'.$j.':F3'.$j)->applyFromArray($linestyle);
+				//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+				//单元格高度自适应
+				//$objPHPExcel->getActiveSheet()->getDefaultRowDimension('A'.$i.':N'.$j)->setRowHeight(-1);
+				//单元格换行
+				//            $objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setWrapText(true);
+				//            $objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
+				//长度不够显示的时候换行
+				//$objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setShrinkToFit(true);
+				//$objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
+				//使用数组定义L列的样式
+				//$objPHPExcel->getActiveSheet()->getStyle('L'.$j)->applyFromArray($styleArray2);
+				//设置字体垂直居中
+				//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+				//设置字体水平居中
+				//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				//$objPHPExcel->getActiveSheet()->getStyle('J'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				//设置填充颜色
+				$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+				$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
+				//设置字体靠左、靠右
+				$objPHPExcel->getActiveSheet()->getStyle('D'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+					
+				//$objPHPExcel->getActiveSheet()->getStyle('E'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,PHPExcel_Cell_DataType::TYPE_NUMERIC);
+				$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':D'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$objPHPExcel->getActiveSheet()->getStyle('N'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				$objPHPExcel->getActiveSheet()->getStyle('E'.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+				//$objPHPExcel->getActiveSheet()->setCellValueExplicit("D".$j,PHPExcel_Cell_DataType::TYPE_NUMERIC);
+				//细边框样式引用
+				//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
+			$j++;
+		}
+		
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F'.$j)->applyFromArray($lineBORDER);
+		//大边框样式引用
+		//$objPHPExcel->getActiveSheet()->getStyle('A2:E'.$j)->applyFromArray($linestyle);
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
+		//单元格加粗，居中：
+		
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+		
+		
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//$objPHPExcel->getActiveSheet()->getStyle('D4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+		
+		
+		
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="营业收入报表（支付方式）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+		
+	}
 // 		public function actionSalesReport(){
 // 			$str = Yii::app()->request->getParam('str');
 // 			$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
