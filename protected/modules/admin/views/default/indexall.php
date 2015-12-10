@@ -58,7 +58,7 @@
 }
 .navigation li {
     border-bottom:1px solid #ED9F9F;    /* 添加下划线 */
-    font-size: 18px;
+    font-size: 1.2em;
 }
 .navigation li{
     display:block;                        /* 区块显示 */
@@ -304,15 +304,15 @@
 	<!-- BEGIN PAGE HEADER-->
         <div  id="order_row" style="display:none;">
         <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-5">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->			
 			<input style="margin:-10px 0 10px 0;" type="button" class="btn green" id="site_list_button" value="<?php echo yii::t('app','临时座');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnswitchsite" value="<?php echo yii::t('app','转台>>');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnunionsite" value="<?php echo yii::t('app','并台>>');?>">
-			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnclosesite" value="<?php echo yii::t('app','撤台>>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnswitchsite" value="<?php echo yii::t('app','转台>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnunionsite" value="<?php echo yii::t('app','并台>');?>">
+			<input style="margin:-10px 0 10px 0;" type="button" class="btn green-stripe" id="btnclosesite" value="<?php echo yii::t('app','撤台>');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
-                <div class="col-md-8" style="">
+                <div class="col-md-7" style="">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
                         <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsaveprint_btn" value="<?php echo yii::t('app','挂单打印');?>">
                         <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsave_btn" value="<?php echo yii::t('app','挂单');?>">
@@ -327,7 +327,7 @@
 	
 	<div class="row">
 		
-                <div class="col-md-3">
+                <div class="col-md-4">
                         <div class="navigation" id="orderdetailauto" style="">
                             <ul orderid="0000000000" class="selectProduct">
                                 <span id="order_create_at">2004/12/12 12:00:00</span>
@@ -411,7 +411,7 @@
                             </div>
                 </div>	
             
-                <div class="col-md-9">			
+                <div class="col-md-8">			
                         <div class="tabbable tabbable-custom">
                             <div class="firstCategory">
                                 <ul class="">
@@ -756,7 +756,7 @@
                     $.ajax({
                         url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid+"/padId/"+padid,
                         type:'GET',
-                        timeout:5000,
+                        timeout:1000,
                         cache:false,
                         async:false,
                         dataType: "json",
@@ -875,7 +875,7 @@
                                     $.ajax({
                                         url:"/wymenuv2/admin/defaultSite/finshPauseJobs/companyId/<?php echo $this->companyId; ?>/successjobs/"+successjobs,
                                         type:'GET',
-                                        timeout:5000,
+                                        timeout:2000,
                                         cache:false,
                                         async:false,
                                         dataType: "json",
@@ -910,8 +910,8 @@
                 //tab-content
                 tabcurrenturl='<?php echo $this->createUrl('defaultSite/showSiteAll',array('typeId'=>$typeId,'companyId'=>$this->companyId));?>';
                 $('#tabsiteindex').load(tabcurrenturl);
-                clearInterval(intervalQueueList);
-                intervalQueueList = setInterval(reloadsitestate,"15000");
+//                clearInterval(intervalQueueList);
+//                intervalQueueList = setInterval(reloadsitestate,"15000");
             });
             
             function sitevisible()
@@ -1057,12 +1057,12 @@
                                   +'      class="selectProductA">'
                                   +'  <span style="background-color:#005580;" class="special badge" content="">'+taotext
                                   +'      </span>'
-                                  +'  <span style="font-size:20px !important;height:auto;" class="badge">'+number+'</span>'
+                                  +'  <span style="font-size:1.3em !important;height:auto;" class="badge">'+number+'</span>'
                                   +'  <span class="selectProductPrice" style="color:#976125;display:none">'+origin_price+'</span>'
                                   +'  <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>'
                                   +'      <span class="selectProductNowPrice" style="color:#976125">'+origin_price+'</span>'
                                   +'      <span style="position:absolute;" class="selectProductName">'+pname+'</span>'
-                                  +'      <img class="selectProductDel" style="position: absolute;right:0.3em; width: 3.0em;height: 2.0em;padding:5px 10px 5px 10px;" '
+                                  +'      <img class="selectProductDel" style="position: absolute;right:0.3em; width: 2.5em;height: 2.0em;padding:5px 10px 5px 10px;" '
                                   +'           src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png"> '                                  
                                   +' </li>'
                     $(".selectProduct").append(appendstr);

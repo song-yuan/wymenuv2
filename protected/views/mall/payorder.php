@@ -10,7 +10,7 @@
 	//②、统一下单
 	$input = new WxPayUnifiedOrder();
 	$input->SetBody("点餐订单");
-//	$input->SetAttach("点餐订单");
+	$input->SetAttach("微信支付");
 	$input->SetOut_trade_no($orderId);
 	$input->SetTotal_fee($order['should_total']*100);
 	$input->SetTime_start(date("YmdHis"));
@@ -53,8 +53,8 @@
 <div class="paytype">
 	<div class="item on" paytype="1">微信支付</div>
 	<div class="item" paytype="2" remain-money="<?php echo $user['remain_money'];?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo $user['remain_money'];?></span></div>
-</di>
-</di>
+</div>
+</div>
 
 <footer>
     <div class="ft-lt">

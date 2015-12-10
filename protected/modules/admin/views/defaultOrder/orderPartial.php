@@ -31,17 +31,20 @@
                                                 if(!empty($orderProduct['taste_memo']) || !empty($tasteidsOrderProducts[$orderProduct['lid']]))
                                                 {  echo "味";}
                                         ?></span>
-                                    <span style="font-size:20px !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>
+                                    <span style="font-size:1.3em !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>
                                     <span class="selectProductPrice" style="color:#976125;display:none"><?php echo number_format($orderProduct['original_price'],2);?></span>
                                     <span class="selectProductDiscount" style="color:#976125;display:none"><?php echo $orderProduct['offprice'];?></span>
                                     <span class="selectProductNowPrice" style="color:#976125"><?php echo number_format($orderProduct['price'],2);?></span>
                                     <span style="position:absolute;" class="selectProductName"><?php echo $orderProduct['product_name'];?></span>
-                                    <img class="selectProductDel" style="position: absolute;right:0.3em; width: 3.0em;height: 2.0em;padding:5px 10px 5px 10px;" 
+                                    <img class="selectProductDel" style="position: absolute;right:0.3em; width: 2.5em;height: 2.0em;padding:5px 10px 5px 10px;" 
                                          src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">                                   
                                    </li>
                 <?php endforeach;?>
         </ul>
-        全单设定：
+        <span style="font-size:1.2em;">
+            原价合计:<?php echo number_format($productPauseTotalarray["originaltotal"],2);?>  /现价合计:<?php echo number_format($productPauseTotalarray["total"],2); ?>
+        </span><br>
+            全单设定：
             <?php 
             $ordertastename="";
             $ordertasteid="";
