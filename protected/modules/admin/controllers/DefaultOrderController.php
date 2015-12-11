@@ -170,9 +170,9 @@ class DefaultOrderController extends BackendController
                 ////////////OrderProduct::setPauseJobs($companyId,$padId);
                 //检查语音播报,然后传递到partial界面，调用语音播报
                 //更新所有状态是9的为0（微信下单）,8的为3（微信支付）,并自动呼叫
-                $ret9arr=OrderProduct::setOrderCall($companyId);
+                //$ret9arr=OrderProduct::setOrderCall($companyId);
                 //var_dump($ret9arr);exit;
-                $ret8arr=OrderProduct::setPayCall($companyId);
+                //$ret8arr=OrderProduct::setPayCall($companyId);
                 //var_dump($order); exit;
                 //固定台的最大的status
                 //$maxstatus=  OrderProduct::getMaxStatus($siteNo->site_id, $companyId);
