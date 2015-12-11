@@ -183,6 +183,21 @@ class WxOrder
 	}
 	/**
 	 * 
+	 * 获取当天改会员使用现金券支付的订单
+	 * 
+	 */
+	 public static function getOrderUseCupon($userId,$dpid){
+	 	$now = date('Y-m-d',time());
+	 	$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and cupon_branduser_lid > 0 and create_at >= :now';
+		$order = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':userId',$userId)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':now',$now)
+				  ->queryAll();
+		return $order;
+	 }
+	/**
+	 * 
 	 * 查询订单总价是否与订单产品总价
 	 * 
 	 */
