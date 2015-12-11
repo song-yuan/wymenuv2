@@ -51,22 +51,22 @@ class WxcardController extends BackendController{
 	//更改卡券库存
 	public function actionChangeSku(){
 		$id = Yii::app()->request->getParam('id',0);
-		$wxCard = WeixinCard::model()->findByPk($id);
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		if(Yii::app()->request->isPostRequest){
 			$data = array('msg'=>'修改失败','status'=>false);
 			$type = Yii::app()->request->getPost('type');
 			$sku = Yii::app()->request->getPost('sku');
 			
-			$wxSdk = new WxSdk($brand->brand_id);
-	      	$accessToken = $wxSdk->getAccessToken();
+			$wxSdk = new AccessToken($this->companyId);
+      		$accessToken = $wxSdk->accessToken;
 	      	$url = 'https://api.weixin.qq.com/card/modifystock?access_token='.$accessToken;
 	      	if($type){
 	      		$postData = '{"card_id":"'.$wxCard->card_id.'","increase_stock_value":"'.$sku.'"}';
 	      	}else{
 	      		$postData = '{"card_id":"'.$wxCard->card_id.'","reduce_stock_value":"'.$sku.'"}';
 	      	}
-	      	$result = $wxSdk->https_request($url,$postData);
+	      	$result = Curl::httpsRequest($url,$postData);
 			$result = json_decode($result);
 			if($result->errmsg=="ok"){
 				if($type){
@@ -267,7 +267,7 @@ class WxcardController extends BackendController{
        */
       public function actionDetail(){
       	$id = Yii::app()->request->getParam('id');
-		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$wxSdk = new AccessToken($this->companyId);
       	$accessToken = $wxSdk->accessToken;
@@ -290,7 +290,7 @@ class WxcardController extends BackendController{
        */
     public function actionDelete(){
         $id = Yii::app()->request->getParam('id');
-		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$wxSdk = new AccessToken($this->companyId);
       	$accessToken = $wxSdk->accessToken;
