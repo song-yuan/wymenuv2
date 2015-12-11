@@ -16,13 +16,13 @@ class WxCardResult {
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	
-	public static function getCard(Array $postArr){
+	public static function getCard(Array $postArr,$dpid){
 		$time = time();
 		$se = new Sequence("weixin_card_user");
 	    $lid = $se->nextval();
 		$data = array(
 					'lid'=>$lid,
-		        	'dpid'=>$this->dpid,
+		        	'dpid'=>$dpid,
 		        	'create_at'=>date('Y-m-d H:i:s',$time),
 		        	'update_at'=>date('Y-m-d H:i:s',$time), 
 		            'from_user_name'=>$postArr['FromUserName'],
