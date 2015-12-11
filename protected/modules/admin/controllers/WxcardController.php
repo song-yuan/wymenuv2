@@ -50,7 +50,7 @@ class WxcardController extends BackendController{
 	}
 	//更改卡券库存
 	public function actionChangeSku(){
-		$id = Yii::app()->request->getParam('id',0);
+      	$id = Yii::app()->request->getParam('id');
 		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		if(Yii::app()->request->isPostRequest){
@@ -318,7 +318,7 @@ class WxcardController extends BackendController{
      //卡券统计
       public function actionCardUser(){
        	$id = Yii::app()->request->getParam('id');
-		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$criteria = new CDbCriteria;
 		
@@ -390,7 +390,7 @@ class WxcardController extends BackendController{
 	 */
 	public function actionPrintWeixinCard(){
 		$id = Yii::app()->request->getParam('id');
-		$wxCard =  WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard =  WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$data = array('msg'=>'请求失败！','status'=>false,'qrcode'=>'');
 		$wxCardQrcode = new WxCardQrcode($this->companyId,$wxCard->card_id);

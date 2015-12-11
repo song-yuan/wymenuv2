@@ -43,7 +43,7 @@
 		$('#create_btn').click(function(){
 			var checked = $('input[name="changeType"]:checked');
 			var sku = $('input[name="sku"]');
-			 $.post('<?php echo $this->createUrl('/brand/wxcard/changeSku',array('cid'=>$this->companyId,'id'=>$id));?>',{type:checked.val(),sku:sku.val()},function(data){
+			 $.post('<?php echo $this->createUrl('/admin/wxcard/changeSku',array('companyId'=>$this->companyId,'id'=>$id));?>',{type:checked.val(),sku:sku.val()},function(data){
 					if(data.status){
 						history.go(0);
 					}else{
