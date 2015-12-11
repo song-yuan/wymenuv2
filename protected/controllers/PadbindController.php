@@ -165,7 +165,7 @@ class PadbindController extends Controller
             $ret=Yii::app()->db->createCommand($sql)->queryRow();      
             if($ret["count"]>0)
             {
-                echo "hasdata".$ret["dt"].$ret["count"];
+                echo "hasdata".$ret["dt"].'nb_order_product'.$ret["count"];
                 exit;
             }
             $sql="select ifnull(count(*),0) as count,now() as dt from nb_order where dpid="
@@ -173,7 +173,7 @@ class PadbindController extends Controller
             $ret=Yii::app()->db->createCommand($sql)->queryRow();      
             if($ret["count"]>0)
             {
-                echo "hasdata".$ret["dt"].$ret["count"];
+                echo "hasdata".$ret["dt"].'nb_order'.$ret["count"];
                 exit;
             }
             $sql="select ifnull(count(*),0) as count,now() as dt from nb_order_pay where dpid="
@@ -181,7 +181,7 @@ class PadbindController extends Controller
             $ret=Yii::app()->db->createCommand($sql)->queryRow();      
             if($ret["count"]>0)
             {
-                echo "hasdata".$ret["dt"].$ret["count"];
+                echo "hasdata".$ret["dt"].'nb_order_pay'.$ret["count"];
                 exit;
             }
             $sql="select ifnull(count(*),0) as count,now() as dt from nb_queue_persons where dpid="
@@ -189,10 +189,10 @@ class PadbindController extends Controller
             $ret=Yii::app()->db->createCommand($sql)->queryRow();      
             if($ret["count"]>0)
             {
-                echo "hasdata".$ret["dt"].$ret["count"];
+                echo "hasdata".$ret["dt"].'nb_queue_persons'.$ret["count"];
                 exit;
             }
-            echo "0";exit;
+            echo "2";exit;
 	}
         
         public function actionGetPadPrinter(){
