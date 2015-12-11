@@ -51,24 +51,26 @@ class WxcardController extends BackendController{
 	//更改卡券库存
 	public function actionChangeSku(){
 		$id = Yii::app()->request->getParam('id',0);
-		$wxCard = WeixinCard::model()->findByPk($id);
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		if(Yii::app()->request->isPostRequest){
 			$data = array('msg'=>'修改失败','status'=>false);
 			$type = Yii::app()->request->getPost('type');
 			$sku = Yii::app()->request->getPost('sku');
 			
-			$wxSdk = new WxSdk($brand->brand_id);
-	      	$accessToken = $wxSdk->getAccessToken();
+			$wxSdk = new AccessToken($this->companyId);
+      		$accessToken = $wxSdk->accessToken;
 	      	$url = 'https://api.weixin.qq.com/card/modifystock?access_token='.$accessToken;
 	      	if($type){
 	      		$postData = '{"card_id":"'.$wxCard->card_id.'","increase_stock_value":"'.$sku.'"}';
 	      	}else{
 	      		$postData = '{"card_id":"'.$wxCard->card_id.'","reduce_stock_value":"'.$sku.'"}';
 	      	}
-	      	$result = $wxSdk->https_request($url,$postData);
+	      	$result = Curl::httpsRequest($url,$postData);
 			$result = json_decode($result);
 			if($result->errmsg=="ok"){
+				$isSync = DataSync::getAfterSync();
+				$wxCard->is_sync = $isSync;
 				if($type){
 					$wxCard->sku_quantity = $wxCard->sku_quantity + $sku;
 				}else{
@@ -192,6 +194,7 @@ class WxcardController extends BackendController{
 				 				 'reduce_cost'=>isset($reduceCost)?$reduceCost:0,
 				 				 'gift'=>isset($defaultDetail)?$defaultDetail:'',
 				 				 'card_id'=>$result->card_id,
+				 				 'is_sync'=>DataSync::getInitSync(),	
 				 				  );
 					$model->attributes =  $modelData;
 					$model->save();
@@ -207,6 +210,7 @@ class WxcardController extends BackendController{
 							$shopData = array(
 											'card_id'=>$result->card_id,
 											'wx_location_id'=>$shop,
+											'is_sync'=>DataSync::getInitSync(),	
 											);
 							$cardShop->attributes =  $shopData;
 							$cardShop->save();
@@ -267,7 +271,7 @@ class WxcardController extends BackendController{
        */
       public function actionDetail(){
       	$id = Yii::app()->request->getParam('id');
-		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$wxSdk = new AccessToken($this->companyId);
       	$accessToken = $wxSdk->accessToken;
@@ -290,7 +294,7 @@ class WxcardController extends BackendController{
        */
     public function actionDelete(){
         $id = Yii::app()->request->getParam('id');
-		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$wxSdk = new AccessToken($this->companyId);
       	$accessToken = $wxSdk->accessToken;
