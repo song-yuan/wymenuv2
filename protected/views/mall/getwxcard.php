@@ -4,7 +4,7 @@
 	.card .inner{width:100%;height:100%;position:relative;}
 	.card .inner .inner-top{height:100px;width:100%;}
 	.card .inner .inner-bottom{height:50px;width:100%;position:absolute;left:0;bottom:0;color:white;background-color:rgba(255,255,255,0.25);}
-	.inner-top .left{width:60px;height:60px;margin:20px 20px;display:inline}
+	.inner-top .left{width:60px;height:60px;margin:20px;display:inline}
 	.inner-top .left img {border-radius:100%;width:60px;height:60px;}
 	.inner-top .right{font-size:30px;text-align:center;height:70px;width:-moz-calc(100% - 100px);width:-webkit-calc(100% - 100px);width:calc(100% - 100px);margin-top:30px;display:inline;color:white;}
 	.inner-bottom .info{float:left;line-height:50px;}
