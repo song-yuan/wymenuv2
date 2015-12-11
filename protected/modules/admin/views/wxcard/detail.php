@@ -7,6 +7,10 @@
 		 		$baseInfo = $cardInfo->cash->base_info;
 		 		$leastCost = isset($cardInfo->cash->least_cost)?$cardInfo->cash->least_cost:0;
 		 		$reduceCost = $cardInfo->cash->reduce_cost;
+		 	}elseif($cardInfo->card_type=="GIFT"){
+		 		$isCash = 2;
+		 		$baseInfo = $cardInfo->gift->base_info;
+		 		$defaultDetail = $cardInfo->gift->gift;
 		 	}else{
 		 		$baseInfo = $cardInfo->general_coupon->base_info;
 		 		$defaultDetail = $cardInfo->general_coupon->default_detail;
@@ -151,7 +155,7 @@
 											<div class="title">券面信息</div>
 											<div class="row colorgray">
 												<div class="col-md-2">卡券类型</div>
-												<div class="col-md-6"><?php if($isCash) echo '代金券';else echo '通用券';?></div>
+												<div class="col-md-6"><?php if($isCash==1) echo '代金券';elseif($isCash==2) echo '礼品券';else echo '通用券';?></div>
 											</div>
 											<div class="row colorgray">
 												<div class="col-md-2">卡券标题</div>
