@@ -88,10 +88,10 @@
 								<td><?php echo $model['all_number'];?></td>
 								<td><?php echo $model['all_account'];?></td>
 								<td><?php echo sprintf("%.2f",$model['all_originalprice']);?></td>
-								<td><?php echo sprintf("%.2f",$model['all_price']);?></td>
-								<td><?php echo sprintf("%.2f",$model['all_originalprice']-$model['all_price']);?></td>
-								<td><?php echo $model['all_realprice'];?></td>
-								<td><?php echo $model['all_account'];?></td>
+								<td><?php echo sprintf("%.2f",$model['all_realprice']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_originalprice']-$model['all_realprice']);?></td>
+								<td><?php if($model['all_number']){echo sprintf("%.2f",$model['all_realprice']/$model['all_number']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
+								<td><?php if($model['all_account']){echo sprintf("%.2f",$model['all_realprice']/$model['all_account']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
 								
 								<td><?php ?></td>
 								
@@ -231,7 +231,8 @@
 				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-
+							alert("<?php echo "sorry,您目前暂无权限！！！";?>")
+							return false;
 			    	   location.href="<?php echo $this->createUrl('statements/payallReport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			       else{
