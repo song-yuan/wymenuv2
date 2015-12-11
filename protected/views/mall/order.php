@@ -15,7 +15,7 @@
 
 <div class="order-title">我的订单</div>
 <?php if($this->type==1):?>
-<div class="order-site">桌号:<?php echo $site['serial'];?></div>
+<div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 <?php else:?>
 
 <?php endif;?>
