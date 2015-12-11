@@ -47,7 +47,7 @@
 			<?php $this->endContent();?>
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.brand.components.widgets.PageHeader', array('head'=>'添加卡券','subhead'=>'添加卡券','breadcrumbs'=>array(array('word'=>'营销品管理','url'=>''),array('word'=>'微信卡券','url'=>''),array('word'=>'添加卡券','url'=>'')),'back'=>array('word'=>'返回','url'=>array('/brand/wxcard','cid'=>$this->companyId))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'添加卡券','subhead'=>'添加卡券','breadcrumbs'=>array(array('word'=>'营销品管理','url'=>''),array('word'=>'微信卡券','url'=>''),array('word'=>'添加卡券','url'=>'')),'back'=>array('word'=>'返回','url'=>array('/brand/wxcard','cid'=>$this->companyId))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
@@ -161,7 +161,7 @@
 												<div class="col-md-2">卡券标题</div>
 												<div class="col-md-6"><?php echo $baseInfo->title;?></div>
 											</div>
-											<?php if($isCash):?>
+											<?php if($isCash==1):?>
 											<div class="row colorgray">
 												<div class="col-md-2">减免金额</div>
 												<div class="col-md-6"><?php echo $reduceCost/100 .'元';?></div>
@@ -232,7 +232,7 @@
 											</div>
 											<div class="row colorgray">
 												<div class="col-md-2">优惠详情</div>
-												<?php if($isCash):?>
+												<?php if($isCash==1):?>
 												<div class="col-md-6">价值<?php echo $reduceCost/100;?>元代金券1张，满<?php echo $leastCost/100;?>元可使用。</div>
 												<?php else:?>
 												<div class="col-md-6"><?php echo $defaultDetail;?></div>
