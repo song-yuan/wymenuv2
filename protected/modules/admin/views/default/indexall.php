@@ -927,7 +927,7 @@
                 $('#tabsiteindex').load(tabcurrenturl);
                 //clearInterval(intervalQueueList);
                 //intervalQueueList = setInterval(reloadsitestate,"15000");
-                setTimeout(reloadsitestate,"15000");
+                //setTimeout(reloadsitestate,"15000");
             });
             
             function sitevisible()
