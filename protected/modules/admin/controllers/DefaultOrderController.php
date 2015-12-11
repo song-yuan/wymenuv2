@@ -170,9 +170,9 @@ class DefaultOrderController extends BackendController
                 ////////////OrderProduct::setPauseJobs($companyId,$padId);
                 //检查语音播报,然后传递到partial界面，调用语音播报
                 //更新所有状态是9的为0（微信下单）,8的为3（微信支付）,并自动呼叫
-                //$ret9arr=OrderProduct::setOrderCall($companyId);
+                $ret9arr=OrderProduct::setOrderCall($companyId,$siteNo->site_id,$siteNo->is_temp);
                 //var_dump($ret9arr);exit;
-                //$ret8arr=OrderProduct::setPayCall($companyId);
+                $ret8arr=OrderProduct::setPayCall($companyId,$siteNo->site_id,$siteNo->is_temp);
                 //var_dump($order); exit;
                 //固定台的最大的status
                 //$maxstatus=  OrderProduct::getMaxStatus($siteNo->site_id, $companyId);
@@ -707,6 +707,7 @@ class DefaultOrderController extends BackendController
                                             'create_at'=>$time,
                                             'order_id'=>$orderid,
                                             'update_at'=>$time,
+                                            'account_no'=>$accountNo,
                                             'pay_amount'=>$paycashaccount,
                                             'paytype'=>"0",
                                             'payment_method_id'=>"0000000000",
@@ -739,6 +740,7 @@ class DefaultOrderController extends BackendController
                                             'create_at'=>$time,
                                             'order_id'=>$orderid,
                                             'update_at'=>$time,
+                                            'account_no'=>$accountNo,
                                             'pay_amount'=>$paymemberaccount,
                                             'paytype'=>"4",
                                             'payment_method_id'=>$cardno,
@@ -757,6 +759,7 @@ class DefaultOrderController extends BackendController
                                             'create_at'=>$time,
                                             'order_id'=>$orderid,
                                             'update_at'=>$time,
+                                            'account_no'=>$accountNo,
                                             'pay_amount'=>$payunionaccount,
                                             'paytype'=>"5",
                                             'payment_method_id'=>"0000000000",
@@ -797,6 +800,7 @@ class DefaultOrderController extends BackendController
                                                     'create_at'=>$time,
                                                     'order_id'=>$orderid,
                                                     'update_at'=>$time,
+                                                    'account_no'=>$accountNo,
                                                     'pay_amount'=>$daarr[1],
                                                     'paytype'=>"3",
                                                     'payment_method_id'=>$daarr[0],
