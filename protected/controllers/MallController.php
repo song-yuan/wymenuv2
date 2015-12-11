@@ -51,14 +51,14 @@ class MallController extends Controller
 					Yii::app()->session['qrcode-'.$userId] = -1;
 				}
 			}else{
-				//pc 浏览
+//				pc 浏览
 				$userId = -1;
-				Yii::app()->session['userId'] = $userId;
-				Yii::app()->session['qrcode-'.$userId] = -1;
-				//pc 测试
-//				$userId = 2;
 //				Yii::app()->session['userId'] = $userId;
-//				Yii::app()->session['qrcode-'.$userId] = 40;
+//				Yii::app()->session['qrcode-'.$userId] = -1;
+//				pc 测试
+				$userId = 2;
+				Yii::app()->session['userId'] = $userId;
+				Yii::app()->session['qrcode-'.$userId] = 40;
 			}
 		}
 		return true;
@@ -83,14 +83,19 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
+		$siteType = false;
 		
 		$site = WxSite::get($siteId,$this->companyId);
+		if($site){
+			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+		}
+		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId));
 		}
-		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'site'=>$site));
+		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'site'=>$site,'siteType'=>$siteType));
 	}
 	/**
 	 * 
@@ -102,8 +107,17 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$msg = '';
+		$number = 1;
+		
 		if($this->type==1){
 			$serial = Yii::app()->request->getParam('serial');
+			$number = Yii::app()->request->getParam('number');
+			$serialArr = explode('>',$serial);
+			if(count($serialArr)==1){
+				$serial = $serialArr[0];
+			}else{
+				$serial = $serialArr[1];
+			}
 			$site = WxSite::getBySerial($serial,$this->companyId);
 			if(!$site){
 				$msg = '输入正确的座位号!';
@@ -114,7 +128,7 @@ class MallController extends Controller
 			}
 		}
 		
-		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type);
+		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number);
 		if(!$orderObj->cart){
 			$msg = '下单失败,请重新下单';
 			$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'msg'=>$msg));
@@ -132,12 +146,17 @@ class MallController extends Controller
 	 {
 	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
+		$siteType = false;
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$site = WxSite::get($order['site_id'],$this->companyId);
+		
+		if($site){
+			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+		}
 		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons));
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType));
 	 }
 	 /**
 	 * 
@@ -223,6 +242,15 @@ class MallController extends Controller
 	}
 	/**
 	 * 
+	 * 卡券领取页面
+	 * 
+	 */
+	 public function actionGetWxCard()
+	{
+		$this->render('getwxcard',array('companyId'=>$this->companyId));
+	}
+	/**
+	 * 
 	 * 添加购物车
 	 * 
 	 */
@@ -281,6 +309,15 @@ class MallController extends Controller
 //				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'请先扫描餐桌二维码,然后再进行点单')));
 //			}
 //		}
+		$all = Yii::app()->request->getParam('all',0);
+		if($all){
+			$result = WxCart::clearCart($userId,$this->companyId);
+			if($result){
+				Yii::app()->end(json_encode(array('status'=>true,'msg'=>'清空成功!')));
+			}else{
+				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'清空失败,请重新操作!')));
+			}
+		}
 		
 		$productId = Yii::app()->request->getParam('productId');
 		$promoteId = Yii::app()->request->getParam('promoteId');

@@ -47,8 +47,8 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$user = WxBrandUser::get($userId,$this->companyId);
-		
-		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user));
+		$userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
+		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user,'userLevel'=>$userLevel));
 	}
 	/**
 	 * 
@@ -69,11 +69,17 @@ class UserController extends Controller
 	public function actionOrderInfo()
 	{
 		$userId = Yii::app()->session['userId'];
+		$siteType = false;
+		
 		$orderId = Yii::app()->request->getParam('orderId');
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$site = $site = WxSite::get($order['site_id'],$this->companyId);
+		if($site){
+			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+		}
+		
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site));
+		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'siteType'=>$siteType));
 	}
 	public function actionAddress()
 	{
