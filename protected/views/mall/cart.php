@@ -14,7 +14,7 @@
 <?php endif;?>
 <div class="section" style="padding-top:0;color:#FF5151;">
     <div class="prt">
-        <div class="prt-rt" id="clearCart" style="float:right;padding-right:30px;text-align:right; background-image: url(<?php echo $baseUrl;?>/img/icon_delete.png);background-size: auto 25px;background-repeat: no-repeat; background-position: right center;">清空全部</div>
+        <div class="prt-rt-del" id="clearCart" style="float:right;padding-right:30px;text-align:right; background-image: url(<?php echo $baseUrl;?>/img/icon_delete.png);background-size: auto 25px;background-repeat: no-repeat; background-position: right center;">清空全部</div>
         <div class="clear"></div>
     </div>
 </div>
@@ -59,7 +59,7 @@ $(document).ready(function(){
 		var serial = $('.serial').val();
 		var number = $('.number').val();
 		if(serial && number){
-			if(!isNaN(number)||(parseInt(number)!=number)||number < 0){
+			if(isNaN(number)||(parseInt(number)!=number)||number < 0){
 				layer.msg('输入人数为大于0的整数!');
 				return;
 			}
