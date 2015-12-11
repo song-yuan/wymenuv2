@@ -9,6 +9,7 @@
  * @property string $create_at
  * @property string $update_at
  * @property string $order_id
+ * @property string $account_no
  * @property string $pay_amount
  * @property string $paytype 
  * @property string $payment_method_id
@@ -47,11 +48,12 @@ class OrderPay extends CActiveRecord
 			array('lid, dpid, order_id, pay_amount, payment_method_id', 'length', 'max'=>10),
                         array('paytype', 'length', 'max'=>1),
 			array('remark, is_sync', 'length', 'max'=>50),
+				array('account_no', 'length', 'max'=>20),
 			array('create_at', 'safe'),
 			//array('pay_amount','compare','compareValue'=>'0','operator'=>'<','message'=>yii::t('app','退款金额必须大于零啊')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, order_id, pay_amount, payment_method_id, remark', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, account_no, update_at, is_sync, order_id, pay_amount, payment_method_id, remark', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -81,6 +83,7 @@ class OrderPay extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => yii::t('app','更新时间'),
 			'order_id' =>yii::t('app', '订单编号'),
+			'account_no' =>yii::t('app', '账单号'),
 			'pay_amount' => yii::t('app','金额'),
                         'paytype' => yii::t('app','支付方式'),
 			'payment_method_id' =>yii::t('app', '方式'),
@@ -112,6 +115,7 @@ class OrderPay extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('order_id',$this->order_id,true);
+		$criteria->compare('account_no',$this->account_no,true);
 		$criteria->compare('pay_amount',$this->pay_amount,true);
                 $criteria->compare('paytype',$this->paytype,true);
 		$criteria->compare('payment_method_id',$this->payment_method_id,true);
