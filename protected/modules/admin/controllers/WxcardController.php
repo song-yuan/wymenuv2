@@ -277,7 +277,7 @@ class WxcardController extends BackendController{
       	$accessToken = $wxSdk->accessToken;
       	$url = 'https://api.weixin.qq.com/card/get?access_token='.$accessToken;
       	$postData = '{"card_id":"'.$wxCard->card_id.'"}';
-      	$result = $wxSdk->https_request($url,$postData);
+      	$result = Curl::httpsRequest($url,$postData);
 		$result = json_decode($result);
 //		var_dump($result->card);exit;
 		if($result->errmsg=="ok"){
@@ -301,7 +301,7 @@ class WxcardController extends BackendController{
       	
       	$url = 'https://api.weixin.qq.com/card/delete?access_token='.$accessToken;
       	$postData = '{"card_id":"'.$wxCard->card_id.'"}';
-      	$result = $wxSdk->https_request($url,$postData);
+      	$result = Curl::httpsRequest($url,$postData);
 		$result = json_decode($result);
 //		var_dump($result->card->cash);exit;
 		if($result->errmsg=="ok"){
@@ -348,7 +348,7 @@ class WxcardController extends BackendController{
       	
       	$url = 'https://api.weixin.qq.com/card/code/get?access_token='.$accessToken;
       	$postData = '{"code":"'.$code.'"}';
-      	$result = $wxSdk->https_request($url,$postData);
+      	$result = Curl::httpsRequest($url,$postData);
 		$result = json_decode($result);
 		$data = array('status'=>0,'msg'=>'');
 		if($result->errmsg=="ok"){
@@ -373,7 +373,7 @@ class WxcardController extends BackendController{
       	$accessToken = $wxSdk->accessToken;
       	$url = 'https://api.weixin.qq.com/card/code/consume?access_token='.$accessToken;
       	$postData = '{"code":"'.$code.'"}';
-      	$result = $wxSdk->https_request($url,$postData);
+      	$result = Curl::httpsRequest($url,$postData);
 		$result = json_decode($result);
 		$data = array('status'=>0,'msg'=>'核销失败');
 		if($result->errmsg=="ok"){
