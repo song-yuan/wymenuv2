@@ -72,11 +72,15 @@ class WxOrder
  			}else{
  				$se = new Sequence("order");
 			    $orderId = $se->nextval();
+			    
+			    $accountNo = self::getAccountNo($this->dpid,$this->siteId,0,$orderId);
+			    
 			    $insertOrderArr = array(
 			        	'lid'=>$orderId,
 			        	'dpid'=>$this->dpid,
 			        	'create_at'=>date('Y-m-d H:i:s',$time),
 			        	'update_at'=>date('Y-m-d H:i:s',$time), 
+			        	'account_no'=>$accountNo,
 			        	'user_id'=>$this->userId,
 			        	'site_id'=>$this->siteId,
 			        	'order_status'=>1,
@@ -98,6 +102,7 @@ class WxOrder
 								'set_id'=>0,
 								'product_id'=>$cart['product_id'],
 								'price'=>$cart['price'],
+								'original_price'=>$cart['original_price'],
 								'amount'=>$cart['num'],
 								'product_order_status'=>9,
 								'is_sync'=>DataSync::getInitSync(),
@@ -136,7 +141,7 @@ class WxOrder
 	 * 
 	 */
 	 public static function getNoPayOrderProduct($orderId,$dpid){
-		$sql = 'select * from nb_order_product where order_id=:lid and dpid=:dpid and delete_flag=0 and product_order_status=0';
+		$sql = 'select * from nb_order_product where order_id=:lid and dpid=:dpid and delete_flag=0 and product_order_status=9';
 		$order = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':lid',$orderId)
 				  ->bindValue(':dpid',$dpid)
@@ -157,7 +162,7 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select t.price,t.amount,t1.product_name,t1.main_picture,t1.original_price from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.delete_flag=0';
+		$sql = 'select t.price,t.amount,t1.product_name,t1.main_picture,t.original_price from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.delete_flag=0';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':orderId',$orderId)
 				  ->bindValue(':dpid',$dpid)
@@ -176,6 +181,21 @@ class WxOrder
 		}
 	    return $orderList;
 	}
+	/**
+	 * 
+	 * 获取当天改会员使用现金券支付的订单
+	 * 
+	 */
+	 public static function getOrderUseCupon($userId,$dpid){
+	 	$now = date('Y-m-d',time());
+	 	$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and cupon_branduser_lid > 0 and create_at >= :now';
+		$order = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':userId',$userId)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':now',$now)
+				  ->queryAll();
+		return $order;
+	 }
 	/**
 	 * 
 	 * 查询订单总价是否与订单产品总价
@@ -309,4 +329,20 @@ class WxOrder
 	 		throw new Exception('支付失败');
 	 	}
 	 }
+	 /**
+	  * 
+	  * 订单流水单号
+	  * 
+	  */
+	  public static function getAccountNo($dpid,$siteId,$isTemp,$orderId){
+            $sql="select ifnull(min(account_no),'000000000000') as account_no from nb_order where dpid="
+                    .$dpid." and site_id=".$siteId." and is_temp=".$isTemp
+                    ." and order_status in ('1','2','3')";
+            $ret=Yii::app()->db->createCommand($sql)->queryScalar();      
+            if(empty($ret) || $ret=="0000000000")
+            {
+                $ret=substr(date('Ymd',time()),-6).substr("0000000000".$orderId, -6);
+            }
+            return $ret;
+        }
 }

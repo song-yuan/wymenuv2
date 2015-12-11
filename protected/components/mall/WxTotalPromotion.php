@@ -2,7 +2,7 @@
 /**
  * 
  * 
- * 微信端产品类
+ * 微信端活动设置类
  * 
  */
 class WxTotalPromotion
