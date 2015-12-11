@@ -309,9 +309,9 @@ class WxcardController extends BackendController{
 			$wxCard->delete_flag = 1;
 			$wxCard->is_sync = $isSync;
 			$wxCard->update();
-			Yii::app()->admin->setFlash('success','删除成功!');
+			Yii::app()->user->setFlash('success','删除成功!');
 		}else{
-			Yii::app()->admin->setFlash('error',$dataObj->errmsg);
+			Yii::app()->user->setFlash('error',$dataObj->errmsg);
 		}
 		$this->redirect(array('/admin/wxcard/index','cid'=>$this->companyId));
      }
