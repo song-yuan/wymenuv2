@@ -217,7 +217,7 @@
 					$('#WeixinCard').attr('action',url);
 					var hide = $('.cover').parents('.form-group').find('input[type=hidden]');
 					hide.attr('name','logo');
-					hide.val(msg);
+					hide.val(baseUrl+msg);
 					$('form').removeAttr('target');
 					$('#js_logo_url_preview').attr('src',baseUrl+msg);
 				  }
