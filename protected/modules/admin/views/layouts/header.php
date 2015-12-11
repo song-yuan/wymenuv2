@@ -3,7 +3,7 @@
 		<!-- BEGIN TOP NAVIGATION BAR -->
 		<div class="header-inner">
 			<!-- BEGIN LOGO -->  
-			<a class="navbar-brand" href="<?php echo $this->createUrl('default/index',array("companyId"=>$this->companyId));?>">
+			<a class="navbar-brand" href="<?php echo '#'; //echo $this->createUrl('default/index',array("companyId"=>$this->companyId));?>">
 			<span style="margin-left:20px;"><?php echo yii::t('app','我要MENU')?></span>
 			</a>
 			<!-- END LOGO -->
