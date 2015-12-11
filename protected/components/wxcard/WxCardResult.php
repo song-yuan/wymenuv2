@@ -30,13 +30,9 @@ class WxCardResult {
 		            'card_id'=>$postArr['CardId'],
 		            'is_giveby_friend'=>$postArr['IsGiveByFriend'],
 		            'user_card_code'=>$postArr['UserCardCode'],
-		            'create_time'=>$postArr['CreateTime'],
 		            'outer_id'=>$postArr['OuterId'],
 		            'is_sync'=>DataSync::getInitSync(),	
 		             );
-         $myfile = fopen("/tmp/newfile.txt", "w") or die("Unable to open file!");
-		fwrite($myfile, json_encode($data));
-		fclose($myfile);
 		Yii::app()->db->createCommand()->insert('nb_weixin_card_user',$data);
 	}
 	
