@@ -59,7 +59,7 @@
 												<td><?php echo '';?></td>
 												<td><?php if($model['is_giveby_friend']) echo '是';else echo '否';?></td>
 												<td><?php  echo $model['user_card_code'];?></td>
-												<td><?php  echo date('Y-m-d',$model['create_time']);?></td>
+												<td><?php  echo $model['create_at'];?></td>
 												<td>
 												 <?php if($model['outer_id']) echo '页面领取';else echo '扫描二维码';?>
 												</td>

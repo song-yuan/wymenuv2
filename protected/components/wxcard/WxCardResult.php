@@ -37,7 +37,7 @@ class WxCardResult {
 	}
 	
 	public static function delCard(Array $postArr){
-		$sql = 'update nb_weixin_card set delete_flag=1 where card_id = "'.$postArr['CardId'].'" and user_card_code='.$postArr['UserCardCode'];
+		$sql = 'update nb_weixin_card_user set delete_flag=1 where card_id = "'.$postArr['CardId'].'" and user_card_code='.$postArr['UserCardCode'];
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 }
