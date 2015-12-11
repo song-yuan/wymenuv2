@@ -145,6 +145,56 @@ class PadbindController extends Controller
                 }
 	}
         
+        public function actionGetOrderInfo(){
+            $companyid = Yii::app()->request->getParam('companyid',0);
+            $dt = Yii::app()->request->getParam('dt',"2015-10-10 01:01:01");
+            if(empty($companyid))
+            {
+                echo "0";
+                exit;
+            }
+            
+//            if($dt=="2015-10-10 01:01:01")
+//            {
+//                echo "0";
+//                exit;
+//            }
+            
+            $sql="select ifnull(count(*),0) as count,now() as dt from nb_order_product where dpid="
+                .$companyid." and create_at >='".$dt."' or update_at >='".$dt."'";
+            $ret=Yii::app()->db->createCommand($sql)->queryRow();      
+            if($ret["count"]>0)
+            {
+                echo "hasdata".$ret["dt"].$ret["count"];
+                exit;
+            }
+            $sql="select ifnull(count(*),0) as count,now() as dt from nb_order where dpid="
+                .$companyid." and create_at >='".$dt."' or update_at >='".$dt."'";
+            $ret=Yii::app()->db->createCommand($sql)->queryRow();      
+            if($ret["count"]>0)
+            {
+                echo "hasdata".$ret["dt"].$ret["count"];
+                exit;
+            }
+            $sql="select ifnull(count(*),0) as count,now() as dt from nb_order_pay where dpid="
+                .$companyid." and create_at >='".$dt."' or update_at >='".$dt."'";
+            $ret=Yii::app()->db->createCommand($sql)->queryRow();      
+            if($ret["count"]>0)
+            {
+                echo "hasdata".$ret["dt"].$ret["count"];
+                exit;
+            }
+            $sql="select ifnull(count(*),0) as count,now() as dt from nb_queue_persons where dpid="
+                .$companyid." and create_at >='".$dt."' or update_at >='".$dt."'";
+            $ret=Yii::app()->db->createCommand($sql)->queryRow();      
+            if($ret["count"]>0)
+            {
+                echo "hasdata".$ret["dt"].$ret["count"];
+                exit;
+            }
+            echo "0";exit;
+	}
+        
         public function actionGetPadPrinter(){
 		$companyid = Yii::app()->request->getParam('companyid',0);
                 $padid = Yii::app()->request->getParam('padid',0);
