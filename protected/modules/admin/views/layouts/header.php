@@ -278,4 +278,141 @@
 //                var url='<?php echo $this->createUrl('queue/index',array("companyId"=>$this->companyId)); ?>'+'/rand/'+randtime;
 //                location.href=url;
 //            });
+
+            function call_alarm()
+            {
+                alert("callalarm");
+                return;
+                //site显示时才做这样的操作
+                if($("#tab_sitelist").css("display")=="block")
+                {                    
+                    var padid="0000000046";
+                    if (typeof Androidwymenuprinter == "undefined") {
+                        alert("找不到PAD设备");
+                        //return false;
+                    }else{
+                        var padinfo=Androidwymenuprinter.getPadInfo();
+                        padid=padinfo.substr(10,10);
+                    }
+                    $.ajax({
+                        url:"/wymenuv2/admin/defaultSite/getSiteAll/companyId/<?php echo $this->companyId; ?>/typeId/"+gtypeid+"/padId/"+padid,
+                        type:'GET',
+                        timeout:5000,
+                        cache:false,
+                        async:false,
+                        dataType: "json",
+                        success:function(msg){
+                            //网络连接有错误要报错
+                             if(!msg.status)
+                             {
+                                 alert("网络故障，请稍后重试!");
+                                 return;
+                             }                            
+                            //$('#tabsiteindex').load(tabcurrenturl);
+                            //重新修改成用ajax动态加载
+                            if(gtypeid=="others")
+                            {
+                                //获取排队信息，并更新状态,不存在删减的
+                                $.each(msg.models,function(key,value){
+                                    var siteobj=$(".modalaction[typeid='others'][sid="+value.splid+"][istemp="+value.typeid+"]");
+                                    siteobj.removeClass("bg-yellow");
+                                    siteobj.removeClass("bg-green");                                                    
+                                    //改变背景颜色///
+                                    if(value.queuepersons>0)
+                                    {                                                
+                                        if(value.sitefree>0)
+                                        {
+                                            siteobj.addClass("bg-green");                                                    
+                                        }else{
+                                            siteobj.addClass("bg-yellow");                                                    
+                                        }
+                                    }
+                                    //修改排队数和空位数文字..
+                                    if(value.sitefree==null)
+                                    {
+                                        value.sitefree=0;
+                                    }
+                                    if(value.queuepersons==null)
+                                    {
+                                        value.queuepersons=0;
+                                    }
+                                    siteobj.find("span[typename='sitefree']").text("空座:"+value.sitefree);
+                                    siteobj.find("span[typename='queuenum']").text("排队:"+value.queuepersons); 
+                                 });
+                            }else if(gtypeid=="tempsite"){
+                                //获取临时座位信息，并更新状态
+                                //存在删减临时座位的,暂不修改，以后添加！！                    
+                                //....
+                            }else{
+                                //获取座位信息，并更新状态
+                                //不存在删减座位的
+                                $.each(msg.models,function(key,value){
+                                    var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");
+                                    var nowstatus=value.min_status;
+                                    if(value.min_status=="1" || value.status=="1")
+                                    {
+                                        nowstatus=1;
+                                    }
+                                    siteobj.attr("status",nowstatus);
+                                    siteobj.attr("maxstatus",value.max_status);
+                                    siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
+                                    siteobj.removeClass("bg-yellow");
+                                    siteobj.removeClass("bg-blue");
+                                    siteobj.removeClass("bg-green");
+                                    if(value.min_status=="1" || value.status=="1")
+                                    {
+                                        siteobj.addClass("bg-yellow");
+                                    }else if(value.min_status=="2")
+                                    {
+                                        siteobj.addClass("bg-blue");
+                                    }else if(value.min_status=="3")
+                                    {
+                                        siteobj.addClass("bg-green");
+                                    }
+                                    if(("12".indexOf(value.order_type)>=0)
+                                            && ("123".indexOf(value.min_status)>=0))
+                                    {
+                                        siteobj.find("div").show();
+                                    }else{
+                                        siteobj.find("div").hide();
+                                    }
+                                    if(value.newitem > 0)
+                                    {
+                                        siteobj.find("div").css("background-color","green");
+                                        //需要打印
+                                    }else{
+                                        siteobj.find("div").css("background-color","");
+                                    }
+                                });
+                                //开始打印任务
+                                var printresult=false;
+                                var successjobs="00000000";
+                                if(typeof(Androidwymenuprinter)=="undefined")
+                                {
+                                    //return;
+                                }
+                                var times=0;
+                                $.each(msg.ret9arr,function(key,value){
+                                    //alert(value);
+                                    setTimeout("Androidwymenuprinter.ordercall('"+value+"')", 6000*times+1000 );
+                                    times++;
+                                });
+                                $.each(msg.ret8arr,function(key,value){
+                                    //alert(value);
+                                    setTimeout("Androidwymenuprinter.paycall('"+value+"')", 6000*times+1000 );
+                                    times++;
+                                });
+                            }                            
+                        },
+                        error: function(msg){
+                            alert("网络可能有问题，再试一次！");
+                        },
+                        complete : function(XMLHttpRequest,status){
+                            if(status=='timeout'){
+                                alert("网络可能有问题，再试一次！");                                            
+                            }
+                        }
+                    });               
+                }
+            }
 	</script>
