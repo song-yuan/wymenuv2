@@ -8,7 +8,7 @@
 					<div class="radio-list">
 						<label>
 						<input type="radio" name="cardType"  value="2" checked> 兑换券<br />
-						<span class="help-block">&nbsp;&nbsp;&nbsp;&nbsp;即“通用券”，建议当以上无法满足需求时采用</span><br />
+						<span class="help-block">&nbsp;&nbsp;&nbsp;&nbsp;可为用户提供消费送赠品服务</span><br />
 						</label>
 						<label>
 						<input type="radio" name="cardType" value="0"> 代金券<br />
