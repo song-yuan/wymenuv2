@@ -112,6 +112,12 @@ class MallController extends Controller
 		if($this->type==1){
 			$serial = Yii::app()->request->getParam('serial');
 			$number = Yii::app()->request->getParam('number');
+			$serialArr = explode($serial);
+			if(count($serialArr)==1){
+				$serial = $serialArr[0];
+			}else{
+				$serial = $serialArr[1];
+			}
 			$site = WxSite::getBySerial($serial,$this->companyId);
 			if(!$site){
 				$msg = '输入正确的座位号!';
