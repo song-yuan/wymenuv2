@@ -112,6 +112,12 @@ class MallController extends Controller
 		if($this->type==1){
 			$serial = Yii::app()->request->getParam('serial');
 			$number = Yii::app()->request->getParam('number');
+			$serialArr = explode('>',$serial);
+			if(count($serialArr)==1){
+				$serial = $serialArr[0];
+			}else{
+				$serial = $serialArr[1];
+			}
 			$site = WxSite::getBySerial($serial,$this->companyId);
 			if(!$site){
 				$msg = '输入正确的座位号!';
@@ -140,12 +146,17 @@ class MallController extends Controller
 	 {
 	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
+		$siteType = false;
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$site = WxSite::get($order['site_id'],$this->companyId);
+		
+		if($site){
+			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+		}
 		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons));
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType));
 	 }
 	 /**
 	 * 
@@ -228,6 +239,15 @@ class MallController extends Controller
 		$deatil = WxPromotionActivity::getDetailItem($this->companyId,$activeDetailId);
 		$lid = WxPromotionActivity::sent($this->companyId,$userId,$deatil['promotion_type'],$deatil['promotion_lid'],$deatil['activity_lid']);
 		$this->render('cuponinfo',array('companyId'=>$this->companyId,'ptype'=>$deatil['promotion_type'],'lid'=>$lid));
+	}
+	/**
+	 * 
+	 * 卡券领取页面
+	 * 
+	 */
+	 public function actionGetWxCard()
+	{
+		$this->render('getwxcard',array('companyId'=>$this->companyId));
 	}
 	/**
 	 * 

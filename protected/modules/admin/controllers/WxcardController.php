@@ -50,25 +50,27 @@ class WxcardController extends BackendController{
 	}
 	//更改卡券库存
 	public function actionChangeSku(){
-		$id = Yii::app()->request->getParam('id',0);
-		$wxCard = WeixinCard::model()->findByPk($id);
+      	$id = Yii::app()->request->getParam('id');
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		if(Yii::app()->request->isPostRequest){
 			$data = array('msg'=>'修改失败','status'=>false);
 			$type = Yii::app()->request->getPost('type');
 			$sku = Yii::app()->request->getPost('sku');
 			
-			$wxSdk = new WxSdk($brand->brand_id);
-	      	$accessToken = $wxSdk->getAccessToken();
+			$wxSdk = new AccessToken($this->companyId);
+      		$accessToken = $wxSdk->accessToken;
 	      	$url = 'https://api.weixin.qq.com/card/modifystock?access_token='.$accessToken;
 	      	if($type){
 	      		$postData = '{"card_id":"'.$wxCard->card_id.'","increase_stock_value":"'.$sku.'"}';
 	      	}else{
 	      		$postData = '{"card_id":"'.$wxCard->card_id.'","reduce_stock_value":"'.$sku.'"}';
 	      	}
-	      	$result = $wxSdk->https_request($url,$postData);
+	      	$result = Curl::httpsRequest($url,$postData);
 			$result = json_decode($result);
 			if($result->errmsg=="ok"){
+				$isSync = DataSync::getAfterSync();
+				$wxCard->is_sync = $isSync;
 				if($type){
 					$wxCard->sku_quantity = $wxCard->sku_quantity + $sku;
 				}else{
@@ -165,6 +167,7 @@ class WxcardController extends BackendController{
 				try{
 					$se=new Sequence("weixin_card");
                     $model->lid = $se->nextval();
+                    $model->dpid = $this->companyId;
                     $model->create_at = date('Y-m-d H:i:s',time());
                     $model->update_at = date('Y-m-d H:i:s',time());
                     $model->delete_flag = '0';
@@ -191,6 +194,7 @@ class WxcardController extends BackendController{
 				 				 'reduce_cost'=>isset($reduceCost)?$reduceCost:0,
 				 				 'gift'=>isset($defaultDetail)?$defaultDetail:'',
 				 				 'card_id'=>$result->card_id,
+				 				 'is_sync'=>DataSync::getInitSync(),	
 				 				  );
 					$model->attributes =  $modelData;
 					$model->save();
@@ -206,6 +210,7 @@ class WxcardController extends BackendController{
 							$shopData = array(
 											'card_id'=>$result->card_id,
 											'wx_location_id'=>$shop,
+											'is_sync'=>DataSync::getInitSync(),	
 											);
 							$cardShop->attributes =  $shopData;
 							$cardShop->save();
@@ -218,7 +223,7 @@ class WxcardController extends BackendController{
             		$transaction->rollback();
             		$msg = '创建失败,请去微信后台!';
             		Yii::app()->user->setFlash('error',$msg);
-            		$this->redirect(array('/brand/wxcard/index','cid'=>$this->companyId));
+            		$this->redirect(array('/brand/wxcard/index','companyId'=>$this->companyId));
        			 }
 				
 			}else{
@@ -266,20 +271,20 @@ class WxcardController extends BackendController{
        */
       public function actionDetail(){
       	$id = Yii::app()->request->getParam('id');
-		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$wxSdk = new AccessToken($this->companyId);
       	$accessToken = $wxSdk->accessToken;
       	$url = 'https://api.weixin.qq.com/card/get?access_token='.$accessToken;
       	$postData = '{"card_id":"'.$wxCard->card_id.'"}';
-      	$result = $wxSdk->https_request($url,$postData);
+      	$result = Curl::httpsRequest($url,$postData);
 		$result = json_decode($result);
 //		var_dump($result->card);exit;
 		if($result->errmsg=="ok"){
 			$this->render('detail',array('cardInfo'=>$result->card));
 		}else{
 			Yii::app()->user->setFlash('error',$dataObj->errmsg);
-			$this->redirect(array('/admin/wxcard/index','cid'=>$this->companyId));
+			$this->redirect(array('/admin/wxcard/index','companyId'=>$this->companyId));
 		}
       }
       /**
@@ -289,14 +294,14 @@ class WxcardController extends BackendController{
        */
     public function actionDelete(){
         $id = Yii::app()->request->getParam('id');
-		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$wxSdk = new AccessToken($this->companyId);
       	$accessToken = $wxSdk->accessToken;
       	
       	$url = 'https://api.weixin.qq.com/card/delete?access_token='.$accessToken;
       	$postData = '{"card_id":"'.$wxCard->card_id.'"}';
-      	$result = $wxSdk->https_request($url,$postData);
+      	$result = Curl::httpsRequest($url,$postData);
 		$result = json_decode($result);
 //		var_dump($result->card->cash);exit;
 		if($result->errmsg=="ok"){
@@ -304,27 +309,27 @@ class WxcardController extends BackendController{
 			$wxCard->delete_flag = 1;
 			$wxCard->is_sync = $isSync;
 			$wxCard->update();
-			Yii::app()->admin->setFlash('success','删除成功!');
+			Yii::app()->user->setFlash('success','删除成功!');
 		}else{
-			Yii::app()->admin->setFlash('error',$dataObj->errmsg);
+			Yii::app()->user->setFlash('error',$dataObj->errmsg);
 		}
-		$this->redirect(array('/admin/wxcard/index','cid'=>$this->companyId));
+		$this->redirect(array('/admin/wxcard/index','companyId'=>$this->companyId));
      }
      //卡券统计
       public function actionCardUser(){
        	$id = Yii::app()->request->getParam('id');
-		$wxCard = WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard = WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$criteria = new CDbCriteria;
 		
-		$criteria->order = ' lid desc';
-		$criteria->addCondition('card_id=:cardId');
-		$criteria->addCondition('delete_flag=0');
+		$criteria->order = ' t.lid desc';
+		$criteria->addCondition('t.card_id=:cardId');
+		$criteria->addCondition('t.delete_flag=0');
 		$criteria->params[':cardId'] = $wxCard->card_id;
 		
-	    $pages = new CPagination(WeixinCardUser::model()->count($criteria));
+	    $pages = new CPagination(WeixinCardUser::model()->with(array('brandUser','fridndUser'))->count($criteria));
 	    $pages->applyLimit($criteria);
-		$models = WeixinCardUser::model()->findAll($criteria);
+		$models = WeixinCardUser::model()->with(array('brandUser','fridndUser'))->findAll($criteria);
 		$this->render('carduser',array(
 			'models'=>$models,
 			'pages'=>$pages,
@@ -343,7 +348,7 @@ class WxcardController extends BackendController{
       	
       	$url = 'https://api.weixin.qq.com/card/code/get?access_token='.$accessToken;
       	$postData = '{"code":"'.$code.'"}';
-      	$result = $wxSdk->https_request($url,$postData);
+      	$result = Curl::httpsRequest($url,$postData);
 		$result = json_decode($result);
 		$data = array('status'=>0,'msg'=>'');
 		if($result->errmsg=="ok"){
@@ -368,7 +373,7 @@ class WxcardController extends BackendController{
       	$accessToken = $wxSdk->accessToken;
       	$url = 'https://api.weixin.qq.com/card/code/consume?access_token='.$accessToken;
       	$postData = '{"code":"'.$code.'"}';
-      	$result = $wxSdk->https_request($url,$postData);
+      	$result = Curl::httpsRequest($url,$postData);
 		$result = json_decode($result);
 		$data = array('status'=>0,'msg'=>'核销失败');
 		if($result->errmsg=="ok"){
@@ -385,7 +390,7 @@ class WxcardController extends BackendController{
 	 */
 	public function actionPrintWeixinCard(){
 		$id = Yii::app()->request->getParam('id');
-		$wxCard =  WeixinCard::model()->findByPk('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+		$wxCard =  WeixinCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$data = array('msg'=>'请求失败！','status'=>false,'qrcode'=>'');
 		$wxCardQrcode = new WxCardQrcode($this->companyId,$wxCard->card_id);

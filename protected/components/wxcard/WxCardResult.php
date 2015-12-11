@@ -16,13 +16,13 @@ class WxCardResult {
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	
-	public static function getCard(Array $postArr){
+	public static function getCard(Array $postArr,$dpid){
 		$time = time();
 		$se = new Sequence("weixin_card_user");
 	    $lid = $se->nextval();
 		$data = array(
 					'lid'=>$lid,
-		        	'dpid'=>$this->dpid,
+		        	'dpid'=>$dpid,
 		        	'create_at'=>date('Y-m-d H:i:s',$time),
 		        	'update_at'=>date('Y-m-d H:i:s',$time), 
 		            'from_user_name'=>$postArr['FromUserName'],
@@ -30,7 +30,6 @@ class WxCardResult {
 		            'card_id'=>$postArr['CardId'],
 		            'is_giveby_friend'=>$postArr['IsGiveByFriend'],
 		            'user_card_code'=>$postArr['UserCardCode'],
-		            'create_time'=>$postArr['CreateTime'],
 		            'outer_id'=>$postArr['OuterId'],
 		            'is_sync'=>DataSync::getInitSync(),	
 		             );
@@ -38,7 +37,7 @@ class WxCardResult {
 	}
 	
 	public static function delCard(Array $postArr){
-		$sql = 'update nb_weixin_card set delete_flag=1 where card_id = "'.$postArr['CardId'].'" and user_card_code='.$postArr['UserCardCode'];
+		$sql = 'update nb_weixin_card_user set delete_flag=1 where card_id = "'.$postArr['CardId'].'" and user_card_code='.$postArr['UserCardCode'];
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 }
