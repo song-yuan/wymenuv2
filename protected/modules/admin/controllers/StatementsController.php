@@ -435,6 +435,67 @@ public function actionPayallReport(){
 		));
 	}
 	
+	public function actionBusinessdataReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$download = Yii::app()->request->getParam('d');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+	
+		$db = Yii::app()->db;
+		$sql = 'select k.* from(select year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,sum(t.number) as all_number,count(distinct(t.account_no)) as all_account,sum(t1.original_price*t1.amount) as all_originalprice,sum(t1.price*t1.amount*(-(t1.is_giving-1))) as all_price,sum(t2.pay_amount) as all_realprice from nb_order t left join nb_order_product t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.order_id = t.lid and t1.product_order_status in(1,2) and t1.is_retreat =0) left join nb_order_pay t2 on(t.dpid = t2.dpid and t2.order_id = t.lid)  where t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" and t.order_status =8) k';
+		//$models = $db->createCommand($sql)->queryAll();
+		//var_dump($models);exit;
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+
+// 		$criteria = new CDbCriteria;
+// 		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
+// 		$criteria->with = array('company','order8','paymentMethod');
+// 		$criteria->condition = ' t.dpid='.$this->companyId ;
+// 		if($str){
+// 			$criteria->condition = ' and t.dpid in('.$str.')';
+// 		}
+// 		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+// 		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+// 		if($text==1){
+// 			$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.update_at)';
+// 			$criteria->order = 'year(t.update_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+// 		}elseif($text==2){
+// 			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,month(t.update_at)';
+// 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+// 		}elseif($text==3){
+// 			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,day(t.update_at)';
+// 			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+// 		}
+		//$criteria->order = 't.update_at asc,t.dpid asc';
+		//$criteria->group = 't.paytype,t.payment_method_id';
+
+// 		$pages = new CPagination(OrderPay::model()->count($criteria));
+// 		//	    $pages->setPageSize(1);
+// 		$pages->applyLimit($criteria);
+// 		//var_dump($criteria);exit;
+// 		$model = OrderPay::model()->findAll($criteria);
+		//var_dump($model);exit;
+		$comName = $this->getComName();
+		$this->render('businessdataReport',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				//'money'=>$money,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
 	/**
 	 * 产品销售报表
 	 *
@@ -628,6 +689,150 @@ public function actionPayallReport(){
 				'str'=>$str,
 		));
 	}
+	
+	public function actionOrderdetail(){
+		$criteria = new CDbCriteria;
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
+		$criteria->select = 'sum(t.number) as all_number,t.*';
+		$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addCondition("t.order_status = 8 ");
+		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+		//$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->with = array("company","paymentMethod");
+	
+		//$connect = Yii::app()->db->createCommand($sql);
+		//$model = $connect->queryAll();
+		$criteria->group = 't.account_no,t.order_status' ;
+		$criteria->order = 't.lid ASC' ;
+		$criteria->distinct = TRUE;
+	
+		//$categoryId = Yii::app()->request->getParam('cid',0);
+	
+	
+	
+		$pages = new CPagination(Order::model()->count($criteria));
+		//$pages->PageSize = 10;
+		$pages->applyLimit($criteria);
+	
+		$model=  Order::model()->findAll($criteria);
+		//var_dump($model);exit;
+		$this->render('orderdetail',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+	
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
+	
+	public function getAccountMoney($account_no){
+		$accountMoney = '';
+		if($account_no){
+		$sql = 'select sum(t.pay_amount) as all_zhifu,t.* from nb_order_pay t where t.order_id in(select t1.lid from nb_order t1 where t1.account_no = '.$account_no.')';
+		$connect = Yii::app()->db->createCommand($sql);
+		$money = $connect->queryRow();
+		$accountMoney = $money['all_zhifu'];
+		}
+		//$accountMoney = '';
+		//$sql = 'update nb_order_product set original_price=(select t.original_price from nb_product t where t.delete_flag=0 and t.lid =nb_order_product.product_id ) where 1';
+		return $accountMoney;
+	}
+	public function getOriginalMoney($account_no){
+		$originalMoney = '';
+		if($account_no){
+			$sql = 'select sum(t.original_price*t.amount) as all_original from nb_order_product t  where t.is_retreat = 0 and t.product_order_status in(1,2) and t.order_id in(select t1.lid from nb_order t1 where t1.account_no = '.$account_no.')';
+			$connect = Yii::app()->db->createCommand($sql);
+			$money = $connect->queryRow();
+			//var_dump($sql);exit;
+			$originalMoney = $money['all_original'];
+		}
+		//$accountMoney = '';
+		//$sql = 'update nb_order_product set original_price=(select t.original_price from nb_product t where t.delete_flag=0 and t.lid =nb_order_product.product_id ) where 1';
+		return $originalMoney;
+	}
+	public function getSiteName($orderId){
+		$sitename="";
+		$sitetype="";
+	
+		$sql = 'select t.site_id, t.dpid, t1.site_level, t1.type_id, t1.serial, t2.name from nb_order t, nb_site t1, nb_site_type t2 where t.site_id = t1.lid and t.dpid = t1.dpid and t1.type_id = t2.lid and t.dpid = t2.dpid and t.lid ='. $orderId;
+		//$conn = Yii::app()->db->createCommand($sql);
+		//$result = $conn->queryRow();
+		//$siteId = $result['lid'];
+		$connect = Yii::app()->db->createCommand($sql);
+		//	$connect->bindValue(':site_id',$siteId);
+		//	$connect->bindValue(':dpid',$dpid);
+		$site = $connect->queryRow();
+		$retsite="";
+		if($site['site_id'] && $site['dpid'] ){
+			//	echo 'ABC';
+			$sitelevel = $site['site_level'];
+			$sitename = $site['name'];
+			$sitetype = $site['serial'];
+			$retsite=$sitelevel.":".$sitename.":".$sitetype;
+		}
+		//if($siteId && $dpid){
+		//$sql = 'select order.site_id, order.dpid,site.type_id, site.serial, site_type.name from nb_order, nb_site, nb_site_type where order.site_id = site.lid and order.dpid = site.dpid';
+		//$conn = Yii::app()->db->createCommand($sql);
+	
+		//}
+		return $retsite;
+	}
+	/**
+	 *
+	 * 订单统计报表
+	 *
+	 * **/
+	public function actionceshiOrderReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.update_at) as y_all,month(t.update_at) as m_all,day(t.update_at) as d_all,t.dpid,t.update_at,sum(t.reality_total) as all_total,count(t.order_status) as all_status,t.paytype,t.payment_method_id,t.order_status';
+		$criteria->with = array('company','paymentMethod');
+		$criteria->condition = ' t.dpid='.$this->companyId ;
+		if($str){
+			$criteria->condition = ' t.dpid in('.$str.')';
+		}
+		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+		if($text==1){
+			$criteria->group ='t.dpid,t.order_status,year(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,t.dpid asc';
+		}elseif($text==2){
+			$criteria->group ='t.dpid,t.order_status,month(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,t.dpid asc';
+		}else{
+			$criteria->group ='t.dpid,t.order_status,day(t.update_at)';
+			$criteria->order = 'year(t.update_at) asc,month(t.update_at) asc,day(t.update_at) asc,t.dpid asc';
+		}
+		//$criteria->order = 't.update_at asc,t.dpid asc';
+		//$criteria->group = 't.paytype,t.payment_method_id';
+	
+		$pages = new CPagination(Order::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		//var_dump($criteria);exit;
+		$model = Order::model()->findAll($criteria);
+		$comName = $this->getComName();
+		$this->render('ceshiorderReport',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
+	
 	/**
 	 * 
 	 * 就餐人数

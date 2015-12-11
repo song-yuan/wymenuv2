@@ -35,6 +35,7 @@ class Order extends CActiveRecord
         public $all_money;
         public $pay_total;
         public $pay_discount_total;
+        public $all_number;
         /**
 	 * @return string the associated database table name
 	 */
