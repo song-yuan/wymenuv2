@@ -181,4 +181,24 @@ class Order extends CActiveRecord
 //            }
             return $orderlist;
 	}
+        
+        /**
+         * 
+         * @param type $dpid
+         * @param type $site_id
+         * @param type $is_temp
+         * @param type $orderid 万一没有取到，说明还没有其他订单，可以根据这个orderid来生成
+         */
+        static public function getAccountNo($dpid,$site_id,$is_temp,$orderid)
+        {
+            $sql="select ifnull(min(account_no),'000000000000') as account_no from nb_order where dpid="
+                    .$dpid." and site_id=".$site_id." and is_temp=".$is_temp
+                    ." and order_status in ('1','2','3')";
+            $ret=Yii::app()->db->createCommand($sql)->queryScalar();      
+            if(empty($ret) || $ret=="0000000000")
+            {
+                $ret=substr(date('Ymd',time()),-6).substr("0000000000".$orderid, -6);
+            }
+            return $ret;
+        }
 }

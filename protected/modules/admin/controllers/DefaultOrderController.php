@@ -152,7 +152,9 @@ class DefaultOrderController extends BackendController
                     Until::validOperate($companyId,$this);                    
                     $order=new Order();
                     $se=new Sequence("order");
-                    $order->lid = $se->nextval();
+                    $templid=$se->nextval();
+                    $order->lid = $templid;
+                    $order->account_no=Order::getAccountNo($companyId, $siteNo->site_id, $siteNo->is_temp, $templid );
                     $order->dpid=$companyId;
                     $order->username=Yii::app()->user->name;
                     $order->create_at = date('Y-m-d H:i:s',time());
@@ -164,8 +166,13 @@ class DefaultOrderController extends BackendController
                     //var_dump($order);exit;
                     $order->save();
                 }
-                //检查是否有自动打印的东西，order_product product_order_status
-                OrderProduct::setPauseJobs($companyId,$padId);
+                //检查是否有自动打印的东西，order_product product_order_status，然后有定时任务打印出来
+                ////////////OrderProduct::setPauseJobs($companyId,$padId);
+                //检查语音播报,然后传递到partial界面，调用语音播报
+                //更新所有状态是9的为0（微信下单）,8的为3（微信支付）,并自动呼叫
+                $ret9arr=OrderProduct::setOrderCall($companyId);
+                //var_dump($ret9arr);exit;
+                $ret8arr=OrderProduct::setPayCall($companyId);
                 //var_dump($order); exit;
                 //固定台的最大的status
                 //$maxstatus=  OrderProduct::getMaxStatus($siteNo->site_id, $companyId);
@@ -182,6 +189,7 @@ class DefaultOrderController extends BackendController
                 $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,$orderlist,'1',$companyId);
                 //所有订单明细
                 $orderProducts = OrderProduct::getOrderProducts($orderlist,$companyId);
+                //var_dump($orderProducts);exit;
                 //单品口味
                 $allOrderProductTastes=  TasteClass::getOrderTasteKV($order->lid,$orderlist,'2',$companyId);
                 $tasteidsOrderProducts=array();
@@ -626,6 +634,7 @@ class DefaultOrderController extends BackendController
                 $payunionaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payunionaccount',"0")));
                 $payshouldaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payshouldaccount',"0")));
                 $payoriginaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payoriginaccount',"0")));
+                $notpaydetail = Yii::app()->request->getPost('notpaydetail',"0");
                 $cardno = Yii::app()->request->getParam('cardno',"0000000000");
                 $ordermemo = Yii::app()->request->getPost('ordermemo',"0");
                 $payotherdetail=Yii::app()->request->getPost('payotherdetail',"");
@@ -652,6 +661,8 @@ class DefaultOrderController extends BackendController
 //                        Yii::app()->end($ret);
 //                    }
                     $orderList=Order::getOrderList($companyId, $order->site_id, $order->is_temp);
+                    $accountNo=Order::getAccountNo($companyId, $order->site_id, $order->is_temp,$order->lid);
+                    //var_dump($accountNo);exit;
 //                    $order->should_total=$payoriginaccount;
 //                    $order->reality_total=$payshouldaccount;
 //                    $order->update_at=$time;
@@ -794,6 +805,73 @@ class DefaultOrderController extends BackendController
                                 $db->createCommand()->insert('nb_order_pay',$orderPayData);                                
                                 //
                             }                            
+                        }
+                    }
+                    //插入优惠的各项数据
+                    $sedis=new Sequence("order_account_discount");
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"accountNo:".$accountNo)));
+                    if(strlen($notpaydetail)>0)
+                    {
+                        $daarr=explode("|",$notpaydetail);
+                        if($daarr[0]!="0000000000")
+                        {
+                            $orderAccountDisId = $sedis->nextval();
+                            //插入一条
+                            $orderAccountDis = array(
+                                                'lid'=>$orderAccountDisId,
+                                                'dpid'=>$companyId,
+                                                'create_at'=>$time,
+                                                'update_at'=>$time,
+                                                'order_id'=>$orderid,
+                                                'account_no'=>$accountNo,
+                                                'discount_type'=>"1",
+                                                'discount_id'=>$daarr[0],
+                                                'discount_money'=>$daarr[2],
+                                                'delete_flag'=>'0',
+                                                'is_sync'=>  DataSync::getInitSync(),                                                
+                                                );
+                            $db->createCommand()->insert('nb_order_account_discount',$orderAccountDis);                                
+                            //
+                        }
+                        if(floatval($daarr[3])>0)
+                        {
+                            $orderAccountDisId = $sedis->nextval();
+                            //插入一条
+                            $orderAccountDis = array(
+                                                'lid'=>$orderAccountDisId,
+                                                'dpid'=>$companyId,
+                                                'create_at'=>$time,
+                                                'update_at'=>$time,
+                                                'order_id'=>$orderid,
+                                                'account_no'=>$accountNo,
+                                                'discount_type'=>"2",
+                                                'discount_id'=>"0000000000",
+                                                'discount_money'=>$daarr[3],
+                                                'delete_flag'=>'0',
+                                                'is_sync'=>  DataSync::getInitSync(),                                                
+                                                );
+                            $db->createCommand()->insert('nb_order_account_discount',$orderAccountDis);                                 
+                            //
+                        }
+                        if(floatval($daarr[4])>0)
+                        {
+                            $orderAccountDisId = $sedis->nextval();
+                            //插入一条
+                            $orderAccountDis = array(
+                                                'lid'=>$orderAccountDisId,
+                                                'dpid'=>$companyId,
+                                                'create_at'=>$time,
+                                                'update_at'=>$time,
+                                                'order_id'=>$orderid,
+                                                'account_no'=>$accountNo,
+                                                'discount_type'=>"0",
+                                                'discount_id'=>"0000000000",
+                                                'discount_money'=>$daarr[4],
+                                                'delete_flag'=>'0',
+                                                'is_sync'=>  DataSync::getInitSync(),                                                
+                                                );
+                            $db->createCommand()->insert('nb_order_account_discount',$orderAccountDis);                                 
+                            //
                         }
                     }
                     $transaction->commit();
