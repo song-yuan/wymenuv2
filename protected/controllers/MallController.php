@@ -112,7 +112,7 @@ class MallController extends Controller
 		if($this->type==1){
 			$serial = Yii::app()->request->getParam('serial');
 			$number = Yii::app()->request->getParam('number');
-			$serialArr = explode($serial);
+			$serialArr = explode('>',$serial);
 			if(count($serialArr)==1){
 				$serial = $serialArr[0];
 			}else{
