@@ -911,7 +911,7 @@
                     });               
                 }
                 reloadsitestatelock=false;
-                setTimeout(reloadsitestate,"15000");
+                //setTimeout(reloadsitestate,"15000");
             }
             
             
