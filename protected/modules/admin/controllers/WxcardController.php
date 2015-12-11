@@ -165,6 +165,7 @@ class WxcardController extends BackendController{
 				try{
 					$se=new Sequence("weixin_card");
                     $model->lid = $se->nextval();
+                    $model->dpid = $this->companyId;
                     $model->create_at = date('Y-m-d H:i:s',time());
                     $model->update_at = date('Y-m-d H:i:s',time());
                     $model->delete_flag = '0';
