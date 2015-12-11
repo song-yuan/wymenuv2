@@ -340,13 +340,15 @@ class MallController extends Controller
 	 */
 	public function actionGetOrderStatus()
 	{
+		$status = 0;
 		$orderId = Yii::app()->request->getParam('orderId');
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProduct = WxOrder::getNoPayOrderProduct($orderId,$this->companyId);
+		$status = $order['order_status'];
 		if(!empty($orderProduct)){
-			$order['order_status'] = 0;
+			$status = 0;
 		}
-		Yii::app()->end($order['order_status']);
+		echo $status;exit;
 	}
 	/**
 	 * 
