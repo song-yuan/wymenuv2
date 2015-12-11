@@ -182,6 +182,8 @@
             });
             
             $('#lock_screen_close').on(event_clicktouchstart, function(){
+                //call_alarm();
+                //return;
                 var password=$("#user_input_password").val();
                 //alert(password);
                 $.get('<?php echo $this->createUrl(
@@ -282,7 +284,7 @@
             function call_alarm()
             {
                 alert("callalarm");
-                return;
+                //return;
                 //site显示时才做这样的操作
                 if($("#tab_sitelist").css("display")=="block")
                 {                    
