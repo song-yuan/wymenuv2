@@ -37,6 +37,8 @@
                            var discountnum=$("label[class='discountList btn btn-default active']").attr("discountnum");                           
                            //$('#payDiscountAccount').text(discountnum);
                            $("#payDiscountAccount").text((discountnum*100)+"%");
+                           $("#payDiscountAccount").attr("disid",discountid);
+                           $("#payDiscountAccount").attr("disnum",discountnum);
                            
                             //$("#payMinusAccount").text("0.00");
                             var payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
@@ -45,11 +47,16 @@
                             var payMinusAccount=parseFloat($("#payMinusAccount").text().replace(",",""));
                             var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
                             var payRealityAccount=$("#payRealityAccount").text();
+                            var cancel_zero=$("#cancel_zero").hasClass("edit_span_select_zero");
+                            
+                            $("#payDiscountAccount").attr("dismoney",(productDisTotal*(1-discountnum)).toFixed(2));
                             //payOriginAccount*payDiscountAccount/100 productDisTotal*payDiscountAccount/100
                             $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount-payHasAccount).toFixed(2));
                             if(cancel_zero)
                             {
+                                
                                 payShouldAccount=$("#payShouldAccount").text();
+                                $("#payCancelZero").text("0"+payShouldAccount.substr(payShouldAccount.indexOf("."),3));
                                 payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                                 $("#payShouldAccount").text(payShouldAccount);
                             }

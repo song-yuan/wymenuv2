@@ -536,9 +536,9 @@
                                         <div>
                                             <div style="width: 95%;margin:1.0em;font-size: 1.5em;">
                                                     <DIV style="float:left;width:27%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','总额');?><span id="payOriginAccount">10000.23</span></DIV>
-                                                    <DIV id="payDiscountAccountDiv" class="edit_span" selectid="discount" style="float:left;width:15%;background-color:#9acfea;"><?php echo yii::t('app','折扣');?><span id="payDiscountAccount">100%</span></DIV>
+                                                    <DIV id="payDiscountAccountDiv" class="edit_span" selectid="discount" style="float:left;width:15%;background-color:#9acfea;"><?php echo yii::t('app','折扣');?><span id="payDiscountAccount" disid="0000000000" disnum="1" dismoney="0.00">100%</span></DIV>
                                                     <DIV class="edit_span" selectid="minus" style="float:left;width:20%;background-color:#9acfea;"><?php echo yii::t('app','优惠');?><span id="payMinusAccount">0</span></DIV>
-                                                    <DIV class="" id="cancel_zero" style="float:left;width:10%;background-color:#9acfea;"><?php echo yii::t('app','抹零');?></DIV>
+                                                    <DIV class="" id="cancel_zero" style="float:left;width:10%;background-color:#9acfea;"><?php echo yii::t('app','抹零');?><span id="payCancelZero" style="display:none;">0</span></DIV>
                                                     <DIV style="float:left;width:27%;font-size: 1.5em;border:1px solid red;"><?php echo yii::t('app','应付');?><span id="payShouldAccount">10000.23</span></DIV>
                                             </div>
                                             
@@ -1117,13 +1117,13 @@
                     tempproduct=tempproduct+","+$(this).attr("is_giving");
                     tempproduct=tempproduct+","+$(this).attr("tasteids");
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
+                    tempproduct=tempproduct+","+$(this).find("span[class='selectProductPrice']").text();
                     if(productlist!="")
                     {
                         productlist=productlist+";"+tempproduct;
                     }else{
                         productlist=tempproduct;
-                    }
-                    
+                    }                    
                 });
                 //包括单品列表、单品口味列表，口味备注等
                 return '&productlist='+productlist+
@@ -2132,9 +2132,10 @@
                 {
                     $(this).removeClass("edit_span_select_zero");
                     $("#payShouldAccount").text(((payOriginAccount-productDisTotal)+productDisTotal*payDiscountAccount/100 - payMinusAccount-payHasAccount).toFixed(2));
-                    
+                    $("#payCancelZero").text("0.00");
                 }else{
                     $(this).addClass("edit_span_select_zero");
+                    $("#payCancelZero").text("0"+payShouldAccount.substr(payShouldAccount.indexOf("."),3));
                     payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                     $("#payShouldAccount").text(payShouldAccount);
                     
@@ -2228,6 +2229,7 @@
                         if(cancel_zero)
                         {
                             payShouldAccount=$("#payShouldAccount").text();
+                            $("#payCancelZero").text("0"+payShouldAccount.substr(payShouldAccount.indexOf("."),3));
                             payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                             $("#payShouldAccount").text(payShouldAccount);
                         }
@@ -2276,6 +2278,7 @@
                     if(cancel_zero)
                     {
                         payShouldAccount=$("#payShouldAccount").text();
+                        $("#payCancelZero").text("0"+payShouldAccount.substr(payShouldAccount.indexOf("."),3));
                         payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                         $("#payShouldAccount").text(payShouldAccount);
                     }
@@ -2631,6 +2634,7 @@
                     if(cancel_zero)
                     {
                         payShouldAccount=$("#payShouldAccount").text();
+                        $("#payCancelZero").text("0"+payShouldAccount.substr(payShouldAccount.indexOf("."),3));
                         payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                         $("#payShouldAccount").text(payShouldAccount);
                     }
@@ -2773,6 +2777,9 @@
                 {   
                         
                         $("#payDiscountAccount").text("100%");
+                        $("#payDiscountAccount").attr("disid","0000000000");
+                        $("#payDiscountAccount").attr("disnum",1);
+                        $("#payDiscountAccount").attr("dismoney","0.00");
                         payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
                         productDisTotal=parseFloat($("#productDisTotal").val().replace(",",""));
                         payDiscountAccount=parseFloat($("#payDiscountAccount").text().replace(",",""));
@@ -2781,6 +2788,7 @@
                         if(cancel_zero)
                         {
                             payShouldAccount=$("#payShouldAccount").text();
+                            $("#payCancelZero").text("0"+payShouldAccount.substr(payShouldAccount.indexOf("."),3));
                             payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                             $("#payShouldAccount").text(payShouldAccount);
                         }
@@ -2810,6 +2818,7 @@
                     if(cancel_zero)
                     {
                         payShouldAccount=$("#payShouldAccount").text();
+                        $("#payCancelZero").text("0"+payShouldAccount.substr(payShouldAccount.indexOf("."),3));
                         payShouldAccount=payShouldAccount.substr(0,payShouldAccount.indexOf("."))+".00";
                         $("#payShouldAccount").text(payShouldAccount);
                     }
@@ -3058,6 +3067,8 @@
                 }
                 //accountManul
                 //判断找零是否大于现金
+                //要将payDiscountAccount的几个id、折扣、金额、payMinusAccount的金额、cancel_zero的金额传递过去
+                var notpaydetail="";
                 var payCashAccount= parseFloat($("#payCashAccount").text().replace(",","")) - parseFloat($("#payChangeAccount").text().replace(",",""));
                 if(payCashAccount<0)
                 {
@@ -3067,20 +3078,26 @@
                 }
                  //改变order实收，打折等注释
                 var ordermemo="";
+                notpaydetail=$("#payDiscountAccount").attr("disid")+"|"+
+                                $("#payDiscountAccount").attr("disnum")+"|"+
+                                $("#payDiscountAccount").attr("dismoney")+"|";
                 var payDiscountAccount=$("#payDiscountAccount").text()
                 if(payDiscountAccount!="100%")
                 {
                     ordermemo=ordermemo+" 折扣"+payDiscountAccount;
                 }
                 var payMinusAccount=$("#payMinusAccount").text()
-                if(payMinusAccount!="100%")
+                if(payMinusAccount!="0.00")
                 {
                     ordermemo=ordermemo+" 优惠"+payMinusAccount;
                 }
+                notpaydetail=notpaydetail+payMinusAccount+"|";
                 if($("#cancel_zero").hasClass("edit_span_select_zero"))
                 {
                     ordermemo=ordermemo+" 抹零";
                 }
+                notpaydetail=notpaydetail+$("#payCancelZero").text();
+                //alert(notpaydetail);return;
                  //存数order order_pay 0现金，4会员卡，5银联                         
                  //写入会员卡消费记录，会员卡总额减少
                 var orderid=$(".selectProduct").attr("orderid");
@@ -3115,8 +3132,9 @@
                                     '&payshouldaccount='+payShouldAccount+
                                     '&payothers='+payOthers+
                                     '&payoriginaccount='+payOriginAccount+
-                                    '&payotherdetail='+otherdetail; 
-//                            alert(sendjson);
+                                    '&payotherdetail='+otherdetail+
+                                    '&notpaydetail='+notpaydetail; 
+                            //alert(sendjson);
 //                            return;
                         $.ajax({
                             url:url,

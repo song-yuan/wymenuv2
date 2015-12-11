@@ -139,6 +139,7 @@ class DatasyncController extends Controller
 //            echo $tempnow->format('Y-m-d H:i:s');
 //            $tempnow->modify("-1 day");
 //            echo $tempnow->format('Y-m-d H:i:s');
+            echo substr(date('Ymd',time()),-6).substr("0000000000"."111", -6);exit;
             echo implode("",array("11"=>'aa','22'=>'bb'));exit;
             try
             {
