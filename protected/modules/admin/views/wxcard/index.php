@@ -50,7 +50,7 @@
 										<?php if($models):?>
 										<?php foreach($models as $model):?>
 											<tr>
-												<td><img style="width:100px;" src="<?php echo $model['qrcode'];?>"/><a class="btn default btn-xs blue" title="生成二维码" href="javascript:;" cardid="<?php echo $model['lid'];?>" onclick="genQrcode(this);"><i class="fa fa-edit"></i> 生成二维码</a></td>
+												<td><img style="width:100px;" src="<?php echo $model['qrcode']?$baseUrl.'/'.$model['qrcode']:'';?>"/><a class="btn default btn-xs blue" title="生成二维码" href="javascript:;" cardid="<?php echo $model['lid'];?>" onclick="genQrcode(this);"><i class="fa fa-edit"></i> 生成二维码</a></td>
 												<td><?php echo $model['title'];?></td>
 												<td><?php echo $model['sku_quantity'];?> <a href="javascript:;" class="btn btn-xs blue change-sku" data-id="<?php echo $model['lid'];?>"><i class="fa fa-pencil"></i></a></td>
 												<td><?php if($model['date_info_type']==1){ echo date('Y-m-d',$model['begin_timestamp']).'至'.date('Y-m-d',$model['end_timestamp']);}else{ echo '领取后'; echo $model['fixed_begin_term'] >0 ?$model['fixed_begin_term']:'当天'; echo '生效'.$model['fixed_term'].'天有效';}?></td>
@@ -124,12 +124,13 @@
 		</div>
 	<script>
 	 function genQrcode(that){
+	 			var baseUrl = '<?php echo $baseUrl.'/';?>';
 	 			var id = $(that).attr('cardid');
 				var $parent = $(that).parent();
-				$.get('<?php echo $this->createUrl('/admin/wxcard/printWeixinCard',array('companyId'=>$this->companyId));?>&id='+id,function(data){
+				$.get('<?php echo $this->createUrl('/admin/wxcard/printWeixinCard',array('companyId'=>$this->companyId));?>/id/'+id,function(data){
 					if(data.status){
 						$parent.find('img').remove();
-						$parent.prepend('<img style="width:100px;" src="'+data.qrcode+'">');
+						$parent.prepend('<img style="width:100px;" src="'+baseUrl+data.qrcode+'">');
 					}
 					alert(data.msg);
 				},'json');
@@ -143,7 +144,7 @@
 	        });
 	        $('.change-sku').on('click',function(){
 	        	var id = $(this).attr('data-id');
-	        	$modal.load('<?php echo $this->createUrl('/admin/wxcard/changeSku',array('companyId'=>$this->companyId));?>&id='+id, '', function(){
+	        	$modal.load('<?php echo $this->createUrl('/admin/wxcard/changeSku',array('companyId'=>$this->companyId));?>/id/'+id, '', function(){
                    $modal.modal();
                  });
 	        });
@@ -151,7 +152,7 @@
             	var cardid = $(this).attr('cardid');
                 bootbox.confirm("你确定要删除该宝贝吗?", function(result) {
                    if(result){
-                       location.href="<?php echo $this->createUrl('/admin/wxcard/delete',array('companyId'=>$this->companyId));?>&id="+cardid;
+                       location.href="<?php echo $this->createUrl('/admin/wxcard/delete',array('companyId'=>$this->companyId));?>/id/"+cardid;
                    }
                 }); 
             });

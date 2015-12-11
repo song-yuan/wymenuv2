@@ -87,7 +87,7 @@ class WxCardQrcode {
 	 * 二维码存储路径
 	 */
     public function genDir(){
-   		$path = Yii::app()->basePath.'/../upload';
+   		$path = Yii::app()->basePath.'/../uploads';
    		if($this->dpid){
    			$path .= '/company_'.$this->dpid;
    			if(!is_dir($path)){
@@ -115,7 +115,7 @@ class WxCardQrcode {
 		$dir = $this->genDir();
 		$dir = substr($this->genDir(),strpos($this->genDir(),'upload'));
 		
-		$fileName = $dir.'/'.Until::genFileName().'.jpg';
+		$fileName = $dir.'/'.Helper::genFileName().'.jpg';
 		
 		file_put_contents($fileName,$qrcodeContents);
 		return $fileName;
