@@ -131,13 +131,6 @@ class Server {
 				WxCardResult::cardNotPassCheck($this->postArr);
             }
             else if($this->event == 'user_get_card') {
-            	$myfile = fopen("/tmp/newfile.txt", "w") or die("Unable to open file!");
-				$txt = "Bill Gates\n";
-				fwrite($myfile, $txt);
-				$txt = "Steve Jobs\n";
-				fwrite($myfile, $txt);
-				fwrite($myfile, json_encode($this->postArr));
-				fclose($myfile);
 				WxCardResult::getCard($this->postArr,$this->brandId);
             }
             else if($this->event == 'user_del_card') {
