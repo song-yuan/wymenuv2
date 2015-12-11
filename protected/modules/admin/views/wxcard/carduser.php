@@ -55,8 +55,8 @@
 										<?php if($models):?>
 										<?php foreach($models as $model):?>
 											<tr>
-												<td><?php echo '';?></td>
-												<td><?php echo '';?></td>
+												<td><?php echo $model->brandUser->nickname;?></td>
+												<td><?php echo isset($model->fridndUser)?$model->fridndUser->nickname:'';?></td>
 												<td><?php if($model['is_giveby_friend']) echo '是';else echo '否';?></td>
 												<td><?php  echo $model['user_card_code'];?></td>
 												<td><?php  echo $model['create_at'];?></td>

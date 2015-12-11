@@ -66,6 +66,8 @@ class WeixinCardUser extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+		'brandUser' => array(self::HAS_ONE , 'BrandUser' ,'','on'=> 't.from_user_name=brandUser.openid'),
+		'fridndUser' => array(self::HAS_ONE , 'BrandUser' ,'','on'=> 't.friend_user_name=fridndUser.openid'),
 		);
 	}
 

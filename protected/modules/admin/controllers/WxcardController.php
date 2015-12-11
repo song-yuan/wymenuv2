@@ -322,14 +322,14 @@ class WxcardController extends BackendController{
 		
 		$criteria = new CDbCriteria;
 		
-		$criteria->order = ' lid desc';
-		$criteria->addCondition('card_id=:cardId');
-		$criteria->addCondition('delete_flag=0');
+		$criteria->order = ' t.lid desc';
+		$criteria->addCondition('t.card_id=:cardId');
+		$criteria->addCondition('t.delete_flag=0');
 		$criteria->params[':cardId'] = $wxCard->card_id;
 		
-	    $pages = new CPagination(WeixinCardUser::model()->count($criteria));
+	    $pages = new CPagination(WeixinCardUser::model()->with(array('brandUser','fridndUser'))->count($criteria));
 	    $pages->applyLimit($criteria);
-		$models = WeixinCardUser::model()->findAll($criteria);
+		$models = WeixinCardUser::model()->with(array('brandUser','fridndUser'))->findAll($criteria);
 		$this->render('carduser',array(
 			'models'=>$models,
 			'pages'=>$pages,
