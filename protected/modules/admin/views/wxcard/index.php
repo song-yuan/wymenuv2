@@ -50,7 +50,7 @@
 										<?php if($models):?>
 										<?php foreach($models as $model):?>
 											<tr>
-												<td><img style="width:100px;" src="<?php echo $model['qrcode'];?>"/><a class="btn default btn-xs blue" title="生成二维码" href="javascript:;" cardid="<?php echo $model['id'];?>" onclick="genQrcode(this);"><i class="fa fa-edit"></i> 生成二维码</a></td>
+												<td><img style="width:100px;" src="<?php echo $model['qrcode'];?>"/><a class="btn default btn-xs blue" title="生成二维码" href="javascript:;" cardid="<?php echo $model['lid'];?>" onclick="genQrcode(this);"><i class="fa fa-edit"></i> 生成二维码</a></td>
 												<td><?php echo $model['title'];?></td>
 												<td><?php echo $model['sku_quantity'];?> <a href="javascript:;" class="btn btn-xs blue change-sku" data-id="<?php echo $model['id'];?>"><i class="fa fa-pencil"></i></a></td>
 												<td><?php if($model['date_info_type']==1){ echo date('Y-m-d',$model['begin_timestamp']).'至'.date('Y-m-d',$model['end_timestamp']);}else{ echo '领取后'; echo $model['fixed_begin_term'] >0 ?$model['fixed_begin_term']:'当天'; echo '生效'.$model['fixed_term'].'天有效';}?></td>
