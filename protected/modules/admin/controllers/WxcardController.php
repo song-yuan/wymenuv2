@@ -69,6 +69,8 @@ class WxcardController extends BackendController{
 	      	$result = Curl::httpsRequest($url,$postData);
 			$result = json_decode($result);
 			if($result->errmsg=="ok"){
+				$isSync = DataSync::getAfterSync();
+				$wxCard->is_sync = $isSync;
 				if($type){
 					$wxCard->sku_quantity = $wxCard->sku_quantity + $sku;
 				}else{
@@ -192,6 +194,7 @@ class WxcardController extends BackendController{
 				 				 'reduce_cost'=>isset($reduceCost)?$reduceCost:0,
 				 				 'gift'=>isset($defaultDetail)?$defaultDetail:'',
 				 				 'card_id'=>$result->card_id,
+				 				 'is_sync'=>DataSync::getInitSync(),	
 				 				  );
 					$model->attributes =  $modelData;
 					$model->save();
@@ -207,6 +210,7 @@ class WxcardController extends BackendController{
 							$shopData = array(
 											'card_id'=>$result->card_id,
 											'wx_location_id'=>$shop,
+											'is_sync'=>DataSync::getInitSync(),	
 											);
 							$cardShop->attributes =  $shopData;
 							$cardShop->save();
