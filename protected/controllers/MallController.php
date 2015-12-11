@@ -242,6 +242,15 @@ class MallController extends Controller
 	}
 	/**
 	 * 
+	 * 卡券领取页面
+	 * 
+	 */
+	 public function actionGetWxCard()
+	{
+		$this->render('getwxcard',array('companyId'=>$this->companyId));
+	}
+	/**
+	 * 
 	 * 添加购物车
 	 * 
 	 */
