@@ -223,7 +223,7 @@ class WxcardController extends BackendController{
             		$transaction->rollback();
             		$msg = '创建失败,请去微信后台!';
             		Yii::app()->user->setFlash('error',$msg);
-            		$this->redirect(array('/brand/wxcard/index','cid'=>$this->companyId));
+            		$this->redirect(array('/brand/wxcard/index','companyId'=>$this->companyId));
        			 }
 				
 			}else{
@@ -284,7 +284,7 @@ class WxcardController extends BackendController{
 			$this->render('detail',array('cardInfo'=>$result->card));
 		}else{
 			Yii::app()->user->setFlash('error',$dataObj->errmsg);
-			$this->redirect(array('/admin/wxcard/index','cid'=>$this->companyId));
+			$this->redirect(array('/admin/wxcard/index','companyId'=>$this->companyId));
 		}
       }
       /**
@@ -313,7 +313,7 @@ class WxcardController extends BackendController{
 		}else{
 			Yii::app()->user->setFlash('error',$dataObj->errmsg);
 		}
-		$this->redirect(array('/admin/wxcard/index','cid'=>$this->companyId));
+		$this->redirect(array('/admin/wxcard/index','companyId'=>$this->companyId));
      }
      //卡券统计
       public function actionCardUser(){
