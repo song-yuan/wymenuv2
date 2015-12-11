@@ -131,7 +131,7 @@ class Server {
 				WxCardResult::cardNotPassCheck($this->postArr);
             }
             else if($this->event == 'user_get_card') {
-				WxCardResult::getCard($this->postArr);
+				WxCardResult::getCard($this->postArr,$this->brandId);
             }
             else if($this->event == 'user_del_card') {
 				WxCardResult::delCard($this->postArr);
