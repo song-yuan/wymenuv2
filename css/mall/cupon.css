@@ -32,8 +32,8 @@ input { line-height: normal; }
 .index .index_box .titl_h floor span{}
 
 .rindex{ margin:10px 10px 5px 10px; background:; box-shadow:1px 1px 3px #CCC; padding:5px 10px; border-radius:5px;position:relative;}
-.rindex .rindex_box .ricon_h{ float:left; margin-right:4% auto; text-align:center; width:22%; }
-.rindex .rindex_box .rtitl{float:left; width:72%;margin-left:4%;}
+.rindex .rindex_box .ricon_h{ float:left; margin-right:4% auto; text-align:center; width:32%;}
+.rindex .rindex_box .rtitl{float:left;width:62%;margin-left:2%;}
 .rindex .rindex_box .rtitl_h{ color:#666; }
 .rindex .rindex_box .rtitl_h h1{ font-size:16px; margin:7px 0; text-decoration:none;}
 .rindex .rindex_box .rtitl_h i span{ color:#666; float:left;}

@@ -42,7 +42,7 @@
 <div class="rindex">
     <div class="rindex_box">
         <div class="rindex_icon">
-             <div class="ricon_h"><img src="<?php echo $cupon['main_picture'];?>"></div>
+             <div class="ricon_h"><img src="<?php echo $cupon['main_picture'];?>" style="width:100%;"></div>
              <div class="rtitl">
 				<div class="rtitl_h">
                  <h1><?php echo $cupon['cupon_title'];?></h1> 

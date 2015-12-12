@@ -14,32 +14,6 @@ body{background: #EC5D5D;}
     <div class="topbox"><img src="../img/mall/cupon.png" /></div>
      <ul>
      <?php foreach($cupons as $cupon):?>
-     <?php if($cupon['is_used']==2):?>
-     <li><a href="<?php echo $this->createUrl('/mall/cuponInfo',array('companyId'=>$this->companyId,'detailid'=>$cupon['lid']));?>">
-		<div class="rindex">
-            <div class="rindex_box">
-                <div class="rindex_icon">
-                     <div class="rtitl">
-                         <h1><?php echo $cupon['title'];?></h1>
-						 <div class="rtitl_h">
-						 <?php if($cupon['promotion_type']==2):?>
-						 <floor title="#">消费满</floor><?php echo $cupon['min_consumer'];?><floor title="#">可用</floor>
-						 <?php endif;?>
-						 </div>                                 
-						 <div class="rtitl_h">
-						 <floor title="#">使用期限：</floor>
-                          <time title="#"><?php echo $cupon['begin_time'];?></time>
-						  <span>~</span>
-                          <time title="#"><?php echo $cupon['end_time'];?></time>
-                          <I><span></span></I>
-                         </div>
-                     </div>	
-                     <div class="clear"></div>
-                </div>
-            </div>
-        </div>
-		</a></li>
-     <?php else:?>
 		<li><a href="<?php echo $this->createUrl('/mall/cuponInfo',array('companyId'=>$this->companyId,'detailid'=>$cupon['lid']));?>">
 		<div class="index">
             <div class="index_box">
@@ -64,7 +38,6 @@ body{background: #EC5D5D;}
             </div>
         </div>
 		</a></li>
-		<?php endif;?>
 		<?php endforeach;?>
    </ul>
 </div>
