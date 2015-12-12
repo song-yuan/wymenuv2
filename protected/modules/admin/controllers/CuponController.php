@@ -181,7 +181,7 @@ class CuponController extends BackendController
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
 							'delete_flag'=>'0',
-							'is_used'=>0,
+							'is_used'=>1,
 							'is_sync'=>$is_sync,
 					);
 					$command = $db->createCommand()->insert('nb_cupon_branduser',$data);

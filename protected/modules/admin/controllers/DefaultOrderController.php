@@ -211,7 +211,7 @@ class DefaultOrderController extends BackendController
                 //原价
                 $originaltotal=$productTotalarray["originaltotal"];
                 //已支付
-                $paytotal=OrderProduct::getPayTotal($orderlist,$companyId);
+                $paytotal=OrderProduct::getPayTotalAll($orderlist,$companyId);
 //                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
                 //参与折扣的总额
                 $productDisTotal = OrderProduct::getDisTotal($orderlist,$order->dpid);
@@ -281,7 +281,7 @@ class DefaultOrderController extends BackendController
                 //原价
                 $originaltotal=$productTotalarray["originaltotal"];
                 //已支付
-                $paytotal=OrderProduct::getPayTotal($orderlist,$companyId);
+                $paytotal=OrderProduct::getPayTotalAll($orderlist,$companyId);
 //                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
                 //参与折扣的总额
                 $productDisTotal = OrderProduct::getDisTotal($orderlist,$order->dpid);
@@ -525,7 +525,7 @@ class DefaultOrderController extends BackendController
                     //原价
                     $originaltotal=$productTotalarray["originaltotal"];
                     //已支付
-                    $paytotal=OrderProduct::getPayTotal($orderList,$companyId);
+                    $paytotal=OrderProduct::getPayTotalAll($orderList,$companyId);
     //                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
                     //参与折扣的总额
                     $productDisTotal = OrderProduct::getDisTotal($orderList,$order->dpid);
@@ -878,6 +878,7 @@ class DefaultOrderController extends BackendController
                             //
                         }
                     }
+                    WxScanLog::invalidScene($companyId,$order->site_id);
                     $transaction->commit();
                     $ret=json_encode(array('status'=>true,'msg'=>"结单成功"));
                 } catch (Exception $ex) {
