@@ -116,7 +116,6 @@ class WxPromotionActivity
 		        	'cupon_source'=>0,
 		        	'source_id'=>$sourceId,
 		        	'is_used'=>0,
-		        	'get_time'=>$now,
 		        	'is_sync'=>DataSync::getInitSync(),
 					);
 			$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
