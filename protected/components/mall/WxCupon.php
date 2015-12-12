@@ -11,7 +11,7 @@ class WxCupon
 {
 	public static function getUserAllCupon($userId,$dpid){
 		$user = WxBrandUser::get($userId,$dpid);
-		$sql = 'select m.lid,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time from (select * from nb_cupon_branduser where dpid=:dpid and to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0' .
+		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time from (select * from nb_cupon_branduser where dpid=:dpid and to_group=3 and brand_user_lid=:userId and is_used=1 and delete_flag=0' .
 				' union select * from nb_cupon_branduser where dpid=:dpid and to_group=2 and brand_user_lid=:userLevelId and is_used > 0 and delete_flag=0)m ,nb_cupon n' .
 				' where m.cupon_id=n.lid and m.dpid=n.dpid and n.delete_flag=0';
 		$cupon = Yii::app()->db->createCommand($sql)
