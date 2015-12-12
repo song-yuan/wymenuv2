@@ -771,8 +771,8 @@ class Helper
 		if($hasData){
                     //$printserver='0';
                     //付款单打印二张，一张留存，一张给客户
-                    $retcontent= Helper::printPauseConetent($printer,$listData,$precode,$sufcode,$printserver,$order->lid);
-                    $retcontent= Helper::printPauseConetent($printer,$listData,$precode,$sufcode,$printserver,$order->lid);
+                    $retcontent= Helper::printPayConetent($printer,$listData,$precode,$sufcode,$printserver,$order->lid);
+                    //$retcontent= Helper::printPauseConetent($printer,$listData,$precode,$sufcode,$printserver,$order->lid);
                     $retcontent['orderid']=$order->lid;
                     return $retcontent;
 		}else{
@@ -2401,6 +2401,95 @@ class Helper
                         $db->createCommand("delete from nb_order_printjobs where dpid=".$printer->dpid." and orderid=".$orderid." and is_sync='10000'")->execute();
                         $db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
                         $db->createCommand("update nb_order_product set product_order_status='0' where dpid=".$printer->dpid." and order_id=".$orderid." and product_order_status='9'")->execute();
+                        $store->set($printer->dpid."_".$jobid,$contentCode,0,30);//should 120测试1200                        
+                        $transactionnow->commit();
+                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
+                    }catch( Exception $ex){
+                        $transactionnow->rollback();
+                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','数据库更新异常！'));
+                    }
+                }
+                $store->close();
+        }
+        
+        static public function printPayConetent(Printer $printer,$content,$precode,$sufcode,$printserver,$orderid)
+        {
+                $store=new Memcache;
+                $store->connect(Yii::app()->params['memcache']['server'],Yii::app()->params['memcache']['port']);                
+                $contentCode="";
+                //内容编码
+                if($printer->language=='1')//zh-cn GBK
+                {
+                    foreach($content as $line)
+                    {
+                        //$strcontent=mb_convert_encoding($line,"GBK","UTF-8");
+                        //$contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
+                        $strcontent=mb_convert_encoding(substr($line,2),"GBK","UTF-8");
+                        $strfontsize=substr($line,0,2);
+                        if($strfontsize=="br")
+                        {
+                            $contentCode.="0A";
+                        }else{                            
+                            $contentCode.="1D21".$strfontsize.strtoupper(implode('',unpack('H*', $strcontent)));
+                        }
+                    }
+                }elseif($printer->language=='2')//日文 shift-jis
+                {
+                    $contentCode.="1C43011C26";//日文前导符号
+                    foreach($content as $line)
+                    {
+                        //$strcontent=mb_convert_encoding($line,"SJIS","UTF-8");
+                        //$contentCode.=strtoupper(implode('',unpack('H*', $strcontent)))."0A";
+                        $strcontent=mb_convert_encoding(substr($line,2),"SJIS","UTF-8");
+                        $strfontsize=substr($line,0,2);
+                        if($strfontsize=="br")
+                        {
+                            $contentCode.="0A";
+                        }else{                            
+                            $contentCode.="1D21".$strfontsize.strtoupper(implode('',unpack('H*', $strcontent)));
+                        }
+                    }
+                }else
+                {
+                    return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'none','msg'=>yii::t('app','无法确定打印机语言！'));
+                }
+                //加barcode和切纸
+                $contentCode=$precode.$contentCode.$sufcode;
+                //任务构建
+                $se=new Sequence("printer_job_id");
+                $jobid = $se->nextval();
+                if($printserver=='1')//通过打印服务器打印
+                {
+                    if($printer->printer_type!='0')//not net
+                    {
+                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','网络打印的打印机必须是网络打印机！'));
+                    }
+                    
+                }else{//主动的同步打印 0
+                    $db=Yii::app()->db;
+                    $transactionnow=$db->beginTransaction();
+                    try{
+                        $seorderprintjobs=new Sequence("order_printjobs");
+                        $orderjobId = $seorderprintjobs->nextval();
+                        $time=date('Y-m-d H:i:s',time());
+                        //插入一条
+                        $orderPrintJob = array(
+                                            'lid'=>$orderjobId,
+                                            'dpid'=>$printer->dpid,
+                                            'create_at'=>$time,
+                                            'orderid'=>$orderid,
+                                            'jobid'=>$jobid,
+                                            'update_at'=>$time,
+                                            'address'=>$printer->address,
+                                            'content'=>$contentCode.$contentCode,
+                                            'printer_type'=>"0",
+                                            'finish_flag'=>'1',
+                                            'delete_flag'=>'0',
+                                            'is_sync'=>'01000',
+                                            );
+                        $db->createCommand("delete from nb_order_printjobs where dpid=".$printer->dpid." and orderid=".$orderid." and is_sync='01000'")->execute();
+                        $db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
+                        //$db->createCommand("update nb_order_product set product_order_status='0' where dpid=".$printer->dpid." and order_id=".$orderid." and product_order_status='9'")->execute();
                         $store->set($printer->dpid."_".$jobid,$contentCode,0,30);//should 120测试1200                        
                         $transactionnow->commit();
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');

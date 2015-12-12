@@ -610,7 +610,7 @@ class DefaultOrderController extends BackendController
             	 //前面加 barcode
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $orderProducts = OrderProduct::getHasOrderProductsAll($orderList,$order->dpid);
-                $memo="清单";
+                $memo="预结单";
                 $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo,$cardtotal);
                 Yii::app()->end(json_encode($printList));
         }

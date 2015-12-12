@@ -569,7 +569,7 @@
                                                         <li id="pay_clearone" style="background-color: #add"><?php echo yii::t('app','退格');?></li>
                                                         <li id="pay_clearall" style="background-color: red"><?php echo yii::t('app','清除/全额');?></li>
                                                         <li id="pay_btn" style="background-color: #0099FF"><?php echo yii::t('app','收银');?></li>    
-                                                        <li id="printlistaccount" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','打印消费清单');?></li>
+                                                        <li id="printlistaccount" class="default" style="background-color: #00FFFFFF"><?php echo yii::t('app','打印预结单');?></li>
                                                         <li id="layer2_close" class="default" style="background-color: #0a0"><?php echo yii::t('app','关闭');?></li>
                                                     </ul>
                                                 </div> 
@@ -3021,8 +3021,16 @@
                 var payCashAccount= parseFloat($("#payCashAccount").text().replace(",","")) - parseFloat($("#payChangeAccount").text().replace(",",""));
                 if(payCashAccount<0)
                 {
-                    alert("金额有误");
-                   
+                    alert("金额有误");                   
+                    return false;
+                }
+                var payShouldAccount=$("#payShouldAccount").text();
+                var payRealityAccount=$("#payRealityAccount").text();
+                
+                if(parseFloat(payRealityAccount.replace(",","")) < parseFloat(payShouldAccount.replace(",","")))
+                {
+                    alert("收款不够");
+                    //ispaybuttonclicked=false;
                     return false;
                 }
                 var orderid=$(".selectProduct").attr("orderid");
