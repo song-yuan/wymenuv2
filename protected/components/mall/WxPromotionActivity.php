@@ -28,6 +28,11 @@ class WxPromotionActivity
 				  ->queryRow();
 		return $activity;
 	}
+	/**
+	 * 
+	 * 获取营销活动 详情
+	 * 
+	 */
 	public static function getDetail($dpid,$activityId){
 		$now = date('Y-m-d H:i:s',time());
 		$sql = 'select * from nb_promotion_activity_detail where dpid=:dpid and activity_lid=:activityId and promotion_type > 0 and delete_flag=0';
@@ -39,7 +44,7 @@ class WxPromotionActivity
 			if($activity['promotion_type']==1){
 				$promotion = WxPromotion::getPromotion($dpid,$activity['promotion_lid']);
 				if($promotion){
-					if($promotion['to_group']!=3){
+					if($promotion['to_group']==2){
 						unset($activitys[$k]);
 					}else{
 						$activitys[$k]['title'] = isset($promotion['promotion_title'])?$promotion['promotion_title']:'';
@@ -52,10 +57,14 @@ class WxPromotionActivity
 			}elseif($activity['promotion_type']==2){
 				$promotion = WxCupon::getCupon($dpid,$activity['promotion_lid']);
 				if($promotion){
-					$activitys[$k]['title'] = isset($promotion['cupon_title'])?$promotion['cupon_title']:'';
-					$activitys[$k]['min_consumer'] = isset($promotion['min_consumer'])?$promotion['min_consumer']:'';
-					$activitys[$k]['begin_time'] = isset($promotion['begin_time'])?$promotion['begin_time']:'';
-					$activitys[$k]['end_time'] = isset($promotion['end_time'])?$promotion['end_time']:'';
+					if($promotion['to_group']==2){
+						unset($activitys[$k]);
+					}else{
+						$activitys[$k]['title'] = isset($promotion['cupon_title'])?$promotion['cupon_title']:'';
+						$activitys[$k]['min_consumer'] = isset($promotion['min_consumer'])?$promotion['min_consumer']:'';
+						$activitys[$k]['begin_time'] = isset($promotion['begin_time'])?$promotion['begin_time']:'';
+						$activitys[$k]['end_time'] = isset($promotion['end_time'])?$promotion['end_time']:'';
+					}
 				}else{
 					unset($activitys[$k]);
 				}
@@ -162,9 +171,9 @@ class WxPromotionActivity
 	}
 	public static function getActivityUser($dpid,$userId,$type,$promotionId){
 		if($type==1){
-			$sql = 'select * from nb_private_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or (to_group=2)) and private_promotion_id='.$promotionId;
+			$sql = 'select * from nb_private_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or (to_group=2)) and private_promotion_id='.$promotionId.' delete_flag=0';
 		}elseif($type==2){
-			$sql = 'select * from nb_cupon_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or (to_group=2)) and cupon_id='.$promotionId;
+			$sql = 'select * from nb_cupon_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or (to_group=2)) and cupon_id='.$promotionId.' delete_flag=0';
 		}
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 	}
