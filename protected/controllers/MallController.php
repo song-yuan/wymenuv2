@@ -364,7 +364,7 @@ class MallController extends Controller
 		if($result){
 			$msg = '领取成功';
 		}else{
-			$msg = '领取失败,请重新领取';
+			$msg = '已领取';
 		}
 		Yii::app()->end($msg);
 	}

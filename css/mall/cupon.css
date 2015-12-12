@@ -23,8 +23,8 @@ input { line-height: normal; }
 
 
 .index{ margin:10px 10px 5px 10px; background:#ffffff; box-shadow:1px 1px 3px #CCC; padding:5px 10px; border-radius:5px;position:relative;}
-.index .index_box .icon_h{ float:left; margin-right:4% auto; text-align:center; width:22%;}
-.index .index_box .titl{float:left;width:72%;margin-left:4%;}
+.index .index_box .icon_h{ float:left; margin-right:4% auto; text-align:center; width:32%;}
+.index .index_box .titl{float:left;width:62%;margin-left:2%;}
 .index .index_box .titl h1{ font-size:16px; margin:7px 0; text-decoration:none}
 .index .index_box .titl_h{ color:#666; }
 .index .index_box .titl_h i span{ color:#666; float:right}
