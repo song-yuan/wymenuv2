@@ -162,7 +162,7 @@ class WxPromotionActivity
 	}
 	public static function getActivityUser($dpid,$userId,$type,$promotionId){
 		if($type==1){
-			$sql = 'select * from nb_private_branduser where dpid='.$dpid.' and brand_user_lid='.$userId.' and private_promotion_id='.$promotionId;
+			$sql = 'select * from nb_private_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or (to_group=2)) and private_promotion_id='.$promotionId;
 		}elseif($type==2){
 			$sql = 'select * from nb_cupon_branduser where dpid='.$dpid.' and brand_user_lid='.$userId.' and cupon_id='.$promotionId;
 		}
