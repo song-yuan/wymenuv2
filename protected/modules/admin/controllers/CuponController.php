@@ -92,7 +92,7 @@ class CuponController extends BackendController
 							'update_at'=>date('Y-m-d H:i:s',time()),
 							'cupon_id'=>$model->lid,
 							'cupon_source'=>'0',
-							//'source_id'=>$model->lid,
+							'source_id'=>'0',
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
 							'delete_flag'=>'0',

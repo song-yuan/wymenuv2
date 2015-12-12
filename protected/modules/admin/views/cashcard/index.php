@@ -80,11 +80,12 @@
 										</div>
 									</div><!-- 特价优惠是否有效 -->
 							<div class="form-group">
-										<?php echo $form->label($model, yii::t('app','代金券是否有效'),array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, yii::t('app','设置代金券使用次数（每天）'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_cupon', array('0' => yii::t('app','所有代金券带客人可用') , '1' => yii::t('app','禁止客人使用代金券')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_cupon')));?>
+											<?php echo $form->textField($model, 'is_cupon',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('负1表示无限制，0表示禁止使用，大于0表示每天限制次数')));?>
 											<?php echo $form->error($model, 'is_cupon' )?>
 										</div>
+										<div class="col-md-4" style="color: red;"><?php echo  yii::t('app','注：-1表示无限制，0表示禁止使用，大于0表示每天限制次数'); ?></div>
 									</div><!-- 代金券是否有效 -->
 							<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','充值返现是否有效'),array('class' => 'col-md-3 control-label'));?>
@@ -193,11 +194,12 @@
 										</div>
 									</div><!-- 特价优惠是否有效 -->
 									<div class="form-group">
-										<?php echo $form->label($model, yii::t('app','代金券是否有效'),array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, yii::t('app','设置代金券使用次数（每天）'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_cupon', array('0' => yii::t('app','有效') , '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_cupon')));?>
+											<?php echo $form->textField($model, 'is_cupon',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('负1表示无限制，0表示禁止使用，大于0表示每天限制次数')));?>
 											<?php echo $form->error($model, 'is_cupon' )?>
 										</div>
+										<div class="col-md-4" style="color: red;"><?php echo  yii::t('app','注：-1表示无限制，0表示禁止使用，大于0表示每天限制次数'); ?></div>
 									</div><!-- 代金券是否有效 -->
 									<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','返现和充值是否有效'),array('class' => 'col-md-3 control-label'));?>
