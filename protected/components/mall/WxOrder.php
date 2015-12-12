@@ -254,7 +254,7 @@ class WxOrder
 		$now = date('Y-m-d H:i:s',time());
 		$order = self::getOrder($orderId,$dpid);
 		$sql = 'select t1.cupon_money from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cuponBranduserLid.
-				' and t1.begin_time <= "'.$now.'" and "'.$now.'" <= t1.end_time and t1.delete_flag=0 and t1.is_available=0';
+				' and t.dpid='.$dpid.' and t1.begin_time <= "'.$now.'" and "'.$now.'" <= t1.end_time and t1.delete_flag=0 and t1.is_available=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result){
 			$isSync = DataSync::getInitSync();
@@ -296,6 +296,9 @@ class WxOrder
 	        );
 		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 		if($order['cupon_branduser_lid']){
+			$sql = 'select t1.cupon_money from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$order['cupon_branduser_lid'].' and t.dpid='.$order['dpid'];
+			$result = Yii::app()->db->createCommand($sql)->queryRow();
+			
 			$se = new Sequence("order_pay");
 		    $orderPayId = $se->nextval();
 		    $insertOrderPayArr = array(
@@ -304,7 +307,7 @@ class WxOrder
 		        	'create_at'=>date('Y-m-d H:i:s',$time),
 		        	'update_at'=>date('Y-m-d H:i:s',$time), 
 		        	'order_id'=>$order['lid'],
-		        	'pay_amount'=>$order['should_total'],
+		        	'pay_amount'=>$result['cupon_money'],
 		        	'paytype'=>9,
 		        	'paytype_id'=>$order['cupon_branduser_lid'],
 		        	'is_sync'=>DataSync::getInitSync(),
