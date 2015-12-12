@@ -770,6 +770,8 @@ class Helper
                 $printret=array();
 		if($hasData){
                     //$printserver='0';
+                    //付款单打印二张，一张留存，一张给客户
+                    $retcontent= Helper::printPauseConetent($printer,$listData,$precode,$sufcode,$printserver,$order->lid);
                     $retcontent= Helper::printPauseConetent($printer,$listData,$precode,$sufcode,$printserver,$order->lid);
                     $retcontent['orderid']=$order->lid;
                     return $retcontent;
