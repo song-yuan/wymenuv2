@@ -315,7 +315,7 @@ class WxOrder
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 			
 			$isSync = DataSync::getInitSync();
-			$sql = 'update nb_cupon_branduser set is_used=1,is_sync='.$isSync.' where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
+			$sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 	 }
