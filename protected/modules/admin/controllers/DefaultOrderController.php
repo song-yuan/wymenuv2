@@ -495,6 +495,69 @@ class DefaultOrderController extends BackendController
                 Yii::app()->end(json_encode($savejson));
 	}
         
+        public function actionOrderAccountSure(){
+		$companyId = Yii::app()->request->getParam('companyId',0);
+                $orderId = Yii::app()->request->getParam('orderId',"0");
+                $padId = Yii::app()->request->getParam('padId',"0");
+                $payShouldAccount=Yii::app()->request->getParam('payShouldAccount',"0");
+                $cardtotal=Yii::app()->request->getParam('cardtotal',0);
+                $order=new Order();
+                $printList=array();
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
+                //echo $orderId;exit;
+                if($orderId !='0')
+                {
+                    $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
+                    if(empty($order))
+                    {
+                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                    }
+                    //$productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                    $criteria->order = ' t.lid desc ';                    
+                    $siteNo = SiteNo::model()->find($criteria);
+                    $orderList=Order::getOrderList($companyId, $order->site_id, $order->is_temp);
+                    //var_dump($siteNo);exit;
+                    $productTotalarray = OrderProduct::getOriginalTotal($orderList,$companyId);
+                    //var_dump($productTotalarray);exit;
+                    //现价
+                    $nowTotal=$productTotalarray["total"];
+                    //原价
+                    $originaltotal=$productTotalarray["originaltotal"];
+                    //已支付
+                    $paytotal=OrderProduct::getPayTotalAll($orderList,$companyId);
+    //                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+                    //参与折扣的总额
+                    $productDisTotal = OrderProduct::getDisTotal($orderList,$order->dpid);
+                    //var_dump($productTotal);exit;
+                    if($siteNo->is_temp=='1')
+                    {
+                        $total = array('total'=>$nowTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+                    }else{
+                        $total = Helper::calOrderConsume($order,$siteNo, $nowTotal);
+                    }
+                    $order->should_total=$originaltotal;
+                    $order->reality_total=$payShouldAccount;//$total['total'];
+                    $order->pay_total=$paytotal;
+                    $order->pay_discount_total=$productDisTotal;
+                    
+                }
+                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
+                $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
+            	 //前面加 barcode
+                $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+                $orderProducts = OrderProduct::getHasOrderProductsAll($orderList,$order->dpid);
+                $memo="结账单";
+                $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo,$cardtotal);
+                //var_dump($printList);exit;
+                //Yii::app()->end(json_encode($printList));
+                $this->renderPartial('orderaccountsure' , array(
+				'printList'=>$printList
+		));
+        }
+        
         public function actionOrderPrintlist(){
 		$companyId = Yii::app()->request->getParam('companyId',0);
                 $orderId = Yii::app()->request->getParam('orderId',"0");
@@ -547,7 +610,7 @@ class DefaultOrderController extends BackendController
             	 //前面加 barcode
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $orderProducts = OrderProduct::getHasOrderProductsAll($orderList,$order->dpid);
-                $memo="清单";
+                $memo="预结单";
                 $printList = Helper::printList($order,$orderProducts , $pad,$precode,"0",$memo,$cardtotal);
                 Yii::app()->end(json_encode($printList));
         }
@@ -672,6 +735,11 @@ class DefaultOrderController extends BackendController
                     $ordersql="update nb_order set order_status=".$orderstatus.",remark='".$ordermemo
                             ."' where dpid=".$companyId." and site_id=".$order->site_id
                             ." and is_temp=".$order->is_temp." and order_status in ('1','2','3')";
+                    $db->createCommand($ordersql)->execute();
+                    
+                    $ordersql="update nb_order_product set product_order_status=2" 
+                            ." where dpid=".$companyId." and order_id in (".$order->site_id
+                            .") and product_order_status=1 and delete_flag=0";
                     $db->createCommand($ordersql)->execute();
 //                    $criteria = new CDbCriteria;
 //                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
@@ -880,6 +948,7 @@ class DefaultOrderController extends BackendController
                     }
                     WxScanLog::invalidScene($companyId,$order->site_id);
                     $transaction->commit();
+                    
                     $ret=json_encode(array('status'=>true,'msg'=>"结单成功"));
                 } catch (Exception $ex) {
                     $transaction->rollback();
