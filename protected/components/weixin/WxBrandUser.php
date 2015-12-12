@@ -42,6 +42,27 @@ class WxBrandUser {
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
 		return $brandUser;
 	}
+	/**
+	 * 
+	 * 获取会员的历史积分
+	 * 
+	 */
+	public static function getHistoryPoints($userId,$dpid) {
+		$sql = 'select sum(point_num) as total from nb_point_record where brand_user_lid = '.$userId.' and dpid='.$dpid;
+		$points = Yii::app()->db->createCommand($sql)->queryRow();
+		return $points?$points['total']:'0';
+	}
+	/**
+	 * 
+	 * 获取会员的可用积分
+	 * 
+	 */
+	public static function getAvaliablePoints($userId,$dpid) {
+		$now = date('Y-m-d H:i:s',time());
+		$sql = 'select sum(point_num) as total from nb_point_record where brand_user_lid = '.$userId.' and dpid='.$dpid.' and end_time > '.$now;
+		$points = Yii::app()->db->createCommand($sql)->queryRow();
+		return $points?$points['total']:'0';
+	}
 }
 
  
