@@ -80,7 +80,7 @@ $(document).ready(function(){
 		}
 	});
 	$('.user-cupon .item.useCupon').click(function(){
-		var usesCuponId = $(this).attr('user-cupon-id');
+		var userCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
 		var noCuponMoney = $('.noCupon').attr('cupon-money');
 		var minMoney = $(this).attr('min-money');
