@@ -65,7 +65,7 @@
                                                         <th><?php echo yii::t('app','最低积分');?></th>
                                                         <th><?php echo yii::t('app','最高积分');?></th>
                                                         <th><?php echo yii::t('app','返现比例');?></th>
-                                                        <th><?php echo yii::t('app','是否有效');?></th>
+                                                        <!-- <th><?php echo yii::t('app','是否有效');?></th> -->
                                                         <th>&nbsp;</th>
                                                     </tr>
 						</thead>
@@ -79,9 +79,9 @@
 								<td ><?php echo $model->min_available_point;?></td>
                                                                 <td ><?php echo $model->max_available_point;?></td>
                                                                 <td ><?php echo $model->proportion_points;?></td>
-                                                                <td>
+                                                                <!-- <td>
                                                                         <?php if($model->is_available) {echo '否';} else {echo '是';} ?>
-								</td>
+								</td> -->
 								<td class="center">
 								<a href="<?php echo $this->createUrl('wxcashback/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
