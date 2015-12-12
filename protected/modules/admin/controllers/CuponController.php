@@ -163,11 +163,11 @@ class CuponController extends BackendController
 			$db = Yii::app()->db;
 			if(!empty($groupID)){
 				//$sql = 'delete from nb_cupon_branduser where cupon_id='.$lid.' and dpid='.$this->companyId;
-                $sql = 'update nb_cupon_branduser set delete_flag="1",is_sync ='.$is_sync.' where cupon_id='.$lid.' and dpid='.$this->companyId;
+                $sql = 'update nb_cupon_branduser set delete_flag="1",is_sync ='.$is_sync.' where cupon_id='.$lid.' and dpid='.$this->companyId.' and to_group=2';
 				$command=$db->createCommand($sql);
 				$command->execute();
 				foreach ($gropids as $gropid){
-					$se = new Sequence("cupon");
+					$se = new Sequence("cupon_branduser");
 					$id = $se->nextval();
 					
 					$data = array(
@@ -181,6 +181,7 @@ class CuponController extends BackendController
 							'to_group'=>"2",
 							'brand_user_lid'=>$gropid,
 							'delete_flag'=>'0',
+							'is_used'=>0,
 							'is_sync'=>$is_sync,
 					);
 					$command = $db->createCommand()->insert('nb_cupon_branduser',$data);
