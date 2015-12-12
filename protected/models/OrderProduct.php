@@ -225,7 +225,19 @@ class OrderProduct extends CActiveRecord
                                 left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
 				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.product_order_status in("0","9") and t.is_retreat=0 and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id';
 		return $db->createCommand($sql)->queryAll();
-	}       
+	}
+        
+        //微信单个订单支付的产品
+        static public function getHasPayProducts($orderId,$dpid){
+		$db = Yii::app()->db;
+		$sql = "select t.*,t1.product_name,t1.original_price,t1.is_temp_price,t1.is_special,t1.is_discount,
+                                t1.product_unit,t1.weight_unit,t1.is_weight_confirm,t1.printer_way_id,t2.category_name,t3.set_name from nb_order_product t
+				left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid
+				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
+                                left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
+				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.product_order_status in("2","8") and t.is_retreat=0 and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id';
+		return $db->createCommand($sql)->queryAll();
+	}
         
         //多个订单挂单的产品
         static public function getHasPauseProductsAll($orderList,$dpid){
@@ -262,7 +274,7 @@ class OrderProduct extends CActiveRecord
 	}
         
         //订单产品原价
-	static public function getPayTotal($orderlist,$dpid){
+	static public function getPayTotalAll($orderlist,$dpid){
 		$db = Yii::app()->db;
 		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as paytotal"
                         . " from nb_order_product t"
@@ -281,6 +293,20 @@ class OrderProduct extends CActiveRecord
                         . " where t.dpid=tp.dpid and t.product_id=tp.lid and t.delete_flag=0 "
                         . " and t.is_giving=0 and t.is_retreat=0 and t.order_id=".$orderId." and t.dpid=".$dpid;
 		$ret= $db->createCommand($sql)->queryRow();
+                return $ret;
+	}
+        
+        //微信已支付的总价，状态是8
+        static public function getPayTotal($orderId,$dpid){
+            //echo "222";exit;
+		$db = Yii::app()->db;
+		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as total"
+                        . ",ifnull(sum(t.original_price*(IF(t.weight>0,t.weight,t.amount))),0.00) as originaltotal"
+                        . " from nb_order_product t"
+                        . " where t.product_order_status in('2','8') and t.delete_flag=0 "
+                        . " and t.is_giving=0 and t.is_retreat=0 and t.order_id=".$orderId." and t.dpid=".$dpid;
+		$ret= $db->createCommand($sql)->queryRow();
+                //echo $sql;exit;
                 return $ret;
 	}
         
@@ -499,7 +525,7 @@ class OrderProduct extends CActiveRecord
         static public function setPayJobs($compayId,$padId){
 		$sqljoborder="select distinct order_id from nb_order_product where product_order_status='8' and dpid=".$compayId." order by order_id";
                 $modeljoborder=Yii::app()->db->createCommand($sqljoborder)->queryAll();                        
-                //var_dump($padId,$pad);exit;
+                //var_dump($modeljoborder,$padId);exit;
                 //前面加 barcode
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $cardtotal=0;
@@ -515,13 +541,16 @@ class OrderProduct extends CActiveRecord
                     {
                         if($mjo["order_id"] !='0000000000')
                         {
+                            //echo "1111";
                             $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$mjo["order_id"],':dpid'=>$compayId));
+                            //var_dump($order);echo "1111";exit;
                             if(empty($order))
                             {
                                 //throw new Exception(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
                                 continue;
                             }
-                            $productTotalarray = OrderProduct::getPauseTotal($order->lid,$order->dpid);
+                            //$productTotalarray = OrderProduct::getPauseTotal($order->lid,$order->dpid);
+                            $productTotalarray = OrderProduct::getPayTotal($order->lid,$order->dpid);
                             //var_dump($productTotalarray);exit;
                             $total=$productTotalarray["total"];
                             $originaltotal=$productTotalarray["originaltotal"]; 
@@ -529,22 +558,26 @@ class OrderProduct extends CActiveRecord
                             $criteria->condition =  't.dpid='.$compayId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                             $criteria->order = ' t.lid desc ';                    
                             $siteNo = SiteNo::model()->find($criteria);
-                            if($order->is_temp=='0')
-                            {
-                                $total = Helper::calOrderConsume($order,$siteNo, $total);
-                            }
+//                            if($order->is_temp=='0')
+//                            {
+//                                $total = Helper::calOrderConsume($order,$siteNo, $total);
+//                            }
                             $order->should_total=$originaltotal;
-                            $order->reality_total=$total["total"];
+                            $order->reality_total=$total;//["total"];
                             //var_dump($order);exit;
-                            $orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
+                            //$orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
+                            $orderProducts = OrderProduct::getHasPayProducts($order->lid,$order->dpid);
                             //var_dump($orderProducts);exit;
-                            $printList = Helper::printPauseList($order,$orderProducts,$pad,$precode,"0",$memo,$cardtotal);
+                            //$printList = Helper::printPauseList($order,$orderProducts,$pad,$precode,"0",$memo,$cardtotal);
+                            $printList = Helper::printPayList($order,$orderProducts,$pad,$precode,"0",$memo,$cardtotal);
 //                                    if($printList["status"])
 //                                    {
 //                                        array_push($modelprinterjob,$printList);
 //                                    }
+                            //var_dump($printList);exit;
                         }                               
                     }
+                    //return $printList;
                     //var_dump($modelprinterjob);exit;
                 }
 	}
