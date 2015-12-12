@@ -43,8 +43,7 @@ class MallController extends Controller
 					if(!empty($scaned)){
 						$scene = WxScanLog::getScene($this->companyId,$scaned['scene_id']);
 						Yii::app()->session['qrcode-'.$userId] = $scene['id'];
-					}
-					if(!isset(Yii::app()->session['qrcode-'.$userId])){
+					}else{
 						Yii::app()->session['qrcode-'.$userId] = -1;//通过扫描二维码 添加session
 					}
 				}else{
