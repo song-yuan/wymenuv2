@@ -241,6 +241,7 @@ class DefaultSiteController extends BackendController
                         //更新所有状态是9的为0（微信下单）,8的为3（微信支付）,并自动呼叫
                         $ret9arr=OrderProduct::setOrderCall($compayId,"0000000000","0");
                         //var_dump($ret9arr);exit;
+                        OrderProduct::setPayJobs($compayId,$padId);
                         $ret8arr=OrderProduct::setPayCall($compayId,"0000000000","0");
                         //var_dump($ret8arr);exit;
                         //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
@@ -267,7 +268,7 @@ class DefaultSiteController extends BackendController
                         //下单打印出来，暂时不用
                         //OrderProduct::setPauseJobs($compayId,$padId);
                         //去modeljobs
-                        //$modeljobs= Yii::app()->db->createCommand("select dpid,jobid,address from nb_order_printjobs where dpid=".$compayId." and is_sync='10000'")->queryAll();
+                        $modeljobs= Yii::app()->db->createCommand("select dpid,jobid,address from nb_order_printjobs where dpid=".$compayId." and is_sync='10000'")->queryAll();
                     }
                 } catch (Exception $ex) {
                     echo $ex->getMessage();
@@ -277,7 +278,7 @@ class DefaultSiteController extends BackendController
 		//var_dump(array("status"=>$status,"models"=>$models));exit;
                 //array_push($models, array("status"=>$status));
                 //Yii::app()->end(json_encode(array("status"=>$status,"models"=>$models,"modeljobs"=>$modeljobs)));
-                Yii::app()->end(json_encode(array("status"=>$status,"models"=>$models,"ret8arr"=>$ret8arr,"ret9arr"=>$ret9arr)));
+                Yii::app()->end(json_encode(array("status"=>$status,"models"=>$models,"ret8arr"=>$ret8arr,"ret9arr"=>$ret9arr,"modeljobs"=>$modeljobs)));
 	}
         
         public function actionFinshPauseJobs()
