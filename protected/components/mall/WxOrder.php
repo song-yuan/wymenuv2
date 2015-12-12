@@ -230,7 +230,7 @@ class WxOrder
 	 */
 	public static function updateOrderProductStatus($orderId,$dpid){
 		$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order_product set product_order_status=2,is_sync='.$isSync.' where order_id='.$orderId.' and dpid='.$dpid.' and delete_flag=0';
+		$sql = 'update nb_order_product set product_order_status=8,is_sync='.$isSync.' where order_id='.$orderId.' and dpid='.$dpid.' and delete_flag=0';
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
