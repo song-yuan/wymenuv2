@@ -333,7 +333,7 @@ class OrderProduct extends CActiveRecord
 		return $db->createCommand($sql)->queryAll();
 	}
         
-        static public function setOrderCall($dpid){
+        static public function setOrderCall($dpid,$site_id,$is_temp){
             $db = Yii::app()->db;
             $retarr=array();
             $temparr=array();
@@ -345,7 +345,11 @@ class OrderProduct extends CActiveRecord
 		$sqlorderproduct="select tp.lid,tp.order_id,t.site_id,t.is_temp from nb_order_product tp"
                         . " LEFT JOIN nb_order t on t.dpid=tp.dpid and t.lid=tp.order_id"
                         . " where tp.product_order_status='9' and tp.dpid="
-                        .$dpid." order by tp.order_id";                
+                        .$dpid; 
+                if($site_id!="0000000000")
+                {
+                    $sqlorderproduct.=" and t.site_id=".$site_id." and t.is_temp=".$is_temp;
+                }
                 $modelorderproduct=$db->createCommand($sqlorderproduct)->queryAll();
                 foreach ( $modelorderproduct as $mop)
                 {
@@ -384,7 +388,7 @@ class OrderProduct extends CActiveRecord
             return $retarr;
 	}
         
-        static public function setPayCall($dpid){
+        static public function setPayCall($dpid,$site_id,$is_temp){
             $db = Yii::app()->db;
             $retarr=array();
             $temparr=array();
@@ -396,7 +400,11 @@ class OrderProduct extends CActiveRecord
 		$sqlorderproduct="select tp.lid,tp.order_id,t.site_id,t.is_temp from nb_order_product tp"
                         . " LEFT JOIN nb_order t on t.dpid=tp.dpid and t.lid=tp.order_id"
                         . " where tp.product_order_status='8' and tp.dpid="
-                        .$dpid." order by tp.order_id";                
+                        .$dpid; 
+                if($site_id!="0000000000")
+                {
+                    $sqlorderproduct.=" and t.site_id=".$site_id." and t.is_temp=".$is_temp;
+                }
                 $modelorderproduct=$db->createCommand($sqlorderproduct)->queryAll();
                 foreach ( $modelorderproduct as $mop)
                 {
@@ -410,7 +418,7 @@ class OrderProduct extends CActiveRecord
                     }
                 }
                 
-                $db->createCommand("update nb_order_product set product_order_status='1'"
+                $db->createCommand("update nb_order_product set product_order_status='2'"
                         . " where lid in (".$lidlistproduct.") and product_order_status='8'"
                         . " and dpid=".$dpid)->execute();
                 
