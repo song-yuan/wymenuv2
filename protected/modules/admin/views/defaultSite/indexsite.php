@@ -326,40 +326,40 @@
                                     setTimeout("Androidwymenuprinter.paycall('"+value+"')", 6000*times+1000 );
                                     times++;
                                 });
-//                                $.each(msg.modeljobs,function(key,value){
-//                                    printresult=false;
-//                                    for(var itemp=1;itemp<4;itemp++)
-//                                    {
-//                                        if(printresult)
-//                                        {
-//                                            successjobs=successjobs+","+value.jobid;
-//                                            break;
-//                                        }
-//                                        var addressdetail=value.address.split(".");
-//                                        if(addressdetail[0]=="com")
-//                                        {
-//                                            var baudrate=parseInt(addressdetail[2]);
-//                                            printresult=Androidwymenuprinter.printComJob(value.dpid,value.jobid,addressdetail[1],baudrate);
-//                                        }else{
-//                                            //alert(value.dpid);alert(value.jobid);alert(value.address);
-//                                            printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
-//                                        }                                                                        
-//                                    }
-//                                });
-//                                if("00000000"!=successjobs)
-//                                {
-//                                    $.ajax({
-//                                        url:"/wymenuv2/admin/defaultSite/finshPauseJobs/companyId/<?php echo $this->companyId; ?>/successjobs/"+successjobs,
-//                                        type:'GET',
-//                                        timeout:5000,
-//                                        cache:false,
-//                                        async:false,
-//                                        dataType: "json",
-//                                        success:function(msg){
-//
-//                                        }
-//                                    });
-//                                }
+                                $.each(msg.modeljobs,function(key,value){
+                                    printresult=false;
+                                    for(var itemp=1;itemp<4;itemp++)
+                                    {
+                                        if(printresult)
+                                        {
+                                            successjobs=successjobs+","+value.jobid;
+                                            break;
+                                        }
+                                        var addressdetail=value.address.split(".");
+                                        if(addressdetail[0]=="com")
+                                        {
+                                            var baudrate=parseInt(addressdetail[2]);
+                                            printresult=Androidwymenuprinter.printComJob(value.dpid,value.jobid,addressdetail[1],baudrate);
+                                        }else{
+                                            //alert(value.dpid);alert(value.jobid);alert(value.address);
+                                            printresult=Androidwymenuprinter.printNetJob(value.dpid,value.jobid,value.address);
+                                        }                                                                        
+                                    }
+                                });
+                                if("00000000"!=successjobs)
+                                {
+                                    $.ajax({
+                                        url:"/wymenuv2/admin/defaultSite/finshPauseJobs/companyId/<?php echo $this->companyId; ?>/successjobs/"+successjobs,
+                                        type:'GET',
+                                        timeout:5000,
+                                        cache:false,
+                                        async:false,
+                                        dataType: "json",
+                                        success:function(msg){
+
+                                        }
+                                    });
+                                }
                             }                            
                         },
                         error: function(msg){
