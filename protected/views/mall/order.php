@@ -47,7 +47,7 @@
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
 		<div class="item on" paytype="2">线上支付</div>
-		<div class="item" paytype="1" style="border:none;">现金支付</div>
+		<div class="item" paytype="1">现金支付</div>
 	</div>
 </di>
 <div class="bottom"></div>
@@ -64,30 +64,37 @@
 <div class="user-cupon" id="cuponList">
 <?php if($isCupon):?>
 <?php foreach($cupons as $coupon):?>
-	<div class="item" cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
+	<div class="item useCupon" cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
 <?php endforeach;?>
-<div class="item" cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
+<div class="item noCupon" cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 <?php endif;?>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
 	$('.paytype .item').click(function(){
-		$('.item').removeClass('on');
+		var paytype = $(this).attr('paytype');
+		$('.paytype .item').removeClass('on');
 		$(this).addClass('on');
+		if(parseInt(paytype)==1){
+			$('.noCupon').click();
+		}
 	});
-	$('.user-cupon .item').click(function(){
+	$('.user-cupon .item.useCupon').click(function(){
 		var cuponId = $(this).attr('cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
+		var noCuponMoney = $('.noCupon').attr('cupon-money');
 		var minMoney = $(this).attr('min-money');
 		var total = $('#total').html();
 		var money = 0;
 		
-		$('.item').removeClass('on');
+		$('.user-cupon .item').removeClass('on');
 		$(this).addClass('on');
 		$('#cuponList').css('display','none');
 		$('input[name="cupon"]').val(cuponId);
+		$('.noCupon').attr('min-money',minMoney);
+		$('.noCupon').attr('cupon-money',cuponMoney);
 		
-		money = parseFloat(total) - parseFloat(cuponMoney);
+		money = parseFloat(total) + parseFloat(noCuponMoney) - parseFloat(cuponMoney);
 		if(money > 0){
 			money = money;
 		}else{
@@ -95,11 +102,31 @@ $(document).ready(function(){
 		}
 		money = money.toFixed(2);
 		$('#total').html(money);
-		if(parseInt(cuponMoney)==0&&parseInt(minMoney)==0){
-			$('.cupon').find('.copun-rt').html('请选择代金券');
+		$('.cupon').find('.copun-rt').html('满'+minMoney+'减'+cuponMoney);
+	});
+	$('.user-cupon .item.noCupon').click(function(){
+		var cuponId = $(this).attr('cupon-id');
+		var cuponMoney = $(this).attr('cupon-money');
+		var minMoney = $(this).attr('min-money');
+		var total = $('#total').html();
+		var money = 0;
+		
+		$('.user-cupon .item').removeClass('on');
+		$(this).addClass('on');
+		$('#cuponList').css('display','none');
+		$('input[name="cupon"]').val(cuponId);
+		$(this).attr('min-money',0);
+		$(this).attr('cupon-money',0);
+		
+		money = parseFloat(total) + parseFloat(cuponMoney);
+		if(money > 0){
+			money = money;
 		}else{
-			$('.cupon').find('.copun-rt').html('满'+minMoney+'减'+cuponMoney);
+			money = 0;
 		}
+		money = money.toFixed(2);
+		$('#total').html(money);
+		$('.cupon').find('.copun-rt').html('请选择代金券');
 	});
 	$('.cupon').click(function(){
 		if($(this).hasClass('disabled')){
