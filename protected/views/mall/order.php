@@ -64,9 +64,9 @@
 <div class="user-cupon" id="cuponList">
 <?php if($isCupon):?>
 <?php foreach($cupons as $coupon):?>
-	<div class="item useCupon" cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
+	<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
 <?php endforeach;?>
-<div class="item noCupon" cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
+<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 <?php endif;?>
 </div>
 <script type="text/javascript">
@@ -80,7 +80,7 @@ $(document).ready(function(){
 		}
 	});
 	$('.user-cupon .item.useCupon').click(function(){
-		var cuponId = $(this).attr('cupon-id');
+		var usesCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
 		var noCuponMoney = $('.noCupon').attr('cupon-money');
 		var minMoney = $(this).attr('min-money');
@@ -90,7 +90,7 @@ $(document).ready(function(){
 		$('.user-cupon .item').removeClass('on');
 		$(this).addClass('on');
 		$('#cuponList').css('display','none');
-		$('input[name="cupon"]').val(cuponId);
+		$('input[name="cupon"]').val(userCuponId);
 		$('.noCupon').attr('min-money',minMoney);
 		$('.noCupon').attr('cupon-money',cuponMoney);
 		
@@ -105,7 +105,7 @@ $(document).ready(function(){
 		$('.cupon').find('.copun-rt').html('满'+minMoney+'减'+cuponMoney);
 	});
 	$('.user-cupon .item.noCupon').click(function(){
-		var cuponId = $(this).attr('cupon-id');
+		var userCuponId = $(this).attr('user-cupon-id');
 		var cuponMoney = $(this).attr('cupon-money');
 		var minMoney = $(this).attr('min-money');
 		var total = $('#total').html();
@@ -114,7 +114,7 @@ $(document).ready(function(){
 		$('.user-cupon .item').removeClass('on');
 		$(this).addClass('on');
 		$('#cuponList').css('display','none');
-		$('input[name="cupon"]').val(cuponId);
+		$('input[name="cupon"]').val(userCuponId);
 		$(this).attr('min-money',0);
 		$(this).attr('cupon-money',0);
 		
