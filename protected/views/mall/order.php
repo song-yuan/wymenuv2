@@ -99,6 +99,7 @@ $(document).ready(function(){
 			money = money;
 		}else{
 			money = 0;
+			$('.noCupon').attr('cupon-money',total);
 		}
 		money = money.toFixed(2);
 		$('#total').html(money);
