@@ -171,10 +171,11 @@ class WxPromotionActivity
 	}
 	public static function getActivityUser($dpid,$userId,$type,$promotionId){
 		if($type==1){
-			$sql = 'select * from nb_private_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or (to_group=2)) and private_promotion_id='.$promotionId.' and delete_flag=0';
+			$sql = 'select * from nb_private_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or to_group=2) and private_promotion_id='.$promotionId.' and delete_flag=0';
 		}elseif($type==2){
-			$sql = 'select * from nb_cupon_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or (to_group=2)) and cupon_id='.$promotionId.' and delete_flag=0';
+			$sql = 'select * from nb_cupon_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or to_group=2) and cupon_id='.$promotionId.' and delete_flag=0';
 		}
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		return $result;
 	}
 }
