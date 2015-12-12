@@ -39,9 +39,13 @@ class WxPromotionActivity
 			if($activity['promotion_type']==1){
 				$promotion = WxPromotion::getPromotion($dpid,$activity['promotion_lid']);
 				if($promotion){
-					$activitys[$k]['title'] = isset($promotion['promotion_title'])?$promotion['promotion_title']:'';
-					$activitys[$k]['begin_time'] = isset($promotion['begin_time'])?$promotion['begin_time']:'';
-					$activitys[$k]['end_time'] = isset($promotion['end_time'])?$promotion['end_time']:'';
+					if($promotion['to_group']!=3){
+						unset($activitys[$k]);
+					}else{
+						$activitys[$k]['title'] = isset($promotion['promotion_title'])?$promotion['promotion_title']:'';
+						$activitys[$k]['begin_time'] = isset($promotion['begin_time'])?$promotion['begin_time']:'';
+						$activitys[$k]['end_time'] = isset($promotion['end_time'])?$promotion['end_time']:'';
+					}
 				}else{
 					unset($activitys[$k]);
 				}

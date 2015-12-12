@@ -46,7 +46,7 @@ class WxPromotion
 	 * 
 	 */
 	 public static function getPromotion($dpid,$promotionId){
-	 	$sql = 'select * from  nb_private_promotion where dpid=:dpid and lid=:lid';
+	 	$sql = 'select * from  nb_private_promotion where dpid=:dpid and lid=:lid and delete_flag=0';
 	 	$result = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':lid',$promotionId)->queryRow();
 	 	return $result;
 	 }
