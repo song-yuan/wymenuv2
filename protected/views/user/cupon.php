@@ -20,7 +20,7 @@
 <div class="index">
     <div class="index_box">
         <div class="index_icon">
-             <div class="icon_h"><img src="<?php echo $cupon['main_picture'];?>"></div>
+             <div class="icon_h"><img src="<?php echo $cupon['main_picture'];?>" style="width:100%;"></div>
              <div class="titl">
                  <h1><?php echo $cupon['cupon_title'];?></h1>
 				 <div class="titl_h">

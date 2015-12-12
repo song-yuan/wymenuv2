@@ -39,9 +39,13 @@ class WxPromotionActivity
 			if($activity['promotion_type']==1){
 				$promotion = WxPromotion::getPromotion($dpid,$activity['promotion_lid']);
 				if($promotion){
-					$activitys[$k]['title'] = isset($promotion['promotion_title'])?$promotion['promotion_title']:'';
-					$activitys[$k]['begin_time'] = isset($promotion['begin_time'])?$promotion['begin_time']:'';
-					$activitys[$k]['end_time'] = isset($promotion['end_time'])?$promotion['end_time']:'';
+					if($promotion['to_group']!=3){
+						unset($activitys[$k]);
+					}else{
+						$activitys[$k]['title'] = isset($promotion['promotion_title'])?$promotion['promotion_title']:'';
+						$activitys[$k]['begin_time'] = isset($promotion['begin_time'])?$promotion['begin_time']:'';
+						$activitys[$k]['end_time'] = isset($promotion['end_time'])?$promotion['end_time']:'';
+					}
 				}else{
 					unset($activitys[$k]);
 				}
@@ -158,9 +162,9 @@ class WxPromotionActivity
 	}
 	public static function getActivityUser($dpid,$userId,$type,$promotionId){
 		if($type==1){
-			$sql = 'select * from nb_private_branduser where dpid='.$dpid.' and brand_user_lid='.$userId.' and private_promotion_id='.$promotionId;
+			$sql = 'select * from nb_private_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or (to_group=2)) and private_promotion_id='.$promotionId;
 		}elseif($type==2){
-			$sql = 'select * from nb_cupon_branduser where dpid='.$dpid.' and brand_user_lid='.$userId.' and cupon_id='.$promotionId;
+			$sql = 'select * from nb_cupon_branduser where dpid='.$dpid.' and ((brand_user_lid='.$userId.' and to_group=3) or (to_group=2)) and cupon_id='.$promotionId;
 		}
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 	}

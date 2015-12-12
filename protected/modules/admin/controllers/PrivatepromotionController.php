@@ -169,7 +169,7 @@ class PrivatepromotionController extends BackendController
 			$db = Yii::app()->db;
 			if(!empty($groupID)){
 				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
-				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where delete_flag = 0 and private_promotion_id='.$lid.' and dpid='.$this->companyId;
+				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where delete_flag = 0 and private_promotion_id='.$lid.' and dpid='.$this->companyId.' and to_group =2';
 				
 				$command=$db->createCommand($sql);
 				$command->execute();
