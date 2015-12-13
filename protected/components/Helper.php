@@ -2046,7 +2046,12 @@ class Helper
                                     array_push($listData,"10"."下单时间：");
                                     array_push($listData,"00".$order->create_at);
                                     array_push($listData,"br");
+                                    array_push($listData,"10"."账单号：");
+                                    array_push($listData,"00".$order->account_no);
+                                    array_push($listData,"br");
                                     //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
+                                    array_push($listData,"00".str_pad('',48,'-'));
+                                    array_push($listData,"10".str_pad('品名',8,' ').str_pad('数量',2,' ').str_pad('单位',2,' '));
                                     array_push($listData,"00".str_pad('',48,'-'));
                                     $productids="";
                                     //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3");
@@ -2066,7 +2071,8 @@ class Helper
                                             continue;
                                         }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
-                                        array_push($listData,"01".str_pad("-".$orderProduct->amount.$orderProduct->product->product_unit,8," ").Helper::setProductName($orderProduct->product->product_name,12,8));	
+                                        //array_push($listData,"01".str_pad("-".$orderProduct->amount.$orderProduct->product->product_unit,8," ").Helper::setProductName($orderProduct->product->product_name,12,8));	
+                                        array_push($listData,"01".str_pad($orderProduct->product->product_name,16," ").str_pad("-".$orderProduct->amount,4," ").str_pad($orderProduct->product->product_unit,4," "));	
                                         array_push($listData,"br");
                                         array_push($listData,"br");
                                         array_push($listData,"10"."原因:".$memo);
@@ -2085,7 +2091,7 @@ class Helper
                                         array_push($listData,"10"."退菜员：".Yii::app()->user->name);//."  "
                                     }
                                     array_push($listData,"br");
-                                    array_push($listData,"10"."退菜时间：".date('Y-m-d H:i:s',time()));
+                                    array_push($listData,"10"."退菜时间：");
                                     array_push($listData,"00".date('Y-m-d H:i:s',time()));
                                     
                                     /////尝试用整体打印$printercontent_a
