@@ -66,7 +66,7 @@
 								<th><?php echo yii::t('app','座位');?></th>
                                 <th><?php echo yii::t('app','人数');?></th>
                                 <!-- <th><?php echo yii::t('app','状态');?></th> -->
-                               
+                                <th><?php echo yii::t('app','原价');?></th>
                                 <th><?php echo yii::t('app','优惠');?></th>                                                                
                                 <th><?php echo yii::t('app','实收');?></th>
 								
@@ -85,6 +85,7 @@
 								<td><?php echo $model->all_number;?></td>
 								<!-- <td><?php switch($model->order_status) {case 1: echo yii::t('app','未下单'); break; case 2: echo yii::t('app','已下单未支付') ; break; case 3: echo yii::t('app','已支付'); break; case 4: echo yii::t('app','已结单'); break; case 5: echo yii::t('app','被并台'); break; case 6: echo yii::t('app','被换台'); break; case 7: echo yii::t('app','被撤台'); break; case 8: echo yii::t('app','日结'); break;default :echo '';}?></td>
 								 -->
+								<td><?php echo sprintf("%.2f",$this->getOriginalMoney($model->account_no));?></td>
 								<td><?php echo  sprintf("%.2f",$this->getOriginalMoney($model->account_no)-$this->getAccountMoney($model->account_no));?></td>
 								<td><?php echo sprintf("%.2f",$this->getAccountMoney($model->account_no));?></td>
 								</tr>
