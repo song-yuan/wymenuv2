@@ -5,24 +5,31 @@
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
-	$tools = new JsApiPay();
-	$openId = WxBrandUser::openId($userId,$this->companyId);
-	//②、统一下单
-	$input = new WxPayUnifiedOrder();
-	$input->SetBody("点餐订单");
-	$input->SetAttach("微信支付");
-	$input->SetOut_trade_no($orderId);
-	$input->SetTotal_fee($order['should_total']*100);
-	$input->SetTime_start(date("YmdHis"));
-	$input->SetTime_expire(date("YmdHis", time() + 600));
-	$input->SetGoods_tag("点餐订单");
-	$input->SetNotify_url($notifyUrl);
-	$input->SetTrade_type("JSAPI");
-	$input->SetOpenid($openId);
+	$canpWxpay = true;
+	try{
+		$tools = new JsApiPay();
+		$openId = WxBrandUser::openId($userId,$this->companyId);
+		//②、统一下单
+		$input = new WxPayUnifiedOrder();
+		$input->SetBody("点餐订单");
+		$input->SetAttach("微信支付");
+		$input->SetOut_trade_no($orderId);
+		$input->SetTotal_fee($order['should_total']*100);
+		$input->SetTime_start(date("YmdHis"));
+		$input->SetTime_expire(date("YmdHis", time() + 600));
+		$input->SetGoods_tag("点餐订单");
+		$input->SetNotify_url($notifyUrl);
+		$input->SetTrade_type("JSAPI");
+		$input->SetOpenid($openId);
+		
+		$orderInfo = WxPayApi::unifiedOrder($input);
+		
+		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
+	}catch(Exception $e){
+		$canpWxpay = false;
+		$jsApiParameters = '';
+	}
 	
-	$orderInfo = WxPayApi::unifiedOrder($input);
-	
-	$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
@@ -41,10 +48,23 @@
 	<?php endforeach;?>
 	<?php if($order['reality_total'] - $order['should_total']):?>
 	<div class="ht1"></div>
+	
+	<?php if($order['cupon_branduser_lid'] > 0):?>
 	<div class="item">
-		<div class="lt">优惠金额</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $order['cupon_money'],2);?></div>
 		<div class="clear"></div>
 	</div>
+	<div class="item">
+		<div class="lt">现金券减免</div><div class="rt">￥<?php echo number_format($order['cupon_money'],2);?></div>
+		<div class="clear"></div>
+	</div>
+	<div class="item">
+		<?php else:?>
+		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
+	
 	<?php endif;?>
 </div>
 
@@ -88,6 +108,10 @@
 
 	function callpay()
 	{
+		<?php if(!$canpWxpay):?>
+		layer.msg('订单信息改变,请使用其他方式付款!');
+		return;
+		<?php endif;?>
 		if (typeof WeixinJSBridge == "undefined"){
 		    if( document.addEventListener ){
 		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);

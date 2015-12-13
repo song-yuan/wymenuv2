@@ -71,15 +71,19 @@ class WxPromotion
 	 		$promotion = Yii::app()->db->createCommand($sql)->bindValue(':dpid',$dpid)->bindValue(':promotionId',$result['private_promotion_id'])->bindValue(':productId',$productId)->queryRow();
 	 		if($promotion){
 	 			if($promotion['is_discount']==0){
-	 				return array('is_discount'=>0,'price'=>($product['original_price'] - $promotion['promotion_money']) > 0 ? number_format($product['original_price'] - $promotion['promotion_money'],2) : number_format(0,2));
+	 				$price = ($product['original_price'] - $promotion['promotion_money']) > 0 ? number_format($product['original_price'] - $promotion['promotion_money'],2) : number_format(0,2);
+	 				$promotion_money = $price ? $promotion['promotion_money'] : $price;
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['private_promotion_id'])));
 	 			}else{
-	 				return array('is_discount'=>1,'price'=>($product['original_price']*$promotion['promotion_discount']) > 0 ? number_format($product['original_price']*$promotion['promotion_discount'],2) : number_format(0,2));
+	 				$price = number_format($product['original_price']*$promotion['promotion_discount'],2);
+	 				$promotion_money = $product['original_price'] -$price;
+	 				return array('promotion_type'=>1,'price'=>$price,'promotion_info'=>array(array('is_discount'=>0,'promotion_money'=>$promotion_money,'poromtion_id'=>$promotion['private_promotion_id'])));
 	 			}
 	 		}else{
-	 			return array('is_discount'=>-1,'price'=>$product['original_price']);
+	 			return array('promotion_type'=>-1,'price'=>$product['original_price'],'promotion_info'=>array());
 	 		}
 	 	}else{
-	 		return array('is_discount'=>-1,'price'=>$product['original_price']);
+	 		return array('promotion_type'=>-1,'price'=>$product['original_price'],'promotion_info'=>array());
 	 	}
 	 }
 }
