@@ -501,7 +501,7 @@ class Helper
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
                     $productnum++;
-                    $productmoneyall=$productmoneyall+$orderProduct->price;
+                    $productmoneyall=$productmoneyall+$product['price'];
                     if($product['amount']<1)
                     {
                         continue;
@@ -515,8 +515,8 @@ class Helper
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
                         //array_push($listData,"00".str_pad($product['amount']." X ".number_format($product['price'],2),13,' ')." ".Helper::setProductName($product['product_name'],24,16));
                         //array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
-                        $printlen=(strlen($orderProduct->product->product_name) + mb_strlen($orderProduct->product->product_name,'UTF8')) / 2;
-                        array_push($listData,"01".$productnum.".".$orderProduct->product->product_name.str_pad("",24-$printlen," ").str_pad($orderProduct->amount,4," ").number_format($orderProduct->original_price,0)."/".number_format($orderProduct->price,2));	
+                        $printlen=(strlen($product['product_name']) + mb_strlen($product['product_name'],'UTF8')) / 2;
+                        array_push($listData,"01".$productnum.".".$product['product_name'].str_pad("",24-$printlen," ").str_pad($product['amount'],4," ").number_format($product['original_price'],0)."/".number_format($product['price'],2));	
                                         
 //                    }
                     array_push($listData,"br");
@@ -542,6 +542,7 @@ class Helper
                     {
                         array_push($listData,"10".yii::t('app','现价：').number_format($order->reality_total,2));
                     }
+                    array_push($listData,"br");
                     if($order->pay_total>0)
                     {
                         array_push($listData,"10".yii::t('app','已付：').number_format($order->pay_total,2));
@@ -552,6 +553,7 @@ class Helper
                         array_push($listData,"10".yii::t('app','会员卡余额：').number_format($cardtotal,2));
                     }
                 }
+                array_push($listData,"br");
                 if(!empty($order->username))
                 {
                     array_push($listData,"10"."点单员：".$order->username);//."  "
