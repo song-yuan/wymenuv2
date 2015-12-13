@@ -5,6 +5,8 @@
  * 微信端订单类
  * //堂吃必须有siteId
  *$type 1 堂吃 2 外卖
+ *$normalPromotionIds 菜品普通优惠id
+ *
  * 
  */
 class WxOrder
@@ -15,6 +17,7 @@ class WxOrder
 	public $type;
 	public $number;
 	public $cart = array();
+	public $normalPromotionIds = array();
 	public $order = false;
 	
 	public function __construct($dpid,$userId,$siteId = null,$type = 1,$number = 1){
@@ -47,6 +50,7 @@ class WxOrder
 			}
 		}
 		$this->cart = $results;
+		var_dump($this->cart);exit;
 	}
 	public function getSite(){
 		$site = WxSite::get($this->siteId,$this->dpid);
@@ -108,6 +112,27 @@ class WxOrder
 								'is_sync'=>DataSync::getInitSync(),
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				 
+				 //插入订单优惠
+				 if(!empty($cart['promotion'])){
+				 	foreach($cart['promotion']['promotion_info'] as $promotion){
+				 		$orderProductPromotionData =array(
+			 										'lid'=>$orderProductId,
+													'dpid'=>$this->dpid,
+													'create_at'=>date('Y-m-d H:i:s',$time),
+						        					'update_at'=>date('Y-m-d H:i:s',$time), 
+													'order_id'=>$orderId,
+													'order_product_id'=>$orderProductId,
+													'account_no'=>$accountNo,
+													'promotion_type'=>$cart['promotion']['promotion_type'],
+													'promotion_id'=>$promotion['poromtion_id'],
+													'promotion_money'=>$promotion['promotion_money'],
+													'delete_flag'=>0,
+													'is_sync'=>DataSync::getInitSync(),
+			 										);
+			 			Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);								
+				 	}
+				 }
 				 $orderPrice +=  $cart['price']*$cart['num'];
 				 $realityPrice += $cart['original_price']*$cart['num'];
 			}
