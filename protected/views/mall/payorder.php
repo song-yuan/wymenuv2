@@ -5,6 +5,7 @@
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
+	$canpWxpay = true;
 	try{
 		$tools = new JsApiPay();
 		$openId = WxBrandUser::openId($userId,$this->companyId);
@@ -25,7 +26,7 @@
 		
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 	}catch(Exception $e){
-		$jsApiParameters = array();
+		$canpWxpay = false;
 	}
 	
 ?>
@@ -47,7 +48,12 @@
 	<?php if($order['reality_total'] - $order['should_total']):?>
 	<div class="ht1"></div>
 	<div class="item">
-		<div class="lt">优惠金额</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<?php if($order['cupon_branduser_lid'] > 0):?>
+		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $order['cupon_money'],2);?></div>
+		<div class="lt">现金券减免</div><div class="rt">￥<?php echo number_format($order['cupon_money'],2);?></div>
+		<?php else:?>
+		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<?php endif;?>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
@@ -93,6 +99,10 @@
 
 	function callpay()
 	{
+		<?php if(!$canpWxpay):?>
+		layer.msg('订单信息改变,请使用其他方式付款!');
+		return;
+		<?php endif;?>
 		if (typeof WeixinJSBridge == "undefined"){
 		    if( document.addEventListener ){
 		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
