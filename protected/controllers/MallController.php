@@ -110,8 +110,8 @@ class MallController extends Controller
 		$number = 1;
 		
 		if($this->type==1){
-			$serial = Yii::app()->request->getParam('serial');
-			$number = Yii::app()->request->getParam('number');
+			$serial = Yii::app()->request->getPost('serial');
+			$number = Yii::app()->request->getPost('number');
 			$serialArr = explode('>',$serial);
 			if(count($serialArr)==1){
 				$serial = $serialArr[0];
@@ -127,8 +127,9 @@ class MallController extends Controller
 				$siteId = $site['lid'];
 			}
 		}
+		$tastes = Yii::app()->request->getPost('taste',array());
 		
-		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number);
+		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number,$tastes);
 		if(!$orderObj->cart){
 			$msg = '下单失败,请重新下单';
 			$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'msg'=>$msg));
