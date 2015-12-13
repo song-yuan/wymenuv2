@@ -525,7 +525,7 @@ class Helper
                             array_push($listData,"br");
                             $lenstrleft=mb_substr($product['product_name'],$charactorlen/2,$charactorlen-($charactorlen/2),'UTF8');
                             $printlenstrleft=(strlen($lenstrleft) + mb_strlen($lenstrleft,'UTF8')) / 2;
-                            //return array('status'=>false,'orderid'=>$order->lid, 'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>$lenstrleft);
+                            //return array('status'=>false,'orderid'=>$order->lid, 'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>$printlenstrleft);
                             array_push($listData,
                                     $lenstrleft
                                     .str_pad("",24-$printlenstrleft," ")
