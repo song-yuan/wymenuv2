@@ -1802,6 +1802,8 @@ class DefaultOrderController extends BackendController
                                             'update_at'=>$time,
                                             'retreat_memo'=>$memo,
                                             'retreat_id'=>$retreatid,
+                                            'username'=>Yii::app()->user->name,
+                                            'retreat_amount'=>$retreatnum,
                                             'delete_flag'=>'0',//'product_order_status'=>$orderProductStatus,
                                             );
                             $db->createCommand()->insert('nb_order_retreat',$orderRetreat);
@@ -1840,7 +1842,7 @@ class DefaultOrderController extends BackendController
                                     $site = Site::model()->with("siteType")->find($criteria2);
                                 }
                             }
-                            $memo="<<退菜";
+                            $memo="退菜单";
                             $orderDetail[0]->amount=$retreatnum;
                             //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$order->dpid)));                           
                             $ret=  Helper::printKitchenOther($order,$orderDetail,$site,$siteNo,false,$memo);                    
