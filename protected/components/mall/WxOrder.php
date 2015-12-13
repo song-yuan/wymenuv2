@@ -136,6 +136,9 @@ class WxOrder
 				 $orderPrice +=  $cart['price']*$cart['num'];
 				 $realityPrice += $cart['original_price']*$cart['num'];
 			}
+			if($orderPrice==0){
+				$orderPrice = 0.01;
+			}
 			$isSync = DataSync::getInitSync();
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
@@ -237,6 +240,9 @@ class WxOrder
 			$oTotal += $product['original_price']*$product['amount'];
 		}
 		if($order['cupon_branduser_lid']==0&&$total!=$order['should_total']){
+			if($total==0){
+				$total = 0.01;
+			}
 			$isSync = DataSync::getInitSync();
 			$sql = 'update nb_order set should_total='.$total.',reality_total='.$oTotal.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
