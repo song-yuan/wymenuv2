@@ -1704,7 +1704,7 @@ class Helper
                                     foreach($values as $value)
                                     {
                                         $productnum++;
-                                        $productmoneyall=+$orderProduct->price;
+                                        $productmoneyall=$productmoneyall+$orderProduct->price;
                                         if(empty($productids))
                                         {
                                             $productids.=$value;
@@ -1718,7 +1718,7 @@ class Helper
                                         }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         //array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
-                                        array_push($listData,"01".$productnum.".".str_pad($orderProduct->product->product_name,34," ").str_pad("-".$orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));	
+                                        array_push($listData,"01".$productnum.".".str_pad($orderProduct->product->product_name,30+strlen($orderProduct->product->product_name)," ").str_pad($orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));	
                                         array_push($listData,"br");
 
                                         $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
@@ -1735,12 +1735,12 @@ class Helper
                                         }
                                         if($existTaste==1)
                                         {
-                                            array_push($listData,"10".$strTaste);
+                                            array_push($listData,"00".$strTaste);
                                             array_push($listData,"br");
                                         }
                                         array_push($listData,"00".str_pad('',48,'-'));
                                     }
-                                    array_push($listData,"10"."金额合计：          ".number_format($productmoneyall,2));//."  "
+                                    array_push($listData,"10"."金额合计：  ".number_format($productmoneyall,2));//."  "
                                     array_push($listData,"br");
                                     array_push($listData,"00".str_pad('',48,'-'));
                                     $orderTastes=  OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=1',  array(':orderid'=>$order->lid,':dpid'=>$order->dpid));
@@ -1758,7 +1758,7 @@ class Helper
                                     }
                                     if($existTaste==1)
                                     {
-                                        array_push($listData,"10".$strAllTaste);
+                                        array_push($listData,"00".$strAllTaste);
                                         array_push($listData,"br");
                                         array_push($listData,"00".str_pad('',48,'-'));
                                     }
