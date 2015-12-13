@@ -27,7 +27,7 @@
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 	}catch(Exception $e){
 		$canpWxpay = false;
-		$jsApiParameters = array();
+		$jsApiParameters = '';
 	}
 	
 ?>
