@@ -50,7 +50,6 @@ class WxOrder
 			}
 		}
 		$this->cart = $results;
-		var_dump($this->cart);exit;
 	}
 	public function getSite(){
 		$site = WxSite::get($this->siteId,$this->dpid);
