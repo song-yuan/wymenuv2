@@ -24,15 +24,23 @@
 		<div class="clear"></div>
 	</div>
 	<?php if($order['reality_total'] - $order['should_total']):?>
+	
+	<?php if($order['cupon_branduser_lid'] > 0):?>
 	<div class="item">
-		<?php if($order['cupon_branduser_lid'] > 0):?>
 		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $order['cupon_money'],2);?></div>
-		<div class="lt">现金券减免</div><div class="rt">￥<?php echo number_format($order['cupon_money'],2);?></div>
-		<?php else:?>
-		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
-		<?php endif;?>
 		<div class="clear"></div>
 	</div>
+	<div class="item">
+		<div class="lt">现金券减免</div><div class="rt">￥<?php echo number_format($order['cupon_money'],2);?></div>
+		<div class="clear"></div>
+	</div>
+	<div class="item">
+		<?php else:?>
+		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
+	
 	<?php endif;?>
 	<div class="item">
 		<div class="lt">实际支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
