@@ -2051,7 +2051,7 @@ class Helper
                                     array_push($listData,"br");
                                     //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
                                     array_push($listData,"00".str_pad('',48,'-'));
-                                    array_push($listData,"10".str_pad('品名',16,' ').str_pad('数量',6,' ').str_pad('单位',4,' '));
+                                    array_push($listData,"10".str_pad('品名',16,' ').str_pad('数量',10,' ').str_pad('单位',4,' '));
                                     array_push($listData,"br");
                                     array_push($listData,"00".str_pad('',48,'-'));
                                     $productids="";
@@ -2073,7 +2073,7 @@ class Helper
                                         }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         //array_push($listData,"01".str_pad("-".$orderProduct->amount.$orderProduct->product->product_unit,8," ").Helper::setProductName($orderProduct->product->product_name,12,8));	
-                                        array_push($listData,"01".str_pad($orderProduct->product->product_name,32," ").str_pad("-".$orderProduct->amount,8," ").str_pad($orderProduct->product->product_unit,8," "));	
+                                        array_push($listData,"01".str_pad($orderProduct->product->product_name,34," ").str_pad("-".$orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));	
                                         array_push($listData,"br");
                                         array_push($listData,"br");
                                         array_push($listData,"10"."原因:".$memo);
