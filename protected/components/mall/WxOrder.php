@@ -18,15 +18,19 @@ class WxOrder
 	public $number;
 	public $cart = array();
 	public $normalPromotionIds = array();
+	public $tastes = array();//原始产品口味
+	public $productTastes = array();//处理后的产品口味
 	public $order = false;
 	
-	public function __construct($dpid,$userId,$siteId = null,$type = 1,$number = 1){
+	public function __construct($dpid,$userId,$siteId = null,$type = 1,$number = 1,$tastes = array()){
 		$this->dpid = $dpid;
 		$this->userId = $userId;
 		$this->siteId = $siteId;
 		$this->type = $type;
 		$this->number = $number;
+		$this->tastes = $tastes;
 		$this->getCart();
+		$this->dealTastes();
 		if($this->type==1){
 			$this->getSite();
 		}
@@ -50,6 +54,14 @@ class WxOrder
 			}
 		}
 		$this->cart = $results;
+	}
+	public function dealTastes(){
+		if(!empty($this->tastes)){
+			foreach($this->tastes as $taste){
+				$tasteArr = explode('-',$taste);
+				$this->productTastes[$tasteArr[0]][] = $tasteArr[1];
+			}
+		}
 	}
 	public function getSite(){
 		$site = WxSite::get($this->siteId,$this->dpid);
@@ -112,6 +124,25 @@ class WxOrder
 								'is_sync'=>DataSync::getInitSync(),
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				
+				 //插入产品口味
+				 if(isset($this->productTastes[$cart['product_id']]) && !empty($this->productTastes[$cart['product_id']])){
+				 	foreach($this->productTastes[$cart['product_id']] as $taste){
+				 		$se = new Sequence("order_taste");
+		    			$orderTasteId = $se->nextval();
+				 		$orderTasteData = array(
+				 								'lid'=>$orderTasteId,
+												'dpid'=>$this->dpid,
+												'create_at'=>date('Y-m-d H:i:s',$time),
+					        					'update_at'=>date('Y-m-d H:i:s',$time),
+					        					'taste_id'=>$taste,
+					        					'order_id'=>$orderProductId,
+					        					'is_order'=>0,
+					        					'is_sync'=>DataSync::getInitSync(),
+				 								);
+				 		Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);								
+				 	}
+				 }
 				 
 				 //插入订单优惠
 				 if(!empty($cart['promotion'])){
