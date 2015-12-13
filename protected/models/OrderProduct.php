@@ -322,12 +322,15 @@ class OrderProduct extends CActiveRecord
                 return $ret;
 	}
         
-        //有折扣优惠后的价格
+        //有折扣优惠后的价格//没有参与折扣的去出来
         static public function getDisTotal($orderlist,$dpid){
 		$db = Yii::app()->db;
+                //关联 nb_order_production_promotion
 		$sql = "select sum(t.price*(IF(t.weight>0,t.weight,t.amount))) as total from nb_order_product t"
                         ." left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid"
-                        . " where t.delete_flag=0 and t1.is_discount=1 and t.product_order_status=1 and t.is_giving=0 and t.is_retreat=0 and t.order_id in (".$orderlist.") and t.dpid=".$dpid;
+                        . " where t.delete_flag=0 and t1.is_discount=1 and t.product_order_status=1"
+                        . " and t.lid not in (select order_product_id from nb_order_product_promotion where dpid=.".$dpid." and order_id in (".$orderlist."))"
+                        . " and t.is_giving=0 and t.is_retreat=0 and t.order_id in (".$orderlist.") and t.dpid=".$dpid;
 		$ret= $db->createCommand($sql)->queryScalar();
                 return empty($ret)?0:$ret;
 	}

@@ -11,6 +11,8 @@
  * @property string $retreat_id
  * @property string $order_detail_id
  * @property string $retreat_memo
+ * @property string $username
+ * @property string $retreat_amount
  * @property string $delete_flag
  * @property string $is_sync
  */
@@ -33,13 +35,13 @@ class OrderRetreat extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('retreat_memo', 'required'),
-			array('lid, dpid, retreat_id, order_detail_id', 'length', 'max'=>10),
-			array('retreat_memo, is_sync', 'length', 'max'=>50),
+			array('lid, dpid, retreat_amount, retreat_id, order_detail_id', 'length', 'max'=>10),
+			array('retreat_memo, is_sync, username', 'length', 'max'=>50),
 			array('delete_flag', 'length', 'max'=>1),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, retreat_id, order_detail_id, retreat_memo, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, username, retreat_amount, update_at, is_sync, retreat_id, order_detail_id, retreat_memo, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +70,8 @@ class OrderRetreat extends CActiveRecord
 			'retreat_id' => yii::t('app','退菜理由'),
 			'order_detail_id' => 'Order Detail',
 			'retreat_memo' => yii::t('app','具体原因'),
+				'username' => yii::t('app','退菜员'),
+				'retreat_amount' => yii::t('app','退菜数量'),
 			'delete_flag' => 'Delete Flag',
 				'is_sync' => yii::t('app','是否同步'),
 		);
@@ -98,6 +102,8 @@ class OrderRetreat extends CActiveRecord
 		$criteria->compare('retreat_id',$this->retreat_id,true);
 		$criteria->compare('order_detail_id',$this->order_detail_id,true);
 		$criteria->compare('retreat_memo',$this->retreat_memo,true);
+		$criteria->compare('username',$this->username,true);
+		$criteria->compare('retreat_amount',$this->retreat_amount,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
