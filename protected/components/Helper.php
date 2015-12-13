@@ -1718,7 +1718,7 @@ class Helper
                                         }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         //array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
-                                        array_push($listData,"01".$productnum.".".str_pad($orderProduct->product->product_name,30+strlen($orderProduct->product->product_name)," ").str_pad($orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));	
+                                        array_push($listData,"01".$productnum.".".str_pad($orderProduct->product->product_name,30+strlen($orderProduct->product->product_name)/2," ").str_pad($orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));	
                                         array_push($listData,"br");
 
                                         $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
