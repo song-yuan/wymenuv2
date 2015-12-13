@@ -5,6 +5,8 @@
  * 微信端订单类
  * //堂吃必须有siteId
  *$type 1 堂吃 2 外卖
+ *$normalPromotionIds 菜品普通优惠id
+ *
  * 
  */
 class WxOrder
@@ -15,6 +17,7 @@ class WxOrder
 	public $type;
 	public $number;
 	public $cart = array();
+	public $normalPromotionIds = array();
 	public $order = false;
 	
 	public function __construct($dpid,$userId,$siteId = null,$type = 1,$number = 1){
@@ -69,6 +72,7 @@ class WxOrder
  				$orderId = $this->order['lid'];
  				$orderPrice = $this->order['should_total'];
  				$realityPrice = $this->order['reality_total'];
+ 				$accountNo = $this->order['account_no'];
  			}else{
  				$se = new Sequence("order");
 			    $orderId = $se->nextval();
@@ -108,8 +112,32 @@ class WxOrder
 								'is_sync'=>DataSync::getInitSync(),
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+				 
+				 //插入订单优惠
+				 if(!empty($cart['promotion'])){
+				 	foreach($cart['promotion']['promotion_info'] as $promotion){
+				 		$orderProductPromotionData =array(
+			 										'lid'=>$orderProductId,
+													'dpid'=>$this->dpid,
+													'create_at'=>date('Y-m-d H:i:s',$time),
+						        					'update_at'=>date('Y-m-d H:i:s',$time), 
+													'order_id'=>$orderId,
+													'order_product_id'=>$orderProductId,
+													'account_no'=>$accountNo,
+													'promotion_type'=>$cart['promotion']['promotion_type'],
+													'promotion_id'=>$promotion['poromtion_id'],
+													'promotion_money'=>$promotion['promotion_money'],
+													'delete_flag'=>0,
+													'is_sync'=>DataSync::getInitSync(),
+			 										);
+			 			Yii::app()->db->createCommand()->insert('nb_order_product_promotion',$orderProductPromotionData);								
+				 	}
+				 }
 				 $orderPrice +=  $cart['price']*$cart['num'];
 				 $realityPrice += $cart['original_price']*$cart['num'];
+			}
+			if($orderPrice==0){
+				$orderPrice = 0.01;
 			}
 			$isSync = DataSync::getInitSync();
 			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
@@ -211,10 +239,15 @@ class WxOrder
 			$total += $product['price']*$product['amount'];
 			$oTotal += $product['original_price']*$product['amount'];
 		}
-		if($total!=$order['should_total']){
+		if($order['cupon_branduser_lid']==0&&$total!=$order['should_total']){
+			if($total==0){
+				$total = 0.01;
+			}
 			$isSync = DataSync::getInitSync();
 			$sql = 'update nb_order set should_total='.$total.',reality_total='.$oTotal.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
+		}else{
+			$total = $order['should_total'];
 		}
 		return $total;
 	}
@@ -259,7 +292,8 @@ class WxOrder
 		if($result){
 			$isSync = DataSync::getInitSync();
 			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money']:0;
-			$sql = 'update nb_order set cupon_branduser_lid='.$cuponBranduserLid.',should_total='.$money.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+			$cuponMoney = $result['cupon_money'];
+			$sql = 'update nb_order set cupon_branduser_lid='.$cuponBranduserLid.',cupon_money='.$cuponMoney.',should_total='.$money.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 	}
