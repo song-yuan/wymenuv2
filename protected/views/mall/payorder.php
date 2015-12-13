@@ -5,24 +5,29 @@
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
-	$tools = new JsApiPay();
-	$openId = WxBrandUser::openId($userId,$this->companyId);
-	//②、统一下单
-	$input = new WxPayUnifiedOrder();
-	$input->SetBody("点餐订单");
-	$input->SetAttach("微信支付");
-	$input->SetOut_trade_no($orderId);
-	$input->SetTotal_fee($order['should_total']*100);
-	$input->SetTime_start(date("YmdHis"));
-	$input->SetTime_expire(date("YmdHis", time() + 600));
-	$input->SetGoods_tag("点餐订单");
-	$input->SetNotify_url($notifyUrl);
-	$input->SetTrade_type("JSAPI");
-	$input->SetOpenid($openId);
+	try{
+		$tools = new JsApiPay();
+		$openId = WxBrandUser::openId($userId,$this->companyId);
+		//②、统一下单
+		$input = new WxPayUnifiedOrder();
+		$input->SetBody("点餐订单");
+		$input->SetAttach("微信支付");
+		$input->SetOut_trade_no($orderId);
+		$input->SetTotal_fee($order['should_total']*100);
+		$input->SetTime_start(date("YmdHis"));
+		$input->SetTime_expire(date("YmdHis", time() + 600));
+		$input->SetGoods_tag("点餐订单");
+		$input->SetNotify_url($notifyUrl);
+		$input->SetTrade_type("JSAPI");
+		$input->SetOpenid($openId);
+		
+		$orderInfo = WxPayApi::unifiedOrder($input);
+		
+		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
+	}catch(Exception $e){
+		$jsApiParameters = array();
+	}
 	
-	$orderInfo = WxPayApi::unifiedOrder($input);
-	
-	$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
