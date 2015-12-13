@@ -561,6 +561,10 @@ class DefaultSiteController extends BackendController
                             $criteria->order = ' t.lid desc ';
                             $siteNo = SiteNo::model()->find($criteria);
                             SiteClass::deleteCode($siteNo->dpid,$siteNo->code);
+                            if($istemp=="0")
+                            {
+                                WxScanLog::invalidScene($companyId,$sid);
+                            }
                             //var_dump($sid);exit;
                             
                             //apc_delete($siteNo->dpid.$siteNo->code);
@@ -637,6 +641,10 @@ class DefaultSiteController extends BackendController
                             $db->createCommand()->insert('nb_site_no',$data);
                             
                             $smodelsn->status='6';
+                            if($sistemp=="0")
+                            {
+                                WxScanLog::invalidScene($companyId,$ssid);
+                            }
                             $smodelsn->save();
                             
                             $sqlorder="update nb_order set is_temp=:istemp,site_id=:sid where site_id=:ssid and is_temp=:sistemp and dpid=:companyId and order_status in ('1','2','3')";
@@ -723,6 +731,10 @@ class DefaultSiteController extends BackendController
                             $smodelsn->site_id=$modelsn->site_id;
                             $smodelsn->is_temp=$modelsn->is_temp;
                             $smodelsn->save();
+                            if($sistemp=="0")
+                            {
+                                WxScanLog::invalidScene($companyId,$ssid);
+                            }
                             //echo json_encode(array('status'=>0,'message'=>$number.'dd'.$status));exit;
                             //因为一个座位对应多个订单，所以，原订单无所谓变更，直接将源订单指向这个座位就行
                             //更新目标订单状态和人数
