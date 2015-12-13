@@ -830,7 +830,7 @@ public function actionPayallReport(){
 	public function getAccountMoney($account_no){
 		$accountMoney = '';
 		if($account_no){
-		$sql = 'select sum(t.pay_amount) as all_zhifu,t.* from nb_order_pay t where t.order_id in(select t1.lid from nb_order t1 where t1.account_no = '.$account_no.')';
+		$sql = 'select sum(t.pay_amount) as all_zhifu,t.* from nb_order_pay t where t.paytype not in(9,10) and t.order_id in(select t1.lid from nb_order t1 where t1.account_no = '.$account_no.')';
 		$connect = Yii::app()->db->createCommand($sql);
 		$money = $connect->queryRow();
 		$accountMoney = $money['all_zhifu'];
