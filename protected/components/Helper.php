@@ -527,10 +527,10 @@ class Helper
                             $printlenstrleft=(strlen($lenstrleft) + mb_strlen($lenstrleft,'UTF8')) / 2;
                             //return array('status'=>false,'orderid'=>$order->lid, 'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>$lenstrleft);
                             array_push($listData,
-                                    "  ".$lenstrleft);
-//                                    .str_pad("",24-$printlenstrleft," ")
-//                                    .str_pad($product['amount'],4," ")
-//                                    .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
+                                      "01"."  ".$lenstrleft
+                                    .str_pad("",24-$printlenstrleft," ")
+                                    .str_pad($product['amount'],4," ")
+                                    .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
                         }else{
                             array_push($listData,"01".$productnum."."
                                     .$product['product_name']
