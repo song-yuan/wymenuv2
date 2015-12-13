@@ -136,7 +136,8 @@
                            //var orderdetailid="<?php echo $orderRetreat->order_detail_id; ?>";
                            var retreatid=$("label[class='selectRetreat btn btn-default active']").attr("retreatid");
                            var url="<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId,'orderDetailId'=>$orderRetreat->order_detail_id)); ?>";
-                           var othermemo=$("#OrderRetreat_other").val();
+                           var othermemo=$.trim($("label[class='selectRetreat btn btn-default active']").text())+$("#OrderRetreat_other").val();
+                           //alert(othermemo);return;
                            //alert(url);alert(othermemo);alert(retreatnum);alert(paymethodid);
                                 $.ajax({
                                         'type':'POST',
