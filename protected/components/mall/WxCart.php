@@ -99,6 +99,7 @@ class WxCart
 				$results[$k]['price'] = $productPrice->price;
 				$results[$k]['promotion'] = $productPrice->promotion;
 			}
+			$results[$k]['taste_groups'] = WxTaste::getProductTastes($result['product_id'],$this->dpid);
 		}
 		return $results;
 	}

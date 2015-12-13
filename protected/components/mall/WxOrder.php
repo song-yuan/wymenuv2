@@ -342,6 +342,7 @@ class WxOrder
 		        	'create_at'=>date('Y-m-d H:i:s',$time),
 		        	'update_at'=>date('Y-m-d H:i:s',$time), 
 		        	'order_id'=>$order['lid'],
+		        	'account_no'=>$order['account_no'],
 		        	'pay_amount'=>$result['cupon_money'],
 		        	'paytype'=>9,
 		        	'paytype_id'=>$order['cupon_branduser_lid'],
