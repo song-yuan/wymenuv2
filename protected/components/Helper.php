@@ -517,14 +517,16 @@ class Helper
                         //array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
                         $printlen=(strlen($product['product_name']) + mb_strlen($product['product_name'],'UTF8')) / 2;
                         $productname="";
-                        $charactorlen=  strlen($product['product_name']);
+                        $charactorlen=  mb_strlen($product['product_name']);
                         if($printlen>22)
                         {
-                            array_push($listData, substr($product['product_name'],0,$charactorlen/2));
+                            array_push($listData, "01".$productnum."."
+                                    .mb_strlen($product['product_name'],0,$charactorlen/2));
                             array_push($listData,"br");
-                            array_push($listData,"01".$productnum."."
-                                    .substr($product['product_name'],$charactorlen/2,$charactorlen-$charactorlen/2)
-                                    .str_pad("",24-($charactorlen-$charactorlen/2)," ")
+                            $lenstrleft=mb_strlen($product['product_name'],$charactorlen/2,$charactorlen-$charactorlen/2);
+                            $printlenstrleft=(strlen($lenstrleft) + mb_strlen($lenstrleft,'UTF8')) / 2;
+                            array_push($listData,
+                                    $lenstrleft.str_pad("",24-$printlenstrleft," ")
                                     .str_pad($product['amount'],4," ")
                                     .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
                         }else{
