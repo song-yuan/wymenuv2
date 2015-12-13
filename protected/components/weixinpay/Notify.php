@@ -75,13 +75,21 @@ class Notify extends WxPayNotify
 		//orderpay表插入数据
 		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
 		WxOrder::insertOrderPay($order,1);
+		$myfile = fopen("/tmp/newfile.txt", "w");
+		$txt = "Bill Gates\n";
+		fwrite($myfile, $txt);
 		//修改订单状态
 		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
+		$txt = "Steve Jobs\n";
+		fwrite($myfile, $txt);
 		//修改订单产品状态
 		WxOrder::updateOrderProductStatus($orderIdArr[0],$orderIdArr[1]);
+		$txt = "Kebi LBJ\n";
+		fwrite($myfile, $txt);
 		//修改座位状态
 		if($order['order_type']==1){
 			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
 		}
+		fclose($myfile);
 	}
 }
