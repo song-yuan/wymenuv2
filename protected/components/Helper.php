@@ -2051,7 +2051,7 @@ class Helper
                                     array_push($listData,"br");
                                     //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
                                     array_push($listData,"00".str_pad('',48,'-'));
-                                    array_push($listData,"10".str_pad('品名',16,' ').str_pad('数量',10,' ').str_pad('单位',4,' '));
+                                    array_push($listData,"10".str_pad('品名',16,' ').str_pad('数量 ',6,' ').str_pad('单位',4,' '));
                                     array_push($listData,"br");
                                     array_push($listData,"00".str_pad('',48,'-'));
                                     $productids="";
