@@ -1644,37 +1644,67 @@ class Helper
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
                                     $listData = array("22".Helper::setPrinterTitle($order->company->company_name,8));
                                     array_push($listData,"br");
+                                    array_push($listData,"br");
                                     //array_push($listData,"22"."+++总单+++"); 
-                                    array_push($listData,"22"."<".$printerway->name.">");
+                                    //array_push($listData,"22"."<".$printerway->name.">");
+                                    array_push($listData,"10".Helper::setPrinterTitle($printerway->name,12));
                                     array_push($listData,"00");
+                                    array_push($listData,"br");
                                     array_push($listData,"br");
                                     if($reprint)
                                     {
                                         $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
-                                        array_push($listData,"11".$strreprint);
+                                        array_push($listData,"10".$strreprint);
+                                        array_push($listData,"br");
                                     }
-                                    array_push($listData,"br");
+                                    
                                     $strSite="";
+//                                    if($order->is_temp=='1')
+//                                    {
+//                                        array_push($listData,"00".yii::t('app','临时座：'));
+//                                        array_push($listData,"11".$siteNo->site_id%1000);
+//                                    }else{
+//                                        array_push($listData,"00".yii::t('app','座号：'));
+//                                        array_push($listData,"11".$site->siteType->name.' '.$site->serial);
+//                                    }
+//                                    array_push($listData,"00".yii::t('app','人数：').$order->number);
+//                                    //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
+//                                    if(!empty($order->callno))
+//                                    {
+//                                        array_push($listData,"00"."  ".yii::t('app','呼叫号：'));
+//                                        array_push($listData,"11".$order->callno);
+//                                    }
+//                                    array_push($listData,"br");
+//                                    array_push($listData,"00".str_pad('',48,'-'));
                                     if($order->is_temp=='1')
                                     {
-                                        array_push($listData,"00".yii::t('app','临时座：'));
+                                        array_push($listData,"10".yii::t('app','临时座：'));
                                         array_push($listData,"11".$siteNo->site_id%1000);
                                     }else{
-                                        array_push($listData,"00".yii::t('app','座号：'));
+                                        array_push($listData,"10".yii::t('app','座号：'));
                                         array_push($listData,"11".$site->siteType->name.' '.$site->serial);
                                     }
-                                    array_push($listData,"00".yii::t('app','人数：').$order->number);
+                                    array_push($listData,"br");
+                                    array_push($listData,"10".yii::t('app','人数：').$order->number);
+                                    array_push($listData,"br");
+                                    array_push($listData,"10"."下单时间：");
+                                    array_push($listData,"00".$order->create_at);
+                                    array_push($listData,"br");
+                                    array_push($listData,"10"."账单号：");
+                                    array_push($listData,"00".$order->account_no);
+                                    array_push($listData,"br");
                                     //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
-                                    if(!empty($order->callno))
-                                    {
-                                        array_push($listData,"00"."  ".yii::t('app','呼叫号：'));
-                                        array_push($listData,"11".$order->callno);
-                                    }
+                                    array_push($listData,"00".str_pad('',48,'-'));
+                                    array_push($listData,"10".str_pad('品名',16,' ').str_pad('数量 ',6,' ').str_pad('单位',4,' '));
                                     array_push($listData,"br");
                                     array_push($listData,"00".str_pad('',48,'-'));
                                     $productids="";
+                                    $productnum=0;
+                                    $productmoneyall=0;
                                     foreach($values as $value)
                                     {
+                                        $productnum++;
+                                        $productmoneyall=+$orderProduct->price;
                                         if(empty($productids))
                                         {
                                             $productids.=$value;
@@ -1687,12 +1717,13 @@ class Helper
                                             continue;
                                         }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
-                                        array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
+                                        //array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
+                                        array_push($listData,"01".$productnum.".".str_pad($orderProduct->product->product_name,34," ").str_pad("-".$orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));	
                                         array_push($listData,"br");
 
                                         $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
                                         $orderProductTasteEx = $orderProduct->taste_memo;                
-                                        $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
+                                        $strTaste= yii::t('app',"备注：").$orderProductTasteEx;
                                         $existTaste=0;
                                         if(!empty($orderProductTasteEx))
                                         {
@@ -1704,14 +1735,17 @@ class Helper
                                         }
                                         if($existTaste==1)
                                         {
-                                            array_push($listData,"11".$strTaste);
+                                            array_push($listData,"10".$strTaste);
                                             array_push($listData,"br");
                                         }
                                         array_push($listData,"00".str_pad('',48,'-'));
                                     }
+                                    array_push($listData,"10"."金额合计：          ".number_format($productmoneyall,2));//."  "
+                                    array_push($listData,"br");
+                                    array_push($listData,"00".str_pad('',48,'-'));
                                     $orderTastes=  OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=1',  array(':orderid'=>$order->lid,':dpid'=>$order->dpid));
                                     $orderTasteEx = $order->taste_memo;                
-                                    array_push($listData,"00".str_pad('',48,'-'));
+                                    //array_push($listData,"00".str_pad('',48,'-'));
                                     $strAllTaste= yii::t('app',"全单口味：").$orderTasteEx;
                                     $existTaste=0;
                                     if(!empty($orderTasteEx))
@@ -1724,13 +1758,24 @@ class Helper
                                     }
                                     if($existTaste==1)
                                     {
-                                        array_push($listData,"11".$strAllTaste);
+                                        array_push($listData,"10".$strAllTaste);
                                         array_push($listData,"br");
                                         array_push($listData,"00".str_pad('',48,'-'));
                                     }
+                                    if(!empty($order->username))
+                                    {
+                                        array_push($listData,"10"."点单员：".$order->username);//."  "
+                                        
+                                    }else{
+                                        array_push($listData,"10"."客人自助下单");//."  "
+                                        
+                                    }
+                                    array_push($listData,"br");
+                                    array_push($listData,"10"."点单时间：");
+                                    array_push($listData,"00".date('Y-m-d H:i:s',time()));
 
-                                    array_push($listData,"00".yii::t('app','操作员：').$order->username."  "//Yii::app()->user->name."  "
-                                            .date('Y-m-d H:i:s',time()));
+//                                    array_push($listData,"00".yii::t('app','操作员：').$order->username."  "//Yii::app()->user->name."  "
+//                                            .date('Y-m-d H:i:s',time()));
 //                                    $precode="";
 //                                    //后面加切纸
 //                                    $sufcode="0A0A0A0A0A0A1D5601";                        
