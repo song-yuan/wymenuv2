@@ -408,12 +408,12 @@ public function actionPayallReport(){
 		}
 		//$criteria->order = 't.create_at asc,t.dpid asc';
 		//$criteria->group = 't.paytype,t.payment_method_id';
-		if($download){
-			//$model = OrderPay::model()->findAll($criteria);
-			//var_dump($models);exit;
-			$this->actionPayallExport($criteria,$text);
-			exit;
-		}
+// 		if($download){
+// 			//$model = OrderPay::model()->findAll($criteria);
+// 			//var_dump($models);exit;
+// 			$this->actionPayallExport($criteria,$text);
+// 			exit;
+// 		}
 		$pages = new CPagination(OrderPay::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -535,6 +535,52 @@ public function actionPayallReport(){
 	
 		$comName = $this->getComName();
 		$this->render('retreatdetailReport',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				//'money'=>$money,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
+	/*
+	 * 退菜原因统计表
+	 */
+	
+	public function actionRetreatreasonReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$download = Yii::app()->request->getParam('d');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+	
+		$db = Yii::app()->db;
+		if($text==1){
+		$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.retreat_id,t1.order_detail_id,t1.retreat_amount,t2.name,t.lid,t.is_retreat,t.price,t.is_print,sum(t.price*t1.retreat_amount) as all_retreatprice,count(t1.retreat_id) as all_num,sum(t1.retreat_amount) as all_amount from nb_order_product t left join nb_order_retreat t1 on(t.dpid = t1.dpid and t.lid = t1.order_detail_id and t1.delete_flag = 0) left join nb_retreat t2 on(t.dpid = t2.dpid and t1.retreat_id = t2.lid and t2.delete_flag = 0) where t.delete_flag = 0 and t.is_retreat = 1 and t.is_print = 1 and t.create_at>="'.$begin_time.'" and t.create_at<="'.$end_time.'" group by year(t.create_at),t1.retreat_id) k';
+		//echo $sql;exit;
+		}elseif($text==2){
+			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.retreat_id,t1.order_detail_id,t1.retreat_amount,t2.name,t.lid,t.is_retreat,t.price,t.is_print,sum(t.price*t1.retreat_amount) as all_retreatprice,count(t1.retreat_id) as all_num,sum(t1.retreat_amount) as all_amount from nb_order_product t left join nb_order_retreat t1 on(t.dpid = t1.dpid and t.lid = t1.order_detail_id and t1.delete_flag = 0) left join nb_retreat t2 on(t.dpid = t2.dpid and t1.retreat_id = t2.lid and t2.delete_flag = 0) where t.delete_flag = 0 and t.is_retreat = 1 and t.is_print = 1 and t.create_at>="'.$begin_time.'" and t.create_at<="'.$end_time.'" group by month(t.create_at),t1.retreat_id) k';
+			//echo $sql;exit;
+		}elseif($text==3){
+			$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.retreat_id,t1.order_detail_id,t1.retreat_amount,t2.name,t.lid,t.is_retreat,t.price,t.is_print,sum(t.price*t1.retreat_amount) as all_retreatprice,count(t1.retreat_id) as all_num,sum(t1.retreat_amount) as all_amount from nb_order_product t left join nb_order_retreat t1 on(t.dpid = t1.dpid and t.lid = t1.order_detail_id and t1.delete_flag = 0) left join nb_retreat t2 on(t.dpid = t2.dpid and t1.retreat_id = t2.lid and t2.delete_flag = 0) where t.delete_flag = 0 and t.is_retreat = 1 and t.is_print = 1 and t.create_at>="'.$begin_time.'" and t.create_at<="'.$end_time.'" group by day(t.create_at),t1.retreat_id) k';
+			//echo $sql;exit;
+		}
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		//var_dump($models);exit;
+	
+	
+		$comName = $this->getComName();
+		$this->render('retreatreasonReport',array(
 				'models'=>$models,
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
@@ -2451,7 +2497,7 @@ public function actionPayallReport(){
 	}
 	//导出支付方式的报表
 	public function actionPayallExport(){
-			$objPHPExcel = new PHPExcel();
+		$objPHPExcel = new PHPExcel();
 	$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$download = Yii::app()->request->getParam('d');
@@ -2466,8 +2512,8 @@ public function actionPayallReport(){
 		if($str){
 			$criteria->condition = ' and t.dpid in('.$str.')';
 		}
-		$criteria->addCondition("order8.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("order8.create_at <='$end_time 23:59:59'");
+		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		if($text==1){
 			$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';

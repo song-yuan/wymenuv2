@@ -64,6 +64,7 @@
 								<th><?php echo yii::t('app','序号');?></th>
 								<th><?php echo yii::t('app','店铺');?></th>
 								<th><?php echo yii::t('app','订单号');?></th>
+								<th><?php echo yii::t('app','账单号');?></th>
 								<th><?php echo yii::t('app','明细');?></th>
 								<th><?php echo yii::t('app','应收金额');?></th>
                                 <th><?php echo yii::t('app','实付金额');?></th>
@@ -82,6 +83,7 @@
 								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
 								<td><?php echo $model->company->company_name; ?></td>
 								<td><?php echo $model->order_id%10000;?></td>
+								<td><?php echo $model->account_no;?></td>
 								<td>
 								 <div style='width:50px;overflow: hidden;height:18px;' title='<?php echo $this->getOrderDetails($model->order_id); ?>'  >
 								 <?php echo $this->getOrderDetails($model->order_id); ?></div>
