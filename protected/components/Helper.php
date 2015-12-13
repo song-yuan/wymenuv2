@@ -572,7 +572,7 @@ class Helper
 //                array_push($listData,"00"."   ".date('Y-m-d H:i:s',time()));
 //                array_push($listData,"br");
 //                array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
-//                $precode=$cprecode;
+                $precode=$cprecode;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";                        
                 //var_dump($listData);exit;
