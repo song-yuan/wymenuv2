@@ -240,6 +240,8 @@ class WxOrder
 			$isSync = DataSync::getInitSync();
 			$sql = 'update nb_order set should_total='.$total.',reality_total='.$oTotal.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
+		}else{
+			$total = $order['should_total'];
 		}
 		return $total;
 	}
