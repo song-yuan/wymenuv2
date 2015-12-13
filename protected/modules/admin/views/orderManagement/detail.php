@@ -88,7 +88,12 @@
                                                                         case 2: echo  yii::t('app','支付宝支付');break; 
                                                                         case 3: echo  $model->paymentMethod->name;break;  
                                                                         case 4: echo  yii::t('app','会员卡支付');break;  
-                                                                        case 5: echo  yii::t('app','银联卡支付');break;  
+                                                                        case 5: echo  yii::t('app','银联卡支付');break;
+                                                                        case 6: echo  yii::t('app','');break;
+                                                                        case 7: echo  yii::t('app','');break;
+                                                                        case 8: echo  yii::t('app','');break;
+                                                                        case 9: echo  yii::t('app','微信代金券');break;
+                                                                        case 10: echo  yii::t('app','微信会员余额支付');break;
                                                                         default :echo ''; }?>
                                                                 </td>								
 								<td><?php echo $model->all_money;?></td>

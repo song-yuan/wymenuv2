@@ -119,8 +119,8 @@ class orderManagementController extends BackendController
 		$criteria->select = 't.*'; //代表了要查询的字段，默认select='*';
 		$criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->addInCondition('t.order_status', array(3,4));
-		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		$criteria->with = 'paymentMethod';//连接表
 		$criteria->order = 't.lid ASC' ;//排序条件
 		$criteria->distinct = TRUE; //是否唯一查询
