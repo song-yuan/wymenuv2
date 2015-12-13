@@ -521,9 +521,9 @@ class Helper
                         if($printlen>22)
                         {
                             array_push($listData, "01".$productnum."."
-                                    .mb_strlen($product['product_name'],0,$charactorlen/2));
+                                    .mb_substr($product['product_name'],0,$charactorlen/2));
                             array_push($listData,"br");
-                            $lenstrleft=mb_strlen($product['product_name'],$charactorlen/2,$charactorlen-$charactorlen/2);
+                            $lenstrleft=mb_substr($product['product_name'],$charactorlen/2,$charactorlen-$charactorlen/2);
                             $printlenstrleft=(strlen($lenstrleft) + mb_strlen($lenstrleft,'UTF8')) / 2;
                             array_push($listData,
                                     $lenstrleft.str_pad("",24-$printlenstrleft," ")
