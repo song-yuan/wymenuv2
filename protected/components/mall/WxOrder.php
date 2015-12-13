@@ -290,12 +290,13 @@ class WxOrder
 	        	'create_at'=>date('Y-m-d H:i:s',$time),
 	        	'update_at'=>date('Y-m-d H:i:s',$time), 
 	        	'order_id'=>$order['lid'],
+	        	'account_no'=>$order['account_no'],
 	        	'pay_amount'=>$order['should_total'],
 	        	'paytype'=>$paytype,
 	        	'is_sync'=>DataSync::getInitSync(),
 	        );
 		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
-		if($order['cupon_branduser_lid']){
+		if($order['cupon_branduser_lid'] > 0){
 			$sql = 'select t1.cupon_money from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$order['cupon_branduser_lid'].' and t.dpid='.$order['dpid'];
 			$result = Yii::app()->db->createCommand($sql)->queryRow();
 			
