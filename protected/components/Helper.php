@@ -2060,16 +2060,16 @@ class Helper
                                             continue;
                                         }
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
-                                        array_push($listData,"01".str_pad("-1".$orderProduct->amount.$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
+                                        array_push($listData,"01".str_pad("-".$orderProduct->amount.$orderProduct->product->product_unit,8," ").Helper::setProductName($orderProduct->product->product_name,12,8));	
                                         array_push($listData,"br");
-                                        array_push($listData,$memo);
-                                        array_push($listData,"br");
+                                        //array_push($listData,$memo);
+                                        //array_push($listData,"br");
                                         //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3".$memo);
                                         array_push($listData,"00".str_pad('',48,'-'));
                                     }
                                     if(!empty($order->username))
                                     {
-                                        array_push($listData,"10".'点单员：'.$order->username."  退菜员：".Yii::app()->user->name);//."  "
+                                        array_push($listData,"10"."点单员：".$order->username."  退菜员：".Yii::app()->user->name);//."  "
                                     }else{
                                         array_push($listData,"10"."客人自助下单  退菜员：".Yii::app()->user->name);//."  "
                                     }
@@ -2114,8 +2114,8 @@ class Helper
                                     array_push($listDataHeader,"br");
                                     //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试4".$memo);                                        
                                     array_push($listDataHeader,"00".str_pad('',48,'-'));
-                                    //组装尾部
                                     
+                                    //组装尾部                                    
                                     $listDataTail =array("00".str_pad('',48,'-'));
                                     if(!empty($order->username))
                                     {
