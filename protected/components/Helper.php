@@ -441,58 +441,104 @@ class Helper
 		//$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 ///site error because tempsite and reserve**************
                 //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
-                $listData = array("22".  Helper::setPrinterTitle($order->company->company_name,8));
-                if(!empty($memo))
-                {
-                    array_push($listData,"br");
-                    array_push($listData,"11".$memo);                    
-                }
+                $listData = array("22".Helper::setPrinterTitle($order->company->company_name."预结单",8));
                 array_push($listData,"00");
                 array_push($listData,"br");
-                $strSite="";
+                array_push($listData,"br");
+                
+//                $listData = array("22".  Helper::setPrinterTitle($order->company->company_name,8));
+//                if(!empty($memo))
+//                {
+//                    array_push($listData,"br");
+//                    array_push($listData,"11".$memo);                    
+//                }
+//                array_push($listData,"00");
+//                array_push($listData,"br");
+//                $strSite="";
                 if($order->is_temp==0)
                 {
                     $site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
                     $siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
                     //$strSite=str_pad(yii::t('app','座号：').$siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
-                    array_push($listData,"00".yii::t('app','座号：'));
+                    array_push($listData,"10".yii::t('app','座号：'));
                     array_push($listData,"11".$siteType->name.' '.$site->serial);
                     //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
                 }else{
                     //$strSite=str_pad(yii::t('app','座号：临时座').$order->site_id%10000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
-                    array_push($listData,"00".yii::t('app','座号：临时座'));
+                    array_push($listData,"10".yii::t('app','座号：临时座'));
                     array_push($listData,"11".$order->site_id%10000);
                     //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
                 }
-                array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
-		if(!empty($order->callno))
-                {
-                    //$strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
-                    //array_push($listData,$strcall);
-                    array_push($listData,"00"."   ".yii::t('app','呼叫号：'));
-                    array_push($listData,"11".$order->callno);
-                }
-		//$listKey = $order->dpid.'_'.$printer->ip_address;                	
-		array_push($listData,"br");
-		//array_push($listData,"00".$strSite);                
-		array_push($listData,"00".str_pad('',48,'-'));                
+//                array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
+//		if(!empty($order->callno))
+//                {
+//                    //$strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
+//                    //array_push($listData,$strcall);
+//                    array_push($listData,"00"."   ".yii::t('app','呼叫号：'));
+//                    array_push($listData,"11".$order->callno);
+//                }
+//		//$listKey = $order->dpid.'_'.$printer->ip_address;                	
+//		array_push($listData,"br");
+//		//array_push($listData,"00".$strSite);                
+//		array_push($listData,"00".str_pad('',48,'-'));                
 		
+                array_push($listData,"br");
+                array_push($listData,"10".yii::t('app','人数：').$order->number);
+                array_push($listData,"br");
+                array_push($listData,"10"."下单时间：");
+                array_push($listData,"00".$order->create_at);
+                array_push($listData,"br");
+                array_push($listData,"10"."账单号：");
+                array_push($listData,"00".$order->account_no);
+                array_push($listData,"br");
+                //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
+                array_push($listData,"00".str_pad('',48,'-'));
+                array_push($listData,"10".str_pad('品名',12,' ').str_pad('数量 ',6,' ').str_pad('单价/金额',5,' '));
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
+                $productnum=0;
+                $productmoneyall=0;
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
+                    $productnum++;
+                    $productmoneyall=$productmoneyall+$product['price'];
                     if($product['amount']<1)
                     {
                         continue;
                     }
                     $hasData=true;
-                    if(Yii::app()->language=='jp')
-                    {
-                        //array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
-                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
-                    }else{
+//                    if(Yii::app()->language=='jp')
+//                    {
+//                        //array_push($listData,Helper::getPlaceholderLen($product['product_name'],36).Helper::getPlaceholderLen($product['amount']." X ".number_format($product['price'],0),12));	
+//                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],0),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
+//                    }else{
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
                         //array_push($listData,"00".str_pad($product['amount']." X ".number_format($product['price'],2),13,' ')." ".Helper::setProductName($product['product_name'],24,16));
-                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
-                    }
+                        //array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
+                        $printlen=(strlen($product['product_name']) + mb_strlen($product['product_name'],'UTF8')) / 2;
+                        $productname="";
+                        $charactorlen=  mb_strlen($product['product_name'],'UTF8');
+                        if($printlen>22)
+                        {
+                            array_push($listData, "01".$productnum."."
+                                    .mb_substr($product['product_name'],0,$charactorlen/2,'UTF8'));
+                            array_push($listData,"br");
+                            $lenstrleft=mb_substr($product['product_name'],$charactorlen/2,$charactorlen-($charactorlen/2),'UTF8');
+                            $printlenstrleft=(strlen($lenstrleft) + mb_strlen($lenstrleft,'UTF8')) / 2;
+                            //return array('status'=>false,'orderid'=>$order->lid, 'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>$lenstrleft);
+                            array_push($listData,
+                                      "01"."  ".$lenstrleft
+                                    .str_pad("",24-$printlenstrleft," ")
+                                    .str_pad($product['amount'],4," ")
+                                    .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
+                        }else{
+                            array_push($listData,"01".$productnum."."
+                                    .$product['product_name']
+                                    .str_pad("",24-$printlen," ")
+                                    .str_pad($product['amount'],4," ")
+                                    .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
+                        }                
+//                    }
                     array_push($listData,"br");
 		}
 		array_push($listData,"00".str_pad('',48,'-'));
@@ -500,7 +546,7 @@ class Helper
                 {
                     //array_push($listData,str_pad(yii::t('app','应付：').number_format($order->should_total,0) , 26,' ').str_pad(date('Y-m-d H:i:s',time()),20,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"11".yii::t('app','应付：').number_format($order->should_total,0)
+                    array_push($listData,"10".yii::t('app','应付：').number_format($order->should_total,0)
                         .yii::t('app','实付：').number_format($order->reality_total,0));                    
                 }else{
                     //array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
@@ -509,30 +555,43 @@ class Helper
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
                     if($order->should_total>0)
                     {
-                        array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,2));
+                        array_push($listData,"10".yii::t('app','原价：').number_format($order->should_total,2));
                         array_push($listData,"br");
                     }
                     if($order->reality_total>0)
                     {
-                        array_push($listData,"11".yii::t('app','现价：').number_format($order->reality_total,2));
+                        array_push($listData,"10".yii::t('app','现价：').number_format($order->reality_total,2));
                     }
+                    array_push($listData,"br");
                     if($order->pay_total>0)
                     {
-                        array_push($listData,"11".yii::t('app','已付：').number_format($order->pay_total,2));
-                    }
-                    
+                        array_push($listData,"10".yii::t('app','已付：').number_format($order->pay_total,2));
+                    }                    
                     if($cardtotal>0)
                     {
                         array_push($listData,"br");
-                        array_push($listData,"11".yii::t('app','会员卡余额：').number_format($cardtotal,2));
+                        array_push($listData,"10".yii::t('app','会员卡余额：').number_format($cardtotal,2));
                     }
                 }
-                
                 array_push($listData,"br");
-                array_push($listData,"00".$order->username);
-                array_push($listData,"00"."   ".date('Y-m-d H:i:s',time()));
+                if(!empty($order->username))
+                {
+                    array_push($listData,"10"."点单员：".$order->username);//."  "
+
+                }else{
+                    array_push($listData,"10"."客人自助下单");//."  "
+
+                }
                 array_push($listData,"br");
-                array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
+                array_push($listData,"10"."点单时间：");
+                array_push($listData,"00".date('Y-m-d H:i:s',time()));
+                array_push($listData,"br");
+                array_push($listData,"10"."订餐电话：");
+                array_push($listData,"00".$order->company->telephone);
+//                array_push($listData,"00".$order->username);
+//                array_push($listData,"00"."   ".date('Y-m-d H:i:s',time()));
+//                array_push($listData,"br");
+//                array_push($listData,"00".yii::t('app','订餐电话：').$order->company->telephone);
                 $precode=$cprecode;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A1D5601";                        

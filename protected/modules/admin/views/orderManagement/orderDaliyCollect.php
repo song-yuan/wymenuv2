@@ -78,11 +78,17 @@
 								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
 								
 								
-                                                                <td><?php switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
+                                                                <td><?php switch($model->paytype) {
+                                                                case 0: echo  yii::t('app','现金支付');break; 
                                                                 case 1: echo  yii::t('app','微信支付');break; 
                                                                 case 2: echo  yii::t('app','支付宝支付');break; 
                                                                 case 4: echo  yii::t('app','会员卡支付');break;  
                                                                 case 5: echo  yii::t('app','银联卡支付');break; 
+                                                                case 6: echo  yii::t('app','');break;
+                                                                case 7: echo  yii::t('app','');break;
+                                                                case 8: echo  yii::t('app','');break;
+                                                                case 9: echo  yii::t('app','微信代金券');break;
+                                                                case 10: echo  yii::t('app','微信会员余额支付');break;
                                                                 case 3: if ($model->payment_method_id){echo  $model->paymentMethod->name;}else echo '';break;
                                                                 default :echo ''; }?></td>
 								<td><?php echo $model->should_all;?></td>
@@ -96,7 +102,7 @@
 													<tr>
 													<td><?php echo $a;?></td>
 													<td><?php echo yii::t('app','充值金额');?></td>
-													<td><?php echo $moneys["all_money"];//var_dump($money);exit;?></td>
+													<td><?php if(!empty($moneys["all_money"])) echo $moneys["all_money"];else echo "0.00";//var_dump($money);exit;?></td>
 													<td></td>
 													</tr>
 											<?php $sumall=$sumall+$moneys["all_money"];
