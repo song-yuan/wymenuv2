@@ -72,6 +72,7 @@ class WxOrder
  				$orderId = $this->order['lid'];
  				$orderPrice = $this->order['should_total'];
  				$realityPrice = $this->order['reality_total'];
+ 				$accountNo = $this->order['account_no'];
  			}else{
  				$se = new Sequence("order");
 			    $orderId = $se->nextval();
@@ -235,7 +236,7 @@ class WxOrder
 			$total += $product['price']*$product['amount'];
 			$oTotal += $product['original_price']*$product['amount'];
 		}
-		if($total!=$order['should_total']){
+		if($order['cupon_branduser_lid']==0&&$total!=$order['should_total']){
 			$isSync = DataSync::getInitSync();
 			$sql = 'update nb_order set should_total='.$total.',reality_total='.$oTotal.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
@@ -283,6 +284,7 @@ class WxOrder
 		if($result){
 			$isSync = DataSync::getInitSync();
 			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money']:0;
+			
 			$sql = 'update nb_order set cupon_branduser_lid='.$cuponBranduserLid.',should_total='.$money.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 		}
