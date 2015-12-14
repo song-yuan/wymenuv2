@@ -539,12 +539,12 @@ class DefaultOrderController extends BackendController
                     $productTotalarray = OrderProduct::getOriginalTotal($orderList,$companyId);
                     //var_dump($productTotalarray);exit;
                     //现价
-//                    $nowTotal=$productTotalarray["total"];
+                    $nowTotal=$productTotalarray["total"];
 //                    //原价
-//                    $originaltotal=$productTotalarray["originaltotal"];
+                    $originaltotal=$productTotalarray["originaltotal"];
                     //已支付
                     $paytotal=OrderProduct::getPayTotalAll($orderList,$companyId);
-//                  $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+//                    $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
                     //参与折扣的总额
                     $productDisTotal = OrderProduct::getDisTotal($orderList,$order->dpid);
                     //var_dump($productTotal);exit;
@@ -554,7 +554,7 @@ class DefaultOrderController extends BackendController
 //                    }else{
 //                        $total = Helper::calOrderConsume($order,$siteNo, $nowTotal);
 //                    }
-                    $order->should_total=$payoriginaccount;
+                    $order->should_total=$originaltotal;
                     $order->reality_total=$payshouldaccount;//$total['total'];实际应该支付的
                     $order->pay_total=$paytotal;
                     $order->pay_discount_total=$productDisTotal;
