@@ -913,8 +913,8 @@ class Helper
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
                         //array_push($listData,"00".str_pad($product['amount']." X ".number_format($product['price'],2),13,' ')." ".Helper::setProductName($product['product_name'],24,16));
 //                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
-                        $printlen=(strlen($product['product_name']) + mb_strlen($product['product_name'],'UTF8')) / 2;
                         $productname=$product['product_name'].$isgiving;
+                        $printlen=(strlen($productname) + mb_strlen($productname,'UTF8')) / 2;
                         $charactorlen=  mb_strlen($productname,'UTF8');
                         if($printlen>22)
                         {
