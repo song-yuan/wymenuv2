@@ -30,7 +30,7 @@
 	<div class="ht1"></div>
 	<div class="item">
 		<div class="lt">合计:</div>
-		<div class="rt">￥<?php echo $order['reality_total'];?></div>
+		<div class="rt">￥<?php echo $order['should_total'];?></div>
 		<div class="clear"></div>
 	</div>
 </div>
