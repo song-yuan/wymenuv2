@@ -122,6 +122,7 @@ $(document).ready(function(){
 		$(this).addClass('on');
 		$('#cuponList').css('display','none');
 		$('input[name="cupon"]').val(userCuponId);
+		
 		$(this).attr('min-money',0);
 		$(this).attr('cupon-money',0);
 		
