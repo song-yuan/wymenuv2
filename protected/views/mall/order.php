@@ -9,7 +9,6 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
@@ -21,6 +20,8 @@
 <?php else:?>
 
 <?php endif;?>
+<input type="text" name="cupon" value="0" />
+<input type="text" name="paytype" value="2" />
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
@@ -42,17 +43,15 @@
 </div>
 
 <div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
-	<div class="copun-lt">代金券</div><div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div><div class="clear"></div></div>
-	<input type="hidden" name="cupon" value="0" />
+	<div class="copun-lt">代金券</div><div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div><div class="clear"></div>
 </div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
 		<div class="item on" paytype="2">线上支付</div>
 		<div class="item" paytype="1">饭后支付</div>
-		<input type="hidden" name="paytype" value="2" />
 	</div>
-</di>
+</div>
 <div class="bottom"></div>
 
 <footer>
@@ -79,7 +78,7 @@ $(document).ready(function(){
 		var paytype = $(this).attr('paytype');
 		$('.paytype .item').removeClass('on');
 		
-		$(this).siblings('input').val(paytype);
+		$('input[name="paytype"]').val(paytype);
 		$(this).addClass('on');
 		if(parseInt(paytype)==1){
 			$('.noCupon').click();
@@ -122,6 +121,7 @@ $(document).ready(function(){
 		$(this).addClass('on');
 		$('#cuponList').css('display','none');
 		$('input[name="cupon"]').val(userCuponId);
+		
 		$(this).attr('min-money',0);
 		$(this).attr('cupon-money',0);
 		
