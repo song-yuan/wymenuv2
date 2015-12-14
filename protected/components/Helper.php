@@ -869,7 +869,8 @@ class Helper
 		array_push($listData,"10".str_pad('品名',12,' ').str_pad('数量 ',6,' ').str_pad('单价/金额',5,' '));
                 array_push($listData,"br");
                 array_push($listData,"00".str_pad('',48,'-'));
-                
+                $productnum=0;
+                $productmoneyall=0;
 		foreach ($orderProducts as $product) {
                     //var_dump($product);exit;
                     $productnum++;
@@ -887,7 +888,7 @@ class Helper
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
                         //array_push($listData,"00".str_pad($product['amount']." X ".number_format($product['price'],2),13,' ')." ".Helper::setProductName($product['product_name'],24,16));
 //                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
-//                        $printlen=(strlen($product['product_name']) + mb_strlen($product['product_name'],'UTF8')) / 2;
+                        $printlen=(strlen($product['product_name']) + mb_strlen($product['product_name'],'UTF8')) / 2;
                         $productname="";
                         $charactorlen=  mb_strlen($product['product_name'],'UTF8');
                         if($printlen>22)
