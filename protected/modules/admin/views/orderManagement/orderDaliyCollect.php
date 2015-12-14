@@ -103,7 +103,7 @@
 													<td><?php echo $a;?></td>
 													<td><?php echo yii::t('app','传统卡充值金额');?></td>
 													<td><?php if(!empty($moneys["all_money"])) echo $moneys["all_money"];else echo "0.00";//var_dump($money);exit;?></td>
-													<td></td>
+													<td><?php echo yii::t('app','总共赠送金额：'); if(!empty($moneys['all_give']))echo $moneys['all_give'];else echo "0.00";?></td>
 													</tr>
 											<?php $sumall=$sumall+$moneys["all_money"];
 												endif;?>
@@ -113,7 +113,7 @@
 													<td><?php echo $a++;?></td>
 													<td><?php echo yii::t('app','微信会员充值金额');?></td>
 													<td><?php if(!empty($recharge["all_recharge"])) echo $recharge["all_recharge"];else echo "0.00";//var_dump($money);exit;?></td>
-													<td><?php echo yii::t('app','总共返现金额：'); echo $recharge['all_cashback'];?></td>
+													<td><?php echo yii::t('app','总共返现金额：'); if(!empty($recharge['all_cashback']))echo $recharge['all_cashback'];else  echo "0.00";?></td>
 													</tr>
 											<?php $sumall=$sumall+$recharge["all_recharge"];
 												endif;?>

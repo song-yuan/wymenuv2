@@ -37,10 +37,18 @@
 										</div>
 									</div><!-- 活动摘要 -->
 									<div class="form-group">
+									<?php if($model->hasErrors('discount_type')) echo 'has-error';?>
+										<?php echo $form->label($model, yii::t('app','设置折扣类型'),array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'discount_type', array( '0' => yii::t('app','只针对可以折扣的菜品'), '1' => yii::t('app','针对所有菜品')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('discount_type')));?>
+											<?php echo $form->error($model, 'discount_type' )?>
+										</div>
+									</div>
+									<div class="form-group">
 									<?php if($model->hasErrors('is_available')) echo 'has-error';?>
 										<?php echo $form->label($model, yii::t('app','设置折扣是否生效'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_available', array( '0' => yii::t('app','生效'), '2' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
+											<?php echo $form->dropDownList($model, 'is_available', array( '0' => yii::t('app','生效'), '1' => yii::t('app','无效')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_available')));?>
 											<?php echo $form->error($model, 'is_available' )?>
 										</div>
 									</div>
