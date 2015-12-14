@@ -3,8 +3,8 @@
                 </div>                
                 <div class="modal-footer">
                     <button type="button" class="btn default" id="btn_orderaccount_cancel" style="width:10em;">取消结单</button>
-                    <button type="button" class="btn green-stripe" id="btn_orderaccount_reprint">重新打印</button>  
-                    <button type="button" class="btn green" id="btn_orderaccount_sure">确定结单</button>    
+                    <button type="button" class="btn green-stripe" id="btn_orderaccount_reprint" style="width:10em;">重新打印</button>  
+                    <button type="button" class="btn green" id="btn_orderaccount_sure" style="width:10em;">确定结单</button>    
                 </div>
         <script type="text/javascript">
             var data=eval('(<?php echo json_encode($printList); ?>)');
@@ -22,78 +22,78 @@
                 //accountManul
                 //判断找零是否大于现金
                 //要将payDiscountAccount的几个id、折扣、金额、payMinusAccount的金额、cancel_zero的金额传递过去
-                var notpaydetail="";
-                var payCashAccount= parseFloat($("#payCashAccount").text().replace(",","")) - parseFloat($("#payChangeAccount").text().replace(",",""));
-                if(payCashAccount<0)
-                {
-                    alert("金额有误");
-                    ispaybuttonclicked=false;
-                    return false;
-                }
-                 //改变order实收，打折等注释
-                var ordermemo="";
-                notpaydetail=$("#payDiscountAccount").attr("disid")+"|"+
-                                $("#payDiscountAccount").attr("disnum")+"|"+
-                                $("#payDiscountAccount").attr("dismoney")+"|";
-                var payDiscountAccount=$("#payDiscountAccount").text()
-                if(payDiscountAccount!="100%")
-                {
-                    ordermemo=ordermemo+" 折扣"+payDiscountAccount;
-                }
-                var payMinusAccount=$("#payMinusAccount").text()
-                if(payMinusAccount!="0.00")
-                {
-                    ordermemo=ordermemo+" 优惠"+payMinusAccount;
-                }
-                notpaydetail=notpaydetail+payMinusAccount+"|";
-                if($("#cancel_zero").hasClass("edit_span_select_zero"))
-                {
-                    ordermemo=ordermemo+" 抹零";
-                }
-                notpaydetail=notpaydetail+$("#payCancelZero").text();
-                //alert(notpaydetail);return;
-                 //存数order order_pay 0现金，4会员卡，5银联                         
-                 //写入会员卡消费记录，会员卡总额减少
+//                var notpaydetail="";
+//                var payCashAccount= parseFloat($("#payCashAccount").text().replace(",","")) - parseFloat($("#payChangeAccount").text().replace(",",""));
+//                if(payCashAccount<0)
+//                {
+//                    alert("金额有误");
+//                    ispaybuttonclicked=false;
+//                    return false;
+//                }
+//                 //改变order实收，打折等注释
+//                var ordermemo="";
+//                notpaydetail=$("#payDiscountAccount").attr("disid")+"|"+
+//                                $("#payDiscountAccount").attr("disnum")+"|"+
+//                                $("#payDiscountAccount").attr("dismoney")+"|";
+//                var payDiscountAccount=$("#payDiscountAccount").text()
+//                if(payDiscountAccount!="100%")
+//                {
+//                    ordermemo=ordermemo+" 折扣"+payDiscountAccount;
+//                }
+//                var payMinusAccount=$("#payMinusAccount").text()
+//                if(payMinusAccount!="0.00")
+//                {
+//                    ordermemo=ordermemo+" 优惠"+payMinusAccount;
+//                }
+//                notpaydetail=notpaydetail+payMinusAccount+"|";
+//                if($("#cancel_zero").hasClass("edit_span_select_zero"))
+//                {
+//                    ordermemo=ordermemo+" 抹零";
+//                }
+//                notpaydetail=notpaydetail+$("#payCancelZero").text();
+//                //alert(notpaydetail);return;
+//                 //存数order order_pay 0现金，4会员卡，5银联                         
+//                 //写入会员卡消费记录，会员卡总额减少
                 var orderid=$(".selectProduct").attr("orderid");
-                //var payCashAccount=$("#payCashAccount").text();
-                //var payChangeAccount=$("#payChangeAccount").text();
-                var payShouldAccount=$("#payShouldAccount").text();
-                var payOriginAccount=$("#payOriginAccount").text();
-                var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
-                var payRealityAccount=$("#payRealityAccount").text();
-                var payMemberAccount=$("#payMemberAccount").text();
+//                //var payCashAccount=$("#payCashAccount").text();
+//                //var payChangeAccount=$("#payChangeAccount").text();
+//                var payShouldAccount=$("#payShouldAccount").text();
+//                var payOriginAccount=$("#payOriginAccount").text();
+//                var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
+//                var payRealityAccount=$("#payRealityAccount").text();
+//                var payMemberAccount=$("#payMemberAccount").text();
                 var cardno=$("#payMemberAccount").attr("cardno");
-                var payUnionAccount=$("#payUnionAccount").text();
-                var payOthers=$("#payOthers").text();
-                var otherdetail=$("#payOthers").attr("detail");
-                if(parseFloat(payRealityAccount.replace(",","")) < parseFloat(payShouldAccount.replace(",","")))
-                {
-                    alert("收款不够");
-                    ispaybuttonclicked=false;
-                    return false;
-                }
-                var typeId=$('li[class="tabSite slectliclass"]').attr('typeid');
+//                var payUnionAccount=$("#payUnionAccount").text();
+//                var payOthers=$("#payOthers").text();
+//                var otherdetail=$("#payOthers").attr("detail");
+//                if(parseFloat(payRealityAccount.replace(",","")) < parseFloat(payShouldAccount.replace(",","")))
+//                {
+//                    alert("收款不够");
+//                    ispaybuttonclicked=false;
+//                    return false;
+//                }
+//                var typeId=$('li[class="tabSite slectliclass"]').attr('typeid');
                 //var isaccount=false;
 //                layer.close(layer_index2);
 //                layer_index2=0;
 //                bootbox.confirm("<?php echo yii::t('app','确定结单吗？');?>", function(result) {                    
 //                    if(result){
                         var url="<?php echo $this->createUrl('defaultOrder/orderAccount',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;
-                        var sendjson='paycashaccount='+payCashAccount+
-                                    '&paymemberaccount='+payMemberAccount+
-                                    '&payunionaccount='+payUnionAccount+
-                                    '&ordermemo='+ordermemo+
-                                    '&payshouldaccount='+payShouldAccount+
-                                    '&payothers='+payOthers+
-                                    '&payoriginaccount='+payOriginAccount+
-                                    '&payotherdetail='+otherdetail+
-                                    '&notpaydetail='+notpaydetail; 
+//                        var sendjson='paycashaccount='+payCashAccount+
+//                                    '&paymemberaccount='+payMemberAccount+
+//                                    '&payunionaccount='+payUnionAccount+
+//                                    '&ordermemo='+ordermemo+
+//                                    '&payshouldaccount='+payShouldAccount+
+//                                    '&payothers='+payOthers+
+//                                    '&payoriginaccount='+payOriginAccount+
+//                                    '&payotherdetail='+otherdetail+
+//                                    '&notpaydetail='+notpaydetail; 
                             //alert(sendjson);
 //                            return;
                         $.ajax({
                             url:url,
                             type:'POST',
-                            data:sendjson,
+                            data:public_account_sendjson,
                             async:false,
                             dataType: "json",
                             success:function(msg){
