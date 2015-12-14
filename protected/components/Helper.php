@@ -942,6 +942,7 @@ class Helper
                     $modeloderpay=OrderPay::model()->findAll( "dpid=:dpid and order_id=:orderid",array(":dpid"=>$order->dpid,":orderid"=>$order->lid));
                     if(!empty($modeloderpay))
                     {
+                        array_push($listData,"br"); 
                         array_push($listData,"00".str_pad('',48,'-'));
                         foreach ($modeloderpay as $op)
                         {

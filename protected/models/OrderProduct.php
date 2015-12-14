@@ -326,14 +326,14 @@ class OrderProduct extends CActiveRecord
         static public function getPromotion($accountno,$dpid){
 		$db = Yii::app()->db;
 		$sqlorderproductpromotion=
-                            "select t.promotion_id,t.promotion_type,tpm.promotion_title,sum(tp.original_price)-sum(tp.price) as subprice"
+                            "select t.promotion_id,t.promotion_type,tpm.promotion_title,(sum(tp.original_price)-sum(tp.price))*IF(tp.weight>0,tp.weight,tp.amount) as subprice"
                             . " from nb_order_product_promotion t"
                             . " LEFT JOIN nb_normal_promotion tpm on t.dpid=tpm.dpid and t.promotion_id=tpm.lid"
                             . " LEFT JOIN nb_order_product tp on t.dpid=tp.dpid and t.order_product_id=tp.lid"
                             . " where t.account_no=".$accountno." and t.dpid=".$dpid." and t.promotion_type=0"
                             . "  group by t.promotion_id,t.promotion_type,tpm.promotion_title"
                             . " UNION "
-                            . "select t.promotion_id,t.promotion_type,tpm.promotion_title,sum(tp.original_price)-sum(tp.price) as subprice"
+                            . "select t.promotion_id,t.promotion_type,tpm.promotion_title,sum(tp.original_price)-sum(tp.price)*IF(tp.weight>0,tp.weight,tp.amount) as subprice"
                             . " from nb_order_product_promotion t"
                             . " LEFT JOIN nb_private_promotion tpm on t.dpid=tpm.dpid and t.promotion_id=tpm.lid "
                             . " LEFT JOIN nb_order_product tp on t.dpid=tp.dpid and t.order_product_id=tp.lid"
