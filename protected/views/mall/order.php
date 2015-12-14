@@ -26,25 +26,30 @@
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo $product['price'];?></div>
+		<div class="lt"><?php echo $product['product_name'];?></div>
+		<div class="rt">X<?php echo $product['amount'];?> ￥<?php echo $product['price'];?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endforeach;?>
 	<div class="ht1"></div>
 	<div class="item">
-		<div class="lt">合计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
+		<div class="lt">合计:</div>
+		<div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
 	</div>
 	<?php if($order['reality_total'] - $order['should_total']):?>
 	<div class="item">
-		<div class="lt">优惠金额:</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<div class="lt">优惠金额:</div>
+		<div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
 </div>
 
 <div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
-	<div class="copun-lt">代金券</div><div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div><div class="clear"></div>
+	<div class="copun-lt">代金券</div>
+	<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
+	<div class="clear"></div>
 </div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
@@ -65,14 +70,14 @@
     <div class="clear"></div>
 </footer>
 
-	<div class="user-cupon" id="cuponList">
+<div class="user-cupon" id="cuponList">
 	<?php if($isCupon):?>
 	<?php foreach($cupons as $coupon):?>
 		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
 	<?php endforeach;?>
 		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>
-	</div>
+</div>
 </form>
 
 <script>
