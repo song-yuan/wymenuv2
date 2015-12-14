@@ -552,7 +552,7 @@ class OrderProduct extends CActiveRecord
                 //前面加 barcode
                 $precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
                 $cardtotal=0;
-                $memo="自助付款单";
+                $memo="客人自助付款单";
                 $temporderid=0;
                 //$orderProducts=array();
                 //$modelprinterjob=array();
