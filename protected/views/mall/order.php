@@ -13,16 +13,12 @@
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
 
-<form action="<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
-	
 <div class="order-title">我的订单</div>
 <?php if($this->type==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 <?php else:?>
 
 <?php endif;?>
-<input type="hidden" name="cupon" value="0" />
-<input type="hidden" name="paytype" value="2" />
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
@@ -78,6 +74,9 @@
 		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>
 </div>
+<form action="<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
+	<input type="hidden" name="cupon" value="0" />
+	<input type="hidden" name="paytype" value="2" />
 </form>
 
 <script>
@@ -153,21 +152,21 @@ $(document).ready(function(){
 	$('#payorder').click(function(){
 		var paytype = $('.on').attr('paytype');
 		var cupon =   $('input[name="cupon"]').val();
-		$('form').submit();
-//		var timestamp=new Date().getTime()
-//        var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
-//		
-//		if(parseInt(paytype)==2){
-//			$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
-//				if(parseInt(msg) < 2){
-//					layer.msg('服务员确认后才能付款!');
-//				}else{
-//					$('form').submit();
-//				}
-//			});
-//		}else{
-//			$('form').submit();
-//		}
+		
+		var timestamp=new Date().getTime()
+        var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+		
+		if(parseInt(paytype)==2){
+			$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
+				if(parseInt(msg) < 2){
+					layer.msg('服务员确认后才能付款!');
+				}else{
+					$('form').submit();
+				}
+			});
+		}else{
+			$('form').submit();
+		}
 	});
 });
 </script>
