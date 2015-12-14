@@ -12,7 +12,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
-
+<form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
 <div class="order-title">我的订单</div>
 <?php if($this->type==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
@@ -74,7 +74,6 @@
 		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>
 </div>
-<form action="<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
 	<input type="hidden" name="cupon" value="0" />
 	<input type="hidden" name="paytype" value="2" />
 </form>
