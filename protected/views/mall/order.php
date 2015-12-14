@@ -79,7 +79,7 @@ $(document).ready(function(){
 		var paytype = $(this).attr('paytype');
 		$('.paytype .item').removeClass('on');
 		
-		$(this).siblings('input').val(paytype);
+		$('input[name="paytype"]').val(paytype);
 		$(this).addClass('on');
 		if(parseInt(paytype)==1){
 			$('.noCupon').click();
