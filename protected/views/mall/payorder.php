@@ -51,16 +51,16 @@
 	
 	<?php if($order['cupon_branduser_lid'] > 0):?>
 	<div class="item">
-		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $order['cupon_money'],2);?></div>
+		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'];?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
-		<div class="lt">现金券减免</div><div class="rt">￥<?php echo number_format($order['cupon_money'],2);?></div>
+		<div class="lt">现金券减免</div><div class="rt">￥<?php echo $order['cupon_money'];?></div>
 		<div class="clear"></div>
 	</div>
 	<?php else:?>
 	<div class="item">
-		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'];?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
