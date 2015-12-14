@@ -69,8 +69,8 @@
 <div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 <?php endif;?>
 </div>
-<input type="text" name="cupon" value="0" />
-<input type="text" name="paytype" value="2" />
+<input type="hidden" name="cupon" value="0" />
+<input type="hidden" name="paytype" value="2" />
 </form>
 <script type="text/javascript">
 $(document).ready(function(){
