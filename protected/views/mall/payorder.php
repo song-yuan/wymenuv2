@@ -87,7 +87,7 @@
 </footer>
 
 <script type="text/javascript">
-	<?php if(!$canpWxpay):?>
+	<?php if($canpWxpay):?>
 	//调用微信JS api 支付
 	function jsApiCall()
 	{
