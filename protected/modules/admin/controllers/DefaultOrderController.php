@@ -499,10 +499,26 @@ class DefaultOrderController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',0);
                 $orderId = Yii::app()->request->getParam('orderId',"0");
                 $padId = Yii::app()->request->getParam('padId',"0");
-                $payShouldAccount=Yii::app()->request->getParam('payShouldAccount',"0");
-                $cardtotal=Yii::app()->request->getParam('cardtotal',0);
+                //$payShouldAccount=Yii::app()->request->getPost('payShouldAccount',"0");
+                $paycashaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paycashaccount',"0")));
+                
+                $payothers = floatval(str_replace(",","",Yii::app()->request->getPost('payothers',"0")));
+                $payotherdetail=Yii::app()->request->getPost('payotherdetail',"");
+                
+                $paymemberaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paymemberaccount',"0")));
+                $cardno = Yii::app()->request->getParam('cardno',"0000000000");
+                $cardtotal=Yii::app()->request->getPost('cardtotal',0);
+                
+                $payunionaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payunionaccount',"0")));
+                
+                $payshouldaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payshouldaccount',"0")));
+                $payoriginaccount = floatval(str_replace(",","",Yii::app()->request->getPost('payoriginaccount',"0")));
+                $ordermemo = Yii::app()->request->getPost('ordermemo',"0");
+                ///////////////////////
+                $notpaydetail = Yii::app()->request->getPost('notpaydetail',"0");
                 $order=new Order();
                 $printList=array();
+                //var_dump($notpaydetail);exit;
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 //echo $orderId;exit;
                 if($orderId !='0')
@@ -511,7 +527,7 @@ class DefaultOrderController extends BackendController
                     //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
                     if(empty($order))
                     {
-                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"1111该订单不存在")));
                     }
                     //$productTotal = OrderProduct::getTotal($order->lid,$order->dpid);
                     $criteria = new CDbCriteria;
@@ -523,26 +539,30 @@ class DefaultOrderController extends BackendController
                     $productTotalarray = OrderProduct::getOriginalTotal($orderList,$companyId);
                     //var_dump($productTotalarray);exit;
                     //现价
-                    $nowTotal=$productTotalarray["total"];
-                    //原价
-                    $originaltotal=$productTotalarray["originaltotal"];
+//                    $nowTotal=$productTotalarray["total"];
+//                    //原价
+//                    $originaltotal=$productTotalarray["originaltotal"];
                     //已支付
                     $paytotal=OrderProduct::getPayTotalAll($orderList,$companyId);
-    //                $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
+//                  $productTotal = OrderProduct::getTotal($orderlist,$order->dpid);
                     //参与折扣的总额
                     $productDisTotal = OrderProduct::getDisTotal($orderList,$order->dpid);
                     //var_dump($productTotal);exit;
-                    if($siteNo->is_temp=='1')
-                    {
-                        $total = array('total'=>$nowTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
-                    }else{
-                        $total = Helper::calOrderConsume($order,$siteNo, $nowTotal);
-                    }
-                    $order->should_total=$originaltotal;
-                    $order->reality_total=$payShouldAccount;//$total['total'];
+//                    if($siteNo->is_temp=='1')
+//                    {
+//                        $total = array('total'=>$nowTotal,'remark'=>yii::t('app','临时座：').$siteNo->site_id%1000);                    
+//                    }else{
+//                        $total = Helper::calOrderConsume($order,$siteNo, $nowTotal);
+//                    }
+                    $order->should_total=$payoriginaccount;
+                    $order->reality_total=$payshouldaccount;//$total['total'];实际应该支付的
                     $order->pay_total=$paytotal;
                     $order->pay_discount_total=$productDisTotal;
-                    
+                    $order->account_cash=$paycashaccount;
+                    $order->account_membercard=$cardno."|".$paymemberaccount."|".$cardtotal;
+                    $order->account_union=$payunionaccount;
+                    $order->account_otherdetail=$payotherdetail;
+                    $order->notpaydetail=$notpaydetail;
                 }
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
@@ -885,6 +905,7 @@ class DefaultOrderController extends BackendController
                     if(strlen($notpaydetail)>0)
                     {
                         $daarr=explode("|",$notpaydetail);
+                        //折扣
                         if($daarr[0]!="0000000000")
                         {
                             $orderAccountDisId = $sedis->nextval();
@@ -905,6 +926,7 @@ class DefaultOrderController extends BackendController
                             $db->createCommand()->insert('nb_order_account_discount',$orderAccountDis);                                
                             //
                         }
+                        //减价
                         if(floatval($daarr[3])>0)
                         {
                             $orderAccountDisId = $sedis->nextval();
@@ -925,6 +947,7 @@ class DefaultOrderController extends BackendController
                             $db->createCommand()->insert('nb_order_account_discount',$orderAccountDis);                                 
                             //
                         }
+                        //抹零
                         if(floatval($daarr[4])>0)
                         {
                             $orderAccountDisId = $sedis->nextval();

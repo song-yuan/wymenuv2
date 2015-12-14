@@ -34,9 +34,16 @@ class Order extends CActiveRecord
         public $reality_all;
         public $all_total;
         public $all_money;
-        public $pay_total;
-        public $pay_discount_total;
+        public $pay_total=0;
+        public $pay_discount_total=0;
         public $all_number;
+        
+        //支付部分传递参数
+        public $account_cash=0;
+        public $account_otherdetail="";
+        public $account_membercard="";
+        public $account_union=0;
+        public $notpaydetail="";
         /**
 	 * @return string the associated database table name
 	 */
