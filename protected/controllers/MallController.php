@@ -172,7 +172,7 @@ class MallController extends Controller
 		$paytype = Yii::app()->request->getPost('paytype');
 		$cuponId = Yii::app()->request->getPost('cupon');
 		
-		var_dump($_POST);
+		var_dump($_POST);var_dump($_GET);
 		if($paytype == 1){
 			WxOrder::updatePayType($orderId,$this->companyId,0);
 			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
