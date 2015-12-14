@@ -36,8 +36,13 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 				
-				 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','充值记录');?></div>
+				 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','充值记录报表');?></div>
 					 <div class="actions">
+							<select id="text" class="btn yellow" >
+							<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','传统卡');?></option>
+							<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信会员卡');?></option>
+							<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','统计');?></option>
+							</select>
                         <div class="btn-group">
             
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
@@ -49,81 +54,98 @@
 					   
 					      <div class="btn-group">
 					      		<button type="submit" id="btn_time_query" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-                                                        <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','日结打印');?></button>
+                                                        <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出excel');?></button>
                                                        <!-- <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>-->
 				  	      </div>
 				  	  </div>
 				</div>
 				<div class="portlet-body" id="table-manage">
+				<?php if($text == 1) :?>
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								
-								<th width=100px;><?php echo yii::t('app','序号');?></th>
+								<th width=100px;><?php echo yii::t('app','传统卡号');?></th>
 						        
-                                <th><?php echo yii::t('app','支付方式');?></th>
-                                <th><?php echo yii::t('app','金额');?></th>                                                                
-                                <th><?php echo yii::t('app','备注');?></th>
-								
+                                <th><?php echo yii::t('app','名称');?></th>
+                                <th><?php echo yii::t('app','充值金额');?></th>                                                                
+                                <th><?php echo yii::t('app','返现');?></th>
+								<th><?php echo yii::t('app','备注');?></th>
 							</tr>
 						</thead>
 						<tbody>
-				 
 						<!--foreach-->
-					<?php $a=1;$sumall=0;?>
-						  <?php foreach ($models as $model):?>  
-						
-												
-								<tr class="odd gradeX">
-								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
-                                <td><?php switch($model->paytype) {
-                                                                case 0: echo  yii::t('app','现金支付');break; 
-                                                                case 1: echo  yii::t('app','微信支付');break; 
-                                                                case 2: echo  yii::t('app','支付宝支付');break; 
-                                                                case 4: echo  yii::t('app','会员卡支付');break;  
-                                                                case 5: echo  yii::t('app','银联卡支付');break; 
-                                                                case 6: echo  yii::t('app','');break;
-                                                                case 7: echo  yii::t('app','');break;
-                                                                case 8: echo  yii::t('app','');break;
-                                                                case 9: echo  yii::t('app','微信代金券');break;
-                                                                case 10: echo  yii::t('app','微信会员余额支付');break;
-                                                                case 3: if ($model->payment_method_id){echo  $model->paymentMethod->name;}else echo '';break;
-                                                                default :echo ''; }?></td>
-								<td><?php echo $model->should_all;?></td>
+							<?php $a=1;$sumall=0;?>
+							<?php if($models) :?>
+							<?php foreach ($models as $model):?> 
+				 			<tr class="odd gradeX">
+								<td><?php echo $model['selfcode'];?></td>
+                                <td><?php echo $model['name'];?></td>
+								<td><?php echo $model['reality_money'];?></td>
+								<td><?php echo $model['give_money'];?></td>
 								<td></td>
-								</tr>
-						<?php $a++;$sumall=$sumall+$model->should_all;?>
-						<?php endforeach;?>	
-						<!-- end foreach--><?php// foreach ($moneys as $money):?>
-											<?php  //var_dump($moneys);exit;
-											if(!empty($moneys)):?>
-													<tr>
-													<td><?php echo $a;?></td>
-													<td><?php echo yii::t('app','传统卡充值金额');?></td>
-													<td><?php if(!empty($moneys["all_money"])) echo $moneys["all_money"];else echo "0.00";//var_dump($money);exit;?></td>
-													<td></td>
-													</tr>
-											<?php $sumall=$sumall+$moneys["all_money"];
-												endif;?>
-											<?php  //var_dump($moneys);exit;
-											if(!empty($recharge)):?>
-													<tr>
-													<td><?php echo $a++;?></td>
-													<td><?php echo yii::t('app','微信会员充值金额');?></td>
-													<td><?php if(!empty($recharge["all_recharge"])) echo $recharge["all_recharge"];else echo "0.00";//var_dump($money);exit;?></td>
-													<td><?php echo yii::t('app','总共返现金额：'); echo $recharge['all_cashback'];?></td>
-													</tr>
-											<?php $sumall=$sumall+$recharge["all_recharge"];
-												endif;?>
-											<?php // endforeach;?>
-                                                    <tr class="odd gradeX">
-                                                    <td></td>
-                                                    <td>合计：</td>
-                                                    <td><?php echo $sumall;?></td>
-                                                    <td></td>
-                                                    </tr>
+							</tr>
+							<?php endforeach;?>
+							<?php endif;?>	
 						</tbody>
 					</table>
+					
+				<?php elseif($text == 2):?>
+					<table class="table table-striped table-bordered table-hover" id="sample_1">
+						<thead>
+							<tr>
+								<th width=100px;><?php echo yii::t('app','会员卡号');?></th>
+						        
+                                <th><?php echo yii::t('app','名称');?></th>
+                                <th><?php echo yii::t('app','充值金额');?></th>                                                                
+                                <th><?php echo yii::t('app','返现');?></th>
+								<th><?php echo yii::t('app','备注');?></th>
+							</tr>
+						</thead>
+						<tbody>
+						<!--foreach-->
+							<?php $a=1;$sumall=0;?>
+							<?php if($models) :?>
+							<?php foreach ($models as $model):?> 
+				 			<tr class="odd gradeX">
+								<td><?php echo $model['card_id'];?></td>
+                                <td><?php echo $model['user_name'];?></td>
+								<td><?php echo $model['recharge_money'];?></td>
+								<td><?php echo $model['cashback_num'];?></td>
+								<td></td>
+							</tr>
+							<?php endforeach;?>	
+							<?php endif;?>
+						</tbody>
+					</table>
+				<?php elseif ($text == 3) :?>
+					<table class="table table-striped table-bordered table-hover" id="sample_1">
+						<thead>
+							<tr>
+								<th width=100px;><?php echo yii::t('app','充值卡类型');?></th>
+                                <th><?php echo yii::t('app','充值金额');?></th>                                                                
+                                <th><?php echo yii::t('app','返现');?></th>
+								<th><?php echo yii::t('app','备注');?></th>
+							</tr>
+						</thead>
+						<tbody>
+						<!--foreach-->
+							  
+				 			<tr class="odd gradeX">
+								<td><?php echo yii::t('app','传统卡');?></td>
+								<td><?php if(!empty($moneys["all_money"])) echo $moneys["all_money"];else echo "0.00";?></td>
+								<td><?php if(!empty($moneys['all_give'])) echo $moneys['all_give'];else echo "0.00";?></td>
+								<td></td>
+							</tr>
+							<tr class="odd gradeX">
+								<td><?php echo yii::t('app','会员卡');?></td>
+								<td><?php if(!empty($recharge["all_recharge"])) echo $recharge["all_recharge"];else echo "0.00";?></td>
+								<td><?php if(!empty($recharge["all_cashback"])) echo $recharge["all_cashback"];else echo "0.00";?></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				<?php endif?>
+				
 						<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -181,13 +203,14 @@
           $('#btn_time_query').click(function() {  
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   location.href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
+			   var text = $('#text').val();
+			   location.href="<?php echo $this->createUrl('statements/recharge' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/page/"    
 			  
 	        });
 	         $('#btn_submit').click(function() {
 	         	var begin_time = $('#begin_time').val();
 			    var end_time = $('#end_time').val();
-	         	$.get("<?php echo $this->createUrl('orderManagement/dailyclose',array('companyId'=>$this->companyId ));?>",{begin_time:begin_time,end_time:end_time},function(msg){
+	         	$.get("<?php echo $this->createUrl('statements/dailyclose',array('companyId'=>$this->companyId ));?>",{begin_time:begin_time,end_time:end_time},function(msg){
 	         		if(parseInt(msg)){
 	         			alert('日结成功!');
 	         			history.go(0);
@@ -200,6 +223,8 @@
                 
                 $('#btn-closeaccount-print').on('click',function() {
                         var padid="0000000046";
+                        alert("你没有权限！！！")
+                        return false;
                         if (typeof Androidwymenuprinter == "undefined") {
                             alert("找不到PAD设备");
                             //return false;
@@ -209,7 +234,7 @@
                         }
                         var begin_time = $('#begin_time').val();
 			var end_time = $('#end_time').val();
-                        var url = "<?php echo $this->createUrl('orderManagement/orderDaliyCollectPrint',array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/padid/"+padid;
+                        var url = "<?php echo $this->createUrl('statements/orderDaliyCollectPrint',array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/padid/"+padid;
                         //var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
                         var statu = confirm("<?php echo yii::t('app','确定要打印日结单吗？');?>");
                         if(!statu){
