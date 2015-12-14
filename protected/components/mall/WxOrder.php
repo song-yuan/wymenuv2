@@ -193,7 +193,8 @@ class WxOrder
 				  ->bindValue(':lid',$orderId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
-		self::updateOrderTotal($order);
+		$total = self::updateOrderTotal($order);
+		$order['should_total'] = $total;
 	    return $order;
 	}
 	/**
