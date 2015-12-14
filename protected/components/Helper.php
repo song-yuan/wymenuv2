@@ -848,7 +848,7 @@ class Helper
                     //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
                 }
                 array_push($listData,"br");
-                array_push($listData,"10"."   ".yii::t('app','人数：').$order->number);
+                array_push($listData,"10".yii::t('app','人数：').$order->number);
                 array_push($listData,"br");
                 array_push($listData,"10"."下单时间：");
                 array_push($listData,"00".$order->create_at);
@@ -918,30 +918,31 @@ class Helper
                 //var_dump($listData);exit;
                 if(Yii::app()->language=='jp')
                 {
-                    array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,0)
+                    array_push($listData,"10".yii::t('app','原价：').str_pad("",10," ").number_format($order->should_total,0)
                         .yii::t('app','现价：').number_format($order->reality_total,0));                    
                 }else{
                     if($order->should_total>0)
                     {
-                        array_push($listData,"11".yii::t('app','原价：').number_format($order->should_total,2));
+                        array_push($listData,"10".yii::t('app','原价：').str_pad("",10," ").number_format($order->should_total,2));
                         array_push($listData,"br");
                     }
                     //单品菜折扣优惠部分
                     $promotionarr=OrderProduct::getPromotion($order->account_no,$order->dpid);
                     foreach ($promotionarr as $dt)
                     {
-                        array_push($listData,"10".$dt["promotion_title"].":"."-".number_format($dt["subprice"],2));
+                        $printlen=(strlen($dt["promotion_title"]) + mb_strlen($dt["promotion_title"],'UTF8')) / 2;
+                        array_push($listData,"10".$dt["promotion_title"].":".str_pad("",16-$printlen," ")."-".number_format($dt["subprice"],2));
                         array_push($listData,"br"); 
                     }
                     if($order->reality_total>0)
                     {
-                        array_push($listData,"11".yii::t('app','现价：').number_format($order->reality_total,2));
+                        array_push($listData,"10".yii::t('app','现价：').str_pad("",10," ").number_format($order->reality_total,2));
                     }
                     
                     $modeloderpay=OrderPay::model()->findAll( "dpid=:dpid and order_id=:orderid",array(":dpid"=>$order->dpid,":orderid"=>$order->lid));
                     if(!empty($modeloderpay))
                     {
-                        array_push($listData,"br");
+                        array_push($listData,"00".str_pad('',48,'-'));
                         foreach ($modeloderpay as $op)
                         {
                             $payname="";
@@ -960,7 +961,8 @@ class Helper
                                     $payname="微信会员余额";
                                     break;
                             }
-                            array_push($listData,"10".$payname.":".number_format($op->pay_amount,2));
+                            $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                            array_push($listData,"10".$payname.str_pad("",16-$printlen," ").":".number_format($op->pay_amount,2));
                             array_push($listData,"br"); 
                         }
                     }
