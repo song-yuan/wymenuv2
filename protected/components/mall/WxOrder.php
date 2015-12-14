@@ -325,7 +325,7 @@ class WxOrder
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		if($result && $order['should_total'] > $result['min_consumer']){
 			$isSync = DataSync::getInitSync();
-			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money']:0;
+			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money'] : 0.01;
 			$cuponMoney = $result['cupon_money'];
 			$sql = 'update nb_order set cupon_branduser_lid='.$cuponBranduserLid.',cupon_money='.$cuponMoney.',should_total='.$money.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			$res = Yii::app()->db->createCommand($sql)->execute();
