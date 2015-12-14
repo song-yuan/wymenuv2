@@ -148,7 +148,7 @@ class orderManagementController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$money = "0";
 		$db = Yii::app()->db;
-		$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		$sql = 'select sum(t.reality_money) as all_money,sum(t.give_money) as all_give from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
 		$money = Yii::app()->db->createCommand($sql)->queryRow();
 		//var_dump($models);exit;
 		//var_dump($money);exit;

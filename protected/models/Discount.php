@@ -11,6 +11,7 @@
  * @property string $discount_name
  * @property string $discount_abstract
  * @property string $discount_num
+ * @property string $discount_type
  * @property string $is_available
  * @property string $delete_flag
  * @property string $is_sync
@@ -38,11 +39,11 @@ class Discount extends CActiveRecord
 			array('discount_name, is_sync', 'length', 'max'=>50),
 			array('discount_abstract', 'length', 'max'=>255),
 			array('discount_num', 'length', 'max'=>5),
-			array('is_available, delete_flag', 'length', 'max'=>2),
+			array('is_available, discount_type, delete_flag', 'length', 'max'=>2),
 			array('create_at, update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, discount_name, discount_abstract, discount_num, is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, discount_name, discount_abstract, discount_num, discount_type, is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,6 +71,7 @@ class Discount extends CActiveRecord
 			'discount_name' => '名称',
 			'discount_abstract' => '摘要',
 			'discount_num' => '折扣数值',
+				'discount_type'=>'折扣类型',
 			'is_available' => '0表示有效，1表示无效',
 			'delete_flag' => '删除标志，1表示删除',
 			'is_sync' => '同步标志',
@@ -101,6 +103,7 @@ class Discount extends CActiveRecord
 		$criteria->compare('discount_name',$this->discount_name,true);
 		$criteria->compare('discount_abstract',$this->discount_abstract,true);
 		$criteria->compare('discount_num',$this->discount_num,true);
+		$criteria->compare('discount_type',$this->discount_type,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
