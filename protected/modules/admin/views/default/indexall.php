@@ -734,6 +734,7 @@
             var ispaybuttonclicked=false;
             var intervalQueueList;
             var reloadsitestatelock=false;
+            var public_account_sendjson="";
             //var member_card_pop_flag=0;
             if (typeof Androidwymenuprinter == "undefined") {
                 event_clicktouchstart="click";
@@ -3018,21 +3019,38 @@
             });
             
             $('#pay_btn').on(event_clicktouchstart,function(){
+                var notpaydetail="";
                 var payCashAccount= parseFloat($("#payCashAccount").text().replace(",","")) - parseFloat($("#payChangeAccount").text().replace(",",""));
                 if(payCashAccount<0)
                 {
-                    alert("金额有误");                   
-                    return false;
-                }
-                var payShouldAccount=$("#payShouldAccount").text();
-                var payRealityAccount=$("#payRealityAccount").text();
-                
-                if(parseFloat(payRealityAccount.replace(",","")) < parseFloat(payShouldAccount.replace(",","")))
-                {
-                    alert("收款不够");
+                    alert("金额有误");
                     //ispaybuttonclicked=false;
                     return false;
                 }
+                 //改变order实收，打折等注释
+                var ordermemo="";
+                notpaydetail=$("#payDiscountAccount").attr("disid")+"|"+
+                                $("#payDiscountAccount").attr("disnum")+"|"+
+                                $("#payDiscountAccount").attr("dismoney")+"|";
+                var payDiscountAccount=$("#payDiscountAccount").text()
+                if(payDiscountAccount!="100%")
+                {
+                    ordermemo=ordermemo+" 折扣"+payDiscountAccount;
+                }
+                var payMinusAccount=$("#payMinusAccount").text()
+                if(payMinusAccount!="0.00")
+                {
+                    ordermemo=ordermemo+" 优惠"+payMinusAccount;
+                }
+                notpaydetail=notpaydetail+payMinusAccount+"|";
+                if($("#cancel_zero").hasClass("edit_span_select_zero"))
+                {
+                    ordermemo=ordermemo+" 抹零";
+                }
+                notpaydetail=notpaydetail+$("#payCancelZero").text();
+                //alert(notpaydetail);return;
+                 //存数order order_pay 0现金，4会员卡，5银联                         
+                 //写入会员卡消费记录，会员卡总额减少
                 var orderid=$(".selectProduct").attr("orderid");
                 var padid="0000000046";
                 if (typeof Androidwymenuprinter == "undefined") {
@@ -3042,14 +3060,52 @@
                     var padinfo=Androidwymenuprinter.getPadInfo();
                     padid=padinfo.substr(10,10);
                 }
-                //重新计算
+                //var payCashAccount=$("#payCashAccount").text();
+                //var payChangeAccount=$("#payChangeAccount").text();
                 var payShouldAccount=$("#payShouldAccount").text();
-                //var payOriginAccount=parseFloat($("#payOriginAccount").text().replace(",",""));
+                var payOriginAccount=$("#payOriginAccount").text();
+                var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
+                var payRealityAccount=$("#payRealityAccount").text();
+                var payMemberAccount=$("#payMemberAccount").text();
+                var cardno=$("#payMemberAccount").attr("cardno");
                 var cardtotal=$('#payMemberAccount').attr("cardtotal");
-                //会员卡的总额
-                var url="<?php echo $this->createUrl('defaultOrder/orderAccountSure',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/payShouldAccount/"+payShouldAccount+"/cardtotal/"+cardtotal;
+                var payUnionAccount=$("#payUnionAccount").text();
+                var payOthers=$("#payOthers").text();
+                var otherdetail=$("#payOthers").attr("detail");
+                if(parseFloat(payRealityAccount.replace(",","")) < parseFloat(payShouldAccount.replace(",","")))
+                {
+                    alert("收款不够");
+                    ispaybuttonclicked=false;
+                    return false;
+                }
+                var typeId=$('li[class="tabSite slectliclass"]').attr('typeid');
+                var isaccount=false;
+                layer.close(layer_index2);
+                layer_index2=0;
+                //var url="<?php echo $this->createUrl('defaultOrder/orderAccount',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;
+                public_account_sendjson='paycashaccount='+payCashAccount+
+                            '&paymemberaccount='+payMemberAccount+
+                            '&payunionaccount='+payUnionAccount+
+                            '&ordermemo='+ordermemo+
+                            '&payshouldaccount='+payShouldAccount+
+                            '&payothers='+payOthers+
+                            '&payoriginaccount='+payOriginAccount+
+                            '&payotherdetail='+otherdetail+
+                            '&notpaydetail='+notpaydetail+
+                            '&cardtotal='+cardtotal; 
+               var loadsendjson={'paycashaccount':payCashAccount,
+                                'paymemberaccount':payMemberAccount,
+                                'payunionaccount':payUnionAccount,
+                                'ordermemo':ordermemo,
+                                'payshouldaccount':payShouldAccount,
+                                'payothers':payOthers,
+                                'payoriginaccount':payOriginAccount,
+                                'payotherdetail':otherdetail,
+                                'notpaydetail':notpaydetail,
+                                'cardtotal':cardtotal};
+                var urlsure="<?php echo $this->createUrl('defaultOrder/orderAccountSure',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/orderstatus/4/cardno/"+cardno;
                 
-                $('#orderaccountsure').load(url);
+                $('#orderaccountsure').load(urlsure,loadsendjson);
                 if(layer_index_orderaccountsure!=0)
                 {
                     return;

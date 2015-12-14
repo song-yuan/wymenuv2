@@ -160,6 +160,37 @@ class MallController extends Controller
 		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType));
 	 }
 	 /**
+	  * 
+	  * 处理 现金券
+	  * 
+	  */
+	  public function actionOrderCupon(){
+		  	$userId = Yii::app()->session['userId'];
+			$orderId = Yii::app()->request->getParam('orderId');
+			$paytype = Yii::app()->request->getPost('paytype');
+			$cuponId = Yii::app()->request->getPost('cupon');
+			
+			$order = WxOrder::getOrder($orderId,$this->companyId);
+			
+			if($order['cupon_branduser_lid'] > 0){
+				$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
+			}
+			if($paytype == 1){
+				WxOrder::updatePayType($orderId,$this->companyId,0);
+				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+			}
+			WxOrder::updatePayType($orderId,$this->companyId);
+			if($cuponId){
+				$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
+			}
+			if($result){
+				$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
+			}else{
+				$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
+			}
+	  }
+	  
+	 /**
 	 * 
 	 * 
 	 * 支付订单
@@ -169,21 +200,7 @@ class MallController extends Controller
 	 {
 	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
-		$paytype = Yii::app()->request->getPost('paytype');
-		$cuponId = Yii::app()->request->getPost('cupon');
 		
-		var_dump($_POST);var_dump($_GET);
-		if($paytype == 1){
-			WxOrder::updatePayType($orderId,$this->companyId,0);
-			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
-		}
-		WxOrder::updatePayType($orderId,$this->companyId);
-		if($cuponId){
-			var_dump('begin');
-			WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
-			var_dump('end');
-		}
-		var_dump($cuponId);exit;
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$this->brandUser));

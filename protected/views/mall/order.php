@@ -12,17 +12,13 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
-
-<form action="<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
-	
+<form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
 <div class="order-title">我的订单</div>
 <?php if($this->type==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 <?php else:?>
 
 <?php endif;?>
-<input type="hidden" name="cupon" value="0" />
-<input type="hidden" name="paytype" value="2" />
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
@@ -34,16 +30,9 @@
 	<div class="ht1"></div>
 	<div class="item">
 		<div class="lt">合计:</div>
-		<div class="rt">￥<?php echo $order['reality_total'];?></div>
+		<div class="rt">￥<?php echo $order['should_total'];?></div>
 		<div class="clear"></div>
 	</div>
-	<?php if($order['reality_total'] - $order['should_total']):?>
-	<div class="item">
-		<div class="lt">优惠金额:</div>
-		<div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
-		<div class="clear"></div>
-	</div>
-	<?php endif;?>
 </div>
 
 <div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
@@ -78,6 +67,8 @@
 		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 	<?php endif;?>
 </div>
+	<input type="hidden" name="cupon" value="0" />
+	<input type="hidden" name="paytype" value="2" />
 </form>
 
 <script>

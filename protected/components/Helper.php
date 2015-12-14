@@ -441,7 +441,7 @@ class Helper
 		//$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 ///site error because tempsite and reserve**************
                 //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
-                $listData = array("22".Helper::setPrinterTitle($order->company->company_name."预结单",8));
+                $listData = array("22".Helper::setPrinterTitle($order->company->company_name.$memo,8));
                 array_push($listData,"00");
                 array_push($listData,"br");
                 array_push($listData,"br");
@@ -561,26 +561,95 @@ class Helper
                     if($order->reality_total>0)
                     {
                         array_push($listData,"10".yii::t('app','现价：').number_format($order->reality_total,2));
-                    }
-                    array_push($listData,"br");
+                        array_push($listData,"br");
+                    }                    
                     if($order->pay_total>0)
                     {
                         array_push($listData,"10".yii::t('app','已付：').number_format($order->pay_total,2));
-                    }                    
-                    if($cardtotal>0)
-                    {
                         array_push($listData,"br");
-                        array_push($listData,"10".yii::t('app','会员卡余额：').number_format($cardtotal,2));
+                    }
+                    array_push($listData,"br");
+                    //单品菜折扣优惠部分
+                    $promotionarr=OrderProduct::getPromotion($order->account_no,$order->dpid);
+                    foreach ($promotionarr as $dt)
+                    {
+                        array_push($listData,"10".$dt["promotion_title"].":".number_format($dt["subprice"],2));
+                        array_push($listData,"br"); 
+                    }
+                    //echo $sqlorderproductpromotion;exit;
+                    //整单折扣优惠部分
+                    if(!empty($order->notpaydetail))
+                    {
+                        $notpayarr=explode("|",$order->notpaydetail);
+                        if($notpayarr[2]>0)
+                        {
+                            //取折扣名称
+                            $discountname=Yii::app()->db->createCommand("select discount_name from nb_discount where dpid=".$order->dpid." and lid=".$notpayarr[0])->queryScalar();
+                            array_push($listData,"10".$discountname."(".$notpayarr[1]."):".number_format($notpayarr[2],2));
+                            array_push($listData,"br"); 
+                        }
+                        if($notpayarr[3]>0)
+                        {
+                            array_push($listData,"10"."后台手动减价:".number_format($notpayarr[3],2));
+                            array_push($listData,"br"); 
+                        }
+                        if($notpayarr[4]>0)
+                        {
+                            array_push($listData,"10"."抹零:".number_format($notpayarr[4],2));
+                            array_push($listData,"br"); 
+                        }
+                    }
+                    array_push($listData,"br");
+                    //支付方式
+                    if($order->account_cash>0)
+                    {
+                        array_push($listData,"10".yii::t('app','现金支付：').number_format($order->account_cash,2));
+                        array_push($listData,"br");                        
+                    }
+                    if(!empty($order->account_membercard))
+                    {
+                        $membercardarr=explode("|",$order->account_membercard);
+                        if($membercardarr[1]>0)
+                        {
+                            array_push($listData,"10".yii::t('app','会员卡号：').$membercardarr[0]);
+                            array_push($listData,"br");
+                            array_push($listData,"10".yii::t('app','会员卡支付：').number_format($membercardarr[1],2));
+                            array_push($listData,"br");
+                            array_push($listData,"10".yii::t('app','会员卡余额：').number_format($membercardarr[2],2));
+                            array_push($listData,"br");
+                        }
+                    }
+                    if($order->account_union>0)
+                    {
+                        array_push($listData,"10".yii::t('app','银联支付：').number_format($order->account_union,2));
+                        array_push($listData,"br");                        
+                    }
+                    if(!empty($order->account_otherdetail))
+                    {
+                        $otherpaykv=array();
+                        $otherpayrow=Yii::app()->db->createCommand("select lid,name from nb_payment_method where dpid=".$order->dpid)->queryAll();
+                        foreach ($otherpayrow as $kv)
+                        {
+                            $otherpaykv[$kv["lid"]]=$kv["name"];
+                        }
+                        $otherpayarr=explode("|",$order->account_otherdetail);
+                        foreach ($otherpayarr as $pd)
+                        {
+                            $pdarr=explode(",",$pd);
+                            if($pdarr[1]>0)
+                            {
+                                array_push($listData,"10".$otherpaykv[$pdarr[0]].":".number_format($pdarr[1],2));
+                                array_push($listData,"br");  
+                            }
+                        }
                     }
                 }
                 array_push($listData,"br");
                 if(!empty($order->username))
                 {
                     array_push($listData,"10"."点单员：".$order->username);//."  "
-
                 }else{
                     array_push($listData,"10"."客人自助下单");//."  "
-
                 }
                 array_push($listData,"br");
                 array_push($listData,"10"."点单时间：");
