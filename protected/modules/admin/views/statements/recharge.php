@@ -26,7 +26,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','日结列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','日结汇总'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('orderManagement/notPay' , array('companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','充值记录'),'url'=>''))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -36,7 +36,7 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 				
-				 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','汇总列表');?></div>
+				 <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','充值记录');?></div>
 					 <div class="actions">
                         <div class="btn-group">
             
@@ -76,9 +76,7 @@
 												
 								<tr class="odd gradeX">
 								<td><?php echo ($pages->getCurrentPage())*10+$a;?></td>
-								
-								
-                                                                <td><?php switch($model->paytype) {
+                                <td><?php switch($model->paytype) {
                                                                 case 0: echo  yii::t('app','现金支付');break; 
                                                                 case 1: echo  yii::t('app','微信支付');break; 
                                                                 case 2: echo  yii::t('app','支付宝支付');break; 
