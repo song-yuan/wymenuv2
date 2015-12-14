@@ -880,9 +880,19 @@ class Helper
                     //var_dump($product);exit;
                     $productnum++;
                     $productmoneyall=$productmoneyall+$product['price']*$product['amount'];
+                    $isgiving="";
+                    $isretreat="";                   
                     if($product['amount']<1)
                     {
                         continue;
+                    }
+                    if($product['is_giving']<1)
+                    {
+                        $isgiving="(赠)";
+                    }
+                    if($product['is_retreat']<1)
+                    {
+                        $isretreat="-";
                     }
                     $hasData=true;
 //                    if(Yii::app()->language=='jp')
@@ -894,26 +904,26 @@ class Helper
                         //array_push($listData,"00".str_pad($product['amount']." X ".number_format($product['price'],2),13,' ')." ".Helper::setProductName($product['product_name'],24,16));
 //                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
                         $printlen=(strlen($product['product_name']) + mb_strlen($product['product_name'],'UTF8')) / 2;
-                        $productname="";
-                        $charactorlen=  mb_strlen($product['product_name'],'UTF8');
+                        $productname=$product['product_name'].$isgiving;
+                        $charactorlen=  mb_strlen($productname,'UTF8');
                         if($printlen>22)
                         {
                             array_push($listData, "01".$productnum."."
-                                    .mb_substr($product['product_name'],0,$charactorlen/2,'UTF8'));
+                                    .mb_substr($productname,0,$charactorlen/2,'UTF8'));
                             array_push($listData,"br");
-                            $lenstrleft=mb_substr($product['product_name'],$charactorlen/2,$charactorlen-($charactorlen/2),'UTF8');
+                            $lenstrleft=mb_substr($productname,$charactorlen/2,$charactorlen-($charactorlen/2),'UTF8');
                             $printlenstrleft=(strlen($lenstrleft) + mb_strlen($lenstrleft,'UTF8')) / 2;
                             //return array('status'=>false,'orderid'=>$order->lid, 'dpid'=>$printer->dpid,'jobid'=>"0",'type'=>'none','msg'=>$lenstrleft);
                             array_push($listData,
                                       "01"."  ".$lenstrleft
                                     .str_pad("",24-$printlenstrleft," ")
-                                    .str_pad($product['amount'],4," ")
+                                    .$isretreat.str_pad($product['amount'],4," ")
                                     .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
                         }else{
                             array_push($listData,"01".$productnum."."
-                                    .$product['product_name']
+                                    .$productname
                                     .str_pad("",24-$printlen," ")
-                                    .str_pad($product['amount'],4," ")
+                                    .$isretreat.str_pad($product['amount'],4," ")
                                     .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
                         }
 //                    }
