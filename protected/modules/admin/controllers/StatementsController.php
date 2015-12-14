@@ -2652,15 +2652,6 @@ public function actionPayallReport(){
 						->setCellValue('E'.$j,$v->all_reality)
 						->setCellValue('F'.$j);
 					break;
-					case 5:
-						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
-						->setCellValue('B'.$j,$v->company->company_name)
-						->setCellValue('C'.$j,yii::t('app','银联卡支付'))
-						->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-						break;
 					case 6:
 						$objPHPExcel->setActiveSheetIndex(0)
 						->setCellValue('A'.$j,$v->y_all)
@@ -2755,7 +2746,7 @@ public function actionPayallReport(){
 					break;
 					case 4:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2773,7 +2764,7 @@ public function actionPayallReport(){
 					break;
 					case 6:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app',''))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2782,7 +2773,7 @@ public function actionPayallReport(){
 						break;
 					case 7:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app',''))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2791,7 +2782,7 @@ public function actionPayallReport(){
 						break;
 					case 8:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app',''))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2800,7 +2791,7 @@ public function actionPayallReport(){
 						break;
 					case 9:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','微信代金券'))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2809,7 +2800,7 @@ public function actionPayallReport(){
 						break;
 					case 10:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','微信会员余额'))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2861,15 +2852,15 @@ public function actionPayallReport(){
 						->setCellValue('D'.$j,$v->all_num)
 						->setCellValue('E'.$j,$v->all_reality)
 						->setCellValue('F'.$j);
-						case 4:
-							$objPHPExcel->setActiveSheetIndex(0)
-							->setCellValue('A'.$j,$v->y_all)
-							->setCellValue('B'.$j,$v->company->company_name)
-							->setCellValue('C'.$j,yii::t('app','会员卡支付'))
-							->setCellValue('D'.$j,$v->all_num)
-						->setCellValue('E'.$j,$v->all_reality)
-						->setCellValue('F'.$j);
-							break;
+					break;
+					case 4:
+						$objPHPExcel->setActiveSheetIndex(0)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
+						->setCellValue('B'.$j,$v->company->company_name)
+						->setCellValue('C'.$j,yii::t('app','会员卡支付'))
+						->setCellValue('D'.$j,$v->all_num)
+					->setCellValue('E'.$j,$v->all_reality)
+					->setCellValue('F'.$j);
 					break;
 					case 5:
 						$objPHPExcel->setActiveSheetIndex(0)
@@ -2882,7 +2873,7 @@ public function actionPayallReport(){
 					break;
 					case 6:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app',''))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2891,7 +2882,7 @@ public function actionPayallReport(){
 						break;
 					case 7:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app',''))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2900,7 +2891,7 @@ public function actionPayallReport(){
 						break;
 					case 8:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app',''))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2909,7 +2900,7 @@ public function actionPayallReport(){
 						break;
 					case 9:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','微信代金券'))
 						->setCellValue('D'.$j,$v->all_num)
@@ -2918,7 +2909,7 @@ public function actionPayallReport(){
 						break;
 					case 10:
 						$objPHPExcel->setActiveSheetIndex(0)
-						->setCellValue('A'.$j,$v->y_all)
+						->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all)
 						->setCellValue('B'.$j,$v->company->company_name)
 						->setCellValue('C'.$j,yii::t('app','微信会员余额'))
 						->setCellValue('D'.$j,$v->all_num)

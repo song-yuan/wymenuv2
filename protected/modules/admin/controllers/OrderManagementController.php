@@ -152,6 +152,8 @@ class orderManagementController extends BackendController
 		$money = Yii::app()->db->createCommand($sql)->queryRow();
 		//var_dump($models);exit;
 		//var_dump($money);exit;
+		$sql = 'select sum(t.recharge_money) as all_recharge,sum(t.cashback_num) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		$recharge = Yii::app()->db->createCommand($sql)->queryRow();
 		$criteria = new CDbCriteria;
 
 		//$sql = "select t2.company_name, t1.name, t.lid, t.dpid, t.payment_method_id, t.update_at, sum(t.should_total) as should_all from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) left join nb_company t2 on t.dpid = t2.dpid where t.order_status in(3,4) and  t.update_at >= '$begin_time 00:00:00' and t.update_at <= '$end_time 60:60:60' and t.dpid= ".$this->companyId ." group by t.payment_method_id " ;
@@ -188,7 +190,7 @@ class orderManagementController extends BackendController
 		$criteria->group = "t.paytype,t.payment_method_id";
 		
 		$pages = new CPagination(OrderPay::model()->count($criteria));
-		//$pages->PageSize = 10;
+		$pages->PageSize = 20;
 		$pages->applyLimit($criteria);
 		
 		$model=  OrderPay::model()->findAll($criteria);
@@ -199,6 +201,7 @@ class orderManagementController extends BackendController
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'moneys'=>$money,
+				'recharge'=>$recharge,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));
