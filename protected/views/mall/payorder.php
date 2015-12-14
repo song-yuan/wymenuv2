@@ -58,8 +58,8 @@
 		<div class="lt">现金券减免</div><div class="rt">￥<?php echo number_format($order['cupon_money'],2);?></div>
 		<div class="clear"></div>
 	</div>
+	<?php else:?>
 	<div class="item">
-		<?php else:?>
 		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
 		<div class="clear"></div>
 	</div>
