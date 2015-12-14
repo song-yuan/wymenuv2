@@ -434,6 +434,81 @@ public function actionPayallReport(){
 				//'categoryId'=>$categoryId
 		));
 	}
+	/*
+	 * 充值记录报表
+	 */
+	public function actionRecharge(){
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$text = Yii::app()->request->getParam('text');
+		$money = "";
+		$recharge = "";
+		$db = Yii::app()->db;
+		if($text==1){
+			$sql = 'select k.* from(select t1.selfcode,t1.name,t.reality_money,t.give_money from nb_member_recharge t left join nb_member_card t1 on(t.member_card_id = t1.selfcode || t.member_card_id = t1.rfid and t1.delete_flag = 0) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59") k';
+			//var_dump($sql);exit;
+		}
+		//传统卡充值
+		//$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		//$money = Yii::app()->db->createCommand($sql)->queryRow();
+		//var_dump($models);exit;
+		//var_dump($money);exit;
+		if($text==2){
+			$sql = 'select k.* from(select t1.card_id,t1.user_name,t.recharge_money,t.cashback_num from nb_recharge_record t left join nb_brand_user t1 on(t.brand_user_lid = t1.lid and t.dpid = t1.dpid ) where t.delete_flag = 0 and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59") k';
+			//var_dump($sql);exit;
+		}
+		if($text==3){
+			//$money = "0";
+			//传统卡充值
+			$sql = 'select k.* from(select sum(t.reality_money) as all_money,sum(t.give_money) as all_give from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ) k';
+			$money = Yii::app()->db->createCommand($sql)->queryRow();
+			//微信会员卡充值
+			$sql = 'select k.* from(select sum(t.recharge_money) as all_recharge,sum(t.cashback_num) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59") k ';
+			$recharge = Yii::app()->db->createCommand($sql)->queryRow();
+		
+		}
+		//微信会员卡充值
+		//$sql = 'select sum(t.recharge_money) as all_recharge,sum(t.cashback_num) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		//$recharge = Yii::app()->db->createCommand($sql)->queryRow();
+	
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		
+// 		$criteria = new CDbCriteria;
+// 		//$sql ='select t.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all,t1.name from nb_order_pay t left join nb_payment_method t1 on(t.dpid = t1.dpid and t.payment_method_id = t1.lid) where (t.dpid = t1.dpid ) group by t.paytype,t.payment_method_id';
+// 		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
+// 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
+// 		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
+// 		$criteria->with = array("order","paymentMethod"); //连接表
+	
+// 		$criteria->addCondition("t.dpid= ".$this->companyId);
+// 		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
+// 		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
+// 		$criteria->group = "t.paytype,t.payment_method_id";
+	
+// 		$pages = new CPagination(OrderPay::model()->count($criteria));
+// 			$pages->PageSize = 20;
+// 		$pages->applyLimit($criteria);
+	
+// 		$model=  OrderPay::model()->findAll($criteria);
+		//var_dump($model);exit;
+		$this->render('recharge',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'moneys'=>$money,
+				'recharge'=>$recharge,
+				'text'=>$text,
+							//'categories'=>$categories,
+							//'categoryId'=>$categoryId
+		));
+	}
 	
 	public function actionBusinessdataReport(){
 		$str = Yii::app()->request->getParam('str');
