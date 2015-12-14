@@ -179,9 +179,9 @@ class MallController extends Controller
 				$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
 			}
 			if($result){
-				$this->redirect(array('/user/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
+				$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 			}else{
-				$this->redirect(array('/user/order','companyId'=>$this->companyId,'orderId'=>$orderId));
+				$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 			}
 	  }
 	  
