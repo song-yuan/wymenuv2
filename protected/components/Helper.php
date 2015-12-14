@@ -570,7 +570,13 @@ class Helper
                     }
                     array_push($listData,"br");
                     //单品菜折扣优惠部分
-                    
+                    $promotionarr=OrderProduct::getPromotion($order->account_no,$order->dpid);
+                    foreach ($promotionarr as $dt)
+                    {
+                        array_push($listData,"10".$dt["promotion_title"].":".number_format($dt["subprice"],2));
+                        array_push($listData,"br"); 
+                    }
+                    //echo $sqlorderproductpromotion;exit;
                     //整单折扣优惠部分
                     if(!empty($order->notpaydetail))
                     {
