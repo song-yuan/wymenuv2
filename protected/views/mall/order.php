@@ -52,7 +52,7 @@
 		<div class="item" paytype="1">饭后支付</div>
 		<input type="hidden" name="paytype" value="2" />
 	</div>
-</di>
+</div>
 <div class="bottom"></div>
 
 <footer>
