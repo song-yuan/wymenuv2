@@ -322,6 +322,26 @@ class OrderProduct extends CActiveRecord
                 return $ret;
 	}
         
+        //获得一个订单所有参见的微信会员活动，客户自己点菜的活动，不是后台活动
+        static public function getPromotion($accountno,$dpid){
+		$db = Yii::app()->db;
+		$sqlorderproductpromotion=
+                            "select t.promotion_id,t.promotion_type,tpm.promotion_title,sum(tp.original_price)-sum(tp.price) as subprice"
+                            . " from nb_order_product_promotion t"
+                            . " LEFT JOIN nb_normal_promotion tpm on t.dpid=tpm.dpid and t.promotion_id=tpm.lid"
+                            . " LEFT JOIN nb_order_product tp on t.dpid=tp.dpid and t.order_product_id=tp.lid"
+                            . " where t.account_no=".$accountno." and t.dpid=".$dpid." and t.promotion_type=0"
+                            . "  group by t.promotion_id,t.promotion_type,tpm.promotion_title"
+                            . " UNION "
+                            . "select t.promotion_id,t.promotion_type,tpm.promotion_title,sum(tp.original_price)-sum(tp.price) as subprice"
+                            . " from nb_order_product_promotion t"
+                            . " LEFT JOIN nb_private_promotion tpm on t.dpid=tpm.dpid and t.promotion_id=tpm.lid "
+                            . " LEFT JOIN nb_order_product tp on t.dpid=tp.dpid and t.order_product_id=tp.lid"
+                            . " where t.account_no=".$accountno." and t.dpid=".$dpid." and t.promotion_type=1"
+                            . "  group by t.promotion_id,t.promotion_type,tpm.promotion_title";
+		return $db->createCommand($sqlorderproductpromotion)->queryAll();
+	}
+        
         //有折扣优惠后的价格//没有参与折扣的去出来
         static public function getDisTotal($orderlist,$dpid){
 		$db = Yii::app()->db;
