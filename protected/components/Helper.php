@@ -546,23 +546,24 @@ class Helper
                 {
                     //array_push($listData,str_pad(yii::t('app','应付：').number_format($order->should_total,0) , 26,' ').str_pad(date('Y-m-d H:i:s',time()),20,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"10".yii::t('app','应付：').number_format($order->should_total,0)
+                    array_push($listData,"10".yii::t('app','应付').str_pad('',10,' ').number_format($order->should_total,0)
                         .yii::t('app','实付：').number_format($order->reality_total,0));                    
                 }else{
                     //array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
                     //array_push($listData,str_pad(yii::t('app','操作员：').Yii::app()->user->name,24,' ')
                     //        .str_pad(yii::t('app','时间：').date('Y-m-d H:i:s',time()),24,' '));
-                    //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
+                    //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' ')); 
                     if($order->should_total>0)
                     {
-                        array_push($listData,"10".yii::t('app','原价：').number_format($order->should_total,2));
+                        array_push($listData,"10".yii::t('app','原价').str_pad('',10,' ').number_format($order->should_total,2));
                         array_push($listData,"br");
                     }
                     //单品菜折扣优惠部分
                     $promotionarr=OrderProduct::getPromotion($order->account_no,$order->dpid);
                     foreach ($promotionarr as $dt)
                     {
-                        array_push($listData,"10".$dt["promotion_title"].":"."-".number_format($dt["subprice"],2));
+                        $printlen=(strlen($dt["promotion_title"]) + mb_strlen($dt["promotion_title"],'UTF8')) / 2;
+                        array_push($listData,"10".$dt["promotion_title"].str_pad("",14-$printlen," ")."-".number_format($dt["subprice"],2));
                         array_push($listData,"br"); 
                     }
                     //整单折扣优惠部分
@@ -573,28 +574,30 @@ class Helper
                         {
                             //取折扣名称
                             $discountname=Yii::app()->db->createCommand("select discount_name from nb_discount where dpid=".$order->dpid." and lid=".$notpayarr[0])->queryScalar();
-                            array_push($listData,"10".$discountname."(".$notpayarr[1]."):"."-".number_format($notpayarr[2],2));
+                            $tempprintname=$discountname."(".$notpayarr[1].")";
+                            $printlen=(strlen($tempprintname) + mb_strlen($tempprintname,'UTF8')) / 2;
+                            array_push($listData,"10".$tempprintname.str_pad("",14-$printlen," ")."-".number_format($notpayarr[2],2));
                             array_push($listData,"br"); 
                         }
                         if($notpayarr[3]>0)
                         {
-                            array_push($listData,"10"."后台手动减价:"."-".number_format($notpayarr[3],2));
+                            array_push($listData,"10"."后台手动减价".str_pad("",4," ")."-".number_format($notpayarr[3],2));
                             array_push($listData,"br"); 
                         }
                         if($notpayarr[4]>0)
                         {
-                            array_push($listData,"10"."抹零:"."-".number_format($notpayarr[4],2));
+                            array_push($listData,"10"."抹零".str_pad("",10," ")."-".number_format($notpayarr[4],2));
                             array_push($listData,"br"); 
                         }
                     }
                     if($order->pay_total>0)
                     {
-                        array_push($listData,"10".yii::t('app','已付：')."-".number_format($order->pay_total,2));
+                        array_push($listData,"10".yii::t('app','已付').str_pad("",10," ")."-".number_format($order->pay_total,2));
                         array_push($listData,"br");
                     }
                     if($order->reality_total>0)
                     {
-                        array_push($listData,"10".yii::t('app','现价：').number_format($order->reality_total,2));
+                        array_push($listData,"10".yii::t('app','现价').str_pad("",10," ").number_format($order->reality_total,2));
                         array_push($listData,"br");
                     }                    
                     array_push($listData,"br");
@@ -604,25 +607,13 @@ class Helper
                     //支付方式
                     if($order->account_cash>0)
                     {
-                        array_push($listData,"10".yii::t('app','现金支付：').number_format($order->account_cash,2));
+                        array_push($listData,"10".yii::t('app','现金支付').str_pad("",6," ").number_format($order->account_cash,2));
                         array_push($listData,"br");                        
                     }
-                    if(!empty($order->account_membercard))
-                    {
-                        $membercardarr=explode("|",$order->account_membercard);
-                        if($membercardarr[1]>0)
-                        {
-                            array_push($listData,"10".yii::t('app','会员卡号：').$membercardarr[0]);
-                            array_push($listData,"br");
-                            array_push($listData,"10".yii::t('app','会员卡支付：').number_format($membercardarr[1],2));
-                            array_push($listData,"br");
-                            array_push($listData,"10".yii::t('app','会员卡余额：').number_format($membercardarr[2],2));
-                            array_push($listData,"br");
-                        }
-                    }
+                    
                     if($order->account_union>0)
                     {
-                        array_push($listData,"10".yii::t('app','银联支付：').number_format($order->account_union,2));
+                        array_push($listData,"10".yii::t('app','银联支付').str_pad("",6," ").number_format($order->account_union,2));
                         array_push($listData,"br");                        
                     }
                     if(!empty($order->account_otherdetail))
@@ -639,12 +630,26 @@ class Helper
                             $pdarr=explode(",",$pd);
                             if($pdarr[1]>0)
                             {
-                                array_push($listData,"10".$otherpaykv[$pdarr[0]].":".number_format($pdarr[1],2));
+                                $printlen=(strlen($otherpaykv[$pdarr[0]]) + mb_strlen($otherpaykv[$pdarr[0]],'UTF8')) / 2;
+                                array_push($listData,"10".$otherpaykv[$pdarr[0]].str_pad("",14-$printlen," ").number_format($pdarr[1],2));
                                 array_push($listData,"br");  
                             }
                         }
                     }
                 }
+                if(!empty($order->account_membercard))
+                    {
+                        $membercardarr=explode("|",$order->account_membercard);
+                        if($membercardarr[1]>0)
+                        {
+                            array_push($listData,"10".yii::t('app','会员卡支付').str_pad("",4," ").number_format($membercardarr[1],2));
+                            array_push($listData,"br");
+                            array_push($listData,"10".yii::t('app','会员卡号').str_pad("",6," ").$membercardarr[0]);
+                            array_push($listData,"br");
+                            array_push($listData,"10".yii::t('app','会员卡余额').str_pad("",4," ").number_format($membercardarr[2],2));
+                            array_push($listData,"br");
+                        }
+                    }
                 array_push($listData,"br");
                 if(!empty($order->username))
                 {
