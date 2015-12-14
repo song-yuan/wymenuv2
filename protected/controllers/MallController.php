@@ -178,9 +178,11 @@ class MallController extends Controller
 		}
 		WxOrder::updatePayType($orderId,$this->companyId);
 		if($cuponId){
+			var_dump('begin');
 			WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
+			var_dump('end');
 		}
-		
+		var_dump($cuponId);exit;
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$this->brandUser));
