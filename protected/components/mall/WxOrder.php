@@ -193,7 +193,8 @@ class WxOrder
 				  ->bindValue(':lid',$orderId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
-		self::updateOrderTotal($order);
+		$total = self::updateOrderTotal($order);
+		$order['should_total'] = $total;
 	    return $order;
 	}
 	/**
@@ -319,12 +320,12 @@ class WxOrder
 	public static function updateOrderCupon($orderId,$dpid,$cuponBranduserLid){
 		$now = date('Y-m-d H:i:s',time());
 		$order = self::getOrder($orderId,$dpid);
-		$sql = 'select t1.cupon_money from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cuponBranduserLid.
+		$sql = 'select t1.cupon_money,t1. from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cuponBranduserLid.
 				' and t.dpid='.$dpid.' and t1.begin_time <= "'.$now.'" and "'.$now.'" <= t1.end_time and t1.delete_flag=0 and t1.is_available=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
-		if($result){
+		if($result && $order['should_total'] > $result['min_consumer']){
 			$isSync = DataSync::getInitSync();
-			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money']:0;
+			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money'] : 0.01;
 			$cuponMoney = $result['cupon_money'];
 			$sql = 'update nb_order set cupon_branduser_lid='.$cuponBranduserLid.',cupon_money='.$cuponMoney.',should_total='.$money.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			$res = Yii::app()->db->createCommand($sql)->execute();
