@@ -20,8 +20,8 @@
 <?php else:?>
 
 <?php endif;?>
-<input type="hidden" name="cupon" value="0" />
-<input type="hidden" name="paytype" value="2" />
+<input type="text" name="cupon" value="0" />
+<input type="text" name="paytype" value="2" />
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
