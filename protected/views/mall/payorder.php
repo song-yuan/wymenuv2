@@ -51,7 +51,7 @@
 	
 	<?php if($order['cupon_branduser_lid'] > 0):?>
 	<div class="item">
-		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'];?></div>
+		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'] + $order['cupon_money'];?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
