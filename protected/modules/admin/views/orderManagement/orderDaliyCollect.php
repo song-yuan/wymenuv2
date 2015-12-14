@@ -30,6 +30,44 @@
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
+					<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">
+				                <div style="margin:0px;height:100%;">
+				                    <div style="margin-top:;height:10%;"><h4 style="text-align:center;font-size:22px;color:#900;">打印列表</h4></div>
+				                	<div style="margin-top:;height:8%;text-align:center;font-size:16px;">
+				                		<div style="width:20%;float:left;"><?php echo yii::t('app','序号');?></div>
+				                		<div style="width:50%;float:left;"><?php echo yii::t('app','报表名称');?></div>
+				                		<div style="width:28%;float:left;"><?php echo yii::t('app','选择打印');?></div>
+				                	</div>
+				                	<div style="height:;text-align:center;font-size:14px;" id="printRsultListdetailsub">
+					                    <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
+					                         <li>
+					                        	<div style="width:20%;float:left;"><?php echo $a++;?></div>
+					                        	<div style="width:50%;float:left;"><?php echo yii::t('app','营业数据表');?></div>
+					                        	<div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="" name="ids[]" /></div>
+					                        </li>
+					                        <li>
+					                        	<div style="width:20%;float:left;"><?php echo $a++;?></div>
+					                        	<div style="width:50%;float:left;"><?php echo yii::t('app','营业收入表');?></div>
+					                        	<div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="" name="ids[]" /></div>
+					                        </li>
+					                        <li>
+					                        	<div style="width:20%;float:left;"><?php echo $a++;?></div>
+					                        	<div style="width:50%;float:left;"><?php echo yii::t('app','收款统计表');?></div>
+					                        	<div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="" name="ids[]" /></div>
+					                        </li>
+					                        <li>
+					                        	<div style="width:20%;float:left;"><?php echo $a++;?></div>
+					                        	<div style="width:50%;float:left;"><?php echo yii::t('app','充值记录表');?></div>
+					                        	<div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="" name="ids[]" /></div>
+					                        </li>
+					                    </ul>
+				                	</div>
+				                	<div style="margin-bottom:10px;height:14%;">
+				                		<div style="width:56%;float:left;text-align:center;"><button id="sure" style="float:right;" class="btn red"><?php echo yii::t('app','确定日结打印');?></button></div>
+				                		<div style="margin-left:4%;width:40%;float:left;text-align:center;"><button style="float:left;"class="btn red"><?php echo yii::t('app','全部打印');?></button></div>
+				                	</div>
+				                </div>
+				    </div>
 	<div class="row">
 	<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -105,12 +143,13 @@
 													<td><?php if(!empty($moneys["all_money"])) echo $moneys["all_money"];else echo "0.00";//var_dump($money);exit;?></td>
 													<td><?php echo yii::t('app','总共赠送金额：'); if(!empty($moneys['all_give']))echo $moneys['all_give'];else echo "0.00";?></td>
 													</tr>
+											<?php $a++;?>
 											<?php $sumall=$sumall+$moneys["all_money"];
 												endif;?>
 											<?php  //var_dump($moneys);exit;
 											if(!empty($recharge)):?>
 													<tr>
-													<td><?php echo $a++;?></td>
+													<td><?php echo $a;?></td>
 													<td><?php echo yii::t('app','微信会员充值金额');?></td>
 													<td><?php if(!empty($recharge["all_recharge"])) echo $recharge["all_recharge"];else echo "0.00";//var_dump($money);exit;?></td>
 													<td><?php echo yii::t('app','总共返现金额：'); if(!empty($recharge['all_cashback']))echo $recharge['all_cashback'];else  echo "0.00";?></td>
@@ -201,6 +240,19 @@
 		});
                 
                 $('#btn-closeaccount-print').on('click',function() {
+
+                	layer_index_printresult=layer.open({
+                        type: 1,
+                        shade: false,
+                        title: false, //不显示标题
+                        area: ['30%', '60%'],
+                        content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                        cancel: function(index){
+                            layer.close(index);
+                            layer_index_printresult=0;                                                                                                     
+                        }
+                    });
+                  
                         var padid="0000000046";
                         if (typeof Androidwymenuprinter == "undefined") {
                             alert("找不到PAD设备");
@@ -257,6 +309,6 @@
                         }
                     });                	
 	         });
-                
+        
 		
 </script> 
