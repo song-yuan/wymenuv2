@@ -14,14 +14,15 @@
 
 
 <form action="<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
+	
 <div class="order-title">我的订单</div>
 <?php if($this->type==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 <?php else:?>
 
 <?php endif;?>
-<input type="text" name="cupon" value="0" />
-<input type="text" name="paytype" value="2" />
+<input type="hidden" name="cupon" value="0" />
+<input type="hidden" name="paytype" value="2" />
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
@@ -63,16 +64,18 @@
     </div>
     <div class="clear"></div>
 </footer>
-<div class="user-cupon" id="cuponList">
-<?php if($isCupon):?>
-<?php foreach($cupons as $coupon):?>
-	<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
-<?php endforeach;?>
-<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
-<?php endif;?>
-</div>
+
+	<div class="user-cupon" id="cuponList">
+	<?php if($isCupon):?>
+	<?php foreach($cupons as $coupon):?>
+		<div class="item useCupon" user-cupon-id="<?php echo $coupon['lid'];?>" min-money="<?php echo $coupon['min_consumer'];?>" cupon-money="<?php echo $coupon['cupon_money'];?>"><?php echo $coupon['cupon_title'];?></div>
+	<?php endforeach;?>
+		<div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
+	<?php endif;?>
+	</div>
 </form>
-<script type="text/javascript">
+
+<script>
 $(document).ready(function(){
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
