@@ -339,7 +339,7 @@ class OrderProduct extends CActiveRecord
                             . " LEFT JOIN nb_order_product tp on t.dpid=tp.dpid and t.order_product_id=tp.lid"
                             . " where t.account_no=".$accountno." and t.dpid=".$dpid." and t.promotion_type=1"
                             . "  group by t.promotion_id,t.promotion_type,tpm.promotion_title";
-                echo $sqlorderproductpromotion;exit;
+                //echo $sqlorderproductpromotion;exit;
 		return $db->createCommand($sqlorderproductpromotion)->queryAll();
 	}
         
