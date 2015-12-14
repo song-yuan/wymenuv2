@@ -42,7 +42,7 @@
 </div>
 
 <div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
-	<div class="copun-lt">代金券</div><div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div><div class="clear"></div></div>
+	<div class="copun-lt">代金券</div><div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div><div class="clear"></div>
 	<input type="hidden" name="cupon" value="0" />
 </div>
 <div class="order-paytype">
