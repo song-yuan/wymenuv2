@@ -603,12 +603,15 @@ class Helper
                     if(!empty($order->account_membercard))
                     {
                         $membercardarr=explode("|",$order->account_membercard);
-                        array_push($listData,"10".yii::t('app','会员卡号：').$membercardarr[0]);
-                        array_push($listData,"br");
-                        array_push($listData,"10".yii::t('app','会员卡支付：').number_format($membercardarr[1],2));
-                        array_push($listData,"br");
-                        array_push($listData,"10".yii::t('app','会员卡余额：').number_format($membercardarr[2],2));
-                        array_push($listData,"br");
+                        if($membercardarr[1]>0)
+                        {
+                            array_push($listData,"10".yii::t('app','会员卡号：').$membercardarr[0]);
+                            array_push($listData,"br");
+                            array_push($listData,"10".yii::t('app','会员卡支付：').number_format($membercardarr[1],2));
+                            array_push($listData,"br");
+                            array_push($listData,"10".yii::t('app','会员卡余额：').number_format($membercardarr[2],2));
+                            array_push($listData,"br");
+                        }
                     }
                     if($order->account_union>0)
                     {
@@ -629,7 +632,7 @@ class Helper
                             $pdarr=explode(",",$pd);
                             if($pdarr[1]>0)
                             {
-                                array_push($listData,"10".$otherpaykv[$pdarr[0]].number_format($pdarr[1],2));
+                                array_push($listData,"10".$otherpaykv[$pdarr[0]].":".number_format($pdarr[1],2));
                                 array_push($listData,"br");  
                             }
                         }

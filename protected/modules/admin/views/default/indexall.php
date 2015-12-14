@@ -3082,7 +3082,7 @@
                 var isaccount=false;
                 layer.close(layer_index2);
                 layer_index2=0;
-                var url="<?php echo $this->createUrl('defaultOrder/orderAccount',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;
+                //var url="<?php echo $this->createUrl('defaultOrder/orderAccount',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/4/cardno/"+cardno;
                 public_account_sendjson='paycashaccount='+payCashAccount+
                             '&paymemberaccount='+payMemberAccount+
                             '&payunionaccount='+payUnionAccount+
@@ -3103,7 +3103,7 @@
                                 'payotherdetail':otherdetail,
                                 'notpaydetail':notpaydetail,
                                 'cardtotal':cardtotal};
-                var urlsure="<?php echo $this->createUrl('defaultOrder/orderAccountSure',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
+                var urlsure="<?php echo $this->createUrl('defaultOrder/orderAccountSure',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/orderstatus/4/cardno/"+cardno;
                 
                 $('#orderaccountsure').load(urlsure,loadsendjson);
                 if(layer_index_orderaccountsure!=0)
