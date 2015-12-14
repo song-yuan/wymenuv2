@@ -13,6 +13,8 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
+
+<form action="<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
 <div class="order-title">我的订单</div>
 <?php if($this->type==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
@@ -48,6 +50,7 @@
 	<div class="paytype">
 		<div class="item on" paytype="2">线上支付</div>
 		<div class="item" paytype="1">饭后支付</div>
+		<input type="hidden" name="paytype" value="2" />
 	</div>
 </di>
 <div class="bottom"></div>
@@ -69,11 +72,14 @@
 <div class="item noCupon" user-cupon-id="0" min-money="0" cupon-money="0">不使用代金券</div>
 <?php endif;?>
 </div>
+</form>
 <script type="text/javascript">
 $(document).ready(function(){
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
 		$('.paytype .item').removeClass('on');
+		
+		$(this).siblings('input').val(paytype);
 		$(this).addClass('on');
 		if(parseInt(paytype)==1){
 			$('.noCupon').click();
@@ -148,11 +154,11 @@ $(document).ready(function(){
 				if(parseInt(msg) < 2){
 					layer.msg('服务员确认后才能付款!');
 				}else{
-					location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>&paytype='+paytype+'&cupon='+cupon;
+					$('form').submit();
 				}
 			});
 		}else{
-			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>&paytype='+paytype+'&cupon='+cupon;
+			$('form').submit();
 		}
 	});
 });
