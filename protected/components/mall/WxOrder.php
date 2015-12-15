@@ -101,6 +101,8 @@ class WxOrder
 			        	'account_no'=>$accountNo,
 			        	'user_id'=>$this->userId,
 			        	'site_id'=>$this->siteId,
+			        	'is_temp'=>0,
+			        	'number'=>$this->number,
 			        	'order_status'=>1,
 			        	'order_type'=>$this->type,
 			        	'is_sync'=>DataSync::getInitSync(),
