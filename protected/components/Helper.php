@@ -605,11 +605,11 @@ class Helper
                         array_push($listData,"10".yii::t('app','已付').str_pad("",10," ")."-".number_format($order->pay_total,2));
                         array_push($listData,"br");
                     }
-                    if($order->reality_total>0)
-                    {
-                        array_push($listData,"10".yii::t('app','现价').str_pad("",10," ").number_format($order->reality_total,2));
+//                    if($order->reality_total>0)
+//                    {
+                        array_push($listData,"10".yii::t('app','应付').str_pad("",10," ").number_format($order->reality_total,2));
                         array_push($listData,"br");
-                    }                    
+//                    }                    
                     array_push($listData,"br");
                     //echo $sqlorderproductpromotion;exit;
                     
