@@ -272,10 +272,8 @@ class WxOrder
 		$dpid = $order['dpid'];
 		$orderProducts = self::getOrderProduct($orderId,$dpid);
 		foreach($orderProducts as $product){
-			if($product['is_retreat']==0){
 				$total += $product['price']*$product['amount'];
 				$oTotal += $product['original_price']*$product['amount'];
-			}
 		}
 		if($order['cupon_branduser_lid']==0&&$total!=$order['should_total']){
 			if($total==0){
