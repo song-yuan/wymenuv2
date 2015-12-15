@@ -101,6 +101,8 @@ class WxOrder
 			        	'account_no'=>$accountNo,
 			        	'user_id'=>$this->userId,
 			        	'site_id'=>$this->siteId,
+			        	'is_temp'=>0,
+			        	'number'=>$this->number,
 			        	'order_status'=>1,
 			        	'order_type'=>$this->type,
 			        	'is_sync'=>DataSync::getInitSync(),
@@ -224,7 +226,7 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select t.price,t.amount,t1.product_name,t1.main_picture,t.original_price from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.delete_flag=0';
+		$sql = 'select t.price,t.amount,t.is_retreat,1.product_name,t1.main_picture,t.original_price from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.delete_flag=0';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':orderId',$orderId)
 				  ->bindValue(':dpid',$dpid)
@@ -270,8 +272,10 @@ class WxOrder
 		$dpid = $order['dpid'];
 		$orderProducts = self::getOrderProduct($orderId,$dpid);
 		foreach($orderProducts as $product){
-			$total += $product['price']*$product['amount'];
-			$oTotal += $product['original_price']*$product['amount'];
+			if($product['is_retreat']==0){
+				$total += $product['price']*$product['amount'];
+				$oTotal += $product['original_price']*$product['amount'];
+			}
 		}
 		if($order['cupon_branduser_lid']==0&&$total!=$order['should_total']){
 			if($total==0){

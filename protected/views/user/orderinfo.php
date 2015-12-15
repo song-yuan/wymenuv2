@@ -14,7 +14,7 @@
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo $product['price'];?></div>
+		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo $product['price'];?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endforeach;?>
