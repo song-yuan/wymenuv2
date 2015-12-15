@@ -36,7 +36,7 @@
                                                                     <h4 class="modal-title">日结打印</h4>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <table class="table table-striped table-bordered table-hover" id="sample_3">
+                                                                <!--  <table class="table table-striped table-bordered table-hover" id="sample_3">
 								<thead>
 									<tr>
 										<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_3 .checkboxes" /></th>
@@ -65,7 +65,7 @@
 										<td><span class="label label-sm label-success">Approved</span></td>
 									</tr>								
 								</tbody>
-							</table>
+							</table>-->
                                                                 <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
                                                                     <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
                                                                         <li>
@@ -88,17 +88,17 @@
                                                                                 <div style="width:50%;float:left;"><?php echo yii::t('app','充值记录表');?></div>
                                                                                 <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="recharge" name="reportlist[]" /></div>
                                                                         </li>
-                                                                        <li>
+                                                                        <!-- <li>
                                                                                 <div style="width:20%;float:left;"></div>
                                                                                 <div style="width:50%;float:left;"></div>
                                                                                 <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkboxes" />全选</div>
-                                                                        </li>                                                                        
+                                                                        </li>    -->                                                                     
                                                                     </ul>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                     <button id="printall" type="button" class="btn blue">确定打印</button>
-                                                                    <button id="selectall" type="button" class="btn blue">全选</button>
+                                                                    <!-- <button id="selectall" type="button" class="btn blue">全选</button> -->
                                                                     <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
                                                             </div>
 					                    
