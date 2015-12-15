@@ -31,42 +31,78 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 					<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">
-				                <div style="margin:0px;height:100%;">
-				                    <div style="margin-top:;height:10%;"><h4 style="text-align:center;font-size:22px;color:#900;">打印列表</h4></div>
-				                	<div style="margin-top:;height:8%;text-align:center;font-size:16px;">
-				                		<div style="width:20%;float:left;"><?php echo yii::t('app','序号');?></div>
-				                		<div style="width:50%;float:left;"><?php echo yii::t('app','报表名称');?></div>
-				                		<div style="width:28%;float:left;"><?php echo yii::t('app','选择打印');?></div>
-				                	</div>
-				                	<div style="height:;text-align:center;font-size:14px;" id="printRsultListdetailsub">
-					                    <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
-					                         <li>
-					                        	<div style="width:20%;float:left;"><?php echo $a++;?></div>
-					                        	<div style="width:50%;float:left;"><?php echo yii::t('app','营业数据表');?></div>
-					                        	<div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="" name="ids[]" /></div>
-					                        </li>
-					                        <li>
-					                        	<div style="width:20%;float:left;"><?php echo $a++;?></div>
-					                        	<div style="width:50%;float:left;"><?php echo yii::t('app','营业收入表');?></div>
-					                        	<div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="" name="ids[]" /></div>
-					                        </li>
-					                        <li>
-					                        	<div style="width:20%;float:left;"><?php echo $a++;?></div>
-					                        	<div style="width:50%;float:left;"><?php echo yii::t('app','收款统计表');?></div>
-					                        	<div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="" name="ids[]" /></div>
-					                        </li>
-					                        <li>
-					                        	<div style="width:20%;float:left;"><?php echo $a++;?></div>
-					                        	<div style="width:50%;float:left;"><?php echo yii::t('app','充值记录表');?></div>
-					                        	<div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="" name="ids[]" /></div>
-					                        </li>
-					                    </ul>
-				                	</div>
-				                	<div style="margin-bottom:10px;height:14%;">
-				                		<div style="width:56%;float:left;text-align:center;"><button id="sure" style="float:right;" class="btn red"><?php echo yii::t('app','确定日结打印');?></button></div>
-				                		<div style="margin-left:4%;width:40%;float:left;text-align:center;"><button style="float:left;"class="btn red"><?php echo yii::t('app','全部打印');?></button></div>
-				                	</div>
-				                </div>
+				                
+                                                            <div class="modal-header">
+                                                                    <h4 class="modal-title">日结打印</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <table class="table table-striped table-bordered table-hover" id="sample_3">
+								<thead>
+									<tr>
+										<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_3 .checkboxes" /></th>
+										<th>Username</th>
+										<th >Email</th>
+										<th >Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="odd gradeX">
+										<td><input type="checkbox" class="checkboxes" value="1" /></td>
+										<td>shuxer</td>
+										<td ><a href="mailto:shuxer@gmail.com">shuxer@gmail.com</a></td>
+										<td><span class="label label-sm label-success">Approved</span></td>
+									</tr>
+									<tr class="odd gradeX">
+										<td><input type="checkbox" class="checkboxes" value="1" /></td>
+										<td>looper</td>
+										<td ><a href="mailto:looper90@gmail.com">looper90@gmail.com</a></td>
+										<td><span class="label label-sm label-warning">Suspended</span></td>
+									</tr>
+									<tr class="odd gradeX">
+										<td><input type="checkbox" class="checkboxes" value="1" /></td>
+										<td>userwow</td>
+										<td ><a href="mailto:userwow@yahoo.com">userwow@yahoo.com</a></td>
+										<td><span class="label label-sm label-success">Approved</span></td>
+									</tr>								
+								</tbody>
+							</table>
+                                                                <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
+                                                                    <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
+                                                                        <li>
+                                                                                <div style="width:20%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:50%;float:left;"><?php echo yii::t('app','营业数据表');?></div>
+                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="businessdata" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:20%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:50%;float:left;"><?php echo yii::t('app','营业收入表');?></div>
+                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="income" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:20%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:50%;float:left;"><?php echo yii::t('app','收款统计表');?></div>
+                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="payall" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:20%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:50%;float:left;"><?php echo yii::t('app','充值记录表');?></div>
+                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="recharge" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:20%;float:left;"></div>
+                                                                                <div style="width:50%;float:left;"></div>
+                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkboxes" />全选</div>
+                                                                        </li>                                                                        
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                    <button id="printall" type="button" class="btn blue">确定打印</button>
+                                                                    <button id="selectall" type="button" class="btn blue">全选</button>
+                                                                    <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
+                                                            </div>
+					                    
+				                	
 				    </div>
 	<div class="row">
 	<div class="col-md-12">
@@ -208,107 +244,121 @@
 
 </div>
 <script>
-		jQuery(document).ready(function(){
-		    if (jQuery().datepicker) {
-	            $('.date-picker').datepicker({
-	            	format: 'yyyy-mm-dd',
-	            	language: 'zh-CN',
-	                rtl: App.isRTL(),
-	                autoclose: true
-	            });
-	            $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
-	            
-           }
-          $('#btn_time_query').click(function() {  
-			   var begin_time = $('#begin_time').val();
-			   var end_time = $('#end_time').val();
-			   location.href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
-			  
-	        });
-	         $('#btn_submit').click(function() {
-	         	var begin_time = $('#begin_time').val();
-			    var end_time = $('#end_time').val();
-	         	$.get("<?php echo $this->createUrl('orderManagement/dailyclose',array('companyId'=>$this->companyId ));?>",{begin_time:begin_time,end_time:end_time},function(msg){
-	         		if(parseInt(msg)){
-	         			alert('日结成功!');
-	         			history.go(0);
-	         		}else{
-	         			alert('日结失败,请重新日结!');
-	         		}
-	         	});
-	         });
-		});
-                
-                $('#btn-closeaccount-print').on('click',function() {
-
-                	layer_index_printresult=layer.open({
-                        type: 1,
-                        shade: false,
-                        title: false, //不显示标题
-                        area: ['30%', '60%'],
-                        content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
-                        cancel: function(index){
-                            layer.close(index);
-                            layer_index_printresult=0;                                                                                                     
-                        }
-                    });
-                  
-                        var padid="0000000046";
-                        if (typeof Androidwymenuprinter == "undefined") {
-                            alert("找不到PAD设备");
-                            //return false;
-                        }else{
-                            var padinfo=Androidwymenuprinter.getPadInfo();
-                            padid=padinfo.substr(10,10);
-                        }
-                        var begin_time = $('#begin_time').val();
-			var end_time = $('#end_time').val();
-                        var url = "<?php echo $this->createUrl('orderManagement/orderDaliyCollectPrint',array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/padid/"+padid;
-                        //var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
-                        var statu = confirm("<?php echo yii::t('app','确定要打印日结单吗？');?>");
-                        if(!statu){
-                            return false;
-                        } 
-	         	$.ajax({
-                        url:url,
-                        type:'GET',
-                        data:"",
-                        async:false,
-                        dataType: "json",
-                        success:function(msg){
-//                            var waittime=0;
-                            var data=msg;
-                            //alert(data.msg);
-                            var printresult=false;
-                            if(data.status){
-                                //alert(data.jobid);
-                                var index = layer.load(0, {shade: [0.3,'#fff']});
-                                //var wait=setInterval(function(){ 
-                                for(var itemp=1;itemp<4;itemp++)
-                                {
-                                    if(printresult)
-                                    {
-                                        break;
-                                    }
-                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);                                  
-                                     //alert(itemp);                                  
-                                }                           
-                                layer.close(index);
-                                if(!printresult)
-                                {
-                                    alert("请重试！");
-                                }
-                            }else{
-                                alert(data.msg);                                
-                            }
-                           //以上是打印
-                           //刷新orderPartial	                 
-                        },
-                        error: function(msg){
-                            alert("保存失败2");
-                        }
-                    });                	
-	         });
+        var layer_index_printreportlist=0;
+        jQuery(document).ready(function(){
+            TableManaged.init();
+            if (jQuery().datepicker) {
+                $('.date-picker').datepicker({
+                    format: 'yyyy-mm-dd',
+                    language: 'zh-CN',
+                    rtl: App.isRTL(),
+                    autoclose: true
+                });
+                $('body').removeClass("modal-open"); // fix bug when inline picker is used in modal	            
+            }
+        });
         
+        $('#btn_time_query').click(function() {  
+            var begin_time = $('#begin_time').val();
+            var end_time = $('#end_time').val();
+            location.href="<?php echo $this->createUrl('orderManagement/orderDaliyCollect' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/";    
+         });
+         
+        $('#btn_submit').click(function() {
+            var begin_time = $('#begin_time').val();
+                var end_time = $('#end_time').val();
+            $.get("<?php echo $this->createUrl('orderManagement/dailyclose',array('companyId'=>$this->companyId ));?>",{begin_time:begin_time,end_time:end_time},function(msg){
+                    if(parseInt(msg)){
+                            alert('日结成功!');
+                            history.go(0);
+                    }else{
+                            alert('日结失败,请重新日结!');
+                    }
+            });
+        });		
+                
+        $('#btn-closeaccount-print').on('click',function() {
+            if(layer_index_printreportlist!=0)
+            {
+                return;
+            }
+            layer_index_printreportlist=layer.open({
+                type: 1,
+                shade: false,
+                title: false, //不显示标题
+                area: ['30%', '60%'],
+                content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
+                cancel: function(index){
+                    layer.close(index);
+                    layer_index_printreportlist=0;                                                                                                     
+                }
+            });
+            return;
+            var padid="0000000046";
+            if (typeof Androidwymenuprinter == "undefined") {
+                alert("找不到PAD设备");
+                //return false;
+            }else{
+                var padinfo=Androidwymenuprinter.getPadInfo();
+                padid=padinfo.substr(10,10);
+            }
+            var begin_time = $('#begin_time').val();
+            var end_time = $('#end_time').val();
+            var url = "<?php echo $this->createUrl('orderManagement/orderDaliyCollectPrint',array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/padid/"+padid;
+            //var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
+            var statu = confirm("<?php echo yii::t('app','确定要打印日结单吗？');?>");
+            if(!statu){
+                return false;
+            } 
+            $.ajax({
+                url:url,
+                type:'GET',
+                data:"",
+                async:false,
+                dataType: "json",
+                success:function(msg){
+    //                            var waittime=0;
+                    var data=msg;
+                    //alert(data.msg);
+                    var printresult=false;
+                    if(data.status){
+                        //alert(data.jobid);
+                        var index = layer.load(0, {shade: [0.3,'#fff']});
+                        //var wait=setInterval(function(){ 
+                        for(var itemp=1;itemp<4;itemp++)
+                        {
+                            if(printresult)
+                            {
+                                break;
+                            }
+                            printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);                                  
+                             //alert(itemp);                                  
+                        }                           
+                        layer.close(index);
+                        if(!printresult)
+                        {
+                            alert("请重试！");
+                        }
+                    }else{
+                        alert(data.msg);                                
+                    }
+                   //以上是打印
+                   //刷新orderPartial	                 
+                },
+                error: function(msg){
+                    alert("保存失败2");
+                }
+            });                	
+         });
+        
+        $("#closeall").on("click",function(){
+            layer.close(layer_index_printreportlist);
+            layer_index_printreportlist=0;
+        });
+        
+        $("#selectall").on("click",function(){
+            alert(11);
+            $(".checkboxes").attr("checked", "checked"); 
+        });
 		
 </script> 
