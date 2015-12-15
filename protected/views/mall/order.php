@@ -43,7 +43,7 @@
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
-		<div class="item on" paytype="2">线上支付</div>
+		<div class="item on" paytype="2">立刻支付</div>
 		<div class="item" paytype="1">饭后支付</div>
 	</div>
 </div>
