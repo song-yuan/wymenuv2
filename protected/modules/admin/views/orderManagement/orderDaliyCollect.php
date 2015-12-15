@@ -36,37 +36,39 @@
                                                                     <h4 class="modal-title">日结打印</h4>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <!--  <table class="table table-striped table-bordered table-hover" id="sample_3">
+                           <!-- <div class="portlet-body" id="table-manage">
+                          	<table class="table table-striped table-bordered table-hover" id="sample_1">
 								<thead>
 									<tr>
-										<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_3 .checkboxes" /></th>
-										<th>Username</th>
-										<th >Email</th>
-										<th >Status</th>
+										<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+										<th><?php echo yii::t('app','报表名称');?></th>
+										<th ><?php echo yii::t('app','');?></th>
+										<th ><?php echo yii::t('app','');?></th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr class="odd gradeX">
-										<td><input type="checkbox" class="checkboxes" value="1" /></td>
+										<td><input type="checkbox" class="checkboxes" value="1" name="ids[]"/></td>
 										<td>shuxer</td>
 										<td ><a href="mailto:shuxer@gmail.com">shuxer@gmail.com</a></td>
 										<td><span class="label label-sm label-success">Approved</span></td>
 									</tr>
 									<tr class="odd gradeX">
-										<td><input type="checkbox" class="checkboxes" value="1" /></td>
+										<td><input type="checkbox" class="checkboxes" value="1" name="ids[]" /></td>
 										<td>looper</td>
 										<td ><a href="mailto:looper90@gmail.com">looper90@gmail.com</a></td>
 										<td><span class="label label-sm label-warning">Suspended</span></td>
 									</tr>
 									<tr class="odd gradeX">
-										<td><input type="checkbox" class="checkboxes" value="1" /></td>
+										<td><input type="checkbox" class="checkboxes" value="1" name="ids[]"/></td>
 										<td>userwow</td>
 										<td ><a href="mailto:userwow@yahoo.com">userwow@yahoo.com</a></td>
 										<td><span class="label label-sm label-success">Approved</span></td>
 									</tr>								
 								</tbody>
-							</table>-->
-                                                                <div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
+							</table>
+                             </div>       -->                            <div class="portlet-body" id="table-manage">  
+                             										<div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
                                                                     <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
                                                                         <li>
                                                                                 <div style="width:20%;float:left;"><?php echo $a++;?></div>
@@ -88,20 +90,20 @@
                                                                                 <div style="width:50%;float:left;"><?php echo yii::t('app','充值记录表');?></div>
                                                                                 <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="recharge" name="reportlist[]" /></div>
                                                                         </li>
-                                                                        <!-- <li>
+                                                                        <li>
                                                                                 <div style="width:20%;float:left;"></div>
                                                                                 <div style="width:50%;float:left;"></div>
                                                                                 <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkboxes" />全选</div>
-                                                                        </li>    -->                                                                     
+                                                                        </li>                                                                       
                                                                     </ul>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
                                                                     <button id="printall" type="button" class="btn blue">确定打印</button>
-                                                                    <!-- <button id="selectall" type="button" class="btn blue">全选</button> -->
+                                                                    <!-- button id="selectall" type="button" class="btn blue">全选</button> -->
                                                                     <button id="closeall" type="button" class="btn default" data-dismiss="modal">关闭</button>
                                                             </div>
-					                    
+					                    					</div>
 				                	
 				    </div>
 	<div class="row">
@@ -356,8 +358,8 @@
             layer_index_printreportlist=0;
         });
         
-        $("#selectall").on("click",function(){
-            alert(11);
+        $("#printall").on("click",function(){
+            alert("暂无权限！！！");
             $(".checkboxes").attr("checked", "checked"); 
         });
 		
