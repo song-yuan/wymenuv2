@@ -861,7 +861,9 @@ public function actionPayallReport(){
 				'str'=>$str,
 		));
 	}
-	
+	/*
+	 * 账单详情报表
+	 */
 	public function actionOrderdetail(){
 		$criteria = new CDbCriteria;
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
@@ -901,6 +903,64 @@ public function actionPayallReport(){
 				//'categoryId'=>$categoryId
 		));
 	}
+	
+/*
+ * 渠道占比报表
+ */
+	public function actionChannelsproportion(){
+		$criteria = new CDbCriteria;
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$db = Yii::app()->db;
+		$sql = 'select k.* from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id ) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) group by t.order_type order by t.create_at asc) k';
+		//var_dump($sql);exit;
+		
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		
+		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.create_at >=0 and t.dpid= '.$this->companyId;
+// 		$criteria->select = 'count(t.order_type) as all_ordertype,t.order_type';
+// 		$criteria->addCondition("t.dpid= ".$this->companyId);
+// 		$criteria->addCondition("t.order_status in(3,4,8) ");
+// 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+// 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+// 		//$criteria->addCondition("t.dpid= ".$this->companyId);
+// 		$criteria->with = array("company","paymentMethod");
+	
+// 		//$connect = Yii::app()->db->createCommand($sql);
+// 		//$model = $connect->queryAll();
+// 		$criteria->group = 't.order_type' ;
+// 		$criteria->order = 't.lid ASC' ;
+// 		$criteria->distinct = TRUE;
+	
+// 		//$categoryId = Yii::app()->request->getParam('cid',0);
+	
+	
+	
+// 		$pages = new CPagination(Order::model()->count($criteria));
+// 		//$pages->PageSize = 10;
+// 		$pages->applyLimit($criteria);
+		$sql = 'select sum(j.all_amount) as all_payall from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id ) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) group by t.order_type order by t.create_at asc) j';
+		$connect = Yii::app()->db->createCommand($sql);
+		$allpay = $connect->queryRow();
+// 		$model=  Order::model()->findAll($criteria);
+		//var_dump($model);exit;
+		$this->render('channelsproportion',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'allpay'=>$allpay,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
+	
 	
 	public function getAccountMoney($account_no){
 		$accountMoney = '';
