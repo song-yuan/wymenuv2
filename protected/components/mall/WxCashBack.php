@@ -26,6 +26,7 @@ class WxCashBack
 		$this->cashBackTotal = $cashBackTotal;
 		$this->getPoints();
 		$this->getCashTpl();
+		$this->getPointsValid();
 		$this->getPointsTpl();
 		$this->getConsumerBack();
 	}
@@ -42,6 +43,16 @@ class WxCashBack
 		$sql = 'select * from nb_consumer_cash_proportion where dpid='.$this->dpid.' and ((point_type=0 and min_available_point < '.$this->historyPoints.' and max_available_point > '.$this->historyPoints.' ) or (point_type=1 and min_available_point < '.$this->avaliablePoints.' and max_available_point > '.$this->avaliablePoints.'))  and is_available=0 and delete_flag=0';
 		$this->cahsTpl = Yii::app()->db->createCommand($sql)->queryRow();
 	}
+	/**
+	 * 
+	 * 
+	 * 获取积分有效期
+	 * 
+	 */
+	 public function getPointsValid(){
+	 	$sql = 'select * from nb_points_valid where dpid='.$this->dpid.' and is_available=0 and delete_flag=0';
+		$this->pointsValid = Yii::app()->db->createCommand($sql)->queryRow();
+	 }
 	/**
 	 * 
 	 * 获取返积分模板
@@ -92,6 +103,11 @@ class WxCashBack
 			Yii::app()->db->createCommand($sql)->execute();
 		}
 		if($this->pointsTpl&&$this->consumerPointsBack){
+			if($this->pointsValid){
+				$endTime = date('Y-m-d H:i:s',strtotime('+'.$this->pointsValid['valid_days'].' year'));
+			}else{
+				$endTime = date('Y-m-d H:i:s',strtotime('+1 year'));
+			}
 			$se = new Sequence("point_record");
 		    $lid = $se->nextval();
 			$pointRecordData = array(
