@@ -354,12 +354,13 @@ class WxOrder
 	 		if(!$user){
 	 			throw new Exception('不存在该会员!');
 	 		}
-	 		if($user['remain_money'] < $order['should_total']){
+	 		if(($user['remain_money'] + $user['remain_back_money']) < $order['should_total']){
 	 			throw new Exception('余额不足!');
 	 		}
-	 		self::reduceYue($order['user_id'],$order['dpid'],$order['should_total']);
+	 		self::reduceYue($user,$order);
 	 		
 	 	}
+	 	
 	 	$se = new Sequence("order_pay");
 	    $orderPayId = $se->nextval();
 	    $insertOrderPayArr = array(
@@ -398,18 +399,52 @@ class WxOrder
 			$sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
 			Yii::app()->db->createCommand($sql)->execute();
 		}
+		
+		if($paytype!=10){
+			//返现或者积分
+			$back = new WxCashBack($order['dpid'],$order['user_id'],$order['should_total']);
+			$back->inRecord($order['lid']);
+		}
 	 }
 	/**
 	 * 
 	 * 扣除会员余额
 	 * 
 	 */
-	 public static function reduceYue($userId,$dpid,$total){
+	 public static function reduceYue($user,$order){
+	 	$dpid = $order['dpid'];
+	 	$total = $order['should_total'];
 	 	$isSync = DataSync::getInitSync();
-	 	$sql = 'update from nb_brand_user set remain_money = remain_money-'.$total.',is_sync='.$isSync.' where lid='.$userId.' and dpid='.$dpid;
-	 	$result = Yii::app()->db->createCommand($sql)->execute();
-	 	if(!$result){
-	 		throw new Exception('支付失败');
+	 	if($user['remain_back_money'] > 0){
+	 		//返现余额大于等于支付
+	 		if($user['remain_back_money'] >= $total){
+	 			$sql = 'update from nb_brand_user set remain_back_money = remain_back_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 			$result = Yii::app()->db->createCommand($sql)->execute();
+	 		}else{
+	 			$sql = 'update from nb_brand_user set remain_back_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 			$result = Yii::app()->db->createCommand($sql)->execute();
+	 			if(!$result){
+			 		throw new Exception('支付失败');
+			 	}
+	 			$sql = 'update from nb_brand_user set remain_money = remain_money-'.($total - $user['remain_back_money']).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 			$result = Yii::app()->db->createCommand($sql)->execute();
+	 			if(!$result){
+			 		throw new Exception('支付失败');
+			 	}
+			 	
+			 	//返现或者积分
+				$back = new WxCashBack($order['dpid'],$order['user_id'],$total - $order['remain_back_money']);
+				$back->inRecord($order['lid']);
+	 		}
+	 	}else{
+	 		$sql = 'update from nb_brand_user set remain_money = remain_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 		$result = Yii::app()->db->createCommand($sql)->execute();
+	 		if(!$result){
+		 		throw new Exception('支付失败');
+		 	}
+		 	//返现或者积分
+			$back = new WxCashBack($order['dpid'],$order['user_id'],$total);
+			$back->inRecord($order['lid']);
 	 	}
 	 }
 	 /**
