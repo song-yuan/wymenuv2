@@ -82,11 +82,8 @@ class WxCashBack
 	 * 
 	 */
 	public function inRecord($orderId){
-		$myfile = fopen('/tmp/newfile.txt','w');
-		fwrite($myfile,'begin');
 		$time = time();
 		if($this->cahsTpl&&$this->consumerCashBack){
-			fwrite($myfile,'0');
 			$se = new Sequence("cashback_record");
 		    $lid = $se->nextval();
 			$cashRecordData = array(
@@ -100,12 +97,9 @@ class WxCashBack
 					        	'brand_user_lid'=>$this->userId,
 					        	'is_sync'=>DataSync::getInitSync(),
 								);
-			fwrite($myfile,json_encode($cashRecordData));
 			$result = Yii::app()->db->createCommand()->insert('nb_cashback_record', $cashRecordData);
-			fwrite($myfile,'1');
 			$sql = 'update nb_brand_user set remain_back_money = remain_back_money + '.$this->consumerCashBack.' where lid='.$this->userId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
-			fwrite($myfile,'2');
 		}
 		if($this->pointsTpl&&$this->consumerPointsBack){
 			if($this->pointsValid){
@@ -113,8 +107,6 @@ class WxCashBack
 			}else{
 				$endTime = date('Y-m-d H:i:s',strtotime('+1 year'));
 			}
-			fwrite($myfile,'3');
-			fwrite($myfile,$endTime);
 			$se = new Sequence("point_record");
 		    $lid = $se->nextval();
 			$pointRecordData = array(
@@ -128,11 +120,7 @@ class WxCashBack
 					        	'brand_user_lid'=>$this->userId,
 					        	'is_sync'=>DataSync::getInitSync(),
 								);
-			fwrite($myfile,json_encode($pointRecordData));				
 			$result = Yii::app()->db->createCommand()->insert('nb_point_record', $pointRecordData);
-			fwrite($myfile,'4');
 		}
-		fwrite($myfile,'end');
-		fclose($myfile);				
 	}
 }
