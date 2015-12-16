@@ -35,7 +35,7 @@
 	</div>
 	-->
 	<div class="listset">
-		<div class="arrowright"><a href="javascript:;">余额 <span class="small font_l"> <?php echo $user['remain_money'];?></span></a>
+		<div class="arrowright"><a href="javascript:;">余额 <span class="small font_l"> <?php echo $user['remain_money'] + $user['remain_back_money'];?></span></a>
 		</div>
 	</div>
 	
