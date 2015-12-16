@@ -24,11 +24,19 @@ class WxCashBack
 		$this->userId = $userId;
 		$this->cashToal = $cashToal;
 		$this->cashBackTotal = $cashBackTotal;
+		$myfile = fopen('/tmp/newfile.txt','w');
+		fwrite($myfile,'begin');
 		$this->getPoints();
+		fwrite($myfile,'points');
 		$this->getCashTpl();
+		fwrite($myfile,'tpl');
 		$this->getPointsValid();
+		fwrite($myfile,'valid');
 		$this->getPointsTpl();
+		fwrite($myfile,'tpl');
 		$this->getConsumerBack();
+		fwrite($myfile,'end');
+		fclose($myfile);
 	}
 	public function getPoints(){
 		$this->historyPoints = WxBrandUser::getHistoryPoints($this->userId,$this->dpid);
