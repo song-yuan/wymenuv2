@@ -227,7 +227,7 @@ class orderManagementController extends BackendController
 		$recharge = Yii::app()->db->createCommand($sql)->queryRow();
 		
 		//添加
-		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,ifnull(sum(t.pay_amount),0) as should_all';
+		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
 		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
 		$criteria->with = array("order","paymentMethod"); //连接表
