@@ -20,15 +20,22 @@ class WxCashBack
 	public $consumerPointsBack = 0;
 	
 	public function __construct($dpid,$userId,$cashToal = 0,$cashBackTotal = 0){
+		$myfile1 = fopen("newfile1.txt", "w");
 		$this->dpid = $dpid;
 		$this->userId = $userId;
 		$this->cashToal = $cashToal;
 		$this->cashBackTotal = $cashBackTotal;
+		fwrite($myfile1,'begain ');
 		$this->getPoints();
+		fwrite($myfile1,'getPoints ');
 		$this->getCashTpl();
+		fwrite($myfile1,'CashTpl ');
 		$this->getPointsValid();
+		fwrite($myfile1,'getPointsValid ');
 		$this->getPointsTpl();
+		fwrite($myfile1,'getPointsTpl ');
 		$this->getConsumerBack();
+		fwrite($myfile1,'getConsumerBack end ');
 	}
 	public function getPoints(){
 		$this->historyPoints = WxBrandUser::getHistoryPoints($this->userId,$this->dpid);
