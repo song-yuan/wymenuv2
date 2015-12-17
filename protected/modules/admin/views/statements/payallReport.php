@@ -25,7 +25,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','收款统计报表（支付方式）'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','台桌区域报表'),'url'=>''))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -34,7 +34,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','收款统计报表（支付方式）');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','台桌区域报表');?></div>
 				<div class="actions">
 					<select id="text" class="btn yellow" >
 					<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
@@ -102,19 +102,17 @@
 								<td style="width:20%;"><?php echo $model->company->company_name;?></td>
 								<td><?php 
 								//if($model->paytype==0){echo yii::t('app','现金支付');
-									switch($model->paytype) {
-															case 0: echo  yii::t('app','现金支付');break; 
-                                                            case 1: echo  yii::t('app','微信支付');break; 
-                                                            case 2: echo  yii::t('app','支付宝支付');break; 
-                                                            case 3: echo  $model->paymentMethod->name;break;
-                                                            case 4: echo  yii::t('app','会员卡支付');break; 
-                                                            case 5: echo  yii::t('app','银联支付');break;
+									switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; 
+                                                             case 1: echo  yii::t('app','微信支付');break; 
+                                                             case 2: echo  yii::t('app','支付宝支付');break; 
+                                                             case 3: echo  $model->paymentMethod->name;break;
+                                                             case 4: echo  yii::t('app','会员卡支付');break; 
+                                                             case 5: echo  yii::t('app','银联支付');break;
 															case 6: echo  yii::t('app','');break;
 															case 7: echo  yii::t('app','');break;
 															case 8: echo  yii::t('app','');break;
 															case 9: echo  yii::t('app','微信代金券');break; 
-															case 10: echo  yii::t('app','微信会员余额支付');break;
-															default: echo "";break;  }
+															case 10: echo  yii::t('app','微信会员余额支付');break;  }
                                                                 
 								//}elseif ($model->paytype==1){
 								//	echo yii::t('app','微信支付');

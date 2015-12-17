@@ -243,9 +243,9 @@
 				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-							alert("<?php echo "然而你并没有权限！！！";?>");
-							return false;
-			    	   location.href="<?php echo $this->createUrl('statements/productsalesExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+							//alert("<?php echo "然而你并没有权限！！！";?>");
+							//return false;
+			    	   location.href="<?php echo $this->createUrl('statements/ceshiproductReportExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
