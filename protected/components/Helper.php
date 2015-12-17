@@ -1033,12 +1033,12 @@ class Helper
                         return array('status'=>0,'dpid'=>$siteno->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}
                 $sumall=0;
-                $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid),8));
-                if(!empty($memo))
-                {
-                    array_push($listData,"br");
-                    array_push($listData,"10".$memo);                    
-                }
+                $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));
+//                if(!empty($memo))
+//                {
+//                    array_push($listData,"br");
+//                    array_push($listData,"10".$memo);                    
+//                }
                 array_push($listData,"00");
                 array_push($listData,"br");
                 foreach ($models as $model)
@@ -1071,8 +1071,8 @@ class Helper
                             $payname="微信会员余额支付";
                             break;                        
                     }
-                        
-                    array_push($listData,"01".str_pad($payname,7).$model->should_all);
+                    $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;    
+                    array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$model->should_all);
                     array_push($listData,"br");
                     $sumall=$sumall+$model->should_all;
                 }
@@ -1082,13 +1082,15 @@ class Helper
                // 	$payname="";
                 	if(!empty($money)){
 	                	$payname = "传统卡充值/赠送:";//}
-	                	array_push($listData,"01".$payname.$money['all_money']."/".$money['all_give']);
+                                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+	                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$money['all_money']."/".$money['all_give']);
 	                	array_push($listData,"br");
 	                	$sumall=$sumall+$money['all_money'];
                 	}
                         if(!empty($recharge)){
 	                	$payname = "微信充值/赠送:";//}
-	                	array_push($listData,"01".$payname.$recharge['all_recharge']."/".$recharge['all_cashback']);
+                                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+	                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$recharge['all_recharge']."/".$recharge['all_cashback']);
 	                	array_push($listData,"br");
 	                	$sumall=$sumall+$recharge['all_recharge'];
                 	}
