@@ -212,6 +212,7 @@ class orderManagementController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
                 $padid= Yii::app()->request->getParam('padid');
+                $rl= Yii::app()->request->getParam('rl');
 		$ret=array();
 		
 		$money = "0";
@@ -246,16 +247,16 @@ class orderManagementController extends BackendController
                         $clid = $se->nextval();
 			$closeA = new CloseAccount;
 			$closeAdata = array(
-								'lid'=>$clid,
-								'dpid'=>$this->companyId,
-								'create_at'=>date('Y-m-d H:i:s',time()),
-								'update_at'=>date('Y-m-d H:i:s',time()),
-								'user_id'=>$userIdArr[0],
-								'begin_time'=>$begin_time,
-								'end_time'=>$end_time,
-								'close_day'=>date('Y-m-d H:i:s',time()),
-								'all_money'=>0
-								);
+                                            'lid'=>$clid,
+                                            'dpid'=>$this->companyId,
+                                            'create_at'=>date('Y-m-d H:i:s',time()),
+                                            'update_at'=>date('Y-m-d H:i:s',time()),
+                                            'user_id'=>$userIdArr[0],
+                                            'begin_time'=>$begin_time,
+                                            'end_time'=>$end_time,
+                                            'close_day'=>date('Y-m-d H:i:s',time()),
+                                            'all_money'=>0
+                                            );
 			$closeA->attributes = $closeAdata;
 			$closeA->save();
 			
@@ -266,15 +267,15 @@ class orderManagementController extends BackendController
 	            $lid = $se->nextval();
 				$closeADel = new CloseAccountDetail;
 				$closeADeldata = array(
-								'lid'=>$lid,
-								'dpid'=>$this->companyId,
-								'create_at'=>date('Y-m-d H:i:s',time()),
-								'update_at'=>date('Y-m-d H:i:s',time()),
-								'close_account_id'=>$clid,
-								'paytype'=>$model->paytype,
-								'payment_method_id'=>$model->payment_method_id,
-								'all_money'=>$model->should_all,
-								);
+                                                'lid'=>$lid,
+                                                'dpid'=>$this->companyId,
+                                                'create_at'=>date('Y-m-d H:i:s',time()),
+                                                'update_at'=>date('Y-m-d H:i:s',time()),
+                                                'close_account_id'=>$clid,
+                                                'paytype'=>$model->paytype,
+                                                'payment_method_id'=>$model->payment_method_id,
+                                                'all_money'=>$model->should_all,
+                                                );
 				$closeADel->attributes = $closeADeldata;
 				$closeADel->save();				
 				$totalMoney +=$model->should_all;
