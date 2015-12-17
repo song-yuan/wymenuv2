@@ -399,11 +399,15 @@ class WxOrder
 			$sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
 			Yii::app()->db->createCommand($sql)->execute();
 		}
-		
-		if($paytype!=10){
+		$myfile2 = fopen("newfile2.txt", "w");
+		if($paytype != 10){
+			fwrite($myfile2, $paytype);
 			//返现或者积分
 			$back = new WxCashBack($order['dpid'],$order['user_id'],$order['should_total']);
+			fwrite($myfile2, '33 ');
 			$back->inRecord($order['lid']);
+			fwrite($myfile2, '55 ');
+			fclose($myfile2);
 		}
 	 }
 	/**
