@@ -359,8 +359,66 @@
         });
         
         $("#printall").on("click",function(){
-            alert("暂无权限！！！");
-            $(".checkboxes").attr("checked", "checked"); 
+            //alert("暂无权限！！！");
+            var reportlist="0000000000";
+            $('.checkboxes:checked').each(function(){
+                reportlist=reportlist+"|"+$(this).val();
+            });
+            var padid="0000000046";
+            if (typeof Androidwymenuprinter == "undefined") {
+                alert("找不到PAD设备");
+                //return false;
+            }else{
+                var padinfo=Androidwymenuprinter.getPadInfo();
+                padid=padinfo.substr(10,10);
+            }
+            var begin_time = $('#begin_time').val();
+            var end_time = $('#end_time').val();
+            var url = "<?php echo $this->createUrl('orderManagement/orderDaliyCollectPrint',array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/padid/"+padid+"/rl/"+reportlist;
+            //var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
+            var statu = confirm("<?php echo yii::t('app','确定要打印日结单吗？');?>");
+            if(!statu){
+                return false;
+            } 
+            $.ajax({
+                url:url,
+                type:'GET',
+                data:"",
+                async:false,
+                dataType: "json",
+                success:function(msg){
+    //                            var waittime=0;
+                    var data=msg;
+                    //alert(data.msg);
+                    var printresult=false;
+                    if(data.status){
+                        //alert(data.jobid);
+                        var index = layer.load(0, {shade: [0.3,'#fff']});
+                        //var wait=setInterval(function(){ 
+                        for(var itemp=1;itemp<4;itemp++)
+                        {
+                            if(printresult)
+                            {
+                                break;
+                            }
+                            printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);                                  
+                             //alert(itemp);                                  
+                        }                           
+                        layer.close(index);
+                        if(!printresult)
+                        {
+                            alert("请重试！");
+                        }
+                    }else{
+                        alert(data.msg);                                
+                    }
+                   //以上是打印
+                   //刷新orderPartial	                 
+                },
+                error: function(msg){
+                    alert("保存失败2");
+                }
+            });
         });
 		
 </script> 

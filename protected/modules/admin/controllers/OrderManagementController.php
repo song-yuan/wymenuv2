@@ -212,12 +212,20 @@ class orderManagementController extends BackendController
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
                 $padid= Yii::app()->request->getParam('padid');
+                $rl= Yii::app()->request->getParam('rl');
 		$ret=array();
 		
 		$money = "0";
 		$db = Yii::app()->db;
-		$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+//		$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+//		$money = Yii::app()->db->createCommand($sql)->queryRow();
+                
+                $sql = 'select ifnull(sum(t.reality_money),0) as all_money,ifnull(sum(t.give_money),0) as all_give from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
 		$money = Yii::app()->db->createCommand($sql)->queryRow();
+		
+                $sql = 'select ifnull(sum(t.recharge_money),0) as all_recharge,ifnull(sum(t.cashback_num),0) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		$recharge = Yii::app()->db->createCommand($sql)->queryRow();
+		
 		//添加
 		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
@@ -246,16 +254,16 @@ class orderManagementController extends BackendController
                         $clid = $se->nextval();
 			$closeA = new CloseAccount;
 			$closeAdata = array(
-								'lid'=>$clid,
-								'dpid'=>$this->companyId,
-								'create_at'=>date('Y-m-d H:i:s',time()),
-								'update_at'=>date('Y-m-d H:i:s',time()),
-								'user_id'=>$userIdArr[0],
-								'begin_time'=>$begin_time,
-								'end_time'=>$end_time,
-								'close_day'=>date('Y-m-d H:i:s',time()),
-								'all_money'=>0
-								);
+                                            'lid'=>$clid,
+                                            'dpid'=>$this->companyId,
+                                            'create_at'=>date('Y-m-d H:i:s',time()),
+                                            'update_at'=>date('Y-m-d H:i:s',time()),
+                                            'user_id'=>$userIdArr[0],
+                                            'begin_time'=>$begin_time,
+                                            'end_time'=>$end_time,
+                                            'close_day'=>date('Y-m-d H:i:s',time()),
+                                            'all_money'=>0
+                                            );
 			$closeA->attributes = $closeAdata;
 			$closeA->save();
 			
@@ -266,15 +274,15 @@ class orderManagementController extends BackendController
 	            $lid = $se->nextval();
 				$closeADel = new CloseAccountDetail;
 				$closeADeldata = array(
-								'lid'=>$lid,
-								'dpid'=>$this->companyId,
-								'create_at'=>date('Y-m-d H:i:s',time()),
-								'update_at'=>date('Y-m-d H:i:s',time()),
-								'close_account_id'=>$clid,
-								'paytype'=>$model->paytype,
-								'payment_method_id'=>$model->payment_method_id,
-								'all_money'=>$model->should_all,
-								);
+                                                'lid'=>$lid,
+                                                'dpid'=>$this->companyId,
+                                                'create_at'=>date('Y-m-d H:i:s',time()),
+                                                'update_at'=>date('Y-m-d H:i:s',time()),
+                                                'close_account_id'=>$clid,
+                                                'paytype'=>$model->paytype,
+                                                'payment_method_id'=>$model->payment_method_id,
+                                                'all_money'=>$model->should_all,
+                                                );
 				$closeADel->attributes = $closeADeldata;
 				$closeADel->save();				
 				$totalMoney +=$model->should_all;
@@ -294,7 +302,7 @@ class orderManagementController extends BackendController
                          //前面加 barcode
                         $precode="";
                         $memo="日结对账单";
-                        $ret = Helper::printCloseAccount($this->companyId,$models ,$money, $pad,$precode,"0",$memo);//添加$money
+                        $ret = Helper::printCloseAccount($this->companyId,$models ,$money,$recharge, $pad,$precode,"0",$memo);//添加$money
                        // var_dump($ret);exit;
                         //var_dump($money);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作

@@ -72,7 +72,7 @@
 <div class="select-type">选择支付方式</div>
 <div class="paytype">
 	<div class="item on" paytype="1">微信支付</div>
-	<div class="item" paytype="2" remain-money="<?php echo $user['remain_money'];?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo $user['remain_money'];?></span></div>
+	<div class="item" paytype="2" remain-money="<?php echo $user['remain_money'];?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo $user['remain_money'] + $user['remain_back_money'];?></span></div>
 </div>
 </div>
 
