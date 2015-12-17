@@ -13,11 +13,26 @@
 <?php if($this->type==1):?>
 <div class="site_no">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'];}?>><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" />人数:<input type="number" class="number" name="number" value="" placeholder="输入人数" /></div>
 <?php endif;?>
-<div class="section" style="padding-top:0;color:#FF5151;">
+<div class="section" style="padding-top:0;">
     <div class="prt">
-        <div class="prt-rt-del" id="clearCart" style="float:right;padding-right:30px;text-align:right; background-image: url(<?php echo $baseUrl;?>/img/icon_delete.png);background-size: auto 25px;background-repeat: no-repeat; background-position: right center;">清空全部</div>
+        <div class="prt-rt-del" id="clearCart" style="float:right;padding-right:30px;text-align:right;color:#FF5151; background-image: url(<?php echo $baseUrl;?>/img/icon_delete.png);background-size: auto 25px;background-repeat: no-repeat; background-position: right center;">清空全部</div>
         <div class="clear"></div>
     </div>
+    <?php if(!empty($orderTastes)):?>
+    <div class="taste">整单口味</div>
+    <div class="taste-items" product-id="0">
+    	<?php foreach($orderTastes as $groups):?>
+    	<div class="item-group">
+    		<div class="item group"><?php echo $groups['name'];?></div>
+    		<?php foreach($groups['tastes'] as $taste):?>
+    			<div class="item t-item" taste-id="<?php echo $taste['lid'];?>"><?php echo $taste['name'];?></div>
+    		<?php endforeach;?>
+    		<input type="hidden" name="taste[]" value="0" />
+    		<div class="clear"></div>
+    	</div>
+    	<?php endforeach;?>
+    </div>
+    <?php endif;?>
 </div>
 <?php foreach($models as $model):?>
 <div class="section">

@@ -21,6 +21,7 @@
 		$input->SetNotify_url($notifyUrl);
 		$input->SetTrade_type("JSAPI");
 		$input->SetOpenid($openId);
+		$input->SetAttach(0);
 		
 		$orderInfo = WxPayApi::unifiedOrder($input);
 		
@@ -72,7 +73,7 @@
 <div class="select-type">选择支付方式</div>
 <div class="paytype">
 	<div class="item on" paytype="1">微信支付</div>
-	<div class="item" paytype="2" remain-money="<?php echo $user['remain_money'];?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo $user['remain_money'] + $user['remain_back_money'];?></span></div>
+	<div class="item" paytype="2" remain-money="<?php echo $user['remain_money'];?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?></span></div>
 </div>
 </div>
 
@@ -110,7 +111,7 @@
 	function callpay()
 	{
 		<?php if(!$canpWxpay):?>
-		layer.msg('订单信息改变,请使用其他方式付款!');
+		layer.msg('使用其他方式付款');
 		return;
 		<?php endif;?>
 		if (typeof WeixinJSBridge == "undefined"){

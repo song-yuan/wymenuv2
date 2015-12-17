@@ -91,11 +91,12 @@ class MallController extends Controller
 		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
+		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 //		var_dump($carts);exit;
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId));
 		}
-		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'site'=>$site,'siteType'=>$siteType));
+		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType));
 	}
 	/**
 	 * 
@@ -169,6 +170,7 @@ class MallController extends Controller
 			$orderId = Yii::app()->request->getParam('orderId');
 			$paytype = Yii::app()->request->getPost('paytype');
 			$cuponId = Yii::app()->request->getPost('cupon');
+			$remark = Yii::app()->request->getPost('remark');
 			
 			$order = WxOrder::getOrder($orderId,$this->companyId);
 			
@@ -185,6 +187,9 @@ class MallController extends Controller
 				if(!$result){
 					$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 				}
+			}
+			if($remark){
+				WxOrder::updateRemark($orderId,$this->companyId,$remark);
 			}
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  }
