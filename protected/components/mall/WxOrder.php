@@ -109,7 +109,25 @@ class WxOrder
 			        );
 				$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
  			}
-			
+ 			
+			//整单口味
+			if(isset($this->productTastes[0]) && !empty($this->productTastes[0])){
+				foreach($this->productTastes[0] as $ordertaste){
+					$se = new Sequence("order_taste");
+	    			$orderTasteId = $se->nextval();
+			 		$orderTasteData = array(
+			 								'lid'=>$orderTasteId,
+											'dpid'=>$this->dpid,
+											'create_at'=>date('Y-m-d H:i:s',$time),
+				        					'update_at'=>date('Y-m-d H:i:s',$time),
+				        					'taste_id'=>$ordertaste,
+				        					'order_id'=>$orderId,
+				        					'is_order'=>1,
+				        					'is_sync'=>DataSync::getInitSync(),
+			 								);
+			 		$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
+				}
+			}
 			foreach($this->cart as $cart){
 				$se = new Sequence("order_product");
 		    	$orderProductId = $se->nextval();
@@ -151,8 +169,10 @@ class WxOrder
 				 //插入订单优惠
 				 if(!empty($cart['promotion'])){
 				 	foreach($cart['promotion']['promotion_info'] as $promotion){
+				 		$se = new Sequence("order_product_promotion");
+		    			$orderproductpromotionId = $se->nextval();
 				 		$orderProductPromotionData =array(
-			 										'lid'=>$orderProductId,
+			 										'lid'=>$orderproductpromotionId,
 													'dpid'=>$this->dpid,
 													'create_at'=>date('Y-m-d H:i:s',$time),
 						        					'update_at'=>date('Y-m-d H:i:s',$time), 
@@ -313,6 +333,17 @@ class WxOrder
 	 public static function updatePayType($orderId,$dpid,$paytype = 1){
 	 	$isSync = DataSync::getInitSync();
 		$sql = 'update nb_order set paytype='.$paytype.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		Yii::app()->db->createCommand($sql)->execute();
+	}
+	/**
+	 * 
+	 * 更改订单备注
+	 * 
+	 * 
+	 */
+	 public static function updateRemark($orderId,$dpid,$remark){
+	 	$isSync = DataSync::getInitSync();
+		$sql = 'update nb_order set remark='.$remark.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
