@@ -79,9 +79,6 @@ $(document).ready(function(){
 		
 		$('input[name="paytype"]').val(paytype);
 		$(this).addClass('on');
-		if(parseInt(paytype)==1){
-			$('.noCupon').click();
-		}
 	});
 	$('.user-cupon .item.useCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
