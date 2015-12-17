@@ -83,7 +83,7 @@ class WxCashBack
 	 */
 	public function inRecord($orderId){
 		$time = time();
-		$myfile = fopen('/tmp/newfile.txt','w');
+		$myfile = fopen("newfile.txt", "w");
 		fwrite($myfile,'begain ');
 		if($this->cashTpl&&$this->consumerCashBack){
 			fwrite($myfile,'cash ');
