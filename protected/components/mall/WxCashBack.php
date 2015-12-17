@@ -20,23 +20,15 @@ class WxCashBack
 	public $consumerPointsBack = 0;
 	
 	public function __construct($dpid,$userId,$cashToal = 0,$cashBackTotal = 0){
-		$myfile1 = fopen("/tmp/newfile1.txt", "w");
 		$this->dpid = $dpid;
 		$this->userId = $userId;
 		$this->cashToal = $cashToal;
 		$this->cashBackTotal = $cashBackTotal;
-		fwrite($myfile1,'begain ');
 		$this->getPoints();
-		fwrite($myfile1,'getPoints ');
 		$this->getCashTpl();
-		fwrite($myfile1,'CashTpl ');
 		$this->getPointsValid();
-		fwrite($myfile1,'getPointsValid ');
 		$this->getPointsTpl();
-		fwrite($myfile1,'getPointsTpl ');
 		$this->getConsumerBack();
-		fwrite($myfile1,'getConsumerBack end ');
-		fclose($myfile1);
 	}
 	public function getPoints(){
 		$this->historyPoints = WxBrandUser::getHistoryPoints($this->userId,$this->dpid);
@@ -91,10 +83,7 @@ class WxCashBack
 	 */
 	public function inRecord($orderId){
 		$time = time();
-		$myfile = fopen("/tmp/newfile.txt", "w");
-		fwrite($myfile,'begain ');
 		if($this->cashTpl&&$this->consumerCashBack){
-			fwrite($myfile,'cash ');
 			$se = new Sequence("cashback_record");
 		    $lid = $se->nextval();
 			$cashRecordData = array(
@@ -108,16 +97,13 @@ class WxCashBack
 					        	'brand_user_lid'=>$this->userId,
 					        	'is_sync'=>DataSync::getInitSync(),
 								);
-			fwrite($myfile,json_encode($cashRecordData));
 			$result = Yii::app()->db->createCommand()->insert('nb_cashback_record', $cashRecordData);
 			$sql = 'update nb_brand_user set remain_back_money = remain_back_money + '.$this->consumerCashBack.' where lid='.$this->userId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
-			fwrite($myfile,' endcash ');
 		}
 		if($this->pointsTpl&&$this->consumerPointsBack){
-			fwrite($myfile,'points ');
 			if($this->pointsValid){
-				$endTime = date('Y-m-d H:i:s',strtotime('+'.$this->pointsValid['valid_days'].' year'));
+				$endTime = date('Y-m-d H:i:s',strtotime('+'.$this->pointsValid['valid_days'].' day'));
 			}else{
 				$endTime = date('Y-m-d H:i:s',strtotime('+1 year'));
 			}
@@ -135,11 +121,7 @@ class WxCashBack
 					        	'end_time'=>$endTime,
 					        	'is_sync'=>DataSync::getInitSync(),
 								);
-			fwrite($myfile,json_encode($pointRecordData));
 			$result = Yii::app()->db->createCommand()->insert('nb_point_record', $pointRecordData);
-			fwrite($myfile,' endpoints ');
 		}
-		fwrite($myfile,' end ');
-		fclose($myfile);
 	}
 }
