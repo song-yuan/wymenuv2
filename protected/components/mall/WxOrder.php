@@ -407,8 +407,8 @@ class WxOrder
 			fwrite($myfile2, '33 ');
 			$back->inRecord($order['lid']);
 			fwrite($myfile2, '55 ');
-			fclose($myfile2);
 		}
+		fclose($myfile2);
 	 }
 	/**
 	 * 
