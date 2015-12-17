@@ -1072,7 +1072,7 @@ class Helper
                             break;                        
                     }
                         
-                    array_push($listData,"01".str_pad($payname,7).empty($model->should_all)?0:$model->should_all);
+                    array_push($listData,"01".str_pad($payname,7).$model->should_all);
                     array_push($listData,"br");
                     $sumall=$sumall+$model->should_all;
                 }
