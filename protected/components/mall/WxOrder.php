@@ -375,6 +375,9 @@ class WxOrder
 	        	'is_sync'=>DataSync::getInitSync(),
 	        );
 		$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
+		$myfile2 = fopen("newfile2.txt", "w");
+		fwrite($myfile2, '2222 ');
+		fwrite($myfile2, $paytype);
 		if($order['cupon_branduser_lid'] > 0){
 			$sql = 'select t1.cupon_money from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$order['cupon_branduser_lid'].' and t.dpid='.$order['dpid'];
 			$result = Yii::app()->db->createCommand($sql)->queryRow();
@@ -399,7 +402,8 @@ class WxOrder
 			$sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
 			Yii::app()->db->createCommand($sql)->execute();
 		}
-		$myfile2 = fopen("newfile2.txt", "w");
+		fwrite($myfile2, '66666 ');
+		fwrite($myfile2, $paytype);
 		if($paytype != 10){
 			fwrite($myfile2, $paytype);
 			//返现或者积分
