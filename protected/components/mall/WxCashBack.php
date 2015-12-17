@@ -132,6 +132,7 @@ class WxCashBack
 					        	'type_lid'=>$orderId,
 					        	'point_num'=>$this->consumerPointsBack,
 					        	'brand_user_lid'=>$this->userId,
+					        	'end_time'=>$endTime,
 					        	'is_sync'=>DataSync::getInitSync(),
 								);
 			fwrite($myfile,json_encode($pointRecordData));
