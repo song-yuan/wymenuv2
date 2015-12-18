@@ -122,7 +122,8 @@ class UserController extends Controller
 	 */
 	 public function actionReCharge(){
 	 	$userId = Yii::app()->session['userId'];
-	 	$this->render('recharge',array('companyId'=>$this->companyId));
+	 	$recharges = WxRecharge::getWxRecharge($this->companyId);
+	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId));
 	 }
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
