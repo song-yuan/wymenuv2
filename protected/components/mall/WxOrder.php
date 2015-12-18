@@ -310,8 +310,9 @@ class WxOrder
 		return $total;
 	}
 	public static function updateOrderStatus($orderId,$dpid){
+		$now = date('Y-m-d H:i:s',time());
 		$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set order_status=3,paytype=1,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		$sql = 'update nb_order set order_status=3,paytype=1,pay_time='.$now.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
