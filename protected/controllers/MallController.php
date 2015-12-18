@@ -232,7 +232,6 @@ class MallController extends Controller
 				$msg = $e->getMessage();
 			}
 		}
-		
 		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'msg'=>$msg));
 	 }
 	 /**
