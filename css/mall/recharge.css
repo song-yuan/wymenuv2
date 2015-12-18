@@ -4,4 +4,4 @@ body{ background-color:#E5E5E5;}
 .section .title{color:#808080;font-size:24px;}
 .section .item{float:left;margin:5px;height:80px;width:calc((100% - 36px)/3);width:-moz-calc((100% - 36px)/3); width:-webkit-calc((100% - 36px)/3);border:1px solid #24E814;color:rgb(6,193,18);}
 .section .item .top{width:100%;height:50%;text-align:center;font-size:25px;line-height:40px;}
-.section .item .down{width:100%;height:50%;text-align:center;line-height:40px;}
+.section .item .down{width:100%;height:50%;text-align:center;line-height:40px;font-size: 14px; overflow:hidden;}
