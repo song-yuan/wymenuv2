@@ -242,9 +242,9 @@ $(function () {
 				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-							alert("<?php echo "sorry,您目前暂无权限！！！";?>")
-							return false;
-			    	   location.href="<?php echo $this->createUrl('statements/eetreatreasonReport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
+							//return false;
+			    	   location.href="<?php echo $this->createUrl('statements/retreatreasonReportExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
