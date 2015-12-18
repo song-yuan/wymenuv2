@@ -343,7 +343,7 @@ class WxOrder
 	 */
 	 public static function updateRemark($orderId,$dpid,$remark){
 	 	$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set remark='.$remark.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		$sql = 'update nb_order set remark="'.$remark.'",is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**

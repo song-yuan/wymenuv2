@@ -44,46 +44,43 @@
 	<div class="item" onclick="callpay<?php echo $k;?>()"><div class="top"><?php echo (int)$recharge['recharge_money'];?>元</div><div class="down"><?php if($recharge['recharge_cashback']):?>返<?php echo (int)$recharge['recharge_cashback'];?>元<?php endif;?> <?php if($recharge['recharge_pointback']):?>返<?php echo $recharge['recharge_pointback'];?>积分<?php endif;?></div></div>
 	<script type="text/javascript">
 	<?php if($canpWxpay):?>
-	//调用微信JS api 支付
-	function jsApiCall<?php echo $k;?>()
-	{
-		WeixinJSBridge.invoke(
-			'getBrandWCPayRequest',
-			<?php echo $jsApiParameters; ?>,
-			function(res){
-				 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-				 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
-				 	layer.msg('支付成功!');
-				 	history.go(-1);
-				 }else{
-				 	//支付失败或取消支付
-				 	layer.msg('取消支付!');
-				 }     
-			}
-		);
-	}
-	<?php endif;?>
-	function callpay<?php echo $k;?>()
-	{
-		<?php if(!$canpWxpay):?>
-		layer.msg('使用其他方式付款');
-		return;
-		<?php endif;?>
-		if (typeof WeixinJSBridge == "undefined"){
-		    if( document.addEventListener ){
-		        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-		    }else if (document.attachEvent){
-		        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
-		        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-		    }
-		}else{
-		    jsApiCall<?php echo $k;?>();
+		//调用微信JS api 支付
+		function jsApiCall<?php echo $k;?>()
+		{
+			WeixinJSBridge.invoke(
+				'getBrandWCPayRequest',
+				<?php echo $jsApiParameters; ?>,
+				function(res){
+					 if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+					 	// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+					 	layer.msg('支付成功!');
+					 	history.go(-1);
+					 }else{
+					 	//支付失败或取消支付
+					 	layer.msg('取消支付!');
+					 }     
+				}
+			);
 		}
-	}
-</script>
+	<?php endif;?>
+		function callpay<?php echo $k;?>()
+		{
+			<?php if(!$canpWxpay):?>
+			layer.msg('使用其他方式付款');
+			return;
+			<?php endif;?>
+			if (typeof WeixinJSBridge == "undefined"){
+			    if( document.addEventListener ){
+			        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+			    }else if (document.attachEvent){
+			        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+			        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+			    }
+			}else{
+			    jsApiCall<?php echo $k;?>();
+			}
+		}
+	</script>
 	<?php endforeach;?>
-	<div class="item"><div class="top">100元</div><div class="down">返10元</div></div>
-	<div class="item"><div class="top">150元</div><div class="down">返20元</div></div>
-	<div class="item"><div class="top">200元</div><div class="down">返30元</div></div>
 	<div class="clear"></div>
-</div>
+	</div>
