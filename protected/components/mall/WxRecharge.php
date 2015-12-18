@@ -34,7 +34,7 @@ class WxRecharge
         } 
 	}
 	public function getRecharge(){
-		$sql = 'selec * from nb_weixin_recharge where lid=:lid and dpid=:dpid and is_available=0 and delete_flag=0';
+		$sql = 'select * from nb_weixin_recharge where lid=:lid and dpid=:dpid and is_available=0 and delete_flag=0';
 		$this->recharge = Yii::app()->db->createCommand($sql)
 						  ->bindValue(':dpid',$this->dpid)
 						  ->bindValue(':lid',$this->rechargeId)
