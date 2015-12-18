@@ -238,16 +238,16 @@ $(function () {
 // 							}								
 // 						});
 // 					str = str.substr(0,str.length-1);//除去最后一个“，”
-				   var str ='<?php echo $str;?>';
+				  
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				   var text = $('#text').val();
 				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-							alert("<?php echo "sorry,您目前暂无权限！！！";?>")
-							return false;
-			    	   location.href="<?php echo $this->createUrl('statements/eetreatdetailReport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
+							//return false;
+			    	   location.href="<?php echo $this->createUrl('statements/retreatdetailReportExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
