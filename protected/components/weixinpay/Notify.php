@@ -71,9 +71,12 @@ class Notify extends WxPayNotify
         	'is_sync'=>DataSync::getInitSync(),
 			);	
 		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
-		
+		$myfile = fopen("/tmp/newfile.txt", "w");
+		fwrite($myfile,'begain ');
 		if($data['attach']==1){
 			//充值
+			fwrite($myfile,'begain recharge ');
+			fclose($myfile);
 			$recharge = new WxRecharge($orderIdArr[0],$orderIdArr[1],$brandUser['lid']);
 			exit;
 		}

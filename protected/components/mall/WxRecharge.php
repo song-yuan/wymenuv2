@@ -12,14 +12,21 @@ class WxRecharge
 		$this->rechargeId = $rechargeId;
 		$this->dpid = $dpid;
 		$this->userId = $userId;
+		$myfile = fopen("/tmp/newfile1.txt", "w");
 		$transaction = Yii::app()->db->beginTransaction();
  		try {
+ 			fwrite($myfile,'begain recharge ');
 			$this->getRecharge();
+			fwrite($myfile,'getRecharge ');
 			$this->recharge();
+			fwrite($myfile,'recharge ');
 			$this->updateBrandUser();
+			fwrite($myfile,'updateBrandUser ');
 			$this->getPointsValid();
+			fwrite($myfile,'getPointsValid ');
 			$this->insertPoints();
-			
+			fwrite($myfile,'insertPoints ');
+			fclose($myfile);
 			$transaction->commit();	
 		 } catch (Exception $e) {
             $transaction->rollback(); //如果操作失败, 数据回滚
