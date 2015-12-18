@@ -23,7 +23,7 @@ class MallController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo'))){
+		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo','reCharge'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -274,6 +274,17 @@ class MallController extends Controller
 	{
 		$this->render('getwxcard',array('companyId'=>$this->companyId));
 	}
+	/**
+	 * 
+	 * 
+	 * 充值
+	 * 
+	 */
+	 public function actionReCharge(){
+	 	$userId = Yii::app()->session['userId'];
+	 	$recharges = WxRecharge::getWxRecharge($this->companyId);
+	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId));
+	 }
 	/**
 	 * 
 	 * 添加购物车
