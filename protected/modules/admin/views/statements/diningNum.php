@@ -56,7 +56,7 @@
 						<thead>
 							<tr>
 								<th><?php echo yii::t('app','序号');?></th>
-								<th>
+								<!-- <th>
 									<div class="btn-group">
 										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
 										<button type="button" class="btn green dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
@@ -73,7 +73,7 @@
 												
 										</div>
 									</div>
-								</th>
+								</th> -->
                                 <th><?php echo yii::t('app','就餐人数');?></th>
 							</tr>
 						</thead>
@@ -81,7 +81,7 @@
 						<?php if( $model) :?>
 							<tr class="odd gradeX">
 								<td>1</td>
-								<td></td>
+								
 								<td><?php echo $model['total']?$model['total']:0;?></td>
 							</tr>
 						<?php else:?>
@@ -148,14 +148,14 @@
 			  });
 			  $('#excel').click(function excel(){
 
-				   var str ='<?php echo $str;?>';
+				   
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 
-			    	   location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
+			    	   location.href="<?php echo $this->createUrl('statements/diningrReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
