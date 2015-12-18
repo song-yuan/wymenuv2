@@ -54,8 +54,9 @@
 					   
 					      <div class="btn-group">
 					      		<button type="submit" id="btn_time_query" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-                                                        <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出excel');?></button>
-                                                       <!-- <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>-->
+                                                       <!-- <button type="button" style="margin-left: 40px;" class="btn green" id="btn-closeaccount-print" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出excel');?></button> --> 
+                                                       <button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+														<!-- <button type="submit" id="btn_submit" class="btn red" style="margin-left:10px;"><i class="fa fa-pencial"></i><?php echo yii::t('app','日 结');?></button>-->
 				  	      </div>
 				  	  </div>
 				</div>
@@ -221,65 +222,22 @@
 	         });
 		});
                 
-                $('#btn-closeaccount-print').on('click',function() {
-                        var padid="0000000046";
-                        alert("你没有权限！！！")
-                        return false;
-                        if (typeof Androidwymenuprinter == "undefined") {
-                            alert("找不到PAD设备");
-                            //return false;
-                        }else{
-                            var padinfo=Androidwymenuprinter.getPadInfo();
-                            padid=padinfo.substr(10,10);
-                        }
-                        var begin_time = $('#begin_time').val();
-			var end_time = $('#end_time').val();
-                        var url = "<?php echo $this->createUrl('statements/orderDaliyCollectPrint',array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/padid/"+padid;
-                        //var url="<?php echo $this->createUrl('defaultOrder/orderPrintlist',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid;
-                        var statu = confirm("<?php echo yii::t('app','确定要打印日结单吗？');?>");
-                        if(!statu){
-                            return false;
-                        } 
-	         	$.ajax({
-                        url:url,
-                        type:'GET',
-                        data:"",
-                        async:false,
-                        dataType: "json",
-                        success:function(msg){
-//                            var waittime=0;
-                            var data=msg;
-                            //alert(data.msg);
-                            var printresult=false;
-                            if(data.status){
-                                //alert(data.jobid);
-                                var index = layer.load(0, {shade: [0.3,'#fff']});
-                                //var wait=setInterval(function(){ 
-                                for(var itemp=1;itemp<4;itemp++)
-                                {
-                                    if(printresult)
-                                    {
-                                        break;
-                                    }
-                                    printresult=Androidwymenuprinter.printNetJob(data.dpid,data.jobid,data.address);                                  
-                                     //alert(itemp);                                  
-                                }                           
-                                layer.close(index);
-                                if(!printresult)
-                                {
-                                    alert("请重试！");
-                                }
-                            }else{
-                                alert(data.msg);                                
-                            }
-                           //以上是打印
-                           //刷新orderPartial	                 
-                        },
-                        error: function(msg){
-                            alert("保存失败2");
-                        }
-                    });                	
-	         });
+		 $('#excel').click(function excel(){
+
+
+	    	   var begin_time = $('#begin_time').val();
+			   var end_time = $('#end_time').val();
+			   var text = $('#text').val();
+			  
+			   //alert(str);
+		       if(confirm('确认导出并且下载Excel文件吗？')){
+		    	   location.href="<?php echo $this->createUrl('statements/rechargeReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+		       }
+		       else{
+		    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+		       }
+		      
+		   });
                 
 		
 </script> 
