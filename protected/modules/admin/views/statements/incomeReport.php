@@ -100,7 +100,7 @@
 								<td style="width:20%;"><?php echo $model['company_name']; ?></td>
 								<td><?php echo $model['category_name']; ?></td>
 								<td><?php echo $model['all_num'];?></td>
-								<td><?php echo $model['all_price'];?></td>
+								<td><?php echo sprintf("%.2f",$model['all_price']);?></td>
 								<td></td>
 								
 								
