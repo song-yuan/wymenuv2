@@ -1,9 +1,12 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('订单');
+	//子订单号
+	$se = new Sequence("order_subno");
+	$orderSubNo = $se->nextval();
 	
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
-	$orderId = $order['lid'].'-'.$order['dpid'];
+	$orderId = $order['lid'].'-'.$order['dpid'].'-'.$orderSubNo;
 	//①、获取用户openid
 	$canpWxpay = true;
 	try{
@@ -12,7 +15,7 @@
 		//②、统一下单
 		$input = new WxPayUnifiedOrder();
 		$input->SetBody("点餐订单");
-		$input->SetAttach("微信支付");
+		$input->SetAttach("0");
 		$input->SetOut_trade_no($orderId);
 		$input->SetTotal_fee($order['should_total']*100);
 		$input->SetTime_start(date("YmdHis"));
