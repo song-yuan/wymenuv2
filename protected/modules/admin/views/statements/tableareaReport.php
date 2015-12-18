@@ -25,7 +25,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','收款统计报表（支付方式）'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','台桌区域报表'),'url'=>''))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -34,13 +34,13 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','收款统计报表（支付方式）');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','台桌区域报表');?></div>
 				<div class="actions">
-					<select id="text" class="btn yellow" >
+					<!--  <select id="text" class="btn yellow" >
 					<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
 					<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
 					<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
-					</select>
+					</select>-->
 				<div class="btn-group">
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
@@ -64,8 +64,8 @@
 							<tr>
 								
 							<!-- 	<th>序号</th> -->
-								<th><?php echo yii::t('app','时间');?></th>
-								<th style="width:20%;">
+								<!--<th><?php echo yii::t('app','时间');?></th>
+								 <th style="width:20%;">
 									<div class="btn-group">
 										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
 										<button type="button" class="btn green dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
@@ -82,7 +82,7 @@
 												
 										</div>
 									</div>
-								</th>
+								</th> -->
                                 <th><?php echo yii::t('app','区域名称');?></th>
                                 <th><?php echo yii::t('app','客流');?></th> 
                                 <th><?php echo yii::t('app','单数');?></th> 
@@ -94,61 +94,24 @@
 						</thead>
 						<tbody>
 						<?php if( $models) :?>
+						<?php if($allmoney) :?>
 						<!--foreach-->
 						<?php $a=1;?>
 						<?php foreach ($models as $model):?>
 
 								<tr class="odd gradeX">
-								<td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
-								<td style="width:20%;"><?php echo $model->company->company_name;?></td>
-								<td><?php 
-								//if($model->paytype==0){echo yii::t('app','现金支付');
-									switch($model->paytype) {
-															case 0: echo  yii::t('app','现金支付');break; 
-                                                            case 1: echo  yii::t('app','微信支付');break; 
-                                                            case 2: echo  yii::t('app','支付宝支付');break; 
-                                                            case 3: echo  $model->paymentMethod->name;break;
-                                                            case 4: echo  yii::t('app','会员卡支付');break; 
-                                                            case 5: echo  yii::t('app','银联支付');break;
-															case 6: echo  yii::t('app','');break;
-															case 7: echo  yii::t('app','');break;
-															case 8: echo  yii::t('app','');break;
-															case 9: echo  yii::t('app','微信代金券');break; 
-															case 10: echo  yii::t('app','微信会员余额支付');break;
-															default: echo "";break;  }
-                                                                
-								//}elseif ($model->paytype==1){
-								//	echo yii::t('app','微信支付');
-								//}elseif ($model->paytype==2){
-								//	echo yii::t('app','支付宝支付');
-								//}elseif ($model->paytype==3){
-								//	echo  $model->paymentMethod->name;
-								///}elseif ($model->paytype==5){
-								//	echo yii::t('app','银联支付');
-								//}
-											
-										?></td>
-								<td><?php echo $model->all_num;?></td>
-								<td><?php echo $model->all_reality;?></td>
+								<td><?php echo $model['name'];?></td>
+								<td style="width:20%;"><?php echo $model['all_number'];?></td>
+								<td><?php echo $model['all_account'];?></td>
+								<td><?php echo $model['all_paymoney'];?></td>
+								<td><?php if($allmoney['all_money']){ echo sprintf("%.2f",$model['all_paymoney']*100/$allmoney['all_money'])."%";} else {echo "0";}?></td>
 								
 								<td><?php ?></td>
 								
 							</tr>
 						<?php $a++;?>
 						<?php endforeach;?>	
-						<!--<php foreach ($money as $moneys):?>
-						<php 
-						if(!empty($moneys)):?>
-						<tr class="odd gradeX">
-						<td><php if($text==1){echo $moneys['y_all'];}elseif($text==2){ echo $moneys['y_all'].-$moneys['m_all'];}else{echo $moneys['y_all'].-$moneys['m_all'].-$moneys['d_all'];}?></td>
-						<td><php echo $moneys['company_name'];?></td>
-						<td><php echo yii::t('app','会员卡支付');?></td>
-						<td><php echo $moneys['all_huiyuan'];?></td>
-						<td><php echo yii::t('app','请注意这是会员卡支付（每一页的数据都是一样的）');?></td>
-						</tr>
-						<php endif;?>
-						<php endforeach;?>
-						<!-- end foreach-->
+						<?php endif;?>
 						<?php endif;?>
 						</tbody>
 					</table>
@@ -219,7 +182,7 @@
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/payallReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text    
+			   location.href="<?php echo $this->createUrl('statements/tableareaReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text    
 			  
 	        });
 		   a = new Array();
@@ -244,25 +207,12 @@
 					   
 					   //var cid = $(this).val();
 					  
-					 location.href="<?php echo $this->createUrl('statements/payallReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;	  
+					 location.href="<?php echo $this->createUrl('statements/tableareaReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;	  
 					 return a; 
 			 });
 
 			  $('#excel').click(function excel(){
-// 				  var obj=$('#checkedCNid');
-// 				    alert(obj);
-// 				    var str=new Array();
-// 						obj.each(function(){
-// 							alert(1);
-// 							if($(this).attr("checked")=="checked")
-// 							{
-// 								alert(str);
-// 								str += $(this).val()+","
-								
-// 							}								
-// 						});
-// 					str = str.substr(0,str.length-1);//除去最后一个“，”
-				   var str ='<?php echo $str;?>';
+
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				   var text = $('#text').val();
@@ -270,7 +220,7 @@
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 
-			    	   location.href="<?php echo $this->createUrl('statements/payallExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	   location.href="<?php echo $this->createUrl('statements/tableareaReportExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
