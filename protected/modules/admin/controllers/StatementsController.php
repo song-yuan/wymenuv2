@@ -2564,7 +2564,7 @@ public function actionPayallReport(){
 			
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A1',yii::t('app','营业收入报表（产品分类）'))
-		->setCellValue('A2',yii::t('app','报表生成时间：').date('Y-m-d h:i:s',time()))
+		->setCellValue('A2',yii::t('app','报表查询时间段：').$begin_time.yii::t('app','00:00:00 至 ').$end_time."23:59:59    ".yii::t('app','报表生成时间：').date('Y-m-d h:i:s',time()))
 		->setCellValue('A3',yii::t('app','时间'))
 		->setCellValue('B3',yii::t('app','店铺名称'))
 		->setCellValue('C3',yii::t('app','产品分类'))
@@ -2767,7 +2767,7 @@ public function actionPayallReport(){
 			
 			$objPHPExcel->setActiveSheetIndex(0)
 			->setCellValue('A1',yii::t('app','收款统计（支付方式）报表'))
-			->setCellValue('A2',yii::t('app','报表生成时间：').date('Y-m-d h:i:s',time()))
+			->setCellValue('A2',yii::t('app','报表查询时间段：').$begin_time.yii::t('app','00:00:00 至 ').$end_time." 23:59:59   ".yii::t('app','报表生成时间：').date('Y-m-d h:i:s',time()))
 			->setCellValue('A3',yii::t('app','时间'))
 			->setCellValue('B3',yii::t('app','店铺名称'))
 			->setCellValue('C3',yii::t('app','支付方式'))
