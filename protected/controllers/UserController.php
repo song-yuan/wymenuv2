@@ -16,7 +16,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','orderList','orderinfo','address','addAddress'))){
+		if(in_array($actin->id,array('index','orderList','orderinfo','address','addAddress','reCharge'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -113,6 +113,17 @@ class UserController extends Controller
 		$cupons = WxCupon::getUserAllCupon($userId,$this->companyId);
 		$this->render('cupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
+	
+	/**
+	 * 
+	 * 
+	 * 充值
+	 * 
+	 */
+	 public function actionReCharge(){
+	 	$userId = Yii::app()->session['userId'];
+	 	$this->render('recharge',array('companyId'=>$this->companyId));
+	 }
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
 	}

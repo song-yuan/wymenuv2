@@ -40,6 +40,9 @@
 	<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
 	<div class="clear"></div>
 </div>
+<div class="order-remark">
+	<textarea name="remark" placeholder="备注"></textarea>
+</div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
