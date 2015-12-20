@@ -75,7 +75,22 @@
 </form>
 
 <script>
+function getOrderStatus(){
+	var timestamp=new Date().getTime()
+    var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+	
+	$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
+		if(parseInt(msg) > 1){
+			layer.alert('服务员已经确认订单!');
+		}else{
+			getOrderStatus();
+		}
+	});
+}
+
 $(document).ready(function(){
+	window.onload = getOrderStatus;
+	
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
 		$('.paytype .item').removeClass('on');
@@ -143,7 +158,6 @@ $(document).ready(function(){
 	});
 	$('#payorder').click(function(){
 		var paytype = $('.on').attr('paytype');
-		var cupon =   $('input[name="cupon"]').val();
 		
 		var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
