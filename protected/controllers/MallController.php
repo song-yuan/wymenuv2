@@ -225,14 +225,20 @@ class MallController extends Controller
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
 				WxOrder::insertOrderPay($order,10);
+				//修改订单状态
 				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+				//修改订单产品状态
+				WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
+				//修改座位状态
+				if($order['order_type']==1){
+					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+				}
 				$transaction->commit();
 			}catch (Exception $e) {
 				$transaction->rollback();
 				$msg = $e->getMessage();
 			}
 		}
-		
 		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'msg'=>$msg));
 	 }
 	 /**

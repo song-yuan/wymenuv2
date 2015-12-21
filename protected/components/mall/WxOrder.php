@@ -312,7 +312,7 @@ class WxOrder
 	public static function updateOrderStatus($orderId,$dpid){
 		$now = date('Y-m-d H:i:s',time());
 		$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set order_status=3,paytype=1,pay_time='.$now.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		$sql = 'update nb_order set order_status=3,paytype=1,pay_time="'.$now.'",is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
@@ -449,15 +449,15 @@ class WxOrder
 	 	if($user['remain_back_money'] > 0){
 	 		//返现余额大于等于支付
 	 		if($user['remain_back_money'] >= $total){
-	 			$sql = 'update from nb_brand_user set remain_back_money = remain_back_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 			$sql = 'update nb_brand_user set remain_back_money = remain_back_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 	 			$result = Yii::app()->db->createCommand($sql)->execute();
 	 		}else{
-	 			$sql = 'update from nb_brand_user set remain_back_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 			$sql = 'update nb_brand_user set remain_back_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 	 			$result = Yii::app()->db->createCommand($sql)->execute();
 	 			if(!$result){
 			 		throw new Exception('支付失败');
 			 	}
-	 			$sql = 'update from nb_brand_user set remain_money = remain_money-'.($total - $user['remain_back_money']).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 			$sql = 'update nb_brand_user set remain_money = remain_money-'.($total - $user['remain_back_money']).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 	 			$result = Yii::app()->db->createCommand($sql)->execute();
 	 			if(!$result){
 			 		throw new Exception('支付失败');
