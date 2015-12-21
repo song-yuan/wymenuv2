@@ -177,11 +177,7 @@ class MallController extends Controller
 			if($order['cupon_branduser_lid'] > 0){
 				$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 			}
-			if($paytype == 1){
-				WxOrder::updatePayType($orderId,$this->companyId,0);
-				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
-			}
-			WxOrder::updatePayType($orderId,$this->companyId);
+			
 			if($cuponId){
 				$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
 				if(!$result){
@@ -191,6 +187,13 @@ class MallController extends Controller
 			if($remark){
 				WxOrder::updateRemark($orderId,$this->companyId,$remark);
 			}
+			
+			if($paytype == 1){
+				WxOrder::updatePayType($orderId,$this->companyId,0);
+				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+			}
+			WxOrder::updatePayType($orderId,$this->companyId);
+			
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  }
 	  
