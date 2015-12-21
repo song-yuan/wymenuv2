@@ -226,6 +226,7 @@ class MallController extends Controller
 			try{
 				WxOrder::insertOrderPay($order,10);
 				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+				WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
 				$transaction->commit();
 			}catch (Exception $e) {
 				$transaction->rollback();
