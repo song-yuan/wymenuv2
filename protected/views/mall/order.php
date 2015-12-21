@@ -11,6 +11,9 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
+<style>
+.layui-layer-btn{height:42px;}
+</style>
 
 <form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
 <div class="order-title">我的订单</div>
