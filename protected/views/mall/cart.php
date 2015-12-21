@@ -183,9 +183,13 @@ $(document).ready(function(){
 	    type: 1,
 	    title: false,
 	    shadeClose: true,
-	    closeBtn: 1,
-	    area: ['80%', '30%'],
-	    content:_this.next()
+	    closeBtn: 0,
+	    area: ['80%'],
+	    content:_this.next(),
+	    btn: '确定',
+	    yes: function(index, layero){ 
+         layer.close(index);
+    	}
 	});
   });
   $('.t-item').click(function(){
