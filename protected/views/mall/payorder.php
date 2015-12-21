@@ -133,7 +133,7 @@
 			if(parseInt(paytype)==2){
 				var remainMoney = $(this).attr('remain-money');
 				var shouldTotal = $('#total').attr('should-total');
-				if(remainMoney < shouldTotal){
+				if(parseFloat(remainMoney) < parseFloat(shouldTotal)){
 					layer.msg('余额不足!');
 					return;
 				}
