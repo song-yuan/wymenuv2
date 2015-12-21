@@ -160,22 +160,16 @@ $(document).ready(function(){
 		$('#cuponList').css('display','block');
 	});
 	$('#payorder').click(function(){
-		var paytype = $('.on').attr('paytype');
-		
 		var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
 		
-		if(parseInt(paytype)==2){
-			$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
-				if(parseInt(msg) < 2){
-					layer.msg('服务员确认后才能付款!');
-				}else{
-					$('form').submit();
-				}
-			});
-		}else{
-			$('form').submit();
-		}
+		$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
+			if(parseInt(msg) < 2){
+				layer.msg('服务员确认后才能付款!');
+			}else{
+				$('form').submit();
+			}
+		});
 	});
 });
 </script>
