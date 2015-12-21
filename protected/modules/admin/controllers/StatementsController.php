@@ -796,6 +796,57 @@ public function actionPayallReport(){
 				//'catId'=>$catId
 		));
 	}
+	
+	/**
+	 *
+	 * 订单统计报表
+	 *
+	 * **/
+	public function actionceshiOrderReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.reality_total) as all_total,count(t.order_status) as all_status,t.paytype,t.payment_method_id,t.order_status';
+		$criteria->with = array('company','paymentMethod');
+		$criteria->condition = ' t.dpid='.$this->companyId ;
+		if($str){
+			$criteria->condition = ' t.dpid in('.$str.')';
+		}
+		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+		if($text==1){
+			$criteria->group ='t.dpid,t.order_status,year(t.create_at)';
+			$criteria->order = 'year(t.create_at) asc,t.dpid asc';
+		}elseif($text==2){
+			$criteria->group ='t.dpid,t.order_status,month(t.create_at)';
+			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,t.dpid asc';
+		}else{
+			$criteria->group ='t.dpid,t.order_status,day(t.create_at)';
+			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,t.dpid asc';
+		}
+		//$criteria->order = 't.create_at asc,t.dpid asc';
+		//$criteria->group = 't.paytype,t.payment_method_id';
+	
+		$pages = new CPagination(Order::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		//var_dump($criteria);exit;
+		$model = Order::model()->findAll($criteria);
+		$comName = $this->getComName();
+		$this->render('ceshiorderReport',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
 	/**
 	 * 
 	 * 订单统计报表
@@ -844,6 +895,41 @@ public function actionPayallReport(){
 				'comName'=>$comName,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
+		));
+	}
+	/**
+	 *
+	 * 就餐人数统计
+	 *
+	 */
+	public function actionCuponReport(){
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$download = Yii::app()->request->getParam('d',0);
+		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+	
+		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" and is_used=0';
+		$read = Yii::app()->db->createCommand($sql)->queryRow();
+		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" and is_used=1';
+		$receive = Yii::app()->db->createCommand($sql)->queryRow();
+		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" and is_used=2';
+		$used = Yii::app()->db->createCommand($sql)->queryRow();
+		//echo $read;
+		//echo $receive;
+		//echo $used;exit;
+		//var_dump($receive);exit;
+		
+		//$model = Yii::app()->db->createCommand($sql)->queryRow();
+		$comName = $this->getComName();
+		$this->render('cuponReport',array(
+				//'model'=>$model,
+				'begin_time'=>$beginTime,
+				'end_time'=>$endTime,
+				'comName'=>$comName,
+				'str'=>$str,
+				'read'=>$read,
+				'receive'=>$receive,
+				'used'=>$used,
 		));
 	}
 	
@@ -1042,56 +1128,7 @@ public function actionPayallReport(){
 		//}
 		return $retsite;
 	}
-	/**
-	 *
-	 * 订单统计报表
-	 *
-	 * **/
-	public function actionceshiOrderReport(){
-		$str = Yii::app()->request->getParam('str');
-		$text = Yii::app()->request->getParam('text');
-		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
-		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		$criteria = new CDbCriteria;
-		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.reality_total) as all_total,count(t.order_status) as all_status,t.paytype,t.payment_method_id,t.order_status';
-		$criteria->with = array('company','paymentMethod');
-		$criteria->condition = ' t.dpid='.$this->companyId ;
-		if($str){
-			$criteria->condition = ' t.dpid in('.$str.')';
-		}
-		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-		if($text==1){
-			$criteria->group ='t.dpid,t.order_status,year(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,t.dpid asc';
-		}elseif($text==2){
-			$criteria->group ='t.dpid,t.order_status,month(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,t.dpid asc';
-		}else{
-			$criteria->group ='t.dpid,t.order_status,day(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,t.dpid asc';
-		}
-		//$criteria->order = 't.create_at asc,t.dpid asc';
-		//$criteria->group = 't.paytype,t.payment_method_id';
-	
-		$pages = new CPagination(Order::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		//var_dump($criteria);exit;
-		$model = Order::model()->findAll($criteria);
-		$comName = $this->getComName();
-		$this->render('ceshiorderReport',array(
-				'models'=>$model,
-				'pages'=>$pages,
-				'begin_time'=>$begin_time,
-				'end_time'=>$end_time,
-				'text'=>$text,
-				'str'=>$str,
-				'comName'=>$comName,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
-		));
-	}
+
 	
 	/**
 	 * 
@@ -5103,6 +5140,170 @@ public function actionPayallReport(){
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="台桌区域报表（".date('m-d',time())."）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+	
+	
+	}
+	
+	/*
+	 *
+	* 代金券使用情况报表
+	*
+	*/
+	public function actionCuponReportExport(){
+		$objPHPExcel = new PHPExcel();
+		//$uid = Yii::app()->user->id;
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$download = Yii::app()->request->getParam('d',0);
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+	
+		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" and is_used=0';
+		$read = Yii::app()->db->createCommand($sql)->queryRow();
+		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" and is_used=1';
+		$receive = Yii::app()->db->createCommand($sql)->queryRow();
+		$sql = 'select count(is_used) as all_cupon from nb_cupon_branduser where delete_flag =0 and dpid in ('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" and is_used=2';
+		$used = Yii::app()->db->createCommand($sql)->queryRow();
+	
+	
+		//设置第1行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+		//设置第2行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
+		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+		//设置字体
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		$styleArray1 = array(
+				'font' => array(
+						'bold' => true,
+						'color'=>array(
+								'rgb' => '000000',
+						),
+						'size' => '20',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		$styleArray2 = array(
+				'font' => array(
+						'color'=>array(
+								'rgb' => 'ff0000',
+						),
+						'size' => '16',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		//大边框样式 边框加粗
+		$lineBORDER = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THICK,
+								'color' => array('argb' => '000000'),
+						),
+				),
+		);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+		//细边框样式
+		$linestyle = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THIN,
+								'color' => array('argb' => 'FF000000'),
+						),
+				),
+		);
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1',yii::t('app','代金券使用情况报表'))
+		->setCellValue('A2',yii::t('app','报表查询时间段：').$begin_time.yii::t('app',' 至 ').$end_time."  ".yii::t('app','报表生成时间：').date('m-d h:i',time()))
+		->setCellValue('A3',yii::t('app','序号'))
+		->setCellValue('B3',yii::t('app','类型'))
+		->setCellValue('C3',yii::t('app','数量'))
+		->setCellValue('D3',yii::t('app','占比(%)'))
+		->setCellValue('A4',1)
+		->setCellValue('B4',yii::t('app',"发送数量"))
+		->setCellValue('C4',$read['all_cupon']+$receive['all_cupon']+$used['all_cupon'])
+		->setCellValue('D4',yii::t('app','100'))
+		->setCellValue('A5',2)
+		->setCellValue('B5',yii::t('app',"领取数量"))
+		->setCellValue('C5',$receive['all_cupon']?$receive['all_cupon']:0)
+		->setCellValue('D5',$receive['all_cupon']*100/($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']))
+		->setCellValue('A6',3)
+		->setCellValue('B6',yii::t('app',"使用数量"))
+		->setCellValue('C6',$used['all_cupon']?$used['all_cupon']:0)
+		->setCellValue('D6',$used['all_cupon']*100/($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']));
+	
+		//细边框引用
+		$objPHPExcel->getActiveSheet()->getStyle('A2:D3')->applyFromArray($linestyle);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:D4')->applyFromArray($linestyle);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:D5')->applyFromArray($linestyle);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:D6')->applyFromArray($linestyle);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->getFill()->getStartColor()->setARGB('fae9e5');
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getFill()->getStartColor()->setARGB('fae9e5');
+		$objPHPExcel->getActiveSheet()->getStyle('A3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3')->getFill()->getStartColor()->setARGB('fae9e5');
+		//设置字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A:B')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+		$objPHPExcel->getActiveSheet()->getStyle('C:D')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		$objPHPExcel->getActiveSheet()->getStyle('D4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+		$objPHPExcel->getActiveSheet()->getStyle('D5')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+		$objPHPExcel->getActiveSheet()->getStyle('D6')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+		$objPHPExcel->getActiveSheet()->getStyle('D7')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+		
+		//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+		//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
+		//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
+			
+		//冻结窗格
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
+		//单元格加粗，居中：
+		$objPHPExcel->getActiveSheet()->getStyle('A1:D7')->applyFromArray($lineBORDER);//大边框格式引用
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+		//$objPHPExcel->getActiveSheet()->getStyle('A2:B2')->applyFromArray($linestyle);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->applyFromArray($linestyle);
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:D2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:D2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+	
+	
+	
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="代金券使用情况报表（".date('m-d',time())."）.xls";
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
