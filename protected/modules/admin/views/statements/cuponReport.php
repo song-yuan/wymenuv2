@@ -87,19 +87,19 @@
 								<td>1</td>
 								<td><?php echo yii::t('app','发出数量');?></td>
 								<td><?php echo $read['all_cupon']+$receive['all_cupon']+$used['all_cupon'];?></td>
-								<td><?php echo yii::t('app','100%');?></td>
+								<td><?php if($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']) echo yii::t('app','100%');else echo "0.00";?></td>
 							</tr>
 							<tr class="odd gradeX">
 								<td>2</td>
 								<td><?php echo yii::t('app','领取数量');?></td>
 								<td><?php echo $receive['all_cupon']?$receive['all_cupon']:0;?></td>
-								<td><?php echo sprintf("%.2f",$receive['all_cupon']*100/($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']))."%";?></td>
+								<td><?php if($receive['all_cupon']) echo sprintf("%.2f",$receive['all_cupon']*100/($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']))."%";else echo "0.00";?></td>
 							</tr>
 							<tr class="odd gradeX">
 								<td>3</td>
 								<td><?php echo yii::t('app','使用数量');?></td>
 								<td><?php echo $used['all_cupon']?$used['all_cupon']:0;?></td>
-								<td><?php echo sprintf("%.2f",$used['all_cupon']*100/($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']))."%";?></td>
+								<td><?php if($used['all_cupon'] )echo sprintf("%.2f",$used['all_cupon']*100/($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']))."%";else echo "0.00";?></td>
 							</tr>
 						<!--<php else:?>
 						<tr>
