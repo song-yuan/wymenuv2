@@ -47,7 +47,7 @@
 		<div class="clear"></div>
 	</div>
 </div>
-<div class="close_window specialbttn bttn_orange" onclick="WeixinJSBridge.call('closeWindow');">返回微信</div>
+<div class="close_window specialbttn bttn_orange">返回微信</div>
 
 <script>
 $(document).ready(function(){
@@ -62,5 +62,10 @@ $(document).ready(function(){
 			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'paytype'=>2));?>';
 		}
 	});
+	$('.close_window').click(function(){
+		WeixinJSBridge.invoke('closeWindow',{},function(res){
+		    alert(res.err_msg);
+		});
+	})
 })
 </script>
