@@ -47,6 +47,8 @@
 		<div class="clear"></div>
 	</div>
 </div>
+<div class="close_window specialbttn bttn_orange" onclick="WeixinJSBridge.call('closeWindow');">返回微信</div>
+
 <script>
 $(document).ready(function(){
 	<?php if(isset($msg)&&$msg):?>
