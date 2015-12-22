@@ -83,10 +83,12 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$siteType = false;
+		$siteNum = false;
 		
 		$site = WxSite::get($siteId,$this->companyId);
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+			$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
 		}
 		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
@@ -96,7 +98,7 @@ class MallController extends Controller
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId));
 		}
-		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType));
+		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum));
 	}
 	/**
 	 * 
@@ -109,7 +111,6 @@ class MallController extends Controller
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$msg = '';
 		$number = 1;
-		
 		if($this->type==1){
 			$serial = Yii::app()->request->getPost('serial');
 			$number = Yii::app()->request->getPost('number');

@@ -25,6 +25,14 @@ class WxSite
 				  ->queryRow();
 	    return $siteType;
 	}
+	public static function getSiteNumber($spLid,$dpid){
+		$sql = 'select * from nb_site_persons where lid=:lid and dpid=:dpid and delete_flag=0';
+		$siteNum = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':lid',$spLid)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryRow();
+	    return $siteNum;
+	}
 	public static function getBySerial($searil,$dpid){
 		$sql = 'select * from nb_site where serial=:serial and dpid=:dpid and delete_flag=0';
 		$site = Yii::app()->db->createCommand($sql)
