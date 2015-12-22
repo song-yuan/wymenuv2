@@ -64,7 +64,7 @@ $(document).ready(function(){
 	});
 	$('.close_window').click(function(){
 		WeixinJSBridge.invoke('closeWindow',{},function(res){
-		    alert(res.err_msg);
+		    
 		});
 	})
 })
