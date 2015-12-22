@@ -22,6 +22,6 @@ li:last-child{margin-bottom:0px;}
 button { border-radius: 3px; display: inline-block;}
 .bttn_orange {border: 1px solid #ff9933;color: #ff9933;}
 .specialbttn{ padding: 3px 5px;font-size: 0.9em;}
-.close_window{margin: 20px auto;border-radius: 3px;}
+.close_window{width:30%;margin: 20px auto;border-radius: 3px;text-align:center;}
 
 .clear{clear:both;}
