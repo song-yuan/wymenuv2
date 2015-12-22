@@ -60,7 +60,7 @@
         <p>￥<span id="total" class="total"><?php echo $order['should_total'];?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a id="payorder" href="javascript:;">去付款</a></p>
+        <p><a id="payorder" href="javascript:;">待付</a></p>
     </div>
     <div class="clear"></div>
 </footer>
@@ -84,7 +84,7 @@ function getOrderStatus(){
 	
 	$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
 		if(parseInt(msg) > 1){
-			layer.alert('服务员已经确认订单!');
+			layer.alert('服务员已经确认,请点击待付!');
 		}else{
 			getOrderStatus();
 		}
