@@ -79,7 +79,10 @@ class UserController extends Controller
 		}
 		
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'siteType'=>$siteType));
+		//查找分享红包
+		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
+		
+		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'siteType'=>$siteType,'redPack'=>$redPack));
 	}
 	public function actionAddress()
 	{

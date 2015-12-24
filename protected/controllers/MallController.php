@@ -23,7 +23,7 @@ class MallController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo','reCharge'))){
+		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo','reCharge','share'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -251,6 +251,7 @@ class MallController extends Controller
 	 /**
 	 * 
 	 * 营销活动的明细列表
+	 * 不只是现金券
 	 * 
 	 */
 	 public function actionCupon()
@@ -267,7 +268,8 @@ class MallController extends Controller
 	}
 	/**
 	 * 
-	 * 活动领取页面
+	 * 营销活动
+	 * 领取页面
 	 * 
 	 */
 	 public function actionCuponInfo()
@@ -277,6 +279,21 @@ class MallController extends Controller
 		$deatil = WxPromotionActivity::getDetailItem($this->companyId,$activeDetailId);
 		$lid = WxPromotionActivity::sent($this->companyId,$userId,$deatil['promotion_type'],$deatil['promotion_lid'],$deatil['activity_lid']);
 		$this->render('cuponinfo',array('companyId'=>$this->companyId,'ptype'=>$deatil['promotion_type'],'lid'=>$lid));
+	}
+	/**
+	 * 
+	 * 领取分享现金券红包
+	 * 
+	 */
+	public function actionShare(){
+	 	$userId = Yii::app()->session['userId'];
+		$redPacketId = Yii::app()->request->getParam('redptId');//红包id
+		$redPacket = WxRedPacket::getRedPacket($this->companyId,$redPacketId);
+		if($redPacket){
+			$redPacketDetails = WxRedPacket::getRedPacketDetail($this->companyId,$redPacketId);
+			WxRedPacket::sent($userId,$this->companyId,$redPacket,$redPacketDetails);
+		}
+		$this->render('redpacket',array('companyId'=>$this->companyId,'redPacket'=>$redPacket,'redPacketDetails'=>$redPacketDetails));
 	}
 	/**
 	 * 
