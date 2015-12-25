@@ -1116,7 +1116,7 @@ class Helper
                 	//return array('status'=>false,'msg'=>"123");
                 $memo="营业数据报表";
                 //var_dump($modeldata);exit;
-                $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));//return array('status'=>false,'msg'=>"123");
+                array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));//return array('status'=>false,'msg'=>"123");
                 //                if(!empty($memo))
                 	//                {
                 	//                    array_push($listData,"br");
