@@ -1032,6 +1032,29 @@ class Helper
 		if(empty($printer)) {
                         return array('status'=>0,'dpid'=>$siteno->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}
+		if(count($models)==0){
+			$sumall=0;
+			$memo="日结对账单";
+			//return array('status'=>false,'msg'=>"123");
+			$listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));
+			//                if(!empty($memo))
+				//                {
+				//                    array_push($listData,"br");
+				//                    array_push($listData,"10".$memo);
+				//                }
+			array_push($listData,"00");
+			array_push($listData,"br");
+			array_push($listData,"00".str_pad('',48,'-'));
+			array_push($listData,"00".yii::t('app','没有数据！！！'));
+			array_push($listData,"00".str_pad('',48,'-'));
+			array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
+			array_push($listData,"br");
+			//array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);return array('status'=>false,'msg'=>"123");
+			
+			$precode=$cprecode;
+			//后面加切纸
+			$sufcode="0A0A0A0A0A0A";
+		}else{
                 $sumall=0;
                 $memo="日结对账单";
                 //return array('status'=>false,'msg'=>"123");
@@ -1109,7 +1132,7 @@ class Helper
                 $precode=$cprecode;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A"; 
-                
+		}
                 array_push($listData,"00");
                 array_push($listData,"br");
                 array_push($listData,"00");
