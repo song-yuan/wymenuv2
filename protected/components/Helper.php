@@ -1025,7 +1025,7 @@ class Helper
         
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
-	static public function printCloseAccount($dpid,$models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
+	static public function printCloseAccount($dpid,$payments, $models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
 		               //添加$money
 		               //var_dump($money);exit;
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$dpid));
@@ -1045,7 +1045,7 @@ class Helper
 			array_push($listData,"00");
 			array_push($listData,"br");
 			array_push($listData,"00".str_pad('',48,'-'));
-			array_push($listData,"00".yii::t('app','没有数据！！！'));
+			array_push($listData,"00".yii::t('app','没有日结数据！！！'));
 			array_push($listData,"br");
 			array_push($listData,"00".str_pad('',48,'-'));
 			array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
@@ -1241,6 +1241,73 @@ class Helper
 //                 	array_push($listData,"br");
                 	
                 }
+                
+                //收款统计（支付方式）
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00");
+                array_push($listData,"br");
+                
+                $sumall=0;
+                $memo="收款统计（支付方式）";
+                //return array('status'=>false,'msg'=>"123");
+                array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid)." ".$memo,8));//return array('status'=>false,'msg'=>"123");
+               
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
+                foreach ($payments as $model)
+                {
+                	$payname="";
+                	switch ($model->paytype)
+                	{
+                		case 0:
+                			$payname="现金支付";
+                			break;
+                		case 1:
+                			$payname="微信支付";
+                			break;
+                		case 2:
+                			$payname="支付宝";
+                			break;
+                		case 3:
+                			if ($model->payment_method_id){$payname = $model->paymentMethod->name;}else $payname="其他代金券";
+                			break;
+                		case 4:
+                			$payname="会员卡支付";
+                			break;
+                		case 5:
+                			$payname="银联卡支付";
+                			break;
+                		case 9:
+                			$payname="微信代金券";
+                			break;
+                		case 10:
+                			$payname="微信会员余额支付";
+                			break;
+                	}
+                	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                	array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$model->should_all);
+                	array_push($listData,"br");
+                	$sumall=$sumall+$model->should_all;
+                }
+              
+                // }//添加
+                array_push($listData,"00".str_pad('',48,'-'));
+                array_push($listData,"10".str_pad("合计：",7).$sumall);
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
+                array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
+                array_push($listData,"br");
+                //array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);return array('status'=>false,'msg'=>"123");
+                
+                $precode=$cprecode;
+                //后面加切纸
+                $sufcode="0A0A0A0A0A0A";
+                
+                
                 //营业收入（产品类型）
                 array_push($listData,"00");
                 array_push($listData,"br");
