@@ -1134,6 +1134,8 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A"; 
 		}
+		
+		//营业数据报表
                 array_push($listData,"00");
                 array_push($listData,"br");
                 array_push($listData,"00");
@@ -1197,6 +1199,8 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A";
                 }
+                
+                
                 //营业收入（产品类型）
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1223,13 +1227,13 @@ class Helper
                 $payname="产品类型";
                 $nummoney="数量/金额";
                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                array_push($listData,"00".$payname.str_pad("", 30-$printlen," ").$nummoney);
+                array_push($listData,"00".$payname.str_pad("", 25-$printlen," ").$nummoney);
                 array_push($listData,"br");
                 foreach ($incomes as $model)
                 {
                 	$payname=$model['category_name'];
                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                	array_push($listData,"00".$payname.str_pad("", 30-$printlen," ").$model['all_num']."/".sprintf("%.2f",$model['all_price']));
+                	array_push($listData,"00".$payname.str_pad("", 25-$printlen," ").$model['all_num']."/".sprintf("%.2f",$model['all_price']));
                 	array_push($listData,"br");
 //                 	$payname="数量/金额";
 //                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
@@ -1237,7 +1241,44 @@ class Helper
 //                 	array_push($listData,"br");
                 	
                 }
+                //营业收入（产品类型）
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00");
+                array_push($listData,"br");
+                $memo="充值记录报表";
+                //return array('status'=>false,'msg'=>"123");
+                array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid)." ".$memo,8));//return array('status'=>false,'msg'=>"123");
+                //                if(!empty($memo))
+                //                {
+                //                    array_push($listData,"br");
+                //                    array_push($listData,"10".$memo);
+                //                }
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
+                $payname="查询时间段：";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"00".$payname.str_pad("", 15-$printlen," ").$begin_time." 至 ".$end_time);
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
                 
+				if(!empty($money)){
+	                	$payname = "传统卡充值/赠送:";//}
+                        $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+	                	array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$money['all_money']."/".$money['all_give']);
+	                	array_push($listData,"br");
+	                	$sumall=$sumall+$money['all_money'];
+                	}
+                        if(!empty($recharge)){
+	                	$payname = "微信充值/赠送:";//}
+                        $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+	                	array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$recharge['all_recharge']."/".$recharge['all_cashback']);
+	                	array_push($listData,"br");
+	                	$sumall=$sumall+$recharge['all_recharge'];
+                	}
                 array_push($listData,"00".str_pad('',48,'-'));
                 array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
                 array_push($listData,"br");
