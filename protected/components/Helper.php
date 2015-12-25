@@ -1025,7 +1025,7 @@ class Helper
         
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
-	static public function printCloseAccount($dpid,$models ,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
+	static public function printCloseAccount($dpid,$models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
 		               //添加$money
 		               //var_dump($money);exit;
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$dpid));
@@ -1046,6 +1046,7 @@ class Helper
 			array_push($listData,"br");
 			array_push($listData,"00".str_pad('',48,'-'));
 			array_push($listData,"00".yii::t('app','没有数据！！！'));
+			array_push($listData,"br");
 			array_push($listData,"00".str_pad('',48,'-'));
 			array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
 			array_push($listData,"br");
@@ -1157,7 +1158,7 @@ class Helper
                 array_push($listData,"00".str_pad('',48,'-'));
                 $payname="时间";
                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$begin_time."至".$end_time);
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$begin_time." 至 ".$end_time);
                 array_push($listData,"br");
                 $payname="客流";
                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;//return array('status'=>false,'msg'=>$modeldata['all_number']);
@@ -1190,8 +1191,47 @@ class Helper
                 array_push($listData,"br");
                 array_push($listData,"00".str_pad('',48,'-'));
                 array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
+                
+                $precode=$cprecode;
+                //后面加切纸
+                $sufcode="0A0A0A0A0A0A";
+                }
+                $memo="营业收入（产品类型）";
+                //return array('status'=>false,'msg'=>"123");
+                array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));//return array('status'=>false,'msg'=>"123");
+                //                if(!empty($memo))
+                	//                {
+                	//                    array_push($listData,"br");
+                	//                    array_push($listData,"10".$memo);
+                	//                }
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
+                foreach ($incomes as $model)
+                {
+                	$payname="时间";
+                	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$begin_time."至".$end_time);
+                	array_push($listData,"br");
+                	$payname="产品类型";
+                	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$model['category_name']);
+                	array_push($listData,"br");
+                	$payname="数量";
+                	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$model['all_num']);
+                	array_push($listData,"br");
+                	$payname="金额";
+                	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$model['all_price']);
+                	array_push($listData,"br");
                 }
                 
+                array_push($listData,"00".str_pad('',48,'-'));
+                array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
+                array_push($listData,"br");
+                //array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);return array('status'=>false,'msg'=>"123");
+             
                 $precode=$cprecode;
                 $sufcode="0A0A0A0A0A0A1D5601";
                 //结束添加
