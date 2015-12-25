@@ -1105,7 +1105,7 @@ class Helper
                  
                 $precode=$cprecode;
                 //后面加切纸
-                $sufcode="0A0A0A0A0A0A"; 
+                //$sufcode="0A0A0A0A0A0A"; 
                 
                 
                 
