@@ -1036,7 +1036,7 @@ class Helper
 			$sumall=0;
 			$memo="日结对账单";
 			//return array('status'=>false,'msg'=>"123");
-			$listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));
+			$listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid)." ".$memo,8));
 			//                if(!empty($memo))
 				//                {
 				//                    array_push($listData,"br");
@@ -1059,7 +1059,7 @@ class Helper
                 $sumall=0;
                 $memo="日结对账单";
                 //return array('status'=>false,'msg'=>"123");
-                $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));
+                $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid)." ".$memo,8));
 //                if(!empty($memo))
 //                {
 //                    array_push($listData,"br");
@@ -1099,7 +1099,7 @@ class Helper
                             break;                        
                     }
                     $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;    
-                    array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$model->should_all);
+                    array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$model->should_all);
                     array_push($listData,"br");
                     $sumall=$sumall+$model->should_all;
                 }
@@ -1110,14 +1110,14 @@ class Helper
                 	if(!empty($money)){
 	                	$payname = "传统卡充值/赠送:";//}
                                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-	                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$money['all_money']."/".$money['all_give']);
+	                	array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$money['all_money']."/".$money['all_give']);
 	                	array_push($listData,"br");
 	                	$sumall=$sumall+$money['all_money'];
                 	}
                         if(!empty($recharge)){
 	                	$payname = "微信充值/赠送:";//}
                                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-	                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$recharge['all_recharge']."/".$recharge['all_cashback']);
+	                	array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$recharge['all_recharge']."/".$recharge['all_cashback']);
 	                	array_push($listData,"br");
 	                	$sumall=$sumall+$recharge['all_recharge'];
                 	}
@@ -1147,7 +1147,7 @@ class Helper
                 	//return array('status'=>false,'msg'=>"123");
                 $memo="营业数据报表";
                 //var_dump($modeldata);exit;
-                array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));//return array('status'=>false,'msg'=>"123");
+                array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid)." ".$memo,8));//return array('status'=>false,'msg'=>"123");
                 //                if(!empty($memo))
                 	//                {
                 	//                    array_push($listData,"br");
@@ -1206,7 +1206,7 @@ class Helper
                 array_push($listData,"br");
                 $memo="营业收入（产品类型）";
                 //return array('status'=>false,'msg'=>"123");
-                array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));//return array('status'=>false,'msg'=>"123");
+                array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid)." ".$memo,8));//return array('status'=>false,'msg'=>"123");
                 //                if(!empty($memo))
                 	//                {
                 	//                    array_push($listData,"br");
