@@ -1103,9 +1103,9 @@ class Helper
 		array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));                    
                 array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
                  
-                $precode=$cprecode;
-                //后面加切纸
-                $sufcode="0A0A0A0A0A0A"; 
+//                 $precode=$cprecode;
+//                 //后面加切纸
+//                 $sufcode="0A0A0A0A0A0A"; 
                 
                 
                 
@@ -1113,6 +1113,7 @@ class Helper
                 //$sumall=0;
                 if(!empty($modeldata)){if(!empty($moneydata)){
                 $memo="营业数据报表";
+                var_dump($modeldata);exit;
                 $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));
                 //                if(!empty($memo))
                 	//                {
@@ -1155,6 +1156,8 @@ class Helper
 //                 array_push($listData,"br");
                
                 }}
+                
+                $precode=$cprecode;
                 $sufcode="0A0A0A0A0A0A1D5601";
                 //结束添加
                 $retcontent=array();
