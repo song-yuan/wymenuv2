@@ -308,7 +308,7 @@ class orderManagementController extends BackendController
                          //前面加 barcode
                         $precode="";
                         //$memo="日结对账单";
-                        $ret = Helper::printCloseAccount($this->companyId,$models , $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
+                        $ret = Helper::printCloseAccount($this->companyId,$models , $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
                        // var_dump($ret);exit;
                         //var_dump($money);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作

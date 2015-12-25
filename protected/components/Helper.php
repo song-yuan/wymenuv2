@@ -1025,7 +1025,7 @@ class Helper
         
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
-	static public function printCloseAccount($dpid,$models , $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
+	static public function printCloseAccount($dpid,$models ,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
 		               //添加$money
 		               //var_dump($money);exit;
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$dpid));
@@ -1106,11 +1106,16 @@ class Helper
 				array_push($listData,"br");
                 //array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);return array('status'=>false,'msg'=>"123");
                 
-               // $precode=$cprecode;
+                $precode=$cprecode;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A"; 
                 
-                
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00");
+                array_push($listData,"br");
                 //return array('status'=>false,'msg'=>"123");
 				//添加
                 //$sumall=0;
@@ -1129,7 +1134,7 @@ class Helper
                 array_push($listData,"00".str_pad('',48,'-'));
                 $payname="时间";
                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$modeldata['y_all']."-".$modeldata['m_all']."-".$modeldata['d_all']);
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$begin_time."至".$end_time);
                 array_push($listData,"br");
                 $payname="客流";
                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;//return array('status'=>false,'msg'=>$modeldata['all_number']);
