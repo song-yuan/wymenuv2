@@ -1034,6 +1034,7 @@ class Helper
 		}
                 $sumall=0;
                 $memo="日结对账单";
+                //return array('status'=>false,'msg'=>"123");
                 $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));
 //                if(!empty($memo))
 //                {
@@ -1096,72 +1097,73 @@ class Helper
 	                	$sumall=$sumall+$recharge['all_recharge'];
                 	}
                // }//添加
-		array_push($listData,"00".str_pad('',48,'-')); 
+				array_push($listData,"00".str_pad('',48,'-')); 
                 array_push($listData,"10".str_pad("合计：",7).$sumall);
                 array_push($listData,"br");
                 array_push($listData,"00".str_pad('',48,'-'));   
-		array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));                    
-                array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);
-                 
-                $precode=$cprecode;
+				array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));                    
+                //array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);return array('status'=>false,'msg'=>"123");
+                
+               // $precode=$cprecode;
                 //后面加切纸
-                $sufcode="0A0A0A0A0A0A1D5601"; 
+                $sufcode="0A0A0A0A0A0A"; 
                 
                 
-                return array('status'=>false,'msg'=>"123");
+                //return array('status'=>false,'msg'=>"123");
 				//添加
                 //$sumall=0;
-//                 if(!empty($modeldata)){if(!empty($moneydata)){
-//                 	return array('status'=>false,'msg'=>"123");
-//                 $memo="营业数据报表";
-//                 //var_dump($modeldata);exit;
-//                 $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));
-//                 //                if(!empty($memo))
-//                 	//                {
-//                 	//                    array_push($listData,"br");
-//                 	//                    array_push($listData,"10".$memo);
-//                 	//                }
-//                 array_push($listData,"00");
-//                 array_push($listData,"br");
-//                 $payname="时间";
-// //                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-// //                 array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$modeldata['y_all']."-.".$modeldata['m_all']."-.".$modeldata['d_all']);
-// //                 array_push($listData,"br");
-// //                 $payname="客流";
-//                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-//                 array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$modeldata['all_number']);
-//                 array_push($listData,"br");
-//                 $payname="单数";
-// //                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-// //                 array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$modeldata['all_account']);
-// //                 array_push($listData,"br");
-// //                 $payname="销售额";
-// //                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-// //                 array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$moneydata['all_originalprice']));
-// //                 array_push($listData,"br");
-// //                 $payname="实收";
-// //                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-// //                 array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$modeldata['all_realprice']));
-// //                 array_push($listData,"br");
-// //                 $payname="优惠";
-// //                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-// //                 array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$moneydata['all_originalprice']-$modeldata['all_realprice']));
-// //                 array_push($listData,"br");
-// //                 $payname="人均";
-// //                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-// //                 array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$modeldata['all_realprice']/$modeldata['all_number']));
-// //                 array_push($listData,"br");
-// //                 $payname="单均";
-// //                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-// //                 array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$modeldata['all_realprice']/$modeldata['all_account']));
-// //                 array_push($listData,"br");
+                if(!empty($modeldata)&&!empty($moneydata)){
+                	//return array('status'=>false,'msg'=>"123");
+                $memo="营业数据报表";
+                //var_dump($modeldata);exit;
+                $listData = array("22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));//return array('status'=>false,'msg'=>"123");
+                //                if(!empty($memo))
+                	//                {
+                	//                    array_push($listData,"br");
+                	//                    array_push($listData,"10".$memo);
+                	//                }
+                array_push($listData,"00");
+                array_push($listData,"br");
+                $payname="时间";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$modeldata['y_all']."-.".$modeldata['m_all']."-.".$modeldata['d_all']);
+                array_push($listData,"br");
+                $payname="客流";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;//return array('status'=>false,'msg'=>$modeldata['all_number']);
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$modeldata['all_number']);
+                array_push($listData,"br");
+                $payname="单数";
+                //return array('status'=>false,'msg'=>"123");
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$modeldata['all_account']);
+                array_push($listData,"br");
+                $payname="销售额";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$moneydata['all_originalprice']));
+                array_push($listData,"br");
+                $payname="实收";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$modeldata['all_realprice']));
+                array_push($listData,"br");
+                $payname="优惠";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$moneydata['all_originalprice']-$modeldata['all_realprice']));
+                array_push($listData,"br");
+                $payname="人均";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$modeldata['all_realprice']/$modeldata['all_number']));
+                array_push($listData,"br");
+                $payname="单均";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").sprintf("%.2f",$modeldata['all_realprice']/$modeldata['all_account']));
+                array_push($listData,"br");
                
-//                 }}
+                }
                 
-//                 $precode=$cprecode;
-//                 $sufcode="0A0A0A0A0A0A1D5601";
+                $precode=$cprecode;
+                $sufcode="0A0A0A0A0A0A1D5601";
                 //结束添加
-                $retcontent=array();
+                $retcontent=array();//return array('status'=>false,'msg'=>"123");
                 $orderid="0000000000";//打印日结单时
 		$retcontent= Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver,$orderid);	
                 //$retcontent['orderid']=$order->lid;
