@@ -1191,11 +1191,18 @@ class Helper
                 array_push($listData,"br");
                 array_push($listData,"00".str_pad('',48,'-'));
                 array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
-                
+                array_push($listData,"br");
                 $precode=$cprecode;
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A";
                 }
+                //营业收入（产品类型）
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00");
+                array_push($listData,"br");
+                array_push($listData,"00");
+                array_push($listData,"br");
                 $memo="营业收入（产品类型）";
                 //return array('status'=>false,'msg'=>"123");
                 array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid).$memo,8));//return array('status'=>false,'msg'=>"123");
@@ -1211,19 +1218,19 @@ class Helper
                 {
                 	$payname="时间";
                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$begin_time."至".$end_time);
+                	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$begin_time."至".$end_time);
                 	array_push($listData,"br");
                 	$payname="产品类型";
                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$model['category_name']);
+                	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$model['category_name']);
                 	array_push($listData,"br");
                 	$payname="数量";
                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$model['all_num']);
+                	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$model['all_num']);
                 	array_push($listData,"br");
                 	$payname="金额";
                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                	array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$model['all_price']);
+                	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$model['all_price']);
                 	array_push($listData,"br");
                 }
                 
