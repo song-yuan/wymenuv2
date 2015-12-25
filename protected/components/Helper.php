@@ -1258,6 +1258,11 @@ class Helper
                 array_push($listData,"00");
                 array_push($listData,"br");
                 array_push($listData,"00".str_pad('',48,'-'));
+                $payname="支付方式";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"01".$payname.str_pad("", 25-$printlen," ")."单数/金额");
+                array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
                 foreach ($payments as $model)
                 {
                 	$payname="";
@@ -1289,9 +1294,9 @@ class Helper
                 			break;
                 	}
                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                	array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$model->should_all);
+                	array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$model->all_num."/".$model->all_reality);
                 	array_push($listData,"br");
-                	$sumall=$sumall+$model->should_all;
+                	$sumall=$sumall+$model->all_reality;
                 }
               
                 // }//添加
