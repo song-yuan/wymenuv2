@@ -219,9 +219,9 @@ class orderManagementController extends BackendController
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
 		$criteria->with = array('company','order8','paymentMethod');
 		$criteria->condition = ' t.dpid='.$this->companyId ;
-		if($str){
-			$criteria->condition = 't.dpid in('.$str.')';
-		}
+		
+		//	$criteria->condition = 't.dpid in('.$str.')';
+		
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 	

@@ -1026,7 +1026,7 @@ class Helper
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
 	static public function printCloseAccount($dpid,$payments, $models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
-		               //添加$money
+		               //return array('status'=>false,'msg'=>"123");//添加$money
 		               //var_dump($money);exit;
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$dpid));
 		if(empty($printer)) {
@@ -1263,10 +1263,10 @@ class Helper
                 array_push($listData,"01".$payname.str_pad("", 25-$printlen," ")."单数/金额");
                 array_push($listData,"br");
                 array_push($listData,"00".str_pad('',48,'-'));
-                foreach ($payments as $model)
+                foreach ($payments as $payment)
                 {
                 	$payname="";
-                	switch ($model->paytype)
+                	switch ($payment->paytype)
                 	{
                 		case 0:
                 			$payname="现金支付";
@@ -1278,7 +1278,7 @@ class Helper
                 			$payname="支付宝";
                 			break;
                 		case 3:
-                			if ($model->payment_method_id){$payname = $model->paymentMethod->name;}else $payname="其他代金券";
+                			if ($payment->payment_method_id){$payname = $payment->paymentMethod->name;}else $payname="其他代金券";
                 			break;
                 		case 4:
                 			$payname="会员卡支付";
@@ -1294,9 +1294,9 @@ class Helper
                 			break;
                 	}
                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                	array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$model->all_num."/".$model->all_reality);
+                	array_push($listData,"01".$payname.str_pad("", 25-$printlen," ").$payment->all_num."/".$payment->all_reality);
                 	array_push($listData,"br");
-                	$sumall=$sumall+$model->all_reality;
+                	$sumall=$sumall+$payment->all_reality;
                 }
               
                 // }//添加
