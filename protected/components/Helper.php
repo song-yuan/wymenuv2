@@ -1106,7 +1106,7 @@ class Helper
                 
                // $precode=$cprecode;
                 //后面加切纸
-                $sufcode="0A0A0A0A0A0A"; 
+                //$sufcode="0A0A0A0A0A0A"; 
                 
                 
                 //return array('status'=>false,'msg'=>"123");
@@ -1126,7 +1126,7 @@ class Helper
                 array_push($listData,"br");
                 $payname="时间";
                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$modeldata['y_all']."-.".$modeldata['m_all']."-.".$modeldata['d_all']);
+                array_push($listData,"01".$payname.str_pad("", 20-$printlen," ").$modeldata['y_all']."-".$modeldata['m_all']."-".$modeldata['d_all']);
                 array_push($listData,"br");
                 $payname="客流";
                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;//return array('status'=>false,'msg'=>$modeldata['all_number']);
