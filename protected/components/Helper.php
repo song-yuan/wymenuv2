@@ -1218,16 +1218,22 @@ class Helper
                 $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
                 array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$begin_time." 至 ".$end_time);
                 array_push($listData,"br");
+                array_push($listData,"00".str_pad('',48,'-'));
+                $payname="产品类型";
+                $nummoney="数量/金额";
+                $printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+                array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$nummoney);
+                array_push($listData,"br");
                 foreach ($incomes as $model)
                 {
-                	$payname="产品类型";
-                	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-                	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$model['category_name']);
-                	array_push($listData,"br");
-                	$payname="数量/金额";
+                	$payname=$model['category_name'];
                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
                 	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$model['all_num']."/".sprintf("%.2f",$model['all_price']));
                 	array_push($listData,"br");
+//                 	$payname="数量/金额";
+//                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+//                 	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$model['all_num']."/".sprintf("%.2f",$model['all_price']));
+//                 	array_push($listData,"br");
                 	
                 }
                 
