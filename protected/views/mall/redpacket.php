@@ -10,17 +10,8 @@
 
 <div class=" " id="wrap">
     <div class="topbox"><img src="../img/mall/cupon/top1.jpg" /></div>
-    <div class="cj_box" id="lottery">
-            <ul>
-                    <li class="lottery-unit  lottery-unit-0 active"><img src="../img/mall/cupon/k100.png" alt="" width="80px" height="131px"/></li>
-                    <li class="lottery-unit lottery-unit-1 active"><img src="../img/mall/cupon/y5.png" alt="" width="105px" height="80px" /></li>
-                    <li class="lottery-unit lottery-unit-2 active"><img src="../img/mall/cupon/y50.png" alt="" width="105px" height="80px" /></li>
-                    <li class="pt5"><img src="../img/mall/cupon/cj1.jpg" alt="" width="130px" height="46px" class="btn" id="receive"/></li>
-                    <li class="lottery-unit pt5 fr lottery-unit-3  active"><img src="../img/mall/cupon/k200.png" alt="" width="80px" height="131px"/></li>
-                    <li class="lottery-unit pt5 fr lottery-unit-4 active"><img src="../img/mall/cupon/y25.png" alt="" width="105px" height="80px" /></li>
-                    <li class="lottery-unit pt5 fr lottery-unit-5 active"><img src="../img/mall/cupon/y10.png" alt="" width="105px" height="80px" /></li>
-                    <div class="clear"></div>
-            </ul>
+    <div class="redpacket">
+          <p class="title"><?php if($redPacket){foreach($redPacketDetails as $detail){ if($detail['promotion_type']==1) echo $detail['item']['promotion_title'].' ';else $detail['item']['cupon_money'].' ';}}else{ echo '活动已结束';}?></p>
     </div>
     <div class="guize">
       <span class="gztt">代金券使用规则：</span><br/>

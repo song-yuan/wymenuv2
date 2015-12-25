@@ -288,6 +288,7 @@ class MallController extends Controller
 	public function actionShare(){
 	 	$userId = Yii::app()->session['userId'];
 		$redPacketId = Yii::app()->request->getParam('redptId');//红包id
+		$redPacketDetails = array();
 		$redPacket = WxRedPacket::getRedPacket($this->companyId,$redPacketId);
 		if($redPacket){
 			$redPacketDetails = WxRedPacket::getRedPacketDetail($this->companyId,$redPacketId);
