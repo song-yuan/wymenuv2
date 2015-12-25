@@ -243,11 +243,11 @@ class orderManagementController extends BackendController
 		$criteria->group = "t.paytype,t.payment_method_id";
 		
 		$models=  OrderPay::model()->findAll($criteria);
-                if(count($models)==0)
-                {
-                    $ret=array('status'=>false,'msg'=>"没有数据！");
-                    Yii::app()->end(json_encode($ret));
-                }
+//                 if(count($models)==0)
+//                 {
+//                     $ret=array('status'=>false,'msg'=>"没有数据！");
+//                     Yii::app()->end(json_encode($ret));
+//                 }
 		//var_dump($model[0]->order);exit;
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 ////////////////
