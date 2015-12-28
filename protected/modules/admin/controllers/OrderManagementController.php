@@ -208,28 +208,40 @@ class orderManagementController extends BackendController
 	}
         
     public function actionOrderDaliyCollectPrint(){
+    	$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+    	$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+    	$padid= Yii::app()->request->getParam('padid');
+    	$rl= Yii::app()->request->getParam('rl');
+    	$rll=explode(",",$rl);
+    	$ret=array();
+    	//产品销售
+    	$criteria = new CDbCriteria;
+    	$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
+    	$criteria->with = array('company','product','order');
+    	$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2) and t.delete_flag=0 and t.dpid='.$this->companyId;
+    	//if($str){
+    	//	$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2) and t.delete_flag=0 and t.dpid in('.$str.')';
+    	//}
+    	$criteria->addCondition("t.set_id !=0");
+    	$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+    	$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+    	$criteria->group ='t.product_id,day(t.create_at)';
+    	$criteria->order ='year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+    	$products = OrderProduct::model()->findAll($criteria);
+    	
+    	//收款统计（支付方式）
 		$criteria = new CDbCriteria;
-		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
-		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-                $padid= Yii::app()->request->getParam('padid');
-                $rl= Yii::app()->request->getParam('rl');
-		$ret=array();
-		$rll=explode(",",$rl);
-		
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
 		$criteria->with = array('company','order8','paymentMethod');
 		$criteria->condition = ' t.dpid='.$this->companyId ;
-		
 		//	$criteria->condition = 't.dpid in('.$str.')';
-		
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-	
-			$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+		$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.create_at)';
+		$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
 		$payments = OrderPay::model()->findAll($criteria);
 		
-		$money = "0";
+		//营业收入（菜品类别）
 		$db = Yii::app()->db;
 		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.number) as all_number,ifnull(count(distinct(t.account_no)),0) as all_account,t2.pay_amount,ifnull(sum(t2.pay_amount),0) as all_realprice,t.* from nb_order t left join nb_order_pay t2 on(t.dpid = t2.dpid and t2.order_id = t.lid and t2.paytype not in(9,10)) where t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8)';
 		$modeldata = Yii::app()->db->createCommand($sql)->queryRow();
@@ -249,12 +261,15 @@ class orderManagementController extends BackendController
 		
 //		$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
 //		$money = Yii::app()->db->createCommand($sql)->queryRow();
-                
-                $sql = 'select ifnull(sum(t.reality_money),0) as all_money,ifnull(sum(t.give_money),0) as all_give from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		//充值（卡）
+		$money = "0";
+        $sql = 'select ifnull(sum(t.reality_money),0) as all_money,ifnull(sum(t.give_money),0) as all_give from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
 		$money = Yii::app()->db->createCommand($sql)->queryRow();
-		
-                $sql = 'select ifnull(sum(t.recharge_money),0) as all_recharge,ifnull(sum(t.cashback_num),0) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		//充值（微信）
+        $sql = 'select ifnull(sum(t.recharge_money),0) as all_recharge,ifnull(sum(t.cashback_num),0) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
 		$recharge = Yii::app()->db->createCommand($sql)->queryRow();
+		
+		//日结数据
 		$criteria = new CDbCriteria;
 		//添加
 		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
@@ -332,7 +347,7 @@ class orderManagementController extends BackendController
                          //前面加 barcode
                         $precode="";
                         //$memo="日结对账单";
-                        $ret = Helper::printCloseAccount($this->companyId,$rll, $payments, $models ,$incomes, $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
+                        $ret = Helper::printCloseAccount($this->companyId,$products, $rll, $payments, $models ,$incomes, $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
                        // var_dump($ret);exit;
                         //var_dump($money);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作

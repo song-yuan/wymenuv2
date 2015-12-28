@@ -1025,7 +1025,7 @@ class Helper
         
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
-	static public function printCloseAccount($dpid, $rll, $payments, $models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
+	static public function printCloseAccount($dpid, $products, $rll, $payments, $models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
 		               //return array('status'=>false,'msg'=>"123");//添加$money
 		               //var_dump($money);exit;
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$dpid));
@@ -1246,6 +1246,9 @@ class Helper
 //                 	array_push($listData,"br");
                 	
                 }
+                array_push($listData,"00".str_pad('',48,'-'));
+                array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
+                array_push($listData,"br");
            }  
            if(in_array('payall',$rll)){
                 //收款统计（支付方式）
@@ -1319,6 +1322,61 @@ class Helper
                 $sufcode="0A0A0A0A0A0A";
                 
            }
+           if(in_array('product',$rll)){
+           	//产品销售
+           	array_push($listData,"00");
+           	array_push($listData,"br");
+           	array_push($listData,"00");
+           	array_push($listData,"br");
+           	array_push($listData,"00");
+           	array_push($listData,"br");
+           	$memo="产品销售";
+           	//return array('status'=>false,'msg'=>"123");
+           	array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid)." ".$memo,8));//return array('status'=>false,'msg'=>"123");
+           	//                if(!empty($memo))
+           	//                {
+           	//                    array_push($listData,"br");
+           	//                    array_push($listData,"10".$memo);
+           	//                }
+           	array_push($listData,"00");
+           	array_push($listData,"br");
+           	array_push($listData,"00".str_pad('',48,'-'));
+           	$payname="查询时间段：";
+           	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+           	array_push($listData,"00".$payname.str_pad("", 15-$printlen," ").$begin_time." 至 ".$end_time);
+           	array_push($listData,"br");
+           	array_push($listData,"00".str_pad('',48,'-'));
+           	$payname="产品";
+            $ranking="排名";
+           	$nummoney="数量/金额/实收（折后）";
+           	//$realitymoney="实收（折后）";
+           	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+           	$printlenc=(strlen($ranking) + mb_strlen($ranking,'UTF8')) / 2;
+           	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$ranking.str_pad("", 5-$printlenc," ").$nummoney);
+           	array_push($listData,"br");
+           	$a=1;return array('status'=>false,'msg'=>$products);
+           	foreach ($products as $model)
+           	{
+           		$payname=$model->product->product_name;
+           		$ranking=$a;
+           		$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+           		$printlenc=(strlen($ranking) + mb_strlen($ranking,'UTF8')) / 2;
+           		$a++;
+           		array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$ranking.str_pad("", 5-$printlenc," ").$model->all_total."/".sprintf("%.2f",$model->all_jiage)."/".sprintf("%.2f",$model->all_price));
+           		array_push($listData,"br");
+           		//                 	$payname="数量/金额";
+           		//                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+           		//                 	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$model['all_num']."/".sprintf("%.2f",$model['all_price']));
+           		//                 	array_push($listData,"br");
+           		 
+           	}
+           	array_push($listData,"00".str_pad('',48,'-'));
+           	array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
+           	array_push($listData,"br");
+           	$precode=$cprecode;
+           	$sufcode="0A0A0A0A0A0A";
+           }
+           
            if(in_array('recharge',$rll)){
                 //充值记录报表）
                 array_push($listData,"00");
