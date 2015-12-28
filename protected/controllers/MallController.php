@@ -158,7 +158,8 @@ class MallController extends Controller
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 		}
-		if($this->type==2){
+		if($order['order_type']==2){
+			$this->type = 2;
 			$address = WxAddress::getDefault($userId,$this->companyId);
 		}
 		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
@@ -174,6 +175,7 @@ class MallController extends Controller
 		  	$userId = Yii::app()->session['userId'];
 			$orderId = Yii::app()->request->getParam('orderId');
 			$paytype = Yii::app()->request->getPost('paytype');
+			$addressId = Yii::app()->request->getPost('address',-1);
 			$cuponId = Yii::app()->request->getPost('cupon');
 			$remark = Yii::app()->request->getPost('remark');
 			
@@ -182,13 +184,24 @@ class MallController extends Controller
 			if($order['cupon_branduser_lid'] > 0){
 				$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 			}
-			
+			if($order['order_type']==2){
+				if($addressId > 0){
+					$address = WxAddress::getAddress($addressId,$this->companyId);
+					$result = WxOrderAddress::addOrderAddress($orderId,$address);
+					if(!$result){
+						$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
+					}
+				}else{
+					$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
+				}
+			}
 			if($cuponId){
 				$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
 				if(!$result){
 					$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 				}
 			}
+			
 			if($remark){
 				WxOrder::updateRemark($orderId,$this->companyId,$remark);
 			}

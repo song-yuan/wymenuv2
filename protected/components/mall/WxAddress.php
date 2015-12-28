@@ -57,6 +57,23 @@ class WxAddress
 		$result = Yii::app()->db->createCommand()->insert('nb_address', $insertData);
 		return $result;
 	}
+	public static function update($param){
+		if(isset($param['default_address'])){
+			self::dealDefaultAddress($param['user_id'],$param['dpid']);
+		}
+		$insertData = array(
+				        	'name'=>$param['name'],
+				        	'province'=>$param['province'],
+				        	'city'=>$param['city'],
+				        	'area'=>$param['area'],
+				        	'street'=>$param['street'],
+				        	'postcode'=>$param['postcode'],
+				        	'mobile'=>$param['mobile'],
+				        	'default_address'=>isset($param['default_address'])?1:0,
+							);
+		$result = Yii::app()->db->createCommand()->update('nb_address', $insertData,'lid=:lid and dpid=:dpid',array(':lid'=>$param['lid'],':dpid'=>$param['dpid']));
+		return $result;
+	}
 	public static function deleteAddress($lid,$dpid){
 		$sql = 'update nb_address set delete_flag=1 where dpid='.$dpid.' and lid='.$lid;
 		$result = Yii::app()->db->createCommand($sql)->execute();;
