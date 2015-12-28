@@ -214,6 +214,7 @@ class orderManagementController extends BackendController
     	$rl= Yii::app()->request->getParam('rl');
     	$rll=explode(",",$rl);
     	$ret=array();
+    	
     	//产品销售
     	$criteria = new CDbCriteria;
     	$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
@@ -222,11 +223,11 @@ class orderManagementController extends BackendController
     	//if($str){
     	//	$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2) and t.delete_flag=0 and t.dpid in('.$str.')';
     	//}
-    	$criteria->addCondition("t.set_id !=0");
+    	$criteria->addCondition("t.set_id in(0)");
     	$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
     	$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
-    	$criteria->group ='t.product_id,day(t.create_at)';
-    	$criteria->order ='year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+    	$criteria->group ='t.product_id,year(t.create_at)';
+		$criteria->order = 'year(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
     	$products = OrderProduct::model()->findAll($criteria);
     	
     	//收款统计（支付方式）
