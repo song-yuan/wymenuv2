@@ -8,10 +8,10 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
-<div class=" " id="wrap">
+<div class="" id="wrap">
     <div class="topbox"><img src="../img/mall/cupon/top1.jpg" /></div>
     <div class="redpacket">
-          <p class="title"><?php if($redPacket){foreach($redPacketDetails as $detail){ if($detail['promotion_type']==1) echo $detail['item']['promotion_title'].' ';else $detail['item']['cupon_money'].' ';}}else{ echo '活动已结束';}?></p>
+          <p class="title"><?php if($redPacket){foreach($redPacketDetails as $detail){ if($detail['promotion_type']==1) echo $detail['item']['promotion_title'].' ';else echo (int)$detail['item']['cupon_money'].'元 ';}}else{ echo '活动已结束';}?></p>
     </div>
     <div class="guize">
       <span class="gztt">代金券使用规则：</span><br/>
