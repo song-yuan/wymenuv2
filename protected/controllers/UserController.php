@@ -114,8 +114,11 @@ class UserController extends Controller
 		if(Yii::app()->request->isPostRequest) {
 			$post = Yii::app()->request->getPost('address');
 			$post['dpid'] = $this->companyId;
-
-            $generateAddress = WxAddress::insert($post);
+			if($post['lid']){
+				 $generateAddress = WxAddress::update($post);
+			}else{
+				 $generateAddress = WxAddress::insert($post);
+			}
             if($goBack){
 				$this->redirect(urldecode($goBack));	
 			}else{
