@@ -740,7 +740,7 @@ public function actionPayallReport(){
 	
 		$criteria->condition = 't.is_retreat=0 and t.product_order_status in(1,2) and t.delete_flag=0 and t.dpid='.$this->companyId;
 		if($str){
-			$criteria->condition = 't.is_retreat=0 and t.product_order_status in(1,2) and t.delete_flag=0 and t.dpid in('.$str.')';
+			$criteria->condition = 'order.order_status in(3,4,8) and t.is_retreat=0 and t.product_order_status in(1,2) and t.delete_flag=0 and t.dpid in('.$str.')';
 		}
 		if($ordertype==1){
 			$criteria->addCondition("order.order_type =0");
