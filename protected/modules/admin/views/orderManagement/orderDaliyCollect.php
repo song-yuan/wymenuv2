@@ -362,8 +362,9 @@
             //alert("暂无权限！！！");
             var reportlist="0000000000";
             $('.checkboxes:checked').each(function(){
-                reportlist=reportlist+"|"+$(this).val();
+                reportlist=reportlist+"||"+$(this).val();
             });
+            alert(reportlist);
             var padid="0000000046";
             if (typeof Androidwymenuprinter == "undefined") {
                 alert("找不到PAD设备");
