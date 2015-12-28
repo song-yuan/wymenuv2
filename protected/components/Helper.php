@@ -1205,7 +1205,7 @@ class Helper
                 $sufcode="0A0A0A0A0A0A";
                 }
 		}     
-           if(in_array('income',$rl)){     
+           if(in_array('income',$rll)){     
                 //营业收入（产品类型）
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1247,7 +1247,7 @@ class Helper
                 	
                 }
            }  
-           if(in_array('payall',$rl)){
+           if(in_array('payall',$rll)){
                 //收款统计（支付方式）
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1319,7 +1319,7 @@ class Helper
                 $sufcode="0A0A0A0A0A0A";
                 
            }
-           if(in_array('recharge',$rl)){
+           if(in_array('recharge',$rll)){
                 //充值记录报表）
                 array_push($listData,"00");
                 array_push($listData,"br");
