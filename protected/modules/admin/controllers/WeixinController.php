@@ -89,12 +89,24 @@ class WeixinController extends BackendController
                 $findprovince=Yii::app()->request->getPost('findprovince',"%");
                 $findcity=Yii::app()->request->getPost('findcity',"%");
                 $pointfrom = Yii::app()->request->getPost('pointfrom',"0");
+                if($pointfrom==0)
+                {
+                    $pointfrom=-999999;
+                }
                 $pointto = Yii::app()->request->getPost('pointto',"9999999999");
                 $remainfrom = Yii::app()->request->getPost('remainfrom',"0");
+                if($remainfrom==0)
+                {
+                    $remainfrom=-999999;
+                }
                 $remainto = Yii::app()->request->getPost('remainto',"9999999999");
                 $datefrom = Yii::app()->request->getPost('datefrom',"2015-01-01");
                 $dateto = Yii::app()->request->getPost('dateto',date('Y-m-d',time()));
                 $consumetotalfrom = Yii::app()->request->getPost('consumetotalfrom',"0");
+                if($consumetotalfrom==0)
+                {
+                    $consumetotalfrom=-999999;
+                }
                 $consumetotalto = Yii::app()->request->getPost('consumetotalto',"9999999999");
                 $timesfrom = Yii::app()->request->getPost('timesfrom',"0");
                 $timesto = Yii::app()->request->getPost('timesto',"999999");
