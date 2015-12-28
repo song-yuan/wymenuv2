@@ -47,11 +47,36 @@
 		<div class="clear"></div>
 	</div>
 </div>
+<div class="close_window specialbttn bttn_orange">返回微信</div>
+<?php if($redPack && $order['order_status'] > 2):?>
+<?php 
+	$title = '现金红包送不停！';
+    $desc = '红包可以抵扣订单金额。点单优惠，尽在物易我要点单';
+    $url = $this->createAbsoluteUrl('/mall/share',array('companyId'=>$this->companyId,'redptId'=>$redPack['lid']));
+    $imgUrl = Yii::app()->request->hostInfo.$baseUrl.'/img/mall/144208iygyy9.png';
+?>
+<a href="javascipt:;" class="share"><img src="<?php echo $baseUrl.'/img/mall/144208iygyy9.png';?>" /></a>
+<div class="popshare">
+	<img src="<?php echo $baseUrl.'/img/mall/popup_share.png';?>" alt="">
+</div>
+<?php else:?>
+<?php 
+	$title = '物易我要点单';
+    $desc = '物点单优惠，尽在物易我要点单';
+    $url = $this->createAbsoluteUrl('/mall/index',array('companyId'=>$this->companyId));
+    $imgUrl = Yii::app()->request->hostInfo.$baseUrl.'/img/mall/144208iygyy9.png';
+?>
+<?php endif;?>
+<script>
+    var title = '<?php echo $title;?>';
+    var link = '<?php echo $url;?>';
+    var desc = '<?php echo $desc;?>';
+    var imgUrl = '<?php echo $imgUrl;?>';
+</script>
+<script src="<?php echo $baseUrl;?>/js/weixinshare.js"></script>
+
 <script>
 $(document).ready(function(){
-	<?php if(isset($msg)&&$msg):?>
-	layer.msg('<?php echo $msg;?>');
-	<?php endif;?>
 	$('.specialbttn').click(function(){
 		var status = $(this).attr('status');
 		if(parseInt(status) < 2){
@@ -59,6 +84,17 @@ $(document).ready(function(){
 		}else{
 			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'paytype'=>2));?>';
 		}
+	});
+	$('.close_window').click(function(){
+		WeixinJSBridge.invoke('closeWindow',{},function(res){
+		    
+		});
+	});
+	$('.share').click(function(){
+		$('.popshare').show();
+	});
+	$('.popshare').click(function(){
+		$(this).hide();
 	});
 })
 </script>

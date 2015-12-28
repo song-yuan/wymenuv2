@@ -10,6 +10,22 @@ class WxTaste
 {
 	/**
 	 * 
+	 * 获取全单的口味
+	 * 
+	 */
+	public static function getOrderTastes($dpid){
+		$sql = 'select lid as taste_group_id,name from nb_taste_group where dpid=:dpid and allflae=1 and delete_flag=0';
+		$tasteGroups = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryAll();
+		foreach($tasteGroups as $k=>$group){
+			$tastes = self::getTastes($group['taste_group_id'],$dpid,1);
+			$tasteGroups[$k]['tastes'] = $tastes;
+		}
+	    return $tasteGroups;		  
+	}
+	/**
+	 * 
 	 * 获取单品的口味
 	 * 
 	 */
@@ -20,7 +36,7 @@ class WxTaste
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
 		foreach($tasteGroups as $k=>$group){
-			$tastes = self::getTastes($group['taste_group_id'],$dpid);
+			$tastes = self::getTastes($group['taste_group_id'],$dpid,0);
 			$tasteGroups[$k]['tastes'] = $tastes;
 		}
 	    return $tasteGroups;
@@ -30,12 +46,14 @@ class WxTaste
 	 * 获取口味 组里的口味
 	 * 
 	 */
-	public static function getTastes($tasteGroupId,$dpid){
-		$sql = 'select lid,name from nb_taste where taste_group_id=:tasteGroupId and dpid=:dpid and allflae=0 and delete_flag=0';
+	public static function getTastes($tasteGroupId,$dpid,$allflae = 0){
+		$sql = 'select lid,name from nb_taste where taste_group_id=:tasteGroupId and dpid=:dpid and allflae=:allflae and delete_flag=0';
 		$tastes = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':tasteGroupId',$tasteGroupId)
 				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':allflae',$allflae)
 				  ->queryAll();
 		return $tastes;
 	}
+	
 }

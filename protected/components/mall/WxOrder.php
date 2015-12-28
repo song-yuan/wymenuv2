@@ -109,7 +109,25 @@ class WxOrder
 			        );
 				$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
  			}
-			
+ 			
+			//整单口味
+			if(isset($this->productTastes[0]) && !empty($this->productTastes[0])){
+				foreach($this->productTastes[0] as $ordertaste){
+					$se = new Sequence("order_taste");
+	    			$orderTasteId = $se->nextval();
+			 		$orderTasteData = array(
+			 								'lid'=>$orderTasteId,
+											'dpid'=>$this->dpid,
+											'create_at'=>date('Y-m-d H:i:s',$time),
+				        					'update_at'=>date('Y-m-d H:i:s',$time),
+				        					'taste_id'=>$ordertaste,
+				        					'order_id'=>$orderId,
+				        					'is_order'=>1,
+				        					'is_sync'=>DataSync::getInitSync(),
+			 								);
+			 		$result = Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
+				}
+			}
 			foreach($this->cart as $cart){
 				$se = new Sequence("order_product");
 		    	$orderProductId = $se->nextval();
@@ -151,8 +169,10 @@ class WxOrder
 				 //插入订单优惠
 				 if(!empty($cart['promotion'])){
 				 	foreach($cart['promotion']['promotion_info'] as $promotion){
+				 		$se = new Sequence("order_product_promotion");
+		    			$orderproductpromotionId = $se->nextval();
 				 		$orderProductPromotionData =array(
-			 										'lid'=>$orderProductId,
+			 										'lid'=>$orderproductpromotionId,
 													'dpid'=>$this->dpid,
 													'create_at'=>date('Y-m-d H:i:s',$time),
 						        					'update_at'=>date('Y-m-d H:i:s',$time), 
@@ -290,8 +310,9 @@ class WxOrder
 		return $total;
 	}
 	public static function updateOrderStatus($orderId,$dpid){
+		$now = date('Y-m-d H:i:s',time());
 		$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set order_status=3,paytype=1,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		$sql = 'update nb_order set order_status=3,paytype=1,pay_time="'.$now.'",is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
@@ -313,6 +334,17 @@ class WxOrder
 	 public static function updatePayType($orderId,$dpid,$paytype = 1){
 	 	$isSync = DataSync::getInitSync();
 		$sql = 'update nb_order set paytype='.$paytype.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		Yii::app()->db->createCommand($sql)->execute();
+	}
+	/**
+	 * 
+	 * 更改订单备注
+	 * 
+	 * 
+	 */
+	 public static function updateRemark($orderId,$dpid,$remark){
+	 	$isSync = DataSync::getInitSync();
+		$sql = 'update nb_order set remark="'.$remark.'",is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	/**
@@ -417,15 +449,15 @@ class WxOrder
 	 	if($user['remain_back_money'] > 0){
 	 		//返现余额大于等于支付
 	 		if($user['remain_back_money'] >= $total){
-	 			$sql = 'update from nb_brand_user set remain_back_money = remain_back_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 			$sql = 'update nb_brand_user set remain_back_money = remain_back_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 	 			$result = Yii::app()->db->createCommand($sql)->execute();
 	 		}else{
-	 			$sql = 'update from nb_brand_user set remain_back_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 			$sql = 'update nb_brand_user set remain_back_money = 0,is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 	 			$result = Yii::app()->db->createCommand($sql)->execute();
 	 			if(!$result){
 			 		throw new Exception('支付失败');
 			 	}
-	 			$sql = 'update from nb_brand_user set remain_money = remain_money-'.($total - $user['remain_back_money']).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+	 			$sql = 'update nb_brand_user set remain_money = remain_money-'.($total - $user['remain_back_money']).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 	 			$result = Yii::app()->db->createCommand($sql)->execute();
 	 			if(!$result){
 			 		throw new Exception('支付失败');

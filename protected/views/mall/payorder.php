@@ -1,9 +1,12 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('订单');
+	//子订单号
+	$se = new Sequence("order_subno");
+	$orderSubNo = $se->nextval();
 	
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
-	$orderId = $order['lid'].'-'.$order['dpid'];
+	$orderId = $order['lid'].'-'.$order['dpid'].'-'.$orderSubNo;
 	//①、获取用户openid
 	$canpWxpay = true;
 	try{
@@ -12,7 +15,7 @@
 		//②、统一下单
 		$input = new WxPayUnifiedOrder();
 		$input->SetBody("点餐订单");
-		$input->SetAttach("微信支付");
+		$input->SetAttach("0");
 		$input->SetOut_trade_no($orderId);
 		$input->SetTotal_fee($order['should_total']*100);
 		$input->SetTime_start(date("YmdHis"));
@@ -72,7 +75,7 @@
 <div class="select-type">选择支付方式</div>
 <div class="paytype">
 	<div class="item on" paytype="1">微信支付</div>
-	<div class="item" paytype="2" remain-money="<?php echo $user['remain_money'];?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo $user['remain_money'] + $user['remain_back_money'];?></span></div>
+	<div class="item" paytype="2" remain-money="<?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?></span></div>
 </div>
 </div>
 
@@ -110,7 +113,7 @@
 	function callpay()
 	{
 		<?php if(!$canpWxpay):?>
-		layer.msg('订单信息改变,请使用其他方式付款!');
+		layer.msg('使用其他方式付款');
 		return;
 		<?php endif;?>
 		if (typeof WeixinJSBridge == "undefined"){
@@ -130,7 +133,7 @@
 			if(parseInt(paytype)==2){
 				var remainMoney = $(this).attr('remain-money');
 				var shouldTotal = $('#total').attr('should-total');
-				if(remainMoney < shouldTotal){
+				if(parseFloat(remainMoney) < parseFloat(shouldTotal)){
 					layer.msg('余额不足!');
 					return;
 				}

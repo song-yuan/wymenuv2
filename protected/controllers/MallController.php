@@ -23,7 +23,7 @@ class MallController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo'))){
+		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo','reCharge','share'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -83,19 +83,22 @@ class MallController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$siteType = false;
+		$siteNum = false;
 		
 		$site = WxSite::get($siteId,$this->companyId);
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
+			$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
 		}
 		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
 		$carts = $cartObj->getCart();
+		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 //		var_dump($carts);exit;
 		if(empty($carts)){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId));
 		}
-		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'site'=>$site,'siteType'=>$siteType));
+		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum));
 	}
 	/**
 	 * 
@@ -108,7 +111,6 @@ class MallController extends Controller
 		$siteId = Yii::app()->session['qrcode-'.$userId];
 		$msg = '';
 		$number = 1;
-		
 		if($this->type==1){
 			$serial = Yii::app()->request->getPost('serial');
 			$number = Yii::app()->request->getPost('number');
@@ -169,23 +171,30 @@ class MallController extends Controller
 			$orderId = Yii::app()->request->getParam('orderId');
 			$paytype = Yii::app()->request->getPost('paytype');
 			$cuponId = Yii::app()->request->getPost('cupon');
+			$remark = Yii::app()->request->getPost('remark');
 			
 			$order = WxOrder::getOrder($orderId,$this->companyId);
 			
 			if($order['cupon_branduser_lid'] > 0){
 				$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 			}
-			if($paytype == 1){
-				WxOrder::updatePayType($orderId,$this->companyId,0);
-				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
-			}
-			WxOrder::updatePayType($orderId,$this->companyId);
+			
 			if($cuponId){
 				$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
 				if(!$result){
 					$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 				}
 			}
+			if($remark){
+				WxOrder::updateRemark($orderId,$this->companyId,$remark);
+			}
+			
+			if($paytype == 1){
+				WxOrder::updatePayType($orderId,$this->companyId,0);
+				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+			}
+			WxOrder::updatePayType($orderId,$this->companyId);
+			
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  }
 	  
@@ -201,6 +210,9 @@ class MallController extends Controller
 		$orderId = Yii::app()->request->getParam('orderId');
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
+		if($order['order_status'] > 2){
+			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+		}
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'orderProducts'=>$orderProducts,'user'=>$this->brandUser));
 	 }
@@ -220,19 +232,26 @@ class MallController extends Controller
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
 				WxOrder::insertOrderPay($order,10);
+				//修改订单状态
 				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+				//修改订单产品状态
+				WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
+				//修改座位状态
+				if($order['order_type']==1){
+					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+				}
 				$transaction->commit();
 			}catch (Exception $e) {
 				$transaction->rollback();
 				$msg = $e->getMessage();
 			}
 		}
-		
-		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId,'msg'=>$msg));
+		$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 	 }
 	 /**
 	 * 
 	 * 营销活动的明细列表
+	 * 不只是现金券
 	 * 
 	 */
 	 public function actionCupon()
@@ -249,7 +268,8 @@ class MallController extends Controller
 	}
 	/**
 	 * 
-	 * 活动领取页面
+	 * 营销活动
+	 * 领取页面
 	 * 
 	 */
 	 public function actionCuponInfo()
@@ -262,6 +282,22 @@ class MallController extends Controller
 	}
 	/**
 	 * 
+	 * 领取分享现金券红包
+	 * 
+	 */
+	public function actionShare(){
+	 	$userId = Yii::app()->session['userId'];
+		$redPacketId = Yii::app()->request->getParam('redptId');//红包id
+		$redPacketDetails = array();
+		$redPacket = WxRedPacket::getRedPacket($this->companyId,$redPacketId);
+		if($redPacket){
+			$redPacketDetails = WxRedPacket::getRedPacketDetail($this->companyId,$redPacketId);
+			WxRedPacket::sent($userId,$this->companyId,$redPacket,$redPacketDetails);
+		}
+		$this->render('redpacket',array('companyId'=>$this->companyId,'redPacket'=>$redPacket,'redPacketDetails'=>$redPacketDetails));
+	}
+	/**
+	 * 
 	 * 卡券领取页面
 	 * 
 	 */
@@ -269,6 +305,17 @@ class MallController extends Controller
 	{
 		$this->render('getwxcard',array('companyId'=>$this->companyId));
 	}
+	/**
+	 * 
+	 * 
+	 * 充值
+	 * 
+	 */
+	 public function actionReCharge(){
+	 	$userId = Yii::app()->session['userId'];
+	 	$recharges = WxRecharge::getWxRecharge($this->companyId);
+	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId));
+	 }
 	/**
 	 * 
 	 * 添加购物车

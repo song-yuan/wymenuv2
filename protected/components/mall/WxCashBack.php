@@ -98,8 +98,14 @@ class WxCashBack
 					        	'is_sync'=>DataSync::getInitSync(),
 								);
 			$result = Yii::app()->db->createCommand()->insert('nb_cashback_record', $cashRecordData);
+			if(!$result){
+				throw new Exception('现金支付记录失败');
+			}
 			$sql = 'update nb_brand_user set remain_back_money = remain_back_money + '.$this->consumerCashBack.' where lid='.$this->userId.' and dpid='.$this->dpid;
-			Yii::app()->db->createCommand($sql)->execute();
+			$result = Yii::app()->db->createCommand($sql)->execute();
+			if(!$result){
+				throw new Exception('更改会员余额失败');
+			}
 		}
 		if($this->pointsTpl&&$this->consumerPointsBack){
 			if($this->pointsValid){
@@ -122,6 +128,9 @@ class WxCashBack
 					        	'is_sync'=>DataSync::getInitSync(),
 								);
 			$result = Yii::app()->db->createCommand()->insert('nb_point_record', $pointRecordData);
+			if(!$result){
+				throw new Exception('现金支付记录失败');
+			}
 		}
 	}
 }

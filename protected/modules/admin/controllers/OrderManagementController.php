@@ -215,8 +215,38 @@ class orderManagementController extends BackendController
                 $rl= Yii::app()->request->getParam('rl');
 		$ret=array();
 		
+		
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
+		$criteria->with = array('company','order8','paymentMethod');
+		$criteria->condition = ' t.dpid='.$this->companyId ;
+		
+		//	$criteria->condition = 't.dpid in('.$str.')';
+		
+		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+	
+			$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.create_at)';
+			$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+		$payments = OrderPay::model()->findAll($criteria);
+		
 		$money = "0";
 		$db = Yii::app()->db;
+		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.number) as all_number,ifnull(count(distinct(t.account_no)),0) as all_account,t2.pay_amount,ifnull(sum(t2.pay_amount),0) as all_realprice,t.* from nb_order t left join nb_order_pay t2 on(t.dpid = t2.dpid and t2.order_id = t.lid and t2.paytype not in(9,10)) where t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8)';
+		$modeldata = Yii::app()->db->createCommand($sql)->queryRow();
+		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.number) as all_number,ifnull(count(distinct(t.account_no)),0) as all_account,ifnull(sum(t1.original_price*t1.amount),0) as all_originalprice,ifnull(sum(t1.price*t1.amount*(-(t1.is_giving-1))),0) as all_price,t.* from nb_order t left join nb_order_product t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.order_id = t.lid and t1.product_order_status in(1,2) and t1.is_retreat =0) where t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) ';
+		//统计订单原价
+		//echo $sql;exit;
+		$moneydata = Yii::app()->db->createCommand($sql)->queryRow();
+		
+		//营业收入报表
+		$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.amount) as all_num,
+						t.lid,t.dpid,t.create_at,t.product_id,t.price,sum(t.price*t.amount*(-(t.is_giving-1))) as all_price,t1.category_id,t2.category_name,t3.company_name
+						from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
+						where t.delete_flag = 0 and t.is_retreat = 0 and t.is_giving = 0 and t.product_order_status in(2) and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.dpid in('.$this->companyId.') and t4.order_status in(3,4,8)
+								group by t1.category_id,t.dpid,year(t.create_at) order by year(t.create_at) asc,sum(t.price) desc,t.dpid asc';
+		$incomes = Yii::app()->db->createCommand($sql)->queryAll();
+		
+		
 //		$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
 //		$money = Yii::app()->db->createCommand($sql)->queryRow();
                 
@@ -225,7 +255,7 @@ class orderManagementController extends BackendController
 		
                 $sql = 'select ifnull(sum(t.recharge_money),0) as all_recharge,ifnull(sum(t.cashback_num),0) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
 		$recharge = Yii::app()->db->createCommand($sql)->queryRow();
-		
+		$criteria = new CDbCriteria;
 		//添加
 		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
@@ -237,11 +267,11 @@ class orderManagementController extends BackendController
 		$criteria->group = "t.paytype,t.payment_method_id";
 		
 		$models=  OrderPay::model()->findAll($criteria);
-                if(count($models)==0)
-                {
-                    $ret=array('status'=>false,'msg'=>"没有数据！");
-                    Yii::app()->end(json_encode($ret));
-                }
+//                 if(count($models)==0)
+//                 {
+//                     $ret=array('status'=>false,'msg'=>"没有数据！");
+//                     Yii::app()->end(json_encode($ret));
+//                 }
 		//var_dump($model[0]->order);exit;
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 ////////////////
@@ -301,8 +331,8 @@ class orderManagementController extends BackendController
                         $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$this->companyId,'lid'=>$padid));
                          //前面加 barcode
                         $precode="";
-                        $memo="日结对账单";
-                        $ret = Helper::printCloseAccount($this->companyId,$models ,$money,$recharge, $pad,$precode,"0",$memo);//添加$money
+                        //$memo="日结对账单";
+                        $ret = Helper::printCloseAccount($this->companyId,$payments, $models ,$incomes, $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
                        // var_dump($ret);exit;
                         //var_dump($money);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作

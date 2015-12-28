@@ -2,10 +2,12 @@
 class WeixinJsSdk {
   private $appId;
   private $appSecret;
+  private $companyId;
 
-  public function __construct($appId, $appSecret) {
+  public function __construct($appId, $appSecret,$companyId) {
     $this->appId = $appId;
     $this->appSecret = $appSecret;
+    $this->companyId = $companyId;
   }
 
   public function getSignPackage() {
@@ -42,8 +44,7 @@ class WeixinJsSdk {
 
   private function getJsApiTicket() {
     // jsapi_ticket 应该全局存储与更新，以下代码以写入到文件中做示例
-    $weixinServerAccount = WeixinServiceAccount::getByAppId($this->appId);
-    $accessToken = new AccessToken($weixinServerAccount['brand_id']);
+    $accessToken = new AccessToken($this->companyId);
     return $accessToken->jsTicket;
   }
 }

@@ -11,6 +11,9 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
+<style>
+.layui-layer-btn{height:42px;}
+</style>
 
 <form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
 <div class="order-title">我的订单</div>
@@ -40,11 +43,14 @@
 	<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
 	<div class="clear"></div>
 </div>
+<div class="order-remark">
+	<textarea name="remark" placeholder="备注"></textarea>
+</div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
-		<div class="item on" paytype="2">立刻支付</div>
-		<div class="item" paytype="1">饭后支付</div>
+		<div class="item  on" paytype="1">饭后支付</div>
+		<div class="item" paytype="2">立刻支付</div>
 	</div>
 </div>
 <div class="bottom"></div>
@@ -54,7 +60,7 @@
         <p>￥<span id="total" class="total"><?php echo $order['should_total'];?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a id="payorder" href="javascript:;">去付款</a></p>
+        <p><a id="payorder" href="javascript:;">待付</a></p>
     </div>
     <div class="clear"></div>
 </footer>
@@ -68,20 +74,32 @@
 	<?php endif;?>
 </div>
 	<input type="hidden" name="cupon" value="0" />
-	<input type="hidden" name="paytype" value="2" />
+	<input type="hidden" name="paytype" value="1" />
 </form>
 
 <script>
+function getOrderStatus(){
+	var timestamp=new Date().getTime()
+    var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+	
+	$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
+		if(parseInt(msg) > 1){
+			layer.alert('服务员已经确认,请点击待付!');
+		}else{
+			getOrderStatus();
+		}
+	});
+}
+
 $(document).ready(function(){
+	window.onload = getOrderStatus;
+	
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
 		$('.paytype .item').removeClass('on');
 		
 		$('input[name="paytype"]').val(paytype);
 		$(this).addClass('on');
-		if(parseInt(paytype)==1){
-			$('.noCupon').click();
-		}
 	});
 	$('.user-cupon .item.useCupon').click(function(){
 		var userCuponId = $(this).attr('user-cupon-id');
@@ -142,23 +160,16 @@ $(document).ready(function(){
 		$('#cuponList').css('display','block');
 	});
 	$('#payorder').click(function(){
-		var paytype = $('.on').attr('paytype');
-		var cupon =   $('input[name="cupon"]').val();
-		
 		var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
 		
-		if(parseInt(paytype)==2){
-			$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
-				if(parseInt(msg) < 2){
-					layer.msg('服务员确认后才能付款!');
-				}else{
-					$('form').submit();
-				}
-			});
-		}else{
-			$('form').submit();
-		}
+		$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
+			if(parseInt(msg) < 2){
+				layer.msg('服务员确认后才能付款!');
+			}else{
+				$('form').submit();
+			}
+		});
 	});
 });
 </script>

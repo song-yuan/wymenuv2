@@ -25,7 +25,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','订单报表'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','代金券使用情况报表'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -34,7 +34,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','订单统计报表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','代金券使用情况报表');?></div>
 				<div class="actions">
 				  <div class="btn-group">
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
@@ -74,20 +74,39 @@
 										</div>
 									</div>
 								</th> -->
-                                <th><?php echo yii::t('app','就餐人数');?></th>
+								<th><?php echo yii::t('app','类别');?></th>
+                                <th><?php echo yii::t('app','数量');?></th>
+                                <th><?php echo yii::t('app','占比');?></th>
 							</tr>
 						</thead>
 						<tbody>
-						<?php if( $model) :?>
+						<?php if( $read) :?>
+						<?php if( $receive) :?>
+						<?php if( $used) :?>
 							<tr class="odd gradeX">
 								<td>1</td>
-								
-								<td><?php echo $model['total']?$model['total']:0;?></td>
+								<td><?php echo yii::t('app','发出数量');?></td>
+								<td><?php echo $read['all_cupon']+$receive['all_cupon']+$used['all_cupon'];?></td>
+								<td><?php if($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']) echo yii::t('app','100%');else echo "0.00";?></td>
 							</tr>
-						<?php else:?>
+							<tr class="odd gradeX">
+								<td>2</td>
+								<td><?php echo yii::t('app','领取数量');?></td>
+								<td><?php echo $receive['all_cupon']?$receive['all_cupon']:0;?></td>
+								<td><?php if($receive['all_cupon']) echo sprintf("%.2f",$receive['all_cupon']*100/($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']))."%";else echo "0.00";?></td>
+							</tr>
+							<tr class="odd gradeX">
+								<td>3</td>
+								<td><?php echo yii::t('app','使用数量');?></td>
+								<td><?php echo $used['all_cupon']?$used['all_cupon']:0;?></td>
+								<td><?php if($used['all_cupon'] )echo sprintf("%.2f",$used['all_cupon']*100/($read['all_cupon']+$receive['all_cupon']+$used['all_cupon']))."%";else echo "0.00";?></td>
+							</tr>
+						<!--<php else:?>
 						<tr>
 							<td colspan="3">没有查询到数据</td>
-						</tr>
+						</tr>-->
+						<?php endif;?>
+						<?php endif;?>
 						<?php endif;?>
 						</tbody>
 					</table>
@@ -120,7 +139,7 @@
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time;
+			   location.href="<?php echo $this->createUrl('statements/cuponReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 			  
 	        });
 		   $('#cx').click(function(){  
@@ -142,7 +161,7 @@
 					   var end_time = $('#end_time').val();
 					   //var cid = $(this).val();
 					   
-					 location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
+					 location.href="<?php echo $this->createUrl('statements/cuponReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
 					  
 
 			  });
@@ -155,7 +174,7 @@
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 
-			    	   location.href="<?php echo $this->createUrl('statements/diningrReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
+			    	   location.href="<?php echo $this->createUrl('statements/cuponReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/diningNum' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;

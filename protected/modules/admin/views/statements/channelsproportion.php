@@ -51,6 +51,7 @@
 					
 					    <div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
 							<!--  <a href="#" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','打 印');?></a>		  -->
 					    </div>		
 					</div>
@@ -177,4 +178,22 @@
 			   location.href="<?php echo $this->createUrl('statements/channelsproportion' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
 			  
 	        });
+		   $('#excel').click(function excel(){
+
+				   
+		    	   var begin_time = $('#begin_time').val();
+				   var end_time = $('#end_time').val();
+				   var text = $('#text').val();
+				  
+				   //alert(str);
+			       if(confirm('确认导出并且下载Excel文件吗？')){
+							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
+							//return false;
+			    	   location.href="<?php echo $this->createUrl('statements/ChannelsproportionExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			       }
+			       else{
+			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			       }
+			      
+			   });
 </script> 
