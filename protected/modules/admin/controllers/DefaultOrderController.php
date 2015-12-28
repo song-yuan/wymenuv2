@@ -758,7 +758,7 @@ class DefaultOrderController extends BackendController
                     $db->createCommand($ordersql)->execute();
                     
                     $ordersql="update nb_order_product set product_order_status=2" 
-                            ." where dpid=".$companyId." and order_id in (".$order->site_id
+                            ." where dpid=".$companyId." and order_id in ( ".$orderList
                             .") and product_order_status=1 and delete_flag=0";
                     $db->createCommand($ordersql)->execute();
 //                    $criteria = new CDbCriteria;

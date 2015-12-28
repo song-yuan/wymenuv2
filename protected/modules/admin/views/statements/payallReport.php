@@ -25,7 +25,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','台桌区域报表'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','收款统计（支付方式）报表'),'url'=>''))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -34,7 +34,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','台桌区域报表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','收款统计（支付方式）报表');?></div>
 				<div class="actions">
 					<select id="text" class="btn yellow" >
 					<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
