@@ -1135,7 +1135,7 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A"; 
 		}
-		if(in_array('businessdata',$rl, true)){
+		//if(in_array('businessdata',$rl, true)){
 		//营业数据报表
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1200,8 +1200,8 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A";
                 }
-		}     
-           if(in_array('income',$rl, true)){     
+		//}     
+         //  if(in_array('income',$rl, true)){     
                 //营业收入（产品类型）
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1242,8 +1242,8 @@ class Helper
 //                 	array_push($listData,"br");
                 	
                 }
-           }  
-           if(in_array('payall',$rl, true)){
+          // }  
+          // if(in_array('payall',$rl, true)){
                 //收款统计（支付方式）
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1314,8 +1314,8 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A";
                 
-           }
-           if(in_array('recharge',$rl, true)){
+          // }
+           //if(in_array('recharge',$rl, true)){
                 //充值记录报表）
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1361,7 +1361,7 @@ class Helper
                 $precode=$cprecode;
                 $sufcode="0A0A0A0A0A0A";
            
-           } 
+          // } 
                 $precode=$cprecode;
                 $sufcode="1D5601";
                 //结束添加
