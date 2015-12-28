@@ -1025,13 +1025,14 @@ class Helper
         
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
-	static public function printCloseAccount($dpid,$payments, $models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
+	static public function printCloseAccount($dpid, $rl, $payments, $models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
 		               //return array('status'=>false,'msg'=>"123");//添加$money
 		               //var_dump($money);exit;
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$dpid));
 		if(empty($printer)) {
                         return array('status'=>0,'dpid'=>$siteno->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}
+		
 		if(count($models)==0){
 			$sumall=0;
 			$memo="日结对账单";
@@ -1134,7 +1135,7 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A"; 
 		}
-		
+		if(in_array('businessdata',$rl, true)){
 		//营业数据报表
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1199,8 +1200,8 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A";
                 }
-                
-                
+		}     
+           if(in_array('income',$rl, true)){     
                 //营业收入（产品类型）
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1241,7 +1242,8 @@ class Helper
 //                 	array_push($listData,"br");
                 	
                 }
-                
+           }  
+           if(in_array('payall',$rl, true)){
                 //收款统计（支付方式）
                 array_push($listData,"00");
                 array_push($listData,"br");
@@ -1312,8 +1314,9 @@ class Helper
                 //后面加切纸
                 $sufcode="0A0A0A0A0A0A";
                 
-                
-                //营业收入（产品类型）
+           }
+           if(in_array('recharge',$rl, true)){
+                //充值记录报表）
                 array_push($listData,"00");
                 array_push($listData,"br");
                 array_push($listData,"00");
@@ -1355,9 +1358,12 @@ class Helper
                 array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
                 array_push($listData,"br");
                 //array_push($listData,"00"."   ".yii::t('app','订餐电话：').$order->company->telephone);return array('status'=>false,'msg'=>"123");
-             
                 $precode=$cprecode;
-                $sufcode="0A0A0A0A0A0A1D5601";
+                $sufcode="0A0A0A0A0A0A";
+           
+           } 
+                $precode=$cprecode;
+                $sufcode="1D5601";
                 //结束添加
                 $retcontent=array();//return array('status'=>false,'msg'=>"123");
                 $orderid="0000000000";//打印日结单时
