@@ -64,7 +64,7 @@ class WxRedPacket
 		try{
 			foreach($redPacketDetails as $detail){
 				$type = $detail['promotion_type'];
-				$sentTotal = self::getUserRedPacket($type,$detail['redpacket_lid'],$total);
+				$sentTotal = self::getUserRedPacket($type,$userId,$detail['redpacket_lid'],$total);
 				if(!$sentTotal){
 					return false;
 				}
@@ -112,14 +112,22 @@ class WxRedPacket
 		
 	}
 	// 查询该红包的领取情况
-	public static function getUserRedPacket($type,$redPacketId,$total){
+	public static function getUserRedPacket($type,$userId,$redPacketId,$total){
+		if($type==1){
+			$sql = 'select * from nb_private_branduser where to_group=3 and brand_user_lid='.$userId.' and cupon_source=1 and source_id='.$redPacketId;
+		}elseif($type==0){
+			$sql = 'select * from nb_cupon_branduser where to_group=3 and brand_user_lid='.$userId.' and cupon_source=1 and source_id='.$redPacketId;
+		}
+		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		
 		if($type==1){
 			$sql = 'select * from nb_private_branduser where cupon_source=1 and source_id='.$redPacketId;
 		}elseif($type==0){
 			$sql = 'select * from nb_cupon_branduser where cupon_source=1 and source_id='.$redPacketId;
 		}
 		$brandUsers = Yii::app()->db->createCommand($sql)->queryAll();
-		if($total >= count($brandUsers)){
+		
+		if($brandUser || ($total >= count($brandUsers))){
 			return false;
 		}else{
 			return true;
