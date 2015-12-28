@@ -64,8 +64,14 @@
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
+		<?php if($order['order_type']==1):?>
 		<div class="item  on" paytype="1">饭后支付</div>
 		<div class="item" paytype="2">立刻支付</div>
+		<input type="hidden" name="paytype" value="1" />
+		<?php else:?>
+		<div class="item on" paytype="2">立刻支付</div>
+		<input type="hidden" name="paytype" value="2" />
+		<?php endif;?>
 	</div>
 </div>
 <div class="bottom"></div>
@@ -89,7 +95,6 @@
 	<?php endif;?>
 </div>
 	<input type="hidden" name="cupon" value="0" />
-	<input type="hidden" name="paytype" value="1" />
 </form>
 
 <script>
