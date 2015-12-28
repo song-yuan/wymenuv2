@@ -13,7 +13,7 @@
 	<?php if($addresss):?>
 	<ul class="addlist" id="list">
 		<?php foreach($addresss as $k=>$address):?>
-		<li id="myadd1">
+		<li id="<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId,'lid'=>$address['lid']));?>">
 			<label for="add<?php echo $k+1;?>">
 			<span class="user">收货人：<?php echo $address['name'];?></span>
 			<span class="font_l small">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
