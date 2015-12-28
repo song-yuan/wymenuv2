@@ -360,6 +360,7 @@
         
         $("#printall").on("click",function(){
             //alert("暂无权限！！！");
+            var reportlist =new Array();
             var reportlist="0000000000";
             $('.checkboxes:checked').each(function(){
                 reportlist=reportlist+","+$(this).val();

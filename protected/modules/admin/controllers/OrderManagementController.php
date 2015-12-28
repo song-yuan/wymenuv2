@@ -214,7 +214,7 @@ class orderManagementController extends BackendController
                 $padid= Yii::app()->request->getParam('padid');
                 $rl= Yii::app()->request->getParam('rl');
 		$ret=array();
-		
+		$rll=explode(",",$rl);
 		
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
 		$criteria->with = array('company','order8','paymentMethod');
@@ -332,7 +332,7 @@ class orderManagementController extends BackendController
                          //前面加 barcode
                         $precode="";
                         //$memo="日结对账单";
-                        $ret = Helper::printCloseAccount($this->companyId,$rl, $payments, $models ,$incomes, $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
+                        $ret = Helper::printCloseAccount($this->companyId,$rll, $payments, $models ,$incomes, $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
                        // var_dump($ret);exit;
                         //var_dump($money);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作
