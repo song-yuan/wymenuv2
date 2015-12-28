@@ -16,7 +16,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','orderList','orderinfo','address','addAddress'))){
+		if(in_array($actin->id,array('index','orderList','orderinfo','address','addAddress','setAddress'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -90,21 +90,37 @@ class UserController extends Controller
 		$addresss = WxAddress::get($userId,$this->companyId);
 		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId));
 	}
+	public function actionSetAddress()
+	{
+		$userId = Yii::app()->session['userId'];
+		$url = Yii::app()->request->getParam('url');
+		$addresss = WxAddress::get($userId,$this->companyId);
+		$this->render('setaddress',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId,'url'=>$url));
+	}
 	public function actionAddAddress()
 	{
 		$userId = Yii::app()->session['userId'];
-	
-		$this->render('addaddress',array('companyId'=>$this->companyId,'userId'=>$userId));
+		$lid = Yii::app()->request->getParam('lid',0);
+		$url = Yii::app()->request->getParam('url',0);
+		$address = false;
+		
+		if($lid){
+			$address = WxAddress::getAddress($lid,$this->companyId);
+		}
+		$this->render('addaddress',array('companyId'=>$this->companyId,'userId'=>$userId,'address'=>$address,'url'=>$url));
 	}
 	public function actionGenerateAddress() {
-		$goBack = Yii::app()->request->getParam('goBack');
+		$goBack = Yii::app()->request->getParam('url');
 		if(Yii::app()->request->isPostRequest) {
 			$post = Yii::app()->request->getPost('address');
 			$post['dpid'] = $this->companyId;
-
-            $generateAddress = WxAddress::insert($post);
-            if($goBack==1){
-				$this->redirect(array('/user/setDefaultAddress','companyId'=>$this->companyId,'goBackUrl'=>1));	
+			if($post['lid']){
+				 $generateAddress = WxAddress::update($post);
+			}else{
+				 $generateAddress = WxAddress::insert($post);
+			}
+            if($goBack){
+				$this->redirect(urldecode($goBack));	
 			}else{
 				$this->redirect(array('/user/address','companyId'=>$this->companyId));
 			}
@@ -116,7 +132,35 @@ class UserController extends Controller
 		$cupons = WxCupon::getUserAllCupon($userId,$this->companyId);
 		$this->render('cupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
-	
+	public function actionAjaxSetAddress()
+	{
+		$lid = Yii::app()->request->getPost('lid');
+		$userId = Yii::app()->request->getPost('userId');
+		$dpid = $this->companyId;
+		
+		$addresss = WxAddress::setDefault($userId,$lid,$dpid);
+		
+		if($addresss){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+	}
+	public function actionAjaxDeleteAddress()
+	{
+		$lid = Yii::app()->request->getPost('lid');
+		$dpid = $this->companyId;
+		
+		$addresss = WxAddress::deleteAddress($lid,$dpid);
+		
+		if($addresss){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
 	}
