@@ -150,6 +150,7 @@ class MallController extends Controller
 	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
 		$siteType = false;
+		$address = false;
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$site = WxSite::get($order['site_id'],$this->companyId);
@@ -157,9 +158,12 @@ class MallController extends Controller
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 		}
+		if($this->type==2){
+			$address = WxAddress::getDefault($userId,$this->companyId);
+		}
 		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType));
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address));
 	 }
 	 /**
 	  * 

@@ -15,12 +15,27 @@
 .layui-layer-btn{height:42px;}
 </style>
 
-<form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>" method="post">
+<form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'type'=>$this->type));?>" method="post">
 <div class="order-title">我的订单</div>
 <?php if($this->type==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 <?php else:?>
-
+<!-- 地址 -->
+<div class="address arrowright">
+	<?php if($address):?>
+	<div class="location">
+		<span>收货人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
+		<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+		<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
+	</div>
+	<?php else:?>
+	<div class="location" style="line-height: 50px;">
+		<span class="add">添加收货地址</span>
+		<input type="hidden" name="address" value="-1"/>
+	</div>
+	<?php endif;?>
+</div>
+<!-- 地址 -->
 <?php endif;?>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
@@ -92,8 +107,13 @@ function getOrderStatus(){
 }
 
 $(document).ready(function(){
+	<?php if($this->type==1):?>
 	window.onload = getOrderStatus;
-	
+	<?php else:?>
+	$('.location').click(function(){
+		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/order',array('companyId'=>$this->companyId,'type'=>$this->type,'orderId'=>$order['lid'])))));?>';
+	});
+	<?php endif;?>
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
 		$('.paytype .item').removeClass('on');
@@ -160,9 +180,9 @@ $(document).ready(function(){
 		$('#cuponList').css('display','block');
 	});
 	$('#payorder').click(function(){
+		<?php if($this->type==1):?>
 		var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
-		
 		$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
 			if(parseInt(msg) < 2){
 				layer.msg('服务员确认后才能付款!');
@@ -170,6 +190,14 @@ $(document).ready(function(){
 				$('form').submit();
 			}
 		});
+		<?php else:?>
+		var address = $('input[name="address"]').val();
+		if(parseInt(address) < 0){
+			layer.msg('请添加收货地址!');
+			return;
+		}
+		$('form').submit();
+		<?php endif;?>
 	});
 });
 </script>

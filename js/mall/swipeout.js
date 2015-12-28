@@ -137,7 +137,7 @@ function SwipeOut(listEl, options) {
         li.appendChild(deleteBtn);
         var urlId = li.id;
 
-        smallEdit.innerHTML = "<a href='/member/user/addAddress?id="+ urlId +"'></a>";
+        smallEdit.innerHTML = "<a href='"+ urlId +"'></a>";
         showButton(deleteBtn);
       }
     }
