@@ -1354,7 +1354,7 @@ class Helper
            	$printlenc=(strlen($ranking) + mb_strlen($ranking,'UTF8')) / 2;
            	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$ranking.str_pad("", 5-$printlenc," ").$nummoney);
            	array_push($listData,"br");
-           	$a=1;return array('status'=>false,'msg'=>$products);
+           	$a=1;//return array('status'=>false,'msg'=>$products);
            	foreach ($products as $model)
            	{
            		$payname=$model->product->product_name;
