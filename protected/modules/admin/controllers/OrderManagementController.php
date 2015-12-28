@@ -226,7 +226,7 @@ class orderManagementController extends BackendController
     	$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
     	$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
     	$criteria->group ='t.product_id,day(t.create_at)';
-    	$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
+    	$criteria->order ='year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.amount) desc,sum(t.original_price*t.amount) desc,t.dpid asc';
     	$products = OrderProduct::model()->findAll($criteria);
     	
     	//收款统计（支付方式）
