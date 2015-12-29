@@ -265,6 +265,14 @@ class WxOrder
 		}
 	    return $orderList;
 	}
+	public static function getOrderAddress($orderId,$dpid){
+		$sql = 'select * from nb_order_address where order_lid=:orderId and dpid=:dpid and delete_flag=0';
+		$address = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':orderId',$orderId)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryRow();
+	    return $address;
+	}
 	/**
 	 * 
 	 * 获取当天改会员使用现金券支付的订单
