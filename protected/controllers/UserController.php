@@ -70,6 +70,7 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteType = false;
+		$address = false;
 		
 		$orderId = Yii::app()->request->getParam('orderId');
 		$order = WxOrder::getOrder($orderId,$this->companyId);
@@ -79,10 +80,14 @@ class UserController extends Controller
 		}
 		
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		
+		if($order['order_type']==2){
+			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
+		}
 		//查找分享红包
 		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
 		
-		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'siteType'=>$siteType,'redPack'=>$redPack));
+		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'redPack'=>$redPack));
 	}
 	public function actionAddress()
 	{

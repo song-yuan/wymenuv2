@@ -17,7 +17,7 @@
 
 <form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'type'=>$this->type));?>" method="post">
 <div class="order-title">我的订单</div>
-<?php if($this->type==1):?>
+<?php if($$order['order_type']==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 <?php else:?>
 <!-- 地址 -->
