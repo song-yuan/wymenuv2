@@ -226,6 +226,7 @@ class MallController extends Controller
 	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
 		$address = false;
+		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		if($order['order_status'] > 2){
 			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
