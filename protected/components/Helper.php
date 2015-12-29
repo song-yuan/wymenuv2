@@ -1025,7 +1025,7 @@ class Helper
         
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
-	static public function printCloseAccount($dpid, $products, $rll, $payments, $models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
+	static public function printCloseAccount($dpid, $orderdetails, $products, $rll, $payments, $models ,$incomes,  $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge,Pad $pad, $cprecode,$printserver){
 		               //return array('status'=>false,'msg'=>"123");//添加$money
 		               //var_dump($money);exit;
                 $printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$pad->printer_id,':dpid'=>$dpid));
@@ -1376,7 +1376,79 @@ class Helper
            	$precode=$cprecode;
            	$sufcode="0A0A0A0A0A0A";
            }
+           //账单详情
+           if(in_array('orderdetail',$rll)){
+           	//产品销售
+           	array_push($listData,"00");
+           	array_push($listData,"br");
+           	array_push($listData,"00");
+           	array_push($listData,"br");
+           	array_push($listData,"00");
+           	array_push($listData,"br");
+           	$memo="账单详情";
+           	//return array('status'=>false,'msg'=>"123");
+           	array_push($listData,"22".  Helper::setPrinterTitle(Company::getCompanyName($dpid)." ".$memo,8));//return array('status'=>false,'msg'=>"123");
+           	//                if(!empty($memo))
+           	//                {
+           	//                    array_push($listData,"br");
+           	//                    array_push($listData,"10".$memo);
+           	//                }
+           	array_push($listData,"00");
+           	array_push($listData,"br");
+           	array_push($listData,"00".str_pad('',48,'-'));
+           	$payname="查询时间段：";
+           	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+           	array_push($listData,"00".$payname.str_pad("", 15-$printlen," ").$begin_time." 至 ".$end_time);
+           	array_push($listData,"br");
+           	array_push($listData,"00".str_pad('',48,'-'));
+           	$payname="账单号";
+           	$time="时间";
+           	$sitenum="座位号";
+           	$number="人数";
+           	$price="原价";
+           	$reaprice="实价";
+           	//$realitymoney="实收（折后）";
+           	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+           	$printlent=(strlen($time) + mb_strlen($time,'UTF8')) / 2;
+           	$printlens=(strlen($sitenum) + mb_strlen($sitenum,'UTF8')) / 2;
+           	$printlenn=(strlen($number) + mb_strlen($number,'UTF8')) / 2;
+           	$printlenp=(strlen($price) + mb_strlen($price,'UTF8')) / 2;
+           	$printlenr=(strlen($reaprice) + mb_strlen($reaprice,'UTF8')) / 2;
+           	array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").$time.str_pad("", 8-$printlent," ").$sitenum.str_pad("", 8-$printlens," ").$number.str_pad("", 6-$printlenn," ").$price.str_pad("", 6-$printlenp," ").$reaprice);
+           	array_push($listData,"br");
+           	array_push($listData,"00".str_pad('',48,'-'));
+           	$a=1;//return array('status'=>false,'msg'=>$products);
+           	foreach ($orderdetails as $model)
+           	{
+           		$payname=$model->account_no;
+           		//$time=date('m-d H:i',$model->update_at);
+           		$date=$model->update_at; // 数据库读取出来的时间
+           		$time = strtotime($date);
+           		$sitenum = $this->getSiteName($model->lid);
+           		$number = $model->all_number;
+           		$price = sprintf("%.2f",$this->getOriginalMoney($model->account_no));
+           		$reaprice = sprintf("%.2f",$this->getAccountMoney($model->account_no));
+           		$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+           		$printlent=(strlen($time) + mb_strlen($time,'UTF8')) / 2;
+           		$printlens=(strlen($sitenum) + mb_strlen($sitenum,'UTF8')) / 2;
+           		$printlenn=(strlen($number) + mb_strlen($number,'UTF8')) / 2;
+           		$printlenp=(strlen($price) + mb_strlen($price,'UTF8')) / 2;
+           		$printlenr=(strlen($reaprice) + mb_strlen($reaprice,'UTF8')) / 2;
+           		$a++;
+           		array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").date("d"."日"."H:i",$time).str_pad("", 6-$printlent," ").$sitenum.str_pad("", 8-$printlens," ").$number.str_pad("", 6-$printlenn," ").$price.str_pad("", 6-$printlenp," ").$reaprice);
+           		array_push($listData,"br");
+           		//                 	$payname="数量/金额";
+           		//                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+           		//                 	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$model['all_num']."/".sprintf("%.2f",$model['all_price']));
+           		//                 	array_push($listData,"br");
            
+           	}
+           	array_push($listData,"00".str_pad('',48,'-'));
+           	array_push($listData,"00".Yii::app()->user->name."    ".date('Y-m-d H:i:s',time()));
+           	array_push($listData,"br");
+           	$precode=$cprecode;
+           	$sufcode="0A0A0A0A0A0A";
+           }
            if(in_array('recharge',$rll)){
                 //充值记录报表）
                 array_push($listData,"00");
@@ -1433,7 +1505,59 @@ class Helper
                 //$retcontent['orderid']=$order->lid;
                 return $retcontent;
 	}
-        
+	public function getAccountMoney($account_no){
+		$accountMoney = '';
+		if($account_no){
+			$sql = 'select sum(t.pay_amount) as all_zhifu,t.* from nb_order_pay t where t.paytype not in(9,10) and t.order_id in(select t1.lid from nb_order t1 where t1.account_no = '.$account_no.')';
+			$connect = Yii::app()->db->createCommand($sql);
+			$money = $connect->queryRow();
+			$accountMoney = $money['all_zhifu'];
+		}
+		//$accountMoney = '';
+		//$sql = 'update nb_order_product set original_price=(select t.original_price from nb_product t where t.delete_flag=0 and t.lid =nb_order_product.product_id ) where 1';
+		return $accountMoney;
+	}
+	public function getOriginalMoney($account_no){
+		$originalMoney = '';
+		if($account_no){
+			$sql = 'select sum(t.original_price*t.amount) as all_original from nb_order_product t  where t.is_retreat = 0 and t.product_order_status in(1,2) and t.order_id in(select t1.lid from nb_order t1 where t1.account_no = '.$account_no.')';
+			$connect = Yii::app()->db->createCommand($sql);
+			$money = $connect->queryRow();
+			//var_dump($sql);exit;
+			$originalMoney = $money['all_original'];
+		}
+		//$accountMoney = '';
+		//$sql = 'update nb_order_product set original_price=(select t.original_price from nb_product t where t.delete_flag=0 and t.lid =nb_order_product.product_id ) where 1';
+		return $originalMoney;
+	}
+	//获取座位信息
+	public function getSiteName($orderId){
+		$sitename="";
+		$sitetype="";
+	
+		$sql = 'select t.site_id, t.dpid, t1.site_level, t1.type_id, t1.serial, t2.name from nb_order t, nb_site t1, nb_site_type t2 where t.site_id = t1.lid and t.dpid = t1.dpid and t1.type_id = t2.lid and t.dpid = t2.dpid and t.lid ='. $orderId;
+		//$conn = Yii::app()->db->createCommand($sql);
+		//$result = $conn->queryRow();
+		//$siteId = $result['lid'];
+		$connect = Yii::app()->db->createCommand($sql);
+		//	$connect->bindValue(':site_id',$siteId);
+		//	$connect->bindValue(':dpid',$dpid);
+		$site = $connect->queryRow();
+		$retsite="";
+		if($site['site_id'] && $site['dpid'] ){
+			//	echo 'ABC';
+			$sitelevel = $site['site_level'];
+			$sitename = $site['simplecode'];
+			$sitetype = $site['serial'];
+			$retsite = $sitename.":".$sitetype;
+		}
+		//if($siteId && $dpid){
+		//$sql = 'select order.site_id, order.dpid,site.type_id, site.serial, site_type.name from nb_order, nb_site, nb_site_type where order.site_id = site.lid and order.dpid = site.dpid';
+		//$conn = Yii::app()->db->createCommand($sql);
+	
+		//}
+		return $retsite;
+	}
         //开台时的打印
         //打印开台号和人数，以后有WiFi的密码等。
 	static public function printSite(SiteNo $siteno,Site $site,Pad $pad, $cprecode,$printserver,$memo){
