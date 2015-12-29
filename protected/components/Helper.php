@@ -1484,7 +1484,7 @@ class Helper
            	$printlena=(strlen($allaccount) + mb_strlen($allaccount,'UTF8')) / 2;
            	$printlenr=(strlen($reamoney) + mb_strlen($reamoney,'UTF8')) / 2;
            	$printlenp=(strlen($proportion) + mb_strlen($proportion,'UTF8')) / 2;
-           	array_push($listData,"00".$payname.str_pad("", 12-$printlen," ").$number.str_pad("", 5-$printlenn," ").$allaccount.str_pad("", 5-$printlena," ").$reamoney.str_pad("", 5-$printlenr," ").$proportion);
+           	array_push($listData,"00".$payname.str_pad("", 15-$printlen," ").$number.str_pad("", 8-$printlenn," ").$allaccount.str_pad("", 4-$printlena," ").$reamoney.str_pad("", 10-$printlenr," ").$proportion);
            	array_push($listData,"br");
            	array_push($listData,"00".str_pad('',48,'-'));
            	$a=1;//return array('status'=>false,'msg'=>$products);
@@ -1506,7 +1506,7 @@ class Helper
            		$printlenr=(strlen($reamoney) + mb_strlen($reamoney,'UTF8')) / 2;
            		$printlenp=(strlen($proportion) + mb_strlen($proportion,'UTF8')) / 2;
            		$a++;
-           		array_push($listData,"00".$payname.str_pad("", 12-$printlen," ").$number.str_pad("", 5-$printlenn," ").$allaccount.str_pad("", 5-$printlena," ").$reamoney.str_pad("", 5-$printlenr," ").$proportion);
+           		array_push($listData,"00".$payname.str_pad("", 15-$printlen," ").$number.str_pad("", 8-$printlenn," ").$allaccount.str_pad("", 4-$printlena," ").$reamoney.str_pad("", 10-$printlenr," ").$proportion);
            		array_push($listData,"br");
            		//                 	$payname="数量/金额";
            		//                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
