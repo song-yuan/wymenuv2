@@ -215,6 +215,21 @@ class orderManagementController extends BackendController
     	$rll=explode(",",$rl);
     	$ret=array();
     	
+    	//账单详情‘
+    	$criteria = new CDbCriteria;
+    	//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.create_at >=0 and t.dpid= '.$this->companyId;
+    	$criteria->select = 'sum(t.number) as all_number,t.*';
+    	$criteria->addCondition("t.dpid= ".$this->companyId);
+    	$criteria->addCondition("t.order_status in(3,4,8) ");//只要付款了的账单都进行统计
+    	$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+    	$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+    	//$criteria->addCondition("t.dpid= ".$this->companyId);
+    	$criteria->with = array("company","paymentMethod");
+    	$criteria->group = 't.account_no,t.order_status' ;
+    	$criteria->order = 't.lid ASC' ;
+    	$criteria->distinct = TRUE;
+    	$orderdetails = Order::model()->findAll($criteria);
+    	
     	//产品销售
     	$criteria = new CDbCriteria;
     	$criteria->select ='year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t.product_id,t.price,t.amount,t.is_retreat,sum(t.price) as all_money,sum(t.amount) as all_total, sum(t.price*t.amount*(-(t.is_giving-1))) as all_price, sum(t.original_price*t.amount) as all_jiage';
@@ -348,7 +363,7 @@ class orderManagementController extends BackendController
                          //前面加 barcode
                         $precode="";
                         //$memo="日结对账单";
-                        $ret = Helper::printCloseAccount($this->companyId,$products, $rll, $payments, $models ,$incomes, $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
+                        $ret = Helper::printCloseAccount($this->companyId, $orderdetails, $products, $rll, $payments, $models ,$incomes, $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
                        // var_dump($ret);exit;
                         //var_dump($money);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作
