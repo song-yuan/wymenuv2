@@ -1414,7 +1414,7 @@ class Helper
            	$printlenn=(strlen($number) + mb_strlen($number,'UTF8')) / 2;
            	$printlenp=(strlen($price) + mb_strlen($price,'UTF8')) / 2;
            	$printlenr=(strlen($reaprice) + mb_strlen($reaprice,'UTF8')) / 2;
-           	array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").$time.str_pad("", 8-$printlent," ").$sitenum.str_pad("", 8-$printlens," ").$number.str_pad("", 6-$printlenn," ").$price.str_pad("", 6-$printlenp," ").$reaprice);
+           	array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").$time.str_pad("", 9-$printlent," ").$sitenum.str_pad("", 8-$printlens," ").$number.str_pad("", 6-$printlenn," ").$price.str_pad("", 4-$printlenp," ").$reaprice);
            	array_push($listData,"br");
            	array_push($listData,"00".str_pad('',48,'-'));
            	$a=1;//return array('status'=>false,'msg'=>$products);
@@ -1424,10 +1424,10 @@ class Helper
            		//$time=date('m-d H:i',$model->update_at);
            		$date=$model->update_at; // 数据库读取出来的时间
            		$time = strtotime($date);
-           		//$sitenum = $this->getSiteName($model->lid);
+           		$sitenum = Helper::getSiteName($model->lid);
            		$number = $model->all_number;
            		$price = sprintf("%.2f",Helper::getOriginalMoney($model->account_no));
-           		//$reaprice = sprintf("%.2f",$this->getAccountMoney($model->account_no));
+           		$reaprice = sprintf("%.2f",Helper::getAccountMoney($model->account_no));
            		$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
            		$printlent=(strlen($time) + mb_strlen($time,'UTF8')) / 2;
            		$printlens=(strlen($sitenum) + mb_strlen($sitenum,'UTF8')) / 2;
@@ -1435,7 +1435,7 @@ class Helper
            		$printlenp=(strlen($price) + mb_strlen($price,'UTF8')) / 2;
            		$printlenr=(strlen($reaprice) + mb_strlen($reaprice,'UTF8')) / 2;
            		$a++;
-           		array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").date("d"."日"."H:i",$time).str_pad("", 6-$printlent," ").$sitenum.str_pad("", 8-$printlens," ").$number.str_pad("", 6-$printlenn," ").$price.str_pad("", 6-$printlenp," ").$reaprice);
+           		array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").date("d"."日"."H:i",$time).str_pad("", 9-$printlent," ").$sitenum.str_pad("", 8-$printlens," ").$number.str_pad("", 6-$printlenn," ").$price.str_pad("", 4-$printlenp," ").$reaprice);
            		array_push($listData,"br");
            		//                 	$payname="数量/金额";
            		//                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
