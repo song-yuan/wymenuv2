@@ -1421,11 +1421,14 @@ class Helper
            	foreach ($orderdetails as $model)
            	{
            		$payname=$model->account_no;
-           		$time=date('m-d H:i',$model->update_at);
+           		//$time=date('m-d H:i',$model->update_at);
+           		$date=$model->update_at; // 数据库读取出来的时间
+           		$time = strtotime($date);
+           		
            		$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
            		$printlenc=(strlen($ranking) + mb_strlen($ranking,'UTF8')) / 2;
            		$a++;
-           		array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$time.str_pad("", 6-$printlent," "));
+           		array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").date("m-d H-i",$time).str_pad("", 6-$printlent," "));
            		array_push($listData,"br");
            		//                 	$payname="数量/金额";
            		//                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
