@@ -96,6 +96,7 @@ class Site extends CActiveRecord
 			'serial' =>yii::t('app', '座位编号'),
 			'type_id' =>yii::t('app', '座位类型'),
 			'site_level' =>yii::t('app', '座位等级'),
+			'site_channel_lid' =>yii::t('app', '渠道类型'),
                         'splid' =>yii::t('app', '座位人数'),
 			'dpid' => 'Company',
 			'delete_flag' => yii::t('app','删除'),
@@ -103,7 +104,7 @@ class Site extends CActiveRecord
 			'minimum_consumption_type' => yii::t('app','最低消费类型'),
 			'minimum_consumption' =>yii::t('app', '最低消费（元/间（人））'),
 			'number' =>yii::t('app', '人数'),
-			'site_channel_lid' =>yii::t('app', '座位类型'),
+			
 			'period' => yii::t('app','最低消费时间（分钟）'),
 			'overtime' =>yii::t('app', '超时单位（分钟）'),
 			'buffer' =>yii::t('app', '超时计算点（分钟）'),
@@ -139,7 +140,7 @@ class Site extends CActiveRecord
 		$criteria->compare('site_level',$this->site_level,true);
 		$criteria->compare('site_channel_lid',$this->site_channel_lid);
 		$criteria->compare('dpid',$this->dpid,true);
-                $criteria->compare('splid',$this->splid,true);
+        $criteria->compare('splid',$this->splid,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('has_minimum_consumption',$this->has_minimum_consumption);
 		$criteria->compare('minimum_consumption_type',$this->minimum_consumption_type);
