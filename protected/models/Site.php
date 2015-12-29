@@ -20,6 +20,7 @@
  * @property double $buffer
  * @property string $overtime_fee
  * @property string $is_sync
+ * @property string $site_channel_lid
  */
 class Site extends CActiveRecord
 {
@@ -51,10 +52,10 @@ class Site extends CActiveRecord
 				array('is_sync','length','max'=>50),
 			//array('site_level', 'length', 'max'=>20),
 			array('floor_id','compare','compareValue'=>'0','operator'=>'>','message'=>'楼层必须选择'),
-			array('dpid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
+			array('dpid, site_channel_lid, minimum_consumption, number, period, overtime, overtime_fee', 'length', 'max'=>10),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, serial,splid, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type,qr_code, minimum_consumption, number, period, overtime, buffer, overtime_fee, floor_id,qrcode, is_sync', 'safe', 'on'=>'search'),
+			array('lid, serial,splid, , site_channel_lid, type_id, site_level, dpid, delete_flag, has_minimum_consumption, minimum_consumption_type,qr_code, minimum_consumption, number, period, overtime, buffer, overtime_fee, floor_id,qrcode, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 	public function validate($attributes = NULL, $clearErrors = true){
@@ -102,6 +103,7 @@ class Site extends CActiveRecord
 			'minimum_consumption_type' => yii::t('app','最低消费类型'),
 			'minimum_consumption' =>yii::t('app', '最低消费（元/间（人））'),
 			'number' =>yii::t('app', '人数'),
+			'site_channel_lid' =>yii::t('app', '座位类型'),
 			'period' => yii::t('app','最低消费时间（分钟）'),
 			'overtime' =>yii::t('app', '超时单位（分钟）'),
 			'buffer' =>yii::t('app', '超时计算点（分钟）'),
@@ -135,6 +137,7 @@ class Site extends CActiveRecord
 		$criteria->compare('serial',$this->serial,true);
 		$criteria->compare('type_id',$this->type_id);
 		$criteria->compare('site_level',$this->site_level,true);
+		$criteria->compare('site_channel_lid',$this->site_channel_lid);
 		$criteria->compare('dpid',$this->dpid,true);
                 $criteria->compare('splid',$this->splid,true);
 		$criteria->compare('delete_flag',$this->delete_flag);

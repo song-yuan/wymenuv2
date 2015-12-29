@@ -215,6 +215,10 @@ class orderManagementController extends BackendController
     	$rll=explode(",",$rl);
     	$ret=array();
     	
+    	//退爱明细
+    	$sql = 'select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t1.account_no,t2.username,t2.retreat_amount,t3.name,t2.retreat_memo,t4.product_name,t.* from nb_order_product t left join nb_order t1 on(t.dpid= t1.dpid and t1.lid = t.order_id ) left join nb_order_retreat t2 on(t.dpid = t2.dpid and t2.order_detail_id = t.lid and t2.delete_flag = 0) left join nb_retreat t3 on(t.dpid = t3.dpid and t3.lid = t2.retreat_id and t3.delete_flag = 0) left join nb_product t4 on(t.dpid = t4.dpid and t.product_id = t4.lid and t4.delete_flag = 0)  where t.delete_flag = 0 and t.is_retreat = 1 and t.product_order_status in(1,2) and t.create_at>="'.$begin_time.'" and t.create_at<="'.$end_time.'"';
+    	$retreatdetails = Yii::app()->db->createCommand($sql)->queryAll();
+    	
     	//台桌区域
     	//$db = Yii::app()->db;
     	$sql = 'select sum(t.number) as all_number, count(t.account_no) as all_account, sum(t2.pay_amount) as all_paymoney, t3.name, t.* from nb_order t left join nb_site t1 on(t.site_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_order_pay t2 on(t.lid = t2.order_id and t.dpid = t2.dpid) left join nb_site_type t3 on(t1.type_id = t3.lid and t3.dpid = t.dpid ) where t.dpid ='.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) group by t1.type_id order by sum(t.number) desc';//区域名称报表
@@ -371,7 +375,7 @@ class orderManagementController extends BackendController
                          //前面加 barcode
                         $precode="";
                         //$memo="日结对账单";
-                        $ret = Helper::printCloseAccount($this->companyId, $tableareas,$allmoney, $orderdetails, $products, $rll, $payments, $models ,$incomes, $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
+                        $ret = Helper::printCloseAccount($this->companyId, $retreatdetails, $tableareas,$allmoney, $orderdetails, $products, $rll, $payments, $models ,$incomes, $begin_time, $end_time, $modeldata, $money, $moneydata, $recharge, $pad,$precode,"0");//添加$money
                        // var_dump($ret);exit;
                         //var_dump($money);exit;
 			$transaction->commit(); //提交事务会真正的执行数据库操作
