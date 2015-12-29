@@ -1435,7 +1435,7 @@ class Helper
            		$printlenp=(strlen($price) + mb_strlen($price,'UTF8')) / 2;
            		$printlenr=(strlen($reaprice) + mb_strlen($reaprice,'UTF8')) / 2;
            		$a++;
-           		array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").date("d"."日"."H:i",$time).str_pad("", 10-$printlent," ").$sitenum.str_pad("", 7-$printlens," ").$number.str_pad("", 3-$printlenn," ").$price.str_pad("", 8-$printlenp," ").$reaprice);
+           		array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").date("d"."日"."H:i",$time).str_pad("", 12-$printlent," ").$sitenum.str_pad("", 6-$printlens," ").$number.str_pad("", 3-$printlenn," ").$price.str_pad("", 8-$printlenp," ").$reaprice);
            		array_push($listData,"br");
            		//                 	$payname="数量/金额";
            		//                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
