@@ -1424,7 +1424,7 @@ class Helper
            		//$time=date('m-d H:i',$model->update_at);
            		$date=$model->update_at; // 数据库读取出来的时间
            		$time = strtotime($date);
-           		$sitenum = Helper::getSiteName($model->lid);
+           		//$sitenum = Helper::getSiteName($model->lid);
            		$number = $model->all_number;
            		$price = sprintf("%.2f",Helper::getOriginalMoney($model->account_no));
            		$reaprice = sprintf("%.2f",Helper::getAccountMoney($model->account_no));
