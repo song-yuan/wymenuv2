@@ -1573,7 +1573,7 @@ class Helper
            		$sitenum = Helper::getSiteName($model->lid);
            		$number = $model['amount'];
            		$price = sprintf("%.2f",$model['price']);
-           		$reason = $model['name']; echo '('. $model['retreat_memo'].')';
+           		$reason = $model['name'].'('. $model['retreat_memo'].')';
            		$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
            		$printlent=(strlen($time) + mb_strlen($time,'UTF8')) / 2;
            		//$printlens=(strlen($sitenum) + mb_strlen($sitenum,'UTF8')) / 2;
