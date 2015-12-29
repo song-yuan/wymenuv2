@@ -42,6 +42,12 @@
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
 <div class="order-title">订单详情</div>
+<?php if($address):?>
+<div class="location">
+	<span>收货人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
+	<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+</div>
+<?php endif;?>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
