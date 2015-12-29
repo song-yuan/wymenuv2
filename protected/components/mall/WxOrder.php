@@ -118,7 +118,13 @@ class WxOrder
 			        );
 				$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
  			}
- 			
+ 			//外卖订单地址
+ 			if($this->type==2){
+ 				$address = WxAddress::getDefault($this->userId,$this->dpid);
+ 				if($address){
+ 					WxOrderAddress::addOrderAddress($orderId,$address);
+ 				}
+ 			}
 			//整单口味
 			if(isset($this->productTastes[0]) && !empty($this->productTastes[0])){
 				foreach($this->productTastes[0] as $ordertaste){
