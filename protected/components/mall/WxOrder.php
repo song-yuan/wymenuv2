@@ -76,7 +76,7 @@ class WxOrder
 		}
 	}
 	public function getTakeOutSite(){
-		$site = WxSite::getTakeOut($this->siteId,$this->dpid);
+		$site = WxSite::getTakeOut($this->dpid);
 		if($site){
 			$this->siteId = $site['lid'];
 		}
