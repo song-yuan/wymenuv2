@@ -1414,7 +1414,7 @@ class Helper
            	$printlenn=(strlen($number) + mb_strlen($number,'UTF8')) / 2;
            	$printlenp=(strlen($price) + mb_strlen($price,'UTF8')) / 2;
            	$printlenr=(strlen($reaprice) + mb_strlen($reaprice,'UTF8')) / 2;
-           	array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").$time.str_pad("", 10-$printlent," ").$sitenum.str_pad("", 8-$printlens," ").$number.str_pad("", 6-$printlenn," ").$price.str_pad("", 6-$printlenp," ").$reaprice);
+           	array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").$time.str_pad("", 8-$printlent," ").$sitenum.str_pad("", 7-$printlens," ").$number.str_pad("", 5-$printlenn," ").$price.str_pad("", 6-$printlenp," ").$reaprice);
            	array_push($listData,"br");
            	array_push($listData,"00".str_pad('',48,'-'));
            	$a=1;//return array('status'=>false,'msg'=>$products);
@@ -1435,7 +1435,7 @@ class Helper
            		$printlenp=(strlen($price) + mb_strlen($price,'UTF8')) / 2;
            		$printlenr=(strlen($reaprice) + mb_strlen($reaprice,'UTF8')) / 2;
            		$a++;
-           		array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").date("d"."日"."H:i",$time).str_pad("", 10-$printlent," ").$sitenum.str_pad("", 8-$printlens," ").$number.str_pad("", 4-$printlenn," ").$price.str_pad("", 8-$printlenp," ").$reaprice);
+           		array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").date("d"."日"."H:i",$time).str_pad("", 10-$printlent," ").$sitenum.str_pad("", 7-$printlens," ").$number.str_pad("", 3-$printlenn," ").$price.str_pad("", 8-$printlenp," ").$reaprice);
            		array_push($listData,"br");
            		//                 	$payname="数量/金额";
            		//                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
@@ -1535,7 +1535,7 @@ public function getSiteName($orderId){
 		$sitename="";
 		$sitetype="";
 	
-		$sql = 'select t.site_id, t.dpid, t1.site_level, t1.type_id, t1.serial, t2.name from nb_order t, nb_site t1, nb_site_type t2 where t.site_id = t1.lid and t.dpid = t1.dpid and t1.type_id = t2.lid and t.dpid = t2.dpid and t.lid ='. $orderId;
+		$sql = 'select t.site_id, t.dpid, t1.site_level, t1.type_id, t1.serial, t2.name,t2.simplecode from nb_order t, nb_site t1, nb_site_type t2 where t.site_id = t1.lid and t.dpid = t1.dpid and t1.type_id = t2.lid and t.dpid = t2.dpid and t.lid ='. $orderId;
 		//$conn = Yii::app()->db->createCommand($sql);
 		//$result = $conn->queryRow();
 		//$siteId = $result['lid'];
@@ -1547,9 +1547,9 @@ public function getSiteName($orderId){
 		if($site['site_id'] && $site['dpid'] ){
 			//	echo 'ABC';
 			$sitelevel = $site['site_level'];
-			$sitename = $site['name'];
+			$sitename = $site['simplecode'];
 			$sitetype = $site['serial'];
-			$retsite=$sitename.":".$sitetype;
+			$retsite=$sitename.$sitetype;
 		}
 		//if($siteId && $dpid){
 		//$sql = 'select order.site_id, order.dpid,site.type_id, site.serial, site_type.name from nb_order, nb_site, nb_site_type where order.site_id = site.lid and order.dpid = site.dpid';
