@@ -17,7 +17,7 @@
 
 <form action="<?php echo $this->createUrl('/mall/orderCupon',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'type'=>$this->type));?>" method="post">
 <div class="order-title">我的订单</div>
-<?php if($this->type==1):?>
+<?php if($order['order_type']==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
 <?php else:?>
 <!-- 地址 -->
@@ -69,7 +69,7 @@
 		<div class="item" paytype="2">立刻支付</div>
 		<input type="hidden" name="paytype" value="1" />
 		<?php else:?>
-		<div class="item on" paytype="2">立刻支付</div>
+		<div class="item on" paytype="2" style="border:none;">立刻支付</div>
 		<input type="hidden" name="paytype" value="2" />
 		<?php endif;?>
 	</div>
