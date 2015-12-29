@@ -97,6 +97,16 @@
                                                                         </li>
                                                                         <li>
                                                                                 <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','台桌区域表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="table" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','退菜明细表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="retreatdetail" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
                                                                                 <div style="width:25%;float:left;"><?php echo yii::t('app','充值记录表');?></div>
                                                                                 <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="recharge" name="reportlist[]" /></div>
                                                                         </li>
