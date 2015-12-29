@@ -122,8 +122,7 @@ class MallController extends Controller
 			}
 			$site = WxSite::getBySerial($serial,$this->companyId);
 			if(!$site){
-				$msg = '输入正确的座位号!';
-				$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'msg'=>$msg));
+				$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'type'=>$this->type));
 			}else{
 				WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
 				$siteId = $site['lid'];
@@ -134,7 +133,7 @@ class MallController extends Controller
 		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number,$tastes);
 		if(!$orderObj->cart){
 			$msg = '下单失败,请重新下单';
-			$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'msg'=>$msg));
+			$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		$orderId = $orderObj->createOrder();
 		$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
