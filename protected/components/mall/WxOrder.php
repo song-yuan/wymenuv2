@@ -33,6 +33,8 @@ class WxOrder
 		$this->dealTastes();
 		if($this->type==1){
 			$this->getSite();
+		}else{
+			$this->getTakeOutSite();
 		}
 	}
 	public function getCart(){
@@ -72,6 +74,13 @@ class WxOrder
 		}elseif($site['status'] == 1){
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
 		}
+	}
+	public function getTakeOutSite(){
+		$site = WxSite::getTakeOut($this->siteId,$this->dpid);
+		if($site){
+			$this->siteId = $site['lid'];
+		}
+		$this->orderOpenSite();
 	}
 	public function orderOpenSite(){
 		SiteClass::openSite($this->dpid,$this->number,0,$this->siteId);
