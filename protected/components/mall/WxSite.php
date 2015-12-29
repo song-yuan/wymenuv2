@@ -23,7 +23,7 @@ class WxSite
 	 * 
 	 */
 	public static function getTakeOut($dpid){
-		$sql = 'select * from nb_site where dpid=:dpid and site_channel_lid=1 and status=0 and delete_flag=0';
+		$sql = 'select * from nb_site where dpid=:dpid and site_channel_lid=1 and status not in (1,2,3) and delete_flag=0';
 		$site = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
