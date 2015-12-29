@@ -17,6 +17,18 @@ class WxSite
 				  ->queryRow();
 	    return $site;
 	}
+	/**
+	 * 
+	 * 查找未开台的外卖台
+	 * 
+	 */
+	public static function getTakeOut($dpid){
+		$sql = 'select * from nb_site where dpid=:dpid and site_channel_lid=1 and status=0 and delete_flag=0';
+		$site = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryRow();
+	    return $site;
+	}
 	public static function getSiteType($siteTypeId,$dpid){
 		$sql = 'select * from nb_site_type where lid=:lid and dpid=:dpid and delete_flag=0';
 		$siteType = Yii::app()->db->createCommand($sql)
