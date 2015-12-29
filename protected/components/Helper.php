@@ -1421,7 +1421,7 @@ class Helper
            	foreach ($orderdetails as $model)
            	{
            		$payname=$model->account_no;
-           		$time=$model->update_at('m-d H:i',time());
+           		$time=$model->update_at;
            		$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
            		$printlenc=(strlen($ranking) + mb_strlen($ranking,'UTF8')) / 2;
            		$a++;
