@@ -69,7 +69,7 @@
 		<div class="item" paytype="2">立刻支付</div>
 		<input type="hidden" name="paytype" value="1" />
 		<?php else:?>
-		<div class="item on" paytype="2">立刻支付</div>
+		<div class="item on" paytype="2" style="border:none;">立刻支付</div>
 		<input type="hidden" name="paytype" value="2" />
 		<?php endif;?>
 	</div>
