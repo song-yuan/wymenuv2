@@ -1424,10 +1424,10 @@ class Helper
            		//$time=date('m-d H:i',$model->update_at);
            		$date=$model->update_at; // 数据库读取出来的时间
            		$time = strtotime($date);
-           		$sitenum = $this->getSiteName($model->lid);
+           		//$sitenum = $this->getSiteName($model->lid);
            		$number = $model->all_number;
-           		$price = sprintf("%.2f",$this->getOriginalMoney($model->account_no));
-           		$reaprice = sprintf("%.2f",$this->getAccountMoney($model->account_no));
+           		//$price = sprintf("%.2f",$this->getOriginalMoney($model->account_no));
+           		//$reaprice = sprintf("%.2f",$this->getAccountMoney($model->account_no));
            		$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
            		$printlent=(strlen($time) + mb_strlen($time,'UTF8')) / 2;
            		$printlens=(strlen($sitenum) + mb_strlen($sitenum,'UTF8')) / 2;
