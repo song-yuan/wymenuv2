@@ -1426,7 +1426,7 @@ class Helper
            		$time = strtotime($date);
            		//$sitenum = $this->getSiteName($model->lid);
            		$number = $model->all_number;
-           		//$price = sprintf("%.2f",$this->getOriginalMoney($model->account_no));
+           		$price = sprintf("%.2f",$this->getOriginalMoney($model->account_no));
            		//$reaprice = sprintf("%.2f",$this->getAccountMoney($model->account_no));
            		$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
            		$printlent=(strlen($time) + mb_strlen($time,'UTF8')) / 2;
