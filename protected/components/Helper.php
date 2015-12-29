@@ -1474,7 +1474,7 @@ class Helper
            	array_push($listData,"00".$payname.str_pad("", 15-$printlen," ").$begin_time." 至 ".$end_time);
            	array_push($listData,"br");
            	array_push($listData,"00".str_pad('',48,'-'));
-           	$payname="区域";
+           	$payname="台桌区域";
            	$number="客流";
            	$allaccount="单数";
            	$reamoney="金额";
