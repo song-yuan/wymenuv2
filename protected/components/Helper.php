@@ -1565,24 +1565,24 @@ class Helper
            	$a=1;//return array('status'=>false,'msg'=>$products);
            	foreach ($retreatdetails as $model)
            	{
-           		$payname = $model['account_no'];
+           		//$payname = $model['account_no'];
            		//$time=date('m-d H:i',$model->update_at);
-           		$date = $model['update_at']; // 数据库读取出来的时间
-           		$time = strtotime($date);
-           		$productname = $model['product_name'];
+           		//$date = $model['update_at']; // 数据库读取出来的时间
+           		//$time = strtotime($date);
+           		//$productname = $model['product_name'];
            		//$sitenum = Helper::getSiteName($model->lid);
-           		$number = $model['amount'];
-           		$price = sprintf("%.2f",$model['price']);
-           		$reason = $model['name'].'('. $model['retreat_memo'].')';
-           		$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
-           		$printlent=(strlen($time) + mb_strlen($time,'UTF8')) / 2;
+           		//$number = $model['amount'];
+           		//$price = sprintf("%.2f",$model['price']);
+           		//$reason = $model['name'].'('. $model['retreat_memo'].')';
+           		//$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
+           		//$printlent=(strlen($time) + mb_strlen($time,'UTF8')) / 2;
            		//$printlens=(strlen($sitenum) + mb_strlen($sitenum,'UTF8')) / 2;
-           		$printlenn=(strlen($number) + mb_strlen($number,'UTF8')) / 2;
-           		$printlenp=(strlen($price) + mb_strlen($price,'UTF8')) / 2;
-           		$printlenr=(strlen($reason) + mb_strlen($reason,'UTF8')) / 2;
+           		//$printlenn=(strlen($number) + mb_strlen($number,'UTF8')) / 2;
+           		//$printlenp=(strlen($price) + mb_strlen($price,'UTF8')) / 2;
+           		//$printlenr=(strlen($reason) + mb_strlen($reason,'UTF8')) / 2;
            		$a++;
-           		array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").date("d"."日"."H:i",$time).str_pad("", 12-$printlent," ").$productname.str_pad("", 7-$printlens," ").$number.str_pad("", 5-$printlenn," ").$price.str_pad("", 6-$printlenp," ").$reason);
-           		array_push($listData,"br");
+           		//array_push($listData,"00".$payname.str_pad("", 13-$printlen," ").date("d"."日"."H:i",$time).str_pad("", 12-$printlent," ").$productname.str_pad("", 7-$printlens," ").$number.str_pad("", 5-$printlenn," ").$price.str_pad("", 6-$printlenp," ").$reason);
+           		//array_push($listData,"br");
            		//                 	$payname="数量/金额";
            		//                 	$printlen=(strlen($payname) + mb_strlen($payname,'UTF8')) / 2;
            		//                 	array_push($listData,"00".$payname.str_pad("", 20-$printlen," ").$model['all_num']."/".sprintf("%.2f",$model['all_price']));
