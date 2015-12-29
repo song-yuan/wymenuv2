@@ -96,7 +96,7 @@ class MallController extends Controller
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 //		var_dump($carts);exit;
 		if(empty($carts)){
-			$this->redirect(array('/mall/index','companyId'=>$this->companyId));
+			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		$this->render('cart',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum));
 	}
