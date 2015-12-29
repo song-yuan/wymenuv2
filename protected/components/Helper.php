@@ -1565,9 +1565,9 @@ class Helper
            	$a=1;//return array('status'=>false,'msg'=>$products);
            	foreach ($retreatdetails as $model)
            	{
-           		$payname=$model['account_no'];
+           		$payname = $model['account_no'];
            		//$time=date('m-d H:i',$model->update_at);
-           		$date=$model['update_at']; // 数据库读取出来的时间
+           		$date = $model['update_at']; // 数据库读取出来的时间
            		$time = strtotime($date);
            		$productname = $model['product_name'];
            		$sitenum = Helper::getSiteName($model->lid);
