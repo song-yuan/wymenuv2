@@ -1570,7 +1570,7 @@ class Helper
            		$date = $model['update_at']; // 数据库读取出来的时间
            		$time = strtotime($date);
            		$productname = $model['product_name'];
-           		$sitenum = Helper::getSiteName($model->lid);
+           		//$sitenum = Helper::getSiteName($model->lid);
            		$number = $model['amount'];
            		$price = sprintf("%.2f",$model['price']);
            		$reason = $model['name'].'('. $model['retreat_memo'].')';
