@@ -1549,7 +1549,7 @@ public function getSiteName($orderId){
 			$sitelevel = $site['site_level'];
 			$sitename = $site['name'];
 			$sitetype = $site['serial'];
-			$retsite=$sitelevel.":".$sitename.":".$sitetype;
+			$retsite=$sitename.":".$sitetype;
 		}
 		//if($siteId && $dpid){
 		//$sql = 'select order.site_id, order.dpid,site.type_id, site.serial, site_type.name from nb_order, nb_site, nb_site_type where order.site_id = site.lid and order.dpid = site.dpid';
