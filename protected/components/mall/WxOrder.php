@@ -80,7 +80,6 @@ class WxOrder
 		if($site){
 			$this->siteId = $site['lid'];
 		}
-		var_dump($site);exit;
 		$this->orderOpenSite();
 	}
 	public function orderOpenSite(){
