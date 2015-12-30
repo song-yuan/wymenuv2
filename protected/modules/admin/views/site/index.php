@@ -62,7 +62,7 @@
 												<th><?php echo yii::t('app','二维码');?></th>
 												<th><?php echo yii::t('app','座位号');?></th>
 												<th><?php echo yii::t('app','类型');?></th>
-												<th><?php echo yii::t('app','外卖渠道');?></th>
+												<th><?php echo yii::t('app','渠道');?></th>
 												<th><?php echo yii::t('app','楼层');?></th>
 												<th><?php echo yii::t('app','等级');?></th>
 												<th><?php echo yii::t('app','人数');?></th>
