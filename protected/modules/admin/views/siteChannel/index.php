@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','座位渠道管理'),'subhead'=>yii::t('app','座位渠道列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','座位渠道管理'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','外卖渠道管理'),'subhead'=>yii::t('app','外卖渠道列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','外卖渠道管理'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','座位渠道列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','外卖渠道列表');?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('siteChannel/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
@@ -65,7 +65,7 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','公司');?></th>
-								<th><?php echo yii::t('app','渠道');?></th>
+								<th><?php echo yii::t('app','外卖渠道');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>

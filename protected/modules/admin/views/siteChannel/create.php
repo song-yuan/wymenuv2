@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','餐桌包厢管理'),'subhead'=>yii::t('app','添加渠道类型'),'breadcrumbs'=>array(array('word'=>yii::t('app','座位渠道管理'),'url'=>$this->createUrl('siteType/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加渠道类型'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','餐桌包厢管理'),'subhead'=>yii::t('app','添加渠道类型'),'breadcrumbs'=>array(array('word'=>yii::t('app','外卖渠道管理'),'url'=>$this->createUrl('siteType/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加渠道类型'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->

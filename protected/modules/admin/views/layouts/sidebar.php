@@ -130,7 +130,7 @@
 						<li class="<?php if(Yii::app()->controller->id == 'siteType') echo 'active';?>"><a href="<?php echo $this->createUrl('siteType/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌种类设置');?></a></li>
 						
 						<li class="<?php if(Yii::app()->controller->id == 'sitePersons') echo 'active';?>"><a href="<?php echo $this->createUrl('sitePersons/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌人数设置');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'siteChannel') echo 'active';?>"><a href="<?php echo $this->createUrl('siteChannel/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌渠道设置');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'siteChannel') echo 'active';?>"><a href="<?php echo $this->createUrl('siteChannel/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','外卖渠道设置');?></a></li>
 						
 						<li class="<?php if(Yii::app()->controller->id == 'site') echo 'active';?>"><a href="<?php echo $this->createUrl('site/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌包厢明细');?></a></li>
 					</ul>

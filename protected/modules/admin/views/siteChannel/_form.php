@@ -20,7 +20,7 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'channel_name',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'channel_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('channel_name')));?>
+											<?php echo $form->textField($model, 'channel_name',array('class' => 'form-control','placeholder'=>"该处只能添加外卖形式的渠道"));?>
 											<?php echo $form->error($model, 'channel_name' )?>
 										</div>
 									</div>
