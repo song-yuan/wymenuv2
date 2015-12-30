@@ -31,7 +31,7 @@ class Channel extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('channel_type, channel_name, is_sync', 'required'),
+			array('lid, dpid', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('channel_type, delete_flag', 'length', 'max'=>2),
 			array('channel_name, is_sync', 'length', 'max'=>50),
@@ -50,6 +50,7 @@ class Channel extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'company' => array(self::BELONGS_TO , 'Company' ,'' ,'on'=>'t.dpid=company.dpid') ,
 		);
 	}
 

@@ -120,7 +120,7 @@
                         <li class="<?php if(Yii::app()->controller->id == 'redpacketanalysis' && in_array($this->getAction()->getId(),array('index'))) echo 'active';?>"><a href="<?php echo $this->createUrl('customerFlow/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','折扣模板');?></a></li><!--营销活动管理，添加营销品--
                     </ul>
 				</li>-->
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType', 'floor','sitePersons'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('site' , 'siteType', 'floor','sitePersons','siteChannel'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-building"></i> 
 					<span class="title"><?php echo yii::t('app','餐桌包厢管理');?></span>					
@@ -130,6 +130,7 @@
 						<li class="<?php if(Yii::app()->controller->id == 'siteType') echo 'active';?>"><a href="<?php echo $this->createUrl('siteType/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌种类设置');?></a></li>
 						
 						<li class="<?php if(Yii::app()->controller->id == 'sitePersons') echo 'active';?>"><a href="<?php echo $this->createUrl('sitePersons/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌人数设置');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'siteChannel') echo 'active';?>"><a href="<?php echo $this->createUrl('siteChannel/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌渠道设置');?></a></li>
 						
 						<li class="<?php if(Yii::app()->controller->id == 'site') echo 'active';?>"><a href="<?php echo $this->createUrl('site/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','餐桌包厢明细');?></a></li>
 					</ul>

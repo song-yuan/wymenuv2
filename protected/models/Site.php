@@ -81,8 +81,11 @@ class Site extends CActiveRecord
 		return array(
 				'isfree' => array(self::HAS_ONE , 'SiteNo' , '' , 'on' => 't.lid=isfree.site_id and t.dpid=isfree.dpid and isfree.status in(2,3,4,5)'),
 				'siteType' => array(self::BELONGS_TO , 'SiteType' ,'','on' =>'t.type_id=siteType.lid and t.dpid=siteType.dpid'),
-                                'sitePersons' => array(self::BELONGS_TO , 'SitePersons' ,'','on' =>'t.splid=sitePersons.lid and t.dpid=sitePersons.dpid'),
-                                'floor' => array(self::BELONGS_TO , 'Floor' ,'','on' =>'t.floor_id=floor.lid and t.dpid=floor.dpid')
+				'channel' => array(self::BELONGS_TO , 'Channel' ,'','on' =>'t.site_channel_lid=channel.lid and t.dpid=channel.dpid'),
+				
+				'sitePersons' => array(self::BELONGS_TO , 'SitePersons' ,'','on' =>'t.splid=sitePersons.lid and t.dpid=sitePersons.dpid'),
+                                
+				'floor' => array(self::BELONGS_TO , 'Floor' ,'','on' =>'t.floor_id=floor.lid and t.dpid=floor.dpid')
 		);
 	}
 	
@@ -138,7 +141,7 @@ class Site extends CActiveRecord
 		$criteria->compare('serial',$this->serial,true);
 		$criteria->compare('type_id',$this->type_id);
 		$criteria->compare('site_level',$this->site_level,true);
-		$criteria->compare('site_channel_lid',$this->site_channel_lid);
+		$criteria->compare('site_channel_lid',$this->site_channel_lid,true);
 		$criteria->compare('dpid',$this->dpid,true);
         $criteria->compare('splid',$this->splid,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
