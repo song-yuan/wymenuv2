@@ -65,7 +65,7 @@ class Channel extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
 			'channel_type' => '0,表示堂食；1表示外卖',
-			'channel_name' => '渠道名称',
+			'channel_name' => '外卖渠道名称',
 			'delete_flag' => 'Delete Flag',
 			'is_sync' => 'Is Sync',
 		);

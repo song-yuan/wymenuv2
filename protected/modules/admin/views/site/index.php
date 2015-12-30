@@ -62,7 +62,7 @@
 												<th><?php echo yii::t('app','二维码');?></th>
 												<th><?php echo yii::t('app','座位号');?></th>
 												<th><?php echo yii::t('app','类型');?></th>
-												<th><?php echo yii::t('app','渠道');?></th>
+												<th><?php echo yii::t('app','外卖渠道');?></th>
 												<th><?php echo yii::t('app','楼层');?></th>
 												<th><?php echo yii::t('app','等级');?></th>
 												<th><?php echo yii::t('app','人数');?></th>
@@ -77,7 +77,7 @@
 												<td ><?php if($model->qrcode):?><img style="width:100px;" src="<?php echo '/wymenuv2/./'.$model->qrcode;?>" /><?php endif;?><br /><a class="btn btn-xs blue" onclick="genQrcode(this);" href="javascript:;" lid="<?php echo $model->lid;?>"><i class="fa fa-qrcode"></i> 生成二维码</a></td>
 												<td ><?php echo $model->serial ;?></td>
 												<td ><?php echo $model->siteType->name ;?></td>
-												<td ><?php if(!empty($model->channel->channel_name)) echo $model->channel->channel_name;  ?></td>
+												<td ><?php if(!empty($model->channel->channel_name)) echo $model->channel->channel_name;else echo yii::t('app',"堂食") ; ?></td>
 												<td ><?php if(!empty($model->floor->name)) echo $model->floor->name;?></td>
 												<td><?php echo $model->site_level;?></td>
 												<td ><?php if(!empty($model->sitePersons)) echo $model->sitePersons->min_persons."_".$model->sitePersons->max_persons;?></td>
