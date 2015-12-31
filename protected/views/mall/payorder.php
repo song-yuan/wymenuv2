@@ -53,7 +53,7 @@
 	<?php else:?>
 	<div class="address">
 		<div class="location" style="line-height: 50px;">
-			<span>收货人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span>
+			<span>预约人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span>
 		</div>
 	</div>
 	<?php endif;?>
