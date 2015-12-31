@@ -81,7 +81,7 @@ class UserController extends Controller
 		
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		
-		if($order['order_type']==2){
+		if(in_array($order['order_type'],array(2,3))){
 			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
 		}
 		//查找分享红包
