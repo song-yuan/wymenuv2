@@ -184,7 +184,7 @@ class MallController extends Controller
 			if($order['cupon_branduser_lid'] > 0){
 				$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 			}
-			if($order['order_type']==2){
+			if(in_array($order['order_type'],array(2,3))){
 				if($addressId > 0){
 					$address = WxAddress::getAddress($addressId,$this->companyId);
 					$result = WxOrderAddress::addOrderAddress($orderId,$address);
@@ -197,8 +197,12 @@ class MallController extends Controller
 			}
 			
 			if($cuponId){
-				$contion = $contion.' cupon_branduser_lid='.$cuponId.',';
+				$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
+				if(!$result){
+					$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
+				}
 			}
+			
 			if($orderTime){
 				$contion = $contion.' appointment_time="'.$orderTime.'",';
 			}
