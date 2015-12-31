@@ -34,10 +34,11 @@ class WxOrder
 		$this->dealTastes();
 		if($this->type==1){
 			$this->isTemp = 0;
+			$this->getSite();
 		}else{
 			$this->isTemp = 1;
+			$this->orderOpenSite();
 		}
-		$this->getSite();
 	}
 	public function getCart(){
 		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
@@ -78,7 +79,20 @@ class WxOrder
 		}
 	}
 	public function orderOpenSite(){
-		SiteClass::openSite($this->dpid,$this->number,$this->isTemp,$this->siteId);
+		$result = SiteClass::openSite($this->dpid,$this->number,$this->isTemp,$this->siteId);
+		if($this->isTemp==1){
+			$this->getSiteNo($result['siteid']);
+		}
+	}
+	public function getSiteNo($siteId){
+		$sql = 'select * from nb_site_no where site_id=:siteId and dpid=:dpid and is_temp=1 and status=1';
+		$siteNo = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':siteId',$siteId)
+				  ->bindValue(':dpid',$this->dpid)
+				  ->queryRow();
+	    if($siteNo){
+	    	$this->siteId = $siteNo['lid'];
+	    }
 	}
 	public function createOrder(){
 		$time = time();
