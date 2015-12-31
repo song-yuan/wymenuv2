@@ -460,7 +460,7 @@ class Helper
                     $site = Site::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$order->site_id,':dpid'=>$order->dpid));
                     $siteType = SiteType::model()->find('lid=:lid and dpid=:dpid',  array(':lid'=>$site->type_id,':dpid'=>$order->dpid));
                     //$strSite=str_pad(yii::t('app','座号：').$siteType->name.' '.$site->serial , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
-                    array_push($listData,"10".yii::t('app','座号：'));
+                    array_push($listData,"10".yii::t('app','座  号：'));
                     array_push($listData,"11".$siteType->name.' '.$site->serial);
                     //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
                 }else{
@@ -483,13 +483,13 @@ class Helper
 //		array_push($listData,"00".str_pad('',48,'-'));                
 		
                 array_push($listData,"br");
-                array_push($listData,"10".yii::t('app','人数：').$order->number);
-                array_push($listData,"br");
-                array_push($listData,"10"."下单时间：");
-                array_push($listData,"00".$order->create_at);
+                array_push($listData,"10".yii::t('app','人  数：').$order->number);
                 array_push($listData,"br");
                 array_push($listData,"10"."账单号：");
                 array_push($listData,"00".$order->account_no);
+                array_push($listData,"br");
+                array_push($listData,"10"."下单时间：");
+                array_push($listData,"00".$order->create_at);
                 array_push($listData,"br");
                 //return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试1");
                 array_push($listData,"00".str_pad('',48,'-'));
@@ -556,7 +556,7 @@ class Helper
                 {
                     //array_push($listData,str_pad(yii::t('app','应付：').number_format($order->should_total,0) , 26,' ').str_pad(date('Y-m-d H:i:s',time()),20,' '));
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' '));
-                    array_push($listData,"10".yii::t('app','应付').str_pad('',10,' ').number_format($order->should_total,0)
+                    array_push($listData,"10".yii::t('app','应付').str_pad('',12,' ').number_format($order->should_total,0)//加2
                         .yii::t('app','实付：').number_format($order->reality_total,0));                    
                 }else{
                     //array_push($listData,str_pad(yii::t('app','应付：').$order->should_total , 40,' '));
@@ -565,7 +565,7 @@ class Helper
                     //array_push($listData,str_pad(yii::t('app','订餐电话：').$order->company->telephone,44,' ')); 
                     if($order->should_total>0)
                     {
-                        array_push($listData,"10".yii::t('app','原价').str_pad('',10,' ').number_format($order->should_total,2));
+                        array_push($listData,"10".yii::t('app','原价').str_pad('',12,' ').number_format($order->should_total,2));//加2
                         array_push($listData,"br");
                     }
                     //单品菜折扣优惠部分
@@ -573,7 +573,7 @@ class Helper
                     foreach ($promotionarr as $dt)
                     {
                         $printlen=(strlen($dt["promotion_title"]) + mb_strlen($dt["promotion_title"],'UTF8')) / 2;
-                        array_push($listData,"10".$dt["promotion_title"].str_pad("",14-$printlen," ")."-".number_format($dt["subprice"],2));
+                        array_push($listData,"10".$dt["promotion_title"].str_pad("",16-$printlen," ")."-".number_format($dt["subprice"],2));//加2
                         array_push($listData,"br"); 
                     }
                     //整单折扣优惠部分
@@ -584,19 +584,19 @@ class Helper
                         {
                             //取折扣名称
                             $discountname=Yii::app()->db->createCommand("select discount_name from nb_discount where dpid=".$order->dpid." and lid=".$notpayarr[0])->queryScalar();
-                            $tempprintname=$discountname."(".$notpayarr[1].")";
+                            $tempprintname=$discountname."(".($notpayarr[1]*10)."折)";
                             $printlen=(strlen($tempprintname) + mb_strlen($tempprintname,'UTF8')) / 2;
-                            array_push($listData,"10".$tempprintname.str_pad("",14-$printlen," ")."-".number_format($notpayarr[2],2));
+                            array_push($listData,"10".$tempprintname.str_pad("",16-$printlen," ")."-".number_format($notpayarr[2],2));//加2
                             array_push($listData,"br"); 
                         }
                         if($notpayarr[3]>0)
                         {
-                            array_push($listData,"10"."后台手动减价".str_pad("",4," ")."-".number_format($notpayarr[3],2));
+                            array_push($listData,"10"."后台手动减价".str_pad("",6," ")."-".number_format($notpayarr[3],2));//加2
                             array_push($listData,"br"); 
                         }
                         if($notpayarr[4]>0)
                         {
-                            array_push($listData,"10"."抹零".str_pad("",10," ")."-".number_format($notpayarr[4],2));
+                            array_push($listData,"10"."抹零".str_pad("",12," ")."-".number_format($notpayarr[4],2));//加2
                             array_push($listData,"br"); 
                         }
                     }
