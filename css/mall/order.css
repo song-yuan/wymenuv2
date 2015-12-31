@@ -8,6 +8,24 @@ body{ background-color:#E5E5E5;}
 .order-info .item .lt{width:70%;height:100%;float:left;}
 .order-info .item .rt{width:30%;height:100%;float:right;font-size:15px;}
 .order-info .ht1{width:100%;height:1px;background-color:#E5E5E5;}
+
+.order-time{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
+.order-time .time-lt{float:left;width:35%;}
+.order-time .time-rt{float:left;width:65%;}
+.order-time input{width:80%;height:100%;border:none;text-align:right;font-size: 16px;}
+.order-time input::-webkit-input-placeholder {
+   color:#FF5151 !important;
+}
+.order-time input:-moz-placeholder {
+   color:#FF5151 !important;
+}
+.order-time input::-moz-placeholder {
+   color:#FF5151 !important;
+}
+.order-time input:-ms-input-placeholder {
+   color:#FF5151 !important;
+}
+
 .order-copun{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
 .order-copun .copun-lt{float:left;width:65%;}
 .order-copun .copun-rt{float:left;width:35%;color:#FF5151;}
