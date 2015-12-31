@@ -77,7 +77,7 @@
 <?php if($order['order_type']==3):?>
 <div class="order-time arrowright">
 	<div class="time-lt">预约时间</div>
-	<div class="time-rt"><input  type="text" class="" name="appDateTime" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
+	<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
 	<div class="clear"></div>
 </div>
 <?php endif;?>
@@ -156,8 +156,8 @@ $(document).ready(function(){
 		lang: 'zh',
 		showNow: true,
 		nowText: "今天",
-        startYear: currYear - 10, //开始年份
-        endYear: currYear + 10 //结束年份
+        startYear: currYear, //开始年份
+        endYear: currYear + 1 //结束年份
 	};
 
   	var optDateTime = $.extend(opt['datetime'], opt['default']);
@@ -244,10 +244,22 @@ $(document).ready(function(){
 				$('form').submit();
 			}
 		});
-		<?php else:?>
+		<?php elseif($order['order_type']==2):?>
 		var address = $('input[name="address"]').val();
 		if(parseInt(address) < 0){
 			layer.msg('请添加收货地址!');
+			return;
+		}
+		$('form').submit();
+		<?php elseif($order['order_type']==3):?>
+		var address = $('input[name="address"]').val();
+		if(parseInt(address) < 0){
+			layer.msg('请添加预约人信息!');
+			return;
+		}
+		var orderTime = $('input[name="order_time"]').val();
+		if(!orderTime){
+			layer.msg('请选择预约时间!');
 			return;
 		}
 		$('form').submit();
