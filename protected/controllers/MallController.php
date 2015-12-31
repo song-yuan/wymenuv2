@@ -239,7 +239,7 @@ class MallController extends Controller
 			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 		}
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		if($order['order_type']==2){
+		if(in_array($order['order_type'],array(2,3))){
 			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
 		}
 		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$this->brandUser));

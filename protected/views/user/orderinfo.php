@@ -12,12 +12,20 @@
 <div class="order-title">我的订单</div>
 <div class="order-site"><div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div><div class="rt"><?php if($order['order_status'] < 3) echo '<button class="specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '已支付';else echo '已完成';?></div><div class="clear"></div></div>
 <?php if($address):?>
-<div class="address">
-	<div class="location">
-		<span>收货人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span><br>
-		<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+	<?php if($order['order_type']==2):?>
+	<div class="address">
+		<div class="location">
+			<span>收货人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span><br>
+			<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+		</div>
 	</div>
-</div>
+	<?php else:?>
+	<div class="address">
+		<div class="location" style="line-height: 50px;">
+			<span>收货人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span>
+		</div>
+	</div>
+	<?php endif;?>
 <?php endif;?>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>

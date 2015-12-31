@@ -43,12 +43,20 @@
 
 <div class="order-title">订单详情</div>
 <?php if($address):?>
-<div class="address">
-	<div class="location">
-		<span>收货人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span><br>
-		<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+<?php if($order['order_type']==2):?>
+	<div class="address">
+		<div class="location">
+			<span>收货人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span><br>
+			<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+		</div>
 	</div>
-</div>
+	<?php else:?>
+	<div class="address">
+		<div class="location" style="line-height: 50px;">
+			<span>收货人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span>
+		</div>
+	</div>
+	<?php endif;?>
 <?php endif;?>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
