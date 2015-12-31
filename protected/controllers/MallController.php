@@ -154,6 +154,10 @@ class MallController extends Controller
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$site = WxSite::get($order['site_id'],$this->companyId);
 		
+		if($order['cupon_branduser_lid'] > 0 || $order['appointment_time'] > "0000-00-00 00:00:00"){
+			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
+		}
+			
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 		}
@@ -181,9 +185,6 @@ class MallController extends Controller
 			
 			$order = WxOrder::getOrder($orderId,$this->companyId);
 			
-			if($order['cupon_branduser_lid'] > 0){
-				$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
-			}
 			if(in_array($order['order_type'],array(2,3))){
 				if($addressId > 0){
 					$address = WxAddress::getAddress($addressId,$this->companyId);
