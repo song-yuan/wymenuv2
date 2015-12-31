@@ -52,8 +52,9 @@
 	</div>
 	<?php else:?>
 	<div class="address">
-		<div class="location" style="line-height: 50px;">
-			<span>预约人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span>
+		<div class="location">
+			<span>预约人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span><br />
+			<span class="add">预约时间：<?php echo $order['appointment_time'];?></span>
 		</div>
 	</div>
 	<?php endif;?>
