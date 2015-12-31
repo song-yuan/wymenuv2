@@ -591,7 +591,7 @@ class Helper
                         }
                         if($notpayarr[3]>0)
                         {
-                            array_push($listData,"10"."后台手动减价".str_pad("",6," ")."-".number_format($notpayarr[3],2));//加2
+                            array_push($listData,"10"."后台手动减价".str_pad("",4," ")."-".number_format($notpayarr[3],2));
                             array_push($listData,"br"); 
                         }
                         if($notpayarr[4]>0)
@@ -602,12 +602,12 @@ class Helper
                     }
                     if($order->pay_total>0)
                     {
-                        array_push($listData,"10".yii::t('app','已付').str_pad("",10," ")."-".number_format($order->pay_total,2));
+                        array_push($listData,"10".yii::t('app','已付').str_pad("",12," ")."-".number_format($order->pay_total,2));//加2
                         array_push($listData,"br");
                     }
 //                    if($order->reality_total>0)
 //                    {
-                        array_push($listData,"10".yii::t('app','应付').str_pad("",10," ").number_format($order->reality_total,2));
+                        array_push($listData,"10".yii::t('app','应付').str_pad("",12," ").number_format($order->reality_total,2));//加2
                         array_push($listData,"br");
 //                    }                    
                     array_push($listData,"br");
@@ -617,13 +617,13 @@ class Helper
                     //支付方式
                     if($order->account_cash>0)
                     {
-                        array_push($listData,"10".yii::t('app','现金支付').str_pad("",6," ").number_format($order->account_cash,2));
+                        array_push($listData,"10".yii::t('app','现金支付').str_pad("",8," ").number_format($order->account_cash,2));//加2
                         array_push($listData,"br");                        
                     }
                     
                     if($order->account_union>0)
                     {
-                        array_push($listData,"10".yii::t('app','银联支付').str_pad("",6," ").number_format($order->account_union,2));
+                        array_push($listData,"10".yii::t('app','银联支付').str_pad("",8," ").number_format($order->account_union,2));//加2
                         array_push($listData,"br");                        
                     }
                     if(!empty($order->account_otherdetail))
@@ -641,7 +641,7 @@ class Helper
                             if($pdarr[1]>0)
                             {
                                 $printlen=(strlen($otherpaykv[$pdarr[0]]) + mb_strlen($otherpaykv[$pdarr[0]],'UTF8')) / 2;
-                                array_push($listData,"10".$otherpaykv[$pdarr[0]].str_pad("",14-$printlen," ").number_format($pdarr[1],2));
+                                array_push($listData,"10".$otherpaykv[$pdarr[0]].str_pad("",16-$printlen," ").number_format($pdarr[1],2));//加2
                                 array_push($listData,"br");  
                             }
                         }
@@ -652,11 +652,11 @@ class Helper
                         $membercardarr=explode("|",$order->account_membercard);
                         if($membercardarr[1]>0)
                         {
-                            array_push($listData,"10".yii::t('app','会员卡支付').str_pad("",4," ").number_format($membercardarr[1],2));
+                            array_push($listData,"10".yii::t('app','会员卡支付').str_pad("",6," ").number_format($membercardarr[1],2));//加2
                             array_push($listData,"br");
-                            array_push($listData,"10".yii::t('app','会员卡号').str_pad("",6," ").$membercardarr[0]);
+                            array_push($listData,"10".yii::t('app','会员卡号').str_pad("",8," ").$membercardarr[0]);//加2
                             array_push($listData,"br");
-                            array_push($listData,"10".yii::t('app','会员卡余额').str_pad("",4," ").number_format($membercardarr[2],2));
+                            array_push($listData,"10".yii::t('app','会员卡余额').str_pad("",6," ").number_format($membercardarr[2],2));//加2
                             array_push($listData,"br");
                         }
                     }
