@@ -77,7 +77,7 @@
 <?php if($order['order_type']==3):?>
 <div class="order-time arrowright">
 	<div class="time-lt">预约时间</div>
-	<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
+	<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="<?php if($order['appointment_time'] > "0000-00-00 00:00:00") echo $order['appointment_time'];?>" placeholder="选择预约时间" readonly="readonly" ></div>
 	<div class="clear"></div>
 </div>
 <?php endif;?>
