@@ -46,8 +46,8 @@
 <?php else:?>
 <div class="address arrowright">
 	<?php if($address):?>
-	<div class="location">
-		<span>收货人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
+	<div class="location" style="line-height: 50px;">
+		<span>预约人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
 		<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
 	</div>
 	<?php else:?>
