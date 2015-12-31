@@ -157,8 +157,7 @@ class MallController extends Controller
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 		}
-		if($order['order_type']==2){
-			$this->type = 2;
+		if(in_array($order['order_type'],array(2,3))){
 			$address = WxAddress::getDefault($userId,$this->companyId);
 		}
 		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
