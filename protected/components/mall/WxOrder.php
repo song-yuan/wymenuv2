@@ -16,6 +16,7 @@ class WxOrder
 	public $siteId;
 	public $type;
 	public $number;
+	public $isTemp = 0;
 	public $cart = array();
 	public $normalPromotionIds = array();
 	public $tastes = array();//原始产品口味
@@ -32,10 +33,11 @@ class WxOrder
 		$this->getCart();
 		$this->dealTastes();
 		if($this->type==1){
-			$this->getSite();
+			$this->isTemp = 0;
 		}else{
-			$this->getTakeOutSite();
+			$this->isTemp = 1;
 		}
+		$this->getSite();
 	}
 	public function getCart(){
 		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
@@ -75,15 +77,8 @@ class WxOrder
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
 		}
 	}
-	public function getTakeOutSite(){
-		$site = WxSite::getTakeOut($this->dpid);
-		if($site){
-			$this->siteId = $site['lid'];
-		}
-		$this->orderOpenSite();
-	}
 	public function orderOpenSite(){
-		SiteClass::openSite($this->dpid,$this->number,0,$this->siteId);
+		SiteClass::openSite($this->dpid,$this->number,$this->isTemp,$this->siteId);
 	}
 	public function createOrder(){
 		$time = time();
@@ -110,7 +105,7 @@ class WxOrder
 			        	'account_no'=>$accountNo,
 			        	'user_id'=>$this->userId,
 			        	'site_id'=>$this->siteId,
-			        	'is_temp'=>0,
+			        	'is_temp'=>$this->isTemp,
 			        	'number'=>$this->number,
 			        	'order_status'=>1,
 			        	'order_type'=>$this->type,
