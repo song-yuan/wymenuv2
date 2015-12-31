@@ -10,6 +10,14 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_002.js" type="text/javascript"></script>
+<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_004.js" type="text/javascript"></script>
+<link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_002.css" rel="stylesheet" type="text/css">
+<link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll.css" rel="stylesheet" type="text/css">
+<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll.js" type="text/javascript"></script>
+<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_003.js" type="text/javascript"></script>
+<script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_005.js" type="text/javascript"></script>
+<link href="<?php echo $baseUrl;?>/css/mall/date/mobiscroll_003.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <style>
 .layui-layer-btn{height:42px;}
@@ -19,7 +27,7 @@
 <div class="order-title">我的订单</div>
 <?php if($order['order_type']==1):?>
 <div class="order-site">桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?></div>
-<?php else:?>
+<?php elseif($order['order_type']==2):?>
 <!-- 地址 -->
 <div class="address arrowright">
 	<?php if($address):?>
@@ -31,6 +39,20 @@
 	<?php else:?>
 	<div class="location" style="line-height: 50px;">
 		<span class="add">添加收货地址</span>
+		<input type="hidden" name="address" value="-1"/>
+	</div>
+	<?php endif;?>
+</div>
+<?php else:?>
+<div class="address arrowright">
+	<?php if($address):?>
+	<div class="location">
+		<span>收货人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
+		<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
+	</div>
+	<?php else:?>
+	<div class="location" style="line-height: 50px;">
+		<span class="add">添加预约人信息</span>
 		<input type="hidden" name="address" value="-1"/>
 	</div>
 	<?php endif;?>
@@ -52,7 +74,13 @@
 		<div class="clear"></div>
 	</div>
 </div>
-
+<?php if($order['order_type']==3):?>
+<div class="order-time arrowright">
+	<div class="time-lt">预约时间</div>
+	<div class="time-rt"><input  type="text" class="" name="appDateTime" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
+	<div class="clear"></div>
+</div>
+<?php endif;?>
 <div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
 	<div class="copun-lt">代金券</div>
 	<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
@@ -112,9 +140,30 @@ function getOrderStatus(){
 }
 
 $(document).ready(function(){
-	<?php if($this->type==1):?>
+	<?php if($order['order_type']==1):?>
 	window.onload = getOrderStatus;
 	<?php else:?>
+	var currYear = (new Date()).getFullYear();	
+	var opt={};
+	opt.date = {preset : 'date'};
+	opt.datetime = {preset : 'datetime'};
+	opt.time = {preset : 'time'};
+	opt.default = {
+		theme: 'android-ics light', //皮肤样式
+        display: 'modal', //显示方式 
+        mode: 'scroller', //日期选择模式
+		dateFormat: 'yyyy-mm-dd',
+		lang: 'zh',
+		showNow: true,
+		nowText: "今天",
+        startYear: currYear - 10, //开始年份
+        endYear: currYear + 10 //结束年份
+	};
+
+  	var optDateTime = $.extend(opt['datetime'], opt['default']);
+  	var optTime = $.extend(opt['time'], opt['default']);
+    $("#appDateTime").mobiscroll(optDateTime).datetime(optDateTime);
+    
 	$('.location').click(function(){
 		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/order',array('companyId'=>$this->companyId,'type'=>$this->type,'orderId'=>$order['lid'])))));?>';
 	});
@@ -185,7 +234,7 @@ $(document).ready(function(){
 		$('#cuponList').css('display','block');
 	});
 	$('#payorder').click(function(){
-		<?php if($this->type==1):?>
+		<?php if($order['order_type']==1):?>
 		var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
 		$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
