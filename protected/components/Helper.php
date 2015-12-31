@@ -539,13 +539,13 @@ class Helper
                             array_push($listData,
                                       "01"."  ".$lenstrleft
                                     .str_pad("",24-$printlenstrleft," ")
-                                    .$isretreat.str_pad($product['amount'],4," ")
+                                    .$isretreat.str_pad($product['amount'],6," ")//加2
                                     .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
                         }else{
                             array_push($listData,"01".$productnum."."
                                     .$productname
                                     .str_pad("",24-$printlen," ")
-                                    .$isretreat.str_pad($product['amount'],4," ")
+                                    .$isretreat.str_pad($product['amount'],6," ")//加2
                                     .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
                         }                
 //                    }
