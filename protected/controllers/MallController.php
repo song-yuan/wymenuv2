@@ -171,12 +171,14 @@ class MallController extends Controller
 	  * 
 	  */
 	  public function actionOrderCupon(){
+	  		$contion = null;
 		  	$userId = Yii::app()->session['userId'];
 			$orderId = Yii::app()->request->getParam('orderId');
 			$paytype = Yii::app()->request->getPost('paytype');
 			$addressId = Yii::app()->request->getPost('address',-1);
 			$cuponId = Yii::app()->request->getPost('cupon');
-			$remark = Yii::app()->request->getPost('remark');
+			$orderTime = Yii::app()->request->getPost('order_time',null);
+			$remark = Yii::app()->request->getPost('remark',null);
 			
 			$order = WxOrder::getOrder($orderId,$this->companyId);
 			
@@ -194,15 +196,22 @@ class MallController extends Controller
 					$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 				}
 			}
+			
 			if($cuponId){
-				$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
+				$contion = $contion.' cupon_branduser_lid='.$cuponId.',';
+			}
+			if($orderTime){
+				$contion = $contion.' appointment_time="'.$orderTime.'",';
+			}
+			if($remark){
+				$contion = $contion.' remark="'.$remark.'",';
+			}
+			
+			if($contion){
+				$result = WxOrder::update($orderId,$this->companyId,$contion);
 				if(!$result){
 					$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
 				}
-			}
-			
-			if($remark){
-				WxOrder::updateRemark($orderId,$this->companyId,$remark);
 			}
 			
 			if($paytype == 1){

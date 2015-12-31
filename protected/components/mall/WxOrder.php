@@ -407,6 +407,17 @@ class WxOrder
 	}
 	/**
 	 * 
+	 * 更改订单信息
+	 * 
+	 * 
+	 */
+	 public static function update($orderId,$dpid,$contion){
+	 	$isSync = DataSync::getInitSync();
+		$sql = 'update nb_order set '.$contion.'is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		Yii::app()->db->createCommand($sql)->execute();
+	}
+	/**
+	 * 
 	 * 微信支付 通知时 使用该方法
 	 * order——pay表记录支付数据
 	 * 
