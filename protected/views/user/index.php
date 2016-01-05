@@ -26,8 +26,8 @@
 	
 	
 	<div class="listset withtop">
-		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/address',array('companyId'=>$this->companyId));?>">收货地址管理</a></div>
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/orderList',array('companyId'=>$this->companyId));?>">我的订单</a></div>
+		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/address',array('companyId'=>$this->companyId));?>">收货地址管理</a></div>
 	</div>
 	<!--
 	<div class="listset">
@@ -41,5 +41,6 @@
 	
 	<div class="listset">
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/cupon',array('companyId'=>$this->companyId));?>">现金券</a></div>
+		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/gift',array('companyId'=>$this->companyId));?>">礼品券</a></div>
 	</div>
 </body>

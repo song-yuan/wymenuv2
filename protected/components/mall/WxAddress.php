@@ -53,6 +53,7 @@ class WxAddress
 				        	'postcode'=>$param['postcode'],
 				        	'mobile'=>$param['mobile'],
 				        	'default_address'=>isset($param['default_address'])?1:0,
+				        	'is_sync'=>DataSync::getInitSync(),
 							);
 		$result = Yii::app()->db->createCommand()->insert('nb_address', $insertData);
 		return $result;
@@ -70,22 +71,26 @@ class WxAddress
 				        	'postcode'=>$param['postcode'],
 				        	'mobile'=>$param['mobile'],
 				        	'default_address'=>isset($param['default_address'])?1:0,
+				        	'is_sync'=>DataSync::getInitSync(),
 							);
 		$result = Yii::app()->db->createCommand()->update('nb_address', $insertData,'lid=:lid and dpid=:dpid',array(':lid'=>$param['lid'],':dpid'=>$param['dpid']));
 		return $result;
 	}
 	public static function deleteAddress($lid,$dpid){
-		$sql = 'update nb_address set delete_flag=1 where dpid='.$dpid.' and lid='.$lid;
+		$isSync = DataSync::getInitSync();
+		$sql = 'update nb_address set delete_flag=1,is_sync='.$isSync.' where dpid='.$dpid.' and lid='.$lid;
 		$result = Yii::app()->db->createCommand($sql)->execute();;
 	    return $result;
 	}
 	public static function dealDefaultAddress($userId,$dpid){
-		$sql = 'update nb_address set default_address=0 where dpid='.$dpid.' and brand_user_lid='.$userId;
+		$isSync = DataSync::getInitSync();
+		$sql = 'update nb_address set default_address=0,is_sync='.$isSync.' where dpid='.$dpid.' and brand_user_lid='.$userId;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 	public static function setDefault($userId,$lid,$dpid){
 		self::dealDefaultAddress($userId,$dpid);
-		$sql = 'update nb_address set default_address=1 where dpid='.$dpid.' and lid='.$lid;
+		$isSync = DataSync::getInitSync();
+		$sql = 'update nb_address set default_address=1,is_sync='.$isSync.' where dpid='.$dpid.' and lid='.$lid;
 		$result = Yii::app()->db->createCommand($sql)->execute();
 		return $result;
 	}

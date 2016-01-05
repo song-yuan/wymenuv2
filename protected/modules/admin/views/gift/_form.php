@@ -78,6 +78,20 @@
 						<?php echo $form->error($model,'end_time'); ?>
 					</div>
 				</div>
+			<div class="form-group">
+				<?php echo $form->label($model, yii::t('app','关注自动领取'),array('class' => 'col-md-3 control-label'));?>
+				<div class="col-md-4">
+					<div class="radio-list">
+						<label class="radio-inline">
+						<input type="radio" name="Gift[is_sent]" id="optionsRadios1" value="1" <?php if($model->is_sent) echo 'checked';?>> 是
+						</label>
+						<label class="radio-inline">
+						<input type="radio" name="Gift[is_sent]" id="optionsRadios2" value="0" <?php if(!$model->is_sent) echo 'checked';?>> 否
+						</label>
+					</div>
+				</div>
+			</div>
+			
 			<div class="form-actions fluid">
 				<div class="col-md-offset-3 col-md-9">
 					<button type="submite" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
