@@ -38,7 +38,7 @@
 			<!-- /.modal -->
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','礼品查询'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','礼品查询'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','礼品券查询'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','礼品券查询'),'url'=>''))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 		<div class="row">
@@ -58,7 +58,7 @@
 				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','普通优惠');?></a></li>
 				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
 				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
-				<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('gift/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','礼品');?></a></li>
+				<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('gift/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','礼品券');?></a></li>
 				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','微信卡券');?></a></li>
 			</ul>
 		<div class="tab-content">
@@ -66,12 +66,12 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','礼品设置');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','礼品券设置');?></div>
 					<div class="actions">
 					<!-- <p><input type="text" name="datetime" class="ui_timepicker" value=""></p> -->
-						<a href="<?php echo $this->createUrl('gift/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加礼品');?></a>
+						<a href="<?php echo $this->createUrl('gift/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加礼品券');?></a>
 						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除礼品');?></button>
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除礼品券');?></button>
 						</div>
 					</div>
 					
@@ -82,10 +82,10 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','礼品名称');?></th>
+								<th><?php echo yii::t('app','礼品券名称');?></th>
 								<th><?php echo yii::t('app','图片');?></th>
 								<th><?php echo yii::t('app','摘要');?></th>
-								<th><?php echo yii::t('app','礼品金额');?></th>
+								<th><?php echo yii::t('app','礼品券金额');?></th>
 								<th><?php echo yii::t('app','库存');?></th>
 								<th><?php echo yii::t('app','限制领取次数');?></th>
 								<th><?php echo yii::t('app','有效期');?></th>
