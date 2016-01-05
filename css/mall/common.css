@@ -1664,6 +1664,10 @@ input.usethis:checked + label {
 	display:block;
 }
 
+.code span{
+	color:red;
+}
+
 .couponlist .unavailable {
 	color: #999999;
 }

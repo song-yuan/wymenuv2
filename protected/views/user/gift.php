@@ -22,7 +22,7 @@
 				<img src="<?php echo $baseUrl.$gift['gift_pic'];?>" alt="">
 				<span class="info">
 					<h2><?php echo $gift['title'];?></h2>
-					<div class="code">兑换码：<span style="color:red;"><?php echo $gift['code'];?></span></div>
+					<div class="code">兑换码：<span><?php echo $gift['code'];?></span></div>
 					<span class="small">有效期：<?php echo date('Y-m-d',strtotime($gift['begin_time']));?>-<?php echo date('Y-m-d',strtotime($gift['end_time']));?></span>
 				</span>
 			</li>
