@@ -1531,12 +1531,12 @@ input.usethis:checked + label {
 	margin-top: 5px;
 	padding-top: 20px;
 	background-repeat: no-repeat;
+	padding-bottom:50px;
 
 }
 
 .infoarea span {
 	margin: auto;
-	display: inline-block;
 	line-height: 1.3em;
 }
 
@@ -1655,13 +1655,7 @@ input.usethis:checked + label {
 
 .couponlist ul>li h2 {
 	margin-top: 10px;
-	margin-bottom: 20px;
-}
-
-.couponlist ul>li .code {
-	font-size: 1.0em;
-    line-height: 1.0em;
-	display:block;
+	margin-bottom: 30px;
 }
 
 .couponlist .unavailable {

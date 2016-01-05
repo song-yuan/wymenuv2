@@ -37,13 +37,11 @@ class WxGiftCard
 				  ->queryAll();
 	    return $gift;
 	}
-	public static function getGift($dpid,$giftId){
-		$now = date('Y-m-d H:i:s',time());
-		$sql = 'select * from nb_gift where lid=:lid and dpid=:dpid and begin_time <=:now and :now <= end_time and delete_flag=0';
+	public static function getUserGift($dpid,$giftId){
+		$sql = 'select t.code,t.is_used,t.used_at,t1.* from nb_branduser_gift t,nb_gift t1 where t.gift_lid=t1.lid and t.dpid=t1.dpid and t.gift_lid=:lid  and t.dpid=:dpid';
 		$gift = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':lid',$giftId)
 				  ->bindValue(':dpid',$dpid)
-				  ->bindValue(':now',$now)
 				  ->queryRow();
 	    return $gift;
 	}

@@ -155,6 +155,14 @@ class UserController extends Controller
 		$gifts = WxGiftCard::getUserExpireGift($userId,$this->companyId);
 		$this->render('expiregift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
 	}
+	public function actionGiftInfo()
+	{
+		$userId = Yii::app()->session['userId'];
+		$giftId = Yii::app()->request->getParam('gid');
+		
+		$gift = WxGiftCard::getUserGift($this->companyId,$giftId);
+		$this->render('giftinfo',array('companyId'=>$this->companyId,'gift'=>$gift));
+	}
 	public function actionAjaxSetAddress()
 	{
 		$lid = Yii::app()->request->getPost('lid');
