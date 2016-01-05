@@ -41,54 +41,61 @@
 		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','礼品券查询'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','礼品券查询'),'url'=>''))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
+			<div class="row">
+			<?php $form=$this->beginWidget('CActiveForm', array(
+						'id'=>'Order',
+						'clientOptions'=>array(
+							'validateOnSubmit'=>true,
+						),
+						'htmlOptions'=>array(
+							'class'=>'form-inline pull-right'
+						),
+					)); ?>
+					<div class="col-md-12">
+						<div class="table-responsive">
+							<style>
+							#search-form tr,#search-form tr td{border:none !important;}
+							</style>
+							<table id="search-form" class="table">
+								<tr>
+									<td width="20%"><label class="control-label">按照兑换码查找</label></td>
+									<td width="50%">
+									<div class="input-group">
+									<span class="input-group-addon">兑换码</span><input type="text" name="code" class="form-control input-medium" value="<?php echo $code?$code:'';?>"/>
+									</div>
+									</td>
+									<td width="20%">
+										<button type="submit" class="btn green">
+											查找 &nbsp; 
+											<i class="m-icon-swapright m-icon-white"></i>
+										</button>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<?php $this->endWidget(); ?>
+			</div>
 		<div class="row">
-		<?php $form=$this->beginWidget('CActiveForm', array(
-				'id' => 'cupon-form',
-				'action' => $this->createUrl('gift/delete' , array('companyId' => $this->companyId,)),
-				'errorMessageCssClass' => 'help-block',
-				'htmlOptions' => array(
-					'class' => 'form-horizontal',
-					'enctype' => 'multipart/form-data'
-				),
-		)); ?>
-		<div class="col-md-12">
-		<div class="tabbable tabbable-custom">
-			<ul class="nav nav-tabs">
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','整体设置');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','普通优惠');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','特价优惠');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','代金券');?></a></li>
-				<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('gift/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','礼品券');?></a></li>
-				<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('wxcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab"><?php echo yii::t('app','微信卡券');?></a></li>
-			</ul>
-		<div class="tab-content">
 			<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','礼品券设置');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','领取详情');?> 总数:<?php echo $pages->getItemCount();?></div>
 					<div class="actions">
-					<!-- <p><input type="text" name="datetime" class="ui_timepicker" value=""></p> -->
-						<a href="<?php echo $this->createUrl('gift/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加礼品券');?></a>
-						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除礼品券');?></button>
-						</div>
+						
 					</div>
-					
-					
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','礼品券名称');?></th>
-								<th><?php echo yii::t('app','图片');?></th>
-								<th><?php echo yii::t('app','摘要');?></th>
-								<th><?php echo yii::t('app','礼品券金额');?></th>
-								<th><?php echo yii::t('app','库存');?></th>
-								<th><?php echo yii::t('app','限制领取次数');?></th>
-								<th><?php echo yii::t('app','有效期');?></th>
+								<th><?php echo yii::t('app','会员头像');?></th>
+								<th><?php echo yii::t('app','会员名');?></th>
+								<th><?php echo yii::t('app','会员卡号');?></th>
+								<th><?php echo yii::t('app','兑换码');?></th>
+								<th><?php echo yii::t('app','是否兑换');?></th>
+								<th><?php echo yii::t('app','是否过期');?></th>
                                 <th><?php echo yii::t('app','操作');?></th>                                                                
 						</thead>
 						<tbody>
@@ -97,17 +104,16 @@
 					
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td><?php echo $model->title; ?></td>
-								<td><img src='<?php echo $model->gift_pic;?>' width="100" height="100"/></td>
-								<td><?php echo $model->intro;?></td>
-								<td><?php echo $model->price;?></td>
-								<td><?php echo $model->stock;?></td>
-								<td><?php echo $model->count;?></td>
-								<td><?php echo $model->begin_time.'至'.$model->end_time;?></td>
+								<td><img src="<?php echo $model->branduser->head_icon;?>" width="100" height="100"/></td>
+								<td><?php echo $model->branduser->nickname; ?></td>
+								<td><?php echo substr($model->branduser->card_id,5); ?></td>
+								<td><?php echo $model->code;?></td>
+								<td><?php if($model->is_used){ echo '已兑换';}else{ echo '未兑换';};?></td>
+								<td><?php if($model->gift->begin_time < date('Y-m-d H:i:s',time())&&date('Y-m-d H:i:s',time()) < $model->gift->end_time){ $expire=0; echo '未过期';}else{ $expire=1; echo '已过期';}?></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('gift/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
-									<a href="<?php echo $this->createUrl('gift/static',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','统计');?></a>
+									<?php if(!$model->is_used&&!$expire):?>
+									<a href="<?php echo $this->createUrl('gift/exchange',array('lid'=>$model->lid, 'companyId'=>$model->dpid));?>"><?php echo yii::t('app','核销');?></a>
+									<?php endif;?>
 								</td>
 							</tr>
 						
@@ -158,31 +164,11 @@
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
 		</div>
-        </div>
-		<?php $this->endWidget(); ?>
-		</div>
 		
 </div>					<!-- END EXAMPLE TABLE PORTLET-->
 </div>				
  <script type="text/javascript">
 		$(document).ready(function(){
-			$('#normalpromotion-form').submit(function(){
-				if(!$('.checkboxes:checked').length){
-					alert("<?php echo yii::t('app','请选择要删除的项');?>");
-					return false;
-				}
-				return true;
+			
 		});
-	    $(function () {
-	        $(".ui_timepicker").datetimepicker({
-	            //showOn: "button",
-	            //buttonImage: "./css/images/icon_calendar.gif",
-	            //buttonImageOnly: true,
-	            showSecond: true,
-	            timeFormat: 'hh:mm:ss',
-	            stepHour: 1,
-	            stepMinute: 1,
-	            stepSecond: 1
-	        })
-	    });
-	     </script>
+</script>

@@ -124,5 +124,63 @@ class GiftController extends BackendController
 			$this->redirect(array('gift/index' , 'companyId' => $companyId)) ;
 		}
 	}
+	/**
+	 * 
+	 * 
+	 * 领取统计
+	 * 
+	 */
+	public function actionStatic(){
+		$lid = Yii::app()->request->getParam('lid');
+		$code = Yii::app()->request->getParam('code',null);
+		
+		$criteria = new CDbCriteria;
+    	$criteria->with = array('gift','branduser');
+    	$criteria->order = 't.update_at desc';
+    	if($code){
+    		$criteria->addSearchCondition('t.code',$code);
+    	}
+    	$criteria->addCondition('t.dpid=:dpid');
+    	$criteria->addCondition('t.delete_flag=0');
+    	$criteria->params[':dpid'] = $this->companyId;
+    
+    	$pages = new CPagination(BranduserGift::model()->count($criteria));
+    	$pages->applyLimit($criteria);
+    	$models = BranduserGift::model()->findAll($criteria);
+    	$this->render('static',array(
+    			'models'=>$models,
+    			'code'=>$code,
+    			'pages'=>$pages,
+    	));
+
+	}
+	public function actionExchange(){
+		$lid = Yii::app()->request->getParam('lid');
+		
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('t.lid=:lid');
+    	$criteria->addCondition('t.dpid=:dpid');
+    	$criteria->addCondition('t.delete_flag=0');
+    	$criteria->params[':lid'] = $lid;
+    	$criteria->params[':dpid'] = $this->companyId;
+    
+        $model = BranduserGift::model()->find($criteria);
+        if($model){
+        	$model->is_used = 1;
+        	$model->used_at = date('Y-m-d H:i:s',time());
+        	if($model->update()){
+        		Yii::app()->user->setFlash('success' , yii::t('app','核销成功'));
+				$this->redirect(Yii::app()->request->urlReferrer) ;
+        	}else{
+        		Yii::app()->user->setFlash('error' , yii::t('app','核销失败'));
+				$this->redirect(Yii::app()->request->urlReferrer) ;
+        	}
+        }else{
+        	Yii::app()->user->setFlash('error' , yii::t('app','核销失败'));
+			$this->redirect(Yii::app()->request->urlReferrer) ;
+        }
+    	
+
+	}
 
 }
