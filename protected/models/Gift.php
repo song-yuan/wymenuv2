@@ -48,14 +48,14 @@ class Gift extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('title, price, count', 'required'),
-			array('count, stock, delete_flag', 'numerical', 'integerOnly'=>true),
+			array('count, stock, is_sent, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, price', 'length', 'max'=>10),
 			array('title, gift_pic', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at, intro, begin_time, end_time', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, title, intro, price, gift_pic, count, stock, begin_time, end_time, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, title, intro, price, gift_pic, count, is_sent, stock, begin_time, end_time, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -116,6 +116,7 @@ class Gift extends CActiveRecord
 		$criteria->compare('stock',$this->stock);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
+		$criteria->compare('is_sent',$this->is_sent);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('is_sync',$this->is_sync,true);
 

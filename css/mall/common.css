@@ -1655,7 +1655,13 @@ input.usethis:checked + label {
 
 .couponlist ul>li h2 {
 	margin-top: 10px;
-	margin-bottom: 30px;
+	margin-bottom: 20px;
+}
+
+.couponlist ul>li .code {
+	font-size: 1.0em;
+    line-height: 1.0em;
+	display:block;
 }
 
 .couponlist .unavailable {
