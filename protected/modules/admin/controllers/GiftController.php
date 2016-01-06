@@ -140,8 +140,10 @@ class GiftController extends BackendController
     	if($code){
     		$criteria->addSearchCondition('t.code',$code);
     	}
+    	$criteria->addCondition('gift.lid=:lid');
     	$criteria->addCondition('t.dpid=:dpid');
     	$criteria->addCondition('t.delete_flag=0');
+    	$criteria->params[':lid'] = $lid;
     	$criteria->params[':dpid'] = $this->companyId;
     
     	$pages = new CPagination(BranduserGift::model()->count($criteria));
@@ -181,6 +183,28 @@ class GiftController extends BackendController
         }
     	
 
+	}
+	public function actionCode(){
+		$code = Yii::app()->request->getParam('code',null);
+		
+		$criteria = new CDbCriteria;
+    	$criteria->with = array('gift','branduser');
+    	
+    	$criteria->addSearchCondition('t.code',$code);
+    	$criteria->addCondition('t.dpid=:dpid');
+    	$criteria->addCondition('t.delete_flag=0');
+    	$criteria->params[':dpid'] = $this->companyId;
+    	
+    	$pages = new CPagination(BranduserGift::model()->count($criteria));
+    	$pages->applyLimit($criteria);
+    	$models = BranduserGift::model()->findAll($criteria);
+    	$this->render('code',array(
+    			'models'=>$models,
+    			'code'=>$code,
+    			'pages'=>$pages,
+    	));
+
+    	
 	}
 
 }

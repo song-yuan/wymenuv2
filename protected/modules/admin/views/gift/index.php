@@ -73,6 +73,7 @@
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除礼品券');?></button>
 						</div>
+						<a href="<?php echo $this->createUrl('gift/code' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','核销礼品券');?></a>
 					</div>
 					
 					
@@ -87,7 +88,7 @@
 								<th><?php echo yii::t('app','摘要');?></th>
 								<th><?php echo yii::t('app','礼品券金额');?></th>
 								<th><?php echo yii::t('app','库存');?></th>
-								<th><?php echo yii::t('app','限制领取次数');?></th>
+								<th><?php echo yii::t('app','会员领取次数');?></th>
 								<th><?php echo yii::t('app','有效期');?></th>
                                 <th><?php echo yii::t('app','操作');?></th>                                                                
 						</thead>
