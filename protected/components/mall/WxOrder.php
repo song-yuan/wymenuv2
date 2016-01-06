@@ -279,11 +279,11 @@ class WxOrder
 	}
 	public static function getUserOrderList($userId,$dpid,$type){
 		if($type==1){
-			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (1,2) order by lid desc';
+			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (1,2) order by lid desc limit 0,20';
 		}elseif($type==2){
-			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (3,4)  order by lid desc';
+			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (3,4)  order by lid desc limit 0,20';
 		}else{
-			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId order by lid desc';
+			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId order by lid desc limit 0,20';
 		}
 		$orderList = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
