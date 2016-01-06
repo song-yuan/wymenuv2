@@ -57,10 +57,13 @@
 						<thead>
 							<tr>
 								<th><?php echo yii::t('app','序号');?></th>
-								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th style="width:10%"><?php echo yii::t('app','名称');?></th>
 								<th ><?php echo yii::t('app','图片');?></th>
 								<th><?php echo yii::t('app','摘要');?></th>
-								<!-- <th><?php echo yii::t('app','针对消费群体');?></th> -->
+								<th><?php echo yii::t('app','礼品券金额');?></th>
+								<th><?php echo yii::t('app','库存');?></th>
+								<th><?php echo yii::t('app','会员领取次数');?></th>
+								<th style="width:15%"><?php echo yii::t('app','有效期');?></th>
 								<th><?php echo yii::t('app','是否添加营销品');?></th>
 							</tr>
 						</thead>
@@ -70,10 +73,13 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><?php echo $i;?></td>
-								<td style="width:20%"><?php echo $model['title'];?></td>
+								<td style="width:10%"><?php echo $model['title'];?></td>
 								<td ><img width="100" src="<?php echo $model['gift_pic'];?>" /></td>
 								<td ><?php echo $model['intro'];?></td>
-								
+								<td><?php echo $model['price'];?></td>
+								<td><?php echo $model['stock'];?></td>
+								<td><?php echo $model['count'];?></td>
+								<td style="width:15%"><?php echo $model['begin_time'].'至'.$model['end_time'];?></td>
                                 <td>
 									<div class="form-group">
 										<div class="col-md-12">
