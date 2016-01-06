@@ -240,7 +240,7 @@ class WxOrder
 				  ->bindValue(':dpid',$dpid)
 				  ->queryRow();
 		$total = self::updateOrderTotal($order);
-		$order['should_total'] = $total;
+		$order['should_total'] = $total['total'];
 	    return $order;
 	}
 	/**
@@ -277,15 +277,22 @@ class WxOrder
 				  ->queryAll();
 	    return $orderProduct;
 	}
-	public static function getUserOrderList($userId,$dpid){
-		$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId order by lid desc';
+	public static function getUserOrderList($userId,$dpid,$type){
+		if($type==1){
+			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (1,2) order by lid desc';
+		}elseif($type==2){
+			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (3,4)  order by lid desc';
+		}else{
+			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId order by lid desc';
+		}
 		$orderList = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
 		foreach($orderList as $k=>$order){
 			$total = self::updateOrderTotal($order);
-			$orderList[$k]['should_total'] = $total;
+			$orderList[$k]['should_total'] = $total['total'];
+			$orderList[$k]['order_num'] = $total['count'];
 		}
 	    return $orderList;
 	}
@@ -339,7 +346,7 @@ class WxOrder
 		}else{
 			$total = $order['should_total'];
 		}
-		return $total;
+		return array('total'=>$total,'count'=>count($orderProducts));
 	}
 	public static function updateOrderStatus($orderId,$dpid){
 		$now = date('Y-m-d H:i:s',time());

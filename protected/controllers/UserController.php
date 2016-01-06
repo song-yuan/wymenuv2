@@ -58,8 +58,10 @@ class UserController extends Controller
 	public function actionOrderList()
 	{
 		$userId = Yii::app()->session['userId'];
-		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId);
-		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists));
+		$type = Yii::app()->request->getParam('t',0);
+		
+		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId,$type);
+		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists,'type'=>$type));
 	}
 	/**
 	 * 
