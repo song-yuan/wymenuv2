@@ -42,14 +42,14 @@
                                     <!-- <li class="<?php if($typeID=='normal'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'normal' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加普通优惠营销品');?></a></li> -->
                                     <li class="<?php if($typeID=='private'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'private' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加特价优惠营销品');?></a></li>
                                     <li class="<?php if($typeID=='cupon'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'cupon' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加代金券营销品');?></a></li>
-                            
+                            		<li class="<?php if($typeID=='gift'){echo 'active';}?>"><a href="" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('promotionActivity/detailindex' , array('typeID'=>'gift' , 'companyId'=>$this->companyId , 'activityID'=>$activityID));?>'"><?php echo yii::t('app','添加礼品券营销品');?></a></li>
                             </ul>
                             <div class="tab-content">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
-			<?php if($typeID=="normal"){ ?>
+			<?php if($typeID=="gift"){ ?>
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','普通优惠');?><p><?php echo yii::t('app','(*注：只显示生效和未过期的优惠)');?></p></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营销活动明细列表');?>-->>><?php echo yii::t('app','礼品券');?><p><?php echo yii::t('app','(*注：只显示生效和未过期的里礼品券)');?></p></div>
 					
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -57,10 +57,13 @@
 						<thead>
 							<tr>
 								<th><?php echo yii::t('app','序号');?></th>
-								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th style="width:10%"><?php echo yii::t('app','名称');?></th>
 								<th ><?php echo yii::t('app','图片');?></th>
 								<th><?php echo yii::t('app','摘要');?></th>
-								<!-- <th><?php echo yii::t('app','针对消费群体');?></th> -->
+								<th><?php echo yii::t('app','礼品券金额');?></th>
+								<th><?php echo yii::t('app','库存');?></th>
+								<th><?php echo yii::t('app','会员领取次数');?></th>
+								<th style="width:15%"><?php echo yii::t('app','有效期');?></th>
 								<th><?php echo yii::t('app','是否添加营销品');?></th>
 							</tr>
 						</thead>
@@ -70,18 +73,13 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><?php echo $i;?></td>
-								<td style="width:20%"><?php echo $model['promotion_title'];?></td>
-								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
-								<td ><?php echo $model['promotion_abstract'];?></td>
-								<!-- <td ><?php switch ($model['to_group']){case 0: echo yii::t('app','所有人');break;case 1: echo yii::t('app','关注微信的人群');break;case 2: echo yii::t('app','会员等级');break;case 3: echo yii::t('app','会员个人');break;default: echo "";break;}?>
-									<?php if($model['to_group']=="2"){?>
-									<div>
-										<tr>
-											<td>213213</td>
-										</tr>
-									</div>
-									<?php }?>
-								</td> -->
+								<td style="width:10%"><?php echo $model['title'];?></td>
+								<td ><img width="100" src="<?php echo $model['gift_pic'];?>" /></td>
+								<td ><?php echo $model['intro'];?></td>
+								<td><?php echo $model['price'];?></td>
+								<td><?php echo $model['stock'];?></td>
+								<td><?php echo $model['count'];?></td>
+								<td style="width:15%"><?php echo $model['begin_time'].'至'.$model['end_time'];?></td>
                                 <td>
 									<div class="form-group">
 										<div class="col-md-12">

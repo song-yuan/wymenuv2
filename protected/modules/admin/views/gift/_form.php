@@ -99,9 +99,10 @@
 				</div>
 			</div>
 	<?php $this->endWidget(); ?>
+	
 	<script>
 		function swfupload_callback(name,path,oldname)  {
-			$("#Cupon_main_picture").val(name);
+			$("#Gift_gift_pic").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 		}
 	</script>

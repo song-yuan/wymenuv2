@@ -151,6 +151,15 @@ class PromotionActivityController extends BackendController
 				$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 				$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 				$models = $pdata->queryAll();
+			}elseif($typeID=="gift"){
+				$sql = 'select m.* from(select t1.promotion_lid,t.* from nb_gift t left join nb_promotion_activity_detail t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.promotion_lid = t.lid and t1.activity_lid ='.$activityID.') where t.dpid='.$this->companyId.' and t.end_time >="'.$data.'" and t.delete_flag = 0 ) m';
+				$count = $db->createCommand(str_replace('m.*','count(*)',$sql))->queryScalar();
+				//var_dump($sql);exit;
+				$pages = new CPagination($count);
+				$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+				$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+				$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+				$models = $pdata->queryAll();
 			}
 			$this->render('detailindex',array(
 					'models'=>$models,
@@ -244,6 +253,22 @@ class PromotionActivityController extends BackendController
 							'update_at'=>date('Y-m-d H:i:s',time()),
 							'activity_lid'=>$activityID,
 							'promotion_type'=>2,
+							'promotion_lid'=>$id,
+				
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync
+					);//Yii::app()->end(json_encode(array("status"=>"success")));
+					$command = $db->createCommand()->insert('nb_promotion_activity_detail',$data);
+				}
+			}elseif ($typeID=="gift"){
+				if(!empty($chk)){
+					$data = array(
+							'lid'=>$lid,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'activity_lid'=>$activityID,
+							'promotion_type'=>3,
 							'promotion_lid'=>$id,
 				
 							'delete_flag'=>'0',
