@@ -135,6 +135,7 @@
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
             <?php $this->endWidget(); ?>
+            </div>
 	</div>
 	</div>
 	<!-- END PAGE CONTENT-->
@@ -298,6 +299,7 @@
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
             <?php $this->endWidget(); ?>
+            </div>
 	</div>
 	</div>
 	<!-- END PAGE CONTENT-->
@@ -460,6 +462,7 @@
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
             <?php $this->endWidget(); ?>
+            </div>
 	</div>
 	</div>
 	<!-- END PAGE CONTENT-->
