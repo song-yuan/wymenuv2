@@ -142,7 +142,7 @@ class WxPromotionActivity
 					);
 			$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
 		}elseif($type==3){
-			WxGiftCard::sent($dpid,$userId,$promotionId,$sourceId);
+			$lid = WxGiftCard::sent($dpid,$userId,$promotionId,$sourceId);
 		}
 		return $lid;
 	}

@@ -155,6 +155,7 @@ class WxGiftCard
 	   		$gift = self::getGift($dpid,$giftId);
 	   		if($gift){
 	   			$total = self::getUserGiftTotal($dpid,$userId,$gift['lid']);
+	   			$lid = $total['total'];
 	   			if($gift['count'] > $total['total']){
 	   					$time = time();
 						$se = new Sequence("branduser_gift");
