@@ -242,6 +242,7 @@
                             var price=obja.attr('price');
                             var setselect=obja.attr("setselect");
                             var isgiving=obja.attr("isgiving");
+                            var productstatus=obja.attr("productstatus");//添加cf
                             if(setselect=="0")
                             {
                                 $("#product-set-detail").hide();
@@ -250,6 +251,7 @@
                                 $("#product-detail-isgiving").val(isgiving);
                                 $("#product-detail-amount").text(amount);
                                 $("#product-detail-zhiamount").text(zhiamount);
+                                $("#product-detail-productstatus").val(productstatus);//添加cf
                             }else{
                                 $("#product-detail").hide();
                                 $("#product-set-detail").show();
@@ -318,6 +320,7 @@
                                 $("#product-detail-isgiving").val('0');
                                 $("#product-detail-amount").text('1');
                                 $("#product-detail-zhiamount").text('0');
+                                $("#product-detail-productstatus").val('0');//添加cf
                             }else if(setselect!=""){
                                 $("#product-detail").hide();
                                 $("#product-set-detail").show();
