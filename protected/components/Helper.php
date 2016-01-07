@@ -2391,17 +2391,17 @@ public function getSiteName($orderId){
                                         $orderProductTasteEx = $orderProduct->taste_memo;                
                                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                                         $existTaste=0;
-                                        $productStatus="";
-                                        if($orderProduct->product_status=="1"){
-                                        	$productStatus="等叫！！！";
-                                        }elseif ($orderProduct->product_status=="2"){
-                                        	$productStatus="加急！！！";
-                                        }
-                                        $strStatus=yii::t('app',"状态：").$productStatus;
-                                        if(!empty($productStatus)){
-                                        	array_push($listDataBody,"11".$strStatus);
-                                        	array_push($listDataBody,"br");
-                                        }
+//                                         $productStatus="";
+//                                         if($orderProduct->product_status=="1"){
+//                                         	$productStatus="等叫！！！";
+//                                         }elseif ($orderProduct->product_status=="2"){
+//                                         	$productStatus="加急！！！";
+//                                         }
+//                                         $strStatus=yii::t('app',"状态：").$productStatus;
+//                                         if(!empty($productStatus)){
+//                                         	array_push($listDataBody,"11".$strStatus);
+//                                         	array_push($listDataBody,"br");
+//                                         }
                                         if(!empty($orderProductTasteEx))
                                         {
                                             $existTaste=1;
