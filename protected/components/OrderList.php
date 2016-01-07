@@ -447,8 +447,8 @@ class OrderList
                                                 'price'=>$productDetailArr[7],
                                                 'update_at'=>$time,
                                                 'amount'=>$productDetailArr[5],
-                                                'is_giving'=>$productDetailArr[8],
-                                                'product_status'=>$productDetailArr[12],//添加cf
+                                                'is_giving'=>$productDetailArr[12],
+                                                'product_status'=>$productDetailArr[8],//添加cf
                                                 'taste_memo'=>$productDetailArr[10],
                                                 'product_order_status'=>$orderProductStatus,
                                                 );

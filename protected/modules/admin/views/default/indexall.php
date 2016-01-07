@@ -1138,11 +1138,11 @@
                     tempproduct=tempproduct+","+$(this).find("span[class='badge']").text();
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductDiscount']").text();
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductNowPrice']").text();
-                    tempproduct=tempproduct+","+$(this).attr("is_giving");
+                    tempproduct=tempproduct+","+$(this).attr("prodct_status");
                     tempproduct=tempproduct+","+$(this).attr("tasteids");
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductPrice']").text();
-                    tempproduct=tempproduct+","+$(this).attr("prodct_status");//添加cf
+                    tempproduct=tempproduct+","+$(this).attr("is_giving");//添加cf
                     if(productlist!="")
                     {
                         productlist=productlist+";"+tempproduct;
