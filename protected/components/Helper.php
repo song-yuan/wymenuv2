@@ -2214,6 +2214,17 @@ public function getSiteName($orderId){
                                         $orderProductTasteEx = $orderProduct->taste_memo;                
                                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                                         $existTaste=0;
+                                        $productStatus="";
+                                        $strStatus=yii::t('app',"状态：").$productStatus;
+                                        if($orderProduct->product_status=="1"){
+                                        	$productStatus="等叫！！！";
+                                        }elseif ($orderProduct->product_status=="2"){
+                                        	$productStatus="加急！！！";
+                                        }
+                                        if(!empty($productStatus)){
+                                        	array_push($listData,"00".$productStatus);
+                                        	array_push($listData,"br");
+                                        }
                                         if(!empty($orderProductTasteEx))
                                         {
                                             $existTaste=1;
@@ -2362,6 +2373,17 @@ public function getSiteName($orderId){
                                         if(!empty($orderProductTasteEx))
                                         {
                                             $existTaste=1;
+                                        }
+                                        $productStatus="";
+                                        $strStatus=yii::t('app',"状态：").$productStatus;
+                                        if($orderProduct->product_status=="1"){
+                                        	$productStatus="等叫！！！";
+                                        }elseif ($orderProduct->product_status=="2"){
+                                        	$productStatus="加急！！！";
+                                        }
+                                        if(!empty($productStatus)){
+                                        	array_push($listData,"00".$productStatus);
+                                        	array_push($listData,"br");
                                         }
                                         foreach($orderProductTastes as $orderProductTaste){
                                             $strTaste.= '/'.$orderProductTaste->taste->name;
@@ -2581,6 +2603,17 @@ public function getSiteName($orderId){
                                         {
                                             $existTaste=1;
                                         }
+                                        $productStatus="";
+                                        $strStatus=yii::t('app',"状态：").$productStatus;
+                                        if($orderProduct->product_status=="1"){
+                                        	$productStatus="等叫！！！";
+                                        }elseif ($orderProduct->product_status=="2"){
+                                        	$productStatus="加急！！！";
+                                        }
+                                        if(!empty($productStatus)){
+                                        	array_push($listData,"00".$productStatus);
+                                        	array_push($listData,"br");
+                                        }
                                         foreach($orderProductTastes as $orderProductTaste){
                                             $strTaste.= '/'.$orderProductTaste->taste->name;
                                             $existTaste=1;
@@ -2745,6 +2778,17 @@ public function getSiteName($orderId){
                                         $orderProductTasteEx = $orderProduct->taste_memo;                
                                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                                         $existTaste=0;
+                                        $productStatus="";
+                                        $strStatus=yii::t('app',"状态：").$productStatus;
+                                        if($orderProduct->product_status=="1"){
+                                        	$productStatus="等叫！！！";
+                                        }elseif ($orderProduct->product_status=="2"){
+                                        	$productStatus="加急！！！";
+                                        }
+                                        if(!empty($productStatus)){
+                                        	array_push($listData,"00".$productStatus);
+                                        	array_push($listData,"br");
+                                        }
                                         if(!empty($orderProductTasteEx))
                                         {
                                             $existTaste=1;
