@@ -68,6 +68,15 @@ class WxPromotionActivity
 				}else{
 					unset($activitys[$k]);
 				}
+			}elseif($activity['promotion_type']==3){
+				$promotion = WxGiftCard::getGift($dpid,$activity['promotion_lid']);
+				if($promotion){
+						$activitys[$k]['title'] = isset($promotion['title'])?$promotion['title']:'';
+						$activitys[$k]['begin_time'] = isset($promotion['begin_time'])?$promotion['begin_time']:'';
+						$activitys[$k]['end_time'] = isset($promotion['end_time'])?$promotion['end_time']:'';
+				}else{
+					unset($activitys[$k]);
+				}
 			}
 		}
 	    return $activitys;
@@ -132,6 +141,8 @@ class WxPromotionActivity
 		        	'is_sync'=>DataSync::getInitSync(),
 					);
 			$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
+		}elseif($type==3){
+			$lid = WxGiftCard::sent($dpid,$userId,$promotionId,$sourceId);
 		}
 		return $lid;
 	}

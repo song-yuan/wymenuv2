@@ -47,6 +47,21 @@ class WxGiftCard
 	}
 	/**
 	 * 
+	 * 获取 代金券
+	 * 
+	 */
+	 public static function getGift($dpid,$lid){
+		$now = date('Y-m-d H:i:s',time());
+		$sql = 'select * from nb_gift where lid=:lid and dpid=:dpid and begin_time <=:now and :now <= end_time and delete_flag=0';
+		$gift = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':lid',$lid)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':now',$now)
+				  ->queryRow();
+	    return $gift;
+	}
+	/**
+	 * 
 	 * 
 	 * 获取自动发送到礼品券
 	 * 
@@ -90,7 +105,7 @@ class WxGiftCard
 	 /**
 	  * 
 	  * 
-	  * 发送礼品券
+	  * 发送自动关注礼品券
 	  * 
 	  * 
 	  */
@@ -115,12 +130,53 @@ class WxGiftCard
 								        	'gift_lid'=>$gift['lid'],
 								        	'brand_user_lid'=>$userId,
 								        	'code'=>$code,
+								        	'gift_source'=>1,
 								        	'is_used'=>0,
 								        	'is_sync'=>DataSync::getInitSync(),
 											);
-						$result = Yii::app()->db->createCommand()->insert('nb_address', $insertData);
+						$result = Yii::app()->db->createCommand()->insert('nb_branduser_gift', $insertData);
 	   			}
 	   		}
+	   }
+	   /**
+	  * 
+	  * 
+	  * 发送礼品券
+	  * 
+	  * 
+	  */
+	   public static function sent($dpid,$userId,$giftId,$sourceId){
+	   		$lid = 0;
+	   		$code = self::code(11);
+	   		do{
+	   			$result = self::getUserGiftByCode($dpid,$code);
+	   		}while ($result);
+	   		
+	   		$gift = self::getGift($dpid,$giftId);
+	   		if($gift){
+	   			$total = self::getUserGiftTotal($dpid,$userId,$gift['lid']);
+	   			$lid = $total['total'];
+	   			if($gift['count'] > $total['total']){
+	   					$time = time();
+						$se = new Sequence("branduser_gift");
+					    $lid = $se->nextval();
+						$insertData = array(
+											'lid'=>$lid,
+								        	'dpid'=>$dpid,
+								        	'create_at'=>date('Y-m-d H:i:s',$time),
+								        	'update_at'=>date('Y-m-d H:i:s',$time), 
+								        	'gift_lid'=>$gift['lid'],
+								        	'brand_user_lid'=>$userId,
+								        	'code'=>$code,
+								        	'gift_source'=>0,
+								        	'source_id'=>$sourceId,
+								        	'is_used'=>0,
+								        	'is_sync'=>DataSync::getInitSync(),
+											);
+						$result = Yii::app()->db->createCommand()->insert('nb_branduser_gift', $insertData);
+		   		}
+	   		}
+	   		return $lid;
 	   }
 	 /**
 	  * 
