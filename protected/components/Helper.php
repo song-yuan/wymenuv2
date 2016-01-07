@@ -2299,38 +2299,7 @@ public function getSiteName($orderId){
                                     $printer = $printers_a[$key];
                                     $productids="";
                                     //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
-                                    //组装头
-                                    $listDataHeader = array("22".Helper::setPrinterTitle($order->company->company_name,8));
-                                    array_push($listData,"br");
-                                    //array_push($listData,"22"."---分菜单---"); 
-                                    array_push($listData,"22"."<".$printerway->name.">");
-                                    array_push($listDataHeader,"00");
-                                    array_push($listDataHeader,"br");
-
-                                    if($reprint)
-                                    {
-                                        $strreprint=yii::t('app',"*****重复厨打，请留意！！！");
-                                        array_push($listDataHeader,"11".$strreprint);
-                                    }
-                                    array_push($listDataHeader,"br");
-                                    $strSite="";
-                                    if($order->is_temp=='1')
-                                    {
-                                        array_push($listDataHeader,"00".yii::t('app','临时座：'));
-                                        array_push($listDataHeader,"11".$siteNo->site_id%1000);
-                                    }else{
-                                        array_push($listDataHeader,"00".yii::t('app','座号：'));
-                                        array_push($listDataHeader,"11".$site->siteType->name.' '.$site->serial);
-                                    }
-                                    array_push($listDataHeader,"00".yii::t('app','人数：').$order->number);
-
-                                    if(!empty($order->callno))
-                                    {
-                                        array_push($listDataHeader,"00"."  ".yii::t('app','呼叫号：'));
-                                        array_push($listDataHeader,"11".$order->callno);
-                                    }
-                                    array_push($listDataHeader,"br");
-                                    array_push($listDataHeader,"00".str_pad('',48,'-'));
+                                  
                                     //组装尾部
                                     $orderTastes=  OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=1',  array(':orderid'=>$order->lid,':dpid'=>$order->dpid));
                                     $orderTasteEx = $order->taste_memo; 
@@ -2359,6 +2328,47 @@ public function getSiteName($orderId){
                                     $productids="";
                                     foreach($values as $value)
                                     {
+                                    	if($orderProduct->product_status=="1"){
+                                    		$productStatu="等叫";
+                                    	//组装头
+                                    	$listDataHeader = array("22".$productStatu,8);
+                                    	}elseif ($orderProduct->product_status=="2"){
+                                    		$productStatu="加急";
+                                    	//组装头
+                                    	$listDataHeader = array("22".$productStatu,8);
+                                    	}else{
+                                    		$listDataHeader = array("22".Helper::setPrinterTitle($order->company->company_name,8));
+                                    	}
+                                    	array_push($listData,"br");
+                                    	//array_push($listData,"22"."---分菜单---");
+                                    	array_push($listData,"22"."<".$printerway->name.">");
+                                    	array_push($listDataHeader,"00");
+                                    	array_push($listDataHeader,"br");
+                                    	
+                                    	if($reprint)
+                                    	{
+                                    		$strreprint=yii::t('app',"*****重复厨打，请留意！！！");
+                                    		array_push($listDataHeader,"11".$strreprint);
+                                    	}
+                                    	array_push($listDataHeader,"br");
+                                    	$strSite="";
+                                    	if($order->is_temp=='1')
+                                    	{
+                                    		array_push($listDataHeader,"00".yii::t('app','临时座：'));
+                                    		array_push($listDataHeader,"11".$siteNo->site_id%1000);
+                                    	}else{
+                                    		array_push($listDataHeader,"00".yii::t('app','座号：'));
+                                    		array_push($listDataHeader,"11".$site->siteType->name.' '.$site->serial);
+                                    	}
+                                    	array_push($listDataHeader,"00".yii::t('app','人数：').$order->number);
+                                    	
+                                    	if(!empty($order->callno))
+                                    	{
+                                    		array_push($listDataHeader,"00"."  ".yii::t('app','呼叫号：'));
+                                    		array_push($listDataHeader,"11".$order->callno);
+                                    	}
+                                    	array_push($listDataHeader,"br");
+                                    	array_push($listDataHeader,"00".str_pad('',48,'-'));
                                         $listDataBody= array();
                                         //组装身体
                                         //$productids="";
