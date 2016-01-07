@@ -443,7 +443,7 @@ class OrderList
                                                 'set_id'=>$productDetailArr[2],
                                                 'product_id'=>$productDetailArr[3],
                                                 'offprice'=>$productDetailArr[6],
-                                                'original_price'=>$productDetailArr[12],
+                                                //'original_price'=>$productDetailArr[12],
                                                 'price'=>$productDetailArr[7],
                                                 'update_at'=>$time,
                                                 'amount'=>$productDetailArr[5],
