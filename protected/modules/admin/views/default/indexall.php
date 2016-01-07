@@ -1195,7 +1195,7 @@
                     //var orderid=$(".selectProduct").attr("orderid");
                    //var orderstatus="1";
                    var sendjson=getallproductinfo();
-                   //alert(sendjson);return;
+                   alert(sendjson);return;
                    var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/1";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
