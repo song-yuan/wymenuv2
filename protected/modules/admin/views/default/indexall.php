@@ -1665,7 +1665,7 @@
 //                {                    
                         //取得数据
                         var sendjson=getallproductinfo();
-                        //alert(sendjson);return;
+                        alert(sendjson);return;
                         var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>/orderid/"+orderid+"/orderstatus/2";
                         var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
                          if(!statu){
@@ -2625,6 +2625,8 @@
                     isgiving="1";
                     special=special+"赠";
                 }
+                //alert(special);
+                obj.attr("is_giving",isgiving);
                 if($(".checkboxNow[id='checkboxWait']").hasClass("active"))
                 {
                     productstatus="1";
@@ -2635,9 +2637,7 @@
                 	productstatus="2";
                     special=special+"急";
                 }
-                //alert(special);
                 obj.attr("product_status",productstatus);
-                obj.attr("is_giving",isgiving);
                 if(obj.attr("is_retreat")=="1")
                 {
                     special=special+"退";
