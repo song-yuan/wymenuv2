@@ -2777,8 +2777,8 @@ public function getSiteName($orderId){
                                             .date('Y-m-d H:i:s',time()));
                                     //生成body并打印
                                     $productids="";
-//                                     foreach($values as $value)
-//                                     {
+                                    //foreach($values as $value)
+                                    //{
                                         $listDataBody= array();
                                         //组装身体
                                         //$productids="";
