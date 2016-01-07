@@ -2711,7 +2711,17 @@ public function getSiteName($orderId){
                                     $productids="";
                                     //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试2");
                                     //组装头
+                                    if($orderProduct->product_status=="1"){
+                                        	$productStatus="等叫";
+                                        	$listDataHeader = array("22".$productStatus);
+                                   
+                                        }elseif ($orderProduct->product_status=="2"){
+                                        	$productStatus="加急";
+                                        	$listDataHeader = array("22".$productStatus);
+                                   
+                                        }else{
                                     $listDataHeader = array("22".Helper::setPrinterTitle($order->company->company_name,8));
+                                        }
                                     //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试3");
                                     array_push($listDataHeader,"br");
                                     array_push($listDataHeader,"22"."<".$printerway->name.">");
@@ -2767,8 +2777,8 @@ public function getSiteName($orderId){
                                             .date('Y-m-d H:i:s',time()));
                                     //生成body并打印
                                     $productids="";
-//                                     foreach($values as $value)
-//                                     {
+                                    //foreach($values as $value)
+                                    //{
                                         $listDataBody= array();
                                         //组装身体
                                         //$productids="";
