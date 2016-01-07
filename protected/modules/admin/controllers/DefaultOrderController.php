@@ -1499,7 +1499,7 @@ class DefaultOrderController extends BackendController
                                     $sorderProduct->zhiamount = $productUnit[3];                                    
                                     $sorderProduct->price = $productUnit[4];
                                     $sorderProduct->is_giving = $productUnit[5];
-                                    $sorderProduct->product_status = $productUnit[6];//添加cf
+                                    $sorderProduct->product_status = "0";//添加cf
                                     $se=new Sequence("order_product");
                                     $sorderProduct->lid = $se->nextval();
                                     //var_dump($orderProduct);exit;
