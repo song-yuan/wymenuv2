@@ -19,7 +19,8 @@
                                         order_status="<?php echo $orderProduct['product_order_status'];?>" 
                                         is_giving="<?php echo $orderProduct['is_giving'];?>" 
                                         is_print="<?php echo $orderProduct['is_print'];?>" 
-                                        is_retreat="<?php echo $orderProduct['is_retreat'];?>" 
+                                        is_retreat="<?php echo $orderProduct['is_retreat'];?>"
+                                        product_status="<?php echo $orderProduct['product_status'];?>"  
                                         tasteids="<?php if(!empty($tasteidsOrderProducts[$orderProduct['lid']])){ echo $tasteidsOrderProducts[$orderProduct['lid']];}?>" 
                                         tastememo="<?php echo $orderProduct['taste_memo'];?>" 
                                         class="selectProductA">
@@ -28,6 +29,8 @@
                                                 echo $orderProduct['is_print']==1?'印':'';
                                                 echo $orderProduct['is_retreat']==1?'退':'';
                                                 echo $orderProduct['set_id']=='0000000000'?'':'套';
+                                                echo $orderProduct['product_status']==1?'等':'';
+                                                echo $orderProduct['product_status']==2?'急':'';
                                                 if(!empty($orderProduct['taste_memo']) || !empty($tasteidsOrderProducts[$orderProduct['lid']]))
                                                 {  echo "味";}
                                         ?></span>

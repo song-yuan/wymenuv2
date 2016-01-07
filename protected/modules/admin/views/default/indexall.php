@@ -351,6 +351,8 @@
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteIds"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteMemo"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;" id="spanProductName">菜品名称</span>
+                                    <input style="float:right;margin-right:2.0em;" type="button" class="btn green" id="btn-reminder" value="<?php echo yii::t('app','催菜');?>">
+                                    <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-return" value="<?php echo yii::t('app','转菜');?>">
                                <!--    <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">-->
                                <!--     <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-reprint" value="<?php echo yii::t('app','厨打');?>">-->
                                 </div>
@@ -402,12 +404,25 @@
 	                        </DIV> 	                            	 
 	                    </div>
                                 <div style="float:left;width:33%;margin:1px;border:1px solid red;">
-                                        <div style="float:left;height:2.0em;width:100%;line-height:2.0em;font-size:1.5em;"><?php echo yii::t('app','口味：');?></div>
-                                        <div id="productTaste" style="width:100%;">
-
-                                        </div>
+                                <div id="productstatus" style="width:100%;">
+                                	<div style="float:left;height:2.0em;width:100%;line-height:2.0em;font-size:1.5em;" class="btn-group" data-toggle="buttons"><?php echo yii::t('app','状态：');?>  </div>
+                                	<div class="btn-group" data-toggle="buttons" style="margin: 5px;border: 1px solid red;background: rgb(245,230,230);">
+                                		<label style="margin:5px;float: right;" group="status" id="checkboxNow" class="checkboxNow btn btn-default active"><input type="radio" value="0" class="toggle"><?php echo yii::t('app','即起');?></label>
+                                        <label style="margin:5px;float: right;" group="status" id="checkboxWait" class="checkboxNow btn btn-default "><input type="radio" value="1" class="toggle"><?php echo yii::t('app','等叫');?></label>
+                                        <label style="margin:5px;float: right;" group="status" id="checkboxHurry" class="checkboxNow btn btn-default "><input type="radio" value="2" class="toggle"><?php echo yii::t('app','加急');?></label>
+                                    </div>
                                 </div>
-	                            
+                                    <div style="float:left;height:2.0em;width:100%;line-height:2.0em;font-size:1.5em;"><?php echo yii::t('app','口味：');?></div>
+                                    <div id="productTaste" style="width:100%;">
+
+                                    </div>
+                                </div>
+	                            <!-- <div style="float:left;height:2.0em;width:100%;line-height:2.0em;font-size:1.5em;" class="btn-group" data-toggle="buttons"><?php echo yii::t('app','状态：');?>  
+                                		<label style="margin:5px;float: right;" id="checkboxNow" class="checkboxNow btn btn-default active"><input type="radio" class="toggle"><?php echo yii::t('app','即起');?></label>
+                                        <label style="margin:5px;float: right;" id="checkboxWait" class="checkboxNow btn btn-default "><input type="radio" class="toggle"><?php echo yii::t('app','等叫');?></label>
+                                        <label style="margin:5px;float: right;" id="checkboxHurry" class="checkboxNow btn btn-default "><input type="radio" class="toggle"><?php echo yii::t('app','加急');?></label>
+                                    </div>
+                                 -->
                             </div>
                 </div>	
             
@@ -1937,6 +1952,20 @@
                     }                    
                 }
             });
+
+            $('.selectNow').click(function(){
+                //var groupid=$(this).attr("group");
+                //var lit=$('label.selectTaste[group="'+groupid+'"]');
+                var chk=$(this).hasClass("active");
+                //alert(chk);
+                lit.each(function(){
+                    $(this).removeClass('active');
+                });
+                if(chk)
+                {
+                    return false;
+                }
+           });
             
             $('.selectProductName,.selectProductName,.badge').live('click', function(){
                 var lid=$(this).parent().attr('lid');
@@ -1951,14 +1980,26 @@
                 var tastememo=$(this).parent().attr("tastememo");                
                 var isretreat=$(this).parent().attr("is_retreat");
                 var orderstatus=$(this).parent().attr("order_status");
+                var productstatus=$(this).parent().attr("product_status");
                 if(productdiscount.lastIndexOf("%")>=0)
-                {
+                {//alert(productstatus);exit;
                     $(".selectDiscount").removeClass("active");
                     $(".selectDiscount[id='checkboxDiscount']").addClass("active");
                 }else{
                     $(".selectDiscount").removeClass("active");
                     $(".selectDiscount[id='checkboxMinus']").addClass("active");
                 }
+                if(productstatus=='0')
+                {//alert(productstatus);exit;
+                    $(".checkboxNow").removeClass("active");
+                    $(".checkboxNow[id='checkboxNow']").addClass("active");
+                }else if(productstatus=='1'){
+                    $(".checkboxNow").removeClass("active");
+                    $(".checkboxNow[id='checkboxWait']").addClass("active");
+                }else if(productstatus=='2'){
+                    $(".checkboxNow").removeClass("active");
+                    $(".checkboxNow[id='checkboxHurry']").addClass("active");
+                }//添加
                 if(isgiving=="1")
                 {
                     $(".selectDiscount").removeClass("active");
@@ -1978,6 +2019,7 @@
                 $("#spanTasteIds").text(tasteids);
                 $("#spanTasteMemo").text(tastememo);
                 $("#spanIsRetreat").text(isretreat);
+                $("#spanProductStatus").text(productstatus);
                 $("#spanOrderStatus").text(orderstatus);
                 $('#productTaste').load('<?php echo $this->createUrl('defaultOrder/productTasteAll',array('companyId'=>$this->companyId,'isall'=>'0'));?>/lid/'+productid);
                 if(layer_index1!=0)
@@ -1998,7 +2040,7 @@
                      }
                  });  
             });
-            
+            //催菜打印出单
             $('#btn-retreat').on(event_clicktouchstart,function(){
                 var lid =$("#spanLid").text();
                 var productid=$("#spanProductId").text();
@@ -2045,7 +2087,45 @@
                      }
                  });  
              });
-             
+//             $('#btn-reminder').on(event_clicktouchstart,function(){
+//                 var lid =$("#spanLid").text();
+//                 var productid=$("#spanProductId").text();
+//                 var isretreat=$("#spanIsRetreat").text();
+//                 var orderstatus=$("#spanOrderStatus").text();
+//                 if(isretreat=="1")
+//                 {
+//                     alert("已经退菜、无法进行催菜操作！！！");
+//                     return false
+//                 }
+//                 if(orderstatus=="0")
+//                 {
+//                     alert("还没有下单、无法进行催菜操作！！！");
+//                     return false
+//                 }
+               // var statu = confirm("<?php echo yii::t('app','确定要进行催菜操作吗？');?>");
+//                 if(!statu){
+//                     return false;
+//                 }
+               // $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+//                 if(layer_index_retreatbox!=0)
+//                 {
+//                     return;
+//                 }
+//                 layer_index_retreatbox=layer.open({
+//                      type: 1,
+//                      shade: false,
+//                      title: false, //不显示标题
+//                      area: ['50%', '50%'],
+//                      content: $('#retreatbox'), //捕获的元素
+//                      cancel: function(index){
+//                          layer.close(index);
+//                          layer_index_retreatbox=0;
+//         //                        this.content.show();
+//         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+//                      }
+//                  });  
+//              });
+          
              $('#payDiscountAccountDiv').on("click",function(){
                 //var lid=$(this).attr("lid");
                 $('#alldiscountselect').load("<?php echo $this->createUrl('defaultOrder/selectAllDiscount',array('companyId'=>$this->companyId));?>");
@@ -2402,6 +2482,18 @@
                 {
                     return false;
                 }
+//                 if($(".selectNow[id='checkboxNow']").hasClass("active"))
+//                 {
+//                     return false;
+//                 }
+//                 if($(".selectNow[id='checkboxWait']").hasClass("active"))
+//                 {
+//                     return false;
+//                 }
+//                 if($(".selectNow[id='checkboxHurry']").hasClass("active"))
+//                 {
+//                     return false;
+//                 }//添加
                 if($("#checkboxDiscount").hasClass("active"))
                 {
                     var discount=parseFloat($("#spanProductDiscount").text().replace(",",""));
@@ -2515,6 +2607,7 @@
                 var special="";
                 var tasteids="";
                 var tastememo="";
+                var productstatus="0";
                 
                 tastememo=$("#Order_remark_taste").val();
                 $("#productTaste").find("label[class='selectTaste btn btn-default active']").each(function(){
@@ -2529,7 +2622,18 @@
                     isgiving="1";
                     special=special+"赠";
                 }
+                if($(".checkboxNow[id='checkboxWait']").hasClass("active"))
+                {
+                    productstatus="1";
+                    special=special+"等";
+                }
+                if($(".checkboxNow[id='checkboxHurry']").hasClass("active"))
+                {
+                	productstatus="2";
+                    special=special+"急";
+                }
                 //alert(special);
+                obj.attr("product_status",productstatus);
                 obj.attr("is_giving",isgiving);
                 if(obj.attr("is_retreat")=="1")
                 {
