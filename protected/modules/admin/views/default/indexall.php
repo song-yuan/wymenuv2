@@ -1139,7 +1139,7 @@
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductDiscount']").text();
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductNowPrice']").text();
                     tempproduct=tempproduct+","+$(this).attr("prodct_status");
-                    tempproduct=tempproduct+","+$(this).attr("is_giving");//添加cf
+                    tempproduct=tempproduct+","+$(this).attr("is_giving");
                     tempproduct=tempproduct+","+$(this).attr("tasteids");
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductPrice']").text();
