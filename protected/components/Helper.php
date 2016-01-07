@@ -1902,7 +1902,7 @@ public function getSiteName($orderId){
                         }
                         $strStatus=yii::t('app',"状态：").$productStatus;
                         if(!empty($productStatus)){
-                        	array_push($listData,"00".$strStatus);
+                        	array_push($listData,"11".$strStatus);
                         	array_push($listData,"br");
                         }
                         if(!empty($orderProductTasteEx))
@@ -2233,7 +2233,7 @@ public function getSiteName($orderId){
 				                        }
 				                        $strStatus=yii::t('app',"状态：").$productStatus;
 				                        if(!empty($productStatus)){
-				                        	array_push($listData,"00".$strStatus);
+				                        	array_push($listData,"11".$strStatus);
 				                        	array_push($listData,"br");
 				                        }
                                         if(!empty($orderProductTasteEx))
@@ -2798,8 +2798,8 @@ public function getSiteName($orderId){
                                         }
                                         $strStatus=yii::t('app',"状态：").$productStatus;
                                         if(!empty($productStatus)){
-                                        	array_push($listData,"11".$strStatus);
-                                        	array_push($listData,"br");
+                                        	array_push($listDataBody,"11".$strStatus);
+                                        	array_push($listDataBody,"br");
                                         }
                                         if(!empty($orderProductTasteEx))
                                         {
