@@ -1665,7 +1665,7 @@
 //                {                    
                         //取得数据
                         var sendjson=getallproductinfo();
-                        alert(sendjson);return;
+                        //alert(sendjson);return;
                         var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>/orderid/"+orderid+"/orderstatus/2";
                         var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
                          if(!statu){
