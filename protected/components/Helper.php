@@ -1894,6 +1894,17 @@ public function getSiteName($orderId){
                         array_push($listData,"br");
                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                         $existTaste=0;
+                        $productStatus="";
+                        $strStatus=yii::t('app',"状态：").$productStatus;
+                        if($orderProduct->product_status=="1"){
+                        	$productStatus="等叫！！！";
+                        }elseif ($orderProduct->product_status=="2"){
+                        	$productStatus="加急！！！";
+                        }
+                        if(!empty($productStatus)){
+                        	array_push($listData,"00".$strStatus);
+                        	array_push($listData,"br");
+                        }
                         if(!empty($orderProductTasteEx))
                         {
                             $existTaste=1;
@@ -2222,7 +2233,7 @@ public function getSiteName($orderId){
                                         	$productStatus="加急！！！";
                                         }
                                         if(!empty($productStatus)){
-                                        	array_push($listData,"00".$productStatus);
+                                        	array_push($listData,"00".$strStatus);
                                         	array_push($listData,"br");
                                         }
                                         if(!empty($orderProductTasteEx))
@@ -2370,10 +2381,6 @@ public function getSiteName($orderId){
                                         $orderProductTasteEx = $orderProduct->taste_memo;                
                                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                                         $existTaste=0;
-                                        if(!empty($orderProductTasteEx))
-                                        {
-                                            $existTaste=1;
-                                        }
                                         $productStatus="";
                                         $strStatus=yii::t('app',"状态：").$productStatus;
                                         if($orderProduct->product_status=="1"){
@@ -2382,8 +2389,12 @@ public function getSiteName($orderId){
                                         	$productStatus="加急！！！";
                                         }
                                         if(!empty($productStatus)){
-                                        	array_push($listData,"00".$productStatus);
+                                        	array_push($listData,"11".$strStatus);
                                         	array_push($listData,"br");
+                                        }
+                                        if(!empty($orderProductTasteEx))
+                                        {
+                                            $existTaste=1;
                                         }
                                         foreach($orderProductTastes as $orderProductTaste){
                                             $strTaste.= '/'.$orderProductTaste->taste->name;
@@ -2599,10 +2610,6 @@ public function getSiteName($orderId){
                                         $orderProductTasteEx = $orderProduct->taste_memo;                
                                         $strTaste= yii::t('app',"备注：").$orderProductTasteEx;
                                         $existTaste=0;
-                                        if(!empty($orderProductTasteEx))
-                                        {
-                                            $existTaste=1;
-                                        }
                                         $productStatus="";
                                         $strStatus=yii::t('app',"状态：").$productStatus;
                                         if($orderProduct->product_status=="1"){
@@ -2611,9 +2618,14 @@ public function getSiteName($orderId){
                                         	$productStatus="加急！！！";
                                         }
                                         if(!empty($productStatus)){
-                                        	array_push($listData,"00".$productStatus);
+                                        	array_push($listData,"00".$strStatus);
                                         	array_push($listData,"br");
                                         }
+                                        if(!empty($orderProductTasteEx))
+                                        {
+                                            $existTaste=1;
+                                        }
+                                        
                                         foreach($orderProductTastes as $orderProductTaste){
                                             $strTaste.= '/'.$orderProductTaste->taste->name;
                                             $existTaste=1;
@@ -2778,7 +2790,7 @@ public function getSiteName($orderId){
                                         $orderProductTasteEx = $orderProduct->taste_memo;                
                                         $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
                                         $existTaste=0;
-                                        $productStatus="";
+                                    	$productStatus="";
                                         $strStatus=yii::t('app',"状态：").$productStatus;
                                         if($orderProduct->product_status=="1"){
                                         	$productStatus="等叫！！！";
@@ -2786,7 +2798,7 @@ public function getSiteName($orderId){
                                         	$productStatus="加急！！！";
                                         }
                                         if(!empty($productStatus)){
-                                        	array_push($listData,"00".$productStatus);
+                                        	array_push($listData,"11".$strStatus);
                                         	array_push($listData,"br");
                                         }
                                         if(!empty($orderProductTasteEx))
