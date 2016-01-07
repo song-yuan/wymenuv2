@@ -2379,7 +2379,7 @@ public function getSiteName($orderId){
 
                                         $orderProductTastes = OrderTaste::model()->with('taste')->findAll('t.order_id=:orderid and t.dpid=:dpid and t.is_order=0',  array(':orderid'=>$orderProduct->lid,':dpid'=>$orderProduct->dpid));
                                         $orderProductTasteEx = $orderProduct->taste_memo;                
-                                        $strTaste= yii::t('app',"单品口味：").$orderProductTasteEx;
+                                        $strTaste= yii::t('app',"单口味：").$orderProductTasteEx;
                                         $existTaste=0;
                                         $productStatus="";
                                         if($orderProduct->product_status=="1"){
