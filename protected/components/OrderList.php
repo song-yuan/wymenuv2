@@ -443,13 +443,13 @@ class OrderList
                                                 'set_id'=>$productDetailArr[2],
                                                 'product_id'=>$productDetailArr[3],
                                                 'offprice'=>$productDetailArr[6],
-                                                'original_price'=>$productDetailArr[11],
+                                                'original_price'=>$productDetailArr[12],
                                                 'price'=>$productDetailArr[7],
                                                 'update_at'=>$time,
                                                 'amount'=>$productDetailArr[5],
-                                                'is_giving'=>$productDetailArr[8],
+                                                'is_giving'=>$productDetailArr[9],
                                                 'product_status'=>$productDetailArr[8],//添加cf
-                                                'taste_memo'=>$productDetailArr[10],
+                                                'taste_memo'=>$productDetailArr[11],
                                                 'product_order_status'=>$orderProductStatus,
                                                 );
                             //return array('status'=>false,'msg'=>"test14444".implode("..",$orderProductData));
@@ -467,7 +467,7 @@ class OrderList
 //                            }
                         //insert taste//delete and insert taste
                         //return array('status'=>false,'msg'=>"nbproductinsert after");
-                        $orderProductTasteIds=str_replace("|",",",$productDetailArr[9]);
+                        $orderProductTasteIds=str_replace("|",",",$productDetailArr[10]);
                         //return array('status'=>false,'msg'=>$orderProductTasteIds);
                         if(!empty($orderProductTasteIds))
                         {
