@@ -2154,13 +2154,18 @@
              $('#btn-reprint').on(event_clicktouchstart,function(){
                 var lid =$("#spanLid").text();
                 var orderid=$(".selectProduct").attr("orderid");
-                var $modal=$('#portlet-config');
-                //不能刷新orderPartial，手动改变状态
-                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid
-                        ,'', function(){
-                                    $modal.modal();
-                            });                                                                    
-            });
+//                 var $modal=$('#portlet-config');
+//                 //不能刷新orderPartial，手动改变状态
+//                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid
+//                         ,'', function(){
+//                                     $modal.modal();
+//                             });    
+                var url='<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid;	
+                var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
+                if(!statu){
+                    return false;
+                } 
+                 });
             
             $('#cancel_zero').on(event_clicktouchstart,function(){
                 var payRealityAccount=$("#payRealityAccount").text();
