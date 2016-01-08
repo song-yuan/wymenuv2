@@ -1852,7 +1852,7 @@ public function getSiteName($orderId){
                         //$list = new ARedisList($listKey);
                         //var_dump($list);exit;
                         //$listData = array("22".Helper::getPlaceholderLenBoth($orderProduct->company->company_name, 16));//
-                        $listData = array("22".  Helper::setPrinterTitle($order->company->company_name,8));
+                        $listData = array("22".  Helper::setPrinterTitle("催菜",8));
                         array_push($listData,"00");
                         array_push($listData,"br");
                         if($reprint)
