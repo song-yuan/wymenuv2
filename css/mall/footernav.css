@@ -1,4 +1,4 @@
-
+.bttnbar-top{width:100%;height:100px;}
 .bttnbar {
 	margin: 0px;
 	padding: 0px;
@@ -22,6 +22,9 @@
 .name {
 	font-size: 0.6em;
 	color:white;
+}
+.name.active{
+	color:rgb(217,35,20);
 }
 
 .bttnbar ul li div {

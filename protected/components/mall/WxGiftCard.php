@@ -113,7 +113,7 @@ class WxGiftCard
 	   		$code = self::code(11);
 	   		do{
 	   			$result = self::getUserGiftByCode($dpid,$code);
-	   		}while ($result);
+	   		}while ($result['total']);
 	   		
 	   		$gifts = self::getAutoGift($dpid);
 	   		foreach($gifts as $gift){
@@ -128,7 +128,7 @@ class WxGiftCard
 								        	'create_at'=>date('Y-m-d H:i:s',$time),
 								        	'update_at'=>date('Y-m-d H:i:s',$time), 
 								        	'gift_lid'=>$gift['lid'],
-								        	'brand_user_lid'=>$userId,
+								        	'branduser_lid'=>$userId,
 								        	'code'=>$code,
 								        	'gift_source'=>1,
 								        	'is_used'=>0,

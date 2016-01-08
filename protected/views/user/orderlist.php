@@ -46,9 +46,9 @@
 					</a>
 			</li>
 			<?php endforeach;?>
+			<div class="bttnbar-top"></div>
 		</ul>
 		<!-- 全部 -->
-
 	</div>
 	<?php 
 	include_once(Yii::app()->basePath.'/views/layouts/footernav.php');
