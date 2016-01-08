@@ -2347,12 +2347,12 @@ class DefaultOrderController extends BackendController
                         }else{
                             $site = new Site();
                         }
-                        if($orderProduct->is_print=='0')
-                        {
-                            $reprint=false;
-                        }else{
-                            $reprint=true;
-                        }
+//                         if($orderProduct->is_print=='0')
+//                         {
+//                             $reprint=false;
+//                         }else{
+//                             $reprint=true;
+//                         }
                         $ret=Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
 //                        if($orderProduct->is_print=='0')
 //                        {
