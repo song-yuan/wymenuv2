@@ -38,7 +38,7 @@ class WxGiftCard
 	    return $gift;
 	}
 	public static function getUserGift($dpid,$giftId){
-		$sql = 'select t.code,t.is_used,t.used_at,t1.* from nb_branduser_gift t,nb_gift t1 where t.gift_lid=t1.lid and t.dpid=t1.dpid and t.gift_lid=:lid  and t.dpid=:dpid';
+		$sql = 'select t.lid,t.code,t.is_used,t.used_at,t1.title,t1.intro,t1.price,t1.gift_pic,t1.count,t1.stock,t1.begin_time,t1.end_time from nb_branduser_gift t,nb_gift t1 where t.gift_lid=t1.lid and t.dpid=t1.dpid and t.gift_lid=:lid  and t.dpid=:dpid';
 		$gift = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':lid',$giftId)
 				  ->bindValue(':dpid',$dpid)
@@ -110,13 +110,13 @@ class WxGiftCard
 	  * 
 	  */
 	   public static function sentGift($dpid,$userId){
-	   		$code = self::code(11);
-	   		do{
-	   			$result = self::getUserGiftByCode($dpid,$code);
-	   		}while ($result['total']);
-	   		
 	   		$gifts = self::getAutoGift($dpid);
 	   		foreach($gifts as $gift){
+	   			$code = self::code(11);
+		   		do{
+		   			$result = self::getUserGiftByCode($dpid,$code);
+		   		}while ($result['total']);
+		   		
 	   			$total = self::getUserGiftTotal($dpid,$userId,$gift['lid']);
 	   			if($gift['count'] > $total['total']){
 	   					$time = time();
