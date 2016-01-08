@@ -43,4 +43,7 @@
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/cupon',array('companyId'=>$this->companyId));?>">现金券</a></div>
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/gift',array('companyId'=>$this->companyId));?>">礼品券</a></div>
 	</div>
+	<?php 
+	include_once(Yii::app()->basePath.'/views/layouts/footernav.php');
+	?>
 </body>
