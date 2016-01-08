@@ -1,0 +1,39 @@
+.bttnbar-top{width:100%;height:100px;}
+.bttnbar {
+	margin: 0px;
+	padding: 0px;
+}
+
+.bttnbar ul {
+	text-align: center;
+	padding: 2px 0px;
+	margin: 0px;
+}
+
+.bttnbar ul li a {
+	display: block;
+}
+
+.bttnbar ul li {
+	width: 33.33%;
+	float:left;
+}
+
+.name {
+	font-size: 0.6em;
+	color:white;
+}
+.name.active{
+	color:rgb(217,35,20);
+}
+
+.bttnbar ul li div {
+	width:50px;
+	margin:0 auto;
+}
+.bttnbar ul li img {
+	width: 50px;
+	height: auto;
+	display: block;
+}
+

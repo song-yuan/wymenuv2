@@ -25,7 +25,7 @@
 				<?php endif;?>
 				<div class="headinfo colclear bottom_dash pad_10">
 					<div class="left small font_l"><?php echo $model['create_at'];?></div>
-					<?php if($model['order_status']< 3):?><div class="right small font_red">待付款</div><?php else:?> <div class="right small font_org">已支付</div><?php endif;?>
+					<?php if($model['order_status']< 3):?><div class="right small font_red">待付款</div><?php else:?> <?php if($model['takeout_status']==0):?><div class="right small font_org">已支付</div><?php elseif($model['takeout_status']==1):?><div class="right small font_org">商家已接单</div><?php elseif($model['takeout_status']==2):?><div class="right small font_org">商家已取消订单</div><?php elseif($model['takeout_status']==3):?><div class="right small font_org">商品配送中</div><?php elseif($model['takeout_status']==4):?><div class="right small font_org">订单已完成</div><?php endif;?><?php endif;?>
 				</div>
 					<!-- 商品简要情况 -->
 					<div class="shortinfo2 noborder bottom_dash">
@@ -46,8 +46,11 @@
 					</a>
 			</li>
 			<?php endforeach;?>
+			<div class="bttnbar-top"></div>
 		</ul>
 		<!-- 全部 -->
-
 	</div>
+	<?php 
+	include_once(Yii::app()->basePath.'/views/layouts/footernav.php');
+	?>
 </body>
