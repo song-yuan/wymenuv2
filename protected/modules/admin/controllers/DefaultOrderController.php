@@ -2331,7 +2331,8 @@ class DefaultOrderController extends BackendController
                 $typeId =  Yii::app()->request->getParam('typeId',0);
                 Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;              
-                
+                $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','发生异常'));
+                Yii::app()->end(json_encode($ret));
                 //var_dump(Yii::app()->params->has_cache);exit;
                 //$transaction = $db->beginTransaction();
                 try {
