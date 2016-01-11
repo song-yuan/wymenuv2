@@ -2327,7 +2327,7 @@ class DefaultOrderController extends BackendController
         
         public function actionPrintOneKitchen(){
                 $orderProductId = Yii::app()->request->getParam('orderProductId',0);
-		$companyId = Yii::app()->request->getParam('companyId');
+				$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId',0);
                 Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;              
@@ -2349,7 +2349,7 @@ class DefaultOrderController extends BackendController
                         }
 //                         if($orderProduct->is_print=='0')
 //                         {
-//                             $reprint=false;
+                             $reprint=false;
 //                         }else{
 //                             $reprint=true;
 //                         }
