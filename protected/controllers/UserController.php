@@ -162,7 +162,7 @@ class UserController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$giftId = Yii::app()->request->getParam('gid');
 		
-		$gift = WxGiftCard::getUserGift($this->companyId,$giftId);
+		$gift = WxGiftCard::getUserGift($this->companyId,$userId,$giftId);
 		$this->render('giftinfo',array('companyId'=>$this->companyId,'gift'=>$gift));
 	}
 	public function actionAjaxSetAddress()
