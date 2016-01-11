@@ -2160,11 +2160,42 @@
 //                         ,'', function(){
 //                                     $modal.modal();
 //                             });    
+				alert(lid+orderid);
                 var url='<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid;	
-                var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
+                var statu = confirm("<?php echo yii::t('app','催菜，确定吗？');?>");
                 if(!statu){
                     return false;
                 } 
+
+                $.ajax({
+                    url:url,
+                    type:'POST',
+                    data:sendjson,
+                    async:false,
+                    dataType: "json",
+                    success:function(msg){
+                        var printresultfail=false;
+                        var printresulttemp=true;
+                        var successjobids="0";
+                        //保存成功，刷新
+                        var data=msg;
+                        //alert('1111'+data.msg);
+                        if(data.status){
+                           
+                            alert(data.msg);
+                            
+                            //如果失败，就把打印任务插入到数据库
+                            //如果有失败任务就打开对话框
+                            //alert(successjobids);
+                            
+                        }
+                       //以上是打印
+                       //刷新orderPartial	                 
+                    },
+                    error: function(msg){
+                        alert("保存失败2");
+                    }
+                });
                  });
             
             $('#cancel_zero').on(event_clicktouchstart,function(){
