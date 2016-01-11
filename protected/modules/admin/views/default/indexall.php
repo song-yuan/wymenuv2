@@ -2160,7 +2160,7 @@
 //                         ,'', function(){
 //                                     $modal.modal();
 //                             });    
-				alert(lid+orderid);
+				alert(lid."++".orderid);
                 var url='<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid;	
                 var statu = confirm("<?php echo yii::t('app','催菜，确定吗？');?>");
                 if(!statu){

@@ -2365,16 +2365,16 @@ class DefaultOrderController extends BackendController
                         //$transaction->rollback(); //如果操作失败, 数据回滚
                         //var_dump($e);exit;
                         $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','发生异常'));
-                        //Yii::app()->end(json_encode($ret));
+                        Yii::app()->end(json_encode($ret));
                 }
                 //var_dump($ret);exit;
-                $this->renderPartial('printresultone' , array(
-                                'orderId'=>$order->lid,
-                                'orderProductId'=>$orderProductId,
-                                'ret'=>$ret,
-                                //'joblist' => $joblist, job in memcached
-                                'typeId'=>$typeId                                
-		));		             
+//                 $this->renderPartial('printresultone' , array(
+//                                 'orderId'=>$order->lid,
+//                                 'orderProductId'=>$orderProductId,
+//                                 'ret'=>$ret,
+//                                 //'joblist' => $joblist, job in memcached
+//                                 'typeId'=>$typeId                                
+// 		));		             
         }
         /**
          * 每个菜品一张单子
