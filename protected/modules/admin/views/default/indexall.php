@@ -2154,7 +2154,7 @@
              $('#btn-reprint').on(event_clicktouchstart,function(){
                 var lid =$("#spanLid").text();
                 var orderid=$(".selectProduct").attr("orderid");
-                var order=lid+"&&"orderid;
+                var order=lid+"&&"+orderid;
 //                 var $modal=$('#portlet-config');
 //                 //不能刷新orderPartial，手动改变状态
 //                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid
