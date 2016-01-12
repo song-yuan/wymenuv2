@@ -1,0 +1,46 @@
+#playercontainer{
+	margin:0 auto;
+}
+.section{
+	position: relative;
+}
+#playercontainer .top {
+	position: absolute;
+	top:0px;
+	left: 0px;
+	width:100%;
+	z-index: 1000;
+}
+#playercontainer .top .message,#playercontainer .bottom .message{
+	position: relative;
+	top: 0;
+	font-size: 30px;
+	color: red;
+	display: inline;
+}
+.fixed{
+	position: fixed;
+}
+.discuss{
+	width: 100%;
+	bottom: 0px;
+	left: 0px;
+	height: 50px;
+	text-align: center; 
+	padding: 10px 0;
+}
+.discuss .s_text{
+	height: 36px;
+	width: -moz-calc(80% - 4px);
+	width: -webkit-calc(80% - 4px);
+	width: calc(80% - 4px);
+	font-size: 20px;
+}
+.discuss .s_btn{
+	height: 42px;
+	width: 20%;
+	background: #22B14C;
+	color:white;
+	border:none;
+	font-size: 20px;
+}
