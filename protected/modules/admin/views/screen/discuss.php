@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','微信电视'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','微信电视'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','微信电视'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','微信电视评论'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,25 +40,20 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','视频列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','视频评论列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('screen/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
-						<a href="<?php echo $this->createUrl('screen/discuss' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-search"></i> <?php echo yii::t('app','查看评论');?></a>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
-								<th ><?php echo yii::t('app','图片');?></th>
-								<th ><?php echo yii::t('app','视频地址');?></th>
-								<th><?php echo yii::t('app','备注');?></th>
-								<th>&nbsp;</th>
+								<th class="table-checkbox" style="width:10%"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+								<th style="width:50%"><?php echo yii::t('app','内容');?></th>
+								<th style="width:10%">&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -66,18 +61,15 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:20%"><?php echo $model->title;?></td>
-								<td ><img width="100" src="<?php echo $model->vedio_pic;?>" /></td>
-								<td ><?php echo $model->vedio_url;?></td>
-								<td><?php echo $model->remark;?></td>
+								<td style="width:20%"><?php echo $model->content;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('screen/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('screen/deleteDiscuss',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','删除');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
 						<?php else:?>
 						<tr>
-							<td colspan="6">没有查询到数据</td>
+							<td colspan="3">没有查询到数据</td>
 						</tr>
 						<?php endif;?>
 						</tbody>
