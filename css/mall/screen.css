@@ -4,6 +4,27 @@
 .section{
 	position: relative;
 }
+.section h2 {
+	padding:20px;
+	font-size:25px;
+	text-align:center;
+}
+.vedio{
+	padding-top:50px;
+	width:100%;
+}
+ul.vedio li{
+	width:44%;
+	margin-left:4%;
+	float:left;
+	text-align:center;	
+}
+ul.vedio li span{
+	font-size:20px;
+}
+ul.vedio li img{
+	width:100%;
+}
 #playercontainer .top {
 	position: absolute;
 	top:0px;

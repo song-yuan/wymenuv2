@@ -18,7 +18,19 @@ class ScreenController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$this->render('index',array('companyId'=>$this->companyId));
+		$screens = WxScreen::get($this->companyId);
+		$this->render('index',array('companyId'=>$this->companyId,'screens'=>$screens));
+	}
+	/**
+	 * 
+	 * 显示视频
+	 * 
+	 */
+	public function actionInfor()
+	{
+		$screenId = Yii::app()->request->getParam('screenId');
+		$screen = WxScreen::getScreen($this->companyId,$screenId);
+		$this->render('infor',array('companyId'=>$this->companyId,'screen'=>$screen));
 	}
 	public function actionAjaxGetDiscuss(){
 		$discuss = WxDiscuss::get($this->companyId);
