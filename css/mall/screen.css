@@ -1,0 +1,67 @@
+#playercontainer{
+	margin:0 auto;
+}
+.section{
+	position: relative;
+}
+.section h2 {
+	padding:20px;
+	font-size:25px;
+	text-align:center;
+}
+.vedio{
+	padding-top:50px;
+	width:100%;
+}
+ul.vedio li{
+	width:44%;
+	margin-left:4%;
+	float:left;
+	text-align:center;	
+}
+ul.vedio li span{
+	font-size:20px;
+}
+ul.vedio li img{
+	width:100%;
+}
+#playercontainer .top {
+	position: absolute;
+	top:0px;
+	left: 0px;
+	width:100%;
+	z-index: 1000;
+}
+#playercontainer .top .message,#playercontainer .bottom .message{
+	position: relative;
+	top: 0;
+	font-size: 30px;
+	color: red;
+	display: inline;
+}
+.fixed{
+	position: fixed;
+}
+.discuss{
+	width: 100%;
+	bottom: 0px;
+	left: 0px;
+	height: 50px;
+	text-align: center; 
+	padding: 10px 0;
+}
+.discuss .s_text{
+	height: 36px;
+	width: -moz-calc(80% - 4px);
+	width: -webkit-calc(80% - 4px);
+	width: calc(80% - 4px);
+	font-size: 20px;
+}
+.discuss .s_btn{
+	height: 42px;
+	width: 20%;
+	background: #22B14C;
+	color:white;
+	border:none;
+	font-size: 20px;
+}

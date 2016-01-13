@@ -94,7 +94,7 @@
 					</ul>
 				</li>
 
-								<li class="<?php if(in_array(Yii::app()->controller->id , array('cashcard','normalpromotion','wxRedpacket','privatepromotion','cupon','gift','wxcard','promotionActivity','discount'))) echo 'active';?>">
+								<li class="<?php if(in_array(Yii::app()->controller->id , array('cashcard','normalpromotion','wxRedpacket','privatepromotion','cupon','gift','wxcard','promotionActivity','discount','screen'))) echo 'active';?>">
 
 					<a href="">
 					<i class="fa fa-comments"></i> 
@@ -105,6 +105,7 @@
 						<li class="<?php if((Yii::app()->controller->id == 'cashcard' || Yii::app()->controller->id == 'normalpromotion' || Yii::app()->controller->id == 'privatepromotion'  || Yii::app()->controller->id == 'cupon' || Yii::app()->controller->id == 'gift' || Yii::app()->controller->id == 'wxcard' ) && in_array($this->getAction()->getId(),array('index','create','update','detailindex','promotiondetail','code','exchange'))) echo 'active';?>"><a href="<?php echo $this->createUrl('cashcard/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','营销品设置');?></a></li><!--整体设置，普通优惠、专享优惠、代金券-->
 						<li class="<?php if(Yii::app()->controller->id == 'wxRedpacket' && in_array($this->getAction()->getId(),array('index','create','update','detailindex','detailrules'))) echo 'active';?>"><a href="<?php echo $this->createUrl('wxRedpacket/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','微信红包');?></a></li><!--管理（概要和明细）、发送规则-->
                         <li class="<?php if(Yii::app()->controller->id == 'promotionActivity' && in_array($this->getAction()->getId(),array('index','create','update','detailindex'))) echo 'active';?>"><a href="<?php echo $this->createUrl('promotionActivity/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','营销活动');?></a></li><!--营销活动管理，添加营销品-->
+                        <li class="<?php if(Yii::app()->controller->id == 'screen' && in_array($this->getAction()->getId(),array('index','create','update','discuss'))) echo 'active';?>"><a href="<?php echo $this->createUrl('screen/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','微信电视');?></a></li><!--弹幕电视-->
                         <li class="<?php if(Yii::app()->controller->id == 'discount' && in_array($this->getAction()->getId(),array('index','create','update','detailindex'))) echo 'active';?>"><a href="<?php echo $this->createUrl('discount/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','折扣模板');?></a></li><!--营销活动管理，添加营销品-->
                         <!--  <li class="<?php if(Yii::app()->controller->id == 'cashcard' && in_array($this->getAction()->getId(),array('xxx'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','营销工具');?></a></li><!--大转盘等，先放哪里，直接把云卡拿来-->
                         <!--  <li class="<?php if(Yii::app()->controller->id == 'cashcard' && in_array($this->getAction()->getId(),array('xxx'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','效果分析');?></a></li><!--每个活动/红包，营销品，发送多少，看的人多少，领用多少，使用多少-->
