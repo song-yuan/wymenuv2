@@ -95,9 +95,14 @@ class ScreenController extends BackendController
 		
 	}
 	public function actionDiscuss(){
+		$content = Yii::app()->request->getPost('content',null);
+		
 		$criteria = new CDbCriteria;
 		
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		if($content){
+			$criteria->addSearchCondition('content',$content);
+		}
 		$criteria->order = 'lid desc';
 		$criteria->params[':dpid'] = $this->companyId;
 		
@@ -109,6 +114,7 @@ class ScreenController extends BackendController
 		$this->render('discuss',array(
 				'models'=>$models,
 				'pages'=>$pages,
+				'content'=>$content
 		));
 	}
 	
