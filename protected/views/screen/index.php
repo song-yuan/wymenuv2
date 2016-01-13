@@ -19,7 +19,7 @@
 			height : 400,
 			backcolor : "#FFFFFF",
 			stretching : "uniform",
-			file : "http://menu.wymenu.com/wymenuv2/video/ceshi2.mp4",
+			file : "http://demo-video.bj.bcebos.com/AdrenalineRush.m3u8",
 			// image : "images/bipbop.jpg",
 			autoStart : true,
 			// playlist: "bottom",
