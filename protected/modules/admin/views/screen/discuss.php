@@ -27,6 +27,41 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
+		<?php $form=$this->beginWidget('CActiveForm', array(
+					'id'=>'Discuss',
+					'clientOptions'=>array(
+						'validateOnSubmit'=>true,
+					),
+					'htmlOptions'=>array(
+						'class'=>'form-inline pull-right'
+					),
+				)); ?>
+				<div class="col-md-12">
+					<div class="table-responsive">
+						<style>
+						#search-form tr,#search-form tr td{border:none !important;}
+						</style>
+						<table id="search-form" class="table">
+							<tr>
+								<td width="20%"><label class="control-label">按照内容查找</label></td>
+								<td width="50%">
+								<div class="input-group">
+								<span class="input-group-addon">内容</span><input type="text" name="content" class="form-control input-medium" value="<?php echo isset($content)?$content:'';?>"/>
+								</div>
+								</td>
+								<td width="20%">
+									<button type="submit" class="btn green">
+										查找 &nbsp; 
+										<i class="m-icon-swapright m-icon-white"></i>
+									</button>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+		<?php $this->endWidget(); ?>
+	</div>
+	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
 				'action' => $this->createUrl('product/delete' , array('companyId' => $this->companyId)),
