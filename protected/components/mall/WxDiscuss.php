@@ -187,7 +187,7 @@ class WxDiscuss
 				'<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/100.gif"/>',
 				'<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/102.gif"/>',
 			);
-	public static function get($dpid){
+	public static function get($dpid,$screenId = 0){
 		$sql = 'select * from nb_discuss where dpid=:dpid and show_flag=0 and delete_flag=0';
 		$discusses = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
@@ -195,6 +195,13 @@ class WxDiscuss
 		foreach($discusses as $k=>$discus){
 			self::showDiscuss($discus['lid'],$discus['dpid']);
 			$discusses[$k]['content'] = self::dealWithEmo($discus['content']);
+		}
+		if(empty($discusses)){
+			$screen = WxScreen::getScreen($dpid,$screenId);
+			if($screen){
+				$discusses[0] = $screen;
+				$discusses[0]['content'] = $screen['default_content'];
+			}
 		}
 	    return $discusses;
 	}

@@ -68,7 +68,7 @@
 			var i = 0;
 			 setInterval(function(){
 				$.ajax({
-					url:'<?php echo $this->createUrl('/screen/ajaxGetDiscuss',array('companyId'=>$this->companyId));?>',
+					url:'<?php echo $this->createUrl('/screen/ajaxGetDiscuss',array('companyId'=>$this->companyId,'screenId'=>$screen['lid']));?>',
 					dataType:'json',
 					success:function(msg){
 						for(var p in msg){

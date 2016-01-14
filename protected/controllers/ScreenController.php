@@ -33,7 +33,8 @@ class ScreenController extends Controller
 		$this->render('infor',array('companyId'=>$this->companyId,'screen'=>$screen));
 	}
 	public function actionAjaxGetDiscuss(){
-		$discuss = WxDiscuss::get($this->companyId);
+		$screenId = Yii::app()->request->getParam('screenId');
+		$discuss = WxDiscuss::get($this->companyId,$screenId);
 		echo json_encode($discuss);
 		exit;
 	}
