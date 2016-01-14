@@ -354,7 +354,7 @@
                                     <input style="float:right;margin-right:2.0em;" type="button" class="btn green" id="btn-reminder" value="<?php echo yii::t('app','催菜');?>">
                                     <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-return" value="<?php echo yii::t('app','转菜');?>">
                                <!--    <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">-->
-                                    <input style="float:right;margin-right:3.0em;" type="button" class="btn green" id="btn-reprint" value="<?php echo yii::t('app','厨打');?>">-->
+                                <!--    <input style="float:right;margin-right:3.0em;" type="button" class="btn green" id="btn-reprint" value="<?php echo yii::t('app','厨打');?>">-->
                                 </div>
                                 <div style="float:left;width:65%;">
                                		 <div style="float:left;width:96%;margin:1px 5px 5px 10px;padding:8px;border:1px solid red;">
@@ -2156,7 +2156,7 @@
                 }); 
              });
              
-             $('#btn-reprint').on(event_clicktouchstart,function(){
+             $('#btn-reminder').on(event_clicktouchstart,function(){
                 var lid =$("#spanLid").text();
                 var orderid=$(".selectProduct").attr("orderid");
                 var order=lid+"&&"+orderid;
@@ -2166,7 +2166,7 @@
 //                         ,'', function(){
 //                                     $modal.modal();
 //                             });    
-				alert(order);
+				//alert(order);
                 //var url='<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid;	
 //                var statu = confirm("<?php echo yii::t('app','催菜，确定吗？');?>");
 //                 if(!statu){
@@ -2178,7 +2178,7 @@
                 var oprole ="<?php echo Yii::app()->user->role; ?>";
                 if(oprole > '2')
                 {
-                    alert("没有退菜权限！");
+                    alert("没有催菜权限！");
                     return;
                 }
                 //alert(curnum);
@@ -2201,7 +2201,7 @@
                              type: 1,
                              shade: false,
                              title: false, //不显示标题
-                             area: ['50%', '70%'],
+                             area: ['50%', '30%'],
                              content: $('#hurrybox'), //捕获的元素
                              cancel: function(index){
                                  layer.close(index);
@@ -2211,19 +2211,8 @@
                             }
                         }); 
                     }
-                }else{ //下单前减少是整体的           
-                    if(setid=="0000000000")
-                    {
-                        productCancelSelect($(this).parent(),1);
-                    }else{
-                        var objnum=0;
-                        $.each($(".selectProductA[setid="+setid+"]"),function(skey,sobj){
-                            //alert($(sobj));
-                            objnum=parseFloat($(sobj).find('span[class="badge"]').text());
-                            productCancelSelect($(sobj),objnum);
-                        });
-                        //$("#productTempOrderNum").val(parseInt($("#productTempOrderNum").val())-1);
-                    }                    
+                }else{
+                    alert("未知错误！！！");            
                 }
             });
             
