@@ -99,6 +99,8 @@
                                 var padinfo=Androidwymenuprinter.getPadInfo();
                                 padid=padinfo.substr(10,10);
                             }
+                            var retreatnum="2";
+                            var othermemo="111";
                            //var retreatnum=parseInt($("#site_number").text());
                            //var allnum=parseInt($("#selectproductnumforhurry").val());
                            //lert(retreatnum);alert(allnum);
@@ -115,10 +117,10 @@
 //                            }
                            
                            //alert(isall);
-                           //var orderdetailid="<?php echo $orderRetreat->order_detail_id; ?>";
-                           //var retreatid=$("label[class='selectRetreat btn btn-default active']").attr("retreatid");
+                           var orderdetailid="<?php echo $orderRetreat->order_detail_id; ?>";
+                           var retreatid=$("label[class='selectRetreat btn btn-default active']").attr("retreatid");
                            var url="<?php echo $this->createUrl('defaultOrder/addHurryOne',array('companyId'=>$this->companyId,'orderDetailId'=>$orderRetreat->order_detail_id)); ?>";
-                           var othermemo=$.trim($("label[class='selectRetreat btn btn-default active']").text())+$("#OrderRetreat_other").val();
+                           //var othermemo=$.trim($("label[class='selectRetreat btn btn-default active']").text())+$("#OrderRetreat_other").val();
                            //alert(othermemo);return;
                            //alert(url);alert(othermemo);alert(retreatnum);alert(paymethodid);
                                 $.ajax({
@@ -133,7 +135,7 @@
                                             //alert(result.msg);
                                             data=result;
                                             if(data.status){
-                                                    $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
+                                                    //$('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
                                                     var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
                                                     $.each(data.jobs,function(skey,svalue){                                        
                                                         detaildata=svalue.split("_");
