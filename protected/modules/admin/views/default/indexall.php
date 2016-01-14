@@ -2162,42 +2162,38 @@
 //                                     $modal.modal();
 //                             });    
 				alert(order);
-                var url='<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid;	
-                var statu = confirm("<?php echo yii::t('app','催菜，确定吗？');?>");
-                if(!statu){
-                    return false;
-                } 
-
-                $.ajax({
-                    url:url,
-                    type:'POST',
-                    data:sendjson,
-                    async:false,
-                    dataType: "json",
-                    success:function(msg){
-                        var printresultfail=false;
-                        var printresulttemp=true;
-                        var successjobids="0";
-                        //保存成功，刷新
-                        var data=msg;
-                        //alert('1111'+data.msg);
-                        if(data.status){
-                           
-                            alert(data.msg);
-                            
-                            //如果失败，就把打印任务插入到数据库
-                            //如果有失败任务就打开对话框
-                            //alert(successjobids);
-                            
-                        }
-                       //以上是打印
-                       //刷新orderPartial	                 
-                    },
-                    error: function(msg){
-                        alert("保存失败2");
+                //var url='<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid;	
+//                var statu = confirm("<?php echo yii::t('app','催菜，确定吗？');?>");
+//                 if(!statu){
+//                     return false;
+//                 } 
+				var orderstatus = $(this).parent().attr("order_status");
+                var curnum = $(this).parent().find('span[class="badge"]').text().replace(",","")
+                var setid = $(this).parent().attr("setid");
+                var oprole ="<?php echo Yii::app()->user->role; ?>";
+                if(oprole > '2')
+                {
+                    alert("没有退菜权限！");
+                    return;
+                }
+                //alert(curnum);
+                //$("#selectproductnumfordelete").val(curnum);
+                if(orderstatus!="0")//退菜是单个的
+                {
+                    var isretreat=$(this).parent().attr("is_retreat");
+                    if(isretreat==1)
+                    {
+                        alert("已经退菜");
+                        return false;
+                    }else{
+                        var lid=$(this).parent().attr("lid");
+                        var url='<?php echo $this->createUrl('defaultOrder/hurryProduct',array('companyId'=>$this->companyId));?>/orderDetailId/'+lid;
+                       alert("111"); 
                     }
-                });
-                 });
+                }else{ //下单前减少是整体的           
+                    alert("222");                   
+                }
+            });
             
             $('#cancel_zero').on(event_clicktouchstart,function(){
                 var payRealityAccount=$("#payRealityAccount").text();
