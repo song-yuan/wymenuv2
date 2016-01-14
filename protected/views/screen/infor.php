@@ -42,7 +42,7 @@
 				$(this).css({left:_left,top:_top,color:getRandomColor()});
 				
 				_top +=75;
-				if(_top >= 90){
+				if(_top >= 100){
 					_top = 20;
 				}
 
