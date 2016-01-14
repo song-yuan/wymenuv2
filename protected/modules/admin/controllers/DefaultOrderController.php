@@ -1985,7 +1985,7 @@ class DefaultOrderController extends BackendController
                             //$memo="退菜单";
                             $orderDetail[0]->amount=$retreatnum;
                             //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$order->dpid)));                           
-                            $ret=  Helper::printKitchenOther($order,$orderDetail,$site,$siteNo,false,$othermemo);                    
+                            $ret=  Helper::printKitchenHurry($order,$orderDetail,$site,$siteNo,false,$othermemo);                    
                             if(!$ret['status'])
                             {
                                 $transaction->rollback();
