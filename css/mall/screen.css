@@ -16,6 +16,7 @@
 ul.vedio li{
 	width:44%;
 	margin-left:4%;
+	margin-top:10px;
 	float:left;
 	text-align:center;	
 }
