@@ -101,6 +101,7 @@
                             }
                             var retreatnum="2";
                             var othermemo="111";
+                            var isall="0";
                            //var retreatnum=parseInt($("#site_number").text());
                            //var allnum=parseInt($("#selectproductnumforhurry").val());
                            //lert(retreatnum);alert(allnum);
@@ -133,7 +134,7 @@
                                             var printresulttemp;
                                             var successjobids="0";
                                             //alert(result.msg);
-                                            data=result;
+                                            data=result;//alert("数量不对");
                                             if(data.status){
                                                     //$('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
                                                     var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
@@ -208,19 +209,21 @@
                                                             }
                                                         });
                                                     }
-                                                }
+                                                }alert("数量不对11");
                                         },
                                         error: function(msg){
+                                            var data=msg;
                                             alert("保存失败2");
+                                            alert(data.msg);
                                         }
                                 });
-                                layer.close(layer_index_retreatbox);
-                                layer_index_retreatbox=0;
+                                layer.close(layer_index_hurrybox);
+                                layer_index_hurrybox=0;
                         });
                         //create_btn_close_retreat
                         $('#create_btn_close_retreat').on(event_clicktouchstart,function(){   
-                            layer.close(layer_index_retreatbox);
-                            layer_index_retreatbox=0;
+                            layer.close(layer_index_hurrybox);
+                            layer_index_hurrybox=0;
                         });
                         
                         $('#open_site_plus').on(event_clicktouchend,function(){
