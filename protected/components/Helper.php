@@ -3390,7 +3390,7 @@ public function getSiteName($orderId){
 						}
 						//array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));
 						//array_push($listData,"01".str_pad("-".$orderProduct->amount.$orderProduct->product->product_unit,8," ").Helper::setProductName($orderProduct->product->product_name,12,8));
-						array_push($listData,"01".str_pad($orderProduct->product->product_name,38," ").str_pad($orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));
+						array_push($listData,"01".str_pad($orderProduct->product->product_name,37," ").str_pad($orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));
 						array_push($listData,"br");
 						array_push($listData,"br");
 						array_push($listData,"10"."原因:".$memo);
@@ -3536,7 +3536,7 @@ public function getSiteName($orderId){
 						//                                        array_push($listDataBody,"10"."原因:".$memo);
 						//                                        array_push($listDataBody,"br");
 						//return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试4".$memo);
-						array_push($listDataBody,"01".str_pad($orderProduct->product->product_name,38," ").str_pad($orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));
+						array_push($listDataBody,"01".str_pad($orderProduct->product->product_name,37," ").str_pad($orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));
 						array_push($listDataBody,"br");
 						array_push($listDataBody,"br");
 						array_push($listDataBody,"10"."原因:".$memo);
