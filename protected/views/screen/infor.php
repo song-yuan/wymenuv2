@@ -39,13 +39,13 @@
 				var thisW = $(this).width();
 				var _left = topW + thisW;
 
+				$(this).css({left:_left,top:_top,color:getRandomColor()});
+				
 				_top +=75;
-
-				if(_top >= 100){
+				if(_top >= 90){
 					_top = 20;
 				}
 
-				$(this).css({left:_left,top:_top,color:getRandomColor()});
 
 				var time = 15000;
 				if($(this).index() % 2 == 0){
