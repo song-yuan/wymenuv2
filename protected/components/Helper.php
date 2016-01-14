@@ -3390,7 +3390,7 @@ public function getSiteName($orderId){
 						}
 						//array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));
 						//array_push($listData,"01".str_pad("-".$orderProduct->amount.$orderProduct->product->product_unit,8," ").Helper::setProductName($orderProduct->product->product_name,12,8));
-						array_push($listData,"01".str_pad($orderProduct->product->product_name,34," ").str_pad("-".$orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));
+						array_push($listData,"01".str_pad($orderProduct->product->product_name,34," ").str_pad($orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));
 						array_push($listData,"br");
 						array_push($listData,"br");
 						array_push($listData,"10"."原因:".$memo);
@@ -3402,11 +3402,11 @@ public function getSiteName($orderId){
 					{
 						array_push($listData,"10"."点单员：".$order->username);//."  "
 						array_push($listData,"br");
-						array_push($listData,"10"."退菜员：".Yii::app()->user->name);//."  "
+						array_push($listData,"10"."催菜员：".Yii::app()->user->name);//."  "
 					}else{
 						array_push($listData,"10"."客人自助下单");//."  "
 						array_push($listData,"br");
-						array_push($listData,"10"."退菜员：".Yii::app()->user->name);//."  "
+						array_push($listData,"10"."催菜员：".Yii::app()->user->name);//."  "
 					}
 					array_push($listData,"br");
 					array_push($listData,"10"."催菜时间：");
@@ -3502,14 +3502,14 @@ public function getSiteName($orderId){
 					{
 						array_push($listDataTail,"10"."点单员：".$order->username);//."  "
 						array_push($listDataTail,"br");
-						array_push($listDataTail,"10"."退菜员：".Yii::app()->user->name);//."  "
+						array_push($listDataTail,"10"."催菜员：".Yii::app()->user->name);//."  "
 					}else{
 						array_push($listDataTail,"10"."客人自助下单");//."  "
 						array_push($listDataTail,"br");
-						array_push($listDataTail,"10"."退菜员：".Yii::app()->user->name);//."  "
+						array_push($listDataTail,"10"."催菜员：".Yii::app()->user->name);//."  "
 					}
 					array_push($listDataTail,"br");
-					array_push($listDataTail,"10"."退菜时间：");
+					array_push($listDataTail,"10"."催菜时间：");
 					array_push($listDataTail,"00".date('Y-m-d H:i:s',time()));
 	
 					//生成body并打印
@@ -3536,7 +3536,7 @@ public function getSiteName($orderId){
 						//                                        array_push($listDataBody,"10"."原因:".$memo);
 						//                                        array_push($listDataBody,"br");
 						//return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试4".$memo);
-						array_push($listDataBody,"01".str_pad($orderProduct->product->product_name,34," ").str_pad("-".$orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));
+						array_push($listDataBody,"01".str_pad($orderProduct->product->product_name,34," ").str_pad($orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));
 						array_push($listDataBody,"br");
 						array_push($listDataBody,"br");
 						array_push($listDataBody,"10"."原因:".$memo);

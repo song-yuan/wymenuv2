@@ -100,7 +100,7 @@
                                 padid=padinfo.substr(10,10);
                             }
                             var retreatnum="2";
-                            var othermemo="111";
+                            var othermemo="长时间没上菜！！";
                             var isall="0";
                            //var retreatnum=parseInt($("#site_number").text());
                            //var allnum=parseInt($("#selectproductnumforhurry").val());
@@ -209,7 +209,7 @@
                                                             }
                                                         });
                                                     }
-                                                }alert("数量不对11");
+                                                }//alert("数量不对11");
                                         },
                                         error: function(msg){
                                             var data=msg;
