@@ -35,7 +35,8 @@ ul.vedio li img{
 #playercontainer .top .message,#playercontainer .bottom .message{
 	position: relative;
 	top: 0;
-	font-size: 30px;
+	left:5000px;
+	font-size: 40px;
 	color: red;
 	display: inline;
 }

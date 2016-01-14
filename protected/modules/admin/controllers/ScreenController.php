@@ -50,7 +50,7 @@ class ScreenController extends BackendController
             $model->lid = $se->nextval();
             $model->create_at = date('Y-m-d H:i:s',time());
             $model->update_at = date('Y-m-d H:i:s',time());
-                       
+              var_dump($model->attributes);exit;         
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('screen/index' , 'companyId' => $this->companyId ));
