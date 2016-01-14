@@ -93,7 +93,7 @@
 						</thead>
 						<tbody>
 						<?php if($models) :?>
-						<?php foreach ($models as $model):?>
+						<?php foreach ($models as $model):$model->content = WxDiscuss::dealWithEmo($model->content);?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:20%"><?php echo $model->content;?></td>

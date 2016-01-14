@@ -55,7 +55,7 @@
 							
 	<script>
 		function swfupload_callback(name,path,oldname)  {
-			$("#Product_main_picture").val(name);
+			$("#Screen_vedio_pic").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 		}
 	</script>
