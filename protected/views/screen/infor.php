@@ -49,7 +49,7 @@
 
 				var time = 15000;
 				if($(this).index() % 2 == 0){
-					time = 10000;
+					time = 13000;
 				}
 
 				$(this).animate({left:"-"+_left+"px"},time,function(){
