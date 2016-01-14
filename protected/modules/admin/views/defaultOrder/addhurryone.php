@@ -219,6 +219,8 @@
                                 });
                                 layer.close(layer_index_hurrybox);
                                 layer_index_hurrybox=0;
+                                layer.close(layer_index1);
+                                layer_index1=0;
                         });
                         //create_btn_close_retreat
                         $('#create_btn_close_retreat').on(event_clicktouchstart,function(){   
