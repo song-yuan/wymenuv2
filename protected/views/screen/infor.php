@@ -47,7 +47,7 @@
 
 				$(this).css({left:_left,top:_top,color:getRandomColor()});
 
-				var time = 7500;
+				var time = 15000;
 				if($(this).index() % 2 == 0){
 					time = 10000;
 				}
