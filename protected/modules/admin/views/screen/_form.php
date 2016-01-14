@@ -39,6 +39,13 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<?php echo $form->label($model, 'default_content',array('class' => 'col-md-3 control-label'));?>
+				<div class="col-md-8">
+					<?php echo $form->textArea($model, 'default_content' , array('class' => 'form-control','placeholder'=>'无最新评论时默认显示该内容'));?>
+					<?php echo $form->error($model, 'default_content' )?>
+				</div>
+			</div>
+			<div class="form-group">
 				<?php echo $form->label($model, 'remark',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-8">
 					<?php echo $form->textArea($model, 'remark' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('remark')));?>
