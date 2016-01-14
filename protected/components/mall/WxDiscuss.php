@@ -192,9 +192,9 @@ class WxDiscuss
 		$discusses = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();
-		foreach($discusses as $discus){
+		foreach($discusses as $k=>$discus){
 			self::showDiscuss($discus['lid'],$discus['dpid']);
-			$discus['content'] = self::dealWithEmo($discus['content']);
+			$discusses[$k]['content'] = self::dealWithEmo($discus['content']);
 		}
 	    return $discusses;
 	}
