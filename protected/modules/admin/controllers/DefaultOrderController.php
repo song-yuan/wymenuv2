@@ -1891,118 +1891,118 @@ class DefaultOrderController extends BackendController
                                 'productname'=>$productname
 		));
 	}
-	public function actionHurryProduct() {
+	public function actionAddHurryOne() {
 		$companyId=Yii::app()->request->getParam('companyId','0');
-		$orderDetailId=Yii::app()->request->getParam('orderDetailId','0');
-		//Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
-		$db=Yii::app()->db;
-		$orderRetreat = new OrderRetreat();
-		$orderRetreat->order_detail_id = $orderDetailId;
-		$orderRetreat->dpid = $companyId;
-		$retreats = Retreat::model()->findAll(' dpid=:dpid and delete_flag = 0',array(':dpid'=>$companyId));
-		$retreatslist=CHtml::listData($retreats, 'lid', 'name');
-		//var_dump($retreatslist);exit;
-		$orderDetail = OrderProduct::model()->with("product")->findAll('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));
-		//Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
-		$orderId=$orderDetail[0]->order_id;
-		//var_dump($orderDetail);exit;
-		$productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderDetail[0]->product_id,':dpid'=>$companyId));
-		$productname=$productdata->product_name;
-		$ret=array();
+                $orderDetailId=Yii::app()->request->getParam('orderDetailId','0');
+                //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
+                $db=Yii::app()->db;
+                $orderRetreat = new OrderRetreat();
+                $orderRetreat->order_detail_id = $orderDetailId;
+                $orderRetreat->dpid = $companyId;
+                $retreats = Retreat::model()->findAll(' dpid=:dpid and delete_flag = 0',array(':dpid'=>$companyId));                
+                $retreatslist=CHtml::listData($retreats, 'lid', 'name');
+                //var_dump($retreatslist);exit;
+                $orderDetail = OrderProduct::model()->with("product")->findAll('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));
+                //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
+                $orderId=$orderDetail[0]->order_id;
+                //var_dump($orderDetail);exit;
+                $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderDetail[0]->product_id,':dpid'=>$companyId));
+                $productname=$productdata->product_name;
+                $ret=array();
 		if(Yii::app()->request->isPostRequest){
-			Until::validOperate($companyId, $this);
-			$retreatnum=Yii::app()->request->getPost('retreatnum',0);
-			$othermemo=Yii::app()->request->getPost('othermemo','');
-			$retreatid=Yii::app()->request->getPost('retreatid','');
-			$isall=Yii::app()->request->getPost('isall','1');
-			$padid=Yii::app()->request->getPost('padid','1');
-			$time=date('Y-m-d H:i:s',time());
-			//Yii::app()->end(json_encode(array('status'=>false,'msg'=>$retreatnum.$othermemo.$isall.$padid)));
-			$transaction = Yii::app()->db->beginTransaction();
-			try {
-				$sqlorderproduct="";
-				$memo="";
-// 				if($isall=="0")
-// 				{
-					//$sqlorderproduct="update nb_order_product set amount=amount-".$retreatnum." where dpid=".$companyId." and lid = ".$orderDetailId;
-					$memo="催菜";
-// 				}else{
-// 					//$sqlorderproduct="update nb_order_product set is_retreat = 1 where dpid=".$companyId." and lid = ".$orderDetailId;
-// 					$memo="全退".$othermemo;
-// 				}
-				//$db->createCommand($sqlorderproduct)->execute();
-				//Yii::app()->end(json_encode(array('status'=>"0",'msg'=>$retreatnum.$othermemo)));
-// 				$se=new Sequence("order_retreat");
-// 				$orderRetreatlid = $se->nextval();
-// 				$orderRetreat = array(
-// 						'lid'=>$orderRetreatlid,
-// 						'dpid'=>$companyId,
-// 						'create_at'=>$time,
-// 						'order_detail_id'=>$orderDetailId,
-// 						'update_at'=>$time,
-// 						'retreat_memo'=>$memo,
-// 						'retreat_id'=>$retreatid,
-// 						'username'=>Yii::app()->user->name,
-// 						'retreat_amount'=>$retreatnum,
-// 						'delete_flag'=>'0',//'product_order_status'=>$orderProductStatus,
-// 				);
-// 				$db->createCommand()->insert('nb_order_retreat',$orderRetreat);
-				//                            Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
-				if($productdata->store_number>=0)
-				{
-					$productdata->store_number=$retreatnum+$productdata->store_number;
-					$productdata->update_at=$time;
-					$productdata->save();
-				}
-				//Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
-				////////////////退菜打印
-				$order=new Order();
-				$siteNo=new SiteNo();
-				$site=new Site();
-				///***********insert to order feedback
-				///*************print
-				if(!empty($orderId))
-				{
-					$order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
-					//Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));
-					if(empty($order))
-					{
-						Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
-					}
-					$criteria = new CDbCriteria;
-					$criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
-					$criteria->order = ' t.lid desc ';
-					$siteNo = SiteNo::model()->find($criteria);
-					//order site 和 siteno都需要更新状态 所以要取出来
-					if($order->is_temp=="0")
-					{
-						$criteria2 = new CDbCriteria;
-						$criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
-						$criteria2->order = ' t.lid desc ';
-						$site = Site::model()->with("siteType")->find($criteria2);
-					}
-				}
-				//$memo="退菜单";
-				$orderDetail[0]->amount=$retreatnum;
-				//Yii::app()->end(json_encode(array('status'=>false,'msg'=>$order->dpid)));
-				$ret=  Helper::printKitchenOther($order,$orderDetail,$site,$siteNo,false,$othermemo);
-				if(!$ret['status'])
-				{
-					$transaction->rollback();
-				}else{
-					$transaction->commit();
-				}
-				//$ret= json_encode(array('status'=>"1",'msg'=>yii::t('app','退菜成功')));
-			} catch (Exception $e) {
-				$transaction->rollback(); //如果操作失败, 数据回滚
-				$ret= array('status'=>false,'msg'=>yii::t('app','失败1'));
-			}
-			Yii::app()->end(json_encode($ret));
-		}
-		$this->renderPartial('addretreatone' , array(
+                    Until::validOperate($companyId, $this);
+                    $retreatnum=Yii::app()->request->getPost('retreatnum',0);
+                    $othermemo=Yii::app()->request->getPost('othermemo','');
+                    $retreatid=Yii::app()->request->getPost('retreatid','');
+                    $isall=Yii::app()->request->getPost('isall','1');
+                    $padid=Yii::app()->request->getPost('padid','1');
+                    $time=date('Y-m-d H:i:s',time());
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$retreatnum.$othermemo.$isall.$padid)));
+                    $transaction = Yii::app()->db->beginTransaction();
+                    try {
+                        $sqlorderproduct="";
+                        $memo="催菜单！";
+//                         if($isall=="0")
+//                         {
+//                             $sqlorderproduct="update nb_order_product set amount=amount-".$retreatnum." where dpid=".$companyId." and lid = ".$orderDetailId;
+//                             $memo="退".$retreatnum."份".$othermemo;
+//                         }else{
+//                             $sqlorderproduct="update nb_order_product set is_retreat = 1 where dpid=".$companyId." and lid = ".$orderDetailId;
+//                             $memo="全退".$othermemo;
+//                         }
+//                            $db->createCommand($sqlorderproduct)->execute();
+	                    //Yii::app()->end(json_encode(array('status'=>"0",'msg'=>$retreatnum.$othermemo)));
+//                             $se=new Sequence("order_retreat");
+// 	                    $orderRetreatlid = $se->nextval();
+//                             $orderRetreat = array(
+//                                             'lid'=>$orderRetreatlid,
+//                                             'dpid'=>$companyId,
+//                                             'create_at'=>$time,
+//                                             'order_detail_id'=>$orderDetailId,
+//                                             'update_at'=>$time,
+//                                             'retreat_memo'=>$memo,
+//                                             'retreat_id'=>$retreatid,
+//                                             'username'=>Yii::app()->user->name,
+//                                             'retreat_amount'=>$retreatnum,
+//                                             'delete_flag'=>'0',//'product_order_status'=>$orderProductStatus,
+//                                             );
+//                             $db->createCommand()->insert('nb_order_retreat',$orderRetreat);
+//                            Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
+                            if($productdata->store_number>=0)
+                            {
+                                $productdata->store_number=$retreatnum+$productdata->store_number;
+                                $productdata->update_at=$time;
+                                $productdata->save();
+                            }
+                            //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
+                                ////////////////退菜打印
+                            $order=new Order();
+                            $siteNo=new SiteNo();
+                            $site=new Site();
+                            ///***********insert to order feedback
+                            ///*************print
+                            if(!empty($orderId))
+                            {
+                                $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
+                                if(empty($order))
+                                {
+                                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                                }
+                                $criteria = new CDbCriteria;
+                                $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                                $criteria->order = ' t.lid desc ';                    
+                                $siteNo = SiteNo::model()->find($criteria);
+                                //order site 和 siteno都需要更新状态 所以要取出来
+                                if($order->is_temp=="0")
+                                {
+                                    $criteria2 = new CDbCriteria;
+                                    $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
+                                    $criteria2->order = ' t.lid desc ';                    
+                                    $site = Site::model()->with("siteType")->find($criteria2);
+                                }
+                            }
+                            //$memo="退菜单";
+                            $orderDetail[0]->amount=$retreatnum;
+                            //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$order->dpid)));                           
+                            $ret=  Helper::printKitchenOther($order,$orderDetail,$site,$siteNo,false,$othermemo);                    
+                            if(!$ret['status'])
+                            {
+                                $transaction->rollback();
+                            }else{
+                                $transaction->commit();
+                            }
+                            //$ret= json_encode(array('status'=>"1",'msg'=>yii::t('app','退菜成功')));
+                        } catch (Exception $e) {
+                                $transaction->rollback(); //如果操作失败, 数据回滚
+                                $ret= array('status'=>false,'msg'=>yii::t('app','失败1'));
+                        } 
+                        Yii::app()->end(json_encode($ret));                    
+                }                
+                $this->renderPartial('addhurryone' , array(
 				'orderRetreat' => $orderRetreat,
 				'retreats'=>$retreatslist,
-				'productname'=>$productname
+                                'productname'=>$productname
 		));
 	}    
 	
