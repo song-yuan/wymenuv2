@@ -723,6 +723,10 @@
             <div id="orderaccountsure" style="display: none">
                 
             </div>
+            <input type="hidden" value="0" id="selectproductnumforhurry">
+            <div id="hurrybox" style="display: none">
+                
+            </div>
         <script type="text/javascript">
             var gsid=0;
             var gistemp=0;
@@ -743,6 +747,7 @@
             var layer_index_printresult=0;
             var layer_index_membercard=0;
             var layer_index_retreatbox=0;
+            var layer_index_hurrybox=0;//cf
             var layer_index_selectalldiscount=0;
             var layer_index_orderaccountsure=0;
             var first_tab="<?php echo empty($categories)?"0":$categories[0]['lid']; ?>";
@@ -2071,12 +2076,12 @@
 //                 	  layer_index1=0;
 //                      $modal.modal();
 //                });
-                $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
-                if(layer_index_retreatbox!=0)
+                $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addHurryOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+                if(layer_index_hurrybox!=0)
                 {
                     return;
                 }
-                layer_index_retreatbox=layer.open({
+                layer_index_hurrybox=layer.open({
                      type: 1,
                      shade: false,
                      title: false, //不显示标题
@@ -2084,7 +2089,7 @@
                      content: $('#retreatbox'), //捕获的元素
                      cancel: function(index){
                          layer.close(index);
-                         layer_index_retreatbox=0;
+                         layer_index_hurrybox=0;
         //                        this.content.show();
         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                      }
@@ -2177,7 +2182,7 @@
                     return;
                 }
                 //alert(curnum);
-                //$("#selectproductnumfordelete").val(curnum);
+                $("#selectproductnumforhurry").val(curnum);
                 if(orderstatus!="0")//退菜是单个的
                 {
                     var isretreat=$(this).parent().attr("is_retreat");
@@ -2186,12 +2191,39 @@
                         alert("已经退菜");
                         return false;
                     }else{
-                        var lid=$(this).parent().attr("lid");
-                        var url='<?php echo $this->createUrl('defaultOrder/hurryProduct',array('companyId'=>$this->companyId));?>/orderDetailId/'+lid;
-                       alert("111"); 
+                        //var lid=$(this).parent().attr("lid");
+                        $('#hurrybox').load("<?php echo $this->createUrl('defaultOrder/addHurryOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+                        if(layer_index_retreatbox!=0)
+                        {
+                            return;
+                        }
+                        layer_index_hurrybox=layer.open({
+                             type: 1,
+                             shade: false,
+                             title: false, //不显示标题
+                             area: ['50%', '70%'],
+                             content: $('#hurrybox'), //捕获的元素
+                             cancel: function(index){
+                                 layer.close(index);
+                                 layer_index_hurrytbox=0;
+                //                        this.content.show();
+                //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                            }
+                        }); 
                     }
                 }else{ //下单前减少是整体的           
-                    alert("222");                   
+                    if(setid=="0000000000")
+                    {
+                        productCancelSelect($(this).parent(),1);
+                    }else{
+                        var objnum=0;
+                        $.each($(".selectProductA[setid="+setid+"]"),function(skey,sobj){
+                            //alert($(sobj));
+                            objnum=parseFloat($(sobj).find('span[class="badge"]').text());
+                            productCancelSelect($(sobj),objnum);
+                        });
+                        //$("#productTempOrderNum").val(parseInt($("#productTempOrderNum").val())-1);
+                    }                    
                 }
             });
             
