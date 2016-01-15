@@ -40,8 +40,8 @@
 					'fileTypes'=> '*.jpg',
 					'buttonText'=> yii::t('app','上传产品图片'),
 					'companyId' => $model->dpid,
-					'image_width'=>940,
-					'image_height'=>700,
+					'thumbWidth'=>940,
+					'thumbHeight'=>700,
 					'imgUrlList' => array($model->discuss_pic),
 				));
 				?>
@@ -86,6 +86,6 @@
 		}
 		function swfupload_callback1(name,path,oldname)  {
 			$("#Screen_discuss_pic").val(name);
-			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
+			$("#thumbnails_2").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 		}
 	</script>
