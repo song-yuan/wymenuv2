@@ -8,7 +8,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 
 
-<body style="background:url(<?php echo $baseUrl;?>/img/bg/2.jpg);">
+<body style="background:url(<?php echo $screen['discuss_pic'];?>);">
 	<div class="main_discuss">
 	
 	</div>
@@ -50,7 +50,7 @@
 			var i = 0;
 			 setInterval(function(){
 				$.ajax({
-					url:'<?php echo $this->createUrl('/screen/ajaxGetDiscuss',array('companyId'=>$this->companyId,'screenId'=>$screenId));?>',
+					url:'<?php echo $this->createUrl('/screen/ajaxGetDiscuss',array('companyId'=>$this->companyId,'screenId'=>$screen['lid']));?>',
 					dataType:'json',
 					success:function(msg){
 						for(var p in msg){
