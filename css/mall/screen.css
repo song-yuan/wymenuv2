@@ -114,3 +114,15 @@ ul.vedio li img{
 	color: red;
 	z-index: 1000;
 }
+.bg{
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	
+}
+.bg img{
+	height:100%;
+	height:100%;
+	}
