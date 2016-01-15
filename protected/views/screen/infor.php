@@ -10,7 +10,8 @@
 
 <div class="section">
 	<h2><?php echo $screen['title'];?></h2>
-	<div id="playercontainer"></div>
+	<div id="playercontainer">
+	</div>
 </div>
 		
 <script type="text/javascript">
@@ -31,6 +32,15 @@
 			//ak 和 sk（sk 只需前 16 位）参数值需要开发者进行申请
 			ak : "85518b85842c4cc0809523322c8c05c3",
 			sk : "4373f8e3941d4a19"
+		});
+		player.onPause(function(event){
+			$('.logo').show();;
+		});
+		player.onComplete(function(event){
+			$('.logo').show();
+		});
+		player.onPlay(function(event){
+			$('.logo').hide();
 		});
 		function init_barrage(top,obj){
 			$('.'+top).find('.'+obj).show().each(function(){
@@ -58,6 +68,7 @@
 		}
 		$(document).ready(function(){
 			$("#playercontainer").append('<div class="top0"></div><div class="top1"></div>');
+			$("#playercontainer").append('<div class="logo"><img src="<?php echo $baseUrl;?>/img/mall/subscribe-code.jpg" /></div>');
 			var i = 0;
 			 setInterval(function(){
 				$.ajax({

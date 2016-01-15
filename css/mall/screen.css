@@ -78,3 +78,14 @@ ul.vedio li img{
 	border:none;
 	font-size: 20px;
 }
+.section .logo{
+	position:absolute;
+	right:20px;
+	bottom:40px;
+	z-index: 1000;
+	display:none;
+}
+.logo img{
+	width:100px;
+	height:100px;
+}
