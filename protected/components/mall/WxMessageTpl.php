@@ -17,7 +17,7 @@ class WxMessageTpl
 		$this->data = $data;
 	}
 	public function getMsgTpl(){
-		$sql = 'select * from nb_discuss where dpid=:dpid and message_type=:type and delete_flag=0';
+		$sql = 'select * from nb_weixin_messagetpl where dpid=:dpid and message_type=:type and delete_flag=0';
 		$this->msgTpl = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':type',$this->type)
@@ -32,7 +32,7 @@ class WxMessageTpl
 			array(
 				'touser'=>$openId,
 	            'template_id'=>$msgTplId,
-	            'url'=>$this->createAbsoluteUrl('/user/order',array('companyId'=>$this->dpid,'orderId'=>$this->data)),
+	            'url'=>$this->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$this->dpid,'orderId'=>$this->data['lid'])),
 	            'topcolor'=>'#FF0000',
 	            'data' => array(
 	                'first'=>array(
@@ -44,7 +44,7 @@ class WxMessageTpl
 	                    'color'=>'#CCCCCC',
 	                ),
 	                'price'=>array(
-	                    'value'=>$this->data,
+	                    'value'=>$this->data['should_total'],
 	                    'color'=>'#CCCCCC',
 	                ),
 	                'time'=>array(
