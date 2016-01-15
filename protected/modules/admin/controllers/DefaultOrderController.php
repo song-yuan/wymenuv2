@@ -1948,12 +1948,12 @@ class DefaultOrderController extends BackendController
 //                                             );
 //                             $db->createCommand()->insert('nb_order_retreat',$orderRetreat);
 //                            Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
-                            if($productdata->store_number>=0)
-                            {
-                                $productdata->store_number=$retreatnum+$productdata->store_number;
-                                $productdata->update_at=$time;
-                                $productdata->save();
-                            }
+//                             if($productdata->store_number>=0)
+//                             {
+//                                 $productdata->store_number=$retreatnum+$productdata->store_number;
+//                                 $productdata->update_at=$time;
+//                                 $productdata->save();
+//                             }
                             //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
                                 ////////////////退菜打印
                             $order=new Order();
@@ -1983,9 +1983,9 @@ class DefaultOrderController extends BackendController
                                 }
                             }
                             //$memo="退菜单";
-                            $orderDetail[0]->amount=$retreatnum;
+                            //$orderDetail[0]->amount=$retreatnum;
                             //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$order->dpid)));                           
-                            $ret=  Helper::printKitchenOther($order,$orderDetail,$site,$siteNo,false,$othermemo);                    
+                            $ret=  Helper::printKitchenHurry($order,$orderDetail,$site,$siteNo,false,$othermemo);                    
                             if(!$ret['status'])
                             {
                                 $transaction->rollback();
