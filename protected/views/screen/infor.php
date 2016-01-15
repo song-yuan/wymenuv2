@@ -42,11 +42,11 @@
 		player.onPlay(function(event){
 			$('.logo').hide();
 		});
-		function init_barrage(top,obj){
-			$('.'+top).find('.'+obj).show().each(function(){
-				var topW = $('.top').width();
+		function init_barrage(obj){
+			$('.barrage').find('.'+obj).show().each(function(){
+				var topW = $('.barrage').width();
 				var thisW = $(this).width();
-				var _left = topW + thisW;
+				var _left = topW + 20;
 				
 				
 				$(this).css({left:_left,color:getRandomColor()});
@@ -67,7 +67,7 @@
 			})((Math.random() * 0x1000000 << 0).toString(16))
 		}
 		$(document).ready(function(){
-			$("#playercontainer").append('<div class="top0"></div><div class="top1"></div>');
+			$("#playercontainer").append('<div class="barrage top0"></div><div class="barrage top1"></div>');
 			$("#playercontainer").append('<div class="logo"><img src="<?php echo $baseUrl;?>/img/mall/subscribe-code.jpg" /></div>');
 			var i = 0;
 			 setInterval(function(){
@@ -85,7 +85,7 @@
 							}
 							
 						}
-						init_barrage(top,'ms'+i);
+						init_barrage('ms'+i);
 						i++;
 						if(i > 100000){
 							i = 0;
