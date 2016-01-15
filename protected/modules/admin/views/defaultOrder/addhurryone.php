@@ -214,7 +214,7 @@
                                         error: function(msg){
                                             var data=msg;
                                             alert("保存失败2");
-                                            alert(data.msg);
+                                            //alert(data.msg);
                                         }
                                 });
                                 layer.close(layer_index_hurrybox);
