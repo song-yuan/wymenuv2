@@ -55,12 +55,6 @@
 					success:function(msg){
 						for(var p in msg){
 							$(".main_discuss").append('<div class="message ms'+i+'">'+msg[p]['content']+'</div>');
-							$(".main_discuss").append('<div class="message ms'+i+'">'+6666666666+'</div>');
-							$(".main_discuss").append('<div class="message ms'+i+'">'+6666666666+'</div>');
-							$(".main_discuss").append('<div class="message ms'+i+'">'+6666666666+'</div>');
-							$(".main_discuss").append('<div class="message ms'+i+'">'+6666666666+'</div>');
-							$(".main_discuss").append('<div class="message ms'+i+'">'+6666666666+'</div>');
-							$(".main_discuss").append('<div class="message ms'+i+'">'+6666666666+'</div>');
 						}
 						init_barrage('ms'+i);
 						i++;
