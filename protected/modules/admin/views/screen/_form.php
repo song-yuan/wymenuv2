@@ -40,6 +40,8 @@
 					'fileTypes'=> '*.jpg',
 					'buttonText'=> yii::t('app','上传产品图片'),
 					'companyId' => $model->dpid,
+					'image_width'=>940,
+					'image_height'=>700,
 					'imgUrlList' => array($model->discuss_pic),
 				));
 				?>
