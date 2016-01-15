@@ -10,8 +10,9 @@
 class WxMessageTpl
 {
 	
-	public function __construct($dpid,$type,$data){
+	public function __construct($dpid,$userId,$type,$data){
 		$this->dpid = $dpid;
+		$this->userId = $userId;
 		$this->type = $type;
 		$this->data = $data;
 	}
@@ -23,6 +24,40 @@ class WxMessageTpl
 				  ->queryRow();
 	}
 	public function getData(){
+		$openId = '';
+		$msgTplId = '';
+		$url = '';
+		
+		$megTplData = array(
+			array(
+				'touser'=>$openId,
+	            'template_id'=>$msgTplId,
+	            'url'=>$this->createAbsoluteUrl('/user/order',array('companyId'=>$this->dpid,'orderId'=>$this->data)),
+	            'topcolor'=>'#FF0000',
+	            'data' => array(
+	                'first'=>array(
+	                    'value'=>'您好，您已支付成功订单',
+	                    'color'=>'#0A0A0A',
+	                ),
+	                'product'=>array(
+	                    'value'=>'点餐订单',
+	                    'color'=>'#CCCCCC',
+	                ),
+	                'price'=>array(
+	                    'value'=>$this->data,
+	                    'color'=>'#CCCCCC',
+	                ),
+	                'time'=>array(
+	                    'value'=>time(),
+	                    'color'=>'#CCCCCC',
+	                ),
+	                'remark'=>array(
+	                    'value'=>'正在尽快给您出菜~',
+	                    'color'=>'#173177',
+	                )
+	            )
+			),
+		);
 		
 	}
 	public function sent(){
