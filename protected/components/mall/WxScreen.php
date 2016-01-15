@@ -9,7 +9,7 @@
 class WxScreen
 {
 	public static function get($dpid){
-		$sql = 'select * from nb_screen where dpid=:dpid and delete_flag=0';
+		$sql = 'select * from nb_screen where dpid=:dpid and delete_flag=0 order by lid desc';
 		$screens = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();

@@ -32,26 +32,19 @@
 			ak : "85518b85842c4cc0809523322c8c05c3",
 			sk : "4373f8e3941d4a19"
 		});
-		function init_barrage(obj){
-			var _top = 20;
-			$('.top').find('.'+obj).show().each(function(){
+		function init_barrage(top,obj){
+			$('.'+top).find('.'+obj).show().each(function(){
 				var topW = $('.top').width();
 				var thisW = $(this).width();
 				var _left = topW + thisW;
-
-				$(this).css({left:_left,top:_top,color:getRandomColor()});
 				
-				_top +=75;
-				if(_top >= 100){
-					_top = 20;
-				}
-
-
+				
+				$(this).css({left:_left,color:getRandomColor()});
+		
 				var time = 15000;
 				if($(this).index() % 2 == 0){
 					time = 13000;
 				}
-
 				$(this).animate({left:"-"+_left+"px"},time,function(){
 					$(this).remove();
 				});
@@ -64,7 +57,7 @@
 			})((Math.random() * 0x1000000 << 0).toString(16))
 		}
 		$(document).ready(function(){
-			$("#playercontainer").append('<div class="top"></div>');
+			$("#playercontainer").append('<div class="top0"></div><div class="top1"></div>');
 			var i = 0;
 			 setInterval(function(){
 				$.ajax({
@@ -72,9 +65,16 @@
 					dataType:'json',
 					success:function(msg){
 						for(var p in msg){
-							$(".top").append('<div class="message ms'+i+'">'+msg[p]['content']+'</div>');
+							if(p % 2 == 0){
+								var top = 'top0';
+								$(".top0").append('<div class="message ms'+i+'">'+msg[p]['content']+'</div>');
+							}else{
+								var top = 'top1';
+								$(".top1").append('<div class="message ms'+i+'">'+msg[p]['content']+'</div>');
+							}
+							
 						}
-						init_barrage('ms'+i);
+						init_barrage(top,'ms'+i);
 						i++;
 						if(i > 100000){
 							i = 0;
