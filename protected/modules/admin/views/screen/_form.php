@@ -36,7 +36,7 @@
 				<div class="col-md-9">
 				<?php
 				$this->widget('application.extensions.swfupload.SWFUpload',array(
-					'callbackJS'=>'swfupload_callback',
+					'callbackJS'=>'swfupload_callback1',
 					'fileTypes'=> '*.jpg',
 					'buttonText'=> yii::t('app','上传产品图片'),
 					'companyId' => $model->dpid,
@@ -80,6 +80,10 @@
 	<script>
 		function swfupload_callback(name,path,oldname)  {
 			$("#Screen_vedio_pic").val(name);
+			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
+		}
+		function swfupload_callback1(name,path,oldname)  {
+			$("#Screen_discuss_pic").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 		}
 	</script>

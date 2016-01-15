@@ -46,12 +46,12 @@ class Screen extends CActiveRecord
 			array('update_at, title, vedio_url', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('title, vedio_pic, vedio_url, default_content, remark', 'length', 'max'=>255),
+			array('title, vedio_pic, vedio_url, discuss_pic, default_content, remark', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, title, vedio_pic, vedio_url, default_content, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, title, vedio_pic, discuss_pic, vedio_url, default_content, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -79,6 +79,7 @@ class Screen extends CActiveRecord
 			'title' => '视频名称',
 			'vedio_pic' => '视频图片',
 			'vedio_url' => '视频地址',
+			'discuss_pic' => '弹幕背景(941*706以上)',
 			'default_content'=>'默认显示内容',
 			'remark' => '备注',
 			'delete_flag' => 'Delete Flag',
@@ -104,6 +105,7 @@ class Screen extends CActiveRecord
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('vedio_pic',$this->vedio_pic,true);
 		$criteria->compare('vedio_url',$this->vedio_url,true);
+		$criteria->compare('discuss_pic',$this->discuss_pic,true);
 		$criteria->compare('default_content',$this->default_content,true);
 		$criteria->compare('remark',$this->remark,true);
 		$criteria->compare('delete_flag',$this->delete_flag);

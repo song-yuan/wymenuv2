@@ -9,7 +9,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/player/cyberplayer.js"></script>
 
 <div class="section">
-	<h2><?php echo $screen['title'];?></h2>
+	<h2><?php echo $screen['title'];?><small class="right"><a href="<?php echo $this->createUrl('screen/discuss',array('companyId'=>$this->companyId,'screenId'=>$screen['lid']));?>">>弹幕</a</small></small></h2>
 	<div id="playercontainer">
 	</div>
 </div>
