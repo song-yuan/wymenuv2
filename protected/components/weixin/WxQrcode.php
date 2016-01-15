@@ -7,6 +7,7 @@
  */
 class WxQrcode {
 	const SITE_QRCODE = 1;
+	const SCREEN_QRCODE = 2;
 
 	
 	public $db;
