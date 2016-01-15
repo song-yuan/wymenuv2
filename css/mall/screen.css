@@ -26,20 +26,31 @@ ul.vedio li span{
 ul.vedio li img{
 	width:100%;
 }
-#playercontainer .top {
+#playercontainer .top0 {
 	position: absolute;
-	top:0px;
+	top:20px;
 	left: 0px;
 	width:100%;
+	height:100%;
 	z-index: 1000;
 }
-#playercontainer .top .message,#playercontainer .bottom .message{
+#playercontainer .top1 {
+	position: absolute;
+	bottom:100px;
+	left: 0px;
+	width:100%;
+	height:100%;
+	z-index: 1000;
+}
+#playercontainer .top0 .message,#playercontainer .top1 .message{
 	position: relative;
 	top: 0;
-	left:5000px;
+	left:3600px;
+	width:100%;
 	font-size: 40px;
+	text-align:center;
 	color: red;
-	display: inline;
+	display: inline-block;
 }
 .fixed{
 	position: fixed;
