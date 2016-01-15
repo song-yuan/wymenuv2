@@ -30,6 +30,23 @@
 				<?php echo $form->error($model,'vedio_pic'); ?>
 				</div>
 			</div>
+			
+			<div class="form-group ">
+				<?php echo $form->label($model,'discuss_pic',array('class'=>'control-label col-md-3')); ?>
+				<div class="col-md-9">
+				<?php
+				$this->widget('application.extensions.swfupload.SWFUpload',array(
+					'callbackJS'=>'swfupload_callback',
+					'fileTypes'=> '*.jpg',
+					'buttonText'=> yii::t('app','上传产品图片'),
+					'companyId' => $model->dpid,
+					'imgUrlList' => array($model->discuss_pic),
+				));
+				?>
+				<?php echo $form->hiddenField($model,'discuss_pic'); ?>
+				<?php echo $form->error($model,'discuss_pic'); ?>
+				</div>
+			</div>
 
 			<div class="form-group">
 				<?php echo $form->label($model, 'vedio_url',array('class' => 'col-md-3 control-label'));?>
