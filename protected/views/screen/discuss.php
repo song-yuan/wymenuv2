@@ -8,10 +8,11 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 
 
-<body style="background:url(<?php echo $screen['discuss_pic'];?>) no-repeat center center;">
+<body>
 	<div class="main_discuss">
 	
 	</div>
+	<div class="bg"><img src="<?php echo $screen['discuss_pic'];?>" /></div>
 </body>
 		
 <script type="text/javascript">
