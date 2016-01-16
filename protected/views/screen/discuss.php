@@ -23,18 +23,18 @@
 				var topW = $('.main_discuss').width();
 				var thisW = $(this).width();
 				var _height = $('.main_discuss').height();
-				var _left = topW + 20;
+				var _left = topW + thisW;
 				
 				
-				$(this).css({left:_left,top:_top,color:getRandomColor()});
+				$(this).css({left:topW + 20,top:_top,color:getRandomColor()});
 
 				_top +=100;
 				if(_top > _height - 130){
 					_top = 20;
 				}
-				var time = 15000;
+				var time = 20000;
 				if($(this).index() % 2 == 0){
-					time = 13000;
+					time = 15000;
 				}
 				$(this).animate({left:"-"+_left+"px"},time,function(){
 					$(this).remove();
