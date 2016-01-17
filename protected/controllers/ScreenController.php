@@ -49,4 +49,10 @@ class ScreenController extends Controller
 		echo json_encode($discuss);
 		exit;
 	}
+	public function actionAjaxGetScreenTips(){
+		$screenId = Yii::app()->request->getParam('screenId');
+		$discuss = WxScreen::getScreen($this->companyId,$screenId);
+		echo json_encode($discuss);
+		exit;
+	}
 }

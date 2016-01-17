@@ -10,7 +10,7 @@
 
 <body>
 	<div class="main_discuss">
-	
+		<div class="bottom"></div>
 	</div>
 	<div class="bg"><img src="<?php echo $screen['discuss_pic'];?>" /></div>
 </body>
@@ -41,13 +41,45 @@
 				});
 			});
 		}
+		function init_bottom_barrage(obj){
+			$('.bottom').find('.message').show().each(function(){
+				var topW = $('.main_discuss').width();
+				var thisW = $(this).width();
+				var _height = $('.main_discuss').height();
+				var _left = topW + thisW;
+				
+				
+				$(this).css({left:topW + 20,color:getRandomColor()});
+
+				var time = 15000;
+				
+				$(this).animate({left:"-"+_left+"px"},time,function(){
+					$(this).remove();
+					bottomTips();
+				});
+			});
+		}
 		//获取随机颜色
 		function getRandomColor(){
 			return '#' + (function(h){
 				return new Array(7 - h.length).join("0") + h
 			})((Math.random() * 0x1000000 << 0).toString(16))
 		}
+		function bottomTips(){
+			$.ajax({
+					url:'<?php echo $this->createUrl('/screen/ajaxGetScreenTips',array('companyId'=>$this->companyId,'screenId'=>$screen['lid']));?>',
+					dataType:'json',
+					success:function(msg){
+						if(msg){
+							$(".bottom").append('<div class="message ">'+msg['default_content']+'</div>');
+						}
+						init_bottom_barrage();
+					},
+
+				});
+		}
 		$(document).ready(function(){
+			bottomTips()
 			var i = 0;
 			 setInterval(function(){
 				$.ajax({
