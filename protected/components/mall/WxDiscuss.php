@@ -143,13 +143,7 @@ class WxDiscuss
 			self::showDiscuss($discus['lid'],$discus['dpid']);
 			$discusses[$k]['content'] = self::dealWithEmo($discus['content']);
 		}
-		if(empty($discusses)){
-			$screen = WxScreen::getScreen($dpid,$screenId);
-			if($screen){
-				$discusses[0] = $screen;
-				$discusses[0]['content'] = $screen['default_content'];
-			}
-		}
+		
 	    return $discusses;
 	}
 	
