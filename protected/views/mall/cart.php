@@ -9,9 +9,9 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
-<form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
+<form action="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
 <?php if($this->type==1):?>
-<div class="site_no">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'];}?>><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" />人数: <input type="button" class="num-minus"  value="-"><input type="text" class="number" name="number" value="<?php if($siteNum){ echo (int)(($siteNum['min_persons'] + $siteNum['max_persons'])/2);}else{echo '3';}?>" readyonly/> <input type="button" class="num-add"  value="+"></div>
+<div class="site_no">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'];}?>><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" />人数: <input type="button" class="num-minus"  value="-"><input type="text" class="number" name="number" value="<?php if($siteNum){ echo (int)(($siteNum['min_persons'] + $siteNum['max_persons'])/2);}else{echo '3';}?>" readonly="readonly"/> <input type="button" class="num-add"  value="+"></div>
 <?php endif;?>
 <div class="section" style="padding-top:10px;">
     <div class="prt">
@@ -83,9 +83,6 @@
 
 <script> 
 $(document).ready(function(){ 
-	<?php if(isset($msg)&&$msg):?>
-	layer.msg('<?php echo $msg;?>');
-	<?php endif;?>
 	$('.checkOrder').click(function(){
 		<?php if($this->type==1):?>
 		var serial = $('.serial').val();

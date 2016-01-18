@@ -3,7 +3,7 @@ body{ background-color:#E5E5E5;}
 .prt-cat{width: 100%;margin:5px 0;}
 .prt{margin:2px 0;}
 .prt-lt{float: left;width: 33%;}
-.prt-mt{float: left;width: 33%;}
+.prt-mt{float: left;width: 33%;text-align:center;}
 .prt-rt{float: left;width: 33%;}
 .prt-rt input.minus,.prt-rt input.result{ float:left; width:0.28rem; height:0.28rem; font-size:0.18rem; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
 .prt-rt input.add{ float:left; width:0.28rem; height:0.28rem; font-size:0.18rem; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
