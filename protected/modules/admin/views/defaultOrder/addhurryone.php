@@ -16,11 +16,9 @@
                                                     
                                                 </div>
                                                 <div class="modal-body">
-                                                                <div class="btn-group" data-toggle="buttons" style="margin: 5px;border: 1px solid red;background: rgb(245,230,230);">
-                                                                 确认进行催菜操作！！！
-                                                                </div>
                                                                 
-                                                    
+                                                   	 确认进行催菜操作！！！
+                                                                
                                                 </div>
                                                 
                                                 <?php echo $form->hiddenField($orderRetreat,'order_detail_id',array('class'=>'form-control')); ?>
@@ -37,58 +35,8 @@
                         $(document).ready(function(){                            
                             $("#site_number").text($("#selectproductnumforhurry").val());
                         });
-                        $('#OrderRetreat_retreat_id').change(function(){
-                            var id = $(this).val();                            
-                                $.ajax({
-                                        url:'<?php echo $this->createUrl('defaultOrder/retreatTip',array('companyId'=>$this->companyId));?>/id/'+id,
-                                        type:'GET',
-                                        dataType:'json',
-                                        success:function(result){                                                                                                                                       
-                                                $('#OrderRetreat_retreat_memo').val(result.cp); 
-                                        }
-                                });                            
-                        });
-                        
-//                        $('#create_btn_add_retreat').on(event_clicktouchstart,function(){                            
-//                           // var id = $(this).val();                            
-//                                $.ajax({
-//                                        'type':'POST',
-//					'dataType':'json',
-//					'data':$('#retreat_form').serialize(),
-//					'url':$('#retreat_form').attr('action'),
-//                                        success:function(result){                                                                                                                                       
-//                                                alert(result.msg);
-//                                                var $modal=$('#portlet-config');
-//                                                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/retreatProduct',array('companyId'=>$this->companyId,'id'=>$orderRetreat->order_detail_id));?>'
-//                                                ,'', function(){
-//                                                  //$modal.modal();
-//                                                  $('#portlet-config2').modal('hide');
-//                                                });                                                
-//                                        }
-//                                });                            
-//                        });
-                        
-//                        $('#create_btn_add_retreat').on(event_clicktouchstart,function(){                            
-//                           var orderid=$(".selectProduct").attr("orderid");                            
-//                                $.ajax({
-//                                        'type':'POST',
-//					'dataType':'json',
-//					'data':$('#retreat_form').serialize(),
-//					'url':$('#retreat_form').attr('action'),
-//                                        success:function(result){
-//                                            alert(result.msg);
-//                                            if(result.status=="1")
-//                                            {
-//                                                $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);
-////                                              //$('#portlet-config').hide();
-//                                                layer.close(layer_index_retreatbox);
-//                                                layer_index_retreatbox=0;
-//                                                
-//                                            }
-//                                                                                                
-//                                        }
-//                                });                            
-//                        });
+                       
+
                         $('#create_btn_add_retreat').on(event_clicktouchstart,function(){                            
                            var orderid=$(".selectProduct").attr("orderid");
                             var padid="0000000046";
@@ -102,22 +50,7 @@
                             var retreatnum="2";
                             var othermemo="长时间没上菜！！";
                             var isall="0";
-                           //var retreatnum=parseInt($("#site_number").text());
-                           //var allnum=parseInt($("#selectproductnumforhurry").val());
-                           //lert(retreatnum);alert(allnum);
-//                            var isall=0;
-//                            if(retreatnum<1)
-//                            {
-//                                alert("数量不对");
-//                                return;
-//                            }
-//                            if(allnum <= retreatnum)
-//                            {
-//                                isall=1;
-//                                retreatnum=allnum;
-//                            }
-                           
-                           //alert(isall);
+
                            var orderdetailid="<?php echo $orderRetreat->order_detail_id; ?>";
                            var retreatid=$("label[class='selectRetreat btn btn-default active']").attr("retreatid");
                            var url="<?php echo $this->createUrl('defaultOrder/addHurryOne',array('companyId'=>$this->companyId,'orderDetailId'=>$orderRetreat->order_detail_id)); ?>";
@@ -227,18 +160,5 @@
                             layer.close(layer_index_hurrybox);
                             layer_index_hurrybox=0;
                         });
-                        
-                        $('#open_site_plus').on(event_clicktouchend,function(){
-                            var num = parseInt($("#site_number").text());
-                                 num = num + 1;
-                                 $("#site_number").text(num);                          
-                         });
 
-                         $('#open_site_minus').on(event_clicktouchend,function(){
-                            var num = parseInt($("#site_number").text());
-                                 num = num - 1;
-                                 if(num < 0)
-                                     num=0;
-                                 $("#site_number").text(num);                          
-                         });
                     </script>
