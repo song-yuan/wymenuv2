@@ -1922,38 +1922,7 @@ class DefaultOrderController extends BackendController
                     try {
                         $sqlorderproduct="";
                         $memo="催菜单！";
-//                         if($isall=="0")
-//                         {
-//                             $sqlorderproduct="update nb_order_product set amount=amount-".$retreatnum." where dpid=".$companyId." and lid = ".$orderDetailId;
-//                             $memo="退".$retreatnum."份".$othermemo;
-//                         }else{
-//                             $sqlorderproduct="update nb_order_product set is_retreat = 1 where dpid=".$companyId." and lid = ".$orderDetailId;
-//                             $memo="全退".$othermemo;
-//                         }
-//                            $db->createCommand($sqlorderproduct)->execute();
-	                    //Yii::app()->end(json_encode(array('status'=>"0",'msg'=>$retreatnum.$othermemo)));
-//                             $se=new Sequence("order_retreat");
-// 	                    $orderRetreatlid = $se->nextval();
-//                             $orderRetreat = array(
-//                                             'lid'=>$orderRetreatlid,
-//                                             'dpid'=>$companyId,
-//                                             'create_at'=>$time,
-//                                             'order_detail_id'=>$orderDetailId,
-//                                             'update_at'=>$time,
-//                                             'retreat_memo'=>$memo,
-//                                             'retreat_id'=>$retreatid,
-//                                             'username'=>Yii::app()->user->name,
-//                                             'retreat_amount'=>$retreatnum,
-//                                             'delete_flag'=>'0',//'product_order_status'=>$orderProductStatus,
-//                                             );
-//                             $db->createCommand()->insert('nb_order_retreat',$orderRetreat);
-//                            Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
-//                             if($productdata->store_number>=0)
-//                             {
-//                                 $productdata->store_number=$retreatnum+$productdata->store_number;
-//                                 $productdata->update_at=$time;
-//                                 $productdata->save();
-//                             }
+
                             //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
                                 ////////////////退菜打印
                             $order=new Order();
