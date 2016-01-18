@@ -139,9 +139,9 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
-		
 		$paytype = Yii::app()->request->getPost('paytype');
 		$cuponId = Yii::app()->request->getPost('cupon',0);
+		$yue = Yii::app()->request->getPost('yue',0);
 		$addressId = Yii::app()->request->getPost('address',-1);
 		$orderTime = Yii::app()->request->getPost('order_time',null);
 		$remark = Yii::app()->request->getPost('remark',null);
