@@ -1,5 +1,5 @@
 body{ background-color:#E5E5E5;}
-.section{width: 90%;margin:0 auto; padding: 10px 0 25px 0;margin-bottom:10px; border-bottom: 1px dashed #FF5151;font-size: 15px;position:relative;}
+.section{width: 100%;margin:0 auto; padding: 10px 0 25px 0;margin-bottom:10px; border-bottom: 1px dashed #FF5151;font-size: 15px;position:relative;}
 .prt-cat{width: 100%;margin:5px 0;}
 .prt{margin:2px 0;}
 .prt-lt{float: left;width: 33%;}
