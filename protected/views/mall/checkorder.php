@@ -128,15 +128,25 @@
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
 		<?php if($this->type==1):?>
-		<div class="item  on" paytype="2">立刻支付</div>
+		<div class="item  on" paytype="2">微信支付</div>
 		<div class="item" paytype="1" style="border:none;">饭后支付</div>
 		<input type="hidden" name="paytype" value="2" />
 		<?php else:?>
-		<div class="item on" paytype="2" style="border:none;">立刻支付</div>
+		<div class="item on" paytype="2" style="border:none;">微信支付</div>
 		<input type="hidden" name="paytype" value="2" />
 		<?php endif;?>
 	</div>
 </div>
+
+<!-- 余额 -->
+<div class="chooselist points">
+	<div class="left">余额 <span class="small font_l"><span id="yue"><?php echo number_format(12.4,2);?></span>元</span></div>
+	<div class="right">
+	<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
+	</div>
+</div>
+<!-- 余额 -->
+
 <div class="bottom"></div>
 
 <footer>
