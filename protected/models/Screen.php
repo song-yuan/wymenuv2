@@ -79,7 +79,7 @@ class Screen extends CActiveRecord
 			'title' => '视频名称',
 			'vedio_pic' => '视频图片',
 			'vedio_url' => '视频地址',
-			'discuss_pic' => '弹幕背景(941*706以上)',
+			'discuss_pic' => '弹幕背景(940*700以上)',
 			'default_content'=>'默认显示内容',
 			'remark' => '备注',
 			'delete_flag' => 'Delete Flag',
