@@ -61,7 +61,7 @@
 <!-- 地址 -->
 <?php endif;?>
 
-<div class="order-info">
+<div class="cart-info">
 	<div class="section" style="padding-top:10px;">
 	    <?php if(!empty($orderTastes)):?>
 	    <div class="taste">整单口味</div><div class="taste-desc"></div>
