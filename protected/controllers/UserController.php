@@ -48,7 +48,8 @@ class UserController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$user = WxBrandUser::get($userId,$this->companyId);
 		$userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
-		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user,'userLevel'=>$userLevel));
+		$remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
+		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user,'userLevel'=>$userLevel,'remainMoney'=>$remainMoney));
 	}
 	/**
 	 * 
@@ -86,10 +87,11 @@ class UserController extends Controller
 		if(in_array($order['order_type'],array(2,3))){
 			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
 		}
+		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		//查找分享红包
 		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
 		
-		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'redPack'=>$redPack));
+		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'orderPays'=>$orderPays,'redPack'=>$redPack));
 	}
 	public function actionAddress()
 	{

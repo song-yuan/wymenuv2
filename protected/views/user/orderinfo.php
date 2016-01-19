@@ -1,6 +1,14 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('订单详情');
+	$payYue = 0;
+	if(!empty($orderPays)){
+		foreach($orderPays as $orderPay){
+			if($orderPay['paytype']==10){
+				$payYue = $orderPay['pay_amount']; 
+			}
+		}
+	}
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
@@ -40,11 +48,11 @@
 		<div class="lt">合计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
 	</div>
-	<?php if($order['reality_total'] - $order['should_total']):?>
+	<?php if($order['reality_total'] - $order['should_total'] - $payYue):?>
 	
 	<?php if($order['cupon_branduser_lid'] > 0):?>
 	<div class="item">
-		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $order['cupon_money'],2);?></div>
+		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $payYue - $order['cupon_money'],2);?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
@@ -53,14 +61,19 @@
 	</div>
 	<?php else:?>
 	<div class="item">
-		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'],2);?></div>
+		<div class="lt">优惠减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $payYue,2);?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
 	
 	<?php endif;?>
+	<div class="ht1"></div>
+	<div class="item" >
+		<div class="lt">余额支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
+		<div class="clear"></div>
+	</div>
 	<div class="item">
-		<div class="lt">实际支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
+		<div class="lt">微信支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>

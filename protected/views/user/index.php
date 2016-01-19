@@ -35,7 +35,7 @@
 	</div>
 	-->
 	<div class="listset">
-		<div class="arrowright"><a href="<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$this->companyId));?>">余额 <span class="small font_l"> <?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?></span></a>
+		<div class="arrowright"><a href="<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$this->companyId));?>">余额 <span class="small font_l"> <?php echo $remainMoney;?></span></a>
 		</div>
 	</div>
 	
