@@ -175,7 +175,7 @@ class WxCart
 		foreach($cartArrs as $cart){
 			$price += $cart['price'];
 		}
-		return $price;
+		return number_format($price,2);
 	}
 	public static function clearCart($userId,$dpid){
 		$sql = 'delete from nb_cart where dpid='.$dpid.' and user_id='.$userId;

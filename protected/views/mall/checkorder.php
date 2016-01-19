@@ -140,7 +140,7 @@
 
 <!-- 余额 -->
 <div class="chooselist points">
-	<div class="left">余额 <span class="small font_l"><span id="yue"><?php echo number_format(12.4,2);?></span>元</span></div>
+	<div class="left">余额 <span class="small font_l"><span id="yue" yue="<?php echo $remainMoney;?>"><?php echo $remainMoney;?></span>元</span></div>
 	<div class="right">
 	<label><input type="checkbox" name="yue" class="ios-switch green  bigswitch" value="1" /><div><div></div></div></label>
 	</div>
@@ -151,7 +151,7 @@
 
 <footer>
     <div class="ft-lt">
-        <p>￥<span id="total" class="total">0.00</span></p>
+        <p>￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt">
         <p><a id="payorder" href="javascript:;">去支付</a></p>
@@ -171,19 +171,7 @@
 </form>
 
 <script>
-function setTotal(){ 
-    var s=0;
-    var v=0;
-    var n=0;
-    <!--计算总额--> 
-    $(".prt").each(function(){ 
-   		 s+=parseInt($(this).find('span[class*=num]').text())*parseFloat($(this).find('span[class*=price]').text()); 
-    });
-    $("#total").html(s.toFixed(2)); 
-} 
-
 $(document).ready(function(){
-	setTotal();
 	<?php if($this->type!=1):?>
 	var currYear = (new Date()).getFullYear();	
 	var opt={};
@@ -294,6 +282,7 @@ $(document).ready(function(){
 		}
 		money = money.toFixed(2);
 		$('#total').html(money);
+		$('#total').attr('total',money);
 		$('.cupon').find('.copun-rt').html('满'+minMoney+'减'+cuponMoney);
 	});
 	$('.user-cupon .item.noCupon').click(function(){
@@ -319,6 +308,7 @@ $(document).ready(function(){
 		}
 		money = money.toFixed(2);
 		$('#total').html(money);
+		$('#total').attr('total',money);
 		$('.cupon').find('.copun-rt').html('请选择代金券');
 	});
 	$('.cupon').click(function(){
@@ -327,6 +317,32 @@ $(document).ready(function(){
 			return;
 		}
 		$('#cuponList').css('display','block');
+	});
+	$('input[name="yue"]').change(function(){
+		var total = $('#total').attr('total');
+		var yue = $('#yue').attr('yue');
+
+		if($(this).is(':checked')){
+			if(parseFloat(yue) > parseFloat(total)){
+				var money = 0;
+				money = money.toFixed(2);
+				$('#total').html(money);
+			}else{
+				var money = total - yue;
+				money = money.toFixed(2);
+				$('#total').html(money);
+			}
+		}else{
+			if(parseFloat(yue) > parseFloat(total)){
+				var money = parseFloat(total);
+				money = money.toFixed(2);
+				$('#total').html(money);
+			}else{
+				var money = parseFloat(total);
+				money = money.toFixed(2);
+				$('#total').html(money);
+			}
+		}
 	});
 	$('#payorder').click(function(){
 		<?php if($this->type==1):?>
