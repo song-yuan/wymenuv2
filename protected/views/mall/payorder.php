@@ -1,6 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('订单');
+	$this->setPageTitle('支付订单');
 	//子订单号
 	$se = new Sequence("order_subno");
 	$orderSubNo = $se->nextval();
@@ -88,13 +88,15 @@
 	<?php endif;?>
 </div>
 
+<!---
 <div class="order-paytype">
-<div class="select-type">选择支付方式</div>
-<div class="paytype">
-	<div class="item on" paytype="1">微信支付</div>
-	<div class="item" paytype="2" remain-money="<?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?></span></div>
+	<div class="select-type">选择支付方式</div>
+	<div class="paytype">
+		<div class="item on" paytype="1">微信支付</div>
+		<div class="item" paytype="2" remain-money="<?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?></span></div>
+	</div>
 </div>
-</div>
+-->
 
 <footer>
     <div class="ft-lt">

@@ -74,7 +74,7 @@
         <p>合计:<span id="total" class="total">0.00元</span><span class="nm">(<label class="share"></label>份)</span></p>
     </div>
     <div class="ft-rt">
-    	<p><a href="<?php echo $this->createUrl('/mall/cart',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
+    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
     </div>
     <div class="clear"></div>
 </footer>

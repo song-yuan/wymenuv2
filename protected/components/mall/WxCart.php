@@ -170,6 +170,13 @@ class WxCart
 		}
 		return $success;
 	}
+	public static function getCartPrice($cartArrs){
+		$price = 0;
+		foreach($cartArrs as $cart){
+			$price += $cart['price'];
+		}
+		return $price;
+	}
 	public static function clearCart($userId,$dpid){
 		$sql = 'delete from nb_cart where dpid='.$dpid.' and user_id='.$userId;
 		$result = Yii::app()->db->createCommand($sql)->execute();
