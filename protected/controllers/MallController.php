@@ -127,8 +127,9 @@ class MallController extends Controller
 		$price = WxCart::getCartPrice($carts);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
+		$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
 		
-		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum));
+		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney));
 	}
 	/**
 	 * 
@@ -213,8 +214,44 @@ class MallController extends Controller
 		}
 		WxOrder::updatePayType($orderId,$this->companyId);
 		
+		//使用余额
+		if($yue){
+			$order = WxOrder::getOrder($orderId,$this->companyId);
+			$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
+			
+			$transaction=Yii::app()->db->beginTransaction();
+			try{
+				WxOrder::insertOrderPay($order,10);
+				$transaction->commit();
+			}catch (Exception $e) {
+				$transaction->rollback();
+				$msg = $e->getMessage();
+			}
+		}
 		$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	}
+	 /**
+	 * 
+	 * 
+	 * 支付订单
+	 * 
+	 */
+	 public function actionPayOrder()
+	 {
+	 	$userId = Yii::app()->session['userId'];
+		$orderId = Yii::app()->request->getParam('orderId');
+		$address = false;
+		
+		$order = WxOrder::getOrder($orderId,$this->companyId);
+		if($order['order_status'] > 2){
+			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+		}
+		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		if(in_array($order['order_type'],array(2,3))){
+			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
+		}
+		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$this->brandUser));
+	 }
 	/**
 	 * 
 	 * 
@@ -300,29 +337,6 @@ class MallController extends Controller
 			
 			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
 	  }
-	  
-	 /**
-	 * 
-	 * 
-	 * 支付订单
-	 * 
-	 */
-	 public function actionPayOrder()
-	 {
-	 	$userId = Yii::app()->session['userId'];
-		$orderId = Yii::app()->request->getParam('orderId');
-		$address = false;
-		
-		$order = WxOrder::getOrder($orderId,$this->companyId);
-		if($order['order_status'] > 2){
-			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
-		}
-		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		if(in_array($order['order_type'],array(2,3))){
-			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
-		}
-		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$this->brandUser));
-	 }
 	 /**
 	 * 
 	 * 
