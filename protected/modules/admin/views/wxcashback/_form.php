@@ -60,15 +60,21 @@
 												 <div style="width:20%;" class="col-md-4">
 													 <div class="radio-list">
 													  	<label>
-															<input type="radio" name="date_info_type"  value="1" checked> 固定日期
+															<input type="radio" name="date_info_type"  value="1" <?php if($model->date_info_type==="1") echo "checked";?>> 固定日期
 														</label>
 													  </div>
 												  </div>
 												  <div class="col-md-8">
 												  <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-													 <?php echo $form->textField($model,'begin_timestamp',array('name'=>"begin_timestamp",'class' => 'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_timestamp'))); ?>
+												  <?php if($model->date_info_type==="2") :?>
+													 <?php echo $form->textField($model,'begin_timestamp',array('disabled'=>"disabled",'name'=>"begin_timestamp",'class' => 'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_timestamp'))); ?>
+													 <span class="input-group-addon"> ~ </span>
+													 <?php echo $form->textField($model,'end_timestamp',array('disabled'=>"disabled",'name'=>"end_timestamp",'class'=>'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('end_timestamp'))); ?>
+												<?php else :?>
+												<?php echo $form->textField($model,'begin_timestamp',array('name'=>"begin_timestamp",'class' => 'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_timestamp'))); ?>
 													 <span class="input-group-addon"> ~ </span>
 													 <?php echo $form->textField($model,'end_timestamp',array('name'=>"end_timestamp",'class'=>'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('end_timestamp'))); ?>
+												<?php endif;?>
 												</div> 
 												<!-- /input-group -->
 												<?php echo $form->error($model,'begin_timestamp'); ?>
@@ -84,26 +90,35 @@
 												  <div style="width:20%;" class="col-md-4">
 													  <div class="radio-list">
 													  	<label>
-															<input type="radio" name="date_info_type"  value="2" > 领取后，
+															<input type="radio" name="date_info_type"  value="2" <?php if($model->date_info_type==="2") echo "checked";?>> 领取后，
 														</label>
 													  </div>
 												  </div>
 												  <div class="col-md-8">
-												    <div class="row input-large">
-													   <div class="col-md-4 select left">
-														   <select class="form-control" name="fixed_begin_term" disabled="disabled">
+												    <div style="width:100%;"class="row ">
+													   <div style="width:28%;"class="col-md-4 select left">
+														   <select class="form-control" name="fixed_begin_term" <?php if($model->date_info_type==="1") echo "disabled"; ?>>
 																<option value="0">当天</option>
+																<?php if($model->date_info_type==="2"):?>
 																<?php for($i=1;$i<91;$i++):?>
-																<option value="<?php echo $i;?>"><?php echo $i;?>天</option>
+																
+																<option value="<?php echo $i;?>" <?php if($i==$model->fixed_begin_term) echo 'selected';?>><?php echo $i;?>天</option>
+																
 																<?php endfor;?>
+																<?php endif;?>
 															</select>
 														</div>
-														<div class="col-md-4 select middle">&nbsp;&nbsp;生效,有效天数 </div>
-														<div class="col-md-4 select left">
-															<select class="form-control" name="fixed_term" disabled="disabled">
+														<div style="font-size:16px;width:32%;"class="col-md-4 select middle">&nbsp;生效,有效天数 </div>
+														<div style="width:28%;"class="col-md-4 select left">
+															<select class="form-control" name="fixed_term" <?php if($model->date_info_type==="1") echo "disabled"; ?>>
+															
+																<option value="999">无限制</option>
+																<?php if($model->date_info_type==="2"):?>
 																<?php for($i=1;$i<37;$i++):?>
-																<option value="<?php echo $i;?>" <?php if($i==3) echo 'selected';?>><?php echo $i;?>个月</option>
+																
+																<option value="<?php echo $i;?>" <?php if($i==$model->fixed_term) echo 'selected';?>><?php echo $i;?>个月</option>
 																<?php endfor;?>
+																<?php endif;?>
 															</select>
 														</div>
 													</div>
