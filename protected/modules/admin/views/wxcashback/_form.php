@@ -60,7 +60,7 @@
 												 <div style="width:20%;" class="col-md-4">
 													 <div class="radio-list">
 													  	<label>
-															<input type="radio" name="date_info_type"  value="1" <?php if($model->date_info_type==="1") echo "checked";?>> 固定日期
+															<input type="radio" name="date_info_type"  value="1" <?php if($model->date_info_type != "2") echo "checked";?>> 固定日期
 														</label>
 													  </div>
 												  </div>
@@ -97,28 +97,29 @@
 												  <div class="col-md-8">
 												    <div style="width:100%;"class="row ">
 													   <div style="width:28%;"class="col-md-4 select left">
-														   <select class="form-control" name="fixed_begin_term" <?php if($model->date_info_type==="1") echo "disabled"; ?>>
+														   <select class="form-control" name="fixed_begin_term" <?php if($model->date_info_type!="2") echo "disabled"; ?>>
 																<option value="0">当天</option>
-																<?php if($model->date_info_type==="2"):?>
+																
 																<?php for($i=1;$i<91;$i++):?>
 																
 																<option value="<?php echo $i;?>" <?php if($i==$model->fixed_begin_term) echo 'selected';?>><?php echo $i;?>天</option>
 																
 																<?php endfor;?>
-																<?php endif;?>
+																
+																
 															</select>
 														</div>
 														<div style="font-size:16px;width:32%;"class="col-md-4 select middle">&nbsp;生效,有效天数 </div>
 														<div style="width:28%;"class="col-md-4 select left">
-															<select class="form-control" name="fixed_term" <?php if($model->date_info_type==="1") echo "disabled"; ?>>
+															<select class="form-control" name="fixed_term" <?php if($model->date_info_type!="2") echo "disabled"; ?>>
 															
 																<option value="999">无限制</option>
-																<?php if($model->date_info_type==="2"):?>
+																
 																<?php for($i=1;$i<37;$i++):?>
 																
 																<option value="<?php echo $i;?>" <?php if($i==$model->fixed_term) echo 'selected';?>><?php echo $i;?>个月</option>
 																<?php endfor;?>
-																<?php endif;?>
+																
 															</select>
 														</div>
 													</div>
