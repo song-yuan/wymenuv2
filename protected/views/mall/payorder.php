@@ -147,26 +147,8 @@
 		}
 	}
 	$(document).ready(function(){
-		$('.paytype .item').click(function(){
-			var paytype = $(this).attr('paytype');
-			if(parseInt(paytype)==2){
-				var remainMoney = $(this).attr('remain-money');
-				var shouldTotal = $('#total').attr('should-total');
-				if(parseFloat(remainMoney) < parseFloat(shouldTotal)){
-					layer.msg('余额不足!');
-					return;
-				}
-			}
-			$('.item').removeClass('on');
-			$(this).addClass('on');
-		});
 		$('#payOrder').click(function(){
-			var paytype = $('.paytype .on').attr('paytype');
-			if(parseInt(paytype)==1){
-				callpay();
-			}else{
-				location.href = '<?php echo $this->createUrl('/mall/payOrderByYue',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
-			}
+			callpay();
 		});
 	})
 </script>
