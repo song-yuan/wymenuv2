@@ -11,6 +11,7 @@
  * @property string $update_at
  * @property string $name
  * @property string $allflae
+ * @property string $price
  * @property string $delete_flag
  *  @property string $is_sync
  */
@@ -37,10 +38,10 @@ class Taste extends CActiveRecord
 			array('lid,dpid, taste_group_id', 'length', 'max'=>10),
 			array('name, is_sync', 'length', 'max'=>50),
 			array('allflae, delete_flag', 'length', 'max'=>1),
-			array('create_at', 'safe'),
+			array('create_at, price', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, taste_group_id, create_at, name, allflae, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, taste_group_id, create_at, name, allflae, price, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +69,8 @@ class Taste extends CActiveRecord
 			'update_at' => '更新时间',
 			'name' => '口味描述',
 			'allflae' => '1整单口味，0不是',
+			//'other_price' => '加价金额',
+			'price' => '加价金额2',
 			'delete_flag' => 'Delete Flag',
 				'is_sync' => yii::t('app','是否同步'),
 		);
@@ -98,6 +101,8 @@ class Taste extends CActiveRecord
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('allflae',$this->allflae,true);
+		//$criteria->compare('other_price',$this->other_price,true);
+		$criteria->compare('price',$this->price,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
