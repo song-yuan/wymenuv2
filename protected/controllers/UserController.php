@@ -87,10 +87,11 @@ class UserController extends Controller
 		if(in_array($order['order_type'],array(2,3))){
 			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
 		}
+		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		//查找分享红包
 		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
 		
-		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'redPack'=>$redPack));
+		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'orderPays'=>$orderPays,'redPack'=>$redPack));
 	}
 	public function actionAddress()
 	{

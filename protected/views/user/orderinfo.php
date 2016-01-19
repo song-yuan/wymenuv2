@@ -59,6 +59,17 @@
 	<?php endif;?>
 	
 	<?php endif;?>
+	
+	<?php if(!empty($orderPays)):?>
+	<?php foreach($orderPays as $orderPay):?>
+	<?php if($orderPay['paytype']==10):?>
+	<div class="item">
+		<div class="lt">余额支付:</div><div class="rt">￥<span><?php echo $orderPay['pay_amount'];?></span></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
+	<?php endforeach;?>
+	<?php endif;?>
 	<div class="item">
 		<div class="lt">实际支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
 		<div class="clear"></div>

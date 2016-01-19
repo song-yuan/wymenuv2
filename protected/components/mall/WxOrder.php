@@ -337,12 +337,14 @@ class WxOrder
 			}
 		}
 		if($order['cupon_branduser_lid']==0&&$total!=$order['should_total']){
-			if($total==0){
-				$total = 0.01;
+			$orderPay = WxOrderPay::get($dpid,$orderId);
+			if(empty($orderPay)){
+				$isSync = DataSync::getInitSync();
+				$sql = 'update nb_order set should_total='.$total.',reality_total='.$oTotal.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+				Yii::app()->db->createCommand($sql)->execute();
+			}else{
+				$total = $order['should_total'];
 			}
-			$isSync = DataSync::getInitSync();
-			$sql = 'update nb_order set should_total='.$total.',reality_total='.$oTotal.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
-			Yii::app()->db->createCommand($sql)->execute();
 		}else{
 			$total = $order['should_total'];
 		}
@@ -515,7 +517,7 @@ class WxOrder
  					$sql = 'update nb_brand_user set remain_money = remain_money-'.($total - $cashback).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 					$result = Yii::app()->db->createCommand($sql)->execute();
 					
-					$sql = 'update nb_order set should_total = 0,order_status=3,is_sync='.$isSync.' where lid='.$order['lid'].' and dpid='.$dpid;
+					$sql = 'update nb_order set should_total=0,order_status=3,is_sync='.$isSync.' where lid='.$order['lid'].' and dpid='.$dpid;
 					$result = Yii::app()->db->createCommand($sql)->execute();
 					//返现或者积分
 					$back = new WxCashBack($order['dpid'],$order['user_id'],$total - $cashback);
@@ -533,7 +535,7 @@ class WxOrder
 				$sql = 'update nb_brand_user set remain_money = remain_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 				$result = Yii::app()->db->createCommand($sql)->execute();
 				
-				$sql = 'update nb_order set should_total = 0,order_status=3,is_sync='.$isSync.' where lid='.$order['lid'].' and dpid='.$dpid;
+				$sql = 'update nb_order set should_total=0,order_status=3,is_sync='.$isSync.' where lid='.$order['lid'].' and dpid='.$dpid;
 				$result = Yii::app()->db->createCommand($sql)->execute();
 				//返现或者积分
 				$back = new WxCashBack($order['dpid'],$order['user_id'],$total - $cashback);
