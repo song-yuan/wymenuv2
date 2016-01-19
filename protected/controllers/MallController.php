@@ -218,14 +218,15 @@ class MallController extends Controller
 		if($yue){
 			$order = WxOrder::getOrder($orderId,$this->companyId);
 			$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
-			
-			$transaction=Yii::app()->db->beginTransaction();
-			try{
-				WxOrder::insertOrderPay($order,10);
-				$transaction->commit();
-			}catch (Exception $e) {
-				$transaction->rollback();
-				$msg = $e->getMessage();
+			if($remainMoney > 0){
+				$transaction=Yii::app()->db->beginTransaction();
+				try{
+					WxOrder::insertOrderPay($order,10);
+					$transaction->commit();
+				}catch (Exception $e) {
+					$transaction->rollback();
+					$msg = $e->getMessage();
+				}
 			}
 		}
 		$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
