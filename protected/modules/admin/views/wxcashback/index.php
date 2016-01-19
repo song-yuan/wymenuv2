@@ -121,7 +121,10 @@
 							</div>
 						</div>
 						<?php endif;?>					
-					
+							<div class="alert alert-danger">
+								<strong> 注:</strong> 每一等级的最低积分要比前一等级的最高积分大一。<br/>
+								<strong> 例:</strong> 等级一的最低积分为0，最高积分为100；等级二的最低积分就必须设置成101。<br/>
+							</div>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
