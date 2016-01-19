@@ -1,3 +1,11 @@
+							<?php 
+	$baseUrl = Yii::app()->baseUrl;
+?>
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/plugins/bootstrap-fileupload/bootstrap-fileupload.css" />
+<script type="text/javascript" src="<?php echo $baseUrl;?>/plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/product/jquery.form.js"></script> 
+							
+							
 							<?php $form=$this->beginWidget('CActiveForm', array(
 									'id' => 'wxlevel-form',
 									'errorMessageCssClass' => 'help-block',
@@ -44,6 +52,67 @@
                                                                                     消费一元钱，获得多少返现的比例；如：消费一元获得0.01元，此处就填0.01
 										</div>
 									</div>
+									
+									<div class="form-group">
+										<label class="control-label col-md-3 ">有效期</label>
+										<div class="col-md-8">
+											<div class="row">
+												 <div style="width:20%;" class="col-md-4">
+													 <div class="radio-list">
+													  	<label>
+															<input type="radio" name="date_info_type"  value="1" checked> 固定日期
+														</label>
+													  </div>
+												  </div>
+												  <div class="col-md-8">
+												  <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+													 <?php echo $form->textField($model,'begin_timestamp',array('name'=>"begin_timestamp",'class' => 'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('begin_timestamp'))); ?>
+													 <span class="input-group-addon"> ~ </span>
+													 <?php echo $form->textField($model,'end_timestamp',array('name'=>"end_timestamp",'class'=>'form-control ui_timepicker','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('end_timestamp'))); ?>
+												</div> 
+												<!-- /input-group -->
+												<?php echo $form->error($model,'begin_timestamp'); ?>
+												<?php echo $form->error($model,'end_timestamp'); ?>
+													  <!-- <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+														<input type="text" class="form-control" name="begin_timestamp" value="<?php echo date('Y-m-d H:i:s',time());?>" />
+														<span class="input-group-addon"> ~ </span>
+														<input type="text" class="form-control" name="end_timestamp" value="<?php echo date('Y-m-d H:i:s',time()+24*3600);?>"  />
+													  </div> -->
+												  </div>
+											</div>
+											<div class="row last">
+												  <div style="width:20%;" class="col-md-4">
+													  <div class="radio-list">
+													  	<label>
+															<input type="radio" name="date_info_type"  value="2" > 领取后，
+														</label>
+													  </div>
+												  </div>
+												  <div class="col-md-8">
+												    <div class="row input-large">
+													   <div class="col-md-4 select left">
+														   <select class="form-control" name="fixed_begin_term" disabled="disabled">
+																<option value="0">当天</option>
+																<?php for($i=1;$i<91;$i++):?>
+																<option value="<?php echo $i;?>"><?php echo $i;?>天</option>
+																<?php endfor;?>
+															</select>
+														</div>
+														<div class="col-md-4 select middle">&nbsp;&nbsp;生效,有效天数 </div>
+														<div class="col-md-4 select left">
+															<select class="form-control" name="fixed_term" disabled="disabled">
+																<?php for($i=1;$i<37;$i++):?>
+																<option value="<?php echo $i;?>" <?php if($i==3) echo 'selected';?>><?php echo $i;?>个月</option>
+																<?php endfor;?>
+															</select>
+														</div>
+													</div>
+												  </div>
+											</div>
+										</div>
+										  
+									</div>
+									
                                                                      <!--   <div class="form-group">
 										<?php echo $form->label($model, 'is_available',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">

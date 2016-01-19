@@ -13,6 +13,11 @@
  * @property string $min_available_point
  * @property string $max_available_point
  * @property string $proportion_points
+ * @property string $date_info_type
+ * @property string $begin_timestamp
+ * @property string $end_timestamp
+ * @property string $fixed_term
+ * @property string $fixed_begin_term
  * @property string $is_available
  * @property string $delete_flag
  *  @property string $is_sync
@@ -38,15 +43,15 @@ class ConsumerCashProportion extends CActiveRecord
 			array('update_at, ccp_name, point_type, min_available_point, max_available_point', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('ccp_name, is_sync', 'length', 'max'=>50),
-			array('point_type, is_available, delete_flag', 'length', 'max'=>2),
-			array('min_available_point, max_available_point', 'length', 'max'=>10),
-                        array('proportion_points','compare','compareValue'=>'9999','operator'=>'<','message'=>yii::t('app','比例数值太大')),
+			array('date_info_type, point_type, is_available, delete_flag', 'length', 'max'=>2),
+			array('fixed_term,fixed_begin_term,min_available_point, max_available_point', 'length', 'max'=>10),
+            array('proportion_points','compare','compareValue'=>'9999','operator'=>'<','message'=>yii::t('app','比例数值太大')),
 			array('min_available_point','compare','compareAttribute'=>'max_available_point','operator'=>'<','message'=>yii::t('app','最小积分大于最大积分')),			
 			array('proportion_points', 'length', 'max'=>6),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, ccp_name, point_type, min_available_point, max_available_point, proportion_points, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, date_info_type, ccp_name, point_type, begin_timestamp,end_timestamp,fixed_term,fixed_begin_term,min_available_point, max_available_point, proportion_points, is_available, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,6 +81,11 @@ class ConsumerCashProportion extends CActiveRecord
 			'min_available_point' => '最低积分',//只要达到最低积分需求，就按照这个比例来计算
 			'max_available_point' => '最高积分',//，区间必须批次覆盖
 			'proportion_points' => '消费返现比例',//，计算结果四舍五入
+				'date_info_type' => '期限类型',
+				'begin_timestamp' => '有效开始时间',
+				'end_timestamp' => '结束时间',
+				'fixed_term' => '有效天数',
+				'fixed_begin_term' => '多少天之后有效',
 			'is_available' => '是否有效',//0表示有效，1表示无效
 			'delete_flag' => '0表示存在，1表示删除',
                         'is_sync' => yii::t('app','是否同步'),
@@ -109,6 +119,11 @@ class ConsumerCashProportion extends CActiveRecord
 		$criteria->compare('min_available_point',$this->min_available_point,true);
 		$criteria->compare('max_available_point',$this->max_available_point,true);
 		$criteria->compare('proportion_points',$this->proportion_points,true);
+		$criteria->compare('date_info_type',$this->date_info_type,true);
+		$criteria->compare('begin_timestamp',$this->begin_timestamp,true);
+		$criteria->compare('end_timestamp',$this->end_timestamp,true);
+		$criteria->compare('fixed_term',$this->fixed_term,true);
+		$criteria->compare('fixed_begin_term',$this->fixed_begin_term,true);
 		$criteria->compare('is_available',$this->is_available,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
