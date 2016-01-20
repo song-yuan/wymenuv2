@@ -1,7 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('订单详情');
-	$payYue = 0;
+	$payYue = 0.00;
 	if(!empty($orderPays)){
 		foreach($orderPays as $orderPay){
 			if($orderPay['paytype']==10){
@@ -75,7 +75,11 @@
 	</div>
 	<?php endif;?>
 	<div class="item">
-		<div class="lt">合计:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
+		<div class="lt">微信支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
+		<div class="clear"></div>
+	</div>
+	<div class="item">
+		<div class="lt">合计:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'] + $payYue;?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>
