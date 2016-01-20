@@ -50,19 +50,19 @@ class WxMessageTpl
 	                ),
 	                'keyword1'=>array(
 	                    'value'=>$this->data['lid'],
-	                    'color'=>'#CCCCCC',
+	                    'color'=>'#0A0A0A',
 	                ),
 	                'keyword2'=>array(
 	                    'value'=>$this->data['should_total'].'元',
-	                    'color'=>'#CCCCCC',
+	                    'color'=>'#FF0000',
 	                ),
 	                'keyword3'=>array(
 	                    'value'=>$company['company_name'],
-	                    'color'=>'#CCCCCC',
+	                    'color'=>'#0A0A0A',
 	                ),
 	                'keyword4'=>array(
 	                    'value'=>date('Y-m-d H:i:s',time()),
-	                    'color'=>'#CCCCCC',
+	                    'color'=>'#0A0A0A',
 	                ),
 	                'remark'=>array(
 	                    'value'=>'小二正在尽快给您出菜~请耐心等候~',
