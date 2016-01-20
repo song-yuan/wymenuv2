@@ -87,5 +87,7 @@ class Notify extends WxPayNotify
 		if($order['order_type']==1){
 			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
 		}
+		//发送模板消息通知
+		new WxMessageTpl($order['dpid'],$order['user_id'],0,$order);
 	}
 }

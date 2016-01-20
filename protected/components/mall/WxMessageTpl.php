@@ -15,6 +15,11 @@ class WxMessageTpl
 		$this->userId = $userId;
 		$this->type = $type;
 		$this->data = $data;
+		$accessToken = new AccessToken($dpid);
+        $this->access_token = $accessToken->accessToken;
+		$this->getMsgTpl();
+		$this->getData();
+		$this->sent();
 	}
 	public function getMsgTpl(){
 		$sql = 'select * from nb_weixin_messagetpl where dpid=:dpid and message_type=:type and delete_flag=0';
@@ -22,13 +27,16 @@ class WxMessageTpl
 				  ->bindValue(':dpid',$this->dpid)
 				  ->bindValue(':type',$this->type)
 				  ->queryRow();
+		if(!$this->msgTpl){
+			return ;
+		}
 	}
 	public function getData(){
-		$openId = '';
-		$msgTplId = '';
-		$url = '';
+		$user = WxBrandUser::get($this->userId,$this->dpid);
+		$openId = $user['openid'];
+		$msgTplId = $this->msgTpl['message_tpl_id'];
 		
-		$megTplData = array(
+		$this->megTplData = array(
 			array(
 				'touser'=>$openId,
 	            'template_id'=>$msgTplId,
@@ -61,7 +69,8 @@ class WxMessageTpl
 		
 	}
 	public function sent(){
-		
+		$tplUrl = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$this->access_token;
+		Curl::httpsRequest($tplUrl, $this->megTplData[$this->type]);
 	}
 	
 	
