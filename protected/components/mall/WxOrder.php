@@ -536,8 +536,14 @@ class WxOrder
  					$sql = 'update nb_brand_user set remain_money = remain_money-'.($total - $cashback).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 					$result = Yii::app()->db->createCommand($sql)->execute();
 					
-					$sql = 'update nb_order set should_total=0,order_status=3,is_sync='.$isSync.' where lid='.$order['lid'].' and dpid='.$dpid;
-					$result = Yii::app()->db->createCommand($sql)->execute();
+					//修改订单状态
+					WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+					//修改订单产品状态
+					WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
+					//修改座位状态
+					if($order['order_type']==1){
+						WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+					}
 					
 					//返现或者积分
 					$back = new WxCashBack($order['dpid'],$order['user_id'],$total - $cashback);
