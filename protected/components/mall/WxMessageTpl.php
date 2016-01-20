@@ -42,7 +42,7 @@ class WxMessageTpl
 			array(
 				'touser'=>$openId,
 	            'template_id'=>$msgTplId,
-	            'url'=>$this->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$this->dpid,'orderId'=>$this->data['lid'])),
+	            'url'=>Yii::app()->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$this->dpid,'orderId'=>$this->data['lid'])),
 	            'data' => array(
 	                'first'=>array(
 	                    'value'=>'您好，您已支付成功订单',
@@ -75,7 +75,7 @@ class WxMessageTpl
 	}
 	public function sent(){
 		$tplUrl = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token='.$this->access_token;
-		Curl::httpsRequest($tplUrl, $this->megTplData[$this->type]);
+		Curl::httpsRequest($tplUrl, json_encode($this->megTplData[$this->type]));
 	}
 	
 	

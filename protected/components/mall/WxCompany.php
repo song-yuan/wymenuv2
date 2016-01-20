@@ -12,7 +12,7 @@ class WxCompany
 		$sql = 'select * from nb_company where dpid=:dpid';
 		$company = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
-				  ->queryAll();
+				  ->queryRow();
 		if(!$company){
 			throw new Exception('不存在该公司信息');
 		}
