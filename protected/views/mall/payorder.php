@@ -1,6 +1,16 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('支付订单');
+	
+	$payYue = 0;
+	if(!empty($orderPays)){
+		foreach($orderPays as $orderPay){
+			if($orderPay['paytype']==10){
+				$payYue = $orderPay['pay_amount']; 
+			}
+		}
+	}
+	
 	//子订单号
 	$se = new Sequence("order_subno");
 	$orderSubNo = $se->nextval();
@@ -41,7 +51,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
-<div class="order-title">订单详情</div>
+<div class="order-title">支付订单</div>
 <?php if($address):?>
 <?php if($order['order_type']==2):?>
 	<div class="address">
@@ -66,26 +76,25 @@
 		<div class="clear"></div>
 	</div>
 	<?php endforeach;?>
-	<?php if($order['reality_total'] - $order['should_total']):?>
 	<div class="ht1"></div>
-	
-	<?php if($order['cupon_branduser_lid'] > 0):?>
 	<div class="item">
-		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'] + $order['cupon_money'];?></div>
+		<div class="lt">总计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
 	</div>
+	
+	<?php if($order['reality_total'] - $order['should_total'] - $payYue):?>
+	<?php if($order['cupon_branduser_lid'] > 0):?>
 	<div class="item">
 		<div class="lt">现金券减免</div><div class="rt">￥<?php echo $order['cupon_money'];?></div>
 		<div class="clear"></div>
 	</div>
-	<?php else:?>
+	<?php endif;?>
+	<?php endif;?>
+	
 	<div class="item">
 		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'];?></div>
 		<div class="clear"></div>
 	</div>
-	<?php endif;?>
-	
-	<?php endif;?>
 </div>
 
 <!---

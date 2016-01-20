@@ -45,7 +45,7 @@
 	<?php endforeach;?>
 	<div class="ht1"></div>
 	<div class="item">
-		<div class="lt">合计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
+		<div class="lt">总计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
 	</div>
 	<?php if($order['reality_total'] - $order['should_total'] - $payYue):?>
@@ -68,12 +68,14 @@
 	
 	<?php endif;?>
 	<div class="ht1"></div>
+	<?php if($payYue > 0):?>
 	<div class="item" >
 		<div class="lt">余额支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
 		<div class="clear"></div>
 	</div>
+	<?php endif;?>
 	<div class="item">
-		<div class="lt">微信支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
+		<div class="lt">合计:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>
