@@ -99,7 +99,7 @@
 	<?php endif;?>
 	
 	<div class="item">
-		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'];?></div>
+		<div class="lt">合计</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>
