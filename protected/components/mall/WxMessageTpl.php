@@ -32,7 +32,9 @@ class WxMessageTpl
 		}
 	}
 	public function getData(){
+		$company = WxCompany::get($this->dpid);
 		$user = WxBrandUser::get($this->userId,$this->dpid);
+		
 		$openId = $user['openid'];
 		$msgTplId = $this->msgTpl['message_tpl_id'];
 		
@@ -41,26 +43,29 @@ class WxMessageTpl
 				'touser'=>$openId,
 	            'template_id'=>$msgTplId,
 	            'url'=>$this->createAbsoluteUrl('/user/orderInfo',array('companyId'=>$this->dpid,'orderId'=>$this->data['lid'])),
-	            'topcolor'=>'#FF0000',
 	            'data' => array(
 	                'first'=>array(
 	                    'value'=>'您好，您已支付成功订单',
 	                    'color'=>'#0A0A0A',
 	                ),
-	                'product'=>array(
-	                    'value'=>'点餐订单',
+	                'keyword1'=>array(
+	                    'value'=>$this->data['lid'],
 	                    'color'=>'#CCCCCC',
 	                ),
-	                'price'=>array(
+	                'keyword2'=>array(
 	                    'value'=>$this->data['should_total'],
 	                    'color'=>'#CCCCCC',
 	                ),
-	                'time'=>array(
-	                    'value'=>time(),
+	                'keyword3'=>array(
+	                    'value'=>$company['company_name'],
+	                    'color'=>'#CCCCCC',
+	                ),
+	                'keyword4'=>array(
+	                    'value'=>date('Y-m-d H:i:s',time()),
 	                    'color'=>'#CCCCCC',
 	                ),
 	                'remark'=>array(
-	                    'value'=>'正在尽快给您出菜~',
+	                    'value'=>'小二正在尽快给您出菜~请耐心等候~',
 	                    'color'=>'#173177',
 	                )
 	            )
