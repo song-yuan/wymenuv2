@@ -53,7 +53,7 @@ class WxMessageTpl
 	                    'color'=>'#CCCCCC',
 	                ),
 	                'keyword2'=>array(
-	                    'value'=>$this->data['should_total'],
+	                    'value'=>$this->data['should_total'].'元',
 	                    'color'=>'#CCCCCC',
 	                ),
 	                'keyword3'=>array(
