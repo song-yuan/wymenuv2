@@ -2,7 +2,7 @@
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('支付订单');
 	
-	$payYue = 0;
+	$payYue = 0.00;
 	if(!empty($orderPays)){
 		foreach($orderPays as $orderPay){
 			if($orderPay['paytype']==10){
@@ -91,21 +91,19 @@
 	<?php endif;?>
 	<?php endif;?>
 	
+	<?php if($payYue > 0):?>
+	<div class="item" >
+		<div class="lt">余额支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
+	
 	<div class="item">
 		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'];?></div>
 		<div class="clear"></div>
 	</div>
 </div>
 
-<!---
-<div class="order-paytype">
-	<div class="select-type">选择支付方式</div>
-	<div class="paytype">
-		<div class="item on" paytype="1">微信支付</div>
-		<div class="item" paytype="2" remain-money="<?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?></span></div>
-	</div>
-</div>
--->
 
 <footer>
     <div class="ft-lt">
