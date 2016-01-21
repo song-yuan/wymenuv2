@@ -520,6 +520,9 @@ class WxOrder
 	 	if($cashback > 0){
 	 		//返现余额大于等于支付
 	 		if($cashback >= $total){
+	 			$sql = 'update nb_order set should_total = 0,is_sync='.$isSync.' where lid='.$order['lid'].' and dpid='.$dpid;
+				$result = Yii::app()->db->createCommand($sql)->execute();
+					
 	 			WxCashBack::userCashBack($total,$userId,$dpid,0);
 	 			//修改订单状态
 				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
@@ -534,6 +537,9 @@ class WxOrder
 	 			WxCashBack::userCashBack($total,$userId,$dpid,1);
 	 			if($yue > $total){//剩余充值大于支付
  					$sql = 'update nb_brand_user set remain_money = remain_money-'.($total - $cashback).',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
+					$result = Yii::app()->db->createCommand($sql)->execute();
+					
+					$sql = 'update nb_order set should_total = 0,is_sync='.$isSync.' where lid='.$order['lid'].' and dpid='.$dpid;
 					$result = Yii::app()->db->createCommand($sql)->execute();
 					
 					//修改订单状态
@@ -563,6 +569,8 @@ class WxOrder
 				$sql = 'update nb_brand_user set remain_money = remain_money-'.$total.',is_sync='.$isSync.' where lid='.$user['lid'].' and dpid='.$dpid;
 				$result = Yii::app()->db->createCommand($sql)->execute();
 				
+				$sql = 'update nb_order set should_total = 0,is_sync='.$isSync.' where lid='.$order['lid'].' and dpid='.$dpid;
+				$result = Yii::app()->db->createCommand($sql)->execute();
 				//修改订单状态
 				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
 				//修改订单产品状态
