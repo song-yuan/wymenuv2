@@ -127,9 +127,10 @@ class MallController extends Controller
 		$price = WxCart::getCartPrice($carts);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
+		
 		$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
 		
-		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney));
+		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons));
 	}
 	/**
 	 * 
