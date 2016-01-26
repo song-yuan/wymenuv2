@@ -61,9 +61,9 @@
 		}
 		//获取随机颜色
 		function getRandomColor(){
-			return '#' + (function(h){
-				return new Array(7 - h.length).join("0") + h
-			})((Math.random() * 0x1000000 << 0).toString(16))
+			var arr = ["#EA0000","#0000C6","#F75000"," #FF0080"];
+			var index = Math.floor((Math.random()*arr.length)); 
+			return arr[index];
 		}
 		function bottomTips(){
 			$.ajax({

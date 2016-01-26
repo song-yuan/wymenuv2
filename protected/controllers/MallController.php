@@ -127,9 +127,10 @@ class MallController extends Controller
 		$price = WxCart::getCartPrice($carts);
 		$orderTastes = WxTaste::getOrderTastes($this->companyId);
 		$cupons = WxCupon::getUserAvaliableCupon($price,$userId,$this->companyId);
+		
 		$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
 		
-		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney));
+		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons));
 	}
 	/**
 	 * 
@@ -251,7 +252,10 @@ class MallController extends Controller
 		if(in_array($order['order_type'],array(2,3))){
 			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
 		}
-		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$this->brandUser));
+		
+		$orderPays = WxOrderPay::get($this->companyId,$orderId);
+		
+		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$this->brandUser,'orderPays'=>$orderPays));
 	 }
 	/**
 	 * 

@@ -65,7 +65,7 @@ class WxRecharge
 	  */
 	  public function updateBrandUser(){
 		  $isSync = DataSync::getInitSync();
-		  $sql = 'update nb_brand_user set remain_money = remain_money + '.$this->recharge['recharge_money'].',remain_back_money =remain_back_money + '.$this->recharge['recharge_cashback'].',is_sync='.$isSync.' where lid='.$this->userId.' and dpid='.$this->dpid;
+		  $sql = 'update nb_brand_user set remain_money = remain_money + '.$this->recharge['recharge_money'].',is_sync='.$isSync.' where lid='.$this->userId.' and dpid='.$this->dpid;
 		  $result = Yii::app()->db->createCommand($sql)->execute();
 		  if(!$result){
        		throw new Exception('更新会员余额失败!');
@@ -83,7 +83,8 @@ class WxRecharge
 	 }
 	  /**
 	   * 
-	   * 插入积分记录
+	   * 插入积分、返现记录
+	   * 
 	   * 
 	   */
 	   public function insertPoints(){
@@ -111,6 +112,27 @@ class WxRecharge
 				$result = Yii::app()->db->createCommand()->insert('nb_point_record', $pointRecordData);
 				if(!$result){
 	       		throw new Exception('插入积分失败!');
+	       	   }
+	   	   }
+	   	   
+	   	   if($this->recharge['recharge_cashback']){
+				$se = new Sequence("point_record");
+			    $lid = $se->nextval();
+				$pointRecordData = array(
+									'lid'=>$lid,
+						        	'dpid'=>$this->dpid,
+						        	'create_at'=>date('Y-m-d H:i:s',$time),
+						        	'update_at'=>date('Y-m-d H:i:s',$time),
+						        	'point_type'=>1,
+						        	'type_lid'=>$this->rechargeId,
+						        	'cashback_num'=>$this->recharge['recharge_cashback'],
+						        	'remain_cashback_num'=>$this->recharge['recharge_cashback'],
+						        	'brand_user_lid'=>$this->userId,
+						        	'is_sync'=>DataSync::getInitSync(),
+									);
+				$result = Yii::app()->db->createCommand()->insert('nb_cashback_record', $pointRecordData);
+				if(!$result){
+	       			throw new Exception('插入返现失败!');
 	       	   }
 	   	   }
 	   }
