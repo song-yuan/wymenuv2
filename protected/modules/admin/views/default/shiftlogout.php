@@ -70,7 +70,7 @@
 						<tbody>
                                                     <tr>
                                                         <th>店铺</th>
-                                                        <td><?php echo company::getCompanyName($this->companyId); ?></td>
+                                                        <td><?php echo Company::getCompanyName($this->companyId); ?></td>
                                                         <th>操作员</th>
                                                         <td><?php echo Yii::app()->user->name; ?></td>
                                                     </tr>
