@@ -22,6 +22,7 @@
  * @property string $remark
  * @property string $taste_memo
  *  @property string $account_no
+ *  @property string $classes
  */
 class Order extends CActiveRecord
 {
@@ -63,7 +64,7 @@ class Order extends CActiveRecord
 		return array(
 			array('lid, dpid, site_id', 'required'),
 			array('lid, dpid, payment_method_id, site_id,user_id, number', 'numerical', 'integerOnly'=>true),
-			array('should_total,reality_total,callno', 'length', 'max'=>10),
+			array('should_total,classes,reality_total,callno', 'length', 'max'=>10),
 				array('account_no', 'length', 'max'=>20),
 			array('is_temp, order_status, lock_status', 'length', 'max'=>1),
                         array('paytype,order_type', 'length', 'max'=>1),
@@ -71,7 +72,7 @@ class Order extends CActiveRecord
 			//array('create_at,pay_time', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, paytype, account_no, update_at,username,payment_method_id, pay_time, site_id,user_id, is_temp, number, order_status,order_type,is_sync,lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, paytype, account_no, classes, update_at,username,payment_method_id, pay_time, site_id,user_id, is_temp, number, order_status,order_type,is_sync,lock_status, callno,should_total, reality_total, remark, taste_memo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -99,20 +100,21 @@ class Order extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => yii::t('app','下单时间'),
 			'update_at' => yii::t('app','更新时间'),
-                        'username' => yii::t('app','员工登录名'),
-                        'user_id' => yii::t('app','微信会员ID'),
-				'account_no' => yii::t('app','账单号'),
+            'username' => yii::t('app','员工登录名'),
+            'user_id' => yii::t('app','微信会员ID'),
+			'account_no' => yii::t('app','账单号'),
+			'classes' => yii::t('app','班次'),
 			'site_id' => yii::t('app','餐桌'),
 			'is_temp' => '0固定台 1临时台',
 			'number' => '人数，和开台中的人数保持一致',
 			'order_status' => '0未结算、1结单、2被并台、3被撤台、4被换台的标志',
 			'lock_status' => '0未锁定，1锁定',
 			'callno' => yii::t('app','呼叫器编号'),
-                        'paytype' => yii::t('app','支付方式'),
-                        'order_type' => yii::t('app','0pad1微信堂食2微信外卖'),
-                        'is_sync' => yii::t('app','是否同步'),
-                        'payment_method_id'=>yii::t('app','支付方式'),//后台手动支付方式
-                        'payment_time'=>yii::t('app','支付时间'),
+            'paytype' => yii::t('app','支付方式'),
+            'order_type' => yii::t('app','0pad1微信堂食2微信外卖'),
+            'is_sync' => yii::t('app','是否同步'),
+            'payment_method_id'=>yii::t('app','支付方式'),//后台手动支付方式
+            'payment_time'=>yii::t('app','支付时间'),
 			'reality_total' =>yii::t('app', '实付金额'),
 			'should_total' =>yii::t('app', '应付金额'),
 			'remark' => yii::t('app','支付说明'),
@@ -146,6 +148,7 @@ class Order extends CActiveRecord
                 $criteria->compare('user_id',$this->user_id);
                 $criteria->compare('username',$this->username);
                 $criteria->compare('account_no',$this->account_no,true);
+                $criteria->compare('classes',$this->classes,true);
 		$criteria->compare('is_temp',$this->is_temp,true);
 		$criteria->compare('number',$this->number);
 		$criteria->compare('order_status',$this->order_status,true);
