@@ -138,8 +138,20 @@ class UserController extends Controller
 	public function actionCupon()
 	{
 		$userId = Yii::app()->session['userId'];
-		$cupons = WxCupon::getUserAllCupon($userId,$this->companyId);
+		$cupons = WxCupon::getUserNotUseCupon($userId,$this->companyId);
 		$this->render('cupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
+	}
+	public function actionUsedCupon()
+	{
+		$userId = Yii::app()->session['userId'];
+		$cupons = WxCupon::getUserUseCupon($userId,$this->companyId);
+		$this->render('usedcupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
+	}
+	public function actionExpireCupon()
+	{
+		$userId = Yii::app()->session['userId'];
+		$cupons = WxCupon::getUserExpireCupon($userId,$this->companyId);
+		$this->render('expirecupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
 	public function actionGift()
 	{
