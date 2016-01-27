@@ -38,7 +38,7 @@ class WxGiftCard
 	    return $gift;
 	}
 	public static function getUserGift($dpid,$userId,$giftId){
-		$sql = 'select t.lid,t.code,t.is_used,t.used_at,t1.title,t1.intro,t1.price,t1.gift_pic,t1.count,t1.stock,t1.begin_time,t1.end_time from nb_branduser_gift t,nb_gift t1 where t.gift_lid=t1.lid and t.dpid=t1.dpid and t.branduser_lid=:userId and t.gift_lid=:lid  and t.dpid=:dpid';
+		$sql = 'select t.lid,t.code,t.qrcode,t.is_used,t.used_at,t1.title,t1.intro,t1.price,t1.gift_pic,t1.count,t1.stock,t1.begin_time,t1.end_time from nb_branduser_gift t,nb_gift t1 where t.gift_lid=t1.lid and t.dpid=t1.dpid and t.branduser_lid=:userId and t.gift_lid=:lid  and t.dpid=:dpid';
 		$gift = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
 				  ->bindValue(':lid',$giftId)
@@ -102,6 +102,20 @@ class WxGiftCard
 				  ->bindValue(':code',$code)
 				  ->queryRow();
 			return $gift;
+	   }
+	   /**
+	    * 
+	    * 保存券信息
+	    * 
+	    */
+	    public static function updateQrcode($dpid,$brandUserGiftId,$qrcode){
+	    	$isSync = DataSync::getInitSync();
+	   		$sql = 'update nb_branduser_gift set qrcode="'.$qrcode.'",is_sync='.$isSync.' where dpid=:dpid and lid=:lid';
+	   		$result = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':lid',$brandUserGiftId)
+				  ->execute();
+			return $result;
 	   }
 	 /**
 	  * 

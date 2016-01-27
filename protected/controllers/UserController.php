@@ -165,6 +165,23 @@ class UserController extends Controller
 		$giftId = Yii::app()->request->getParam('gid');
 		
 		$gift = WxGiftCard::getUserGift($this->companyId,$userId,$giftId);
+		if(!$gift['qrcode']){
+			$imgurl = './uploads';
+			$imgurl .= '/company_'.$this->companyId;
+   			if(!is_dir($imgurl)){
+   				mkdir($imgurl, 0777,true);
+   			}
+			$imgurl .= '/qrcode';
+   			if(!is_dir($imgurl)){
+   				mkdir($imgurl, 0777,true);
+   			}
+   			$imgurl .= '/gift-'.$this->companyId.'-'.$giftId.'.png';
+   			
+			$code=new QRCode($gift['code']);
+			$code->create($imgurl);
+			WxGiftCard::updateQrcode($this->companyId,$gift['lid'],$imgurl);
+			$gift['qrcode'] = $imgurl;
+		}
 		$this->render('giftinfo',array('companyId'=>$this->companyId,'gift'=>$gift));
 	}
 	public function actionAjaxSetAddress()
