@@ -1526,7 +1526,7 @@ input.usethis:checked + label {
 
 .infoarea {
 	background-image: url('../../img/mall/bg_wave1.png');
-	background-size: 90% auto;
+	background-size: 90% 100%;
 	background-position: top center;
 	height: 45%;
 	margin-top: 5px;
