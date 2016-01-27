@@ -110,7 +110,7 @@ class WxGiftCard
 	    */
 	    public static function updateQrcode($dpid,$brandUserGiftId,$qrcode){
 	    	$isSync = DataSync::getInitSync();
-	   		$sql = 'update nb_branduser_gift set qrcode='.$qrcode.',is_sync='.$isSync.' where dpid=:dpid and lid=:lid';
+	   		$sql = 'update nb_branduser_gift set qrcode="'.$qrcode.'",is_sync='.$isSync.' where dpid=:dpid and lid=:lid';
 	   		$result = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->bindValue(':lid',$brandUserGiftId)
