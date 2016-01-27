@@ -14,6 +14,7 @@
  * @property string $main_picture
  * @property string $description
  * @property integer $rank
+ * @property integer $spicy
  * @property string $is_temp_price
  * @property string $is_member_discount
  * @property string $is_special
@@ -50,7 +51,7 @@ class Product extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('product_name, simple_code, main_picture', 'required'),
-			array('rank, order_number,category_id, favourite_number', 'numerical', 'integerOnly'=>true),
+			array('rank, spicy, order_number,category_id, favourite_number', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, category_id, original_price, product_unit, weight_unit, printer_way_id', 'length', 'max'=>10),
 			array('product_name, is_sync', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
@@ -60,7 +61,7 @@ class Product extends CActiveRecord
 			array('create_at,description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, category_id, product_name, simple_code, main_picture, description, rank, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, product_unit, weight_unit, is_weight_confirm, store_number, order_number, favourite_number, printer_way_id, is_show, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, category_id, product_name, simple_code, main_picture, description, rank, spicy, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, product_unit, weight_unit, is_weight_confirm, store_number, order_number, favourite_number, printer_way_id, is_show, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -100,6 +101,7 @@ class Product extends CActiveRecord
 			'main_picture' =>yii::t('app', '产品主图片'),
 			'description' =>yii::t('app', '描述'),
 			'rank' =>yii::t('app', '推荐星级'),
+			'spicy' =>yii::t('app', '辣度等级'),
 			'is_temp_price' =>yii::t('app', '是否时价菜'),
 			'is_member_discount' =>yii::t('app', '是否参与会员折扣'),
 			'is_special' =>yii::t('app', '是否特价菜'),
@@ -147,6 +149,7 @@ class Product extends CActiveRecord
 		$criteria->compare('main_picture',$this->main_picture,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('rank',$this->rank);
+		$criteria->compare('spicy',$this->spicy,true);
 		$criteria->compare('is_temp_price',$this->is_temp_price,true);
 		$criteria->compare('is_member_discount',$this->is_member_discount,true);
 		$criteria->compare('is_special',$this->is_special,true);
@@ -157,7 +160,7 @@ class Product extends CActiveRecord
 		$criteria->compare('weight_unit',$this->weight_unit,true);
 		$criteria->compare('is_weight_confirm',$this->is_weight_confirm,true);
 		$criteria->compare('order_number',$this->order_number);
-                $criteria->compare('store_number',$this->store_number);
+        $criteria->compare('store_number',$this->store_number);
 		$criteria->compare('favourite_number',$this->favourite_number);
 		$criteria->compare('printer_way_id',$this->printer_way_id,true);
 		$criteria->compare('is_show',$this->is_show,true);
