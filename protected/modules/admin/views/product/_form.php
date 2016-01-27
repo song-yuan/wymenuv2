@@ -57,6 +57,13 @@
 											<?php echo $form->error($model, 'rank' )?>
 										</div>
 									</div>
+									<div class="form-group" <?php if($model->hasErrors('spicy')) echo 'has-error';?>>
+										<?php echo $form->label($model, 'spicy',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'spicy', array('0' => '0' , '1' => '1' , '2' => '2' , '3' => '3' ) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('spicy')));?>
+											<?php echo $form->error($model, 'spicy' )?>
+										</div>
+									</div>
                                                                         <div class="form-group">
 										<?php echo $form->label($model, 'is_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
