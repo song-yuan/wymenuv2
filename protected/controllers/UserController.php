@@ -166,7 +166,7 @@ class UserController extends Controller
 		
 		$gift = WxGiftCard::getUserGift($this->companyId,$userId,$giftId);
 		if(!$gift['qrcode']){
-			$imgurl = 'uploads/company_'.$this->companyId.'/qrcode/gift-'.$this->companyId.'-'.$giftId.'.png';
+			$imgurl = './uploads/company_'.$this->companyId.'/qrcode/gift-'.$this->companyId.'-'.$giftId.'.png';
 			$code=new QRCode($gift['code']);
 			$code->create($imgurl);
 			WxGiftCard::updateQrcode($this->companyId,$gift['lid'],$imgurl);
