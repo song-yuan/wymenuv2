@@ -27,6 +27,7 @@
             <div class="weui_cell_bd weui_cell_primary">
                 <input class="weui_input" id="mobile" name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
             </div>
+            <div class="weui_cell_ft" style="font-size:100%;border-left:1px solid #888;">发送验证码</div>
         </div>
         
         <div class="weui_cell">
