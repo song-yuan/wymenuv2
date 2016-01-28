@@ -19,7 +19,7 @@
    		<div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">姓名</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" id="name" name="user[user_name]" type="tel" placeholder="请输入姓名" value="<?php echo $user['user_name'];?>"/>
+                <input class="weui_input" id="name" name="user[user_name]" type="text" placeholder="请输入姓名" value="<?php echo $user['user_name'];?>"/>
             </div>
         </div>
        <div class="weui_cell">
