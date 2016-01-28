@@ -79,6 +79,7 @@
 			obj.removeClass("disable");    
 			obj.html('获取验证码'); 
 			countdown = 60; 
+			return;
 		} else { 
 			obj.html('('+countdown+')'); 
 			countdown--; 
