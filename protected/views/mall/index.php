@@ -30,7 +30,7 @@
   	<div class="prt-lt">
     	<div class="lt-lt"><img src="<?php echo $promotionProduct['main_picture'];?>"></div>
         <div class="lt-ct">
-        	<p><span><?php echo $promotionProduct['product_name'];?></span> <?php if($promotionProduct['spicy']==1):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/><?php elseif($promotionProduct['spicy']==2):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:30px;height:20px;"/><?php elseif($promotionProduct['spicy']==3):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:45px;height:20px;"/><?php endif;?></p>
+        	<p><span><?php echo $promotionProduct['product_name'];?></span> <span><?php if($promotionProduct['spicy']==1):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/><?php elseif($promotionProduct['spicy']==2):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:30px;height:20px;"/><?php elseif($promotionProduct['spicy']==3):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:45px;height:20px;"/><?php endif;?></span></p>
             <p class="pr">¥<span class="price"><?php echo $promotionProduct['price'];?></span> <?php if($promotionProduct['price']!=$promotionProduct['original_price']):?><span class="oprice"><strike>¥<?php echo $promotionProduct['original_price'];?></strike></span><?php endif;?></p>
         </div>
         <div class="lt-rt">
@@ -53,7 +53,7 @@
   	<div class="prt-lt">
     	<div class="lt-lt"><img src="<?php echo $product['main_picture'];?>"></div>
         <div class="lt-ct">
-        	<p><span><?php echo $product['product_name'];?></span> <?php if($product['spicy']==1):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/><?php elseif($product['spicy']==2):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:30px;height:20px;"/><?php elseif($product['spicy']==3):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:45px;height:20px;"/><?php endif;?></p>
+        	<p><span><?php echo $product['product_name'];?></span> <span><?php if($product['spicy']==1):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/><?php elseif($product['spicy']==2):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:30px;height:20px;"/><?php elseif($product['spicy']==3):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:45px;height:20px;"/><?php endif;?></span></p>
             <p class="pr">¥<span class="price"><?php echo $product['price'];?></span><?php if($product['price']!=$product['original_price']):?><span class="oprice"><strike>¥<?php echo $product['original_price'];?></strike></span><?php endif;?></p>
         </div>
         <div class="lt-rt">
