@@ -27,7 +27,7 @@
             <div class="weui_cell_bd weui_cell_primary">
                 <input class="weui_input" id="mobile" name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
             </div>
-            <div class="weui_cell_ft sentMessage" style="font-size:100%;border-left:1px solid #888;"> 获取验证码<span id="countdown"></span></div>
+            <div class="weui_cell_ft sentMessage" style="font-size:100%;padding-left:5px;border-left:1px solid #888;">获取验证码<span id="countdown"></span></div>
         </div>
         
         <div class="weui_cell">
@@ -72,8 +72,8 @@
         
         return true;
     }
-    var countdown = 60;
-    function countdown(){
+   var countdown = 60;
+   function setTime(){
     	var obj = $('#countdown');
     	if (countdown == 0) { 
 			obj.removeClass("disable");    
@@ -84,7 +84,7 @@
 			countdown--; 
 		} 
 		setTimeout(function(){ 
-			countdown();
+			setTime();
 		},1000);
     }
     $('document').ready(function(){
@@ -99,8 +99,8 @@
     			success:function(msg){
     				$('#dialog2').find('.weui_dialog_bd').html(msg);
            	 		$('#dialog2').show();
-           	 		$(this).addClass('disable')
-           	 		countdown();
+           	 		$('.sentMessage').addClass('disable')
+           	 		setTime();
     			}
     		});
     	});
