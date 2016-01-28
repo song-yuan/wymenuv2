@@ -16,7 +16,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo'))){
+		if(in_array($actin->id,array('index','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -92,6 +92,18 @@ class UserController extends Controller
 		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
 		
 		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'orderPays'=>$orderPays,'redPack'=>$redPack));
+	}
+	/**
+	 * 
+	 * 完善个人资料
+	 * 
+	 */
+	public function actionSetUserInfo()
+	{
+		$userId = Yii::app()->session['userId'];
+		$user = WxBrandUser::get($userId,$this->companyId);
+		
+		$this->render('updateuserinfo',array('companyId'=>$this->companyId,'user'=>$user));
 	}
 	public function actionAddress()
 	{
@@ -196,18 +208,30 @@ class UserController extends Controller
 		}
 		$this->render('giftinfo',array('companyId'=>$this->companyId,'gift'=>$gift));
 	}
-	public function actionAjaxSetAddress()
+	public function actionAjaxHeadIcon()
 	{
-		$lid = Yii::app()->request->getPost('lid');
 		$userId = Yii::app()->request->getPost('userId');
 		$dpid = $this->companyId;
 		
-		$addresss = WxAddress::setDefault($userId,$lid,$dpid);
+		$user = WxBrandUser::get($userId,$this->companyId);
 		
-		if($addresss){
+		if($user){
 			echo 1;
 		}else{
 			echo 0;
+		}
+		exit;
+	}
+	public function actionAjaxSetAddress()
+	{
+		$userId = Yii::app()->request->getPost('userId');
+		$dpid = $this->companyId;
+		
+		$pullInfo = new PullUserInfo($dpid,$userId);
+		if($pullInfo->response->headimgurl){
+			echo $pullInfo->response->headimgurl;
+		}else{
+			echo false;
 		}
 		exit;
 	}

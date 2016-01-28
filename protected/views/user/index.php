@@ -10,7 +10,7 @@
 <body class="members bg_lgrey2">
 	<div class="toparea">
 		<div class="maininfo">
-		<div class="left">
+		<div class="left headImg">
 			<img src="<?php echo $user['head_icon'];?>" class="avatar">
 		</div>
 		
@@ -46,4 +46,20 @@
 	<?php 
 	include_once(Yii::app()->basePath.'/views/layouts/footernav.php');
 	?>
+	<script type="text/javascript">
+	$('document').ready(function(){
+		$('.headImg').click(function(){
+			$.ajax({
+				url:'<?php echo $this->createUrl('/user/ajaxHeadIcon',array('companyId'=>$this->companyId));?>',
+				dataType:'post',
+				data:{userId:<?php echo $user['lid'];?>},
+				success:function(msg){
+					if(msg){
+						$('.headImg').find('img').attr('src',msg);
+					}
+				}
+			});
+		});
+	});
+	</script>
 </body>
