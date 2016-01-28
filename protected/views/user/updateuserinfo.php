@@ -49,7 +49,7 @@
 	    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
 	    <div class="weui_dialog_bd"></div>
 	    <div class="weui_dialog_ft">
-	        <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+	        <a href="javascript:;" id="confirm" class="weui_btn_dialog primary">确定</a>
 	    </div>
 	</div>
 </div>
@@ -71,4 +71,9 @@
         
         return true;
     }
+    $('document').ready(function(){
+    	$('#confirm').click(function(){
+    		$('#dialog2').hide();
+    	});
+    });
 </script>
