@@ -43,17 +43,30 @@
 </div>
 
 </form>
+<div class="weui_dialog_alert" id="dialog2" style="display: none;">
+	<div class="weui_mask"></div>
+	<div class="weui_dialog">
+	    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+	    <div class="weui_dialog_bd"></div>
+	    <div class="weui_dialog_ft">
+	        <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+	    </div>
+	</div>
+</div>
 </body>
 <script type="text/javascript">
   function validate() {
         if($('#name').val() == ''){
-            alert('请填写姓名！');
+        	$('#dialog2').find('.weui_dialog_bd').html('请填写姓名！');
+            $('#dialog2').show();
             return false;}
         if($('#mobile').val() == ''){
-            alert('请填写联系方式！');
+            $('#dialog2').find('.weui_dialog_bd').html('请填写联系方式！');
+            $('#dialog2').show();
             return false;}
         if($('#birthday').val() == ''){
-            alert('请填写生日！');
+            $('#dialog2').find('.weui_dialog_bd').html('请填写生日！');
+            $('#dialog2').show();
         return false;}
         
         return true;
