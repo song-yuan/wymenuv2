@@ -77,7 +77,7 @@
     	var obj = $('#countdown');
     	if (countdown == 0) { 
 			obj.removeClass("disable");    
-			obj.html('获取验证码'); 
+			obj.html(''); 
 			countdown = 60; 
 			return;
 		} else { 
