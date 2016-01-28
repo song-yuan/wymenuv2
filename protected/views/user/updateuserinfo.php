@@ -27,7 +27,7 @@
             <div class="weui_cell_bd weui_cell_primary">
                 <input class="weui_input" id="mobile" name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
             </div>
-            <div class="weui_cell_ft sentMessage" style="font-size:100%;border-left:1px solid #888;">发送验证码</div>
+            <div class="weui_cell_ft sentMessage disable" style="font-size:100%;border-left:1px solid #888;"> 获取验证码<span id="countdown"></span></div>
         </div>
         
         <div class="weui_cell">
@@ -72,8 +72,26 @@
         
         return true;
     }
+    var countdown = 60;
+    function countdown(){
+    	var obj = $('#countdown');
+    	if (countdown == 0) { 
+			obj.removeClass("disable");    
+			obj.html('获取验证码'); 
+			countdown = 60; 
+		} else { 
+			obj.html('('+countdown+')'); 
+			countdown--; 
+		} 
+		setTimeout(function(){ 
+			countdown();
+		},1000);
+    }
     $('document').ready(function(){
     	$('.sentMessage').click(function(){
+    		if($(this).hasClass('disable')){
+    			return;
+    		}
     		var mobile = $('#mobile').val()
     		$.ajax({
     			url:'<?php echo $this->createUrl('/user/ajaxSentMessage',array('companyId'=>$this->companyId));?>',
@@ -81,6 +99,8 @@
     			success:function(msg){
     				$('#dialog2').find('.weui_dialog_bd').html(msg);
            	 		$('#dialog2').show();
+           	 		$(this).addClass('disable')
+           	 		countdown();
     			}
     		});
     	});

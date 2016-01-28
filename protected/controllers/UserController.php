@@ -319,13 +319,7 @@ class UserController extends Controller
 	 public function actionAjaxSentMessage()
 	{
 		$mobile = Yii::app()->request->getParam('mobile');
-		$code = rand(1000,9999);
-		$userid = '';
-		$account = 'jl01';
-		$password = 'ab123456';
-		$content = '【物易科技】您的验证码是：'.$code;
-		$url = 'http://sh2.ipyy.com/smsJson.aspx?action=send&userid='.$userid.'&account='.$account.'&password='.$password.'&mobile='.trim($mobile).'&content='.$content.'&sendTime=&extno=';
-		$result = Curl::httpsRequest($url);
+		$result = WxSentMessage::sentMessage($mobile);
 		echo $result;
 		exit;
 	}
