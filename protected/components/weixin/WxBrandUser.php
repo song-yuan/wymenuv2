@@ -97,6 +97,22 @@ class WxBrandUser {
 		$points = Yii::app()->db->createCommand($sql)->queryRow();
 		return $points['total']?$points['total']:0;
 	}
+	/**
+	 * 
+	 * 保存会员资料
+	 * 
+	 * 
+	 */
+	public static function update($param){
+		$insertData = array(
+				        	'user_name'=>$param['user_name'],
+				        	'mobile_num'=>$param['mobile_num'],
+				        	'user_birthday'=>$param['user_birthday'],
+				        	'is_sync'=>DataSync::getInitSync(),
+							);
+		$result = Yii::app()->db->createCommand()->update('nb_brand_user', $insertData,'lid=:lid and dpid=:dpid',array(':lid'=>$param['lid'],':dpid'=>$param['dpid']));
+		return $result;
+	}
 }
 
  

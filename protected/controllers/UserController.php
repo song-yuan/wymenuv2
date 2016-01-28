@@ -102,19 +102,43 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$user = WxBrandUser::get($userId,$this->companyId);
-		if(Yii::app()->request->isPostRequest){
-			$userInfo = Yii::app()->request->getPost('user');
-			var_dump($userInfo);exit;
-		}
 		
 		$this->render('updateuserinfo',array('companyId'=>$this->companyId,'user'=>$user));
 	}
+	/**
+	 * 
+	 * 保存个人资料
+	 * 
+	 */
+	public function actionSaveUserInfo()
+	{
+		if(Yii::app()->request->isPostRequest){
+			$userInfo = Yii::app()->request->getPost('user');
+			$userInfo['dpid'] = $this->companyId;
+			$result = WxBrandUser::update($userInfo);
+			if($result){
+				$this->redirect(array('/user/index','companyId'=>$this->companyId));
+			}else{
+				$this->redirect(array('/user/setUserInfo','companyId'=>$this->companyId));
+			}
+		}
+	}
+	/**
+	 * 
+	 * 会员地址列表
+	 * 
+	 */
 	public function actionAddress()
 	{
 		$userId = Yii::app()->session['userId'];
 		$addresss = WxAddress::get($userId,$this->companyId);
 		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId));
 	}
+	/**
+	 * 
+	 * 编辑地址
+	 * 
+	 */
 	public function actionSetAddress()
 	{
 		$userId = Yii::app()->session['userId'];
@@ -122,6 +146,11 @@ class UserController extends Controller
 		$addresss = WxAddress::get($userId,$this->companyId);
 		$this->render('setaddress',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId,'url'=>$url));
 	}
+	/**
+	 * 
+	 * 增加地址
+	 * 
+	 */
 	public function actionAddAddress()
 	{
 		$userId = Yii::app()->session['userId'];
@@ -134,6 +163,11 @@ class UserController extends Controller
 		}
 		$this->render('addaddress',array('companyId'=>$this->companyId,'userId'=>$userId,'address'=>$address,'url'=>$url));
 	}
+	/**
+	 * 
+	 * 保存地址
+	 * 
+	 */
 	public function actionGenerateAddress() {
 		$goBack = Yii::app()->request->getParam('url');
 		if(Yii::app()->request->isPostRequest) {
@@ -187,6 +221,12 @@ class UserController extends Controller
 		$gifts = WxGiftCard::getUserExpireGift($userId,$this->companyId);
 		$this->render('expiregift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
 	}
+	/**
+	 * 
+	 * 
+	 * 礼品券详情
+	 * 
+	 */
 	public function actionGiftInfo()
 	{
 		$userId = Yii::app()->session['userId'];
@@ -212,21 +252,12 @@ class UserController extends Controller
 		}
 		$this->render('giftinfo',array('companyId'=>$this->companyId,'gift'=>$gift));
 	}
+	/**
+	 * 
+	 * 点击头像 更新会员信息
+	 * 
+	 */
 	public function actionAjaxHeadIcon()
-	{
-		$userId = Yii::app()->request->getPost('userId');
-		$dpid = $this->companyId;
-		
-		$user = WxBrandUser::get($userId,$this->companyId);
-		
-		if($user){
-			echo 1;
-		}else{
-			echo 0;
-		}
-		exit;
-	}
-	public function actionAjaxSetAddress()
 	{
 		$userId = Yii::app()->request->getPost('userId');
 		$dpid = $this->companyId;
@@ -239,6 +270,33 @@ class UserController extends Controller
 		}
 		exit;
 	}
+	/**
+	 * 
+	 * 设置默认地址
+	 * 
+	 * 
+	 */
+	public function actionAjaxSetAddress()
+	{
+		$lid = Yii::app()->request->getPost('lid');
+		$userId = Yii::app()->request->getPost('userId');
+		$dpid = $this->companyId;
+		
+		$addresss = WxAddress::setDefault($userId,$lid,$dpid);
+		
+		if($addresss){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+
+	}
+	/**
+	 * 
+	 * 删除地址
+	 * 
+	 */
 	public function actionAjaxDeleteAddress()
 	{
 		$lid = Yii::app()->request->getPost('lid');
