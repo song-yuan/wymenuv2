@@ -311,6 +311,24 @@ class UserController extends Controller
 		}
 		exit;
 	}
+	/**
+	 * 
+	 * 发送短信
+	 * 
+	 */
+	 public function actionAjaxSentMessage()
+	{
+		$mobile = Yii::app()->request->getParam('mobile');
+		$code = rand(1000,9999);
+		$userid = '';
+		$account = 'jl01';
+		$password = 'ab123456';
+		$content = '【物易科技】您的验证码是：'.$code;
+		$url = 'http://sh2.ipyy.com/smsJson.aspx?action=send&userid='.$userid.'&account='.$account.'&password='.$password.'&mobile='.trim($mobile).'&content='.$content.'&sendTime=&extno=';
+		$result = Curl::httpsRequest($url);
+		echo $result;
+		exit;
+	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
 	}
