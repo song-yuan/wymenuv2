@@ -102,6 +102,10 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$user = WxBrandUser::get($userId,$this->companyId);
+		if(Yii::app()->request->isPostRequest){
+			$userInfo = Yii::app()->request->getPost('user');
+			var_dump($userInfo);exit;
+		}
 		
 		$this->render('updateuserinfo',array('companyId'=>$this->companyId,'user'=>$user));
 	}
