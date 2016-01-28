@@ -319,7 +319,9 @@ class UserController extends Controller
 	 public function actionAjaxSentMessage()
 	{
 		$mobile = Yii::app()->request->getParam('mobile');
-		$result = WxSentMessage::sentMessage($mobile);
+		$code = rand(1000,9999);
+		$content = '【物易科技】您的验证码是：'.$code;
+		$result = WxSentMessage::sentMessage($mobile,$content);
 		echo $result;
 		exit;
 	}
