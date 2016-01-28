@@ -32,7 +32,7 @@
         <div class="weui_cell">
             <div class="weui_cell_hd"><label for="" class="weui_label">生日</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" id="birthday" name="user[user_birthday]" type="date" value="<?php echo $user['user_birthday'];?>"/>
+                <input class="weui_input" id="birthday" name="user[user_birthday]" type="date" value="<?php echo date('Y-m-d',strtotime($user['user_birthday']));?>"/>
             </div>
         </div>
     </div>
