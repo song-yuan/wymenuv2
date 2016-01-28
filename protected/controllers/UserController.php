@@ -115,6 +115,7 @@ class UserController extends Controller
 		if(Yii::app()->request->isPostRequest){
 			$userInfo = Yii::app()->request->getPost('user');
 			$userInfo['dpid'] = $this->companyId;
+			var_dump($userInfo);exit;
 			$result = WxBrandUser::update($userInfo);
 			if($result){
 				$this->redirect(array('/user/index','companyId'=>$this->companyId));
