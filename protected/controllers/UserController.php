@@ -313,6 +313,23 @@ class UserController extends Controller
 	}
 	/**
 	 * 
+	 * 验证手机验证码
+	 * 
+	 */
+	 public function actionAjaxVerifyCode()
+	{
+		$mobile = Yii::app()->request->getPost('mobile');
+		$code = Yii::app()->request->getPost('code');
+		
+		if(isset(Yii::app()->session[$mobile]) && Yii::app()->session[$mobile] == $code){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+	}
+	/**
+	 * 
 	 * 发送短信
 	 * 
 	 */
@@ -320,6 +337,8 @@ class UserController extends Controller
 	{
 		$mobile = Yii::app()->request->getParam('mobile');
 		$code = rand(1000,9999);
+		Yii::app()->session[$mobile] = $code;
+		
 		$content = '【物易科技】您的验证码是：'.$code;
 		$result = WxSentMessage::sentMessage($mobile,$content);
 		echo $result;
