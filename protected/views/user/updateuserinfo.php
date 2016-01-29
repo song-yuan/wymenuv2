@@ -29,7 +29,12 @@
             </div>
             <div class="weui_cell_ft sentMessage" style="font-size:100%;padding-left:5px;border-left:1px solid #888;">获取验证码<span id="countdown"></span></div>
         </div>
-        
+        <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input class="weui_input" id="verifyCode" name="verifyCode" type="tel" placeholder="请输入验证码" value=""/>
+            </div>
+        </div>
         <div class="weui_cell">
             <div class="weui_cell_hd"><label for="" class="weui_label">生日</label></div>
             <div class="weui_cell_bd weui_cell_primary">
@@ -65,13 +70,32 @@
             $('#dialog2').find('.weui_dialog_bd').html('请填写联系方式！');
             $('#dialog2').show();
             return false;}
+        if($('#verifyCode').val() == ''){
+            $('#dialog2').find('.weui_dialog_bd').html('请填写验证码！');
+            $('#dialog2').show();
+            return false;}
         if($('#birthday').val() == ''){
             $('#dialog2').find('.weui_dialog_bd').html('请填写生日！');
             $('#dialog2').show();
         return false;}
         
-        return true;
+        var verifyCode = $('#verifyCode').val();
+        var mobile = $('#mobile').val()
+		$.ajax({
+			url:'<?php echo $this->createUrl('/user/ajaxVerifyCode',array('companyId'=>$this->companyId));?>',
+			data:{mobile:mobile,code:verifyCode},
+			success:function(msg){
+				if(parseInt(msg)){
+					return true;
+				}else{
+					$('#dialog2').find('.weui_dialog_bd').html('验证码错误');
+       	 			$('#dialog2').show();
+       	 			return false;
+				}
+			}
+		});
     }
+    
    var countdown = 60;
    function setTime(){
     	var obj = $('#countdown');
