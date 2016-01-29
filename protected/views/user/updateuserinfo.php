@@ -79,21 +79,22 @@
             $('#dialog2').show();
         return false;}
         
+        var success = true;
         var verifyCode = $('#verifyCode').val();
         var mobile = $('#mobile').val()
 		$.ajax({
 			url:'<?php echo $this->createUrl('/user/ajaxVerifyCode',array('companyId'=>$this->companyId));?>',
 			data:{mobile:mobile,code:verifyCode},
+			async: false,
 			success:function(msg){
-				if(parseInt(msg)){
-					return true;
-				}else{
+				if(!parseInt(msg)){
 					$('#dialog2').find('.weui_dialog_bd').html('验证码错误');
        	 			$('#dialog2').show();
-       	 			return false;
+       	 			success = false;
 				}
 			}
 		});
+		return success;
     }
     
    var countdown = 60;

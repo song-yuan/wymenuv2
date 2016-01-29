@@ -318,8 +318,8 @@ class UserController extends Controller
 	 */
 	 public function actionAjaxVerifyCode()
 	{
-		$mobile = Yii::app()->request->getPost('mobile');
-		$code = Yii::app()->request->getPost('code');
+		$mobile = Yii::app()->request->getParam('mobile');
+		$code = Yii::app()->request->getParam('code');
 		
 		if(isset(Yii::app()->session[$mobile]) && Yii::app()->session[$mobile] == $code){
 			echo 1;
