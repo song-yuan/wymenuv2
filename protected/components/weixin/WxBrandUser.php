@@ -41,6 +41,15 @@ class WxBrandUser {
 		return $brandUser;
 	}
 	/**
+	 * 通过openid查找用户
+	 * 
+	 */
+	public static function getFromCardId($cardId) {
+		$sql = 'select * from nb_brand_user where card_id = "'.$cardId.'"';
+		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		return $brandUser;
+	}
+	/**
 	 * 
 	 * 获取会员总余额
 	 * 

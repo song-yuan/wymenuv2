@@ -24,7 +24,7 @@
 			<li><label for="receiver">详细地址</label><input type="text" id="street" name="address[street]" placeholder="街道门牌信息" value="<?php echo $address?$address['street']:'';?>"></li>
 			<li><label for="receiver">邮政编码</label><input type="text" id="postcode" name="address[postcode]" placeholder="邮政编码" value="<?php echo $address?$address['postcode']:'';?>"></li>
 			<li>
-			<div class="left">设置为默认收货地址</span></div>
+			<div class="left">设置为默认配送地址</span></div>
 			<div class="right">
 			<label><input type="checkbox" name="address[default_address]" class="ios-switch green  bigswitch" <?php echo $address&&$address['default_address']?'checked':'';?> value="1"/><div><div></div></div></label>
 			</div>

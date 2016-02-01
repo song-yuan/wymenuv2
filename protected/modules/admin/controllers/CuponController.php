@@ -212,7 +212,47 @@ class CuponController extends BackendController
 		));
 
 	}
-
+	/**
+	 * 发送现金券
+	 */
+	public function actionSentCupon()
+	{	
+		$success = true;
+		$i = 0;
+		$cuponId = Yii::app()->request->getParam('cuponid');
+		$now = time();
+		
+		$model = Cupon::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $cuponId,':dpid'=> $this->companyId));
+	    
+	    if(Yii::app()->request->isPostRequest){
+	    	$userIds = Yii::app()->request->getPost('userIds');
+	    	$userArr = explode(',',$userIds);
+	    	$pre = 10000 + $this->companyId;
+	    	if(!empty($userArr)){
+	    		foreach($userArr as $k=>$user){
+	    			$brandUser = WxBrandUser::getFromCardId($pre.trim($user));
+	    			if(!$brandUser){
+	    				continue;
+	    			}
+	    			$result = WxCupon::sentCupon($this->companyId,$brandUser['lid'],$cuponId);
+	    			if(!$result){
+	    				$success = false;
+	    			}else{
+	    				$i++;
+	    			}
+	    		}
+	    		if($success){
+	    			Yii::app()->admin->setFlash('success','全部发送成功！');	
+	    		}else{
+	    			Yii::app()->admin->setFlash('error','发送成功'.($i+1).'成功！');	
+	    		}
+	    	}
+	    	$this->redirect(array('/admin/cupon/index','companyId'=>$this->companyId));
+	    }
+		$this->renderPartial('sentcashcard',array(
+			'model'=>$model,
+		));
+	}
 
 	private function getBrdulv(){
 		$criteria = new CDbCriteria;

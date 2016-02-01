@@ -9,6 +9,11 @@
  */
 class WxCupon
 {
+	/**
+	 * 
+	 * 获取会员所以代金券
+	 * 
+	 */
 	public static function getUserAllCupon($userId,$dpid){
 		$user = WxBrandUser::get($userId,$dpid);
 		$sql = 'select m.lid,m.is_used,n.cupon_title,n.main_picture,n.min_consumer,n.cupon_money,n.begin_time,n.end_time from (select * from nb_cupon_branduser where dpid=:dpid and to_group=3 and brand_user_lid=:userId and is_used > 0 and delete_flag=0' .
@@ -76,6 +81,11 @@ class WxCupon
 				  ->queryAll();
 	    return $cupon;
 	}
+	/**
+	 * 
+	 * 获取会员该订单可用
+	 * 
+	 */
 	public static function getUserAvaliableCupon($total,$userId,$dpid){
 		$isCanUse = true;
 		$set = WxTotalPromotion::get($dpid);
@@ -104,6 +114,10 @@ class WxCupon
 		}
 	    return $cupon;
 	}
+	/**
+	 * 正在进行代金券列表
+	 * 
+	 */
 	public static function getCuponList($dpid){
 		$now = date('Y-m-d H:i:s',time());
 		$sql = 'select * from nb_cupon where dpid=:dpid and begin_time <=:now and :now <= end_time and delete_flag=0';
@@ -113,6 +127,10 @@ class WxCupon
 				  ->queryAll();
 	    return $cupon;
 	}
+	/**
+	 * 代金券详情
+	 * 
+	 */
 	public static function getCupon($dpid,$cuponId){
 		$now = date('Y-m-d H:i:s',time());
 		$sql = 'select * from nb_cupon where lid=:lid and dpid=:dpid and begin_time <=:now and :now <= end_time and delete_flag=0';
@@ -122,5 +140,30 @@ class WxCupon
 				  ->bindValue(':now',$now)
 				  ->queryRow();
 	    return $cupon;
+	}
+	/**
+	 * 
+	 * 发放代金券
+	 */
+	public static function sentCupon($dpid,$userId,$cuponId){
+		$now = date('Y-m-d H:i:s',time());
+		$se = new Sequence("cupon_branduser");
+		$lid = $se->nextval();
+		$data = array(
+				'lid'=>$lid,
+	        	'dpid'=>$dpid,
+	        	'create_at'=>$now,
+	        	'update_at'=>$now,
+	        	'cupon_id'=>$cuponId,
+	        	'to_group'=>3,
+	        	'brand_user_lid'=>$userId,
+	        	'cupon_source'=>2,
+	        	'source_id'=>0,
+	        	'is_used'=>1,
+	        	'is_sync'=>DataSync::getInitSync(),
+				);
+		$result = Yii::app()->db->createCommand()->insert('nb_cupon_branduser', $data);
+		
+	    return $result;
 	}
 }
