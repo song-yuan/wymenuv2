@@ -6,6 +6,12 @@
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>"></script>
 
 
+	<link href="<?php echo Yii::app()->request->baseUrl;?>/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+	<script src="<?php echo Yii::app()->request->baseUrl;?>/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript" ></script>
+	<script src="<?php echo Yii::app()->request->baseUrl;?>/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript" ></script>
+	<style>
+		#ajax-modal.modal{width:600px;}
+	</style>
 
 
 <!-- 		<script type="text/javascript" src="metronic/plugins/select2/select2.min.js"></script>
@@ -19,17 +25,7 @@
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">Modal title</h4>
-				</div>
-				<div class="modal-body">
-					Widget settings form goes here
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn blue">Save changes</button>
-					<button type="button" class="btn default" data-dismiss="modal">Close</button>
-				</div>
+				
 			</div>
 			<!-- /.modal-content -->
 		</div>
@@ -92,7 +88,7 @@
                                 <th><?php echo yii::t('app','是否有效');?></th>
                                 <!--<th><?php echo yii::t('app','支付方式');?></th>-->
                                 <th><?php echo yii::t('app','编辑');?></th>                                                                
-                                <!-- <th><?php echo yii::t('app','编辑明细');?></th> -->
+                                <th><?php echo yii::t('app','发放');?></th> 
                                 <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
@@ -114,8 +110,8 @@
 								<td><?php switch ($model->is_available){case 0:echo yii::t('app','有效');break;case 1:echo yii::t('app','无效');break;default:echo '';break;} ?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('cupon/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a></td>
-								<!-- <td class="center">
-								<a href="<?php echo $this->createUrl('cupon/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a> </td> -->
+								<td class="center">
+								<a href="javascript:;" class="sent" data-id="<?php echo $model->lid ;?>"><?php echo yii::t('app','发放');?></a> </td> 
 								 <td><?php echo '';?></td>
 								</tr>
 						
@@ -167,7 +163,16 @@
 		</div>
 		
 </div>					<!-- END EXAMPLE TABLE PORTLET-->
-</div>				
+</div>
+<div id="responsive" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div id="ajax-modal" class="modal fade" tabindex="-1"  style="width:600px;">
+    </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>			
  <script type="text/javascript">
 		$(document).ready(function(){
 			$('#normalpromotion-form').submit(function(){
@@ -175,9 +180,8 @@
 					alert("<?php echo yii::t('app','请选择要删除的项');?>");
 					return false;
 				}
-				return true;
-		});
-	    $(function () {
+					return true;
+			});
 	        $(".ui_timepicker").datetimepicker({
 	            //showOn: "button",
 	            //buttonImage: "./css/images/icon_calendar.gif",
@@ -187,6 +191,13 @@
 	            stepHour: 1,
 	            stepMinute: 1,
 	            stepSecond: 1
-	        })
+	        });
+	        var $modal = $('#ajax-modal');
+	        $('.sent').on('click',function(){
+	            var cuponid = $(this).attr('data-id');
+	            $modal.load('<?php echo $this->createUrl('/admin/cupon/sentCupon',array('companyId'=>$this->companyId));?>/cuponid/'+cuponid, '', function(){
+	                $modal.modal();
+	            });
+	        });
 	    });
 	     </script>
