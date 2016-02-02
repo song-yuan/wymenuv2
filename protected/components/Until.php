@@ -10,8 +10,9 @@ class Until {
  			$xls->addArray($data);
  			$xls->generateXML($fileName);
  		}
- 		if($type == 'pdf'){
- 			
+ 		if($type == 'txt'){
+ 			$txt = new Txt($data,$fileName);
+ 			$txt->create();
  		}
  		return; 		
  	}

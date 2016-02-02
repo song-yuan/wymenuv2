@@ -2,8 +2,8 @@
   #ajax-modal.modal{width:600px;}
   </style>
   	<?php $form=$this->beginWidget('CActiveForm', array(
-			'id'=>'Cashcard',
-			'action'=>$this->createUrl('/admin/cupon/sentCupon',array('companyId'=>$this->companyId,'cupinid'=>$model->lid)),
+			'id'=>'Prize',
+			'action'=>$this->createUrl('/admin/screen/index',array('companyId'=>$this->companyId,'download'=>1)),
 			'clientOptions'=>array(
 				'validateOnSubmit'=>true,
 			),
@@ -15,27 +15,27 @@
 	</div>
 	<div class="modal-body">
 		<div class="form-group">
-			<label for="GoodsCategory_category_name">填写会员号</label>
-			<textarea class="form-control" placeholder="填写会员号,多个会员以 “，” 结束" name="userIds" rows="10"></textarea>	
-			<div class="errorMessage"></div>								
+			<label class="col-md-3 control-label">发放人数</label>
+			<div class="col-md-4">
+				<input type="number" id="number" class="form-control" name="num" value="50"/>
+			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
+	<div class="modal-footer" style="text-align:center;">
 		<button type="button" data-dismiss="modal" class="btn default">取 消</button><button type="button" class="btn green submit">确 定</button>
 	</div>
 	<script>
 	var submit = true;
 	
 	$('.submit').click(function(){
-		var userIds = $('textarea').val();
-		if(!userIds){
-			$('.errorMessage').html('不能为空');
-			submit = false;
+		var num = $('#number').val();
+		if(num <= 0){
+			alert('填写大于零的数')
 			return;
 		}
 
 		if(submit){
-			$('form').submit();
+			$('#Prize').submit();
 		}
 		
 	});

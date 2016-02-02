@@ -87,7 +87,7 @@
 					dataType:'json',
 					success:function(msg){
 						for(var p in msg){
-							$(".main_discuss").append('<div class="message ms'+i+'">'+msg[p]['content']+'</div>');
+							$(".main_discuss").append('<div class="message ms'+i+'">'+msg[p]['openid']+':'+msg[p]['content']+'</div>');
 						}
 						init_barrage('ms'+i);
 						i++;

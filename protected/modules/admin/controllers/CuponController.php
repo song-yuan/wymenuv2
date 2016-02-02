@@ -242,9 +242,9 @@ class CuponController extends BackendController
 	    			}
 	    		}
 	    		if($success){
-	    			Yii::app()->admin->setFlash('success','全部发送成功！');	
+	    			Yii::app()->user->setFlash('success','全部发送成功！');	
 	    		}else{
-	    			Yii::app()->admin->setFlash('error','发送成功'.($i+1).'成功！');	
+	    			Yii::app()->user->setFlash('error','发送成功'.($i+1).'成功！');	
 	    		}
 	    	}
 	    	$this->redirect(array('/admin/cupon/index','companyId'=>$this->companyId));
@@ -283,7 +283,7 @@ class CuponController extends BackendController
 			$model->order_consume /= 100;
 		}
 		if(!$model->isAdmin()){
-			Yii::app()->admin->setFlash('error','你没有权限修改');
+			Yii::app()->user->setFlash('error','你没有权限修改');
 			$this->redirect(array('index','cid'=>$this->companyId));
 		}
 		if($request->isPostRequest)
@@ -318,11 +318,11 @@ class CuponController extends BackendController
 							$regionAdminIds = Yii::app()->admin->getRegionOwnerIds($shopIds);
 						}
 						$systemMessage = new SystemMessageManage();
-						$title = Yii::app()->admin->admin_user_name.' 修改了现金券['.$model->title.']';
+						$title = Yii::app()->user->admin_user_name.' 修改了现金券['.$model->title.']';
 						$systemMessage->sendMessage(array_merge($regionAdminIds,$shopAdminIds),$title,'');
 					}
 					$transaction->commit();
-					Yii::app()->admin->setFlash('success','编辑成功！');
+					Yii::app()->user->setFlash('success','编辑成功！');
 					$this->redirect(array('index','cid'=>$this->companyId));
 				} catch(Exception $e){
 					$transaction->rollback();
