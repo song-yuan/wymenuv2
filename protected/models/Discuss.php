@@ -61,6 +61,7 @@ class Discuss extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'branduser'=>array(self::HAS_ONE , 'BrandUser' ,'','on'=> 't.branduser_lid=branduser.lid and t.dpid=branduser.dpid'),
 		);
 	}
 

@@ -135,7 +135,7 @@ class WxDiscuss
 				'<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/102.gif"/>',
 			);
 	public static function get($dpid,$screenId = 0){
-		$sql = 'select * from nb_discuss where dpid=:dpid and show_flag=0 and delete_flag=0';
+		$sql = 'select t.content,t1.nickname from nb_discuss t,nb_brand_user t1 where t.dpid=t1.dpid and t.branduser_lid =t1.lid and dpid=:dpid and show_flag=0 and delete_flag=0';
 		$discusses = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->queryAll();

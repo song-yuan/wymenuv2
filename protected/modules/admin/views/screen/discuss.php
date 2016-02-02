@@ -1,3 +1,11 @@
+<link href="<?php echo Yii::app()->request->baseUrl;?>/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>
+<script src="<?php echo Yii::app()->request->baseUrl;?>/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript" ></script>
+<script src="<?php echo Yii::app()->request->baseUrl;?>/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript" ></script>
+
+<style>
+td{word-break: break-all;}
+#ajax-modal.modal{width:600px;}
+</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -78,6 +86,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','视频评论列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
+							<button type="button"  class="btn blue sent" ><i class="fa fa-ban"></i> <?php echo yii::t('app','导出中奖人');?></button>
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
 					</div>
@@ -86,9 +95,10 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th class="table-checkbox" style="width:10%"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:50%"><?php echo yii::t('app','内容');?></th>
-								<th style="width:10%">&nbsp;</th>
+								<th class="table-checkbox" style="width:5%"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
+								<th style="width:10%"><?php echo yii::t('app','会员名');?></th>
+								<th style="width:40%"><?php echo yii::t('app','内容');?></th>
+								<th style="width:5%">&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -96,7 +106,8 @@
 						<?php foreach ($models as $model):$model->content = WxDiscuss::dealWithEmo($model->content);?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:20%"><?php echo $model->content;?></td>
+								<td ><?php echo $model->branduser->nickname;?></td>
+								<td ><?php echo $model->content;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('screen/deleteDiscuss',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','删除');?></a>
 								</td>
@@ -147,6 +158,15 @@
 		</div>
 		<?php $this->endWidget(); ?>
 	</div>
+	<div id="responsive" class="modal fade" tabindex="-1" aria-hidden="true">
+	    <div id="ajax-modal" class="modal fade" tabindex="-1"  style="width:600px;">
+	    </div>
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	
+	        </div>
+	    </div>
+	</div>		
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
@@ -157,5 +177,11 @@
 			}
 			return true;
 		});
+		var $modal = $('#ajax-modal');
+        $('.sent').on('click',function(){
+            $modal.load('<?php echo $this->createUrl('/admin/screen/prize',array('companyId'=>$this->companyId));?>', '', function(){
+                $modal.modal();
+            });
+        });
 	});
 	</script>	
