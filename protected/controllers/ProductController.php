@@ -116,6 +116,7 @@ class ProductController extends Controller
 	 	$product = Product::model()->findByPk($id);
 	 	$this->render('productinfo',array('product'=>$product));
 	 }
+         
 	 /**
 	  * 
 	  * 推荐商品

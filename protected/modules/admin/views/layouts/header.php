@@ -302,7 +302,7 @@
                         type:'GET',
                         timeout:5000,
                         cache:false,
-                        async:false,
+                        //async:false,
                         dataType: "json",
                         success:function(msg){
                             //网络连接有错误要报错
@@ -438,7 +438,7 @@
                                         type:'GET',
                                         timeout:5000,
                                         cache:false,
-                                        async:false,
+                                        //async:false,
                                         dataType: "json",
                                         success:function(msg){
 
