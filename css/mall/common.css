@@ -962,16 +962,17 @@ top: 0px;
 }
 
 .shortinfo2 .right {
-	width: 65%;
+	width: 80%;
 }
 
 .shortinfo2 .left {
-	width: 33%;
+	width: 20%;
 }
 
 
 .shortinfo2 h2 {
 	font-size: 13px !important;
+	margin-bottom:10px;
 }
 
 .shortinfo2 span {
@@ -1450,7 +1451,6 @@ input.usethis:checked + label {
 #topnav ul li span {
 	padding: 12px 0px 10px 0px;
 	display: inline-block;
-
 }
 
 #topnav ul li.current span {
@@ -1490,6 +1490,7 @@ input.usethis:checked + label {
 }
 
 .gift_exchange .orderlist  > ul {
+	width:100%;
 	position: absolute;
 	top: 39px;
 	left: 0px;
@@ -1525,18 +1526,18 @@ input.usethis:checked + label {
 
 .infoarea {
 	background-image: url('../../img/mall/bg_wave1.png');
-	background-size: 90% auto;
+	background-size: 90% 100%;
 	background-position: top center;
 	height: 45%;
 	margin-top: 5px;
 	padding-top: 20px;
 	background-repeat: no-repeat;
+	padding-bottom:50px;
 
 }
 
 .infoarea span {
 	margin: auto;
-	display: inline-block;
 	line-height: 1.3em;
 }
 

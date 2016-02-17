@@ -212,7 +212,47 @@ class CuponController extends BackendController
 		));
 
 	}
-
+	/**
+	 * 发送现金券
+	 */
+	public function actionSentCupon()
+	{	
+		$success = true;
+		$i = 0;
+		$cuponId = Yii::app()->request->getParam('cuponid');
+		$now = time();
+		
+		$model = Cupon::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $cuponId,':dpid'=> $this->companyId));
+	    
+	    if(Yii::app()->request->isPostRequest){
+	    	$userIds = Yii::app()->request->getPost('userIds');
+	    	$userArr = explode(',',$userIds);
+	    	$pre = 10000 + $this->companyId;
+	    	if(!empty($userArr)){
+	    		foreach($userArr as $k=>$user){
+	    			$brandUser = WxBrandUser::getFromCardId($pre.trim($user));
+	    			if(!$brandUser){
+	    				continue;
+	    			}
+	    			$result = WxCupon::sentCupon($this->companyId,$brandUser['lid'],$cuponId);
+	    			if(!$result){
+	    				$success = false;
+	    			}else{
+	    				$i++;
+	    			}
+	    		}
+	    		if($success){
+	    			Yii::app()->user->setFlash('success','全部发送成功！');	
+	    		}else{
+	    			Yii::app()->user->setFlash('error','发送成功'.($i+1).'成功！');	
+	    		}
+	    	}
+	    	$this->redirect(array('/admin/cupon/index','companyId'=>$this->companyId));
+	    }
+		$this->renderPartial('sentcashcard',array(
+			'model'=>$model,
+		));
+	}
 
 	private function getBrdulv(){
 		$criteria = new CDbCriteria;
@@ -243,7 +283,7 @@ class CuponController extends BackendController
 			$model->order_consume /= 100;
 		}
 		if(!$model->isAdmin()){
-			Yii::app()->admin->setFlash('error','你没有权限修改');
+			Yii::app()->user->setFlash('error','你没有权限修改');
 			$this->redirect(array('index','cid'=>$this->companyId));
 		}
 		if($request->isPostRequest)
@@ -278,11 +318,11 @@ class CuponController extends BackendController
 							$regionAdminIds = Yii::app()->admin->getRegionOwnerIds($shopIds);
 						}
 						$systemMessage = new SystemMessageManage();
-						$title = Yii::app()->admin->admin_user_name.' 修改了现金券['.$model->title.']';
+						$title = Yii::app()->user->admin_user_name.' 修改了现金券['.$model->title.']';
 						$systemMessage->sendMessage(array_merge($regionAdminIds,$shopAdminIds),$title,'');
 					}
 					$transaction->commit();
-					Yii::app()->admin->setFlash('success','编辑成功！');
+					Yii::app()->user->setFlash('success','编辑成功！');
 					$this->redirect(array('index','cid'=>$this->companyId));
 				} catch(Exception $e){
 					$transaction->rollback();

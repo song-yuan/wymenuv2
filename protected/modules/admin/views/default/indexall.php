@@ -351,8 +351,10 @@
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteIds"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;display: none;" id="spanTasteMemo"></span>
                                     <span style="font-size:2.0em;margin-left:1.0em;" id="spanProductName">菜品名称</span>
-                               <!--    <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">-->
-                               <!--     <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-reprint" value="<?php echo yii::t('app','厨打');?>">-->
+                                    <input style="float:right;margin-right:2.0em;" type="button" class="btn green" id="btn-reminder" value="<?php echo yii::t('app','催菜');?>">
+                                <!--      <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-return" value="<?php echo yii::t('app','转菜');?>">
+                                 <input style="float:right;margin-right:1.0em;" type="button" class="btn green" id="btn-retreat" value="<?php echo yii::t('app','退菜');?>">-->
+                                <!--    <input style="float:right;margin-right:3.0em;" type="button" class="btn green" id="btn-reprint" value="<?php echo yii::t('app','厨打');?>">-->
                                 </div>
                                 <div style="float:left;width:65%;">
                                		 <div style="float:left;width:96%;margin:1px 5px 5px 10px;padding:8px;border:1px solid red;">
@@ -402,12 +404,25 @@
 	                        </DIV> 	                            	 
 	                    </div>
                                 <div style="float:left;width:33%;margin:1px;border:1px solid red;">
-                                        <div style="float:left;height:2.0em;width:100%;line-height:2.0em;font-size:1.5em;"><?php echo yii::t('app','口味：');?></div>
-                                        <div id="productTaste" style="width:100%;">
-
-                                        </div>
+                                <div id="productstatus" style="width:100%;">
+                                	<div style="float:left;height:2.0em;width:100%;line-height:2.0em;font-size:1.5em;" class="btn-group" data-toggle="buttons"><?php echo yii::t('app','状态：');?>  </div>
+                                	<div class="btn-group" data-toggle="buttons" style="margin: 5px;border: 1px solid red;background: rgb(245,230,230);">
+                                		<label style="margin:5px;float: right;" group="status" id="checkboxNow" class="checkboxNow btn btn-default active"><input type="radio" value="0" class="toggle"><?php echo yii::t('app','即起');?></label>
+                                        <label style="margin:5px;float: right;" group="status" id="checkboxWait" class="checkboxNow btn btn-default "><input type="radio" value="1" class="toggle"><?php echo yii::t('app','等叫');?></label>
+                                        <label style="margin:5px;float: right;" group="status" id="checkboxHurry" class="checkboxNow btn btn-default "><input type="radio" value="2" class="toggle"><?php echo yii::t('app','加急');?></label>
+                                    </div>
                                 </div>
-	                            
+                                    <div style="float:left;height:2.0em;width:100%;line-height:2.0em;font-size:1.5em;"><?php echo yii::t('app','口味：');?></div>
+                                    <div id="productTaste" style="width:100%;">
+
+                                    </div>
+                                </div>
+	                            <!-- <div style="float:left;height:2.0em;width:100%;line-height:2.0em;font-size:1.5em;" class="btn-group" data-toggle="buttons"><?php echo yii::t('app','状态：');?>  
+                                		<label style="margin:5px;float: right;" id="checkboxNow" class="checkboxNow btn btn-default active"><input type="radio" class="toggle"><?php echo yii::t('app','即起');?></label>
+                                        <label style="margin:5px;float: right;" id="checkboxWait" class="checkboxNow btn btn-default "><input type="radio" class="toggle"><?php echo yii::t('app','等叫');?></label>
+                                        <label style="margin:5px;float: right;" id="checkboxHurry" class="checkboxNow btn btn-default "><input type="radio" class="toggle"><?php echo yii::t('app','加急');?></label>
+                                    </div>
+                                 -->
                             </div>
                 </div>	
             
@@ -708,6 +723,10 @@
             <div id="orderaccountsure" style="display: none">
                 
             </div>
+            <input type="hidden" value="0" id="selectproductnumforhurry">
+            <div id="hurrybox" style="display: none">
+                
+            </div>
         <script type="text/javascript">
             var gsid=0;
             var gistemp=0;
@@ -728,6 +747,7 @@
             var layer_index_printresult=0;
             var layer_index_membercard=0;
             var layer_index_retreatbox=0;
+            var layer_index_hurrybox=0;//cf
             var layer_index_selectalldiscount=0;
             var layer_index_orderaccountsure=0;
             var first_tab="<?php echo empty($categories)?"0":$categories[0]['lid']; ?>";
@@ -1075,6 +1095,7 @@
                                   +'      productid="'+lid+'"'
                                   +'      order_status="0"' 
                                   +'      is_giving="0" '
+                                  +'      product_status="0" '//添加cf
                                   +'      is_print="0" '
                                   +'       is_retreat="0"' 
                                   +'      tasteids="" tastememo=""' 
@@ -1122,10 +1143,12 @@
                     tempproduct=tempproduct+","+$(this).find("span[class='badge']").text();
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductDiscount']").text();
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductNowPrice']").text();
+                    tempproduct=tempproduct+","+$(this).attr("product_status");
                     tempproduct=tempproduct+","+$(this).attr("is_giving");
                     tempproduct=tempproduct+","+$(this).attr("tasteids");
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductPrice']").text();
+                    
                     if(productlist!="")
                     {
                         productlist=productlist+";"+tempproduct;
@@ -1177,7 +1200,7 @@
                     //var orderid=$(".selectProduct").attr("orderid");
                    //var orderstatus="1";
                    var sendjson=getallproductinfo();
-                   //alert(sendjson);return;
+                   alert(sendjson);return;
                    var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/1";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
@@ -1937,6 +1960,20 @@
                     }                    
                 }
             });
+
+            $('.selectNow').click(function(){
+                //var groupid=$(this).attr("group");
+                //var lit=$('label.selectTaste[group="'+groupid+'"]');
+                var chk=$(this).hasClass("active");
+                //alert(chk);
+                lit.each(function(){
+                    $(this).removeClass('active');
+                });
+                if(chk)
+                {
+                    return false;
+                }
+           });//添加cf
             
             $('.selectProductName,.selectProductName,.badge').live('click', function(){
                 var lid=$(this).parent().attr('lid');
@@ -1951,14 +1988,26 @@
                 var tastememo=$(this).parent().attr("tastememo");                
                 var isretreat=$(this).parent().attr("is_retreat");
                 var orderstatus=$(this).parent().attr("order_status");
+                var productstatus=$(this).parent().attr("product_status");
                 if(productdiscount.lastIndexOf("%")>=0)
-                {
+                {//alert(productstatus);exit;
                     $(".selectDiscount").removeClass("active");
                     $(".selectDiscount[id='checkboxDiscount']").addClass("active");
                 }else{
                     $(".selectDiscount").removeClass("active");
                     $(".selectDiscount[id='checkboxMinus']").addClass("active");
                 }
+                if(productstatus=='0')
+                {//alert(productstatus);exit;
+                    $(".checkboxNow").removeClass("active");
+                    $(".checkboxNow[id='checkboxNow']").addClass("active");
+                }else if(productstatus=='1'){
+                    $(".checkboxNow").removeClass("active");
+                    $(".checkboxNow[id='checkboxWait']").addClass("active");
+                }else if(productstatus=='2'){
+                    $(".checkboxNow").removeClass("active");
+                    $(".checkboxNow[id='checkboxHurry']").addClass("active");
+                }//添加
                 if(isgiving=="1")
                 {
                     $(".selectDiscount").removeClass("active");
@@ -1978,6 +2027,7 @@
                 $("#spanTasteIds").text(tasteids);
                 $("#spanTasteMemo").text(tastememo);
                 $("#spanIsRetreat").text(isretreat);
+                $("#spanProductStatus").text(productstatus);
                 $("#spanOrderStatus").text(orderstatus);
                 $('#productTaste').load('<?php echo $this->createUrl('defaultOrder/productTasteAll',array('companyId'=>$this->companyId,'isall'=>'0'));?>/lid/'+productid);
                 if(layer_index1!=0)
@@ -1998,7 +2048,7 @@
                      }
                  });  
             });
-            
+            //催菜打印出单
             $('#btn-retreat').on(event_clicktouchstart,function(){
                 var lid =$("#spanLid").text();
                 var productid=$("#spanProductId").text();
@@ -2026,12 +2076,12 @@
 //                 	  layer_index1=0;
 //                      $modal.modal();
 //                });
-                $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
-                if(layer_index_retreatbox!=0)
+                $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addHurryOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+                if(layer_index_hurrybox!=0)
                 {
                     return;
                 }
-                layer_index_retreatbox=layer.open({
+                layer_index_hurrybox=layer.open({
                      type: 1,
                      shade: false,
                      title: false, //不显示标题
@@ -2039,13 +2089,51 @@
                      content: $('#retreatbox'), //捕获的元素
                      cancel: function(index){
                          layer.close(index);
-                         layer_index_retreatbox=0;
+                         layer_index_hurrybox=0;
         //                        this.content.show();
         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
                      }
                  });  
              });
-             
+//             $('#btn-reminder').on(event_clicktouchstart,function(){
+//                 var lid =$("#spanLid").text();
+//                 var productid=$("#spanProductId").text();
+//                 var isretreat=$("#spanIsRetreat").text();
+//                 var orderstatus=$("#spanOrderStatus").text();
+//                 if(isretreat=="1")
+//                 {
+//                     alert("已经退菜、无法进行催菜操作！！！");
+//                     return false
+//                 }
+//                 if(orderstatus=="0")
+//                 {
+//                     alert("还没有下单、无法进行催菜操作！！！");
+//                     return false
+//                 }
+               // var statu = confirm("<?php echo yii::t('app','确定要进行催菜操作吗？');?>");
+//                 if(!statu){
+//                     return false;
+//                 }
+               // $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+//                 if(layer_index_retreatbox!=0)
+//                 {
+//                     return;
+//                 }
+//                 layer_index_retreatbox=layer.open({
+//                      type: 1,
+//                      shade: false,
+//                      title: false, //不显示标题
+//                      area: ['50%', '50%'],
+//                      content: $('#retreatbox'), //捕获的元素
+//                      cancel: function(index){
+//                          layer.close(index);
+//                          layer_index_retreatbox=0;
+//         //                        this.content.show();
+//         //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+//                      }
+//                  });  
+//              });
+          
              $('#payDiscountAccountDiv').on("click",function(){
                 //var lid=$(this).attr("lid");
                 $('#alldiscountselect').load("<?php echo $this->createUrl('defaultOrder/selectAllDiscount',array('companyId'=>$this->companyId));?>");
@@ -2068,15 +2156,64 @@
                 }); 
              });
              
-             $('#btn-reprint').on(event_clicktouchstart,function(){
+             $('#btn-reminder').on(event_clicktouchstart,function(){
                 var lid =$("#spanLid").text();
                 var orderid=$(".selectProduct").attr("orderid");
-                var $modal=$('#portlet-config');
-                //不能刷新orderPartial，手动改变状态
-                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid
-                        ,'', function(){
-                                    $modal.modal();
-                            });                                                                    
+                var order=lid+"&&"+orderid;
+//                 var $modal=$('#portlet-config');
+//                 //不能刷新orderPartial，手动改变状态
+//                $modal.find('.modal-content').load('<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid
+//                         ,'', function(){
+//                                     $modal.modal();
+//                             });    
+				//alert(order);
+                //var url='<?php echo $this->createUrl('defaultOrder/printOneKitchen',array('companyId'=>$this->companyId));?>/orderProductId/'+lid+'/orderId/'+orderid;	
+//                var statu = confirm("<?php echo yii::t('app','催菜，确定吗？');?>");
+//                 if(!statu){
+//                     return false;
+//                 } 
+				var orderstatus = $(this).parent().attr("order_status");
+                var curnum = $(this).parent().find('span[class="badge"]').text().replace(",","")
+                var setid = $(this).parent().attr("setid");
+                var oprole ="<?php echo Yii::app()->user->role; ?>";
+                if(oprole > '2')
+                {
+                    alert("没有催菜权限！");
+                    return;
+                }
+                //alert(curnum);
+                $("#selectproductnumforhurry").val(curnum);
+                if(orderstatus!="0")//退菜是单个的
+                {
+                    var isretreat=$(this).parent().attr("is_retreat");
+                    if(isretreat==1)
+                    {
+                        alert("已经退菜");
+                        return false;
+                    }else{
+                        //var lid=$(this).parent().attr("lid");
+                        $('#hurrybox').load("<?php echo $this->createUrl('defaultOrder/addHurryOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+                        if(layer_index_retreatbox!=0)
+                        {
+                            return;
+                        }
+                        layer_index_hurrybox=layer.open({
+                             type: 1,
+                             shade: false,
+                             title: false, //不显示标题
+                             area: ['50%', '30%'],
+                             content: $('#hurrybox'), //捕获的元素
+                             cancel: function(index){
+                                 layer.close(index);
+                                 layer_index_hurrytbox=0;
+                //                        this.content.show();
+                //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                            }
+                        }); 
+                    }
+                }else{
+                    alert("未知错误！！！");            
+                }
             });
             
             $('#cancel_zero').on(event_clicktouchstart,function(){
@@ -2402,6 +2539,18 @@
                 {
                     return false;
                 }
+//                 if($(".selectNow[id='checkboxNow']").hasClass("active"))
+//                 {
+//                     return false;
+//                 }
+//                 if($(".selectNow[id='checkboxWait']").hasClass("active"))
+//                 {
+//                     return false;
+//                 }
+//                 if($(".selectNow[id='checkboxHurry']").hasClass("active"))
+//                 {
+//                     return false;
+//                 }//添加
                 if($("#checkboxDiscount").hasClass("active"))
                 {
                     var discount=parseFloat($("#spanProductDiscount").text().replace(",",""));
@@ -2515,6 +2664,7 @@
                 var special="";
                 var tasteids="";
                 var tastememo="";
+                var productstatus="0";
                 
                 tastememo=$("#Order_remark_taste").val();
                 $("#productTaste").find("label[class='selectTaste btn btn-default active']").each(function(){
@@ -2531,6 +2681,17 @@
                 }
                 //alert(special);
                 obj.attr("is_giving",isgiving);
+                if($(".checkboxNow[id='checkboxWait']").hasClass("active"))
+                {
+                    productstatus="1";
+                    special=special+"等";
+                }
+                if($(".checkboxNow[id='checkboxHurry']").hasClass("active"))
+                {
+                	productstatus="2";
+                    special=special+"急";
+                }
+                obj.attr("product_status",productstatus);
                 if(obj.attr("is_retreat")=="1")
                 {
                     special=special+"退";

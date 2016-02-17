@@ -39,6 +39,13 @@
 										</div>
 									</div>
 									<div class="form-group">
+										<?php echo $form->label($model, 'site_channel_lid',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'site_channel_lid', array('0' => yii::t('app','-- 请选择 --')) +$channeltypes ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('site_channel_lid')));?>
+											<?php echo $form->error($model, 'site_channel_lid' )?>
+										</div>
+									</div>
+									<div class="form-group">
 										<?php echo $form->label($model, 'site_level',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'site_level',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('site_level')));?>

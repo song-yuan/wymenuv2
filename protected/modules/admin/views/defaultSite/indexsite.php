@@ -128,6 +128,7 @@
                                                                             
                                                                             <a id="manul_fresh" class="btn green"><i class="fa fa-cogs"></i> <?php echo yii::t('app','手动刷新');?></a>
                                                                             <a id="order_list" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','点单界面');?></a>
+                                                                            <a id="hexiao" class="btn green"><i class="fa fa-archive"></i> <?php echo yii::t('app','核销界面');?></a>
                                                                             <a  href="<?php echo $this->createUrl('orderManagement/notPay',array('companyId' => $this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>" class='btn green'  ><?php echo yii::t('app','今日订单');?></a>
                                                                             <a  href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId,'typeId'=>'product','from'=>'home'));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','快速沽清');?></a>
                                                                             <a  href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId,'from'=>'home'));?>" class="btn green"><i class="fa fa-chain-broken"></i> <?php echo yii::t('app','会员管理');?></a>
@@ -174,12 +175,26 @@
                                                         
                                                         <!-------------queue_call----------->
                                                         
-					
+			<!---------------折扣类型选择------------------>
+            <div id="hexiaobox" style="display: none">
+            	<div class="modal-header">
+                    <h4 id="orderaccountprintresult" style="color:red;"> 请选择需要核销的卡券类型... </h4>                                                    
+                </div>
+                <div class="modal-footer">
+                	<a href="<?php echo $this->createUrl('/admin/gift/code' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','礼品券核销');?></a>
+                	<a href="<?php echo $this->createUrl('/admin/wxcard/consume',array('companyId'=>$this->companyId));?>" class="btn red"><i class="fa fa-globe"></i> <?php echo yii::t('app','卡券核销');?></a>
+                    <!--<a><button type="button" class="btn green" id="giveup" style="width:10em;"><?php echo yii::t('app','取消核销');?></button></a>
+                     <button type="button" class="btn default" id="btn_orderaccount_cancel" style="width:10em;">取消结单</button>
+                    <button type="button" class="btn green-stripe" id="btn_orderaccount_reprint" style="width:10em;">重新打印</button>  
+                    <button type="button" class="btn green" id="btn_orderaccount_sure" style="width:10em;">确定结单</button>     -->
+                </div> 
+            </div>		
         <script type="text/javascript">
             gtypeid="<?php echo $typeId; ?>";
             //ghasfree=<?php //echo $hasfree;?>;
             //ghaswaiting=<?php //echo $haswaiting;?>;
             var layer_queue_call=0;
+            var layer_index_hexiaobox=0;
             
             $(document).ready(function(){
                 //alert(gtypeid);
@@ -198,6 +213,45 @@
 //                    }
 //                }
             });           
+
+            $('#hexiao').on(event_clicktouchstart,function(){
+              
+                var oprole ="<?php echo Yii::app()->user->role; ?>";
+                if(oprole > '2')
+                {
+                    alert("没有核销权限！");
+                    return;
+                }
+                //alert(curnum);
+                //$("#selectproductnumforhurry").val(curnum);
+//                 if(orderstatus!="0")//退菜是单个的
+//                 {
+                    
+                        //var lid=$(this).parent().attr("lid");
+                        //$('#hurrybox').load("<?php echo $this->createUrl('defaultOrder/addHurryOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+                        if(layer_index_hexiaobox!=0)
+                        {
+                            return;
+                        }
+                        layer_index_hexiaobox=layer.open({
+                             type: 1,
+                             shade: false,
+                             title: false, //不显示标题
+                             area: ['30%', '30%'],
+                             content: $('#hexiaobox'), //捕获的元素
+                             cancel: function(index){
+                                 layer.close(index);
+                                 layer_index_hexiaobox=0;
+                //                        this.content.show();
+                //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+                            }
+                        }); 
+                    
+//                 }else{
+//                     alert("未知错误！！！");
+//                 }
+            });
+            
             
             $('#manul_fresh').on("click",function(){
                 //site显示时才做这样的操作

@@ -37,8 +37,8 @@ class WebUser extends CWebUser
 							array('{class}'=>get_class($this))));
 				}
 			}
-			if ($this->absoluteAuthTimeout)
-				$this->setState(self::AUTH_ABSOLUTE_TIMEOUT_VAR, time()+$this->absoluteAuthTimeout);
+//			if ($this->absoluteAuthTimeout)
+//				$this->setState(self::AUTH_ABSOLUTE_TIMEOUT_VAR, time()+$this->absoluteAuthTimeout);
 			$this->afterLogin(false);
 		}
 		return !$this->getIsGuest();

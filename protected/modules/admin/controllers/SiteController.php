@@ -19,7 +19,7 @@ class SiteController extends BackendController
                         $typeId = array_search($typeId, $typeKeys) ? $typeId : $typeKeys[0] ;                      
                 }
 		$criteria = new CDbCriteria;
-                $criteria->with = array('siteType', 'floor','sitePersons');
+                $criteria->with = array('siteType', 'floor','sitePersons' ,'channel');
                 $criteria->condition =  't.delete_flag = 0 and t.type_id = '.$typeId.' and t.dpid='.$this->companyId ;
                 $criteria->order = ' t.type_id asc ';		
                 $pages = new CPagination(Site::model()->count($criteria));
@@ -56,13 +56,15 @@ class SiteController extends BackendController
 		$types = $this->getTypes();
                 $floors = $this->getFloors();
                 $sitepersons = $this->getSitePersons();
+                $channeltypes = $this->getChanneltypes();
                 //var_dump($floors);
                 //var_dump($types);exit;
 		$this->render('create' , array(
 				'model' => $model , 
 				'types' => $types ,
-                                'floors'=> $floors,
-                                'sitepersons'=>$sitepersons
+                'floors'=> $floors,
+                'sitepersons'=>$sitepersons,
+				'channeltypes'=>$channeltypes
 		));
 	}
 	public function actionUpdate(){
@@ -81,12 +83,14 @@ class SiteController extends BackendController
 		$types = $this->getTypes();
                 $floors = $this->getFloors();
                 $sitepersons = $this->getSitePersons();
+                $channeltypes = $this->getChanneltypes();
                 //var_dump($sitepersons,$floors);exit;
 		$this->render('update' , array(
 			'model'=>$model,
 			'types' => $types,
-                        'floors'=> $floors,
-                        'sitepersons'=>$sitepersons
+            'floors'=> $floors,
+            'sitepersons'=>$sitepersons,
+			'channeltypes'=>$channeltypes
 		));
 	}
 	public function actionDelete(){
@@ -150,5 +154,19 @@ class SiteController extends BackendController
                 }
                // var_dump($sp)
 		return CHtml::listData($splist, 'lid', 'persons');
+	}
+	private function getChanneltypes(){
+		$channeltypes = Channel::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId)) ;
+		$channeltypes = $channeltypes ? $channeltypes : array();
+		$splist=array();
+		if(!empty($channeltypes))
+		{
+			foreach($channeltypes as $sp)
+			{
+				array_push($splist,array("lid"=>$sp->lid,"types"=>$sp->channel_name));
+			}
+		}
+		// var_dump($sp)
+		return CHtml::listData($splist, 'lid', 'types');
 	}
 }

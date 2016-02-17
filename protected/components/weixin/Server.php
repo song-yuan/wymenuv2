@@ -139,7 +139,10 @@ class Server {
                  
             // 消息回复,类型包括：文本、图片、语音、视频
 			else if( !empty($this->postArr['MsgType']) && ($this->postArr['MsgType'] == 'text' || $this->postArr['MsgType'] == 'image' || $this->postArr['MsgType'] == 'voice' || $this->postArr['MsgType'] == 'video') ) {
-  				
+  				if($this->postArr['MsgType'] == 'text'){
+  					$data = array('dpid'=>$this->brandId,'user_id'=>$this->userId,'content'=>$this->postArr['Content']);
+  					WxDiscuss::insert($data);
+  				}
             }
     	}
         exit;
@@ -275,6 +278,7 @@ class Server {
     		$newBrandUser = new NewBrandUser($this->postArr['FromUserName'], $this->brandId);
     		$this->brandUser = $newBrandUser->brandUser;
     		$this->userId = $this->brandUser['lid'];
+    		WxGiftCard::sentGift($this->brandId,$this->userId);
     	}else {
             if($this->brandUser['unsubscribe'])
             	$this->cancelUnsubscribe();

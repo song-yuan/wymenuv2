@@ -1,6 +1,16 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('订单');
+	$this->setPageTitle('支付订单');
+	
+	$payYue = 0.00;
+	if(!empty($orderPays)){
+		foreach($orderPays as $orderPay){
+			if($orderPay['paytype']==10){
+				$payYue = $orderPay['pay_amount']; 
+			}
+		}
+	}
+	
 	//子订单号
 	$se = new Sequence("order_subno");
 	$orderSubNo = $se->nextval();
@@ -41,7 +51,24 @@
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
-<div class="order-title">订单详情</div>
+<div class="order-title">支付订单</div>
+<?php if($address):?>
+<?php if($order['order_type']==2):?>
+	<div class="address">
+		<div class="location">
+			<span>收货人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span><br>
+			<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+		</div>
+	</div>
+	<?php else:?>
+	<div class="address">
+		<div class="location">
+			<span>预约人：<?php echo $address['consignee'];?>   <?php echo $address['mobile'];?></span><br />
+			<span class="add">预约时间：<?php echo $order['appointment_time'];?></span>
+		</div>
+	</div>
+	<?php endif;?>
+<?php endif;?>
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
@@ -49,35 +76,34 @@
 		<div class="clear"></div>
 	</div>
 	<?php endforeach;?>
-	<?php if($order['reality_total'] - $order['should_total']):?>
 	<div class="ht1"></div>
-	
-	<?php if($order['cupon_branduser_lid'] > 0):?>
 	<div class="item">
-		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'] + $order['cupon_money'];?></div>
+		<div class="lt">总计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
 	</div>
+	
+	<?php if($order['reality_total'] - $order['should_total'] - $payYue):?>
+	<?php if($order['cupon_branduser_lid'] > 0):?>
 	<div class="item">
 		<div class="lt">现金券减免</div><div class="rt">￥<?php echo $order['cupon_money'];?></div>
 		<div class="clear"></div>
 	</div>
-	<?php else:?>
-	<div class="item">
-		<div class="lt">合计</div><div class="rt">￥<?php echo $order['should_total'];?></div>
+	<?php endif;?>
+	<?php endif;?>
+	
+	<?php if($payYue > 0):?>
+	<div class="item" >
+		<div class="lt">余额支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo $payYue;?></span></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
 	
-	<?php endif;?>
+	<div class="item">
+		<div class="lt">合计</div><div class="rt">￥<span style="color:#FF5151"><?php echo $order['should_total'];?></span></div>
+		<div class="clear"></div>
+	</div>
 </div>
 
-<div class="order-paytype">
-<div class="select-type">选择支付方式</div>
-<div class="paytype">
-	<div class="item on" paytype="1">微信支付</div>
-	<div class="item" paytype="2" remain-money="<?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?>" style="border:none;">余额支付<span style="color:#FF5151"><?php echo number_format($user['remain_money'] + $user['remain_back_money'],2);?></span></div>
-</div>
-</div>
 
 <footer>
     <div class="ft-lt">
@@ -128,26 +154,8 @@
 		}
 	}
 	$(document).ready(function(){
-		$('.paytype .item').click(function(){
-			var paytype = $(this).attr('paytype');
-			if(parseInt(paytype)==2){
-				var remainMoney = $(this).attr('remain-money');
-				var shouldTotal = $('#total').attr('should-total');
-				if(parseFloat(remainMoney) < parseFloat(shouldTotal)){
-					layer.msg('余额不足!');
-					return;
-				}
-			}
-			$('.item').removeClass('on');
-			$(this).addClass('on');
-		});
 		$('#payOrder').click(function(){
-			var paytype = $('.paytype .on').attr('paytype');
-			if(parseInt(paytype)==1){
-				callpay();
-			}else{
-				location.href = '<?php echo $this->createUrl('/mall/payOrderByYue',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
-			}
+			callpay();
 		});
 	})
 </script>

@@ -8,6 +8,24 @@ body{ background-color:#E5E5E5;}
 .order-info .item .lt{width:70%;height:100%;float:left;}
 .order-info .item .rt{width:30%;height:100%;float:right;font-size:15px;}
 .order-info .ht1{width:100%;height:1px;background-color:#E5E5E5;}
+
+.order-time{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
+.order-time .time-lt{float:left;width:35%;}
+.order-time .time-rt{float:left;width:65%;}
+.order-time input{width:80%;height:100%;border:none;text-align:right;font-size: 16px; color:#FF5151;}
+.order-time input::-webkit-input-placeholder {
+   color:#FF5151 !important;
+}
+.order-time input:-moz-placeholder {
+   color:#FF5151 !important;
+}
+.order-time input::-moz-placeholder {
+   color:#FF5151 !important;
+}
+.order-time input:-ms-input-placeholder {
+   color:#FF5151 !important;
+}
+
 .order-copun{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
 .order-copun .copun-lt{float:left;width:65%;}
 .order-copun .copun-rt{float:left;width:35%;color:#FF5151;}
@@ -19,8 +37,11 @@ body{ background-color:#E5E5E5;}
 .order-paytype .paytype{padding:10px;background:rgb(255,255,255);}
 .order-paytype .item,.user-cupon .item{padding:5px;border-bottom:1px solid #E5E5E5;background:url(../../img/mall/round_unchk.png) right center no-repeat; background-size: 20px 20px;}
 .order-paytype .on,.user-cupon .on{background:url(../../img/mall/round_chk.png) right center no-repeat; background-size: 20px 20px;}
-.item:last-child{border:none;}
+.paytype .item:last-child,.user-cupon .item:last-child{border:none;}
 .bottom{width:100%;height:100px;background-color:#E5E5E5;}
 
 
+.address { padding: 10px;min-height: 55px;line-height: 1.2em;font-size:18px; background-color:rgb(255,255,255);margin: 10px 0;}
+.location {padding-left: 25px; height: 100%;min-height:50px;padding-right: 20px;font-size: 0.8em !important;background-image: url(../../img/mall/icon_location.png);background-size: 25px auto;background-repeat: no-repeat;background-position:0 15px;}
+.address .add {font-size: 0.8em !important;}
 .arrowright { background-image: url(../../img/mall/arrowright.png);background-size: auto 25px;background-repeat: no-repeat;background-position: right center;}

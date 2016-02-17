@@ -127,14 +127,16 @@ class TasteController extends BackendController
                         //$model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $data = array(
-					 'lid'=>substr("0000000000".$se->nextval(),-10),//$model->lid,
-					 'dpid'=>$model->dpid,
-					 'create_at'=>date('Y-m-d H:i:s',time()),
-                                         'update_at'=>date('Y-m-d H:i:s',time()),
-					 'taste_group_id'=>$groupid,
-					 'allflae'=>$type,
-                                         'name'=>$model->name,
-					 'delete_flag'=>'0'
+					 				'lid'=>substr("0000000000".$se->nextval(),-10),//$model->lid,
+					 				'dpid'=>$model->dpid,
+					 				'create_at'=>date('Y-m-d H:i:s',time()),
+                                    'update_at'=>date('Y-m-d H:i:s',time()),
+					 				'taste_group_id'=>$groupid,
+					 				'allflae'=>$type,
+                        			//'other_price'=>$model->other_price,
+                        			'price'=>$model->price,
+                                    'name'=>$model->name,
+					 				'delete_flag'=>'0'
 					);
                         //var_dump($data);exit;
                         if(Yii::app()->db->createCommand()->insert('nb_taste',$data))
@@ -160,8 +162,11 @@ class TasteController extends BackendController
 		$model = Taste::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		
 		if(Yii::app()->request->isPostRequest) {
+			//$otherprice = $_POST['other_price'];
 			$model->attributes = Yii::app()->request->getPost('Taste');
+			//$model->other_price = $otherprice;
                         $model->update_at=date('Y-m-d H:i:s',time());
+                        //var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('taste/detailIndex' , 'type'=>$type,'groupname'=>$groupname,'groupid'=>$model->taste_group_id, 'companyId' => $this->companyId));

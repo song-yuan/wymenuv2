@@ -1406,6 +1406,7 @@ class DefaultOrderController extends BackendController
                                         $sorderProduct->amount = $productUnit[1];
                                         $sorderProduct->price = $productUnit[2];
                                         $sorderProduct->is_giving = '0';
+                                        $sorderProduct->product_status = '0';//添加cf
                                         $sorderProduct->zhiamount = 0;                                    
                                         $se=new Sequence("order_product");
                                         $sorderProduct->lid = $se->nextval();
@@ -1498,6 +1499,7 @@ class DefaultOrderController extends BackendController
                                     $sorderProduct->zhiamount = $productUnit[3];                                    
                                     $sorderProduct->price = $productUnit[4];
                                     $sorderProduct->is_giving = $productUnit[5];
+                                    $sorderProduct->product_status = "0";//添加cf
                                     $se=new Sequence("order_product");
                                     $sorderProduct->lid = $se->nextval();
                                     //var_dump($orderProduct);exit;
@@ -1564,6 +1566,7 @@ class DefaultOrderController extends BackendController
                                         $sorderProduct->price = $productUnit[1];
                                         $sorderProduct->amount = $productUnit[2];
                                         $sorderProduct->is_giving = '0';
+                                        $sorderProduct->product_status = '0';//添加cf
                                         $sorderProduct->zhiamount = 0;                                    
                                         $se=new Sequence("order_product");
                                         $sorderProduct->lid = $se->nextval();
@@ -1888,7 +1891,91 @@ class DefaultOrderController extends BackendController
                                 'productname'=>$productname
 		));
 	}
-        
+	public function actionAddHurryOne() {
+		$companyId=Yii::app()->request->getParam('companyId','0');
+                $orderDetailId=Yii::app()->request->getParam('orderDetailId','0');
+                //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
+                $db=Yii::app()->db;
+                $orderRetreat = new OrderRetreat();
+                $orderRetreat->order_detail_id = $orderDetailId;
+                $orderRetreat->dpid = $companyId;
+                $retreats = Retreat::model()->findAll(' dpid=:dpid and delete_flag = 0',array(':dpid'=>$companyId));                
+                $retreatslist=CHtml::listData($retreats, 'lid', 'name');
+                //var_dump($retreatslist);exit;
+                $orderDetail = OrderProduct::model()->with("product")->findAll('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));
+                //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
+                $orderId=$orderDetail[0]->order_id;
+                //var_dump($orderDetail);exit;
+                $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderDetail[0]->product_id,':dpid'=>$companyId));
+                $productname=$productdata->product_name;
+                $ret=array();
+		if(Yii::app()->request->isPostRequest){
+                    Until::validOperate($companyId, $this);
+                    $retreatnum=Yii::app()->request->getPost('retreatnum',0);
+                    $othermemo=Yii::app()->request->getPost('othermemo','');
+                    $retreatid=Yii::app()->request->getPost('retreatid','');
+                    $isall=Yii::app()->request->getPost('isall','1');
+                    $padid=Yii::app()->request->getPost('padid','1');
+                    $time=date('Y-m-d H:i:s',time());
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$retreatnum.$othermemo.$isall.$padid)));
+                    $transaction = Yii::app()->db->beginTransaction();
+                    try {
+                        $sqlorderproduct="";
+                        $memo="催菜单！";
+
+                            //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
+                                ////////////////退菜打印
+                            $order=new Order();
+                            $siteNo=new SiteNo();
+                            $site=new Site();
+                            ///***********insert to order feedback
+                            ///*************print
+                            if(!empty($orderId))
+                            {
+                                $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                                //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
+                                if(empty($order))
+                                {
+                                    Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                                }
+                                $criteria = new CDbCriteria;
+                                $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                                $criteria->order = ' t.lid desc ';                    
+                                $siteNo = SiteNo::model()->find($criteria);
+                                //order site 和 siteno都需要更新状态 所以要取出来
+                                if($order->is_temp=="0")
+                                {
+                                    $criteria2 = new CDbCriteria;
+                                    $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
+                                    $criteria2->order = ' t.lid desc ';                    
+                                    $site = Site::model()->with("siteType")->find($criteria2);
+                                }
+                            }
+                            //$memo="退菜单";
+                            //$orderDetail[0]->amount=$retreatnum;
+                            //Yii::app()->end(json_encode(array('status'=>false,'msg'=>$order->dpid)));                           
+                            $ret=  Helper::printKitchenHurry($order,$orderDetail,$site,$siteNo,false,$othermemo);                    
+                            if(!$ret['status'])
+                            {
+                                $transaction->rollback();
+                            }else{
+                                $transaction->commit();
+                            }
+                            //$ret= json_encode(array('status'=>"1",'msg'=>yii::t('app','退菜成功')));
+                        } catch (Exception $e) {
+                                $transaction->rollback(); //如果操作失败, 数据回滚
+                                $ret= array('status'=>false,'msg'=>yii::t('app','失败1'));
+                        } 
+                        Yii::app()->end(json_encode($ret));                    
+                }                
+                $this->renderPartial('addhurryone' , array(
+				'orderRetreat' => $orderRetreat,
+				'retreats'=>$retreatslist,
+                                'productname'=>$productname
+		));
+	}    
+	
+	
         public function actionSelectAllDiscount() {
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
@@ -2004,6 +2091,7 @@ class DefaultOrderController extends BackendController
                                         $sorderProduct->amount = $productUnit[1];
                                         $sorderProduct->price = $productUnit[2];
                                         $sorderProduct->is_giving = '0';
+                                        $sorderProduct->product_status = '0';//添加cf
                                         $sorderProduct->zhiamount = 0;                                    
                                         $se=new Sequence("order_product");
                                         $sorderProduct->lid = $se->nextval();
@@ -2323,18 +2411,21 @@ class DefaultOrderController extends BackendController
         
         public function actionPrintOneKitchen(){
                 $orderProductId = Yii::app()->request->getParam('orderProductId',0);
-		$companyId = Yii::app()->request->getParam('companyId');
+				$companyId = Yii::app()->request->getParam('companyId');
                 $typeId =  Yii::app()->request->getParam('typeId',0);
                 Until::validOperate($companyId, $this);
                 $db = Yii::app()->db;              
-                
+//                 $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','发生异常'));
+//                 Yii::app()->end(json_encode($ret));
                 //var_dump(Yii::app()->params->has_cache);exit;
                 //$transaction = $db->beginTransaction();
                 try {
                         $orderProduct = OrderProduct::model()->with('product')->find('t.lid=:id and t.dpid=:dpid and t.delete_flag=0' , array(':id'=>$orderProductId,':dpid'=>$companyId));                        
                         $order = Order::model()->with('company')->find('t.lid=:id and t.dpid=:dpid' , array(':id'=>$orderProduct->order_id,':dpid'=>$companyId));
                         $criteria = new CDbCriteria;
-                        $criteria->condition =  't.status in ("1","2","3") and t.dpid='.$order->dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                        $criteria->condition =  't.dpid='.$order->dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                        
+                        //$criteria->condition =  't.status in ("1","2","3") and t.dpid='.$order->dpid.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
                         $criteria->order = ' t.lid desc ';
                         $siteNo = SiteNo::model()->find($criteria);
                         if($siteNo->is_temp=='0')
@@ -2343,12 +2434,12 @@ class DefaultOrderController extends BackendController
                         }else{
                             $site = new Site();
                         }
-                        if($orderProduct->is_print=='0')
-                        {
-                            $reprint=false;
-                        }else{
-                            $reprint=true;
-                        }
+//                         if($orderProduct->is_print=='0')
+//                         {
+                             $reprint=false;
+//                         }else{
+//                             $reprint=true;
+//                         }
                         $ret=Helper::printKitchen($order,$orderProduct,$site,$siteNo ,$reprint);
 //                        if($orderProduct->is_print=='0')
 //                        {
@@ -2361,16 +2452,16 @@ class DefaultOrderController extends BackendController
                         //$transaction->rollback(); //如果操作失败, 数据回滚
                         //var_dump($e);exit;
                         $ret=array('status'=>false,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','发生异常'));
-                        //Yii::app()->end(json_encode($ret));
+                        Yii::app()->end(json_encode($ret));
                 }
                 //var_dump($ret);exit;
-                $this->renderPartial('printresultone' , array(
-                                'orderId'=>$order->lid,
-                                'orderProductId'=>$orderProductId,
-                                'ret'=>$ret,
-                                //'joblist' => $joblist, job in memcached
-                                'typeId'=>$typeId                                
-		));		             
+//                 $this->renderPartial('printresultone' , array(
+//                                 'orderId'=>$order->lid,
+//                                 'orderProductId'=>$orderProductId,
+//                                 'ret'=>$ret,
+//                                 //'joblist' => $joblist, job in memcached
+//                                 'typeId'=>$typeId                                
+// 		));		             
         }
         /**
          * 每个菜品一张单子

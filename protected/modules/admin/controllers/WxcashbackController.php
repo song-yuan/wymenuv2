@@ -28,15 +28,46 @@ class WxcashbackController extends BackendController
 	public function actionCreate() {
 		$model = new ConsumerCashProportion ;
 		$model->dpid = $this->companyId ;
+		$is_sync = DataSync::getInitSync();
 		
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('ConsumerCashProportion');
-                        
-                        $se=new Sequence("brand_user_level");
-                        $model->lid = $se->nextval();
-                        $model->create_at=date('Y-m-d H:i:s',time());
-                        $model->update_at=date('Y-m-d H:i:s',time());
-			$model->delete_flag = '0';
+			$dateType = (int)($_POST['date_info_type']);
+			if($dateType==1){
+				$beginDate = $_POST['begin_timestamp'];
+				$endDate = $_POST['end_timestamp'];
+// 				$begin = str_replace('.','-',$_POST['begin_timestamp']);
+// 				$beginDate = strtotime($begin);
+// 				$end = str_replace('.','-',$_POST['end_timestamp']);
+// 				$endDate = strtotime($end);
+				
+				$model->attributes = Yii::app()->request->getPost('ConsumerCashProportion');
+				$se=new Sequence("brand_user_level");
+				$model->lid = $se->nextval();
+				$model->create_at=date('Y-m-d H:i:s',time());
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->date_info_type=$dateType;
+				$model->begin_timestamp=$beginDate;
+				$model->end_timestamp=$endDate;
+				$model->delete_flag = '0';
+				$model->is_sync=$is_sync;
+			}elseif($dateType==2){
+				$beginDate = (int)$_POST['fixed_term'];
+				$endDate = (int)$_POST['fixed_begin_term'];
+				
+				$model->attributes = Yii::app()->request->getPost('ConsumerCashProportion');
+				$se=new Sequence("brand_user_level");
+				$model->lid = $se->nextval();
+				$model->create_at=date('Y-m-d H:i:s',time());
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->date_info_type=$dateType;
+				$model->fixed_term=$beginDate;
+				$model->fixed_begin_term=$endDate;
+				$model->delete_flag = '0';
+				$model->is_sync=$is_sync;
+			}
+			//$end = $beginDate.'+'.$endDate;
+			//var_dump($end);exit;
+			
                         //var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
@@ -51,15 +82,46 @@ class WxcashbackController extends BackendController
 		$lid = Yii::app()->request->getParam('lid');
 		$model = ConsumerCashProportion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=>  $this->companyId));
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。			
-                        
+		$is_sync = DataSync::getInitSync();
+		
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('ConsumerCashProportion');
-			$model->update_at=date('Y-m-d H:i:s',time());
-                        //var_dump($model->attributes);exit;
-			if($model->save()){
-				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
-				$this->redirect(array('wxcashback/index' , 'companyId' => $this->companyId));
+			$dateType = (int)($_POST['date_info_type']);
+			if($dateType==1){
+				$beginDate = $_POST['begin_timestamp'];
+				$endDate = $_POST['end_timestamp'];
+				$model->attributes = Yii::app()->request->getPost('ConsumerCashProportion');
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->date_info_type=$dateType;
+				$model->begin_timestamp=$beginDate;
+				$model->end_timestamp=$endDate;
+				$model->fixed_term="0";
+				$model->fixed_begin_term="0";
+				$model->is_sync=$is_sync;
+				if($model->save()){
+					Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
+					$this->redirect(array('wxcashback/index' , 'companyId' => $this->companyId));
+				}
+			}elseif($dateType==2){
+				$beginDate = (int)$_POST['fixed_term'];
+				$endDate = (int)$_POST['fixed_begin_term'];
+			
+				$model->attributes = Yii::app()->request->getPost('ConsumerCashProportion');
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->date_info_type=$dateType;
+				$model->fixed_term=$beginDate;
+				$model->fixed_begin_term=$endDate;
+				$model->begin_timestamp="0";
+				$model->end_timestamp="0";
+				$model->is_sync=$is_sync;
+				if($model->save()){
+					Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
+					$this->redirect(array('wxcashback/index' , 'companyId' => $this->companyId));
+				}
 			}
+			//$model->attributes = Yii::app()->request->getPost('ConsumerCashProportion');
+			//$model->update_at=date('Y-m-d H:i:s',time());
+                        //var_dump($model->attributes);exit;
+			
 		}
 		$this->render('update' , array(
 			'model'=>$model

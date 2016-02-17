@@ -1,73 +1,37 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('代金券');
+	$this->setPageTitle('现金券');
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/common.css">
-<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cupon.css">
 
-<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
-<div class="header">
-		<!--
-		<a href="index.html" class="back"></a>
-		-->
-        <span>我的代金券</span>
-</div>
-<?php if($cupons):?> 
-<?php foreach($cupons as $cupon):?>
-<?php if($cupon['end_time'] >= date('Y-m-d H:i:s',time())&&$cupon['is_used']==1):?>
-<div class="index">
-    <div class="index_box">
-        <div class="index_icon">
-             <div class="icon_h"><img src="<?php echo $cupon['main_picture'];?>" style="width:100%;"></div>
-             <div class="titl">
-                 <h1><?php echo $cupon['cupon_title'];?></h1>
-				 <div class="titl_h">
-				 <floor title="#">消费满</floor><?php echo $cupon['min_consumer'];?><floor title="#">可用</floor>
-				 </div>                                 
-				 <div class="titl_h">
-				 <floor title="#">使用期限：</floor>
-                  <time title="#"><?php echo $cupon['begin_time'];?></time>
-				  <span>~</span>
-                  <time title="#"><?php echo $cupon['end_time'];?></time>
-                  <I><span></span></I>
-                 </div>
-             </div>	
-             <div class="clear"></div>
-        </div>
-    </div>
-</div>
-<?php else:?>    
-<div class="rindex">
-    <div class="rindex_box">
-        <div class="rindex_icon">
-             <div class="ricon_h"><img src="<?php echo $cupon['main_picture'];?>" style="width:100%;"></div>
-             <div class="rtitl">
-				<div class="rtitl_h">
-                 <h1><?php echo $cupon['cupon_title'];?></h1> 
-				 </div>
-				 <div class="rtitl_h">
-				 <floor title="#">消费满</floor><?php echo $cupon['min_consumer'];?><floor title="#">可用</floor>
-				 <a><?php if($cupon['is_used']==2):?>（已使用）<?php else:?>（已过期）<?php endif;?></a>
-				 </div>
-				 <div class="rtitl_h">
-				 
-				 <floor title="#">使用期限：</floor>
-                  <time title="#"><?php echo $cupon['begin_time'];?></time>
-				  <span>~</span>
-                  <time title="#"><?php echo $cupon['end_time'];?></time>
-                  <I><span></span></I>
-                 </div>
-             </div>	
-             <div class="clear">
-			 </div>
-        </div>
-    </div>
-</div>
-<?php endif;?>
-<?php endforeach;?>
-<?php endif;?>
+<body class="gift_exchange bg_lgrey2">
+	<div id="topnav">
+		<ul>
+			<li class="notuse current"><a href="<?php echo $this->createUrl('/user/cupon',array('companyId'=>$this->companyId));?>"><span>未使用</span></a></li>
+			<li class="used"><a href="<?php echo $this->createUrl('/user/usedCupon',array('companyId'=>$this->companyId));?>"><span>已使用</span></a></li>
+			<li class="expired"><a href="<?php echo $this->createUrl('/user/expireCupon',array('companyId'=>$this->companyId));?>"><span>已过期</span></a></li>
+		</ul>
+	</div>
+	<div class="couponlist with_topbar">
+		<!-- 未使用 -->
+		<ul id="notuse">
+			<?php foreach($cupons as $cupon):?>
+			<li>
+				<img src="<?php echo $baseUrl.$cupon['main_picture'];?>" alt="">
+				<span class="info">
+					<h2 style="margin-bottom:10px;"><?php echo $cupon['cupon_title'];?></h2>
+					<span class="small">满<?php echo $cupon['min_consumer'];?>元减<?php echo $cupon['cupon_money'];?>元</span><br />
+					<span class="small">有效期：<?php echo date('Y-m-d',strtotime($cupon['begin_time']));?>-<?php echo date('Y-m-d',strtotime($cupon['end_time']));?></span>
+				</span>
+			</li>
+			<?php endforeach;?>
+		</ul>
+		<!-- 未使用 -->
+	</div>
+
+</body>
 
 
   

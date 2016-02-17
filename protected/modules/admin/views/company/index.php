@@ -82,7 +82,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /></td>
 								<td ><?php echo $model->dpid;?></td>
-								<td><a href="<?php echo $this->createUrl('company/update',array('companyId' => $model->dpid));?>" ><?php echo $model->company_name;?></a></td>
+								<td><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>" ><?php echo $model->company_name;?></a></td>
 								<td ><img width="100" src="<?php echo $model->logo;?>" /></td>
 								<td ><?php echo $model->contact_name;?></td>
 								<td ><?php echo $model->mobile;?></td>

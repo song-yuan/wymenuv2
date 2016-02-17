@@ -59,6 +59,8 @@ class SWFUpload extends CWidget
 	    $this->postParams['SessionID'] = Yii::app()->session->getSessionID();
 	    $this->postParams['fileQuenueLimit'] = $this->fileQuenueLimit;
 	    $this->postParams['companyId'] = $this->companyId;
+	     $this->postParams['thumbWidth'] = $this->thumbWidth;
+	      $this->postParams['thumbHeight'] = $this->thumbHeight;
 	    $this->postParams['folder'] = $this->folder;
 		
         $assets=dirname(__FILE__).'/assets';

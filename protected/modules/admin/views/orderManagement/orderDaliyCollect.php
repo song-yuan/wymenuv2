@@ -71,29 +71,49 @@
                              										<div id="reportlistdiv" style="display:inline-block;width:100%;font-size:1.5em;">
                                                                     <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
                                                                         <li>
-                                                                                <div style="width:20%;float:left;"><?php echo $a++;?></div>
-                                                                                <div style="width:50%;float:left;"><?php echo yii::t('app','营业数据表');?></div>
-                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="businessdata" name="reportlist[]" /></div>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','营业数据表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="businessdata" name="reportlist[]" /></div>
                                                                         </li>
                                                                         <li>
-                                                                                <div style="width:20%;float:left;"><?php echo $a++;?></div>
-                                                                                <div style="width:50%;float:left;"><?php echo yii::t('app','营业收入表');?></div>
-                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="income" name="reportlist[]" /></div>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','营业收入表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="income" name="reportlist[]" /></div>
                                                                         </li>
                                                                         <li>
-                                                                                <div style="width:20%;float:left;"><?php echo $a++;?></div>
-                                                                                <div style="width:50%;float:left;"><?php echo yii::t('app','收款统计表');?></div>
-                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="payall" name="reportlist[]" /></div>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','收款统计表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="payall" name="reportlist[]" /></div>
                                                                         </li>
                                                                         <li>
-                                                                                <div style="width:20%;float:left;"><?php echo $a++;?></div>
-                                                                                <div style="width:50%;float:left;"><?php echo yii::t('app','充值记录表');?></div>
-                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="recharge" name="reportlist[]" /></div>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','产品销售表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="product" name="reportlist[]" /></div>
                                                                         </li>
                                                                         <li>
-                                                                                <div style="width:20%;float:left;"></div>
-                                                                                <div style="width:50%;float:left;"></div>
-                                                                                <div style="width:28%;float:left;"><input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkboxes" />全选</div>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','账单详情表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="orderdetail" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','台桌区域表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="table" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','退菜明细表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="retreatdetail" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:10%;float:left;"><?php echo $a++;?></div>
+                                                                                <div style="width:25%;float:left;"><?php echo yii::t('app','充值记录表');?></div>
+                                                                                <div style="width:14%;float:left;"><input style="height:20px;" type="checkbox" class="checkboxes" value="recharge" name="reportlist[]" /></div>
+                                                                        </li>
+                                                                        <li>
+                                                                                <div style="width:10%;float:left;"></div>
+                                                                                <div style="width:25%;float:left;"></div>
+                                                                                <div style="width:14%;float:right;"><input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkboxes" />全选</div>
                                                                         </li>                                                                       
                                                                     </ul>
                                                                 </div>
@@ -288,7 +308,7 @@
                 type: 1,
                 shade: false,
                 title: false, //不显示标题
-                area: ['30%', '60%'],
+                area: ['60%', '60%'],
                 content: $('#printRsultListdetail'),//$('#productInfo'), //捕获的元素
                 cancel: function(index){
                     layer.close(index);
@@ -360,10 +380,12 @@
         
         $("#printall").on("click",function(){
             //alert("暂无权限！！！");
+            var reportlist =new Array();
             var reportlist="0000000000";
             $('.checkboxes:checked').each(function(){
-                reportlist=reportlist+"|"+$(this).val();
+                reportlist=reportlist+","+$(this).val();
             });
+            //alert(reportlist);
             var padid="0000000046";
             if (typeof Androidwymenuprinter == "undefined") {
                 alert("找不到PAD设备");

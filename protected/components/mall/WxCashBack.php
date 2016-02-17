@@ -84,6 +84,13 @@ class WxCashBack
 	public function inRecord($orderId){
 		$time = time();
 		if($this->cashTpl&&$this->consumerCashBack){
+			if($this->cashTpl['date_info_type']==1){
+				$beginTime = date('Y-m-d H:i:s',$this->cashTpl['begin_timestamp']);
+				$endTime = date('Y-m-d H:i:s',$this->cashTpl['	end_timestamp']);
+			}elseif($this->cashTpl['date_info_type']==2){
+				$beginTime = date('Y-m-d H:i:s',strtotime('+'.$this->cashTpl['fixed_begin_term'].' day'));
+				$endTime = date('Y-m-d H:i:s',strtotime('+'.$this->cashTpl['fixed_term'].' month'));
+			}
 			$se = new Sequence("cashback_record");
 		    $lid = $se->nextval();
 			$cashRecordData = array(
@@ -94,17 +101,15 @@ class WxCashBack
 					        	'point_type'=>0,
 					        	'type_lid'=>$orderId,
 					        	'cashback_num'=>$this->consumerCashBack,
+					        	'remain_cashback_num'=>$this->consumerCashBack,
+					        	'begin_timestamp'=>$beginTime,
+					        	'end_timestamp'=>$endTime,
 					        	'brand_user_lid'=>$this->userId,
 					        	'is_sync'=>DataSync::getInitSync(),
 								);
 			$result = Yii::app()->db->createCommand()->insert('nb_cashback_record', $cashRecordData);
 			if(!$result){
 				throw new Exception('现金支付记录失败');
-			}
-			$sql = 'update nb_brand_user set remain_back_money = remain_back_money + '.$this->consumerCashBack.' where lid='.$this->userId.' and dpid='.$this->dpid;
-			$result = Yii::app()->db->createCommand($sql)->execute();
-			if(!$result){
-				throw new Exception('更改会员余额失败');
 			}
 		}
 		if($this->pointsTpl&&$this->consumerPointsBack){
@@ -133,4 +138,38 @@ class WxCashBack
 			}
 		}
 	}
+	
+	/**
+	 * 
+	 * 
+	 * 使用消费余额
+	 * $isAll 是否全部使用
+	 * 
+	 * 
+	 */
+	 public static function userCashBack($total,$userId,$dpid,$isAll = 0){
+	 	$cash = 0;
+	 	$now = date('Y-m-d H:i:s',time());
+	 	$is_sync = DataSync::getInitSync();
+	 	if($isAll){
+			$sql = 'update nb_cashback_record set remain_cashback_num=0,is_sync='.$is_sync.'  where brand_user_lid = '.$userId.' and dpid='.$dpid.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1)';
+			Yii::app()->db->createCommand($sql)->execute();
+	 	}else{
+	 		$sql = 'select * from nb_cashback_record where brand_user_lid = '.$userId.' and dpid='.$dpid.' and delete_flag=0 and ((point_type=0 and begin_timestamp < "'.$now.'" and end_timestamp > "'.$now.'") or point_type=1) order by end_timestamp asc , lid asc';
+	 		$cashbacks = Yii::app()->db->createCommand($sql)->queryAll();
+	 		foreach($cashbacks as $cashback){
+	 			$cash += $cashback['remain_cashback_num'];
+	 			if($cash < $total){
+	 				$sql = 'update nb_cashback_record set remain_cashback_num=0,is_sync='.$is_sync.'  where lid = '.$cashback['lid'].' and dpid='.$dpid;
+	 				Yii::app()->db->createCommand($sql)->execute();
+	 			}else{
+	 				
+	 				$sql = 'update nb_cashback_record set remain_cashback_num = remain_cashback_num - '.($total - ($cash - $cashback['remain_cashback_num'])).',is_sync='.$is_sync.'  where lid = '.$cashback['lid'].' and dpid='.$dpid;
+	 				Yii::app()->db->createCommand($sql)->execute();
+	 				break;
+	 			}
+	 		}
+	 	}
+	 }
+	
 }

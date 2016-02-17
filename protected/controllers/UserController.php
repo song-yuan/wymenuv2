@@ -16,7 +16,7 @@ class UserController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','orderList','orderinfo','address','addAddress'))){
+		if(in_array($actin->id,array('index','orderList','orderinfo','address','addAddress','setAddress','gift','usedGift','cupon','expireGift','giftInfo','setUserInfo'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -48,7 +48,8 @@ class UserController extends Controller
 		$userId = Yii::app()->session['userId'];
 		$user = WxBrandUser::get($userId,$this->companyId);
 		$userLevel =  WxBrandUser::getUserLevel($user['user_level_lid'],$this->companyId);
-		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user,'userLevel'=>$userLevel));
+		$remainMoney =  WxBrandUser::getYue($userId,$this->companyId);
+		$this->render('index',array('companyId'=>$this->companyId,'user'=>$user,'userLevel'=>$userLevel,'remainMoney'=>$remainMoney));
 	}
 	/**
 	 * 
@@ -58,8 +59,10 @@ class UserController extends Controller
 	public function actionOrderList()
 	{
 		$userId = Yii::app()->session['userId'];
-		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId);
-		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists));
+		$type = Yii::app()->request->getParam('t',0);
+		
+		$orderLists = WxOrder::getUserOrderList($userId,$this->companyId,$type);
+		$this->render('orderlist',array('companyId'=>$this->companyId,'models'=>$orderLists,'type'=>$type));
 	}
 	/**
 	 * 
@@ -70,6 +73,7 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteType = false;
+		$address = false;
 		
 		$orderId = Yii::app()->request->getParam('orderId');
 		$order = WxOrder::getOrder($orderId,$this->companyId);
@@ -79,32 +83,103 @@ class UserController extends Controller
 		}
 		
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
+		
+		if(in_array($order['order_type'],array(2,3))){
+			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
+		}
+		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		//查找分享红包
 		$redPack = WxRedPacket::getOrderShareRedPacket($this->companyId,$order['should_total']);
 		
-		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'siteType'=>$siteType,'redPack'=>$redPack));
+		$this->render('orderinfo',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'address'=>$address,'siteType'=>$siteType,'orderPays'=>$orderPays,'redPack'=>$redPack));
 	}
+	/**
+	 * 
+	 * 完善个人资料
+	 * 
+	 */
+	public function actionSetUserInfo()
+	{
+		$userId = Yii::app()->session['userId'];
+		$user = WxBrandUser::get($userId,$this->companyId);
+		
+		$this->render('updateuserinfo',array('companyId'=>$this->companyId,'user'=>$user));
+	}
+	/**
+	 * 
+	 * 保存个人资料
+	 * 
+	 */
+	public function actionSaveUserInfo()
+	{
+		if(Yii::app()->request->isPostRequest){
+			$userInfo = Yii::app()->request->getPost('user');
+			$userInfo['dpid'] = $this->companyId;
+			$result = WxBrandUser::update($userInfo);
+			if($result){
+				$this->redirect(array('/user/index','companyId'=>$this->companyId));
+			}else{
+				$this->redirect(array('/user/setUserInfo','companyId'=>$this->companyId));
+			}
+		}
+	}
+	/**
+	 * 
+	 * 会员地址列表
+	 * 
+	 */
 	public function actionAddress()
 	{
 		$userId = Yii::app()->session['userId'];
 		$addresss = WxAddress::get($userId,$this->companyId);
 		$this->render('address',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId));
 	}
+	/**
+	 * 
+	 * 编辑地址
+	 * 
+	 */
+	public function actionSetAddress()
+	{
+		$userId = Yii::app()->session['userId'];
+		$url = Yii::app()->request->getParam('url');
+		$addresss = WxAddress::get($userId,$this->companyId);
+		$this->render('setaddress',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId,'url'=>$url));
+	}
+	/**
+	 * 
+	 * 增加地址
+	 * 
+	 */
 	public function actionAddAddress()
 	{
 		$userId = Yii::app()->session['userId'];
-	
-		$this->render('addaddress',array('companyId'=>$this->companyId,'userId'=>$userId));
+		$lid = Yii::app()->request->getParam('lid',0);
+		$url = Yii::app()->request->getParam('url',0);
+		$address = false;
+		
+		if($lid){
+			$address = WxAddress::getAddress($lid,$this->companyId);
+		}
+		$this->render('addaddress',array('companyId'=>$this->companyId,'userId'=>$userId,'address'=>$address,'url'=>$url));
 	}
+	/**
+	 * 
+	 * 保存地址
+	 * 
+	 */
 	public function actionGenerateAddress() {
-		$goBack = Yii::app()->request->getParam('goBack');
+		$goBack = Yii::app()->request->getParam('url');
 		if(Yii::app()->request->isPostRequest) {
 			$post = Yii::app()->request->getPost('address');
 			$post['dpid'] = $this->companyId;
-
-            $generateAddress = WxAddress::insert($post);
-            if($goBack==1){
-				$this->redirect(array('/user/setDefaultAddress','companyId'=>$this->companyId,'goBackUrl'=>1));	
+			if($post['lid']){
+				 $generateAddress = WxAddress::update($post);
+			}else{
+				 $generateAddress = WxAddress::insert($post);
+			}
+            if($goBack){
+				$this->redirect(urldecode($goBack));	
 			}else{
 				$this->redirect(array('/user/address','companyId'=>$this->companyId));
 			}
@@ -113,10 +188,162 @@ class UserController extends Controller
 	public function actionCupon()
 	{
 		$userId = Yii::app()->session['userId'];
-		$cupons = WxCupon::getUserAllCupon($userId,$this->companyId);
+		$cupons = WxCupon::getUserNotUseCupon($userId,$this->companyId);
 		$this->render('cupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
-	
+	public function actionUsedCupon()
+	{
+		$userId = Yii::app()->session['userId'];
+		$cupons = WxCupon::getUserUseCupon($userId,$this->companyId);
+		$this->render('usedcupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
+	}
+	public function actionExpireCupon()
+	{
+		$userId = Yii::app()->session['userId'];
+		$cupons = WxCupon::getUserExpireCupon($userId,$this->companyId);
+		$this->render('expirecupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
+	}
+	public function actionGift()
+	{
+		$userId = Yii::app()->session['userId'];
+		$gifts = WxGiftCard::getUserAvailableGift($userId,$this->companyId);
+		$this->render('gift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
+	}
+	public function actionUsedGift()
+	{
+		$userId = Yii::app()->session['userId'];
+		$gifts = WxGiftCard::getUserUsedGift($userId,$this->companyId);
+		$this->render('usedgift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
+	}
+	public function actionExpireGift()
+	{
+		$userId = Yii::app()->session['userId'];
+		$gifts = WxGiftCard::getUserExpireGift($userId,$this->companyId);
+		$this->render('expiregift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
+	}
+	/**
+	 * 
+	 * 
+	 * 礼品券详情
+	 * 
+	 */
+	public function actionGiftInfo()
+	{
+		$userId = Yii::app()->session['userId'];
+		$giftId = Yii::app()->request->getParam('gid');
+		
+		$gift = WxGiftCard::getUserGift($this->companyId,$userId,$giftId);
+		if(!$gift['qrcode']){
+			$imgurl = './uploads';
+			$imgurl .= '/company_'.$this->companyId;
+   			if(!is_dir($imgurl)){
+   				mkdir($imgurl, 0777,true);
+   			}
+			$imgurl .= '/qrcode';
+   			if(!is_dir($imgurl)){
+   				mkdir($imgurl, 0777,true);
+   			}
+   			$imgurl .= '/gift-'.$this->companyId.'-'.$giftId.'.png';
+   			
+			$code=new QRCode($gift['code']);
+			$code->create($imgurl);
+			WxGiftCard::updateQrcode($this->companyId,$gift['lid'],$imgurl);
+			$gift['qrcode'] = $imgurl;
+		}
+		$this->render('giftinfo',array('companyId'=>$this->companyId,'gift'=>$gift));
+	}
+	/**
+	 * 
+	 * 点击头像 更新会员信息
+	 * 
+	 */
+	public function actionAjaxHeadIcon()
+	{
+		$userId = Yii::app()->request->getPost('userId');
+		$dpid = $this->companyId;
+		
+		$pullInfo = new PullUserInfo($dpid,$userId);
+		if($pullInfo->response->headimgurl){
+			echo $pullInfo->response->headimgurl;
+		}else{
+			echo false;
+		}
+		exit;
+	}
+	/**
+	 * 
+	 * 设置默认地址
+	 * 
+	 * 
+	 */
+	public function actionAjaxSetAddress()
+	{
+		$lid = Yii::app()->request->getPost('lid');
+		$userId = Yii::app()->request->getPost('userId');
+		$dpid = $this->companyId;
+		
+		$addresss = WxAddress::setDefault($userId,$lid,$dpid);
+		
+		if($addresss){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+
+	}
+	/**
+	 * 
+	 * 删除地址
+	 * 
+	 */
+	public function actionAjaxDeleteAddress()
+	{
+		$lid = Yii::app()->request->getPost('lid');
+		$dpid = $this->companyId;
+		
+		$addresss = WxAddress::deleteAddress($lid,$dpid);
+		
+		if($addresss){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+	}
+	/**
+	 * 
+	 * 验证手机验证码
+	 * 
+	 */
+	 public function actionAjaxVerifyCode()
+	{
+		$mobile = Yii::app()->request->getParam('mobile');
+		$code = Yii::app()->request->getParam('code');
+		
+		if(isset(Yii::app()->session[$mobile]) && Yii::app()->session[$mobile] == $code){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+	}
+	/**
+	 * 
+	 * 发送短信
+	 * 
+	 */
+	 public function actionAjaxSentMessage()
+	{
+		$mobile = Yii::app()->request->getParam('mobile');
+		$code = rand(1000,9999);
+		Yii::app()->session[$mobile] = $code;
+		
+		$content = '【物易科技】您的验证码是：'.$code;
+		$result = WxSentMessage::sentMessage($mobile,$content);
+		echo $result;
+		exit;
+	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
 	}
