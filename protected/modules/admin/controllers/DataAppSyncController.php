@@ -66,7 +66,12 @@ class DataAppSyncController extends Controller
          * 
          */
          public function actionTest(){
-         	echo 33;
+         	$id = Yii::app()->request->getParam('id');
+         	if($id==1){
+         		echo 11;
+         	}else{
+         		echo 22;
+         	}
          	exit;
          }
         /**
