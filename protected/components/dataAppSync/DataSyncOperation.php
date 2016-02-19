@@ -14,6 +14,38 @@
  */
 class DataSyncOperation
 {
+	/**
+	 * 
+	 * 获取基础数据表
+	 * 
+	 */
+	 public static function getDataSyncBaseTable()
+	 {
+	 	$dataBase = new DataSyncTables();
+        $allTables = $dataBase->getBaseTableList();
+	 }
+	 /**
+	  * 
+	  * 
+	  * 获取所有的表
+	  * 
+	  */
+	  public static function getDataSyncAllTable()
+	 {
+	 	$dataBase = new DataSyncTables();
+        $allTables = $dataBase->getAllTableList();
+	 }
+	/**
+	 * 
+	 * 获取初始化数据
+	 * 
+	 */
+	 public static function getDataSyncInit($dpid)
+	 {
+	 	$dataBase = new DataSyncTables();
+        $allTables = $dataBase->getAllTableList();
+        
+	 }
      /**
      * 获取需要到本地执行的sql，每次仅限1000条
      */

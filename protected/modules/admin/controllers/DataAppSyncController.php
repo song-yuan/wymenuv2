@@ -66,7 +66,9 @@ class DataAppSyncController extends Controller
          * 
          */
          public function actionTest(){
-         	$id = Yii::app()->request->getParam('id');
+         	$id = Yii::app()->request->getParam('id',0);
+         	$allTables = DataSyncOperation::getDataSyncInit();
+         	var_dump($allTables);exit;
          	if($id==1){
          		echo 11;
          	}else{
