@@ -85,13 +85,121 @@ class DataSyncTables
     public static function getTableStructure($tablename)
     {
         $tableStructureAll=array(
-            "nb_local_company"=>"",
-            "nb_user"=>"",
-            "nb_product" => " CREATE TABLE 'nb_product'('lid' int(10) NOT NULL,"
-                    . " 'dpid' int(10) NOT NULL,"
-                    . "'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+            "nb_local_company"=>" CREATE TABLE 'nb_local_company'('dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `token` varchar(50) NOT NULL,".
+        		"  `company_name` varchar(50) NOT NULL,".
+        		"  `logo` varchar(255) NOT NULL,".
+        		"  `contact_name` varchar(20) NOT NULL,".
+        		"  `mobile` varchar(20) NOT NULL,".
+        		"  `telephone` varchar(20) NOT NULL,".
+        		"  `email` varchar(50) NOT NULL,".
+        		"  `address` varchar(200) NOT NULL,".
+        		"  `homepage` varchar(255) NOT NULL,".
+        		"  `delete_flage` char(1) NOT NULL DEFAULT '0',".
+        		"  `description` text NOT NULL,".
+        		"  `printer_id` int(10) NOT NULL,".
+        		"  `is2_othersystem` char(1) NOT NULL DEFAULT '0',".
+				"  `is2_base_fkxx` char(1) NOT NULL DEFAULT '0',".
+				"  `is2_base_tjlb` char(1) NOT NULL DEFAULT '0',".
+				"  `is2_base_yhhd` char(1) NOT NULL DEFAULT '0',".
+				"  `is2_cloud` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`dpid`)".
+        		");",
+            "nb_user"=>" CREATE TABLE 'nb_user'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `mobile` varchar(20) NOT NULL,".
+				"  `username` varchar(50) NOT NULL,".
+				"  `password_hash` varchar(60) NOT NULL,".
+				"  `password_reset_token` varchar(255) NOT NULL,".
+				"  `staff_no` varchar(20) NOT NULL,".
+				"  `email` varchar(100) NOT NULL,".
+				"  `auth_key` varchar(255) NOT NULL,".
+				"  `role` int(10) NOT NULL DEFAULT '0',".
+				"  `status` int(10) NOT NULL DEFAULT '0',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_floor"=>" CREATE TABLE 'nb_floor'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `name` varchar(50) NOT NULL,".
+				"  `manager` varchar(20) NOT NULL,".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"   PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_pad"=>" CREATE TABLE 'nb_pad'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `name` varchar(100) NOT NULL ,".
+				"  `printer_id` int(10) NOT NULL DEFAULT '0',".
+				"  `server_address` varchar(70) NOT NULL DEFAULT '0',".
+				"  `pad_type` char(1) NOT NULL DEFAULT '0',".
+				"  `is_bind` varchar(1) NOT NULL DEFAULT '0',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_payment_method"=>" CREATE TABLE 'nb_payment_method'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `name` varchar(50) NOT NULL,".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_printer"=>" CREATE TABLE 'nb_printer'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `name` varchar(64) NOT NULL,".
+        		"  `address` varchar(64) NOT NULL ,".
+        		"  `language` char(2) NOT NULL DEFAULT '1',".
+        		"  `brand` varchar(50) NOT NULL,".
+        		"  `remark` varchar(50) NOT NULL,".
+        		"  `printer_type` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_printer_way"=>" CREATE TABLE 'nb_printer_way'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `name` varchar(50) NOT NULL,".
+				"  `is_onepaper` char(1) NOT NULL DEFAULT '1',".
+				"  `list_no` tinyint NOT NULL DEFAULT '1',".
+				"  `memo` varchar(100) NOT NULL,".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_printer_way_detail"=>" CREATE TABLE 'nb_printer_way_detail'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `print_way_id` int(10) NOT NULL DEFAULT '0',".
+				"  `floor_id` int(10) NOT NULL DEFAULT '0',".
+				"  `printer_id` int(10) NOT NULL DEFAULT '0',".
+				"  `list_no` tinyint NOT NULL DEFAULT '1',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",	
+            "nb_product" => " CREATE TABLE 'nb_product'('lid' int(10) NOT NULL,".
+        			"  'dpid' int(10) NOT NULL,".
+        			"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                     "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-                    "  'category_id' int(10) NOT NULL DEFAULT '0000000000',".
+                    "  'category_id' int(10) NOT NULL DEFAULT '0',".
                     "  'product_name' varchar(50) NOT NULL,".
                     "  'simple_code' varchar(25) NOT NULL,".
                     "  'main_picture' varchar(255) NOT NULL,".
@@ -110,13 +218,418 @@ class DataSyncTables
                     "  'store_number' int(10) NOT NULL DEFAULT '-1',".
                     "  'order_number' int(10) NOT NULL DEFAULT '0',".
                     "  'favourite_number' int(10) NOT NULL DEFAULT '0',".
-                    "  'printer_way_id' int(10) NOT NULL DEFAULT '0000000000',".
+                    "  'printer_way_id' int(10) NOT NULL DEFAULT '0',".
                     "  'is_show' char(1) NOT NULL DEFAULT '1',".
                     "  'delete_flag' char(1) NOT NULL DEFAULT '0',".
-                    " 'is_sync' varchar(50) NOT NULL DEFAULT '11111',".
-                    " PRIMARY KEY ('lid','dpid')".
-                   ");",
-            "nb_site_no"=>"",
+                    "  'is_sync' varchar(50) NOT NULL DEFAULT '11111',".
+                    "  PRIMARY KEY ('lid','dpid')".
+                    ");",
+        	"nb_product_category"=>" CREATE TABLE 'nb_product_category'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `pid` int(10) NOT NULL DEFAULT '0',".
+				"  `tree` varchar(50) NOT NULL,".
+				"  `category_name` varchar(50) NOT NULL,".
+				"  `type` varchar(3) NOT NULL DEFAULT '0',".
+				"  `main_picture` varchar(255) NOT NULL,".
+				"  `order_num` int(4) NOT NULL DEFAULT '0',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_product_picture"=>" CREATE TABLE 'nb_product_picture'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `product_id` int(10) NOT NULL DEFAULT '0',".
+				"  `is_set` char(1) NOT NULL DEFAULT '0',".
+				"  `pic_path` varchar(255) NOT NULL,".
+				"  `pic_show_order` tinyint NOT NULL DEFAULT '1',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_product_printerway"=>" CREATE TABLE 'nb_product_printerway'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `printer_way_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `product_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_product_set"=>" CREATE TABLE 'nb_product_set'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `set_name` varchar(50) NOT NULL,".
+				"  `simple_code` varchar(25) NOT NULL,".
+				"  `main_picture` varchar(255) NOT NULL,".
+				"  `description` text NOT NULL,".
+				"  `rank` tinyint(3) NOT NULL DEFAULT '3',".
+				"  `is_member_discount` char(1) NOT NULL DEFAULT '0',".
+				"  `is_special` char(1) NOT NULL DEFAULT '0',".
+				"  `is_discount` char(1) NOT NULL DEFAULT '0',".
+				"  `status` char(1) NOT NULL DEFAULT '0',".
+				"  `store_number` int(10) NOT NULL DEFAULT '-1',".
+				"  `order_number` int(10) NOT NULL DEFAULT '0',".
+				"  `favourite_number` int(10) NOT NULL DEFAULT '0',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_product_set_detail"=>" CREATE TABLE 'nb_product_set_detail'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `set_id` int(10) NOT NULL DEFAULT '0',".
+				"  `product_id` int(10) NOT NULL DEFAULT '0',".
+				"  `price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+				"  `group_no` tinyint NOT NULL DEFAULT '0',".
+				"  `number` tinyint NOT NULL DEFAULT '1',".
+				"  `is_select` char(1) NOT NULL DEFAULT '1',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_product_taste"=>" CREATE TABLE 'nb_product_taste'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `taste_group_id` int(10) NOT NULL DEFAULT '0',".
+				"  `product_id` int(10) NOT NULL DEFAULT '0',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_retreat"=>" CREATE TABLE 'nb_retreat'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `name` varchar(50) NOT NULL,".
+				"  `tip` varchar(50) NOT NULL ,".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_site"=>" CREATE TABLE 'nb_site'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `serial` varchar(50) NOT NULL,".
+				"  `type_id` int(10) NOT NULL DEFAULT '0',".
+				"  `splid` int(10) NOT NULL DEFAULT '0',".
+				"  `site_level` varchar(20) DEFAULT NULL,".
+				"  `site_channel_lid` int(10) NOT NULL DEFAULT '0',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `has_minimum_consumption` char(1) NOT NULL DEFAULT '0',".
+				"  `minimum_consumption_type` char(1) NOT NULL DEFAULT '0',".
+				"  `minimum_consumption` decimal(10,2) NOT NULL DEFAULT '0.00',".
+				"  `number` tinyint(3) NOT NULL DEFAULT '0',".
+				"  `period` float NOT NULL DEFAULT '0',".
+				"  `overtime` float NOT NULL DEFAULT '0',".
+				"  `buffer` float NOT NULL DEFAULT '0',".
+				"  `overtime_fee` decimal(10,2) NOT NULL DEFAULT '0.00',".
+				"  `floor_id` int(10) NOT NULL DEFAULT '0',".
+				"  `status` char(1) NOT NULL DEFAULT '0',".
+				"  `qrcode` varchar(255) DEFAULT NULL,".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_site_persons"=>" CREATE TABLE 'nb_site_persons'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `min_persons` tinyint(3) NOT NULL DEFAULT '1',".
+        		"  `max_persons` tinyint(3) NOT NULL DEFAULT '4',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_site_type"=>" CREATE TABLE 'nb_site_type'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `name` varchar(45) NOT NULL,".
+				"  `simplecode` varchar(3) NOT NULL DEFAULT 'A',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_taste"=>" CREATE TABLE 'nb_taste'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `name` varchar(50) NOT NULL,".
+        		"  `allflae` char(1) NOT NULL DEFAULT '0',".
+        		"  `price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_taste_group"=>" CREATE TABLE 'nb_taste_group'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `name` varchar(50) NOT NULL,".
+        		"  `allflae` char(1) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        		
+        	"nb_member_card"=>" CREATE TABLE 'nb_member_card'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `selfcode` varchar(10) DEFAULT NULL ,".
+				"  `rfid` varchar(10) DEFAULT NULL ,".
+				"  `name` varchar(20) NOT NULL DEFAULT '',".
+				"  `mobile` varchar(20) DEFAULT NULL ,".
+				"  `email` varchar(100) NOT NULL DEFAULT '',".
+				"  `haspassword` varchar(1) NOT NULL DEFAULT '0',".
+				"  `password_hash` varchar(60) NOT NULL DEFAULT '',".
+				"  `sex` varchar(1) NOT NULL DEFAULT 'm' ,".
+				"  `ages` varchar(20) NOT NULL DEFAULT '18-25' ,".
+				"  `all_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111' ,".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_member_recharge"=>" CREATE TABLE 'nb_member_recharge'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `member_card_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `reality_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `give_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_local_activity"=>" CREATE TABLE 'nb_local_activity'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		");",
+        	"nb_close_account"=>" CREATE TABLE 'nb_close_account'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `user_id` int(10) unsigned zerofill NOT NULL DEFAULT '0',".
+        		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"  `close_day` date NOT NULL DEFAULT '0000-00-00',".
+        		"  `all_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_close_account_detail"=>" CREATE TABLE 'nb_close_account_detail'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `close_account_id` int(10) NOT NULL DEFAULT '',".
+        		"  `paytype` varchar(1) NOT NULL DEFAULT '0',".
+        		"  `payment_method_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `all_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_order"=>" CREATE TABLE 'nb_order'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `user_id` int(10) DEFAULT NULL,".
+        		"  `account_no` varchar(20) NOT NULL ,".
+        		"  `classes` int(10) NOT NULL ,".
+        		"  `username` varchar(50) NOT NULL ,".
+        		"  `site_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `is_temp` char(1) NOT NULL DEFAULT '0' ,".
+        		"  `number` tinyint NOT NULL DEFAULT '0',".
+        		"  `order_status` char(1) NOT NULL DEFAULT '1',".
+        		"  `order_type` tinyint NOT NULL DEFAULT '0',".
+        		"  `takeout_typeid` int(10) NOT NULL ,".
+        		"  `takeout_status` varchar(1) NOT NULL DEFAULT '0',".
+        		"  `appointment_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"  `lock_status` char(1) NOT NULL DEFAULT '0',".
+        		"  `should_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `reality_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `callno` varchar(10) NOT NULL ,".
+        		"  `paytype` varchar(1) NOT NULL DEFAULT '0',".
+        		"  `payment_method_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `pay_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"  `remark` varchar(50) NOT NULL DEFAULT '全款支付',".
+        		"  `taste_memo` varchar(50) NOT NULL,".
+        		"  `cupon_branduser_lid` int(10) NOT NULL DEFAULT '0',".
+        		"  `cupon_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`),".
+				"  KEY `account_no` (`account_no`),".
+				"  KEY `dpid` (`dpid`,`site_id`,`is_temp`)".
+        		");",
+        	"nb_order_account_discount"=>" CREATE TABLE 'nb_order_account_discount'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `order_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `account_no` varchar(20) NOT NULL ,".
+        		"  `discount_type` varchar(2) NOT NULL ,".
+        		"  `discount_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `discount_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `delete_flag` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL ,".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_order_address"=>" CREATE TABLE 'nb_order_address'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `order_lid` int(11) NOT NULL ,".
+        		"  `consignee` varchar(30) DEFAULT NULL ,".
+        		"  `province` varchar(30) DEFAULT NULL,".
+        		"  `city` varchar(30) DEFAULT NULL ,".
+        		"  `area` varchar(30) DEFAULT NULL ,".
+        		"  `street` varchar(30) DEFAULT NULL ,".
+        		"  `postcode` varchar(30) DEFAULT NULL ,".
+        		"  `mobile` varchar(30) DEFAULT NULL ,".
+        		"  `tel` varchar(30) DEFAULT NULL ,".
+        		"  `delete_flag` tinyint NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) DEFAULT '11111' ,".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_order_feedback"=>" CREATE TABLE 'nb_order_feedback'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `site_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `is_temp` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_deal` char(1) NOT NULL DEFAULT '0',".
+        		"  `feedback_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `order_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `is_order` char(1) NOT NULL DEFAULT '0',".
+        		"  `feedback_memo` varchar(50) NOT NULL,".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_order_pay"=>" CREATE TABLE 'nb_order_pay'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `order_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `account_no` varchar(20) NOT NULL,".
+        		"  `pay_amount` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `paytype` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `payment_method_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `paytype_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `remark` varchar(50) NOT NULL DEFAULT '全款支付',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_order_product"=>" CREATE TABLE 'nb_order_product'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `order_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `set_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `private_promotion_lid` int(10) NOT NULL DEFAULT '0',".
+        		"  `main_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `product_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `is_retreat` char(1) NOT NULL DEFAULT '0',".
+        		"  `original_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `offprice` varchar(10) NOT NULL DEFAULT '100%',".
+        		"  `amount` float NOT NULL DEFAULT '1',".
+        		"  `zhiamount` float NOT NULL DEFAULT '0',".
+        		"  `is_waiting` char(1) NOT NULL DEFAULT '0',".
+        		"  `weight` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `taste_memo` varchar(50) NOT NULL,".
+        		"  `is_giving` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_print` varchar(1) NOT NULL DEFAULT '0',".
+        		"  `product_status` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `product_order_status` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`),".
+				"  KEY `dpid` (`dpid`,`order_id`)".
+        		");",
+        	"nb_order_retreat"=>" CREATE TABLE 'nb_order_retreat'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `retreat_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `order_detail_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `retreat_memo` varchar(50) NOT NULL ,".
+        		"  `username` varchar(50) NOT NULL ,".
+        		"  `retreat_amount` int(10) NOT NULL DEFAULT '1',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_order_taste"=>" CREATE TABLE 'nb_order_taste'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `taste_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `order_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `is_order` char(1) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_queue_persons"=>" CREATE TABLE 'nb_queue_persons'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `stlid` int(10) NOT NULL DEFAULT '0',".
+        		"  `splid` int(10) NOT NULL DEFAULT '0',".
+        		"  `queue_no` varchar(20) NOT NULL DEFAULT 'A001',".
+        		"  `mobile_no` varchar(30) NOT NULL ,".
+        		"  `weixin_openid` varchar(50) NOT NULL ,".
+        		"  `status` char(1) NOT NULL DEFAULT '0',".
+        		"  `slid` int(10) NOT NULL DEFAULT '0' ,".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_shift_detail"=>" CREATE TABLE 'nb_shift_detail'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `userid` int(10) NOT NULL DEFAULT '0',".
+        		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+         		"  `order_num` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `order_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `member_charge` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `member_consume` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `cash_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `union_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `weixin_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `zhifubao_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `other_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+            "nb_site_no"=>" CREATE TABLE 'nb_site_no'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `site_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `is_temp` char(1) NOT NULL DEFAULT '0',".
+        		"  `status` char(1) NOT NULL DEFAULT '0',".
+        		"  `account_no` varchar(20) NOT NULL ,".
+        		"  `t_account_no` varchar(20) NOT NULL ,".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `waiter_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `number` tinyint(3) NOT NULL DEFAULT '0',".
+        		"  `code` varchar(10) NOT NULL,".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
         );
         
         return json_encode($tableStructureAll[$tablename]);
