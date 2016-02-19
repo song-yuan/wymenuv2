@@ -60,7 +60,15 @@ class DataAppSyncController extends Controller
 //                echo "false"; 
 //            } 
 	}
-        
+        /**
+         * 
+         * 测试
+         * 
+         */
+         public function actionTest(){
+         	echo 33;
+         	exit;
+         }
         /**
          * 获取服务器端图片列表
          */
