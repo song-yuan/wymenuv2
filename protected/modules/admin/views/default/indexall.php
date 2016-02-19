@@ -789,7 +789,7 @@
                         type:'GET',
                         timeout:1000,
                         cache:false,
-                        async:false,
+                        //async:false,
                         dataType: "json",
                         success:function(msg){
                             //$('#tabsiteindex').load(tabcurrenturl);
