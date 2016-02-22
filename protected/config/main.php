@@ -21,6 +21,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.components.dataAppSync.*',
 		'application.components.weixinpay.*',
 		'application.components.weixin.*',
 		'application.components.mall.*',
