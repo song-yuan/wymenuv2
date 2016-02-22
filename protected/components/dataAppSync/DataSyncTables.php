@@ -42,7 +42,7 @@ class DataSyncTables
     //云端的会员不用下载到本地，在云端和本地都能使用
     //和上面一样，以sql的形式体现，并按照顺序执行
     //这些表的结构都要在本地建立
-    public $otherTableNmae=array(
+    public $otherTableName=array(
         array("name"=>"本店会员","table"=>"nb_member_card"),
         array("name"=>"本店会员充值","table"=>"nb_member_recharge"),
         array("name"=>"本店活动","table"=>"nb_local_activity"),//这张表云端暂时没有
@@ -82,7 +82,7 @@ class DataSyncTables
     /**
      * 根据表名获取表结构
      */
-    public static function getTableStructure($tablename)
+    public function getTableStructure($tablename)
     {
         $tableStructureAll=array(
             "nb_local_company"=>" CREATE TABLE 'nb_local_company'('dpid' int(10) NOT NULL,".
