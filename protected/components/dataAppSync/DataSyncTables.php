@@ -68,7 +68,7 @@ class DataSyncTables
      */
     public function getBaseTableList()
     {
-        return json_encode($this->baseTableName);        
+        return $this->baseTableName;        
     }
     
     /**
@@ -76,7 +76,7 @@ class DataSyncTables
      */
     public function getAllTableList()
     {
-         return json_encode(array_merge($this->baseTableName,$this->otherTableName));       
+         return array_merge($this->baseTableName,$this->otherTableName);       
     }
     
     /**
@@ -632,7 +632,7 @@ class DataSyncTables
         		");",
         );
         
-        return json_encode($tableStructureAll[$tablename]);
+        return $tableStructureAll[$tablename];
     }
     
     /**
