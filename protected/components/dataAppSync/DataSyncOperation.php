@@ -28,26 +28,19 @@ class DataSyncOperation
 	 /**
 	  * 
 	  * 
-	  * 获取所有的表
+	  * 获取所有的表 和 结构
 	  * 
 	  */
 	  public static function getDataSyncAllTables()
 	 {
 	 	$dataBase = new DataSyncTables();
         $allTables = $dataBase->getAllTableList();
-        return $allTables;
-	 }
-	  /**
-	  * 
-	  * 
-	  * 获取表结构
-	  * 
-	  */
-	 public static function getDataSyncTableStruct($tableName)
-	 {
-	 	$dataBase = new DataSyncTables();
-        $tableStruct = $dataBase->getTableStructure($tableName);
-        return $tableStruct;
+        
+    	foreach($allTables as $k=>$table){
+    		$tableStruct = $dataBase->getTableStructure($table['table']);
+    		$allTables[$k]['struct'] = $tableStruct;
+    	}
+        return array('status'=>true,'msg'=>$allTables);
 	 }
 	/**
 	 * 
@@ -58,7 +51,11 @@ class DataSyncOperation
 	 {
 	 	$dataBase = new DataSyncTableData($dpid,$tableName);
         $tableData = $dataBase->getInitData();
-        return $tableData;
+        if($tableData){
+        	return array('status'=>true,'msg'=>$tableData);
+        }else{
+        	return array('status'=>false,'msg'=>'无数据');
+        }
 	 }
      /**
      * 获取需要到本地执行的sql，每次仅限1000条
