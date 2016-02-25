@@ -76,7 +76,7 @@ class DataSyncTables
      */
     public function getAllTableList()
     {
-         return array('status'=>true,'msg'=>array_merge($this->baseTableName,$this->otherTableName));       
+         return array_merge($this->baseTableName,$this->otherTableName);       
     }
     
     /**
@@ -632,7 +632,7 @@ class DataSyncTables
         		");",
         );
         
-        return array('status'=>true,'msg'=>$tableStructureAll[$tablename]);
+        return $tableStructureAll[$tablename];
     }
     
     /**

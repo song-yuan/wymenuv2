@@ -12,7 +12,7 @@ class DataSyncTableData
     	$this->tableName = $tableName;
     }
     public function getInitData(){
-    	$sql = 'select * from ' . $this->tableName . ' where dapid=:dpid and delete_flag = 0';
+    	$sql = 'select * from ' . $this->tableName . ' where dpid=:dpid and delete_flag = 0';
     	$data = Yii::app()->db->createCommand($sql)
     							->bindValue(':dpid',$this->dpid)
     							->queryAll();

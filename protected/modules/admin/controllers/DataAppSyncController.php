@@ -39,22 +39,13 @@ public function actionServerImglist(){
 }
 /**
  * 
- * 获取基础数据表
- * 
- */ 
-public function actionGetSyncTableStruct(){
-   $tableName = Yii::app()->request()->getParam('tn',null);
-   $tableStruct = DataSyncOperation::getDataSyncTableStruct($tableName);
-   echo json_encode($tableStruct);exit;
-}
-/**
- * 
  * 获取基础数据表 数据
  * 
  */ 
 public function actionGetSyncTableData(){
-	$tableName = Yii::app()->request()->getParam('tn',null);
-   $tableStruct = DataSyncOperation::getDataSyncData($tableName);
+   $dpid = Yii::app()->request->getParam('dpid',null);
+   $tableName = Yii::app()->request->getParam('tn',null);
+   $tableStruct = DataSyncOperation::getDataSyncData($dpid,$tableName);
    echo json_encode($tableStruct);exit;
 }
 /**
