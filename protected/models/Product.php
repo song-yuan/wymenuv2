@@ -105,7 +105,7 @@ class Product extends CActiveRecord
 			'is_temp_price' =>yii::t('app', '是否时价菜'),
 			'is_member_discount' =>yii::t('app', '是否参与会员折扣'),
 			'is_special' =>yii::t('app', '是否特价菜'),
-			'is_discount' =>yii::t('app', '是否折扣'),
+			'is_discount' =>yii::t('app', '可折'),
 			'status' =>yii::t('app', '状态'),
 			'original_price' =>yii::t('app', '价格'),
 			'product_unit' =>yii::t('app', '默认单位'),
@@ -115,7 +115,7 @@ class Product extends CActiveRecord
                         'order_number' =>yii::t('app', '总下单次数'),
 			'favourite_number' =>yii::t('app', '总点赞次数'),
 			'printer_way_id' => '打印方案id',
-			'is_show' =>yii::t('app', '是否配菜'),
+			'is_show' =>yii::t('app', '可售'),
 			'delete_flag' => 'Delete Flag',
 				'is_sync' => yii::t('app','是否同步'),
 		);
