@@ -9,7 +9,7 @@ class DataSyncTables
     //每次同步时都根据表名、APP版本号获取表结构，
     //然后根据企业id获取数据，下载到本地后删除所有
     //原有的基础数据，然后插入新的。    
-    public static $baseTableName= array(
+    public $baseTableName= array(
         array("name"=>"店铺信息","table"=>"nb_local_company"),
         array("name"=>"用户","table"=>"nb_user"),
         array("name"=>"楼层区域","table"=>"nb_floor"),
@@ -42,7 +42,7 @@ class DataSyncTables
     //云端的会员不用下载到本地，在云端和本地都能使用
     //和上面一样，以sql的形式体现，并按照顺序执行
     //这些表的结构都要在本地建立
-    public static $otherTableNmae=array(
+    public $otherTableName=array(
         array("name"=>"本店会员","table"=>"nb_member_card"),
         array("name"=>"本店会员充值","table"=>"nb_member_recharge"),
         array("name"=>"本店活动","table"=>"nb_local_activity"),//这张表云端暂时没有
@@ -66,23 +66,23 @@ class DataSyncTables
     /**
      * 获取所有的基础数据表列表
      */
-    public static function getBaseTableList()
+    public function getBaseTableList()
     {
-        return json_encode($baseTableName);        
+        return $this->baseTableName;        
     }
     
     /**
      * 获取所有的数据表列表，初始化的时候用
      */
-    public static function getAllTableList()
+    public function getAllTableList()
     {
-         return json_encode(array_merge($baseTableName,$otherTableName));       
+         return array_merge($this->baseTableName,$this->otherTableName);       
     }
     
     /**
      * 根据表名获取表结构
      */
-    public static function getTableStructure($tablename)
+    public function getTableStructure($tablename)
     {
         $tableStructureAll=array(
             "nb_local_company"=>" CREATE TABLE 'nb_local_company'('dpid' int(10) NOT NULL,".
@@ -632,7 +632,7 @@ class DataSyncTables
         		");",
         );
         
-        return json_encode($tableStructureAll[$tablename]);
+        return $tableStructureAll[$tablename];
     }
     
     /**
