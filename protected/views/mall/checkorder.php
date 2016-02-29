@@ -222,21 +222,24 @@ $(document).ready(function(){
 	<?php else:?>
 	var number = $('.number').val();
 	var seatFee = $('.seatingFee').attr('price');
+	var total = $('#total').html();
+	
 	$('.seatingFee').find('.num').html(number);
 	$('.seatingFee').find('.price').html(number*seatFee);
+	$('#total').html(total + number*seatFee);
+	$('#total').attr('total',total + number*seatFee);
 	<?php endif;?>
 	
 	$('.num-minus').click(function(){
 		var number = $('.number').val();
 		var seatFee = $('.seatingFee').attr('price');
+		var total = $('#total').html();
 		if(parseInt(number) > 1 ){
 			$('.number').val(parseInt(number)-1);
 			$('.seatingFee').find('.num').html(parseInt(number)-1);
 			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
-		}else{
-			$('.number').val(1);
-			$('.seatingFee').find('.num').html(1);
-			$('.seatingFee').find('.price').html(seatFee);
+			$('#total').html(total + (parseInt(number)-1)*seatFee);
+			$('#total').attr('total',total + (parseInt(number)-1)*seatFee);
 		}
 	});
 	
@@ -244,9 +247,13 @@ $(document).ready(function(){
 	$('.num-add').click(function(){
 		var number = $('.number').val();
 		var seatFee = $('.seatingFee').attr('price');
+		var total = $('#total').html();
 		$('.number').val(parseInt(number)+1);
 		$('.seatingFee').find('.num').html(parseInt(number)+1);
 		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
+		
+		$('#total').html(total + (parseInt(number)+1)*seatFee);
+		$('#total').attr('total',total + (parseInt(number)+1)*seatFee);
 	});
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
