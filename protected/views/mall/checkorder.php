@@ -27,6 +27,7 @@
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
 <div class="order-title">确认订单</div>
 <?php if($this->type==1):?>
+<!-- 桌号 及人数 -->
 <div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'];}?>><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteNum){ echo (int)(($siteNum['min_persons'] + $siteNum['max_persons'])/2);}else{echo '3';}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
 <?php elseif($this->type==2):?>
 <!-- 地址 -->
@@ -61,6 +62,7 @@
 <!-- 地址 -->
 <?php endif;?>
 
+<!-- 购物车商品 -->
 <div class="cart-info">
 	<div class="section" style="padding-top:10px;">
 	    <?php if(!empty($orderTastes)):?>
@@ -107,6 +109,17 @@
 	    <?php endif;?>
 	</div>
 	<?php endforeach;?>
+	<?php if($this->type==1):?>
+	<!-- 餐位费 -->
+	<div class="section seatingFee" price="2">
+		 <div class="prt">
+	        <div class="prt-lt">餐位费</div>
+	        <div class="prt-mt">x<span class="num"></span></div>
+	        <div class="prt-rt">￥<span class="price"></span></div>
+	        <div class="clear"></div>
+	    </div>
+	</div>
+	<?php endif;?>
 </div>
 
 <?php if($this->type==3):?>
@@ -206,6 +219,11 @@ $(document).ready(function(){
 	$('.location').click(function(){
 		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
 	});
+	<?php else:?>
+	var number = $('.number').val();
+	var seatFee = $('.seatingFee').attr('price');
+	$('.seatingFee').find('.num').html(number);
+	$('.seatingFee').find('.price').html(number*price);
 	<?php endif;?>
 	
 	$('.num-minus').click(function(){
