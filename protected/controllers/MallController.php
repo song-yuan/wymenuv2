@@ -130,7 +130,9 @@ class MallController extends Controller
 		
 		$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
 		
-		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons));
+		$user = WxBrandUser::get($userId,$this->companyId); 
+		
+		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user));
 	}
 	/**
 	 * 
