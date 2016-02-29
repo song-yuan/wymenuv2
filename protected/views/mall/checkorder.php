@@ -116,11 +116,20 @@
 	<div class="clear"></div>
 </div>
 <?php endif;?>
+<!-- 完善资料才能使用代金券  -->
+<?php if($user['mobile_num']&&$user['user_birthday']):?>
 <div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
 	<div class="copun-lt">代金券</div>
 	<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
 	<div class="clear"></div>
 </div>
+<?php else:?>
+<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
+	<div class="copun-lt">代金券</div>
+	<div class="copun-rt"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId));?>">去完善资料</a></div>
+	<div class="clear"></div>
+</div>
+<?php endif;?>
 <div class="order-remark">
 	<textarea name="remark" placeholder="备注"></textarea>
 </div>
