@@ -223,22 +223,30 @@ $(document).ready(function(){
 	var number = $('.number').val();
 	var seatFee = $('.seatingFee').attr('price');
 	$('.seatingFee').find('.num').html(number);
-	$('.seatingFee').find('.price').html(number*price);
+	$('.seatingFee').find('.price').html(number*seatFee);
 	<?php endif;?>
 	
 	$('.num-minus').click(function(){
 		var number = $('.number').val();
+		var seatFee = $('.seatingFee').attr('price');
 		if(parseInt(number) > 1 ){
 			$('.number').val(parseInt(number)-1);
+			$('.seatingFee').find('.num').html(parseInt(number)-1);
+			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
 		}else{
 			$('.number').val(1);
+			$('.seatingFee').find('.num').html(1);
+			$('.seatingFee').find('.price').html(seatFee);
 		}
 	});
 	
 	//参数人数增减
 	$('.num-add').click(function(){
 		var number = $('.number').val();
+		var seatFee = $('.seatingFee').attr('price');
 		$('.number').val(parseInt(number)+1);
+		$('.seatingFee').find('.num').html(parseInt(number)+1);
+		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
 	});
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
