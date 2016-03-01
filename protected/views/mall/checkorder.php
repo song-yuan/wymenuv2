@@ -5,6 +5,11 @@
 	if(!empty($cupons)){
 		$isCupon = true;
 	}
+	if($isSeatingFee){
+		$seatingFee = $isSeatingFee['fee_price'];
+	}else{
+		$seatingFee = 0;
+	}
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
@@ -27,7 +32,8 @@
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
 <div class="order-title">确认订单</div>
 <?php if($this->type==1):?>
-<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'];}?>><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>人数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteNum){ echo (int)(($siteNum['min_persons'] + $siteNum['max_persons'])/2);}else{echo '3';}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
+<!-- 桌号 及人数 -->
+<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'];}?>><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteNum){ echo (int)(($siteNum['min_persons'] + $siteNum['max_persons'])/2);}else{echo '3';}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
 <?php elseif($this->type==2):?>
 <!-- 地址 -->
 <div class="address arrowright">
@@ -61,6 +67,7 @@
 <!-- 地址 -->
 <?php endif;?>
 
+<!-- 购物车商品 -->
 <div class="cart-info">
 	<div class="section" style="padding-top:10px;">
 	    <?php if(!empty($orderTastes)):?>
@@ -107,6 +114,17 @@
 	    <?php endif;?>
 	</div>
 	<?php endforeach;?>
+	<?php if($this->type==1):?>
+	<!-- 餐位费 -->
+	<div class="section seatingFee" price="<?php echo $seatingFee;?>">
+		 <div class="prt">
+	        <div class="prt-lt">餐位费</div>
+	        <div class="prt-mt">x<span class="num"></span></div>
+	        <div class="prt-rt">￥<span class="price"></span></div>
+	        <div class="clear"></div>
+	    </div>
+	</div>
+	<?php endif;?>
 </div>
 
 <?php if($this->type==3):?>
@@ -116,11 +134,20 @@
 	<div class="clear"></div>
 </div>
 <?php endif;?>
+<!-- 完善资料才能使用代金券  -->
+<?php if($user['mobile_num']&&$user['user_birthday']):?>
 <div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
 	<div class="copun-lt">代金券</div>
 	<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
 	<div class="clear"></div>
 </div>
+<?php else:?>
+<div class="order-copun arrowright disabled">
+	<div class="copun-lt">代金券</div>
+	<div class="copun-rt"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId));?>">去完善资料</a></div>
+	<div class="clear"></div>
+</div>
+<?php endif;?>
 <div class="order-remark">
 	<textarea name="remark" placeholder="备注"></textarea>
 </div>
@@ -197,21 +224,52 @@ $(document).ready(function(){
 	$('.location').click(function(){
 		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
 	});
+	<?php else:?>
+	var number = $('.number').val();
+	var seatFee = $('.seatingFee').attr('price');
+	var total = $('#total').html();
+	
+	$('.seatingFee').find('.num').html(number);
+	$('.seatingFee').find('.price').html(parseInt(number)*seatFee);
+	
+	var totalFee = parseFloat(total) + parseInt(number)*seatFee;
+	totalFee =  totalFee.toFixed(2);
+	
+	$('#total').html(totalFee);
+	$('#total').attr('total',totalFee);
 	<?php endif;?>
 	
 	$('.num-minus').click(function(){
 		var number = $('.number').val();
+		var seatFee = $('.seatingFee').attr('price');
+		var total = $('#total').html();
 		if(parseInt(number) > 1 ){
 			$('.number').val(parseInt(number)-1);
-		}else{
-			$('.number').val(1);
+			$('.seatingFee').find('.num').html(parseInt(number)-1);
+			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
+			
+			var totalFee = parseFloat(total) - parseFloat(seatFee);
+			totalFee =  totalFee.toFixed(2);
+			
+			$('#total').html(totalFee);
+			$('#total').attr('total',totalFee);
 		}
 	});
 	
 	//参数人数增减
 	$('.num-add').click(function(){
 		var number = $('.number').val();
+		var seatFee = $('.seatingFee').attr('price');
+		var total = $('#total').html();
 		$('.number').val(parseInt(number)+1);
+		$('.seatingFee').find('.num').html(parseInt(number)+1);
+		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
+		
+		var totalFee = parseFloat(total) + parseFloat(seatFee);
+		totalFee =  totalFee.toFixed(2);
+		
+		$('#total').html(totalFee);
+		$('#total').attr('total',totalFee);
 	});
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
