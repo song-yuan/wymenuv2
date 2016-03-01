@@ -10,6 +10,16 @@
 	}else{
 		$seatingFee = 0;
 	}
+	if($isPackingFee){
+		$packingFee = $isPackingFee['fee_price'];
+	}else{
+		$packingFee = 0;
+	}
+	if($isFreightFee){
+		$freightFee = $isFreightFee['fee_price'];
+	}else{
+		$freightFee = 0;
+	}
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
@@ -51,6 +61,11 @@
 	<?php endif;?>
 </div>
 <?php else:?>
+<div class="order-num">
+	<div class="num-lt">预约人数</div>
+	<div class="num-rt"><input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteNum){ echo (int)(($siteNum['min_persons'] + $siteNum['max_persons'])/2);}else{echo '3';}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
+	<div class="clear"></div>
+</div>
 <div class="address arrowright">
 	<?php if($address):?>
 	<div class="location" style="line-height: 50px;">
@@ -87,7 +102,7 @@
 	    <?php endif;?>
 	</div>
 	<?php foreach($models as $model):?>
-	<div class="section">
+	<div class="section cartProduct">
 		<!--
 	    <div class="prt-cat">/div>
 	    -->
@@ -114,8 +129,8 @@
 	    <?php endif;?>
 	</div>
 	<?php endforeach;?>
-	<?php if($this->type==1):?>
-	<!-- 餐位费 -->
+	<?php if($this->type==1||$this->type==3):?>
+	<!-- begain餐位费 -->
 	<div class="section seatingFee" price="<?php echo $seatingFee;?>">
 		 <div class="prt">
 	        <div class="prt-lt">餐位费</div>
@@ -124,11 +139,33 @@
 	        <div class="clear"></div>
 	    </div>
 	</div>
+	<!-- end餐位费 -->
+	<?php else:?>
+	<!-- begain餐位费 -->
+	<div class="section packingFee" price="<?php echo $packingFee;?>">
+		 <div class="prt">
+	        <div class="prt-lt">包装费</div>
+	        <div class="prt-mt">x<span class="num"></span></div>
+	        <div class="prt-rt">￥<span class="price"></span></div>
+	        <div class="clear"></div>
+	    </div>
+	</div>
+	<!-- end餐位费 -->
+	<!-- begain餐位费 -->
+	<div class="section freightFee" price="<?php echo $freightFee;?>">
+		 <div class="prt">
+	        <div class="prt-lt">配送费</div>
+	        <div class="prt-mt">x<span class="num">1</span></div>
+	        <div class="prt-rt">￥<span class="price"><?php echo number_format($freightFee,2);?></span></div>
+	        <div class="clear"></div>
+	    </div>
+	</div>
+	<!-- end餐位费 -->
 	<?php endif;?>
 </div>
 
 <?php if($this->type==3):?>
-<div class="order-time arrowright">
+<div class="order-time">
 	<div class="time-lt">预约时间</div>
 	<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
 	<div class="clear"></div>
@@ -199,7 +236,7 @@
 
 <script>
 $(document).ready(function(){
-	<?php if($this->type!=1):?>
+	<?php if($this->type==3):?>
 	var currYear = (new Date()).getFullYear();	
 	var opt={};
 	opt.date = {preset : 'date'};
@@ -221,10 +258,43 @@ $(document).ready(function(){
   	var optTime = $.extend(opt['time'], opt['default']);
     $("#appDateTime").mobiscroll(optDateTime).datetime(optDateTime);
     
+    var number = $('.number').val();
+	var seatFee = $('.seatingFee').attr('price');
+	var total = $('#total').html();
+	
+	$('.seatingFee').find('.num').html(number);
+	$('.seatingFee').find('.price').html(parseInt(number)*seatFee);
+	
+	var totalFee = parseFloat(total) + parseInt(number)*seatFee;
+	totalFee =  totalFee.toFixed(2);
+	
+	$('#total').html(totalFee);
+	$('#total').attr('total',totalFee);
+	
 	$('.location').click(function(){
 		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
 	});
-	<?php else:?>
+	<?php elseif($this->type==2):?>
+	var totalPackFee = 0;
+	var total = $('#total').html();
+	var packingFee = $('.packingFee').attr('price');
+	var freightFee = $('.freightFee').attr('price');
+	$('.cartProduct').each(function(){
+		var num = $(this).find('.num').html();
+		totalPackFee += parseInt(num)*parseFloat(packingFee);
+	});
+	totalPackFee = totalPackFee.toFixed(2);
+	$('.packingFee').find('.price').html(totalPackFee);
+	
+	var totalFee = parseFloat(total) + parseFloat(totalPackFee) + parseFloat(freightFee);
+	totalFee =  totalFee.toFixed(2);
+	$('#total').html(totalFee);
+	$('#total').attr('total',totalFee);
+	
+	$('.location').click(function(){
+		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
+	});
+	<?php elseif($this->type==1):?>
 	var number = $('.number').val();
 	var seatFee = $('.seatingFee').attr('price');
 	var total = $('#total').html();
