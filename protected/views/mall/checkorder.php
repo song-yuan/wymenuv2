@@ -407,13 +407,17 @@ $(document).ready(function(){
 		var serial = $('.serial').val();
 		var number = $('.number').val();
 		if(serial && number){
+			if(serial=='>'){
+				layer.msg('请输入座位号!');
+				return;
+			}
 			if(isNaN(number)||(parseInt(number)!=number)||number < 0){
 				layer.msg('输入人数为大于0的整数!');
 				return;
 			}
 			$('form').submit();
 		}else{
-			if(!serial){
+			if(!serial||serial=='>'){
 				layer.msg('请输入座位号!');
 				return;
 			}
