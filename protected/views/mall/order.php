@@ -93,7 +93,7 @@
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
 		<?php if($order['order_type']==1):?>
-		<div class="item  on" paytype="2">微信支付</div>
+		<div class="item  on" paytype="2" style="border:none;">微信支付</div>
 		<!--
 		<div class="item" paytype="1">饭后支付</div>
 		-->
@@ -142,9 +142,7 @@ function getOrderStatus(){
 }
 
 $(document).ready(function(){
-	<?php if($order['order_type']==1):?>
-	window.onload = getOrderStatus;
-	<?php else:?>
+	<?php if($order['order_type']!=1):?>
 	var currYear = (new Date()).getFullYear();	
 	var opt={};
 	opt.date = {preset : 'date'};
@@ -237,15 +235,7 @@ $(document).ready(function(){
 	});
 	$('#payorder').click(function(){
 		<?php if($order['order_type']==1):?>
-		var timestamp=new Date().getTime()
-        var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
-		$.get('<?php echo $this->createUrl('/mall/getOrderStatus',array('companyId'=>$this->companyId,'orderId'=>$order['lid']))?>',{random:random},function(msg){
-			if(parseInt(msg) < 2){
-				layer.msg('服务员确认后才能付款!');
-			}else{
-				$('form').submit();
-			}
-		});
+		$('form').submit();
 		<?php elseif($order['order_type']==2):?>
 		var address = $('input[name="address"]').val();
 		if(parseInt(address) < 0){
