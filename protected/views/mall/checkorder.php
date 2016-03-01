@@ -243,7 +243,7 @@ $(document).ready(function(){
 			$('.seatingFee').find('.num').html(parseInt(number)-1);
 			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
 			
-			var totalFee = parseFloat(total) - seatFee;
+			var totalFee = parseFloat(total) - parseFloat(seatFee);
 			totalFee =  totalFee.toFixed(2);
 			
 			$('#total').html(totalFee);
@@ -260,7 +260,7 @@ $(document).ready(function(){
 		$('.seatingFee').find('.num').html(parseInt(number)+1);
 		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
 		
-		var totalFee = parseFloat(total) + seatFee;
+		var totalFee = parseFloat(total) + parseFloat(seatFee);
 		totalFee =  totalFee.toFixed(2);
 		
 		$('#total').html(totalFee);
