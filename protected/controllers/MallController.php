@@ -262,7 +262,7 @@ class MallController extends Controller
 		
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		
-		$user = WxBrandUser::get($userId,$this->companyId); 
+		$user = WxBrandUser::get($userId,$this->companyId);
 		
 		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays));
 	 }
@@ -294,7 +294,9 @@ class MallController extends Controller
 		}
 		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address));
+		$user = WxBrandUser::get($userId,$this->companyId);
+		
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user));
 	 }
 	 /**
 	  * 
