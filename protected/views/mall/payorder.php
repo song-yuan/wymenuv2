@@ -99,8 +99,19 @@
 	
 	<?php if($order['reality_total'] - $order['should_total'] - $payYue):?>
 	<?php if($order['cupon_branduser_lid'] > 0):?>
+	<?php if(($order['reality_total'] - $order['should_total'] - $payYue - $order['cupon_money'])>0):?>
+	<div class="item">
+		<div class="lt">会员减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $payYue - $order['cupon_money'],2);?></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
 	<div class="item">
 		<div class="lt">现金券减免</div><div class="rt">￥<?php echo $order['cupon_money'];?></div>
+		<div class="clear"></div>
+	</div>
+	<?php else:?>
+	<div class="item">
+		<div class="lt">会员减免</div><div class="rt">￥<?php echo number_format($order['reality_total'] - $order['should_total'] - $payYue,2);?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
@@ -112,7 +123,6 @@
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
-	
 	<div class="item">
 		<div class="lt">合计</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['should_total'],2);?></span></div>
 		<div class="clear"></div>
