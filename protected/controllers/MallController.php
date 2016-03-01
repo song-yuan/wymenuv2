@@ -166,7 +166,7 @@ class MallController extends Controller
 			}
 			$site = WxSite::getBySerial($serial,$this->companyId);
 			if(!$site){
-				$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'type'=>$this->type));
+				$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 			}else{
 				WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
 				$siteId = $site['lid'];
