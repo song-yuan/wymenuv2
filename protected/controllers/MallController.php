@@ -4,7 +4,7 @@ class MallController extends Controller
 {
 	/**
 	 * 
-	 * type点单类型 1 堂吃 2 外卖
+	 * type点单类型 1 堂吃 2 外卖 3 预约
 	 * 
 	 */
 	public $companyId;
@@ -130,9 +130,10 @@ class MallController extends Controller
 		
 		$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
 		
+		$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
 		$user = WxBrandUser::get($userId,$this->companyId); 
 		
-		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user));
+		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'isSeatingFee'=>$isSeatingFee,'user'=>$user));
 	}
 	/**
 	 * 

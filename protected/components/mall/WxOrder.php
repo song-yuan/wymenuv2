@@ -17,6 +17,9 @@ class WxOrder
 	public $type;
 	public $number;
 	public $isTemp = 0;
+	public $seatingFee = 0;
+	public $packingFee = 0;
+	public $freightFee = 0;
 	public $cart = array();
 	public $normalPromotionIds = array();
 	public $tastes = array();//原始产品口味
@@ -32,14 +35,18 @@ class WxOrder
 		$this->tastes = $tastes;
 		$this->getCart();
 		$this->dealTastes();
-		if($this->type==1){
+		if($this->type==1||$this->type==3){
 			$this->isTemp = 0;
 			$this->getSite();
+			$this->getSeatingFee();
 		}else{
 			$this->isTemp = 1;
 			$this->orderOpenSite();
+			$this->getPackingFee();
+			$this->getFreightFee();
 		}
 	}
+	//获取购物车信息
 	public function getCart(){
 		$sql = 'select t.dpid,t.product_id,t.num,t.privation_promotion_id,t.to_group,t1.product_name,t1.main_picture,t1.original_price from nb_cart t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid=:dpid and t.user_id=:userId and t.site_id=:siteId';
 		$results = Yii::app()->db->createCommand($sql)
@@ -60,6 +67,7 @@ class WxOrder
 		}
 		$this->cart = $results;
 	}
+	//处理订单口味
 	public function dealTastes(){
 		if(!empty($this->tastes)){
 			foreach($this->tastes as $taste){
@@ -70,6 +78,7 @@ class WxOrder
 			}
 		}
 	}
+	//获取座位状态
 	public function getSite(){
 		$site = WxSite::get($this->siteId,$this->dpid);
 		if(!in_array($site['status'],array(1,2,3))){
@@ -78,6 +87,34 @@ class WxOrder
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
 		}
 	}
+	//获取餐位费
+	public function getSeatingFee(){
+		$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
+		if($isSeatingFee){
+			$this->seatingFee = $isSeatingFee['fee_price']*$this->number;
+		}else{
+			$this->seatingFee = 0;
+		}
+	}
+	//获取打包费
+	public function getPackingFee(){
+		$isPackingFee = WxCompanyFee::get(2,$this->companyId);
+		if($isPackingFee){
+			$this->packingFee = $isPackingFee['fee_price']*$this->number;
+		}else{
+			$this->packingFee = 0;
+		}
+	}
+	//获取运费
+	public function getFreightFee(){
+		$isFreightFee = WxCompanyFee::get(3,$this->companyId);
+		if($isFreightFee){
+			$this->freightFee = $isFreightFee['fee_price'];
+		}else{
+			$this->freightFee = 0;
+		}
+	}
+	//座位开台
 	public function orderOpenSite(){
 		$result = SiteClass::openSite($this->dpid,$this->number,$this->isTemp,$this->siteId);
 		if($this->isTemp==1){
@@ -94,6 +131,7 @@ class WxOrder
 	    	$this->siteId = $siteNo['lid'];
 	    }
 	}
+	//生成订单
 	public function createOrder(){
 		$time = time();
 		$orderPrice = 0;
@@ -121,6 +159,9 @@ class WxOrder
 			        	'site_id'=>$this->siteId,
 			        	'is_temp'=>$this->isTemp,
 			        	'number'=>$this->number,
+			        	'seating_fee'=>$this->seatingFee,
+			        	'packing_fee'=>$this->packingFee,
+			        	'freight_fee'=>$this->freightFee,
 			        	'order_status'=>1,
 			        	'order_type'=>$this->type,
 			        	'is_sync'=>DataSync::getInitSync(),
@@ -336,7 +377,9 @@ class WxOrder
 				$oTotal += $product['original_price']*$product['amount'];
 			}
 		}
-		if($order['cupon_branduser_lid']==0&&$total!=$order['should_total']){
+		
+		$total += $order['seating_fee'] + $order['packing_fee'] + $order['freight_fee'];
+		if($order['cupon_branduser_lid']==0 && $total!=$order['should_total']){
 			$orderPay = WxOrderPay::get($dpid,$orderId);
 			if(empty($orderPay)){
 				$isSync = DataSync::getInitSync();

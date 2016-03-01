@@ -5,6 +5,11 @@
 	if(!empty($cupons)){
 		$isCupon = true;
 	}
+	if($isSeatingFee){
+		$seatingFee = $isSeatingFee['fee_price'];
+	}else{
+		$seatingFee = 0;
+	}
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
@@ -111,7 +116,7 @@
 	<?php endforeach;?>
 	<?php if($this->type==1):?>
 	<!-- 餐位费 -->
-	<div class="section seatingFee" price="2">
+	<div class="section seatingFee" price="<?php echo $seatingFee;?>">
 		 <div class="prt">
 	        <div class="prt-lt">餐位费</div>
 	        <div class="prt-mt">x<span class="num"></span></div>
