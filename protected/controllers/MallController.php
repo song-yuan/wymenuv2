@@ -131,9 +131,11 @@ class MallController extends Controller
 		$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
 		
 		$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
+		
+		$address = WxAddress::getDefault($userId,$this->companyId);
 		$user = WxBrandUser::get($userId,$this->companyId); 
 		
-		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'isSeatingFee'=>$isSeatingFee,'user'=>$user));
+		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'isSeatingFee'=>$isSeatingFee,'user'=>$user,'address'=>$address));
 	}
 	/**
 	 * 
