@@ -77,6 +77,21 @@
 	</div>
 	<?php endforeach;?>
 	<div class="ht1"></div>
+	<?php if($order['order_type']==1):?>
+	<div class="item">
+		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $order['seating_fee']?$order['seating_fee']:'免费';?></div>
+		<div class="clear"></div>
+	</div>
+	<?php else:?>
+	<div class="item">
+		<div class="lt">包装费:</div><div class="rt">￥<?php echo $order['packing_fee']?$order['packing_fee']:'免费';?></div>
+		<div class="clear"></div>
+	</div>
+	<div class="item">
+		<div class="lt">运费:</div><div class="rt">￥<?php echo $order['freight_fee']?$order['freight_fee']:'免费';?></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
 	<div class="item">
 		<div class="lt">总计:</div><div class="rt">￥<?php echo $order['reality_total'];?></div>
 		<div class="clear"></div>
