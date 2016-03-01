@@ -89,7 +89,7 @@ class WxOrder
 	}
 	//获取餐位费
 	public function getSeatingFee(){
-		$isSeatingFee = WxCompanyFee::get(1,$this->companyId);
+		$isSeatingFee = WxCompanyFee::get(1,$this->dpid);
 		if($isSeatingFee){
 			$this->seatingFee = $isSeatingFee['fee_price']*$this->number;
 		}else{
@@ -98,7 +98,7 @@ class WxOrder
 	}
 	//获取打包费
 	public function getPackingFee(){
-		$isPackingFee = WxCompanyFee::get(2,$this->companyId);
+		$isPackingFee = WxCompanyFee::get(2,$this->dpid);
 		if($isPackingFee){
 			$this->packingFee = $isPackingFee['fee_price']*$this->number;
 		}else{
@@ -107,7 +107,7 @@ class WxOrder
 	}
 	//获取运费
 	public function getFreightFee(){
-		$isFreightFee = WxCompanyFee::get(3,$this->companyId);
+		$isFreightFee = WxCompanyFee::get(3,$this->dpid);
 		if($isFreightFee){
 			$this->freightFee = $isFreightFee['fee_price'];
 		}else{
