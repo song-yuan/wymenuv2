@@ -178,7 +178,7 @@ class MallController extends Controller
 		
 		$orderObj = new WxOrder($this->companyId,$userId,$siteId,$this->type,$number,$tastes);
 		if(!$orderObj->cart){
-			$this->redirect(array('/mall/cart','companyId'=>$this->companyId,'type'=>$this->type));
+			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
 		//生成订单
 		$orderId = $orderObj->createOrder();
