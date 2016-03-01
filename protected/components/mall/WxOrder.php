@@ -16,6 +16,7 @@ class WxOrder
 	public $siteId;
 	public $type;
 	public $number;
+	public $cartNumber = 0;
 	public $isTemp = 0;
 	public $seatingFee = 0;
 	public $packingFee = 0;
@@ -64,6 +65,7 @@ class WxOrder
 				$results[$k]['price'] = $productPrice->price;
 				$results[$k]['promotion'] = $productPrice->promotion;
 			}
+			$this->cartNumber +=$result['num'];
 		}
 		$this->cart = $results;
 	}
@@ -100,7 +102,7 @@ class WxOrder
 	public function getPackingFee(){
 		$isPackingFee = WxCompanyFee::get(2,$this->dpid);
 		if($isPackingFee){
-			$this->packingFee = $isPackingFee['fee_price']*$this->number;
+			$this->packingFee = $isPackingFee['fee_price']*$this->cartNumber;
 		}else{
 			$this->packingFee = 0;
 		}
@@ -260,7 +262,7 @@ class WxOrder
 				$orderPrice = 0.01;
 			}
 			$isSync = DataSync::getInitSync();
-			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
+			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',packing_fee = packing_fee + '.$this->packingFee.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 			
 			//清空购物车
