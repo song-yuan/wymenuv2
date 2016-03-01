@@ -67,6 +67,25 @@
 		<div class="clear"></div>
 	</div>
 	<?php endforeach;?>
+	<!-- 其他费用 -->
+	<?php if($order['order_type']==1):?>
+	<div class="item">
+		<div class="lt">餐位费:</div>
+		<div class="rt">X1 ￥<?php echo $order['seating_fee'];?></div>
+		<div class="clear"></div>
+	</div>
+	<?php else:?>
+	<div class="item">
+		<div class="lt">包装费:</div>
+		<div class="rt">X1 ￥<?php echo $order['packing_fee'];?></div>
+		<div class="clear"></div>
+	</div>
+	<div class="item">
+		<div class="lt">配送费:</div>
+		<div class="rt">X1 ￥<?php echo $order['freight_fee'];?></div>
+		<div class="clear"></div>
+	</div>
+	<?php endif;?>
 	<div class="ht1"></div>
 	<div class="item">
 		<div class="lt">合计:</div>
