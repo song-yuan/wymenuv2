@@ -82,10 +82,7 @@
 
 <script> 
 window.onload=function(){
-	if (location.href.indexOf("?xyz=")<0)
-	{
-		location.href=location.href+"?xyz="+Math.random();
-	}
+	window.location.reload(true);
 }
 $(document).ready(function(){ 
     $('#nav li').click(function(){
