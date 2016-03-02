@@ -240,7 +240,7 @@
 function emptyCart(){
 	$.ajax({
 		url:'<?php echo $this->createUrl('/mall/emptyCart',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>',
-		dataType:'get',
+		type:'GET',
 		success:function(msg){
 			if(parseInt(msg)==1){
 				location.href = '<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId));?>';
