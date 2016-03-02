@@ -2,7 +2,6 @@
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('点单');
 ?>
-
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>

@@ -11,6 +11,9 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta http-equiv="Pragma" content="no-cache" /> 
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
