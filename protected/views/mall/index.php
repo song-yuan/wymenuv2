@@ -33,8 +33,8 @@
             <p class="pr">¥<span class="price"><?php echo $promotionProduct['price'];?></span> <?php if($promotionProduct['price']!=$promotionProduct['original_price']):?><span class="oprice"><strike>¥<?php echo $promotionProduct['original_price'];?></strike></span><?php endif;?></p>
         </div>
         <div class="lt-rt">
-        	<div class="minus <?php if(!$promotionProduct['num']) echo 'zero';?>">-</div>
-            <input type="text" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" to-group="<?php echo $promotion['to_group'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
+        	<div class="minus <?php if(empty($promotionProduct['num'])) echo 'zero';?>">-</div>
+            <input type="text" class="result <?php if(empty($promotionProduct['num'])) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" to-group="<?php echo $promotion['to_group'];?>" readyonly value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
             <div class="add">+</div>
             <div class="clear"></div>
         </div>
@@ -56,8 +56,8 @@
             <p class="pr">¥<span class="price"><?php echo $product['price'];?></span><?php if($product['price']!=$product['original_price']):?><span class="oprice"><strike>¥<?php echo $product['original_price'];?></strike></span><?php endif;?></p>
         </div>
         <div class="lt-rt">
-        	<div class="minus <?php if(!$product['num']) echo 'zero';?>">-</div>
-            <input type="text" class="result <?php if(!$product['num']) echo 'zero';?>" product-id="<?php echo $product['lid'];?>" promote-id="-1" to-group="-1" disabled value="<?php echo $product['num']?$product['num']:0;?>">
+        	<div class="minus <?php if(empty($product['num'])) echo 'zero';?>">-</div>
+            <input type="text" class="result <?php if(empty($product['num'])) echo 'zero';?>" product-id="<?php echo $product['lid'];?>" promote-id="-1" to-group="-1" readyonly value="<?php echo $product['num']?$product['num']:0;?>">
             <div class="add">+</div>
             <div class="clear"></div>
         </div>
