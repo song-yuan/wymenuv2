@@ -237,6 +237,21 @@
 </form>
 
 <script>
+function emptyCart(){
+	var timestamp=new Date().getTime()
+    var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+	$.ajax({
+		url:'<?php echo $this->createUrl('/mall/emptyCart',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>',
+		type:'GET',
+		data:{random:random},
+		success:function(msg){
+			if(parseInt(msg)==1){
+				location.href = '<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId));?>';
+			}
+		}
+	});
+}
+window.onload = emptyCart;
 $(document).ready(function(){
 	<?php if($this->type==3):?>
 	var currYear = (new Date()).getFullYear();	
