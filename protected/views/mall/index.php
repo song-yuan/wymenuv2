@@ -13,7 +13,7 @@
   <li class="current"><a href="#st-1">特价菜</a><b></b></li>
   <?php endif;?>
   <?php foreach($categorys as $k=>$category):?>
-  <li class="<?php if($k==0&&empty($promotions)):?>current<?php endif;?>"><a href="#st<?php echo $category['lid'];?>"><?php echo $category['category_name'];?></a><b></b></li>
+  <li class="<?php if($k==0&&empty($promotions)):?>current<?php endif;?>"><a href="#st<?php echo (int)$category['lid'];?>"><?php echo $category['category_name'];?></a><b></b></li>
   <?php endforeach;?>
 </ul>
 </div>
@@ -46,7 +46,7 @@
 <!-- end特价优惠  -->
 
 <?php foreach($models as $model):?>
-  <div class="section" id="st<?php echo $model['lid'];?>">
+  <div class="section" id="st<?php echo (int)$model['lid'];?>">
     <div class="prt-title"><?php echo $model['category_name'];?></div>
     <?php foreach($model['product_list'] as $product):?>
   	<div class="prt-lt">
