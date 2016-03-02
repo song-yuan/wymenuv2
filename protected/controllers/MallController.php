@@ -65,13 +65,8 @@ class MallController extends Controller
 	public function actionIndex()
 	{
 		$userId = Yii::app()->session['userId'];
-		//特价菜
-		$promotion = new WxPromotion($this->companyId,$userId);
-		//普通优惠
-		$product = new WxProduct($this->companyId,$userId);
-		$categorys = $product->categorys;
-		$products = $product->categoryProductLists;
-		$this->render('index',array('companyId'=>$this->companyId,'categorys'=>$categorys,'models'=>$products,'promotions'=>$promotion->promotionProductList));
+	
+		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId));
 	}
 	/**
 	 * 
@@ -453,6 +448,25 @@ class MallController extends Controller
 	 	$recharges = WxRecharge::getWxRecharge($this->companyId);
 	 	$this->render('recharge',array('companyId'=>$this->companyId,'recharges'=>$recharges,'userId'=>$userId));
 	 }
+	/**
+	 * 
+	 * 获取商品
+	 * 
+	 * 
+	 */
+	public function actionGetProduct()
+	{
+		$userId = Yii::app()->request->getParam('userId');
+		//特价菜
+		$promotion = new WxPromotion($this->companyId,$userId);
+		$promotions = $promotion->promotionProductList;
+		//普通优惠
+		$product = new WxProduct($this->companyId,$userId);
+		$categorys = $product->categorys;
+		$products = $product->categoryProductLists;
+		echo json_encode(array('categorys'=>$categorys,'promotions'=>$promotions,'products'=>$products));
+		exit;
+	}
 	/**
 	 * 
 	 * 添加购物车
