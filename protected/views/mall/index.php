@@ -81,9 +81,6 @@
 
 
 <script> 
-window.onload=function(){
-	window.location.reload(true);
-}
 $(document).ready(function(){ 
     $('#nav li').click(function(){
     	var _this = $(this);
