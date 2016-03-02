@@ -80,7 +80,43 @@
 
 
 <script> 
+function setTotal(){ 
+    var s=0;
+    var v=0;
+    var n=0;
+    <!--计算总额--> 
+    $(".lt-rt").each(function(){ 
+    s+=parseInt($(this).find('input[class*=result]').val())*parseFloat($(this).siblings().find('span[class*=price]').text()); 
+
+    });
+
+    <!--计算菜种-->
+    $('li').each(function(){
+    	var nIn = $(this).find("a").attr("href");
+	    $(nIn+" input[type='text']").each(function() {
+	    	if($(this).val()!=0){
+	    		n++;
+	    	}
+	    });
+	    if(n>0){
+    		$(this).find("b").html(n).show();		
+	    }else{
+	    	$(this).find("b").hide();		
+	    }
+	    n = 0;	
+    });
+
+    <!--计算总份数-->
+    $("input[type='text']").each(function(){
+    	v += parseInt($(this).val());
+    });
+    
+    $(".share").html(v);
+    $("#total").html(s.toFixed(2)); 
+} 
 $(document).ready(function(){ 
+	window.onload = setTotal; 
+	
     $('#nav li').click(function(){
     	var _this = $(this);
         $('#nav').find('li').removeClass('current');
@@ -158,42 +194,5 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
- 
-function setTotal(){ 
-    var s=0;
-    var v=0;
-    var n=0;
-    <!--计算总额--> 
-    $(".lt-rt").each(function(){ 
-    s+=parseInt($(this).find('input[class*=result]').val())*parseFloat($(this).siblings().find('span[class*=price]').text()); 
-
-    });
-
-    <!--计算菜种-->
-    $('li').each(function(){
-    	var nIn = $(this).find("a").attr("href");
-	    $(nIn+" input[type='text']").each(function() {
-	    	if($(this).val()!=0){
-	    		n++;
-	    	}
-	    });
-	    if(n>0){
-    		$(this).find("b").html(n).show();		
-	    }else{
-	    	$(this).find("b").hide();		
-	    }
-	    n = 0;	
-    });
-
-    <!--计算总份数-->
-    $("input[type='text']").each(function(){
-    	v += parseInt($(this).val());
-    });
-    
-    $(".share").html(v);
-    $("#total").html(s.toFixed(2)); 
-} 
-setTotal(); 
-
-}) 
+});
 </script> 
