@@ -109,10 +109,10 @@ function getProduct(){
 						}
              			promotionStr +='</p></div>';
              			if(promotionProduct.num){
-             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" readyonly value="'+promotionProduct.num+'">';
+             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" readonly value="'+promotionProduct.num+'">';
             				promotionStr +='<div class="add">+</div><div class="clear"></div></div></div>';
              			}else{
-             				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" readyonly value="0">';
+             				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" readonly value="0">';
             				promotionStr +='<div class="add">+</div><div class="clear"></div></div></div>';
              			}
              		
@@ -150,10 +150,10 @@ function getProduct(){
 					}
          			productStr +='</p></div>';
          			if(pProduct.num < 1){
-         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+pProduct.product_id+'" promote-id="-1" to-group="-1" readyonly value="0">';
+         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+pProduct.product_id+'" promote-id="-1" to-group="-1" readonly value="0">';
         				productStr +='<div class="add">+</div><div class="clear"></div></div></div>';
          			}else{
-         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.product_id+'" promote-id="-1" to-group="-1" readyonly value="'+pProduct.num+'">';
+         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.product_id+'" promote-id="-1" to-group="-1" readonly value="'+pProduct.num+'">';
         				productStr +='<div class="add">+</div><div class="clear"></div></div></div>';
          			}
          		
