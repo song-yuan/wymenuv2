@@ -82,9 +82,9 @@
 
 <script> 
 window.onload=function(){
-	if (location.href.indexOf("?random=")<0)
+	if (location.href.indexOf("?xyz=")<0)
 	{
-		location.href=location.href+'?random='+Math.random();
+		location.href=location.href+"?xyz="+Math.random();
 	}
 }
 $(document).ready(function(){ 
