@@ -237,7 +237,19 @@
 </form>
 
 <script>
+function emptyCart(){
+	$.ajax({
+		url:'<?php echo $this->createUrl('/mall/emptyCart',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>',
+		dataType:'get',
+		success:function(msg){
+			if(parseInt(msg)==1){
+				location.href = '<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId));?>';
+			}
+		}
+	});
+}
 $(document).ready(function(){
+	window.onload = emptyCart;
 	<?php if($this->type==3):?>
 	var currYear = (new Date()).getFullYear();	
 	var opt={};
