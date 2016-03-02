@@ -81,6 +81,12 @@
 
 
 <script> 
+window.onload=function(){
+	if (location.href.indexOf("?random=")<0)
+	{
+		location.href=location.href+'?random='+Math.random();
+	}
+}
 $(document).ready(function(){ 
     $('#nav li').click(function(){
     	var _this = $(this);
