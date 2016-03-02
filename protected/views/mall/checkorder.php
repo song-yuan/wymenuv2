@@ -245,15 +245,14 @@ function emptyCart(){
 		type:'GET',
 		data:{random:random},
 		success:function(msg){
-			alert(msg);
 			if(parseInt(msg)==1){
 				location.href = '<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId));?>';
 			}
 		}
 	});
 }
+window.onload = emptyCart;
 $(document).ready(function(){
-	window.onload = emptyCart;
 	<?php if($this->type==3):?>
 	var currYear = (new Date()).getFullYear();	
 	var opt={};
