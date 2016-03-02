@@ -94,6 +94,7 @@ function setTotal(){
     $('li').each(function(){
     	var nIn = $(this).find("a").attr("href");
 	    $(nIn+" input[type='text']").each(function() {
+	    	alert(nIn);
 	    	if($(this).val()!=0){
 	    		n++;
 	    	}
