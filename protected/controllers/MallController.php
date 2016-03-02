@@ -572,6 +572,23 @@ class MallController extends Controller
 		}
 		Yii::app()->end($msg);
 	}
+	/**
+	 * 
+	 * 判断购物车是否为空
+	 * 
+	 */
+	public function actionEmptyCart()
+	{
+		$userId = Yii::app()->request->getParam('userId');
+		$companyId = Yii::app()->request->getParam('companyId');
+		$carts = WxCart::isEmptyCart($userId,$companyId);
+		if(empty($carts)){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+	}
 	private function weixinServiceAccount() {	
 		$this->weixinServiceAccount = WxAccount::get($this->companyId);
 	}
