@@ -242,6 +242,7 @@ function emptyCart(){
 		url:'<?php echo $this->createUrl('/mall/emptyCart',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>',
 		type:'GET',
 		success:function(msg){
+			alert(msg);
 			if(parseInt(msg)==1){
 				location.href = '<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId));?>';
 			}
