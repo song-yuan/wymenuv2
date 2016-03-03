@@ -79,16 +79,16 @@
 	<div class="ht1"></div>
 	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
-		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $order['seating_fee']?$order['seating_fee']:'免费';?></div>
+		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php else:?>
 	<div class="item">
-		<div class="lt">包装费:</div><div class="rt">￥<?php echo $order['packing_fee']?$order['packing_fee']:'免费';?></div>
+		<div class="lt">包装费:</div><div class="rt">￥<?php echo $packingFee?number_format($packingFee,2):'免费';?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
-		<div class="lt">配送费:</div><div class="rt">￥<?php echo $order['freight_fee']?$order['freight_fee']:'免费';?></div>
+		<div class="lt">配送费:</div><div class="rt">￥<?php echo $freightFee?number_format($freightFee):'免费';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>

@@ -72,18 +72,18 @@
 	<?php if($order['order_type']==1):?>
 	<div class="item">
 		<div class="lt">餐位费:</div>
-		<div class="rt">X1 ￥<?php echo $order['seating_fee'];?></div>
+		<div class="rt">X1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php else:?>
 	<div class="item">
 		<div class="lt">包装费:</div>
-		<div class="rt">X1 ￥<?php echo $order['packing_fee'];?></div>
+		<div class="rt">X1 ￥<?php echo $packingFee?number_format($packingFee,2):'免费';?></div>
 		<div class="clear"></div>
 	</div>
 	<div class="item">
 		<div class="lt">配送费:</div>
-		<div class="rt">X1 ￥<?php echo $order['freight_fee'];?></div>
+		<div class="rt">X1 ￥<?php echo $freightFee?number_format($freightFee):'免费';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
