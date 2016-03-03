@@ -278,8 +278,8 @@ class WxOrder
 									'is_sync'=>DataSync::getInitSync(),
 									);
 					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-					$orderPrice +=  $this->seatingFee;
-				 	$realityPrice += $this->seatingFee;
+					$orderPrice +=  $this->seatingFee*$this->number;
+				 	$realityPrice += $this->seatingFee*$this->number;
 			  }else{
 			  		$se = new Sequence("order_product");
 			    	$orderProductId = $se->nextval();
@@ -301,8 +301,8 @@ class WxOrder
 									'is_sync'=>DataSync::getInitSync(),
 									);
 					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-					$orderPrice +=  $this->packingFee;
-				 	$realityPrice += $this->packingFee;
+					$orderPrice +=  $this->packingFee*$this->cartNumber;
+				 	$realityPrice += $this->packingFee*$this->cartNumber;
 				 	
 				 	$se = new Sequence("order_product");
 			    	$orderProductId = $se->nextval();
