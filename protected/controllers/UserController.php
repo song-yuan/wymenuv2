@@ -363,7 +363,7 @@ class UserController extends Controller
 			$content = '【物易科技】您的验证码是：'.$code;
 			$result = WxSentMessage::sentMessage($mobile,$content);
 			$resArr = json_decode($result);
-			if($resArr['returnstatus']=='Success'){
+			if($resArr->returnstatus=='Success'){
 				echo 1;
 			}else{
 				echo 0;

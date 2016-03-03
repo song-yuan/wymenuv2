@@ -118,7 +118,8 @@
     		if($(this).hasClass('disable')){
     			return;
     		}
-    		var mobile = $('#mobile').val()
+    		var mobile = $('#mobile').val();
+    		$('.sentMessage').addClass('disable');
     		$.ajax({
     			url:'<?php echo $this->createUrl('/user/ajaxSentMessage',array('companyId'=>$this->companyId));?>',
     			data:{mobile:mobile},
@@ -127,7 +128,6 @@
     					$('#dialog2').find('.weui_dialog_bd').html('发送失败!');
            	 			$('#dialog2').show();
     				}else{
-    					$('.sentMessage').addClass('disable');
            	 			setTime();
     				}
     			}
