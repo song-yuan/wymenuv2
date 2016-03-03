@@ -125,7 +125,7 @@
     			data:{mobile:mobile},
     			success:function(msg){
     				if(!parseInt(msg)){
-    					$('#dialog2').find('.weui_dialog_bd').html('发送失败!');
+    					$('#dialog2').find('.weui_dialog_bd').html('发送失败!'+msg);
            	 			$('#dialog2').show();
     				}else{
            	 			setTime();
