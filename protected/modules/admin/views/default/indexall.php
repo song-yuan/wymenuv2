@@ -472,7 +472,7 @@
                                                                     }
                                                                 endforeach;
                                                             ?>
-                                                            <li class="productSetClick" search="search" lid="<?php echo $productSet->lid; ?>" simplecode="<?php echo $productSet->simple_code;?>" setselect="<?php echo $setdetail; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
+                                                            <li class="productSetClick" search="search" lid="<?php echo $productSet->lid; ?>" producttype="0" simplecode="<?php echo $productSet->simple_code;?>" setselect="<?php echo $setdetail; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
                                                     <?php                                                         
                                                     endforeach; ?>
                                                    <!-- product list -->
@@ -482,7 +482,7 @@
                                                             <?php 
                                                                 foreach ($products as $product): 
                                                                     if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
-                                                                    <li class="productClick" search="search" lid="<?php echo $product->lid; ?>" simplecode="<?php echo $product->simple_code;?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>" name="<?php echo $product->product_name; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
+                                                                    <li class="productClick" search="search" lid="<?php echo $product->lid; ?>" producttype="0" simplecode="<?php echo $product->simple_code;?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>" name="<?php echo $product->product_name; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
                                                             <?php  endif;                                                         
                                                             endforeach; ?>
                                                     <?php 
@@ -499,7 +499,7 @@
                                                     <?php 
                                                          foreach ($feeTypes as $feeType): 
                                                           	?>
-                                                          	<li class="productTypeClick" search="search" lid="<?php echo $feeType->lid; ?>"  price="<?php echo $feeType->fee_price; ?>" name="<?php echo $feeType->fee_name; ?>"><?php echo $feeType->fee_name; ?>(<?php echo $feeType->fee_price; ?>)</li>                                                                    
+                                                          	<li class="productTypeClick" search="search" lid="<?php echo $feeType->lid; ?>" producttype="<?php echo $feeType->fee_type;?>"  price="<?php echo $feeType->fee_price;?>" name="<?php echo $feeType->fee_name; ?>"><?php echo $feeType->fee_name; ?>(<?php echo $feeType->fee_price; ?>)</li>                                                                    
                                                           	<?php                                                         
                                                     endforeach; ?>                                           
                                                 </ul>
@@ -524,7 +524,7 @@
                                                                     }
                                                                 endforeach;
                                                             ?>
-                                                            <li class="productSetClick" lid="<?php echo $productSet->lid; ?>" setselect="<?php echo $setdetail; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
+                                                            <li class="productSetClick" lid="<?php echo $productSet->lid; ?>" producttype="0" setselect="<?php echo $setdetail; ?>" store="<?php echo $productSet->store_number; ?>" price="<?php echo $setprice[$productSet->lid]; ?>"><?php echo $productSet->set_name; ?>(<?php echo $setprice[$productSet->lid]; ?>)</li>                                                                    
                                                     <?php                                                         
                                                     endforeach; ?>                                                    
                                                 </ul>
@@ -546,7 +546,7 @@
                                                             <?php 
                                                                 foreach ($products as $product): 
                                                                     if($product->is_show=="1" and $product->category_id==$categorie2->lid):?>
-                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>" name="<?php echo $product->product_name; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
+                                                                    <li class="productClick" lid="<?php echo $product->lid; ?>" producttype="0" store="<?php echo $product->store_number; ?>" price="<?php echo $product->original_price; ?>" name="<?php echo $product->product_name; ?>"><?php echo $product->product_name; ?>(<?php echo $product->original_price; ?>)</li>                                                                    
                                                             <?php  endif;                                                         
                                                             endforeach; ?>
                                                     <?php 
@@ -1064,12 +1064,14 @@
                 var price="";
                 var pname="";
                 var number="";
+                var ptype="0";
                 $.each($("#product-set-detail").find(".selectSetProduct.active"),function(skey,sobj){
                     lid=sobj.getAttribute("productid");
                     price=sobj.getAttribute("price");
                     pname=sobj.getAttribute("pname");
                     number=sobj.getAttribute("number");
-                    addProductInTempOrder(setid,lid,price,pname,number);
+                    ptype=sobj.getAttribute("producttype");
+                    addProductInTempOrder(setid,lid,price,pname,ptype,number);
                 });  
                 //$("#productTempOrderNum").val(parseInt($("#productTempOrderNum").val())+1);
                 layer.close(layer_productset_click);
@@ -1094,8 +1096,9 @@
 //                str = str.replace(new RegExp(reg2,"g"),change1);
 //                objset.attr("setselect",str);
             }); 
+            //添加ptype
             
-            function addProductInTempOrder(setid,lid,origin_price,pname,number)
+            function addProductInTempOrder(setid,lid,origin_price,pname,ptype,number)
             {
                 var obj=$('.selectProductA[productid="'+lid+'"][order_status="0"][setid="'+setid+'"]');//.find('span[class="badge"]'); 
                 var taotext="";
@@ -1123,6 +1126,7 @@
                                   +'  <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>'
                                   +'      <span class="selectProductNowPrice" style="color:#976125">'+origin_price+'</span>'
                                   +'      <span style="position:absolute;" class="selectProductName">'+pname+'</span>'
+                                  +'      <span style="position:absolute;display:none;" class="selectProductType">'+ptype+'</span>'//tianjiaCF
                                   +'      <img class="selectProductDel" style="position: absolute;right:0.3em; width: 2.5em;height: 2.0em;padding:5px 10px 5px 10px;" '
                                   +'           src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png"> '                                  
                                   +' </li>'
@@ -1136,14 +1140,17 @@
             $('.productClick').on(event_clicktouchstart, function(){
                 var origin_price=$(this).attr("price");
                 var lid=$(this).attr("lid");
-                var pname=$(this).attr("name");                
-                addProductInTempOrder("0000000000",lid,origin_price,pname,1);
-            });            
+                var pname=$(this).attr("name"); 
+                var ptype=$(this).attr("producttype");               
+                addProductInTempOrder("0000000000",lid,origin_price,pname,ptype,1);
+            }); 
+            //添加CF           
             $('.productTypeClick').on(event_clicktouchstart, function(){
                 var origin_price=$(this).attr("price");
                 var lid=$(this).attr("lid");
-                var pname=$(this).attr("name");                
-                addProductInTempOrder("0000000000",lid,origin_price,pname,1);
+                var pname=$(this).attr("name");
+                var ptype=$(this).attr("producttype");                 
+                addProductInTempOrder("0000000000",lid,origin_price,pname,ptype,1);
             });
             
             function getallproductinfo()
@@ -1169,6 +1176,7 @@
                     tempproduct=tempproduct+","+$(this).attr("tasteids");
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductPrice']").text();
+                    tempproduct=tempproduct+","+$(this).find("span[class='selectProductType']").text();
                     
                     if(productlist!="")
                     {
