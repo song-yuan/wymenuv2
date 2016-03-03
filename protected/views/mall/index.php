@@ -191,7 +191,7 @@ $(document).ready(function(){
        
     });
 
-    $("#container").on('click','.add',function(){
+    $("#container").on('touchstart','.add',function(){
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
@@ -218,7 +218,7 @@ $(document).ready(function(){
         });
     });
      
-    $("#container").on('click','.minus',function(){ 
+    $("#container").on('touchstart','.minus',function(){ 
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
