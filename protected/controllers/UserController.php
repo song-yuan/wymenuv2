@@ -340,7 +340,8 @@ class UserController extends Controller
 	{
 		$mobile = Yii::app()->request->getParam('mobile');
 		$code = Yii::app()->request->getParam('code');
-		
+		$mobile = trim($mobile);
+		$code = trim($code);
 		if(isset(Yii::app()->session[$mobile]) && Yii::app()->session[$mobile] == $code){
 			echo 1;
 		}else{

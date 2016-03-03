@@ -32,7 +32,7 @@
 			</li>
 		</ul>
 		<input type="hidden" name="address[user_id]" value="<?php echo $userId;?>"/>
-		<input type="hidden" name="address[lid]" value=""<?php echo $address?$address['lid']:'-1';?>"/>
+		<input type="hidden" name="address[lid]" value="<?php echo $address?$address['lid']:'-1';?>"/>
 		<div class="bttnbar">
 		<button class="bttn_black2 bttn_large" type="button"><a href="<?php echo $this->createUrl('/user/address',array('companyId'=>$this->companyId));?>">取消</a></button>
 		<button class="bttn_black2 bttn_large" type="submit">保存</button>

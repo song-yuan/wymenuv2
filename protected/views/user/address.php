@@ -33,6 +33,6 @@
 var list = document.getElementById("list");
 new SwipeOut(list);
 list.addEventListener("delete", function(evt) {
-	alert('地址已删除');
+
 });
 </script>
