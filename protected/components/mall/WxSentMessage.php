@@ -15,8 +15,8 @@ class WxSentMessage
 	 */
 	public static function sentMessage($mobile,$content = ''){
 		$userid = '';
-		$account = 'jl01';
-		$password = 'ab123456';
+		$account = 'jksc344';
+		$password = 'wymenu6688';
 		$url = 'http://sh2.ipyy.com/smsJson.aspx?action=send&userid='.$userid.'&account='.$account.'&password='.$password.'&mobile='.trim($mobile).'&content='.$content.'&sendTime=&extno=';
 		$result = Curl::httpsRequest($url);
 		return $result;
