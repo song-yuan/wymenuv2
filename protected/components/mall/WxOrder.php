@@ -84,7 +84,7 @@ class WxOrder
 	public function getSite(){
 		$site = WxSite::get($this->siteId,$this->dpid);
 		if(!in_array($site['status'],array(1,2,3))){
-			if($this->number){
+			if(empty($this->number)){
 				 throw new Exception('开台餐位数不能为0，请添加餐位数！');
 			}
 			$this->orderOpenSite();

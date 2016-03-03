@@ -438,7 +438,8 @@
                                             <li lid="<?php echo $categorie->lid; ?>" class="tabProduct"><?php echo $categorie->category_name; ?></li>
                                         <?php 
                                             endif;
-                                        endforeach; ?>                                       
+                                        endforeach; ?>
+                                        <li lid="producttype" class="tabProduct">其他</li>                                       
                                         
                                 </ul>
                             </div>
@@ -491,6 +492,20 @@
                                             </div>                                        												
                                         </div>
                                     </div>
+                                    <div class="tab-content" style="display:none;" lid="producttype">                                        
+                                        <div style="width:100%;height:100%;">
+                                            <div class="product_list product_typelist">
+                                                <ul class="">
+                                                    <?php 
+                                                         foreach ($feeTypes as $feeType): 
+                                                          	?>
+                                                          	<li class="productTypeClick" search="search" lid="<?php echo $feeType->lid; ?>"  price="<?php echo $feeType->fee_price; ?>" name="<?php echo $feeType->fee_name; ?>"><?php echo $feeType->fee_name; ?>(<?php echo $feeType->fee_price; ?>)</li>                                                                    
+                                                          	<?php                                                         
+                                                    endforeach; ?>                                           
+                                                </ul>
+                                            </div>                                        												
+                                        </div>
+                                    </div>
                                     <div class="tab-content" style="display:none;" lid="productset">                                        
                                         <div style="width:100%;height:100%;">
                                             <div class="product_list">
@@ -516,6 +531,7 @@
                                             </div>                                        												
                                         </div>
                                     </div>
+                                   
                                 <?php 
                                 foreach ($categories as $categorie): 
                                     if($categorie->pid=="0000000000"):?>
@@ -1123,7 +1139,12 @@
                 var pname=$(this).attr("name");                
                 addProductInTempOrder("0000000000",lid,origin_price,pname,1);
             });            
-           
+            $('.productTypeClick').on(event_clicktouchstart, function(){
+                var origin_price=$(this).attr("price");
+                var lid=$(this).attr("lid");
+                var pname=$(this).attr("name");                
+                addProductInTempOrder("0000000000",lid,origin_price,pname,1);
+            });
             
             function getallproductinfo()
             {
