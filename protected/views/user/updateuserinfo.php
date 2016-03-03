@@ -44,7 +44,7 @@
     </div>
 </div>
 <div class="bttnbar">
-	<button class="bttn_black2 bttn_large" type="button"><a href="<?php echo Yii::app()->request->urlReferrer;?>">取消</a></button>
+	<button class="bttn_black2 bttn_large backUrl" type="button">取消</button>
 	<button class="bttn_black2 bttn_large" type="submit">保存</button>
 </div>
 <input type="hidden" name="user[lid]" value="<?php echo $user['lid'];?>"/>
@@ -133,6 +133,9 @@
     	
     	$('#confirm').click(function(){
     		$('#dialog2').hide();
+    	});
+    	$('.backUrl').click(function(){
+    		history.go(-1);
     	});
     });
 </script>

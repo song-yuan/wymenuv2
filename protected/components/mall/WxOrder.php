@@ -96,7 +96,7 @@ class WxOrder
 	public function getSeatingFee(){
 		$isSeatingFee = WxCompanyFee::get(1,$this->dpid);
 		if($isSeatingFee){
-			$this->seatingFee = $isSeatingFee['fee_price']*$this->number;
+			$this->seatingFee = $isSeatingFee['fee_price'];
 		}else{
 			$this->seatingFee = 0;
 		}
@@ -105,7 +105,7 @@ class WxOrder
 	public function getPackingFee(){
 		$isPackingFee = WxCompanyFee::get(2,$this->dpid);
 		if($isPackingFee){
-			$this->packingFee = $isPackingFee['fee_price']*$this->cartNumber;
+			$this->packingFee = $isPackingFee['fee_price'];
 		}else{
 			$this->packingFee = 0;
 		}
@@ -391,7 +391,7 @@ class WxOrder
 	    return $orderProduct;
 	}
 	public static function getOrderProductByType($orderId,$dpid,$type){
-		$sql = 'select t.price,t.amount,t.is_retreat,t1.product_name,t1.main_picture,t.original_price from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.product_type=:type and t.delete_flag=0';
+		$sql = 'select t.price,t.amount,t.is_retreat from nb_order_product t where t.order_id = :orderId and t.dpid = :dpid and t.product_type=:type and t.delete_flag=0';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':orderId',$orderId)
 				  ->bindValue(':dpid',$dpid)
@@ -449,6 +449,9 @@ class WxOrder
 	public static function updateOrderTotal($order){
 		$total = 0;
 		$oTotal = 0;
+		$seatingFee = 0;
+		$packingFee = 0;
+		$freightFee = 0;
 		$orderId = $order['lid'];
 		$dpid = $order['dpid'];
 		$orderProducts = self::getOrderProduct($orderId,$dpid);
@@ -458,6 +461,20 @@ class WxOrder
 				$oTotal += $product['original_price']*$product['amount'];
 			}
 		}
+		$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+		foreach($seatingProducts as $seatingProduct){
+			$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
+		}
+		$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
+		foreach($packingProducts as $packingProduct){
+			$packingFee += $packingProduct['price']*$packingProduct['amount'];
+		}
+		$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,3);
+		foreach($freightProducts as $freightProduct){
+			$freightFee += $freightProduct['price']*$freightProduct['amount'];
+		}
+			
+		$total = $total + $seatingFee + $packingFee + $freightFee;
 		
 		if($order['cupon_branduser_lid']==0 && $total!=$order['should_total']){
 			$orderPay = WxOrderPay::get($dpid,$orderId);
