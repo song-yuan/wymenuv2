@@ -461,15 +461,15 @@ class WxOrder
 				$oTotal += $product['original_price']*$product['amount'];
 			}
 		}
-		$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+		$seatingProducts = WxOrder::getOrderProductByType($orderId,$dpid,1);
 		foreach($seatingProducts as $seatingProduct){
 			$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
 		}
-		$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
+		$packingProducts = WxOrder::getOrderProductByType($orderId,$dpid,2);
 		foreach($packingProducts as $packingProduct){
 			$packingFee += $packingProduct['price']*$packingProduct['amount'];
 		}
-		$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,3);
+		$freightProducts = WxOrder::getOrderProductByType($orderId,$dpid,3);
 		foreach($freightProducts as $freightProduct){
 			$freightFee += $freightProduct['price']*$freightProduct['amount'];
 		}
