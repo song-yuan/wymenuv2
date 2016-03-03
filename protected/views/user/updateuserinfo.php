@@ -27,7 +27,7 @@
             <div class="weui_cell_bd weui_cell_primary">
                 <input class="weui_input" id="mobile" name="user[mobile_num]" type="tel" placeholder="请输入联系方式" value="<?php echo $user['mobile_num'];?>"/>
             </div>
-            <div class="weui_cell_ft sentMessage" style="font-size:100%;padding-left:5px;border-left:1px solid #888;">获取验证码<span id="countdown"></span></div>
+            <div class="weui_cell_ft sentMessage" style="font-size:100%;padding-left:5px;border-left:1px solid #888;"><span id="countSpan">获取验证码</span><span id="countdown"></span></div>
         </div>
         <div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">验证码</label></div>
@@ -123,10 +123,13 @@
     			url:'<?php echo $this->createUrl('/user/ajaxSentMessage',array('companyId'=>$this->companyId));?>',
     			data:{mobile:mobile},
     			success:function(msg){
-    				$('#dialog2').find('.weui_dialog_bd').html(msg);
-           	 		$('#dialog2').show();
-           	 		$('.sentMessage').addClass('disable')
-           	 		setTime();
+    				if(!parseInt(msg)){
+    					$('#dialog2').find('.weui_dialog_bd').html('发送失败!');
+           	 			$('#dialog2').show();
+    				}else{
+    					$('.sentMessage').addClass('disable');
+           	 			setTime();
+    				}
     			}
     		});
     	});
