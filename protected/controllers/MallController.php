@@ -267,19 +267,19 @@ class MallController extends Controller
 		if(in_array($order['order_type'],array(1,3))){
 			$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
 			foreach($seatingProducts as $seatingProduct){
-				$seatingFee += $seatingProduct['price'];
+				$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
 			}
 		}else{
 			$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
 			foreach($packingProducts as $packingProduct){
-				$packingFee += $packingProduct['price'];
+				$packingFee += $packingProduct['price']*$packingProduct['amount'];
 			}
-			$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+			$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,3);
 			foreach($freightProducts as $freightProduct){
-				$freightFee += $freightProduct['price'];
+				$freightFee += $freightProduct['price']*$freightProduct['amount'];
 			}
 		}
-		
+
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		
 		$user = WxBrandUser::get($userId,$this->companyId);
