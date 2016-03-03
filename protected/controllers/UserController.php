@@ -340,8 +340,10 @@ class UserController extends Controller
 	{
 		$mobile = Yii::app()->request->getParam('mobile');
 		$code = Yii::app()->request->getParam('code');
-		
-		if(isset(Yii::app()->session[$mobile]) && Yii::app()->session[$mobile] == $code){
+		$mobile = trim($mobile);
+		$code = trim($code);
+		$result = WxSentMessage::getCode($this->companyId,$mobile);
+		if($result && $result['code'] == $code){
 			echo 1;
 		}else{
 			echo 0;
@@ -357,11 +359,18 @@ class UserController extends Controller
 	{
 		$mobile = Yii::app()->request->getParam('mobile');
 		$code = rand(1000,9999);
-		Yii::app()->session[$mobile] = $code;
-		
-		$content = '【物易科技】您的验证码是：'.$code;
-		$result = WxSentMessage::sentMessage($mobile,$content);
-		echo $result;
+		if(WxSentMessage::insert($this->companyId,$mobile,$code)){
+			$content = '【物易科技】您的验证码是：'.$code;
+			$result = WxSentMessage::sentMessage($mobile,$content);
+			$resArr = json_decode($result);
+			if($resArr->returnstatus=='Success'){
+				echo 1;
+			}else{
+				echo 0;
+			}
+		}else{
+			echo 0;
+		}
 		exit;
 	}
 	private function weixinServiceAccount() {	
