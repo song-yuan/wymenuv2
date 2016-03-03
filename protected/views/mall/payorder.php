@@ -1,7 +1,6 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('支付订单');
-	
 	$payYue = 0.00;
 	if(!empty($orderPays)){
 		foreach($orderPays as $orderPay){
