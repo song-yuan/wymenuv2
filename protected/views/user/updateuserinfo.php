@@ -44,7 +44,7 @@
     </div>
 </div>
 <div class="bttnbar">
-	<button class="bttn_black2 bttn_large" type="button"><a href="<?php echo $this->createUrl('/user/index',array('companyId'=>$this->companyId));?>">取消</a></button>
+	<button class="bttn_black2 bttn_large" type="button"><a href="<?php echo Yii::app()->request->urlReferrer;?>">取消</a></button>
 	<button class="bttn_black2 bttn_large" type="submit">保存</button>
 </div>
 <input type="hidden" name="user[lid]" value="<?php echo $user['lid'];?>"/>

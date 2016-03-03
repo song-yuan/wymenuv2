@@ -43,7 +43,7 @@
 <div class="order-title">确认订单</div>
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
-<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'];}?>><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteOpen){echo '0';}else{if($siteNum){ echo (int)$siteNum['max_persons'];}else{echo '3';}}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
+<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'].'>';}?><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteOpen){echo '0';}else{if($siteNum){ echo (int)$siteNum['max_persons'];}else{echo '3';}}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
 <?php elseif($this->type==2):?>
 <!-- 地址 -->
 <div class="address arrowright">
