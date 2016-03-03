@@ -187,4 +187,12 @@ class WxCart
 		$sql = 'update nb_cart set site_id='.$siteId.',is_sync='.$isSync.' where dpid='.$dpid.' and user_id='.$userId.' and site_id!='.$siteId;
 		Yii::app()->db->createCommand($sql)->execute();
 	}
+	public static function isEmptyCart($userId,$dpid){
+		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId';
+		$results = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':userId',$userId)
+				  ->queryAll();
+		return $results;
+	}
 }

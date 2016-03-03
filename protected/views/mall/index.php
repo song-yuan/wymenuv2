@@ -2,7 +2,6 @@
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('点单');
 ?>
-
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
@@ -10,62 +9,17 @@
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <div class="nav-lf">
 <ul id="nav">
-  <?php if(!empty($promotions)):?>
-  <li class="current"><a href="#st-1">特价菜</a><b></b></li>
-  <?php endif;?>
-  <?php foreach($categorys as $k=>$category):?>
-  <li class="<?php if($k==0&&empty($promotions)):?>current<?php endif;?>"><a href="#st<?php echo $category['lid'];?>"><?php echo $category['category_name'];?></a><b></b></li>
-  <?php endforeach;?>
+  
 </ul>
 </div>
 
 
 <div id="container" class="container">
 <!-- 特价优惠  -->
-<?php if(!empty($promotions)):?>
-<?php foreach($promotions as $promotion):?>
-<div class="section" id="st-1">
-    <div class="prt-title"><?php echo $promotion['promotion_title'];?></div>
-    <?php foreach($promotion['productList'] as $promotionProduct):?>
-  	<div class="prt-lt">
-    	<div class="lt-lt"><img src="<?php echo $promotionProduct['main_picture'];?>"></div>
-        <div class="lt-ct">
-        	<p><span><?php echo $promotionProduct['product_name'];?></span> <span><?php if($promotionProduct['spicy']==1):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/><?php elseif($promotionProduct['spicy']==2):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:30px;height:20px;"/><?php elseif($promotionProduct['spicy']==3):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:45px;height:20px;"/><?php endif;?></span></p>
-            <p class="pr">¥<span class="price"><?php echo $promotionProduct['price'];?></span> <?php if($promotionProduct['price']!=$promotionProduct['original_price']):?><span class="oprice"><strike>¥<?php echo $promotionProduct['original_price'];?></strike></span><?php endif;?></p>
-        </div>
-        <div class="lt-rt">
-        	<div class="minus <?php if(!$promotionProduct['num']) echo 'zero';?>">-</div>
-            <input type="text" class="result <?php if(!$promotionProduct['num']) echo 'zero';?>" product-id="<?php echo $promotionProduct['product_id'];?>" promote-id="<?php echo $promotion['private_promotion_id'];?>" to-group="<?php echo $promotion['to_group'];?>" disabled value="<?php echo $promotionProduct['num']?$promotionProduct['num']:0;?>">
-            <div class="add">+</div>
-            <div class="clear"></div>
-        </div>
-    </div>
-    <?php endforeach;?>
-  </div>
-<?php endforeach;?>
-<?php endif;?>
+
 <!-- end特价优惠  -->
 
-<?php foreach($models as $model):?>
-  <div class="section" id="st<?php echo $model['lid'];?>">
-    <div class="prt-title"><?php echo $model['category_name'];?></div>
-    <?php foreach($model['product_list'] as $product):?>
-  	<div class="prt-lt">
-    	<div class="lt-lt"><img src="<?php echo $product['main_picture'];?>"></div>
-        <div class="lt-ct">
-        	<p><span><?php echo $product['product_name'];?></span> <span><?php if($product['spicy']==1):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/><?php elseif($product['spicy']==2):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:30px;height:20px;"/><?php elseif($product['spicy']==3):?><img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:45px;height:20px;"/><?php endif;?></span></p>
-            <p class="pr">¥<span class="price"><?php echo $product['price'];?></span><?php if($product['price']!=$product['original_price']):?><span class="oprice"><strike>¥<?php echo $product['original_price'];?></strike></span><?php endif;?></p>
-        </div>
-        <div class="lt-rt">
-        	<div class="minus <?php if(!$product['num']) echo 'zero';?>">-</div>
-            <input type="text" class="result <?php if(!$product['num']) echo 'zero';?>" product-id="<?php echo $product['lid'];?>" promote-id="-1" to-group="-1" disabled value="<?php echo $product['num']?$product['num']:0;?>">
-            <div class="add">+</div>
-            <div class="clear"></div>
-        </div>
-    </div>
-    <?php endforeach;?>
-  </div>
-<?php endforeach;?> 
+
    
 </div>
 
@@ -81,8 +35,142 @@
 
 
 <script> 
+function setTotal(){ 
+    var s=0;
+    var v=0;
+    var n=0;
+    <!--计算总额--> 
+    $(".lt-rt").each(function(){ 
+    s+=parseInt($(this).find('input[class*=result]').val())*parseFloat($(this).siblings().find('span[class*=price]').text()); 
+
+    });
+
+    <!--计算菜种-->
+    $('li').each(function(){
+    	var nIn = $(this).find("a").attr("href");
+	    $(nIn).find("input[type='text']").each(function() {
+	    	if(parseInt($(this).val()) > 0){
+	    		n++;
+	    	}
+	    });
+	    if(n>0){
+    		$(this).find("b").html(n).show();		
+	    }else{
+	    	$(this).find("b").hide();		
+	    }
+	    n = 0;	
+    });
+
+    <!--计算总份数-->
+    $("input[type='text']").each(function(){
+    	v += parseInt($(this).val());
+    });
+    
+    $(".share").html(v);
+    $("#total").html(s.toFixed(2)); 
+} 
+function getProduct(){
+	layer.load(2);
+	var timestamp=new Date().getTime()
+    var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+	$.ajax({
+		url:'<?php echo $this->createUrl('/mall/getProduct',array('companyId'=>$this->companyId,'userId'=>$userId));?>',
+		data:{random:random},
+		dataType:'json',
+		timeout:'30000',
+		success:function(data){
+			var categorys = data.categorys;
+			var promotions = data.promotions;
+			var products = data.products;
+			var navLi = '';
+			var promotionStr = '';
+			var productStr = '';
+			
+			if(promotions.length > 0){
+				navLi += '<li class="current"><a href="#st-1">特价菜</a><b></b></li>';
+				
+				for(var i in promotions){
+					var promotion = promotions[i];
+					promotionStr +='<div class="section" id="st-1"><div class="prt-title">' + promotion.promotion_title + '</div>';
+					for(var ip in promotion.productList){
+						var promotionProduct = promotion.productList[ip];
+						promotionStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+promotionProduct.main_picture+'"></div>';
+						promotionStr +='<div class="lt-ct"><p><span>'+ promotionProduct.product_name +'</span> <span>';
+						if(promotionProduct.spicy==1){
+							promotionStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/>';
+						}else if(promotionProduct.spicy==2){
+							promotionStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/>';
+						}else if(promotionProduct.spicy==3){
+							promotionStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span></p>';
+						}
+						promotionStr +='<p class="pr">¥<span class="price">'+promotionProduct.price+'</span>';
+						if(promotionProduct.price != promotionProduct.original_price){
+							promotionStr +='<span class="oprice"><strike>¥'+promotionProduct.original_price+'</strike></span>';
+						}
+             			promotionStr +='</p></div>';
+             			if(promotionProduct.num){
+             				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" readonly value="'+promotionProduct.num+'">';
+            				promotionStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+             			}else{
+             				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" readonly value="0">';
+            				promotionStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+             			}
+             		
+					}
+					promotionStr +='</div>';
+				}
+			}
+			
+			for(var k in categorys){
+				var category = categorys[k];
+				if((k==0) && (promotions.length==0)){
+					navLi += '<li class="current"><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
+				}else{
+					navLi += '<li class=""><a href="#st' + category.lid + '">' + category.category_name + '</a><b></b></li>';
+				}
+			}
+			
+			for(var p in products){
+				var product = products[p];
+				productStr +='<div class="section" id="st'+ product.lid  +'"><div class="prt-title">' + product.category_name + '</div>';
+				for(var pp in product.product_list){
+					var pProduct = product.product_list[pp];
+					productStr +='<div class="prt-lt"><div class="lt-lt"><img src="'+pProduct.main_picture+'"></div>';
+					productStr +='<div class="lt-ct"><p><span>'+ pProduct.product_name +'</span> <span>';
+					if(pProduct.spicy==1){
+						productStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy1.png" style="width:15px;height:20px;"/>';
+					}else if(pProduct.spicy==2){
+						productStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy2.png" style="width:15px;height:20px;"/>';
+					}else if(pProduct.spicy==3){
+						productStr +='<img src="<?php echo $baseUrl;?>/img/mall/index/spicy3.png" style="width:15px;height:20px;"/></span></p>';
+					}
+					productStr +='<p class="pr">¥<span class="price">'+pProduct.price+'</span>';
+					if(pProduct.price != pProduct.original_price){
+						productStr +='<span class="oprice"><strike>¥'+pProduct.original_price+'</strike></span>';
+					}
+         			productStr +='</p></div>';
+         			if(pProduct.num < 1){
+         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" readonly value="0">';
+        				productStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+         			}else{
+         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" readonly value="'+pProduct.num+'">';
+        				productStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+         			}
+         		
+				}
+				productStr +='</div>';
+			}
+			$('#nav').append(navLi);
+			$('#container').append(promotionStr + productStr);
+			setTotal();
+			layer.closeAll('loading');
+		},
+	});
+}
 $(document).ready(function(){ 
-    $('#nav li').click(function(){
+	window.load = getProduct(); 
+	
+    $('#nav').on('click','li',function(){
     	var _this = $(this);
         $('#nav').find('li').removeClass('current');
         _this.addClass('current');
@@ -103,7 +191,7 @@ $(document).ready(function(){
        
     });
 
-    $(".add").click(function(){
+    $("#container").on('touchstart','.add',function(){
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
@@ -130,7 +218,7 @@ $(document).ready(function(){
         });
     });
      
-    $(".minus").click(function(){ 
+    $("#container").on('touchstart','.minus',function(){ 
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
@@ -159,42 +247,5 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
- 
-function setTotal(){ 
-    var s=0;
-    var v=0;
-    var n=0;
-    <!--计算总额--> 
-    $(".lt-rt").each(function(){ 
-    s+=parseInt($(this).find('input[class*=result]').val())*parseFloat($(this).siblings().find('span[class*=price]').text()); 
-
-    });
-
-    <!--计算菜种-->
-    $('li').each(function(){
-    	var nIn = $(this).find("a").attr("href");
-	    $(nIn+" input[type='text']").each(function() {
-	    	if($(this).val()!=0){
-	    		n++;
-	    	}
-	    });
-	    if(n>0){
-    		$(this).find("b").html(n).show();		
-	    }else{
-	    	$(this).find("b").hide();		
-	    }
-	    n = 0;	
-    });
-
-    <!--计算总份数-->
-    $("input[type='text']").each(function(){
-    	v += parseInt($(this).val());
-    });
-    
-    $(".share").html(v);
-    $("#total").html(s.toFixed(2)); 
-} 
-setTotal(); 
-
-}) 
+});
 </script> 

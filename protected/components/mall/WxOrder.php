@@ -84,6 +84,9 @@ class WxOrder
 	public function getSite(){
 		$site = WxSite::get($this->siteId,$this->dpid);
 		if(!in_array($site['status'],array(1,2,3))){
+			if(empty($this->number)){
+				 throw new Exception('开台餐位数不能为0，请添加餐位数！');
+			}
 			$this->orderOpenSite();
 		}elseif($site['status'] == 1){
 			$this->order = self::getOrderBySiteId($this->siteId,$this->dpid);
@@ -93,7 +96,7 @@ class WxOrder
 	public function getSeatingFee(){
 		$isSeatingFee = WxCompanyFee::get(1,$this->dpid);
 		if($isSeatingFee){
-			$this->seatingFee = $isSeatingFee['fee_price']*$this->number;
+			$this->seatingFee = $isSeatingFee['fee_price'];
 		}else{
 			$this->seatingFee = 0;
 		}
@@ -102,7 +105,7 @@ class WxOrder
 	public function getPackingFee(){
 		$isPackingFee = WxCompanyFee::get(2,$this->dpid);
 		if($isPackingFee){
-			$this->packingFee = $isPackingFee['fee_price']*$this->cartNumber;
+			$this->packingFee = $isPackingFee['fee_price'];
 		}else{
 			$this->packingFee = 0;
 		}
@@ -161,9 +164,6 @@ class WxOrder
 			        	'site_id'=>$this->siteId,
 			        	'is_temp'=>$this->isTemp,
 			        	'number'=>$this->number,
-			        	'seating_fee'=>$this->seatingFee,
-			        	'packing_fee'=>$this->packingFee,
-			        	'freight_fee'=>$this->freightFee,
 			        	'order_status'=>1,
 			        	'order_type'=>$this->type,
 			        	'is_sync'=>DataSync::getInitSync(),
@@ -232,7 +232,6 @@ class WxOrder
 				 		Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);								
 				 	}
 				 }
-				 
 				 //插入订单优惠
 				 if(!empty($cart['promotion'])){
 				 	foreach($cart['promotion']['promotion_info'] as $promotion){
@@ -258,11 +257,82 @@ class WxOrder
 				 $orderPrice +=  $cart['price']*$cart['num'];
 				 $realityPrice += $cart['original_price']*$cart['num'];
 			}
+			 if($this->type==1||$this->type==3){
+				 	$se = new Sequence("order_product");
+			    	$orderProductId = $se->nextval();
+		         	$orderProductData = array(
+									'lid'=>$orderProductId,
+									'dpid'=>$this->dpid,
+									'create_at'=>date('Y-m-d H:i:s',$time),
+		        					'update_at'=>date('Y-m-d H:i:s',$time), 
+									'order_id'=>$orderId,
+									'set_id'=>0,
+									'product_id'=>0,
+									'product_name'=>'餐位费',
+									'product_pic'=>'',
+									'product_type'=>1,
+									'price'=>$this->seatingFee,
+									'original_price'=>$this->seatingFee,
+									'amount'=>$this->number,
+									'product_order_status'=>9,
+									'is_sync'=>DataSync::getInitSync(),
+									);
+					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+					$orderPrice +=  $this->seatingFee;
+				 	$realityPrice += $this->seatingFee;
+			  }else{
+			  		$se = new Sequence("order_product");
+			    	$orderProductId = $se->nextval();
+		         	$orderProductData = array(
+									'lid'=>$orderProductId,
+									'dpid'=>$this->dpid,
+									'create_at'=>date('Y-m-d H:i:s',$time),
+		        					'update_at'=>date('Y-m-d H:i:s',$time), 
+									'order_id'=>$orderId,
+									'set_id'=>0,
+									'product_id'=>0,
+									'product_name'=>'餐位费',
+									'product_pic'=>'',
+									'product_type'=>2,
+									'price'=>$this->packingFee,
+									'original_price'=>$this->packingFee,
+									'amount'=>$this->cartNumber,
+									'product_order_status'=>9,
+									'is_sync'=>DataSync::getInitSync(),
+									);
+					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+					$orderPrice +=  $this->packingFee;
+				 	$realityPrice += $this->packingFee;
+				 	
+				 	$se = new Sequence("order_product");
+			    	$orderProductId = $se->nextval();
+		         	$orderProductData = array(
+									'lid'=>$orderProductId,
+									'dpid'=>$this->dpid,
+									'create_at'=>date('Y-m-d H:i:s',$time),
+		        					'update_at'=>date('Y-m-d H:i:s',$time), 
+									'order_id'=>$orderId,
+									'set_id'=>0,
+									'product_id'=>0,
+									'product_name'=>'配送费',
+									'product_pic'=>'',
+									'product_type'=>3,
+									'price'=>$this->freightFee,
+									'original_price'=>$this->freightFee,
+									'amount'=>1,
+									'product_order_status'=>9,
+									'is_sync'=>DataSync::getInitSync(),
+									);
+					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+					$orderPrice +=  $this->freightFee;
+				 	$realityPrice += $this->freightFee;
+			  }
+				 
 			if($orderPrice==0){
 				$orderPrice = 0.01;
 			}
 			$isSync = DataSync::getInitSync();
-			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',packing_fee = packing_fee + '.$this->packingFee.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
+			$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 			Yii::app()->db->createCommand($sql)->execute();
 			
 			//清空购物车
@@ -313,10 +383,19 @@ class WxOrder
 	    return $order;
 	}
 	public static function getOrderProduct($orderId,$dpid){
-		$sql = 'select t.price,t.amount,t.is_retreat,t1.product_name,t1.main_picture,t.original_price from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.delete_flag=0';
+		$sql = 'select t.price,t.amount,t.is_retreat,t1.product_name,t1.main_picture,t.original_price from nb_order_product t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.order_id = :orderId and t.dpid = :dpid and t.product_type=0 and t.delete_flag=0';
 		$orderProduct = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':orderId',$orderId)
 				  ->bindValue(':dpid',$dpid)
+				  ->queryAll();
+	    return $orderProduct;
+	}
+	public static function getOrderProductByType($orderId,$dpid,$type){
+		$sql = 'select t.price,t.amount,t.is_retreat from nb_order_product t where t.order_id = :orderId and t.dpid = :dpid and t.product_type=:type and t.delete_flag=0';
+		$orderProduct = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':orderId',$orderId)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':type',$type)
 				  ->queryAll();
 	    return $orderProduct;
 	}
@@ -370,6 +449,9 @@ class WxOrder
 	public static function updateOrderTotal($order){
 		$total = 0;
 		$oTotal = 0;
+		$seatingFee = 0;
+		$packingFee = 0;
+		$freightFee = 0;
 		$orderId = $order['lid'];
 		$dpid = $order['dpid'];
 		$orderProducts = self::getOrderProduct($orderId,$dpid);
@@ -379,8 +461,21 @@ class WxOrder
 				$oTotal += $product['original_price']*$product['amount'];
 			}
 		}
+		$seatingProducts = WxOrder::getOrderProductByType($orderId,$dpid,1);
+		foreach($seatingProducts as $seatingProduct){
+			$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
+		}
+		$packingProducts = WxOrder::getOrderProductByType($orderId,$dpid,2);
+		foreach($packingProducts as $packingProduct){
+			$packingFee += $packingProduct['price']*$packingProduct['amount'];
+		}
+		$freightProducts = WxOrder::getOrderProductByType($orderId,$dpid,3);
+		foreach($freightProducts as $freightProduct){
+			$freightFee += $freightProduct['price']*$freightProduct['amount'];
+		}
+			
+		$total = $total + $seatingFee + $packingFee + $freightFee;
 		
-		$total += $order['seating_fee'] + $order['packing_fee'] + $order['freight_fee'];
 		if($order['cupon_branduser_lid']==0 && $total!=$order['should_total']){
 			$orderPay = WxOrderPay::get($dpid,$orderId);
 			if(empty($orderPay)){

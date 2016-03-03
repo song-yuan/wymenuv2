@@ -43,7 +43,7 @@
 <div class="order-title">确认订单</div>
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
-<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'];}?>><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteNum){ echo (int)(($siteNum['min_persons'] + $siteNum['max_persons'])/2);}else{echo '3';}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
+<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'].'>';}?><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteOpen){echo '0';}else{if($siteNum){ echo (int)$siteNum['max_persons'];}else{echo '3';}}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
 <?php elseif($this->type==2):?>
 <!-- 地址 -->
 <div class="address arrowright">
@@ -237,7 +237,27 @@
 </form>
 
 <script>
+function emptyCart(){
+	var timestamp=new Date().getTime()
+    var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+	$.ajax({
+		url:'<?php echo $this->createUrl('/mall/emptyCart',array('companyId'=>$this->companyId,'userId'=>$user['lid']));?>',
+		type:'GET',
+		data:{random:random},
+		success:function(msg){
+			if(parseInt(msg)==1){
+				location.href = '<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId));?>';
+			}
+		}
+	});
+}
+window.onload = emptyCart;
 $(document).ready(function(){
+	<?php if($msg):?>
+	layer.ready(function(){
+	    layer.msg(<?php echo $msg;?>);
+	}); 
+	<?php endif;?>
 	<?php if($this->type==3):?>
 	var currYear = (new Date()).getFullYear();	
 	var opt={};
