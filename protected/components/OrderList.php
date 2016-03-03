@@ -387,12 +387,14 @@ class OrderList
                     {   
                         //更新库存//失败则返回
                         $productDetailArr=explode(",",$tvalue);
+                        if($productDetailArr[13]=="0"){
                         $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$productDetailArr[3],':dpid'=>$companyId));
                         //return json_encode(array('status'=>true,'msg'=>$productdata->store_number.$productDetailArr[3].$productDetailArr[4]));
                         if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[5] ))
                         {
                             $transaction->rollback();
                             return array('status'=>false,'msg'=>$productdata->product_name."数量不足");
+                        }
                         }
                         ////////套餐数量判断//////////////////////////
                         
@@ -451,6 +453,7 @@ class OrderList
                                                 'product_status'=>$productDetailArr[8],//添加cf
                                                 'taste_memo'=>$productDetailArr[11],
                                                 'product_order_status'=>$orderProductStatus,
+                                                'product_type'=>$productDetailArr[13],
                                                 );
                             //return array('status'=>false,'msg'=>"test14444".implode("..",$orderProductData));
                             $db->createCommand()->insert('nb_order_product',$orderProductData);                                

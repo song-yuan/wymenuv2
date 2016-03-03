@@ -467,7 +467,6 @@ class DefaultOrderController extends BackendController
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
                 //$orderList=Yii::app()->request->getPost('orderlist',"0");
                 $callId=Yii::app()->request->getParam('callId',"0");
-                exit;
                 //返回json挂单成功或失败gi
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
