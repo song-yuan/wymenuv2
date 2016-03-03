@@ -105,13 +105,18 @@ class MallController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$siteId = Yii::app()->session['qrcode-'.$userId];
+		$msg = Yii::app()->request->getParam('msg',null);
 		$siteType = false;
 		$siteNum = false;
+		$siteOpen = false;
 		
 		$site = WxSite::get($siteId,$this->companyId);
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 			$siteNum = WxSite::getSiteNumber($site['splid'],$this->companyId);
+			if(in_array($site['status'],array(1,2,3))){
+				$siteOpen = true;
+			}
 		}
 		
 		$cartObj = new WxCart($this->companyId,$userId,$productArr = array(),$siteId);
@@ -132,7 +137,7 @@ class MallController extends Controller
 		$address = WxAddress::getDefault($userId,$this->companyId);
 		$user = WxBrandUser::get($userId,$this->companyId); 
 		
-		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee));
+		$this->render('checkorder',array('companyId'=>$this->companyId,'models'=>$carts,'orderTastes'=>$orderTastes,'site'=>$site,'siteType'=>$siteType,'siteNum'=>$siteNum,'siteOpen'=>$siteOpen,'price'=>$price,'remainMoney'=>$remainMoney,'cupons'=>$cupons,'user'=>$user,'address'=>$address,'isSeatingFee'=>$isSeatingFee,'isPackingFee'=>$isPackingFee,'isFreightFee'=>$isFreightFee,'msg'=>$msg));
 	}
 	/**
 	 * 
@@ -187,7 +192,8 @@ class MallController extends Controller
 					$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type));
 				}
 			}else{
-				$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type));
+				$msg = '请添加订单地址信息';
+				$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 			}
 		}
 		
@@ -229,6 +235,7 @@ class MallController extends Controller
 				}catch (Exception $e) {
 					$transaction->rollback();
 					$msg = $e->getMessage();
+					$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 				}
 			}
 		}
@@ -245,6 +252,9 @@ class MallController extends Controller
 	 	$userId = Yii::app()->session['userId'];
 		$orderId = Yii::app()->request->getParam('orderId');
 		$address = false;
+		$seatingFee = 0;
+		$packingFee = 0;
+		$freightFee = 0;
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		if($order['order_status'] > 2){
@@ -254,12 +264,27 @@ class MallController extends Controller
 		if(in_array($order['order_type'],array(2,3))){
 			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
 		}
+		if(in_array($order['order_type'],array(1,3))){
+			$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+			foreach($seatingProducts as $seatingProduct){
+				$seatingFee += $seatingProduct['price'];
+			}
+		}else{
+			$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
+			foreach($packingProducts as $packingProduct){
+				$packingFee += $packingProduct['price'];
+			}
+			$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+			foreach($freightProducts as $freightProduct){
+				$freightFee += $freightProduct['price'];
+			}
+		}
 		
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		
 		$user = WxBrandUser::get($userId,$this->companyId);
 		
-		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays));
+		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
 	/**
 	 * 
@@ -273,6 +298,9 @@ class MallController extends Controller
 		$orderId = Yii::app()->request->getParam('orderId');
 		$siteType = false;
 		$address = false;
+		$seatingFee = 0;
+		$packingFee = 0;
+		$freightFee = 0;
 		
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$site = WxSite::get($order['site_id'],$this->companyId);
@@ -287,11 +315,28 @@ class MallController extends Controller
 		if(in_array($order['order_type'],array(2,3))){
 			$address = WxAddress::getDefault($userId,$this->companyId);
 		}
+		
+		if(in_array($order['order_type'],array(1,3))){
+			$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+			foreach($seatingProducts as $seatingProduct){
+				$seatingFee += $seatingProduct['price'];
+			}
+		}else{
+			$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
+			foreach($packingProducts as $packingProduct){
+				$packingFee += $packingProduct['price'];
+			}
+			$freightProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
+			foreach($freightProducts as $freightProduct){
+				$freightFee += $freightProduct['price'];
+			}
+		}
+		
 		$cupons = WxCupon::getUserAvaliableCupon($order['should_total'],$userId,$this->companyId);
 		$orderProducts = WxOrder::getOrderProduct($orderId,$this->companyId);
 		$user = WxBrandUser::get($userId,$this->companyId);
 		
-		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user));
+		$this->render('order',array('companyId'=>$this->companyId,'order'=>$order,'orderProducts'=>$orderProducts,'site'=>$site,'cupons'=>$cupons,'siteType'=>$siteType,'address'=>$address,'user'=>$user,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 	 }
 	 /**
 	  * 
