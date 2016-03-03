@@ -475,6 +475,7 @@ class WxOrder
 		}
 			
 		$total = $total + $seatingFee + $packingFee + $freightFee;
+		$oTotal = $oTotal + $seatingFee + $packingFee + $freightFee;
 		
 		if($order['cupon_branduser_lid']==0 && $total!=$order['should_total']){
 			$orderPay = WxOrderPay::get($dpid,$orderId);
