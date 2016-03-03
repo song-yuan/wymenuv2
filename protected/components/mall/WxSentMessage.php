@@ -21,5 +21,38 @@ class WxSentMessage
 		$result = Curl::httpsRequest($url);
 		return $result;
 	}
-	
+	/**
+	 * 
+	 * 记录短信
+	 * 
+	 */
+	public static function insert($dpid,$mobile,$code){
+		$time = time();
+		$se = new Sequence("mobile_message");
+	    $lid = $se->nextval();
+		$insertArr = array(
+			        	'lid'=>$lid,
+			        	'dpid'=>$dpid,
+			        	'create_at'=>date('Y-m-d H:i:s',$time),
+			        	'update_at'=>date('Y-m-d H:i:s',$time), 
+			        	'mobile'=>$mobile,
+			        	'code'=>$code,
+			        	'is_sync'=>DataSync::getInitSync(),
+			        );
+		$result = Yii::app()->db->createCommand()->insert('nb_mobile_message', $insertArr);
+		return $result;
+	}
+	/**
+	 * 
+	 * 查找短信
+	 * 
+	 */
+	public static function getCode($dpid,$mobile){
+		$sql = 'select * from nb_mobile_message where dpid=:dpid and mobile=:mobile order by lid desc';
+		$result = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':mobile',$mobile)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryRow();
+	    return $result;
+	}
 }
