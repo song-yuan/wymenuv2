@@ -116,6 +116,10 @@ class DefaultOrderController extends BackendController
                 $order=new Order();
                 $siteNo=new SiteNo();
                 $site=new Site();
+                
+                $db = Yii::app()->db;
+                $sql = 'select t.fee_price from nb_company_basic_fee t where t.fee_type = "1" and t.dpid = '.$this->companyId;
+                $ordersitefee = Yii::app()->db->createCommand($sql)->queryRow();
                 ///***********insert to order feedback
                 ///*************print
                 if($orderId !='0')
@@ -251,13 +255,56 @@ class DefaultOrderController extends BackendController
                                 'orderTastes'=>$orderTastes,
                                 'tasteMemo'=>$tasteMemo,
                                 'tasteidsOrderProducts'=>$tasteidsOrderProducts,
-                                'productPauseTotalarray'=>$productPauseTotalarray
+                                'productPauseTotalarray'=>$productPauseTotalarray,
+                                'ordersitefee'=>$ordersitefee
                                 //'categories' => $categories
                                 //'products' => $productslist,
                                 //'setlist' => $setlist
 		));
 	}
-        
+//
+// 修改人数。。。（未修改） 
+// 	public function actionStore(){
+// 		$sid = Yii::app()->request->getParam('sid',0);
+// 		$istemp = Yii::app()->request->getParam('istemp',0);
+// 		$companyId = Yii::app()->request->getParam('companyId',0);
+//                 $typeId = Yii::app()->request->getParam('typeId',0);
+//                 $orderId = Yii::app()->request->getParam('orderId',0);
+//                 $syscallId = Yii::app()->request->getParam('syscallId',0);
+//                 $autoaccount = Yii::app()->request->getParam('autoaccount',0);
+//                 $padId = Yii::app()->request->getParam('padId',"0000000000");
+//                 $siteNumber = Yii::app()->request->getParam('siteNumber',"0000000000");
+// 		$dpid = $this->companyId;
+// 		$is_sync = DataSync::getInitSync();
+	
+// 		$db = Yii::app()->db;
+// 		$transaction = $db->beginTransaction();
+// 		try{
+// 			$se=new Sequence("promotion_activity_detail");
+// 			$lid = $se->nextval();
+// 			//$create_at = date('Y-m-d H:i:s',time());
+// 			//$update_at = date('Y-m-d H:i:s',time());
+	
+// 			//$sql = 'delete from nb_promotion_activity_detail where promotion_lid = '.$id.' and dpid='.$dpid.' and activity_lid='.$activityID;
+// 			//var_dump($sql);exit;
+// 			$sql = 'update nb_order set number ='.$siteNumber.', is_sync ='.$is_sync.' where promotion_lid = '.$id.' and dpid='.$dpid.' and activity_lid='.$activityID;
+	
+// 			$command=$db->createCommand($sql);
+// 			$command->execute();
+			
+// 			$transaction->commit(); //提交事务会真正的执行数据库操作
+// 			Yii::app()->end(json_encode(array("status"=>"success")));
+// 			return true;
+// 		}catch (Exception $e) {
+// 			$transaction->rollback(); //如果操作失败, 数据回滚
+// 			Yii::app()->end(json_encode(array("status"=>"fail")));
+// 			return false;
+// 		}
+	
+	
+			
+// 	}
+	
         public function actionGetFailPrintjobs(){
 		$companyId = Yii::app()->request->getParam('companyId',"0");
                 $orderId = Yii::app()->request->getParam('orderId',"0");
@@ -420,6 +467,7 @@ class DefaultOrderController extends BackendController
                 $orderTasteMemo=Yii::app()->request->getPost('ordertastememo',"0");
                 //$orderList=Yii::app()->request->getPost('orderlist',"0");
                 $callId=Yii::app()->request->getParam('callId',"0");
+                exit;
                 //返回json挂单成功或失败gi
                 //如果orderId是0，表示是临时台，
                 //要开台、生成新的订单//暂时不处理
