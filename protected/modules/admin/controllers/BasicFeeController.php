@@ -35,13 +35,45 @@ class BasicFeeController extends BackendController {
 		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('CompanyBasicFee');
+			if($model->fee_type =="1"){
 			$se=new Sequence("company_basic_fee");
                         $model->lid = $se->nextval();
-			$model->create_at = date('Y-m-d H:i:s');
+						$model->create_at = date('Y-m-d H:i:s');
                         $model->update_at=date('Y-m-d H:i:s',time());
                         $model->delete_flag = "0";
+                        $model->fee_name = "餐位费";
                         $model->is_sync = $is_sync;
 //			var_dump($model->attributes);exit;
+			}
+			elseif($model->fee_type =="2"){
+				$se=new Sequence("company_basic_fee");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s');
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->delete_flag = "0";
+				$model->fee_name = "打包费";
+				$model->is_sync = $is_sync;
+				//			var_dump($model->attributes);exit;
+			}
+			elseif($model->fee_type =="3"){
+				$se=new Sequence("company_basic_fee");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s');
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->delete_flag = "0";
+				$model->fee_name = "送餐费";
+				$model->is_sync = $is_sync;
+				//			var_dump($model->attributes);exit;
+			}elseif($model->fee_type =="4"){
+				$se=new Sequence("company_basic_fee");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s');
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->delete_flag = "0";
+				$model->fee_name = "外卖起步价";
+				$model->is_sync = $is_sync;
+				//			var_dump($model->attributes);exit;
+			}
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
 				$this->redirect(array('basicFee/index' , 'companyId' => $companyId));

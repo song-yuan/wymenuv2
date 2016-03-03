@@ -90,7 +90,14 @@ class DefaultController extends BackendController
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
 		$criteria->order = ' pid,lid ';		
-		$categories = ProductCategory::model()->findAll($criteria);
+		$categories = ProductCategory::model()->findAll($criteria);	
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
+		$criteria->addCondition('t.fee_type in(1,2,3)');
+		$criteria->order = ' t.fee_type asc,t.lid asc';
+		$feeTypes = CompanyBasicFee::model()->findAll($criteria);
+//		var_dump($feeTypes);exit;
 //                var_dump($categories);exit;
                 $criteriaps = new CDbCriteria;
 		$criteriaps->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
@@ -124,6 +131,7 @@ class DefaultController extends BackendController
                 $this->render('indexall',array(
                                 'siteTypes' => $siteTypes,
                                 'typeId' => $typeId,
+                		'feeTypes'=> $feeTypes,
 				"categories"=>$categories,
                                 "productSets"=>$productSets,
                                 'setprice'=>$setprice,

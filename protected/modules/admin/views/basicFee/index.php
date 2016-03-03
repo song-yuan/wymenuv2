@@ -68,7 +68,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td><?php echo $model->lid;?></td>
 								
-								<td><?php switch($model->fee_type) {case 1: echo yii::t('app','餐位费'); break; case 2: echo yii::t('app','打包费') ; break; case 3: echo yii::t('app','运送费'); break; case 4: echo yii::t('app','外卖起步价'); break; default :echo '';}?></td>
+								<td><?php switch($model->fee_type) {case 1: echo yii::t('app','餐位费'); break; case 2: echo yii::t('app','打包费') ; break; case 3: echo yii::t('app','送餐费'); break; case 4: echo yii::t('app','外卖起步价'); break; default :echo '';}?></td>
 								<td><?php echo $model->fee_price;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
