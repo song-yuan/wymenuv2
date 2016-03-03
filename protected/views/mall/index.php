@@ -170,7 +170,7 @@ function getProduct(){
 $(document).ready(function(){ 
 	window.load = getProduct(); 
 	
-    $('#nav').on('click','li',function(){
+    $('#nav').on('touchstart','li',function(){
     	var _this = $(this);
         $('#nav').find('li').removeClass('current');
         _this.addClass('current');
