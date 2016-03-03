@@ -340,11 +340,15 @@ $(document).ready(function(){
 			$('.seatingFee').find('.num').html(parseInt(number)-1);
 			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
 			
-			var totalFee = parseFloat(total) - parseFloat(seatFee);
-			totalFee =  totalFee.toFixed(2);
-			
-			$('#total').html(totalFee);
-			$('#total').attr('total',totalFee);
+			if(parseFloat(total) > 0){
+				var totalFee = parseFloat(total) - parseFloat(seatFee);
+				if(parseFloat(totalFee)==0){
+					totalFee = 0; 
+				}
+				totalFee =  totalFee.toFixed(2);
+				$('#total').html(totalFee);
+				$('#total').attr('total',totalFee);
+			}
 		}
 	});
 	
