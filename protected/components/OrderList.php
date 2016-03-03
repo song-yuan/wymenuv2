@@ -395,7 +395,7 @@ class OrderList
                             $transaction->rollback();
                             return array('status'=>false,'msg'=>$productdata->product_name."数量不足");
                         }
-                        }
+                       
                         ////////套餐数量判断//////////////////////////
                         
                         //不是临时挂单就更新库存，更新下单数和点赞数，发送更新库存消息
@@ -419,6 +419,8 @@ class OrderList
                             ///套餐数量减////////////
                         }
                         $productdata->save();
+                        }//
+                        //exit;
                         //return array('status'=>false,'msg'=>"test111333");
                         if($productDetailArr[4]=="0")
                         {
@@ -458,6 +460,7 @@ class OrderList
                             //return array('status'=>false,'msg'=>"test14444".implode("..",$orderProductData));
                             $db->createCommand()->insert('nb_order_product',$orderProductData);                                
                         }
+                        //exit;
                         //修改为先删除后插入，防止以后一个菜品被分开点多分。
                         ////else{
 //                                //更新
@@ -472,6 +475,7 @@ class OrderList
                         //return array('status'=>false,'msg'=>"nbproductinsert after");
                         $orderProductTasteIds=str_replace("|",",",$productDetailArr[10]);
                         //return array('status'=>false,'msg'=>$orderProductTasteIds);
+                        if($productDetailArr[13]=="0"){
                         if(!empty($orderProductTasteIds))
                         {
                             $orderProductTasteIds=substr($orderProductTasteIds, 0,strlen($orderProductTasteIds)-1);
@@ -515,6 +519,7 @@ class OrderList
                                 }
                             }
                         }
+                        }
                         //return array('status'=>false,'msg'=>"after taste insert");
                     }
                 }
@@ -545,7 +550,7 @@ class OrderList
                 $order->taste_memo=$orderTasteMemo;
                 $order->callno=$callId;
                 $order->save();
-                
+               
                 //删除全单口味
                 $orderTasteIds=str_replace("|",",",$orderTasteIds);
                 //return array('status'=>false,'msg'=>$orderTasteIds);
