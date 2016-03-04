@@ -475,7 +475,7 @@ $(document).ready(function(){
 	$('input[name="yue"]').change(function(){
 		var total = $('#total').attr('total');
 		var yue = $('#yue').attr('yue');
-
+		
 		if($(this).is(':checked')){
 			if(parseFloat(yue) > parseFloat(total)){
 				var money = 0;
