@@ -249,7 +249,7 @@ class UserController extends Controller
 	public function actionStatistic()
 	{
 		$userId = Yii::app()->session['userId'];
-		$this->render('statistic',array('companyId'=>$this->companyId,'userId'=>$userId));
+		$this->render('statistic',array('companyId'=>$this->companyId));
 	}
 	/**
 	 * 
