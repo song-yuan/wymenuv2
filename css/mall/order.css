@@ -30,6 +30,8 @@ body{ background-color:#E5E5E5;}
    color:#FF5151 !important;
 }
 
+.weui_cells_tips {margin-top: .3em;color: #888;padding-left: 15px;padding-right: 15px;font-size: 14px;}
+
 .order-copun{padding:10px;font-size:16px;margin-top:10px;background:rgb(255,255,255);}
 .order-copun .copun-lt{float:left;width:65%;}
 .order-copun .copun-rt{float:left;width:35%;color:#FF5151;}
