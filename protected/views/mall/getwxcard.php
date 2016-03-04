@@ -54,4 +54,14 @@
 			</script>
 		<?php }
 		}?>
-
+		<?php if(empty($coupons)):?>
+		<?php foreach($coupons as $coupon):?>
+		<div class="card">
+				<div class="inner" style="">
+					<div class="inner-top"><div class="left"><img src="<?php echo $coupon['main_picture'];?>" /></div><div class="right"><?php echo $coupon['activity_title'];?></div><div class="clear"></div></div>
+					<div class="inner-bottom"><div class="info l"></div><div class="info r"><?php echo $coupon['end_time'];?></div></div>
+				</div>
+			</div>
+		<?php endforeach;?>
+		<?php endif;?>
+	
