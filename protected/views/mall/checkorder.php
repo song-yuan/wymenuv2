@@ -7,8 +7,10 @@
 	}
 	if($isSeatingFee){
 		$seatingFee = $isSeatingFee['fee_price'];
+		$seatingTips = $isSeatingFee['fee_abstract'];
 	}else{
 		$seatingFee = 0;
+		$seatingTips = '';
 	}
 	if($isPackingFee){
 		$packingFee = $isPackingFee['fee_price'];
@@ -139,6 +141,7 @@
 	        <div class="clear"></div>
 	    </div>
 	</div>
+	<div class="weui_cells_tips"><?php echo $seatingTips;?></div>
 	<!-- end餐位费 -->
 	<?php else:?>
 	<!-- begain餐位费 -->
