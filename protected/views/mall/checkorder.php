@@ -368,12 +368,13 @@ $(document).ready(function(){
 		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
 		
 		var totalFee = parseFloat(total) + parseFloat(seatFee);
+		$('#total').attr('total',parseFloat(setTotal) + parseFloat(totalFee));
+		
 		if(parseFloat(yue) > (parseFloat(setTotal) + parseFloat(totalFee))){
 			totalFee = 0;
 		}
 		totalFee =  totalFee.toFixed(2);
 		$('#total').html(totalFee);
-		$('#total').attr('total',parseFloat(setTotal) + parseFloat(totalFee));
 	});
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
