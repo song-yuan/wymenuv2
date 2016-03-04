@@ -243,6 +243,16 @@ class UserController extends Controller
 	}
 	/**
 	 * 
+	 * 手机报表统计
+	 * 
+	 */
+	public function actionStatistic()
+	{
+		$userId = Yii::app()->session['userId'];
+		$this->render('statistic',array('companyId'=>$this->companyId));
+	}
+	/**
+	 * 
 	 * 
 	 * 礼品券详情
 	 * 

@@ -46,6 +46,11 @@
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/address',array('companyId'=>$this->companyId));?>">收货地址管理</a></div>
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId));?>">完善个人资料</a></div>
 	</div>
+	<?php if($user['lid']==2):?>
+	<div class="listset">
+		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/statistic',array('companyId'=>$this->companyId));?>">统计</a></div>
+	</div>
+	<?php endif;?>
 	<?php 
 	include_once(Yii::app()->basePath.'/views/layouts/footernav.php');
 	?>
