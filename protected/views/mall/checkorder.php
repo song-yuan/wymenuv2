@@ -361,14 +361,17 @@ $(document).ready(function(){
 		var number = $('.number').val();
 		var seatFee = $('.seatingFee').attr('price');
 		var setTotal = $('#total').attr('total');
+		var yue = $('#yue').attr('yue');
 		var total = $('#total').html();
 		$('.number').val(parseInt(number)+1);
 		$('.seatingFee').find('.num').html(parseInt(number)+1);
 		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
 		
 		var totalFee = parseFloat(total) + parseFloat(seatFee);
+		if(parseFloat(yue) > (parseFloat(setTotal) + parseFloat(totalFee))){
+			totalFee = 0;
+		}
 		totalFee =  totalFee.toFixed(2);
-		
 		$('#total').html(totalFee);
 		$('#total').attr('total',parseFloat(setTotal) + parseFloat(totalFee));
 	});
