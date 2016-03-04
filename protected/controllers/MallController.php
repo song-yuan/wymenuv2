@@ -480,7 +480,8 @@ class MallController extends Controller
 	 */
 	 public function actionGetWxCard()
 	{
-		$this->render('getwxcard',array('companyId'=>$this->companyId));
+		$coupons = WxPromotionActivity::getNoPush($this->companyId);
+		$this->render('getwxcard',array('companyId'=>$this->companyId,'coupons'=>$coupons));
 	}
 	/**
 	 * 
