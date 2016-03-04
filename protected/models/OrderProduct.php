@@ -63,7 +63,7 @@ class OrderProduct extends CActiveRecord
 				array('product_status','length','max'=>2),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, order_id, main_id, set_id,private_promotion_lid, product_id, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, product_status, delete_flag, product_order_status', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, order_id, main_id, set_id,private_promotion_lid, product_id, product_name, product_pic, product_type, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, product_status, delete_flag, product_order_status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -185,15 +185,20 @@ class OrderProduct extends CActiveRecord
         
         static public function getOrderProducts($orderId,$dpid){
 		$db = Yii::app()->db;
-		$sql = "select t.*,t1.product_name,t1.original_price,t1.is_temp_price,t1.is_special,t1.is_discount,
+		$sql = "select t.*,t1.product_name as product_name_order,t1.original_price,t1.is_temp_price,t1.is_special,t1.is_discount,
                                 t1.product_unit,t1.weight_unit,t1.is_weight_confirm,t1.printer_way_id,t2.category_name,t3.set_name from nb_order_product t
 				left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid
 				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
                                 left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
-				where t.order_id in (".$orderId.") and t.dpid=".$dpid.' and t.delete_flag=0 order by t.order_id, t.set_id,t.main_id,t1.category_id,t.lid'; //and is_retreat=0
+				where t.order_id in (".$orderId.") and t.dpid=".$dpid.' and t.delete_flag=0 order by t.product_type asc,t.order_id, t.set_id,t.main_id,t1.category_id,t.lid'; //and is_retreat=0
 		return $db->createCommand($sql)->queryAll();
 	}
-        
+	
+	static public function getOrderProductsByType($orderId,$dpid,$type=1){
+		$db = Yii::app()->db;
+		$sql = "select * from nb_order_product where order_id in (".$orderId.") and dpid=".$dpid." and delete_flag=0 and product_type=".$type." order by order_id,lid";
+		return $db->createCommand($sql)->queryAll();
+	}   
         
         //单个订单已经下单的产品
         static public function getHasOrderProducts($orderId,$dpid){

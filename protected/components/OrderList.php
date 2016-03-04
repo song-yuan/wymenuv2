@@ -456,6 +456,7 @@ class OrderList
                                                 'taste_memo'=>$productDetailArr[11],
                                                 'product_order_status'=>$orderProductStatus,
                                                 'product_type'=>$productDetailArr[13],
+                                                'product_name'=>$productDetailArr[14],
                                                 );
                             //return array('status'=>false,'msg'=>"test14444".implode("..",$orderProductData));
                             $db->createCommand()->insert('nb_order_product',$orderProductData);                                
@@ -603,7 +604,7 @@ class OrderList
 //                    $ret=json_encode($savejson);
 //                }else{
                 if($orderStatus>1)
-                {
+                {$ret= array('status'=>true,'msg'=>"保存成功",'jobs'=>array());
                     //return array('status'=>false,'msg'=>"before printkitchen all".$orderList);
                     $ret=  Helper::printKitchenAll3($order,$orderList,$site,$siteNo,false);
                     //return array('status'=>false,'msg'=>"after printkitchen all");
@@ -616,7 +617,7 @@ class OrderList
                 }else{
                     $ret = array('status'=>true,'msg'=>"保存成功",'jobs'=>array());
                     $transaction->commit();
-                }       
+                }      
                 //估清产品通知
 //                if(!empty($sellOff)){
 //                    //return array('status'=>false,'msg'=>"沽清：".$sellOff);
@@ -639,7 +640,7 @@ class OrderList
 //                    } 
 //                }
                 //return array('status'=>true,'msg'=>"保存成功",'jobs'=>array());
-                return $ret;
+                return $ret; 
             } catch (Exception $ex) {
                 $transaction->rollback();
                 return array('status'=>false,'msg'=>$e->getMessage(),'jobs'=>array());

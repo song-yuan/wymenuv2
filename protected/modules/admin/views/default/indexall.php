@@ -1177,7 +1177,7 @@
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductPrice']").text();
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductType']").text();
-                    
+                    tempproduct=tempproduct+","+$(this).find("span[class='selectProductName']").text();
                     if(productlist!="")
                     {
                         productlist=productlist+";"+tempproduct;
@@ -1936,15 +1936,17 @@
             
             $('.selectProductDel').live(event_clicktouchstart, function(){
                 var orderstatus=$(this).parent().attr("order_status");
-                var curnum = $(this).parent().find('span[class="badge"]').text().replace(",","")
-                var setid=$(this).parent().attr("setid");
+                var curnum = $(this).parent().find('span[class="badge"]').text().replace(",","");
+                var setid= $(this).parent().attr("setid");
                 var oprole="<?php echo Yii::app()->user->role; ?>";
+                var ptype = $(this).parent().attr("product_type");
                 if(oprole > '2')
                 {
                     alert("没有退菜权限！");
                     return;
                 }
-                //alert(curnum);
+                //echo=orderstatus+'/'+curnum+'/'+setid+'/'+oprole+'/'+ptype;
+                //alert(echo);
                 $("#selectproductnumfordelete").val(curnum);
                 if(orderstatus!="0")//退菜是单个的
                 {
@@ -1955,7 +1957,7 @@
                         return false;
                     }else{
                         var lid=$(this).parent().attr("lid");
-                        $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid);
+                        $('#retreatbox').load("<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId));?>/orderDetailId/"+lid+"/productType/"+ptype);
                         if(layer_index_retreatbox!=0)
                         {
                             return;
