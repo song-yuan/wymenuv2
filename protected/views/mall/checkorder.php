@@ -371,8 +371,10 @@ $(document).ready(function(){
 		var totalFee = parseFloat(total) + parseFloat(seatFee);
 		$('#total').attr('total',parseFloat(setTotal) + parseFloat(seatFee));
 		
-		if(parseFloat(yue) > (parseFloat(setTotal) + parseFloat(totalFee))){
-			totalFee = 0;
+		if($('input[name="yue"]').is(':checked')){
+			if(parseFloat(yue) > (parseFloat(setTotal) + parseFloat(totalFee))){
+				totalFee = 0;
+			}
 		}
 		totalFee =  totalFee.toFixed(2);
 		$('#total').html(totalFee);
