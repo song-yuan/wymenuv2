@@ -337,11 +337,14 @@ $(document).ready(function(){
 	$('.num-minus').click(function(){
 		var number = $('.number').val();
 		var seatFee = $('.seatingFee').attr('price');
+		var setTotal = $('#total').attr('total');
 		var total = $('#total').html();
 		if(parseInt(number) > 1 ){
 			$('.number').val(parseInt(number)-1);
 			$('.seatingFee').find('.num').html(parseInt(number)-1);
 			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
+			
+			$('#total').attr('total',parseFloat(setTotal) - parseFloat(seatFee));
 			
 			if(parseFloat(total) > 0){
 				var totalFee = parseFloat(total) - parseFloat(seatFee);
@@ -350,7 +353,6 @@ $(document).ready(function(){
 				}
 				totalFee =  totalFee.toFixed(2);
 				$('#total').html(totalFee);
-				$('#total').attr('total',totalFee);
 			}
 		}
 	});
@@ -359,16 +361,23 @@ $(document).ready(function(){
 	$('.num-add').click(function(){
 		var number = $('.number').val();
 		var seatFee = $('.seatingFee').attr('price');
+		var setTotal = $('#total').attr('total');
+		var yue = $('#yue').attr('yue');
 		var total = $('#total').html();
 		$('.number').val(parseInt(number)+1);
 		$('.seatingFee').find('.num').html(parseInt(number)+1);
 		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
 		
 		var totalFee = parseFloat(total) + parseFloat(seatFee);
-		totalFee =  totalFee.toFixed(2);
+		$('#total').attr('total',parseFloat(setTotal) + parseFloat(seatFee));
 		
+		if($('input[name="yue"]').is(':checked')){
+			if(parseFloat(yue) > (parseFloat(setTotal) + parseFloat(totalFee))){
+				totalFee = 0;
+			}
+		}
+		totalFee =  totalFee.toFixed(2);
 		$('#total').html(totalFee);
-		$('#total').attr('total',totalFee);
 	});
 	$('.paytype .item').click(function(){
 		var paytype = $(this).attr('paytype');
