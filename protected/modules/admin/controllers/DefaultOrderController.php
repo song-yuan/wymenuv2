@@ -1842,6 +1842,7 @@ class DefaultOrderController extends BackendController
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $orderDetailId=Yii::app()->request->getParam('orderDetailId','0');
                 $producttype=Yii::app()->request->getParam('productType','0');
+                $orderDetail = '';
                 //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
                 $db=Yii::app()->db;
                 $orderRetreat = new OrderRetreat();
@@ -1850,9 +1851,11 @@ class DefaultOrderController extends BackendController
                 $retreats = Retreat::model()->findAll(' dpid=:dpid and delete_flag = 0',array(':dpid'=>$companyId));                
                 $retreatslist=CHtml::listData($retreats, 'lid', 'name');
                 //var_dump($retreatslist);exit;
-                $orderDetail = OrderProduct::model()->with("product")->findAll('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));
+                //if($producttype=="0"){
+                	$orderDetail = OrderProduct::model()->with("product")->findAll('t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$companyId,':lid'=>$orderDetailId));
+                	$orderId=$orderDetail[0]->order_id;
+                //}
                 //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
-                $orderId=$orderDetail[0]->order_id;
                 //var_dump($orderDetail);exit;
                 if($producttype=="0"){
                 	$productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderDetail[0]->product_id,':dpid'=>$companyId));
@@ -1869,8 +1872,10 @@ class DefaultOrderController extends BackendController
                 	$productname="其他";
                 }
                 $ret=array();
-                if($producttype=="0"){
 				if(Yii::app()->request->isPostRequest){
+// 					$ret= array('status'=>false,'msg'=>$producttype);
+// 					Yii::app()->end(json_encode($ret));
+				if($producttype=="0"){
                     Until::validOperate($companyId, $this);
                     $retreatnum=Yii::app()->request->getPost('retreatnum',0);
                     $othermemo=Yii::app()->request->getPost('othermemo','');
@@ -1959,20 +1964,17 @@ class DefaultOrderController extends BackendController
                                 $ret= array('status'=>false,'msg'=>yii::t('app','失败1'));
                         } 
                         Yii::app()->end(json_encode($ret));                    
-                }  
                 }else{
-                		if(Yii::app()->request->isPostRequest){
-                			$ret= array('status'=>false,'msg'=>yii::t('app','失败1'));
-                			Yii::app()->end(json_encode($ret));
                 			Until::validOperate($companyId, $this);
                 			$retreatnum=Yii::app()->request->getPost('retreatnum',0);
                 			$othermemo=Yii::app()->request->getPost('othermemo','');
                 			$retreatid=Yii::app()->request->getPost('retreatid','');
                 			$isall=Yii::app()->request->getPost('isall','1');
                 			$padid=Yii::app()->request->getPost('padid','1');
-                			$time=date('Y-m-d H:i:s',time());exit;
+                			$time=date('Y-m-d H:i:s',time());
                 			//Yii::app()->end(json_encode(array('status'=>false,'msg'=>$retreatnum.$othermemo.$isall.$padid)));
                 			$transaction = Yii::app()->db->beginTransaction();
+                			
                 			try {
                 				$sqlorderproduct="";
                 				$memo="";
@@ -2001,13 +2003,13 @@ class DefaultOrderController extends BackendController
                 						'delete_flag'=>'0',//'product_order_status'=>$orderProductStatus,
                 				);
                 				$db->createCommand()->insert('nb_order_retreat',$orderRetreat);
-                				//                            Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
-                				if($productdata->store_number>=0)
-                				{
-                					$productdata->store_number=$retreatnum+$productdata->store_number;
-                					$productdata->update_at=$time;
-                					$productdata->save();
-                				}
+                				
+//                 				if($productdata->store_number>=0)
+//                 				{
+//                 					$productdata->store_number=$retreatnum+$productdata->store_number;
+//                 					$productdata->update_at=$time;
+//                 					$productdata->save();
+//                 				}
                 				//Yii::app()->end(json_encode(array('status'=>false,'msg'=>"23424332")));
                 				////////////////退菜打印
                 				$order=new Order();
@@ -2039,7 +2041,7 @@ class DefaultOrderController extends BackendController
                 				//$memo="退菜单";
                 				$orderDetail[0]->amount=$retreatnum;
                 				//Yii::app()->end(json_encode(array('status'=>false,'msg'=>$order->dpid)));
-                				$ret=  $ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'msg'=>'打印任务正常发布',"jobs"=>$jobids2);
+                				$ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'msg'=>'打印任务正常发布');
                 				if(!$ret['status'])
                 				{
                 					$transaction->rollback();
@@ -2052,13 +2054,13 @@ class DefaultOrderController extends BackendController
                 				$ret= array('status'=>false,'msg'=>yii::t('app','失败1'));
                 			}
                 			Yii::app()->end(json_encode($ret));
-                		}
+                		}  
                 }              
                 $this->renderPartial('addretreatone' , array(
 				'orderRetreat' => $orderRetreat,
 				'retreats'=>$retreatslist,
-                                'productname'=>$productname,
-                		'producttype'=>$producttype,
+                'productname'=>$productname,
+                'producttype'=>$producttype,
 		));
 	}
 	public function actionAddHurryOne() {
