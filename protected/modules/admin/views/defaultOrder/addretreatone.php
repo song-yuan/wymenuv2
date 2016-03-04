@@ -140,7 +140,8 @@
                             }
                            var retreatnum=parseInt($("#site_number").text());
                            var allnum=parseInt($("#selectproductnumfordelete").val());
-                           //lert(retreatnum);alert(allnum);
+                           var producttype=<?php echo $producttype;?>;
+                           //alert(producttype);alert(allnum);
                            var isall=0;
                            if(retreatnum<1)
                            {
@@ -155,22 +156,24 @@
                            
                            //alert(isall);
                            //var orderdetailid="<?php echo $orderRetreat->order_detail_id; ?>";
-                           var retreatid=$("label[class='selectRetreat btn btn-default active']").attr("retreatid");
+                           var retreatid="0";
+                           //var retreatid=$("label[class='selectRetreat btn btn-default active']").attr("retreatid");
                            var url="<?php echo $this->createUrl('defaultOrder/addRetreatOne',array('companyId'=>$this->companyId,'orderDetailId'=>$orderRetreat->order_detail_id)); ?>";
                            var othermemo=$.trim($("label[class='selectRetreat btn btn-default active']").text())+$("#OrderRetreat_other").val();
                            //alert(othermemo);return;
-                           //alert(url);alert(othermemo);alert(retreatnum);alert(paymethodid);
+                           //alert(url);alert(othermemo);alert(retreatnum);alert(retreatid);
                                 $.ajax({
                                         'type':'POST',
 					'dataType':'json',
-					'data':{"retreatnum":retreatnum,"othermemo":othermemo,"retreatid":retreatid,"isall":isall,"padid":padid},
+					'data':{"retreatnum":retreatnum,"othermemo":othermemo,"retreatid":retreatid,"isall":isall,"padid":padid,"productType":producttype},
 					'url':url,
                                         success:function(result){
                                             var printresultfail=false;
                                             var printresulttemp;
                                             var successjobids="0";
-                                            alert(result.msg);
+                                            //alert(result.msg);
                                             data=result;
+                                            if(producttype=="0"){
                                             if(data.status){
                                                     $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
                                                     var layer_flash_index = layer.load(0, {shade: [0.3,'#fff']});
@@ -246,6 +249,13 @@
                                                         });
                                                     }
                                                 }
+                                            }else{
+                                           	 if(data.status){
+                                                 $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
+                                                  
+                                                     alert("打印成功！");  
+                                             }
+                                          }
                                         },
                                         error: function(msg){
                                         	alert("保存失败2");
