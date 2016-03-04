@@ -74,7 +74,7 @@ input { line-height: normal; }
 .topbox img {width: 100%;}
 .index {
     margin: 10px 10px 5px 10px;
-    background: #FD9C62;
+    background: rgb(221, 101, 73);
     box-shadow: 1px 1px 3px #0E0101;
     padding: 5px 10px;
     border-radius: 5px;
