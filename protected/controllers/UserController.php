@@ -319,7 +319,7 @@ class UserController extends Controller
 	 */
 	public function actionAjaxDeleteAddress()
 	{
-		$lid = Yii::app()->request->getPost('lid');
+		$lid = Yii::app()->request->getParam('lid');
 		$dpid = $this->companyId;
 		
 		$addresss = WxAddress::deleteAddress($lid,$dpid);

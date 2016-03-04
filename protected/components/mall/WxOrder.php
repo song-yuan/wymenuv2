@@ -206,6 +206,8 @@ class WxOrder
 								'order_id'=>$orderId,
 								'set_id'=>0,
 								'product_id'=>$cart['product_id'],
+								'product_name'=>$cart['product_name'],
+								'product_pic'=>$cart['main_picture'],
 								'price'=>$cart['price'],
 								'original_price'=>$cart['original_price'],
 								'amount'=>$cart['num'],

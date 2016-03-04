@@ -146,6 +146,12 @@ class WxPromotionActivity
 		}
 		return $lid;
 	}
+	/**
+	 * 
+	 * 关注推送
+	 * 
+	 * 
+	 */
 	public static function getSubPush($dpid){
 		$now = date('Y-m-d H:i:s',time());
 		$sql = 'select * from nb_promotion_activity where dpid=:dpid and begin_time <=:now and :now <= end_time and is_first_push=0 and delete_flag=0';
@@ -155,9 +161,29 @@ class WxPromotionActivity
 				  ->queryAll();
 	    return $cupon;
 	}
+	/**
+	 * 
+	 * 扫码推送
+	 * 
+	 * 
+	 */
 	public static function getScanPush($dpid){
 		$now = date('Y-m-d H:i:s',time());
 		$sql = 'select * from nb_promotion_activity where dpid=:dpid and begin_time <=:now and :now <= end_time and is_scan_push=0 and delete_flag=0';
+		$cupon = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$dpid)
+				  ->bindValue(':now',$now)
+				  ->queryAll();
+	    return $cupon;
+	}
+	/**
+	 * 
+	 * 其他活动
+	 * 
+	 */
+	 public static function getNoPush($dpid){
+		$now = date('Y-m-d H:i:s',time());
+		$sql = 'select * from nb_promotion_activity where dpid=:dpid and begin_time <=:now and :now <= end_time and is_first_push=1 and is_scan_push=1 and  and delete_flag=0';
 		$cupon = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':dpid',$dpid)
 				  ->bindValue(':now',$now)

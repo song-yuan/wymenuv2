@@ -24,16 +24,16 @@
 	
 	</div>
 	
-	
+	<!--
 	<div class="listset withtop">
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/orderList',array('companyId'=>$this->companyId));?>">我的订单</a></div>
 	</div>
-	<!--
+	
 	<div class="listset">
 		<div class="arrowright"><a href="shopping_cart.php">购物车 <span class="dot bg_red"></span></a></div>
 	</div>
 	-->
-	<div class="listset">
+	<div class="listset withtop">
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/mall/reCharge',array('companyId'=>$this->companyId));?>">余额 <span class="small font_l"> <?php echo $remainMoney;?></span></a>
 		</div>
 	</div>

@@ -170,11 +170,11 @@ function getProduct(){
 $(document).ready(function(){ 
 	window.load = getProduct(); 
 	
-    $('#nav').on('touchstart','li',function(){
+    $('#nav').on('click','li',function(){
     	var _this = $(this);
+    	var href = _this.find('a').attr('href');
         $('#nav').find('li').removeClass('current');
         _this.addClass('current');
-        var href = _this.find('a').attr('href');
         $(href).scrollTop();
     });
     $('#container').scroll(function(){
