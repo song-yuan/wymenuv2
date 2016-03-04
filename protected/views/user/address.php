@@ -6,14 +6,18 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/common.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/members.css">
+<script type="text/javascript">
+var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId));?>";
+</script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/hammer.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/swipeout.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <body class="my_address bg_lgrey2">
 	<?php if($addresss):?>
 	<ul class="addlist" id="list">
 		<?php foreach($addresss as $k=>$address):?>
-		<li id="<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId,'lid'=>$address['lid']));?>">
+		<li id="<?php echo $address['lid'];?>">
 			<label for="add<?php echo $k+1;?>">
 			<span class="user">收货人：<?php echo $address['name'];?></span>
 			<span class="font_l small">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
@@ -33,6 +37,17 @@
 var list = document.getElementById("list");
 new SwipeOut(list);
 list.addEventListener("delete", function(evt) {
-
+	var lid = evt.target.id;
+	$.ajax({
+		url:"<?php echo $this->createUrl('/user/ajaxDeleteAddress',array('companyId'=>$this->companyId));?>",
+		data:{lid:lid},
+		success:function(data){
+			if(parseInt(data)){
+				history.go(0);
+			}else{
+				layer.msg('删除失败');
+			}
+		}
+	});
 });
 </script>

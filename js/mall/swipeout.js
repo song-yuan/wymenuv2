@@ -133,11 +133,12 @@ function SwipeOut(listEl, options) {
         // add delete button
         swiped = true;
         var li = findListItemNode(e.target);
-        removeElement(deleteBtn);
-        li.appendChild(deleteBtn);
         var urlId = li.id;
+        removeElement(deleteBtn);
+        smallDelete.id = urlId;
+        li.appendChild(deleteBtn);
 
-        smallEdit.innerHTML = "<a href='"+ urlId +"'></a>";
+        smallEdit.innerHTML = "<a href='"+ editUrl +'&lid='+ urlId +"'></a>";
         showButton(deleteBtn);
       }
     }
