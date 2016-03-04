@@ -116,6 +116,12 @@ class DefaultOrderController extends BackendController
                 $order=new Order();
                 $siteNo=new SiteNo();
                 $site=new Site();
+                   
+                $criteria = new CDbCriteria;
+                $criteria->condition =  't.delete_flag=0 and t.dpid='.$companyId ;
+                $criteria->addCondition('t.fee_type in(1,2,3)');
+                $criteria->order = ' t.fee_type asc,t.lid asc';
+                $feeTypes = CompanyBasicFee::model()->findAll($criteria);
                 
                 $db = Yii::app()->db;
                 $sql = 'select t.fee_price from nb_company_basic_fee t where t.fee_type = "1" and t.dpid = '.$this->companyId;
@@ -193,6 +199,10 @@ class DefaultOrderController extends BackendController
                 $allOrderTastes=  TasteClass::getOrderTasteKV($order->lid,$orderlist,'1',$companyId);
                 //所有订单明细
                 $orderProducts = OrderProduct::getOrderProducts($orderlist,$companyId);
+                
+//                 $orderSeatingProducts = OrderProduct::getOrderProductsByType($orderlist,$companyId,1);
+//                 $orderPackingProducts = OrderProduct::getOrderProductsByType($orderlist,$companyId,2);
+//                 $orderFreightProducts = OrderProduct::getOrderProductsByType($orderlist,$companyId,3);
                 //var_dump($orderProducts);exit;
                 //单品口味
                 $allOrderProductTastes=  TasteClass::getOrderTasteKV($order->lid,$orderlist,'2',$companyId);
@@ -239,6 +249,9 @@ class DefaultOrderController extends BackendController
 		$this->renderPartial('orderPartial' , array(
 				'model'=>$order,
 				'orderProducts' => $orderProducts,
+// 				'orderSeatingProducts' =>$orderSeatingProducts,
+// 				'orderPackingProducts' =>$orderPackingProducts,
+// 				'orderFreightProducts' =>$orderFreightProducts,
                                 'allOrderTastes'=>$allOrderTastes,
                                 'allOrderProductTastes'=>$allOrderProductTastes,
                                 //'orderProduct' => $orderProduct,
@@ -256,7 +269,8 @@ class DefaultOrderController extends BackendController
                                 'tasteMemo'=>$tasteMemo,
                                 'tasteidsOrderProducts'=>$tasteidsOrderProducts,
                                 'productPauseTotalarray'=>$productPauseTotalarray,
-                                'ordersitefee'=>$ordersitefee
+                                'ordersitefee'=>$ordersitefee,
+                                'feeTypes'=> $feeTypes,
                                 //'categories' => $categories
                                 //'products' => $productslist,
                                 //'setlist' => $setlist
@@ -1827,6 +1841,7 @@ class DefaultOrderController extends BackendController
         public function actionAddRetreatOne() {
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $orderDetailId=Yii::app()->request->getParam('orderDetailId','0');
+                $producttype=Yii::app()->request->getParam('productType','0');
                 //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
                 $db=Yii::app()->db;
                 $orderRetreat = new OrderRetreat();
@@ -1839,8 +1854,20 @@ class DefaultOrderController extends BackendController
                 //Yii::app()->end(array('status'=>false,'msg'=>yii::t('app','失败1')));
                 $orderId=$orderDetail[0]->order_id;
                 //var_dump($orderDetail);exit;
-                $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderDetail[0]->product_id,':dpid'=>$companyId));
-                $productname=$productdata->product_name;
+                if($producttype=="0"){
+                	$productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$orderDetail[0]->product_id,':dpid'=>$companyId));
+                	$productname=$productdata->product_name;
+                }elseif($producttype=="1"){
+                	$productname="餐位费";
+                }elseif($producttype=="2"){
+                	$productname="打包费";
+                }elseif($producttype=="3"){
+                	$productname="送餐费";
+                }elseif($producttype=="4"){
+                	$productname="外卖起步价";
+                }else{
+                	$productname="其他";
+                }
                 $ret=array();
 		if(Yii::app()->request->isPostRequest){
                     Until::validOperate($companyId, $this);
@@ -1935,7 +1962,8 @@ class DefaultOrderController extends BackendController
                 $this->renderPartial('addretreatone' , array(
 				'orderRetreat' => $orderRetreat,
 				'retreats'=>$retreatslist,
-                                'productname'=>$productname
+                                'productname'=>$productname,
+                		'producttype'=>$producttype,
 		));
 	}
 	public function actionAddHurryOne() {

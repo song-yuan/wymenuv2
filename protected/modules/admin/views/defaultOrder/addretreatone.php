@@ -11,6 +11,7 @@
                                                                 'class'=>'form-horizontal'
                                                         ),
                                                 )); ?>
+                                                <?php if($producttype=="0") :?>
                                                 <div class="modal-header">
                                                     <h4> <?php echo $productname;?> </h4>
                                                     
@@ -40,7 +41,27 @@
                                                                 </div>
                                                     
                                                 </div>
-                                                
+                                                <?php else :?>
+                                               <div class="modal-header">
+                                                    <h4> <?php echo $productname;?> </h4>
+                                                    
+                                                </div>
+                                                <div class="modal-body">
+                                                                
+                                                                <div style="width:100%;margin: 5px;display: inline-block;">
+                                                                    <div style="width:50%;float: left;">
+                                                                        <textarea class="form-control" placeholder="其他原因" name="OrderRetreatOther" id="OrderRetreat_other"></textarea>
+                                                                    </div>
+                                                                    <div style="width:45%;float: left;">                                                                        
+                                                                        <label id="open_site_minus" style="font-size: 2em;padding: 8px; margin: 7px; border: 1px;">━</label>
+                                                                        <label style="font-size:1.5em; padding: 5px;" name="siteNumber" id="site_number">1</label>
+                                                                        <label id="open_site_plus" style="font-size: 2em;padding: 8px; margin: 7px; border: 1px;">╋</label>
+                                                                    </div>
+                                                                </div>
+                                                    
+                                                </div>
+                                               
+                                               <?php endif;?>
                                                 <?php echo $form->hiddenField($orderRetreat,'order_detail_id',array('class'=>'form-control')); ?>
                                                 
                                                 <div class="modal-footer">

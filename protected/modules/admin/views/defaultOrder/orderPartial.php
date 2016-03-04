@@ -17,7 +17,8 @@
                  <label id="order_num_plus" style="font-size: 1em;padding: 1px; margin: 2px; border: 1px;">╋</label>
                  <BUTTON id="order_num_button" style="margin-left: 10px;">确定</BUTTON>
                  </div>
-           </span>                 
+           </span>  
+                        
             </li>
                 <?php foreach ($orderProducts as $orderProduct):?>
                                     <li lid="<?php echo $orderProduct['lid'];?>" 
@@ -28,6 +29,7 @@
                                         is_giving="<?php echo $orderProduct['is_giving'];?>" 
                                         is_print="<?php echo $orderProduct['is_print'];?>" 
                                         is_retreat="<?php echo $orderProduct['is_retreat'];?>"
+                                        product_type="<?php echo $orderProduct['product_type'];?>"
                                         product_status="<?php echo $orderProduct['product_status'];?>"  
                                         tasteids="<?php if(!empty($tasteidsOrderProducts[$orderProduct['lid']])){ echo $tasteidsOrderProducts[$orderProduct['lid']];}?>" 
                                         tastememo="<?php echo $orderProduct['taste_memo'];?>" 
@@ -46,11 +48,12 @@
                                     <span class="selectProductPrice" style="color:#976125;display:none"><?php echo number_format($orderProduct['original_price'],2);?></span>
                                     <span class="selectProductDiscount" style="color:#976125;display:none"><?php echo $orderProduct['offprice'];?></span>
                                     <span class="selectProductNowPrice" style="color:#976125"><?php echo number_format($orderProduct['price'],2);?></span>
-                                    <span style="position:absolute;" class="selectProductName"><?php echo $orderProduct['product_name'];?></span>
+                                    <span style="position:absolute;" class="selectProductName"><?php if($orderProduct['product_type']=="0"||$orderProduct['product_type']==""){echo $orderProduct['product_name_order'];}elseif($orderProduct['product_type']=="1"){echo "餐位费";}elseif($orderProduct['product_type']=="2"){echo "打包费";}elseif($orderProduct['product_type']=="3"){echo "送餐费";}elseif($orderProduct['product_type']=="4"){echo "外卖起步价";}?></span>
                                     <img class="selectProductDel" style="position: absolute;right:0.3em; width: 2.5em;height: 2.0em;padding:5px 10px 5px 10px;" 
                                          src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png">                                   
                                    </li>
                 <?php endforeach;?>
+               
         </ul>
         <span style="font-size:1.2em;">
            餐位费:<label style="font-size:1em; padding: 1px;" name="OrderSiteFee" id="order_site_fee"><?php echo number_format($model->number*$ordersitefee['fee_price'], 2);?></label>元  
