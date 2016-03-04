@@ -169,7 +169,7 @@
                                             var printresultfail=false;
                                             var printresulttemp;
                                             var successjobids="0";
-                                            //alert(result.msg);
+                                            alert(result.msg);
                                             data=result;
                                             if(data.status){
                                                     $('#orderdetailauto').load('<?php echo $this->createUrl('defaultOrder/orderPartial',array('companyId'=>$this->companyId));?>/orderId/'+orderid);                                
@@ -248,7 +248,7 @@
                                                 }
                                         },
                                         error: function(msg){
-                                            alert("保存失败2");
+                                        	alert("保存失败2");
                                         }
                                 });
                                 layer.close(layer_index_retreatbox);
