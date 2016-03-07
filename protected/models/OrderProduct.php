@@ -251,7 +251,7 @@ class OrderProduct extends CActiveRecord
 				left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid
 				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
                                 left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
-				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.product_order_status in("2","8") and t.delete_flag=0 order by t.product_type desc,t.set_id,t.main_id,t1.category_id';
+				where t.order_id=".$orderId." and t.dpid=".$dpid.' and t.product_order_status in("2","8") and t.delete_flag=0 order by t.product_type ASC,t.set_id,t.main_id,t1.category_id';
 		return $db->createCommand($sql)->queryAll();// and t.is_retreat=0
 	}
         
@@ -560,6 +560,86 @@ class OrderProduct extends CActiveRecord
                     }
                     //var_dump($modelprinterjob);exit;
                 }
+	}
+	static public function setProductallJobs($compayId,$padId){
+		$sqljoborder="select distinct order_id from nb_order_product where product_order_status='9' and dpid=".$compayId." order by order_id";
+		$modeljoborder=Yii::app()->db->createCommand($sqljoborder)->queryAll();
+		//var_dump($padId,$pad);exit;
+		//前面加 barcode
+		$precode="";//"1D6B450B".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A".strtoupper(implode('',unpack('H*', 'A'.$order->lid)))."0A";
+		$cardtotal=0;
+		$memo="挂单清单";
+		$temporderid=0;
+		//$orderProducts=array();
+		//$modelprinterjob=array();
+		if(!empty($modeljoborder))
+		{
+			$pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$compayId,'lid'=>$padId));
+			//var_dump($modeljoborder);exit;
+			foreach ($modeljoborder as $mjo)
+			{
+				if($mjo["order_id"] !='0000000000')
+				{
+					$order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$mjo["order_id"],':dpid'=>$compayId));
+					if(empty($order))
+					{
+						//throw new Exception(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+						continue;
+					}
+					$productTotalarray = OrderProduct::getPauseTotal($order->lid,$order->dpid);
+					//var_dump($productTotalarray);exit;
+					$total=$productTotalarray["total"];
+					$originaltotal=$productTotalarray["originaltotal"];
+					$criteria = new CDbCriteria;
+					$criteria->condition =  't.dpid='.$compayId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+					$criteria->order = ' t.lid desc ';
+					$siteNo = SiteNo::model()->find($criteria);
+					if($order->is_temp=='0')
+					{
+						$total = Helper::calOrderConsume($order,$siteNo, $total);
+					}
+					$order->should_total=$originaltotal;
+					$order->reality_total=$total["total"];
+					//var_dump($order);exit;
+					
+					//CF
+					$order=new Order();
+                $siteNo=new SiteNo();
+                $site=new Site();
+                ///***********insert to order feedback
+                ///*************print
+                
+                   // $order = Order::model()->with('company')->find(' t.lid=:lid and t.dpid=:dpid and t.order_status in(1,2,3)' , array(':lid'=>$orderId,':dpid'=>$companyId));
+                    //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"234")));                    
+                    if(empty($order))
+                    {
+                        Yii::app()->end(json_encode(array('status'=>false,'msg'=>"该订单不存在")));
+                    }
+                    $criteria = new CDbCriteria;
+                    $criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
+                    $criteria->order = ' t.lid desc ';                    
+                    $siteNo = SiteNo::model()->find($criteria);
+                    //order site 和 siteno都需要更新状态 所以要取出来
+                    if($order->is_temp=="0")
+                    {
+                        $criteria2 = new CDbCriteria;
+                        $criteria2->condition =  't.dpid='.$companyId.' and t.lid='.$order->site_id ;
+                        $criteria2->order = ' t.lid desc ';                    
+                        $site = Site::model()->with("siteType")->find($criteria2);
+                    }
+                
+                $orderList=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
+					//$orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
+					//var_dump($orderProducts);exit;
+					$printList = Helper::printKitchenAll3($order,$orderList,$site,$siteNo,false);
+					//                                    if($printList["status"])
+						//                                    {
+						//                                        array_push($modelprinterjob,$printList);
+						//                                    }
+				}
+			}
+			//var_dump($modelprinterjob);exit;
+		}
 	}
         
         static public function setPayJobs($compayId,$padId){
