@@ -259,7 +259,7 @@ class WxOrder
 				 $orderPrice +=  $cart['price']*$cart['num'];
 				 $realityPrice += $cart['original_price']*$cart['num'];
 			}
-			 if($this->type==1||$this->type==3){
+			 if(($this->type==1||$this->type==3) && $this->seatingFee > 0){
 				 	$se = new Sequence("order_product");
 			    	$orderProductId = $se->nextval();
 		         	$orderProductData = array(
@@ -282,52 +282,55 @@ class WxOrder
 					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 					$orderPrice +=  $this->seatingFee*$this->number;
 				 	$realityPrice += $this->seatingFee*$this->number;
-			  }else{
-			  		$se = new Sequence("order_product");
-			    	$orderProductId = $se->nextval();
-		         	$orderProductData = array(
-									'lid'=>$orderProductId,
-									'dpid'=>$this->dpid,
-									'create_at'=>date('Y-m-d H:i:s',$time),
-		        					'update_at'=>date('Y-m-d H:i:s',$time), 
-									'order_id'=>$orderId,
-									'set_id'=>0,
-									'product_id'=>0,
-									'product_name'=>'餐位费',
-									'product_pic'=>'',
-									'product_type'=>2,
-									'price'=>$this->packingFee,
-									'original_price'=>$this->packingFee,
-									'amount'=>$this->cartNumber,
-									'product_order_status'=>9,
-									'is_sync'=>DataSync::getInitSync(),
-									);
-					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-					$orderPrice +=  $this->packingFee*$this->cartNumber;
-				 	$realityPrice += $this->packingFee*$this->cartNumber;
-				 	
-				 	$se = new Sequence("order_product");
-			    	$orderProductId = $se->nextval();
-		         	$orderProductData = array(
-									'lid'=>$orderProductId,
-									'dpid'=>$this->dpid,
-									'create_at'=>date('Y-m-d H:i:s',$time),
-		        					'update_at'=>date('Y-m-d H:i:s',$time), 
-									'order_id'=>$orderId,
-									'set_id'=>0,
-									'product_id'=>0,
-									'product_name'=>'配送费',
-									'product_pic'=>'',
-									'product_type'=>3,
-									'price'=>$this->freightFee,
-									'original_price'=>$this->freightFee,
-									'amount'=>1,
-									'product_order_status'=>9,
-									'is_sync'=>DataSync::getInitSync(),
-									);
-					 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-					$orderPrice +=  $this->freightFee;
-				 	$realityPrice += $this->freightFee;
+			  }elseif($this->type==2){
+			  		if($this->packingFee > 0){
+			  			$se = new Sequence("order_product");
+				    	$orderProductId = $se->nextval();
+			         	$orderProductData = array(
+										'lid'=>$orderProductId,
+										'dpid'=>$this->dpid,
+										'create_at'=>date('Y-m-d H:i:s',$time),
+			        					'update_at'=>date('Y-m-d H:i:s',$time), 
+										'order_id'=>$orderId,
+										'set_id'=>0,
+										'product_id'=>0,
+										'product_name'=>'包装费',
+										'product_pic'=>'',
+										'product_type'=>2,
+										'price'=>$this->packingFee,
+										'original_price'=>$this->packingFee,
+										'amount'=>$this->cartNumber,
+										'product_order_status'=>9,
+										'is_sync'=>DataSync::getInitSync(),
+										);
+						 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+						$orderPrice +=  $this->packingFee*$this->cartNumber;
+					 	$realityPrice += $this->packingFee*$this->cartNumber;
+			  		}
+				 	if($this->freightFee > 0){
+				 		$se = new Sequence("order_product");
+				    	$orderProductId = $se->nextval();
+			         	$orderProductData = array(
+										'lid'=>$orderProductId,
+										'dpid'=>$this->dpid,
+										'create_at'=>date('Y-m-d H:i:s',$time),
+			        					'update_at'=>date('Y-m-d H:i:s',$time), 
+										'order_id'=>$orderId,
+										'set_id'=>0,
+										'product_id'=>0,
+										'product_name'=>'配送费',
+										'product_pic'=>'',
+										'product_type'=>3,
+										'price'=>$this->freightFee,
+										'original_price'=>$this->freightFee,
+										'amount'=>1,
+										'product_order_status'=>9,
+										'is_sync'=>DataSync::getInitSync(),
+										);
+						 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+						$orderPrice +=  $this->freightFee;
+					 	$realityPrice += $this->freightFee;
+				 	}
 			  }
 				 
 			if($orderPrice==0){
