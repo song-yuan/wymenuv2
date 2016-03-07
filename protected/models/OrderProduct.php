@@ -59,8 +59,9 @@ class OrderProduct extends CActiveRecord
 			array('is_print, is_retreat, is_waiting, is_giving, delete_flag, product_order_status', 'length', 'max'=>1),
 			//array('taste_memo', 'length', 'max'=>50),
 			array('create_at, offprice, amount, zhiamount', 'safe'),
-				array('is_sync','length','max'=>50),
-				array('product_status','length','max'=>2),
+			array('is_sync','length','max'=>50),
+			array('product_name, product_pic','length','max'=>255),
+			array('product_status, product_type','length','max'=>2),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, is_sync, order_id, main_id, set_id,private_promotion_lid, product_id, product_name, product_pic, product_type, is_retreat, is_print, price, offprice, amount, zhiamount, is_waiting, weight, taste_memo, is_giving, product_status, delete_flag, product_order_status', 'safe', 'on'=>'search'),
@@ -108,6 +109,9 @@ class OrderProduct extends CActiveRecord
                         'private_promotion_lid' => yii::t('app','专享活动ID'),
                         'main_id' => yii::t('app','主菜'),
 			'product_id' => yii::t('app','产品编号'),
+				'product_name' => yii::t('app','产品名称'),
+				'product_pic' => yii::t('app','产品图片'),
+				'product_type' => yii::t('app','产品类型'),
 			'is_retreat' => '0非退菜，1退菜',
                         'is_print' => yii::t('app','厨打'),
 			'price' => yii::t('app','下单时价格'),
@@ -152,6 +156,9 @@ class OrderProduct extends CActiveRecord
                 $criteria->compare('private_promotion_lid',$this->set_id,true);
                 $criteria->compare('main_id',$this->main_id,true);
 		$criteria->compare('product_id',$this->product_id,true);
+		$criteria->compare('product_name',$this->product_name,true);
+		$criteria->compare('product_pic',$this->product_pic,true);
+		$criteria->compare('product_type',$this->product_type,true);
 		$criteria->compare('is_retreat',$this->is_retreat,true);
                 $criteria->compare('is_print',$this->is_print,true);
 		$criteria->compare('price',$this->price,true);
