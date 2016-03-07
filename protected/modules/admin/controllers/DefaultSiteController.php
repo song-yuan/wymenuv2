@@ -242,7 +242,7 @@ class DefaultSiteController extends BackendController
                         $ret9arr=OrderProduct::setOrderCall($compayId,"0000000000","0");
                         //var_dump($ret9arr);exit;
                         OrderProduct::setPayJobs($compayId,$padId);
-                        OrderProduct::setProductallJobs($compayId,$padId);
+                        //OrderProduct::setProductallJobs($compayId,$padId);//CF
                         //echo "222";exit;
                         $ret8arr=OrderProduct::setPayCall($compayId,"0000000000","0");
                         //var_dump($ret8arr);exit;

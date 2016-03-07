@@ -281,9 +281,9 @@ class OrderProduct extends CActiveRecord
 	static public function getOriginalTotal($orderlist,$dpid){
 		$db = Yii::app()->db;
 		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as total"
-                        . ",ifnull(sum(tp.original_price*(IF(t.weight>0,t.weight,t.amount))),0.00) as originaltotal"
-                        . " from nb_order_product t,nb_product tp"
-                        . " where t.dpid=tp.dpid and t.product_id=tp.lid and t.delete_flag=0 and t.product_order_status in('1','2')"
+                        . ",ifnull(sum(t.original_price*(IF(t.weight>0,t.weight,t.amount))),0.00) as originaltotal"//CF:-->tp.->>t.
+                        . " from nb_order_product t"//CF:-->,nb_product tp
+                        . " where t.delete_flag=0 and t.product_order_status in('1','2')"//CF:-->t.dpid=tp.dpid and t.product_id=tp.lid and 
                         . " and t.is_giving=0 and t.is_retreat=0 and t.order_id in (".$orderlist.") and t.dpid=".$dpid;
 		$ret= $db->createCommand($sql)->queryRow();
                 return $ret;
@@ -330,10 +330,10 @@ class OrderProduct extends CActiveRecord
         static public function getPauseTotalAll($orderList,$dpid){
 		$db = Yii::app()->db;
 		$sql = "select ifnull(sum(t.price*(IF(t.weight>0,t.weight,t.amount))),0.00) as total"
-                        . ",ifnull(sum(tp.original_price*(IF(t.weight>0,t.weight,t.amount))),0.00) as originaltotal"
-                        . " from nb_order_product t,nb_product tp"
-                        . " where t.dpid=tp.dpid and t.product_id=tp.lid and t.delete_flag=0 "
-                        . " and t.is_giving=0 and t.is_retreat=0 and t.order_id in(".$orderList.") and t.dpid=".$dpid;
+                        . ",ifnull(sum(t.original_price*(IF(t.weight>0,t.weight,t.amount))),0.00) as originaltotal"//CF:-->tp.>>t.
+                        . " from nb_order_product t"//CF:-->,nb_product tp
+                        . " where t.delete_flag=0 "//CF:-->t.dpid=tp.dpid and t.product_id=tp.lid and 
+                        . " and t.is_giving=0 and t.is_retreat=0 and t.order_id in(".$orderList.") and t.dpid=".$dpid;//CF:-->
 		$ret= $db->createCommand($sql)->queryRow();
                 return $ret;
 	}
