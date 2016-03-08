@@ -534,7 +534,7 @@ class Helper
                         }elseif($product['product_type']=="3"){
                         	$productname="打包费";
                         }else{
-                        	$productname="其他";
+                        	$productname=$product['product_name_p'].$isgiving;
                         }
                         $printlen=(strlen($productname) + mb_strlen($productname,'UTF8')) / 2;
                         $charactorlen=  mb_strlen($productname,'UTF8');
@@ -932,7 +932,7 @@ class Helper
                         }elseif($product['product_type']=="3"){
                         	$productname="打包费";
                         }else{
-                        	$productname="其他";
+                        	$productname=$product['product_name_p'].$isgiving;
                         }//CF
                     	
                         $printlen=(strlen($productname) + mb_strlen($productname,'UTF8')) / 2;
