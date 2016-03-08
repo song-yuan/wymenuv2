@@ -98,7 +98,7 @@
 								<tr class="odd gradeX">
 								<td><?php if($text==1){echo $model['y_all'];}elseif($text==2){ echo $model['y_all'].-$model['m_all'];}else{echo $model['y_all'].-$model['m_all'].-$model['d_all'];}?></td>
 								<td style="width:20%;"><?php echo $model['company_name']; ?></td>
-								<td><?php echo $model['category_name']; ?></td>
+								<td><?php if (!empty($model['category_name'])){echo $model['category_name'];}else{echo "基础费（餐位费等）";} ?></td>
 								<td><?php echo $model['all_num'];?></td>
 								<td><?php echo sprintf("%.2f",$model['all_price']);?></td>
 								<td></td>
