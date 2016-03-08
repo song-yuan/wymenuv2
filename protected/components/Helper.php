@@ -527,8 +527,14 @@ class Helper
                         //array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
                         if($product['product_type']=="0"){
                     		$productname=$product['product_name'].$isgiving;
-                        }else{
+                        }elseif($product['product_type']=="1"){
                         	$productname="餐位费";
+                        }elseif($product['product_type']=="2"){
+                        	$productname="送餐费";
+                        }elseif($product['product_type']=="3"){
+                        	$productname="打包费";
+                        }else{
+                        	$productname="其他";
                         }
                         $printlen=(strlen($productname) + mb_strlen($productname,'UTF8')) / 2;
                         $charactorlen=  mb_strlen($productname,'UTF8');
@@ -917,10 +923,16 @@ class Helper
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
                         //array_push($listData,"00".str_pad($product['amount']." X ".number_format($product['price'],2),13,' ')." ".Helper::setProductName($product['product_name'],24,16));
 //                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
-                        if($product['product_type']=="0"){
-                        	$productname=$product['product_name'].$isgiving;
-                        }else{
+		 				if($product['product_type']=="0"){
+                    		$productname=$product['product_name'].$isgiving;
+                        }elseif($product['product_type']=="1"){
                         	$productname="餐位费";
+                        }elseif($product['product_type']=="2"){
+                        	$productname="送餐费";
+                        }elseif($product['product_type']=="3"){
+                        	$productname="打包费";
+                        }else{
+                        	$productname="其他";
                         }//CF
                     	
                         $printlen=(strlen($productname) + mb_strlen($productname,'UTF8')) / 2;
@@ -2631,6 +2643,27 @@ public function getSiteName($orderId){
                                         		array_push($listData,"01".$productnum.".".$productStatus."餐位费".str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
                                         	}else{
                                         		array_push($listData,"01".$productnum.".".$productStatus."餐位费".str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+                                        	}
+                                        }elseif($orderProduct->product_type=="2"){
+                                        	$printlen=(strlen("送餐费") + mb_strlen("送餐费",'UTF8')) / 2;
+                                        	if(!empty($productStatus)){
+                                        		array_push($listData,"01".$productnum.".".$productStatus."送餐费".str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+                                        	}else{
+                                        		array_push($listData,"01".$productnum.".".$productStatus."送餐费".str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+                                        	}
+                                        }elseif($orderProduct->product_type=="3"){
+                                        	$printlen=(strlen("打包费") + mb_strlen("打包费",'UTF8')) / 2;
+                                        	if(!empty($productStatus)){
+                                        		array_push($listData,"01".$productnum.".".$productStatus."打包费".str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+                                        	}else{
+                                        		array_push($listData,"01".$productnum.".".$productStatus."打包费".str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+                                        	}
+                                        }else{
+                                        	$printlen=(strlen("其他") + mb_strlen("其他",'UTF8')) / 2;
+                                        	if(!empty($productStatus)){
+                                        		array_push($listData,"01".$productnum.".".$productStatus."其他".str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+                                        	}else{
+                                        		array_push($listData,"01".$productnum.".".$productStatus."其他".str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
                                         	}
                                         }
                                         array_push($listData,"br");
