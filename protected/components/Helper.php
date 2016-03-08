@@ -525,7 +525,11 @@ class Helper
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
                         //array_push($listData,"00".str_pad($product['amount']." X ".number_format($product['price'],2),13,' ')." ".Helper::setProductName($product['product_name'],24,16));
                         //array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
-                        $productname=$product['product_name'].$isgiving;
+                        if($product['product_type']=="0"){
+                    		$productname=$product['product_name'].$isgiving;
+                        }else{
+                        	$productname="餐位费";
+                        }
                         $printlen=(strlen($productname) + mb_strlen($productname,'UTF8')) / 2;
                         $charactorlen=  mb_strlen($productname,'UTF8');
                         if($printlen>22)
@@ -913,7 +917,12 @@ class Helper
                         //array_push($listData,Helper::getPlaceholderLen($product['product_name'],24).Helper::getPlaceholderLen($product['amount']." X ".$product['product_unit'],12).Helper::getPlaceholderLen(number_format($product['price'],2) , 12));	
                         //array_push($listData,"00".str_pad($product['amount']." X ".number_format($product['price'],2),13,' ')." ".Helper::setProductName($product['product_name'],24,16));
 //                        array_push($listData,"11".str_pad($product['amount']." X ".number_format($product['price'],2),10,' ')." ".Helper::setProductName($product['product_name'],12,6));
-                        $productname=$product['product_name'].$isgiving;
+                        if($product['product_type']=="0"){
+                        	$productname=$product['product_name'].$isgiving;
+                        }else{
+                        	$productname="餐位费";
+                        }//CF
+                    	
                         $printlen=(strlen($productname) + mb_strlen($productname,'UTF8')) / 2;
                         $charactorlen=  mb_strlen($productname,'UTF8');
                         if($printlen>22)
@@ -2466,7 +2475,7 @@ public function getSiteName($orderId){
                 {
                     $floor_id=$site->floor_id;
                 }
-                $orderProducts = OrderProduct::model()->with('product')->findAll(' t.order_id in ('.$orderList.') and t.dpid='.$order->dpid.' and t.is_print=0 and t.delete_flag=0 and t.product_type not in(1,2,3,4,5,6,7,8)');//CF
+                $orderProducts = OrderProduct::model()->with('product')->findAll(' t.order_id in ('.$orderList.') and t.dpid='.$order->dpid.' and t.is_print=0 and t.delete_flag=0 ');//CF
                 if(empty($orderProducts)) 
                 {
                     return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"noorderproduct");//yii::t('app','没有要打印的菜品！')
@@ -3197,7 +3206,11 @@ public function getSiteName($orderId){
 //                                        array_push($listDataBody,"10"."原因:".$memo);
 //                                        array_push($listDataBody,"br");
                                         //return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试4".$memo);                                        
-                                        array_push($listDataBody,"01".str_pad($orderProduct->product->product_name,34," ").str_pad("-".$orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));	
+                                        if($orderProduct->product_type=="0"){
+                                        	array_push($listDataBody,"01".str_pad($orderProduct->product->product_name,34," ").str_pad("-".$orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));	
+                                        }else{
+                                        	array_push($listDataBody,"01".str_pad($orderProduct->product_name,34," ").str_pad("-".$orderProduct->amount,6," ").str_pad($orderProduct->product->product_unit,8," "));
+                                        }
                                         array_push($listDataBody,"br");
                                         array_push($listDataBody,"br");
                                         array_push($listDataBody,"10"."原因:".$memo);
