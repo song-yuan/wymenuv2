@@ -102,16 +102,16 @@ class WxPayDataBase
 	 */
 	public function MakeSign()
 	{
-		$key = '';
+		$key = WxPayConfig::KEY;
 		if(isset($_GET['companyId'])){
 			$dpid = $_GET['companyId'];
 			$account = WxAccount::get($dpid);
-			$key = $account['key'];
+//			$key = $account['key'];
 		}elseif(isset($this->values['out_trade_no'])){
 			$orderIdArr = explode('-',$this->values['out_trade_no']);
 			$dpid = $orderIdArr[1];
 			$account = WxAccount::get($dpid);
-			$key = $account['key'];
+//			$key = $account['key'];
 		}
 		//签名步骤一：按字典序排序参数
 		ksort($this->values);
