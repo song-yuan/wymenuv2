@@ -242,7 +242,6 @@ class DefaultSiteController extends BackendController
                         $ret9arr=OrderProduct::setOrderCall($compayId,"0000000000","0");
                         //var_dump($ret9arr);exit;
                         OrderProduct::setPayJobs($compayId,$padId);
-                        OrderProduct::setPayJobs($compayId,$padId);
                         //OrderProduct::setProductallJobs($compayId,$padId);//CF
                         //echo "222";exit;
                         $ret8arr=OrderProduct::setPayCall($compayId,"0000000000","0");
@@ -269,6 +268,8 @@ class DefaultSiteController extends BackendController
                         $models= Yii::app()->db->createCommand($sql)->queryAll();
                         //var_dump($models);exit;
                         //下单打印出来，暂时不用
+
+                        OrderProduct::setPayJobs($compayId,$padId);
                         //OrderProduct::setPauseJobs($compayId,$padId);//CF
                         //去modeljobs
                         $modeljobs= Yii::app()->db->createCommand("select dpid,jobid,address from nb_order_printjobs where dpid=".$compayId." and is_sync in ('10000','01000')")->queryAll();
