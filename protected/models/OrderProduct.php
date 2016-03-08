@@ -221,12 +221,12 @@ class OrderProduct extends CActiveRecord
         
         //多个订单已经下单的产品
         static public function getHasOrderProductsAll($orderList,$dpid){
-		$db = Yii::app()->db;
-		$sql = "select t.*,t1.product_name,t1.original_price,t1.is_temp_price,t1.is_special,t1.is_discount,
-                                t1.product_unit,t1.weight_unit,t1.is_weight_confirm,t1.printer_way_id,t2.category_name,t3.set_name from nb_order_product t
+		$db = Yii::app()->db;//下行CF修改AS之后
+		$sql = "select t.*,t1.product_name as product_name_p,t1.original_price as original_price_p,t1.is_temp_price,t1.is_special,t1.is_discount,
+                t1.product_unit,t1.weight_unit,t1.is_weight_confirm,t1.printer_way_id,t2.category_name,t3.set_name from nb_order_product t
 				left join nb_product t1 on t.product_id = t1.lid and t.dpid=t1.dpid
 				left join nb_product_category t2 on t1.category_id = t2.lid and t1.dpid=t2.dpid
-                                left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
+                left join nb_product_set t3 on t.set_id = t3.lid and t.dpid=t3.dpid
 				where t.order_id in (".$orderList.") and t.dpid=".$dpid." and t.is_print=1 and t.product_order_status in ('1','2') and t.delete_flag=0 order by t.set_id,t.main_id,t1.category_id";
 		return $db->createCommand($sql)->queryAll();// and t.is_retreat=0
 	}
