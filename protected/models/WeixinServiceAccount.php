@@ -97,7 +97,7 @@ class WeixinServiceAccount extends CActiveRecord
 			'expire' => 'Expire',
 			'access_token' => 'Access Token',
 			'partner_id' => 'Partner',
-			'key' => 'Key',
+			'key' => '微信支付密钥 Key',
 			'operator' => 'Operator',
 			'certificate' => 'Certificate',
 			'rootca' => 'Rootca',
