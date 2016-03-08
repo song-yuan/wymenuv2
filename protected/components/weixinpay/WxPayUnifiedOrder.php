@@ -525,5 +525,30 @@ class WxPayUnifiedOrder extends WxPayDataBase
 	{
 		return array_key_exists('openid', $this->values);
 	}
+	
+	/**
+	* 设置trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。下单前需要调用【网页授权获取用户信息】接口获取到用户的Openid。 
+	* @param string $value 
+	**/
+	public function SetSubOpenid($value)
+	{
+		$this->values['sub_appid'] = $value;
+	}
+	/**
+	* 获取trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。下单前需要调用【网页授权获取用户信息】接口获取到用户的Openid。 的值
+	* @return 值
+	**/
+	public function GetSubOpenid()
+	{
+		return $this->values['sub_appid'];
+	}
+	/**
+	* 判断trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。下单前需要调用【网页授权获取用户信息】接口获取到用户的Openid。 是否存在
+	* @return true 或 false
+	**/
+	public function IsSubOpenidSet()
+	{
+		return array_key_exists('sub_appid', $this->values);
+	}
 }
 ?>

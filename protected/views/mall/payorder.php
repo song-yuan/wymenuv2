@@ -32,16 +32,18 @@
 		$input->SetGoods_tag("点餐订单");
 		$input->SetNotify_url($notifyUrl);
 		$input->SetTrade_type("JSAPI");
-		$input->SetOpenid($openId);
+		if(WxPayConfig::ISSUBMCH){
+			$input->SetSubOpenid($openId);
+		}else{
+			$input->SetOpenid($openId);
+		}
 		
 		$orderInfo = WxPayApi::unifiedOrder($input);
-		
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 	}catch(Exception $e){
 		$canpWxpay = false;
 		$jsApiParameters = '';
 	}
-	var_dump($jsApiParameters);
 	
 ?>
 
