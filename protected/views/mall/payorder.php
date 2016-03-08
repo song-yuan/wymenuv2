@@ -41,6 +41,7 @@
 		$canpWxpay = false;
 		$jsApiParameters = '';
 	}
+	var_dump($jsApiParameters);
 	
 ?>
 
