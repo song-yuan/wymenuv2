@@ -28,6 +28,13 @@
 				<?php echo $form->error($model, 'appsecret' )?>
 			</div>
 		</div>
+		<div class="form-group">
+			<?php echo $form->label($model, 'key',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'key',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('key')));?>
+				<?php echo $form->error($model, 'key' )?>
+			</div>
+		</div>
 
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
