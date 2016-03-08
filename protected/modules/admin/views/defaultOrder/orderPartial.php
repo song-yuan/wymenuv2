@@ -10,14 +10,14 @@
                     现价<span id="order_reality_pay"><?php echo number_format($model->reality_total, 2);?></span>元<br>
                     已付<span id="order_has_pay"><?php echo number_format($model->pay_total, 2);?></span>元/
                     应付<span id="order_remain_pay"><?php echo number_format($model->reality_total-$model->pay_total, 2);?></span>元 </br>
-                   修改人数:<span id="order_num_xiugai">
+                  <!-- 修改人数:<span id="order_num_xiugai">
                  <div style="width:50%;float: right;margin-right: 110px;">                                                                      
                  <label id="order_num_minus" style="font-size: 1em;padding: 1px; margin: 2px; border: 1px;">━</label>
                  <label style="font-size:1em; padding: 1px;" name="OrderNumber" id="order_number"><?php echo number_format($model->number, 0);?></label>
                  <label id="order_num_plus" style="font-size: 1em;padding: 1px; margin: 2px; border: 1px;">╋</label>
                  <BUTTON id="order_num_button" style="margin-left: 10px;">确定</BUTTON>
                  </div>
-           </span>  
+           </span>   --> 
                         
             </li>
                 <?php foreach ($orderProducts as $orderProduct):?>
@@ -55,9 +55,9 @@
                 <?php endforeach;?>
                
         </ul>
-        <span style="font-size:1.2em;">
+        <!-- <span style="font-size:1.2em;">
            餐位费:<label style="font-size:1em; padding: 1px;" name="OrderSiteFee" id="order_site_fee"><?php echo number_format($model->number*$ordersitefee['fee_price'], 2);?></label>元  
-        </span><br>
+        </span><br> -->
         <span style="font-size:1.2em;">
             原价合计:<?php echo number_format($productPauseTotalarray["originaltotal"],2);?>  /现价合计:<?php echo number_format($productPauseTotalarray["total"],2); ?>
         </span><br>
