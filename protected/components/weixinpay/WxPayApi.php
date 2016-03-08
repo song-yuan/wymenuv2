@@ -52,8 +52,12 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 		
-		$inputObj->SetAppid($appId);//公众账号ID
-		$inputObj->SetMch_id($mchId);//商户号
+		
+		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		
+		$inputObj->SetSubAppid($appId);//子商户公众账号ID
+		$inputObj->SetSubMch_id($appId);//子商户号
 		$inputObj->SetSpbill_create_ip($_SERVER['REMOTE_ADDR']);//终端ip	  
 		//$inputObj->SetSpbill_create_ip("1.1.1.1");  	    
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
@@ -94,8 +98,11 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 			
-		$inputObj->SetAppid($appId);//公众账号ID
-		$inputObj->SetMch_id($mchId);//商户号
+		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		
+		$inputObj->SetSubAppid($appId);//子商户公众账号ID
+		$inputObj->SetSubMch_id($appId);//子商户号
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 		
 		$inputObj->SetSign();//签名
