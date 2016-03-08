@@ -32,7 +32,7 @@
 		$input->SetGoods_tag("点餐订单");
 		$input->SetNotify_url($notifyUrl);
 		$input->SetTrade_type("JSAPI");
-		$input->SetOpenid($openId);
+		$input->SetSubOpenid($openId);
 		
 		$orderInfo = WxPayApi::unifiedOrder($input);
 		echo '<meta charset=utf8 />';
