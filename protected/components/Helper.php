@@ -3129,11 +3129,11 @@ public function getSiteName($orderId){
 								array_push($listData,"01".$productnum.".".$productStatus."打包费".str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
 							}
 						}else{
-							$printlen=(strlen("其他") + mb_strlen("其他",'UTF8')) / 2;
+							$printlen=(strlen($orderProduct->product->product_name) + mb_strlen($orderProduct->product->product_name,'UTF8')) / 2;
 							if(!empty($productStatus)){
-								array_push($listData,"01".$productnum.".".$productStatus."其他".str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+								array_push($listData,"01".$productnum.".".$productStatus.$orderProduct->product->product_name.str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
 							}else{
-								array_push($listData,"01".$productnum.".".$productStatus."其他".str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+								array_push($listData,"01".$productnum.".".$productStatus.$orderProduct->product->product_name.str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
 							}
 						}
 						array_push($listData,"br");
