@@ -241,7 +241,7 @@ class DefaultSiteController extends BackendController
                         //更新所有状态是9的为0（微信下单）,8的为3（微信支付）,并自动呼叫
                         $ret9arr=OrderProduct::setOrderCall($compayId,"0000000000","0");
                         //var_dump($ret9arr);exit;
-                        OrderProduct::setProductallJobs($compayId);//CF
+                        //OrderProduct::setProductallJobs($compayId);//CF
                         OrderProduct::setPayJobs($compayId,$padId);
                         //echo "222";exit;
                         $ret8arr=OrderProduct::setPayCall($compayId,"0000000000","0");
