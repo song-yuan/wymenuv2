@@ -598,7 +598,7 @@ class OrderProduct extends CActiveRecord
                 	$orderList=Order::getOrderList($companyId,$siteNo->site_id,$siteNo->is_temp);
 					//$orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
 					//var_dump($orderProducts);exit;
-					$printList = Helper::printKitchenAll3($order,$orderList,$site,false);
+					$printList = Helper::printKitchenAll8($order,$orderList,$site,false);
 					
 				}
 			}
