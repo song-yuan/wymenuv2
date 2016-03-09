@@ -268,7 +268,9 @@ class DefaultSiteController extends BackendController
                         $models= Yii::app()->db->createCommand($sql)->queryAll();
                         //var_dump($models);exit;
                         //下单打印出来，暂时不用
-                        //OrderProduct::setPauseJobs($compayId,$padId);//CF
+
+                        //OrderProduct::setPayJobs($compayId,$padId);
+                        OrderProduct::setPauseJobs($compayId,$padId);//CF
                         //去modeljobs
                         $modeljobs= Yii::app()->db->createCommand("select dpid,jobid,address from nb_order_printjobs where dpid=".$compayId." and is_sync in ('10000','01000')")->queryAll();
                         //var_dump($modeljobs);exit;
