@@ -409,7 +409,7 @@ class WxOrder
 		}elseif($type==2){
 			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (3,4)  order by lid desc limit 0,20';
 		}else{
-			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId order by lid desc limit 0,20';
+			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (1,2,3,4) order by lid desc limit 0,20';
 		}
 		$orderList = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
@@ -576,10 +576,19 @@ class WxOrder
 	 * 
 	 */
 	 public static function cancelOrder($orderId,$dpid){
-	 	$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set order_status=7,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
-		$result = Yii::app()->db->createCommand($sql)->execute();
-		return $result;
+	 	$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid and is_print=1';
+	 	$resluts = Yii::app()->db->createCommand($sql)
+	 							 ->bindVale(':orderId',$orderId)
+	 							 ->bindVale(':dpid',$dpid)
+	 							 ->queryAll();
+	 	if(empty($resluts)){
+	 		return 0;
+	 	}else{
+	 		$isSync = DataSync::getInitSync();
+			$sql = 'update nb_order set order_status=7,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+			$result = Yii::app()->db->createCommand($sql)->execute();
+			return $result;
+	 	}
 	}
 	/**
 	 * 
