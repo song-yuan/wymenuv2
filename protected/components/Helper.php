@@ -4521,40 +4521,12 @@ public function getSiteName($orderId){
                 $jobid = $se->nextval();
                 if($printserver=='1')//通过打印服务器打印
                 {
-//                    if($printer->printer_type!='0')//not net
-//                    {
-//                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','网络打印的打印机必须是网络打印机！'));
-//                    }
-//                    $print_data=array(
-//                        "do_id"=>"ipPrintContent",
-//                        "company_id"=>$printer->dpid,
-//                        "job_id"=>$jobid,
-//                        "printer"=>$printer->address,
-//                        //"content"=>"BBB6D3ADCAB9D3C30A0A0A0A0A0A1D5601"
-//                        "content"=>$contentCode
-//                    );
-//                    //$store = Store::instance('wymenu');
-//                    //echo 'ss';exit;
-//                    $clientId=$store->get("client_".$printer->dpid);
-//                    //var_dump($clientId,$print_data);exit;
-//                    if(!empty($clientId))
-//                    {
-//                        Gateway::sendToClient($clientId,json_encode($print_data));
-//                        //Gateway::sendToAll(json_encode($print_data));
-//                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','msg'=>'');
-//                    }else{
-//                        return array('status'=>false,'dpid'=>$printer->dpid,'jobid'=>'0','type'=>'net','msg'=>yii::t('app','打印服务器找不到！'));
-//                    }   
+  
                     ///////////////////
                     ///打印任务不再发送，返回job编号，有pad自己去取                   
 
                 }else{//主动的同步打印 0
-//                    if($printer->printer_type=='1')//local
-//                    {                
-//                        //$ret = $store->set($companyId."_".$jobid,'1C43011C2688A488A482AE82AF82B182F182C982BF82CD0A0A0A0A0A0A1D5601',0,60);
-//                        $store->set($printer->dpid."_".$jobid,$contentCode,0,120);//should 120测试1200
-//                        return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'local','msg'=>'');
-//                    }else{
+
                         
                         $seorderprintjobs=new Sequence("order_printjobs");
                         $orderjobId = $seorderprintjobs->nextval();
@@ -4572,7 +4544,7 @@ public function getSiteName($orderId){
                                             'printer_type'=>"0",
                                             'finish_flag'=>'0',//默认0不成功
                                             'delete_flag'=>'0',
-                        					'is_sync'=>'01000',
+                        					//'is_sync'=>'01000',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
                         
