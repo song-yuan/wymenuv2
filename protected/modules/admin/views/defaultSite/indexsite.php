@@ -381,8 +381,8 @@
                                     times++;
                                 });
                                 $.each(msg.modeljobs,function(key,value){
-                                    alert(value);
-                                    alert("1111);
+                                	alert("1111");alert(value);
+                                    
                                     //printresult=false;
                                     for(var itemp=1;itemp<4;itemp++)
                                     {
@@ -402,8 +402,9 @@
                                         }                                                                        
                                     }
                                 });
+                                    alert("222");
                                 alert(msg.modeljobs);
-                                alert("222");
+                                
                                 if("00000000"!=successjobs)
                                 {
                                     $.ajax({
