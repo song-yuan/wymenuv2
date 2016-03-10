@@ -141,35 +141,34 @@ class WxOrder
 		$time = time();
 		$orderPrice = 0;
 		$realityPrice = 0;
+		$accountNo = 0;
 		$transaction = Yii::app()->db->beginTransaction();
  		try {
- 			if($this->type==1 && $this->order){
- 				$orderId = $this->order['lid'];
- 				$orderPrice = $this->order['should_total'];
- 				$realityPrice = $this->order['reality_total'];
+			$se = new Sequence("order");
+		    $orderId = $se->nextval();
+		    
+		    if($this->type==1 && $this->order){
  				$accountNo = $this->order['account_no'];
  			}else{
- 				$se = new Sequence("order");
-			    $orderId = $se->nextval();
-			    
-			    $accountNo = self::getAccountNo($this->dpid,$this->siteId,0,$orderId);
-			    
-			    $insertOrderArr = array(
-			        	'lid'=>$orderId,
-			        	'dpid'=>$this->dpid,
-			        	'create_at'=>date('Y-m-d H:i:s',$time),
-			        	'update_at'=>date('Y-m-d H:i:s',$time), 
-			        	'account_no'=>$accountNo,
-			        	'user_id'=>$this->userId,
-			        	'site_id'=>$this->siteId,
-			        	'is_temp'=>$this->isTemp,
-			        	'number'=>$this->number,
-			        	'order_status'=>1,
-			        	'order_type'=>$this->type,
-			        	'is_sync'=>DataSync::getInitSync(),
-			        );
-				$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
+ 				$accountNo = self::getAccountNo($this->dpid,$this->siteId,0,$orderId);
  			}
+ 			
+		    $insertOrderArr = array(
+		        	'lid'=>$orderId,
+		        	'dpid'=>$this->dpid,
+		        	'create_at'=>date('Y-m-d H:i:s',$time),
+		        	'update_at'=>date('Y-m-d H:i:s',$time), 
+		        	'account_no'=>$accountNo,
+		        	'user_id'=>$this->userId,
+		        	'site_id'=>$this->siteId,
+		        	'is_temp'=>$this->isTemp,
+		        	'number'=>$this->number,
+		        	'order_status'=>1,
+		        	'order_type'=>$this->type,
+		        	'is_sync'=>DataSync::getInitSync(),
+		        );
+			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
+ 			
  			//外卖订单地址
  			if($this->type==2){
  				$address = WxAddress::getDefault($this->userId,$this->dpid);
@@ -570,6 +569,17 @@ class WxOrder
 	 	$isSync = DataSync::getInitSync();
 		$sql = 'update nb_order set '.$contion.'is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 		Yii::app()->db->createCommand($sql)->execute();
+	}
+	/**
+	 * 
+	 * 取消订单
+	 * 
+	 */
+	 public static function cancelOrder($orderId,$dpid){
+	 	$isSync = DataSync::getInitSync();
+		$sql = 'update nb_order set order_status=7,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+		$result = Yii::app()->db->createCommand($sql)->execute();
+		return $result;
 	}
 	/**
 	 * 

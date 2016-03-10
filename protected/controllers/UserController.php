@@ -284,6 +284,24 @@ class UserController extends Controller
 	}
 	/**
 	 * 
+	 * 取消订单
+	 * 
+	 */
+	 public function actionAjaxCancelOrder()
+	{
+		$orderId = Yii::app()->request->getParam('orderId');
+		$dpid = $this->companyId;
+		
+		$result = WxOrder::cancelOrder($orderId,$dpid);
+		if($result){
+			echo 1;
+		}else{
+			echo 0;
+		}
+		exit;
+	}
+	/**
+	 * 
 	 * 点击头像 更新会员信息
 	 * 
 	 */
