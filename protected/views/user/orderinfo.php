@@ -13,8 +13,8 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/user.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 
 
 <div class="order-title">我的订单</div>
@@ -104,6 +104,32 @@
 	</div>
 </div>
 <div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" style="font-size:1.2em;">取消订单</div>
+
+ <!--BEGIN dialog1-->
+<div class="weui_dialog_confirm" id="dialog1" style="display: none;">
+    <div class="weui_mask" style="z-index:1005;"></div>
+    <div class="weui_dialog" style="z-index:1006;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd" style="text-align:center;">是否要取消订单？</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+<!--END dialog1-->
+ <!--BEGIN dialog2-->
+<div class="weui_dialog_alert" id="dialog2" style="display: none;">
+    <div class="weui_mask" style="z-index:1005;"></div>
+    <div class="weui_dialog" style="z-index:1006;">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+        <div class="weui_dialog_bd">订单取消失败</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+<!--END dialog2-->
 <?php if($redPack && $order['order_status'] > 2):?>
 <?php 
 	$title = '现金红包送不停！';
@@ -141,26 +167,31 @@ $(document).ready(function(){
 			location.href = '<?php echo $this->createUrl('/mall/payOrder',array('companyId'=>$this->companyId,'orderId'=>$order['lid'],'paytype'=>2));?>';
 		}
 	});
+	var orderId = 0;
 	$('.close_window').click(function(){
-		var orderId = $(this).attr('order-id');
-		layer.confirm('是否要取消订单？', {
-		    btn: ['确定','取消'] //按钮
-		}, function(){
-		    $.ajax({
-				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
-				data:{orderId:orderId},
-				success:function(data){
-					if(parseInt(data)){
-						history.go(0);
-					}else{
-						layer.msg('取消失败,重新操作');
-					}
+		orderId = $(this).attr('order-id');
+		$('#dialog1').show();
+	});
+	$('#dialog1 .primary').click(function(){
+		$.ajax({
+			url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
+			data:{orderId:orderId},
+			success:function(data){
+				if(parseInt(data)){
+					history.go(0);
+				}else{
+					$('#dialog1').hide();
+					$('#dialog2').show();
 				}
-			});
-		}, function(){
-
+			}
 		});
 	});
+	$('#dialog1 .default').click(function(){
+		$('#dialog1').hide();
+	});	
+	$('#dialog2 .primary').click(function(){
+		$('#dialog2').hide();
+	});	
 	$('.share').click(function(){
 		$('.popshare').show();
 	});
