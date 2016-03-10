@@ -4544,7 +4544,7 @@ public function getSiteName($orderId){
                                             'printer_type'=>"0",
                                             'finish_flag'=>'0',//默认0不成功
                                             'delete_flag'=>'0',
-                        					'is_sync'=>'01001',
+                        					'is_sync'=>'01000',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
                         
