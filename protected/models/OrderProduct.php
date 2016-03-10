@@ -562,8 +562,8 @@ class OrderProduct extends CActiveRecord
                 }
 	}
 	static public function setProductallJobs($compayId){
-		$sqljobsite="select distinct site_id from nb_order_product where product_order_status='8' and dpid=".$compayId." order by site_id";
-		$modeljobsite=Yii::app()->db->createCommand($sqljobsite)->queryAll();
+		//$sqljobsite="select distinct site_id from nb_order_product where product_order_status='8' and dpid=".$compayId." order by site_id";
+		//$modeljobsite=Yii::app()->db->createCommand($sqljobsite)->queryAll();exit;
 		$sqljoborder="select distinct order_id from nb_order_product where product_order_status='8' and dpid=".$compayId." order by order_id";
 		$modeljoborder=Yii::app()->db->createCommand($sqljoborder)->queryAll();
 		
