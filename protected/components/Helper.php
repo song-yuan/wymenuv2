@@ -3344,7 +3344,7 @@ public function getSiteName($orderId){
                 $printret=array();
 										$printserver="0";  ///自己去轮询
 										//份数循环
-												foreach ($printercontent_a as $key=>$values) {     exit;        //////////////
+												foreach ($printercontent_a as $key=>$values) {             //////////////
 												//$printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
 												$printer2 = $printers_a[$key];
 												//return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"before printConetent2");
