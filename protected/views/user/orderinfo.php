@@ -103,7 +103,7 @@
 		<div class="clear"></div>
 	</div>
 </div>
-<div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" style="font-size:1.5em;">取消订单</div>
+<div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" style="font-size:1.2em;">取消订单</div>
 <?php if($redPack && $order['order_status'] > 2):?>
 <?php 
 	$title = '现金红包送不停！';
