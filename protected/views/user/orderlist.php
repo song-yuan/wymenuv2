@@ -5,8 +5,8 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link href='<?php echo $baseUrl;?>/css/mall/common.css' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <body class="gift_exchange bg_lgrey2">
 	<div id="topnav">
 		<ul>
@@ -53,28 +53,58 @@
 		</ul>
 		<!-- 全部 -->
 	</div>
+	 <!--BEGIN dialog1-->
+    <div class="weui_dialog_confirm" id="dialog1" style="display: none;">
+        <div class="weui_mask" style="z-index:1005;"></div>
+        <div class="weui_dialog" style="z-index:1006;">
+            <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+            <div class="weui_dialog_bd" style="text-align:center;">是否要取消订单？</div>
+            <div class="weui_dialog_ft">
+                <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+                <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+            </div>
+        </div>
+    </div>
+    <!--END dialog1-->
+     <!--BEGIN dialog2-->
+            <div class="weui_dialog_alert" id="dialog2" style="display: none;">
+                <div class="weui_mask" style="z-index:1005;"></div>
+                <div class="weui_dialog" style="z-index:1006;">
+                    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+                    <div class="weui_dialog_bd">订单取消失败</div>
+                    <div class="weui_dialog_ft">
+                        <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+                    </div>
+                </div>
+            </div>
+            <!--END dialog2-->
 	<script type="text/javascript">
 	$(document).ready(function(){
+		var orderId = 0;
 		$('.cancel').click(function(){
-			var orderId = $(this).attr('order-id');
-			layer.confirm('是否要取消订单？', {
-			    btn: ['确定','取消'] //按钮
-			}, function(){
-			    $.ajax({
-					url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
-					data:{orderId:orderId},
-					success:function(data){
-						if(parseInt(data)){
-							history.go(0);
-						}else{
-							layer.msg('取消失败,重新操作');
-						}
+			orderId = $(this).attr('order-id');
+			$('#dialog1').show();
+		});
+		$('#dialog1 .primary').click(function(){
+			$.ajax({
+				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
+				data:{orderId:orderId},
+				success:function(data){
+					if(parseInt(data)){
+						history.go(0);
+					}else{
+						$('#dialog1').hide();
+						$('#dialog2').show();
 					}
-				});
-			}, function(){
-
+				}
 			});
 		});
+		$('#dialog1 .default').click(function(){
+			$('#dialog1').hide();
+		});	
+		$('#dialog2 .primary').click(function(){
+			$('#dialog1').hide();
+		});	
 	});
 	</script>
 	<?php 
