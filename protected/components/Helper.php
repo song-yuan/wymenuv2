@@ -4538,13 +4538,13 @@ public function getSiteName($orderId){
                                             'create_at'=>$time,
                                             'orderid'=>$orderid,
                                             'jobid'=>$jobid,
-                                            'update_at'=>"2015-12-12 12:12:12",
+                                            'update_at'=>$time,
                                             'address'=>$printer->address,
                                             'content'=>$contentCodeAll,
                                             'printer_type'=>"0",
                                             'finish_flag'=>'0',//默认0不成功
                                             'delete_flag'=>'0',
-                        					//'is_sync'=>'01000',
+                        					'is_sync'=>'01000',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
                         
