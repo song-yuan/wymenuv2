@@ -3375,7 +3375,7 @@ public function getSiteName($orderId){
 						$ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'msg'=>'打印任务正常发布',"jobs"=>$jobids2);
 						//return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
 						//更新菜品状态为已打印
-						$sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$order->dpid." and order_id in (".$orderList.")";
+						$sqlorderproduct="update nb_order_product set is_print='1' where dpid=".$order->dpid." and order_id in (".$orderList.") and product_order_status = 8";
 						$commandorderproduct=Yii::app()->db->createCommand($sqlorderproduct);
 						$commandorderproduct->execute();
 	
