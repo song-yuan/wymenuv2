@@ -381,6 +381,7 @@
                                     times++;
                                 });
                                 $.each(msg.modeljobs,function(key,value){
+                                    alert(msg.modeljobs);
                                     //printresult=false;
                                     for(var itemp=1;itemp<4;itemp++)
                                     {
