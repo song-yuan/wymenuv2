@@ -2980,7 +2980,7 @@ public function getSiteName($orderId){
 		{
 			$floor_id=$site->floor_id;
 		}
-		$orderProducts = OrderProduct::model()->with('product')->findAll(' t.order_id in ('.$orderList.') and t.dpid='.$order->dpid.' and t.order_product_status=8 and t.is_print=0 and t.delete_flag=0 ');//CF
+		$orderProducts = OrderProduct::model()->with('product')->findAll(' t.order_id in ('.$orderList.') and t.dpid='.$order->dpid.' and t.product_order_status=8 and t.is_print=0 and t.delete_flag=0 ');//CF
 		if(empty($orderProducts))
 		{
 			return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"noorderproduct");//yii::t('app','没有要打印的菜品！')
@@ -3348,7 +3348,7 @@ public function getSiteName($orderId){
 												//$printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
 												$printer2 = $printers_a[$key];
 												//return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"before printConetent2");
-												$printret=Helper::printConetent2($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
+												$printret=Helper::printConetent8($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
 												//return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"after printConetent2");
 												//array_push($jobids,$printret['jobid']."_".$order->lid);//将所有单品的id链接上去，便于更新下单状态，打印成功后下单状态和打印状态变更，数量加1
 												if(!$printret['status'])
