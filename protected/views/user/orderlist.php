@@ -5,6 +5,8 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/reset.css">
 <link href='<?php echo $baseUrl;?>/css/mall/common.css' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <body class="gift_exchange bg_lgrey2">
 	<div id="topnav">
 		<ul>
@@ -40,12 +42,33 @@
 					</div>	
 					<!-- 商品简要情况 -->
 					</a>
+					<div class="order_bttnbar pad_10">
+						<button class="bttn_large bttn_orange cancel" order-id="<?php echo $model['lid'];?>">取消订单</button>
+					</div>
 			</li>
 			<?php endforeach;?>
 			<div class="bttnbar-top"></div>
 		</ul>
 		<!-- 全部 -->
 	</div>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('.cancel').click(function(){
+			var orderId = $(this).attr('order-id');
+			$.ajax({
+				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
+				data:{orderId:orderId},
+				success:function(data){
+					if(parseInt(data)){
+						history.go(0);
+					}else{
+						layer.msg('取消失败,重新操作');
+					}
+				}
+			});
+		});
+	});
+	</script>
 	<?php 
 	include_once(Yii::app()->basePath.'/views/layouts/footernav.php');
 	?>
