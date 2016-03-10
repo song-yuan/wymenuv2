@@ -578,8 +578,8 @@ class WxOrder
 	 public static function cancelOrder($orderId,$dpid){
 	 	$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid and is_print=1';
 	 	$resluts = Yii::app()->db->createCommand($sql)
-	 							 ->bindVale(':orderId',$orderId)
-	 							 ->bindVale(':dpid',$dpid)
+	 							 ->bindValue(':orderId',$orderId)
+	 							 ->bindValue(':dpid',$dpid)
 	 							 ->queryAll();
 	 	if(empty($resluts)){
 	 		return 0;
