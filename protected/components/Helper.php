@@ -4538,7 +4538,7 @@ public function getSiteName($orderId){
                                             'create_at'=>$time,
                                             'orderid'=>$orderid,
                                             'jobid'=>$jobid,
-                                            'update_at'=>$time,
+                                            'update_at'=>"2015-12-12 12:12:12",
                                             'address'=>$printer->address,
                                             'content'=>$contentCodeAll,
                                             'printer_type'=>"0",
