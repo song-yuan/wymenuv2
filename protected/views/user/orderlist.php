@@ -57,17 +57,27 @@
 	$(document).ready(function(){
 		$('.cancel').click(function(){
 			var orderId = $(this).attr('order-id');
-			$.ajax({
-				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
-				data:{orderId:orderId},
-				success:function(data){
-					if(parseInt(data)){
-						history.go(0);
-					}else{
-						layer.msg('取消失败,重新操作');
-					}
-				}
+			var isConfirm = 0;
+			layer.confirm('是否要取消订单？', {
+			    btn: ['确定','取消'] //按钮
+			}, function(){
+			    isConfirm = 1;
+			}, function(){
+
 			});
+			if(parseInt(isConfirm)){
+				$.ajax({
+					url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
+					data:{orderId:orderId},
+					success:function(data){
+						if(parseInt(data)){
+							history.go(0);
+						}else{
+							layer.msg('取消失败,重新操作');
+						}
+					}
+				});
+			}
 		});
 	});
 	</script>
