@@ -67,17 +67,17 @@
     </div>
     <!--END dialog1-->
      <!--BEGIN dialog2-->
-            <div class="weui_dialog_alert" id="dialog2" style="display: none;">
-                <div class="weui_mask" style="z-index:1005;"></div>
-                <div class="weui_dialog" style="z-index:1006;">
-                    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-                    <div class="weui_dialog_bd">订单取消失败</div>
-                    <div class="weui_dialog_ft">
-                        <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
-                    </div>
-                </div>
+    <div class="weui_dialog_alert" id="dialog2" style="display: none;">
+        <div class="weui_mask" style="z-index:1005;"></div>
+        <div class="weui_dialog" style="z-index:1006;">
+            <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+            <div class="weui_dialog_bd">订单取消失败</div>
+            <div class="weui_dialog_ft">
+                <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
             </div>
-            <!--END dialog2-->
+        </div>
+    </div>
+    <!--END dialog2-->
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var orderId = 0;
@@ -103,7 +103,7 @@
 			$('#dialog1').hide();
 		});	
 		$('#dialog2 .primary').click(function(){
-			$('#dialog1').hide();
+			$('#dialog2').hide();
 		});	
 	});
 	</script>
