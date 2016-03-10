@@ -18,7 +18,7 @@
 
 
 <div class="order-title">我的订单</div>
-<div class="order-site"><div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div><div class="rt"><?php if($order['order_status'] < 3) echo '<button class="specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '已支付';else echo '已完成';?></div><div class="clear"></div></div>
+<div class="order-site"><div class="lt"><?php if($order['order_type']==1):?>桌号:<?php if($siteType){echo $siteType['name'];}?><?php echo $site['serial'];?><?php else:?>订单状态<?php endif;?></div><div class="rt"><?php if($order['order_status'] < 3) echo '<button class="payOrder specialbttn bttn_orange" status="'.$order['order_status'].'">待支付</button>';elseif($order['order_status'] == 3) echo '已支付';else echo '已完成';?></div><div class="clear"></div></div>
 <?php if($address):?>
 	<?php if($order['order_type']==2):?>
 	<div class="address">
@@ -103,7 +103,7 @@
 		<div class="clear"></div>
 	</div>
 </div>
-<div class="close_window specialbttn bttn_orange">返回微信</div>
+<div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" style="font-size:1.5em;">取消订单</div>
 <?php if($redPack && $order['order_status'] > 2):?>
 <?php 
 	$title = '现金红包送不停！';
@@ -133,7 +133,7 @@
 
 <script>
 $(document).ready(function(){
-	$('.specialbttn').click(function(){
+	$('.payOrder').click(function(){
 		var status = $(this).attr('status');
 		if(parseInt(status) < 2){
 			location.href = '<?php echo $this->createUrl('/mall/order',array('companyId'=>$this->companyId,'orderId'=>$order['lid']));?>';
@@ -142,9 +142,28 @@ $(document).ready(function(){
 		}
 	});
 	$('.close_window').click(function(){
-		WeixinJSBridge.invoke('closeWindow',{},function(res){
-		    
+		var orderId = $(this).attr('order-id');
+		var isConfirm = 0;
+		layer.confirm('是否要取消订单？', {
+		    btn: ['确定','取消'] //按钮
+		}, function(){
+		    isConfirm = 1;
+		}, function(){
+
 		});
+		if(parseInt(isConfirm)){
+			$.ajax({
+				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
+				data:{orderId:orderId},
+				success:function(data){
+					if(parseInt(data)){
+						history.go(0);
+					}else{
+						layer.msg('取消失败,重新操作');
+					}
+				}
+			});
+		}
 	});
 	$('.share').click(function(){
 		$('.popshare').show();
