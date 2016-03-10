@@ -243,7 +243,7 @@ class DefaultSiteController extends BackendController
                         //var_dump($ret9arr);exit;
                        //OrderProduct::setProductallJobs($compayId);//CF
                         OrderProduct::setPayJobs($compayId,$padId);
-                        //echo "222";exit;
+                        echo "222";exit;
                         $ret8arr=OrderProduct::setPayCall($compayId,"0000000000","0");
                         //var_dump($ret8arr);exit;
                         //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
