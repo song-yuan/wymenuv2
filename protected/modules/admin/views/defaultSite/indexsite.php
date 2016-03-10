@@ -382,6 +382,11 @@
                                 });
                                 $.each(msg.modeljobs,function(key,value){
                                 	alert("1111");alert(value);
+                                	var str = '';
+                                	for(var key in value){
+										str += 'key:'+ key + 'value:'+ value[key];
+                                    	}
+                                	alert(str);
                                     
                                     //printresult=false;
                                     for(var itemp=1;itemp<4;itemp++)
