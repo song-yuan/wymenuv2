@@ -43,7 +43,11 @@
 					<!-- 商品简要情况 -->
 					</a>
 					<div class="order_bttnbar pad_10">
+						<?php if($model['order_status']< 3):?>
 						<button class="bttn_large bttn_orange cancel" order-id="<?php echo $model['lid'];?>">取消订单</button>
+						<?php else:?>
+						<button class="bttn_large bttn_black2">已完成</button>
+						<?php endif;?>
 					</div>
 			</li>
 			<?php endforeach;?>
