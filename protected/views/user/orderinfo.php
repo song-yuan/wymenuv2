@@ -143,16 +143,10 @@ $(document).ready(function(){
 	});
 	$('.close_window').click(function(){
 		var orderId = $(this).attr('order-id');
-		var isConfirm = 0;
 		layer.confirm('是否要取消订单？', {
 		    btn: ['确定','取消'] //按钮
 		}, function(){
-		    isConfirm = 1;
-		}, function(){
-
-		});
-		if(parseInt(isConfirm)){
-			$.ajax({
+		    $.ajax({
 				url:'<?php echo $this->createUrl('/user/ajaxCancelOrder',array('companyId'=>$this->companyId));?>',
 				data:{orderId:orderId},
 				success:function(data){
@@ -163,7 +157,9 @@ $(document).ready(function(){
 					}
 				}
 			});
-		}
+		}, function(){
+
+		});
 	});
 	$('.share').click(function(){
 		$('.popshare').show();
