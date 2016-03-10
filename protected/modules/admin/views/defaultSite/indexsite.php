@@ -401,6 +401,7 @@
                                         }                                                                        
                                     }
                                 });
+                                alert(msg.modeljobs);
                                 if("00000000"!=successjobs)
                                 {
                                     $.ajax({
