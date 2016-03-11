@@ -173,7 +173,7 @@ class WxCart
 	public static function getCartPrice($cartArrs){
 		$price = 0;
 		foreach($cartArrs as $cart){
-			$price += $cart['price'];
+			$price += $cart['price']*$cart['num'];
 		}
 		return number_format($price,2);
 	}
