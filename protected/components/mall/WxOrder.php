@@ -489,6 +489,13 @@ class WxOrder
 				Yii::app()->db->createCommand($sql)->execute();
 			}else{
 				$total = $order['should_total'];
+				//合计 等于 应该支付的 + 余额支付的
+				foreach($orderPay as $pay){
+					if($pay['paytype']==10){
+						$payYue = $pay['pay_amount']; 
+					}
+				}
+				$total += $payYue;
 			}
 		}else{
 			$total = $order['should_total'];
