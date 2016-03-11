@@ -358,6 +358,7 @@ class WxOrder
 				  ->queryRow();
 		$total = self::updateOrderTotal($order);
 		$order['should_total'] = $total['total'];
+		$order['yue_total'] = $total['yue'];
 	    return $order;
 	}
 	/**
@@ -417,7 +418,7 @@ class WxOrder
 				  ->queryAll();
 		foreach($orderList as $k=>$order){
 			$total = self::updateOrderTotal($order);
-			$orderList[$k]['should_total'] = $total['total'];
+			$orderList[$k]['should_total'] = $total['total'] + $total['yue'];
 			$orderList[$k]['order_num'] = $total['count'];
 		}
 	    return $orderList;
@@ -453,6 +454,7 @@ class WxOrder
 	public static function updateOrderTotal($order){
 		$total = 0;
 		$oTotal = 0;
+		$payYue = 0;
 		$seatingFee = 0;
 		$packingFee = 0;
 		$freightFee = 0;
@@ -495,12 +497,11 @@ class WxOrder
 						$payYue = $pay['pay_amount']; 
 					}
 				}
-				$total += $payYue;
 			}
 		}else{
 			$total = $order['should_total'];
 		}
-		return array('total'=>$total,'count'=>count($orderProducts));
+		return array('total'=>$total,'yue'=>$payYue,'count'=>count($orderProducts));
 	}
 	public static function updateOrderStatus($orderId,$dpid){
 		$now = date('Y-m-d H:i:s',time());
