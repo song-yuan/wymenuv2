@@ -27,9 +27,6 @@ class AlipayNotify {
 	function __construct($alipay_config){
 		$this->alipay_config = $alipay_config;
 	}
-    function AlipayNotify($alipay_config) {
-    	$this->__construct($alipay_config);
-    }
     /**
      * 针对notify_url验证消息是否是支付宝发出的合法消息
      * @return 验证结果
@@ -44,18 +41,6 @@ class AlipayNotify {
 			//获取支付宝远程服务器ATN结果（验证是否是支付宝发来的消息）
 			$responseTxt = 'false';
 			if (! empty($_POST["notify_id"])) {$responseTxt = $this->getResponse($_POST["notify_id"]);}
-			
-			//写日志记录
-			//if ($isSign) {
-			//	$isSignStr = 'true';
-			//}
-			//else {
-			//	$isSignStr = 'false';
-			//}
-			//$log_text = "responseTxt=".$responseTxt."\n notify_url_log:isSign=".$isSignStr.",";
-			//$log_text = $log_text.createLinkString($_POST);
-			//logResult($log_text);
-			
 			//验证
 			//$responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
 			//isSign的结果不是true，与安全校验码、请求时的参数格式（如：带自定义参数等）、编码格式有关
@@ -81,17 +66,6 @@ class AlipayNotify {
 			//获取支付宝远程服务器ATN结果（验证是否是支付宝发来的消息）
 			$responseTxt = 'false';
 			if (! empty($_GET["notify_id"])) {$responseTxt = $this->getResponse($_GET["notify_id"]);}
-			
-			//写日志记录
-			//if ($isSign) {
-			//	$isSignStr = 'true';
-			//}
-			//else {
-			//	$isSignStr = 'false';
-			//}
-			//$log_text = "responseTxt=".$responseTxt."\n return_url_log:isSign=".$isSignStr.",";
-			//$log_text = $log_text.createLinkString($_GET);
-			//logResult($log_text);
 			
 			//验证
 			//$responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
@@ -155,6 +129,57 @@ class AlipayNotify {
 		$responseTxt = AlipayCore::getHttpResponseGET($veryfy_url, $this->alipay_config['cacert']);
 		
 		return $responseTxt;
+	}
+	public function checkNotify($data){
+		$sql = 'SELECT (SELECT count(*) FROM nb_notify WHERE transaction_id = "' .$data['trade_no']. '") + (SELECT count(*) FROM nb_notify WHERE out_trade_no= "' .$data['out_trade_no']. '") as count';
+		$count = Yii::app()->db->createCommand($sql)->queryRow();
+		if(!$count['count']){
+			$this->insertNotify($data);
+		}
+	}
+	/**
+	 * 
+	 * 处理支付通知
+	 * 
+	 * 
+	 */
+	 public function insertNotify($data){
+	 	$orderIdArr = explode('-',$data["out_trade_no"]);
+	 	//orderpay表插入数据
+		$order = WxOrder::getOrder($orderIdArr[0],$orderIdArr[1]);
+		//total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
+		if($order['should_total'] != $data['total_fee'] || $this->alipay_config['seller_id']!=$data['seller_id']){
+			exit;
+		}
+		
+		$se = new Sequence("notify");
+        $lid = $se->nextval();
+		$notifyData = array(
+			'lid'=>$lid,
+        	'dpid'=>$orderIdArr[1],
+        	'create_at'=>date('Y-m-d H:i:s',time()),
+        	'update_at'=>date('Y-m-d H:i:s',time()),
+        	'user_id'=>0,
+        	'out_trade_no'=>$data['out_trade_no'],
+        	'transaction_id'=>$data['trade_no'],
+        	'total_fee'=>$data['total_fee'],
+        	'time_end'=>$data['gmt_create'],
+        	'attach'=>isset($data['body'])?$data['body']:'',
+        	'is_sync'=>DataSync::getInitSync(),
+			);	
+		Yii::app()->db->createCommand()->insert('nb_notify', $notifyData);
+		
+		WxOrder::insertOrderPay($order,2);
+		//修改订单状态
+		WxOrder::updateOrderStatus($orderIdArr[0],$orderIdArr[1]);
+		//修改订单产品状态
+		WxOrder::updateOrderProductStatus($orderIdArr[0],$orderIdArr[1]);
+		//修改座位状态
+		if($order['order_type']==1){
+			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+		}
+		//发送模板消息通知
+		new WxMessageTpl($order['dpid'],$order['user_id'],0,$order);
 	}
 }
 ?>
