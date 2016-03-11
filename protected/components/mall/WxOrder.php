@@ -358,6 +358,7 @@ class WxOrder
 				  ->queryRow();
 		$total = self::updateOrderTotal($order);
 		$order['should_total'] = $total['total'];
+		$order['yue_total'] = $total['yue'];
 	    return $order;
 	}
 	/**
@@ -409,7 +410,7 @@ class WxOrder
 		}elseif($type==2){
 			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (3,4)  order by lid desc limit 0,20';
 		}else{
-			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId order by lid desc limit 0,20';
+			$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and order_status in (1,2,3,4) order by lid desc limit 0,20';
 		}
 		$orderList = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
@@ -417,7 +418,7 @@ class WxOrder
 				  ->queryAll();
 		foreach($orderList as $k=>$order){
 			$total = self::updateOrderTotal($order);
-			$orderList[$k]['should_total'] = $total['total'];
+			$orderList[$k]['should_total'] = $total['total'] + $total['yue'];
 			$orderList[$k]['order_num'] = $total['count'];
 		}
 	    return $orderList;
@@ -453,6 +454,7 @@ class WxOrder
 	public static function updateOrderTotal($order){
 		$total = 0;
 		$oTotal = 0;
+		$payYue = 0;
 		$seatingFee = 0;
 		$packingFee = 0;
 		$freightFee = 0;
@@ -489,11 +491,17 @@ class WxOrder
 				Yii::app()->db->createCommand($sql)->execute();
 			}else{
 				$total = $order['should_total'];
+				//合计 等于 应该支付的 + 余额支付的
+				foreach($orderPay as $pay){
+					if($pay['paytype']==10){
+						$payYue = $pay['pay_amount']; 
+					}
+				}
 			}
 		}else{
 			$total = $order['should_total'];
 		}
-		return array('total'=>$total,'count'=>count($orderProducts));
+		return array('total'=>$total,'yue'=>$payYue,'count'=>count($orderProducts));
 	}
 	public static function updateOrderStatus($orderId,$dpid){
 		$now = date('Y-m-d H:i:s',time());
@@ -576,10 +584,19 @@ class WxOrder
 	 * 
 	 */
 	 public static function cancelOrder($orderId,$dpid){
-	 	$isSync = DataSync::getInitSync();
-		$sql = 'update nb_order set order_status=7,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
-		$result = Yii::app()->db->createCommand($sql)->execute();
-		return $result;
+	 	$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid and is_print=1';
+	 	$resluts = Yii::app()->db->createCommand($sql)
+	 							 ->bindValue(':orderId',$orderId)
+	 							 ->bindValue(':dpid',$dpid)
+	 							 ->queryAll();
+	 	if(empty($resluts)){
+	 		return 0;
+	 	}else{
+	 		$isSync = DataSync::getInitSync();
+			$sql = 'update nb_order set order_status=7,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
+			$result = Yii::app()->db->createCommand($sql)->execute();
+			return $result;
+	 	}
 	}
 	/**
 	 * 
