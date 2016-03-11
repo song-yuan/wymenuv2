@@ -153,6 +153,7 @@
 </header>
 <div id="main">
         <form name='alipayment' action='<?php echo $this->createUrl('/alipay/mobileWeb',array('companyId'=>$this->companyId));?>' method="get" target="_blank">
+            <input type="hidden" id="companyId" name="companyId" value="<?php echo $this->companyId;?>"/>
             <div id="body" style="clear:left">
                 <dl class="content">
                     <dt>商户订单号：</dt>
