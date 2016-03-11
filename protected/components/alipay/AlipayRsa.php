@@ -38,7 +38,7 @@ class AlipayRsa
     static function rsaVerify($data, $ali_public_key_path, $sign)  {
     	$pubKey = file_get_contents($ali_public_key_path);
         $res = openssl_get_publickey($pubKey);
-        var_dump($res);
+        var_dump($res);exit;
         $result = (bool)openssl_verify($data, base64_decode($sign), $res);
         var_dump($result);exit;
         openssl_free_key($res);    
