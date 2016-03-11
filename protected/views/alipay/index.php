@@ -152,42 +152,42 @@
         <h1>支付宝手机网站支付接口快速通道</h1>
 </header>
 <div id="main">
-        <form name='alipayment' action='<?php echo $this->createUrl('/alipay/mobileWeb',array('companyId'=>$this->companyId));?>' method=post target="_blank">
+        <form name='alipayment' action='<?php echo $this->createUrl('/alipay/mobileWeb',array('companyId'=>$this->companyId));?>' method="get" target="_blank">
             <div id="body" style="clear:left">
                 <dl class="content">
                     <dt>商户订单号：</dt>
                     <dd>
-                        <input id="WIDout_trade_no" name="WIDout_trade_no" />
+                        <input id="WIDout_trade_no" name="out_trade_no" />
                     </dd>
                     <hr class="one_line">
                     <dt>订单名称：</dt>
                     <dd>
-                        <input id="WIDsubject" name="WIDsubject" />
+                        <input id="WIDsubject" name="subject" />
                     </dd>
                     <hr class="one_line">
                     <dt>付款金额：</dt>
                     <dd>
-                        <input id="WIDtotal_fee" name="WIDtotal_fee" />
+                        <input id="WIDtotal_fee" name="total_fee" />
                     </dd>
                     <hr class="one_line">
                     <dt>商品展示地址：</dt>
                     <dd>
-                        <input id="WIDshow_url" name="WIDshow_url" />
+                        <input id="WIDshow_url" name="show_url" />
                     </dd>
                     <hr class="one_line">
                     <dt>订单描述：</dt>
                     <dd>
-                        <input id="WIDbody" name="WIDbody" />
+                        <input id="WIDbody" name="body" />
                     </dd>
                     <hr class="one_line">
                     <dt>超时时间：</dt>
                     <dd>
-                        <input id="WIDit_b_pay" name="WIDit_b_pay" />
+                        <input id="WIDit_b_pay" name="it_b_pay" />
                     </dd>
                     <hr class="one_line">
                     <dt>钱包token：</dt>
                     <dd>
-                        <input id="WIDextern_token" name="WIDextern_token" />
+                        <input id="WIDextern_token" name="extern_token" />
                     </dd>
                     <hr class="one_line">
                     <dt></dt>
