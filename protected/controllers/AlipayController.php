@@ -87,7 +87,6 @@ class AlipayController extends Controller
 		
 		//建立请求
 		$alipaySubmit = new AlipaySubmit($this->alipay_config);
-		var_dump($alipaySubmit);exit;
 		$htmlText = $alipaySubmit->buildRequestForm($parameter,"get", "确认");
 		
 		$this->render('mobileweb',array('htmlText'=>$htmlText));
