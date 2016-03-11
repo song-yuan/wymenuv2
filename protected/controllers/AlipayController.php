@@ -2,6 +2,7 @@
 //require_once("alipay.config.php");
 class AlipayController extends Controller
 {
+	public $companyId = 0;
 	public $layout = '/layouts/mallmain';
 	public $alipay_config = array();
     public function init(){
