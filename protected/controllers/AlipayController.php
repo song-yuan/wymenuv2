@@ -134,7 +134,9 @@ class AlipayController extends Controller
                     );
 
             //建立请求
+            var_dump($this->alipay_config);
             $alipaySubmit = new AlipaySubmit($this->alipay_config);
+            var_dump($alipaySubmit);exit;
             $html_text = $alipaySubmit->buildRequestForm($parameter,"get", "正在跳转到支付宝，请稍等...");
 			$this->render('pay',array(
 	                    'html_text'=>$html_text               
