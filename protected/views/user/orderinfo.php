@@ -96,7 +96,7 @@
 	</div>
 </div>
 
-<?php if($model['order_status']< 3):?>
+<?php if($order['order_status']< 3):?>
 <div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" style="font-size:1.2em;">取消订单</div>
 <?php endif;?>
  <!--BEGIN dialog1-->
