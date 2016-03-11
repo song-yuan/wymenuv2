@@ -241,10 +241,12 @@ class DefaultSiteController extends BackendController
                         //更新所有状态是9的为0（微信下单）,8的为3（微信支付）,并自动呼叫
                         $ret9arr=OrderProduct::setOrderCall($compayId,"0000000000","0");
                         //var_dump($ret9arr);exit;
-                        OrderProduct::setProductallJobs($compayId);//CF
-                        OrderProduct::setPayJobs($compayId,$padId);
+                        //OrderProduct::setProductallJobs($compayId);//CF
+                        //OrderProduct::setPayJobs($compayId,$padId);
                         //echo "222";exit;
                         $ret8arr=OrderProduct::setPayCall($compayId,"0000000000","0");
+                        OrderProduct::setProductallJobs($compayId);//CF
+                        OrderProduct::setPayJobs($compayId,$padId);
                         //var_dump($ret8arr);exit;
                         //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
 
@@ -581,6 +583,87 @@ class DefaultSiteController extends BackendController
 		}
 	}
         
+	
+	/*
+	 * 仿closesite写的清除订单内没有打印的菜品
+	 * CF
+	 * 
+	 */
+
+	public function actionDeleteproduct() {
+		if(Yii::app()->request->isPostRequest) {
+			$sid = Yii::app()->request->getPost('sid');
+			$companyId = Yii::app()->request->getPost('companyId');
+			$istemp = Yii::app()->request->getPost('istemp','0');
+			Until::validOperate($companyId, $this);
+			$db = Yii::app()->db;
+			$maxstatus=  OrderProduct::getMaxStatus($sid,$istemp, $companyId);
+	
+			if($maxstatus=="2" || $maxstatus=="3")
+			{
+				Yii::app()->end(json_encode(array('status'=>0,'message'=>yii::t('app','不能撤台了'))));
+			}
+			$transaction = $db->beginTransaction();
+			try {
+				if($istemp=="0")
+				{
+					$sqlsite="update nb_site set status='7' where lid=:sid and dpid=:companyId";
+					$commandsite=$db->createCommand($sqlsite);
+					$commandsite->bindValue(":sid" , $sid);
+					$commandsite->bindValue(":companyId" , $companyId);
+					$commandsite->execute();
+				}
+	
+				//下单厨打、收银结单时，必须更改整体的状态,
+				//由于前面加了单品的状态的判断，所以不可能产生2,3整体状态时撤台，
+				//但是撤去的时候，仍然要去除这个脏数据。
+				$sqlsiteno="update nb_site_no set status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and status in ('1','2','3')";
+				$commandsiteno=$db->createCommand($sqlsiteno);
+				$commandsiteno->bindValue(":sid" , $sid);
+				$commandsiteno->bindValue(":istemp" , $istemp);
+				$commandsiteno->bindValue(":companyId" , $companyId);
+				$commandsiteno->execute();
+	
+				$sqlorder="update nb_order set order_status='7' where site_id=:sid and is_temp=:istemp and dpid=:companyId and order_status in ('1','2','3')";
+				$commandorder=$db->createCommand($sqlorder);
+				$commandorder->bindValue(":sid" , $sid);
+				$commandorder->bindValue(":istemp" , $istemp);
+				$commandorder->bindValue(":companyId" , $companyId);
+				$commandorder->execute();
+	
+				$sqlfeedback = "update nb_order_feedback set is_deal='1' where dpid=:companyId and site_id=:siteId and is_temp=:istemp";
+				$commandfeedback = $db->createCommand($sqlfeedback);
+				$commandfeedback->bindValue(":companyId",$companyId);
+				$commandfeedback->bindValue(":siteId",$sid);
+				$commandfeedback->bindValue(":istemp",$istemp);
+				//var_dump($sqlsite);exit;
+				$commandfeedback->execute();
+	
+				//FeedBackClass::cancelAllOrderMsg($sid,$istemp,"0000000000",$companyId);
+	
+				$transaction->commit(); //提交事务会真正的执行数据库操作
+				//
+				$criteria = new CDbCriteria;
+				$criteria->condition =  't.dpid='.$companyId.' and t.site_id='.$sid.' and t.is_temp='.$istemp ;
+				$criteria->order = ' t.lid desc ';
+				$siteNo = SiteNo::model()->find($criteria);
+				SiteClass::deleteCode($siteNo->dpid,$siteNo->code);
+				if($istemp=="0")
+				{
+					WxScanLog::invalidScene($companyId,$sid);
+				}
+				//var_dump($sid);exit;
+	
+				//apc_delete($siteNo->dpid.$siteNo->code);
+				echo json_encode(array('status'=>1,'message'=>yii::t('app','撤台成功')));
+				return true;
+			} catch (Exception $e) {
+				$transaction->rollback(); //如果操作失败, 数据回滚
+				echo json_encode(array('status'=>0,'message'=>yii::t('app','撤台失败')));
+				return false;
+			}
+		}
+	}
         public function actionSwitchsite() {
 		if(Yii::app()->request->isPostRequest) {
 			$sid = Yii::app()->request->getPost('sid');
