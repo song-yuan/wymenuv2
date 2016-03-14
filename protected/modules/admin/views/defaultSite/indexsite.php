@@ -319,6 +319,7 @@
                                 //存在删减临时座位的,暂不修改，以后添加！！                    
                                 //....
                                 //CF
+                                //alert("123");
                             	if($("#tab_sitelist").css("display")=="block")
                                 {
                                     $.each(msg.models,function(key,value){
