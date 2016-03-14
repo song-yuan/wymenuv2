@@ -653,7 +653,7 @@
                                     <li typeId="<?php echo $key ;?>" class="tabSite <?php if($key == $typeId) echo 'slectliclass';?>"><?php echo $siteType ;?></li>
                             <?php endforeach;?>
                             <?php endif;?>
-                                <!-- <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座');?></li> -->
+                                <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座');?></li> 
                                 <li typeId="others" class="tabSite <?php if($typeId == 'others') echo 'slectliclass';?>">其他</li>
                             </ul>
                         </div>
@@ -845,6 +845,49 @@
                                 //获取临时座位信息，并更新状态
                                 //存在删减临时座位的,暂不修改，以后添加！！                    
                                 //....
+                                //CF
+                            	if($("#tab_sitelist").css("display")=="block")
+                                {
+                                    $.each(msg.models,function(key,value){
+                                        var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");                                        
+                                        var nowstatus=value.min_status;
+                                        if(value.min_status=="1" || value.status=="1")
+                                        {
+                                            nowstatus=1;
+                                        }
+                                        siteobj.attr("status",nowstatus);
+                                        siteobj.attr("maxstatus",value.max_status);
+                                        siteobj.find("span[typename=updateat]").html("<br>"+value.update_at.substr(5,11));
+                                        siteobj.removeClass("bg-yellow");
+                                        siteobj.removeClass("bg-blue");
+                                        siteobj.removeClass("bg-green");
+                                        if(value.min_status=="1" || value.status=="1")
+                                        {
+                                            siteobj.addClass("bg-yellow");
+                                        }else if(value.min_status=="2")
+                                        {
+                                            siteobj.addClass("bg-blue");
+                                        }else if(value.min_status=="3")
+                                        {
+                                            siteobj.addClass("bg-green");
+                                        }
+                                        if("12".indexOf(value.order_type)>=0
+                                                && ("123".indexOf(value.min_status)>=0))
+                                        {
+                                            siteobj.find("div").show();
+                                        }else{
+                                            siteobj.find("div").hide();
+                                        }
+                                        if(value.newitem > 0)
+                                        {
+                                            siteobj.find("div").css("background-color","green");
+                                            //需要打印
+                                            //然后再打印本机器
+                                        }else{
+                                            siteobj.find("div").css("background-color","");
+                                        }
+                                    });
+                                }
                             }else{
                                 //获取座位信息，并更新状态
                                 //不存在删减座位的
