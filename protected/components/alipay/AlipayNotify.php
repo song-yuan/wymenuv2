@@ -57,6 +57,7 @@ class AlipayNotify {
      * @return 验证结果
      */
 	function verifyReturn(){
+		unset($_GET['companyId']);//删除companyId参数
 		if(empty($_GET)) {//判断POST来的数组是否为空
 			return false;
 		}
@@ -93,7 +94,6 @@ class AlipayNotify {
 		
 		//把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
 		$prestr = AlipayCore::createLinkstring($para_sort);
-		
 		$isSgin = false;
 		switch (strtoupper(trim($this->alipay_config['sign_type']))) {
 			case "RSA" :
