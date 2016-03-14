@@ -108,7 +108,7 @@ function getProduct(){
 							promotionStr +='<span class="oprice"><strike>¥'+promotionProduct.original_price+'</strike></span>';
 						}
              			promotionStr +='</p></div>';
-             			if(promotionProduct.num){
+             			if(parseInt(promotionProduct.num)){
              				promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" readonly value="'+promotionProduct.num+'">';
             				promotionStr +='<div class="add">+</div><div class="clear"></div></div></div>';
              			}else{
