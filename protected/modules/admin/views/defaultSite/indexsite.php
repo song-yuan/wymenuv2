@@ -322,7 +322,7 @@
                             	if($("#tab_sitelist").css("display")=="block")
                                 {
                                     $.each(msg.models,function(key,value){
-                                        var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=0]");                                        
+                                        var siteobj=$(".modalaction[typeid="+value.type_id+"][sid="+value.lid+"][istemp=1]");                                        
                                         var nowstatus=value.min_status;
                                         if(value.min_status=="1" || value.status=="1")
                                         {
@@ -470,11 +470,11 @@
                             }                            
                         },
                         error: function(msg){
-                            alert("网络可能有问题，再试一次！");
+                            alert("1网络可能有问题，再试一次！");
                         },
                         complete : function(XMLHttpRequest,status){
                             if(status=='timeout'){
-                                alert("网络可能有问题，再试一次！");                                            
+                                alert("2网络可能有问题，再试一次！");                                            
                             }
                         }
                     });               
