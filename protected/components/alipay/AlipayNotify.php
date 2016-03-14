@@ -163,7 +163,7 @@ class AlipayNotify {
         	'out_trade_no'=>$data['out_trade_no'],
         	'transaction_id'=>$data['trade_no'],
         	'total_fee'=>$data['total_fee'],
-        	'time_end'=>$data['gmt_create'],
+        	'time_end'=>$data['notify_time'],
         	'attach'=>isset($data['body'])?$data['body']:'',
         	'is_sync'=>DataSync::getInitSync(),
 			);	
