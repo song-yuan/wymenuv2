@@ -101,7 +101,7 @@ class AlipaySubmit {
             if($key=="out_trade_no"){
             	$sHtml.= '<div class="weui_cells"><div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>订单号:</p></div><div class="weui_cell_ft">'.$order['lid'].'-'.$order['dpid'].'</div></div>';
             }elseif($key=="total_fee"){
-            	$sHtml.= '<div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>共计金额:</p></div><div class="weui_cell_ft">'.$order['should_total'].'</div></div>';
+            	$sHtml.= '<div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>共计金额:</p></div><div class="weui_cell_ft">￥'.$order['should_total'].'</div></div>';
             }
         }
         $sHtml.= '<div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>下单时间:</p></div><div class="weui_cell_ft">'.$order['create_at'].'</div></div></div>';
