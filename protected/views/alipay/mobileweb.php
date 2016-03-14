@@ -13,7 +13,9 @@
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.submit').trigger('click');
+	window.onload = function(){
+		$('.submit').trigger('click');	
+	}
 	$('.submit').click(function(){
 		$('#alipaysubmit').submit();
 	});
