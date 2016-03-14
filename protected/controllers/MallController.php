@@ -486,6 +486,15 @@ class MallController extends Controller
 	}
 	/**
 	 * 
+	 * 输入金额
+	 * 买单
+	 * 
+	 */
+	 public function actionBill(){
+	 	$this->render('bill');
+	 }
+	/**
+	 * 
 	 * 卡券领取页面
 	 * 
 	 */
