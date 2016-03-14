@@ -2,11 +2,17 @@
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('优惠买单');
 ?>
-
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
 
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <style type="text/css">
+footer{
+	font-family: 'Heiti SC', 'Microsoft YaHei';
+}
+.total {
+   color: #FF5151;
+}
 .page {
     position: absolute;
     top: 0;
@@ -23,6 +29,10 @@
 .weui_input{
 	text-align:right;
 }
+.weui_select{
+	direction: rtl;
+	color: #FF5151
+}
 </style>
 <div class="page cell" >
 <form action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId));?>" method="post" onsubmit="return validate()">
@@ -31,10 +41,25 @@
    		<div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">消费金额</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" id="name" name="user[user_name]" type="text" placeholder="询问服务员后输入" value=""/>
+                <input class="weui_input" id="price" name="order[price]" type="text" placeholder="询问服务员后输入" value=""/>
             </div>
         </div>
     </div>
+    
+    <div class="weui_cells_title">选择优惠券</div>
+    <div class="weui_cells">
+        <div class="weui_cell weui_cell_select weui_select_after">
+            <div class="weui_cell_hd">优惠券</div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <select class="weui_select" name="select2">
+                    <option value="1">10元</option>
+                    <option value="2">20元</option>
+                    <option value="3">30元</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
     <div class="weui_cells_title">选择支付方式</div>
     <div class="weui_cells weui_cells_checkbox">
         <label class="weui_cell weui_check_label" for="x11">
@@ -43,7 +68,7 @@
                 <p>微信支付</p>
             </div>
             <div class="weui_cell_ft">
-                <input type="radio" class="weui_check" name="radio1" id="x11">
+                <input type="radio" class="weui_check" name="order[pay-type]" id="x11" checked="checked">
                 <span class="weui_icon_checked"></span>
             </div>
         </label>
@@ -53,12 +78,21 @@
                 <p>支付宝支付</p>
             </div>
             <div class="weui_cell_ft">
-                <input type="radio" name="radio1" class="weui_check" id="x12" checked="checked">
+                <input type="radio" name="order[pay-type]" class="weui_check" id="x12">
                 <span class="weui_icon_checked"></span>
             </div>
         </label>
     </div>
 </form>
+<footer>
+    <div class="ft-lt">
+        <p>￥<span id="total" class="total">0.00</span></p>
+    </div>
+    <div class="ft-rt">
+        <p><a id="payorder" href="javascript:;">确认买单</a></p>
+    </div>
+    <div class="clear"></div>
+</footer>
 <div class="weui_dialog_alert" id="dialog2" style="display: none;">
 	<div class="weui_mask"></div>
 	<div class="weui_dialog">
