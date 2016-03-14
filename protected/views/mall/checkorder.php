@@ -189,7 +189,7 @@
 </div>
 <?php endif;?>
 <div class="order-remark">
-	<textarea name="remark" placeholder="备注"></textarea>
+	<textarea name="taste_memo" placeholder="备注"></textarea>
 </div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
