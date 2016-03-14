@@ -160,10 +160,11 @@ class AlipayNotify {
         	'create_at'=>date('Y-m-d H:i:s',time()),
         	'update_at'=>date('Y-m-d H:i:s',time()),
         	'user_id'=>0,
+        	'seller_id'=>$data['seller_id'],
         	'out_trade_no'=>$data['out_trade_no'],
         	'transaction_id'=>$data['trade_no'],
         	'total_fee'=>$data['total_fee'],
-        	'time_end'=>$data['notify_time'],
+        	'time_end'=>date('YmdHis',strtotime($data['notify_time'])),
         	'attach'=>isset($data['body'])?$data['body']:'',
         	'is_sync'=>DataSync::getInitSync(),
 			);	

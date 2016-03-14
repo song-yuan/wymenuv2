@@ -97,8 +97,7 @@ class AlipayController extends Controller
         //计算得出通知验证结果
         $alipayNotify = new AlipayNotify($this->alipay_config);
         $verify_result = $alipayNotify->verifyReturn();
-        $ret_status="";
-        $trade_status="";
+        $orderIdArr = explode('-',$_GET["out_trade_no"]);
         if($verify_result) {//验证成功
                 //商户订单号
                 $out_trade_no = $_GET['out_trade_no'];
@@ -115,7 +114,6 @@ class AlipayController extends Controller
                 //如果有做过处理，不执行商户的业务程序
                 //下单，返回页面，单元清单。。。
                 $alipayNotify->checkNotify($_GET);
-                $ret_status="正常返回，下单成功";//下单成功
             } else {
                 //echo "trade_status=".$_GET['trade_status'];
                 $ret_status= "非正常返回，验证成功。";
@@ -126,11 +124,8 @@ class AlipayController extends Controller
             //如要调试，请看alipay_notify.php页面的verifyReturn函数
             $ret_status="验证失败";
         }
-        //var_dump($trade_status);exit;
-		$this->render('return',array(
-			'trade_status'=>$trade_status,
-            'ret_status'=>$ret_status
-		));
+        //跳转订单详情
+        $this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderIdArr[1]));
 	}
         
     public function actionNotify()
@@ -172,14 +167,5 @@ class AlipayController extends Controller
             echo "fail";
         }
         exit;
-	}
-    /*
-     * 支付成功后，订单边支付成功，商品清单就变成下单成功，下单数量加一
-     * 打印清单，同时厨房打印，厨房打印成功，都打印成功了就结单、
-     * 任何一个打印失败都通知到order_feedback
-     */
-    private function endTrade($out_trade_no,$trade_no,$trade_no){
-		
-	} 
-   
+	}  
 }
