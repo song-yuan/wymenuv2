@@ -316,9 +316,11 @@
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
                         <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsaveprint_btn" value="<?php echo yii::t('app','挂单打印');?>">
                         <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempsave_btn" value="<?php echo yii::t('app','挂单');?>">
+                        
 			<!--<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printlist_btn" value="<?php echo yii::t('app','打印清单');?>">-->
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="alltaste_btn" value="<?php echo yii::t('app','全单设定');?>">
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printerKitchen" value="<?php echo yii::t('app','下单&厨打&收银&结单');?>">
+			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempdelete_btn" value="<?php echo yii::t('app','清菜');?>">
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
 	</div>
@@ -651,7 +653,7 @@
                                     <li typeId="<?php echo $key ;?>" class="tabSite <?php if($key == $typeId) echo 'slectliclass';?>"><?php echo $siteType ;?></li>
                             <?php endforeach;?>
                             <?php endif;?>
-                               <!--     <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座');?></li>-->
+                                <!-- <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座');?></li> -->
                                 <li typeId="others" class="tabSite <?php if($typeId == 'others') echo 'slectliclass';?>">其他</li>
                             </ul>
                         </div>
@@ -3384,6 +3386,37 @@
                                     sitevisible();
                                     //$('#portlet-button').modal('hide');
                                     //$("#tab_sitelist").hide();
+                            }
+                    },
+                        'error':function(e){
+                            return false;
+                        }
+                });
+                //return false;                               
+           });
+            
+
+			//
+			//修改清除本桌未厨打的菜品。。。
+            $('#tempdelete_btn').on(event_clicktouchstart,function(){
+                var statu = confirm("<?php echo yii::t('app','确定清菜吗？');?>");
+                if(!statu){
+                    return false;
+                } 
+               //var sid = $(this).attr('sid');
+               $.ajax({
+                    'type':'POST',
+                    'dataType':'json',
+                    'data':{"sid":gsid,"companyId":'<?php echo $this->companyId; ?>',"istemp":gistemp},
+                    'url':'<?php echo $this->createUrl('defaultSite/deleteproduct',array());?>',
+                    'success':function(data){
+                            if(data.status == 0) {
+                                    alert(data.message);
+                                    return false;
+                            } else {
+                                    alert(data.message);
+                                     //更改状态
+                                   
                             }
                     },
                         'error':function(e){
