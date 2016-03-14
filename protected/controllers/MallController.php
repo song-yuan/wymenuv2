@@ -153,7 +153,7 @@ class MallController extends Controller
 		$yue = Yii::app()->request->getPost('yue',0);
 		$addressId = Yii::app()->request->getPost('address',-1);
 		$orderTime = Yii::app()->request->getPost('order_time',null);
-		$remark = Yii::app()->request->getPost('remark',null);
+		$remark = Yii::app()->request->getPost('taste_memo',null);
 		
 		$contion = null;
 		$number = 1;
@@ -210,7 +210,7 @@ class MallController extends Controller
 		}
 		//备注
 		if($remark){
-			$contion = $contion.' remark="'.$remark.'",';
+			$contion = $contion.' taste_memo="'.$remark.'",';
 		}
 		
 		if($contion){
@@ -241,7 +241,7 @@ class MallController extends Controller
 			if($order['order_status'] > 2){
 				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
 			}
-			$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
+			$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
 		}
 		WxOrder::updatePayType($orderId,$this->companyId);
 		$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
@@ -383,7 +383,7 @@ class MallController extends Controller
 				$contion = $contion.' appointment_time="'.$orderTime.'",';
 			}
 			if($remark){
-				$contion = $contion.' remark="'.$remark.'",';
+				$contion = $contion.' taste_memo="'.$remark.'",';
 			}
 			
 			if($contion){
@@ -391,8 +391,14 @@ class MallController extends Controller
 			}
 			
 			if($paytype == 1){
-				WxOrder::updatePayType($orderId,$this->companyId,0);
-				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+				$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
+				//支付宝支付
+				WxOrder::updatePayType($orderId,$this->companyId,2);
+				$order = WxOrder::getOrder($orderId,$this->companyId);
+				if($order['order_status'] > 2){
+					$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+				}
+				$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
 			}
 			WxOrder::updatePayType($orderId,$this->companyId);
 			

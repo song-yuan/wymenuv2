@@ -189,17 +189,17 @@
 </div>
 <?php endif;?>
 <div class="order-remark">
-	<textarea name="remark" placeholder="备注"></textarea>
+	<textarea name="taste_memo" placeholder="备注"></textarea>
 </div>
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
 		<?php if($this->type==1):?>
-		<div class="item on" paytype="2" style="border:none;">微信支付</div>
+		<div class="item on" paytype="2">微信支付</div>
 		<div class="item" paytype="1" style="border:none;">支付宝支付</div>
 		<input type="hidden" name="paytype" value="2" />
 		<?php else:?>
-		<div class="item on" paytype="2" style="border:none;">微信支付</div>
+		<div class="item on" paytype="2">微信支付</div>
 		<div class="item" paytype="1" style="border:none;">支付宝支付</div>
 		<input type="hidden" name="paytype" value="2" />
 		<?php endif;?>
