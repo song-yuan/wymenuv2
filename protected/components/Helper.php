@@ -2852,8 +2852,8 @@ public function getSiteName($orderId){
                                         $printlen=(strlen($orderProduct->product->product_name) + mb_strlen($orderProduct->product->product_name,'UTF8')) / 2;
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         //array_push($listDataBody,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
-                                        array_push($listDataBody,"11".Helper::setProductName($orderProduct->product->product_name,12,8).str_pad("",32-$printlen," ").$orderProduct->amount.$orderProduct->product->product_unit);
-                                        //array_push($listData,"01".$productnum.".".$productStatus.$orderProduct->product->product_name.str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+                                        //array_push($listDataBody,"11".Helper::setProductName($orderProduct->product->product_name,12,8).str_pad("",32-$printlen," ").$orderProduct->amount.$orderProduct->product->product_unit);
+                                        array_push($listData,"11".$productStatus.$orderProduct->product->product_name.str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
                                          
                                         array_push($listDataBody,"br");
 
