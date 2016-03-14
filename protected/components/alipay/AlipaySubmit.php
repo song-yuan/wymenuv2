@@ -99,12 +99,12 @@ class AlipaySubmit {
 		while (list ($key, $val) = each ($para)) {
             $sHtml.= "<input type='hidden' name='".$key."' value='".$val."'/>";
             if($key=="out_trade_no"){
-            	$sHtml.= '<div class="weui_cells"><div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>订单号:</p></div><div class="weui_cell_ft">'.$order['lid'].'-'.$order['dpid'].'</div></div></div>';
+            	$sHtml.= '<div class="weui_cells"><div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>订单号:</p></div><div class="weui_cell_ft">'.$order['lid'].'-'.$order['dpid'].'</div></div>';
             }elseif($key=="total_fee"){
-            	$sHtml.= '<div class="weui_cells"><div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>共计金额:</p></div><div class="weui_cell_ft">'.$order['should_total'].'</div></div></div>';
+            	$sHtml.= '<div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>共计金额:</p></div><div class="weui_cell_ft">'.$order['should_total'].'</div></div>';
             }
         }
-        $sHtml.= '<div class="weui_cells"><div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>下单时间:</p></div><div class="weui_cell_ft">'.$order['create_at'].'</div></div></div>';
+        $sHtml.= '<div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>下单时间:</p></div><div class="weui_cell_ft">'.$order['create_at'].'</div></div></div>';
 		//submit按钮控件请不要含有name属性
         $sHtml = $sHtml."<div class='weui_btn_area'><a class='weui_btn weui_btn_primary submit' href='javascript:'>确认付款</a></div></form>";
 		
