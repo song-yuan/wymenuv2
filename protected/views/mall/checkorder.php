@@ -196,11 +196,11 @@
 	<div class="paytype">
 		<?php if($this->type==1):?>
 		<div class="item on" paytype="2" style="border:none;">微信支付</div>
-		<div class="item" paytype="1" style="border:none;">微信支付</div>
+		<div class="item" paytype="1" style="border:none;">支付宝支付</div>
 		<input type="hidden" name="paytype" value="2" />
 		<?php else:?>
 		<div class="item on" paytype="2" style="border:none;">微信支付</div>
-		<div class="item" paytype="1" style="border:none;">微信支付</div>
+		<div class="item" paytype="1" style="border:none;">支付宝支付</div>
 		<input type="hidden" name="paytype" value="2" />
 		<?php endif;?>
 	</div>
