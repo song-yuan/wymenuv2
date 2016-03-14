@@ -45,10 +45,10 @@ class AlipayController extends Controller
 		//支付类型
         $payment_type = "1";
         //服务器异步通知页面路径
-        $notify_url = "http://menu.wymenu.com/wymenuv2/alipay/notify?companyId=".$this->companyId;
+        $notify_url = Yii::app()->request->hostInfo."/wymenuv2/alipay/notify?companyId=".$this->companyId;
         //需http://格式的完整路径，不能加?id=123这类自定义参数
         //页面跳转同步通知页面路径
-        $return_url = "http://menu.wymenu.com/wymenuv2/alipay/return?companyId=".$this->companyId;
+        $return_url = Yii::app()->request->hostInfo."/wymenuv2/alipay/return?companyId=".$this->companyId;
         //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
         //商户订单号
         $out_trade_no = $_GET['out_trade_no'];
