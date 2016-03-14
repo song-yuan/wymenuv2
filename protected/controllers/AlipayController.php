@@ -62,11 +62,11 @@ class AlipayController extends Controller
         $show_url = $_GET['show_url'];
         //必填，需以http://开头的完整路径，例如：http://www.商户网址.com/myorder.html
         //订单描述 
-        $body = $_GET['body'];
+        $body = isset($_GET['body'])?$_GET['body']:'';
         //超时时间
-        $it_b_pay = $_GET['it_b_pay'];
+        $it_b_pay = isset($_GET['it_b_pay'])?$_GET['it_b_pay']:'';
         //钱包token
-        $extern_token = $_GET['extern_token'];
+        $extern_token = isset($_GET['extern_token'])?$_GET['extern_token']:'';
         //构造要请求的参数数组，无需改动
 		$parameter = array(
 				"service" => "alipay.wap.create.direct.pay.by.user",

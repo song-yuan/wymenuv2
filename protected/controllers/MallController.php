@@ -238,6 +238,9 @@ class MallController extends Controller
 			//支付宝支付
 			WxOrder::updatePayType($orderId,$this->companyId,2);
 			$order = WxOrder::getOrder($orderId,$this->companyId);
+			if($order['order_status'] > 2){
+				$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+			}
 			$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'点餐','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
 		}
 		WxOrder::updatePayType($orderId,$this->companyId);
