@@ -131,8 +131,8 @@ class DefaultController extends BackendController
                 $this->render('indexall',array(
                                 'siteTypes' => $siteTypes,
                                 'typeId' => $typeId,
-                		'feeTypes'=> $feeTypes,
-				"categories"=>$categories,
+                				'feeTypes'=> $feeTypes,
+								"categories"=>$categories,
                                 "productSets"=>$productSets,
                                 'setprice'=>$setprice,
                                 "products"=>$products,

@@ -177,8 +177,10 @@ class DefaultSiteController extends BackendController
                 $criteriat = new CDbCriteria;
                 $criteria = new CDbCriteria;
                 $status=true;
-		$models=array();
+				$models=array();
                 $modeljobs=array();
+                $ret9arr="";
+                $ret8arr="";
                 try{
                     if($typeId=="queue")
                     {
