@@ -13,6 +13,6 @@
 ?>
 <script type="text/javascript">
 $(document).ready(function(){
-//	$('#alipaysubmit').submit();
+	$('#alipaysubmit').submit();
 });
 </script>
