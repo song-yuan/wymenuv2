@@ -585,7 +585,7 @@ class DefaultSiteController extends BackendController
 	/*
 	 * 仿closesite写的清除订单内没有打印的菜品
 	 * CF
-	 * 
+	 * 删除掉座位里面的没打印并且状态是小于2的菜品
 	 */
 
 	public function actionDeleteproduct() {
