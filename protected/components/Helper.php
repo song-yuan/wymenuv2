@@ -2849,7 +2849,8 @@ public function getSiteName($orderId){
                                         {
                                             continue;
                                         }
-                                        $printlen=(strlen(trim($orderProduct->product->product_name)) + mb_strlen(trim($orderProduct->product->product_name),'UTF8')) / 2;
+                                        $productcf=trim($orderProduct->product->product_name);
+                                        $printlen=(strlen($productcf) + mb_strlen($productcf,'UTF8')) / 2;
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         //array_push($listDataBody,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
                                         array_push($listDataBody,"11".trim(Helper::setProductName($orderProduct->product->product_name,12,8)).str_pad("",20-$printlen," ").$orderProduct->amount.$orderProduct->product->product_unit);
