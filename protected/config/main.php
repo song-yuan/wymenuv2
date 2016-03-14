@@ -26,7 +26,7 @@ return array(
 		'application.components.weixin.*',
 		'application.components.mall.*',
 		'application.components.wxcard.*',
-                'application.components.alipaydp.lib.*',
+		'application.components.alipay.*',
 		'application.extensions.redis.*',
 		'application.extensions.qrcode.*',
                 'application.extensions.PHPExcel.*'

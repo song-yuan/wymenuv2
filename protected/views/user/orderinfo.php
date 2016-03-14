@@ -95,8 +95,10 @@
 		<div class="clear"></div>
 	</div>
 </div>
-<div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" style="font-size:1.2em;">取消订单</div>
 
+<?php if($order['order_status']< 3):?>
+<div class="close_window specialbttn bttn_orange" order-id="<?php echo $order['lid'];?>" style="font-size:1.2em;">取消订单</div>
+<?php endif;?>
  <!--BEGIN dialog1-->
 <div class="weui_dialog_confirm" id="dialog1" style="display: none;">
     <div class="weui_mask" style="z-index:1005;"></div>

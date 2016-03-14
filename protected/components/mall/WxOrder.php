@@ -589,7 +589,7 @@ class WxOrder
 	 							 ->bindValue(':orderId',$orderId)
 	 							 ->bindValue(':dpid',$dpid)
 	 							 ->queryAll();
-	 	if(empty($resluts)){
+	 	if(!empty($resluts)){
 	 		return 0;
 	 	}else{
 	 		$isSync = DataSync::getInitSync();
