@@ -125,7 +125,7 @@ class AlipayController extends Controller
             $ret_status="验证失败";
         }
         //跳转订单详情
-        $this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderIdArr[1]));
+        $this->redirect(array('/user/orderInfo','companyId'=>$orderIdArr[1],'orderId'=>$orderIdArr[0]));
 	}
         
     public function actionNotify()
