@@ -184,6 +184,7 @@ $(document).ready(function(){
         _this.addClass('current');
     });
     $('#container').scroll(function(){
+    	$('.prt-title').removeClass('top');
         $('.section').each(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
@@ -193,8 +194,6 @@ $(document).ready(function(){
         		 $('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
             	 $('a[href=#'+id+']').parent('li').addClass('current');
             	 return false;
-            }else{
-            	 $(this).find('.prt-title').removeClass('top');
             }
         });
        
