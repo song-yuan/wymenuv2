@@ -4,6 +4,12 @@
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css">
+<style type="text/css">
+.layui-layer-content img{
+	width:100%;
+	height:100%;
+}
+</style>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
@@ -253,7 +259,7 @@ $(document).ready(function(){
 		    type: 1,
 		    title: false,
 		    closeBtn: 0,
-		    area: ['300px', '300px'],
+		    area: ['100%', '60%'],
 		    skin: 'layui-layer-nobg', //没有背景色
 		    shadeClose: true,
 		    content: str
