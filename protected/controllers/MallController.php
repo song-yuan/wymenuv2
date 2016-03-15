@@ -308,10 +308,6 @@ class MallController extends Controller
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$site = WxSite::get($order['site_id'],$this->companyId);
 		
-		if($order['cupon_branduser_lid'] > 0 || $order['appointment_time'] > "0000-00-00 00:00:00"){
-			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
-		}
-			
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 		}
