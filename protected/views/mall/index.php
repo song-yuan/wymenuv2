@@ -189,12 +189,8 @@ $(document).ready(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
-            if((parseInt(top) + parseInt(height)) > 45){
-        		$(this).find('.prt-title').addClass('top');
-        	}else{
-        		$(this).next().find('.prt-title').addClass('top');
-        	}
             if(top < 0 && (parseInt(top) + parseInt(height)) > 5){
+            	$(this).find('.prt-title').addClass('top');
 	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
 	        	$('a[href=#'+id+']').parent('li').addClass('current');
 	        	return false;
