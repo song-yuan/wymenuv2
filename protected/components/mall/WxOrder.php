@@ -709,6 +709,8 @@ class WxOrder
 				//修改座位状态
 				if($order['order_type']==1){
 					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+				}else{
+					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 				}
 				$payMoney = $total;
 	 		}else{
@@ -727,6 +729,8 @@ class WxOrder
 					//修改座位状态
 					if($order['order_type']==1){
 						WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+					}else{
+						WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 					}
 					
 					//返现或者积分
@@ -756,6 +760,8 @@ class WxOrder
 				//修改座位状态
 				if($order['order_type']==1){
 					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+				}else{
+					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 				}
 				
 				//返现或者积分
