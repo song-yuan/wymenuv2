@@ -256,10 +256,9 @@ $(document).ready(function(){
     $("#container").on('click','.lt-lt',function(){
     	var str = $(this).html();
     	layer.open({
-		    type: 2,
+		    type: 1,
 		    title: false,
 		    closeBtn: 0,
-		    area: ['100%', '60%'],
 		    skin: 'layui-layer-nobg', //没有背景色
 		    shadeClose: true,
 		    content: str
