@@ -180,25 +180,26 @@ class MallController extends Controller
 		if(!$orderObj->cart){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
-		//生成订单
-		$orderId = $orderObj->createOrder();
-		
-		//订单地址
-		if(in_array($this->type,array(2,3))){
-			if($addressId > 0){
-				$address = WxAddress::getAddress($addressId,$this->companyId);
-				$result = WxOrderAddress::addOrderAddress($orderId,$address);
-				if(!$result){
-					$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type));
-				}
-			}else{
-				$msg = '请添加订单地址信息';
-				$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
-			}
-		}
 		
 		$transaction=Yii::app()->db->beginTransaction();
 		try{
+			//生成订单
+			$orderId = $orderObj->createOrder();
+			
+			//订单地址
+			if(in_array($this->type,array(2,3))){
+				if($addressId > 0){
+					$address = WxAddress::getAddress($addressId,$this->companyId);
+					$result = WxOrderAddress::addOrderAddress($orderId,$address);
+					if(!$result){
+						$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type));
+					}
+				}else{
+					$msg = '请添加订单地址信息';
+					$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
+				}
+			}
+		
 			//使用现金券
 			if($cuponId){
 			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
