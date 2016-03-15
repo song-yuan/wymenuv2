@@ -253,7 +253,7 @@ $(document).ready(function(){
 		    type: 1,
 		    title: false,
 		    closeBtn: 0,
-		    area: '516px',
+		    area: ['300px', '300px'],
 		    skin: 'layui-layer-nobg', //没有背景色
 		    shadeClose: true,
 		    content: str
