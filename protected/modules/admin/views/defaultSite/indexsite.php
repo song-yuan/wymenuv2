@@ -155,6 +155,42 @@
                                                                                         <?php                                                                                                 
                                                                                                 endforeach;
                                                                                             endif;?>
+                                                                                            <!-- CF外卖 -->
+                                                                                            <?php
+                                                                                            if(!empty($tempsitewModels)):
+                                                                                                $tempnumber=0;
+                                                                                                foreach ($tempsitewModels as $model):?>
+                                                                                                    <?php if($tempnumber!=$model->number): ?>
+                                                                                                        <!--  <li class="modalaction bg-red" typeid="waimai" showbutton="yes" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model->number; ?>人</span></li>
+                                                                                                    --><?php 
+                                                                                                        $tempnumber=$model->number;
+                                                                                                        endif;?>
+                                                                                                        <li class="modalaction <?php if($model->order_status=='1') echo 'bg-yellow'; elseif($model->order_status=='2') echo 'bg-blue'; elseif($model->order_status=='3') echo 'bg-green';?>" typeid="waimai" showbutton="yes" istemp="1" status=<?php echo $model->order_status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 20px;"><?php echo $model->site_id%1000;?>&nbsp;</span><span typename="updateat">
+                                                                                                                <?php echo '<br>'.substr($model["update_at"],5,11);?></span>
+                                                                                                            <div style="width: 100%;background-color:green;height:40%;
+                                                                                                                 display:block;">
+                                                                                                                <img style="height:90%;" src="<?php echo Yii::app()->request->baseUrl;?>/img/weixin.png" >印</div></li>
+                                                                                        <?php                                                                                                 
+                                                                                                endforeach;
+                                                                                            endif;?>
+                                                                                            <!-- CF预约 -->
+                                                                                            <?php
+                                                                                            if(!empty($tempsiteyModels)):
+                                                                                                $tempnumber=0;
+                                                                                                foreach ($tempsiteyModels as $model):?>
+                                                                                                    <?php if($tempnumber!=$model->number): ?>
+                                                                                                       <!-- <li class="modalaction bg-red" typeid="yuyue" showbutton="yes" style="width:4.0em;"><span style="font-size:20px;"><?php echo $model->number; ?>人</span></li>
+                                                                                                    -->  <?php 
+                                                                                                        $tempnumber=$model->number;
+                                                                                                        endif;?>
+                                                                                                        <li class="modalaction <?php if($model->order_status=='1') echo 'bg-yellow'; elseif($model->order_status=='2') echo 'bg-blue'; elseif($model->order_status=='3') echo 'bg-green';?>" typeid="yuyue" showbutton="yes" istemp="1" status=<?php echo $model->order_status;?> sid=<?php echo $model->site_id;?> shname="<?php echo $model->site_id%1000;?>"><span style="font-size: 20px;"><?php echo $model->site_id%1000;?>&nbsp;</span><span typename="updateat">
+                                                                                                                <?php echo '<br>'.substr($model["update_at"],5,11);?></span>
+                                                                                                            <div style="width: 100%;background-color:green;height:40%;
+                                                                                                                 display:block;">
+                                                                                                                <img style="height:90%;" src="<?php echo Yii::app()->request->baseUrl;?>/img/weixin.png" >印</div></li>
+                                                                                        <?php                                                                                                 
+                                                                                                endforeach;
+                                                                                            endif;?>
                                                                                     <?php //else:?>
                                                                                         <?php foreach ($models as $model):?>
                                                                                                         <li class="modalaction <?php if($model["min_status"]=='1'||$model["status"]=="1") echo 'bg-yellow'; elseif($model["min_status"]=='2') echo 'bg-blue'; elseif($model["min_status"]=='3') echo 'bg-green';?>"
