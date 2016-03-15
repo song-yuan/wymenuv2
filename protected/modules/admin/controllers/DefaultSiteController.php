@@ -100,6 +100,8 @@ class DefaultSiteController extends BackendController
 		$typeId = Yii::app()->request->getParam('typeId');
                 $compayId=Yii::app()->request->getParam('companyId');
                 $criteriat = new CDbCriteria;
+                $criteriaw = new CDbCriteria;
+                $criteriay = new CDbCriteria;
                 $criteria = new CDbCriteria;
 		//$title=yii::t('app','请选择餐桌');
                     $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
@@ -135,7 +137,16 @@ class DefaultSiteController extends BackendController
                         $criteriat->order = ' t.number desc,t.site_id desc ';
                         $tempsiteModels = SiteNo::model()->findAll($criteriat);
                         //var_dump($tempsiteModels);exit;
-                
+                        //外卖CF
+                		$criteriaw->condition =  't.order_status = 3 and t.is_temp = 1 and t.order_type = 2 and t.dpid='.$compayId ;
+                                
+                        $criteriaw->order = ' t.number desc,t.site_id desc ';
+                        $tempsitewModels = Order::model()->findAll($criteriaw);
+                        //预约CF
+                        $criteriay->condition =  't.order_status = 3 and t.is_temp = 1 and t.order_type = 3 and t.dpid='.$compayId ;
+                        
+                        $criteriay->order = ' t.number desc,t.site_id desc ';
+                        $tempsiteyModels = Order::model()->findAll($criteriay);
 //                        $criteria->with = 'siteType';
 //                        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$compayId ;
 //                        $criteria->order = ' t.serial asc ';
@@ -164,8 +175,10 @@ class DefaultSiteController extends BackendController
 		$this->renderPartial('indexsite',array(
 				'models'=>$models,
 				'queueModels' => $queueModels,
-                                'tempsiteModels' => $tempsiteModels,
-                                'typeId'=>$typeId
+                'tempsiteModels' => $tempsiteModels,
+				'tempsitewModels' => $tempsitewModels,
+				'tempsiteyModels' => $tempsiteyModels,
+                'typeId'=>$typeId
 		));
 	}
         
