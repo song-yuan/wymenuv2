@@ -256,7 +256,7 @@ $(document).ready(function(){
     $("#container").on('click','.lt-lt',function(){
     	var str = $(this).html();
     	layer.open({
-		    type: 1,
+		    type: 2,
 		    title: false,
 		    closeBtn: 0,
 		    area: ['100%', '60%'],
