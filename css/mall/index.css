@@ -13,7 +13,8 @@ body{ background-color:#E5E5E5;}
 .current{ background-color:#fff;}
 .sticky {position: fixed;top: 0;	animation:thedrop 1s 1;	-moz-animation:thedrop 1s 1;-webkit-animation:thedrop 1s 1;  background-color:#E5E5E5; font-size:0.15rem;}
 .sticky .nav-above {position: absolute;	top:0;left:1em;	right:1em;height:15px;}
-.section{ background-color:#fff;}
+.section{ background-color:#fff;position:relative;}
+.section .top{ position:fixed;top:0;right:0;width: 2.78rem;}
 .prt-title{height: 40px; line-height: 40px; margin-left:3%;padding-left:3%; font-size: 18px;background: #E5E5E5;}
 .prt-lt{ position:relative; width:97%; height:0.8rem; margin-left:3%; border-bottom:1px solid #e5e5e5;}
 .prt-lt .lt-lt{ position:relative; float:left; width:0.8rem; height:0.6rem; margin:0.1rem;}
