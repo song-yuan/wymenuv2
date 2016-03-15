@@ -189,7 +189,6 @@ $(document).ready(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
-            alert(top);
             if(top < 0){
             	$(this).find('.prt-title').addClass('top');
             }
