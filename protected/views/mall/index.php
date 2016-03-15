@@ -247,5 +247,17 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
+    $("#container").on('click','.lt-lt',function(){
+    	var str = $(this).html();
+    	layer.open({
+		    type: 1,
+		    title: false,
+		    closeBtn: 0,
+		    area: '516px',
+		    skin: 'layui-layer-nobg', //没有背景色
+		    shadeClose: true,
+		    content: str
+		});
+    });
 });
 </script> 
