@@ -175,7 +175,16 @@ class Server {
      * @return String 
      */
 	public function generalResponse() {
+		$subPushs = array();
+		$promotionPushs = WxPromotionActivity::getSubPush($this->brandId);
+    	if(!empty($promotionPushs)){
+    		foreach($promotionPushs as $push){
+    			array_push($subPushs,array($push['activity_title'],$push['activity_memo'],'http://menu.wymenu.com'.$push['main_picture'],Yii::app()->createAbsoluteUrl('/mall/cupon',array('companyId'=>$this->brandId,'activeId'=>$push['lid']))));
+    		}
+    		return $this->news($subPushs);
+    	}else{
     		$this->text('欢迎关注我要点单官方微信！');
+    	}
 	}
 	
 	/**
