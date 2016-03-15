@@ -581,8 +581,8 @@ class WxOrder
 		     );
 			$orderPay = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 			
-			$cuponBranduser = $sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$cuponBranduserLid.' and dpid='.$order['dpid'].' and to_group=3';
-			Yii::app()->db->createCommand($sql)->execute();
+			$sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$cuponBranduserLid.' and dpid='.$order['dpid'].' and to_group=3';
+			$cuponBranduser = Yii::app()->db->createCommand($sql)->execute();
 			if($res&&$orderPay){
 				return true;
 			}else{
@@ -608,6 +608,8 @@ class WxOrder
 	 * 
 	 */
 	 public static function cancelOrder($orderId,$dpid){
+	 	$order = self::getOrder($orderId,$dpid);
+	 	
 	 	$sql = 'select * from nb_order_product where order_id=:orderId and dpid=:dpid and is_print=1';
 	 	$resluts = Yii::app()->db->createCommand($sql)
 	 							 ->bindValue(':orderId',$orderId)
@@ -619,6 +621,10 @@ class WxOrder
 	 		$isSync = DataSync::getInitSync();
 			$sql = 'update nb_order set order_status=7,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			$result = Yii::app()->db->createCommand($sql)->execute();
+			if($order['cupon_branduser_lid'] > 0){
+				$sql = 'update nb_cupon_branduser set is_used=1,is_sync='.$isSync.' where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
+				$cuponBranduser = Yii::app()->db->createCommand($sql)->execute();
+			}
 			return $result;
 	 	}
 	}

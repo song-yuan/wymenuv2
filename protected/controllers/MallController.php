@@ -197,41 +197,38 @@ class MallController extends Controller
 			}
 		}
 		
-		//使用现金券
-		if($cuponId){
-			$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
-			if(!$result){
-				$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
+		$transaction=Yii::app()->db->beginTransaction();
+		try{
+			//使用现金券
+			if($cuponId){
+			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
 			}
-		}
-		//预订时间
-		if($orderTime){
-			$contion = $contion.' appointment_time="'.$orderTime.'",';
-		}
-		//备注
-		if($remark){
-			$contion = $contion.' taste_memo="'.$remark.'",';
-		}
+			//预订时间
+			if($orderTime){
+				$contion = $contion.' appointment_time="'.$orderTime.'",';
+			}
+			//备注
+			if($remark){
+				$contion = $contion.' taste_memo="'.$remark.'",';
+			}
+			
+			if($contion){
+				WxOrder::update($orderId,$this->companyId,$contion);
+			}
 		
-		if($contion){
-			WxOrder::update($orderId,$this->companyId,$contion);
-		}
-		
-		//使用余额
-		if($yue){
-			$order = WxOrder::getOrder($orderId,$this->companyId);
-			$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
-			if($remainMoney > 0){
-				$transaction=Yii::app()->db->beginTransaction();
-				try{
+			//使用余额
+			if($yue){
+				$order = WxOrder::getOrder($orderId,$this->companyId);
+				$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
+				if($remainMoney > 0){
 					WxOrder::insertOrderPay($order,10);
-					$transaction->commit();
-				}catch (Exception $e) {
-					$transaction->rollback();
-					$msg = $e->getMessage();
-					$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 				}
 			}
+		   $transaction->commit();
+		}catch (Exception $e) {
+			$transaction->rollback();
+			$msg = $e->getMessage();
+			$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
 		if($paytype == 1){
 			$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
