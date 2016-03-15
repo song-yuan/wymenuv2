@@ -550,7 +550,7 @@ class WxOrder
 		$sql = 'select t1.cupon_money,t1.min_consumer from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$cuponBranduserLid.
 				' and t.dpid='.$dpid.' and t1.begin_time <= "'.$now.'" and "'.$now.'" <= t1.end_time and t1.delete_flag=0 and t1.is_available=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
-		if($result && $order['should_total'] > $result['min_consumer']){
+		if($result && $order['should_total'] >= $result['min_consumer']){
 			$isSync = DataSync::getInitSync();
 			$money = ($order['should_total'] - $result['cupon_money']) >0 ? $order['should_total'] - $result['cupon_money'] : 0;
 			$cuponMoney = $result['cupon_money'];
@@ -575,6 +575,18 @@ class WxOrder
 			
 			$sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$cuponBranduserLid.' and dpid='.$order['dpid'].' and to_group=3';
 			$cuponBranduser = Yii::app()->db->createCommand($sql)->execute();
+			if($money == 0){
+				//修改订单状态
+				WxOrder::updateOrderStatus($order['lid'],$order['dpid']);
+				//修改订单产品状态
+				WxOrder::updateOrderProductStatus($order['lid'],$order['dpid']);
+				//修改座位状态
+				if($order['order_type']==1){
+					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+				}else{
+					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
+				}
+			}
 			if($res&&$orderPay){
 				return true;
 			}else{
