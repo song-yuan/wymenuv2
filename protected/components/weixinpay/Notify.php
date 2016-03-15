@@ -86,6 +86,8 @@ class Notify extends WxPayNotify
 		//修改座位状态
 		if($order['order_type']==1){
 			WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+		}else{
+			WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 		}
 		//发送模板消息通知
 		new WxMessageTpl($order['dpid'],$order['user_id'],0,$order);
