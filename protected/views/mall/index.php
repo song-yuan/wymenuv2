@@ -5,9 +5,6 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css">
 <style type="text/css">
-.layui-layer-content{
-	overflow:hidden;
-}
 .layui-layer-content img{
 	width:100%;
 	height:100%;
@@ -267,6 +264,7 @@ $(document).ready(function(){
 		    shadeClose: true,
 		    content: str
 		});
+		$('.layui-layer-content').css('overflow','hidden');
     });
 });
 </script> 
