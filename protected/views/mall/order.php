@@ -122,18 +122,9 @@
 <div class="order-paytype">
 	<div class="select-type">选择支付方式</div>
 	<div class="paytype">
-		<?php if($order['order_type']==1):?>
-		<div class="item  on" paytype="2">微信支付</div>
-		<div class="item" paytype="1" style="border:none;">支付宝支付</div>
-		<!--
-		<div class="item" paytype="1">饭后支付</div>
-		-->
+		<div class="item wx on" paytype="2"><img src="<?php echo $baseUrl;?>/img/mall/wxpay.png"/> 微信支付</div>
+		<div class="item zfb" paytype="1" style="border:none;"><img src="<?php echo $baseUrl;?>/img/mall/zfbpay.png"/> 支付宝支付</div>
 		<input type="hidden" name="paytype" value="2" />
-		<?php else:?>
-		<div class="item on" paytype="2">微信支付</div>
-		<div class="item" paytype="1" style="border:none;">支付宝支付</div>
-		<input type="hidden" name="paytype" value="2" />
-		<?php endif;?>
 	</div>
 </div>
 <div class="bottom"></div>

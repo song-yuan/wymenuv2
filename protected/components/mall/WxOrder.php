@@ -36,15 +36,19 @@ class WxOrder
 		$this->tastes = $tastes;
 		$this->getCart();
 		$this->dealTastes();
-		if($this->type==1||$this->type==3){
+		if($this->type==1){
 			$this->isTemp = 0;
 			$this->getSite();
 			$this->getSeatingFee();
-		}else{
+		}elseif($this->type==2){
 			$this->isTemp = 1;
 			$this->orderOpenSite();
 			$this->getPackingFee();
 			$this->getFreightFee();
+		}elseif($this->type==3){
+			$this->isTemp = 1;
+			$this->orderOpenSite();
+			$this->getSeatingFee();
 		}
 	}
 	//获取购物车信息
@@ -123,7 +127,8 @@ class WxOrder
 	public function orderOpenSite(){
 		$result = SiteClass::openSite($this->dpid,$this->number,$this->isTemp,$this->siteId);
 		if($this->isTemp==1){
-			$this->getSiteNo($result['siteid']);
+			$this->siteId = $result['siteid'];
+//			$this->getSiteNo($result['siteid']);
 		}
 	}
 	public function getSiteNo($siteId){
@@ -704,6 +709,8 @@ class WxOrder
 				//修改座位状态
 				if($order['order_type']==1){
 					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+				}else{
+					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 				}
 				$payMoney = $total;
 	 		}else{
@@ -722,6 +729,8 @@ class WxOrder
 					//修改座位状态
 					if($order['order_type']==1){
 						WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+					}else{
+						WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 					}
 					
 					//返现或者积分
@@ -751,6 +760,8 @@ class WxOrder
 				//修改座位状态
 				if($order['order_type']==1){
 					WxSite::updateSiteStatus($order['site_id'],$order['dpid'],3);
+				}else{
+					WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 				}
 				
 				//返现或者积分

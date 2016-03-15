@@ -53,9 +53,24 @@ class WxSite
 				  ->queryRow();
 	    return $site;
 	}
+	/**
+	 * 
+	 * 更改固定台状态
+	 * 
+	 */
 	public static function updateSiteStatus($siteId,$dpid,$status){
 		$isSync = DataSync::getInitSync();
 		$sql = 'update nb_site set status='.$status.',is_sync='.$isSync.' where lid='.$siteId.' and dpid='.$dpid;
+		Yii::app()->db->createCommand($sql)->execute();
+	}
+	/**
+	 * 
+	 * 更改临时台状态
+	 * 
+	 */
+	public static function updateTempSiteStatus($siteId,$dpid,$status){
+		$isSync = DataSync::getInitSync();
+		$sql = 'update nb_site_no set status='.$status.',is_sync='.$isSync.' where site_id='.$siteId.' and dpid='.$dpid.' and is_temp=1';
 		Yii::app()->db->createCommand($sql)->execute();
 	}
 }
