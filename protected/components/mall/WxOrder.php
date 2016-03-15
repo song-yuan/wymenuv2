@@ -564,7 +564,26 @@ class WxOrder
 			$cuponMoney = $result['cupon_money'];
 			$sql = 'update nb_order set cupon_branduser_lid='.$cuponBranduserLid.',cupon_money='.$cuponMoney.',should_total='.$money.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			$res = Yii::app()->db->createCommand($sql)->execute();
-			if($res){
+			
+			$se = new Sequence("order_pay");
+		    $orderPayId = $se->nextval();
+		    $insertOrderPayArr = array(
+		        	'lid'=>$orderPayId,
+		        	'dpid'=>$order['dpid'],
+		        	'create_at'=>$now,
+		        	'update_at'=>$now, 
+		        	'order_id'=>$order['lid'],
+		        	'account_no'=>$order['account_no'],
+		        	'pay_amount'=>$cuponMoney,
+		        	'paytype'=>9,
+		        	'paytype_id'=>$cuponBranduserLid,
+		        	'is_sync'=>$isSync,
+		     );
+			$orderPay = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
+			
+			$cuponBranduser = $sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$cuponBranduserLid.' and dpid='.$order['dpid'].' and to_group=3';
+			Yii::app()->db->createCommand($sql)->execute();
+			if($res&&$orderPay){
 				return true;
 			}else{
 				return false;
@@ -650,30 +669,6 @@ class WxOrder
 			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
 	 	}
 	 	
-		if($order['cupon_branduser_lid'] > 0){
-			$sql = 'select t1.cupon_money from nb_cupon_branduser t,nb_cupon t1 where t.cupon_id=t1.lid and t.dpid=t1.dpid and  t.lid='.$order['cupon_branduser_lid'].' and t.dpid='.$order['dpid'];
-			$result = Yii::app()->db->createCommand($sql)->queryRow();
-			
-			$se = new Sequence("order_pay");
-		    $orderPayId = $se->nextval();
-		    $insertOrderPayArr = array(
-		        	'lid'=>$orderPayId,
-		        	'dpid'=>$order['dpid'],
-		        	'create_at'=>date('Y-m-d H:i:s',$time),
-		        	'update_at'=>date('Y-m-d H:i:s',$time), 
-		        	'order_id'=>$order['lid'],
-		        	'account_no'=>$order['account_no'],
-		        	'pay_amount'=>$result['cupon_money'],
-		        	'paytype'=>9,
-		        	'paytype_id'=>$order['cupon_branduser_lid'],
-		        	'is_sync'=>DataSync::getInitSync(),
-		     );
-			$result = Yii::app()->db->createCommand()->insert('nb_order_pay', $insertOrderPayArr);
-			
-			$isSync = DataSync::getInitSync();
-			$sql = 'update nb_cupon_branduser set is_used=2,is_sync='.$isSync.' where lid='.$order['cupon_branduser_lid'].' and dpid='.$order['dpid'].' and to_group=3';
-			Yii::app()->db->createCommand($sql)->execute();
-		}
 		if($paytype != 10){
 			//返现或者积分
 			$back = new WxCashBack($order['dpid'],$order['user_id'],$order['should_total']);
