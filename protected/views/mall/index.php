@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/index.css">
 <style type="text/css">
 .layui-layer-content{
-	overflow:none;
+	overflow:hidden;
 }
 .layui-layer-content img{
 	width:100%;
