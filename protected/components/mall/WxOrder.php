@@ -127,7 +127,8 @@ class WxOrder
 	public function orderOpenSite(){
 		$result = SiteClass::openSite($this->dpid,$this->number,$this->isTemp,$this->siteId);
 		if($this->isTemp==1){
-			$this->getSiteNo($result['siteid']);
+			$this->siteId = $result['siteid'];
+//			$this->getSiteNo($result['siteid']);
 		}
 	}
 	public function getSiteNo($siteId){
