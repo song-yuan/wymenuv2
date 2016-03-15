@@ -180,8 +180,8 @@ $(document).ready(function(){
     	var _this = $(this);
     	var href = _this.find('a').attr('href');
         $('#nav').find('li').removeClass('current');
-        _this.addClass('current');
         $(href).scrollTop();
+        _this.addClass('current');
     });
     $('#container').scroll(function(){
         $('.section').each(function(){
@@ -189,9 +189,12 @@ $(document).ready(function(){
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
             if(top < 0 && (parseInt(top) + parseInt(height)) > 5){
+            	 $(this).find('.prt-title').addClass('top');
         		 $('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
             	 $('a[href=#'+id+']').parent('li').addClass('current');
             	 return false;
+            }else{
+            	 $(this).find('.prt-title').removeClass('top');
             }
         });
        
