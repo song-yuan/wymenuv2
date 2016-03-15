@@ -653,7 +653,9 @@
                                     <li typeId="<?php echo $key ;?>" class="tabSite <?php if($key == $typeId) echo 'slectliclass';?>"><?php echo $siteType ;?></li>
                             <?php endforeach;?>
                             <?php endif;?>
-                                <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座');?></li> 
+                                <!-- <li typeId="tempsite" class="tabSite <?php if($typeId == 'tempsite') echo 'slectliclass';?>"><?php echo yii::t('app','临时座');?></li> -->
+                                <li typeId="waimai" class="tabSite <?php if($typeId == 'waimai') echo 'slectliclass';?>"><?php echo yii::t('app','外卖');?></li> 
+                                <li typeId="yuyue" class="tabSite <?php if($typeId == 'yuyue') echo 'slectliclass';?>"><?php echo yii::t('app','预约');?></li> 
                                 <li typeId="others" class="tabSite <?php if($typeId == 'others') echo 'slectliclass';?>">其他</li>
                             </ul>
                         </div>
