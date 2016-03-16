@@ -72,7 +72,6 @@
     		var street = $('#province').val();
     		myGeo.getPoint(city + area + street, function(point){
 				if (point) {
-					alert(point.lng);alert(point.lat);
 					$('input[name="address[lng]"]').val(point.lng);
 					$('input[name="address[lat]"]').val(point.lat);
 				}else{
