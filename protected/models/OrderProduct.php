@@ -408,7 +408,7 @@ class OrderProduct extends CActiveRecord
             $lidlistproduct="0000000000";
             $transaction = $db->beginTransaction();
             try {
-		$sqlorderproduct="select tp.lid,tp.order_id,t.site_id,t.is_temp from nb_order_product tp"
+		$sqlorderproduct="select tp.lid,tp.order_id,t.site_id,t.is_temp,t.order_type from nb_order_product tp"
                         . " LEFT JOIN nb_order t on t.dpid=tp.dpid and t.lid=tp.order_id"
                         . " where tp.product_order_status='9' and tp.dpid="
                         .$dpid; 
@@ -421,8 +421,16 @@ class OrderProduct extends CActiveRecord
                 {
                     if($mop["is_temp"]=="1")
                     {
-                        $lidlistproduct.=",".$mop["lid"];
-                        $temparr[$mop["order_id"]]="临时座位".$mop["lid"]%1000;
+                    	if($mop["order_type"=="2"]){
+	                        $lidlistproduct.=",".$mop["lid"];
+	                        $temparr[$mop["order_id"]]="微信外卖".$mop["lid"]%1000;
+                    	}elseif($mop["order_type"=="3"]){
+	                        $lidlistproduct.=",".$mop["lid"];
+	                        $temparr[$mop["order_id"]]="微信预约".$mop["lid"]%1000;
+                    	}else{
+	                        $lidlistproduct.=",".$mop["lid"];
+	                        $temparr[$mop["order_id"]]="临时座".$mop["lid"]%1000;
+                    	}
                     }else{
                         $lidlistproduct.=",".$mop["lid"];
                         $lidlistarr[$mop["order_id"]]=$mop["site_id"];
@@ -463,7 +471,7 @@ class OrderProduct extends CActiveRecord
             $lidlistproduct="0000000000";
             $transaction = $db->beginTransaction();
             try {
-		$sqlorderproduct="select tp.lid,tp.order_id,t.site_id,t.is_temp from nb_order_product tp"
+		$sqlorderproduct="select tp.lid,tp.order_id,t.site_id,t.is_temp,t.order_type from nb_order_product tp"
                         . " LEFT JOIN nb_order t on t.dpid=tp.dpid and t.lid=tp.order_id"
                         . " where tp.product_order_status='8' and tp.dpid="
                         .$dpid; 
@@ -476,8 +484,16 @@ class OrderProduct extends CActiveRecord
                 {
                     if($mop["is_temp"]=="1")
                     {
-                        $lidlistproduct.=",".$mop["lid"];
-                        $temparr[$mop["order_id"]]="临时座位".$mop["lid"]%1000;
+                    	if($mop["order_type"]=="2"){
+	                        $lidlistproduct.=",".$mop["lid"];
+	                        $temparr[$mop["order_id"]]="微信外卖".$mop["lid"]%1000;
+                    	}elseif($mop["order_type"]=="3"){
+	                        $lidlistproduct.=",".$mop["lid"];
+	                        $temparr[$mop["order_id"]]="微信预约".$mop["lid"]%1000;
+                    	}else{
+	                        $lidlistproduct.=",".$mop["lid"];
+	                        $temparr[$mop["order_id"]]="临时座位".$mop["lid"]%1000;
+                    	}
                     }else{
                         $lidlistproduct.=",".$mop["lid"];
                         $lidlistarr[$mop["order_id"]]=$mop["site_id"];
