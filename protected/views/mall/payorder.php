@@ -37,14 +37,15 @@
 		}else{
 			$input->SetOpenid($openId);
 		}
-		
+		echo '<meta charset=utf8 />';
+		var_dump($input);exit;
 		$orderInfo = WxPayApi::unifiedOrder($input);
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 	}catch(Exception $e){
 		$canpWxpay = false;
 		echo '<meta charset=utf8 />';
 		var_dump($e->getMessage());exit;
-		$jsApiParameters = '';
+		$jsApiParameters = $e->getMessage();
 	}
 	
 ?>
