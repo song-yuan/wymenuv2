@@ -239,30 +239,30 @@ class DefaultSiteController extends BackendController
                             }
                             //var_dump($models);exit;
                     }
-                    elseif($typeId=="waimai"){
-                            //外卖CF
-                			$criteriaw->condition =  't.order_status = 3 and t.is_temp = 1 and t.order_type = 2 and t.dpid='.$compayId ;
+//                     elseif($typeId=="waimai"){
+//                             //外卖CF
+//                 			$criteriaw->condition =  't.order_status = 3 and t.is_temp = 1 and t.order_type = 2 and t.dpid='.$compayId ;
                                 
-                        	$criteriaw->order = ' t.number desc,t.site_id desc ';
-                        	$tempsitewModels = Order::model()->findAll($criteriaw);
-                            foreach ($tempsitewModels as $model)
-                            {
-                                array_push($models,array('number'=>$model->number,'status'=>$model->order_status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
-                            }
-                            //var_dump($models);exit;
-                    }
-                    elseif($typeId=="yuyue"){
-                     		//预约CF
-                        	$criteriay->condition =  't.order_status = 3 and t.is_temp = 1 and t.order_type = 3 and t.dpid='.$compayId ;
+//                         	$criteriaw->order = ' t.number desc,t.site_id desc ';
+//                         	$tempsitewModels = Order::model()->findAll($criteriaw);
+//                             foreach ($tempsitewModels as $model)
+//                             {
+//                                 array_push($models,array('number'=>$model->number,'status'=>$model->order_status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
+//                             }
+//                             //var_dump($models);exit;
+//                     }
+//                     elseif($typeId=="yuyue"){
+//                      		//预约CF
+//                         	$criteriay->condition =  't.order_status = 3 and t.is_temp = 1 and t.order_type = 3 and t.dpid='.$compayId ;
                         
-                        	$criteriay->order = ' t.number desc,t.site_id desc ';
-                        	$tempsiteyModels = Order::model()->findAll($criteriay);
-                            foreach ($tempsiteyModels as $model)
-                            {
-                                array_push($models,array('number'=>$model->number,'status'=>$model->order_status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
-                            }
-                            //var_dump($models);exit;
-                    }
+//                         	$criteriay->order = ' t.number desc,t.site_id desc ';
+//                         	$tempsiteyModels = Order::model()->findAll($criteriay);
+//                             foreach ($tempsiteyModels as $model)
+//                             {
+//                                 array_push($models,array('number'=>$model->number,'status'=>$model->order_status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
+//                             }
+//                             //var_dump($models);exit;
+//                     }
                     else{
                         //如果是本地模式，先从云端取有没有微信订单，有的话，加入到本地，然后打印。
                         if(Yii::app()->params['cloud_local']=='l')
