@@ -3354,7 +3354,7 @@ public function getSiteName($orderId){
 										//份数循环
 												foreach ($printercontent_a as $key=>$values) {             //////////////
 												//$printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
-												$printer2 = $printers_a[$key];
+												$printer2 = $printers_a[$key];return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"memcache初始化失败444");
 												//return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"before printConetent2");
 												$printret=Helper::printConetent8($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
 												//return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"after printConetent2");
