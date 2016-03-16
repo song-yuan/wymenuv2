@@ -165,7 +165,7 @@
 	function callpay()
 	{
 		<?php if(!$canpWxpay):?>
-		layer.msg('使用其他方式付款');
+		layer.msg('<?php echo $jsApiParameters;?>');
 		return;
 		<?php endif;?>
 		if (typeof WeixinJSBridge == "undefined"){
