@@ -1,3 +1,4 @@
+							<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hzj3D9srpRthGaFjOeBGvOG6"></script>
 							<?php $form=$this->beginWidget('CActiveForm', array(
 									'id' => 'company-form',
 									'errorMessageCssClass' => 'help-block',
@@ -60,8 +61,19 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'address',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'address',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('address')));?>
+											<div class="input-group">
+												<?php echo $form->textField($model, 'address',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('address')));?>
+												<span class="input-group-btn">
+												<button class="btn blue getLocation" type="button">获取位置</button>
+												</span>
+											</div>
 											<?php echo $form->error($model, 'address' )?>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label">地图位置</label>
+										<div class="col-md-4">
+											<div id="allmap" style="width:400px;height:200px;"></div>
 										</div>
 									</div>
 									<div class="form-group">
@@ -93,6 +105,8 @@
 											<?php echo $form->error($model, 'description' )?>
 										</div>
 									</div>
+									<?php echo $form->hiddenField($model, 'lng',array('class' => 'form-control'));?>
+									<?php echo $form->hiddenField($model, 'lat',array('class' => 'form-control'));?>
                                                                         <!--
 									<div class="form-group">
 										<?php echo $form->label($model, 'printer_id',array('class' => 'col-md-3 control-label'));?>
@@ -128,4 +142,32 @@
 			$("#Company_logo").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 		}
+		function myFun(result){
+			var cityName = result.name;
+			map.setCenter(cityName);
+		}
+		$(document).ready(function(){
+			// 百度地图API功能
+			var map = new BMap.Map("allmap");
+			map.centerAndZoom('上海市',11);
+			var myCity = new BMap.LocalCity();
+			myCity.get(myFun);
+			map.enableScrollWheelZoom(true);
+			$('.getLocation').click(function(){
+				var address = $('#Company_address').val();
+				// 创建地址解析器实例
+				var myGeo = new BMap.Geocoder();
+				// 将地址解析结果显示在地图上,并调整地图视野
+				myGeo.getPoint(address, function(point){
+					if (point) {
+						$('#Company_lng').val(point.lng);
+						$('#Company_lat').val(point.lat);
+						map.centerAndZoom(point, 16);
+						map.addOverlay(new BMap.Marker(point));
+					}else{
+						alert("您选择地址没有解析到结果!");
+					}
+				}, "上海市");
+			});
+		});
 	</script>							

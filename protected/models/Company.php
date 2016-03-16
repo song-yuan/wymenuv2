@@ -43,6 +43,7 @@ class Company extends CActiveRecord
 			array('company_name, email, is_sync', 'length', 'max'=>50),
 			array('logo, domain, homepage', 'length', 'max'=>255),
 			array('contact_name, mobile, telephone', 'length', 'max'=>20),
+			array('lng, lat', 'length', 'max'=>10),
 			array('description','length'),
 			array('queuememo','length'),
 			array('address','length'),
@@ -54,7 +55,7 @@ class Company extends CActiveRecord
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('dpid, company_name, logo,token, contact_name, is_sync, mobile, telephone, email, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
+			array('dpid, company_name, logo,token, contact_name, is_sync, mobile, telephone, email, lng, lat, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -125,6 +126,8 @@ class Company extends CActiveRecord
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('queuememo',$this->queuememo,true);
+		$criteria->compare('lng',$this->lng,true);
+		$criteria->compare('lat',$this->lat,true);
 		$criteria->compare('printer_id',$this->printer_id,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
