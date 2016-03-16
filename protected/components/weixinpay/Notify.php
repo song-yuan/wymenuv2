@@ -26,6 +26,13 @@ class Notify extends WxPayNotify
 	//重写回调处理函数
 	public function NotifyProcess($data, &$msg)
 	{
+		$myfile = fopen("/tmp/newfile.txt", "w") or die("Unable to open file!");
+		$txt = "Bill Gates\n";
+		fwrite($myfile, $txt);
+		$txt = "Steve Jobs\n";
+		fwrite($myfile, $txt);
+		fwrite($myfile, json_encode($data));
+		fclose($myfile);
 		$notfiyOutput = array();
 		if(!array_key_exists("out_trade_no", $data)){
 			$msg = "输入参数不正确";

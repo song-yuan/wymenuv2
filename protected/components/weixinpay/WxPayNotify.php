@@ -54,13 +54,6 @@ class WxPayNotify extends WxPayNotifyReply
 	 */
 	final public function NotifyCallBack($data)
 	{
-		$myfile = fopen("/tmp/newfile.txt", "w") or die("Unable to open file!");
-		$txt = "Bill Gates\n";
-		fwrite($myfile, $txt);
-		$txt = "Steve Jobs\n";
-		fwrite($myfile, $txt);
-		fwrite($myfile, json_encode($data));
-		fclose($myfile);
 		$msg = "OK";
 		$result = $this->NotifyProcess($data, $msg);
 		
