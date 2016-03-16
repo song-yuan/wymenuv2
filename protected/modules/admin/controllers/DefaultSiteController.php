@@ -322,7 +322,8 @@ class DefaultSiteController extends BackendController
                     echo $ex->getMessage();
                     $status=false;
                 }
-                $status=true;Yii::app()->end(json_encode(array("status"=>$status,"msg"=>$typeId)));
+                $status=true;
+                //Yii::app()->end(json_encode(array("status"=>$status,"msg"=>$typeId)));
 		//var_dump(array("status"=>$status,"models"=>$models));exit;
                 //array_push($models, array("status"=>$status));
                 //Yii::app()->end(json_encode(array("status"=>$status,"models"=>$models,"modeljobs"=>$modeljobs)));
