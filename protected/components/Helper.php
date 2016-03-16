@@ -3354,7 +3354,7 @@ public function getSiteName($orderId){
 										//份数循环
 												foreach ($printercontent_a as $key=>$values) {             //////////////
 												//$printret=Helper::printConetent($printer,$listData,$precode,$sufcode,$printserver);
-												$printer2 = $printers_a[$key];return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"memcache初始化失败444");
+												$printer2 = $printers_a[$key];
 												//return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"before printConetent2");
 												$printret=Helper::printConetent8($printer2,$values,$precode,$sufcode,$printserver,$order->lid);
 												//return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"after printConetent2");
@@ -3379,7 +3379,7 @@ public function getSiteName($orderId){
 						}  catch (Exception $e)
 						{
 						return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"memcache初始化失败444");
-						}
+						}return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"memcache初始化失败444");
 						$ret=array('status'=>true,'orderid'=>$order->lid,'dpid'=>$order->dpid,'allnum'=>count($jobids2),'msg'=>'打印任务正常发布',"jobs"=>$jobids2);
 						//return array('status'=>true,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"测试14");
 						//更新菜品状态为已打印
