@@ -58,6 +58,56 @@ class WxPayOrderQuery extends WxPayDataBase
 		return array_key_exists('mch_id', $this->values);
 	}
 
+	/**
+	* 设置微信分配的子商户公众账号ID
+	* @param string $value 
+	**/
+	public function SetSubAppid($value)
+	{
+		$this->values['sub_appid'] = $value;
+	}
+	/**
+	* 获取微信分配的子商户公众账号ID的值
+	* @return 值
+	**/
+	public function GetSubAppid()
+	{
+		return $this->values['sub_appid'];
+	}
+	/**
+	* 判断微信分配的子商户公众账号ID是否存在
+	* @return true 或 false
+	**/
+	public function IsSubAppidSet()
+	{
+		return array_key_exists('sub_appid', $this->values);
+	}
+
+	/**
+	* 设置微信支付分配的商户号
+	* @param string $value 
+	**/
+	public function SetSubMch_id($value)
+	{
+		$this->values['sub_mch_id'] = $value;
+	}
+	/**
+	* 获取微信支付分配的商户号的值
+	* @return 值
+	**/
+	public function GetSubMch_id()
+	{
+		return $this->values['sub_mch_id'];
+	}
+	/**
+	* 判断微信支付分配的商户号是否存在
+	* @return true 或 false
+	**/
+	public function IsSubMch_idSet()
+	{
+		return array_key_exists('sub_mch_id', $this->values);
+	}
+
 
 	/**
 	* 设置微信的订单号，优先使用
