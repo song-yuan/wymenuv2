@@ -23,9 +23,9 @@ class WxPayConfig
 	 * @var string
 	 */
 	const ISSUBMCH = 1; //1 受理模式 0 非受理模式
-	const APPID = '';
-	const MCHID = '';
-	const KEY = '';
+	const APPID = 'wxc7efde5ed05f36da';//受理appid
+	const MCHID = '1292535601';//受理mch_id
+	const KEY = 'ff123456789012345678901234567890';//受理密钥key
 	
 	//=======【证书路径设置】=====================================
 	/**
