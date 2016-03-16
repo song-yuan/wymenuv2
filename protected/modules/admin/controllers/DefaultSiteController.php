@@ -188,6 +188,8 @@ class DefaultSiteController extends BackendController
                 $compayId=Yii::app()->request->getParam('companyId');
                 $padId=Yii::app()->request->getParam('padId');
                 $criteriat = new CDbCriteria;
+                $criteriaw = new CDbCriteria;
+                $criteriay = new CDbCriteria;
                 $criteria = new CDbCriteria;
                 $status=true;
 				$models=array();
@@ -217,7 +219,8 @@ class DefaultSiteController extends BackendController
                         $connect = Yii::app()->db->createCommand($sql);
                         $models = $connect->queryAll();
                         //var_dump($queueModels);exit;
-                    }elseif($typeId=="tempsite"){
+                    }
+                    elseif($typeId=="tempsite"){
                             $tempnow = new DateTime(date('Y-m-d H:i:s',time()));
                             //var_dump($tempnow->format('Y-m-d H:i:s'));
                             $tempnow->modify("-12 hour");
@@ -235,7 +238,32 @@ class DefaultSiteController extends BackendController
                                 array_push($models,array('number'=>$model->number,'status'=>$model->status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
                             }
                             //var_dump($models);exit;
-                    }else{
+                    }
+                    elseif($typeId=="waimai"){
+                            //外卖CF
+                			$criteriaw->condition =  't.order_status = 3 and t.is_temp = 1 and t.order_type = 2 and t.dpid='.$compayId ;
+                                
+                        	$criteriaw->order = ' t.number desc,t.site_id desc ';
+                        	$tempsitewModels = Order::model()->findAll($criteriaw);
+                            foreach ($tempsitewModels as $model)
+                            {
+                                array_push($models,array('number'=>$model->number,'status'=>$model->order_status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
+                            }
+                            //var_dump($models);exit;
+                    }
+                    elseif($typeId=="yuyue"){
+                     		//预约CF
+                        	$criteriay->condition =  't.order_status = 3 and t.is_temp = 1 and t.order_type = 3 and t.dpid='.$compayId ;
+                        
+                        	$criteriay->order = ' t.number desc,t.site_id desc ';
+                        	$tempsiteyModels = Order::model()->findAll($criteriay);
+                            foreach ($tempsiteyModels as $model)
+                            {
+                                array_push($models,array('number'=>$model->number,'status'=>$model->order_status,'site_id'=>$model->site_id,'update_at'=>$model->update_at));
+                            }
+                            //var_dump($models);exit;
+                    }
+                    else{
                         //如果是本地模式，先从云端取有没有微信订单，有的话，加入到本地，然后打印。
                         if(Yii::app()->params['cloud_local']=='l')
                         {
@@ -262,7 +290,7 @@ class DefaultSiteController extends BackendController
                         $ret8arr=OrderProduct::setPayCall($compayId,"0000000000","0");
                         //var_dump($ret8arr);exit;
                         //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
-
+                        //Yii::app()->end(json_encode(array("status"=>$status,"msg"=>"cfceshi")));
                         $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
                               . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem"
                                 . ",IFNULL(minstatus.min_status,-1)+1 as min_status,IFNULL(minstatus.max_status,-1)+1 as max_status "
@@ -295,6 +323,7 @@ class DefaultSiteController extends BackendController
                     $status=false;
                 }
                 $status=true;
+                //Yii::app()->end(json_encode(array("status"=>$status,"msg"=>$typeId)));
 		//var_dump(array("status"=>$status,"models"=>$models));exit;
                 //array_push($models, array("status"=>$status));
                 //Yii::app()->end(json_encode(array("status"=>$status,"models"=>$models,"modeljobs"=>$modeljobs)));
