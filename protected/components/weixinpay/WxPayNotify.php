@@ -15,15 +15,8 @@ class WxPayNotify extends WxPayNotifyReply
 	final public function Handle($needSign = true)
 	{
 		$msg = "OK";
-		$myfile = fopen("/tmp/newfile2.txt", "w") or die("Unable to open file!");
 		//当返回false的时候，表示notify中调用NotifyCallBack回调失败获取签名校验失败，此时直接回复失败
 		$result = WxPayApi::notify(array($this, 'NotifyCallBack'), $msg);
-		$txt = "Bill Gates\n";
-		fwrite($myfile, $txt);
-		$txt = "Steve Jobs\n";
-		fwrite($myfile, $txt);
-		fwrite($myfile, json_encode($result));
-		fclose($myfile);
 		if($result == false){
 			$this->SetReturn_code("FAIL");
 			$this->SetReturn_msg($msg);
@@ -61,6 +54,13 @@ class WxPayNotify extends WxPayNotifyReply
 	 */
 	final public function NotifyCallBack($data)
 	{
+		$myfile = fopen("/tmp/newfile.txt", "w") or die("Unable to open file!");
+		$txt = "Bill Gates\n";
+		fwrite($myfile, $txt);
+		$txt = "Steve Jobs\n";
+		fwrite($myfile, $txt);
+		fwrite($myfile, json_encode($data));
+		fclose($myfile);
 		$msg = "OK";
 		$result = $this->NotifyProcess($data, $msg);
 		

@@ -27,25 +27,16 @@ class Notify extends WxPayNotify
 	public function NotifyProcess($data, &$msg)
 	{
 		$notfiyOutput = array();
-		$myfile = fopen("/tmp/newfile1.txt", "w") or die("Unable to open file!");
-		$txt = "Bill Gates wewe\n";
 		if(!array_key_exists("out_trade_no", $data)){
 			$msg = "输入参数不正确";
 			return false;
 		}
-		$txt = "Bill Gates ddfdfdf\n";
 		//查询订单，判断订单真实性
 		if(!$this->Queryorder($data["out_trade_no"])){
 			$msg = "订单查询失败";
 			return false;
 		}
 	
-		$txt = "Bill Gates\n";
-		fwrite($myfile, $txt);
-		$txt = "Steve Jobs\n";
-		fwrite($myfile, $txt);
-		fwrite($myfile, json_encode($data));
-		fclose($myfile);
 		//记录通知 并更改订单状态
 		$this->checkNotify($data);
 		
