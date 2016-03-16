@@ -355,12 +355,13 @@
                                 //存在删减临时座位的,暂不修改，以后添加！！                    
                                 //....
                                 //CF
-                                alert("123");
+                                //alert("123");
                             	history.go(0);
                             	//location.href="<?php echo $this->createUrl('default/index' , array('companyId'=>$this->companyId ));?>/typeId/"+gtypeid    
                             	//var loadurl='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>'waimai'));?>';
                                 //location.href=loadurl; 
-                            }else{alert("456");
+                            }else{
+                                //alert("456");
                                 //获取座位信息，并更新状态
                                 //不存在删减座位的
                                 if($("#tab_sitelist").length > 0)
