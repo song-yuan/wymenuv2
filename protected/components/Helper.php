@@ -4534,7 +4534,7 @@ public function getSiteName($orderId){
                     ///打印任务不再发送，返回job编号，有pad自己去取                   
 
                 }else{//主动的同步打印 0
-
+exit;
                         
                         $seorderprintjobs=new Sequence("order_printjobs");
                         $orderjobId = $seorderprintjobs->nextval();
