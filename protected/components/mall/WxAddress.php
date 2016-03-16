@@ -52,6 +52,8 @@ class WxAddress
 				        	'street'=>$param['street'],
 				        	'postcode'=>$param['postcode'],
 				        	'mobile'=>$param['mobile'],
+				        	'lng'=>$param['lng'],
+				        	'lat'=>$param['lat'],
 				        	'default_address'=>isset($param['default_address'])?1:0,
 				        	'is_sync'=>DataSync::getInitSync(),
 							);
@@ -70,6 +72,8 @@ class WxAddress
 				        	'street'=>$param['street'],
 				        	'postcode'=>$param['postcode'],
 				        	'mobile'=>$param['mobile'],
+				        	'lng'=>$param['lng'],
+				        	'lat'=>$param['lat'],
 				        	'default_address'=>isset($param['default_address'])?1:0,
 				        	'is_sync'=>DataSync::getInitSync(),
 							);
