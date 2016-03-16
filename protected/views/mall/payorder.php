@@ -11,11 +11,11 @@
 	}
 	
 	//子订单号
-	$se = new Sequence("order_subno");
-	$orderSubNo = $se->nextval();
+//	$se = new Sequence("order_subno");
+//	$orderSubNo = $se->nextval();
 	
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
-	$orderId = $order['lid'].'-'.$order['dpid'].'-'.$orderSubNo;
+	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
 	$canpWxpay = true;
 	try{
