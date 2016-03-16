@@ -310,7 +310,7 @@ $(document).ready(function(){
 	$('#total').attr('total',totalFee);
 	
 	$('.location').click(function(){
-		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
+		location.href = '<?php echo $this->createUrl('/user/setAddress',array('companyId'=>$this->companyId,'type'=>$this->type,'url'=>urlencode($this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type)))));?>';
 	});
 	<?php elseif($this->type==1):?>
 	var number = $('.number').val();
