@@ -4534,7 +4534,7 @@ public function getSiteName($orderId){
                     ///打印任务不再发送，返回job编号，有pad自己去取                   
 
                 }else{//主动的同步打印 0
-exit;
+
                         
                         $seorderprintjobs=new Sequence("order_printjobs");
                         $orderjobId = $seorderprintjobs->nextval();
@@ -4555,7 +4555,7 @@ exit;
                         					'is_sync'=>'01001',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
-                        
+                        exit;
                         $store->set($printer->dpid."_".$jobid,$contentCodeAll,0,30);//should 120测试1200
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
 //                    }
