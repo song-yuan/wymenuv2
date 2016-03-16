@@ -290,7 +290,7 @@ class DefaultSiteController extends BackendController
                         $ret8arr=OrderProduct::setPayCall($compayId,"0000000000","0");
                         //var_dump($ret8arr);exit;
                         //查看是否有新内容，有则打印(无论云端或本地都要执行这一步)。
-                        Yii::app()->end(json_encode(array("status"=>$status,"msg"=>"cfceshi")));
+                        //Yii::app()->end(json_encode(array("status"=>$status,"msg"=>"cfceshi")));
                         $sql="select t.lid,t.dpid,t.status,t.type_id,t.serial,t.update_at,"
                               . "IFNULL(twx.order_type,0) as order_type,IFNULL(twx.newitem,0) as newitem"
                                 . ",IFNULL(minstatus.min_status,-1)+1 as min_status,IFNULL(minstatus.max_status,-1)+1 as max_status "
