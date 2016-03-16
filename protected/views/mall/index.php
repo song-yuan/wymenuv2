@@ -180,18 +180,20 @@ $(document).ready(function(){
     	var _this = $(this);
     	var href = _this.find('a').attr('href');
         $('#nav').find('li').removeClass('current');
-        _this.addClass('current');
         $(href).scrollTop();
+        _this.addClass('current');
     });
     $('#container').scroll(function(){
+    	$('.prt-title').removeClass('top');
         $('.section').each(function(){
         	var id = $(this).attr('id');
             var top = $(this).offset().top;
             var height = $(this).outerHeight();
             if(top < 0 && (parseInt(top) + parseInt(height)) > 5){
-        		 $('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
-            	 $('a[href=#'+id+']').parent('li').addClass('current');
-            	 return false;
+            	$(this).find('.prt-title').addClass('top');
+	    		$('a[href=#'+id+']').parents('ul').find('li').removeClass('current');
+	        	$('a[href=#'+id+']').parent('li').addClass('current');
+	        	return false;
             }
         });
        

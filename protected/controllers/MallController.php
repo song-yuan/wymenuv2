@@ -180,58 +180,56 @@ class MallController extends Controller
 		if(!$orderObj->cart){
 			$this->redirect(array('/mall/index','companyId'=>$this->companyId,'type'=>$this->type));
 		}
-		//生成订单
-		$orderId = $orderObj->createOrder();
 		
-		//订单地址
-		if(in_array($this->type,array(2,3))){
-			if($addressId > 0){
-				$address = WxAddress::getAddress($addressId,$this->companyId);
-				$result = WxOrderAddress::addOrderAddress($orderId,$address);
-				if(!$result){
-					$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type));
-				}
-			}else{
-				$msg = '请添加订单地址信息';
-				$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
-			}
-		}
-		
-		//使用现金券
-		if($cuponId){
-			$result = WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
-			if(!$result){
-				$this->redirect(array('/mall/order','companyId'=>$this->companyId,'orderId'=>$orderId));
-			}
-		}
-		//预订时间
-		if($orderTime){
-			$contion = $contion.' appointment_time="'.$orderTime.'",';
-		}
-		//备注
-		if($remark){
-			$contion = $contion.' taste_memo="'.$remark.'",';
-		}
-		
-		if($contion){
-			WxOrder::update($orderId,$this->companyId,$contion);
-		}
-		
-		//使用余额
-		if($yue){
-			$order = WxOrder::getOrder($orderId,$this->companyId);
-			$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
-			if($remainMoney > 0){
-				$transaction=Yii::app()->db->beginTransaction();
-				try{
-					WxOrder::insertOrderPay($order,10);
-					$transaction->commit();
-				}catch (Exception $e) {
-					$transaction->rollback();
-					$msg = $e->getMessage();
+		$transaction=Yii::app()->db->beginTransaction();
+		try{
+			//生成订单
+			$orderId = $orderObj->createOrder();
+			
+			//订单地址
+			if(in_array($this->type,array(2,3))){
+				if($addressId > 0){
+					$address = WxAddress::getAddress($addressId,$this->companyId);
+					$result = WxOrderAddress::addOrderAddress($orderId,$address);
+					if(!$result){
+						$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type));
+					}
+				}else{
+					$msg = '请添加订单地址信息';
 					$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 				}
 			}
+		
+			//使用现金券
+			if($cuponId){
+			   WxOrder::updateOrderCupon($orderId,$this->companyId,$cuponId);
+			}
+			//预订时间
+			if($orderTime){
+				$contion = $contion.' appointment_time="'.$orderTime.'",';
+			}
+			//备注
+			if($remark){
+				$contion = $contion.' taste_memo="'.$remark.'",';
+			}
+			
+			if($contion){
+				WxOrder::update($orderId,$this->companyId,$contion);
+			}
+		
+			//使用余额
+			if($yue){
+				$order = WxOrder::getOrder($orderId,$this->companyId);
+				$remainMoney = WxBrandUser::getYue($userId,$this->companyId);
+				if($remainMoney > 0){
+					WxOrder::insertOrderPay($order,10);
+				}
+			}
+		   $transaction->commit();
+		}catch (Exception $e) {
+			$transaction->rollback();
+			$msg = $e->getMessage();
+			$this->redirect(array('/mall/checOrder','companyId'=>$this->companyId,'type'=>$this->type,'msg'=>$msg));
 		}
 		if($paytype == 1){
 			$showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
@@ -310,10 +308,6 @@ class MallController extends Controller
 		$order = WxOrder::getOrder($orderId,$this->companyId);
 		$site = WxSite::get($order['site_id'],$this->companyId);
 		
-		if($order['cupon_branduser_lid'] > 0 || $order['appointment_time'] > "0000-00-00 00:00:00"){
-			$this->redirect(array('/mall/payOrder','companyId'=>$this->companyId,'orderId'=>$orderId));
-		}
-			
 		if($site){
 			$siteType = WxSite::getSiteType($site['type_id'],$this->companyId);
 		}

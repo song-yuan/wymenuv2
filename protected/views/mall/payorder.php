@@ -37,12 +37,11 @@
 		}else{
 			$input->SetOpenid($openId);
 		}
-		
 		$orderInfo = WxPayApi::unifiedOrder($input);
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 	}catch(Exception $e){
 		$canpWxpay = false;
-		$jsApiParameters = '';
+		$jsApiParameters = $e->getMessage();
 	}
 	
 ?>
@@ -166,7 +165,7 @@
 	function callpay()
 	{
 		<?php if(!$canpWxpay):?>
-		layer.msg('使用其他方式付款');
+		layer.msg('<?php echo $jsApiParameters;?>');
 		return;
 		<?php endif;?>
 		if (typeof WeixinJSBridge == "undefined"){
