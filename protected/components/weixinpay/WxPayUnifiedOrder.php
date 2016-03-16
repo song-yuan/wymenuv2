@@ -532,7 +532,7 @@ class WxPayUnifiedOrder extends WxPayDataBase
 	**/
 	public function SetSubOpenid($value)
 	{
-		$this->values['sub_appid'] = $value;
+		$this->values['sub_openid'] = $value;
 	}
 	/**
 	* 获取trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。下单前需要调用【网页授权获取用户信息】接口获取到用户的Openid。 的值
@@ -540,7 +540,7 @@ class WxPayUnifiedOrder extends WxPayDataBase
 	**/
 	public function GetSubOpenid()
 	{
-		return $this->values['sub_appid'];
+		return $this->values['sub_openid'];
 	}
 	/**
 	* 判断trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。下单前需要调用【网页授权获取用户信息】接口获取到用户的Openid。 是否存在
@@ -548,7 +548,7 @@ class WxPayUnifiedOrder extends WxPayDataBase
 	**/
 	public function IsSubOpenidSet()
 	{
-		return array_key_exists('sub_appid', $this->values);
+		return array_key_exists('sub_openid', $this->values);
 	}
 }
 ?>
