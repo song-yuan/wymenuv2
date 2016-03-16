@@ -421,16 +421,16 @@ class OrderProduct extends CActiveRecord
                 {
                     if($mop["is_temp"]=="1")
                     {
-                    	if($mop["order_type"=="2"]){
-	                        $lidlistproduct.=",".$mop["lid"];
-	                        $temparr[$mop["order_id"]]="微信外卖".$mop["lid"]%1000;
-                    	}elseif($mop["order_type"=="3"]){
-	                        $lidlistproduct.=",".$mop["lid"];
-	                        $temparr[$mop["order_id"]]="微信预约".$mop["lid"]%1000;
-                    	}else{
-	                        $lidlistproduct.=",".$mop["lid"];
-	                        $temparr[$mop["order_id"]]="临时座".$mop["lid"]%1000;
-                    	}
+	                    if($mop["order_type"]=="2"){
+		                        $lidlistproduct.=",".$mop["lid"];
+		                        $temparr[$mop["order_id"]]="微信外卖".$mop["lid"]%1000;
+	                    	}elseif($mop["order_type"]=="3"){
+		                        $lidlistproduct.=",".$mop["lid"];
+		                        $temparr[$mop["order_id"]]="微信预约".$mop["lid"]%1000;
+	                    	}else{
+		                        $lidlistproduct.=",".$mop["lid"];
+		                        $temparr[$mop["order_id"]]="临时座位".$mop["lid"]%1000;
+	                    	}
                     }else{
                         $lidlistproduct.=",".$mop["lid"];
                         $lidlistarr[$mop["order_id"]]=$mop["site_id"];
