@@ -255,14 +255,14 @@ $(document).ready(function(){
 			            t.removeClass('zero');
 			        }
 			        setTotal();
-			        //动画
-			        bool.start();
         		}else{
         			layer.msg(msg.msg);
         		}
         	},
         	dataType:'json'
         });
+        //动画
+		bool.start();
     });
      
     $("#container").on('touchstart','.minus',function(){ 
