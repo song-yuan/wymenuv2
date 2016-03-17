@@ -37,7 +37,7 @@
 		<input type="hidden" name="address[lng]" value="<?php echo $address?$address['lng']:'0';?>"/>
 		<input type="hidden" name="address[lat]" value="<?php echo $address?$address['lat']:'0';?>"/>
 		<div class="bttnbar">
-		<button class="bttn_black2 bttn_large" type="button"><a href="<?php echo $this->createUrl('/user/address',array('companyId'=>$this->companyId));?>">取消</a></button>
+		<button class="bttn_black2 bttn_large cancel" type="button"><a href="javacript:;">取消</a></button>
 		<button class="bttn_black2 bttn_large" type="submit">保存</button>
 		</div>
 	</form>
@@ -65,11 +65,11 @@
         return false;}
     }
     $(document).ready(function(){
-    	var myGeo = new BMap.Geocoder();
-    	$('#street').change(function(){
+    	$('#street').blur(function(){
     		var city = $('#city').val();
     		var area = $('#area').val();
-    		var street = $('#province').val();
+    		var street = $('#street').val();
+    		var myGeo = new BMap.Geocoder();
     		myGeo.getPoint(city + area + street, function(point){
 				if (point) {
 					$('input[name="address[lng]"]').val(point.lng);
@@ -78,6 +78,9 @@
 					alert("您选择地址没有解析到结果!");
 				}
 			}, city);
+    	});
+    	$('.cancel').click(function(){
+    		history.go(-1);
     	});
     });
 </script>
