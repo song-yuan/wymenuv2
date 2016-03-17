@@ -50,7 +50,7 @@
 <!-- 地址 -->
 <div class="address arrowright">
 	<?php if($address):?>
-		<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);echo $distance;?>
+		<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
 		<?php if($company['distance']*1000 > $distance):?>
 		<div class="location">
 			<span>收货人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
