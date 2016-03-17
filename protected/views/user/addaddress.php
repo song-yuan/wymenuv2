@@ -66,7 +66,7 @@
     }
     $(document).ready(function(){
     	var myGeo = new BMap.Geocoder();
-    	$('#street').change(function(){
+    	$('#street').blur(function(){
     		var city = $('#city').val();
     		var area = $('#area').val();
     		var street = $('#province').val();
