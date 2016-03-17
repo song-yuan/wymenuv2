@@ -622,7 +622,7 @@ class OrderProduct extends CActiveRecord
 					//$orderProducts = OrderProduct::getHasPauseProducts($order->lid,$order->dpid);
 					//var_dump($orderList);exit;
 					$printList = Helper::printKitchenAll8($order,$orderList,$site,false);
-					return $printList;
+					//return $printList;
 				}
 			}
 			//var_dump($modelprinterjob);exit;

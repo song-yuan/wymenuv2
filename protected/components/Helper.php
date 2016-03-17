@@ -2992,7 +2992,6 @@ public function getSiteName($orderId){
 		}
 		//foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
 		$printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));
-		return $printerways;
 		if(empty($printerways))
 		{
 			return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"没有打印方案");
@@ -3000,6 +2999,7 @@ public function getSiteName($orderId){
 		//var_dump($printerways);exit;
 		foreach($printerways as $printerway)
 		{
+			$a = 0;
 			$printer2orderproducts_a=array();
 			foreach($orderProducts as $orderProduct)
 			{
@@ -3013,7 +3013,9 @@ public function getSiteName($orderId){
 					//                                return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"部分产品没有设置打印方案");
 					//                            }else{
 					$printwaydetails = PrinterWayDetail::model()->findAll('floor_id=:floorid and print_way_id=:pwi and dpid=:dpid and delete_flag=0',array(':floorid'=>$floor_id,':pwi'=>$printerway->lid,':dpid'=>$order->dpid));
+					//var_dump($printwaydetails);
 					foreach ($printwaydetails as $printway) {
+						//$a .= $printway->floor_id.'[]';
 						$printer = Printer::model()->find('lid=:printerId and dpid=:dpid',  array(':printerId'=>$printway->printer_id,':dpid'=>$order->dpid));
 						if(empty($printer)) {
 							return array('status'=>false,'dpid'=>$printer->dpid,'allnum'=>"0",'type'=>'none','msg'=>yii::t('app','打印方案没有设置厨房打印机'));
@@ -3034,6 +3036,7 @@ public function getSiteName($orderId){
 					}
 				}
 			}
+			//return $a;
 			if($printerway->is_onepaper=="1")
 			{
 				foreach ($printer2orderproducts_a as $key=>$values) {
