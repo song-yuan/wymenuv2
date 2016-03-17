@@ -50,11 +50,19 @@
 <!-- 地址 -->
 <div class="address arrowright">
 	<?php if($address):?>
-	<div class="location">
-		<span>收货人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
-		<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
-		<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
-	</div>
+		<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
+		<?php if($company['distance']*1000 > $distance):?>
+		<div class="location">
+			<span>收货人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
+			<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+			<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
+		</div>
+		<?php else:?>
+		<div class="location" style="line-height: 50px;">
+			<span class="add">添加收货地址</span>
+			<input type="hidden" name="address" value="-1"/>
+		</div>
+		<?php endif;?>
 	<?php else:?>
 	<div class="location" style="line-height: 50px;">
 		<span class="add">添加收货地址</span>
