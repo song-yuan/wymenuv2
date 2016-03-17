@@ -11,7 +11,7 @@
 .weui_cell_ft{
 	position:absolute;
 	text-align:center;
-	top:5px;
+	top:8px;
 	right:10px;
 	color:red;
 	display:none;
