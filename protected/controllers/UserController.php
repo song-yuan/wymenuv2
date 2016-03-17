@@ -163,8 +163,10 @@ class UserController extends Controller
 	{
 		$userId = Yii::app()->session['userId'];
 		$url = Yii::app()->request->getParam('url');
+		$type = Yii::app()->request->getParam('type',1);
 		$addresss = WxAddress::get($userId,$this->companyId);
-		$this->render('setaddress',array('companyId'=>$this->companyId,'addresss'=>$addresss,'userId'=>$userId,'url'=>$url));
+		$company = WxCompany::get($this->companyId);
+		$this->render('setaddress',array('company'=>$company,'addresss'=>$addresss,'userId'=>$userId,'url'=>$url,'type'=>$type));
 	}
 	/**
 	 * 

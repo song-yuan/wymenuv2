@@ -76,6 +76,18 @@
 											<div id="allmap" style="width:400px;height:200px;"></div>
 										</div>
 									</div>
+									
+									<div class="form-group">
+										<?php echo $form->label($model, 'distance',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<div class="input-group">
+												<?php echo $form->textField($model, 'distance',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('distance')));?>
+												<span class="input-group-addon">km</span>
+											</div>
+											<?php echo $form->error($model, 'distance' )?>
+										</div>
+									</div>
+									
 									<div class="form-group">
 										<?php echo $form->label($model, 'queuememo',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -142,17 +154,27 @@
 			$("#Company_logo").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 
 		}
-		function myFun(result){
+		function theLocation(result){
 			var cityName = result.name;
-			map.setCenter(cityName);
+			map.centerAndZoom(cityName,11);
 		}
+		var map = new BMap.Map("allmap");
 		$(document).ready(function(){
 			// 百度地图API功能
-			var map = new BMap.Map("allmap");
-			map.centerAndZoom('上海市',11);
-			var myCity = new BMap.LocalCity();
-			myCity.get(myFun);
+			var lng = $('#Company_lng').val();
+			var lat = $('#Company_lat').val();
+			
+			if(parseInt(lng) && parseInt(lat)){
+				var point = new BMap.Point(lng,lat);
+				map.centerAndZoom(point,16);
+				map.addOverlay(new BMap.Marker(point));
+			}else{
+				var myCity = new BMap.LocalCity();
+				myCity.get(theLocation);
+			}
+			
 			map.enableScrollWheelZoom(true);
+			
 			$('.getLocation').click(function(){
 				var address = $('#Company_address').val();
 				// 创建地址解析器实例
@@ -165,7 +187,7 @@
 						map.centerAndZoom(point, 16);
 						map.addOverlay(new BMap.Marker(point));
 					}else{
-						alert("您选择地址没有解析到结果!");
+						
 					}
 				}, "上海市");
 			});
