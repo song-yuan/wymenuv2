@@ -10,13 +10,13 @@
 	height:100%;
 }
 .boll {
-	width: 20px;
-	height: 20px;
+	width: 15px;
+	height: 15px;
 	background-color: #FF5151;
 	position: absolute;
-	-moz-border-radius: 20px;
-	-webkit-border-radius: 20px;
-	border-radius: 20px;
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+	border-radius: 15px;
 	display:none;
 }
 
@@ -187,6 +187,7 @@ function getProduct(){
 	});
 }
 $(document).ready(function(){ 
+	var i = 0;
 	window.load = getProduct(); 
 	
     $('#nav').on('click','li',function(){
@@ -216,11 +217,13 @@ $(document).ready(function(){
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
-    	$('#boll').css({top:top,left:left,display:"block"});
+    	var str = '<div id="boll'+i+'" class="boll"></div>';
+    	$('body').append(str);
+    	$('#boll'+i).css({top:top,left:left,display:"block"});
     	
     	var bool = new Parabola({
-			el: "#boll",
-			offset: [-left, height-top],
+			el: "#boll"+i,
+			offset: [-left+10, height-top-25],
 			curvature: 0.005,
 			duration: 1000,
 			callback:function(){
