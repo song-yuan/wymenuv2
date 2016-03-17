@@ -188,6 +188,7 @@ function getProduct(){
 }
 $(document).ready(function(){ 
 	var i = 0;
+	var j = 0;
 	window.load = getProduct(); 
 	
     $('#nav').on('click','li',function(){
@@ -227,12 +228,14 @@ $(document).ready(function(){
 			curvature: 0.005,
 			duration: 1000,
 			callback:function(){
-				$('#boll').css('display','none');
+				$('#boll'+j).css('display','none');
+				j++;
 			},
 			stepCallback:function(x,y){
 				
 			}
 		});
+    	i++;
     	
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
