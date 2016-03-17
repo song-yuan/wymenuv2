@@ -9,9 +9,21 @@
 	width:100%;
 	height:100%;
 }
+.boll {
+	width: 15px;
+	height: 15px;
+	background-color: #FF5151;
+	position: absolute;
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+	border-radius: 15px;
+	display:none;
+}
+
 </style>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <div class="nav-lf">
 <ul id="nav">
@@ -39,6 +51,7 @@
     <div class="clear"></div>
 </footer>
 
+<div id="boll" class="boll"></div>
 
 <script> 
 function setTotal(){ 
@@ -174,6 +187,8 @@ function getProduct(){
 	});
 }
 $(document).ready(function(){ 
+	var i = 0;
+	var j = 0;
 	window.load = getProduct(); 
 	
     $('#nav').on('click','li',function(){
@@ -200,6 +215,28 @@ $(document).ready(function(){
     });
 
     $("#container").on('touchstart','.add',function(){
+    	var height = $('body').height();
+    	var top = $(this).offset().top;
+    	var left = $(this).offset().left;
+    	var str = '<div id="boll'+i+'" class="boll"></div>';
+    	$('body').append(str);
+    	$('#boll'+i).css({top:top,left:left,display:"block"});
+    	
+    	var bool = new Parabola({
+			el: "#boll"+i,
+			offset: [-left+10, height-top-25],
+			curvature: 0.005,
+			duration: 1000,
+			callback:function(){
+				$('#boll'+j).css('display','none');
+				j++;
+			},
+			stepCallback:function(x,y){
+				
+			}
+		});
+    	i++;
+    	
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
@@ -224,6 +261,8 @@ $(document).ready(function(){
         	},
         	dataType:'json'
         });
+        //动画
+		bool.start();
     });
      
     $("#container").on('touchstart','.minus',function(){ 
