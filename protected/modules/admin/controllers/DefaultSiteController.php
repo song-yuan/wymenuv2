@@ -285,7 +285,7 @@ class DefaultSiteController extends BackendController
                         $ret9arr=OrderProduct::setOrderCall($compayId,"0000000000","0");
                         //var_dump($ret9arr);exit;
                         $CFceshi=OrderProduct::setProductallJobs($compayId);//CF
-                        Yii::app()->end(json_encode(array("status"=>$status,"msg"=>var_dump($CFceshi))));
+                        Yii::app()->end(json_encode(array("status"=>true,"msg"=>var_dump($CFceshi))));
                         OrderProduct::setPayJobs($compayId,$padId);
                         //echo "222";exit;
                         $ret8arr=OrderProduct::setPayCall($compayId,"0000000000","0");
