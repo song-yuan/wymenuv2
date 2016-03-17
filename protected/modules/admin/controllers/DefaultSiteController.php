@@ -103,12 +103,6 @@ class DefaultSiteController extends BackendController
                 $criteriaw = new CDbCriteria;
                 $criteriay = new CDbCriteria;
                 $criteria = new CDbCriteria;
-
-                $criteria2 = new CDbCriteria;
-                $criteria2->condition =  't.dpid='.$compayId.' and t.lid="0000000040"' ;
-                $criteria2->order = ' t.lid desc ';
-                $site = Site::model()->with("siteType")->find($criteria2);
-                var_dump($site);exit;
 		//$title=yii::t('app','请选择餐桌');
                     $sql = 'select distinct t.dpid as dpid,t.splid as splid,t.type_id as typeid,st.name as name,'
                             . 'sp.min_persons as min,sp.max_persons as max, tq.queuepersons as queuepersons, sf.sitenum as sitefree'
