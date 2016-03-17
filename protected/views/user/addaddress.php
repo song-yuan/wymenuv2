@@ -65,11 +65,11 @@
         return false;}
     }
     $(document).ready(function(){
-    	var myGeo = new BMap.Geocoder();
     	$('#street').blur(function(){
     		var city = $('#city').val();
     		var area = $('#area').val();
-    		var street = $('#province').val();
+    		var street = $('#street').val();
+    		var myGeo = new BMap.Geocoder();
     		myGeo.getPoint(city + area + street, function(point){
 				if (point) {
 					$('input[name="address[lng]"]').val(point.lng);
