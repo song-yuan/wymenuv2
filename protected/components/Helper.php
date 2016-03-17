@@ -869,7 +869,7 @@ class Helper
                 }else{
                     //$strSite=str_pad(yii::t('app','座号：临时座').$order->site_id%10000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
                     array_push($listData,"10".yii::t('app','座号：临时座'));
-                    array_push($listData,"11".$order->site_id%10000);
+                    array_push($listData,"11".$order->site_id%1000);
                     //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
                 }
                 array_push($listData,"br");
@@ -2967,7 +2967,7 @@ public function getSiteName($orderId){
 	
 	//2016/3/9更新
 	//在3的基础上修改，打印从微信端下单的已经付款的订单，以实现客人自助付款单的菜品厨打。
-	static public function printKitchenAll8($companyId, Order $order,$orderList,Site $site, $reprint){
+	static public function printKitchenAll8(Order $order,$orderList,Site $site, $reprint){
 		$printers_a=array();
 		$orderproducts_a=array();
 		$printer2orderproducts_a=array();
@@ -2992,6 +2992,7 @@ public function getSiteName($orderId){
 		}
 		//foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
 		$printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));
+		return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>json_encode($printerways));
 		if(empty($printerways))
 		{
 			return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"没有打印方案");
