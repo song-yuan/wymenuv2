@@ -36,7 +36,7 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 			<label for="add<?php echo $k+1;?>" address-id="<?php echo $address['lid'];?>">
 			<span class="user">收货人：<?php echo $address['name'];?></span>
 			<span class="font_l small">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
-			<div class="weui_cell_ft"><i class="weui_icon_warn"></i><br>超出配送范围</div>
+			<div class="weui_cell_ft small"><i class="weui_icon_warn"></i><br>超出范围</div>
 			</label>
 			<input type="hidden" name="lng" value="<?php echo $address['lng'];?>" />
 			<input type="hidden" name="lat" value="<?php echo $address['lat'];?>" />
