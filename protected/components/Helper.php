@@ -3274,16 +3274,6 @@ public function getSiteName($orderId){
 			$strSite="";
 					if($order->is_temp=='1')
 					{
-						if($order->order_type=="2"){
-							array_push($listData,"10".yii::t('app','微信外卖：'));
-							array_push($listData,"11".$order->site_id%1000);
-						}elseif($order->order_type=="3"){
-							array_push($listData,"10".yii::t('app','预约自提：'));
-							array_push($listData,"11".$order->site_id%1000);
-						}else{
-							array_push($listData,"10".yii::t('app','临时座：'));
-							array_push($listData,"11".$order->site_id%1000);
-						}
 						array_push($listData,"10".yii::t('app','临时座：'));
 						array_push($listData,"11".$order->site_id%1000);
 					}else{
