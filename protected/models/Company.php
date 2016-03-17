@@ -39,7 +39,7 @@ class Company extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('printer_id, delete_flag', 'numerical', 'integerOnly'=>true),
+			array('printer_id, distance, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('company_name, email, is_sync', 'length', 'max'=>50),
 			array('logo, domain, homepage', 'length', 'max'=>255),
 			array('contact_name, mobile, telephone', 'length', 'max'=>20),
@@ -55,7 +55,7 @@ class Company extends CActiveRecord
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('dpid, company_name, logo,token, contact_name, is_sync, mobile, telephone, email, lng, lat, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
+			array('dpid, company_name, logo,token, contact_name, is_sync, mobile, telephone, email, lng, lat, distance, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -85,7 +85,8 @@ class Company extends CActiveRecord
 			'email' => yii::t('app','电子邮箱'),
 			'address'=>yii::t('app','公司地址'),
 			'homepage' => yii::t('app','公司主页'),
-                        'domain'=>yii::t('app','系统服务地址'),
+            'domain'=>yii::t('app','系统服务地址'),
+            'distance'=> yii::t('app','外卖范围'),
 			'create_at' => yii::t('app','创建时间'),
 			'delete_flag' => yii::t('app','状态'),
 			'description' => yii::t('app','公司描述'),
@@ -128,6 +129,7 @@ class Company extends CActiveRecord
 		$criteria->compare('queuememo',$this->queuememo,true);
 		$criteria->compare('lng',$this->lng,true);
 		$criteria->compare('lat',$this->lat,true);
+		$criteria->compare('distance',$this->distance,true);
 		$criteria->compare('printer_id',$this->printer_id,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
