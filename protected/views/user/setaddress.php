@@ -32,14 +32,13 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 	<?php if($addresss):?>
 	<ul class="addlist" id="list">
 		<?php foreach($addresss as $k=>$address):?>
-		<li id='<?php echo $address['lid'];?>'>
+		<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
+		<li id='<?php echo $address['lid'];?>' <?php if($type==2&&$company['distance']*1000 < $distance):?>class="over-distance"<?php endif;?>>
 			<label for="add<?php echo $k+1;?>" address-id="<?php echo $address['lid'];?>">
 			<span class="user">收货人：<?php echo $address['name'];?></span>
 			<span class="font_l small">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
-			<div class="weui_cell_ft"><i class="weui_icon_warn"></i><br>超出配送范围</div>
+			<div class="weui_cell_ft small"><i class="weui_icon_warn"></i><br>超出范围</div>
 			</label>
-			<input type="hidden" name="lng" value="<?php echo $address['lng'];?>" />
-			<input type="hidden" name="lat" value="<?php echo $address['lat'];?>" />
 		</li>
 		<?php endforeach;?>
 	</ul>
@@ -49,9 +48,6 @@ var editUrl = "<?php echo $this->createUrl('/user/addAddress',array('companyId'=
 			<li class="addicon"><a href="<?php echo $this->createUrl('/user/addAddress',array('companyId'=>$this->companyId,'url'=>$url));?>">添加收货地址</a></li>
 		</ul>
 	</div>
-	<input type="hidden" name="Company_lng" value="<?php echo $company['lng'];?>" />
-	<input type="hidden" name="Company_lat" value="<?php echo $company['lat'];?>" />
-	<input type="hidden" name="Company_distance" value="<?php echo $company['distance']*1000;?>" />
 	<input type="hidden" name="back" value="<?php echo urldecode($url);?>" />
 </body>
 
@@ -71,21 +67,6 @@ list.addEventListener("delete", function(evt) {
 });
 
 $(document).ready(function(){
-	<?php if($type==2):?>
-	var map = new BMap.Map("");
-	var companyLng = $('input[name="Company_lng"]').val();
-	var companyLat = $('input[name="Company_lat"]').val();
-	var distance = $('input[name="Company_distance"]').val();
-	var pointCompany = new BMap.Point(companyLng,companyLat);
-	$('#list li').each(function(){
-		var addressLng = $(this).find('input[name="lng"]').val();
-		var addressLat = $(this).find('input[name="lat"]').val();
-		var pointAddress = new BMap.Point(addressLng,addressLat);
-		if(parseInt(map.getDistance(pointCompany,pointAddress)) > parseInt(distance)){
-			$(this).addClass('over-distance');
-		}
-	});
-	<?php endif;?>
 	$('#list li').click(function(){
 		if($(this).hasClass('over-distance')){
 			layer.msg('超出配送范围');
