@@ -423,10 +423,10 @@ class OrderProduct extends CActiveRecord
                     {
 	                    if($mop["order_type"]=="2"){
 		                        $lidlistproduct.=",".$mop["lid"];
-		                        $temparr[$mop["order_id"]]="微信外卖".$mop["lid"]%1000;
+		                        $temparr[$mop["order_id"]]="微信外卖".$mop["site_id"]%1000;
 	                    	}elseif($mop["order_type"]=="3"){
 		                        $lidlistproduct.=",".$mop["lid"];
-		                        $temparr[$mop["order_id"]]="微信预约".$mop["lid"]%1000;
+		                        $temparr[$mop["order_id"]]="微信预约".$mop["site_id"]%1000;
 	                    	}else{
 		                        $lidlistproduct.=",".$mop["lid"];
 		                        $temparr[$mop["order_id"]]="临时座位".$mop["lid"]%1000;
@@ -486,10 +486,10 @@ class OrderProduct extends CActiveRecord
                     {
                     	if($mop["order_type"]=="2"){
 	                        $lidlistproduct.=",".$mop["lid"];
-	                        $temparr[$mop["order_id"]]="微信外卖".$mop["lid"]%1000;
+	                        $temparr[$mop["order_id"]]="微信外卖".$mop["site_id"]%1000;
                     	}elseif($mop["order_type"]=="3"){
 	                        $lidlistproduct.=",".$mop["lid"];
-	                        $temparr[$mop["order_id"]]="微信预约".$mop["lid"]%1000;
+	                        $temparr[$mop["order_id"]]="微信预约".$mop["site_id"]%1000;
                     	}else{
 	                        $lidlistproduct.=",".$mop["lid"];
 	                        $temparr[$mop["order_id"]]="临时座位".$mop["lid"]%1000;
