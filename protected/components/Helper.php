@@ -4555,7 +4555,7 @@ public function getSiteName($orderId){
                         					'is_sync'=>'01001',
                                             );
                         Yii::app()->db->createCommand()->insert('nb_order_printjobs',$orderPrintJob);
-                        //exit;
+                       exit;
                         $store->set($printer->dpid."_".$jobid,$contentCodeAll,0,30);//should 120测试1200
                         return array('status'=>true,'dpid'=>$printer->dpid,'jobid'=>$jobid,'type'=>'net','address'=>$printer->address,'msg'=>'');
 //                    }
