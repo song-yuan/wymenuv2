@@ -868,8 +868,19 @@ class Helper
                     //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
                 }else{
                     //$strSite=str_pad(yii::t('app','座号：临时座').$order->site_id%10000 , 24,' ').str_pad(yii::t('app','人数：').$order->number,12,' ');
-                    array_push($listData,"10".yii::t('app','座号：临时座'));
-                    array_push($listData,"11".$order->site_id%1000);
+                	
+                		if($order->order_type=="2"){
+                			array_push($listData,"10".yii::t('app','微信外卖：'));
+                			array_push($listData,"11".$order->site_id%1000);
+                		}elseif($order->order_type=="3"){
+                			array_push($listData,"10".yii::t('app','预约自提：'));
+                			array_push($listData,"11".$order->site_id%1000);
+                		}else{
+                			array_push($listData,"10".yii::t('app','临时座：'));
+                			array_push($listData,"11".$order->site_id%1000);
+                		}
+//                 	array_push($listData,"10".yii::t('app','座号：临时座'));
+//                     array_push($listData,"11".$order->site_id%1000);
                     //array_push($listData,"00"."   ".yii::t('app','人数：').$order->number);
                 }
                 array_push($listData,"br");
@@ -3259,25 +3270,26 @@ public function getSiteName($orderId){
 			array_push($listDataHeader,"11".$strreprint);
 			}
 			array_push($listDataHeader,"br");
-			$strSite="";
-			if($order->is_temp=='1')
-			{
-				if($order->order_type=="2"){
-					array_push($listData,"10".yii::t('app','微信外卖：'));
-					array_push($listData,"11".$order->site_id%1000);
-				}elseif($order->order_type=="3"){
-					array_push($listData,"10".yii::t('app','预约自提：'));
-					array_push($listData,"11".$order->site_id%1000);
-				}else{
-					array_push($listData,"10".yii::t('app','临时座：'));
-					array_push($listData,"11".$order->site_id%1000);
-				}
-// 				array_push($listDataHeader,"00".yii::t('app','临时座：'));
-// 				array_push($listDataHeader,"11".$order->site_id%1000);
-			}else{
-			array_push($listDataHeader,"00".yii::t('app','座号：'));
-				array_push($listDataHeader,"11".$site->siteType->name.' '.$site->serial);
-			}
+			
+		$strSite="";
+					if($order->is_temp=='1')
+					{
+						if($order->order_type=="2"){
+							array_push($listData,"10".yii::t('app','微信外卖：'));
+							array_push($listData,"11".$order->site_id%1000);
+						}elseif($order->order_type=="3"){
+							array_push($listData,"10".yii::t('app','预约自提：'));
+							array_push($listData,"11".$order->site_id%1000);
+						}else{
+							array_push($listData,"10".yii::t('app','临时座：'));
+							array_push($listData,"11".$order->site_id%1000);
+						}
+// 						array_push($listData,"10".yii::t('app','临时座：'));
+// 						array_push($listData,"11".$order->site_id%1000);
+					}else{
+						array_push($listData,"10".yii::t('app','座号：'));
+						array_push($listData,"11".$site->siteType->name.' '.$site->serial);
+					}
 			array_push($listDataHeader,"00".yii::t('app','人数：').$order->number);
 	
 			if(!empty($order->callno))
