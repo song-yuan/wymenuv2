@@ -602,7 +602,7 @@ class OrderProduct extends CActiveRecord
 					$criteria->condition =  't.dpid='.$compayId.' and t.site_id='.$order->site_id.' and t.is_temp='.$order->is_temp ;
 					$criteria->order = ' t.lid desc ';
 					$siteNo = SiteNo::model()->find($criteria);
-					$site="";
+					$site=new Site();
 					if($order->is_temp=="0")
 					{
 						$criteria2 = new CDbCriteria;
