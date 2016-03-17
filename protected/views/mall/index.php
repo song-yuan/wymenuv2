@@ -9,9 +9,21 @@
 	width:100%;
 	height:100%;
 }
+.boll {
+	width: 20px;
+	height: 20px;
+	background-color: #FF5151;
+	position: absolute;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	border-radius: 20px;
+	display:none;
+}
+
 </style>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/parabola.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <div class="nav-lf">
 <ul id="nav">
@@ -39,6 +51,7 @@
     <div class="clear"></div>
 </footer>
 
+<div id="boll" class="boll"></div>
 
 <script> 
 function setTotal(){ 
@@ -200,6 +213,24 @@ $(document).ready(function(){
     });
 
     $("#container").on('touchstart','.add',function(){
+    	var height = $('body').height();
+    	var top = $(this).offset().top;
+    	var left = $(this).offset().left;
+    	$('#boll').css({top:top,left:left,display:"block"});
+    	
+    	var bool = new Parabola({
+			el: "#boll",
+			offset: [-left, height-top],
+			curvature: 0.005,
+			duration: 1000,
+			callback:function(){
+				$('#boll').css('display','none');
+			},
+			stepCallback:function(x,y){
+				
+			}
+		});
+    	
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
@@ -218,6 +249,8 @@ $(document).ready(function(){
 			            t.removeClass('zero');
 			        }
 			        setTotal();
+			        //动画
+			        bool.start();
         		}else{
         			layer.msg(msg.msg);
         		}
