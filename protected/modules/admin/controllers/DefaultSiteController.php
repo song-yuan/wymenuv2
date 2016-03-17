@@ -264,6 +264,11 @@ class DefaultSiteController extends BackendController
 //                             //var_dump($models);exit;
 //                     }
                     else{
+                    	$criteria2 = new CDbCriteria;
+                    	$criteria2->condition =  't.dpid='.$compayId.' and t.lid="0000000040"' ;
+                    	$criteria2->order = ' t.lid desc ';
+                    	$site = Site::model()->with("siteType")->find($criteria2);
+                    	var_dump($site);exit;
                         //如果是本地模式，先从云端取有没有微信订单，有的话，加入到本地，然后打印。
                         if(Yii::app()->params['cloud_local']=='l')
                         {
