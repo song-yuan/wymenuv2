@@ -2992,7 +2992,7 @@ public function getSiteName($orderId){
 		}
 		//foreach printer_way //传菜厨打、整单厨打、配菜和制作厨打
 		$printerways= PrinterWay::model()->findAll(" dpid = :dpid and delete_flag=0",array(':dpid'=>$order->dpid));
-		return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>json_encode($printerways));
+		return $printerways;
 		if(empty($printerways))
 		{
 			return array('status'=>false,'dpid'=>$order->dpid,'allnum'=>"0",'type'=>'none','msg'=>"没有打印方案");
