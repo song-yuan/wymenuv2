@@ -315,7 +315,7 @@
                                  alert("网络故障，请稍后重试!");
                                  return;
                              }
-                            alert(msg.msg);
+                            document.write(msg.msg);
                             //$('#tabsiteindex').load(tabcurrenturl);
                             //重新修改成用ajax动态加载
                             if(gtypeid=="others")
