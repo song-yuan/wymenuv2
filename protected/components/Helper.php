@@ -891,6 +891,26 @@ class Helper
                 array_push($listData,"br");
                 array_push($listData,"10"."账单号：");
                 array_push($listData,"00".$order->account_no);
+                array_push($listData,"br");
+                if($order->order_type=="2"){
+                	$orderAddress = OrderAddress::model()->find('order_lid=:lid and dpid=:dpid',  array(':lid'=>$order->lid,':dpid'=>$order->dpid));
+                	array_push($listData,"10".yii::t('app','姓名：'));
+                	array_push($listData,"11".$orderAddress->consignee);
+                	array_push($listData,"br");
+                	array_push($listData,"10".yii::t('app','电话：'));
+                	array_push($listData,"11".$orderAddress->mobile);
+                	array_push($listData,"br");
+                	array_push($listData,"10".yii::t('app','地址：'));
+                	array_push($listData,"11".$orderAddress->province."".$orderAddress->city."".$orderAddress->area."-".$orderAddress->street);
+                }
+                if($order->order_type=="3"){
+                	$orderAddress = OrderAddress::model()->find('order_lid=:lid and dpid=:dpid',  array(':lid'=>$order->lid,':dpid'=>$order->dpid));
+                	array_push($listData,"10".yii::t('app','姓名：'));
+                	array_push($listData,"11".$orderAddress->consignee);
+                	array_push($listData,"br");
+                	array_push($listData,"10".yii::t('app','电话：'));
+                	array_push($listData,"11".$orderAddress->mobile);
+                }
 //		if(!empty($order->callno))
 //                {
 //                    //$strSite=$strSite.str_pad(yii::t('app','呼叫号：').$order->callno,12,' ');
@@ -960,13 +980,13 @@ class Helper
                                       "01"."  ".$lenstrleft
                                     .str_pad("",24-$printlenstrleft," ")
                                     .$isretreat.str_pad($product['amount'],4," ")
-                                    .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
+                                    .number_format($product['original_price'],0)."/".number_format($product['price']*$product['amount'],2));	
                         }else{
                             array_push($listData,"01".$productnum."."
                                     .$productname
                                     .str_pad("",24-$printlen," ")
                                     .$isretreat.str_pad($product['amount'],4," ")
-                                    .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
+                                    .number_format($product['original_price'],0)."/".number_format($product['price']*$product['amount'],2));	
                         }
 //                    }
                     array_push($listData,"br");
