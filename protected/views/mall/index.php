@@ -258,7 +258,7 @@ $(document).ready(function(){
 			        //动画
 					bool.start();
         		}else{
-        			$('#boll'+j).css('display','none');
+        			$('#boll'+(i-1)).css('display','none');
         			layer.msg(msg.msg);
         		}
         	},
