@@ -2663,11 +2663,11 @@ public function getSiteName($orderId){
                                         //array_push($listData,Helper::getPlaceholderLen($value->product->product_name,38).Helper::getPlaceholderLen($orderProduct->amount." X ".$value->product->product_unit,10));	
                                         //array_push($listData,"11".str_pad($orderProduct->amount."X".$orderProduct->product->product_unit,8," ").  Helper::setProductName($orderProduct->product->product_name,12,8));	
                                         if($orderProduct->product_type=="0"){
-	                                        $printlen=(strlen(trim($productcf)) + mb_strlen(trim($productcf),'UTF8')) / 2;
+	                                        $printlen=(strlen($productcf) + mb_strlen($productcf,'UTF8')) / 2;
 	                                        if(!empty($productStatus)){
-	                                        	array_push($listData,"01".$productnum.".".$productStatus.trim($productcf).str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);	
+	                                        	array_push($listData,"01".$productnum.".".$productStatus.$productcf.str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);	
 	                                        }else{
-	                                        	array_push($listData,"01".$productnum.".".$productStatus.trim($productcf).str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+	                                        	array_push($listData,"01".$productnum.".".$productStatus.$productcf.str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
 	                                        }
                                         }elseif($orderProduct->product_type=="1"){
                                         	$printlen=(strlen("餐位费") + mb_strlen("餐位费",'UTF8')) / 2;
@@ -2691,11 +2691,11 @@ public function getSiteName($orderId){
                                         		array_push($listData,"01".$productnum.".".$productStatus."打包费".str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
                                         	}
                                         }else{
-                                        $printlen=(strlen(trim($productcf)) + mb_strlen(trim($productcf),'UTF8')) / 2;
+                                        $printlen=(strlen($productcf) + mb_strlen($productcf,'UTF8')) / 2;
 	                                        if(!empty($productStatus)){
-	                                        	array_push($listData,"01".$productnum.".".$productStatus.trim($productcf).str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);	
+	                                        	array_push($listData,"01".$productnum.".".$productStatus.$productcf.str_pad("",28-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);	
 	                                        }else{
-	                                        	array_push($listData,"01".$productnum.".".$productStatus.trim($productcf).str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
+	                                        	array_push($listData,"01".$productnum.".".$productStatus.$productcf.str_pad("",32-$printlen," ").str_pad($orderProduct->amount,4," ").$orderProduct->product->product_unit);
 	                                        }
                                         }
                                         array_push($listData,"br");
