@@ -116,31 +116,6 @@
 				
             </div>
 			</header> 
-			<!--
-			<div class="bdjr">
-				<div class="flbaobiao l">
-					<select id="text" class="btn selectl ">
-					</select>
-				</div>
-				<div class="flbaobiao m">
-					<span></span>
-						<select id="shop" class="btn selectm ">
-							<option class="optionr" value="1" >陶然居（丽水店）</option>
-							<option class="optionr" value="2" >上海一号（静安店）</option>
-							<option class="optionr" value="3" selected>有家川菜同心店</option>
-						</select>
-					
-				</div>
-				<div class="flbaobiao r">
-					<select id="text" class="btn selectr ">
-						<option class="optionr" value="1" >年</option>
-						<option class="optionr" value="2" >月</option>
-						<option class="optionr" value="3" selected>日</option>
-					</select>
-				</div>
-				<div class="clear"></div>
-			</div>
-			-->
 			<div style="box-shadow: 0px 0px 5px #000000;background-color:#FFFFFF;">
 				<div class="today">
 					<a>
@@ -162,14 +137,14 @@
 				<div class="search">
 					<div class="l">
 					<div class="icon1">
-						<a href=""><img src="<?php echo $baseUrl;?>/img/mall/left.png" /></a>
+						<a href="<?php echo $this->createUrl('/user/statistic',array('companyId'=>$this->companyId,'day'=>$day+1,'t'=>0));?>"><img src="<?php echo $baseUrl;?>/img/mall/left.png" /></a>
 					</div>	
 					</div>
 					<div class="m">
 					<a>
 						<div class="button">
-						<?php echo date('m-d ', strtotime('-1 day'));
-						switch(date('w', strtotime('-1 day'))){
+						<?php echo date('m-d ', strtotime('-'.$day.' day'));
+						switch(date('w', strtotime('-'.$day.' day'))){
 							case 0: echo "(周日)";break;
 							case 1: echo "(周一)";break;
 							case 2: echo "(周二)";break;
@@ -183,7 +158,7 @@
 					</div>
 					<div class="r">
 					<div class="icon1">
-						<a href=""><img src="<?php echo $baseUrl;?>/img/mall/right.png" /></a>
+						<a href="<?php echo $this->createUrl('/user/statistic',array('companyId'=>$this->companyId,'day'=>$day-1,'t'=>1));?>"><img src="<?php echo $baseUrl;?>/img/mall/right.png" /></a>
 					</div>	
 					</div>
 					<div class="clear"></div>
