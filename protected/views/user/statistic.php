@@ -7,6 +7,9 @@
 	$wx = 0;$ywx = 0; //微信
 	$zfb = 0;$yzfb = 0;//支付宝
 	$ylk = 0;$yylk = 0;//银联卡
+	$hyk = 0;$yhyk = 0;//会员卡
+	$xjq = 0;$xjq = 0;//现金券
+	$yue = 0;$yyue = 0;//余额支付
 	$mt = 0;$ymt = 0; //美团
 	$dz = 0;$ydz = 0; //大众支付
 	foreach($orderTypeStatistic as $order){
@@ -30,9 +33,18 @@
 			$wx += $pay['total'];
 		}elseif($pay['paytype']==2){
 			$zfb += $pay['total'];
-		}elseif($pay['paytype']==3){
+		}elseif($pay['paytype']==4){
+			$hyk += $pay['total'];
+		}elseif($pay['paytype']==5){
 			$ylk += $pay['total'];
+		}elseif($pay['paytype']==9){
+			$xjq += $pay['total'];
+		}elseif($pay['paytype']==10){
+			$yue += $pay['total'];
+		}else{
+			$mt += $pay['total'];
 		}
+		
 	}
 	foreach($ypayTypeStatistic as $ypay){
 		if($ypay['paytype']==0){
@@ -41,8 +53,16 @@
 			$ywx += $ypay['total'];
 		}elseif($ypay['paytype']==2){
 			$yzfb += $ypay['total'];
-		}elseif($ypay['paytype']==3){
-			$yylk += $ypay['total'];
+		}elseif($ypay['paytype']==4){
+			$yhyk += $pay['total'];
+		}elseif($ypay['paytype']==5){
+			$yylk += $pay['total'];
+		}elseif($ypay['paytype']==9){
+			$yxjq += $pay['total'];
+		}elseif($ypay['paytype']==10){
+			$yyue += $ypay['total'];
+		}else{
+			$ymt += $ypay['total'];
 		}
 	}
 ?>
@@ -243,13 +263,13 @@
 						<div>
 							<div class="typename">现金支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($xj/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($xj/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($xj,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($xj/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%;background-color:red;"></div>
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($xj/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:red;"></div>
 							</div>							
 						</div>
 					</div>
@@ -257,13 +277,13 @@
 						<div>
 							<div class="typename">微信支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($wx/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($wx/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($wx,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($wx/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%;background-color:yellow;"></div>
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($wx/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:yellow;"></div>
 							</div>							
 						</div>
 					</div>
@@ -271,13 +291,55 @@
 						<div>
 							<div class="typename">支付宝支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($zfb/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($zfb/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($zfb,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($zfb/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%;background-color:pink;"></div>
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($zfb/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:pink;"></div>
+							</div>							
+						</div>
+					</div>
+					<div class="tup1" >
+						<div>
+							<div class="typename">会员卡支付:</div>
+							<div class="typename">
+								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($hyk/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
+								<div class="danwei">元</div>
+								<div class="jiage"><?php echo number_format($hyk,2)?></div>
+								<div class="clear"></div>
+							</div>
+							<div class="caisetiao">
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($hyk/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:green;"></div>
+							</div>							
+						</div>
+					</div>
+					<div class="tup1" >
+						<div>
+							<div class="typename">余额支付:</div>
+							<div class="typename">
+								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($yue/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
+								<div class="danwei">元</div>
+								<div class="jiage"><?php echo number_format($yue,2)?></div>
+								<div class="clear"></div>
+							</div>
+							<div class="caisetiao">
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($yue/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:green;"></div>
+							</div>							
+						</div>
+					</div>
+					<div class="tup1" >
+						<div>
+							<div class="typename">现金券支付:</div>
+							<div class="typename">
+								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($xjq/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
+								<div class="danwei">元</div>
+								<div class="jiage"><?php echo number_format($xjq,2)?></div>
+								<div class="clear"></div>
+							</div>
+							<div class="caisetiao">
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($xjq/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:green;"></div>
 							</div>							
 						</div>
 					</div>
@@ -285,13 +347,13 @@
 						<div>
 							<div class="typename">银联卡支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($ylk/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($ylk/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($ylk,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($ylk/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%;background-color:green;"></div>
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($ylk/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:green;"></div>
 							</div>							
 						</div>
 					</div>
@@ -299,13 +361,13 @@
 						<div>
 							<div class="typename">美团支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($mt/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($mt/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($mt,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($mt/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%;background-color:pink;"></div>
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($mt/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:pink;"></div>
 							</div>							
 						</div>
 					</div>
@@ -313,13 +375,13 @@
 						<div>
 							<div class="typename">大众支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($dz/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($dz/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($dz,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz ? number_format($dz/($xj+$wx+$zfb+$ylk+$mt+$dz)*100,2):0;?>%;background-color:blue;"></div>
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($dz/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:blue;"></div>
 							</div>							
 						</div>
 					</div>
@@ -330,13 +392,13 @@
 						<div>
 							<div class="typename">现金支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($yxj/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yxj/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($yxj,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($yxj/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%;background-color:red;"></div>
+								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yxj/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%;background-color:red;"></div>
 							</div>							
 						</div>
 					</div>
@@ -344,13 +406,13 @@
 						<div>
 							<div class="typename">微信支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($ywx/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($ywx/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($ywx,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($ywx/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%;background-color:yellow;"></div>
+								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($ywx/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%;background-color:yellow;"></div>
 							</div>							
 						</div>
 					</div>
@@ -358,13 +420,55 @@
 						<div>
 							<div class="typename">支付宝支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($yzfb/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yzfb/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($yzfb,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($yzfb/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%;background-color:pink;"></div>
+								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yzfb/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%;background-color:pink;"></div>
+							</div>							
+						</div>
+					</div>
+					<div class="tup2" >
+						<div>
+							<div class="typename">会员卡支付:</div>
+							<div class="typename">
+								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq+$yhyk+$yyue+$yxjq ? number_format($yhyk/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%</a></div>
+								<div class="danwei">元</div>
+								<div class="jiage"><?php echo number_format($yhyk,2)?></div>
+								<div class="clear"></div>
+							</div>
+							<div class="caisetiao">
+								<div style="width:<?php echo $xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq ? number_format($yhyk/($xj+$wx+$zfb+$ylk+$mt+$dz+$hyk+$yue+$xjq)*100,2):0;?>%;background-color:green;"></div>
+							</div>							
+						</div>
+					</div>
+					<div class="tup2" >
+						<div>
+							<div class="typename">余额支付:</div>
+							<div class="typename">
+								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yyue/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%</a></div>
+								<div class="danwei">元</div>
+								<div class="jiage"><?php echo number_format($yyue,2)?></div>
+								<div class="clear"></div>
+							</div>
+							<div class="caisetiao">
+								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yyue/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%;background-color:green;"></div>
+							</div>							
+						</div>
+					</div>
+					<div class="tup2" >
+						<div>
+							<div class="typename">现金券支付:</div>
+							<div class="typename">
+								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yxjq/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%</a></div>
+								<div class="danwei">元</div>
+								<div class="jiage"><?php echo number_format($yxjq,2)?></div>
+								<div class="clear"></div>
+							</div>
+							<div class="caisetiao">
+								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yxjq/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%;background-color:green;"></div>
 							</div>							
 						</div>
 					</div>
@@ -372,13 +476,13 @@
 						<div>
 							<div class="typename">银联卡支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($yylk/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yylk/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($yylk,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($yylk/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%;background-color:green;"></div>
+								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($yylk/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%;background-color:green;"></div>
 							</div>							
 						</div>
 					</div>
@@ -386,13 +490,13 @@
 						<div>
 							<div class="typename">美团支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($ymt/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($ymt/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($ymt,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($ymt/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%;background-color:pink;"></div>
+								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($ymt/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%;background-color:pink;"></div>
 							</div>							
 						</div>
 					</div>
@@ -400,13 +504,13 @@
 						<div>
 							<div class="typename">大众支付:</div>
 							<div class="typename">
-								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($ydz/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%</a></div>
+								<div class="zhanbi"><a ><?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($ydz/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%</a></div>
 								<div class="danwei">元</div>
 								<div class="jiage"><?php echo number_format($ydz,2)?></div>
 								<div class="clear"></div>
 							</div>
 							<div class="caisetiao">
-								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz ? number_format($ydz/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz)*100,2):0;?>%;background-color:blue;"></div>
+								<div style="width:<?php echo $yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq ? number_format($ydz/($yxj+$ywx+$yzfb+$yylk+$ymt+$ydz+$yhyk+$yyue+$yxjq)*100,2):0;?>%;background-color:blue;"></div>
 							</div>							
 						</div>
 					</div>
