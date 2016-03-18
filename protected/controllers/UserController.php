@@ -250,8 +250,32 @@ class UserController extends Controller
 	 */
 	public function actionStatistic()
 	{
+		$now = time();
 		$userId = Yii::app()->session['userId'];
-		$this->render('statistic',array('companyId'=>$this->companyId));
+		$day = Yii::app()->request->getParam('day',1);
+		$t = Yii::app()->request->getParam('t',0);
+		if($day==1){
+			$yesterday = strtotime('-1 day');
+		}else{
+			if($day < 1){
+				$day = 1;
+			}
+			$yesterday = strtotime('-'.$day.' day');
+		}
+		
+		$start = date('Y-m-d',$now).' 00:00:00';
+		$end = date('Y-m-d',$now).' 23:59:59';
+		
+		$ystart = date('Y-m-d',$yesterday).' 00:00:00';
+		$yend = date('Y-m-d',$yesterday).' 23:59:59';
+		
+		$orderTypeStatistic = WxStatistic::getStatisticByOrderType($this->companyId,$start,$end);
+		$payTypeStatistic = WxStatistic::getStatisticByOrderPayType($this->companyId,$start,$end);
+		
+		$yorderTypeStatistic = WxStatistic::getStatisticByOrderType($this->companyId,$ystart,$yend);
+		$ypayTypeStatistic = WxStatistic::getStatisticByOrderPayType($this->companyId,$ystart,$yend);
+		
+		$this->render('statistic',array('companyId'=>$this->companyId,'orderTypeStatistic'=>$orderTypeStatistic,'payTypeStatistic'=>$payTypeStatistic,'yorderTypeStatistic'=>$yorderTypeStatistic,'ypayTypeStatistic'=>$ypayTypeStatistic,'day'=>$day));
 	}
 	/**
 	 * 
