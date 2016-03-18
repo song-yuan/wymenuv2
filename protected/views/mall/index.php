@@ -218,24 +218,6 @@ $(document).ready(function(){
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
-    	var str = '<div id="boll'+i+'" class="boll"></div>';
-    	$('body').append(str);
-    	$('#boll'+i).css({top:top,left:left,display:"block"});
-    	
-    	var bool = new Parabola({
-			el: "#boll"+i,
-			offset: [-left+10, height-top-25],
-			curvature: 0.005,
-			duration: 1000,
-			callback:function(){
-				$('#boll'+j).css('display','none');
-				j++;
-			},
-			stepCallback:function(x,y){
-				
-			}
-		});
-    	i++;
     	
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
@@ -255,14 +237,31 @@ $(document).ready(function(){
 			            t.removeClass('zero');
 			        }
 			        setTotal();
+			        //动画
+			        var str = '<div id="boll'+i+'" class="boll"></div>';
+			    	$('body').append(str);
+			    	$('#boll'+i).css({top:top,left:left,display:"block"});
+			    	var bool = new Parabola({
+						el: "#boll"+i,
+						offset: [-left+10, height-top-25],
+						curvature: 0.005,
+						duration: 1000,
+						callback:function(){
+							$('#boll'+j).css('display','none');
+							j++;
+						},
+						stepCallback:function(x,y){
+						}
+					});
+					bool.start();
+					i++;
         		}else{
+        			$('#boll'+(i-1)).css('display','none');
         			layer.msg(msg.msg);
         		}
         	},
         	dataType:'json'
         });
-        //动画
-		bool.start();
     });
      
     $("#container").on('touchstart','.minus',function(){ 
