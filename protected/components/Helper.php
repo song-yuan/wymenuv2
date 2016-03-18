@@ -4361,7 +4361,7 @@ public function getSiteName($orderId){
                                             'jobid'=>$jobid,
                                             'update_at'=>$time,
                                             'address'=>$printer->address,
-                                            'content'=>$contentCode,
+                                            'content'=>$contentCode.$contentCode,
                                             'printer_type'=>"0",
                                             'finish_flag'=>'1',
                                             'delete_flag'=>'0',
