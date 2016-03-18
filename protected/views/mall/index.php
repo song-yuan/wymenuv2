@@ -237,7 +237,7 @@ $(document).ready(function(){
 			            t.removeClass('zero');
 			        }
 			        setTotal();
-			        
+			        //动画
 			        var str = '<div id="boll'+i+'" class="boll"></div>';
 			    	$('body').append(str);
 			    	$('#boll'+i).css({top:top,left:left,display:"block"});
@@ -251,10 +251,8 @@ $(document).ready(function(){
 							j++;
 						},
 						stepCallback:function(x,y){
-							
 						}
 					});
-			        //动画
 					bool.start();
 					i++;
         		}else{
