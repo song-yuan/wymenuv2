@@ -51,6 +51,7 @@ class WxCart
 				return array('status'=>false,'msg'=>'超出产品库存!');
 			}
 		}
+		return array('status'=>true,'msg'=>'');
 	}
 	// 如果产品有特价活动
 	public function checkPromotion(){
