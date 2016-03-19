@@ -912,6 +912,7 @@ class Helper
                 	array_push($listData,"11".$orderAddress->mobile);
                 	array_push($listData,"br");
                 	array_push($listData,"10".yii::t('app','预约时间：'));
+                	array_push($listData,"br");
                 	array_push($listData,"11".$order->appointment_time);
                 }
 //		if(!empty($order->callno))
