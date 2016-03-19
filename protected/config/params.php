@@ -3,7 +3,7 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 		
 		'admin_home_url' => 'default',
-		'admin_return_url' => 'login/index',
+		'admin_return_url' => array('/admin/login/index'),
 		'waiter_return_url' => 'index.php?r=waiter/user/index',
 		'waiter_home_url' => 'index.php?r=waiter/seat/index',
 		'frontend_home_url' => '',
@@ -27,8 +27,8 @@ return array(
                 ////////////////////////////////////////
     
                 //获取图片的域名
-                'masterdomain'=>'http://120.27.29.4/wymenuv2/',
-    
+                //'masterdomain'=>'http://120.27.29.4/wymenuv2/',
+				'masterdomain'=>'http://121.42.12.97/wymenuv2/',
                 //云端数据库连接
                 'dbcloud'=>array(
                         //'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
@@ -77,7 +77,12 @@ return array(
                 ),
                 //memcache的定义
                 'memcache'=>array(
+<<<<<<< HEAD
                     'server'=>'121.42.12.97',
+=======
+                		'server'=>'121.42.12.97',
+                    //'server'=>'192.168.63.8',
+>>>>>>> fc3612bb76cbc4ba6211985a03f73aab458508ff
                     'port'=>11211,
                 ),
 );
