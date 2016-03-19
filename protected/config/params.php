@@ -3,7 +3,7 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 		
 		'admin_home_url' => 'default',
-		'admin_return_url' => 'login/index',
+		'admin_return_url' => array('/admin/login/index'),
 		'waiter_return_url' => 'index.php?r=waiter/user/index',
 		'waiter_home_url' => 'index.php?r=waiter/seat/index',
 		'frontend_home_url' => '',
@@ -21,14 +21,14 @@ return array(
                /////////////cloud_local/////////////
                //c是云端系统，表示本系统运行在云端，不需要和下位系统同步，所有的同步是下位系统发出的。
                //l是本地系统，表示本系统运行在本地，需要同步
-                'cloud_local'=>'l',
+                'cloud_local'=>'c',
                 //c is （cloud） can add company 
                 //l only local） can import company data from master
                 ////////////////////////////////////////
     
                 //获取图片的域名
-                'masterdomain'=>'http://120.27.29.4/wymenuv2/',
-    
+                //'masterdomain'=>'http://120.27.29.4/wymenuv2/',
+				'masterdomain'=>'http://121.42.12.97/wymenuv2/',
                 //云端数据库连接
                 'dbcloud'=>array(
                         //'connectionString' => 'sqlite:'.dirname(__FILE__).'/../data/testdrive.db',
@@ -77,7 +77,8 @@ return array(
                 ),
                 //memcache的定义
                 'memcache'=>array(
-                    'server'=>'192.168.63.8',
+                		'server'=>'121.42.12.97',
+                    //'server'=>'192.168.63.8',
                     'port'=>11211,
                 ),
 );
