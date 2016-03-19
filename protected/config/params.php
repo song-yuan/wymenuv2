@@ -21,7 +21,7 @@ return array(
                /////////////cloud_local/////////////
                //c是云端系统，表示本系统运行在云端，不需要和下位系统同步，所有的同步是下位系统发出的。
                //l是本地系统，表示本系统运行在本地，需要同步
-                'cloud_local'=>'l',
+                'cloud_local'=>'c',
                 //c is （cloud） can add company 
                 //l only local） can import company data from master
                 ////////////////////////////////////////
@@ -77,7 +77,7 @@ return array(
                 ),
                 //memcache的定义
                 'memcache'=>array(
-                    'server'=>'192.168.63.8',
+                    'server'=>'121.42.12.97',
                     'port'=>11211,
                 ),
 );
