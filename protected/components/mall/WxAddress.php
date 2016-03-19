@@ -58,6 +58,8 @@ class WxAddress
 				        	'is_sync'=>DataSync::getInitSync(),
 							);
 		$result = Yii::app()->db->createCommand()->insert('nb_address', $insertData);
+		//var_dump($insertData);
+		//var_dump($result);exit;
 		return $result;
 	}
 	public static function update($param){

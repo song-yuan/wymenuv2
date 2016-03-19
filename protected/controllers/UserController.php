@@ -195,6 +195,7 @@ class UserController extends Controller
 		if(Yii::app()->request->isPostRequest) {
 			$post = Yii::app()->request->getPost('address');
 			$post['dpid'] = $this->companyId;
+
 			if($post['lid'] > 0){
 				 $generateAddress = WxAddress::update($post);
 			}else{
