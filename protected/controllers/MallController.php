@@ -268,10 +268,15 @@ class MallController extends Controller
 		if(in_array($order['order_type'],array(2,3))){
 			$address =  WxOrder::getOrderAddress($orderId,$this->companyId);
 		}
-		if(in_array($order['order_type'],array(1,3))){
+		if($order['order_type']==1){
 			$seatingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,1);
 			foreach($seatingProducts as $seatingProduct){
 				$seatingFee += $seatingProduct['price']*$seatingProduct['amount'];
+			}
+		}elseif($order['order_type']==3){
+			$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
+			foreach($packingProducts as $packingProduct){
+				$packingFee += $packingProduct['price']*$packingProduct['amount'];
 			}
 		}else{
 			$packingProducts = WxOrder::getOrderProductByType($orderId,$this->companyId,2);
