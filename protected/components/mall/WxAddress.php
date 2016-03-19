@@ -46,6 +46,7 @@ class WxAddress
 				        	'update_at'=>date('Y-m-d H:i:s',$time), 
 				        	'brand_user_lid'=>$param['user_id'],
 				        	'name'=>$param['name'],
+				        	'sex'=>$param['sex'],
 				        	'province'=>$param['province'],
 				        	'city'=>$param['city'],
 				        	'area'=>$param['area'],
@@ -58,8 +59,6 @@ class WxAddress
 				        	'is_sync'=>DataSync::getInitSync(),
 							);
 		$result = Yii::app()->db->createCommand()->insert('nb_address', $insertData);
-		//var_dump($insertData);
-		//var_dump($result);exit;
 		return $result;
 	}
 	public static function update($param){
@@ -68,6 +67,7 @@ class WxAddress
 		}
 		$insertData = array(
 				        	'name'=>$param['name'],
+				        	'sex'=>$param['sex'],
 				        	'province'=>$param['province'],
 				        	'city'=>$param['city'],
 				        	'area'=>$param['area'],
