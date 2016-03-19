@@ -116,7 +116,7 @@ class WxRecharge
 	   	   }
 	   	   
 	   	   if($this->recharge['recharge_cashback']){
-				$se = new Sequence("point_record");
+				$se = new Sequence("cashback_record");
 			    $lid = $se->nextval();
 				$pointRecordData = array(
 									'lid'=>$lid,
