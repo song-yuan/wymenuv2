@@ -187,7 +187,7 @@
 </div>
 
 <?php if($this->type==3):?>
-<div class="order-time">
+<div class="order-time arrowright">
 	<div class="time-lt">预约时间</div>
 	<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
 	<div class="clear"></div>
