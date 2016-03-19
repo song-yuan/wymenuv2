@@ -139,7 +139,7 @@
 	    <?php endif;?>
 	</div>
 	<?php endforeach;?>
-	<?php if($this->type==1||$this->type==3):?>
+	<?php if($this->type==1):?>
 	<!-- begain餐位费 -->
 	<div class="section seatingFee" price="<?php echo $seatingFee;?>">
 		 <div class="prt">
@@ -151,6 +151,15 @@
 	</div>
 	<div class="weui_cells_tips"><?php echo $seatingTips;?></div>
 	<!-- end餐位费 -->
+	<?php elseif($this->type==3):?>
+	<div class="section packingFee" price="<?php echo $packingFee;?>">
+		 <div class="prt">
+	        <div class="prt-lt">包装费</div>
+	        <div class="prt-mt">x<span class="num"></span></div>
+	        <div class="prt-rt">￥<span class="price"></span></div>
+	        <div class="clear"></div>
+	    </div>
+	</div>
 	<?php else:?>
 	<!-- begain餐位费 -->
 	<div class="section packingFee" price="<?php echo $packingFee;?>">

@@ -261,7 +261,7 @@ class WxOrder
 			 $orderPrice +=  $cart['price']*$cart['num'];
 			 $realityPrice += $cart['original_price']*$cart['num'];
 		}
-		 if(($this->type==1||$this->type==3) && $this->seatingFee > 0){
+		 if(($this->type==1) && $this->seatingFee > 0){
 			 	$se = new Sequence("order_product");
 		    	$orderProductId = $se->nextval();
 	         	$orderProductData = array(
@@ -284,7 +284,7 @@ class WxOrder
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 				$orderPrice +=  $this->seatingFee*$this->number;
 			 	$realityPrice += $this->seatingFee*$this->number;
-		  }elseif($this->type==2){
+		  }elseif($this->type==2||$this->type==3){
 		  		if($this->packingFee > 0){
 		  			$se = new Sequence("order_product");
 			    	$orderProductId = $se->nextval();
@@ -309,7 +309,7 @@ class WxOrder
 					$orderPrice +=  $this->packingFee*$this->cartNumber;
 				 	$realityPrice += $this->packingFee*$this->cartNumber;
 		  		}
-			 	if($this->freightFee > 0){
+			 	if($this->type==2 && $this->freightFee > 0){
 			 		$se = new Sequence("order_product");
 			    	$orderProductId = $se->nextval();
 		         	$orderProductData = array(
