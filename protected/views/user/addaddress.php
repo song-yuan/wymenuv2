@@ -18,8 +18,8 @@
 			<li><label for="name">联系人</label><input type="text" id="name" name="address[name]" placeholder="名字" value="<?php echo $address?$address['name']:'';?>"></li> 
 			<li><label for="name">性别</label>
 				<select name="address[sex]" style="width:23%;">
-                    <option value="1">男</option>
-                    <option value="2">女</option>
+                    <option value="1" <?php if($address&&$address['sex']==1) echo 'selected';?>>男</option>
+                    <option value="2" <?php if($address&&$address['sex']==2) echo 'selected';?>>女</option>
                 </select>
             </li> 
 			<li><label for="area">选择地区</label>
