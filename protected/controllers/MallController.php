@@ -568,6 +568,10 @@ class MallController extends Controller
 			}	
 		}
 		
+		$store = $cart->checkStoreNumber();
+		if(!$store['status']){
+			Yii::app()->end(json_encode($store));
+		}	
 		if($cart->addCart()){
 			Yii::app()->end(json_encode(array('status'=>true,'msg'=>'ok')));
 		}else{

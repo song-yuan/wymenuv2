@@ -26,6 +26,7 @@ class WxCart
 			$this->isCart();
 		}
 	}
+	//加入购物车 判断
 	public function isCart(){
 		$sql = 'select * from nb_cart where dpid=:dpid and user_id=:userId and product_id=:productId and privation_promotion_id=:privationPromotionId';
 		$this->cart = Yii::app()->db->createCommand($sql)
@@ -35,6 +36,23 @@ class WxCart
 					  ->bindValue(':privationPromotionId',$this->productArr['privation_promotion_id'])
 					  ->queryRow();
 	}
+	//判断产品库存
+	public function checkStoreNumber(){
+		$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
+		$product = Yii::app()->db->createCommand($sql)
+					  ->bindValue(':dpid',$this->dpid)
+					  ->bindValue(':productId',$this->productArr['product_id'])
+					  ->queryRow();
+		if($product['store_number']==0){
+			return array('status'=>false,'msg'=>'该产品已售罄!');
+		}
+		if($product['store_number'] > 0){
+			if($this->cart && $this->cart['num'] >= $product['store_number']){
+				return array('status'=>false,'msg'=>'超出产品库存!');
+			}
+		}
+	}
+	// 如果产品有特价活动
 	public function checkPromotion(){
 		if($this->productArr['privation_promotion_id'] > 0){
 			$sqla = 'select count(*) as count from nb_cart where dpid=:dpid and user_id=:userId and privation_promotion_id=:privationPromotionId';
