@@ -15,15 +15,20 @@
 <section class="add_address bg_lgrey2">
 	<form action="<?php echo Yii::app()->createUrl('/user/generateAddress',array('companyId'=>$this->companyId,'url'=>$url));?>" method="post" onsubmit="return validate()">
 		<ul class="complete_add">
-			<li><label for="name">收货人</label><input type="text" id="name" name="address[name]" placeholder="名字" value="<?php echo $address?$address['name']:'';?>"></li> 
-			<li><label for="tel">手机号码</label><input type="text" id="mobile" name="address[mobile]" placeholder="11位手机号码" value="<?php echo $address?$address['mobile']:'';?>"></li>
+			<li><label for="name">联系人</label><input type="text" id="name" name="address[name]" placeholder="名字" value="<?php echo $address?$address['name']:'';?>"></li> 
+			<li><label for="name"></label>
+				<select name="address[sex]" style="width:23%;">
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </li> 
 			<li><label for="area">选择地区</label>
                 <select id="province" name="address[province]" style="width:23%;"></select>
                 <select id="city" name="address[city]"style="width:23%;"></select>
                 <select id="area" name="address[area]"style="width:23%;"></select>
             </li>
 			<li><label for="receiver">详细地址</label><input type="text" id="street" name="address[street]" placeholder="街道门牌信息" value="<?php echo $address?$address['street']:'';?>"></li>
-			<li><label for="receiver">邮政编码</label><input type="text" id="postcode" name="address[postcode]" placeholder="邮政编码" value="<?php echo $address?$address['postcode']:'';?>"></li>
+			<li><label for="tel">手机号码</label><input type="text" id="mobile" name="address[mobile]" placeholder="11位手机号码" value="<?php echo $address?$address['mobile']:'';?>"></li>
 			<li>
 			<div class="left">设置为默认配送地址</span></div>
 			<div class="right">
