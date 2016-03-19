@@ -65,8 +65,8 @@ class MallController extends Controller
 	public function actionIndex()
 	{
 		$userId = Yii::app()->session['userId'];
-	
-		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId));
+		$start = WxCompanyFee::get(4,$this->companyId);
+		$this->render('index',array('companyId'=>$this->companyId,'userId'=>$userId,'start'=>$start));
 	}
 	/**
 	 * 

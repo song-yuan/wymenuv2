@@ -19,6 +19,9 @@
 	border-radius: 15px;
 	display:none;
 }
+.none{
+	display:none;
+}
 
 </style>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/Adaptive.js"></script>
@@ -45,9 +48,20 @@
 	<div class="ft-lt">
         <p>合计:<span id="total" class="total">0.00元</span><span class="nm">(<label class="share"></label>份)</span></p>
     </div>
-    <div class="ft-rt">
+    <?php if($this->type==1):?>
+    <?php if($start&&$start['fee_price']):?>
+    <div class="ft-rt start" start-price="<?php echo $start['fee_price'];?>">
     	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
     </div>
+    <div class="ft-rt no-start" style="background:#E5E5E5" start-price="<?php echo $start['fee_price'];?>">
+    	<p><?php echo (int)$start['fee_price'];?>元起送</p>
+    </div>
+    <?php else:?>
+    <div class="ft-rt" start-price="0">
+    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
+    </div>
+    <?php endif;?>
+    <?php endif;?>
     <div class="clear"></div>
 </footer>
 
@@ -87,6 +101,17 @@ function setTotal(){
     
     $(".share").html(v);
     $("#total").html(s.toFixed(2)); 
+    <?php if($this->type==1):?>
+    var startPrice = $('.ft-rt').attr('start-price');
+    var total = $("#total").html();
+    if(parseFloat(startPrice) >= parseFloat(total)){
+    	$('.no-start').removeClass('none');
+    	$('.start').addClass('none');
+    }else{
+    	$('.no-start').addClass('none');
+    	$('.start').removeClass('none');
+    }
+    <?php endif;?>
 } 
 function getProduct(){
 	layer.load(2);
