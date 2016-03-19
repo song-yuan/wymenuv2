@@ -358,14 +358,23 @@ $(document).ready(function(){
 	
 	$('.num-minus').click(function(){
 		var number = $('.number').val();
+		<?php if($this->type==1):?>
 		var seatFee = $('.seatingFee').attr('price');
+		<?php elseif($this->type==3):?>
+		var seatFee = $('.packingFee').attr('price');
+		<?php endif;?>
 		var setTotal = $('#total').attr('total');
 		var total = $('#total').html();
 		if(parseInt(number) > 1 ){
 			$('.number').val(parseInt(number)-1);
+			<?php if($this->type==1):?>
 			$('.seatingFee').find('.num').html(parseInt(number)-1);
 			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
-			
+			<?php elseif($this->type==3):?>
+			$('.packingFee').find('.num').html(parseInt(number)-1);
+			$('.packingFee').find('.price').html((parseInt(number)-1)*seatFee);
+			<?php endif;?>
+		
 			$('#total').attr('total',parseFloat(setTotal) - parseFloat(seatFee));
 			
 			if(parseFloat(total) > 0){
@@ -382,14 +391,22 @@ $(document).ready(function(){
 	//参数人数增减
 	$('.num-add').click(function(){
 		var number = $('.number').val();
+		<?php if($this->type==1):?>
 		var seatFee = $('.seatingFee').attr('price');
+		<?php elseif($this->type==3):?>
+		var seatFee = $('.packingFee').attr('price');
+		<?php endif;?>
 		var setTotal = $('#total').attr('total');
 		var yue = $('#yue').attr('yue');
 		var total = $('#total').html();
 		$('.number').val(parseInt(number)+1);
+		<?php if($this->type==1):?>
 		$('.seatingFee').find('.num').html(parseInt(number)+1);
 		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
-		
+		<?php elseif($this->type==3):?>
+		$('.packingFee').find('.num').html(parseInt(number)+1);
+		$('.packingFee').find('.price').html((parseInt(number)+1)*seatFee);
+		<?php endif;?>
 		var totalFee = parseFloat(total) + parseFloat(seatFee);
 		$('#total').attr('total',parseFloat(setTotal) + parseFloat(seatFee));
 		

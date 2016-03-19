@@ -60,6 +60,11 @@ class WxOrder
 				  ->bindValue(':siteId',$this->siteId)
 				  ->queryAll();
 		foreach($results as $k=>$result){
+			$store = $this->checkStoreNumber($this->dpid,$result['product_id'],$result['num']);
+			if(!$store['status']){
+				throw new Exception($store['msg']);
+			}
+			$results[$k]['store_number'] = $store['msg'];
 			if($result['privation_promotion_id'] > 0){
 				$productPrice = WxPromotion::getPromotionPrice($result['dpid'],$this->userId,$result['product_id'],$result['privation_promotion_id'],$result['to_group']);
 				$results[$k]['price'] = $productPrice['price'];
@@ -72,6 +77,23 @@ class WxOrder
 			$this->cartNumber +=$result['num'];
 		}
 		$this->cart = $results;
+	}
+	//判断产品库存
+	public function checkStoreNumber($dpid,$productId,$num){
+		$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
+		$product = Yii::app()->db->createCommand($sql)
+					  ->bindValue(':dpid',$dpid)
+					  ->bindValue(':productId',$productId)
+					  ->queryRow();
+		if($product['store_number']==0){
+			return array('status'=>false,'msg'=>'该产品已售罄!');
+		}
+		if($product['store_number'] > 0){
+			if($num > $product['store_number']){
+				return array('status'=>false,'msg'=>'超出库存,库存剩余'.$product['store_number'].'!');
+			}
+		}
+		return array('status'=>true,'msg'=>$product['store_number']);
 	}
 	//处理订单口味
 	public function dealTastes(){
@@ -217,7 +239,12 @@ class WxOrder
 							'is_sync'=>DataSync::getInitSync(),
 							);
 			 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
-			
+			 
+			 $isSync = DataSync::getInitSync();
+			 if($cart['store_number'] > 0){
+			 	$sql = 'update nb_product set store_number =  store_number-'.$cart['num'].',is_sync='.$isSync.' where lid='.$cart['product_id'].' and dpid='.$this->dpid.' and delete_flag=0';
+			 	Yii::app()->db->createCommand($sql)->execute();
+			 }
 			 //插入产品口味
 			 if(isset($this->productTastes[$cart['product_id']]) && !empty($this->productTastes[$cart['product_id']])){
 			 	foreach($this->productTastes[$cart['product_id']] as $taste){
@@ -338,7 +365,6 @@ class WxOrder
 		if($orderPrice==0){
 			$orderPrice = 0.01;
 		}
-		$isSync = DataSync::getInitSync();
 		$sql = 'update nb_order set should_total='.$orderPrice.',reality_total='.$realityPrice.',is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$this->dpid;
 		Yii::app()->db->createCommand($sql)->execute();
 		
@@ -623,6 +649,17 @@ class WxOrder
 	 		return 0;
 	 	}else{
 	 		$isSync = DataSync::getInitSync();
+	 		foreach($resluts as $orderProduct){
+	 			$sql = 'select * from nb_product where lid=:productId and dpid=:dpid and delete_flag=0';
+				$product = Yii::app()->db->createCommand($sql)
+							  ->bindValue(':dpid',$dpid)
+							  ->bindValue(':productId',$orderProduct['product_id'])
+							  ->queryRow();
+				if($product['store_number'] >= 0){
+					$sql = 'update nb_product set store_number =  store_number+'.$orderProduct['amount'].',is_sync='.$isSync.' where lid='.$orderProduct['product_id'].' and dpid='.$dpid.' and delete_flag=0';
+			 		Yii::app()->db->createCommand($sql)->execute();
+				}
+	 		}
 			$sql = 'update nb_order set order_status=7,is_sync='.$isSync.' where lid='.$orderId.' and dpid='.$dpid;
 			$result = Yii::app()->db->createCommand($sql)->execute();
 			if($order['cupon_branduser_lid'] > 0){

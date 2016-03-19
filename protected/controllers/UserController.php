@@ -319,10 +319,13 @@ class UserController extends Controller
 		$orderId = Yii::app()->request->getParam('orderId');
 		$dpid = $this->companyId;
 		
-		$result = WxOrder::cancelOrder($orderId,$dpid);
-		if($result){
-			echo 1;
-		}else{
+		$transaction=Yii::app()->db->beginTransaction();
+		try{
+			$result = WxOrder::cancelOrder($orderId,$dpid);
+			 $transaction->commit();
+			 echo 1;
+		}catch (Exception $e) {
+			$transaction->rollback();
 			echo 0;
 		}
 		exit;
