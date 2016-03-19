@@ -293,14 +293,23 @@ $(document).ready(function(){
   	var optTime = $.extend(opt['time'], opt['default']);
     $("#appDateTime").mobiscroll(optDateTime).datetime(optDateTime);
     
+    var totalPackFee = 0;
+    var totalPackNum = 0;
     var number = $('.number').val();
 	var seatFee = $('.seatingFee').attr('price');
 	var total = $('#total').html();
 	
-	$('.seatingFee').find('.num').html(number);
-	$('.seatingFee').find('.price').html(parseInt(number)*seatFee);
+	var packingFee = $('.packingFee').attr('price');
+	$('.cartProduct').each(function(){
+		var num = $(this).find('.num').html();
+		totalPackNum += parseInt(num);
+		totalPackFee += parseInt(num)*parseFloat(packingFee);
+	});
+	totalPackFee = totalPackFee.toFixed(2);
+	$('.packingFee').find('.num').html(totalPackNum);
+	$('.packingFee').find('.price').html(totalPackFee);
 	
-	var totalFee = parseFloat(total) + parseInt(number)*seatFee;
+	var totalFee = parseFloat(total) + parseFloat(totalPackFee);
 	totalFee =  totalFee.toFixed(2);
 	
 	$('#total').html(totalFee);
@@ -311,14 +320,17 @@ $(document).ready(function(){
 	});
 	<?php elseif($this->type==2):?>
 	var totalPackFee = 0;
+	var totalPackNum = 0;
 	var total = $('#total').html();
 	var packingFee = $('.packingFee').attr('price');
 	var freightFee = $('.freightFee').attr('price');
 	$('.cartProduct').each(function(){
 		var num = $(this).find('.num').html();
+		totalPackNum += parseInt(num);
 		totalPackFee += parseInt(num)*parseFloat(packingFee);
 	});
 	totalPackFee = totalPackFee.toFixed(2);
+	$('.packingFee').find('.num').html(totalPackNum);
 	$('.packingFee').find('.price').html(totalPackFee);
 	
 	var totalFee = parseFloat(total) + parseFloat(totalPackFee) + parseFloat(freightFee);
