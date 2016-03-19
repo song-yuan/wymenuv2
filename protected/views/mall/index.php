@@ -48,7 +48,7 @@
 	<div class="ft-lt">
         <p>合计:<span id="total" class="total">0.00元</span><span class="nm">(<label class="share"></label>份)</span></p>
     </div>
-    <?php if($this->type==1):?>
+    <?php if($this->type==2):?>
     <?php if($start&&$start['fee_price']):?>
     <div class="ft-rt start" start-price="<?php echo $start['fee_price'];?>">
     	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
@@ -61,6 +61,10 @@
     	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
     </div>
     <?php endif;?>
+     <?php else:?>
+     <div class="ft-rt">
+    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
+    </div>
     <?php endif;?>
     <div class="clear"></div>
 </footer>
@@ -101,7 +105,7 @@ function setTotal(){
     
     $(".share").html(v);
     $("#total").html(s.toFixed(2)); 
-    <?php if($this->type==1):?>
+    <?php if($this->type==2):?>
     var startPrice = $('.ft-rt').attr('start-price');
     var total = $("#total").html();
     if(parseFloat(startPrice) >= parseFloat(total)){
