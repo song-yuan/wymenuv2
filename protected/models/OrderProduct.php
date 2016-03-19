@@ -611,10 +611,10 @@ class OrderProduct extends CActiveRecord
 						$site = Site::model()->with("siteType")->find($criteria2);
 					}elseif($order->is_temp=="1"){
 
-						$criteria2 = new CDbCriteria;
-						$criteria2->condition =  't.dpid='.$compayId.' and t.lid="0000000040"' ;
-						$criteria2->order = ' t.lid desc ';
-						$site = Site::model()->with("siteType")->find($criteria2);
+// 						$criteria2 = new CDbCriteria;
+// 						$criteria2->condition =  't.dpid='.$compayId.' and t.lid="0000000040"' ;
+// 						$criteria2->order = ' t.lid desc ';
+// 						$site = Site::model()->with("siteType")->find($criteria2);
 						//var_dump($site);exit;
 					}
                 
