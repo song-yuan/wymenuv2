@@ -71,11 +71,13 @@
 	<?php endif;?>
 </div>
 <?php else:?>
+<!--
 <div class="order-num">
 	<div class="num-lt">预约人数</div>
 	<div class="num-rt"><input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteNum){ echo (int)(($siteNum['min_persons'] + $siteNum['max_persons'])/2);}else{echo '3';}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
 	<div class="clear"></div>
 </div>
+-->
 <div class="address arrowright">
 	<?php if($address):?>
 	<div class="location" style="line-height: 50px;">
@@ -296,7 +298,6 @@ $(document).ready(function(){
     var totalPackFee = 0;
     var totalPackNum = 0;
     var number = $('.number').val();
-	var seatFee = $('.seatingFee').attr('price');
 	var total = $('#total').html();
 	
 	var packingFee = $('.packingFee').attr('price');
@@ -370,9 +371,6 @@ $(document).ready(function(){
 			<?php if($this->type==1):?>
 			$('.seatingFee').find('.num').html(parseInt(number)-1);
 			$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
-			<?php elseif($this->type==3):?>
-			$('.packingFee').find('.num').html(parseInt(number)-1);
-			$('.packingFee').find('.price').html((parseInt(number)-1)*seatFee);
 			<?php endif;?>
 		
 			$('#total').attr('total',parseFloat(setTotal) - parseFloat(seatFee));
@@ -403,9 +401,6 @@ $(document).ready(function(){
 		<?php if($this->type==1):?>
 		$('.seatingFee').find('.num').html(parseInt(number)+1);
 		$('.seatingFee').find('.price').html((parseInt(number)+1)*seatFee);
-		<?php elseif($this->type==3):?>
-		$('.packingFee').find('.num').html(parseInt(number)+1);
-		$('.packingFee').find('.price').html((parseInt(number)+1)*seatFee);
 		<?php endif;?>
 		var totalFee = parseFloat(total) + parseFloat(seatFee);
 		$('#total').attr('total',parseFloat(setTotal) + parseFloat(seatFee));
