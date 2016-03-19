@@ -435,7 +435,7 @@ class WxOrder
 	 */
 	 public static function getOrderUseCupon($userId,$dpid){
 	 	$now = date('Y-m-d',time());
-	 	$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and cupon_branduser_lid > 0 and create_at >= :now';
+	 	$sql = 'select * from nb_order where dpid=:dpid and user_id=:userId and cupon_branduser_lid > 0 and order_status in (1,2,3,4,8) and create_at >= :now';
 		$order = Yii::app()->db->createCommand($sql)
 				  ->bindValue(':userId',$userId)
 				  ->bindValue(':dpid',$dpid)
