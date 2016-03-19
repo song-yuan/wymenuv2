@@ -48,7 +48,7 @@ class WxOrder
 		}elseif($this->type==3){
 			$this->isTemp = 1;
 			$this->orderOpenSite();
-			$this->getSeatingFee();
+			$this->getPackingFee();
 		}
 	}
 	//获取购物车信息
