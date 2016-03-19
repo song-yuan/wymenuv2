@@ -77,12 +77,7 @@ return array(
                 ),
                 //memcache的定义
                 'memcache'=>array(
-<<<<<<< HEAD
                     'server'=>'121.42.12.97',
-=======
-                		'server'=>'121.42.12.97',
-                    //'server'=>'192.168.63.8',
->>>>>>> fc3612bb76cbc4ba6211985a03f73aab458508ff
                     'port'=>11211,
                 ),
 );
