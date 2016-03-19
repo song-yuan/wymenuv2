@@ -53,7 +53,7 @@
     <div class="ft-rt start" start-price="<?php echo $start['fee_price'];?>">
     	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
     </div>
-    <div class="ft-rt no-start" style="background:#E5E5E5" start-price="<?php echo $start['fee_price'];?>">
+    <div class="ft-rt no-start" style="background:#6A706E" start-price="<?php echo $start['fee_price'];?>">
     	<p><?php echo (int)$start['fee_price'];?>元起送</p>
     </div>
     <?php else:?>
@@ -108,7 +108,7 @@ function setTotal(){
     <?php if($this->type==2):?>
     var startPrice = $('.ft-rt').attr('start-price');
     var total = $("#total").html();
-    if(parseFloat(startPrice) >= parseFloat(total)){
+    if(parseFloat(startPrice) > parseFloat(total)){
     	$('.no-start').removeClass('none');
     	$('.start').addClass('none');
     }else{
