@@ -38,7 +38,7 @@
 			$input->SetOpenid($openId);
 		}
 		$orderInfo = WxPayApi::unifiedOrder($input);
-		echo '<meat charset=utf8 />';
+		echo '<meta charset=utf8 />';
 		var_dump($orderInfo);exit;
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		
