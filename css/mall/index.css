@@ -25,6 +25,7 @@ body{ background-color:#E5E5E5;}
 .prt-lt .lt-ct p.pr{ margin-top:0.1rem; color:#FF5151;}
 span.oprice{font-size:0.12rem;color:#BFBEBE;}
 .prt-lt .lt-rt{ position:absolute; bottom:0.1rem; right:0.1rem; width:0.9rem; height:0.3rem;}
+.prt-lt .lt-rt.sale-out{font-size:0.15rem;text-align:center;line-height:0.3rem;color:#BFBEBE}
 .prt-lt .lt-rt div.minus{ float:left; width:24px; height:24px;line-height:24px; font-size:20px;padding:0;margin:0; border:1px solid #e5e5e5; text-align:center; background-color:#fff;}
 .prt-lt .lt-rt input.result{ float:left; width:calc(0.9rem - 52px);width:-moz-calc(0.9rem - 52px);width:-webkit-calc(0.9rem - 52px); height:24px; font-size:20px; border:1px solid #e5e5e5; text-align:center; color:#A1A09C; background-color:#fff;}
 .prt-lt .lt-rt div.add{ float:right; width:24px; height:24px;line-height:24px; font-size:20px;padding:0;margin:0; border:1px solid #e5e5e5; text-align:center; background-color:#fff;}

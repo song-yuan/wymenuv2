@@ -274,7 +274,13 @@ $(document).ready(function(){
 	}); 
 	<?php endif;?>
 	<?php if($this->type==3):?>
-	var currYear = (new Date()).getFullYear();	
+	var today = new Date();
+	var currYear = today.getFullYear();
+	var currMonth = today.getMonth();
+	var currDay = today.getDate();
+	var currHours = today.getHours();
+	var currMinutes = today.getMinutes();
+		
 	var opt={};
 	opt.date = {preset : 'date'};
 	opt.datetime = {preset : 'datetime'};
@@ -540,6 +546,10 @@ $(document).ready(function(){
 	$('input[name="yue"]').change(function(){
 		var total = $('#total').attr('total');
 		var yue = $('#yue').attr('yue');
+		if(parseFloat(yue) == 0){
+			layer.msg('余额不足!');
+			$(this).prop('checked',false);
+		}
 		
 		if($(this).is(':checked')){
 			if(parseFloat(yue) > parseFloat(total)){
@@ -562,6 +572,7 @@ $(document).ready(function(){
 				$('#total').html(money);
 			}
 		}
+		
 	});
 	$('#payorder').click(function(){
 		<?php if($this->type==1):?>
@@ -605,6 +616,12 @@ $(document).ready(function(){
 		var orderTime = $('input[name="order_time"]').val();
 		if(!orderTime){
 			layer.msg('请选择预约时间!');
+			return;
+		}
+		var timestamp = Date.parse(today) / 1000;
+		var pointsTime = Date.parse(orderTime) / 1000;
+		if(timestamp > pointsTime){
+			layer.msg('预约时间必须大于当前时间!');
 			return;
 		}
 		$('form').submit();

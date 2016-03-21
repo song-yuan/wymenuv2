@@ -86,10 +86,12 @@
 		<div class="clear"></div>
 	</div>
 	<?php endif;?>
+	<?php if($order['should_total'] > 0):?>
 	<div class="item">
-		<div class="lt">微信支付:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['should_total'],2);?></span></div>
+		<div class="lt"><?php if($order['paytype']==1):?>微信支付:<?php if($order['paytype']==2):?>微信支付:<?phpelse:?>现金支付<?php endif;?></div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['should_total'],2);?></span></div>
 		<div class="clear"></div>
 	</div>
+	<?php endif;?>
 	<div class="item">
 		<div class="lt">合计:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['should_total'] + $order['yue_total'],2);?></span></div>
 		<div class="clear"></div>
