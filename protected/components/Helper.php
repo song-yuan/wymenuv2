@@ -438,6 +438,10 @@ class Helper
                         return array('status'=>false,'dpid'=>$order->dpid,'jobid'=>"0",'type'=>'none','msg'=>yii::t('app','PAD还没有设置默认打印机'));		
 		}
 		$hasData=false;
+		$db = Yii::app()->db;
+		$sql="select sum(t.number) as all_number from nb_order t where t.account_no =". $order->account_no;
+		$command=$db->createCommand($sql);
+		$Allnumber= $command->queryAll();
 		//$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
                 ///site error because tempsite and reserve**************
                 //$listData = array("22".Helper::getPlaceholderLenBoth($order->company->company_name, 16));//
@@ -483,7 +487,7 @@ class Helper
 //		array_push($listData,"00".str_pad('',48,'-'));                
 		
                 array_push($listData,"br");
-                array_push($listData,"10".yii::t('app','人  数：').$order->number);
+                array_push($listData,"10".yii::t('app','人  数：').$Allnumber->all_number);
                 array_push($listData,"br");
                 array_push($listData,"10"."账单号：");
                 array_push($listData,"00".$order->account_no);
@@ -550,13 +554,13 @@ class Helper
                                       "01"."  ".$lenstrleft
                                     .str_pad("",24-$printlenstrleft," ")
                                     .$isretreat.str_pad($product['amount'],6," ")//加2
-                                    .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
+                                    .number_format($product['original_price'],0)."/".number_format($product['price']*$product['amount'],2));	
                         }else{
                             array_push($listData,"01".$productnum."."
                                     .$productname
                                     .str_pad("",24-$printlen," ")
                                     .$isretreat.str_pad($product['amount'],6," ")//加2
-                                    .number_format($product['original_price'],0)."/".number_format($product['price'],2));	
+                                    .number_format($product['original_price'],0)."/".number_format($product['price']*$product['amount'],2));	
                         }                
 //                    }
                     array_push($listData,"br");
