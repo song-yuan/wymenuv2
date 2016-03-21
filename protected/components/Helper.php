@@ -1008,7 +1008,8 @@ class Helper
                         array_push($listData,"br");
                     }
                     //单品菜折扣优惠部分
-                    $promotionarr=OrderProduct::getPromotion($order->account_no,$order->dpid);
+                    //$promotionarr=OrderProduct::getPromotion($order->account_no,$order->dpid);
+                    $promotionarr=OrderProduct::getPromotionByOrderId($order->lid,$order->dpid);
                     foreach ($promotionarr as $dt)
                     {
                         $printlen=(strlen($dt["promotion_title"]) + mb_strlen($dt["promotion_title"],'UTF8')) / 2;
