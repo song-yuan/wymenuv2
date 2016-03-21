@@ -37,8 +37,6 @@
 		}else{
 			$input->SetOpenid($openId);
 		}
-		echo '<meta charset=utf8 />';
-		var_dump($input);exit;
 		$orderInfo = WxPayApi::unifiedOrder($input);
 		echo '<meta charset=utf8 />';
 		var_dump($orderInfo);exit;

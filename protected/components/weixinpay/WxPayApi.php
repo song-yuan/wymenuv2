@@ -68,7 +68,8 @@ class WxPayApi
 			$inputObj->SetAppid($appId);//公众账号ID
 			$inputObj->SetMch_id($mchId);//商户号
 		}
-		
+		echo '<meta charset=utf8 />';
+		var_dump($inputObj);
 		$inputObj->SetSpbill_create_ip($_SERVER['REMOTE_ADDR']);//终端ip	  
 		//$inputObj->SetSpbill_create_ip("1.1.1.1");  	    
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
