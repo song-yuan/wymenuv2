@@ -383,6 +383,25 @@ $(document).ready(function(){
 				totalFee =  totalFee.toFixed(2);
 				$('#total').html(totalFee);
 			}
+		}elseif(parseInt(number) == 1 ){
+			<?php if($siteOpen):?>
+				$('.number').val(parseInt(number)-1);
+				<?php if($this->type==1):?>
+				$('.seatingFee').find('.num').html(parseInt(number)-1);
+				$('.seatingFee').find('.price').html((parseInt(number)-1)*seatFee);
+				<?php endif;?>
+			
+				$('#total').attr('total',parseFloat(setTotal) - parseFloat(seatFee));
+				
+				if(parseFloat(total) > 0){
+					var totalFee = parseFloat(total) - parseFloat(seatFee);
+					if(parseFloat(totalFee)==0){
+						totalFee = 0; 
+					}
+					totalFee =  totalFee.toFixed(2);
+					$('#total').html(totalFee);
+				}
+			<?php endif;?>
 		}
 	});
 	
