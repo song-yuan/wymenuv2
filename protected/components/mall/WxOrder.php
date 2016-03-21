@@ -522,6 +522,12 @@ class WxOrder
 				}
 			}
 		}else{
+			$orderPay = WxOrderPay::get($dpid,$orderId);
+			foreach($orderPay as $pay){
+				if($pay['paytype']==10){
+					$payYue = $pay['pay_amount']; 
+				}
+			}
 			$total = $order['should_total'];
 		}
 		return array('total'=>$total,'yue'=>$payYue,'count'=>count($orderProducts));
