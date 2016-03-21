@@ -383,7 +383,7 @@ $(document).ready(function(){
 				totalFee =  totalFee.toFixed(2);
 				$('#total').html(totalFee);
 			}
-		}elseif(parseInt(number) == 1 ){
+		}else if(parseInt(number) == 1 ){
 			<?php if($siteOpen):?>
 				$('.number').val(parseInt(number)-1);
 				<?php if($this->type==1):?>
