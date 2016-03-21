@@ -39,7 +39,7 @@ class Order extends CActiveRecord
         public $pay_discount_total=0;
         public $all_number;
         public $all_ordertype;
-        public $all_number_Printer;
+        public $all_num;
         //支付部分传递参数
         public $account_cash=0;
         public $account_otherdetail="";
