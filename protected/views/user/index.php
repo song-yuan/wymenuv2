@@ -59,7 +59,6 @@
 		$('.headImg').click(function(){
 			$.ajax({
 				url:'<?php echo $this->createUrl('/user/ajaxHeadIcon',array('companyId'=>$this->companyId));?>',
-				dataType:'get',
 				data:{userId:<?php echo $user['lid'];?>},
 				success:function(msg){
 					if(msg){
