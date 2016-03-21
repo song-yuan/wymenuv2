@@ -551,27 +551,27 @@ $(document).ready(function(){
 			$(this).prop('checked',false);
 		}
 		
-//		if($(this).is(':checked')){
-//			if(parseFloat(yue) > parseFloat(total)){
-//				var money = 0;
-//				money = money.toFixed(2);
-//				$('#total').html(money);
-//			}else{
-//				var money = total - yue;
-//				money = money.toFixed(2);
-//				$('#total').html(money);
-//			}
-//		}else{
-//			if(parseFloat(yue) > parseFloat(total)){
-//				var money = parseFloat(total);
-//				money = money.toFixed(2);
-//				$('#total').html(money);
-//			}else{
-//				var money = parseFloat(total);
-//				money = money.toFixed(2);
-//				$('#total').html(money);
-//			}
-//		}
+		if($(this).is(':checked')){
+			if(parseFloat(yue) > parseFloat(total)){
+				var money = 0;
+				money = money.toFixed(2);
+				$('#total').html(money);
+			}else{
+				var money = total - yue;
+				money = money.toFixed(2);
+				$('#total').html(money);
+			}
+		}else{
+			if(parseFloat(yue) > parseFloat(total)){
+				var money = parseFloat(total);
+				money = money.toFixed(2);
+				$('#total').html(money);
+			}else{
+				var money = parseFloat(total);
+				money = money.toFixed(2);
+				$('#total').html(money);
+			}
+		}
 		
 	});
 	$('#payorder').click(function(){
