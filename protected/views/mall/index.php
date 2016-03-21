@@ -162,7 +162,7 @@ function getProduct(){
              			}else{
              				if(parseInt(promotionProduct.store_number) != 0){
              					promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly value="0">';
-            					promotionStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+            					promotionStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div></div>';
              				}else{
              					promotionStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly value="0">';
             					promotionStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
@@ -208,7 +208,7 @@ function getProduct(){
          			}else{
          				if(parseInt(pProduct.store_number) != 0){
 	         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
-	        				productStr +='<div class="add">+</div><div class="clear"></div></div></div>';
+	        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div></div>';
          				}else{
          					productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
 	        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
@@ -308,6 +308,7 @@ $(document).ready(function(){
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
         var toGroup = t.attr('to-group');
+        var storeNum = t.attr('store-number');
         
         var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
@@ -319,6 +320,10 @@ $(document).ready(function(){
     			  if(parseInt(t.val())==1){
 			          t.siblings(".minus").addClass('zero');
 			          t.addClass('zero');
+			          if(parseInt(storeNum)==0){
+			          	t.siblings(".add").addClass('zero');
+			          	t.siblings(".sale-out").removeClass('zero');
+			          }
 			       }
 			       t.val(parseInt(t.val())-1);
 			       if(parseInt(t.val()) < 0){ 
