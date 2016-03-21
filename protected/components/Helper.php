@@ -439,7 +439,7 @@ class Helper
 		}
 		$hasData=false;
 		$db = Yii::app()->db;
-		$sql="select sum(t.number) as all_number from nb_order t where t.account_no =".$order->account_no;
+		$sql="select sum(t.number) as all_number_Printer from nb_order t where t.account_no =".$order->account_no;
 		$command=$db->createCommand($sql);
 		$Allnumber= $command->queryAll();
 		//$orderProducts = OrderProduct::getOrderProducts($order->lid,$order->dpid);
@@ -487,7 +487,7 @@ class Helper
 //		array_push($listData,"00".str_pad('',48,'-'));                
 		
                 array_push($listData,"br");
-                array_push($listData,"10".yii::t('app','人  数：').$Allnumber['all_number']);
+                array_push($listData,"10".yii::t('app','人  数：').$Allnumber['all_number_Printer']);
                 array_push($listData,"br");
                 array_push($listData,"10"."账单号：");
                 array_push($listData,"00".$order->account_no);
