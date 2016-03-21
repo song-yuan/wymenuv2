@@ -53,7 +53,7 @@
 		<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
 		<?php if($company['distance']*1000 > $distance):?>
 		<div class="location">
-			<span>收货人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
+			<span>收货人：<?php echo $address['name'];?> <?php if($address['sex']==1){echo '先生';}else{echo '女士';}?>   <?php echo $address['mobile'];?></span><br>
 			<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
 			<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
 		</div>
@@ -81,7 +81,7 @@
 <div class="address arrowright">
 	<?php if($address):?>
 	<div class="location" style="line-height: 50px;">
-		<span>预约人：<?php echo $address['name'];?>   <?php echo $address['mobile'];?></span><br>
+		<span>预约人：<?php echo $address['name'];?> <?php if($address['sex']==1){echo '先生';}else{echo '女士';}?> <?php echo $address['mobile'];?></span><br>
 		<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
 	</div>
 	<?php else:?>
@@ -383,7 +383,7 @@ $(document).ready(function(){
 				totalFee =  totalFee.toFixed(2);
 				$('#total').html(totalFee);
 			}
-		}else if(parseInt(number) == 1 ){
+		}else if(parseInt(number) == 1){
 			<?php if($siteOpen):?>
 				$('.number').val(parseInt(number)-1);
 				<?php if($this->type==1):?>
