@@ -337,7 +337,8 @@ class UserController extends Controller
 	 */
 	public function actionAjaxHeadIcon()
 	{
-		$userId = Yii::app()->request->getPost('userId');
+		$userId = Yii::app()->request->getParam('userId');
+		var_dump($userId);exit;
 		$dpid = $this->companyId;
 		
 		$pullInfo = new PullUserInfo($dpid,$userId);
