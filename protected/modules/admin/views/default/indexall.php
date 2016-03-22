@@ -320,7 +320,7 @@
 			<!--<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printlist_btn" value="<?php echo yii::t('app','打印清单');?>">-->
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="alltaste_btn" value="<?php echo yii::t('app','全单设定');?>">
 			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="printerKitchen" value="<?php echo yii::t('app','下单&厨打&收银&结单');?>">
-			<input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempdelete_btn" value="<?php echo yii::t('app','清菜');?>">
+			<!-- <input style="margin:-10px 10px 10px 0;float:right;" type="button" class="btn blue" id="tempdelete_btn" value="<?php echo yii::t('app','清菜');?>"> --><!-- 功能还未完善、代码未写 -->
 			<!-- END PAGE TITLE & BREADCRUMB-->
 		</div>
 	</div>
