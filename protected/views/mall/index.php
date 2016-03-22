@@ -17,6 +17,7 @@
 	-moz-border-radius: 15px;
 	-webkit-border-radius: 15px;
 	border-radius: 15px;
+	z-index:5;
 	display:none;
 }
 .none{
@@ -292,6 +293,7 @@ $(document).ready(function(){
 						stepCallback:function(x,y){
 						}
 					});
+					
 					bool.start();
 					i++;
         		}else{
