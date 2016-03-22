@@ -238,7 +238,7 @@
         <p>￥<span id="total" class="total" total="<?php echo $price;?>"><?php echo $price;?></span></p>
     </div>
     <div class="ft-rt">
-        <p><a id="payorder" href="javascript:;">去支付</a></p>
+        <p><a id="payorder" href="javascript:;">确认下单</a></p>
     </div>
     <div class="clear"></div>
 </footer>
