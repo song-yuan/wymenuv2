@@ -58,6 +58,7 @@
 								<th>ID</th>
 								<th><?php echo yii::t('app','基础费用名称');?></th>
 								<th><?php echo yii::t('app','价格');?></th>
+								<th><?php echo yii::t('app','描述');?></th>
 								<th><?php echo yii::t('app','创建时间');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -70,6 +71,7 @@
 								
 								<td><?php switch($model->fee_type) {case 1: echo yii::t('app','餐位费'); break; case 2: echo yii::t('app','打包费') ; break; case 3: echo yii::t('app','送餐费'); break; case 4: echo yii::t('app','外卖起步价'); break; default :echo '';}?></td>
 								<td><?php echo $model->fee_price;?></td>
+								<td><?php echo $model->fee_abstract;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('basicFee/update' , array('id' => $model->lid , 'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
