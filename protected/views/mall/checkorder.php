@@ -41,7 +41,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <style>
 .layui-layer-btn{height:42px;}
-.weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0}
+.weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0;font-size:65%;}
 </style>
 
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
@@ -259,7 +259,7 @@
     <div class="weui_mask"></div>
     <div class="weui_dialog">
         <div class="weui_dialog_hd"><strong class="weui_dialog_title">餐位数提示</strong></div>
-        <div class="weui_dialog_bd content"></div>
+        <div class="weui_dialog_bd content" style="text-align:center;"></div>
         <div class="weui_dialog_ft">
             <a href="javascript:;" class="weui_btn_dialog default">取消</a>
             <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
