@@ -56,10 +56,11 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:20%"><?php echo yii::t('app','名称');?></th>
+								<th style="width:16%"><?php echo yii::t('app','名称');?></th>
 								<th ><?php echo yii::t('app','图片');?></th>
 								<th><?php echo yii::t('app','类别');?></th>
 								<th><?php echo yii::t('app','现价');?></th>
+								<th><?php echo yii::t('app','打包费');?></th>
                                                                 <th><?php echo yii::t('app','单位');?></th>
                                                                 <th><?php echo yii::t('app','称重');?></th>
                                                                 <th><?php echo yii::t('app','重量单位');?></th>                                                                
@@ -76,10 +77,11 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:20%"><?php echo $model->product_name;?></td>
+								<td style="width:16%"><?php echo $model->product_name;?></td>
 								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
 								<td ><?php echo $model->original_price;?></td>
+								<td ><?php echo $model->dabao_fee;?></td>
                                                                 <td ><?php echo $model->product_unit;?></td>
                                                                 <td ><?php echo $model->is_weight_confirm=='0'?yii::t('app','否'):yii::t('app','是');?></td>
                                                                 <td ><?php echo $model->weight_unit;?></td>

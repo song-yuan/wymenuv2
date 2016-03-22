@@ -20,6 +20,13 @@
 											<?php echo $form->textField($model, 'fee_price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('fee_price')));?>
 											<?php echo $form->error($model, 'fee_price' )?>
 										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-3 control-label" ><?php echo yii::t('app','费用描述');?></label>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'fee_abstract',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('fee_abstract')));?>
+											<?php echo $form->error($model, 'fee_abstract' )?>
+										</div>
 									</div>									
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
