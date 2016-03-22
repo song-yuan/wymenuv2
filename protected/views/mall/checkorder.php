@@ -27,6 +27,8 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/cart.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/order.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
+
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_002.js" type="text/javascript"></script>
 <script src="<?php echo $baseUrl;?>/js/mall/date/mobiscroll_004.js" type="text/javascript"></script>
@@ -39,6 +41,7 @@
 <script type="text/javascript" src="<?php echo $baseUrl.'/js/layer/layer.js';?>"></script>
 <style>
 .layui-layer-btn{height:42px;}
+.weui_dialog_confirm .weui_dialog .weui_dialog_hd{margin:0;padding:0}
 </style>
 
 <form action="<?php echo $this->createUrl('/mall/generalOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>" method="post">
@@ -250,6 +253,20 @@
 </div>
 	<input type="hidden" name="cupon" value="0" />
 </form>
+
+ <!--BEGIN dialog1-->
+<div class="weui_dialog_confirm" id="dialog" style="display: none;">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd"><strong class="weui_dialog_title">餐位数提示</strong></div>
+        <div class="weui_dialog_bd content"></div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default">取消</a>
+            <a href="javascript:;" class="weui_btn_dialog primary">确定</a>
+        </div>
+    </div>
+</div>
+<!--END dialog1-->
 
 <script>
 function emptyCart(){
@@ -578,6 +595,7 @@ $(document).ready(function(){
 		<?php if($this->type==1):?>
 		var serial = $('.serial').val();
 		var number = $('.number').val();
+		var seatingFee = $('.seatingFee').find('.price').html();
 		if(serial && number){
 			if(serial=='>'){
 				layer.msg('请输入座位号!');
@@ -587,7 +605,8 @@ $(document).ready(function(){
 				layer.msg('输入人数为大于0的整数!');
 				return;
 			}
-			$('form').submit();
+			$('#dialog .content').html('餐位数:'+number+'人;餐位费:'+seatingFee+'元');
+			$('#dialog').show();
 		}else{
 			if(!serial||serial=='>'){
 				layer.msg('请输入座位号!');
@@ -597,9 +616,7 @@ $(document).ready(function(){
 				layer.msg('请输入人数!');
 				return;
 			}
-			
 		}
-		$('form').submit();
 		<?php elseif($this->type==2):?>
 		var address = $('input[name="address"]').val();
 		if(parseInt(address) < 0){
@@ -626,6 +643,12 @@ $(document).ready(function(){
 		}
 		$('form').submit();
 		<?php endif;?>
+	});
+	$('#dialog .primary').click(function(){
+		$('form').submit();
+	});
+	$('#dialog .default').click(function(){
+		$('#dialog').hide();
 	});
 });
 </script>
