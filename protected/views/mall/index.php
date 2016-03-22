@@ -157,7 +157,7 @@ function getProduct(){
 							promotionStr +='<span class="oprice"><strike>¥'+promotionProduct.original_price+'</strike></span>';
 						}
              			promotionStr +='</p></div>';
-             			if(parseInt(promotionProduct.num)){
+             			if(parseInt(promotionProduct.num) > 0){
              				promotionStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+promotionProduct.product_id+'" promote-id="'+promotion.private_promotion_id+'" to-group="'+promotion.to_group+'" store-number="'+promotionProduct.store_number+'" readonly value="'+promotionProduct.num+'">';
             				promotionStr +='<div class="add">+</div><div class="clear"></div></div></div>';
              			}else{
@@ -203,7 +203,7 @@ function getProduct(){
 						productStr +='<span class="oprice"><strike>¥'+pProduct.original_price+'</strike></span>';
 					}
          			productStr +='</p></div>';
-         			if(pProduct.num < 1){
+         			if(parseInt(pProduct.num) > 0){
          				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
         				productStr +='<div class="add">+</div><div class="clear"></div></div></div>';
          			}else{
