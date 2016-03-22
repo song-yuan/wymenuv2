@@ -36,12 +36,12 @@ class CompanyBasicFee extends CActiveRecord
 			array('fee_type', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, fee_price', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>2),
-				array('fee_name', 'length', 'max'=>255),
+				array('fee_name, fee_abstract', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at, update_at, fee_type', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, fee_type, fee_name, fee_price, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, fee_type, fee_name, fee_abstract, fee_price, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +68,7 @@ class CompanyBasicFee extends CActiveRecord
 			'update_at' => '更新时间',
 			'fee_type' => '基础费类型',
 			'fee_name' => '基础费名称',
+			'fee_abstract' => '基础费描述',
 			'fee_price' => '价格',
 			'delete_flag' => '1表示删除',
 			'is_sync' => '同步标志',
@@ -96,8 +97,9 @@ class CompanyBasicFee extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('fee_type',$this->fee_type);
-		$criteria->compare('fee_name',$this->fee_name);
+		$criteria->compare('fee_type',$this->fee_type,true);
+		$criteria->compare('fee_name',$this->fee_name,true);
+		$criteria->compare('fee_abstract',$this->fee_abstract,true);
 		$criteria->compare('fee_price',$this->fee_price,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
