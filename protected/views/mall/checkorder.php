@@ -645,6 +645,7 @@ $(document).ready(function(){
 		<?php endif;?>
 	});
 	$('#dialog .primary').click(function(){
+		$('#dialog').hide();
 		$('form').submit();
 	});
 	$('#dialog .default').click(function(){
