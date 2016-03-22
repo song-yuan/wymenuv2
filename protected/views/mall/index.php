@@ -212,7 +212,7 @@ function getProduct(){
 	        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div></div>';
          				}else{
          					productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
-	        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
+	        				productStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
          				}
          			}
          		
