@@ -1,4 +1,3 @@
-
 <style>
 .product_list {
         padding-right:10px;
@@ -20,7 +19,6 @@
         text-align:center;
         vertical-align:middle;
 }
-
 .firstCategory {
         padding-right:10px;
 }

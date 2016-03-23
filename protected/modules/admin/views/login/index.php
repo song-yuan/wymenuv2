@@ -33,6 +33,9 @@
 				</label>
 				<button type="submit" class="btn blue pull-right">
 				<?php echo yii::t('app','登录');?> <i class="m-icon-swapright m-icon-white"></i>
+				</button>                             
+                            <button id="sqlitetest" type="button" class="btn blue pull-right">
+				<?php echo yii::t('app','数据库测试');?> <i class="m-icon-swapright m-icon-white"></i>
 				</button> 
                             <a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>" id="bindbutton" class="blue" target="_blank" ><?php echo yii::t('app','解除绑定');?></a>
                             <!--<a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>"  target="view_frame"  id="bindbutton" class="blue" target="_blank" ><?php echo yii::t('app','解除绑定');?></a>
@@ -65,6 +68,14 @@
                             return false;
                         }
                     });
-                    
+                    $("#sqlitetest").click(function(){
+                        var dbinfo="no";
+                        if (typeof Androidwymenuprinter == "undefined") {
+                            
+                        }else{
+                            dbinfo=Androidwymenuprinter.dbInfo();
+                        }
+                        alert(dbinfo);
+                    });
                 </script>
                 
