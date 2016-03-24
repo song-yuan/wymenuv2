@@ -327,7 +327,7 @@ class DataSyncTables
 				"  `has_minimum_consumption` char(1) NOT NULL DEFAULT '0',".
 				"  `minimum_consumption_type` char(1) NOT NULL DEFAULT '0',".
 				"  `minimum_consumption` decimal(10,2) NOT NULL DEFAULT '0.00',".
-				"  `number` varchar(3) NOT NULL DEFAULT '0',".
+				"  `number` tinyint(3) NOT NULL DEFAULT '0',".
 				"  `period` float NOT NULL DEFAULT '0',".
 				"  `overtime` float NOT NULL DEFAULT '0',".
 				"  `buffer` float NOT NULL DEFAULT '0',".
