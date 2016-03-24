@@ -1,5 +1,5 @@
 <?php
-class PrivatepromotionController extends BackendController
+class FullSentPromotionController extends BackendController
 {
 
 	public function actions() {
@@ -27,14 +27,14 @@ class PrivatepromotionController extends BackendController
     	//$brand = Yii::app()->admin->getBrand($this->companyId);
     	$criteria = new CDbCriteria;
     	$criteria->select = 't.*';
-    	$criteria->order = ' update_at desc';
+    	$criteria->order = ' t.lid desc';
     	$criteria->addCondition("t.dpid= ".$this->companyId);
     	$criteria->addCondition('delete_flag=0');
     	//$criteria->params[':brandId'] = $brand->brand_id;
     
-    	$pages = new CPagination(PrivatePromotion::model()->count($criteria));
+    	$pages = new CPagination(FullSent::model()->count($criteria));
     	$pages->applyLimit($criteria);
-    	$models = PrivatePromotion::model()->findAll($criteria);
+    	$models = FullSent::model()->findAll($criteria);
     	 
     	$this->render('index',array(
     			'models'=>$models,
@@ -59,9 +59,9 @@ class PrivatepromotionController extends BackendController
 	 * 创建活动，并发送系统消息
 	 */
 	public function actionCreate(){
-		$model = new PrivatePromotion();
+		$model = new FullSent();
 		$model->dpid = $this->companyId ;
-		$brdulvs = $this->getBrdulv();
+		//$brdulvs = $this->getBrdulv();
 		//$model->create_time = time();
 		//var_dump($model);exit;
 		$is_sync = DataSync::getInitSync();
@@ -69,42 +69,40 @@ class PrivatepromotionController extends BackendController
 			$db = Yii::app()->db;
 			//$transaction = $db->beginTransaction();
 		//try{
-			$model->attributes = Yii::app()->request->getPost('PrivatePromotion');
+			$model->attributes = Yii::app()->request->getPost('FullSent');
 			$groupID = Yii::app()->request->getParam('hidden1');
-			$weekdayID = Yii::app()->request->getParam('weekday');
 			$gropids = array();
 			$gropids = explode(',',$groupID);
 			//$db = Yii::app()->db;
 		
-			$se=new Sequence("private_promotion");
+			$se=new Sequence("full_sent");
 			$model->lid = $se->nextval();
-			if(!empty($groupID)){
-				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
-				//$command=$db->createCommand($sql);
-				//$command->execute();
-				foreach ($gropids as $gropid){
-					$userid = new Sequence("private_branduser");
-					$id = $userid->nextval();
-					$data = array(
-							'lid'=>$id,
-							'dpid'=>$this->companyId,
-							'create_at'=>date('Y-m-d H:i:s',time()),
-							'update_at'=>date('Y-m-d H:i:s',time()),
-							'private_promotion_id'=>$model->lid,
-							'to_group'=>"2",
-							'is_used'=>"1",
-							'brand_user_lid'=>$gropid,
-							'cupon_source'=>'0',
-							'delete_flag'=>'0',
-							'is_sync'=>$is_sync,
-					);
-					$command = $db->createCommand()->insert('nb_private_branduser',$data);
-					//var_dump($gropid);exit;
-				}
-			}
+// 			if(!empty($groupID)){
+// 				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
+// 				//$command=$db->createCommand($sql);
+// 				//$command->execute();
+// 				foreach ($gropids as $gropid){
+// 					$userid = new Sequence("private_branduser");
+// 					$id = $userid->nextval();
+// 					$data = array(
+// 							'lid'=>$id,
+// 							'dpid'=>$this->companyId,
+// 							'create_at'=>date('Y-m-d H:i:s',time()),
+// 							'update_at'=>date('Y-m-d H:i:s',time()),
+// 							'private_promotion_id'=>$model->lid,
+// 							'to_group'=>"2",
+// 							'is_used'=>"1",
+// 							'brand_user_lid'=>$gropid,
+// 							'cupon_source'=>'0',
+// 							'delete_flag'=>'0',
+// 							'is_sync'=>$is_sync,
+// 					);
+// 					$command = $db->createCommand()->insert('nb_private_branduser',$data);
+// 					//var_dump($gropid);exit;
+// 				}
+// 			}
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->weekday = $weekdayID;
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
 			//$transaction->commit(); //提交事务会真正的执行数据库操作
@@ -120,7 +118,7 @@ class PrivatepromotionController extends BackendController
 			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('privatepromotion/index' , 'companyId' => $this->companyId ));
+				$this->redirect(array('fullSentPromotion/index' , 'companyId' => $this->companyId ));
 			}
 		}
 		
@@ -129,7 +127,7 @@ class PrivatepromotionController extends BackendController
 		//echo 'ss';exit;
 		$this->render('create' , array(
 				'model' => $model ,
-				'brdulvs'=>$brdulvs,
+				//'brdulvs'=>$brdulvs,
 				//'categories' => $categories
 		));
 	}
@@ -142,68 +140,17 @@ class PrivatepromotionController extends BackendController
 		//echo 'ddd';
 		//$groupID = Yii::app()->request->getParam('str');
 		//var_dump($groupID);exit;
-		$brdulvs = $this->getBrdulv();
+		//$brdulvs = $this->getBrdulv();
 		$is_sync = DataSync::getInitSync();
-		$model = PrivatePromotion::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		//var_dump($model);exit;
-		$db = Yii::app()->db;
-		$sql = 'select t1.brand_user_lid from nb_private_promotion t left join nb_private_branduser t1 on(t.dpid = t1.dpid and t1.to_group = 2 and t1.private_promotion_id = t.lid and t1.delete_flag = 0) where t.delete_flag = 0 and t.lid = '.$lid.' and t.dpid = '.$this->companyId;
-		$command = $db->createCommand($sql);
-		$userlvs = $command->queryAll();
-		//var_dump($userlvs);exit;
-		//var_dump($sql);exit;
-// 		$criteria = new CDbCriteria;
-// 		$criteria->select = 't.brand_user_lid';
-// 		$criteria->with = 'PrivateBranduser';
-// 		$criteria->condition =  't.delete_flag=0 and t.lid='.$lid.' and t.dpid='.$this->companyId ;
-// 		$criteria->order = ' t.lid asc ';
-		
-// 		$model = PrivatePromotion::model()->find($criteria);
-// 		$model = (object)$model;
-		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
-		//var_dump($model);exit;
+		$model = FullSent::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
+
 		
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('PrivatePromotion');
-			$groupID = Yii::app()->request->getParam('hidden1');
-			$weekdayID = Yii::app()->request->getParam('weekday');
-			$gropids = array();
-			$gropids = explode(',',$groupID);
-			$db = Yii::app()->db;
-			if(!empty($groupID)){
-				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
-				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where delete_flag = 0 and private_promotion_id='.$lid.' and dpid='.$this->companyId.' and to_group =2';
-				
-				$command=$db->createCommand($sql);
-				$command->execute();
-				foreach ($gropids as $gropid){
-				$se = new Sequence("private_branduser");
-				$id = $se->nextval();
-				$data = array(
-						'lid'=>$id,
-						'dpid'=>$this->companyId,
-						'create_at'=>date('Y-m-d H:i:s',time()),
-						'update_at'=>date('Y-m-d H:i:s',time()),
-						'private_promotion_id'=>$lid,
-						'to_group'=>"2",
-						'is_used'=>"1",
-						'brand_user_lid'=>$gropid,
-						'cupon_source'=>'0',
-						'delete_flag'=>'0',
-						'is_sync'=>$is_sync
-						);
-				$command = $db->createCommand()->insert('nb_private_branduser',$data);
-				//var_dump($gropid);exit;
-			}
-			}else{
-				$sql = 'update nb_private_branduser set delete_flag = "1", is_sync ='.$is_sync.' where delete_flag = 0 and private_promotion_id='.$lid.' and dpid='.$this->companyId;
-				$command=$db->createCommand($sql);
-				$command->execute();
-			}
+			$model->attributes = Yii::app()->request->getPost('FullSent');
+	
 			//print_r(explode(',',$groupID));
 			//var_dump($gropid);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
-			$model->weekday=$weekdayID;
 			$model->is_sync = $is_sync;
 			//$gropid = array();
 			//$gropid = (dexplode(',',$groupID));
@@ -211,13 +158,13 @@ class PrivatepromotionController extends BackendController
 			//($model->attributes);var_dump(Yii::app()->request->getPost('Printer'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
-				$this->redirect(array('privatepromotion/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('FullSentPromotion/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('update' , array(
 				'model'=>$model,
-				'brdulvs'=>$brdulvs,
-				'userlvs'=>$userlvs,
+				//'brdulvs'=>$brdulvs,
+				//'userlvs'=>$userlvs,
 		));
 	}
 
@@ -232,12 +179,12 @@ class PrivatepromotionController extends BackendController
 		$is_sync = DataSync::getInitSync();
         //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_private_promotion set delete_flag="1",is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_full_sent set delete_flag="1",is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('privatepromotion/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('fullSentPromotion/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('privatepromotion/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('fullSentPromotion/index' , 'companyId' => $companyId)) ;
 		}
 	}
 
@@ -261,30 +208,21 @@ class PrivatepromotionController extends BackendController
 				echo "操作有误！请点击右上角的返回继续编辑";
 				exit;
 			}
-			//$sql = 'select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_product t left join nb_private_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0) where t.delete_flag = 0 and t.dpid='.$this->companyId;
-// 			$command=$db->createCommand($sql);
-// 			$models= $command->queryAll();
-// 			//var_dump($sql);exit;
-			
-			
-// 			$criteria = new CDbCriteria;
-// 			$criteria->with = array('company','category','PrivatePromotionDetail');
-// 			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
- 			//var_dump($$categoryId);exit;
+
 			if(!empty($categoryId)){
 				//var_dump($typeId);exit;
 				//$criteria->condition.=' and t.category_id = '.$categoryId;
-				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_product t left join nb_private_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.is_set = 0 and t1.delete_flag = 0 and t1.private_promotion_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.category_id = '.$categoryId.' ) k';
+				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.number,t1.product_id,t1.full_sent_id,t.* from nb_product t left join nb_full_sent_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0 and t1.full_sent_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.category_id = '.$categoryId.' ) k';
 				
 				//var_dump($sql);exit;
 			}
 	
 			elseif(!empty($csinquery)){
 				//$criteria->condition.=' and t.simple_code like "%'.strtoupper($csinquery).'%"';
-				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_product t left join nb_private_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.is_set = 0 and t1.delete_flag = 0 and t1.private_promotion_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.simple_code like "%'.strtoupper($csinquery).'%" ) k';
+				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.number,t1.product_id,t1.full_sent_id,t.* from nb_product t left join nb_full_sent_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0 and t1.full_sent_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.simple_code like "%'.strtoupper($csinquery).'%" ) k';
 					
 			}else{
-				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_product t left join nb_private_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.is_set = 0 and t1.delete_flag = 0 and t1.private_promotion_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.') k' ;
+				$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.number,t1.product_id,t1.full_sent_id,t.* from nb_product t left join nb_full_sent_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0 and t1.full_sent_id = '.$promotionID.') where t.delete_flag = 0 and t.dpid='.$this->companyId.') k' ;
 					
 			}
 			//var_dump($sql);exit;
@@ -296,17 +234,7 @@ class PrivatepromotionController extends BackendController
 			$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 			$models = $pdata->queryAll();
 			$categories = $this->getCategories();
-			//var_dump($models);exit;
-//			$criteria = new CDbCriteria;
-// 			$pages = new CPagination(count($models));
-// 				    $pages->setPageSize(1);
-// 			$pages->applyLimit($criteria);
-// 			$categories = $this->getCategories();
-			
-			//$pages = new CPagination(Product::model()->count($criteria));
-			//	    $pages->setPageSize(1);
-			//$pages->applyLimit($criteria);
-			//$models = Product::model()->findAll($criteria);
+
 			
 			//$categories = $this->getCategories();
 			//var_dump($promotionID);exit;
@@ -330,15 +258,6 @@ class PrivatepromotionController extends BackendController
 			$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
 			$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 			$models = $pdata->queryAll();
-
-
-// 			$criteria = new CDbCriteria;
-// 			$criteria->with = array('PrivatePromotionDetail');
-// 			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
-// 			$pages = new CPagination(ProductSet::model()->count($criteria));
-// 			$pages->applyLimit($criteria);
-// 			$models = ProductSet::model()->findAll($criteria);
- 			//var_dump($promotionID);exit;
 			$this->render('detailindex',array(
 					'models'=>$models,
 					'pages'=>$pages,
@@ -347,32 +266,6 @@ class PrivatepromotionController extends BackendController
 			));
 		}
 		 
-		//var_dump($sc);exit;
-		//$db = Yii::app()->db;
-		/*if(empty($sc))
-		 {
-		$sql = "SELECT 0 as isset,lid,dpid,product_name as name,simple_code as cs,main_picture as pic , status from nb_product where delete_flag=0 and is_show=1 and dpid=".$this->companyId
-		. " union ".
-		"SELECT 1 as isset,lid,dpid,set_name as name,simple_code as cs,main_picture as pic ,status from nb_product_set where delete_flag=0 and dpid=".$this->companyId
-		;
-		}else{
-		$sql = "SELECT 0 as isset,lid,dpid,product_name as name,simple_code as cs,main_picture as pic , status from nb_product where delete_flag=0 and is_show=1 and dpid=".$this->companyId." and simple_code like '%".$sc."%'"
-		. " union ".
-		"SELECT 1 as isset,lid,dpid,set_name as name,simple_code as cs,main_picture as pic ,status from nb_product_set where delete_flag=0 and dpid=".$this->companyId." and simple_code like '%".$sc."%'"
-		;
-		}
-		$command=$db->createCommand($sql);
-		//$command->bindValue(":table" , $this->table);
-		$models= $command->queryAll();
-		//var_dump($models);exit;
-		$criteria = new CDbCriteria;
-		$pages = new CPagination(count($models));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$this->render('index',array(
-		'models'=>$models,
-		'pages'=>$pages
-		));*/
 	}
 	
 	public function actionStatus(){
@@ -408,27 +301,21 @@ class PrivatepromotionController extends BackendController
 		//Yii::app()->end(json_encode(array("status"=>"success")));
 		//var_dump($order_num);exit;
 		//$sql='';
-		
+		$ceshi=$id."+".$promotionID."+".$proID."+".$proNum."+".$dpid."+".$typeId;
 		//Yii::app()->end(json_encode(array("status"=>"success")));
 		$db = Yii::app()->db;
 		$transaction = $db->beginTransaction();
 		try 
 		{
 			$is_sync = DataSync::getInitSync();
-			$se=new Sequence("private_promotion_detail");
+			$se=new Sequence("full_sent_detail");
 			$lid = $se->nextval();
-			//$create_at = date('Y-m-d H:i:s',time());
-			//$update_at = date('Y-m-d H:i:s',time());
-			$sql='';
-// 			$sql = 'delete from nb_private_promotion_detail where dpid="'.$dpid.'" and private_promotion_id="'.$promotionID.'" and product_id="'.$id.'"';
-// 			$command=$db->createCommand($sql);
-// 			$command->execute();
-		
+
 		if($typeId=='product')
 		{
 			//$sql = 'delete from nb_private_promotion_detail where is_set=0 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
 			//var_dump($sql);exit;
-			$sql = 'update nb_private_promotion_detail set delete_flag = "1",is_sync ='.$is_sync.' where is_set=0 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
+			$sql = 'update nb_full_sent_detail set delete_flag = "1",is_sync ='.$is_sync.' where dpid='.$dpid.' and full_sent_id='.$promotionID.' and product_id='.$id;
 				
 			$command=$db->createCommand($sql);
 			$command->execute();
@@ -439,13 +326,13 @@ class PrivatepromotionController extends BackendController
 						'dpid'=>$dpid,
 						'create_at'=>date('Y-m-d H:i:s',time()),
 						'update_at'=>date('Y-m-d H:i:s',time()),
-						'private_promotion_id'=>$promotionID,
+						'full_sent_id'=>$promotionID,
 						'product_id'=>$id,
-						'is_set'=>0,
+						//'is_set'=>0,
 						'is_discount'=>0,
 						'promotion_money'=>$proNum,
 						'promotion_discount'=>'1.00',
-						'order_num'=>$order_num,
+						'number'=>$order_num,
 						'delete_flag'=>'0',
 						'is_sync'=>$is_sync
 				);
@@ -454,24 +341,20 @@ class PrivatepromotionController extends BackendController
 			//$sql="insert into nb_private_promotion_detail (lid,dpid,create_at,update_at,private_promotion_id,product_id,is_set,promotion_money,promotion_discount,order_num,) 
 			//		values ('$model->lid','$this->companyId','')";
 		}elseif($proID=="1"){
-			
-// 			$sql = 'delete from nb_private_promotion_detail where is_set=0 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
-// 			$command=$db->createCommand($sql);
-// 			$command->execute();
-				
+		
 			//$sql='insert nb_private_promotion_detail set is_set="0", product_id = '.$id.', promotion_discount = '.$proNum.', order_num = "'.$order_num.'" where lid='.$id.' and dpid='.$this->companyId;
 			$data = array(
 					'lid'=>$lid,
 					'dpid'=>$dpid,
 					'create_at'=>date('Y-m-d H:i:s',time()),
 					'update_at'=>date('Y-m-d H:i:s',time()),
-					'private_promotion_id'=>$promotionID,
+					'full_sent_id'=>$promotionID,
 					'product_id'=>$id,
-					'is_set'=>0,
+					//'is_set'=>0,
 					'is_discount'=>1,
 					'promotion_money'=>'0.00',
 					'promotion_discount'=>$proNum,
-					'order_num'=>$order_num,
+					'number'=>$order_num,
 					'delete_flag'=>'0',
 					'is_sync'=>$is_sync
 			);
@@ -482,7 +365,7 @@ class PrivatepromotionController extends BackendController
 		//var_dump($sql);exit;
 		}else{
 			//$sql = 'delete from nb_private_promotion_detail where is_set=1 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
-			$sql = 'update nb_private_promotion_detail set delete_flag ="1",is_sync ='.$is_sync.' where is_set=1 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
+			$sql = 'update nb_full_sent_detail set delete_flag ="1",is_sync ='.$is_sync.' where dpid='.$dpid.' and full_sent_id='.$promotionID.' and product_id='.$id;
 				
 			$command=$db->createCommand($sql);
 			$command->execute();
@@ -495,87 +378,51 @@ class PrivatepromotionController extends BackendController
 						'dpid'=>$dpid,
 						'create_at'=>date('Y-m-d H:i:s',time()),
 						'update_at'=>date('Y-m-d H:i:s',time()),
-						'private_promotion_id'=>$promotionID,
+						'full_sent_id'=>$promotionID,
 						'product_id'=>$id,
-						'is_set'=>1,
+						//'is_set'=>1,
 						'is_discount'=>0,
 						'promotion_money'=>$proNum,
 						'promotion_discount'=>'1.00',
-						'order_num'=>$order_num,
+						'number'=>$order_num,
 						'delete_flag'=>'0',
 						'is_sync'=>$is_sync
 				);
 			
 			}elseif($proID=='1'){
-// 				$sql = 'delete from nb_private_promotion_detail where is_set=1 and dpid='.$dpid.' and private_promotion_id='.$promotionID.' and product_id='.$id;
-// 				$command=$db->createCommand($sql);
-// 				$command->execute();
-					
+		
 				//$sql='insert nb_private_promotion_detail set is_set="1", product_id = '.$id.', promotion_discount = '.$proNum.', order_num = '.$order_num.' where lid='.$id.' and dpid='.$this->companyId;
 				$data = array(
 						'lid'=>$lid,
 						'dpid'=>$dpid,
 						'create_at'=>date('Y-m-d H:i:s',time()),
 						'update_at'=>date('Y-m-d H:i:s',time()),
-						'private_promotion_id'=>$promotionID,
+						'full_sent_id'=>$promotionID,
 						'product_id'=>$id,
-						'is_set'=>1,
+						//'is_set'=>1,
 						'is_discount'=>1,
 						'promotion_money'=>'0.00',
 						'promotion_discount'=>$proNum,
-						'order_num'=>$order_num,
+						'number'=>$order_num,
 						'delete_flag'=>'0',
 						'is_sync'=>$is_sync
 				);
 			}
 		}//Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID)));
 		//$db->createCommand()->insert('private_promotion_detail',$data);
-		$command = $db->createCommand()->insert('nb_private_promotion_detail',$data);
+		$command = $db->createCommand()->insert('nb_full_sent_detail',$data);
 		//Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID)));
 		
 		$transaction->commit(); //提交事务会真正的执行数据库操作
-		Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID)));
-// 		if($command->execute()){
-// 			Yii::app()->end(json_encode(array("status"=>"success")));
-// 		}else{
-// 			Yii::app()->end(json_encode(array("status"=>"fail")));
-// 		}
+		Yii::app()->end(json_encode(array("status"=>"success","promotion"=>$promotionID,'msg'=>$ceshi)));
+
 		return true;
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
-			Yii::app()->end(json_encode(array("status"=>"fail")));
+			Yii::app()->end(json_encode(array("status"=>"fail",'msg'=>$ceshi)));
 			return false;
 		}
-	}	
-		
-// 		if($command->execute())
-// 		{
-// 			Gateway::getOnlineStatus();
-// 			$store = Store::instance('wymenu');
-// 			$pads=Pad::model()->findAll(" dpid = :dpid and delete_flag='0' and pad_type in ('1','2')",array(":dpid"=>  $this->companyId));
-// 			//var_dump($pads);exit;
-// 			if(!empty($pads))
-// 			{
-// 				$sendjsondata=json_encode(array("company_id"=>  $this->companyId,
-// 						"do_id"=>"sell_off",
-// 						"do_data"=>array(array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
-// 								//,array("product_id"=>$id,"type"=>$typeId,"num"=>$store_number)
-// 						)));
-// 				//var_dump($sendjsondata);exit;
-// 				foreach($pads as $pad)
-// 				{
-// 					$clientId=$store->get("padclient_".$this->companyId.$pad->lid);
-// 					//var_dump($clientId,$print_data);exit;
-// 					if(!empty($clientId))
-// 					{
-// 						Gateway::sendToClient($clientId,$sendjsondata);
-// 					}
-// 				}
-// 			}
-// 			Yii::app()->end(json_encode(array("status"=>"success")));
-// 		}else{
-// 			Yii::app()->end(json_encode(array("status"=>"fail")));
-// 		}
+	}
 
 	
 	public function actionResetall(){
@@ -656,13 +503,13 @@ class PrivatepromotionController extends BackendController
 		$is_sync = DataSync::getInitSync();
 		//        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_private_promotion_detail set delete_flag="1", is_sync ='.$is_sync.' where product_id in('.$ids.') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_full_sent_detail set delete_flag="1", is_sync ='.$is_sync.' where product_id in('.$ids.') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			Yii::app()->end(json_encode(array("status"=>"success")));
 			//$this->redirect(array('privatepromotion/detailindex' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要移除的项目'));
-			$this->redirect(array('privatepromotion/detailindex' , 'companyId' => $companyId)) ;
+			$this->redirect(array('fullSentPromotion/detailindex' , 'companyId' => $companyId)) ;
 		}
 	}
 	
@@ -671,11 +518,11 @@ class PrivatepromotionController extends BackendController
 	public function actionPromotiondetail(){
 		$sc = Yii::app()->request->getPost('csinquery');
 		$promotionID = Yii::app()->request->getParam('lid');
-		//$typeId = Yii::app()->request->getParam('typeId');
+		$typeId = Yii::app()->request->getParam('typeId');
 		$categoryId = Yii::app()->request->getParam('cid',"");
 		$fromId = Yii::app()->request->getParam('from','sidebar');
 		$csinquery=Yii::app()->request->getPost('csinquery',"");
-		//var_dump($csinquery);exit;
+		//var_dump($typeId);exit;
 		$db = Yii::app()->db;
 			
 			
@@ -689,22 +536,22 @@ class PrivatepromotionController extends BackendController
 	
 		if(!empty($categoryId)){
 			//$criteria->condition.=' and t.category_id = '.$categoryId;
-			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.private_promotion_id,t1.*
-							from nb_private_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id  and t1.delete_flag = 0 )
-							where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.private_promotion_id = '.$promotionID.' and t1.category_id = '.$categoryId.' ) k';
+			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.number,t.product_id,t.full_sent_id,t1.*
+							from nb_full_sent_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id  and t1.delete_flag = 0 )
+							where t.delete_flag = 0 and t.dpid='.$this->companyId.' and  t.full_sent_id = '.$promotionID.' and t1.category_id = '.$categoryId.' order by t.lid asc) k';
 	
 		}
 	
 		elseif(!empty($csinquery)){
 			//$criteria->condition.=' and t.simple_code like "%'.strtoupper($csinquery).'%"';
-			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.private_promotion_id,t1.*
-							from nb_private_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
-									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.private_promotion_id = '.$promotionID.' and t1.simple_code like "%'.strtoupper($csinquery).'%" ) k';
+			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.number,t.product_id,t.full_sent_id,t1.*
+							from nb_full_sent_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
+									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.full_sent_id = '.$promotionID.' and t1.simple_code like "%'.strtoupper($csinquery).'%" order by t.lidcreate_at asc ) k';
 	
 		}else{
-			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.private_promotion_id,t1.*
-							from nb_private_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
-									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.private_promotion_id = '.$promotionID.') k' ;
+			$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.number,t.product_id,t.full_sent_id,t1.*
+							from nb_full_sent_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
+									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.full_sent_id = '.$promotionID.' order by t.lid asc) k' ;
 	
 		}
 		//$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.private_promotion_id,t.* from nb_private_promotion_detail t1  where t1.is_set = 0 and t1.private_promotion_id ='.$promotionID.' t1.delete_flag = 0 and t1.dpid='.$this->companyId.') k' ;
@@ -724,7 +571,7 @@ class PrivatepromotionController extends BackendController
 				'pages'=>$pages,
 				'categories'=>$categories,
 				'categoryId'=>$categoryId,
-				//'typeId' => $typeId,
+				'typeId' => $typeId,
 				'promotionID'=>$promotionID
 		));
 			
