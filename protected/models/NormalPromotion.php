@@ -47,10 +47,10 @@ class NormalPromotion extends CActiveRecord
 			array('promotion_title, is_sync', 'length', 'max'=>50),
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
 			array('promotion_type, can_cupon, to_group, is_available, delete_flag', 'length', 'max'=>2),
-			array('create_at,update_at, begin_time, end_time', 'safe'),
+			array('create_at,update_at, begin_time, end_time, weekday, day_begin, day_end', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, can_cupon, begin_time, end_time, to_group, group_id, order_num, is_available, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, can_cupon, begin_time, end_time, weekday, day_begin, day_end, to_group, group_id, order_num, is_available, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,6 +83,9 @@ class NormalPromotion extends CActiveRecord
 			'can_cupon' => '是否能用代金券，0能用，1不能用',
 			'begin_time' => '开始日期',
 			'end_time' => '结束日期',
+			'weekday' => '选择星期进行折扣',
+			'day_beign' => '开始时间',
+			'day_end' => '结束时间',
 			'to_group' => '0所有人，1所有微信的对象，2会员',
 			'group_id' => '不同群体类型的id，如会员等级',
 			'order_num' => '单个订单的数量限制',
@@ -122,6 +125,9 @@ class NormalPromotion extends CActiveRecord
 		$criteria->compare('can_cupon',$this->can_cupon,true);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
+		$criteria->compare('weekday',$this->weekday,true);
+		$criteria->compare('day_begin',$this->day_beign,true);
+		$criteria->compare('day_end',$this->day_end,true);
 		$criteria->compare('to_group',$this->to_group,true);
 		$criteria->compare('group_id',$this->group_id,true);
 		$criteria->compare('order_num',$this->order_num);

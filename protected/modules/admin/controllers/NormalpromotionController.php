@@ -70,6 +70,7 @@ class NormalpromotionController extends BackendController
 			//try{
 			$model->attributes = Yii::app()->request->getPost('NormalPromotion');
 			$groupID = Yii::app()->request->getParam('hidden1');
+			$weekdayID = Yii::app()->request->getParam('weekday');
 			$gropids = array();
 			$gropids = explode(',',$groupID);
 			
@@ -102,6 +103,7 @@ class NormalpromotionController extends BackendController
 			}
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->weekday = $weekdayID;
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
 				
@@ -153,6 +155,7 @@ class NormalpromotionController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('NormalPromotion');
 			$groupID = Yii::app()->request->getParam('hidden1');
+			$weekdayID = Yii::app()->request->getParam('weekday');
 			$gropids = array();
 			$gropids = explode(',',$groupID);
 			$db = Yii::app()->db;
@@ -189,6 +192,7 @@ class NormalpromotionController extends BackendController
 			//print_r(explode(',',$groupID));
 			//var_dump($gropid);exit;
 			$model->update_at=date('Y-m-d H:i:s',time());
+			$model->weekday = $weekdayID;
 			$model->is_sync=$is_sync;
 			//$gropid = array();
 			//$gropid = (dexplode(',',$groupID));
