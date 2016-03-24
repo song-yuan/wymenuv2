@@ -17,6 +17,7 @@
 	-moz-border-radius: 15px;
 	-webkit-border-radius: 15px;
 	border-radius: 15px;
+	z-index:5;
 	display:none;
 }
 .none{
@@ -202,16 +203,16 @@ function getProduct(){
 						productStr +='<span class="oprice"><strike>¥'+pProduct.original_price+'</strike></span>';
 					}
          			productStr +='</p></div>';
-         			if(pProduct.num < 1){
-         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
+         			if(parseInt(pProduct.num)){
+         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
         				productStr +='<div class="add">+</div><div class="clear"></div></div></div>';
          			}else{
          				if(parseInt(pProduct.store_number) != 0){
-	         				productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
+	         				productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
 	        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out zero"> 已售罄  </div></div></div>';
          				}else{
-         					productStr +='<div class="lt-rt"><div class="minus">-</div><input type="text" class="result" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="'+pProduct.num+'">';
-	        				productStr +='<div class="add">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
+         					productStr +='<div class="lt-rt"><div class="minus zero">-</div><input type="text" class="result zero" product-id="'+pProduct.lid+'" promote-id="-1" to-group="-1" store-number="'+pProduct.store_number+'" readonly value="0">';
+	        				productStr +='<div class="add zero">+</div><div class="clear"></div><div class="sale-out"> 已售罄  </div></div></div>';
          				}
          			}
          		
@@ -292,6 +293,7 @@ $(document).ready(function(){
 						stepCallback:function(x,y){
 						}
 					});
+					
 					bool.start();
 					i++;
         		}else{
