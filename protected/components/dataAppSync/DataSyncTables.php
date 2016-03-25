@@ -211,6 +211,7 @@ class DataSyncTables
                     "  'is_special' char(1) NOT NULL DEFAULT '0',".
                     "  'is_discount' char(1) NOT NULL DEFAULT '0',".
                     "  'status' char(1) NOT NULL DEFAULT '0',".
+                    "  'dabao_fee' decimal(10,2) NOT NULL DEFAULT '0.00',".
                     "  'original_price' decimal(10,2) NOT NULL DEFAULT '0.00',".
                     "  'product_unit' varchar(10) NOT NULL,".
                     "  'weight_unit' varchar(10) NOT NULL,".
