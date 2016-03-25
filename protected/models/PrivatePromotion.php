@@ -17,6 +17,8 @@
  * @property string $can_cupon
  * @property string $begin_time
  * @property string $end_time
+ * @property string $day_begin
+ * @property string $day_end
  * @property string $to_group
  * @property string $group_id
  * @property string $order_num
@@ -48,10 +50,10 @@ class PrivatePromotion extends CActiveRecord
 			array('main_picture, promotion_abstract', 'length', 'max'=>255),
 			array('to_group,promotion_type, can_cupon, is_available, delete_flag', 'length', 'max'=>2),
 			//array('order_num', 'length', 'max'=>3),
-			array('create_at, begin_time, end_time', 'safe'),
+			array('create_at, begin_time, end_time, day_begin, day_end, weekday', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, change_point, can_cupon, begin_time, end_time,  is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, promotion_title, main_picture, promotion_abstract, promotion_memo, promotion_type, change_point, can_cupon, begin_time, end_time, weekday, day_begin, end_day, is_available, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -86,6 +88,10 @@ class PrivatePromotion extends CActiveRecord
 			'can_cupon' => '是否能使用代金券，0表示能用，1表示不能用',
 			'begin_time' => '开始时间',
 			'end_time' => '结束时间',
+			'weekday' => '选择折扣新奇',
+			'day_begin' => '开始时间段',
+			'day_end' => '结束时间段',
+				
 			'to_group' => '0表示所有人，1表示关注微信的人群，2表示会员等级，3表示会员个人',
 			'group_id' => '表示会员的id',
 			'order_num' => '单个订单的数量限制',
@@ -126,6 +132,9 @@ class PrivatePromotion extends CActiveRecord
 		$criteria->compare('can_cupon',$this->can_cupon,true);
 		$criteria->compare('begin_time',$this->begin_time,true);
 		$criteria->compare('end_time',$this->end_time,true);
+		$criteria->compare('weekday',$this->weekday,true);
+		$criteria->compare('day_begin',$this->day_begin,true);
+		$criteria->compare('day_end',$this->day_end,true);
 		$criteria->compare('to_group',$this->to_group,true);
 		$criteria->compare('group_id',$this->group_id,true);
 		$criteria->compare('order_num',$this->order_num,true);

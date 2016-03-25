@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','特价活动产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','查看已添加菜品'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('privatepromotion/detailindex' , array('typeId' =>'product','companyId' => $this->companyId,'promotionID'=>$promotionID)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','满惠（折）活动产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','查看已添加菜品'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('fullSentPromotion/detailindex' , array('typeId' =>'product','companyId' => $this->companyId,'promotionID'=>$promotionID)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'normalpromotiondetail-form',
-				'action' => $this->createUrl('privatepromotion/promotiondetail' , array('companyId' => $this->companyId,'promotionID'=>$promotionID)),
+				'action' => $this->createUrl('fullSentPromotion/promotiondetail' , array('companyId' => $this->companyId,'promotionID'=>$promotionID)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,8 +40,8 @@
               
                     <div class="tabbable tabbable-custom">
                             <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#tab_1" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('privatepromotion/promotiondetail' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID));?>'"><?php echo yii::t('app','单品');?></a></li>
-                                    <!-- <li class="active"><a href="#tab_1_" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID));?>'"><?php echo yii::t('app','套餐');?></a></li>
+                                    <li class="active"><a href="#tab_1" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('fullSentPromotion/promotiondetail' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID));?>'"><?php echo yii::t('app','单品');?></a></li>
+                                    <!-- <li class="active"><a href="#tab_1_" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('fullSentPromotion/detailindex' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID));?>'"><?php echo yii::t('app','套餐');?></a></li>
                              			-->
                             </ul>
    		<div class="tab-content">
@@ -101,7 +101,7 @@
 										<div class="col-md-12">
 											<div class="radio-list">
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>1" value="0" checked="checked" <?php if($model['promotion_money']>'0.00') echo "checked";?> > <?php echo yii::t('app','优惠');?>
+												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>1" value="0" checked="checked" <?php if($model['promotion_money']>'0.00') echo "checked";?> > <?php echo yii::t('app','价格');?>
 												<input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php if(!empty($model['promotion_money'])) echo $model['promotion_money']; else echo '0.00'; ?>" onfocus=" if (value =='0.00'){value = ''}" onblur="if (value ==''){value='0.00'}" >
 												</label>
 												<label class="radio-inline">
@@ -110,8 +110,8 @@
 												<a style="color: red;"><?php echo yii::t('app','例：88折填写为0.88');?></a>
 												</label>
                                                 <label class="radio-inline">
-                                                <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['order_num'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
-                                                <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['order_num'])) echo $model['order_num']; else echo yii::t('app','无限制'); ?>" onfocus=" if (value =='无限制'){value = ''}" onblur="if (value ==''){value='无限制'}" >
+                                                <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['number'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
+                                                <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['number'])) echo $model['number']; else echo yii::t('app','无限制'); ?>" onfocus=" if (value =='无限制'){value = ''}" onblur="if (value ==''){value='无限制'}" >
                                                 <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
                                                 <input type="button" name="delete<?php echo $model['lid'];?>" id="delete<?php echo $model['lid'];?>" class="clear_red" value=<?php echo yii::t('app','移除');?> >
                                                 </label>
@@ -174,21 +174,21 @@
                     var inp = $(this).find('input');
                         var id=inp.attr('pid');
                         //var typeid=inp.attr('typeid');
-                        var url='<?php echo $this->createUrl('privatepromotion/status',array('companyId'=>$this->companyId));?>/id/'+id;
+                        var url='<?php echo $this->createUrl('fullSentPromotion/status',array('companyId'=>$this->companyId));?>/id/'+id;
                         //alert(url);
                         $.get(url);
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
 			var promotionID='<?php echo $promotionID;?>';
-			location.href="<?php echo $this->createUrl('privatepromotion/promotiondetail' , array('companyId'=>$this->companyId));?>/cid/"+cid+"/promotionID/"+promotionID;
+			location.href="<?php echo $this->createUrl('fullSentPromotion/promotiondetail' , array('companyId'=>$this->companyId));?>/cid/"+cid+"/promotionID/"+promotionID;
 		});
 	});
         
         //cancelallclean
         
         $("#cancelallclean").on("click",function(){
-            var url="<?php echo $this->createUrl('privatepromotion/resetall',array('companyId'=>$this->companyId));?>";
+            var url="<?php echo $this->createUrl('fullSentPromotion/resetall',array('companyId'=>$this->companyId));?>";
             //alert(url);
             $.ajax({
  			url:url,
@@ -245,17 +245,22 @@
                   	return false;
                       }
                 }
-			if(chx.checked)
-				{
-				checkvalue= $("#checknum"+vid).val();
-				}
+            if(chx.checked)
+			{
+			checkvalue= $("#checknum"+vid).val();
+			}
+			//if(chx.checked)
+			//	{
+			//	checkvalue= $("#checknum"+vid).val();
+			//	}
 			//alert(optid);
 			//alert(optvalue);
            // alert(checkvalue);
             //alert(promotionID);
             $.ajax({
-                        type:'GET',
- 			url:"<?php echo $this->createUrl('privatepromotion/store',array('companyId'=>$this->companyId,'typeId'=>"product"));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/order_num/"+checkvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
+            type:'GET',
+            url:"<?php echo $this->createUrl('fullSentPromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/order_num/"+checkvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
+ 			//url:"<?php echo $this->createUrl('fullSentPromotion/store',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>/id/"+vid+"/promotionID/"+promotionID+"/proNum/"+optvalue+"/proID/"+optid+"/cid/"+cid+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
                         cache:false,
@@ -269,7 +274,9 @@
                                 
                                 location.reload();
                             }else{
-                                alert("<?php echo yii::t('app','失败'); ?>"+"1")
+                            	//alert("<?php echo $typeId;?>")
+                                alert("<?php echo yii::t('app','失败'); ?>"+"11")
+                                //alert(msg.msg);
                                 location.reload();
                             }
  			},
@@ -285,7 +292,7 @@
            
             $.ajax({
                         type:'GET',
- 			url:"<?php echo $this->createUrl('privatepromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+vid+"/page/",
+ 			url:"<?php echo $this->createUrl('fullSentPromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+vid+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
                         cache:false,
@@ -333,7 +340,7 @@
 
             $.ajax({
                         type:'GET',
- 			url:"<?php echo $this->createUrl('privatepromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+str+"/page/",
+ 			url:"<?php echo $this->createUrl('fullSentPromotion/detaildelete',array('companyId'=>$this->companyId));?>/id/"+str+"/page/",
  			async: false,
  			//data:"companyId="+company_id+'&padId='+pad_id,
                         cache:false,

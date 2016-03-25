@@ -158,6 +158,54 @@
 												<?php echo $form->error($model,'end_time'); ?>
 											</div>
 										</div>
+										<div id="" class="form-group ">
+										<label class="col-md-3 control-label"><?php echo yii::t('app','选择有效星期天数');?></label>
+										<div class="col-md-4" style="border:1px solid red;">
+										
+											<tr class="odd gradeX">
+												<td><input type="checkbox" id="7" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("7", $weekdayids)){echo "checked";}}else echo "123";?> value="7" name="week" /></td>
+												<td><?php echo "星期日"; ?></td>
+											</tr>
+											<tr class="odd gradeX">
+												<td><input type="checkbox" id="1" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("1", $weekdayids)){echo "checked";}}else echo "123";?> value="1" name="week" /></td>
+												<td><?php echo "星期一"; ?></td>
+											</tr>
+											<tr class="odd gradeX">
+												<td><input type="checkbox" id="2" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("2", $weekdayids)){echo "checked";}}else echo "123";?>  value="2" name="week" /></td>
+												<td><?php echo "星期二"; ?></td>
+											</tr>
+											<tr class="odd gradeX">
+												<td><input type="checkbox" id="3" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("3", $weekdayids)){echo "checked";}}else echo "123";?>  value="3" name="week" /></td>
+												<td><?php echo "星期三"; ?></td>
+											</tr></br>
+											<tr class="odd gradeX">
+												<td><input type="checkbox" id="4" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("4", $weekdayids)){echo "checked";}}else echo "123";?>  value="4" name="week" /></td>
+												<td><?php echo "星期四"; ?></td>	
+											</tr>
+											<tr class="odd gradeX">
+												<td><input type="checkbox" id="5" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("5", $weekdayids)){echo "checked";}}else echo "123";?>  value="5" name="week" /></td>
+												<td><?php echo "星期伍"; ?></td>
+											</tr>
+											<tr class="odd gradeX">
+												<td><input type="checkbox" id="6" class="checkboxes " <?php if(!empty($model)){$weekdayids = array();$weekdayids = explode(',',$model->weekday);if(in_array("6", $weekdayids)){echo "checked";}}else echo "123";?>  value="6" name="week" /></td>
+												<td><?php echo "星期六"; ?></td>
+											</tr>
+										</div>
+										<input type="hidden" id="weekday" name="weekday" value="" />
+									</div>
+									<div class="form-group">
+											<label class="control-label col-md-3"><?php echo yii::t('app','优惠时段');?></label>
+											<div class="col-md-4">
+												 <div class="input-group input-large date-picker input-daterange" data-date="10:10" data-date-format="h:i">
+													 <?php echo $form->timeField($model,'day_begin',array('class' => 'form-control ','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('day_begin'))); ?>
+													 <span class="input-group-addon"> ~ </span>
+													 <?php echo $form->timeField($model,'day_end',array('class'=>'form-control ','style'=>'width:160px;','placeholder'=>$model->getAttributeLabel('day_end'))); ?>
+												</div> 
+												<!-- /input-group -->
+												<?php echo $form->error($model,'day_begin'); ?>
+												<?php echo $form->error($model,'day_end'); ?>
+											</div>
+										</div>
 									<div class="form-group">
 										<?php echo $form->label($model, yii::t('app','图文说明'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-8">
@@ -207,8 +255,12 @@
          var p1 = $('#PrivatePromotion_to_group').children('option:selected').val();
          var begintime = $('#PrivatePromotion_begin_time').val();
          var endtime = $('#PrivatePromotion_end_time').val();
+         var daybegin = $('#PrivatePromotion_day_begin').val();
+         var dayend = $('#PrivatePromotion_day_end').val();
          var aa = document.getElementsByName("chk");
+         var weekday = document.getElementsByName("week");
          var str=new Array();
+         var weekstr=new Array();
          //alert(p1);
          //var ss = "";
        // if(aa.checked){
@@ -218,6 +270,12 @@
         	 alert("<?php echo yii::t('app','活动结束时间应该大于开始时间!!!');?>");
         	 return false;
          }
+         if(dayend<=daybegin){
+        	 alert("<?php echo yii::t('app','结束时间应该大于开始时间!!!');?>");
+        	 return false;
+         }
+         //alert(daybegin);
+         //alert(dayend);
          if(p1=='2'){
          for (var i = 0; i < aa.length; i++) {
              if (aa[i].checked) {
@@ -231,12 +289,22 @@
         	 return false;
         	 }
          }
+         for(var j = 0;j < weekday.length;j++){
+        	 if (weekday[j].checked) {
+                 weekstr += weekday[j].value +',';
+             }
+             }
+         if(weekstr!=''){
+             weekstr = weekstr.substr(0,weekstr.length-1);//除去最后一个“，”
+             }
+         //alert(weekstr);
          //else{
         //	 alert("<?php echo yii::t('app','请选择相应的会员等级！！！');?>");
           //   }
          //alert(str);
       //  }else{
         // alert(str);}
+         $("#weekday").val(weekstr);
          $("#hidden1").val(str);
          $("#privatepromotion-form").submit();
      });
