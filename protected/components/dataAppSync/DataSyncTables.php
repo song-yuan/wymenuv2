@@ -442,27 +442,27 @@ class DataSyncTables
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  `user_id` int(10) DEFAULT NULL,".
-        		"  `account_no` varchar(20) NOT NULL ,".
-        		"  `classes` int(10) NOT NULL ,".
+        		"  `user_id` int(10) DEFAULT NULL DEFAULT '0',".
+        		"  `account_no` varchar(20) NOT NULL DEFAULT '0',".
+        		"  `classes` int(10) NOT NULL DEFAULT '0',".
         		"  `username` varchar(50) NOT NULL ,".
         		"  `site_id` int(10) NOT NULL DEFAULT '0',".
         		"  `is_temp` varchar(1) NOT NULL DEFAULT '0' ,".
         		"  `number` tinyint NOT NULL DEFAULT '0',".
         		"  `order_status` varchar(1) NOT NULL DEFAULT '1',".
         		"  `order_type` tinyint NOT NULL DEFAULT '0',".
-        		"  `takeout_typeid` int(10) NOT NULL ,".
+        		"  `takeout_typeid` int(10) NOT NULL DEFAULT '0',".
         		"  `takeout_status` varchar(1) NOT NULL DEFAULT '0',".
         		"  `appointment_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"  `lock_status` varchar(1) NOT NULL DEFAULT '0',".
         		"  `should_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `reality_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
-        		"  `callno` varchar(10) NOT NULL ,".
+        		"  `callno` varchar(10) NOT NULL DEFAULT '0',".
         		"  `paytype` varchar(1) NOT NULL DEFAULT '0',".
         		"  `payment_method_id` int(10) NOT NULL DEFAULT '0',".
         		"  `pay_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"  `remark` varchar(50) NOT NULL DEFAULT '全款支付',".
-        		"  `taste_memo` varchar(50) NOT NULL,".
+        		"  `taste_memo` varchar(50) NOT NULL DEFAULT '0',".
         		"  `cupon_branduser_lid` int(10) NOT NULL DEFAULT '0',".
         		"  `cupon_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
