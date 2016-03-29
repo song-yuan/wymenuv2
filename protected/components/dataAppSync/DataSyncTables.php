@@ -362,6 +362,7 @@ class DataSyncTables
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  'taste_group_id' int(10) NOT NULL DEFAULT '0',".
         		"  `name` varchar(50) NOT NULL,".
         		"  `allflae` char(1) NOT NULL DEFAULT '0',".
         		"  `price` decimal(10,2) NOT NULL DEFAULT '0.00',".
