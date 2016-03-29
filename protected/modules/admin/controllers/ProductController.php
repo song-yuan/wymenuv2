@@ -34,7 +34,7 @@ class ProductController extends BackendController
 		$models = Product::model()->findAll($criteria);
 		
 		$categories = $this->getCategories();
-                //var_dump($categoryId);exit;
+//                var_dump($categories);exit;
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
