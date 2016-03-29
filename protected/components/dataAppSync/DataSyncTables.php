@@ -211,6 +211,7 @@ class DataSyncTables
                     "  'is_special' char(1) NOT NULL DEFAULT '0',".
                     "  'is_discount' char(1) NOT NULL DEFAULT '0',".
                     "  'status' char(1) NOT NULL DEFAULT '0',".
+                    "  'dabao_fee' decimal(10,2) NOT NULL DEFAULT '0.00',".
                     "  'original_price' decimal(10,2) NOT NULL DEFAULT '0.00',".
                     "  'product_unit' varchar(10) NOT NULL,".
                     "  'weight_unit' varchar(10) NOT NULL,".
@@ -419,7 +420,7 @@ class DataSyncTables
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  `user_id` int(10) unsigned zerofill NOT NULL DEFAULT '0',".
+        		"  `user_id` int(10) NOT NULL DEFAULT '0',".
         		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"  `close_day` date NOT NULL DEFAULT '0000-00-00',".
@@ -442,33 +443,31 @@ class DataSyncTables
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  `user_id` int(10) DEFAULT NULL,".
-        		"  `account_no` varchar(20) NOT NULL ,".
-        		"  `classes` int(10) NOT NULL ,".
+        		"  `user_id` int(10) DEFAULT NULL DEFAULT '0',".
+        		"  `account_no` varchar(20) NOT NULL DEFAULT '0',".
+        		"  `classes` int(10) NOT NULL DEFAULT '0',".
         		"  `username` varchar(50) NOT NULL ,".
         		"  `site_id` int(10) NOT NULL DEFAULT '0',".
-        		"  `is_temp` char(1) NOT NULL DEFAULT '0' ,".
+        		"  `is_temp` varchar(1) NOT NULL DEFAULT '0' ,".
         		"  `number` tinyint NOT NULL DEFAULT '0',".
-        		"  `order_status` char(1) NOT NULL DEFAULT '1',".
+        		"  `order_status` varchar(1) NOT NULL DEFAULT '1',".
         		"  `order_type` tinyint NOT NULL DEFAULT '0',".
-        		"  `takeout_typeid` int(10) NOT NULL ,".
+        		"  `takeout_typeid` int(10) NOT NULL DEFAULT '0',".
         		"  `takeout_status` varchar(1) NOT NULL DEFAULT '0',".
         		"  `appointment_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
-        		"  `lock_status` char(1) NOT NULL DEFAULT '0',".
+        		"  `lock_status` varchar(1) NOT NULL DEFAULT '0',".
         		"  `should_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `reality_total` decimal(10,2) NOT NULL DEFAULT '0.00',".
-        		"  `callno` varchar(10) NOT NULL ,".
+        		"  `callno` varchar(10) NOT NULL DEFAULT '0',".
         		"  `paytype` varchar(1) NOT NULL DEFAULT '0',".
         		"  `payment_method_id` int(10) NOT NULL DEFAULT '0',".
         		"  `pay_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"  `remark` varchar(50) NOT NULL DEFAULT '全款支付',".
-        		"  `taste_memo` varchar(50) NOT NULL,".
+        		"  `taste_memo` varchar(50) NOT NULL DEFAULT '0',".
         		"  `cupon_branduser_lid` int(10) NOT NULL DEFAULT '0',".
         		"  `cupon_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-        		"  PRIMARY KEY (`lid`,`dpid`),".
-				"  KEY `account_no` (`account_no`),".
-				"  KEY `dpid` (`dpid`,`site_id`,`is_temp`)".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
         	"nb_order_account_discount"=>" CREATE TABLE 'nb_order_account_discount'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
@@ -553,8 +552,7 @@ class DataSyncTables
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `product_order_status` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-        		"  PRIMARY KEY (`lid`,`dpid`),".
-				"  KEY `dpid` (`dpid`,`order_id`)".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
         	"nb_order_retreat"=>" CREATE TABLE 'nb_order_retreat'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
