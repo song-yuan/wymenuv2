@@ -308,6 +308,7 @@ $(document).ready(function(){
    
     //查看菜单
     $('body').on(event_clicktouchstart,'.top-right',function(){
+    	 $(".setting-pad-mask").hide();
     	  if($('.product-pad-mask').is(':hidden')) {
               $('.product-pad-mask').show();
      	  }else{
