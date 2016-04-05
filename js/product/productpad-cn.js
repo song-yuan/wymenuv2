@@ -297,7 +297,9 @@ $(document).ready(function(){
     });
    //help
    $('.padsetting').on(event_clicktouchstart,function(){
-            $(".setting-pad-mask").toggle();});
+            $(".setting-pad-mask").toggle();
+            $('.product-pad-mask').hide();         
+   });
    
    $('#content').on(event_clicktouchend,function(){
             $(".setting-pad-mask").css('display','none');
