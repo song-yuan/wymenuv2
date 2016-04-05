@@ -263,20 +263,23 @@ class CreateOrder
 
                                 $se=new Sequence("order");
                                 $orderId = $se->nextval();
+                                
+                                $accountNo = self::getPadAccountNo($dpid,$site_id,0,$orderId);
                                 $data = array(
-							'lid'=>$orderId,
-							'dpid'=>$dpid,
-							'site_id'=>$site_id,
-							'create_at'=>$time,
-                                                        'username'=>$waitorname,
-							'is_temp'=>$isTemp,
-							'order_status'=>$orderStatus,
-							'number'=>1,
-							'update_at'=>$time,
-							'remark'=>yii::t('app','无'),
-							'taste_memo'=>"",
-							);
-				$db->createCommand()->insert('nb_order',$data);
+										'lid'=>$orderId,
+										'dpid'=>$dpid,
+										'site_id'=>$site_id,
+										'account_no'=>$accountNo,
+										'create_at'=>$time,
+			                            'username'=>$waitorname,
+										'is_temp'=>$isTemp,
+										'order_status'=>$orderStatus,
+										'number'=>1,
+										'update_at'=>$time,
+										'remark'=>yii::t('app','无'),
+										'taste_memo'=>"",
+										);
+							$db->createCommand()->insert('nb_order',$data);
                                 
                                 $sef=new Sequence("order_feedback");
                                 $lidf = $sef->nextval();
@@ -332,29 +335,31 @@ class CreateOrder
                                 if($orderModel){
                                         $orderId = $orderModel['lid'];
                                 }else{
-	            		 //生成订单
-			            $se=new Sequence("order");
-			            $orderId = $se->nextval();
-			            $data = array(
-                                                'lid'=>$orderId,
-                                                'dpid'=>$dpid,
-                                                'site_id'=>$site_id,
-                                                'create_at'=>$time,
-                                                'username'=>$waitorname,
-                                                'is_temp'=>$isTemp,
-                                                'order_status'=>$orderStatus,
-                                                'number'=>$siteNo->number,
-                                                'update_at'=>$time,
-                                                'remark'=>yii::t('app','无'),
-                                                'taste_memo'=>"",
-                                                );
-				$db->createCommand()->insert('nb_order',$data);						 
-						 //更新site表状态
-//						$sql = 'update nb_site set status=1 where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
-//					    $db->createCommand($sql)->execute();
-//					    //更新site_no表状态
-//					    $sql = 'update nb_site_no set status=1 where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
-//					    $db->createCommand($sql)->execute();
+				            		 //生成订单
+						            $se=new Sequence("order");
+						            $orderId = $se->nextval();
+						            $accountNo = self::getPadAccountNo($dpid,$site_id,0,$orderId);
+						            $data = array(
+			                                    'lid'=>$orderId,
+			                                    'dpid'=>$dpid,
+			                                    'account_no'=>$accountNo,
+			                                    'site_id'=>$site_id,
+			                                    'create_at'=>$time,
+			                                    'username'=>$waitorname,
+			                                    'is_temp'=>$isTemp,
+			                                    'order_status'=>$orderStatus,
+			                                    'number'=>$siteNo->number,
+			                                    'update_at'=>$time,
+			                                    'remark'=>yii::t('app','无'),
+			                                    'taste_memo'=>"",
+			                                    );
+									$db->createCommand()->insert('nb_order',$data);						 
+									 //更新site表状态
+			//						$sql = 'update nb_site set status=1 where lid='.$site_id.' and dpid='.$dpid.' order by lid desc';
+			//					    $db->createCommand($sql)->execute();
+			//					    //更新site_no表状态
+			//					    $sql = 'update nb_site_no set status=1 where site_id='.$site_id.' and dpid='.$dpid.' and is_temp='.$isTemp.' order by lid desc';
+			//					    $db->createCommand($sql)->execute();
                                 }
                             }
  			
@@ -649,4 +654,20 @@ class CreateOrder
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		return $result;
 	}
+	 /**
+	  * 
+	  * 订单流水单号
+	  * 
+	  */
+	  public static function getPadAccountNo($dpid,$siteId,$isTemp,$orderId){
+            $sql="select ifnull(min(account_no),'000000000000') as account_no from nb_order where dpid="
+                    .$dpid." and site_id=".$siteId." and is_temp=".$isTemp
+                    ." and order_status in ('1','2','3')";
+            $ret=Yii::app()->db->createCommand($sql)->queryScalar();      
+            if(empty($ret) || $ret=="0000000000")
+            {
+                $ret=substr(date('Ymd',time()),-6).substr("0000000000".$orderId, -6);
+            }
+            return $ret;
+        }
 }
