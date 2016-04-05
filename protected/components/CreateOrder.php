@@ -397,6 +397,8 @@ class CreateOrder
 											'order_id'=>$orderId,
 											'set_id'=>$goodsArr[0],
 											'product_id'=>$productSet['product_id'],
+											'product_name'=>$productSet['product_name'],
+											'product_pic'=>$productSet['main_picture'],
 											'price'=>$productSet['price'],
 											'update_at'=>$time,
 											'amount'=>$productSet['number'],
@@ -462,6 +464,8 @@ class CreateOrder
 											'order_id'=>$orderId,
 											'set_id'=>0,
 											'product_id'=>$goodsArr[0],
+											'product_name'=>$result['product_name'],
+											'product_pic'=>$result['main_picture'],
 											'price'=>$productPrice,
 											'update_at'=>$time,
 											'amount'=>$amount,
@@ -515,6 +519,8 @@ class CreateOrder
 										'order_id'=>$orderId,
 										'set_id'=>0,
 										'product_id'=>$goodsArr[0],
+										'product_name'=>$result['product_name'],
+										'product_pic'=>$result['main_picture'],
 										'price'=>$productPrice,
 										'update_at'=>$time,
 										'amount'=>$num,
@@ -650,7 +656,7 @@ class CreateOrder
 	}
 	//获取套餐明细
 	public static function getSetProductId($dpid,$lid){
-		$sql = 'select product_id,price,number from nb_product_set_detail where dpid='.$dpid.' and lid='.$lid;
+		$sql = 'select t.product_id,t.price,t.number,t1.product_name,t1.main_picture from nb_product_set_detail t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.lid='.$lid;
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		return $result;
 	}
