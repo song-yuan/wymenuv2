@@ -47,6 +47,7 @@
                                     <span style="font-size:1.3em !important;height:auto;" class="badge"><?php echo $orderProduct['amount'];?></span>
                                     <span class="selectProductPrice" style="color:#976125;display:none"><?php echo number_format($orderProduct['original_price'],2);?></span>
                                     <span class="selectProductDiscount" style="color:#976125;display:none"><?php echo $orderProduct['offprice'];?></span>
+                                    <span class="selectProductType" style="color:#976125;display:none"><?php echo $orderProduct['product_type'];?></span>
                                     <span class="selectProductNowPrice" style="color:#976125"><?php echo number_format($orderProduct['price'],2);?></span>
                                     <span style="position:absolute;" class="selectProductName"><?php if($orderProduct['product_type']=="0"||$orderProduct['product_type']==""){echo $orderProduct['product_name_order'];}elseif($orderProduct['product_type']=="1"){echo "餐位费";}elseif($orderProduct['product_type']=="2"){echo "打包费";}elseif($orderProduct['product_type']=="3"){echo "送餐费";}elseif($orderProduct['product_type']=="4"){echo "外卖起步价";}?></span>
                                     <img class="selectProductDel" style="position: absolute;right:0.3em; width: 2.5em;height: 2.0em;padding:5px 10px 5px 10px;" 
