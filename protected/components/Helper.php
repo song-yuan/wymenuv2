@@ -537,7 +537,7 @@ class Helper
                         }elseif($product['product_type']=="3"){
                         	$productname="打包费";
                         }else{
-                        	$productname=$product['product_name_p'].$isgiving;
+                        	$productname=$product['product_name'].$isgiving;
                         }
                         $printlen=(strlen($productname) + mb_strlen($productname,'UTF8')) / 2;
                         $charactorlen=  mb_strlen($productname,'UTF8');
@@ -553,13 +553,13 @@ class Helper
                                       "01"."  ".$lenstrleft
                                     .str_pad("",24-$printlenstrleft," ")
                                     .$isretreat.str_pad($product['amount'],6," ")//加2
-                                    .number_format($product['original_price'],0)."/".number_format($product['price']*$product['amount'],2));	
+                                    .number_format($product['price'],0)."/".number_format($product['price']*$product['amount'],2));	
                         }else{
                             array_push($listData,"01".$productnum."."
                                     .$productname
                                     .str_pad("",24-$printlen," ")
                                     .$isretreat.str_pad($product['amount'],6," ")//加2
-                                    .number_format($product['original_price'],0)."/".number_format($product['price']*$product['amount'],2));	
+                                    .number_format($product['price'],0)."/".number_format($product['price']*$product['amount'],2));	
                         }                
 //                    }
                     array_push($listData,"br");

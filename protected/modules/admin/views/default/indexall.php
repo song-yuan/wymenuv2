@@ -1187,7 +1187,8 @@
                 var origin_price=$(this).attr("price");
                 var lid=$(this).attr("lid");
                 var pname=$(this).attr("name"); 
-                var ptype=$(this).attr("producttype");               
+                var ptype=$(this).attr("producttype");  
+                //alert(ptype);exit;             
                 addProductInTempOrder("0000000000",lid,origin_price,pname,ptype,1);
             }); 
             //添加CF           
@@ -1209,6 +1210,7 @@
                 var tempproduct="";
                 //取得所有未下单状态的单品，没有打印和厨打都是0,1就不能修改了。
                 $(".selectProductA[order_status='0']").each(function(){
+                    //alert($(this).find("span[class='selectProductType']").text());exit;
                     tempproduct=$(this).attr("lid");
                     tempproduct=tempproduct+","+$(this).attr("orderid");
                     tempproduct=tempproduct+","+$(this).attr("setid");
@@ -1222,7 +1224,7 @@
                     tempproduct=tempproduct+","+$(this).attr("tasteids");
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductPrice']").text();
-                    tempproduct=tempproduct+","+$(this).find("span[class='selectProductType']").text();
+                    tempproduct=tempproduct+","+$(this).attr("product_type");
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductName']").text();
                     if(productlist!="")
                     {
@@ -1275,7 +1277,7 @@
                     //var orderid=$(".selectProduct").attr("orderid");
                    //var orderstatus="1";
                    var sendjson=getallproductinfo();
-                   alert(sendjson);return;
+                   //alert(sendjson);return;
                    var url="<?php echo $this->createUrl('defaultOrder/orderPause',array('companyId'=>$this->companyId));?>/orderid/"+orderid+"/orderstatus/1";
                    var index = layer.load(0, {shade: [0.3,'#fff']});
                    $.ajax({
@@ -1745,7 +1747,7 @@
 //                {                    
                         //取得数据
                         var sendjson=getallproductinfo();
-                        //alert(sendjson);return;
+                        alert(sendjson);return;
                         var url="<?php echo $this->createUrl('defaultOrder/orderKitchen',array('companyId'=>$this->companyId,"callId"=>"0"));?>/orderid/"+orderid+"/orderstatus/2";
                         var statu = confirm("<?php echo yii::t('app','下单，并厨打，确定吗？');?>");
                          if(!statu){
