@@ -259,7 +259,6 @@ class CreateOrder
                                     'delete_flag'=>'0'
                                 );                            
                                 $db->createCommand()->insert('nb_site_no',$data);
-                                $feedback_memo = '开台';
 
                                 $se=new Sequence("order");
                                 $orderId = $se->nextval();
@@ -280,25 +279,6 @@ class CreateOrder
 										'taste_memo'=>"",
 										);
 							$db->createCommand()->insert('nb_order',$data);
-                                
-                                $sef=new Sequence("order_feedback");
-                                $lidf = $sef->nextval();
-                                $dataf = array(
-                                    'lid'=>$lidf,
-                                    'dpid'=>$dpid,
-                                    'create_at'=>date('Y-m-d H:i:s',time()),
-                                    'update_at'=>date('Y-m-d H:i:s',time()),
-                                    'is_temp'=>$isTemp,
-                                    'site_id'=>$site_id,
-                                    'is_deal'=>'0',
-                                    'feedback_id'=>0,
-                                    'order_id'=>0,
-                                    'is_order'=>'1',
-                                    'feedback_memo'=>$feedback_memo,
-                                    'delete_flag'=>'0'
-                                );
-                                $db->createCommand()->insert('nb_order_feedback',$dataf); 
-                                
  			}else{
  				//已经开台的固定台或临时台，
  				//$feedback_memo = yii::t('app','点单');
@@ -467,6 +447,7 @@ class CreateOrder
 											'product_name'=>$result['product_name'],
 											'product_pic'=>$result['main_picture'],
 											'price'=>$productPrice,
+											'original_price'=>$result['original_price'],
 											'update_at'=>$time,
 											'amount'=>$amount,
 											'taste_memo'=>"",
@@ -522,6 +503,7 @@ class CreateOrder
 										'product_name'=>$result['product_name'],
 										'product_pic'=>$result['main_picture'],
 										'price'=>$productPrice,
+										'original_price'=>$result['original_price'],
 										'update_at'=>$time,
 										'amount'=>$num,
 										'taste_memo'=>"",
@@ -656,7 +638,7 @@ class CreateOrder
 	}
 	//获取套餐明细
 	public static function getSetProductId($dpid,$lid){
-		$sql = 'select t.product_id,t.price,t.number,t1.product_name,t1.main_picture from nb_product_set_detail t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.lid='.$lid;
+		$sql = 'select t.product_id,t.price,t.number,t1.product_name,t1.main_picture,t1.original_price from nb_product_set_detail t,nb_product t1 where t.product_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.lid='.$lid;
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		return $result;
 	}
