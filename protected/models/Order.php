@@ -46,6 +46,8 @@ class Order extends CActiveRecord
         public $account_membercard="";
         public $account_union=0;
         public $notpaydetail="";
+        public $paycashaccountori="";
+        public $paychangeaccount="";
         /**
 	 * @return string the associated database table name
 	 */
