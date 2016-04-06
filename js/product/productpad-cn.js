@@ -297,7 +297,9 @@ $(document).ready(function(){
     });
    //help
    $('.padsetting').on(event_clicktouchstart,function(){
-            $(".setting-pad-mask").toggle();});
+            $(".setting-pad-mask").toggle();
+            $('.product-pad-mask').hide();         
+   });
    
    $('#content').on(event_clicktouchend,function(){
             $(".setting-pad-mask").css('display','none');
@@ -306,6 +308,7 @@ $(document).ready(function(){
    
     //查看菜单
     $('body').on(event_clicktouchstart,'.top-right',function(){
+    	 $(".setting-pad-mask").hide();
     	  if($('.product-pad-mask').is(':hidden')) {
               $('.product-pad-mask').show();
      	  }else{
