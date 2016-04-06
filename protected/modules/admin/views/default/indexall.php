@@ -3300,8 +3300,8 @@
                     var padinfo=Androidwymenuprinter.getPadInfo();
                     padid=padinfo.substr(10,10);
                 }
-               // var payCashAccountOri=$("#payCashAccount").text();//CF
-                //var payChangeAccount=$("#payChangeAccount").text();//CF
+                var payCashAccountOri=$("#payCashAccount").text();//alert(payCashAccountOri);//CF
+                var payChangeAccount=$("#payChangeAccount").text();//alert(payChangeAccount);//CF
                 var payShouldAccount=$("#payShouldAccount").text();
                 var payOriginAccount=$("#payOriginAccount").text();
                 var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
@@ -3332,9 +3332,9 @@
                             '&payoriginaccount='+payOriginAccount+
                             '&payotherdetail='+otherdetail+
                             '&notpaydetail='+notpaydetail+
-                            '&cardtotal='+cardtotal
-//                             '&paycashaccountori='+payCashAccountOri+
-//                             '&paychangeaccount='+payChangeAccount
+                            '&cardtotal='+cardtotal+
+                            '&paycashaccountori='+payCashAccountOri+
+                            '&paychangeaccount='+payChangeAccount
                             ; 
                var loadsendjson={'paycashaccount':payCashAccount,
                                 'paymemberaccount':payMemberAccount,
@@ -3345,9 +3345,10 @@
                                 'payoriginaccount':payOriginAccount,
                                 'payotherdetail':otherdetail,
                                 'notpaydetail':notpaydetail,
-                                'cardtotal':cardtotal};
-//                                 'paycashaccountOri':payCashAccountOri,
-//                                 'paychangeaccount':payChangeAccount};
+                                'cardtotal':cardtotal,
+                                'paycashaccountori':payCashAccountOri,
+                                'paychangeaccount':payChangeAccount
+                                };
                 var urlsure="<?php echo $this->createUrl('defaultOrder/orderAccountSure',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/orderstatus/4/cardno/"+cardno;
                 
                 $('#orderaccountsure').load(urlsure,loadsendjson);
