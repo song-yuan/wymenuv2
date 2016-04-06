@@ -628,20 +628,20 @@ class Helper
                     
                     array_push($listData,"br");
                     //支付方式
-                    if($order->account_cash>0)
-                    {
-                        array_push($listData,"10".yii::t('app','现金支付').str_pad("",8," ").number_format($order->account_cash,2));//加2
-                        array_push($listData,"br");                        
-                    }
+//                     if($order->account_cash>0)
+//                     {
+//                         array_push($listData,"10".yii::t('app','现金支付').str_pad("",8," ").number_format($order->account_cash,2));//加2
+//                         array_push($listData,"br");                        
+//                     }
                     
                     //支付方式CF
-//                     if($order->paycashaccountori>0)
-//                     {
-//                     	array_push($listData,"10".yii::t('app','现金支付').str_pad("",8," ").number_format($order->paycashaccountori,2));//加2
-//                     	array_push($listData,"br");
-//                     	array_push($listData,"10".yii::t('app','找零').str_pad("",8," ").number_format($order->paychangeaccount,2));//加2
-//                     	array_push($listData,"br");
-//                     }
+                    if($order->paycashaccountori>0)
+                    {
+                    	array_push($listData,"10".yii::t('app','现金支付').str_pad("",8," ").number_format($order->paycashaccountori,2));//加2
+                    	array_push($listData,"br");
+                    	array_push($listData,"10".yii::t('app','找零').str_pad("",8," ").number_format($order->paychangeaccount,2));//加2
+                    	array_push($listData,"br");
+                    }
                     
                     if($order->account_union>0)
                     {
