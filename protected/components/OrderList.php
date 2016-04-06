@@ -387,7 +387,7 @@ class OrderList
                     {   
                         //更新库存//失败则返回
                         $productDetailArr=explode(",",$tvalue);
-                        if($productDetailArr[13]=="0"){
+                        //if($productDetailArr[13]=="0"){
                         $productdata=Product::model()->find('lid=:lid and dpid=:dpid' , array(':lid'=>$productDetailArr[3],':dpid'=>$companyId));
                         //return json_encode(array('status'=>true,'msg'=>$productdata->store_number.$productDetailArr[3].$productDetailArr[4]));
                         if($productdata->store_number==0 || ($productdata->store_number >0 && $productdata->store_number< $productDetailArr[5] ))
@@ -419,7 +419,7 @@ class OrderList
                             ///套餐数量减////////////
                         }
                         $productdata->save();
-                        }//
+                       // }//
                         //exit;
                         //return array('status'=>false,'msg'=>"test111333");
                         if($productDetailArr[4]=="0")
@@ -476,7 +476,7 @@ class OrderList
                         //return array('status'=>false,'msg'=>"nbproductinsert after");
                         $orderProductTasteIds=str_replace("|",",",$productDetailArr[10]);
                         //return array('status'=>false,'msg'=>$orderProductTasteIds);
-                        if($productDetailArr[13]=="0"){
+                        //if($productDetailArr[13]=="0"){
                         if(!empty($orderProductTasteIds))
                         {
                             $orderProductTasteIds=substr($orderProductTasteIds, 0,strlen($orderProductTasteIds)-1);
@@ -520,7 +520,7 @@ class OrderList
                                 }
                             }
                         }
-                        }
+                        //}
                         //return array('status'=>false,'msg'=>"after taste insert");
                     }
                 }
