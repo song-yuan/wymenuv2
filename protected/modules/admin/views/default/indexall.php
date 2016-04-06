@@ -784,7 +784,7 @@
             //alert(event_clicktouchstart);
             
             function reloadsitestate()
-            {
+            {return;
                 if(reloadsitestatelock)
                 {
                     return;
@@ -846,7 +846,7 @@
                                 //存在删减临时座位的,暂不修改，以后添加！！                    
                                 //....
                                 //CF
-                                history.go(0);
+                               // history.go(0);
 //                             	if($("#tab_sitelist").css("display")=="block")
 //                                 {
 //                                     $.each(msg.models,function(key,value){
@@ -3291,15 +3291,15 @@
                  //写入会员卡消费记录，会员卡总额减少
                 var orderid=$(".selectProduct").attr("orderid");
                 var padid="0000000046";
-                if (typeof Androidwymenuprinter == "undefined") {
+                if (typeof Androidwymenuprinter == "undefined"){
                     alert("找不到PAD设备");
                     //return false;
                 }else{
                     var padinfo=Androidwymenuprinter.getPadInfo();
                     padid=padinfo.substr(10,10);
                 }
-                //var payCashAccount=$("#payCashAccount").text();
-                //var payChangeAccount=$("#payChangeAccount").text();
+                var payCashAccountOri=$("#payCashAccount").text();//CF
+                var payChangeAccount=$("#payChangeAccount").text();//CF
                 var payShouldAccount=$("#payShouldAccount").text();
                 var payOriginAccount=$("#payOriginAccount").text();
                 var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
@@ -3330,7 +3330,9 @@
                             '&payoriginaccount='+payOriginAccount+
                             '&payotherdetail='+otherdetail+
                             '&notpaydetail='+notpaydetail+
-                            '&cardtotal='+cardtotal; 
+                            '&cardtotal='+cardtotal+
+                            '&paycashaccountori='+payCashAccountOri+
+                            '&paychangeaccount='+payChangeAccount; 
                var loadsendjson={'paycashaccount':payCashAccount,
                                 'paymemberaccount':payMemberAccount,
                                 'payunionaccount':payUnionAccount,
@@ -3340,7 +3342,9 @@
                                 'payoriginaccount':payOriginAccount,
                                 'payotherdetail':otherdetail,
                                 'notpaydetail':notpaydetail,
-                                'cardtotal':cardtotal};
+                                'cardtotal':cardtotal,
+                                'paycashaccountOri':payCashAccountOri,
+                                'paychangeaccount':payChangeAccount};
                 var urlsure="<?php echo $this->createUrl('defaultOrder/orderAccountSure',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/orderstatus/4/cardno/"+cardno;
                 
                 $('#orderaccountsure').load(urlsure,loadsendjson);

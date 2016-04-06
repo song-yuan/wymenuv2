@@ -356,7 +356,7 @@
                                 //....
                                 //CF
                                 //alert("123");
-                            	history.go(0);
+                            	//history.go(0);
                             	//location.href="<?php echo $this->createUrl('default/index' , array('companyId'=>$this->companyId ));?>/typeId/"+gtypeid    
                             	//var loadurl='<?php echo $this->createUrl('default/index',array('companyId'=>$this->companyId,'typeId'=>'waimai'));?>';
                                 //location.href=loadurl; 
