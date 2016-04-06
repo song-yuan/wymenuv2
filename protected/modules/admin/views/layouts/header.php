@@ -282,7 +282,7 @@
 //            });
 
             function call_alarm()
-            {
+            {return;
                 //alert($("#tab_sitelist").length);
                 //return;
                 //site显示时才做这样的操作
