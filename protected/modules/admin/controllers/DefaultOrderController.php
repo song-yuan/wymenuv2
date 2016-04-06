@@ -566,6 +566,7 @@ class DefaultOrderController extends BackendController
                 $paychangeaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paychangeaccount',"0")));
                 $payothers = floatval(str_replace(",","",Yii::app()->request->getPost('payothers',"0")));
                 $payotherdetail=Yii::app()->request->getPost('payotherdetail',"");
+                //var_dump($paycashaccountori);var_dump($paychangeaccount);exit;
                 
                 $paymemberaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paymemberaccount',"0")));
                 $cardno = Yii::app()->request->getParam('cardno',"0000000000");
@@ -625,8 +626,8 @@ class DefaultOrderController extends BackendController
                     $order->account_union=$payunionaccount;
                     $order->account_otherdetail=$payotherdetail;
                     $order->notpaydetail=$notpaydetail;
-                    $order->paycashaccountori=$paycashaccountori;
-                    $order->paychangeaccount=$paychangeaccount;
+                   // $order->paycashaccountori=$paycashaccountori;
+                   // $order->paychangeaccount=$paychangeaccount;
                 }
                 //Yii::app()->end(json_encode(array('status'=>false,'msg'=>"111")));
                 $pad=Pad::model()->with('printer')->find(' t.dpid=:dpid and t.lid=:lid',array(':dpid'=>$order->dpid,'lid'=>$padId));
