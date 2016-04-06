@@ -1172,7 +1172,7 @@
                                   +'  <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>'
                                   +'      <span class="selectProductNowPrice" style="color:#976125">'+origin_price+'</span>'
                                   +'      <span style="position:absolute;" class="selectProductName">'+pname+'</span>'
-                                  +'      <span style="position:absolute;display:none;" class="selectProductType">'+ptype+'</span>'//tianjiaCF
+                                  +'      <span style="position:absolute;display:none;" product_type="'+ptype+'" class="selectProductType">'+ptype+'</span>'//tianjiaCF
                                   +'      <img class="selectProductDel" style="position: absolute;right:0.3em; width: 2.5em;height: 2.0em;padding:5px 10px 5px 10px;" '
                                   +'           src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png"> '                                  
                                   +' </li>'
@@ -1210,7 +1210,7 @@
                 var tempproduct="";
                 //取得所有未下单状态的单品，没有打印和厨打都是0,1就不能修改了。
                 $(".selectProductA[order_status='0']").each(function(){
-                    //alert($(this).find("span[class='selectProductType']").text());exit;
+                    //alert($(this).find("span[class='selectProductName']").text());exit;
                     tempproduct=$(this).attr("lid");
                     tempproduct=tempproduct+","+$(this).attr("orderid");
                     tempproduct=tempproduct+","+$(this).attr("setid");
@@ -1224,7 +1224,7 @@
                     tempproduct=tempproduct+","+$(this).attr("tasteids");
                     tempproduct=tempproduct+","+$(this).attr("tastememo");
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductPrice']").text();
-                    tempproduct=tempproduct+","+$(this).attr("product_type");
+                    tempproduct=tempproduct+","+$(this).find("span[class='selectProductType']").text();
                     tempproduct=tempproduct+","+$(this).find("span[class='selectProductName']").text();
                     if(productlist!="")
                     {
