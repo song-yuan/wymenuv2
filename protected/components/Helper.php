@@ -639,7 +639,7 @@ class Helper
                     {
                     	array_push($listData,"10".yii::t('app','现金支付').str_pad("",8," ").number_format($order->paycashaccountori,2));//加2
                     	array_push($listData,"br");
-                    	array_push($listData,"10".yii::t('app','找零').str_pad("",8," ").number_format($order->paychangeaccount,2));//加2
+                    	array_push($listData,"10".yii::t('app','找零').str_pad("",12," ").number_format($order->paychangeaccount,2));//加2
                     	array_push($listData,"br");
                     }
                     
