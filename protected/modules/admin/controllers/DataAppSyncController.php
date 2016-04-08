@@ -49,6 +49,14 @@ public function actionGetSyncTableData(){
    echo json_encode($tableStruct);exit;
 }
 /**
+ * 
+ * 
+ * 
+ */
+public function actionGetData(){
+   echo json_encode(array('status'=>true,'msg'=>'success'));exit;
+}
+/**
  * 初始化
  */
 public function actionLocalInit(){
