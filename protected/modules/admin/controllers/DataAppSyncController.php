@@ -54,7 +54,7 @@ public function actionGetSyncTableData(){
  * 
  */
 public function actionGetData(){
-   echo 1;exit;
+   echo json_encode(array('status'=>true,'msg'=>'success'));exit;
 }
 /**
  * 初始化
