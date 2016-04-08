@@ -27,22 +27,20 @@
                                var istemp = $(this).attr('istemp');
                                if(!isNaN(siteNumber) && siteNumber>0 && siteNumber < 99)
                                {
-                                   //alert(!isNaN(siteNumber));
                                     $.ajax({
-					'type':'POST',
-					'dataType':'json',
-					'data':{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php echo $istemp; ?>'},
-					'url':'<?php echo $this->createUrl('defaultSite/opensite',array());?>',
-					'success':function(data){
-						if(data.status == 0) {
-							alert(data.message);
-						} else {
-							alert(data.message);
-                                                        $('#portlet-button').modal('hide');
-							$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
-                                                        //$("#tab_sitelist").hide();
-						}
-					},
+										'type':'POST',
+										'dataType':'json',
+										'data':{"sid":sid,"siteNumber":siteNumber,"companyId":'<?php echo $this->companyId; ?>',"istemp":'<?php echo $istemp; ?>'},
+										'url':'<?php echo $this->createUrl('defaultSite/opensite',array());?>',
+										'success':function(data){
+											if(data.status == 0) {
+												alert(data.message);
+											} else {
+												alert(data.message);
+					                            $('#portlet-button').modal('hide');
+												$('#tabsiteindex').load('<?php echo $this->createUrl('defaultSite/showSite',array('companyId'=>$this->companyId,'typeId'=>$typeId));?>');
+											}
+										},
                                         'error':function(e){
                                             return false;
                                         }
