@@ -225,6 +225,16 @@ class DataSyncTables
                     "  'is_sync' varchar(50) NOT NULL DEFAULT '11111',".
                     "  PRIMARY KEY ('lid','dpid')".
                     ");",
+             "nb_product_icache" => " CREATE TABLE 'nb_product'('lid' int(10) NOT NULL,".
+        			"  'dpid' int(10) NOT NULL,".
+        			"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                    "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+                    "  'product_id' int(10) NOT NULL DEFAULT '0',".
+                    "  'icache_picture' varchar(255) NOT NULL,".
+                    "  'delete_flag' char(1) NOT NULL DEFAULT '0',".
+                    "  'is_sync' varchar(50) NOT NULL DEFAULT '11111',".
+                    "  PRIMARY KEY ('lid','dpid')".
+                    ");",
         	"nb_product_category"=>" CREATE TABLE 'nb_product_category'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
