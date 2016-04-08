@@ -49,6 +49,14 @@ public function actionGetSyncTableData(){
    echo json_encode($tableStruct);exit;
 }
 /**
+ * 
+ * 
+ * 
+ */
+public function actionGetData(){
+   echo 1;exit;
+}
+/**
  * 初始化
  */
 public function actionLocalInit(){
