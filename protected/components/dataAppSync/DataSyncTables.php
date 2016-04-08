@@ -19,6 +19,7 @@ class DataSyncTables
         array("name"=>"打印方式","table"=>"nb_printer_way"),
         array("name"=>"打印方式明细","table"=>"nb_printer_way_detail"),
         array("name"=>"产品","table"=>"nb_product"),
+        array("name"=>"产品缓存图片","table"=>"nb_product_icache"),
         array("name"=>"产品分类","table"=>"nb_product_category"),
         array("name"=>"产品图片","table"=>"nb_product_picture"),//只有点单pad需要
         array("name"=>"产品打印方式","table"=>"nb_product_printerway"),
@@ -225,7 +226,7 @@ class DataSyncTables
                     "  'is_sync' varchar(50) NOT NULL DEFAULT '11111',".
                     "  PRIMARY KEY ('lid','dpid')".
                     ");",
-             "nb_product_icache" => " CREATE TABLE 'nb_product'('lid' int(10) NOT NULL,".
+             "nb_product_icache" => " CREATE TABLE 'nb_product_icache'('lid' int(10) NOT NULL,".
         			"  'dpid' int(10) NOT NULL,".
         			"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                     "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
