@@ -283,6 +283,7 @@
 
             function call_alarm()
             {
+                //return;
                 //alert($("#tab_sitelist").length);
                 //return;
                 //site显示时才做这样的操作
@@ -302,7 +303,7 @@
                         type:'GET',
                         timeout:5000,
                         cache:false,
-                        //async:false,
+                        //async:true,
                         dataType: "json",
                         success:function(msg){
                             //网络连接有错误要报错

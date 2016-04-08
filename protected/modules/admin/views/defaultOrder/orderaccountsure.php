@@ -93,8 +93,8 @@
                         $.ajax({
                             url:url,
                             type:'POST',
-                            data:public_account_sendjson,
-                            async:false,
+                            data:public_account_sendjson,//CF
+                            //async:false,
                             dataType: "json",
                             success:function(msg){
                                 var data=msg;

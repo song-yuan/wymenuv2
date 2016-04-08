@@ -1172,7 +1172,7 @@
                                   +'  <span class="selectProductDiscount" style="color:#976125;display:none">100%</span>'
                                   +'      <span class="selectProductNowPrice" style="color:#976125">'+origin_price+'</span>'
                                   +'      <span style="position:absolute;" class="selectProductName">'+pname+'</span>'
-                                  +'      <span style="position:absolute;display:none;" class="selectProductType">'+ptype+'</span>'//tianjiaCF
+                                  +'      <span style="position:absolute;display:none;" product_type="'+ptype+'" class="selectProductType">'+ptype+'</span>'//tianjiaCF
                                   +'      <img class="selectProductDel" style="position: absolute;right:0.3em; width: 2.5em;height: 2.0em;padding:5px 10px 5px 10px;" '
                                   +'           src="<?php echo Yii::app()->request->baseUrl;?>/img/product/icon_cart_m.png"> '                                  
                                   +' </li>'
@@ -1187,7 +1187,8 @@
                 var origin_price=$(this).attr("price");
                 var lid=$(this).attr("lid");
                 var pname=$(this).attr("name"); 
-                var ptype=$(this).attr("producttype");               
+                var ptype=$(this).attr("producttype");  
+                //alert(ptype);exit;             
                 addProductInTempOrder("0000000000",lid,origin_price,pname,ptype,1);
             }); 
             //添加CF           
@@ -1209,6 +1210,7 @@
                 var tempproduct="";
                 //取得所有未下单状态的单品，没有打印和厨打都是0,1就不能修改了。
                 $(".selectProductA[order_status='0']").each(function(){
+                    //alert($(this).find("span[class='selectProductName']").text());exit;
                     tempproduct=$(this).attr("lid");
                     tempproduct=tempproduct+","+$(this).attr("orderid");
                     tempproduct=tempproduct+","+$(this).attr("setid");
@@ -3298,8 +3300,8 @@
                     var padinfo=Androidwymenuprinter.getPadInfo();
                     padid=padinfo.substr(10,10);
                 }
-                var payCashAccountOri=$("#payCashAccount").text();//CF
-                var payChangeAccount=$("#payChangeAccount").text();//CF
+                var payCashAccountOri=$("#payCashAccount").text();//alert(payCashAccountOri);//CF
+                var payChangeAccount=$("#payChangeAccount").text();//alert(payChangeAccount);//CF
                 var payShouldAccount=$("#payShouldAccount").text();
                 var payOriginAccount=$("#payOriginAccount").text();
                 var payHasAccount=parseFloat($("#order_has_pay").text().replace(",",""));
@@ -3332,7 +3334,8 @@
                             '&notpaydetail='+notpaydetail+
                             '&cardtotal='+cardtotal+
                             '&paycashaccountori='+payCashAccountOri+
-                            '&paychangeaccount='+payChangeAccount; 
+                            '&paychangeaccount='+payChangeAccount
+                            ; 
                var loadsendjson={'paycashaccount':payCashAccount,
                                 'paymemberaccount':payMemberAccount,
                                 'payunionaccount':payUnionAccount,
@@ -3343,8 +3346,9 @@
                                 'payotherdetail':otherdetail,
                                 'notpaydetail':notpaydetail,
                                 'cardtotal':cardtotal,
-                                'paycashaccountOri':payCashAccountOri,
-                                'paychangeaccount':payChangeAccount};
+                                'paycashaccountori':payCashAccountOri,
+                                'paychangeaccount':payChangeAccount
+                                };
                 var urlsure="<?php echo $this->createUrl('defaultOrder/orderAccountSure',array('companyId'=>$this->companyId));?>/orderId/"+orderid+"/padId/"+padid+"/orderstatus/4/cardno/"+cardno;
                 
                 $('#orderaccountsure').load(urlsure,loadsendjson);

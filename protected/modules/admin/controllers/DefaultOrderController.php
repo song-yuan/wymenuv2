@@ -562,10 +562,11 @@ class DefaultOrderController extends BackendController
                 $padId = Yii::app()->request->getParam('padId',"0");
                 //$payShouldAccount=Yii::app()->request->getPost('payShouldAccount',"0");
                 $paycashaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paycashaccount',"0")));
-                $paycashaccountori = floatval(str_replace(",","",Yii::app()->request->getPost('paycashaccountOri',"0")));
+                $paycashaccountori = floatval(str_replace(",","",Yii::app()->request->getPost('paycashaccountori',"0")));
                 $paychangeaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paychangeaccount',"0")));
                 $payothers = floatval(str_replace(",","",Yii::app()->request->getPost('payothers',"0")));
                 $payotherdetail=Yii::app()->request->getPost('payotherdetail',"");
+                //var_dump($paycashaccountori);var_dump($paychangeaccount);exit;
                 
                 $paymemberaccount = floatval(str_replace(",","",Yii::app()->request->getPost('paymemberaccount',"0")));
                 $cardno = Yii::app()->request->getParam('cardno',"0000000000");
