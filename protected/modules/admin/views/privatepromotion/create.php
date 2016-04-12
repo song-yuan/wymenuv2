@@ -37,12 +37,12 @@
 			<div class="row">
 				<div class="col-md-12">
 				<div class="tabbable tabbable-custom">
-					<ul class="nav nav-tabs">
+<!-- 					<ul class="nav nav-tabs"> --
 					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">整体设置</a></li>
 					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('normalpromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">普通优惠</a></li>
 					<li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('privatepromotion/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">特价优惠</a></li>
 					<li class=""><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('cupon/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">代金券</a></li>
-				</ul>
+<!-- 				</ul> -->
 				<div class="tab-content">
 			
 					<div class="col-md-12">
