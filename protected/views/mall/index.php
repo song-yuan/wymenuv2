@@ -339,7 +339,7 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
-    $("body").on('click','.lt-lt',function(){
+    $("#container").on('click','.lt-lt',function(){
     	var str = $(this).html();
     	layer.open({
 		    type: 1,
