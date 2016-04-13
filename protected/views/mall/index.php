@@ -254,7 +254,7 @@ $(document).ready(function(){
        
     });
 
-    $("#container").on('touchstart','.add',function(){
+    $("#container").on('click','.add',function(){
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
@@ -266,6 +266,43 @@ $(document).ready(function(){
         
         var timestamp=new Date().getTime()
         var random = ''+timestamp + parseInt(Math.random()*899+100)+'';
+        $.ajax({
+        	url:'<?php echo $this->createUrl('/mall/addCart',array('companyId'=>$this->companyId));?>',
+        	data:{productId:productId,promoteId:promoteId,toGroup:toGroup,random:random},
+        	success:function(msg){
+        		if(msg.status){
+        			 t.val(parseInt(t.val())+1);
+			        if(parseInt(t.val()) > 0){
+			            t.siblings(".minus").removeClass('zero');
+			            t.removeClass('zero');
+			        }
+			        setTotal();
+			        //动画
+			        var str = '<div id="boll'+i+'" class="boll"></div>';
+			    	$('body').append(str);
+			    	$('#boll'+i).css({top:top,left:left,display:"block"});
+			    	var bool = new Parabola({
+						el: "#boll"+i,
+						offset: [-left+10, height-top-25],
+						curvature: 0.005,
+						duration: 1000,
+						callback:function(){
+							$('#boll'+j).css('display','none');
+							j++;
+						},
+						stepCallback:function(x,y){
+						}
+					});
+					
+					bool.start();
+					i++;
+        		}else{
+        			$('#boll'+(i-1)).css('display','none');
+        			layer.msg(msg.msg);
+        		}
+        	},
+        	dataType:'json'
+        });
     });
      
     $("#container").on('touchstart','.minus',function(){ 
