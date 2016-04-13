@@ -254,7 +254,7 @@ $(document).ready(function(){
        
     });
 
-    $("#container").on('click','.add',function(){
+    $("body").on('touchstart','.add',function(){
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
