@@ -51,94 +51,28 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th><?php echo yii::t('app','品项编号');?></th>
+								<th><?php echo yii::t('app','品项类型');?></th>
 								<th><?php echo yii::t('app','品项名称');?></th>
-								<th><?php echo yii::t('app','单位');?></th>
-								<th><?php echo yii::t('app','规格');?></th>
+								<th><?php echo yii::t('app','进货价格');?></th>
 								<th><?php echo yii::t('app','进货数量');?></th>
-								<th><?php echo yii::t('app','退货数量');?></th>
 								<th><?php echo yii::t('app','赠品数量');?></th>
-								<th><?php echo yii::t('app','进货金额');?></th>
-								<th><?php echo yii::t('app','退货金额');?></th>
-								<th><?php echo yii::t('app','赠品金额');?></th>
 							</tr>
 						</thead>
 						<tbody>
-						<?php //if($models) :?>
-						<?php //foreach ($models as $model):?>
-							<!-- <tr class="odd gradeX">
-								<td><?php //echo $model->mfrInfor->manufacturer_name;?></td>
-								<td><?php //echo $model->admin->username;?></td>
-								<td><?php //echo $model->purchase_account_no;?></td>
-								<td><?php //echo $model->organization_id;?></td>
-								<td><?php //echo $model->organization_address;?></td>
-								<td><?php //echo $model->delivery_date;?></td>
-								<td><?php //echo $model->remark;?></td>
-								<td><?php //echo $model->organization_address;?></td>
-								<td><?php //echo $model->delivery_date;?></td>
-								<td><?php //echo $model->remark;?></td>
-							</tr> -->
-						<?php //endforeach;?>
-						<?php //endif;?>
-				<!-- test start -->
+						<?php if($models) :?>
+						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td>3</td>
-								<td>FGT</td>
-								<td>箱</td>
-								<td> </td>
-								<td>343</td>
-								<td>12</td>
-								<td>0</td>
-								<td>2354</td>
-								<td>246</td>
-								<td>0</td>
+								<td><?php echo $model->mfrInfor->manufacturer_name;?></td>
+								<td><?php echo $model->admin->username;?></td>
+								<td><?php echo $model->purchase_account_no;?></td>
+								<td><?php echo $model->organization_id;?></td>
+								<td><?php echo $model->organization_address;?></td>
 							</tr>
-							<tr class="odd gradeX">
-								<td>5</td>
-								<td>IOK</td>
-								<td>瓶</td>
-								<td> </td>
-								<td>560</td>
-								<td>10</td>
-								<td>0</td>
-								<td>1234</td>
-								<td>231</td>
-								<td>0</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td>8</td>
-								<td>SOE</td>
-								<td>袋</td>
-								<td> </td>
-								<td>343</td>
-								<td>12</td>
-								<td>0</td>
-								<td>1234</td>
-								<td>431</td>
-								<td>0</td>
-							</tr>
-				<!-- test end -->
-						</tbody>
+						<?php endforeach;?>
+						<?php endif;?>
+					</tbody>
 					</table>
-					<!-- 分页（测式） -->
-					<div class="row">
-						<div class="col-md-5 col-sm-12">
-							<div class="dataTables_info">共 1 页 , 3 条数据 , 当前是第 1 页</div>
-						</div>
-						<div class="col-md-7 col-sm-12">
-							<div class="dataTables_paginate paging_bootstrap">
-								<ul class="pagination pull-right" id="yw0">
-									<li class=" disabled"><a href="#">&lt;&lt;</a></li>
-									<li class=" disabled"><a href="#">&lt;</a></li>
-									<li class=" active"><a href="#">1</a></li>
-									<li class=""><a href="#">&gt;</a></li>
-									<li class=""><a href="#">&gt;&gt;</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<!-- 分页（测试） 结束 -->
-						<?php if($pages->getItemCount()):?>
+					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">

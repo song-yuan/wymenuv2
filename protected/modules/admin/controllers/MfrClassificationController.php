@@ -45,14 +45,12 @@ class MfrClassificationController extends BackendController
 
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ManufacturerClassification');
-                        $se=new Sequence("manufacturer_classification");
-                        $model->lid = $se->nextval();
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->update_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
-                        $py=new Pinyin();
-                        $model->classification_name = $py->py($model->classification_name);
-                        //var_dump($model);exit;
+			$se=new Sequence("manufacturer_classification");
+			$model->lid = $se->nextval();
+			$model->create_at = date('Y-m-d H:i:s',time());
+			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->delete_flag = '0';
+			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('mfrClassification/index' , 'companyId' => $this->companyId ));
@@ -73,9 +71,7 @@ class MfrClassificationController extends BackendController
 		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ManufacturerClassification');
-                        $py=new Pinyin();
-                        $model->classification_name = $py->py($model->classification_name);
-			$model->update_at=date('Y-m-d H:i:s',time());
+       		$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
 				$this->redirect(array('mfrClassification/index' , 'companyId' => $this->companyId ));

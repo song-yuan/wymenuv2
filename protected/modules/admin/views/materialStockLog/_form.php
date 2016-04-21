@@ -10,22 +10,24 @@
 	#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 	</style>
 	<div class="form-body">
+		<div class="form-group">
+			<?php echo $form->label($model, '品项分类',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+			</div>
+		</div>
 		<div class="form-group" <?php if($model->hasErrors('material_id')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'material_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropdownlist($model, 'material_id', array('0'=>'0','1'=>'1'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('material_id')));?>
+				<?php echo $form->dropDownList($model, 'material_id', array('0' => yii::t('app','-- 请选择 --')) +$materials ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('material_id')));?>
 				<?php echo $form->error($model, 'material_id' )?>
 			</div>
 		</div>
 		<div class="form-group <?php if($model->hasErrors('type')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'type',array('class' => 'col-md-3 control-label'));?>
-			<div class="radio-list">
-				<label class="radio-inline">
-				<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>1" value="0" <?php if($model->type==0) echo "checked";?>> <?php echo yii::t('app','入库');?>
-				</label>
-				<label class="radio-inline">
-				<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>2" value="1" <?php if($model->type==1) echo "checked";?>> <?php echo yii::t('app','出库');?>
-				</label>
+			<div class="col-md-4">
+				<?php echo $form->dropDownList($model, 'type', array('0' => yii::t('app','入库') , '1' => yii::t('app','出库')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type')));?>
+				<?php echo $form->error($model, 'type' )?>
 			</div>
 		</div>
         <div class="form-group <?php if($model->hasErrors('stock_num')) echo 'has-error';?>">
@@ -74,5 +76,26 @@
                             sid=$('.category_selecter').eq(1).val();
                             //alert(sid);
                         }
+	   });
+	   $('#selectCategory').change(function(){
+		   var cid = $(this).val();
+		   //alert($('#ProductSetDetail_product_id').html());
+		   $.ajax({
+			   url:'<?php echo $this->createUrl('materialStockLog/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
+			   type:'GET',
+			   dataType:'json',
+			   success:function(result){
+				   //alert(result.data);
+				   var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
+				   if(result.data.length){
+					   //alert(1);
+					   $.each(result.data,function(index,value){
+						   str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+					   });
+				   }
+				   //alert(str);
+				   $('#MaterialStockLog_material_id').html(str);
+			   }
+		   });
 	   });
 </script>

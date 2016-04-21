@@ -53,7 +53,8 @@ class MaterialStockLog extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
+			'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
+			'material'=>array(self::BELONGS_TO,'ProductMaterial','','on'=>'t.material_id=material.lid and material.dpid=t.dpid and material.delete_flag=0'),
 		);
 	}
 

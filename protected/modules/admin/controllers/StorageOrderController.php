@@ -45,36 +45,32 @@ class StorageOrderController extends BackendController
 
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('StorageOrder');
-                        $se=new Sequence("material_unit");
-                        $model->lid = $se->nextval();
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->update_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
-                        $py=new Pinyin();
-                        $model->unit_name = $py->py($model->unit_name);
-                        //var_dump($model);exit;
+			$se=new Sequence("storage_order");
+			$model->lid = $se->nextval();
+			$model->create_at = date('Y-m-d H:i:s',time());
+			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->delete_flag = '0';
+
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('storageOrder/index' , 'companyId' => $this->companyId ));
 			}
 		}
-		$categories = $categories = StorageOrder::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
+		//$categories = $categories = StorageOrder::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
 		$this->render('create' , array(
 			'model' => $model ,
-			'categories' => $categories
+			//'categories' => $categories
 		));
 	}
 	
 	public function actionUpdate(){
 		$id = Yii::app()->request->getParam('id');
-		$model = StorageOrder::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $id,':dpid'=>  $this->companyId));
+		$model = StorageOrder::model()->find('lid=:storageId and dpid=:dpid' , array(':storageId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
 		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('StorageOrder');
-                        $py=new Pinyin();
-                        $model->unit_name = $py->py($model->unit_name);
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));

@@ -2,108 +2,91 @@
 		'id' => 'printer-form',
 		'errorMessageCssClass' => 'help-block',
 		'htmlOptions' => array(
-			'class' => 'form-horizontal',
-			'enctype' => 'multipart/form-data'
+				'class' => 'form-horizontal',
+				'enctype' => 'multipart/form-data'
 		),
 )); ?>
-	<div class="form-body">
-		<div class="form-group">
-			<?php echo $form->label($model, 'product_id',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'product_id', array('0' => yii::t('app','-- 请选择 --')) +$products  ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
-				<?php echo $form->error($model, 'product_id' )?>
-			</div>
-		</div>															
-		<div class="form-group" <?php if($model->hasErrors('material_id')) echo 'has-error';?>>
-			<?php echo $form->label($model, 'material_id',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">											
-				<?php echo $form->dropDownList($model, 'material_id', array('0' => yii::t('app','-- 请选择 --')) +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
-				<?php echo $form->error($model, 'material_id' )?>
-			</div>
+<div class="form-body">
+	<div class="form-group">
+		<?php echo $form->label($model, '品项分类',array('class' => 'col-md-3 control-label'));?>
+		<div class="col-md-4">
+			<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('sales_unit_id')) echo 'has-error';?>>
-			<?php echo $form->label($model, 'sales_unit_id',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">											
-				<?php echo $form->dropDownList($model, 'product_id', array('0' => yii::t('app','-- 请选择 --')) +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
-				<?php echo $form->error($model, 'sales_unit_idcccccccccc' )?>
-			</div>
+	</div>
+	<div class="form-group" <?php if($model->hasErrors('material_id')) echo 'has-error';?>>
+		<?php echo $form->label($model, 'material_id',array('class' => 'col-md-3 control-label'));?>
+		<div class="col-md-4">
+			<?php echo $form->dropDownList($model, 'material_id', array('0' => yii::t('app','-- 请选择 --')) +$materials ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('material_id')));?>
+			<?php echo $form->error($model, 'material_id' )?>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('number')) echo 'has-error';?>>
-			<?php echo $form->label($model, 'number',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'number',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('number')));?>
-				<?php echo $form->error($model, 'number' )?>
-			</div>
+	</div>
+	<div class="form-group" <?php if($model->hasErrors('sales_unit_id')) echo 'has-error';?>>
+		<?php echo $form->label($model, 'sales_unit_id',array('class' => 'col-md-3 control-label'));?>
+		<div class="col-md-4">
+			<?php echo $form->dropDownList($model, 'sales_unit_id',array('0' => yii::t('app','-- 请选择 --')) +Helper::genSalesUnit() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sales_unit_id')));?>
+			<?php echo $form->error($model, 'sales_unit_id' )?>
 		</div>
-		<div class="form-actions fluid">
-			<div class="col-md-offset-3 col-md-9">
-				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-				<a href="<?php echo $this->createUrl('productBom/detailindex' , array('companyId' => $model->dpid,'lid' => $pblid,));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                            
-			</div>
+	</div>
+	<div class="form-group" <?php if($model->hasErrors('number')) echo 'has-error';?>>
+		<?php echo $form->label($model, 'number',array('class' => 'col-md-3 control-label'));?>
+		<div class="col-md-4">
+			<?php echo $form->textField($model, 'number',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('number')));?>
+			<?php echo $form->error($model, 'number' )?>
 		</div>
-<?php $this->endWidget(); ?>
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#selectCategory').change(function(){
-			var cid = $(this).val();
-			//alert('<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid);
-			//alert($('#ProductSetDetail_product_id').html());
-			$.ajax({
-				url:'<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
-				type:'GET',
-				dataType:'json',
-				success:function(result){
-					//alert(result.data);
-					var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';                                                                                            
-					if(result.data.length){
-						//alert(1);
-						$.each(result.data,function(index,value){
-							str = str + '<option value="'+value.id+'">'+value.name+'</option>';
-						}); 
+	</div>
+	<div class="form-actions fluid">
+		<div class="col-md-offset-3 col-md-9">
+			<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+			<a href="<?php echo $this->createUrl('productBom/detailindex' , array('companyId' => $model->dpid,'pblid'=>$pblid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
+		</div>
+	</div>
+	<?php $this->endWidget(); ?>
+	<script type="text/javascript">
+		$(document).ready(function(){
+//         $('#selectCategory').change(function(){
+//             var cid = $(this).val();
+//            location.href="<?php echo $this->createUrl('productBom/detailcreate' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+//         });
+
+			$('#selectCategory').change(function(){
+				var cid = $(this).val();
+				//alert($('#ProductSetDetail_product_id').html());
+				$.ajax({
+					url:'<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
+					type:'GET',
+					dataType:'json',
+					success:function(result){
+						//alert(result.data);
+						var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
+						if(result.data.length){
+							//alert(1);
+							$.each(result.data,function(index,value){
+								str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+							});
+						}
+						//alert(str);
+						$('#ProductBom_material_id').html(str);
 					}
-					$('#ProductSetDetail_product_id').html(str); 
-				}
+				});
 			});
+			/*var productVal=$('#ProductSetDetail_product_id').val();
+			 $('#ProductSetDetail_product_id').change(function(){
+			 var productid = $(this).val();
+			 //alert(productid);
+			 $.ajax({
+			 url:'<php echo $this->createUrl('productSet/isDoubleSetDetail',array('companyId'=>$this->companyId,'productSetId'=>$model->lid));?>/productid/'+productid,
+			 type:'GET',
+			 dataType:'json',
+			 success:function(result){
+			 if(result.data){
+			 alert("<php echo yii::t('app','改单品套餐内已经存在！');?>");
+			 $('#ProductSetDetail_product_id').val(productVal);
+			 }else{
+			 //alert(2);
+			 productVal=$('#ProductSetDetail_product_id').val();
+			 }
+			 }
+			 });
+			 });*/
 		});
-		var productVal=$('#ProductSetDetail_product_id').val();
-		$('#ProductSetDetail_product_id').change(function(){
-			var productid = $(this).val();
-			//alert(productid);
-			$.ajax({
-				url:'<?php echo $this->createUrl('productBom/isDoubleSetDetail',array('companyId'=>$this->companyId,));?>/productid/'+productid,
-				type:'GET',
-				dataType:'json',
-				success:function(result){
-					if(result.data){
-						alert("<?php echo yii::t('app','品项已经存在！');?>");
-						 $('#ProductSetDetail_product_id').val(productVal);        
-					}else{
-						//alert(2);
-						productVal=$('#ProductSetDetail_product_id').val();	
-					}
-				}
-			});													 
-		});
-	});
-	
-	$('.minus').click(function(){
-		var input = $(this).siblings('input');
-		var num = parseInt(input.val());
-		var maxgroupno = parseInt(input.attr('maxgroupno'));
-		if(num-1 > 0){
-				num = num - 1;
-		}
-		input.val(num);			
-	});
-	$('.plus').click(function(){
-		var input = $(this).siblings('input');
-		var num = parseInt(input.val());
-		var maxgroupno = parseInt(input.attr('maxgroupno'));
-		num = num + 1;
-		if(num > maxgroupno){
-				num = maxgroupno+1;
-				$("#isSelectId").val('1');
-		}
-		input.val(num);			
-	});
-</script>
+	</script>

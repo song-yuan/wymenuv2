@@ -67,20 +67,27 @@ class SiteTypeController extends BackendController
 	}
 	public function actionDelete() {
 		//$ids = $_POST['type_id'] ;
-                $ids = Yii::app()->request->getPost('type_id');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$ids = Yii::app()->request->getPost('ids');
+		//var_dump($ids);exit;
+		$is_sync = DataSync::getInitSync();
+        //        Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		//var_dump(implode(',' , $ids),$this->companyId);exit;
                 //$sql='update nb_site_type set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId';
                 //$command=Yii::app()->db->createCommand($sql);
                 //$command->bindValue(":ids" , implode(',' , $ids));
                 //$command->bindValue(":dpid" , $this->companyId);
                 //var_dump($command);exit;
+                //var_dump($ids);exit;
 		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_site_type set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_site_type set delete_flag=1, is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
 			
-			Yii::app()->db->createCommand('update nb_site set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			Yii::app()->db->createCommand('update nb_site set delete_flag=1, is_sync ='.$is_sync.' where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
+		}else{
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
+			
 		}
 		$this->redirect(array('siteType/index' , 'companyId' => $this->companyId));
 	}

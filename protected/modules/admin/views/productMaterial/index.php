@@ -57,8 +57,8 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:16%"><?php echo yii::t('app','品项名称');?></th>
-								<th ><?php echo yii::t('app','编号');?></th>
+								<th style="width:16%"><?php echo yii::t('app','品项编号');?></th>
+								<th ><?php echo yii::t('app','品项名称');?></th>
 								<th ><?php echo yii::t('app','类型');?></th>
 								<th><?php echo yii::t('app','店内码');?></th>
 								<th><?php echo yii::t('app','库存单位');?></th>
@@ -73,12 +73,12 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo $model->material_name;?></td>
-								<td ><?php echo $model->material_identifier;?></td>
+								<td style="width:16%"><?php echo $model->material_identifier;?></td>
+								<td ><?php echo $model->material_name;?></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
 								<td ><?php echo $model->material_private_identifier;?></td>
-								<td ><?php echo $model->stock_unit_id;?></td>
-								<td ><?php echo $model->sales_unit_id;?></td>
+								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
+								<td ><?php echo Common::getStockName($model->sales_unit_id);?></td>
 								<td ><?php echo $model->stock;?></td>
 								<td ><?php echo $model->stock_cost;?></td>
 								<td class="center">
@@ -87,100 +87,8 @@
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
-					<!-- test start -->
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:16%">FGT</td>
-								<td >11</td>
-								<td>盐</td>
-								<td >3</td>
-								<td >箱</td>
-								<td >克</td>
-								<td >1433.00</td>
-								<td >1200.00</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:16%">IOK</td>
-								<td >34</td>
-								<td>酵母粉</td>
-								<td >45</td>
-								<td >盒</td>
-								<td >克</td>
-								<td >455.00</td>
-								<td >300.00</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:16%">SOE</td>
-								<td >34</td>
-								<td>牛奶</td>
-								<td >33</td>
-								<td >箱</td>
-								<td >克</td>
-								<td >690.00</td>
-								<td >400.00</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:16%"> ERG</td>
-								<td >33</td>
-								<td>酱油</td>
-								<td >64</td>
-								<td >箱</td>
-								<td >克</td>
-								<td >611.00</td>
-								<td >500.00</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:16%">HJI</td>
-								<td >27</td>
-								<td>苹果</td>
-								<td >18</td>
-								<td >箱</td>
-								<td >个</td>
-								<td >3264.00</td>
-								<td >2674.00</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-					<!-- test end -->
 						</tbody>
 					</table>
-					<!-- 分页（测式） -->
-					<div class="row">
-						<div class="col-md-5 col-sm-12">
-							<div class="dataTables_info">共 1 页 , 5 条数据 , 当前是第 1 页</div>
-						</div>
-						<div class="col-md-7 col-sm-12">
-							<div class="dataTables_paginate paging_bootstrap">
-								<ul class="pagination pull-right" id="yw0">
-									<li class=" disabled"><a href="#">&lt;&lt;</a></li>
-									<li class=" disabled"><a href="#">&lt;</a></li>
-									<li class=" active"><a href="#">1</a></li>
- 									<li class=""><a href="#">&gt;</a></li>
-									<li class=""><a href="#">&gt;&gt;</a></li>
-								</ul>	
-							</div>
-						</div>
-					</div>
-					<!-- 分页（测试） 结束 -->
-
-					<!-- 分页（正式） -->
 					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">

@@ -51,9 +51,8 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:16%"><?php echo yii::t('app','品项ID');?></th>
-								<th><?php echo yii::t('app','品项名称');?></th>
-								<th><?php echo yii::t('app','入库进价');?></th>
+								<th style="width:16%"><?php echo yii::t('app','品项名称');?></th>
+								<th><?php echo yii::t('app','退货金额');?></th>
 								<th><?php echo yii::t('app','退货库存');?></th>
 								<th><?php echo yii::t('app','赠品数量');?></th>
 								<th>&nbsp;</th>
@@ -64,8 +63,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo $model->material_id;?></td>
-								<td><?php echo $model->material_name;?></td>
+								<td style="width:16%"><?php echo Common::getmaterialName($model->material_id);?></td>
 								<td><?php echo $model->price;?></td>
 								<td ><?php echo $model->stock;?></td>
 								<td><?php echo $model->free_stock;?></td>
@@ -75,41 +73,9 @@
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
-						<!-- test start -->
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:16%">3</td>
-								<td>DFE</td>
-								<td>50</td>
-								<td >300</td>
-								<td>0</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-						<!-- test end -->
-						</tbody>
+					</tbody>
 					</table>
-					<!-- 分页（测式） -->
-					<div class="row">
-						<div class="col-md-5 col-sm-12">
-							<div class="dataTables_info">共 1 页 , 1 条数据 , 当前是第 1 页</div>
-						</div>
-						<div class="col-md-7 col-sm-12">
-							<div class="dataTables_paginate paging_bootstrap">
-								<ul class="pagination pull-right" id="yw0">
-									<li class=" disabled"><a href="#">&lt;&lt;</a></li>
-									<li class=" disabled"><a href="#">&lt;</a></li>
-									<li class=" active"><a href="#">1</a></li>
-									<li class=""><a href="#">&gt;</a></li>
-									<li class=""><a href="#">&gt;&gt;</a></li>
-								</ul>	
-							</div>
-						</div>
-					</div>
-					<!-- 分页（测试） 结束 -->
-
-						<?php if($pages->getItemCount()):?>
+					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">

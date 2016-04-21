@@ -31,6 +31,56 @@ class Helper
 		$companies = Company::model()->findAll('delete_flag=0') ;
 		return CHtml::listData($companies, 'dpid', 'company_name');
 	}
+	static public function genProductMaterial() { // 品项名称
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companies = ProductMaterial::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
+		return CHtml::listData($companies, 'lid', 'material_name');
+	}
+	static public function genStockUnit() { // 库存单位名称
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companies = MaterialUnit::model()->findAll('unit_type=0 and delete_flag=0 and dpid='.$companyId) ;
+		return CHtml::listData($companies, 'lid', 'unit_name');
+	}
+	static public function genSalesUnit() { // 零售单位名称
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companies = MaterialUnit::model()->findAll('unit_type=1 and delete_flag=0 and dpid='.$companyId) ;
+		return CHtml::listData($companies, 'lid', 'unit_name');
+	}
+	static public function genOrgClass() { // 组织类型名称
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companies = OrganizationClassification::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
+		return CHtml::listData($companies, 'lid', 'classification_name');
+	}
+	static public function genMfrClass() { //厂商类型名称
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companies = ManufacturerClassification::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
+		return CHtml::listData($companies, 'lid', 'classification_name');
+	}
+	static public function genMfrInfoname() { //厂商名称
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companies = ManufacturerInformation::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
+		//var_dump($companies);exit;
+		return CHtml::listData($companies, 'lid', 'manufacturer_name');
+	}
+	static public function genOrgInfoname() { //组织名称
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companies = OrganizationInformation::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
+		return CHtml::listData($companies, 'lid', 'organization_name');
+	}
+	static public function genUsername() {//管理员
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$companies = User::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
+		// var_dump($companies);exit;
+		return CHtml::listData($companies, 'lid', 'username');
+	}
+	
+	// 品项分类
+	static public function getCategory($companyId,$pid=0){
+		$command = Yii::app()->db->createCommand('select * from nb_material_category where dpid=:companyId and pid=:pid and delete_flag=0');
+		$command->bindValue(':companyId',$companyId);
+		$command->bindValue(':pid',$pid);
+		return $command->queryAll();
+	}
 	//生成文件名字
 	static public function genFileName(){
 		if (function_exists('com_create_guid') === true)

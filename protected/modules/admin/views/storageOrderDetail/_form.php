@@ -10,25 +10,17 @@
 	#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 	</style>
 	<div class="form-body">
+		<div class="form-group">
+			<?php echo $form->label($model, '品项分类',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+			</div>
+		</div>
 		<div class="form-group" <?php if($model->hasErrors('material_id')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'material_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropdownlist($model, 'material_id', array('0'=>'0','1'=>'1'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('material_id')));?>
+				<?php echo $form->dropdownlist($model, 'material_id', array('0' => yii::t('app','-- 请选择 --')) +$materials ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('material_id')));?>
 				<?php echo $form->error($model, 'material_id' )?>
-			</div>
-		</div>
-        <div class="form-group" <?php if($model->hasErrors('material_name')) echo 'has-error';?>>
-			<?php echo $form->label($model, 'material_name',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->dropdownlist($model, 'material_name', array('0'=>'0','1'=>'1'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('material_name')));?>
-				<?php echo $form->error($model, 'material_name' )?>
-			</div>
-		</div>
-        <div class="form-group <?php if($model->hasErrors('price')) echo 'has-error';?>">
-			<?php echo $form->label($model, 'price',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('price')));?>
-				<?php echo $form->error($model, 'price' )?>
 			</div>
 		</div>
 		<div class="form-group <?php if($model->hasErrors('stock')) echo 'has-error';?>">
@@ -77,5 +69,26 @@
                             sid=$('.category_selecter').eq(1).val();
                             //alert(sid);
                         }
+	   });
+	   $('#selectCategory').change(function(){
+		   var cid = $(this).val();
+		   //alert($('#ProductSetDetail_product_id').html());
+		   $.ajax({
+			   url:'<?php echo $this->createUrl('StorageOrderDetail/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
+			   type:'GET',
+			   dataType:'json',
+			   success:function(result){
+				   //alert(result.data);
+				   var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
+				   if(result.data.length){
+					   //alert(1);
+					   $.each(result.data,function(index,value){
+						   str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+					   });
+				   }
+				   //alert(str);
+				   $('#StorageOrderDetail_material_id').html(str);
+			   }
+		   });
 	   });
 </script>

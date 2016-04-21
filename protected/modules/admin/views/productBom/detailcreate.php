@@ -1,6 +1,6 @@
-	<!-- BEGIN PAGE -->  
+	<!-- BEGIN PAGE -->
 		<div class="page-content">
-			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -22,9 +22,9 @@
 			</div>
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<!-- BEGIN PAGE HEADER-->   
+			<!-- BEGIN PAGE HEADER-->
 			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','BOM管理'),'subhead'=>yii::t('app','添加BOM明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','BOM管理'),'url'=>$this->createUrl('productBom/detailindex' , array('companyId'=>$this->companyId,))),array('word'=>\yii::t('app','添加BOM明细'),'url'=>''))));?>
-			
+
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
@@ -38,12 +38,12 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_detailform', array('model'=>$model,'pblid'=>$pblid, 'categories' => $categories,'categoryId'=>$categoryId,'products'=>$products,)); ?>
-							<!-- END FORM--> 
+							<?php echo $this->renderPartial('_detailform', array('model'=>$model,'pblid'=>$pblid, 'categories' => $categories,'categoryId'=>$categoryId,'materials'=>$materials,)); ?>
+							<!-- END FORM-->
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- END PAGE CONTENT-->    
+			<!-- END PAGE CONTENT-->
 		</div>
-		<!-- END PAGE -->  
+		<!-- END PAGE -->

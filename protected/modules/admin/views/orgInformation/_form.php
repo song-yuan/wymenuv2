@@ -11,13 +11,12 @@
 	</style>
 	
 	<div class="form-body">
-		<div class="form-group  <?php if($model->hasErrors('classification_id')) echo 'has-error';?>">
+		<div class="form-group" <?php if($model->hasErrors('classification_id')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'classification_id',array('class' => 'col-md-3 control-label'));?>
-			<div id="category_container" class="col-md-9">
-			<?php echo $form->dropdownlist($model, 'classification_id',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('classification_id')));?>
-			<?php echo $form->error($model, 'classification_id' )?>
+			<div class="col-md-4">
+				<?php echo $form->dropDownList($model, 'classification_id', array('0' => yii::t('app','——请选择——')) +Helper::genOrgClass() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('classification_id')));?>
+				<?php echo $form->error($model, 'classification_id' )?>
 			</div>
-			<?php echo $form->hiddenField($model,'classification_id',array('class'=>'form-control')); ?>
 		</div>
 		<div class="form-group <?php if($model->hasErrors('organization_code')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'organization_code',array('class' => 'col-md-3 control-label'));?>
@@ -128,35 +127,12 @@
 $('#category_container').on('change','.category_selecter',function(){
 	var id = $(this).val();
 	var $parent = $(this).parent();
-            var sid ='0000000000';
-            var len=$('.category_selecter').eq(1).length;
-            if(len > 0)
-            {
-                sid=$('.category_selecter').eq(1).val();
-                //alert(sid);
-            }
-           
-	$(this).nextAll().remove();
-	$.ajax({
-		url:'<?php echo $this->createUrl('orgInformation/getChildren',array('companyId'=>$this->companyId));?>/pid/'+id,
-	type:'GET',
-	dataType:'json',
-	success:function(result){
-		if(result.data.length){
-			var str = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter">'+
-			'<option value="">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
-				$.each(result.data,function(index,value){
-					str = str + '<option value="'+value.id+'">'+value.name+'</option>';
-				});
-				str = str + '</select>';
-				$parent.append(str);
-				$('#Product_category_id').val('');
-				$parent.find('span').remove();
-			}else{
-                  //if(selname == 'category_id_selecter2')
-                    $('#Product_category_id').val(sid);                                                
-			}
-		}
-	});
+	var sid ='0000000000';
+	var len=$('.category_selecter').eq(1).length;
+	if(len > 0)
+	{
+		sid=$('.category_selecter').eq(1).val();
+		//alert(sid);
+	}
 });
 </script>

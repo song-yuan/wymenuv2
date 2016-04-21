@@ -20,7 +20,6 @@ class PurchaseOrderController extends BackendController
 		return true;
 	}
 	public function actionIndex(){
-		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;	
@@ -32,8 +31,6 @@ class PurchaseOrderController extends BackendController
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
-				'categoryId'=>$categoryId
-		
 		));
 	}
 	public function actionSetMealList() {
@@ -42,23 +39,19 @@ class PurchaseOrderController extends BackendController
 	public function actionCreate(){
 		$model = new PurchaseOrder();
 		$model->dpid = $this->companyId ;
-
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PurchaseOrder');
-                        $se=new Sequence("material_unit");
-                        $model->lid = $se->nextval();
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->update_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
-                        $py=new Pinyin();
-                        $model->unit_name = $py->py($model->unit_name);
-                        //var_dump($model);exit;
+			$se=new Sequence("purchase_order");
+			$model->lid = $se->nextval();
+			$model->create_at = date('Y-m-d H:i:s',time());
+			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->delete_flag = '0';
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('purchaseOrder/index' , 'companyId' => $this->companyId ));
 			}
 		}
-		$categories = $categories = PurchaseOrder::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
+		$categories = PurchaseOrder::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
 		$this->render('create' , array(
 			'model' => $model ,
@@ -73,8 +66,6 @@ class PurchaseOrderController extends BackendController
 		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PurchaseOrder');
-                        $py=new Pinyin();
-                        $model->unit_name = $py->py($model->unit_name);
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
@@ -99,5 +90,6 @@ class PurchaseOrderController extends BackendController
 			$this->redirect(array('purchaseOrder/index' , 'companyId' => $companyId)) ;
 		}
 	}
+
 
 }

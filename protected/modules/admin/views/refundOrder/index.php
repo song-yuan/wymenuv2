@@ -71,10 +71,10 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo $model->mfrInfor->manufacturer_name;?></td>
-								<td ><?php echo $model->organization->organization_name;?></td>
+								<td style="width:16%"><?php echo Common::getmfrName($model->manufacturer_id);?></td>
+								<td ><?php echo Common::getorgName($model->organization_id);?></td>
 								<td><?php echo $model->refund_account_no;?></td>
-								<td><?php echo $model->admin->username;?></td>
+								<td><?php echo Common::getuserName($model->admin_id);?></td>
 								<td><?php echo $model->storage_account_no;?></td>
 								<td><?php echo $model->refund_date;?></td>
 								<td><?php echo $model->remark;?></td>
@@ -88,47 +88,9 @@
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
-							<!-- test start -->
-								<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:16%">大白兔</td>
-								<td >仓库</td>
-								<td>24146253687590900543</td>
-								<td>咪咪</td>
-								<td>22146287687503023536</td>
-								<td>2016.04.08</td>
-								<td></td>
-								<td>未审核</td>
-								<td class="center">
-									<a href="<?php echo $this->createUrl('/admin/refundOrderDetail/index',array('companyId'=>$this->companyId));?>"><?php echo yii::t('app','订单详情');?></a>
-								</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<!-- test end -->
-						</tbody>
+					</tbody>
 					</table>
-				<!-- 分页（测式） -->
-					<div class="row">
-						<div class="col-md-5 col-sm-12">
-							<div class="dataTables_info">共 1 页 , 1 条数据 , 当前是第 1 页</div>
-						</div>
-						<div class="col-md-7 col-sm-12">
-							<div class="dataTables_paginate paging_bootstrap">
-								<ul class="pagination pull-right" id="yw0">
-									<li class=" disabled"><a href="#">&lt;&lt;</a></li>
-									<li class=" disabled"><a href="#">&lt;</a></li>
-									<li class=" active"><a href="#">1</a></li>
-									<li class=""><a href="#">&gt;</a></li>
-									<li class=""><a href="#">&gt;&gt;</a></li>
-								</ul>	
-							</div>
-						</div>
-					</div>
-					<!-- 分页（测试） 结束 -->
-
-						<?php if($pages->getItemCount()):?>
+					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">

@@ -9,7 +9,6 @@
  * @property string $create_at
  * @property string $update_at
  * @property string $material_id
- * @property string $material_name
  * @property string $price
  * @property string $stock
  * @property string $free_stock
@@ -33,14 +32,13 @@ class StorageOrderDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, material_id, material_name', 'required'),
+			array('update_at, material_id', 'required'),
 			array('lid, dpid, material_id, price, stock, free_stock', 'length', 'max'=>10),
-			array('material_name', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, material_id, material_name, price, stock, free_stock, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, material_id, price, stock, free_stock, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -52,8 +50,7 @@ class StorageOrderDetail extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
-		'material'=>array(self::BELONGS_TO , 'ProductMaterial' ,'','on'=> 't.material_id=material.lid and material.dpid=t.dpid'),
+				'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 		);
 	}
 
@@ -67,8 +64,7 @@ class StorageOrderDetail extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'material_id' => '品项ID',
-			'material_name' => '品项名称',
+			'material_id' => '品项名称',
 			'price' => '入库进价',
 			'stock' => '入库库存',
 			'free_stock' => '赠品数',
@@ -99,7 +95,6 @@ class StorageOrderDetail extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('material_id',$this->material_id,true);
-		$criteria->compare('material_name',$this->material_name,true);
 		$criteria->compare('price',$this->price,true);
 		$criteria->compare('stock',$this->stock,true);
 		$criteria->compare('free_stock',$this->free_stock,true);
