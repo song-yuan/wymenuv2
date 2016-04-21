@@ -72,55 +72,9 @@
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
-						<!--test start-->
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:35%">仓库</td>
-								<td>所有物品</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:35%">总店</td>
-								<td>高大尚</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td style="width:35%">分店</td>
-								<td>多多</td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-
-						<!--test end-->
 						</tbody>
 					</table>
-				<!-- 分页（测式） -->
-					<div class="row">
-						<div class="col-md-5 col-sm-12">
-							<div class="dataTables_info">共 1 页 , 3 条数据 , 当前是第 1 页</div>
-						</div>
-						<div class="col-md-7 col-sm-12">
-							<div class="dataTables_paginate paging_bootstrap">
-								<ul class="pagination pull-right" id="yw0">
-									<li class=" disabled"><a href="#">&lt;&lt;</a></li>
-									<li class=" disabled"><a href="#">&lt;</a></li>
-									<li class=" active"><a href="#">1</a></li>
-									<li class=""><a href="#">&gt;</a></li>
-									<li class=""><a href="#">&gt;&gt;</a></li>
-								</ul>	
-							</div>
-						</div>
-					</div>
-					<!-- 分页（测试） 结束 -->
-
-						<?php if($pages->getItemCount()):?>
+					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">

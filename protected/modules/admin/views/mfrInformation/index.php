@@ -43,7 +43,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','信息列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
-							<?php echo CHtml::dropDownList('selectCategory', $mfrclassId, $categories , array('class'=>'form-control'));?>
+							<?php //echo CHtml::dropDownList('selectCategory', $mfrclassId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<a href="<?php echo $this->createUrl('mfrInformation/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
@@ -77,7 +77,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php if(!empty($model->mfrclass->classification_name)) echo $model->orgclass->classification_name;?></td>
+								<td ><?php echo $this->getClassName($model->classification_id);?></td>
 								<td><?php echo $model->manufacturer_name;?></td>
 								<td><?php echo $model->post_code;?></td>
 								<td><?php echo $model->address;?></td>
@@ -95,157 +95,9 @@
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
-					<!-- test start -->
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td>糖</td>
-								<td>大白兔</td>
-								<td> </td>
-								<td></td>
-								<td>周&&</td>
-								<td>13245671234</td>
-								<td> </td>
-								<td> </td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td> </td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td>糖</td>
-								<td>砂糖</td>
-								<td> </td>
-								<td></td>
-								<td>吴XX</td>
-								<td>13245671234</td>
-								<td> </td>
-								<td> </td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td> </td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td>食盐</td>
-								<td>渤海盐场</td>
-								<td> </td>
-								<td></td>
-								<td>郑。。</td>
-								<td>13245671234</td>
-								<td> </td>
-								<td> </td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td> </td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td>醋</td>
-								<td>山西老陈醋</td>
-								<td> </td>
-								<td></td>
-								<td>王</td>
-								<td>13245671234</td>
-								<td> </td>
-								<td> </td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td> </td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td>醋</td>
-								<td>巧媳妇醋</td>
-								<td> </td>
-								<td></td>
-								<td>冯</td>
-								<td>13245671234</td>
-								<td> </td>
-								<td> </td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td> </td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td>醋</td>
-								<td>米醋</td>
-								<td> </td>
-								<td></td>
-								<td>陈</td>
-								<td>13245671234</td>
-								<td> </td>
-								<td> </td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td> </td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td>油</td>
-								<td>西王玉米胚芽油</td>
-								<td> </td>
-								<td></td>
-								<td>楮</td>
-								<td>13245671234</td>
-								<td> </td>
-								<td> </td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td> </td>
-								<td class="center">
-								<a href="#">编辑</a>
-								</td>
-							</tr>
-						
-					<!-- test end -->
 						</tbody>
 					</table>
-				<!-- 分页（测式） -->
-					<div class="row">
-						<div class="col-md-5 col-sm-12">
-							<div class="dataTables_info">共 1 页 , 7 条数据 , 当前是第 1 页</div>
-						</div>
-						<div class="col-md-7 col-sm-12">
-							<div class="dataTables_paginate paging_bootstrap">
-								<ul class="pagination pull-right" id="yw0">
-									<li class=" disabled"><a href="#">&lt;&lt;</a></li>
-									<li class=" disabled"><a href="#">&lt;</a></li>
-									<li class=" active"><a href="#">1</a></li>
-									<li class=""><a href="#">&gt;</a></li>
-									<li class=""><a href="#">&gt;&gt;</a></li>
-								</ul>	
-							</div>
-						</div>
-					</div>
-					<!-- 分页（测试） 结束 -->
-
-						<?php if($pages->getItemCount()):?>
+					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">

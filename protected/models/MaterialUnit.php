@@ -54,7 +54,6 @@ class MaterialUnit extends CActiveRecord
 		return array(
 		'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 		'productMaterial'=>array(self::HAS_MANY,'ProductMaterial','','on'=>'t.lid=ProductMaterial.stock_unit_id or t.lid=ProductMaterial.sales_unit_id and ProductMaterial.dpid=t.dpid and ProductMaterial.delete_flag=0'),
-		'unitRatio'=>array(self::HAS_MANY,'MaterialUnitRatio','','on'=>'unit.stock_unit_id=t.lid or unit.sales_unit_id=t.lid'),
 		);
 	}
 

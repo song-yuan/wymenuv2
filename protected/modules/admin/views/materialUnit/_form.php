@@ -19,13 +19,9 @@
 		</div>
 		<div class="form-group <?php if($model->hasErrors('unit_type')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'unit_type',array('class' => 'col-md-3 control-label'));?>
-			<div class="radio-list">
-				<label class="radio-inline">
-				<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>1" value="0" <?php if($model->unit_type==0) echo "checked";?> /> <?php echo yii::t('app','库存单位');?>
-				</label>
-				<label class="radio-inline">
-				<input type="radio" name="optionsRadios<?php echo $model->lid;?>" id="optionsRadios<?php echo $model->lid;?>2" value="1" <?php if($model->unit_type==1) echo "checked";?>  /> <?php echo yii::t('app','零售单位');?>
-				</label>
+			<div class="col-md-4">
+				<?php echo $form->dropDownList($model, 'unit_type', array('0' => yii::t('app','库存单位') , '1' => yii::t('app','零售单位')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('unit_type')));?>
+				<?php echo $form->error($model, 'unit_type' )?>
 			</div>
 		</div>
 		<div class="form-group" <?php if($model->hasErrors('unit_specifications')) echo 'has-error';?>>

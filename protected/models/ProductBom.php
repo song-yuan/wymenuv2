@@ -32,11 +32,11 @@ class ProductBom extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, product_id, material_id, sales_unit_id', 'required'),
+			array('lid, dpid','required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, product_id, material_id, number, sales_unit_id', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
-			array('create_at', 'safe'),
+			array('create_at ,update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, product_id, material_id, number, sales_unit_id, delete_flag, is_sync', 'safe', 'on'=>'search'),
@@ -51,8 +51,10 @@ class ProductBom extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'product' => array(self::HAS_ONE , 'Product' , '' , 'on' => ' t.product_id=product.lid and t.dpid=product.dpid'),
-			'material' => array(self::HAS_ONE , 'ProductMaterial' , '' , 'on' => ' t.material_id=material.lid and t.dpid=material.dpid'),
+			'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
+			'product' => array(self::BELONGS_TO , 'Product' , '' , 'on' => ' t.product_id=product.lid and t.dpid=product.dpid and product.delete_flag=0'),
+			'material' => array(self::BELONGS_TO , 'ProductMaterial' , '' , 'on' => ' t.material_id=material.lid and t.dpid=material.dpid and material.delete_flag=0'),
+			//'unit'=>array(self::BELONGS_TO, 'MaterialUnit' , '' ,'on'=>'t.sales_unit_id=unit.lid and t.dpid=unit.dpid and unit.delete_flag=0'),
 		);
 	}
 

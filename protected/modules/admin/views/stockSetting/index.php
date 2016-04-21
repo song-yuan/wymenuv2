@@ -35,12 +35,14 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','安全库存设置');?></div>
 				</div>
 				<div class="portlet-body">
+
 					<div class="col-md-offset-3">	
-					安全库存 = 现有库存 < 日均销量 X (到货周期 + <input type="text" name="" class="" /> 天)<br /><br/>
-					日均销量 = 最近<input type="text" name="" class="" /> 天的日均销量<br /><br/>
+					安全库存 = 现有库存 < 日均销量 X (到货周期 + <input type="text" name="" class="" value="<?php if($model) : $model->safe_day; endif;?>" /> 天)<br /><br/>
+					日均销量 = 最近<input type="text" name="" class="" value="<?php if($model) :$model->sales_day; endif;?>" /> 天的日均销量<br /><br/>
 					<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
 					<a href="<?php echo $this->createUrl('bom/set' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
 					</div>
+
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->

@@ -59,7 +59,7 @@ class ProductMaterial extends CActiveRecord
 		return array(
 		'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 		'category' => array(self::BELONGS_TO , 'MaterialCategory' ,'','on'=> 't.category_id=category.lid and category.dpid=t.dpid'),
-		'materialunit' =>array(self::BELONGS_TO,'MaterialUnit','','on'=>'t.stock_unit_id=unit.lid or t.sales_unit_id =unit.lid'),
+		'unit' =>array(self::BELONGS_TO , 'MaterialUnit','','on'=>'t.stock_unit_id=unit.lid or t.sales_unit_id =unit.lid'),
 		);
 	}
 
@@ -71,7 +71,7 @@ class ProductMaterial extends CActiveRecord
 		return array(
 			'lid' => '自身id，统一dpid下递增',
 			'dpid' => '店铺id',
-			'category_id' => '种类',
+			'category_id' => '品项类别',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'material_name' => '品项名称',

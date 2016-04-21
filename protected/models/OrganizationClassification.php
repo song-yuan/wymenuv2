@@ -30,12 +30,12 @@ class OrganizationClassification extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, classification_name', 'required'),
+			array('lid, dpid, classification_name', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('classification_name, remark', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
-			array('create_at', 'safe'),
+			array('create_at, update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, classification_name, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),

@@ -6,6 +6,12 @@
 			'enctype' => 'multipart/form-data'
 		),
 )); ?>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
 	<style>
 	#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 	</style>
@@ -13,14 +19,14 @@
 		<div class="form-group" <?php if($model->hasErrors('manufacturer_id')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'manufacturer_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropdownlist($model, 'manufacturer_id', array('0'=>'0','1'=>'1'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('manufacturer_id')));?>
+				<?php echo $form->dropDownList($model, 'manufacturer_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genMfrInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('manufacturer_id')));?>
 				<?php echo $form->error($model, 'manufacturer_id' )?>
 			</div>
 		</div>
         <div class="form-group" <?php if($model->hasErrors('admin_id')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'admin_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropdownlist($model, 'admin_id', array('0'=>'0','1'=>'1'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('admin_id')));?>
+				<?php echo $form->dropDownList($model, 'admin_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genUsername() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('admin_id')));?>
 				<?php echo $form->error($model, 'admin_id' )?>
 			</div>
 		</div>
@@ -34,8 +40,8 @@
 		<div class="form-group <?php if($model->hasErrors('organization_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'organization_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropdownlist($model, 'organization_id',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('organization_id')));?>
-				<?php echo $form->error($model, 'organization_id' )?>
+                <?php echo $form->dropDownList($model, 'organization_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genOrgInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('organization_id')));?>
+                <?php echo $form->error($model, 'organization_id' )?>
 			</div>
 		</div>
 		<div class="form-group <?php if($model->hasErrors('organization_address')) echo 'has-error';?>">
@@ -48,7 +54,7 @@
 		<div class="form-group <?php if($model->hasErrors('delivery_date')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'delivery_date',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->textField($model, 'delivery_date',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('delivery_date')));?>
+                <?php echo $form->textField($model, 'delivery_date',array('class' => 'form-control ui_timepicker','placeholder'=>$model->getAttributeLabel('delivery_date')));?>
 				<?php echo $form->error($model, 'delivery_date' )?>
 			</div>
 		</div>
@@ -92,4 +98,20 @@
                             //alert(sid);
                         }
 	   });
+       $(function () {
+           $(".ui_timepicker").datetimepicker({
+           //showOn: "button",
+           //buttonImage: "./css/images/icon_calendar.gif",
+           //buttonImageOnly: true,
+               showSecond: true,
+               timeFormat: 'hh:mm:ss',
+               stepHour: 1,
+               stepMinute: 1,
+               stepSecond: 1
+       })
+       });
+
 </script>
+
+
+

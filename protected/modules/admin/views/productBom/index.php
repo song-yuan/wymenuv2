@@ -67,7 +67,7 @@
 							<tr class="odd gradeX">
 								<td ><?php echo $model->product_name ;?></td>
                                  <td class="center">
-								<a href="<?php echo $this->createUrl('productBom/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
+								<a href="<?php echo $this->createUrl('productBom/detailindex',array('pblid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

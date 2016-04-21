@@ -50,6 +50,7 @@ class OrgClassificationController extends BackendController
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->update_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
+			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('orgClassification/index' , 'companyId' => $this->companyId ));

@@ -1,4 +1,5 @@
-	<!-- BEGIN PAGE -->  
+
+<!-- BEGIN PAGE -->
 		<div class="page-content">
 			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -38,7 +39,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model , 'categories' => $categories)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model ,)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>

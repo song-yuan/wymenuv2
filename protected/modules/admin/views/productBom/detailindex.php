@@ -28,8 +28,8 @@
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <?php $form=$this->beginWidget('CActiveForm', array(
-				'id' => 'product-form',
-				'action' => $this->createUrl('productBom/detaildelete' , array('companyId' => $this->companyId,)),
+				'id' => 'material-form',
+				'action' => $this->createUrl('productBom/detaildelete' , array('companyId' => $this->companyId,'pblid'=>$pblid)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -60,6 +60,7 @@
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
+						<?php if($models):?>
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
@@ -70,69 +71,24 @@
 							</tr>
 						</thead>
 						<tbody>
-							<?php if($models):?>
+
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td ><?php echo $model->productMaterial->material_name ;?></td>
-                                <td><?php echo $model->sales_name;?></td>
+								<td><?php echo Common::getmaterialName($model->material_id) ;?></td>
+                                <td><?php echo Common::getSalesName($model->sales_unit_id);?></td>
                                 <td><?php echo $model->number;?></td>
                                 <td class="center">
-								<a href="<?php echo $this->createUrl('productBom/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('productBom/detailupdate',array('lid' => $model->lid ,'pblid'=>$model->product_id, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>             
 							</tr>
 						<?php endforeach;?>
+						</tbody>
 						<?php else:?>
-						<!--<tr><td><?php echo yii::t('app','还没有添加详细品项');?></td></tr>-->
+							<tr><td><?php echo yii::t('app','还没有添加详细产品');?></td></tr>
 						<?php endif;?>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td >食盐</td>
-                                <td>2.00</td>
-                                <td>20g</td>
-                                <td class="center">
-								<a href="#">编辑</a>
-								</td>             
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td >油</td>
-                                <td>20.00</td>
-                                <td>100g</td>
-                                <td class="center">
-								<a href="#">编辑</a>
-								</td>             
-							</tr>
-							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="" name="ids[]" /></td>
-								<td >香菜</td>
-                                <td>6.00</td>
-                                <td>100g</td>
-                                <td class="center">
-								<a href="#">编辑</a>
-								</td>             
-							</tr>
-						</tbody>	
 					</table>
-					<!-- 分页（测式） -->
-					<div class="row">
-						<div class="col-md-5 col-sm-12">
-							<div class="dataTables_info">共 1页 , 3 条数据 , 当前是第 1 页</div>
-						</div>
-						<div class="col-md-7 col-sm-12">
-							<div class="dataTables_paginate paging_bootstrap">
-								<ul class="pagination pull-right" id="yw0">
-									<li class=" disabled"><a href="#">&lt;&lt;</a></li>
-									<li class=" disabled"><a href="#">&lt;</a></li>
-									<li class=" active"><a href="#">1</a></li>
-									<li class=""><a href="#">&gt;</a></li>
-									<li class=""><a href="#">&gt;&gt;</a></li>
-								</ul>	
-							</div>
-						</div>
-					</div>
-					<!-- 分页（测试） 结束 -->
-						<?php if($pages->getItemCount()):?>
+					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
@@ -171,4 +127,15 @@
             <?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#material-form').submit(function(){
+				if(!$('.checkboxes:checked').length){
+					alert("<?php echo yii::t('app','请选择要删除的项');?>");
+					return false;
+				}
+				return true;
+			});
+		});
+	</script>
         

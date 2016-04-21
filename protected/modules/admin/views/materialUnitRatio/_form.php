@@ -13,14 +13,14 @@
 		<div class="form-group" <?php if($model->hasErrors('stock_unit_id')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'stock_unit_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->textField($model, 'stock_unit_id',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock_unit_id')));?>
+				<?php echo $form->dropDownList($model, 'stock_unit_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genStockUnit() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock_unit_id')));?>
 				<?php echo $form->error($model, 'stock_unit_id' )?>
 			</div>
 		</div>
 		<div class="form-group" <?php if($model->hasErrors('sales_unit_id')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'sales_unit_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->textField($model, 'sales_unit_id',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sales_unit_id')));?>
+				<?php echo $form->dropDownList($model, 'sales_unit_id',array('0' => yii::t('app','-- 请选择 --')) +Helper::genSalesUnit() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sales_unit_id')));?>
 				<?php echo $form->error($model, 'sales_unit_id' )?>
 			</div>
 		</div>
@@ -56,12 +56,12 @@
 	   $('#category_container').on('change','.category_selecter',function(){
 	   		var id = $(this).val();
 	   		var $parent = $(this).parent();
-                        var sid ='0000000000';
-                        var len=$('.category_selecter').eq(1).length;
-                        if(len > 0)
-                        {
-                            sid=$('.category_selecter').eq(1).val();
-                            //alert(sid);
-                        }
+			var sid ='0000000000';
+			var len=$('.category_selecter').eq(1).length;
+			if(len > 0)
+			{
+				sid=$('.category_selecter').eq(1).val();
+				//alert(sid);
+			}
 	   });
 </script>
