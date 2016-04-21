@@ -549,6 +549,8 @@ class DataSyncTables
         		"  `private_promotion_lid` int(10) NOT NULL DEFAULT '0',".
         		"  `main_id` int(10) NOT NULL DEFAULT '0',".
         		"  `product_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `product_name` varchar(255) NOT NULL,".
+        		"  `product_pic` varchar(255) NOT NULL,".
         		"  `is_retreat` char(1) NOT NULL DEFAULT '0',".
         		"  `original_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `price` decimal(10,2) NOT NULL DEFAULT '0.00',".
