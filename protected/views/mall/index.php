@@ -254,7 +254,7 @@ $(document).ready(function(){
        
     });
 
-    $("#container").on('touchstart','.add',function(){
+    $("body").on('touchstart','.add',function(){
     	var height = $('body').height();
     	var top = $(this).offset().top;
     	var left = $(this).offset().left;
@@ -305,7 +305,7 @@ $(document).ready(function(){
         });
     });
      
-    $("#container").on('touchstart','.minus',function(){ 
+    $("body").on('touchstart','.minus',function(){ 
         var t=$(this).parent().find('input[class*=result]');
         var productId = t.attr('product-id');
         var promoteId = t.attr('promote-id');
@@ -339,7 +339,7 @@ $(document).ready(function(){
         	dataType:'json'
         });
    });
-    $("#container").on('click','.lt-lt',function(){
+    $("body").on('click','.lt-lt',function(){
     	var str = $(this).html();
     	layer.open({
 		    type: 1,
