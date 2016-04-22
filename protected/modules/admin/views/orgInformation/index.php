@@ -89,8 +89,19 @@
 								<td><?php echo $model->tax_account;?></td>
 								<td><?php echo $model->address;?></td>
 								<td><?php echo $model->remark;?></td>
-								<td class="center">
-								<a href="<?php echo $this->createUrl('orgInformation/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<td class="center dropdown">
+									<p class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作</p>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="<?php echo $this->createUrl('orgInformation/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+										</li>
+										<li>
+											<a href="<?php echo $this->createUrl('#',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','盘存');?></a>
+										</li>
+										<li>
+											<a href="<?php echo $this->createUrl('#',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','盘损');?></a>
+										</li>
+									</ul>
 								</td>
 							</tr>
 						<?php endforeach;?>

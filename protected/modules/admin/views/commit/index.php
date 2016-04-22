@@ -45,6 +45,9 @@
 						<div class="btn-group">
 							<?php //echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
+						<div class="btn-group">
+							<button type="button"  class="btn blue" > <?php echo yii::t('app','自动生成调拨单');?></button>
+						</div>
 						<a href="<?php echo $this->createUrl('commit/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>

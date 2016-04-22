@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','安全库存设置'),'subhead'=>yii::t('app','安全库存设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','安全库存设置'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','库存设置'),'subhead'=>yii::t('app','库存设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存设置'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -32,15 +32,24 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','安全库存设置');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','库存设置');?></div>
 				</div>
 				<div class="portlet-body">
 
-					<div class="col-md-offset-3">	
-					安全库存 = 现有库存 < 日均销量 X (到货周期 + <input type="text" name="" class="" value="<?php if($model) : $model->safe_day; endif;?>" /> 天)<br /><br/>
-					日均销量 = 最近<input type="text" name="" class="" value="<?php if($model) :$model->sales_day; endif;?>" /> 天的日均销量<br /><br/>
-					<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-					<a href="<?php echo $this->createUrl('bom/set' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
+					<div class="col-md-offset-3">
+						<p>店铺库存(库存少于安全库存时自动申请调拨)</p>
+						日均销量 = 最近<input type="text" name="" class="" value="<?php //echo $model->sales_day;?>" /> 天的日均销量<br /><br/>
+						日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<库存范围 < 日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<br /><br/>
+						<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+						<a href="<?php echo $this->createUrl('bom/set' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
+					</div>
+
+					<div class="col-md-offset-3">
+						<p>仓库库存(库存少于安全库存时自动生成采购订单)</p>
+						日均销量 = 最近<input type="text" name="" class="" value="<?php //echo $model->sales_day;?>" /> 天的日均销量<br /><br/>
+						日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<库存范围 < 日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<br /><br/>
+						<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+						<a href="<?php echo $this->createUrl('bom/set' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
 					</div>
 
 				</div>

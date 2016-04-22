@@ -70,11 +70,14 @@ class LoginForm extends CFormModel
 			$this->_identity->authenticate();
 		}
 		if($this->_identity->errorCode===UserIdentity::ERROR_NONE)
-		{
+		{ 
 			$duration=$this->rememberMe ? 3600*24*30 : 0; // 30 days
+			//echo Yii::app()->user->login($this->_identity,$duration);exit;
 			if(Yii::app()->user->login($this->_identity,$duration)) {
+				//echo Yii::app()->user->login($this->_identity,$duration);
+				//exit;
 				return true;
-			} else {
+			} else {//var_dump($this->_identity);exit;
 				Yii::app()->user->setFlash('error' ,yii::t('app', '对不起，你没有权限登陆'));
 				return false ;
 			}

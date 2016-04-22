@@ -37,6 +37,15 @@
 											<?php echo $form->error($model, 'contact_name' )?>
 										</div>
 									</div>
+									<?php if($role=="2"):?>
+									<div class="form-group"> 
+										<?php echo $form->label($model, 'type',array('class' => 'col-md-3 control-label'));?>
+ 										<div class="col-md-4"> 
+											<?php echo $form->dropDownList($model, 'type',array( '1' => yii::t('app','店铺') , '2' => yii::t('app','仓库')) ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type')));?>
+											<?php echo $form->error($model, 'type' )?>
+										</div> 
+									</div>
+									<?php endif;?>
 									<div class="form-group">
 										<?php echo $form->label($model, 'mobile',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
