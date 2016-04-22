@@ -46,7 +46,7 @@ class DataSyncTables
     public $otherTableName=array(
         array("name"=>"本店会员","table"=>"nb_member_card"),
         array("name"=>"本店会员充值","table"=>"nb_member_recharge"),
-        array("name"=>"本店活动","table"=>"nb_local_activity"),//这张表云端暂时没有
+       // array("name"=>"本店活动","table"=>"nb_local_activity"),//这张表云端暂时没有
         array("name"=>"日结","table"=>"nb_close_account"),
         array("name"=>"日结明细","table"=>"nb_close_account_detail"),
         array("name"=>"订单","table"=>"nb_order"),
@@ -549,6 +549,8 @@ class DataSyncTables
         		"  `private_promotion_lid` int(10) NOT NULL DEFAULT '0',".
         		"  `main_id` int(10) NOT NULL DEFAULT '0',".
         		"  `product_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `product_name` varchar(255) NOT NULL,".
+        		"  `product_pic` varchar(255) NOT NULL,".
         		"  `is_retreat` char(1) NOT NULL DEFAULT '0',".
         		"  `original_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `price` decimal(10,2) NOT NULL DEFAULT '0.00',".
@@ -557,7 +559,7 @@ class DataSyncTables
         		"  `zhiamount` float NOT NULL DEFAULT '0',".
         		"  `is_waiting` char(1) NOT NULL DEFAULT '0',".
         		"  `weight` decimal(10,2) NOT NULL DEFAULT '0.00',".
-        		"  `taste_memo` varchar(50) NOT NULL,".
+        		"  `taste_memo` text NOT NULL,".
         		"  `is_giving` char(1) NOT NULL DEFAULT '0',".
         		"  `is_print` varchar(1) NOT NULL DEFAULT '0',".
         		"  `product_status` varchar(2) NOT NULL DEFAULT '0',".
