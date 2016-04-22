@@ -16,6 +16,7 @@
 										</div>
 									</div>
 								<?php endif;?>
+								<?php if(Yii::app()->user->role == User::POWER_ADMIN):?>
 									<div class="form-group <?php if($model->hasErrors('role')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'role',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -23,6 +24,24 @@
 											<?php echo $form->error($model, 'role' )?>
 										</div>
 									</div>
+								<?php elseif(Yii::app()->user->role == User::ADMIN):?>
+									<div class="form-group <?php if($model->hasErrors('role')) echo 'has-error';?>">
+										<?php echo $form->label($model, 'role',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'role', $this->roles3 ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->error($model, 'role' )?>
+										</div>
+									</div>
+								<?php elseif(Yii::app()->user->role == User::WAITER):?>
+									<div class="form-group <?php if($model->hasErrors('role')) echo 'has-error';?>">
+										<?php echo $form->label($model, 'role',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'role', $this->roles4 ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->error($model, 'role' )?>
+										</div>
+									</div>
+								<?php endif;?>
+								
 									<div class="form-group <?php if($model->hasErrors('username')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'username',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -61,8 +80,29 @@
 									
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="submit"  class="btn blue"><?php echo yii::t('app','确定');?></button>
 											<a href="<?php echo $this->createUrl('user/index',array('companyId'=>$this->companyId));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
+							
+<script type="text/javascript"> 							
+ $("#su").on('click',function() {
+         //alert(11);
+         //var p1 = $('#PrivatePromotion_to_group').children('option:selected').val();
+        // var username = $('#UserForm_username').val();
+         //var users = $('#username').val();
+         //alert(username.indexOf(users));
+//          if(username.indexOf(users)=="-1"){
+//              alert("用户名已存在！");
+//              return;
+//              }else{
+//                  alert(111);return;}
+         //var aa = document.getElementsById("username");
+         //alert(users);
+         //alert(username);
+        
+         $("#user-form").submit();
+     });
+
+ </script>

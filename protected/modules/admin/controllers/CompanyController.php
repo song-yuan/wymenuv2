@@ -13,6 +13,31 @@ class CompanyController extends BackendController
 	}
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+	
+		$criteria = new CDbCriteria;
+		if(Yii::app()->user->role == User::POWER_ADMIN)
+		{
+			$criteria->condition =' delete_flag=0 ';
+		}else if(Yii::app()->user->role == '2')
+		{
+			$criteria->condition =' delete_flag=0 and dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or dpid='.Yii::app()->user->companyId;
+		}else{
+			$criteria->condition = ' delete_flag=0 and dpid='.Yii::app()->user->companyId ;
+		}
+		//var_dump($criteria);exit;
+	
+		$pages = new CPagination(Company::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		$models = Company::model()->findAll($criteria);
+	
+		$this->render('index',array(
+				'models'=> $models,
+				'pages'=>$pages,
+		));
+	}
+	public function actionIndex1(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 
 		$criteria = new CDbCriteria;
                 if(Yii::app()->user->role == User::POWER_ADMIN)
@@ -31,36 +56,63 @@ class CompanyController extends BackendController
 		$pages->applyLimit($criteria);
 		$models = Company::model()->findAll($criteria);
 		
-		$this->render('index',array(
+		$this->render('index1',array(
 				'models'=> $models,
 				'pages'=>$pages,
 		));
 	}
 	public function actionCreate(){
-		if(Yii::app()->user->role != User::POWER_ADMIN) {
-			$this->redirect(array('company/index','companyId'=>  $this->companyId));
-		}
+		if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role == User::ADMIN) {
+		
 		$model = new Company();
 		$model->create_at = date('Y-m-d H:i:s');
-		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('Company');
-                        $model->create_at=date('Y-m-d H:i:s',time());
-                        $model->update_at=date('Y-m-d H:i:s',time());
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
-				$this->redirect(array('company/index','companyId'=> $this->companyId));
-			} else {
-				Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
+		if(Yii::app()->user->role == User::POWER_ADMIN){
+			if(Yii::app()->request->isPostRequest) {
+				$model->attributes = Yii::app()->request->getPost('Company');
+	                        $model->create_at=date('Y-m-d H:i:s',time());
+	                        $model->update_at=date('Y-m-d H:i:s',time());
+	                        //$model->comp_dpid=$this->companyId;
+	                        $model->type="0";
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
+					$this->redirect(array('company/index','companyId'=> $this->companyId));
+				} else {
+					Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
+				}
 			}
 		}
+		elseif(Yii::app()->user->role == User::ADMIN){
+			if(Yii::app()->request->isPostRequest) {
+				$model->attributes = Yii::app()->request->getPost('Company');
+				$model->create_at=date('Y-m-d H:i:s',time());
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->comp_dpid = $this->companyId;
+				//$model->type="0";
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
+					$this->redirect(array('company/index','companyId'=> $this->companyId));
+				} else {
+					Yii::app()->user->setFlash('error',yii::t('app','创建失败'));
+				}
+			}
+		}
+		$role = Yii::app()->user->role;
 		$printers = $this->getPrinterList();
+		//var_dump($printers);exit;
 		return $this->render('create',array(
 				'model' => $model,
 				'printers'=>$printers,
-                                'companyId'=>  $this->companyId
+				'role'=>$role,
+                'companyId'=>  $this->companyId
 		));
+		
+		
+		}else{
+			$this->redirect(array('company/index','companyId'=>  $this->companyId));
+		}
 	}
 	public function actionUpdate(){
+		$role = Yii::app()->user->role;
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
 		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
 		if(Yii::app()->request->isPostRequest) {
@@ -80,7 +132,8 @@ class CompanyController extends BackendController
 		return $this->render('update',array(
 				'model'=>$model,
 				'printers'=>$printers,
-                                'companyId'=>$this->companyId
+				'role'=>$role,
+                'companyId'=>$this->companyId
 		));
 	}
 	public function actionDelete(){

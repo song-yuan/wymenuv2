@@ -2,14 +2,39 @@
 class UserController extends BackendController
 {
 	public $roles ;
+	public $roles2;
+	public $roles3;
+	public $roles4;
 	public function init(){
 		$this->roles = array(
-			'2' => yii::t('app','管理员') ,
-			'3' => yii::t('app','服务员'),
+			'2' => yii::t('app','总部管理员'),
+			//'3' => yii::t('app','服务员'),
+		) ;
+		
+		$this->roles2 = array(
+				'1' => yii::t('app','超级管理员'),
+				'2' => yii::t('app','总部管理员'),
+				'3' => yii::t('app','店长'),
+				'4' => yii::t('app','收银员'),
+				'5' => yii::t('app','服务员'),
+		) ;
+		$this->roles3 = array(
+				//'1' => yii::t('app','超级管理员'),
+				//'2' => yii::t('app','总部管理员'),
+				'3' => yii::t('app','店长'),
+				'4' => yii::t('app','收银员'),
+				'5' => yii::t('app','服务员'),
+		) ;
+		$this->roles4 = array(
+				//'1' => yii::t('app','超级管理员'),
+				//'2' => yii::t('app','总部管理员'),
+				//'3' => yii::t('app','店长'),
+				'4' => yii::t('app','收银员'),
+				'5' => yii::t('app','服务员'),
 		) ;
 		if(Yii::app()->user->role == User::POWER_ADMIN) {
                     
-			$this->roles = array('1' => yii::t('app','系统管理员')) +$this->roles;
+			$this->roles = array('1' => yii::t('app','超级管理员')) +$this->roles;
                         //var_dump($this->roles);exit;
 		}
 		$this->roles = array('' => yii::t('app','-- 请选择 --' )) +$this->roles;
@@ -41,26 +66,66 @@ class UserController extends BackendController
 		));
 	}
 	public function actionCreate() {
+ 		
+// 		$sql = 'select username from nb_user where delete_flag = 0 ';
+// 		$command = $db->createCommand($sql);
+// 		$users = $command->queryAll();
+// 		if($users){
+// 			$usernames = " ";
+// 			foreach ($users as $username){
+// 				$usernames =$username['username'].','.$usernames;
+// 			}
+// 			if($usernames!=''){
+// 				$usernames = substr($usernames,0,-2);//除去最后一个“，”
+// 			}
+// 		}
+		//var_dump($usernames);exit;
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$model = new UserForm() ;
 		$model->dpid = $companyId ;
 		$model->status = 1;
-		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('UserForm');
-                        //$model->create_at=date('Y-m-d H:i:s',time());
-                        //$model->update_at=date('Y-m-d H:i:s',time());
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功'));
-				$this->redirect(array('user/index' , 'companyId' => $companyId));
-			}
-		}
-		$this->render('create' , array('model' => $model));
+				if(Yii::app()->request->isPostRequest) {
+					$model->attributes = Yii::app()->request->getPost('UserForm');
+		                        //$model->create_at=date('Y-m-d H:i:s',time());
+		                        //$model->update_at=date('Y-m-d H:i:s',time());
+					if($model->save()){
+						Yii::app()->user->setFlash('success',yii::t('app','添加成功'));
+						$this->redirect(array('user/index' , 'companyId' => $companyId));
+					}
+				}
+// 		if(Yii::app()->request->isPostRequest) {
+				
+// 			$model->attributes = Yii::app()->request->getPost('UserForm');
+// 			if($model->username){
+// 				$db = Yii::app()->db;
+// 				$sqls = 'select t.dpid from nb_user t where t.delete_flag = 0 and t.username ="'.$model->username.'"';
+// 				$command = $db->createCommand($sqls);
+// 				$a = $command->queryAll();
+// 				if(!empty($a)){
+// 					Yii::app()->user->setFlash('error' , yii::t('app','该用户名已存在！！'));
+// 					//$this->render('create' , array('model' => $model));
+		
+// 				}else{
+// 					if($model->save()){
+// 						Yii::app()->user->setFlash('success',yii::t('app','添加成功'));
+// 						$this->redirect(array('user/index' , 'companyId' => $companyId));
+// 					}
+// 				}
+// 			}
+// 		}
+		$this->render('create' , array(
+				'model' => $model
+				//'usernames' =>$usernames
+				
+		));
+
+		
 	}
 	public function actionUpdate() {
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));		
 		$id = Yii::app()->request->getParam('id');
                 Until::isUpdateValid(array($id),$companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(Yii::app()->user->role > User::ADMIN && Yii::app()->user->userId != $id) {
+		if(Yii::app()->user->role > User::WAITER && Yii::app()->user->userId != $id) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限修改'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}

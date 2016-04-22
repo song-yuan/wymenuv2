@@ -7,12 +7,12 @@ class MaterialCategoryController extends BackendController
 		$criteria->with = 'company';
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' tree,lid asc ';
-		
+
 		$models = MaterialCategory::model()->findAll($criteria);
-		
+
 		$id = Yii::app()->request->getParam('id',0);
 		$expandModel = MaterialCategory::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$id,':dpid'=>  $this->companyId));
-		
+
                 $expandNode = $expandModel?explode(',',$expandModel->tree):array(0);
 		//var_dump(substr('0000000000'.$expandNode[2],-10,10));exit;
 		$this->render('index',array(
@@ -39,7 +39,7 @@ class MaterialCategoryController extends BackendController
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $model->update_at=date('Y-m-d H:i:s',time());
-                        
+
 			if($model->save()){
                               //var_dump($model);exit;
                 $self = MaterialCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->lid,':dpid'=>  $this->companyId));
@@ -58,7 +58,7 @@ class MaterialCategoryController extends BackendController
 				$this->redirect(array('materialCategory/index' ,'companyId' => $this->companyId));
 			}
 		}
-		$this->render('_form1' , array(
+		$this->render('_form' , array(
 				'model' => $model,
 				'action' => $this->createUrl('materialCategory/create' , array('companyId'=>$this->companyId))
 		));
@@ -76,7 +76,7 @@ class MaterialCategoryController extends BackendController
 				$this->redirect(array('materialCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
 			}
 		}
-		$this->render('_form1' , array(
+		$this->render('_form' , array(
 				'model' => $model,
 				'action' => $this->createUrl('materialCategory/update' , array(
 						'companyId'=>$this->companyId,
@@ -95,7 +95,7 @@ class MaterialCategoryController extends BackendController
 		}
 		$this->redirect(array('materialCategory/index','companyId'=>$this->companyId,'id'=>$model->pid));
 	}
-	
-	
-	
+
+
+
 }

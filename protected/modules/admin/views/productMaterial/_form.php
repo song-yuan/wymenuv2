@@ -15,7 +15,7 @@
 			<?php echo $form->label($model, 'category_id',array('class' => 'col-md-3 control-label'));?>
 			<div id="category_container" class="col-md-9">
 			<?php $this->widget('application.modules.admin.components.widgets.MaterialCategorySelecter',array('categoryId'=>$model->category_id,'companyId'=>$this->companyId)); ?>
-			<?php echo $form->error($model, 'category_id' )?>
+			<?php echo $form->error($model, 'category_id' )?><?php echo $model->category_id;?>
 			</div>
 			<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
 		</div>

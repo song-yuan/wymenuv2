@@ -75,6 +75,9 @@
 						<?php endif;?>
 					</tbody>
 					</table>
+					<div class="">
+						<input type="button" class="" value="审核通过" />&nbsp;<input type="button" class="" value="审核未通过" />
+					</div>
 					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">

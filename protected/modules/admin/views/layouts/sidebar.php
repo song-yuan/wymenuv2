@@ -13,7 +13,7 @@
 					<span class="title"><?php echo yii::t('app','首页');?></span>					
 					</a>
 				</li>
-                                <?php if(Yii::app()->user->role < '3') : ?>
+                                <?php if(Yii::app()->user->role < '4') : ?>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' ,'payMethod', 'companyWifi', 'user' , 'basicFee' ,'synchronous' ))) echo 'active';?>">
 					<a href="">
                                             <i class="fa fa-cog"></i> 
@@ -49,14 +49,14 @@
 						<li class="<?php if(Yii::app()->controller->id == 'retreat') echo 'active';?>"><a href="<?php echo $this->createUrl('retreat/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','退菜理由选项设定');?></a></li>
 					</ul>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('bom','stock','set','report','productBom','productMaterial','materialCategory','materialUnit','materialUnitRatio','orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail','product','productCategory','stockSetting','materialStockLog'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('bom','stock','set','report','productBom','productMaterial','materialCategory','materialUnit','materialUnitRatio','orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail','product','productCategory','stockSetting','materialStockLog','commit','commitDetail'))) echo 'active';?>">
 					<a href="">
 					<i class="fa fa-coffee"></i> 
 					<span class="title"><?php echo yii::t('app','库存管理');?></span>		
 					</a>
 					<ul class="sub-menu">
 						<li class="<?php if((Yii::app()->controller->id=="bom"&&$this->getAction()->getId()=="bom")||in_array(Yii::app()->controller->id,array('productBom','productMaterial','product','materialCategory','materialUnit','productCategory','materialUnitRatio','materialStockLog'))) echo 'active';?>"><a href="<?php echo $this->createUrl('bom/bom',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','品项信息');?></a></li>
-						<li class="<?php if(( Yii::app()->controller->id=="bom"&&$this->getAction()->getId()=="stock")||in_array(Yii::app()->controller->id,array('orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail') )) echo 'active';?>"><a href="<?php echo $this->createUrl('bom/stock',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','入库信息');?></a></li>
+						<li class="<?php if(( Yii::app()->controller->id=="bom"&&$this->getAction()->getId()=="stock")||in_array(Yii::app()->controller->id,array('orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail','commit','commitDetail') )) echo 'active';?>"><a href="<?php echo $this->createUrl('bom/stock',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','入库信息');?></a></li>
 						<li class="<?php if( Yii::app()->controller->id=="report") echo 'active';?>"><a href="<?php echo $this->createUrl('report/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','统计报表');?></a></li>
 						<li class="<?php if(( Yii::app()->controller->id=="bom"&&$this->getAction()->getId()=="set")||in_array(Yii::app()->controller->id,array('stockSetting',))) echo 'active';?>"><a href="<?php echo $this->createUrl('bom/set',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','系统设置');?></a></li>
 					</ul>
