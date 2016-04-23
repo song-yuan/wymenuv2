@@ -53,7 +53,7 @@
 					type:'GET',
 					dataType:'json',
 					success:function(result){
-						alert(result.data);
+						//alert(result.data);
 						var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
 						if(result.data.length){
 							//alert(1);
@@ -84,6 +84,6 @@
 			 }
 			 }
 			 });
-			 });
-		});*/
+			 });*/
+		});
 	</script>
