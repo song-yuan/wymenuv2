@@ -73,11 +73,11 @@
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
+							<tr>
+								<td colspan="20" style="text-align: right;"><input type="button" class="btn blue" value="审核通过" />&nbsp;<input type="button" class="btn blue" value="审核未通过" />&nbsp;<input type="button" class="btn blue" value="生成入库单" />&nbsp;<input type="button" class="btn blue" value="生成退货单" /></td>
+							</tr>
 						</tbody>
 					</table>
-					<div class="">
-						<input type="button" class="" value="审核通过" />&nbsp;<input type="button" class="" value="审核未通过" />&nbsp;<input type="button" class="" value="生成入库单" />&nbsp;<input type="button" class="" value="生成退货单" />
-					</div>
 					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
@@ -85,6 +85,7 @@
 									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?> , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
+
 							<div class="col-md-7 col-sm-12">
 								<div class="dataTables_paginate paging_bootstrap">
 								<?php $this->widget('CLinkPager', array(
@@ -107,6 +108,7 @@
 								?>
 								</div>
 							</div>
+
 						</div>
 						<?php endif;?>					
 					

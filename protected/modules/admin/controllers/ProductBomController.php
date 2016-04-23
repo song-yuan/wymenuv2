@@ -42,7 +42,7 @@ class ProductBomController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductBom');
 			$se=new Sequence("product_bom");
-			//$model->lid = $se->nextval();
+			$model->lid = $se->nextval();
             $model->product_id = $pblid;
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
@@ -80,7 +80,7 @@ class ProductBomController extends BackendController
 			}
 		}
         $categories = $this->getCategories();
-        $categoryId=0;
+		$categoryId=  $this->getCategoryId($lid);
         $materials = $this->getMaterials($categoryId);
         $materialslist=CHtml::listData($materials, 'lid', 'material_name');
 		$this->render('detailupdate' , array(
@@ -149,6 +149,13 @@ class ProductBomController extends BackendController
 		}
 		return $optionsReturn;
 	}
+	private function getCategoryId($lid){
+		$db = Yii::app()->db;
+		$sql = "SELECT category_id from nb_product_bom pb,nb_product_material pm where pb.dpid=pm.dpid and pb.material_id=pm.lid and pb.lid=:lid";
+		$command=$db->createCommand($sql);
+		$command->bindValue(":lid" , $lid);
+		return $command->queryScalar();
+	}
 	private function getMaterials($categoryId){
 		if($categoryId==0)
 		{
@@ -178,6 +185,18 @@ class ProductBomController extends BackendController
 			$tmp['name'] = $c['material_name'];
 			$tmp['id'] = $c['lid'];
 			$treeDataSource['data'][] = $tmp;
+		}
+		Yii::app()->end(json_encode($treeDataSource));
+	}
+	public function actionIsDoubleBomDetail(){
+		$materialId = Yii::app()->request->getParam('materialid',0);
+		$productBomId = Yii::app()->request->getParam('productBomId',0);
+		$companyId = Yii::app()->request->getParam('companyId',0);
+		$treeDataSource = array('data'=>FALSE,'delay'=>400);
+		$material= ProductBom::model()->find('t.dpid = :dpid and t.material_id = :materialid and t.delete_flag=0',array(':dpid'=>$companyId,':setid'=>$productBomId,':productid'=>$materialId));
+		//var_dump($productId,$productSetId,$companyId,$product);exit;
+		if(!empty($material)){
+			$treeDataSource['data'] = TRUE;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
 	}
