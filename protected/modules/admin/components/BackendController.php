@@ -12,7 +12,7 @@ class BackendController extends CController
 			if($controllerId != 'login' && $action != 'upload') {
 				$this->redirect(Yii::app()->params['admin_return_url']);
 			}
-		} elseif(Yii::app()->user->role > User::WAITER &&$controllerId != 'login'){
+		} elseif(Yii::app()->user->role > User::USER &&$controllerId != 'login'){
 			$this->redirect(Yii::app()->params['admin_return_url']);
 		}else {
 			$this->companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId',"0000000000"));
