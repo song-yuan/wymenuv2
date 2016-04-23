@@ -8,6 +8,13 @@
 )); ?>
 	
 	<div class="form-body">
+		<div class="form-group <?php if($model->hasErrors('classid')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'classid',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->dropDownList($model, 'classid', array('0' => yii::t('app','门店') , '1' => yii::t('app','仓库'), '2'=>yii::t('app','其他')),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('classid')));?>
+				<?php echo $form->error($model, 'classid' )?>
+			</div>
+		</div>
         <div class="form-group <?php if($model->hasErrors('classification_name')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'classification_name',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">

@@ -54,7 +54,8 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:35%"><?php echo yii::t('app','分类名称');?></th>
+								<th style="width:35%"><?php echo yii::t('app','所属类型');?></th>
+								<th><?php echo yii::t('app','分类名称');?></th>
 								<th><?php echo yii::t('app','备注');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -64,7 +65,8 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:35%"><?php echo $model->classification_name;?></td>
+								<td style="width:35%"><?php if($model->classid==0) echo "门店"; elseif($model->classid==1) echo"仓库"; elseif($model->classid==2) echo"其他";?></td>
+								<td><?php echo $model->classification_name;?></td>
 								<td><?php echo $model->remark;?></td>
 								<td class="center" >
 								<a href="<?php echo $this->createUrl('orgClassification/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>

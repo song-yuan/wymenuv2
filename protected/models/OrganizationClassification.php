@@ -30,7 +30,7 @@ class OrganizationClassification extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, classification_name', 'required'),
+			array('lid, dpid, classification_name,classid', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('classification_name, remark', 'length', 'max'=>255),
@@ -38,7 +38,7 @@ class OrganizationClassification extends CActiveRecord
 			array('create_at, update_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, classification_name, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, classid, classification_name, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +64,7 @@ class OrganizationClassification extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
+			'classid'=>'所属类型',
 			'classification_name' => '组织名称',
 			'remark' => '备注',
 			'delete_flag' => '删除 0未删除 1删除',
@@ -93,6 +94,7 @@ class OrganizationClassification extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
+		$criteria->compare('classid',$this->classid,true);
 		$criteria->compare('classification_name',$this->classification_name,true);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('is_sync',$this->is_sync,true);

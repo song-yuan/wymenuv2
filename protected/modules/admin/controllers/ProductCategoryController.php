@@ -51,7 +51,10 @@ class ProductCategoryController extends BackendController
 			$category = ProductCategory::model()->find('dpid=:dpid and category_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->category_name));
 			if($category){
 				$this->redirect(array('productCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
-			}
+			}			
+						$code=new Sequence("chs_code");
+						$chs_code = $code->nextval();
+						var_dump($chs_code);exit;
                         $se=new Sequence("product_category");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
