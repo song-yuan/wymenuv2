@@ -72,7 +72,7 @@ class DefaultController extends BackendController
 ////	}
         
         public function actionIndex()
-	{              
+	{        //var_dump("111");exit;      
                 //           
                 $companyId=Yii::app()->request->getParam('companyId','0');
                 $typeId = Yii::app()->request->getParam('typeId','0');
