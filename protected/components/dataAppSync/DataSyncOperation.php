@@ -140,4 +140,14 @@ class DataSyncOperation
             return false;
         }
     }
+    /**
+     * 订单操作
+     * 
+     */
+    public static function operateOrder($data){
+    	$dpid = $data['dpid'];
+    	$order = $data['data'];
+	    var_dump($order);exit;
+    } 
+    
 }
