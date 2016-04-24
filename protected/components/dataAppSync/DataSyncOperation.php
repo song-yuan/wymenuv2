@@ -147,7 +147,7 @@ class DataSyncOperation
     public static function operateOrder($data){
     	$dpid = $data['dpid'];
     	$order = $data['data'];
-	    var_dump($order);exit;
+	    var_dump(json_decode($order));exit;
     } 
     
 }
