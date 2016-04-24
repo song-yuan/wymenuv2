@@ -146,8 +146,63 @@ class DataSyncOperation
      */
     public static function operateOrder($data){
     	$dpid = $data['dpid'];
-    	$order = $data['data'];
-	    var_dump(json_decode($order));exit;
+    	$orderData = $data['data'];
+    	$obj = json_decode($orderData);
+    	
+    	$orderInfo = $obj->order_info;
+    	$orderProduct = $obj->order_product;
+    	
+    	$time = time();
+	    $se = new Sequence("order");
+	    $orderId = $se->nextval();
+	    $accountNo = WxOrder::getAccountNo($dpid,$orderInfo->site_id,$orderInfo->is_temp,$orderId);
+	   
+	    $transaction=Yii::app()->db->beginTransaction();
+		try{
+		    $insertOrderArr = array(
+		        	'lid'=>$orderId,
+		        	'dpid'=>$dpid,
+		        	'create_at'=>date('Y-m-d H:i:s',$time),
+		        	'update_at'=>date('Y-m-d H:i:s',$time), 
+		        	'account_no'=>$accountNo,
+		        	'user_id'=>'0',
+		        	'site_id'=>$orderInfo->site_id,
+		        	'is_temp'=>$orderInfo->is_temp,
+		        	'number'=>$orderInfo->number,
+		        	'order_status'=>3,
+		        	'order_type'=>1,
+		        	'is_sync'=>DataSync::getInitSync(),
+		        );
+			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
+			
+			foreach($orderProduct as $product){
+				$se = new Sequence("order_product");
+		    	$orderProductId = $se->nextval();
+	         	$orderProductData = array(
+								'lid'=>$orderProductId,
+								'dpid'=>$dpid,
+								'create_at'=>date('Y-m-d H:i:s',$time),
+	        					'update_at'=>date('Y-m-d H:i:s',$time), 
+								'order_id'=>$orderId,
+								'set_id'=>$product->set_id,
+								'product_id'=>$product->product_id,
+								'product_name'=>$product->product_name,
+								'product_pic'=>'',
+								'price'=>$product->price,
+								'original_price'=>$product->price,
+								'amount'=>$product->amount,
+								'product_order_status'=>9,
+								'is_sync'=>DataSync::getInitSync(),
+								);
+				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+			}
+		   $transaction->commit();
+		   $msg = true;
+		}catch (Exception $e) {
+		   $transaction->rollback();
+		    $msg = false;
+		}
+	    return $msg;
     } 
     
 }
