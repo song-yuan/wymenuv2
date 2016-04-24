@@ -171,6 +171,8 @@ class DataSyncOperation
 		        	'number'=>$orderInfo->number,
 		        	'order_status'=>3,
 		        	'order_type'=>1,
+		        	'should_total'=>$orderInfo->should_total,
+		        	'reality_total'=>$orderInfo->should_total,
 		        	'is_sync'=>DataSync::getInitSync(),
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
