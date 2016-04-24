@@ -58,8 +58,10 @@ class ProductMaterialController extends BackendController
 				$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
 			}
 		}
+		$categories = $this->getCategoryList();
  		$this->render('create' , array(
 			'model' => $model ,
+			'categories' => $categories
 		));
 	}
 	
@@ -67,7 +69,7 @@ class ProductMaterialController extends BackendController
 		$id = Yii::app()->request->getParam('id');
 		$model = ProductMaterial::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductMaterial');
          	$model->update_at=date('Y-m-d H:i:s',time());
@@ -76,8 +78,10 @@ class ProductMaterialController extends BackendController
 				$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
 			}
 		}
+		$categories = $this->getCategoryList();//var_dump($categories);exit;
 		$this->render('update' , array(
 				'model' => $model ,
+				'categories' => $categories
 		));
 	}
 	public function actionDelete(){
@@ -93,7 +97,11 @@ class ProductMaterialController extends BackendController
 			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId)) ;
 		}
 	}
-
+	private function getCategoryList(){
+		$categories = MaterialCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
+		//var_dump($categories);exit;
+		return CHtml::listData($categories, 'lid', 'category_name');
+	}
 	public function actionGetChildren(){
 		$pid = Yii::app()->request->getParam('pid',0);
 		if(!$pid){

@@ -21,9 +21,10 @@ class MaterialUnitController extends BackendController
 	}
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
+		$type=Yii::app()->request->getParam('type',0);
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;	
+		$criteria->condition =  't.unit_type='.$type.' and t.delete_flag=0 and t.dpid='.$this->companyId;
 		$criteria->order = ' t.lid desc ';	
 		$pages = new CPagination(MaterialUnit::model()->count($criteria));
 		//	    $pages->setPageSize(1);

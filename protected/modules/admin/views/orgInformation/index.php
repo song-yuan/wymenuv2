@@ -64,9 +64,6 @@
 								<th><?php echo yii::t('app','传真');?></th>
 								<th><?php echo yii::t('app','邮编');?></th>
 								<th><?php echo yii::t('app','电子邮箱');?></th>
-								<th><?php echo yii::t('app','开户银行');?></th>
-								<th><?php echo yii::t('app','开户账号');?></th>
-								<th><?php echo yii::t('app','纳税账号');?></th>
 								<th><?php echo yii::t('app','地址');?></th>
 								<th><?php echo yii::t('app','备注');?></th>
 								<th>&nbsp;</th>
@@ -84,13 +81,18 @@
 								<td><?php echo $model->contact_fax;?></td>
 								<td><?php echo $model->post_code;?></td>
 								<td><?php echo $model->email;?></td>
-								<td><?php echo $model->bank;?></td>
-								<td><?php echo $model->bank_account;?></td>
-								<td><?php echo $model->tax_account;?></td>
 								<td><?php echo $model->address;?></td>
 								<td><?php echo $model->remark;?></td>
-								<td class="center">
-								<a href="<?php echo $this->createUrl('orgInformation/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<td class="center dropdown">
+									<p class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">操作</p>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="<?php echo $this->createUrl('orgInformation/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+										</li>
+										<li>
+											<a href="<?php echo $this->createUrl('orgInformation/stockdetail',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','库存详情');?></a>
+										</li>
+									</ul>
 								</td>
 							</tr>
 						<?php endforeach;?>

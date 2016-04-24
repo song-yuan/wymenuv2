@@ -17,7 +17,7 @@ class LoginController extends BackendController
 		$model = new LoginForm();
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
-		{
+		{ //var_dump($language);exit;
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
@@ -27,10 +27,11 @@ class LoginController extends BackendController
 		{
 			$model->attributes=$_POST['LoginForm'];
 			//var_dump($model);exit;
+			//var_dump($model->login());exit;
 			// validate user input and redirect to the previous page if valid
 			if($model->validate() && $model->login()) {
                                 //insert into nb_b_login
-                                //echo Yii::app()->user->userId;
+                                //echo Yii::app()->user->userId;exit;
                                 $se=new Sequence("b_login");
                                 $lid = $se->nextval(); 
                                 $userarray= explode("_",Yii::app()->user->userId);
@@ -43,9 +44,11 @@ class LoginController extends BackendController
                                     'out_time'=>"0000-00-00 00:00:00"                                    
                                 );                            
                                 Yii::app()->db->createCommand()->insert('nb_b_login',$data);
+                               //print_r ((array('default/index/companyId/'.Yii::app()->user->companyId)));exit;
 				$this->redirect(array('default/index/companyId/'.Yii::app()->user->companyId));
+				
 			}
-		}
+		}//var_dump(Yii::app()->user->companyId);exit;
 		$this->render('index',array('model' => $model));
 	}
 	public function actionLogout()

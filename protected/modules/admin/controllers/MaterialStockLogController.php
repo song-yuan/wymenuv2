@@ -86,7 +86,7 @@ class MaterialStockLogController extends BackendController
 			}
 		}
 		$categories = $this->getCategories();
-		$categoryId=0;
+		$categoryId=  $this->getCategoryId($id);
 		$materials = $this->getMaterials($categoryId);
 		$materialslist=CHtml::listData($materials, 'lid', 'material_name');
 		$this->render('update' , array(
@@ -136,6 +136,13 @@ class MaterialStockLogController extends BackendController
 			$optionsReturn[$model->category_name] = $v;
 		}
 		return $optionsReturn;
+	}
+	private function getCategoryId($lid){
+		$db = Yii::app()->db;
+		$sql = "SELECT category_id from nb_material_stock_log sl,nb_product_material pm where sl.dpid=pm.dpid and sl.material_id=pm.lid and sl.lid=:lid";
+		$command=$db->createCommand($sql);
+		$command->bindValue(":lid" , $lid);
+		return $command->queryScalar();
 	}
 	private function getMaterials($categoryId){
 		if($categoryId==0)

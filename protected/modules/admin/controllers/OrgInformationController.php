@@ -78,7 +78,55 @@ class OrgInformationController extends BackendController
 			$this->redirect(array('orgInformation/index' , 'companyId' => $companyId)) ;
 		}
 	}
-	
+	public function actionstockDetail(){
+		//$sc = Yii::app()->request->getPost('csinquery');
+		$typeId = Yii::app()->request->getParam('typeId');
+		$categoryId = Yii::app()->request->getParam('cid',"");
+		$fromId = Yii::app()->request->getParam('from','sidebar');
+		$csinquery=Yii::app()->request->getPost('csinquery',"");
+		//var_dump($csinquery);exit;
+		if($typeId=='product')
+		{
+
+			$criteria = new CDbCriteria;
+			$criteria->with = array('company','category');
+			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+			if(!empty($categoryId)){
+				$criteria->condition.=' and t.category_id = '.$categoryId;
+			}
+
+			if(!empty($csinquery)){
+				$criteria->condition.=' and t.simple_code like "%'.strtoupper($csinquery).'%"';
+			}
+
+			$pages = new CPagination(Product::model()->count($criteria));
+			//	    $pages->setPageSize(1);
+			$pages->applyLimit($criteria);
+			$models = Product::model()->findAll($criteria);
+
+			$categories = $this->getCategories();
+			//var_dump($models);exit;
+			$this->render('index',array(
+					'models'=>$models,
+					'pages'=>$pages,
+					'categories'=>$categories,
+					'categoryId'=>$categoryId,
+					'typeId' => $typeId
+			));
+		}else{
+			$criteria = new CDbCriteria;
+			$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+			$pages = new CPagination(ProductMaterial::model()->count($criteria));
+			$pages->applyLimit($criteria);
+			$models = ProductMaterial::model()->findAll($criteria);
+			//var_dump($models);exit;
+			$this->render('stockdetail',array(
+					'models'=>$models,
+					'pages'=>$pages,
+					'typeId' => $typeId
+			));
+		}
+	}
 	public function actionGetChildren(){
 		$pid = Yii::app()->request->getParam('pid',0);
 		if(!$pid){

@@ -9,6 +9,7 @@
  * @property string $logo
  * @property string $contact_name
  * @property string $mobile
+ *  @property string $type
  * @property string $telephone
  * @property string $email
  * @property string $address
@@ -47,6 +48,7 @@ class Company extends CActiveRecord
 			array('description','length'),
 			array('queuememo','length'),
 			array('address','length'),
+			array('type','length','max'=>2),
 			array('company_name, logo, contact_name, mobile' , 'required'),
 			array('email', 'length', 'min'=>6, 'max'=>40,'message'=>yii::t('app','请输入4到20的电子邮件')),
 			//array('mobile','match','pattern'=>'/^[1][358]\d{9}$/','message'=>yii::t('app','请填写有效的手机号码')),
@@ -55,7 +57,7 @@ class Company extends CActiveRecord
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('dpid, company_name, logo,token, contact_name, is_sync, mobile, telephone, email, lng, lat, distance, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
+			array('dpid, company_name, logo,token, contact_name,type, is_sync, mobile, telephone, email, lng, lat, distance, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -80,6 +82,7 @@ class Company extends CActiveRecord
 			'company_name' => yii::t('app','公司名称'),
 			'logo' => 'Logo',
 			'contact_name' => yii::t('app','联系人'),
+			'type' => yii::t('app','类型'),
 			'mobile' =>yii::t('app', '联系人手机'),
 			'telephone' => yii::t('app','电话'),
 			'email' => yii::t('app','电子邮箱'),
@@ -118,11 +121,12 @@ class Company extends CActiveRecord
 		$criteria->compare('company_name',$this->company_name,true);
 		$criteria->compare('logo',$this->logo,true);
 		$criteria->compare('contact_name',$this->contact_name,true);
+		$criteria->compare('type',$this->type,true);
 		$criteria->compare('mobile',$this->mobile,true);
 		$criteria->compare('telephone',$this->telephone,true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('homepage',$this->homepage,true);
-                $criteria->compare('domain',$this->domain,true);
+        $criteria->compare('domain',$this->domain,true);
 		$criteria->compare('create_at',$this->create_at);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('description',$this->description,true);

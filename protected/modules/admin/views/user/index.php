@@ -67,21 +67,21 @@
 						<?php if($models):?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
+								<td><?php if(Yii::app()->user->role==$model->role):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /><?php endif;?></td>
 								<td><a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid , 'companyId' => $this->companyId));?>" ><?php echo $model->username;?></a></td>
 								<td ><?php echo $model->company ? $model->company->company_name : '' ;?></td>
-								<td ><?php echo $this->roles[$model->role];?></td>
+								<td ><?php echo $this->roles2[$model->role];?></td>
 								<td ><?php echo $model->staff_no;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->email;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid,'companyId'=>$this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
+									<a href="<?php echo $this->createUrl('user/update',array('id' => $model->lid,'companyId'=>$this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
-                                                                <td class="center">
-                                                                <?php if(Yii::app()->user->role=="1" && $model->role=="2"): ?>
-								<a href="<?php echo $this->createUrl('user/companyIndex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>" class="btn_user_company" role="<?php echo $model->role; ?>"><?php echo yii::t('app','明细');?></a>
-								<?php endif; ?>
-                                                                </td>
+                                <td class="center">
+	                                <?php if(Yii::app()->user->role=="1" && $model->role=="2"): ?>
+									<a href="<?php echo $this->createUrl('user/companyIndex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>" class="btn_user_company" role="<?php echo $model->role; ?>"><?php echo yii::t('app','明细');?></a>
+									<?php endif; ?>
+                                </td>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>

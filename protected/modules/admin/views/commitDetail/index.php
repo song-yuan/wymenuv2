@@ -71,9 +71,12 @@
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
+							<tr>
+								<td colspan="20" style="text-align: right;"><input type="button" class="btn blue" value="审核通过" />&nbsp;<input type="button" class="btn blue" value="审核未通过" />&nbsp;<input type="button" class="btn blue" value="调拨入库" /></td>
+							</tr>
 						</tbody>
 					</table>
-					<?php if($pages->getItemCount()):?>
+                    <?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">

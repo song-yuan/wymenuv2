@@ -50,8 +50,8 @@ $basepath = Yii::app()->baseUrl;
 				<a href="<?php echo $this->createUrl('/admin/productMaterial/index',array('companyId'=>$this->companyId));?>" class="two"></a>
 				<a href="<?php echo $this->createUrl('/admin/product/index',array('companyId'=>$this->companyId));?>" class="three"></a>
 				<a href="<?php echo $this->createUrl('/admin/materialCategory/index',array('companyId'=>$this->companyId));?>" class="four"></a>
-				<a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId));?>" class="five"></a>
-				<a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId));?>" class="six"></a>
+				<a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId,'type'=>"0"));?>" class="five"></a>
+				<a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId,'type'=>"1"));?>" class="six"></a>
 				<a href="<?php echo $this->createUrl('/admin/productCategory/index',array('companyId'=>$this->companyId));?>" class="sever"></a>
 				<a href="<?php echo $this->createUrl('/admin/materialUnitRatio/index',array('companyId'=>$this->companyId));?>" class="eight"></a>
 			</div>

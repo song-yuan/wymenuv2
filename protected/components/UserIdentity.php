@@ -41,6 +41,7 @@ class UserIdentity extends CUserIdentity
 			$this->status = $user->status;
 			$this->errorCode =  self::ERROR_NONE;
 		}
+		//var_dump($user);exit;
 		return array('field' =>$field , 'status' => $this->errorCode);
 	}
 }

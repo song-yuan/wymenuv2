@@ -77,7 +77,7 @@
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									<?php echo yii::t('app','共 ');?><?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?><?php echo yii::t('app','页');?> 
+									<?php echo yii::t('app','共 ');?><?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?><?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">
@@ -103,8 +103,8 @@
 								</div>
 							</div>
 						</div>
-						<?php endif;?>					
-					
+						<?php endif;?>
+
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->

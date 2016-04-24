@@ -42,6 +42,9 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','品项库存日志');?></div>
 					<div class="actions">
+						<div class="btn-group">
+							<input type="text" class="" value="" /> <input type="button" class="" value="搜索" />
+						</div>
 						<a href="<?php echo $this->createUrl('materialStockLog/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>

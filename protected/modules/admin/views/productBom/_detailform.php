@@ -43,13 +43,10 @@
 	<?php $this->endWidget(); ?>
 	<script type="text/javascript">
 		$(document).ready(function(){
-//         $('#selectCategory').change(function(){
-//             var cid = $(this).val();
-//            location.href="<?php echo $this->createUrl('productBom/detailcreate' , array('companyId'=>$this->companyId));?>/cid/"+cid;
-//         });
-
+			//alert('123435');
 			$('#selectCategory').change(function(){
 				var cid = $(this).val();
+				//alert('<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid);
 				//alert($('#ProductSetDetail_product_id').html());
 				$.ajax({
 					url:'<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
@@ -69,21 +66,21 @@
 					}
 				});
 			});
-			/*var productVal=$('#ProductSetDetail_product_id').val();
-			 $('#ProductSetDetail_product_id').change(function(){
+			/*var productVal=$('#ProductBom_material_id').val();
+			 $('#ProductBom_material_id').change(function(){
 			 var productid = $(this).val();
 			 //alert(productid);
 			 $.ajax({
-			 url:'<php echo $this->createUrl('productSet/isDoubleSetDetail',array('companyId'=>$this->companyId,'productSetId'=>$model->lid));?>/productid/'+productid,
+			 url:'<php echo $this->createUrl('productBom/isDoubleBomDetail',array('companyId'=>$this->companyId,'productBomId'=>$model->lid));?>/materialid/'+productid,
 			 type:'GET',
 			 dataType:'json',
 			 success:function(result){
 			 if(result.data){
 			 alert("<php echo yii::t('app','改单品套餐内已经存在！');?>");
-			 $('#ProductSetDetail_product_id').val(productVal);
+			 $('#ProductBom_material_id').val(productVal);
 			 }else{
 			 //alert(2);
-			 productVal=$('#ProductSetDetail_product_id').val();
+			 productVal=$('#ProductBom_material_id').val();
 			 }
 			 }
 			 });

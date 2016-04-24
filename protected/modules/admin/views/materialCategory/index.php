@@ -1,5 +1,5 @@
 <div class="page-content">
-	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
+	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<div id="responsive" class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -23,7 +23,7 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','品项分类管理'),'subhead'=>yii::t('app','品项分类列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项分类管理'),'url'=>''))));?>
-	
+
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -56,7 +56,7 @@
 										<a class="btn btn-xs green add_btn" pid="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-plus"></i></a>
 										<?php endif;?>
 										<a class="btn btn-xs blue edit_btn" id="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-edit"></i></a>
-										<a href="javascript:;" cid="<?php echo $model->lid;?>" class="btn btn-xs red btn_delete"><i class="fa fa-times"></i></a>										
+										<a href="javascript:;" cid="<?php echo $model->lid;?>" class="btn btn-xs red btn_delete"><i class="fa fa-times"></i></a>
 										</td>
 									</tr>
 									<?php endforeach;?>
@@ -71,8 +71,8 @@
 						</div>
 					</div>
 				</div>
-	
-		<?php $this->endWidget(); ?>    
+
+		<?php $this->endWidget(); ?>
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
     $(document).ready(function() {
@@ -104,6 +104,6 @@
            if(result){
                location.href="<?php echo $this->createUrl('materialCategory/delete',array('companyId'=>$this->companyId));?>/id/"+cid;
            }
-        }); 
+        });
     });
 	</script>
