@@ -44,6 +44,13 @@
 				<?php echo $form->error($model, 'free_stock' )?>
 			</div>
 		</div>
+		<div class="form-group <?php if($model->hasErrors('reason')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'reason',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-5">
+				<?php echo $form->textArea($model, 'reason',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('reason')));?>
+				<?php echo $form->error($model, 'reason' )?>
+			</div>
+		</div>
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
 				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>

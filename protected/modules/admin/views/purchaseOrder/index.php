@@ -25,6 +25,18 @@
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','采购订单'),'subhead'=>yii::t('app','采购订单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','采购订单'),'url'=>''))));?>
 	
 	<!-- END PAGE HEADER-->
+	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
+	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
+
+	<div class="">
+		<form action="" method="get" class="">
+			<input type="text" class="col-md-2" placeholder="厂商名称" value="" />&nbsp;&nbsp;<input type="text" class="col-md-2" placeholder="组织名称" />&nbsp;&nbsp;<input type="text" class="ui_timepicker col-md-2" placeholder="起始日期" />&nbsp;&nbsp;<input type="text" class="ui_timepicker col-md-2" placeholder="结束日期" />&nbsp;&nbsp;<input type="submit" class="btn blue" value="搜索" />
+		</form>
+	</div>
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
@@ -42,11 +54,14 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','采购订单列表');?></div>
 					<div class="actions">
+						<div class="btn-group">
+							<button type="button"  class="btn blue" > <?php echo yii::t('app','自动生成采购单');?></button>
+						</div>
 						<a href="<?php echo $this->createUrl('purchaseOrder/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
-						<a href="<?php echo $this->createUrl('bom/stock' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
+						<a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -148,5 +163,14 @@
 			var cid = $(this).val();
 			location.href="<?php echo $this->createUrl('purchaseOrder/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
+	});
+	$(function () {
+		$(".ui_timepicker").datetimepicker({
+			showSecond: true,
+			timeFormat: 'hh:mm:ss',
+			stepHour: 1,
+			stepMinute: 1,
+			stepSecond: 1
+		})
 	});
 	</script>	

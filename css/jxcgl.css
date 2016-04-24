@@ -1,0 +1,98 @@
+@charset "utf-8";
+/* CSS Document */
+
+.page-content{padding:5px 20px 20px 20px;}
+
+html,body{width:100%; height:100%; }
+ul,li{ list-style: none; margin:0px; padding:0px;}
+.middle{width:100%; height:90%; margin:0 auto; border:solid 1px #00b7ee; background:url(../img/jxcgl/aqkcsz.png) no-repeat; background-size:100% 100%; position:relative;}
+.tabButton{width:100%; height:70px;  background:#00b7ee; }
+.tabButton ul{width:100%; height:60px; padding-top:10px; font-size:0px;}
+.tabButton li{display:inline-block; width:20%;  height:100%;   }
+.tabButton .marginLeft{  margin-left:5%;}
+.tabButton li a{ text-decoration:none; background:#00b7ee;height:120%; font-size:24PX; line-height:60px; font-weight:bold; color:#fff; display:inline-block; width:100%; vertical-align:bottom; overflow:hidden;white-space:nowrap; text-align:center;}
+.tabButton li a:hover{  background:#fff; color:#000; }
+.tabButton li .first{background:#fff; color:#000}
+
+/*库存设置*/
+.inventory .one{position:absolute; top:16.5%; left:9.4%; width:13%; height:21.2%; }
+.inventory .one a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/kcsz.png); background-size:100% 100%;}
+.inventory .one a:hover{background:url(../img/jxcgl/kcsz-hover.png); background-size:100% 100%;}
+
+/*品项信息*/
+.itemsMid{display:none;}
+.itemsMid .one{position:absolute; top:48.3%; left:77.5%; width:19.2%; height:14%; }
+.itemsMid .one a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/bomxx.png); background-size:100% 100%;}
+.itemsMid .one a:hover{background:url(../img/jxcgl/bomxx-hover.png); background-size:100% 100%;}
+
+
+.itemsMid .two{position:absolute; top:27.2%; left:54.9%; width:19.2%; height:14%; }
+.itemsMid .two a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/pxxx.png); background-size:100% 100%;}
+.itemsMid .two a:hover{background:url(../img/jxcgl/pxxx-hover.png); background-size:100% 100%;}
+
+
+.itemsMid .three{position:absolute; top:69.2%; left:54.9%; width:19.2%; height:14%;}
+.itemsMid .three a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/cpxx.png); background-size:100% 100%;}
+.itemsMid .three a:hover{background:url(../img/jxcgl/cpxx-hover.png); background-size:100% 100%;}
+
+.itemsMid .four{position:absolute; top:16.2%; left:29%; width:19.2%; height:14%; }
+.itemsMid .four a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/pxfl.png); background-size:100% 100%;}
+.itemsMid .four a:hover{background:url(../img/jxcgl/pxfl-hover.png); background-size:100% 100%;}
+
+.itemsMid .five{position:absolute; top:37.3%; left:29%; width:19.2%; height:14%; }
+.itemsMid .five a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/rkdw.png); background-size:100% 100%;}
+.itemsMid .five a:hover{background:url(../img/jxcgl/rkdw-hover.png); background-size:100% 100%;}
+
+.itemsMid .six{position:absolute; top:58.2%; left:29%; width:19.2%; height:14%; }
+.itemsMid .six a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/lsdw.png); background-size:100% 100%;}
+.itemsMid .six a:hover{background:url(../img/jxcgl/lsdw-hover.png); background-size:100% 100%;}
+
+.itemsMid .sever{position:absolute; top:79%; left:29%;  width:19.2%; height:14%;}
+.itemsMid .sever a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/cpfl.png); background-size:100% 100%;}
+.itemsMid .sever a:hover{background:url(../img/jxcgl/cpfl-hover.png); background-size:100% 100%;}
+
+.itemsMid .eight{position:absolute; top:47.8%; left:2.7%;  width:19.2%; height:14%; }
+.itemsMid .eight a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/dwxs.png); background-size:100% 100%;}
+.itemsMid .eight a:hover{background:url(../img/jxcgl/dwxs-hover.png); background-size:100% 100%;}
+
+.itemsMid .nine{position:absolute; top:78%; left:83%; width:14%; height:21%; }
+.itemsMid .nine a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/kcrz.png); background-size:100% 100%;}
+.itemsMid .nine a:hover{background:url(../img/jxcgl/kcrz-hover.png); background-size:100% 100%;}
+
+
+/*库存设置*/
+.stockMid{display:none;}
+.stockMid .one{position:absolute; top:36.2%; left:4.9%; width:19.2%; height:14%; }
+.stockMid .one a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/zzfl.png); background-size:100% 100%;}
+.stockMid .one a:hover{background:url(../img/jxcgl/zzfl-hover.png); background-size:100% 100%;}
+
+
+.stockMid .two{position:absolute; top:51.2%; left:4.9%; width:19.2%; height:14%; }
+.stockMid .two a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/zzxx.png); background-size:100% 100%;}
+.stockMid .two a:hover{background:url(../img/jxcgl/zzxx-hover.png); background-size:100% 100%;}
+
+
+.stockMid .three{position:absolute; top:36.2%; left:76.9%; width:19.2%; height:14%;}
+.stockMid .three a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/ccxx.png); background-size:100% 100%;}
+.stockMid .three a:hover{background:url(../img/jxcgl/ccxx-hover.png); background-size:100% 100%;}
+
+.stockMid .four{position:absolute; top:51%; left:76.9%; width:19.2%; height:14%; }
+.stockMid .four a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/csfl.png); background-size:100% 100%;}
+.stockMid .four a:hover{background:url(../img/jxcgl/csfl-hover.png); background-size:100% 100%;}
+
+.stockMid .five{position:absolute; top:16.6%; left:41.9%; width:19.2%; height:14%; }
+.stockMid .five a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/cgdd.png); background-size:100% 100%;}
+.stockMid .five a:hover{background:url(../img/jxcgl/cgdd-hover.png); background-size:100% 100%;}
+
+.stockMid .six{position:absolute; top:43.6%; left:41.9%; width:19.2%; height:14%; }
+.stockMid .six a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/thdd.png); background-size:100% 100%;}
+.stockMid .six a:hover{background:url(../img/jxcgl/thdd-hover.png); background-size:100% 100%;}
+
+.stockMid .sever{position:absolute; top:69%; left:41.9%;  width:19.2%; height:14%;}
+.stockMid .sever a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/rkdd.png); background-size:100% 100%;}
+.stockMid .sever a:hover{background:url(../img/jxcgl/rkdd-hover.png); background-size:100% 100%;}
+
+.stockMid .eight{position:absolute; top:73%; left:24%; width:14%; height:22%; }
+.stockMid .eight a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/db.png); background-size:100% 100%;}
+.stockMid .eight a:hover{background:url(../img/jxcgl/db-hover.png); background-size:100% 100%;}
+

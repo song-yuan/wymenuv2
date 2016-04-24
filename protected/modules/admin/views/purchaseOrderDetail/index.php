@@ -74,7 +74,7 @@
 						<?php endforeach;?>
 						<?php endif;?>
 							<tr>
-								<td colspan="20" style="text-align: right;"><input type="button" class="btn blue" value="审核通过" />&nbsp;<input type="button" class="btn blue" value="审核未通过" />&nbsp;<input type="button" class="btn blue" value="生成入库单" />&nbsp;<input type="button" class="btn blue" value="生成退货单" /></td>
+								<td colspan="20" style="text-align: right;"><input type="button" class="btn blue" value="审核通过" />&nbsp;<input type="button" class="btn blue" value="驳回" />&nbsp;<input type="button" class="btn blue" value="生成入库单" />&nbsp;<input type="button" class="btn blue" value="生成退货单" /></td>
 							</tr>
 						</tbody>
 					</table>

@@ -55,6 +55,7 @@
 								<th><?php echo yii::t('app','退货金额');?></th>
 								<th><?php echo yii::t('app','退货库存');?></th>
 								<th><?php echo yii::t('app','赠品数量');?></th>
+								<th><?php echo yii::t('app','退货原因');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -67,6 +68,7 @@
 								<td><?php echo $model->price;?></td>
 								<td ><?php echo $model->stock;?></td>
 								<td><?php echo $model->free_stock;?></td>
+								<td><?php echo $model->reason;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('refundOrderDetail/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
@@ -74,7 +76,7 @@
 						<?php endforeach;?>
 						<?php endif;?>
 						<tr>
-							<td colspan="20" style="text-align: right;"><input type="button" class="btn blue" value="审核通过" />&nbsp;<input type="button" class="btn blue" value="审核未通过" /></td>
+							<td colspan="20" style="text-align: right;"><input type="button" class="btn blue" value="审核通过" />&nbsp;<input type="button" class="btn blue" value="驳回" />&nbsp;<input type="button" class="btn blue" value="执行退货" /></td>
 						</tr>
 					</tbody>
 					</table>
