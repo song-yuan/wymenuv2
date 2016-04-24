@@ -21,11 +21,8 @@
 				<?php echo $form->error($model, 'order_num' )?>
 			</div>
 		</div>
-		
-		<div class="form-actions fluid">
-			<div class="col-md-offset-3 col-md-9">
-				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-				<a href="<?php echo $this->createUrl('materialCategory/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
-			</div>
-		</div>
+	<div class="modal-footer">
+		<button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
+		<input type="submit" class="btn green" id="create_btn" value="<?php echo yii::t('app','确 定');?>">
+	</div>
 <?php $this->endWidget(); ?>
