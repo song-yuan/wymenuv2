@@ -4,6 +4,7 @@ class LoginController extends BackendController
 	public $layout = '/layouts/loginLayout';
 	public function actionIndex()
 	{
+				//var_dump(Yii::getVersion());exit;
                 $language=Yii::app()->request->getParam('language','0');
                 //echo Yii::app()->language;
                 if($language!='0')
