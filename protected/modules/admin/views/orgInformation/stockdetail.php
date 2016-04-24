@@ -50,13 +50,13 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th><?php echo yii::t('app','品项名称');?></th>
-								<th><?php echo yii::t('app','品项单位');?></th>
-								<th><?php echo yii::t('app','实时库存');?></th>
-								<th><?php echo yii::t('app','盘存数量');?></th>
-                                <th><?php echo yii::t('app','盘损数量');?></th>
-                                <th><?php echo yii::t('app','备注');?></th>
-                                <th>&nbsp;</th>
+								<th width="12%"><?php echo yii::t('app','品项名称');?></th>
+								<th width="12%"><?php echo yii::t('app','品项单位');?></th>
+								<th width="12%"><?php echo yii::t('app','实时库存');?></th>
+								<th width="12%"><?php echo yii::t('app','盘损数量');?></th>
+								<th width="12%"><?php echo yii::t('app','盘存数量');?></th>
+								<th width="37%"><?php echo yii::t('app','备注');?></th>
+                                <th width="3%">&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -76,7 +76,11 @@
                                         <input type="text" style="width:100px;" name="leftnum<?php echo $model->lid;?>" id="idleftnum<?php echo $model->lid;?>" value="<?php //if($model->store_number>0) echo $model->store_number; else echo "0"; ?>" >
                                     </div>
                                 </td>
-                                <td><?php //echo $model->product_name ;?></td>
+                                <td>
+									<div class="col-md-12">
+										<input type="text" style="width:200px;" name="leftnum<?php echo $model->lid;?>" id="idleftnum<?php echo $model->lid;?>" value="<?php //if($model->store_number>0) echo $model->store_number; else echo "0"; ?>" >
+									</div>
+								</td>
                                 <td>
                                     <div class="col-md-12">
                                         <input type="button" name="leftbutton<?php echo $model->lid;?>" id="idleftbutton<?php echo $model->lid;?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >

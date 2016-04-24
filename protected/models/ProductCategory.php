@@ -33,6 +33,7 @@ class ProductCategory extends CActiveRecord
 			array('lid,dpid , category_name', 'required'),
 			array('pid,delete_flag', 'numerical', 'integerOnly'=>true),
 			array('category_name', 'length','min'=>2, 'max'=>45),
+				array('category_name' , 'unique' , 'message'=>'类别名已经存在'),
 			array('dpid', 'length', 'max'=>10),
                         array('order_num', 'length', 'max'=>4),
                         array('type', 'length', 'max'=>3),

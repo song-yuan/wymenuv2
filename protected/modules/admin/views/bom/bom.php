@@ -1,7 +1,4 @@
-<?php
-$basepath = Yii::app()->baseUrl;
-
-?>
+<link href="../../../../css/jxcgl.css" rel="stylesheet" type="text/css">
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -25,38 +22,73 @@ $basepath = Yii::app()->baseUrl;
 	</div>
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-	<style>
-		h1{ margin:0;padding:0; padding-bottom:10px;}
-		html,body{width:100%; height:100%;}
-		.content{width:100%; height:100%;}
-		.contentMid{width:80%; height:60%; margin:0 auto; background:url(../../../../img/BOM.gif) no-repeat; background-size:100% 100%; position:relative;}
-		.contentMid div{font-size:3vw; color:#fff;}
-		.contentMid .one{position:absolute; top:0%; left:34%; width:27%; height:16%;}
-		.contentMid .two{position:absolute; top:26%; left:16%; width:26%; height:16%;}
-		.contentMid .three{position:absolute; top:26%; left:54%; width:26%; height:16%; }
-		.contentMid .four{position:absolute; top:60%; left:0%; width:23%; height:14%; }
-		.contentMid .five{position:absolute; top:60%; left:25%; width:23%; height:14%; }
-		.contentMid .six{position:absolute; top:60%; left:52%; width:23%; height:14%; }
-		.contentMid .sever{position:absolute; top:60%; left:77%; width:23%; height:14%;}
-		.contentMid .eight{position:absolute; top:86%; left:39%; width:23%; height:14%;}
-		.bottom a{ background-color:#0f0;color:#fff; box-shadow: 4px 4px 4px #888888; width:18%; height:50px; display:inline-block; line-height:50px; text-align:center; font-size:25px;font-weight:bold; margin-left:10%; text-decoration:none;}
-	</style>
 
 	<!-- BEGIN PAGE CONTENT-->
-	<div class="row" style="height: 760px;">
-		<div class="content">
-			<div class="contentMid">
-				<a href="<?php echo $this->createUrl('/admin/productBom/index',array('companyId'=>$this->companyId));?>" class="one"></a>
-				<a href="<?php echo $this->createUrl('/admin/productMaterial/index',array('companyId'=>$this->companyId));?>" class="two"></a>
-				<a href="<?php echo $this->createUrl('/admin/product/index',array('companyId'=>$this->companyId));?>" class="three"></a>
-				<a href="<?php echo $this->createUrl('/admin/materialCategory/index',array('companyId'=>$this->companyId));?>" class="four"></a>
-				<a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId,'type'=>"0"));?>" class="five"></a>
-				<a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId,'type'=>"1"));?>" class="six"></a>
-				<a href="<?php echo $this->createUrl('/admin/productCategory/index',array('companyId'=>$this->companyId));?>" class="sever"></a>
-				<a href="<?php echo $this->createUrl('/admin/materialUnitRatio/index',array('companyId'=>$this->companyId));?>" class="eight"></a>
-			</div>
-			<div class="bottom"><a href="<?php echo $this->createUrl('/admin/materialStockLog/index',array('companyId'=>$this->companyId));?>">品项库存日志</a></div>
-		</div>
+	<div class="row" style="height: 700px;">
+        <div class="middle">
+            <div class="tabButton">
+                <ul>
+                    <li class="marginLeft">
+                        <a href="#" class="first">库存设置</a>
+                    </li>
+                    <li >
+                        <a href="#">品项信息</a>
+                    </li>
+                    <li>
+                        <a href="#">库存管理</a>
+                    </li>
+                </ul>
+            </div>
+            <!--库存设置-->
+            <div class="inventory">
+                <div class="one"><a href="<?php echo $this->createUrl('/admin/stockSetting/index',array('companyId'=>$this->companyId));?>"></a></div>
+            </div>
+
+            <!--品项信息-->
+            <div class="itemsMid" >
+                <div class="one"><a href="<?php echo $this->createUrl('/admin/productBom/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="two"><a href="<?php echo $this->createUrl('/admin/productMaterial/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="three"><a href="<?php echo $this->createUrl('/admin/product/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="four"><a href="<?php echo $this->createUrl('/admin/materialCategory/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="five"><a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId,'type'=>"0"));?>"></a></div>
+                <div class="six"><a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId,'type'=>"1"));?>"></a></div>
+                <div class="sever"><a href="<?php echo $this->createUrl('/admin/productCategory/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="eight"><a href="<?php echo $this->createUrl('/admin/materialUnitRatio/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="nine"><a href="<?php echo $this->createUrl('/admin/materialStockLog/index',array('companyId'=>$this->companyId));?>"></a></div>
+            </div>
+
+            <!--库存管理-->
+            <div class="stockMid" >
+                <div class="one"><a href="<?php echo $this->createUrl('/admin/orgClassification/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="two"><a href="<?php echo $this->createUrl('/admin/orgInformation/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="three"><a href="<?php echo $this->createUrl('/admin/mfrClassification/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="four"><a href="<?php echo $this->createUrl('/admin/mfrInformation/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="five"><a href="<?php echo $this->createUrl('/admin/purchaseOrder/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="six"><a href="<?php echo $this->createUrl('/admin/refundOrder/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="sever"><a href="<?php echo $this->createUrl('/admin/storageOrder/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="eight"><a href="<?php echo $this->createUrl('/admin/commit/index',array('companyId'=>$this->companyId));?>"></a></div>
+            </div>
+        </div>
 	</div>
 	<!-- END PAGE CONTENT-->
-	
+	<script>
+        $(document).ready(function(e) {
+            $(".tabButton li a").click(function(){
+                $(".tabButton li a").css({"background":"#00b7ee"})
+                $(this).css({"background":"#fff"})
+                $(".tabButton li a").css({"color":"#fff"})
+                $(this).css({"color":"#000"})
+                var i=$(this).parent().index();
+                $(this).parents(".middle").children().not(".tabButton").hide();
+                $(this).parents(".middle").children().eq(i+1).show();
+                switch(i){
+                    case 0:
+                        $(this).parents(".middle").css("background-image","url(../../../../img/jxcgl/aqkcsz.png)");break;
+                    case 1:
+                        $(this).parents(".middle").css("background-image","url(../../../../img/jxcgl/pxxxz.png)");break;
+                    case 2:
+                        $(this).parents(".middle").css("background-image","url(../../../../img/jxcgl/kcgl.png)");break;
+                }
+            });
+        });
+	</script>

@@ -42,7 +42,7 @@
 						日均销量 = 最近<input type="text" name="" class="" value="<?php //echo $model->sales_day;?>" /> 天的日均销量<br /><br/>
 						日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<安全库存范围 < 日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<br /><br/>
 						<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-						<a href="<?php echo $this->createUrl('bom/set' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
+						<a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
 			</div>
@@ -60,7 +60,7 @@
 						日均销量 = 最近<input type="text" name="" class="" value="<?php //echo $model->sales_day;?>" /> 天的日均销量<br /><br/>
 						日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<安全库存范围 < 日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<br /><br/>
 						<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-						<a href="<?php echo $this->createUrl('bom/set' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
+						<a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
 			</div>

@@ -35,10 +35,11 @@ class RefundOrderDetail extends CActiveRecord
 			array('update_at, material_id', 'required'),
 			array('lid, dpid, material_id, price, stock, free_stock', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
+			array('reason', 'length', 'max'=>255),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, material_id, price, stock, free_stock, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, material_id, price, stock, free_stock，reason, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +69,7 @@ class RefundOrderDetail extends CActiveRecord
 			'price' => '退货金额',
 			'stock' => '退货库存',
 			'free_stock' => '赠品数',
+			'reason'=>'退货原因',
 			'is_sync' => 'Is Sync',
 		);
 	}

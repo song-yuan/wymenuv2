@@ -62,18 +62,18 @@
 		
 		<div class="form-group" <?php if($model->hasErrors('remark')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'remark',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'remark', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('remark')));?>
+			<div class="col-md-5">
+				<?php echo $form->textArea($model, 'remark', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('remark')));?>
 				<?php echo $form->error($model, 'remark' )?>
 			</div>
 		</div>
-		<div class="form-group <?php if($model->hasErrors('status')) echo 'has-error';?>">
+		<!--<div class="form-group <?php if($model->hasErrors('status')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'status',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->dropDownList($model, 'status', array('0' => yii::t('app','已审核') , '1' => yii::t('app','未审核')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('status')));?>
 				<?php echo $form->error($model, 'status' )?>
 			</div>
-		</div>
+		</div>-->
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
 				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
