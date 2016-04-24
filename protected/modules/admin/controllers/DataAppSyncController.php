@@ -57,28 +57,16 @@ public function actionGetData(){
    echo json_encode(array('status'=>true,'msg'=>'success'));exit;
 }
 /**
- * 初始化
+ * 
+ * app订单同步云端
+ * sid 台号
+ * isTemp 是否是临时台
+ * post传参
+ * 
  */
-public function actionLocalInit(){
-    
+ public function actionCreateOrder(){
+ 	$result = DataSyncOperation::operateOrder($_POST);
+ 	echo $result;exit;
 }
-
-/**
- * 同步基础数据
- */
-public function actionSyncBaseData(){
-    
-}
-
-/**
- * 获取表结构
- */
-public function actionGetTableStructure(){
-    
-}
-
-public function actionOperation()
-{
-    
-}
+ 
 }
