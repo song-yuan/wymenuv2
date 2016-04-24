@@ -52,14 +52,20 @@ class ProductCategoryController extends BackendController
 			if($category){
 				$this->redirect(array('productCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
 			}			
+			
+						
+						$se=new Sequence("product_category");
+						$lid = $se->nextval();
+						$model->lid = $lid;
 						$code=new Sequence("chs_code");
 						$chs_code = $code->nextval();
-						var_dump($chs_code);exit;
-                        $se=new Sequence("product_category");
-                        $model->lid = $se->nextval();
+						$chscode = ProductCategory::getChscode($this->companyId,$lid, $chs_code);
+						//var_dump($chs_code);exit;
+						
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
                         $model->update_at=date('Y-m-d H:i:s',time());
+                        $model->chs_code = $chscode;
                         
 			if($model->save()){
                               //var_dump($model);exit;

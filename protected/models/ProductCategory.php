@@ -37,10 +37,11 @@ class ProductCategory extends CActiveRecord
                         array('order_num', 'length', 'max'=>4),
                         array('type', 'length', 'max'=>3),
                         array('tree, is_sync', 'length', 'max'=>50),
+				array('chs_code', 'length', 'max'=>12),
                         array('main_picture', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid,order_num, create_at,tree, category_name, main_picture,type, dpid, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid,order_num, create_at,tree, category_name,chs_code, main_picture,type, dpid, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -148,5 +149,16 @@ class ProductCategory extends CActiveRecord
 			array_push($totalCatgorys,$category);
 		}
 		return $totalCatgorys;
+	}
+	
+	
+	static public function getChscode($dpid,$lid,$id)
+	{
+// 		var_dump($dpid,$id);exit;
+		$ret = substr("0000000000".$dpid,-3).substr("0000000000".$lid,-4).substr("0000000000".$id,-5);
+		//var_dump($ret);exit;
+			//$ret=substr(date('Ymd',time()),-6).substr("0000000000".$orderid, -6);
+		
+		return $ret;
 	}
 }

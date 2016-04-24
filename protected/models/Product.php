@@ -56,13 +56,14 @@ class Product extends CActiveRecord
 			array('lid, dpid, category_id, original_price, dabao_fee, product_unit, weight_unit, printer_way_id', 'length', 'max'=>10),
 			array('product_name, is_sync', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
+			array('chs_code, phs_code', 'length', 'max'=>12),
 			array('main_picture', 'length', 'max'=>255),
             array('category_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','必须选择二级产品分类')),
 			array('is_temp_price, is_member_discount, is_special, is_discount, status, is_weight_confirm, is_show, delete_flag', 'length', 'max'=>1),
 			array('create_at,description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, category_id, product_name, simple_code, main_picture, description, rank, spicy, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, dabao_fee, product_unit, weight_unit, is_weight_confirm, store_number, order_number, favourite_number, printer_way_id, is_show, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, category_id,chs_code,phs_code, product_name, simple_code, main_picture, description, rank, spicy, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, dabao_fee, product_unit, weight_unit, is_weight_confirm, store_number, order_number, favourite_number, printer_way_id, is_show, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 

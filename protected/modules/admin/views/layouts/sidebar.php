@@ -28,7 +28,7 @@
 						<li class="<?php if(Yii::app()->controller->id == 'synchronous') echo 'active';?>"><a href="<?php echo $this->createUrl('synchronous/index' , array('companyId' =>$this->companyId , 'type' => "manul"));?>"><?php echo yii::t('app','基础数据同步设定');?></a></li>
 					</ul>
 				</li>
-                                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productAddition','productSet','productSim','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice'))) echo 'active';?>">
+                                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productAddition','productSet','productSim','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice', 'copyproduct'))) echo 'active';?>">
                                         <a href="">
 					<i class="fa fa-coffee"></i> 
 					<span class="title"><?php echo yii::t('app','产品管理');?></span>					
@@ -39,6 +39,7 @@
 						<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','套餐管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSim') echo 'active';?>"><a href="<?php echo $this->createUrl('productSim/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','菜品简写管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productAddition') echo 'active';?>"><a href="<?php echo $this->createUrl('productAddition/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','加菜管理');?></a></li>
+						<li class="<?php if(Yii::app()->controller->id == 'copyproduct') echo 'active';?>"><a href="<?php echo $this->createUrl('copyproduct/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','菜品下发');?></a></li>
 						<!--<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','套餐管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productTempprice') echo 'active';?>"><a href="<?php echo $this->createUrl('productTempprice/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','时价菜管理');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'productSpecial') echo 'active';?>"><a href="<?php echo $this->createUrl('productSpecial/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','特价菜管理');?></a></li>
