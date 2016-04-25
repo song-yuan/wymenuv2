@@ -201,6 +201,8 @@ class DataSyncTables
         			"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                     "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
                     "  'category_id' int(10) NOT NULL DEFAULT '0',".
+                    "  'phs_code' varchar(12) NOT NULL DEFAULT '0',".
+                    "  'chs_code' varchar(12) NOT NULL DEFAULT '0',".
                     "  'product_name' varchar(50) NOT NULL,".
                     "  'simple_code' varchar(25) NOT NULL,".
                     "  'main_picture' varchar(255) NOT NULL,".
@@ -244,6 +246,7 @@ class DataSyncTables
         		"  `pid` int(10) NOT NULL DEFAULT '0',".
 				"  `tree` varchar(50) NOT NULL,".
 				"  `category_name` varchar(50) NOT NULL,".
+				"  'chs_code' varchar(12) NOT NULL DEFAULT '0',".
 				"  `type` varchar(3) NOT NULL DEFAULT '0',".
 				"  `main_picture` varchar(255) NOT NULL,".
 				"  `order_num` int(4) NOT NULL DEFAULT '0',".
