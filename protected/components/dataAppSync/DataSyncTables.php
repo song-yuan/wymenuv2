@@ -200,43 +200,43 @@ class DataSyncTables
         			"  'dpid' int(10) NOT NULL,".
         			"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                     "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-                    "  'category_id' int(10) NOT NULL DEFAULT '0',".
-                    "  'phs_code' varchar(12) NOT NULL DEFAULT '0',".
-                    "  'chs_code' varchar(12) NOT NULL DEFAULT '0',".
-                    "  'product_name' varchar(50) NOT NULL,".
-                    "  'simple_code' varchar(25) NOT NULL,".
-                    "  'main_picture' varchar(255) NOT NULL,".
-                    "  'description' text NOT NULL,".
-                    "  'rank' tinyint NOT NULL DEFAULT '3',".
-                    "  'spicy' tinyint NOT NULL DEFAULT '0',".
-                    "  'is_temp_price' char(1) NOT NULL DEFAULT '0',".
-                    "  'is_member_discount' char(1) NOT NULL DEFAULT '0',".
-                    "  'is_special' char(1) NOT NULL DEFAULT '0',".
-                    "  'is_discount' char(1) NOT NULL DEFAULT '0',".
-                    "  'status' char(1) NOT NULL DEFAULT '0',".
-                    "  'dabao_fee' decimal(10,2) NOT NULL DEFAULT '0.00',".
-                    "  'original_price' decimal(10,2) NOT NULL DEFAULT '0.00',".
-                    "  'product_unit' varchar(10) NOT NULL,".
-                    "  'weight_unit' varchar(10) NOT NULL,".
-                    "  'is_weight_confirm' char(1) NOT NULL DEFAULT '0',".
-                    "  'store_number' int(10) NOT NULL DEFAULT '-1',".
-                    "  'order_number' int(10) NOT NULL DEFAULT '0',".
-                    "  'favourite_number' int(10) NOT NULL DEFAULT '0',".
-                    "  'printer_way_id' int(10) NOT NULL DEFAULT '0',".
-                    "  'is_show' char(1) NOT NULL DEFAULT '1',".
-                    "  'delete_flag' char(1) NOT NULL DEFAULT '0',".
-                    "  'is_sync' varchar(50) NOT NULL DEFAULT '11111',".
+                    "  `category_id` int(10) NOT NULL DEFAULT '0',".
+                    "  `phs_code` varchar(12) NOT NULL,".
+                    "  `chs_code` varchar(12) NOT NULL,".
+                    "  `product_name` varchar(50) NOT NULL,".
+                    "  `simple_code` varchar(25) NOT NULL,".
+                    "  `main_picture` varchar(255) NOT NULL,".
+                    "  `description` text NOT NULL,".
+                    "  `rank` tinyint NOT NULL DEFAULT '3',".
+                    "  `spicy` tinyint NOT NULL DEFAULT '0',".
+                    "  `is_temp_price` char(1) NOT NULL DEFAULT '0',".
+                    "  `is_member_discount` char(1) NOT NULL DEFAULT '0',".
+                    "  `is_special` char(1) NOT NULL DEFAULT '0',".
+                    "  `is_discount` char(1) NOT NULL DEFAULT '0',".
+                    "  `status` char(1) NOT NULL DEFAULT '0',".
+                    "  `dabao_fee` decimal(10,2) NOT NULL DEFAULT '0.00',".
+                    "  `original_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+                    "  `product_unit` varchar(10) NOT NULL,".
+                    "  `weight_unit` varchar(10) NOT NULL,".
+                    "  `is_weight_confirm` char(1) NOT NULL DEFAULT '0',".
+                    "  `store_number` int(10) NOT NULL DEFAULT '-1',".
+                    "  `order_number` int(10) NOT NULL DEFAULT '0',".
+                    "  `favourite_number` int(10) NOT NULL DEFAULT '0',".
+                    "  `printer_way_id` int(10) NOT NULL DEFAULT '0',".
+                    "  `is_show` char(1) NOT NULL DEFAULT '1',".
+                    "  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+                    "  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
                     "  PRIMARY KEY ('lid','dpid')".
                     ");",
              "nb_product_icache" => " CREATE TABLE 'nb_product_icache'('lid' int(10) NOT NULL,".
         			"  'dpid' int(10) NOT NULL,".
         			"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                     "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-					"  'product_id' int(10) NOT NULL DEFAULT '0',".
-                    "  'icache_picture' varchar(255) NOT NULL,".
-                    "  'is_set' char(1) NOT NULL DEFAULT '0',".
-                    "  'delete_flag' char(1) NOT NULL DEFAULT '0',".
-                    "  'is_sync' varchar(50) NOT NULL DEFAULT '11111',".
+					"  `product_id` int(10) NOT NULL DEFAULT '0',".
+                    "  `icache_picture` varchar(255) NOT NULL,".
+                    "  `is_set` char(1) NOT NULL DEFAULT '0',".
+                    "  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+                    "  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
                     "  PRIMARY KEY ('lid','dpid')".
                     ");",
         	"nb_product_category"=>" CREATE TABLE 'nb_product_category'('lid' int(10) NOT NULL,".
@@ -246,7 +246,7 @@ class DataSyncTables
         		"  `pid` int(10) NOT NULL DEFAULT '0',".
 				"  `tree` varchar(50) NOT NULL,".
 				"  `category_name` varchar(50) NOT NULL,".
-				"  'chs_code' varchar(12) NOT NULL DEFAULT '0',".
+				"  `chs_code` varchar(12) NOT NULL,".
 				"  `type` varchar(3) NOT NULL DEFAULT '0',".
 				"  `main_picture` varchar(255) NOT NULL,".
 				"  `order_num` int(4) NOT NULL DEFAULT '0',".
