@@ -1,19 +1,5 @@
 <?php
-	$baseUrl = Yii::app()->baseUrl;
-	$this->setPageTitle('支付订单');
-	$payYue = 0.00;
-	if(!empty($orderPays)){
-		foreach($orderPays as $orderPay){
-			if($orderPay['paytype']==10){
-				$payYue = $orderPay['pay_amount']; 
-			}
-		}
-	}
-	
-	//子订单号
-//	$se = new Sequence("order_subno");
-//	$orderSubNo = $se->nextval();
-	
+
 	$notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
@@ -36,11 +22,15 @@
 		$result = $notify->GetPayUrl($input);
 		$url2 = $result["code_url"];
 		echo $url2;
-		$code=new QRCode($url2);
-		$code->create();exit;
 	}catch(Exception $e){
 		$canpWxpay = false;
 		$jsApiParameters = $e->getMessage();
+	}
+	if($canpWxpay){
+		$code=new QRCode($url2);
+		$code->create();
+	}else{
+		echo '生成失败';
 	}
 	
 ?>

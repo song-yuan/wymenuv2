@@ -294,7 +294,7 @@ class MallController extends Controller
 		
 		$user = WxBrandUser::get($userId,$this->companyId);
 		if($qrcode==1){
-			$this->renderPartial('payorderbyqrcode',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order));
+			$this->render('payorderbyqrcode',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order));
 		}else{
 			$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 		}
@@ -488,6 +488,7 @@ class MallController extends Controller
 		}
 		$this->render('redpacket',array('companyId'=>$this->companyId,'redPacket'=>$redPacket,'redPacketDetails'=>$redPacketDetails));
 	}
+	
 	/**
 	 * 
 	 * 输入金额
