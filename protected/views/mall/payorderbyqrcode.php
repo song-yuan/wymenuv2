@@ -21,17 +21,17 @@
 
 		$result = $notify->GetPayUrl($input);
 		$url2 = $result["code_url"];
-		echo $url2;
 	}catch(Exception $e){
 		$canpWxpay = false;
 		$jsApiParameters = $e->getMessage();
 	}
+	echo $url2;
 	if($canpWxpay){
 		$code=new QRCode($url2);
 		$code->create();
 	}else{
 		echo '生成失败';
 	}
-	
+	exit;
 ?>
 
