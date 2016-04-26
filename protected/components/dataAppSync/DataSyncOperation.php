@@ -199,10 +199,10 @@ class DataSyncOperation
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 			}
 		   $transaction->commit();
-		   $msg = true;
+		   $msg = json_encode(array('status'=>true,'orderId'=>$orderId));
 		}catch (Exception $e) {
 		   $transaction->rollback();
-		    $msg = false;
+		   $msg = json_encode(array('status'=>false,'orderId'=>''));
 		}
 	    return $msg;
     } 
