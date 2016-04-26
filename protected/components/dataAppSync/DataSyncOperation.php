@@ -206,5 +206,37 @@ class DataSyncOperation
 		}
 	    return $msg;
     } 
-    
+    /**
+     * 增加会员卡
+     * 
+     */
+    public static function addMemberCard($data){
+    	$dpid = $data['dpid'];
+    	$orderData = $data['data'];
+    	$obj = json_decode($orderData);
+    	
+    	$time = time();
+	    $se = new Sequence("member_card");
+	    $memberCardId = $se->nextval();
+    	$inserMemberCardrArr = array(
+		        	'lid'=>$memberCardId,
+		        	'dpid'=>$dpid,
+		        	'create_at'=>date('Y-m-d H:i:s',$time),
+		        	'update_at'=>date('Y-m-d H:i:s',$time), 
+		        	'selfcode'=>$obj->selfcode,
+		        	'rfid'=>$obj->rfid,
+		        	'level_id'=>$obj->level_id,
+		        	'name'=>$obj->name,
+		        	'mobile'=>$obj->mobile,
+		        	'sex'=>$obj->sex,
+		        	'ages'=>$obj->ages,
+		        	'is_sync'=>DataSync::getInitSync(),
+		        );
+	   $result = Yii::app()->db->createCommand()->insert('nb_member_card', $inserMemberCardrArr);
+	   if($result){
+	      return true;
+	   }else{
+	      return false;
+	   }
+    }
 }
