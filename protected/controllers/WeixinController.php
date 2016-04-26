@@ -11,4 +11,11 @@ class WeixinController extends Controller
 	{
 		$this->render('notify');
 	}
+	public function actionQrcode()
+	{
+		$orderId = Yii::app()->request->getParam('orderId');
+		$companyId = Yii::app()->request->getParam('companyId');
+		$order = WxOrder::getOrder($orderId,$companyId);
+		$this->render('qrcode',array('order'=>$order));
+	}
 }
