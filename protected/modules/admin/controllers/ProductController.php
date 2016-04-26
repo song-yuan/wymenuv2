@@ -54,30 +54,36 @@ class ProductController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('Product');
 			
 			$cateID = $model->category_id;
-			$db = Yii::app()->db;
-			$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.lid = '.$cateID;
-			$command = $db->createCommand($sql);
-			$categoryId = $command->queryRow();
-			//var_dump($categoryId['chs_code']);exit;
-
-						$se=new Sequence("product");
-						$lid = $se->nextval();
-						$model->lid = $lid;
-						$code=new Sequence("phs_code");
-						$phs_code = $code->nextval();
-						
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->update_at = date('Y-m-d H:i:s',time());
-                        $model->chs_code = $categoryId['chs_code'];
-                        $model->phs_code = ProductCategory::getChscode($this->companyId, $lid, $phs_code);
-                        $model->delete_flag = '0';
-                        $py=new Pinyin();
-                        $model->simple_code = $py->py($model->product_name);
-                        //var_dump($model);exit;
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
-			}
+			//if(!empty($cateID)){
+				$db = Yii::app()->db;
+				$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.lid = '.$cateID;
+				$command = $db->createCommand($sql);
+				$categoryId = $command->queryRow();
+				//var_dump($categoryId['chs_code']);exit;
+				
+				$se=new Sequence("product");
+				$lid = $se->nextval();
+				$model->lid = $lid;
+				$code=new Sequence("phs_code");
+				$phs_code = $code->nextval();
+				
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->chs_code = $categoryId['chs_code'];
+				$model->phs_code = ProductCategory::getChscode($this->companyId, $lid, $phs_code);
+				$model->delete_flag = '0';
+				$py=new Pinyin();
+				$model->simple_code = $py->py($model->product_name);
+				//var_dump($model);exit;
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+					$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
+				}
+// 			}else{
+// 				Yii::app()->user->setFlash('error',yii::t('app','请选择二级分类。。。'));
+// 				$this->redirect(array('product/create' , 'companyId' => $this->companyId ));
+// 			}
+			
 		}
 		$categories = $this->getCategoryList();
 		//$departments = $this->getDepartments();
