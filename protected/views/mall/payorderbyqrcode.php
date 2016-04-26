@@ -37,7 +37,7 @@
 		$url2 = $result["code_url"];
 		echo $url2;
 		$code=new QRCode($url2);
-		$code->create();
+		$code->create();exit;
 	}catch(Exception $e){
 		$canpWxpay = false;
 		$jsApiParameters = $e->getMessage();
