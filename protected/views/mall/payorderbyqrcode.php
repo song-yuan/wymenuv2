@@ -35,7 +35,7 @@
 
 		$result = $notify->GetPayUrl($input);
 		$url2 = $result["code_url"];
-		echo $url2;
+		echo $url2;exit;
 		$code=new QRCode($url2);
 		$code->create();
 	}catch(Exception $e){
