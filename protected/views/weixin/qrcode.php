@@ -29,7 +29,7 @@
 		$code=new QRCode($url2);
 		$code->create();
 	}else{
-		echo '生成失败';
+		echo '<a href="javascript:;" onclick=functin(){history.go(0);}>重新生成</a>';
 	}
 	exit;
 ?>
