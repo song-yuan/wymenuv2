@@ -25,9 +25,8 @@
 		$canpWxpay = false;
 		$jsApiParameters = $e->getMessage();
 	}
-	echo $url2;
 	if($canpWxpay){
-		$code=new QRCode($url2);
+		$code=new QRCode(urlencode($url2));
 		$code->create();
 	}else{
 		echo '生成失败';

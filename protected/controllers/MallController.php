@@ -254,7 +254,7 @@ class MallController extends Controller
 	 public function actionPayOrder()
 	 {
 	 	$userId = Yii::app()->session['userId'];
-	 	$qrcode = Yii::app()->request->getParam('qrcode',1);
+	 	$qrcode = Yii::app()->request->getParam('qrcode',0);
 		$orderId = Yii::app()->request->getParam('orderId');
 		$address = false;
 		$seatingFee = 0;
