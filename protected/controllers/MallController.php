@@ -294,7 +294,7 @@ class MallController extends Controller
 		
 		$user = WxBrandUser::get($userId,$this->companyId);
 		if($qrcode==1){
-			$this->render('payorderbyqrcode',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order));
+			$this->renderPartial('payorderbyqrcode',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order));
 		}else{
 			$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
 		}
