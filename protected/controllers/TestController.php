@@ -11,9 +11,7 @@ class TestController extends Controller
 		exit;
 	}
 	public function actionQrcode(){
-		$url = 'http://www.baidu.com';
-		$code=new QRCode($url);
-		$code->create();exit;
+		$this->render('index');
 	}
 	
 }
