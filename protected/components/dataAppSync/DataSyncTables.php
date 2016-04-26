@@ -397,7 +397,7 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        	"nb_brand_user_level"=>" CREATE TABLE 'nb_taste_group'('lid' int(10) NOT NULL,".
+        	"nb_brand_user_level"=>" CREATE TABLE 'nb_brand_user_level'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
