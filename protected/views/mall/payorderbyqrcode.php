@@ -20,7 +20,7 @@
 	$canpWxpay = true;
 	try{
 		//模式二扫码支付
-		$notify = new NativePay();
+		$notify = new WxPayNativePay();
 		$input = new WxPayUnifiedOrder();
 		$input->SetBody("点餐订单");
 		$input->SetAttach("0");
