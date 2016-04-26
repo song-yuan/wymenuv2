@@ -68,5 +68,14 @@ public function actionGetData(){
  	$result = DataSyncOperation::operateOrder($_POST);
  	echo $result;exit;
 }
+/**
+ * 
+ * 增加会员卡
+ * 
+ */
+public function actionAddMemberCard(){
+ 	$result = DataSyncOperation::addMemberCard($_POST);
+ 	echo $result;exit;
+}
  
 }

@@ -44,6 +44,7 @@ class DataSyncTables
     //和上面一样，以sql的形式体现，并按照顺序执行
     //这些表的结构都要在本地建立
     public $otherTableName=array(
+        array("name"=>"会员等级","table"=>"nb_brand_user_level"),
         array("name"=>"本店会员","table"=>"nb_member_card"),
         array("name"=>"本店会员充值","table"=>"nb_member_recharge"),
        // array("name"=>"本店活动","table"=>"nb_local_activity"),//这张表云端暂时没有
@@ -396,13 +397,26 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
-        		
+        	"nb_brand_user_level"=>" CREATE TABLE 'nb_taste_group'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `level_name` varchar(50) NOT NULL,".
+        		"  `level_type` varchar(1) NOT NULL DEFAULT '0',".
+        		"  `level_discount` varchar(8) NOT NULL DEFAULT '1',".
+        		"  `min_total_points` int(10) NOT NULL DEFAULT '0',".
+        		"  `max_total_points` int(10) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",	
         	"nb_member_card"=>" CREATE TABLE 'nb_member_card'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `selfcode` varchar(10) DEFAULT NULL ,".
 				"  `rfid` varchar(10) DEFAULT NULL ,".
+				"  `level_id` int(10) NOT NULL DEFAULT '0',".
 				"  `name` varchar(20) NOT NULL DEFAULT '',".
 				"  `mobile` varchar(20) DEFAULT NULL ,".
 				"  `email` varchar(100) NOT NULL DEFAULT '',".
@@ -411,6 +425,7 @@ class DataSyncTables
 				"  `sex` varchar(1) NOT NULL DEFAULT 'm' ,".
 				"  `ages` varchar(20) NOT NULL DEFAULT '18-25' ,".
 				"  `all_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+				"  `card_status` varchar(1) NOT NULL DEFAULT '0' ,".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111' ,".
         		"  PRIMARY KEY (`lid`,`dpid`)".
