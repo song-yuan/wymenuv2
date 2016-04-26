@@ -51,7 +51,7 @@ class Product extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('product_name, simple_code, main_picture', 'required'),
+			array('product_name, simple_code, main_picture, category_id', 'required'),
 			array('rank, spicy, order_number,category_id, favourite_number', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, category_id, original_price, dabao_fee, product_unit, weight_unit, printer_way_id', 'length', 'max'=>10),
 			array('product_name, is_sync', 'length', 'max'=>50),
@@ -98,6 +98,8 @@ class Product extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'category_id' => yii::t('app','种类'),
+			'chs_code' => yii::t('app','分类编码'),
+			'phs_code' => yii::t('app','产品编码'),
 			'product_name' => yii::t('app','产品名称'),
 			'simple_code' => 'Simple Code',
 			'main_picture' =>yii::t('app', '产品主图片'),
@@ -147,6 +149,8 @@ class Product extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('category_id',$this->category_id,true);
+		$criteria->compare('chs_code',$this->category_id,true);
+		$criteria->compare('phs_code',$this->category_id,true);
 		$criteria->compare('product_name',$this->product_name,true);
 		$criteria->compare('simple_code',$this->simple_code,true);
 		$criteria->compare('main_picture',$this->main_picture,true);
