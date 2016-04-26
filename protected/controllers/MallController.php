@@ -254,6 +254,7 @@ class MallController extends Controller
 	 public function actionPayOrder()
 	 {
 	 	$userId = Yii::app()->session['userId'];
+	 	$qrcode = Yii::app()->request->getParam('qrcode',1);
 		$orderId = Yii::app()->request->getParam('orderId');
 		$address = false;
 		$seatingFee = 0;
@@ -292,8 +293,11 @@ class MallController extends Controller
 		$orderPays = WxOrderPay::get($this->companyId,$orderId);
 		
 		$user = WxBrandUser::get($userId,$this->companyId);
-		
-		$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+		if($qrcode==1){
+			$this->render('payorderbyqrcode',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+		}else{
+			$this->render('payorder',array('companyId'=>$this->companyId,'userId'=>$userId,'order'=>$order,'address'=>$address,'orderProducts'=>$orderProducts,'user'=>$user,'orderPays'=>$orderPays,'seatingFee'=>$seatingFee,'packingFee'=>$packingFee,'freightFee'=>$freightFee));
+		}
 	 }
 	/**
 	 * 
