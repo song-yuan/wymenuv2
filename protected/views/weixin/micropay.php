@@ -7,7 +7,8 @@ if(isset($auth_code) && $auth_code != ""){
 	$input->SetTotal_fee($order['should_total']*100);
 	$input->SetOut_trade_no($orderId);
 	$microPay = new MicroPay();
-	printf_info($microPay->pay($input));
+	var_dump($microPay->pay($input));
 }
+exit;
 ?>
 
