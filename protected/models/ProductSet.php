@@ -47,6 +47,7 @@ class ProductSet extends CActiveRecord
 			array('set_name, is_sync', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
+			array('type', 'length', 'max'=>2),
 			array('is_member_discount, is_special, is_discount, status, delete_flag', 'length', 'max'=>1),
 			array('description', 'safe'),
 			// The following rule is used by search().
