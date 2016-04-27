@@ -283,6 +283,7 @@ class DataSyncTables
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `set_name` varchar(50) NOT NULL,".
 				"  `simple_code` varchar(25) NOT NULL,".
+				"  `type` varchar(2) NOT NULL DEFAULT '0',".
 				"  `main_picture` varchar(255) NOT NULL,".
 				"  `description` text NOT NULL,".
 				"  `rank` tinyint(3) NOT NULL DEFAULT '3',".
