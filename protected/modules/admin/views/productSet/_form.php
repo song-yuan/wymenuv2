@@ -16,14 +16,21 @@
 										</div>
 									</div>
 								<?php endif;?>
-                                                                        <div class="form-group">
-                                                                                <?php echo $form->label($model, 'set_name',array('class' => 'col-md-3 control-label'));?>
-                                                                                <div class="col-md-4">
-                                                                                        <?php echo $form->textField($model, 'set_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('set_name')));?>
-                                                                                        <?php echo $form->error($model, 'set_name' )?>
-                                                                                </div>
-                                                                        </div>
-                                                                       <div class="form-group">
+									<div class="form-group">
+										<?php echo $form->label($model, 'type',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'type', array('0' => '套餐' , '1' => '自由组合') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type')));?>
+											<?php echo $form->error($model, 'type' )?>
+										</div>
+									</div>
+                                    <div class="form-group">
+                                            <?php echo $form->label($model, 'set_name',array('class' => 'col-md-3 control-label'));?>
+                                            <div class="col-md-4">
+                                                    <?php echo $form->textField($model, 'set_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('set_name')));?>
+                                                    <?php echo $form->error($model, 'set_name' )?>
+                                            </div>
+                                    </div>
+                                   <div class="form-group">
 										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2', '3' => '3', '4' => '4', '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rank')));?>
