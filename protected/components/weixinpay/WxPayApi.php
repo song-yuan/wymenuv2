@@ -147,8 +147,24 @@ class WxPayApi
 		if(!$inputObj->IsOut_trade_noSet()) {
 			throw new WxPayException("订单查询接口中，out_trade_no必填！");
 		}
-		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
-		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		$orderId = $inputObj->GetOut_trade_no();
+		
+		$orderIdArr = explode('-',$orderId);
+		$dpid = $orderIdArr[1];
+		$account = WxAccount::get($dpid);
+		$appId = $account['appid'];
+		$mchId = $account['partner_id'];
+			
+		if(WxPayConfig::ISSUBMCH){
+			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+			
+			$inputObj->SetSubAppid($appId);//子商户公众账号ID
+			$inputObj->SetSubMch_id($mchId);//子商户号
+		}else{
+			$inputObj->SetAppid($appId);//公众账号ID
+			$inputObj->SetMch_id($mchId);//商户号
+		}
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 		
 		$inputObj->SetSign();//签名
@@ -187,8 +203,25 @@ class WxPayApi
 		}else if(!$inputObj->IsOp_user_idSet()){
 			throw new WxPayException("退款申请接口中，缺少必填参数op_user_id！");
 		}
-		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
-		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		
+		$orderId = $inputObj->GetOut_trade_no();
+		
+		$orderIdArr = explode('-',$orderId);
+		$dpid = $orderIdArr[1];
+		$account = WxAccount::get($dpid);
+		$appId = $account['appid'];
+		$mchId = $account['partner_id'];
+			
+		if(WxPayConfig::ISSUBMCH){
+			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+			
+			$inputObj->SetSubAppid($appId);//子商户公众账号ID
+			$inputObj->SetSubMch_id($mchId);//子商户号
+		}else{
+			$inputObj->SetAppid($appId);//公众账号ID
+			$inputObj->SetMch_id($mchId);//商户号
+		}
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 		
 		$inputObj->SetSign();//签名
@@ -223,8 +256,24 @@ class WxPayApi
 			!$inputObj->IsRefund_idSet()) {
 			throw new WxPayException("退款查询接口中，out_refund_no、out_trade_no、transaction_id、refund_id四个参数必填一个！");
 		}
-		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
-		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		$orderId = $inputObj->GetOut_trade_no();
+		
+		$orderIdArr = explode('-',$orderId);
+		$dpid = $orderIdArr[1];
+		$account = WxAccount::get($dpid);
+		$appId = $account['appid'];
+		$mchId = $account['partner_id'];
+			
+		if(WxPayConfig::ISSUBMCH){
+			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+			
+			$inputObj->SetSubAppid($appId);//子商户公众账号ID
+			$inputObj->SetSubMch_id($mchId);//子商户号
+		}else{
+			$inputObj->SetAppid($appId);//公众账号ID
+			$inputObj->SetMch_id($mchId);//商户号
+		}
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 		
 		$inputObj->SetSign();//签名
@@ -253,8 +302,24 @@ class WxPayApi
 		if(!$inputObj->IsBill_dateSet()) {
 			throw new WxPayException("对账单接口中，缺少必填参数bill_date！");
 		}
-		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
-		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		$orderId = $inputObj->GetOut_trade_no();
+		
+		$orderIdArr = explode('-',$orderId);
+		$dpid = $orderIdArr[1];
+		$account = WxAccount::get($dpid);
+		$appId = $account['appid'];
+		$mchId = $account['partner_id'];
+			
+		if(WxPayConfig::ISSUBMCH){
+			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+			
+			$inputObj->SetSubAppid($appId);//子商户公众账号ID
+			$inputObj->SetSubMch_id($mchId);//子商户号
+		}else{
+			$inputObj->SetAppid($appId);//公众账号ID
+			$inputObj->SetMch_id($mchId);//商户号
+		}
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 		
 		$inputObj->SetSign();//签名
@@ -291,8 +356,24 @@ class WxPayApi
 		}
 		
 		$inputObj->SetSpbill_create_ip($_SERVER['REMOTE_ADDR']);//终端ip
-		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
-		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		$orderId = $inputObj->GetOut_trade_no();
+		
+		$orderIdArr = explode('-',$orderId);
+		$dpid = $orderIdArr[1];
+		$account = WxAccount::get($dpid);
+		$appId = $account['appid'];
+		$mchId = $account['partner_id'];
+			
+		if(WxPayConfig::ISSUBMCH){
+			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+			
+			$inputObj->SetSubAppid($appId);//子商户公众账号ID
+			$inputObj->SetSubMch_id($mchId);//子商户号
+		}else{
+			$inputObj->SetAppid($appId);//公众账号ID
+			$inputObj->SetMch_id($mchId);//商户号
+		}
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 		
 		$inputObj->SetSign();//签名
@@ -322,8 +403,24 @@ class WxPayApi
 			throw new WxPayException("撤销订单API接口中，参数out_trade_no和transaction_id必须填写一个！");
 		}
 		
-		$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
-		$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+		$orderId = $inputObj->GetOut_trade_no();
+		
+		$orderIdArr = explode('-',$orderId);
+		$dpid = $orderIdArr[1];
+		$account = WxAccount::get($dpid);
+		$appId = $account['appid'];
+		$mchId = $account['partner_id'];
+			
+		if(WxPayConfig::ISSUBMCH){
+			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
+			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
+			
+			$inputObj->SetSubAppid($appId);//子商户公众账号ID
+			$inputObj->SetSubMch_id($mchId);//子商户号
+		}else{
+			$inputObj->SetAppid($appId);//公众账号ID
+			$inputObj->SetMch_id($mchId);//商户号
+		}
 		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
 		
 		$inputObj->SetSign();//签名
