@@ -116,10 +116,13 @@ class ProductCategoryController extends BackendController
                 Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		$model = ProductCategory::model()->find('lid=:id and dpid=:companyId' , array(':id'=>$id,':companyId'=>$this->companyId));
 		//var_dump($id,  $this->companyId,$model);exit;
-		if($model) {
+		if($model&&$model->checkCategory($id)) {
 			$model->deleteCategory();
 			Yii::app()->user->setFlash('success',yii::t('app','删除成功！'));
+		}else{
+			Yii::app()->user->setFlash('error',yii::t('app','请先删除该分类下的产品！'));
 		}
+		
 		$this->redirect(array('productCategory/index','companyId'=>$this->companyId,'id'=>$model->pid));
 	}
 	

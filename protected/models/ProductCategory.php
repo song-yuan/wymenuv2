@@ -123,6 +123,16 @@ class ProductCategory extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	public function checkCategory($categoryId){
+		$db = Yii::app()->db;
+		$sql = 'select * from nb_product where category_id='.$categoryId.' and delete_flag=0';
+		$categoryProducts = $db->createCommand($sql)->queryAll();
+		if(empty($categoryProducts)){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	public function deleteCategory(){
 		$db = Yii::app()->db;
 		$categoryIds = $db->createCommand('select lid from '.$this->tableName().' where tree like :categoryTree')->bindValue(':categoryTree',$this->tree.','.'%')->queryColumn();
