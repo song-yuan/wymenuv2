@@ -2,6 +2,7 @@
 
 class TestController extends Controller
 {
+	public $layout = '/layouts/productmain';
 	public function actionIndex()
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
@@ -12,6 +13,11 @@ class TestController extends Controller
 	}
 	public function actionQrcode(){
 		$this->render('index');
+	}
+	public function actionMicroPay(){
+		$companyId = Yii::app()->request->getParam('companyId');
+		$orderId = Yii::app()->request->getParam('orderId');
+		$this->render('micropay',array('companyId'=>$companyId,'orderId'=>$orderId));
 	}
 	
 }
