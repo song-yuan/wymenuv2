@@ -16,7 +16,7 @@
 										<?php $this->widget('application.modules.admin.components.widgets.ProductCategorySelecter',array('categoryId'=>$model->category_id,'companyId'=>$this->companyId)); ?>
 										<?php echo $form->error($model, 'category_id' )?>
 										</div>
-										
+										<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
 									</div>
 								
 									<div class="form-group <?php if($model->hasErrors('product_name')) echo 'has-error';?>">

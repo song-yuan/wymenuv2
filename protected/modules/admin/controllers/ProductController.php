@@ -54,7 +54,7 @@ class ProductController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('Product');
 			
 			$cateID = $model->category_id;
-			//if(!empty($cateID)){
+			if(!empty($cateID)){
 				$db = Yii::app()->db;
 				$sql = 'select t.* from nb_product_category t where t.delete_flag = 0 and t.lid = '.$cateID;
 				$command = $db->createCommand($sql);
@@ -79,10 +79,10 @@ class ProductController extends BackendController
 					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 					$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
 				}
-// 			}else{
-// 				Yii::app()->user->setFlash('error',yii::t('app','请选择二级分类。。。'));
-// 				$this->redirect(array('product/create' , 'companyId' => $this->companyId ));
-// 			}
+			}else{
+				Yii::app()->user->setFlash('error',yii::t('app','请选择二级分类。。。'));
+				$this->redirect(array('product/create' , 'companyId' => $this->companyId ));
+			}
 			
 		}
 		$categories = $this->getCategoryList();
