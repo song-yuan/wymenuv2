@@ -10,5 +10,8 @@ class TestController extends Controller
 		new WxMessageTpl($order['dpid'],$order['user_id'],0,$order);
 		exit;
 	}
+	public function actionQrcode(){
+		$this->render('index');
+	}
 	
 }

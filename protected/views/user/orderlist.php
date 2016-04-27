@@ -44,6 +44,7 @@
 					</a>
 					<?php if($model['order_status']< 3):?>
 					<div class="order_bttnbar pad_10">
+						<a href="<?php echo $this->createUrl('/weixin/qrcode',array('companyId'=>$this->companyId,'orderId'=>$model['lid']));?>"><button class="bttn_large bttn_orange">二维码付款</button></a>
 						<button class="bttn_large bttn_orange cancel" order-id="<?php echo $model['lid'];?>">取消订单</button>
 					</div>
 					<?php endif;?>
