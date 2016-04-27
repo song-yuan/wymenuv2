@@ -51,7 +51,7 @@ class ProductSet extends CActiveRecord
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, set_name, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, set_name, type, simple_code, main_picture, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, delete_flag, is_sync', 'safe', 'on'=>'search'),
 
 		);
 	}
@@ -80,6 +80,7 @@ class ProductSet extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'set_name' => yii::t('app','套餐名称'),
+			'type' => yii::t('app','套餐类型'),
 			'simple_code' => 'Simple Code',
 			'main_picture' => yii::t('app','主图片'),
 			'description' => yii::t('app','描述'),
@@ -119,6 +120,7 @@ class ProductSet extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('set_name',$this->set_name,true);
+		$criteria->compare('type',$this->type);
 		$criteria->compare('simple_code',$this->simple_code,true);
 		$criteria->compare('main_picture',$this->main_picture,true);
 		$criteria->compare('description',$this->description,true);
@@ -128,7 +130,7 @@ class ProductSet extends CActiveRecord
 		$criteria->compare('is_discount',$this->is_discount,true);
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('order_number',$this->order_number);
-                $criteria->compare('store_number',$this->store_number);
+        $criteria->compare('store_number',$this->store_number);
 		$criteria->compare('favourite_number',$this->favourite_number);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
