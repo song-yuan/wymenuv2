@@ -32,6 +32,31 @@ class WxPayMicroPay extends WxPayDataBase
 		return array_key_exists('appid', $this->values);
 	}
 	
+  /**
+	* 设置微信支付分配的商户号
+	* @param string $value 
+	**/
+	public function SetMch_id($value)
+	{
+		$this->values['mch_id'] = $value;
+	}
+	/**
+	* 获取微信支付分配的商户号的值
+	* @return 值
+	**/
+	public function GetMch_id()
+	{
+		return $this->values['mch_id'];
+	}
+	/**
+	* 判断微信支付分配的商户号是否存在
+	* @return true 或 false
+	**/
+	public function IsMch_idSet()
+	{
+		return array_key_exists('mch_id', $this->values);
+	}
+	
    /** 
 	* 设置微信分配的子商户公众账号ID
 	* @param string $value 
@@ -82,31 +107,6 @@ class WxPayMicroPay extends WxPayDataBase
 	public function IsSubMch_idSet()
 	{
 		return array_key_exists('sub_mch_id', $this->values);
-	}
-
-	/**
-	* 设置微信支付分配的商户号
-	* @param string $value 
-	**/
-	public function SetMch_id($value)
-	{
-		$this->values['mch_id'] = $value;
-	}
-	/**
-	* 获取微信支付分配的商户号的值
-	* @return 值
-	**/
-	public function GetMch_id()
-	{
-		return $this->values['mch_id'];
-	}
-	/**
-	* 判断微信支付分配的商户号是否存在
-	* @return true 或 false
-	**/
-	public function IsMch_idSet()
-	{
-		return array_key_exists('mch_id', $this->values);
 	}
 
 
