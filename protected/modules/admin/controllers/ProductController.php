@@ -80,8 +80,7 @@ class ProductController extends BackendController
 					$this->redirect(array('product/index' , 'companyId' => $this->companyId ));
 				}
 			}else{
-				Yii::app()->user->setFlash('error',yii::t('app','请选择二级分类。。。'));
-				$this->redirect(array('product/create' , 'companyId' => $this->companyId ));
+				 $model->addError('category_id','必须添加二级分类');
 			}
 			
 		}
