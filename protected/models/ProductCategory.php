@@ -131,7 +131,11 @@ class ProductCategory extends CActiveRecord
 		}else{
 			$sql = 'select lid from nb_product_category where dpid='.$this->dpid.' and pid='.$this->lid;
 			$category = $categoryProducts = $db->createCommand($sql)->queryColumn();
-			$str = implode(',',$category);
+			if(empty($category)){
+				$str = 0;
+			}else{
+				$str = implode(',',$category);
+			}
 			$sql = 'select * from nb_product where dpid='.$this->dpid.' and category_id in ('.$str.') and delete_flag=0';
 			$categoryProducts = $db->createCommand($sql)->queryAll();
 		}
