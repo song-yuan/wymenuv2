@@ -123,10 +123,19 @@ class ProductCategory extends CActiveRecord
 	{
 		return parent::model($className);
 	}
-	public function checkCategory($categoryId){
+	public function checkCategory(){
 		$db = Yii::app()->db;
-		$sql = 'select * from nb_product where category_id='.$categoryId.' and delete_flag=0';
-		$categoryProducts = $db->createCommand($sql)->queryAll();
+		if($this->pid > 0){
+			$sql = 'select * from nb_product where dpid='.$this->dpid.' and category_id='.$this->lid.' and delete_flag=0';
+			$categoryProducts = $db->createCommand($sql)->queryAll();
+		}else{
+			$sql = 'select lid from nb_product_category where dpid='.$this->dpid.' and pid='.$this->lid;
+			$category = $categoryProducts = $db->createCommand($sql)->queryColumn();
+			$str = implode(',',$category);
+			$sql = 'select * from nb_product where dpid='.$this->dpid.' and category_id in ('.$str.') and delete_flag=0';
+			$categoryProducts = $db->createCommand($sql)->queryAll();
+		}
+		
 		if(empty($categoryProducts)){
 			return true;
 		}else{
