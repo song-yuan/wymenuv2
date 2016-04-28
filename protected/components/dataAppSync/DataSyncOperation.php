@@ -141,6 +141,22 @@ class DataSyncOperation
         }
     }
     /**
+     * 
+     * 用户名密码验证
+     * 
+     */
+     public static function validateUser($data){
+     	$userName = $data['user_name'];
+     	$passward = $data['passward'];
+     	$sql = 'select * from nb_user where username='.$userName.' and password_hash='.Helper::genPassword($passward).' and delete_flag=0';
+     	$result = Yii::app()->db->createCommand($sql)->queryRow();
+     	if($result){
+     		return json_encode(array('status'=>true));
+     	}else{
+     		return json_encode(array('status'=>false));
+     	}
+     }
+    /**
      * 订单操作
      * 
      */
@@ -208,7 +224,7 @@ class DataSyncOperation
 								'create_at'=>date('Y-m-d H:i:s',$time),
 	        					'update_at'=>date('Y-m-d H:i:s',$time), 
 								'order_id'=>$orderId,
-								'account_no'=>$pay->account_no,
+								'account_no'=>$accountNo,
 								'pay_amount'=>$pay->pay_amount,
 								'paytype'=>$pay->paytype,
 								'payment_method_id'=>$pay->payment_method_id,
