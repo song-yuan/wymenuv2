@@ -10,6 +10,7 @@ class DataSyncTables
     //然后根据企业id获取数据，下载到本地后删除所有
     //原有的基础数据，然后插入新的。    
     public $baseTableName= array(
+    	array("name"=>"pad设置","table"=>"nb_pad_setting"),
         array("name"=>"店铺信息","table"=>"nb_local_company"),
         array("name"=>"用户","table"=>"nb_user"),
         array("name"=>"楼层区域","table"=>"nb_floor"),
@@ -87,6 +88,20 @@ class DataSyncTables
     public function getTableStructure($tablename)
     {
         $tableStructureAll=array(
+        	"nb_pad_setting"=>" CREATE TABLE 'nb_floor'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `pad_code` varchar(50) NOT NULL,".
+				"  `pad_sales_type` varchar(2) NOT NULL,".
+				"  `pad_type` varchar(2) NOT NULL,".
+				"  `pad_ip` varchar(20) NOT NULL,".
+				"  `pad_fip` varchar(20) NOT NULL DEFAULT '0',".
+				"  `is_product_free` varchar(1) NOT NULL,".
+				"  `delete_flag` varchar(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"   PRIMARY KEY (`lid`,`dpid`)".
+        		");",
             "nb_local_company"=>" CREATE TABLE 'nb_local_company'('dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
         		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
