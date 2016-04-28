@@ -88,7 +88,7 @@ class DataSyncTables
     public function getTableStructure($tablename)
     {
         $tableStructureAll=array(
-        	"nb_pad_setting"=>" CREATE TABLE 'nb_floor'('lid' int(10) NOT NULL,".
+        	"nb_pad_setting"=>" CREATE TABLE 'nb_pad_setting'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
@@ -97,7 +97,7 @@ class DataSyncTables
 				"  `pad_type` varchar(2) NOT NULL,".
 				"  `pad_ip` varchar(20) NOT NULL,".
 				"  `pad_fip` varchar(20) NOT NULL DEFAULT '0',".
-				"  `is_product_free` varchar(1) NOT NULL,".
+				"  `is_product_free` varchar(1) NOT NULL  DEFAULT '0',".
 				"  `delete_flag` varchar(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"   PRIMARY KEY (`lid`,`dpid`)".
