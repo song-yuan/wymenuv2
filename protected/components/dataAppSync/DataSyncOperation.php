@@ -151,6 +151,7 @@ class DataSyncOperation
     	
     	$orderInfo = $obj->order_info;
     	$orderProduct = $obj->order_product;
+    	$orderPay = $obj->order_pay;
     	
     	$time = time();
 	    $se = new Sequence("order");
@@ -193,10 +194,29 @@ class DataSyncOperation
 								'price'=>$product->price,
 								'original_price'=>$product->price,
 								'amount'=>$product->amount,
-								'product_order_status'=>9,
+								'product_order_status'=>2,
 								'is_sync'=>DataSync::getInitSync(),
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+			}
+			foreach($orderPay as $pay){
+				$se = new Sequence("order_pay");
+		    	$orderPayId = $se->nextval();
+		    	$orderPayData = array(
+								'lid'=>$orderPayId,
+								'dpid'=>$dpid,
+								'create_at'=>date('Y-m-d H:i:s',$time),
+	        					'update_at'=>date('Y-m-d H:i:s',$time), 
+								'order_id'=>$orderId,
+								'account_no'=>$pay->account_no,
+								'pay_amount'=>$pay->pay_amount,
+								'paytype'=>$pay->paytype,
+								'payment_method_id'=>$pay->payment_method_id,
+								'paytype_id'=>$pay->paytype_id,
+								'is_sync'=>DataSync::getInitSync(),
+								);
+				 Yii::app()->db->createCommand()->insert('nb_order_pay',$orderPayData);
+		    	
 			}
 		   $transaction->commit();
 		   $msg = json_encode(array('status'=>true,'orderId'=>$orderId));
