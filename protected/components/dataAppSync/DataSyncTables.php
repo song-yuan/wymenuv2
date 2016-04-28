@@ -10,7 +10,7 @@ class DataSyncTables
     //然后根据企业id获取数据，下载到本地后删除所有
     //原有的基础数据，然后插入新的。    
     public $baseTableName= array(
-    	array("name"=>"pad设置","table"=>"nb_pad_setting"),
+    	//array("name"=>"pad设置","table"=>"nb_pad_setting"),
         array("name"=>"店铺信息","table"=>"nb_local_company"),
         array("name"=>"用户","table"=>"nb_user"),
         array("name"=>"楼层区域","table"=>"nb_floor"),
@@ -88,7 +88,7 @@ class DataSyncTables
     public function getTableStructure($tablename)
     {
         $tableStructureAll=array(
-        	"nb_pad_setting"=>" CREATE TABLE 'nb_pad_setting'('lid' int(10) NOT NULL,".
+        	"nb_pad_setting"=>" CREATE TABLE IF NOT EXISTS 'nb_pad_setting'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
