@@ -106,6 +106,8 @@ class DataSyncTables
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
         		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `token` varchar(50) NOT NULL,".
+        		"  `type` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `comp_dpid` int(10) NOT NULL,".
         		"  `company_name` varchar(50) NOT NULL,".
         		"  `logo` varchar(255) NOT NULL,".
         		"  `contact_name` varchar(20) NOT NULL,".
@@ -113,7 +115,11 @@ class DataSyncTables
         		"  `telephone` varchar(20) NOT NULL,".
         		"  `email` varchar(50) NOT NULL,".
         		"  `address` varchar(200) NOT NULL,".
+        		"  `lng` varchar(10) NOT NULL,".
+        		"  `lat` varchar(10) NOT NULL,".
+        		"  `distance` int(10) NOT NULL DEFAULT '5',".
         		"  `homepage` varchar(255) NOT NULL,".
+        		"  `domain` varchar(255) NOT NULL,".
         		"  `delete_flage` char(1) NOT NULL DEFAULT '0',".
         		"  `description` text NOT NULL,".
         		"  `printer_id` int(10) NOT NULL,".
