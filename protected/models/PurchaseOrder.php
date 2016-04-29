@@ -74,10 +74,10 @@ class PurchaseOrder extends CActiveRecord
 			'manufacturer_id' => '厂商名称',
 			'admin_id' => '管理员',
 			'purchase_account_no' => '订货单号',
-			'organization_id' => '组织名称',
-			'organization_address' => '组织信息地址',
+			'organization_id' => '采购商',
+			'organization_address' => '采购商地址',
 			'delivery_date' => '交货日期',
-			'remark' => '备注',
+			'remark' => yii::t('app','描述'),
 			'delete_flag' => '删除 0未删除 1删除',
 			'is_sync' => 'Is Sync',
 		);

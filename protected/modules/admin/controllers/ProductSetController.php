@@ -40,14 +40,14 @@ class ProductSetController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
-                        $se=new Sequence("porduct_set");
-                        $model->lid = $se->nextval();
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->update_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
-                        $py=new Pinyin();
-                        $model->simple_code = $py->py($model->set_name);
-                        //var_dump($model);exit;
+			$se=new Sequence("porduct_set");
+			$model->lid = $se->nextval();
+			$model->create_at = date('Y-m-d H:i:s',time());
+			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->delete_flag = '0';
+			$py=new Pinyin();
+			$model->simple_code = $py->py($model->set_name);
+			//var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 				$this->redirect(array('productSet/index','companyId' => $this->companyId));
@@ -96,7 +96,7 @@ class ProductSetController extends BackendController
 	}
         
         public function actionDetailIndex(){
-		$pwlid = Yii::app()->request->getParam('lid');
+		$pwlid = Yii::app()->request->getParam('lid');// var_dump($pwlid);exit;
                 $criteria = new CDbCriteria;
                 $criteria->with = array('product');
                 $criteria->order =  't.group_no';
@@ -115,28 +115,29 @@ class ProductSetController extends BackendController
                // var_dump($psmodel);exit;
 		$this->render('detailindex',array(
 			'models'=>$models,
-                        'psmodel'=>$psmodel,
+            'psmodel'=>$psmodel,
 			'pages'=>$pages
 		));
 	}
+
 	public function actionDetailCreate(){
 		$model = new ProductSetDetail();
 		$model->dpid = $this->companyId ;
-		$pslid = Yii::app()->request->getParam('psid');
-                $model->set_id=$pslid;
+		$pslid = Yii::app()->request->getParam('psid'); //var_dump($pslid);exit;
+        $model->set_id=$pslid;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
-                        $se=new Sequence("porduct_set_detail");
-                        $model->lid = $se->nextval();
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
-                        $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$pslid.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
-                        //var_dump($modelsp);exit;
-                        if($model->is_select=="1")
-                        {
-                            $sqlgroup="update nb_product_set_detail set is_select=0 where group_no=".$model->group_no." and dpid=".$this->companyId." and set_id=".$model->set_id;
-                            Yii::app()->db->createCommand($sqlgroup)->execute(); 
-                        }
+            $se=new Sequence("porduct_set_detail");
+            $model->lid = $se->nextval();
+            $model->create_at = date('Y-m-d H:i:s',time());
+            $model->delete_flag = '0';
+            $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$pslid.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
+            //var_dump($modelsp);exit;
+            if($model->is_select=="1")
+            {
+                $sqlgroup="update nb_product_set_detail set is_select=0 where group_no=".$model->group_no." and dpid=".$this->companyId." and set_id=".$model->set_id;
+                Yii::app()->db->createCommand($sqlgroup)->execute();
+            }
 			if($model->save()) {
                             
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
@@ -150,10 +151,10 @@ class ProductSetController extends BackendController
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
 		$this->render('detailcreate' , array(
 				'model' => $model,
-                                'categories' => $categories,
-                                'categoryId' => $categoryId,
-                                'products' => $productslist,
-                                'maxgroupno'=>$maxgroupno
+				'categories' => $categories,
+				'categoryId' => $categoryId,
+				'products' => $productslist,
+				'maxgroupno'=>$maxgroupno
 		));
 	}
 	public function actionDetailUpdate(){
@@ -164,12 +165,11 @@ class ProductSetController extends BackendController
                 Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
-                        $model->update_at = date('Y-m-d H:i:s',time());                        
-                        //只有一个时选中，如果第一个必须选中，后续的，判断是选中，必须取消其他选中
-                        $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$model->set_id.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
-                        //var_dump($modelsp);exit;
-                        
-                        if($model->save()){
+			$model->update_at = date('Y-m-d H:i:s',time());
+			//只有一个时选中，如果第一个必须选中，后续的，判断是选中，必须取消其他选中
+			$modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$model->set_id.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
+			//var_dump($modelsp);exit;
+			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id));
 			}
@@ -182,10 +182,10 @@ class ProductSetController extends BackendController
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
 		$this->render('detailupdate' , array(
 				'model'=>$model,
-                                'categories' => $categories,
-                                'categoryId' => $categoryId,
-                                'products' => $productslist,
-                                'maxgroupno' => $maxgroupno
+                'categories' => $categories,
+                'categoryId' => $categoryId,
+                'products' => $productslist,
+                'maxgroupno' => $maxgroupno
 		));
 	}
         
@@ -206,14 +206,14 @@ class ProductSetController extends BackendController
         
         public function actionGetChildren(){
 		$categoryId = Yii::app()->request->getParam('pid',0);
-                $productSetId = Yii::app()->request->getParam('$productSetId',0);
+		$productSetId = Yii::app()->request->getParam('$productSetId',0);
+           // var_dump($productSetId);exit;
 		if(!$categoryId){
 			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
 		}
-		
-                $treeDataSource = array('data'=>array(),'delay'=>400);
+        $treeDataSource = array('data'=>array(),'delay'=>400);
 		$produts=  $this->getProducts($categoryId);
-	
+		//var_dump($produts);exit;
 		foreach($produts as $c){
 			$tmp['name'] = $c['product_name'];
 			$tmp['id'] = $c['lid'];
@@ -222,18 +222,15 @@ class ProductSetController extends BackendController
 		Yii::app()->end(json_encode($treeDataSource));
 	}
         
-        public function actionIsDoubleSetDetail(){
+   public function actionIsDoubleSetDetail(){
 		$productId = Yii::app()->request->getParam('productid',0);
-                $productSetId = Yii::app()->request->getParam('productSetId',0);
-                $companyId = Yii::app()->request->getParam('companyId',0);
-				
-                $treeDataSource = array('data'=>FALSE,'delay'=>400);
-		
-                $product= ProductSetDetail::model()->find('t.dpid = :dpid and t.set_id = :setid and t.product_id = :productid and t.delete_flag=0',array(':dpid'=>$companyId,':setid'=>$productSetId,':productid'=>$productId));
-                //var_dump($productId,$productSetId,$companyId,$product);exit;
-                if(!empty($product))
-                {
-			$treeDataSource['data'] = TRUE;
+        $productSetId = Yii::app()->request->getParam('productSetId',0);
+        $companyId = Yii::app()->request->getParam('companyId',0);
+        $treeDataSource = array('data'=>FALSE,'delay'=>400);
+        $product= ProductSetDetail::model()->find('t.dpid = :dpid and t.set_id = :setid and t.product_id = :productid and t.delete_flag=0',array(':dpid'=>$companyId,':setid'=>$productSetId,':productid'=>$productId));
+        //var_dump($productId,$productSetId,$companyId,$product);exit;
+        if(!empty($product)){
+            $treeDataSource['data'] = TRUE;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
 	}

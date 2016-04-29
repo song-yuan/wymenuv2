@@ -61,8 +61,8 @@
             <div class="stockMid" >
                 <div class="one"><a href="<?php echo $this->createUrl('/admin/orgClassification/index',array('companyId'=>$this->companyId));?>"></a></div>
                 <div class="two"><a href="<?php echo $this->createUrl('/admin/orgInformation/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="three"><a href="<?php echo $this->createUrl('/admin/mfrClassification/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="four"><a href="<?php echo $this->createUrl('/admin/mfrInformation/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="three"><a href="<?php echo $this->createUrl('/admin/mfrInformation/index',array('companyId'=>$this->companyId));?>"></a></div>
+                <div class="four"><a href="<?php echo $this->createUrl('/admin/mfrClassification/index',array('companyId'=>$this->companyId));?>"></a></div>
                 <div class="five"><a href="<?php echo $this->createUrl('/admin/purchaseOrder/index',array('companyId'=>$this->companyId));?>"></a></div>
                 <div class="six"><a href="<?php echo $this->createUrl('/admin/refundOrder/index',array('companyId'=>$this->companyId));?>"></a></div>
                 <div class="sever"><a href="<?php echo $this->createUrl('/admin/storageOrder/index',array('companyId'=>$this->companyId));?>"></a></div>

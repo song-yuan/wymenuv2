@@ -27,44 +27,43 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
+		<?php $form=$this->beginWidget('CActiveForm', array(
+				'id' => 'product-form',
+				'action' => $this->createUrl('stockSetting/index' , array('companyId' => $this->companyId,)),
+				'errorMessageCssClass' => 'help-block',
+				'htmlOptions' => array(
+						'class' => 'form-horizontal',
+						'enctype' => 'multipart/form-data'
+				),
+		)); ?>
 		<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺库存(库存少于安全库存时自动申请调拨)');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','库存参数设置');?></div>
 					<div class="tools">
 						<a href="javascript:;" class="collapse"></a>
 					</div>
 				</div>
-				<div class="portlet-body">
-
+				<div class="portlet-body" style="border-bottom: 1px dashed #002a80;">
+					<p>店铺库存(库存小于安全库存范围时自动申请调拨)</p>
 					<div class="col-md-offset-3">
-						日均销量 = 最近<input type="text" name="" class="" value="<?php //echo $model->sales_day;?>" /> 天的日均销量<br /><br/>
-						日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<安全库存范围 < 日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<br /><br/>
-						<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
-						<a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
-					</div>
-				</div>
-			</div>
-			<!-- END EXAMPLE TABLE PORTLET-->
-			<!-- BEGIN EXAMPLE TABLE PORTLET-->
-			<div class="portlet box purple">
-				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','仓库库存(库存少于安全库存时自动生成采购订单)');?></div>
-					<div class="tools">
-						<a href="javascript:;" class="collapse"></a>
+						日均销量 = 最近 <input type="text" name="StockSetting[dsales_day]" class="" value="<?php echo $model->dsales_day;?>" /> 天的日均销量<br /><br/>
+						日均销量 X <input type="text" name="StockSetting[dsafe_min_day]" class="" value="<?php echo $model->dsafe_min_day;?>" /> 天<安全库存范围 < 日均销量 X <input type="text" name="StockSetting[dsafe_max_day]" class="" value="<?php echo $model->dsafe_max_day;?>" /> 天<br /><br/>
 					</div>
 				</div>
 				<div class="portlet-body">
+					<p>仓库库存(库存小于安全库存范围时自动生成采购订单)</p>
 					<div class="col-md-offset-3">
-						日均销量 = 最近<input type="text" name="" class="" value="<?php //echo $model->sales_day;?>" /> 天的日均销量<br /><br/>
-						日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<安全库存范围 < 日均销量 X <input type="text" name="" class="" value="<?php //echo $model->safe_day;?>" /> 天<br /><br/>
-						<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+                        日均销量 = 最近 <input type="text" name="StockSetting[csales_day]" class="" value="<?php echo $model->csales_day;?>" /> 天的日均销量<br /><br/>
+                        日均销量 X <input type="text" name="StockSetting[csafe_min_day]" class="" value="<?php echo $model->csafe_min_day;?>" /> 天<安全库存范围 < 日均销量 X <input type="text" name="StockSetting[csafe_max_day]" class="" value="<?php echo $model->csafe_max_day;?>" /> 天<br /><br/>
+                        <button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
 						<a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn default"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
+        <?php $this->endWidget();?>
 	</div>
 	<!-- END PAGE CONTENT-->

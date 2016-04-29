@@ -33,12 +33,12 @@ class PurchaseOrderDetail extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('update_at, material_id', 'required'),
-			array('lid, dpid, material_id, price, stock, free_stock', 'length', 'max'=>10),
+			array('lid, dpid, purchase_id, material_id, price, stock, free_stock', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, material_id, price, stock, free_stock, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, purchase_id, material_id, price, stock, free_stock, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +64,7 @@ class PurchaseOrderDetail extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
+			'purcharse_id'=>'',
 			'material_id' => '品项名称',
 			'price' => '进价',
 			'stock' => '采购数量',

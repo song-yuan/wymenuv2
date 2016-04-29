@@ -8,8 +8,12 @@
  * @property string $dpid
  * @property string $create_at
  * @property string $update_at
- * @property integer $safe_day
- * @property integer $sales_day
+ * @property integer $dsales_day
+ * @property integer $dsafe_min_day
+ * @property integer $dsafe_max_day
+ * @property integer $csales_day
+ * @property integer $csafe_min_day
+ * @property integer $csafe_max_day
  * @property integer $delete_flag
  * @property string $is_sync
  */
@@ -32,13 +36,13 @@ class StockSetting extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('update_at', 'required'),
-			array('safe_day, sales_day, delete_flag', 'numerical', 'integerOnly'=>true),
+			array('dsales_day, dsafe_min_day, dsafe_max_day, csales_day, csafe_min_day, csafe_max_day, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, safe_day, sales_day, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, dsales_day, dsafe_min_day, dsafe_max_day, csales_day, csafe_min_day, csafe_max_day, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,7 +54,6 @@ class StockSetting extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 		);
 	}
 
@@ -64,8 +67,12 @@ class StockSetting extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
-			'safe_day' => '安全天数',
-			'sales_day' => '日均销量计算系数',
+			'dsales_day' => '店铺日均销量计算系数',
+			'dsafe_min_day' => '店铺小安全天数',
+			'dsafe_max_day' => '店铺大安全天数',
+			'csales_day' => '仓库日均销量计算系数',
+			'csafe_min_day' => '仓库小安全天数',
+			'csafe_max_day' => '仓库大安全天数',
 			'delete_flag' => '删除 0未删除 1删除',
 			'is_sync' => 'Is Sync',
 		);
@@ -93,8 +100,12 @@ class StockSetting extends CActiveRecord
 		$criteria->compare('dpid',$this->dpid,true);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
-		$criteria->compare('safe_day',$this->safe_day);
-		$criteria->compare('sales_day',$this->sales_day);
+		$criteria->compare('dsales_day',$this->dsales_day);
+		$criteria->compare('dsafe_min_day',$this->dsafe_min_day);
+		$criteria->compare('dsafe_max_day',$this->dsafe_max_day);
+		$criteria->compare('csales_day',$this->csales_day);
+		$criteria->compare('csafe_min_day',$this->csafe_min_day);
+		$criteria->compare('csafe_max_day',$this->csafe_max_day);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('is_sync',$this->is_sync,true);
 

@@ -32,13 +32,13 @@ class CommitDetail extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('update_at, material_id, unit_name', 'required'),
-			array('lid, dpid, material_id, stock', 'length', 'max'=>10),
+			array('lid, dpid, commit_id, material_id, stock', 'length', 'max'=>10),
 			array('unit_name', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, material_id, unit_name, stock, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at,commit_id, material_id, unit_name, stock, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,6 +64,7 @@ class CommitDetail extends CActiveRecord
 			'dpid' => '店铺id',
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
+			'commit_id'=>'Commit Id',
 			'material_id' => '品项名称',
 			'unit_name' => '库存单位',
 			'stock' => '调拨数量',

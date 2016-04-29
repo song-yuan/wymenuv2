@@ -1,14 +1,11 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
-		'id' => 'material-form',
+		'id' =>'product-form',
 		'errorMessageCssClass' => 'help-block',
 		'htmlOptions' => array(
 			'class' => 'form-horizontal',
 			'enctype' => 'multipart/form-data'
 		),
 )); ?>
-	<style>
-	#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
-	</style>
 	
 	<div class="form-body">
 		<div class="form-group" <?php if($model->hasErrors('classification_id')) echo 'has-error';?>>
@@ -95,10 +92,10 @@
 				<?php echo $form->error($model, 'address' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('remark')) echo 'has-error';?>>
+		<div class="form-group">
 			<?php echo $form->label($model, 'remark',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'remark', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('remark')));?>
+			<div class="col-md-5">
+				<?php echo $form->textArea($model, 'remark' , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('remark')));?>
 				<?php echo $form->error($model, 'remark' )?>
 			</div>
 		</div>
@@ -134,5 +131,6 @@ $('#category_container').on('change','.category_selecter',function(){
 		sid=$('.category_selecter').eq(1).val();
 		//alert(sid);
 	}
+	$(this).nextAll().remove();
 });
 </script>

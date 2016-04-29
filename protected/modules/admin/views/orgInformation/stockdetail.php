@@ -64,7 +64,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><?php echo $model->material_name ;?></td>
-								<td><?php //echo $model->product_name ;?></td>
+								<td><?php echo Common::getStockName($model->sales_unit_id) ;?></td>
 								<td><?php //echo $model->product_name ;?></td>
                                 <td>
                                     <div class="col-md-12">

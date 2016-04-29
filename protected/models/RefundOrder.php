@@ -73,7 +73,7 @@ class RefundOrder extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'manufacturer_id' => '厂商名称',
-			'organization_id' => '组织名称',
+			'organization_id' => '退货商名称',
 			'refund_account_no' => '退货单号',
 			'admin_id' => '管理员',
 			'storage_account_no' => '入库编号',
