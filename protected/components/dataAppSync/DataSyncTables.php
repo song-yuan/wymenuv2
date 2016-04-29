@@ -121,7 +121,8 @@ class DataSyncTables
         		"  `homepage` varchar(255) NOT NULL,".
         		"  `domain` varchar(255) NOT NULL,".
         		"  `delete_flage` char(1) NOT NULL DEFAULT '0',".
-        		"  `description` text NOT NULL,".
+        		"  `description` text NOT NULL DEFAULT '',".
+        		"  `queuememo` text NOT NULL DEFAULT '',".
         		"  `printer_id` int(10) NOT NULL,".
         		"  `is2_othersystem` char(1) NOT NULL DEFAULT '0',".
 				"  `is2_base_fkxx` char(1) NOT NULL DEFAULT '0',".
