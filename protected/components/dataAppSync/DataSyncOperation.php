@@ -275,4 +275,17 @@ class DataSyncOperation
 	      return false;
 	   }
     }
+    /**
+     * 
+     * 获取订单
+     * 
+     */
+     public static function getOrderStaus($dpid,$orderId){
+     	$order = WxOrder::getOrder($orderId,$dpid);
+     	if($order){
+     		return json_encode(array('status'=>true,'order_status'=>$order['order_status']));
+     	}else{
+     		return json_encode(array('status'=>false,'order_status'=>''));
+     	}
+     }
 }
