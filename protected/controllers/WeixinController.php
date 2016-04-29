@@ -49,7 +49,7 @@ class WeixinController extends Controller
 		$companyId = Yii::app()->request->getPost('dpid');
 		$should_total = Yii::app()->request->getPost('pay_price');
 		$auth_code = Yii::app()->request->getPost('auth_code');
-		var_dump($companyId);exit;
+		
 		$this->render('singlemicropay',array('dpid'=>$companyId,'auth_code'=>$auth_code,'should_total'=>$should_total));
 	}
 }
