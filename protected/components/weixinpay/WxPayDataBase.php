@@ -17,7 +17,6 @@ class WxPayDataBase
 	public function SetSign()
 	{
 		$sign = $this->MakeSign();
-		echo $sign;
 		$this->values['sign'] = $sign;
 		return $sign;
 	}
@@ -122,7 +121,6 @@ class WxPayDataBase
 				$key = $account['key'];
 			}
 		}
-		var_dump($this->values);
 		//签名步骤一：按字典序排序参数
 		ksort($this->values);
 		$string = $this->ToUrlParams();
