@@ -70,7 +70,7 @@ public function actionGetData(){
  * 获取订单状态
  * 
  */
-  public function actionGetOrderStatus($companyId,$orderId){
+  public function actionGetOrderStatus(){
   	$dpid = Yii::app()->request->getParam('companyId');
     $orderId = Yii::app()->request->getParam('orderId');
  	$result = DataSyncOperation::getOrderStaus($dpid,$orderId);
