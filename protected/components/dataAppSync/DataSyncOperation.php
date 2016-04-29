@@ -187,7 +187,7 @@ class DataSyncOperation
 		        	'is_temp'=>$orderInfo->is_temp,
 		        	'number'=>$orderInfo->number,
 		        	'order_status'=>$orderInfo->order_status,
-		        	'order_type'=>1,
+		        	'order_type'=>$orderInfo->order_type,
 		        	'should_total'=>$orderInfo->should_total,
 		        	'reality_total'=>$orderInfo->should_total,
 		        	'is_sync'=>DataSync::getInitSync(),
