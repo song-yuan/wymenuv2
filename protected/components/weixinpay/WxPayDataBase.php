@@ -17,6 +17,7 @@ class WxPayDataBase
 	public function SetSign()
 	{
 		$sign = $this->MakeSign();
+		echo $sign;
 		$this->values['sign'] = $sign;
 		return $sign;
 	}
