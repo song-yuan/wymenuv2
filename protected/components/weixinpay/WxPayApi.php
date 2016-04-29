@@ -363,7 +363,7 @@ class WxPayApi
 		$account = WxAccount::get($dpid);
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
-	    var_dump($account);exit;
+	    
 		if(WxPayConfig::ISSUBMCH){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
