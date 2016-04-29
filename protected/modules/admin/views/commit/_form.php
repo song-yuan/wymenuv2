@@ -24,48 +24,48 @@
 				<?php echo $form->error($model, 'commit_account_no' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('commit_date')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('commit_date')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'commit_date',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'commit_date',array('class' => 'form-control ui_timepicker','placeholder'=>$model->getAttributeLabel('commit_date')));?>
 				<?php echo $form->error($model, 'commit_date' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('callout_id')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('callout_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'callout_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->dropDownList($model, 'callout_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genOrgInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('callout_id')));?>
 				<?php echo $form->error($model, 'callout_id' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('callin_id')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('callin_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'callin_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->dropDownList($model, 'callin_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genOrgInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('callin_id')));?>
 				<?php echo $form->error($model, 'callin_id' )?>
 			</div>
-		</div><!-- 大单位 -->
-		<div class="form-group" <?php if($model->hasErrors('admin_id')) echo 'has-error';?>>
+		</div>
+		<div class="form-group <?php if($model->hasErrors('admin_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'admin_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->dropDownList($model, 'admin_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genUsername() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('admin_id')));?>
 				<?php echo $form->error($model, 'admin_id' )?>
 			</div>
-		</div><!-- 小单位 -->
-		<div class="form-group" <?php if($model->hasErrors('remark')) echo 'has-error';?>>
+		</div>
+		<div class="form-group">
 			<?php echo $form->label($model, 'remark',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'remark',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('remark')));?>
 				<?php echo $form->error($model, 'remark' )?>
 			</div>
 		</div>
-        <div class="form-group <?php if($model->hasErrors('status')) echo 'has-error';?>">
+        <!--<div class="form-group <?php if($model->hasErrors('status')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'status',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'status', array('0' => yii::t('app','已审核') , '1' => yii::t('app','未审核')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('status')));?>
+				<?php echo $form->dropDownList($model, 'status', array('0' => yii::t('app','未审核') , '1' => yii::t('app','已审核')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('status')));?>
 				<?php echo $form->error($model, 'status' )?>
 			</div>
-		</div>
+		</div>-->
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
 				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>

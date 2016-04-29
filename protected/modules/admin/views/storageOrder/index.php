@@ -23,8 +23,6 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','入库单'),'subhead'=>yii::t('app','入库单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','入库单'),'url'=>''))));?>
-	
-	<!-- END PAGE HEADER-->
 	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
 	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
 	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
@@ -32,9 +30,20 @@
 	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
 	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
 
-	<div class="">
-		<form action="" method="get" class="">
-			<input type="text" class="col-md-2" placeholder="厂商名称" value="" />&nbsp;&nbsp;<input type="text" class="col-md-2" placeholder="组织名称" />&nbsp;&nbsp;<input type="text" class="ui_timepicker col-md-2" placeholder="起始日期" />&nbsp;&nbsp;<input type="text" class="ui_timepicker col-md-2" placeholder="结束日期" />&nbsp;&nbsp;<input type="submit" class="btn blue" value="搜索" />
+	<!-- END PAGE HEADER-->
+	<style>
+		.find form input{display: inline;width:180px;}
+	</style>
+	<div class="find">
+		<form action="" method="post">
+			<input type="text" name="mid" class="form-control" placeholder="厂商名称" value="<?php echo isset($mid) && $mid ?$mid:'';?>" />
+			<input type="text" name="oid" class="form-control" placeholder="采购商" value="<?php echo isset($oid) && $oid ?$oid:'';?>" />
+			<input type="text" class="ui_timepicker form-control" placeholder="起始日期" />
+			<input type="text" class="ui_timepicker form-control" placeholder="结束日期" />
+			<button type="submit" class="btn green">
+				查找 &nbsp;
+				<i class="m-icon-swapright m-icon-white"></i>
+			</button>
 		</form>
 	</div>
 	<!-- BEGIN PAGE CONTENT-->
@@ -90,10 +99,10 @@
 								<td><?php echo $model->storage_date;?></td>
 								<td><?php echo $model->remark;?></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('/admin/storageOrderDetail/index',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','订单详情');?></a>
+									<a href="<?php echo $this->createUrl('storageOrder/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','订单详情');?></a>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('storageOrder/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('storageOrder/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

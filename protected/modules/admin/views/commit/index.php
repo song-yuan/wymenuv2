@@ -23,8 +23,28 @@
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','调拨管理'),'subhead'=>yii::t('app','调拨列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','调拨管理'),'url'=>''))));?>
-	
+	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
+	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
+
 	<!-- END PAGE HEADER-->
+	<style>
+		.find form input{display: inline;width:180px;}
+	</style>
+	<div class="find">
+		<form action="" method="post">
+			<input type="text" name="id" class="form-control" placeholder="调拨单号" value="<?php echo isset($id) && $id ?$id:'';?>" />
+			<input type="text" name="date" class="ui_timepicker form-control" placeholder="调拨日期" value="<?php echo isset($date) && $date ?$date:'';?>" />
+			<button type="submit" class="btn green">
+				查找 &nbsp;
+				<i class="m-icon-swapright m-icon-white"></i>
+			</button>
+		</form>
+	</div>
+
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
@@ -82,10 +102,10 @@
 								<td ><?php echo $model->remark;?></td>
 								<td ><?php if($model->status==0) echo "未审核"; elseif($model->status==1) echo "已审核";?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('/admin/commitDetail/index',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','调拨详情');?></a>
+								<a href="<?php echo $this->createUrl('commit/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','调拨详情');?></a>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('commit/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('commit/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
@@ -151,5 +171,14 @@
 			var cid = $(this).val();
 			location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
+	});
+	$(function () {
+		$(".ui_timepicker").datetimepicker({
+			showSecond: true,
+			timeFormat: 'hh:mm:ss',
+			stepHour: 1,
+			stepMinute: 1,
+			stepSecond: 1
+		})
 	});
 	</script>	
