@@ -76,7 +76,6 @@ class WxPayDataBase
 		}
         //将XML转为array 
         $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
-		var_dump($this->values);exit;
 		return $this->values;
 	}
 	
