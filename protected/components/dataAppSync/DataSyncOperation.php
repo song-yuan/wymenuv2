@@ -186,7 +186,7 @@ class DataSyncOperation
 		        	'site_id'=>$orderInfo->site_id,
 		        	'is_temp'=>$orderInfo->is_temp,
 		        	'number'=>$orderInfo->number,
-		        	'order_status'=>3,
+		        	'order_status'=>$orderInfo->order_status,
 		        	'order_type'=>1,
 		        	'should_total'=>$orderInfo->should_total,
 		        	'reality_total'=>$orderInfo->should_total,
