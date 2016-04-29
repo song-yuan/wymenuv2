@@ -121,7 +121,7 @@ class WxPayDataBase
 				$key = $account['key'];
 			}
 		}
-		var_dump($this->values);exit;
+		var_dump($this->values);
 		//签名步骤一：按字典序排序参数
 		ksort($this->values);
 		$string = $this->ToUrlParams();
