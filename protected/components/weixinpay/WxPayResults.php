@@ -18,6 +18,7 @@ class WxPayResults extends WxPayDataBase
 		}
 		
 		$sign = $this->MakeSign();
+		var_dump($sign);var_dump($this->GetSign());exit;
 		if($this->GetSign() == $sign){
 			return true;
 		}

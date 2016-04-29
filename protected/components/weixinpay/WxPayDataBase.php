@@ -115,7 +115,6 @@ class WxPayDataBase
 			$orderIdArr = explode('-',$this->values['out_trade_no']);
 			$dpid = $orderIdArr[1];
 			$account = WxAccount::get($dpid);
-			var_dump($account);exit;
 			if(WxPayConfig::ISSUBMCH){
 				$key = WxPayConfig::KEY;
 			}else{
