@@ -76,6 +76,7 @@ class WxPayDataBase
 		}
         //将XML转为array 
         $this->values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);		
+		var_dump($this->values);
 		return $this->values;
 	}
 	
@@ -121,7 +122,6 @@ class WxPayDataBase
 				$key = $account['key'];
 			}
 		}
-		var_dump($this->values);exit;
 		//签名步骤一：按字典序排序参数
 		ksort($this->values);
 		$string = $this->ToUrlParams();
