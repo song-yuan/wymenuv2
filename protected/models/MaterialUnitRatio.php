@@ -32,11 +32,13 @@ class MaterialUnitRatio extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, stock_unit_id, sales_unit_id', 'required'),
+			array('update_at,', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, stock_unit_id, sales_unit_id, unit_ratio', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
+			array('stock_unit_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择库存单位')),
+			array('sales_unit_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择入库单位')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, stock_unit_id, sales_unit_id, unit_ratio, delete_flag, is_sync', 'safe', 'on'=>'search'),

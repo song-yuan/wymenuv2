@@ -36,13 +36,15 @@ class PurchaseOrder extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, manufacturer_id, admin_id, purchase_account_no, organization_id, organization_address, remark', 'required'),
+			array('update_at, organization_address,', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, manufacturer_id, admin_id, organization_id', 'length', 'max'=>10),
 			array('purchase_account_no', 'length', 'max'=>32),
 			array('organization_address, remark', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at, delivery_date', 'safe'),
+			array('manufacturer_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择厂商类别')),
+			array('organization_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择采购商地址')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, manufacturer_id, admin_id, purchase_account_no, organization_id, organization_address, delivery_date, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
@@ -77,7 +79,7 @@ class PurchaseOrder extends CActiveRecord
 			'organization_id' => '采购商',
 			'organization_address' => '采购商地址',
 			'delivery_date' => '交货日期',
-			'remark' => yii::t('app','描述'),
+			'remark' => yii::t('app','备注'),
 			'delete_flag' => '删除 0未删除 1删除',
 			'is_sync' => 'Is Sync',
 		);

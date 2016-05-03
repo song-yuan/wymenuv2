@@ -32,11 +32,12 @@ class RefundOrderDetail extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, material_id', 'required'),
+			array('update_at, reason', 'required'),
 			array('lid, dpid, material_id, price, stock, free_stock', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
 			array('reason', 'length', 'max'=>255),
 			array('create_at', 'safe'),
+			array('material_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择品项名')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, material_id, price, stock, free_stock，reason, is_sync', 'safe', 'on'=>'search'),
