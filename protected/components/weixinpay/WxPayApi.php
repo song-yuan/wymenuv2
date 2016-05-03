@@ -363,7 +363,7 @@ class WxPayApi
 		$account = WxAccount::get($dpid);
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
-			
+	    
 		if(WxPayConfig::ISSUBMCH){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
@@ -378,7 +378,6 @@ class WxPayApi
 		
 		$inputObj->SetSign();//签名
 		$xml = $inputObj->ToXml();
-		
 		$startTimeStamp = self::getMillisecond();//请求开始时间
 		$response = self::postXmlCurl($xml, $url, false, $timeOut);
 		$result = WxPayResults::Init($response);
