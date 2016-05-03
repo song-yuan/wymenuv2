@@ -10,14 +10,14 @@
 	#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 	</style>
 	<div class="form-body">
-		<div class="form-group" <?php if($model->hasErrors('stock_unit_id')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('stock_unit_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'stock_unit_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->dropDownList($model, 'stock_unit_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genStockUnit() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock_unit_id')));?>
 				<?php echo $form->error($model, 'stock_unit_id' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('sales_unit_id')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('sales_unit_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'sales_unit_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->dropDownList($model, 'sales_unit_id',array('0' => yii::t('app','-- 请选择 --')) +Helper::genSalesUnit() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sales_unit_id')));?>

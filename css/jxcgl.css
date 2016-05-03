@@ -5,7 +5,7 @@
 
 html,body{width:100%; height:100%; }
 ul,li{ list-style: none; margin:0px; padding:0px;}
-.middle{width:100%; height:90%; margin:0 auto; border:solid 1px #00b7ee; background:url(../img/jxcgl/aqkcsz.png) no-repeat; background-size:100% 100%; position:relative;}
+.middle{width:100%; height:90%; margin:0 auto;  background:url(../img/jxcgl/aqkcsz.png) no-repeat; background-size:100% 100%; position:relative;}
 .tabButton{width:100%; height:70px;  background:#00b7ee; }
 .tabButton ul{width:100%; height:60px; padding-top:10px; font-size:0px;}
 .tabButton li{display:inline-block; width:20%;  height:100%;   }
@@ -15,7 +15,7 @@ ul,li{ list-style: none; margin:0px; padding:0px;}
 .tabButton li .first{background:#fff; color:#000}
 
 /*库存设置*/
-.inventory .one{position:absolute; top:16.5%; left:9.4%; width:13%; height:21.2%; }
+.inventory .one{position:absolute; top:16.7%; left:9.2%; width:13%; height:21%; }
 .inventory .one a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/kcsz.png); background-size:100% 100%;}
 .inventory .one a:hover{background:url(../img/jxcgl/kcsz-hover.png); background-size:100% 100%;}
 
@@ -62,21 +62,21 @@ ul,li{ list-style: none; margin:0px; padding:0px;}
 
 /*库存设置*/
 .stockMid{display:none;}
-.stockMid .one{position:absolute; top:36.2%; left:4.9%; width:19.2%; height:14%; }
+.stockMid .one{position:absolute; top:36.5%; left:5%; width:19.2%; height:14%; }
 .stockMid .one a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/zzfl.png); background-size:100% 100%;}
 .stockMid .one a:hover{background:url(../img/jxcgl/zzfl-hover.png); background-size:100% 100%;}
 
 
-.stockMid .two{position:absolute; top:51.2%; left:4.9%; width:19.2%; height:14%; }
+.stockMid .two{position:absolute; top:51.2%; left:5%; width:19.2%; height:14%; }
 .stockMid .two a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/zzxx.png); background-size:100% 100%;}
 .stockMid .two a:hover{background:url(../img/jxcgl/zzxx-hover.png); background-size:100% 100%;}
 
 
-.stockMid .three{position:absolute; top:36.2%; left:76.9%; width:19.2%; height:14%;}
+.stockMid .three{position:absolute; top:36.5%; left:76.9%; width:19.2%; height:14%;}
 .stockMid .three a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/ccxx.png); background-size:100% 100%;}
 .stockMid .three a:hover{background:url(../img/jxcgl/ccxx-hover.png); background-size:100% 100%;}
 
-.stockMid .four{position:absolute; top:51%; left:76.9%; width:19.2%; height:14%; }
+.stockMid .four{position:absolute; top:51.1%; left:76.9%; width:19.2%; height:14%; }
 .stockMid .four a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/csfl.png); background-size:100% 100%;}
 .stockMid .four a:hover{background:url(../img/jxcgl/csfl-hover.png); background-size:100% 100%;}
 
@@ -88,11 +88,11 @@ ul,li{ list-style: none; margin:0px; padding:0px;}
 .stockMid .six a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/thdd.png); background-size:100% 100%;}
 .stockMid .six a:hover{background:url(../img/jxcgl/thdd-hover.png); background-size:100% 100%;}
 
-.stockMid .sever{position:absolute; top:69%; left:41.9%;  width:19.2%; height:14%;}
+.stockMid .sever{position:absolute; top:69.2%; left:41.9%;  width:19.2%; height:14%;}
 .stockMid .sever a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/rkdd.png); background-size:100% 100%;}
 .stockMid .sever a:hover{background:url(../img/jxcgl/rkdd-hover.png); background-size:100% 100%;}
 
-.stockMid .eight{position:absolute; top:73%; left:24%; width:14%; height:22%; }
+.stockMid .eight{position:absolute; top:72.9%; left:24%; width:14%; height:22%; }
 .stockMid .eight a{display:inline-block; width:100%; height:100%; background:url(../img/jxcgl/db.png); background-size:100% 100%;}
 .stockMid .eight a:hover{background:url(../img/jxcgl/db-hover.png); background-size:100% 100%;}
 

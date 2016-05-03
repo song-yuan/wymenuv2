@@ -37,6 +37,8 @@ class ProductBom extends CActiveRecord
 			array('lid, dpid, product_id, material_id, number, sales_unit_id', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at ,update_at', 'safe'),
+			array('material_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择品项名称')),
+			array('sales_unit_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择零售单位')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, product_id, material_id, number, sales_unit_id, delete_flag, is_sync', 'safe', 'on'=>'search'),

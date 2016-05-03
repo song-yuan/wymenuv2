@@ -42,7 +42,7 @@ class ManufacturerInformation extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, classification_id, manufacturer_code, manufacturer_name, post_code, address, contact_name, contact_tel, contact_fax, email, bank, bank_account, tax_account, remark', 'required'),
+			array('update_at, classification_id, manufacturer_code, manufacturer_name, address, contact_name, contact_tel,', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, classification_id', 'length', 'max'=>10),
 			array('manufacturer_code, manufacturer_name, address, contact_name, email, remark', 'length', 'max'=>255),
@@ -50,6 +50,7 @@ class ManufacturerInformation extends CActiveRecord
 			array('bank_account, tax_account', 'length', 'max'=>64),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
+			array('classification_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择厂商类别')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, classification_id, manufacturer_code, manufacturer_name, post_code, address, contact_name, contact_tel, contact_fax, email, bank, bank_account, tax_account, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),

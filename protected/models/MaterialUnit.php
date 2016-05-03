@@ -32,7 +32,7 @@ class MaterialUnit extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, unit_name, unit_specifications', 'required'),
+			array('update_at, unit_name,', 'required'),
 			array('unit_type, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
 			array('unit_name, unit_specifications', 'length', 'max'=>255),

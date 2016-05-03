@@ -16,7 +16,7 @@
 	#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 	</style>
 	<div class="form-body">
-		<div class="form-group" <?php if($model->hasErrors('manufacturer_id')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('manufacturer_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'manufacturer_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->dropDownList($model, 'manufacturer_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genMfrInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('manufacturer_id')));?>
@@ -44,14 +44,6 @@
 				<?php echo $form->error($model, 'admin_id' )?>
 			</div>
 		</div>
-        <div class="form-group <?php if($model->hasErrors('purchase_account_no')) echo 'has-error';?>">
-			<?php echo $form->label($model, 'purchase_account_no',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'purchase_account_no',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('purchase_account_no')));?>
-				<?php echo $form->error($model, 'purchase_account_no' )?>
-			</div>
-		</div>
-		
 		<div class="form-group <?php if($model->hasErrors('storage_date')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'storage_date',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">

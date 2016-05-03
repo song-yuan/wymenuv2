@@ -37,13 +37,15 @@ class StorageOrder extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, manufacturer_id, organization_id, storage_account_no, admin_id, purchase_account_no, remark', 'required'),
+			array('update_at, storage_account_no', 'required'),
 			array('status, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, manufacturer_id, organization_id, admin_id', 'length', 'max'=>10),
 			array('storage_account_no, purchase_account_no', 'length', 'max'=>32),
 			array('remark', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at, storage_date', 'safe'),
+			array('manufacturer_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择厂商名称')),
+			array('organization_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择组织名称')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, manufacturer_id, organization_id, storage_account_no, admin_id, purchase_account_no, storage_date, remark, status, delete_flag, is_sync', 'safe', 'on'=>'search'),

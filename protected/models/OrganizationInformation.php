@@ -42,7 +42,7 @@ class OrganizationInformation extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, classification_id, organization_code, organization_name, contact_name, contact_tel, contact_fax, post_code, email, bank, bank_account, tax_account, address, remark', 'required'),
+			array('update_at, organization_code, organization_name, contact_name, contact_tel, address,', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, classification_id', 'length', 'max'=>10),
 			array('organization_code, organization_name, contact_name, email, address, remark', 'length', 'max'=>255),
@@ -50,6 +50,7 @@ class OrganizationInformation extends CActiveRecord
 			array('bank_account, tax_account', 'length', 'max'=>64),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
+			array('classification_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','必须选择组织类别')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, classification_id, organization_code, organization_name, contact_name, contact_tel, contact_fax, post_code, email, bank, bank_account, tax_account, address, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),

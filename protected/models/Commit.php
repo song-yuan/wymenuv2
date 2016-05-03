@@ -36,13 +36,15 @@ class Commit extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, commit_account_no, callout_id, callin_id, admin_id, remark', 'required'),
+			array('update_at, commit_account_no, callout_id, callin_id, admin_id, ', 'required'),
 			array('status, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, callout_id, callin_id, admin_id', 'length', 'max'=>10),
 			array('commit_account_no', 'length', 'max'=>32),
 			array('remark', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at, commit_date', 'safe'),
+			array('callout_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择调出组织')),
+			array('callin_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择调入组织')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at, commit_account_no, commit_date, callout_id, callin_id, admin_id, remark, status, delete_flag, is_sync', 'safe', 'on'=>'search'),
