@@ -14,8 +14,8 @@
 		<div class="form-group  <?php if($model->hasErrors('category_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'category_id',array('class' => 'col-md-3 control-label'));?>
 			<div id="category_container" class="col-md-9">
-			<?php $this->widget('application.modules.admin.components.widgets.MaterialCategorySelecter',array('categoryId'=>$model->category_id,'companyId'=>$this->companyId)); ?>
-			<?php echo $form->error($model, 'category_id' )?><?php echo $model->category_id;?>
+				<?php $this->widget('application.modules.admin.components.widgets.MaterialCategorySelecter',array('categoryId'=>$model->category_id,'companyId'=>$this->companyId)); ?>
+				<?php echo $form->error($model, 'category_id' )?>
 			</div>
 			<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
 		</div>
@@ -54,7 +54,7 @@
 				<?php echo $form->error($model, 'sales_unit_id' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('stock')) echo 'has-error';?>>
+		<!--<div class="form-group" <?php if($model->hasErrors('stock')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'stock',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'stock',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock')));?>
@@ -67,7 +67,7 @@
 				<?php echo $form->textField($model, 'stock_cost',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock_cost')));?>
 				<?php echo $form->error($model, 'stock_cost' )?>
 			</div>
-		</div>
+		</div>-->
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
 				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>

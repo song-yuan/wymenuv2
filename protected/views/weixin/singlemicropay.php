@@ -18,7 +18,6 @@ if(isset($auth_code) && $auth_code != ""){
 		$msg = array('status'=>false);
 	}
 }
-$msg = array('status'=>false);
 echo json_encode($msg);
 exit;
 ?>
