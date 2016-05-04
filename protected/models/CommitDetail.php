@@ -36,6 +36,8 @@ class CommitDetail extends CActiveRecord
 			array('unit_name', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
+			array('material_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择品项名称')),
+			array('unit_name','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择库存单位')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, create_at, update_at,commit_id, material_id, unit_name, stock, is_sync', 'safe', 'on'=>'search'),

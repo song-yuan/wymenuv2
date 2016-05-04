@@ -30,14 +30,7 @@
 				<?php echo $form->error($model, 'admin_id' )?>
 			</div>
 		</div>
-        <div class="form-group <?php if($model->hasErrors('purchase_account_no')) echo 'has-error';?>">
-			<?php echo $form->label($model, 'purchase_account_no',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'purchase_account_no',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('purchase_account_no')));?>
-				<?php echo $form->error($model, 'purchase_account_no' )?>
-			</div>
-		</div>
-		<div class="form-group <?php if($model->hasErrors('organization_id')) echo 'has-error';?>">
+        <div class="form-group <?php if($model->hasErrors('organization_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'organization_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
                 <?php echo $form->dropDownList($model, 'organization_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genOrgInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('organization_id')));?>

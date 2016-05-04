@@ -37,12 +37,15 @@ class ProductMaterial extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, material_name, material_identifier, material_private_identifier, stock_unit_id, sales_unit_id', 'required'),
+			array('update_at, material_name, material_identifier, ', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, category_id, stock_unit_id, sales_unit_id, stock, stock_cost', 'length', 'max'=>10),
 			array('material_name, material_identifier, material_private_identifier', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
+			array('category_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择品项类别')),
+			array('stock_unit_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择库存单位')),
+			array('sales_unit_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择零售单位')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, dpid, category_id, create_at, update_at, material_name, material_identifier, material_private_identifier, stock_unit_id, sales_unit_id, stock, stock_cost, delete_flag, is_sync', 'safe', 'on'=>'search'),

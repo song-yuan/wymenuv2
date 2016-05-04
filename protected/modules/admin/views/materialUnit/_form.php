@@ -10,21 +10,21 @@
 	#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 	</style>
 	<div class="form-body">
-        <div class="form-group" <?php if($model->hasErrors('unit_name')) echo 'has-error';?>>
+        <div class="form-group <?php if($model->hasErrors('unit_name')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'unit_name',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'unit_name', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('unit_name')));?>
 				<?php echo $form->error($model, 'unit_name' )?>
 			</div>
 		</div>
-		<div class="form-group <?php if($model->hasErrors('unit_type')) echo 'has-error';?>">
+		<div class="form-group">
 			<?php echo $form->label($model, 'unit_type',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->dropDownList($model, 'unit_type', array('0' => yii::t('app','库存单位') , '1' => yii::t('app','零售单位')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('unit_type')));?>
 				<?php echo $form->error($model, 'unit_type' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('unit_specifications')) echo 'has-error';?>>
+		<div class="form-group">
 			<?php echo $form->label($model, 'unit_specifications',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'unit_specifications', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('unit_specifications')));?>

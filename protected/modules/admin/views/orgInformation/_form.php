@@ -8,7 +8,7 @@
 )); ?>
 	
 	<div class="form-body">
-		<div class="form-group" <?php if($model->hasErrors('classification_id')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('classification_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'classification_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->dropDownList($model, 'classification_id', array('0' => yii::t('app','——请选择——')) +Helper::genOrgClass() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('classification_id')));?>
@@ -22,21 +22,21 @@
 				<?php echo $form->error($model, 'organization_code' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('organization_name')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('organization_name')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'organization_name',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'organization_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('organization_name')));?>
 				<?php echo $form->error($model, 'organization_name' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('contact_name')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('contact_name')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'contact_name',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'contact_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('contact_name')));?>
 				<?php echo $form->error($model, 'contact_name' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('contact_tel')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('contact_tel')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'contact_tel',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'contact_tel', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('contact_tel')));?>
@@ -85,7 +85,7 @@
 				<?php echo $form->error($model, 'tax_account' )?>
 			</div>
 		</div>
-		<div class="form-group" <?php if($model->hasErrors('address')) echo 'has-error';?>>
+		<div class="form-group <?php if($model->hasErrors('address')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'address',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
 				<?php echo $form->textField($model, 'address', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('address')));?>
