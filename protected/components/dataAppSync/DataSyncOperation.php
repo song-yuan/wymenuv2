@@ -168,7 +168,11 @@ class DataSyncOperation
     	$orderInfo = $obj->order_info;
     	$orderProduct = $obj->order_product;
     	$orderPay = $obj->order_pay;
-    	
+    	if(isset($obj->order_discount)){
+    		$orderDiscount = $obj->order_discount;
+    	}else{
+    		$orderDiscount = array();
+    	}
     	$time = time();
 	    $se = new Sequence("order");
 	    $orderId = $se->nextval();
@@ -215,6 +219,7 @@ class DataSyncOperation
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
 			}
+			//支付方式
 			foreach($orderPay as $pay){
 				$se = new Sequence("order_pay");
 		    	$orderPayId = $se->nextval();
@@ -232,7 +237,24 @@ class DataSyncOperation
 								'is_sync'=>DataSync::getInitSync(),
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_pay',$orderPayData);
-		    	
+			}
+			//订单优惠
+			foreach($orderDiscount as $discount){
+				$se = new Sequence("order_account_discount");
+		    	$orderDiscountId = $se->nextval();
+		    	$orderDiscountData = array(
+								'lid'=>$orderDiscountId,
+								'dpid'=>$dpid,
+								'create_at'=>date('Y-m-d H:i:s',$time),
+	        					'update_at'=>date('Y-m-d H:i:s',$time), 
+								'order_id'=>$orderId,
+								'account_no'=>$accountNo,
+								'discount_type'=>$discount->discount_type,
+								'discount_id'=>$discount->discount_id,
+								'discount_money'=>$pay->discount_money,
+								'is_sync'=>DataSync::getInitSync(),
+								);
+				 Yii::app()->db->createCommand()->insert('nb_order_account_discount',$orderDiscountData);
 			}
 		   $transaction->commit();
 		   $msg = json_encode(array('status'=>true,'orderId'=>$orderId));
