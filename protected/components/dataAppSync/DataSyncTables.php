@@ -120,7 +120,7 @@ class DataSyncTables
         		"  `distance` int(10) NOT NULL DEFAULT '5',".
         		"  `homepage` varchar(255) NOT NULL,".
         		"  `domain` varchar(255) NOT NULL,".
-        		"  `delete_flage` char(1) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `description` text NOT NULL DEFAULT '',".
         		"  `queuememo` text NOT NULL DEFAULT '',".
         		"  `printer_id` int(10) NOT NULL,".
