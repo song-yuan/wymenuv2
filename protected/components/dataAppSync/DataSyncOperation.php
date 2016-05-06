@@ -212,7 +212,7 @@ class DataSyncOperation
 								'product_name'=>$product->product_name,
 								'product_pic'=>'',
 								'price'=>$product->price,
-								'original_price'=>$product->price,
+								'original_price'=>$product->original_price,
 								'amount'=>$product->amount,
 								'product_order_status'=>2,
 								'is_sync'=>DataSync::getInitSync(),
