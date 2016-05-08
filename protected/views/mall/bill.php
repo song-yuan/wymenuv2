@@ -41,7 +41,7 @@ footer{
    		<div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">消费金额</label></div>
             <div class="weui_cell_bd weui_cell_primary">
-                <input class="weui_input" id="price" name="order[price]" type="text" placeholder="询问服务员后输入" value=""/>
+                <input class="weui_input" id="price" name="order[price]" type="number" placeholder="询问服务员后输入" value=""/>
             </div>
         </div>
     </div>
@@ -106,8 +106,8 @@ footer{
 </div>
 <script type="text/javascript">
   function validate() {
-        if($('#name').val() == ''){
-	        	$('#dialog2').find('.weui_dialog_bd').html('请填写姓名！');
+        if($('#price').val() == ''){
+	        	$('#dialog2').find('.weui_dialog_bd').html('请填写金额');
 	            $('#dialog2').show();
 	            return false;
            }

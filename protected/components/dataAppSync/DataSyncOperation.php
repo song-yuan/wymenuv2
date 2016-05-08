@@ -151,7 +151,7 @@ class DataSyncOperation
      	$sql = 'select * from nb_user where username="'.$userName.'" and password_hash="'.Helper::genPassword($passward).'" and delete_flag=0';
      	$result = Yii::app()->db->createCommand($sql)->queryRow();
      	if($result){
-     		return json_encode(array('status'=>true));
+     		return json_encode(array('status'=>true,'user_id'=>$result['lid']));
      	}else{
      		return json_encode(array('status'=>false));
      	}
@@ -212,7 +212,7 @@ class DataSyncOperation
 								'product_name'=>$product->product_name,
 								'product_pic'=>'',
 								'price'=>$product->price,
-								'original_price'=>$product->price,
+								'original_price'=>$product->original_price,
 								'amount'=>$product->amount,
 								'product_order_status'=>2,
 								'is_sync'=>DataSync::getInitSync(),
@@ -309,5 +309,65 @@ class DataSyncOperation
      	}else{
      		return json_encode(array('status'=>false,'order_status'=>''));
      	}
+     }
+     /**
+      * 
+      * 日结订单
+      * 
+      */
+     public static function operateCloseAccount($dpid,$userId){
+     	$time = time();
+     	$sql = 'select lid from nb_order where dpid='.$dpid.' and order_status in(3,4)';
+     	$lids = Yii::app()->db->createCommand($sql)->queryColumn();
+     	$lidStr = join(',',$lids);
+     	
+     	$sql= 'select sum(pay_amount) as pay_amount,paytype,payment_method_id,paytype_id from nb_order_pay where order_id in ('.$lidStr.') group by paytype';
+     	$results = Yii::app()->db->createCommand($sql)->queryAll();
+     	
+     	$totalMoney = 0;
+     	$transaction=Yii::app()->db->beginTransaction();
+		try{
+		    $se = new Sequence("close_account");
+		    $closeAccountId = $se->nextval();
+		    
+	     	foreach($results as $result){
+	     		 $se = new Sequence("close_account_detail");
+		    	 $closeAccountDetailId = $se->nextval();
+		    	 $closeAccountDetailArr = array(
+			        	'lid'=>$closeAccountDetailId,
+			        	'dpid'=>$dpid,
+			        	'create_at'=>date('Y-m-d H:i:s',$time),
+			        	'update_at'=>date('Y-m-d H:i:s',$time),
+			        	'close_account_id'=>$closeAccountId,
+			        	'paytype'=>$result['paytype'],
+			        	'payment_method_id'=>$result['payment_method_id'],
+			        	'all_money'=>$result['pay_amount'],
+			        	'is_sync'=>DataSync::getInitSync(),
+			        );
+			    Yii::app()->db->createCommand()->insert('nb_close_account_detail', $closeAccountDetailArr);
+			    $totalMoney += $result['pay_amount'];
+	     	}
+	     	$closeAccountArr = array(
+			        	'lid'=>$closeAccountId,
+			        	'dpid'=>$dpid,
+			        	'create_at'=>date('Y-m-d H:i:s',$time),
+			        	'update_at'=>date('Y-m-d H:i:s',$time),
+			        	'user_id'=>$userId,
+			        	'close_day'=>date('Y-m-d',$time),
+			        	'all_money'=>$totalMoney,
+			        	'is_sync'=>DataSync::getInitSync(),
+			        );
+		   Yii::app()->db->createCommand()->insert('nb_close_account', $closeAccountArr);
+		   
+		   $sql = 'update nb_order set order_status=8 where lid in('.$lidStr.')';
+		   Yii::app()->db->createCommand($sql)->execute();
+		    
+     	   $transaction->commit();
+		   $msg = json_encode(array('status'=>true,'closeAccountId'=>$closeAccountId));
+		}catch (Exception $e) {
+		   $transaction->rollback();
+		   $msg = json_encode(array('status'=>false,'closeAccountId'=>''));
+		}
+	    return $msg;
      }
 }
