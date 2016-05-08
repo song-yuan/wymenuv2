@@ -97,5 +97,15 @@ public function actionAddMemberCard(){
  	$result = DataSyncOperation::addMemberCard($_POST);
  	echo $result;exit;
 }
+/**
+ * 日结订单
+ * 
+ */
+ public function actionCloseAccount(){
+ 	$dpid = Yii::app()->request->getParam('dpid');
+ 	$userId = Yii::app()->request->getParam('uid');
+ 	$result = DataSyncOperation::operateCloseAccount($dpid,$userId);
+ 	echo $result;exit;
+}
  
 }
