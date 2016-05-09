@@ -256,7 +256,7 @@ class DataSyncOperation
 								'dpid'=>$dpid,
 								'create_at'=>date('Y-m-d H:i:s',$time),
 	        					'update_at'=>date('Y-m-d H:i:s',$time), 
-	        					'taste_id'=>$taste->taste_id;
+	        					'taste_id'=>$taste->taste_id,
 								'order_id'=>$orderId,
 								'is_order'=>1,
 								'is_sync'=>DataSync::getInitSync(),
