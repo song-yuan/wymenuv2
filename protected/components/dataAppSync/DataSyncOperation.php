@@ -168,11 +168,19 @@ class DataSyncOperation
     	$orderInfo = $obj->order_info;
     	$orderProduct = $obj->order_product;
     	$orderPay = $obj->order_pay;
+
+    	if(isset($obj->order_taste)){
+    		$orderTaste = $obj->order_taste;
+    	}else{
+    		$orderTaste = array();
+    	}
+
     	if(isset($obj->order_discount)){
     		$orderDiscount = $obj->order_discount;
     	}else{
     		$orderDiscount = array();
     	}
+
     	$time = time();
 	    $se = new Sequence("order");
 	    $orderId = $se->nextval();
@@ -194,6 +202,7 @@ class DataSyncOperation
 		        	'order_type'=>$orderInfo->order_type,
 		        	'should_total'=>$orderInfo->should_total,
 		        	'reality_total'=>$orderInfo->should_total,
+		        	'taste_memo'=>isset($orderInfo->taste_memo)?$orderInfo->taste_memo:'',
 		        	'is_sync'=>DataSync::getInitSync(),
 		        );
 			$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
@@ -237,6 +246,22 @@ class DataSyncOperation
 								'is_sync'=>DataSync::getInitSync(),
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_pay',$orderPayData);
+			}
+			//订单口味
+			foreach($orderTaste as $taste){
+				$se = new Sequence("order_taste");
+		    	$orderTasteId = $se->nextval();
+		    	$orderTasteData = array(
+								'lid'=>$orderTasteId,
+								'dpid'=>$dpid,
+								'create_at'=>date('Y-m-d H:i:s',$time),
+	        					'update_at'=>date('Y-m-d H:i:s',$time), 
+	        					'taste_id'=>$taste->taste_id;
+								'order_id'=>$orderId,
+								'is_order'=>1,
+								'is_sync'=>DataSync::getInitSync(),
+								);
+				 Yii::app()->db->createCommand()->insert('nb_order_taste',$orderTasteData);
 			}
 			//订单优惠
 			foreach($orderDiscount as $discount){
