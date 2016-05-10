@@ -48,6 +48,7 @@ class DataSyncTables
         array("name"=>"会员等级","table"=>"nb_brand_user_level"),
         array("name"=>"本店会员","table"=>"nb_member_card"),
         array("name"=>"本店会员充值","table"=>"nb_member_recharge"),
+        array("name"=>"折扣表","table"=>"nb_discount"),
        // array("name"=>"本店活动","table"=>"nb_local_activity"),//这张表云端暂时没有
         array("name"=>"日结","table"=>"nb_close_account"),
         array("name"=>"日结明细","table"=>"nb_close_account_detail"),
@@ -464,6 +465,19 @@ class DataSyncTables
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
+            "nb_discount"=>" CREATE TABLE 'nb_discount'('lid' int(10) NOT NULL,".
+                "  'dpid' int(10) NOT NULL,".
+                "  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+                "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+                "  `discount_name` varchar(50) NOT NULL,".
+                "  `discount_abstract` varchar(255) NOT NULL DEFAULT '',".
+                "  `discount_num` decimal(5,2) NOT NULL DEFAULT '0.00',".
+                "  `discount_type` varchar(2) NOT NULL DEFAULT '0',".
+                "  `is_available` varchar(2) NOT NULL DEFAULT '0',".
+                "  `delete_flag` varchar(1) NOT NULL DEFAULT '0',".
+                "  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+                "  PRIMARY KEY (`lid`,`dpid`)".
+                ");",
         	"nb_local_activity"=>" CREATE TABLE 'nb_local_activity'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
