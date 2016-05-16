@@ -30,6 +30,13 @@
                                                     <?php echo $form->error($model, 'set_name' )?>
                                             </div>
                                     </div>
+                                    <div class="form-group">
+										<?php echo $form->label($model, 'set_price',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'set_price', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('set_price')));?>
+											<?php echo $form->error($model, 'set_price' )?>
+										</div>
+									</div>
                                    <div class="form-group">
 										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">

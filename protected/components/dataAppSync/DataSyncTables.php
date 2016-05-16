@@ -307,6 +307,7 @@ class DataSyncTables
 				"  `simple_code` varchar(25) NOT NULL,".
 				"  `type` varchar(2) NOT NULL DEFAULT '0',".
 				"  `main_picture` varchar(255) NOT NULL,".
+        		"  `set_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
 				"  `description` text NOT NULL,".
 				"  `rank` tinyint(3) NOT NULL DEFAULT '3',".
 				"  `is_member_discount` char(1) NOT NULL DEFAULT '0',".
