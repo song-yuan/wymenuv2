@@ -64,9 +64,10 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','套餐名称');?></th>
-                                                                <th><?php echo yii::t('app','主图片');?></th>
-                                                                <th><?php echo yii::t('app','星级');?></th>
-                                                                <th><?php echo yii::t('app','下单数');?></th>
+                                <th><?php echo yii::t('app','主图片');?></th>
+                                <th><?php echo yii::t('app','套餐价格');?></th>
+                                <th><?php echo yii::t('app','星级');?></th>
+                                <th><?php echo yii::t('app','下单数');?></th>
 								<th><?php echo yii::t('app','点赞数');?></th>
 								<th>&nbsp;</th>
                                                                 <th>&nbsp;</th>
@@ -79,7 +80,8 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->set_name ;?></td>
 								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
-                                                                <td><?php echo $model->rank;?></td>
+								<td><?php echo $model->set_price;?></td>
+                                <td><?php echo $model->rank;?></td>
 								<td ><?php echo $model->order_number ;?></td>
 								<td><?php echo $model->favourite_number;?></td>
 								<td class="center">
