@@ -91,6 +91,61 @@ class AlipayController extends Controller
 		
 		$this->render('mobileweb',array('htmlText'=>$htmlText));
     }
+    /**
+     * 
+     * 支付宝即时到账交易接口接口
+     * 
+     */
+    public function actionInstantArriva(){
+        //支付类型
+        $payment_type = "1";
+        //服务器异步通知页面路径
+        $notify_url = Yii::app()->request->hostInfo."/wymenuv2/alipay/notify?companyId=".$this->companyId;
+        //需http://格式的完整路径，不能加?id=123这类自定义参数
+        //页面跳转同步通知页面路径
+        $return_url = Yii::app()->request->hostInfo."/wymenuv2/alipay/return?companyId=".$this->companyId;
+        //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
+        //商户订单号
+        $out_trade_no = $_GET['out_trade_no'];
+        //商户网站订单系统中唯一订单号，必填
+        //订单名称
+        $subject = $_GET['subject'];
+        //付款金额
+        $total_fee = $_GET['total_fee'];
+        //必填
+        //商品展示地址
+        $show_url = $_GET['show_url'];
+        //必填，需以http://开头的完整路径，例如：http://www.商户网址.com/myorder.html
+        //订单描述 
+        $body = isset($_GET['body'])?$_GET['body']:'';
+        //超时时间
+        $it_b_pay = isset($_GET['it_b_pay'])?$_GET['it_b_pay']:'';
+        //钱包token
+        $extern_token = isset($_GET['extern_token'])?$_GET['extern_token']:'';
+        //构造要请求的参数数组，无需改动
+        $parameter = array(
+                "service" => "create_direct_pay_by_user",
+                "partner" => trim($this->alipay_config['partner']),
+                "seller_id" => trim($this->alipay_config['seller_id']),
+                "payment_type"  => $payment_type,
+                "notify_url"    => $notify_url,
+                "return_url"    => $return_url,
+                "out_trade_no"  => $out_trade_no,
+                "subject"   => $subject,
+                "total_fee" => $total_fee,
+                "show_url"  => $show_url,
+                "body"  => $body,
+                "it_b_pay"  => $it_b_pay,
+                "extern_token"  => $extern_token,
+                "_input_charset"=> trim(strtolower($this->alipay_config['input_charset']))
+        );
+        
+        //建立请求
+        $alipaySubmit = new AlipaySubmit($this->alipay_config);
+        $htmlText = $alipaySubmit->buildRequestForm($parameter,"get", "确认");
+        
+        $this->render('mobileweb',array('htmlText'=>$htmlText));
+    }
    
     public function actionReturn()
 	{
