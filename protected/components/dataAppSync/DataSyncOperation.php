@@ -158,11 +158,16 @@ class DataSyncOperation
                 $order['nb_order'] = $result;
                 $sql = 'select * from nb_order_product where order_id='.$result['lid'];
                 $orderProduct = Yii::app()->db->createCommand($sql)->queryAll();
+                foreach($orderProduct as $k=>$product){
+                    $sql = 'select * from nb_order_taste where order_id='.$product['lid'].' and is_order=0';
+                    $orderProductTaste = Yii::app()->db->createCommand($sql)->queryAll();
+                    $orderProduct[$k]['product_taste'] = $orderProductTaste;
+                }
                 $order['nb_order_product'] = $orderProduct;
                 $sql = 'select * from nb_order_pay where order_id='.$result['lid'];
                 $orderPay = Yii::app()->db->createCommand($sql)->queryAll();
                 $order['nb_order_pay'] = $orderPay;
-                $sql = 'select * from nb_order_taste where order_id='.$result['lid'];
+                $sql = 'select * from nb_order_taste where order_id='.$result['lid'].' and is_order=1';
                 $orderTaste = Yii::app()->db->createCommand($sql)->queryAll();
                 $order['nb_order_taste'] = $orderTaste;
                 array_push($data['order'],$order);
