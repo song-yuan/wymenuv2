@@ -208,6 +208,11 @@ class DataSyncOperation
         $dpid = $data['dpid'];
         $orderData = $data['data'];
         $obj = json_decode($orderData);
+        if(isset($data['is_pos'])&&$data['is_pos']==1){
+            $isSync = 0;
+        }else{
+            $isSync = DataSync::getInitSync();
+        }
 
         $orderInfo = $obj->order_info;
         $orderProduct = $obj->order_product;
@@ -248,7 +253,7 @@ class DataSyncOperation
                 'should_total' => $orderInfo->should_total,
                 'reality_total' => $orderInfo->should_total,
                 'taste_memo' => isset($orderInfo->taste_memo) ? $orderInfo->taste_memo : '',
-                'is_sync' => DataSync::getInitSync(),
+                'is_sync' => $isSync,
                 );
             $result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
 
