@@ -125,12 +125,14 @@ class AlipayCore{
 	 */
 	static function getHttpResponseGET($url,$cacert_url) {
 		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_HEADER, 0 ); // 过滤HTTP头
+		curl_setopt($curl, CURLOPT_HEADER, 1 ); // 过滤HTTP头
+		curl_setopt($curl, CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36");
+		
 		curl_setopt($curl,CURLOPT_RETURNTRANSFER, 1);// 显示输出结果
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);//SSL证书认证
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);//严格认证
 		curl_setopt($curl, CURLOPT_CAINFO,$cacert_url);//证书地址
-		$responseText = curl_exec($curl);
+		$responseText = curl_exec($curl);var_dump($responseText);exit;
 		//var_dump( curl_error($curl) );//如果执行curl过程中出现异常，可打开此开关，以便查看异常内容
 		curl_close($curl);
 		
