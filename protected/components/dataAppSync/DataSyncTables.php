@@ -128,6 +128,7 @@ class DataSyncTables
         		"  `description` text NOT NULL DEFAULT '',".
         		"  `queuememo` text NOT NULL DEFAULT '',".
         		"  `printer_id` int(10) NOT NULL,".
+                "  `is_membercard_recharge` varchar(2) NOT NULL DEFAULT '0',".
         		"  `is2_othersystem` char(1) NOT NULL DEFAULT '0',".
 				"  `is2_base_fkxx` char(1) NOT NULL DEFAULT '0',".
 				"  `is2_base_tjlb` char(1) NOT NULL DEFAULT '0',".
