@@ -28,7 +28,7 @@ class WxlevelController extends BackendController
 	public function actionCreate() {
 		$model = new BrandUserLevel ;
 		$model->dpid = $this->companyId ;
-		
+        
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('BrandUserLevel');
                         
@@ -37,12 +37,13 @@ class WxlevelController extends BackendController
                         $model->create_at=date('Y-m-d H:i:s',time());
                         $model->update_at=date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
-                        //var_dump($model);exit;
+            
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
 				$this->redirect(array('wxlevel/index' , 'companyId' => $this->companyId));
 			}
 		}
+        
 		$this->render('create' , array(
 				'model' => $model
 		));

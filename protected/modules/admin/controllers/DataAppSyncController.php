@@ -58,6 +58,20 @@ public function actionGetData(){
 }
 /**
  * 
+ * pad实时获取云端数据
+ * is_sync 不为0时是需要同步的数据
+ * 返回json格式
+ * array(array('table_name'="",data=>array()),array('table_name'="",data=>array()));
+ * 
+ */
+ public function actionGetSyncData(){
+    $dpid = Yii::app()->request->getParam('dpid');
+    $result = DataSyncOperation::getSyncData($dpid);
+ 	echo $result;exit;
+ }
+ 
+/**
+ * 
  * 登录验证
  * 
  */

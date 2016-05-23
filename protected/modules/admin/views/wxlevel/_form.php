@@ -1,4 +1,4 @@
-							<?php $form=$this->beginWidget('CActiveForm', array(
+						 <?php $form=$this->beginWidget('CActiveForm', array(
 									'id' => 'wxlevel-form',
 									'errorMessageCssClass' => 'help-block',
 									'htmlOptions' => array(
@@ -6,22 +6,39 @@
 										'enctype' => 'multipart/form-data'
 									),
 							)); ?>
+                         
 								<div class="form-body">
+                                    <div class="form-group">
+										<?php echo $form->label($model, 'level_type',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<div class="radio-list">
+    											<label class="radio-inline">
+    											<input type="radio" name="BrandUserLevel[level_type]" id="optionsRadios0" value="0" checked> 传统会员卡
+    											</label>
+    											<label class="radio-inline">
+    											<input type="radio" name="BrandUserLevel[level_type]" id="optionsRadios1" value="1" > 微信统会员卡
+    											</label>  
+    										</div>
+											<?php echo $form->error($model, 'level_type' )?>
+										</div>
+									</div>
+                                    
 									<div class="form-group">
 										<?php echo $form->label($model, 'level_name',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
+									    <div class="col-md-4">
 											<?php echo $form->textField($model, 'level_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('level_name')));?>
 											<?php echo $form->error($model, 'level_name' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group">
+                                    	
+                                     <div class="form-group">
 										<?php echo $form->label($model, 'min_total_points',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'min_total_points',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('min_total_points')));?>
 											<?php echo $form->error($model, 'min_total_points' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group">
+                                    <div class="form-group">
 										<?php echo $form->label($model, 'max_total_points',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'max_total_points',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('max_total_points')));?>
