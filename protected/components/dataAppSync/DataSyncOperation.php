@@ -178,8 +178,8 @@ class DataSyncOperation
             $sql = 'select * nb_member_card where dpid='.$dpid.' and delete_flag=0 and is_sync<>0';
             $memberCard = Yii::app()->db->createCommand($sql)->queryAll();
             foreach($memberCard as $card){
-                array_push($data['member_card'],$order);
-                $sql = 'update nb_order set is_sync=0 where dpid='.$dpid.' and lid='.$card['lid'];
+                array_push($data['member_card'],$card);
+                $sql = 'update nb_member_card set is_sync=0 where dpid='.$dpid.' and lid='.$card['lid'];
                 Yii::app()->db->createCommand($sql)->execute();
             }
             $transaction->commit();//事物结束 
