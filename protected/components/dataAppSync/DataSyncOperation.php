@@ -389,7 +389,7 @@ class DataSyncOperation
         }
     }
     /**
-     * 增加会员卡
+     * 会员卡支付
      * 
      */
     public static function payMemberCard($data)

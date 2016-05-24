@@ -482,7 +482,7 @@ class DataSyncTables
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `selfcode` varchar(10) DEFAULT NULL ,".
-				"  `rfid` varchar(10) DEFAULT NULL ,".
+				"  `rfid` varchar(10) DEFAULT NULL UNIQUE,".
 				"  `level_id` int(10) NOT NULL DEFAULT '0',".
 				"  `name` varchar(20) NOT NULL DEFAULT '',".
 				"  `mobile` varchar(20) DEFAULT NULL ,".
