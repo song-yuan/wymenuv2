@@ -375,6 +375,32 @@ class DataSyncOperation
         }
     }
     /**
+     * 增加会员卡
+     * 
+     */
+    public static function payMemberCard($data)
+    {
+        $dpid = $data['dpid'];
+        $rfid = $data['rfid'];
+        $password = $data['password'];
+        $payPrice = $data['pay_price'];
+        $sql = 'select * from nb_member_card where dpid='.$dpid.' and rfid='.$rfid.' and delete_flag=0';
+        $reslut = Yii::app()->db->createCommand($sql)->queryRow();
+        if(!$reslut){
+            throw new Exception('不存在该会员信息！');
+        }
+        if($payPrice > $reslut['all_money']){
+             throw new Exception('余额不足！');
+        }
+        $sql = 'update nb_member_card set all_money=all_money-'.$payPrice.' where dpid='.$dqpi.' and lid='.$reslut['lid'];
+        $reslut = Yii::app()->db->createCommand($sql)->execute();
+        if($reslut){
+            return json_encode(array('status'=>true));
+        }else{
+            return json_encode(array('status'=>false));
+        }
+    }
+    /**
      * 
      * 获取订单
      * 
