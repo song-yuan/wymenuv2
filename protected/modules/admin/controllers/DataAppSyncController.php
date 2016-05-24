@@ -112,6 +112,15 @@ public function actionAddMemberCard(){
  	echo $result;exit;
 }
 /**
+ * 
+ *会员卡支付 
+ * 
+ */
+ public function actionPayByMemberCard(){
+ 	$result = DataSyncOperation::payMemberCard($_POST);
+ 	echo $result;exit;
+}
+/**
  * 日结订单
  * 
  */
