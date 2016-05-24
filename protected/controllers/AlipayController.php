@@ -138,6 +138,7 @@ class AlipayController extends Controller
                 "it_b_pay"  => $it_b_pay,
                 "extern_token"  => $extern_token,
                 'qr_pay_mode'=>4,
+                'qrcode_width'=>400,
                 "_input_charset"=> trim(strtolower($this->alipay_config['input_charset']))
         );
         
