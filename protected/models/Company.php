@@ -20,6 +20,7 @@
  * @property string $queuememo
  * @property string $printer_id
  * @property string $is_sync
+ * @property string $is_membercard_recharge
  */
 class Company extends CActiveRecord
 {
@@ -48,7 +49,7 @@ class Company extends CActiveRecord
 			array('description','length'),
 			array('queuememo','length'),
 			array('address','length'),
-			array('type','length','max'=>2),
+			array('type, is_membercard_recharge','length','max'=>2),
 			array('company_name, logo, contact_name, mobile' , 'required'),
 			array('email', 'length', 'min'=>6, 'max'=>40,'message'=>yii::t('app','请输入4到20的电子邮件')),
 			//array('mobile','match','pattern'=>'/^[1][358]\d{9}$/','message'=>yii::t('app','请填写有效的手机号码')),
@@ -57,7 +58,7 @@ class Company extends CActiveRecord
 				
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('dpid, company_name, logo,token, contact_name,type, is_sync, mobile, telephone, email, lng, lat, distance, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
+			array('dpid, company_name, logo,token, contact_name,type, is_membercard_recharge, is_sync, mobile, telephone, email, lng, lat, distance, homepage, domain, create_at, delete_flag, description, queuememo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -83,6 +84,7 @@ class Company extends CActiveRecord
 			'logo' => 'Logo',
 			'contact_name' => yii::t('app','联系人'),
 			'type' => yii::t('app','类型'),
+			'is_membercard_recharge' => yii::t('app','是否允许会员卡充值'),
 			'mobile' =>yii::t('app', '联系人手机'),
 			'telephone' => yii::t('app','电话'),
 			'email' => yii::t('app','电子邮箱'),
@@ -122,6 +124,7 @@ class Company extends CActiveRecord
 		$criteria->compare('logo',$this->logo,true);
 		$criteria->compare('contact_name',$this->contact_name,true);
 		$criteria->compare('type',$this->type,true);
+		$criteria->compare('is_membercard_recharge',$this->is_membercard_recharge,true);
 		$criteria->compare('mobile',$this->mobile,true);
 		$criteria->compare('telephone',$this->telephone,true);
 		$criteria->compare('email',$this->email,true);
