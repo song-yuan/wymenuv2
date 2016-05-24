@@ -348,6 +348,11 @@ class DataSyncOperation
     {
         $dpid = $data['dpid'];
         $orderData = $data['data'];
+        if(isset($data['is_pos'])&&$data['is_pos']==1){
+            $isSync = 0;
+        }else{
+            $isSync = DataSync::getInitSync();
+        }
         $obj = json_decode($orderData);
 
         $time = time();
@@ -365,7 +370,7 @@ class DataSyncOperation
             'mobile' => $obj->mobile,
             'sex' => $obj->sex,
             'ages' => $obj->ages,
-            'is_sync' => DataSync::getInitSync(),
+            'is_sync' => $isSync,
             );
         $result = Yii::app()->db->createCommand()->insert('nb_member_card', $inserMemberCardrArr);
         if ($result) {
