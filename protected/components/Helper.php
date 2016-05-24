@@ -93,7 +93,7 @@ class Helper
 	 * 判断是不是微信浏览器
 	 */
 	public static function isMicroMessenger() {
-		return stripos($_SERVER['HTTP_USER_AGENT'], 'microMessenger') !== false ? true : false;
+		return stripos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ? true : false;
 	}
 	static public function getCategories($companyId,$pid=0){
 		$command = Yii::app()->db->createCommand('select * from nb_product_category where dpid=:companyId and pid=:pid and delete_flag=0');
