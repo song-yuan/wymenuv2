@@ -103,7 +103,7 @@ class AlipayController extends Controller
         $notify_url = Yii::app()->request->hostInfo."/wymenuv2/alipay/notify?companyId=".$this->companyId;
         //需http://格式的完整路径，不能加?id=123这类自定义参数
         //页面跳转同步通知页面路径
-        $return_url = Yii::app()->request->hostInfo."/wymenuv2/alipay/return?companyId=".$this->companyId;
+        $return_url = Yii::app()->request->hostInfo."/wymenuv2/alipay/returnInstant?companyId=".$this->companyId;
         //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
         //商户订单号
         $out_trade_no = $_GET['out_trade_no'];
@@ -148,7 +148,7 @@ class AlipayController extends Controller
         
         $this->render('mobileweb',array('htmlText'=>$htmlText));
     }
-   
+   // 手机订单支付
     public function actionReturn()
 	{
         //计算得出通知验证结果
@@ -184,7 +184,42 @@ class AlipayController extends Controller
         //跳转订单详情
         $this->redirect(array('/user/orderInfo','companyId'=>$orderIdArr[1],'orderId'=>$orderIdArr[0]));
 	}
-        
+     // 及时到帐接口返回  
+     public function actionReturnInstant()
+	{
+        //计算得出通知验证结果
+        $alipayNotify = new AlipayNotify($this->alipay_config);
+        $verify_result = $alipayNotify->verifyReturn();
+        $orderIdArr = explode('-',$_GET["out_trade_no"]);
+        if($verify_result) {//验证成功
+                //商户订单号
+                $out_trade_no = $_GET['out_trade_no'];
+                //支付宝交易号
+                $trade_no = $_GET['trade_no'];
+                //交易状态
+                $trade_status = $_GET['trade_status'];
+                //交易目前所处的状态。成功状态的值只有两个：
+                //TRADE_FINISHED（普通即时到账的交易成功状态）
+                //TRADE_SUCCESS（开通了高级即时到账或机票分销产品后的交易成功状态）
+            if($_GET['trade_status'] == 'TRADE_FINISHED' || $_GET['trade_status'] == 'TRADE_SUCCESS') {
+                //判断该笔订单是否在商户网站中已经做过处理
+                //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
+                //如果有做过处理，不执行商户的业务程序
+                //下单，返回页面，单元清单。。。
+                $alipayNotify->checkNotify($_GET);
+                
+            } else {
+                //echo "trade_status=".$_GET['trade_status'];
+                $ret_status= "非正常返回，验证成功。";
+            }
+
+        } else {
+            //验证失败
+            //如要调试，请看alipay_notify.php页面的verifyReturn函数
+            $ret_status="验证失败";
+        }
+        exit;
+	} 
     public function actionNotify()
 	{
         $alipayNotify = new AlipayNotify($this->alipay_config);

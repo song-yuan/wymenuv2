@@ -23,7 +23,7 @@ class MallController extends Controller
 	}
 	
 	public function beforeAction($actin){
-		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo','reCharge','share'))){
+		if(in_array($actin->id,array('index','cart','order','payOrder','cupon','cuponinfo','reCharge','share','bill'))){
 			//如果微信浏览器
 			if(Helper::isMicroMessenger()){
 				$this->weixinServiceAccount();
@@ -491,7 +491,37 @@ class MallController extends Controller
 	 * 
 	 */
 	 public function actionBill(){
-	 	$this->render('bill');
+	    $userId = Yii::app()->session['userId'];
+	 	$this->render('bill',array('userId'=>$userId));
+	 }
+     /**
+	 * 
+	 * 生成扫码订单
+	 * 
+	 */
+	 public function actionCreateBillOrder(){
+	 	$userId = Yii::app()->request->getPost('userId');
+        $orderPrice = Yii::app()->request->getPost('orderPrice');
+        $result = WxOrder::createBillOrder($this->companyId,$userId,$orderPrice);
+	 }
+     /**
+	 * 
+	 * 支付扫码订单
+	 * 
+	 */
+     public function actionPayBillOrder(){
+        $type = Yii::app()->request->getParam('type');
+        $orderId = Yii::app()->request->getParam('orderId');
+        $order = WxOrder::getOrder($orderId,$this->companyId);
+        if($type==1){
+            $showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
+		
+    		if($order['order_status'] > 2){
+    			$this->redirect(array('/user/orderInfo','companyId'=>$this->companyId,'orderId'=>$orderId));
+    		}
+    		$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'扫码买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
+        }
+        $this->render('paybill',array('order'=>$order));
 	 }
 	/**
 	 * 

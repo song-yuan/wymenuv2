@@ -35,17 +35,16 @@ footer{
 }
 </style>
 <div class="page cell" >
-<form action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId));?>" method="post" onsubmit="return validate()">
-	<div class="weui_cells_title">输入消费金额</div>
+    <div class="weui_cells_title">输入消费金额</div>
     <div class="weui_cells weui_cells_form">
-   		<div class="weui_cell">
+    	<div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">消费金额</label></div>
             <div class="weui_cell_bd weui_cell_primary">
                 <input class="weui_input" id="price" name="order[price]" type="number" placeholder="询问服务员后输入" value=""/>
             </div>
         </div>
     </div>
-    
+    <!--
     <div class="weui_cells_title">选择优惠券</div>
     <div class="weui_cells">
         <div class="weui_cell weui_cell_select weui_select_after">
@@ -59,7 +58,7 @@ footer{
             </div>
         </div>
     </div>
-    
+    -->
     <div class="weui_cells_title">选择支付方式</div>
     <div class="weui_cells weui_cells_checkbox">
         <label class="weui_cell weui_check_label" for="x11">
@@ -68,7 +67,7 @@ footer{
                 <p>微信支付</p>
             </div>
             <div class="weui_cell_ft">
-                <input type="radio" class="weui_check" name="order[pay-type]" id="x11" checked="checked">
+                <input type="radio" class="weui_check" name="order[pay-type]" id="x11" checked="checked" value="0">
                 <span class="weui_icon_checked"></span>
             </div>
         </label>
@@ -78,46 +77,64 @@ footer{
                 <p>支付宝支付</p>
             </div>
             <div class="weui_cell_ft">
-                <input type="radio" name="order[pay-type]" class="weui_check" id="x12">
+                <input type="radio" name="order[pay-type]" class="weui_check" id="x12" value="1">
                 <span class="weui_icon_checked"></span>
             </div>
         </label>
     </div>
-</form>
-<footer>
-    <div class="ft-lt">
-        <p>￥<span id="total" class="total">0.00</span></p>
+    <footer>
+        <div class="ft-lt">
+            <p>￥<span id="total" class="total">0.00</span></p>
+        </div>
+        <div class="ft-rt">
+            <p><a id="payorder" href="javascript:;">确认买单</a></p>
+        </div>
+        <div class="clear"></div>
+    </footer>
+    <div class="weui_dialog_alert" id="dialog2" style="display: none;">
+    	<div class="weui_mask"></div>
+    	<div class="weui_dialog">
+    	    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+    	    <div class="weui_dialog_bd"></div>
+    	    <div class="weui_dialog_ft">
+    	        <a href="javascript:;" id="confirm" class="weui_btn_dialog primary">确定</a>
+    	    </div>
+    	</div>
     </div>
-    <div class="ft-rt">
-        <p><a id="payorder" href="javascript:;">确认买单</a></p>
-    </div>
-    <div class="clear"></div>
-</footer>
-<div class="weui_dialog_alert" id="dialog2" style="display: none;">
-	<div class="weui_mask"></div>
-	<div class="weui_dialog">
-	    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-	    <div class="weui_dialog_bd"></div>
-	    <div class="weui_dialog_ft">
-	        <a href="javascript:;" id="confirm" class="weui_btn_dialog primary">确定</a>
-	    </div>
-	</div>
-</div>
+    <input type="hidden" id="user-id" value="<?php echo $userId;?>"/>
 </div>
 <script type="text/javascript">
-  function validate() {
-        if($('#price').val() == ''){
-	        	$('#dialog2').find('.weui_dialog_bd').html('请填写金额');
-	            $('#dialog2').show();
-	            return false;
-           }
-		return success;
-    }
-    
     $('document').ready(function(){
-
+        $('#price').keyup(function(){
+            var price = parseFloat($(this).val());
+            $('#total').html(price.toFixed(2));
+        });
     	$('#confirm').click(function(){
     		$('#dialog2').hide();
     	});
+        $('#payorder').click(function(){
+            if($('#price').val() == ''){
+	        	$('#dialog2').find('.weui_dialog_bd').html('请填写金额');
+	            $('#dialog2').show();
+	            return;
+           }
+           var userId = $('#user-id').val();
+           var orderPrice = $('#total').html();
+           var type = $('input[name="order[pay-type]"]:checked').val();
+           $.ajax({
+                url:'<?php echo $this->createUrl('/mall/createBillOrder',array('companyId'=>$this->companyId));?>',
+                type:'POST',
+                data:{userId:userId,orderPrice:orderPrice},
+                success:function(msg){
+                    if(msg.status){
+                        local.href = "<?php echo $this->createUrl('/mall/payBillOrder',array('companyId'=>$this->companyId));?>&orderId="+msg.order_id+"&type="+type;
+                    }else{
+                        $('#dialog2').find('.weui_dialog_bd').html('请请重新支付！');
+	                    $('#dialog2').show();
+                    }
+                },
+                dataType:'json'
+           });
+        });
     });
 </script>
