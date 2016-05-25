@@ -882,10 +882,10 @@ class WxOrder
 								);
 				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
         	    $transaction->commit();
-                $msg = json_encode('status'=>true,'order_id'=>$orderId);
+                $msg = json_encode(array('status'=>true,'order_id'=>$orderId));
 			}catch (Exception $e) {
 				$transaction->rollback();
-				$msg = json_encode('status'=>false,'order_id'=>0);
+				$msg = json_encode(array('status'=>false,'order_id'=>0));
 			}
             return $msg;
      }

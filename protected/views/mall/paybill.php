@@ -4,6 +4,7 @@
     
     $notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
+    $userId = $order['user_id'];
 	//①、获取用户openid
 	$canpWxpay = true;
 	try{
@@ -42,9 +43,9 @@
 <div class="weui_cells">
     <div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>订单号:</p></div><div class="weui_cell_ft"><?php echo $order['lid'].'-'.$order['dpid'];?></div></div>
     <div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>共计金额:</p></div><div class="weui_cell_ft">￥<?php echo $order['should_total'];?></div></div>
-    <div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>下单时间:</p></div><div class="weui_cell_ft"><?php $order['create_at'];?></div></div>
+    <div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>下单时间:</p></div><div class="weui_cell_ft"><?php echo $order['create_at'];?></div></div>
 </div>
-<div class='weui_btn_area'><a id="payOrder" class='weui_btn weui_btn_default submit' href='javascript:'>确认付款</a></div>
+<div class='weui_btn_area'><a id="payOrder" class='weui_btn weui_btn_primary submit' href='javascript:'>确认付款</a></div>
 <script>
 	<?php if($canpWxpay):?>
 	//调用微信JS api 支付
@@ -62,7 +63,7 @@
 				 	//支付失败或取消支付
 				 	
 				 }     
-			}
+			}<strong></strong>
 		);
 	}
 	<?php endif;?>

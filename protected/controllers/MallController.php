@@ -503,6 +503,8 @@ class MallController extends Controller
 	 	$userId = Yii::app()->request->getPost('userId');
         $orderPrice = Yii::app()->request->getPost('orderPrice');
         $result = WxOrder::createBillOrder($this->companyId,$userId,$orderPrice);
+        echo $result;
+        exit;
 	 }
      /**
 	 * 
