@@ -4,7 +4,6 @@
     
     $notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
-    $userId = $order['user_id'];
 	//①、获取用户openid
 	$canpWxpay = true;
 	try{
