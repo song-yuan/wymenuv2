@@ -513,7 +513,9 @@ class MallController extends Controller
 	 */
      public function actionPayBillOrder(){
         $type = Yii::app()->request->getParam('type');
-        $orderId = Yii::app()->request->getParam('orderId');
+        $orderId = Yii::app()->request->getParam('oid');
+        $userId = Yii::app()->request->getParam('uid');
+        
         $order = WxOrder::getOrder($orderId,$this->companyId);
         if($type==1){
             $showUrl = Yii::app()->request->hostInfo."/wymenuv2/user/orderInfo?companyId=".$this->companyId.'&orderId='.$orderId;
@@ -523,7 +525,7 @@ class MallController extends Controller
     		}
     		$this->redirect(array('/alipay/mobileWeb','companyId'=>$this->companyId,'out_trade_no'=>$order['lid'].'-'.$order['dpid'],'subject'=>'扫码买单','total_fee'=>$order['should_total'],'show_url'=>$showUrl));
         }
-        $this->render('paybill',array('order'=>$order));
+        $this->render('paybill',array('order'=>$order,'userId'=>$userId));
 	 }
 	/**
 	 * 
