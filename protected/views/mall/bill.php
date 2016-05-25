@@ -127,7 +127,7 @@ footer{
                 data:{userId:userId,orderPrice:orderPrice},
                 success:function(msg){
                     if(msg.status){
-                        location.href = "<?php echo $this->createUrl('/mall/payBillOrder',array('companyId'=>$this->companyId));?>&orderId="+msg.order_id+"&type="+type;
+                        location.href = "<?php echo $this->createUrl('/mall/payBillOrder',array('companyId'=>$this->companyId));?>&oid="+msg.order_id+"&uid="+userId+"&type="+type;
                     }else{
                         $('#dialog2').find('.weui_dialog_bd').html('请请重新支付！');
 	                    $('#dialog2').show();
