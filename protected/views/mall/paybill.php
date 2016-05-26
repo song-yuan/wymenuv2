@@ -41,6 +41,7 @@
     height: 2em;
     margin:0 auto;
     font-size:100px;
+    border-radius:1em;
 }
 .logo img{
     width:100%;
