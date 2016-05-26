@@ -61,7 +61,7 @@
 				 	//支付失败或取消支付
 				 	
 				 }     
-			}<strong></strong>
+			}
 		);
 	}
 	<?php endif;?>
