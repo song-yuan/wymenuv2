@@ -833,9 +833,10 @@ class WxOrder
       * 输入金额订单
       * 
       */
-     public static function createBillOrder($dpid,$userId,$order_price){
+     public static function createBillOrder($dpid,$userId,$order_price,$offprice){
         $time = time();
         $accountNo = 0;
+        $price = $order_price - $offprice;
 		$se = new Sequence("order");
 	    $orderId = $se->nextval();
 	    
@@ -853,7 +854,7 @@ class WxOrder
         	        	'site_id'=>0,
         	        	'is_temp'=>1,
         	        	'number'=>1,
-                        'should_total'=>$order_price,
+                        'should_total'=>$price,
                         'reality_total'=>$order_price,
         	        	'order_status'=>1,
         	        	'order_type'=>5,
@@ -874,8 +875,9 @@ class WxOrder
 								'product_name'=>'扫码支付',
 								'product_pic'=>'',
 								'product_type'=>0,
-								'price'=>$order_price,
+								'price'=>$price,
 								'original_price'=>$order_price,
+                                'offprice'=>$offprice,
 								'amount'=>1,
 								'product_order_status'=>9,
 								'is_sync'=>DataSync::getInitSync(),
