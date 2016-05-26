@@ -35,7 +35,18 @@
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
-
+<style>
+.logo{
+    width:2em;
+    height: 2em;
+    margin:0 auto;
+    font-size:100px;
+}
+.logo img{
+    width:100%;
+    height:100%;
+}
+</style>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
 		
 <div class="weui_cells">
@@ -44,6 +55,9 @@
     <div class="weui_cell"><div class="weui_cell_bd weui_cell_primary"><p>下单时间:</p></div><div class="weui_cell_ft"><?php echo $order['create_at'];?></div></div>
 </div>
 <div class='weui_btn_area'><a id="payOrder" class='weui_btn weui_btn_primary submit' href='javascript:'>确认付款</a></div>
+<div class="logo">
+    <img src="<?php echo $company['logo']?$company['logo']:'img/logo.png';?>" />
+</div>
 <script>
 	<?php if($canpWxpay):?>
 	//调用微信JS api 支付

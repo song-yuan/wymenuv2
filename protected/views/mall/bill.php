@@ -1,6 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('优惠买单');
+    $company = WxCompany::get($this->companyId);
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
@@ -22,6 +23,15 @@ footer{
 }
 .page, body {
     background-color: #FBF9FE;
+}
+.page .logo{
+    width:2em;
+    height: 2em;
+    margin:0 auto;
+}
+.page .logo img{
+    width:100%;
+    height:100%;
 }
 .weui_label{
 	width:5em;
@@ -84,6 +94,10 @@ footer{
         </label>
         -->
     </div>
+    <div class="logo">
+        <img src="<?php echo $company['logo']?$company['logo']:'img/logo.png';?>" />
+    </div>
+    
     <footer>
         <div class="ft-lt">
             <p>￥<span id="total" class="total">0.00</span></p>
