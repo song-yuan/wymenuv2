@@ -67,7 +67,6 @@
 	<?php endif;?>
     function callpay()
 	{
-	   alert('callpay');
 		<?php if(!$canpWxpay):?>
 		alert('<?php echo $jsApiParameters;?>');
 		return;
