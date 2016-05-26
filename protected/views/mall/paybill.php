@@ -25,8 +25,9 @@
 		}else{
 			$input->SetOpenid($openId);
 		}
+        var_dump($input);
 		$orderInfo = WxPayApi::unifiedOrder($input);
-
+        var_dump($orderInfo);exit;
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		
 	}catch(Exception $e){
