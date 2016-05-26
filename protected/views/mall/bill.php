@@ -71,6 +71,7 @@ footer{
                 <span class="weui_icon_checked"></span>
             </div>
         </label>
+        <!--
         <label class="weui_cell weui_check_label" for="x12">
         <div class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/mall/zfbpay.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
             <div class="weui_cell_bd weui_cell_primary">
@@ -81,6 +82,7 @@ footer{
                 <span class="weui_icon_checked"></span>
             </div>
         </label>
+        -->
     </div>
     <footer>
         <div class="ft-lt">
@@ -93,7 +95,7 @@ footer{
     </footer>
     <div class="weui_dialog_alert" id="dialog2" style="display: none;">
     	<div class="weui_mask"></div>
-    	<div class="weui_dialog">
+    	<div class="weui_dialog" style="font-size:15px;">
     	    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
     	    <div class="weui_dialog_bd"></div>
     	    <div class="weui_dialog_ft">
