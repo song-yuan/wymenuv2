@@ -502,7 +502,8 @@ class MallController extends Controller
 	 public function actionCreateBillOrder(){
 	 	$userId = Yii::app()->request->getPost('userId');
         $orderPrice = Yii::app()->request->getPost('orderPrice');
-        $result = WxOrder::createBillOrder($this->companyId,$userId,$orderPrice);
+        $offprice = Yii::app()->request->getPost('offprice');
+        $result = WxOrder::createBillOrder($this->companyId,$userId,$orderPrice,$offprice);
         echo $result;
         exit;
 	 }

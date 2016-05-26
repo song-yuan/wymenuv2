@@ -70,6 +70,21 @@ footer{
         </div>
     </div>
     -->
+    <div class="weui_cells_title">满减优惠</div>
+    <div class="weui_cells weui_cells_radio">
+        <label id="off-price" class="weui_cell weui_check_label" for="x2">
+        	<div class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/mall/act_04.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>满30元减3元</p>
+            </div>
+            <div class="weui_cell_ft">
+                <input type="checkbox" class="weui_check" name="order[offprice]" id="x2" full="30" value="3">
+                <span class="weui_icon_checked"></span>
+            </div>
+        </label>
+    </div>
+    <div class="weui_cells_tips">提示:午餐不参与减价优惠!</div>
+    
     <div class="weui_cells_title">选择支付方式</div>
     <div class="weui_cells weui_cells_checkbox">
         <label class="weui_cell weui_check_label" for="x11">
@@ -122,18 +137,55 @@ footer{
 </div>
 <script type="text/javascript">
     $('document').ready(function(){
+         $('#price').focus(function(){
+            if($('input[name="order[offprice]"]').is(':checked')){
+                $('input[name="order[offprice]"]').prop('checked',false);
+                var price = parseFloat($(this).val());
+                if(isNaN(price)){
+                    $('#total').html('0.00');
+                }else{
+                    $('#total').html(price.toFixed(2));
+                }
+            }
+         });
         $('#price').keyup(function(){
             var price = parseFloat($(this).val());
-            $('#total').html(price.toFixed(2));
+            if(isNaN(price)){
+                $('#total').html('0.00');
+            }else{
+                $('#total').html(price.toFixed(2));
+            }
         });
     	$('#confirm').click(function(){
     		$('#dialog2').hide();
     	});
+        $('input[name="order[offprice]"]').change(function(){
+            var price = parseFloat($('#price').val());
+            var full = parseFloat($(this).attr('full'));
+            var offprice = parseFloat($(this).val());
+            if($(this).is(':checked')){
+              if(price > full){
+                 var final = price-offprice;
+                 if(final < 0){
+                    final = 0;
+                 }
+                 $('#total').html(final.toFixed(2));
+              }else{
+                 $(this).prop('checked',false);
+              }
+            }else{
+               $('#total').html(price.toFixed(2)); 
+            }
+        });
         $('#payorder').click(function(){
             if($('#price').val() == ''){
 	        	$('#dialog2').find('.weui_dialog_bd').html('请填写金额');
 	            $('#dialog2').show();
 	            return;
+           }
+           var offprice = 0;
+           if($('input[name="order[offprice]"]').is(':checked')){
+                offprice = $('input[name="order[offprice]"]').val();
            }
            var userId = $('#user-id').val();
            var orderPrice = $('#total').html();
@@ -141,7 +193,7 @@ footer{
            $.ajax({
                 url:'<?php echo $this->createUrl('/mall/createBillOrder',array('companyId'=>$this->companyId));?>',
                 type:'POST',
-                data:{userId:userId,orderPrice:orderPrice},
+                data:{userId:userId,orderPrice:orderPrice,offprice:offprice},
                 success:function(msg){
                     if(msg.status){
                         location.href = "<?php echo $this->createUrl('/mall/payBillOrder',array('companyId'=>$this->companyId));?>&oid="+msg.order_id+"&uid="+userId+"&type="+type;
