@@ -750,7 +750,7 @@ class DataSyncTables
         		"  `infor` varchar(255) NOT NULL,".
         		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
         		"  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
-        		"  `weekday` varchar(32) NOT NULL DEFAULT '',".
+        		"  `full_type` varchar(2) NOT NULL DEFAULT '0',".
         	    "  `full_cost` decimal(10,2) NOT NULL DEFAULT '0.00',".
                 "  `extra_cost` decimal(10,2) NOT NULL DEFAULT '0.00',".
                 "  `sent_number` int(3) NOT NULL DEFAULT '1',".
