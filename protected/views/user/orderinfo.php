@@ -43,7 +43,7 @@
 		<div class="rt">X1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
 		<div class="clear"></div>
 	</div>
-	<?php else:?>
+	<?php elseif($order['order_type']!=5):?>
 	<div class="item">
 		<div class="lt">包装费:</div>
 		<div class="rt">X1 ￥<?php echo $packingFee?number_format($packingFee,2):'免费';?></div>
