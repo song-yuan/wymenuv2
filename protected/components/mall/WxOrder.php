@@ -873,7 +873,7 @@ class WxOrder
 								'product_id'=>0,
 								'product_name'=>'扫码支付',
 								'product_pic'=>'',
-								'product_type'=>1,
+								'product_type'=>0,
 								'price'=>$order_price,
 								'original_price'=>$order_price,
 								'amount'=>1,
