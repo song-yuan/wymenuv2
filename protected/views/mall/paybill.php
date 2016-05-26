@@ -1,7 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('支付订单');
-    
+    $company = WxCompany::get($this->companyId);
     $notifyUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->createUrl('/weixin/notify');
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
@@ -11,13 +11,13 @@
 		$openId = WxBrandUser::openId($userId,$this->companyId);
 		//②、统一下单
 		$input = new WxPayUnifiedOrder();
-		$input->SetBody("扫码订单");
+		$input->SetBody($company['company_name']);
 		$input->SetAttach("0");
 		$input->SetOut_trade_no($orderId);
 		$input->SetTotal_fee($order['should_total']*100);
 		$input->SetTime_start(date("YmdHis"));
 		$input->SetTime_expire(date("YmdHis", time() + 600));
-		$input->SetGoods_tag("扫码订单");
+		$input->SetGoods_tag($company['company_name']);
 		$input->SetNotify_url($notifyUrl);
 		$input->SetTrade_type("JSAPI");
 		if(WxPayConfig::ISSUBMCH){
@@ -25,7 +25,6 @@
 		}else{
 			$input->SetOpenid($openId);
 		}
-        echo '<meta  charset="utf-8">';
 		$orderInfo = WxPayApi::unifiedOrder($input);
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		
