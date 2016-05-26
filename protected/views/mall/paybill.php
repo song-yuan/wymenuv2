@@ -41,11 +41,11 @@
     height: 2em;
     margin:0 auto;
     font-size:100px;
-    border-radius:1em;
 }
 .logo img{
     width:100%;
     height:100%;
+    border-radius:100%;
 }
 </style>
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
