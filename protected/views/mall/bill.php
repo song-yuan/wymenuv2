@@ -28,6 +28,7 @@ footer{
     width:2em;
     height: 2em;
     margin:0 auto;
+    border-radius:1em;
 }
 .page .logo img{
     width:100%;
