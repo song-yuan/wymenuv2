@@ -11,12 +11,9 @@ class DataSyncTables
     //然后根据企业id获取数据，下载到本地后删除所有
     //原有的基础数据，然后插入新的。    
     public $baseTableName= array(
-    	//array("name"=>"pad设置","table"=>"nb_pad_setting"),
         array("name"=>"店铺信息","table"=>"nb_local_company"),
         array("name"=>"用户","table"=>"nb_user"),
         array("name"=>"楼层区域","table"=>"nb_floor"),
-   		array("name"=>"普通活动","table"=>"nb_normal_promotion"),
-    	array("name"=>"普通活动详情","table"=>"nb_normal_promotion_detail"),
         array("name"=>"点单PAD","table"=>"nb_pad"),
         array("name"=>"支付方法","table"=>"nb_payment_method"),
         array("name"=>"打印机","table"=>"nb_printer"),
@@ -65,7 +62,11 @@ class DataSyncTables
         array("name"=>"订单口味","table"=>"nb_order_taste"),
         array("name"=>"排队人数","table"=>"nb_queue_persons"),
         array("name"=>"交班明细","table"=>"nb_shift_detail"),
-        array("name"=>"台操作明细","table"=>"nb_site_no"),        
+        array("name"=>"台操作明细","table"=>"nb_site_no"),  
+        array("name"=>"普通活动","table"=>"nb_normal_promotion"),
+    	array("name"=>"普通活动详情","table"=>"nb_normal_promotion_detail"),
+        array("name"=>"满送满减活动","table"=>"nb_full_sent"),
+    	array("name"=>"满送满减活动详情","table"=>"nb_full_sent_detail"),      
     );
 
     
@@ -163,44 +164,6 @@ class DataSyncTables
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"   PRIMARY KEY (`lid`,`dpid`)".
-        		");",
-        	"nb_normal_promotion" => " CREATE TABLE 'nb_normal_promotion'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  `promotion_title` varchar(50) NOT NULL,".
-        		"  `main_picture` varchar(255) NOT NULL,".
-        		"  `promotion_abstract` varchar(255) NOT NULL,".
-        		"  `promotion_memo` text NOT NULL,".
-        		"  `promotion_type` varchar(2) NOT NULL,".
-        		"  `can_cupon` varchar(2) NOT NULL DEFAULT '0',".
-        		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
-        		"  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
-        		"  `weekday` varchar(32) NOT NULL DEFAULT '',".
-        		"  `day_begin` varchar(8) NOT NULL DEFAULT '00:00',".
-        		"  `day_end` varchar(8) NOT NULL DEFAULT '00:00',".
-        		"  `to_group` varchar(2) NOT NULL DEFAULT '0',".
-        		"  `group_id` int(10) NOT NULL DEFAULT '0',".
-        		"  `order_num` int(4) NOT NULL DEFAULT '0',".
-        		"  `is_available` varchar(2) NOT NULL DEFAULT '0',".
-        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
-        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-        		"  PRIMARY KEY ('lid','dpid')".
-        		");",
-        	"nb_normal_promotion_detail" => " CREATE TABLE 'nb_normal_promotion_detail'('lid' int(10) NOT NULL,".
-        		"  'dpid' int(10) NOT NULL,".
-        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
-        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  `normal_promotion_id` int(10) NOT NULL DEFAULT '0',".
-        		"  `product_id` int(10) NOT NULL DEFAULT '0',".
-        		"  `is_set` varchar(2) NOT NULL,".
-        		"  `is_discount` varchar(2) NOT NULL,".
-        		"  `promotion_money` decimal(10,2) NOT NULL,".
-        		"  `promotion_discount` decimal(10,2) NOT NULL,".
-        		"  `order_num` int(4) NOT NULL DEFAULT '0',".
-        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
-        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
-        		"  PRIMARY KEY ('lid','dpid')".
         		");",
         	"nb_pad"=>" CREATE TABLE 'nb_pad'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
@@ -482,7 +445,7 @@ class DataSyncTables
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `selfcode` varchar(10) DEFAULT NULL ,".
-				"  `rfid` varchar(10) DEFAULT NULL ,".
+				"  `rfid` varchar(10) DEFAULT NULL UNIQUE,".
 				"  `level_id` int(10) NOT NULL DEFAULT '0',".
 				"  `name` varchar(20) NOT NULL DEFAULT '',".
 				"  `mobile` varchar(20) DEFAULT NULL ,".
@@ -741,6 +704,74 @@ class DataSyncTables
         		"  `code` varchar(10) NOT NULL,".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+          	"nb_normal_promotion" => " CREATE TABLE 'nb_normal_promotion'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `promotion_title` varchar(50) NOT NULL,".
+        		"  `main_picture` varchar(255) NOT NULL,".
+        		"  `promotion_abstract` varchar(255) NOT NULL,".
+        		"  `promotion_memo` text NOT NULL,".
+        		"  `promotion_type` varchar(2) NOT NULL,".
+        		"  `can_cupon` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"  `weekday` varchar(32) NOT NULL DEFAULT '',".
+        		"  `day_begin` varchar(8) NOT NULL DEFAULT '00:00',".
+        		"  `day_end` varchar(8) NOT NULL DEFAULT '00:00',".
+        		"  `to_group` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `group_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `order_num` int(4) NOT NULL DEFAULT '0',".
+        		"  `is_available` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY ('lid','dpid')".
+        		");",
+        	"nb_normal_promotion_detail" => " CREATE TABLE 'nb_normal_promotion_detail'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `normal_promotion_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `product_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `is_set` varchar(2) NOT NULL,".
+        		"  `is_discount` varchar(2) NOT NULL,".
+        		"  `promotion_money` decimal(10,2) NOT NULL,".
+        		"  `promotion_discount` decimal(10,2) NOT NULL,".
+        		"  `order_num` int(4) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY ('lid','dpid')".
+        		");",
+          	"nb_full_sent" => " CREATE TABLE 'nb_full_sent'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `title` varchar(64) NOT NULL,".
+        		"  `infor` varchar(255) NOT NULL,".
+        		"  `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
+        		"  `full_type` varchar(2) NOT NULL DEFAULT '0',".
+        	    "  `full_cost` decimal(10,2) NOT NULL DEFAULT '0.00',".
+                "  `extra_cost` decimal(10,2) NOT NULL DEFAULT '0.00',".
+                "  `sent_number` int(3) NOT NULL DEFAULT '1',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY ('lid','dpid')".
+        		");",
+        	"nb_full_sent_detail" => " CREATE TABLE 'nb_full_sent_detail'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `full_sent_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `product_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `is_discount` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `promotion_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `promotion_discount` decimal(10,2) NOT NULL DEFAULT '1.00',".
+        		"  `number` int(3) NOT NULL DEFAULT '1',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY ('lid','dpid')".
         		");",
         );
         

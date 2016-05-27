@@ -828,6 +828,69 @@ class WxOrder
 	 	
 	 	return $payMoney;
 	 }
+     /**
+      * 
+      * 输入金额订单
+      * 
+      */
+     public static function createBillOrder($dpid,$userId,$order_price,$offprice){
+        $time = time();
+        $accountNo = 0;
+        $orignprice = $order_price + $offprice;
+		$se = new Sequence("order");
+	    $orderId = $se->nextval();
+	    
+		$accountNo = self::getAccountNo($dpid,0,1,$orderId);
+		
+		$transaction=Yii::app()->db->beginTransaction();
+			try{
+        	    $insertOrderArr = array(
+        	        	'lid'=>$orderId,
+        	        	'dpid'=>$dpid,
+        	        	'create_at'=>date('Y-m-d H:i:s',$time),
+        	        	'update_at'=>date('Y-m-d H:i:s',$time), 
+        	        	'account_no'=>$accountNo,
+        	        	'user_id'=>$userId,
+        	        	'site_id'=>0,
+        	        	'is_temp'=>1,
+        	        	'number'=>1,
+                        'should_total'=>$order_price,
+                        'reality_total'=>$orignprice,
+        	        	'order_status'=>1,
+        	        	'order_type'=>5,
+        	        	'is_sync'=>DataSync::getInitSync(),
+        	        );
+        		$result = Yii::app()->db->createCommand()->insert('nb_order', $insertOrderArr);
+                
+                $se = new Sequence("order_product");
+		    	$orderProductId = $se->nextval();
+	         	$orderProductData = array(
+								'lid'=>$orderProductId,
+								'dpid'=>$dpid,
+								'create_at'=>date('Y-m-d H:i:s',$time),
+	        					'update_at'=>date('Y-m-d H:i:s',$time), 
+								'order_id'=>$orderId,
+								'set_id'=>0,
+								'product_id'=>0,
+								'product_name'=>'扫码支付',
+								'product_pic'=>'',
+								'product_type'=>0,
+								'price'=>$order_price,
+								'original_price'=>$orignprice,
+                                'offprice'=>$offprice,
+								'amount'=>1,
+								'product_order_status'=>9,
+								'is_sync'=>DataSync::getInitSync(),
+								);
+				 Yii::app()->db->createCommand()->insert('nb_order_product',$orderProductData);
+        	    $transaction->commit();
+                $msg = json_encode(array('status'=>true,'order_id'=>$orderId));
+			}catch (Exception $e) {
+				$transaction->rollback();
+				$msg = json_encode(array('status'=>false,'order_id'=>0));
+			}
+            return $msg;
+     }
 	 /**
 	  * 
 	  * 订单流水单号

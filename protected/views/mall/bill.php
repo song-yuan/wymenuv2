@@ -1,6 +1,7 @@
 <?php
 	$baseUrl = Yii::app()->baseUrl;
 	$this->setPageTitle('优惠买单');
+    $company = WxCompany::get($this->companyId);
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/style.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/weui.min.css">
@@ -23,6 +24,16 @@ footer{
 .page, body {
     background-color: #FBF9FE;
 }
+.page .logo{
+    width:2em;
+    height: 2em;
+    margin:0 auto;
+}
+.page .logo img{
+    width:100%;
+    height:100%;
+    border-radius:100%;
+}
 .weui_label{
 	width:5em;
 }
@@ -35,17 +46,16 @@ footer{
 }
 </style>
 <div class="page cell" >
-<form action="<?php echo Yii::app()->createUrl('/user/saveUserInfo',array('companyId'=>$this->companyId));?>" method="post" onsubmit="return validate()">
-	<div class="weui_cells_title">输入消费金额</div>
+    <div class="weui_cells_title">输入消费金额</div>
     <div class="weui_cells weui_cells_form">
-   		<div class="weui_cell">
+    	<div class="weui_cell">
             <div class="weui_cell_hd"><label class="weui_label">消费金额</label></div>
             <div class="weui_cell_bd weui_cell_primary">
                 <input class="weui_input" id="price" name="order[price]" type="number" placeholder="询问服务员后输入" value=""/>
             </div>
         </div>
     </div>
-    
+    <!--
     <div class="weui_cells_title">选择优惠券</div>
     <div class="weui_cells">
         <div class="weui_cell weui_cell_select weui_select_after">
@@ -59,6 +69,21 @@ footer{
             </div>
         </div>
     </div>
+    -->
+    <div class="weui_cells_title">满减优惠</div>
+    <div class="weui_cells weui_cells_radio">
+        <label id="off-price" class="weui_cell weui_check_label" for="x2">
+        	<div class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/mall/act_04.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>满30元减3元</p>
+            </div>
+            <div class="weui_cell_ft">
+                <input type="checkbox" class="weui_check" name="order[offprice]" id="x2" full="30" value="3">
+                <span class="weui_icon_checked"></span>
+            </div>
+        </label>
+    </div>
+    <div class="weui_cells_tips">提示:午餐不参与减价优惠!</div>
     
     <div class="weui_cells_title">选择支付方式</div>
     <div class="weui_cells weui_cells_checkbox">
@@ -68,56 +93,117 @@ footer{
                 <p>微信支付</p>
             </div>
             <div class="weui_cell_ft">
-                <input type="radio" class="weui_check" name="order[pay-type]" id="x11" checked="checked">
+                <input type="radio" class="weui_check" name="order[pay-type]" id="x11" checked="checked" value="0">
                 <span class="weui_icon_checked"></span>
             </div>
         </label>
+        <!--
         <label class="weui_cell weui_check_label" for="x12">
         <div class="weui_cell_hd"><img src="<?php echo $baseUrl;?>/img/mall/zfbpay.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
             <div class="weui_cell_bd weui_cell_primary">
                 <p>支付宝支付</p>
             </div>
             <div class="weui_cell_ft">
-                <input type="radio" name="order[pay-type]" class="weui_check" id="x12">
+                <input type="radio" name="order[pay-type]" class="weui_check" id="x12" value="1">
                 <span class="weui_icon_checked"></span>
             </div>
         </label>
+        -->
     </div>
-</form>
-<footer>
-    <div class="ft-lt">
-        <p>￥<span id="total" class="total">0.00</span></p>
+    <div class="logo">
+        <img src="<?php echo $company['logo']?$company['logo']:'img/logo.png';?>" />
     </div>
-    <div class="ft-rt">
-        <p><a id="payorder" href="javascript:;">确认买单</a></p>
+    
+    <footer>
+        <div class="ft-lt">
+            <p>￥<span id="total" class="total">0.00</span></p>
+        </div>
+        <div class="ft-rt">
+            <p><a id="payorder" href="javascript:;">确认买单</a></p>
+        </div>
+        <div class="clear"></div>
+    </footer>
+    <div class="weui_dialog_alert" id="dialog2" style="display: none;">
+    	<div class="weui_mask"></div>
+    	<div class="weui_dialog" style="font-size:15px;">
+    	    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
+    	    <div class="weui_dialog_bd"></div>
+    	    <div class="weui_dialog_ft">
+    	        <a href="javascript:;" id="confirm" class="weui_btn_dialog primary">确定</a>
+    	    </div>
+    	</div>
     </div>
-    <div class="clear"></div>
-</footer>
-<div class="weui_dialog_alert" id="dialog2" style="display: none;">
-	<div class="weui_mask"></div>
-	<div class="weui_dialog">
-	    <div class="weui_dialog_hd"><strong class="weui_dialog_title">提示</strong></div>
-	    <div class="weui_dialog_bd"></div>
-	    <div class="weui_dialog_ft">
-	        <a href="javascript:;" id="confirm" class="weui_btn_dialog primary">确定</a>
-	    </div>
-	</div>
-</div>
+    <input type="hidden" id="user-id" value="<?php echo $userId;?>"/>
 </div>
 <script type="text/javascript">
-  function validate() {
-        if($('#price').val() == ''){
-	        	$('#dialog2').find('.weui_dialog_bd').html('请填写金额');
-	            $('#dialog2').show();
-	            return false;
-           }
-		return success;
-    }
-    
     $('document').ready(function(){
-
+         $('#price').focus(function(){
+            if($('input[name="order[offprice]"]').is(':checked')){
+                $('input[name="order[offprice]"]').prop('checked',false);
+                var price = parseFloat($(this).val());
+                if(isNaN(price)){
+                    $('#total').html('0.00');
+                }else{
+                    $('#total').html(price.toFixed(2));
+                }
+            }
+         });
+        $('#price').keyup(function(){
+            var price = parseFloat($(this).val());
+            if(isNaN(price)){
+                $('#total').html('0.00');
+            }else{
+                $('#total').html(price.toFixed(2));
+            }
+        });
     	$('#confirm').click(function(){
     		$('#dialog2').hide();
     	});
+        $('input[name="order[offprice]"]').change(function(){
+            var price = parseFloat($('#price').val());
+            var full = parseFloat($(this).attr('full'));
+            var offprice = parseFloat($(this).val());
+            if($(this).is(':checked')){
+              if(price > full){
+                 var final = price-offprice;
+                 if(final < 0){
+                    final = 0;
+                 }
+                 $('#total').html(final.toFixed(2));
+              }else{
+                 $(this).prop('checked',false);
+              }
+            }else{
+               $('#total').html(price.toFixed(2)); 
+            }
+        });
+        $('#payorder').click(function(){
+            if($('#price').val() == ''){
+	        	$('#dialog2').find('.weui_dialog_bd').html('请填写金额');
+	            $('#dialog2').show();
+	            return;
+           }
+           var offprice = 0;
+           if($('input[name="order[offprice]"]').is(':checked')){
+                offprice = $('input[name="order[offprice]"]').val();
+           }
+           var userId = $('#user-id').val();
+           var orderPrice = $('#total').html();
+           var type = $('input[name="order[pay-type]"]:checked').val();
+           $.ajax({
+                url:'<?php echo $this->createUrl('/mall/createBillOrder',array('companyId'=>$this->companyId));?>',
+                type:'POST',
+                data:{userId:userId,orderPrice:orderPrice,offprice:offprice},
+                success:function(msg){
+                    if(msg.status){
+                        location.href = "<?php echo $this->createUrl('/mall/payBillOrder',array('companyId'=>$this->companyId));?>&oid="+msg.order_id+"&uid="+userId+"&type="+type;
+                    }else{
+                        $('#dialog2').find('.weui_dialog_bd').html('请请重新支付！');
+	                    $('#dialog2').show();
+                    }
+                },
+                dataType:'json'
+           });
+        });
     });
 </script>

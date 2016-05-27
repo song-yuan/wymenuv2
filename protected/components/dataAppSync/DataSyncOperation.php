@@ -149,6 +149,7 @@ class DataSyncOperation
     {
         $data = array();
         $data['order'] = array();
+        $data['member_card'] = array();
         $transaction = Yii::app()->db->beginTransaction();
         try{
             $sql = 'select * from nb_order where dpid='.$dpid.' and order_status=3 and 	is_sync<>0';
@@ -174,10 +175,18 @@ class DataSyncOperation
                 $sql = 'update nb_order set is_sync=0 where dpid='.$dpid.' and lid='.$result['lid'];
                 Yii::app()->db->createCommand($sql)->execute();
             }
+            $sql = 'select * from nb_member_card where dpid='.$dpid.' and delete_flag=0 and is_sync<>0';
+            $memberCard = Yii::app()->db->createCommand($sql)->queryAll();
+            foreach($memberCard as $card){
+                array_push($data['member_card'],$card);
+                $sql = 'update nb_member_card set is_sync=0 where dpid='.$dpid.' and lid='.$card['lid'];
+                Yii::app()->db->createCommand($sql)->execute();
+            }
             $transaction->commit();//事物结束 
         }catch (Exception $e) {
             $transaction->rollback();//回滚函数
             $data['order'] = array();
+            $data['member_card'] = array();
         }
         return json_encode($data);
     }
@@ -348,6 +357,11 @@ class DataSyncOperation
     {
         $dpid = $data['dpid'];
         $orderData = $data['data'];
+        if(isset($data['is_pos'])&&$data['is_pos']==1){
+            $isSync = 0;
+        }else{
+            $isSync = DataSync::getInitSync();
+        }
         $obj = json_decode($orderData);
 
         $time = time();
@@ -365,7 +379,7 @@ class DataSyncOperation
             'mobile' => $obj->mobile,
             'sex' => $obj->sex,
             'ages' => $obj->ages,
-            'is_sync' => DataSync::getInitSync(),
+            'is_sync' => $isSync,
             );
         $result = Yii::app()->db->createCommand()->insert('nb_member_card', $inserMemberCardrArr);
         if ($result) {
@@ -375,7 +389,7 @@ class DataSyncOperation
         }
     }
     /**
-     * 增加会员卡
+     * 会员卡支付
      * 
      */
     public static function payMemberCard($data)
