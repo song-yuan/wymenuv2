@@ -96,13 +96,13 @@
 					<ul class="sub-menu">
 						<li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('index'))) echo 'active';?>"><a href="<?php echo $this->createUrl('weixin/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','公众号设置');?></a></li>
 						<li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('menu'))) echo 'active';?>"><a href="<?php echo $this->createUrl('weixin/menu',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','发布菜单');?></a></li>
-                                                <li class="<?php if(in_array(Yii::app()->controller->id,array('wxlevel','wxcashback','wxpoint','wxpointvalid','wxrecharge')) && in_array($this->getAction()->getId(),array('index','create','update'))) echo 'active';?>"><a href="<?php echo $this->createUrl('wxlevel/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','微信会员设置');?></a></li><!--等级、积分有效期、积分比例、返现的比率、充值阶梯-->
-                                                <li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('wxmember'))) echo 'active';?>"><a href="<?php echo $this->createUrl('weixin/wxmember',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','微信会员列表');?></a></li><!--会员信息、历史积分、余额、相关营销品（优惠、代金券）、积分记录、充值记录、返现记录、订单记录等-->
-                                                <li class="<?php if(Yii::app()->controller->id == 'member' && in_array($this->getAction()->getId(),array('index','create','update','charge'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','传统卡会员列表');?></a></li>
+                        <li class="<?php if(in_array(Yii::app()->controller->id,array('wxlevel','wxcashback','wxpoint','wxpointvalid','wxrecharge')) && in_array($this->getAction()->getId(),array('index','create','update'))) echo 'active';?>"><a href="<?php echo $this->createUrl('wxlevel/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','微信会员设置');?></a></li><!--等级、积分有效期、积分比例、返现的比率、充值阶梯-->
+                        <li class="<?php if(Yii::app()->controller->id == 'weixin' && in_array($this->getAction()->getId(),array('wxmember'))) echo 'active';?>"><a href="<?php echo $this->createUrl('weixin/wxmember',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','微信会员列表');?></a></li><!--会员信息、历史积分、余额、相关营销品（优惠、代金券）、积分记录、充值记录、返现记录、订单记录等-->
+                        <li class="<?php if(Yii::app()->controller->id == 'member' && in_array($this->getAction()->getId(),array('index','create','update','charge'))) echo 'active';?>"><a href="<?php echo $this->createUrl('member/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','传统卡会员列表');?></a></li>
 					</ul>
 				</li>
 
-								<li class="<?php if(in_array(Yii::app()->controller->id , array('cashcard','normalpromotion','wxRedpacket','privatepromotion','fullSentPromotion','cupon','gift','wxcard','promotionActivity','discount','screen'))) echo 'active';?>">
+								<li class="<?php if(in_array(Yii::app()->controller->id , array('cashcard','normalpromotion','wxRedpacket','privatepromotion','fullSentPromotion','fullMinusPromotion','cupon','gift','wxcard','promotionActivity','discount','screen'))) echo 'active';?>">
 
 					<a href="">
 					<i class="fa fa-comments"></i> 

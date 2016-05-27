@@ -28,7 +28,7 @@ class FullSentPromotionController extends BackendController
     	$criteria = new CDbCriteria;
     	$criteria->select = 't.*';
     	$criteria->order = ' t.lid desc';
-    	$criteria->addCondition("t.dpid= ".$this->companyId);
+    	$criteria->addCondition("t.full_type = 0 and t.dpid= ".$this->companyId);
     	$criteria->addCondition('delete_flag=0');
     	//$criteria->params[':brandId'] = $brand->brand_id;
     
@@ -77,45 +77,11 @@ class FullSentPromotionController extends BackendController
 		
 			$se=new Sequence("full_sent");
 			$model->lid = $se->nextval();
-// 			if(!empty($groupID)){
-// 				//$sql = 'delete from nb_private_branduser where private_promotion_id='.$lid.' and dpid='.$this->companyId;
-// 				//$command=$db->createCommand($sql);
-// 				//$command->execute();
-// 				foreach ($gropids as $gropid){
-// 					$userid = new Sequence("private_branduser");
-// 					$id = $userid->nextval();
-// 					$data = array(
-// 							'lid'=>$id,
-// 							'dpid'=>$this->companyId,
-// 							'create_at'=>date('Y-m-d H:i:s',time()),
-// 							'update_at'=>date('Y-m-d H:i:s',time()),
-// 							'private_promotion_id'=>$model->lid,
-// 							'to_group'=>"2",
-// 							'is_used'=>"1",
-// 							'brand_user_lid'=>$gropid,
-// 							'cupon_source'=>'0',
-// 							'delete_flag'=>'0',
-// 							'is_sync'=>$is_sync,
-// 					);
-// 					$command = $db->createCommand()->insert('nb_private_branduser',$data);
-// 					//var_dump($gropid);exit;
-// 				}
-// 			}
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
 			$model->is_sync = $is_sync;
-			//$transaction->commit(); //提交事务会真正的执行数据库操作
-			//return true;
-			//}catch (Exception $e) {
-			//	$transaction->rollback(); //如果操作失败, 数据回滚
-				//Yii::app()->end(json_encode(array("status"=>"fail")));
-			//	return false;
-			//}
-			
-			//$py=new Pinyin();
-			//$model->simple_code = $py->py($model->product_name);
-			//var_dump($model);exit;
+			$model->full_type = '0';
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('fullSentPromotion/index' , 'companyId' => $this->companyId ));
