@@ -11,6 +11,7 @@ class DataSyncTables
     //然后根据企业id获取数据，下载到本地后删除所有
     //原有的基础数据，然后插入新的。    
     public $baseTableName= array(
+        array("name"=>"同步失败信息","table"=>"nb_sync_failure"),
         array("name"=>"店铺信息","table"=>"nb_local_company"),
         array("name"=>"用户","table"=>"nb_user"),
         array("name"=>"楼层区域","table"=>"nb_floor"),
@@ -89,20 +90,20 @@ class DataSyncTables
     
     /**
      * 根据表名获取表结构
+     * sync_type 表示同步类型
+     * 0 表示打印 1 同步云端
+     * 
      */
     public function getTableStructure($tablename)
     {
         $tableStructureAll=array(
-        	"nb_pad_setting"=>" CREATE TABLE IF NOT EXISTS 'nb_pad_setting'('lid' int(10) NOT NULL,".
+        	"nb_sync_failure"=>" CREATE TABLE IF NOT EXISTS 'nb_sync_failure'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  `pad_code` varchar(50) NOT NULL,".
-				"  `pad_sales_type` varchar(2) NOT NULL,".
-				"  `pad_type` varchar(2) NOT NULL,".
-				"  `pad_ip` varchar(20) NOT NULL,".
-				"  `pad_fip` varchar(20) NOT NULL DEFAULT '0',".
-				"  `is_product_free` varchar(1) NOT NULL  DEFAULT '0',".
+        		"  `sync_type` varchar(2) NOT NULL DEFAULT '0',".
+                "  `sync_url` varchar(255) NOT NULL DEFAULT '0',".
+				"  `content` text NOT NULL,".
 				"  `delete_flag` varchar(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"   PRIMARY KEY (`lid`,`dpid`)".
