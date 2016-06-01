@@ -99,7 +99,7 @@ public function actionGetData(){
  * 
  */
  public function actionCreateOrder(){
- 	$result = DataSyncOperation::operateOrder($_POST);
+ 	$result = DataSyncOperation::operateOrder($_GET);
  	echo $result;exit;
 }
 /**
