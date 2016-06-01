@@ -67,9 +67,7 @@ class ProductBomController extends BackendController
 	public function actionDetailUpdate(){
         $pblid = Yii::app()->request->getParam('pblid');
         $lid = Yii::app()->request->getParam('lid');
-      // var_dump($pblid);exit;
 		$model = ProductBom::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		//var_dump($model);exit;
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductBom');
@@ -140,10 +138,8 @@ class ProductBomController extends BackendController
 					$options[$model->pid][$model->lid] = $model->category_name;
 				}
 			}
-			//var_dump($options);exit;
 		}
 		foreach ($options as $k=>$v) {
-			//var_dump($k,$v);exit;
 			$model = MaterialCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
 			$optionsReturn[$model->category_name] = $v;
 		}
@@ -159,21 +155,16 @@ class ProductBomController extends BackendController
 	private function getMaterials($categoryId){
 		if($categoryId==0)
 		{
-			//var_dump ('2',$categoryId);exit;
 			$materials = ProductMaterial::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
 		}else{
-			//var_dump ('3',$categoryId);exit;
 			$materials = ProductMaterial::model()->findAll('dpid=:companyId and category_id=:categoryId and delete_flag=0' , array(':companyId' => $this->companyId,':categoryId'=>$categoryId)) ;
 		}
 		$materials = $materials ? $materials : array();
-		//var_dump($products);exit;
 		return $materials;
-		//return CHtml::listData($products, 'lid', 'product_name');
 	}
 
 	public function actionGetChildren(){
 		$categoryId = Yii::app()->request->getParam('pid',0);
-		//$productSetId = Yii::app()->request->getParam('$productSetId',0);
 		if(!$categoryId){
 			Yii::app()->end(json_encode(array('data'=>array(),'delay'=>400)));
 		}
@@ -194,7 +185,6 @@ class ProductBomController extends BackendController
 		$companyId = Yii::app()->request->getParam('companyId',0);
 		$treeDataSource = array('data'=>FALSE,'delay'=>400);
 		$material= ProductBom::model()->find('t.dpid = :dpid and t.material_id = :materialid and t.delete_flag=0',array(':dpid'=>$companyId,':setid'=>$productBomId,':productid'=>$materialId));
-		//var_dump($productId,$productSetId,$companyId,$product);exit;
 		if(!empty($material)){
 			$treeDataSource['data'] = TRUE;
 		}
