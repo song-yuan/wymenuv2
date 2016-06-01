@@ -46,6 +46,7 @@ class ProductMaterialController extends BackendController
 		$model = new ProductMaterial();
 		$modelStock = new ProductMaterialStock();
 		$model->dpid = $this->companyId ;
+		$modelStock->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductMaterial');
             $se=new Sequence("product_material");
