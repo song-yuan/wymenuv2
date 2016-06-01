@@ -43,25 +43,19 @@
 	<?php $this->endWidget(); ?>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			//alert('123435');
 			$('#selectCategory').change(function(){
 				var cid = $(this).val();
-				//alert('<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid);
-				//alert($('#ProductSetDetail_product_id').html());
 				$.ajax({
 					url:'<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
 					type:'GET',
 					dataType:'json',
 					success:function(result){
-						//alert(result.data);
 						var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
 						if(result.data.length){
-							//alert(1);
 							$.each(result.data,function(index,value){
 								str = str + '<option value="'+value.id+'">'+value.name+'</option>';
 							});
 						}
-						//alert(str);
 						$('#ProductBom_material_id').html(str);
 					}
 				});

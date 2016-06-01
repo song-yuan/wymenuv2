@@ -44,6 +44,7 @@ class ProductMaterialController extends BackendController
 	}
 	public function actionCreate(){
 		$model = new ProductMaterial();
+		$modelStock = new ProductMaterialStock();
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductMaterial');
@@ -52,8 +53,14 @@ class ProductMaterialController extends BackendController
             $model->create_at = date('Y-m-d H:i:s',time());
             $model->update_at = date('Y-m-d H:i:s',time());
             $model->delete_flag = '0';
-         // var_dump($model);exit;
-			if($model->save()){
+            
+            $se=new Sequence("product_material_stock");
+            $modelStock->lid = $se->nextval();
+            $modelStock->create_at = date('Y-m-d H:i:s',time());
+            $modelStock->update_at = date('Y-m-d H:i:s',time());
+            $modelStock->material_id = $model->lid;
+            
+			if($model->save()&&$modelStock->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
 			}
