@@ -54,20 +54,7 @@
 				<?php echo $form->error($model, 'sales_unit_id' )?>
 			</div>
 		</div>
-		<!--<div class="form-group" <?php if($model->hasErrors('stock')) echo 'has-error';?>>
-			<?php echo $form->label($model, 'stock',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'stock',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock')));?>
-				<?php echo $form->error($model, 'stock' )?>
-			</div>
-		</div>
-        <div class="form-group" <?php if($model->hasErrors('stock_cost')) echo 'has-error';?>>
-			<?php echo $form->label($model, 'stock_cost',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'stock_cost',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock_cost')));?>
-				<?php echo $form->error($model, 'stock_cost' )?>
-			</div>
-		</div>-->
+		
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
 				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
