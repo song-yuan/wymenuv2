@@ -240,6 +240,7 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function operateOrder($data) {
+		var_dump($data);exit;
 		$dpid = $data ['dpid'];
 		$orderData = $data ['data'];
 		$obj = json_decode ( $orderData );
