@@ -207,7 +207,7 @@ class AlipayController extends Controller
                 //如果有做过处理，不执行商户的业务程序
                 //下单，返回页面，单元清单。。。
                 $alipayNotify->checkNotify($_GET);
-                
+                $ret_status= "验证成功。";
             } else {
                 //echo "trade_status=".$_GET['trade_status'];
                 $ret_status= "非正常返回，验证成功。";
@@ -218,6 +218,7 @@ class AlipayController extends Controller
             //如要调试，请看alipay_notify.php页面的verifyReturn函数
             $ret_status="验证失败";
         }
+        echo $ret_status;
         exit;
 	} 
     public function actionNotify()
