@@ -12,8 +12,6 @@ class WxBrandUser {
 	public static function get($userId,$dpid) {
 		$sql = 'SELECT * FROM nb_brand_user WHERE lid = ' .$userId .' and dpid = '.$dpid;
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
-		if(!$brandUser)
-			throw new Exception('不存在该会员信息');
 		return $brandUser;
 	}
 	/**
