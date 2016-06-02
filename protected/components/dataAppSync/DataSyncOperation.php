@@ -311,12 +311,14 @@ class DataSyncOperation {
 						'is_sync' => DataSync::getInitSync () 
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_product', $orderProductData );
-				// 消耗原材料库存
-				$productBoms = self::getBom($dpid, $product->product_id);
-				if(!empty($productBoms)){
-					foreach ($productBoms as $bom){
-						$stock = $bom['number']/$bom['unit_ratio'];
-						self::updateMaterialStock($dpid,$bom['material_id'],$stock);
+				if($isSync==0){
+					// 消耗原材料库存
+					$productBoms = self::getBom($dpid, $product->product_id);
+					if(!empty($productBoms)){
+						foreach ($productBoms as $bom){
+							$stock = $bom['number']/$bom['unit_ratio'];
+							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
+						}
 					}
 				}
 			}

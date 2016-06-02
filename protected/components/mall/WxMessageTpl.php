@@ -35,6 +35,9 @@ class WxMessageTpl
 		$company = WxCompany::get($this->dpid);
 		$user = WxBrandUser::get($this->userId,$this->dpid);
 		
+		if(!$user){
+			return;
+		}
 		$openId = $user['openid'];
 		$msgTplId = $this->msgTpl['message_tpl_id'];
 		

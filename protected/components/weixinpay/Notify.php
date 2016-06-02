@@ -93,6 +93,17 @@ class Notify extends WxPayNotify
 		}else{
 			WxSite::updateTempSiteStatus($order['site_id'],$order['dpid'],3);
 		}
+		//减少库存
+		$orderProducts = WxOrder::getOrderProduct($orderIdArr[0], $orderIdArr[1]);
+		foreach($orderProducts as $product){
+			$productBoms = DataSyncOperation::getBom($dpid, $product['product_id']);
+			if(!empty($productBoms)){
+				foreach ($productBoms as $bom){
+					$stock = $bom['number']/$bom['unit_ratio'];
+					DataSyncOperation::updateMaterialStock($dpid,$bom['material_id'],$stock);
+				}
+			}
+		}
 		//发送模板消息通知
 		new WxMessageTpl($order['dpid'],$order['user_id'],0,$order);
 	}
