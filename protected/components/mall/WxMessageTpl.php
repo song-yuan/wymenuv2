@@ -36,6 +36,7 @@ class WxMessageTpl
 		$user = WxBrandUser::get($this->userId,$this->dpid);
 		
 		if(!$user){
+			$this->megTplData = array(array());
 			return;
 		}
 		$openId = $user['openid'];
