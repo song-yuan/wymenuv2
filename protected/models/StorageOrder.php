@@ -135,4 +135,9 @@ class StorageOrder extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	public static function updateStatus($dpid,$id)
+	{
+		$sql = 'update nb_storage_order set status=2 where dpid='.$dpid.' and lid='.$id;
+		Yii::app()->db->createCommand($sql)->execute();
+	}
 }

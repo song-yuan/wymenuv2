@@ -22,7 +22,7 @@ class ProductMaterialController extends BackendController
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
-		$criteria->with = array('company','category');
+		$criteria->with = array('company','category','material_stock');
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
 		if($categoryId){
 			$criteria->condition.=' and t.category_id = '.$categoryId;
@@ -33,7 +33,6 @@ class ProductMaterialController extends BackendController
 		$pages->applyLimit($criteria);
 		$models = ProductMaterial::model()->findAll($criteria);
 		$categories = $this->getCategories();
-		//var_dump($models);exit;
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,

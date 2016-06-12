@@ -85,8 +85,9 @@
 								<th><?php echo yii::t('app','采购商地址');?></th>
 								<th><?php echo yii::t('app','交货日期');?></th>
 								<th><?php echo yii::t('app','备注');?></th>
-								<th>&nbsp;</th>
-								<th>&nbsp;</th>
+								<th><?php echo yii::t('app','状态');?></th>
+								<th><?php echo yii::t('app','采购详情');?></th>
+								<th><?php echo yii::t('app','操作');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -101,6 +102,7 @@
 								<td><?php echo $model->organization_address;?></td>
 								<td><?php echo $model->delivery_date;?></td>
 								<td><?php echo $model->remark;?></td>
+								<td><span style="color: red;"><?php if($model->status==0){echo '待审核';}elseif($model->status==1){ echo '已审核';}elseif($model->status==2){ echo '已驳回';}?></span></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('purchaseOrder/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','订单详情');?></a>
 								</td>
@@ -110,7 +112,7 @@
 							</tr>
 						<?php endforeach;?>
 						<?php else:?>
-							<td colspan="8">没有找到数据</td>
+							<td colspan="11">没有找到数据</td>
 						<?php endif;?>
 					</tbody>
 					</table>

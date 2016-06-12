@@ -38,6 +38,7 @@ class CommitController extends BackendController
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->commit_account_no = date('YmdHis',time()).substr($model->lid,-4);
 			$model->delete_flag = '0';
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
@@ -81,7 +82,8 @@ class CommitController extends BackendController
 	}
 	public function actionDetailIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
-        $clid = Yii::app()->request->getParam('lid');//var_dump($clid);exit;
+        $clid = Yii::app()->request->getParam('lid');
+        $commit = Commit::model()->find('lid=:id and dpid=:dpid',array(':id'=>$clid,':dpid'=>$this->companyId));
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.dpid='.$this->companyId .' and t.commit_id='.$clid;
 		$pages = new CPagination(CommitDetail::model()->count($criteria));
@@ -91,6 +93,7 @@ class CommitController extends BackendController
 		//var_dump($categoryId);exit;
 		$this->render('detailindex',array(
 				'models'=>$models,
+				'commit'=>$commit,
 				'pages'=>$pages,
 				'categoryId'=>$categoryId,
                 'clid'=>$clid,
@@ -153,6 +156,66 @@ class CommitController extends BackendController
 				'categoryId'=>$categoryId,
 				'materials'=>$materialslist
 		));
+	}
+	public function actionCommitVerify(){
+		$pid = Yii::app()->request->getParam('pid');
+		$type = Yii::app()->request->getParam('type');
+		$commit = Commit::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		$commit->status = $type;
+		if($commit->update()){
+			echo 'true';
+		}else{
+			echo 'false';
+		}
+		exit;
+	}
+	public function actionStorageOrder(){
+		$pid = Yii::app()->request->getParam('pid');
+		$commit = Commit::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		if($commit){
+			$transaction = Yii::app()->db->beginTransaction();
+			try{
+				$model = new StorageOrder();
+				$model->dpid = $this->companyId ;
+					
+				$se=new Sequence("storage_order");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->manufacturer_id = $commit->callout_id;
+				$model->organization_id = $commit->callin_id;
+				$model->admin_id = $commit->admin_id;
+				$model->storage_account_no = date('YmdHis',time()).substr($model->lid,-4);
+				$model->purchase_account_no = $commit->commit_account_no;
+				$model->storage_date = $commit->commit_date;
+				$model->remark = $commit->remark;
+				$model->status = 1;
+				// 入库订单
+				$model->save();
+				
+				$commitDetails = CommitDetail::model()->findAll('dpid=:dpid and commit_id=:pid',array(':dpid'=>$this->companyId,':pid'=>$pid));
+
+				foreach ($commitDetails as $detail){
+					$modeldetail = new StorageOrderDetail();
+					$modeldetail->dpid = $this->companyId ;
+					$se=new Sequence("storage_order_detail");
+					$modeldetail->lid = $se->nextval();
+					$modeldetail->create_at = date('Y-m-d H:i:s',time());
+					$modeldetail->update_at = date('Y-m-d H:i:s',time());
+					$modeldetail->storage_id = $model->lid;
+					$modeldetail->material_id = $detail->material_id;
+					$modeldetail->stock = $detail->stock;
+					$modeldetail->save();
+					
+				}
+				$transaction->commit();
+				echo 'true';
+			}catch (Exception $e){
+				$transaction->rollback();
+				echo 'false';
+			}
+		}
+		exit;
 	}
 	private function getCategories(){
 		$criteria = new CDbCriteria;

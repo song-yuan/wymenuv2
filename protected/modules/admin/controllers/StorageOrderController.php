@@ -55,7 +55,8 @@ class StorageOrderController extends BackendController
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->delete_flag = '0';
+			$model->storage_account_no = date('YmdHis',time()).substr($model->lid,-4);
+			$model->status = 1;
 
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
@@ -103,13 +104,15 @@ class StorageOrderController extends BackendController
 	}
 	public function actionDetailIndex(){
 		$criteria = new CDbCriteria;
-		$slid = Yii::app()->request->getParam('lid');//var_dump($slid);exit;
+		$slid = Yii::app()->request->getParam('lid');
+		$storage = StorageOrder::model()->find('lid=:id and dpid=:dpid',array(':id'=>$slid,':dpid'=>$this->companyId));
 		$criteria->condition =  't.dpid='.$this->companyId .' and t.storage_id='.$slid;
 		$pages = new CPagination(StorageOrderDetail::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = StorageOrderDetail::model()->findAll($criteria);
 		$this->render('detailindex',array(
+				'storage'=>$storage,
 				'models'=>$models,
 				'pages'=>$pages,
 				'slid'=>$slid,
@@ -166,6 +169,42 @@ class StorageOrderController extends BackendController
 				'categoryId'=>$categoryId,
 				'materials'=>$materialslist
 		));
+	}
+	public function actionStorageIn(){
+		$sid = Yii::app()->request->getParam('sid');
+		$storage = StorageOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$sid,':dpid'=>$this->companyId));
+		if($storage->status){
+			$storageDetails = StorageOrderDetail::model()->findAll('storage_id=:sid and dpid=:dpid and delete_flag=0',array(':sid'=>$sid,':dpid'=>$this->companyId));
+			$transaction = Yii::app()->db->beginTransaction();
+			try{
+				foreach ($storageDetails as $detail){
+					$stock = $detail['stock'];
+					$stockCost = ($detail['stock']-$detail['free_stock'])*$detail['price'];
+					ProductMaterialStock::updateStock($this->companyId, $detail['material_id'], $stock, $stockCost);
+					
+					//入库日志
+					$materialStockLog = new MaterialStockLog();
+					$se=new Sequence("material_stock_log");
+					$materialStockLog->lid = $se->nextval();
+					$materialStockLog->dpid = $this->companyId;
+					$materialStockLog->create_at = date('Y-m-d H:i:s',time());
+					$materialStockLog->update_at = date('Y-m-d H:i:s',time());
+					$materialStockLog->material_id = $detail['material_id'];
+					$materialStockLog->type = 0;
+					$materialStockLog->stock_num = $stock;
+					$materialStockLog->resean = '入库单入库';
+					$materialStockLog->save();
+				}
+				StorageOrder::updateStatus($this->companyId, $sid);
+				$transaction->commit();
+				echo 'true';exit;
+			}catch (Exception $e){
+				$transaction->rollback();
+				echo 'false';exit;
+			}
+		}
+		echo 'false';
+		exit;
 	}
 	private function getCategories(){
 		$criteria = new CDbCriteria;

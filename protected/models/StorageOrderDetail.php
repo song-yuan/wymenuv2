@@ -33,13 +33,14 @@ class StorageOrderDetail extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('update_at,', 'required'),
+			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, material_id, price, stock, free_stock', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
 			array('material_id', 'compare', 'compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择品项信息')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, material_id, price, stock, free_stock, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, material_id, price, stock, free_stock, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,7 +68,7 @@ class StorageOrderDetail extends CActiveRecord
 			'update_at' => '更新时间',
 			'material_id' => '品项名称',
 			'price' => '入库进价',
-			'stock' => '入库库存',
+			'stock' => '入库库存(含赠品)',
 			'free_stock' => '赠品数',
 			'is_sync' => 'Is Sync',
 		);
@@ -99,6 +100,7 @@ class StorageOrderDetail extends CActiveRecord
 		$criteria->compare('price',$this->price,true);
 		$criteria->compare('stock',$this->stock,true);
 		$criteria->compare('free_stock',$this->free_stock,true);
+		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
 		return new CActiveDataProvider($this, array(

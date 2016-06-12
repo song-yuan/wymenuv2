@@ -52,6 +52,7 @@ class PurchaseOrderController extends BackendController
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->purchase_account_no = date('YmdHis',time()).substr($model->lid,-4);
 			$model->delete_flag = '0';
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
@@ -98,7 +99,9 @@ class PurchaseOrderController extends BackendController
 		}
 	}
 	public function actionDetailIndex(){
-		$polid = Yii::app()->request->getParam('lid');//var_dump($polid);exit;
+		$polid = Yii::app()->request->getParam('lid');
+		
+		$purchase = PurchaseOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$polid,':dpid'=>$this->companyId));
 		$criteria = new CDbCriteria;
         $criteria->condition =  't.dpid='.$this->companyId .' and t.purchase_id='.$polid;
 		$pages = new CPagination(PurchaseOrderDetail::model()->count($criteria));
@@ -108,6 +111,7 @@ class PurchaseOrderController extends BackendController
 		//var_dump($categoryId);exit;
 		$this->render('detailindex',array(
 				'models'=>$models,
+				'purchase'=>$purchase,
 				'pages'=>$pages,
 				'polid'=>$polid,
 		));
@@ -115,7 +119,7 @@ class PurchaseOrderController extends BackendController
 	public function actionDetailCreate(){
 		$model = new PurchaseOrderDetail();
 		$model->dpid = $this->companyId ;
-        $polid = Yii::app()->request->getParam('lid');//var_dump($polid);exit;
+        $polid = Yii::app()->request->getParam('lid');
         $model->purchase_id=$polid;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PurchaseOrderDetail');
@@ -142,7 +146,7 @@ class PurchaseOrderController extends BackendController
 	}
 
 	public function actionDetailUpdate(){
-		$lid = Yii::app()->request->getParam('lid');//var_dump($id);exit;
+		$lid = Yii::app()->request->getParam('lid');
 		$model = PurchaseOrderDetail::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $lid,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -164,6 +168,67 @@ class PurchaseOrderController extends BackendController
 				'categoryId'=>$categoryId,
 				'materials'=>$materialslist
 		));
+	}
+	public function actionPurchaseVerify(){
+		$pid = Yii::app()->request->getParam('pid');
+		$type = Yii::app()->request->getParam('type');
+		$purchase = PurchaseOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		$purchase->status = $type;
+		if($purchase->update()){
+			echo 'true';
+		}else{
+			echo 'false';
+		}
+		exit;
+	}
+	public function actionStorageOrder(){
+		$pid = Yii::app()->request->getParam('pid');
+		$purchase = PurchaseOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		if($purchase){
+			$transaction = Yii::app()->db->beginTransaction();
+			try{
+				$model = new StorageOrder();
+				$model->dpid = $this->companyId ;
+					
+				$se=new Sequence("storage_order");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->manufacturer_id = $purchase->manufacturer_id;
+				$model->organization_id = $purchase->organization_id;
+				$model->admin_id = $purchase->admin_id;
+				$model->storage_account_no = date('YmdHis',time()).substr($model->lid,-4);
+				$model->purchase_account_no = $purchase->purchase_account_no;
+				$model->storage_date = $purchase->delivery_date;
+				$model->remark = $purchase->remark;
+				$model->status = 1;
+				// 入库订单
+				$model->save();
+					
+				$purchaseDetails = PurchaseOrderDetail::model()->findAll('dpid=:dpid and purchase_id=:pid',array(':dpid'=>$this->companyId,':pid'=>$pid));
+				
+				foreach ($purchaseDetails as $detail){
+					$modeldetail = new StorageOrderDetail();
+					$modeldetail->dpid = $this->companyId ;
+					$se=new Sequence("storage_order_detail");
+					$modeldetail->lid = $se->nextval();
+					$modeldetail->create_at = date('Y-m-d H:i:s',time());
+					$modeldetail->update_at = date('Y-m-d H:i:s',time());
+					$modeldetail->storage_id = $model->lid;
+					$modeldetail->material_id = $detail->material_id;
+					$modeldetail->price = $detail->price;
+					$modeldetail->stock = $detail->stock;
+					$modeldetail->free_stock = $detail->free_stock;
+					$modeldetail->save();
+				}
+				$transaction->commit();
+				echo 'true';
+			}catch (Exception $e){
+				$transaction->rollback();
+				echo 'false';
+			}
+		}
+		exit;
 	}
 	private function getCategories(){
 		$criteria = new CDbCriteria;
