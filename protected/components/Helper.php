@@ -67,9 +67,8 @@ class Helper
 		$companies = OrganizationInformation::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
 		return CHtml::listData($companies, 'lid', 'organization_name');
 	}
-	static public function genUsername() {//管理员
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$companies = User::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
+	static public function genUsername($companyId) {//管理员
+		$companies = User::model()->findAll('delete_flag=0 and dpid='.$companyId.' and status=1 and role >='.Yii::app()->user->role) ;
 		// var_dump($companies);exit;
 		return CHtml::listData($companies, 'lid', 'username');
 	}

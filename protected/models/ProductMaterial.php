@@ -63,6 +63,7 @@ class ProductMaterial extends CActiveRecord
 		'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 		'category' => array(self::BELONGS_TO , 'MaterialCategory' ,'','on'=> 't.category_id=category.lid and category.dpid=t.dpid'),
 		'unit' =>array(self::BELONGS_TO , 'MaterialUnit','','on'=>'t.stock_unit_id=unit.lid or t.sales_unit_id =unit.lid'),
+		'material_stock' => array(self::HAS_ONE , 'ProductMaterialStock' , '', 'on'=>'t.lid  = material_stock.material_id'),
 		);
 	}
 

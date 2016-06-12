@@ -17,20 +17,6 @@
 	</style>
 	
 	<div class="form-body">
-		<div class="form-group <?php if($model->hasErrors('commit_account_no')) echo 'has-error';?>">
-			<?php echo $form->label($model, 'commit_account_no',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'commit_account_no',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('commit_account_no')));?>
-				<?php echo $form->error($model, 'commit_account_no' )?>
-			</div>
-		</div>
-		<div class="form-group <?php if($model->hasErrors('commit_date')) echo 'has-error';?>">
-			<?php echo $form->label($model, 'commit_date',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->textField($model, 'commit_date',array('class' => 'form-control ui_timepicker','placeholder'=>$model->getAttributeLabel('commit_date')));?>
-				<?php echo $form->error($model, 'commit_date' )?>
-			</div>
-		</div>
 		<div class="form-group <?php if($model->hasErrors('callout_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'callout_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
@@ -48,8 +34,15 @@
 		<div class="form-group <?php if($model->hasErrors('admin_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'admin_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'admin_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genUsername() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('admin_id')));?>
+				<?php echo $form->dropDownList($model, 'admin_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genUsername($this->companyId) ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('admin_id')));?>
 				<?php echo $form->error($model, 'admin_id' )?>
+			</div>
+		</div>
+		<div class="form-group <?php if($model->hasErrors('commit_date')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'commit_date',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'commit_date',array('class' => 'form-control ui_timepicker','placeholder'=>$model->getAttributeLabel('commit_date')));?>
+				<?php echo $form->error($model, 'commit_date' )?>
 			</div>
 		</div>
 		<div class="form-group">
@@ -59,13 +52,6 @@
 				<?php echo $form->error($model, 'remark' )?>
 			</div>
 		</div>
-        <!--<div class="form-group <?php if($model->hasErrors('status')) echo 'has-error';?>">
-			<?php echo $form->label($model, 'status',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'status', array('0' => yii::t('app','未审核') , '1' => yii::t('app','已审核')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('status')));?>
-				<?php echo $form->error($model, 'status' )?>
-			</div>
-		</div>-->
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
 				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>

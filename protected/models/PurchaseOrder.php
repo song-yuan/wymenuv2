@@ -37,7 +37,7 @@ class PurchaseOrder extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('update_at, organization_address,', 'required'),
-			array('delete_flag', 'numerical', 'integerOnly'=>true),
+			array('status, delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, manufacturer_id, admin_id, organization_id', 'length', 'max'=>10),
 			array('purchase_account_no', 'length', 'max'=>32),
 			array('organization_address, remark', 'length', 'max'=>255),
@@ -47,7 +47,7 @@ class PurchaseOrder extends CActiveRecord
 			array('organization_id','compare','compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择采购商地址')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, manufacturer_id, admin_id, purchase_account_no, organization_id, organization_address, delivery_date, remark, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, manufacturer_id, admin_id, purchase_account_no, organization_id, organization_address, delivery_date, remark, status, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -114,6 +114,7 @@ class PurchaseOrder extends CActiveRecord
 		$criteria->compare('organization_address',$this->organization_address,true);
 		$criteria->compare('delivery_date',$this->delivery_date,true);
 		$criteria->compare('remark',$this->remark,true);
+		$criteria->compare('status',$this->status);
 		$criteria->compare('delete_flag',$this->delete_flag);
 		$criteria->compare('is_sync',$this->is_sync,true);
 

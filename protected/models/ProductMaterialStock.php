@@ -115,4 +115,14 @@ class ProductMaterialStock extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	/**
+	 * 
+	 * 入库存
+	 * 
+	 */
+	public static function updateStock($dpid,$materialId,$stock,$stockCost)
+	{
+		$sql = 'update nb_product_material_stock set stock = stock+'.$stock.',stock_cost =+'.$stockCost.' where dpid='.$dpid.' and 	material_id='.$materialId.' and delete_flag=0';
+		Yii::app()->db->createCommand($sql)->execute();
+	}
 }

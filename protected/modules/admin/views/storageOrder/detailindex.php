@@ -74,7 +74,7 @@
 						<?php endforeach;?>
 						<?php endif;?>
 							<tr>
-								<td colspan="20" style="text-align: right;"><input type="button" class="btn blue" value="执行入库" /></td>
+								<td colspan="6" style="text-align: right;"><?php if($storage->status==1):?><input id="storage-in" type="button" class="btn blue" value="确认入库" storage-id="<?php echo $storage->lid;?>" /><?php elseif($storage->status==3):?><span style="color:red">已入库</span><?php endif;?></td>
 							</tr>
 						</tbody>
 					</table>
@@ -119,18 +119,20 @@
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
-		
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('storageOrderDetail/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('storageOrderDetail/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('#selectCategory').change(function(){
-			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('storageOrderDetail/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+		$('#storage-in').click(function(){
+			var id = $(this).attr('storage-id');
+			$.ajax({
+					url:'<?php echo $this->createUrl('storageOrder/storageIn' , array('companyId'=>$this->companyId));?>',
+					data:{sid:id},
+					success:function(msg){
+						if(msg=='true'){
+						   alert('入库成功!');		
+						}else{
+							alert('入库失败!');
+						}
+						history.go(0);
+					},
+				});
 		});
 	});
 	</script>	

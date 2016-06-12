@@ -63,8 +63,8 @@
 								<th><?php echo yii::t('app','店内码');?></th>
 								<th><?php echo yii::t('app','库存单位');?></th>
 								<th><?php echo yii::t('app','零售单位');?></th>
-								<!--<th><php echo yii::t('app','库存');?></th>
-								<th><php echo yii::t('app','库存成本');?></th>-->
+								<th><?php echo yii::t('app','实时库存');?></th>
+								<!--<th><php echo yii::t('app','库存成本');?></th>-->
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -79,8 +79,8 @@
 								<td ><?php echo $model->material_private_identifier;?></td>
 								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
 								<td ><?php echo Common::getStockName($model->sales_unit_id);?></td>
-								<!--<td ><php echo $model->stock;?></td>
-								<td ><php echo $model->stock_cost;?></td>-->
+								<td ><?php echo $model->material_stock->stock;?></td>
+								<!--<td ><php echo $model->stock_cost;?></td>-->
 								<td class="center">
 								<a href="<?php echo $this->createUrl('productMaterial/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>

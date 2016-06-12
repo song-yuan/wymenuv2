@@ -86,8 +86,8 @@
 								<th><?php echo yii::t('app','调入组织');?></th>
 								<th><?php echo yii::t('app','备注');?></th>
 								<th><?php echo yii::t('app','审核状态');?></th>
-								<th>&nbsp;</th>
-								<th>&nbsp;</th>
+								<th><?php echo yii::t('app','详情');?></th>
+								<th><?php echo yii::t('app','操作');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -100,7 +100,7 @@
 								<td><?php echo Common::getorgName($model->callout_id);?></td>
 								<td ><?php echo Common::getorgName($model->callin_id);?></td>
 								<td ><?php echo $model->remark;?></td>
-								<td ><?php if($model->status==0) echo "未审核"; elseif($model->status==1) echo "已审核";?></td>
+								<td ><span style="color: red"><?php if($model->status==0) echo "未审核"; elseif($model->status==1) echo "已审核"; elseif ($model->status==2) echo "已入库";?></span></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('commit/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','调拨详情');?></a>
 								</td>

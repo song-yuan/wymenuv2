@@ -53,31 +53,22 @@
 						var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
 						if(result.data.length){
 							$.each(result.data,function(index,value){
-								str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+								str = str + '<option value="'+value.id+'" unit-id="'+value.unit_id+'">'+value.name+'</option>';
 							});
 						}
 						$('#ProductBom_material_id').html(str);
 					}
 				});
 			});
-			/*var productVal=$('#ProductBom_material_id').val();
-			 $('#ProductBom_material_id').change(function(){
-			 var productid = $(this).val();
-			 //alert(productid);
-			 $.ajax({
-			 url:'<php echo $this->createUrl('productBom/isDoubleBomDetail',array('companyId'=>$this->companyId,'productBomId'=>$model->lid));?>/materialid/'+productid,
-			 type:'GET',
-			 dataType:'json',
-			 success:function(result){
-			 if(result.data){
-			 alert("<php echo yii::t('app','改单品套餐内已经存在！');?>");
-			 $('#ProductBom_material_id').val(productVal);
-			 }else{
-			 //alert(2);
-			 productVal=$('#ProductBom_material_id').val();
-			 }
-			 }
-			 });
-			 });*/
+			$('#ProductBom_material_id').change(function(){
+				var salesUnitId = $(this).find('option:selected').attr('unit-id');
+				$('#ProductBom_sales_unit_id').find('option').each(function(){
+					var val = $(this).val();
+					if(val!=salesUnitId){
+						$(this).remove();
+					}
+				});
+				
+			});
 		});
 	</script>
