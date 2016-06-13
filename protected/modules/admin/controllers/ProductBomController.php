@@ -175,7 +175,7 @@ class ProductBomController extends BackendController
 		foreach($produts as $c){
 			$tmp['name'] = $c['material_name'];
 			$tmp['id'] = $c['lid'];
-			$tmp['unit_id'] = $c['sales_unit_id'];
+			$tmp['unit_id'] = $c['stock_unit_id'];
 			$treeDataSource['data'][] = $tmp;
 		}
 		Yii::app()->end(json_encode($treeDataSource));

@@ -14,11 +14,10 @@ class Helper
             }
 	}
           
-        static public function getCompanyName($companyId) {
+     static public function getCompanyName($companyId) {
             if($companyId)
             {
-		$models = Company::model()->find('t.dpid = '.$companyId);
-                //var_dump($models);exit;
+				$models = Company::model()->find('t.dpid = '.$companyId);
                 //return Yii::app()->user->role == User::POWER_ADMIN ? $companyId : Yii::app()->user->companyId ;
                
             }else{
@@ -62,10 +61,14 @@ class Helper
 		//var_dump($companies);exit;
 		return CHtml::listData($companies, 'lid', 'manufacturer_name');
 	}
-	static public function genOrgInfoname() { //组织名称
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$companies = OrganizationInformation::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
-		return CHtml::listData($companies, 'lid', 'organization_name');
+	static public function genOrgCompany($companyId) { //公司及组织名
+		$company = Company::model()->find('delete_flag=0 and dpid='.$companyId) ;
+		if($company->type==0){
+			$company = Company::model()->findAll('dpid='.$companyId.' or comp_dpid='.$companyId.' and delete_flag=0') ;
+		}else{
+			$company = Company::model()->findAll('dpid='.$companyId.' and delete_flag=0') ;
+		}
+		return $company;
 	}
 	static public function genUsername($companyId) {//管理员
 		$companies = User::model()->findAll('delete_flag=0 and dpid='.$companyId.' and status=1 and role >='.Yii::app()->user->role) ;

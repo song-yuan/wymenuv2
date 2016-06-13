@@ -19,21 +19,21 @@
 		<div class="form-group <?php if($model->hasErrors('manufacturer_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'manufacturer_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'manufacturer_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genMfrInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('manufacturer_id')));?>
+				<?php echo $form->dropDownList($model, 'manufacturer_id', Helper::genMfrInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('manufacturer_id')));?>
 				<?php echo $form->error($model, 'manufacturer_id' )?>
 			</div>
 		</div>
 		<div class="form-group <?php if($model->hasErrors('organization_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'organization_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'organization_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genOrgInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('organization_id')));?>
+				<?php echo $form->dropDownList($model, 'organization_id', CHtml::listData(Helper::genOrgCompany($this->companyId), 'dpid', 'company_name'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('organization_id')));?>
 				<?php echo $form->error($model, 'organization_id' )?>
 			</div>
 		</div>
         <div class="form-group" <?php if($model->hasErrors('admin_id')) echo 'has-error';?>>
 			<?php echo $form->label($model, 'admin_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'admin_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genUsername($this->companyId) ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('admin_id')));?>
+				<?php echo $form->dropDownList($model, 'admin_id', Helper::genUsername($this->companyId) ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('admin_id')));?>
 				<?php echo $form->error($model, 'admin_id' )?>
 			</div>
 		</div>
@@ -65,6 +65,7 @@
 				<a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 			</div>
 		</div>
+	</div>
 <?php $this->endWidget(); ?>
 <?php $this->widget('ext.kindeditor.KindEditorWidget',array(
 	'id'=>'',	//Textarea id

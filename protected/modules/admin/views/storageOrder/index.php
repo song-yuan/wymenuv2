@@ -93,7 +93,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo Common::getmfrName($model->manufacturer_id);?></td>
-								<td ><?php echo Common::getorgName($model->organization_id);?></td>
+								<td ><?php echo Helper::getCompanyName($model->organization_id);?></td>
 								<td><?php echo $model->storage_account_no;?></td>
 								<td><?php echo Common::getuserName($model->admin_id);?></td>
 								<td><?php echo $model->purchase_account_no;?></td>
