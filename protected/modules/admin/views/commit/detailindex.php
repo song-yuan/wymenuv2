@@ -114,6 +114,7 @@
 		</div>
 		<?php $this->endWidget(); ?>
 	</div>
+	</div>
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){

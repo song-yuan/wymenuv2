@@ -78,7 +78,7 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:16%"><?php echo yii::t('app','厂商名称');?></th>
+								<th><?php echo yii::t('app','厂商名称');?></th>
 								<th><?php echo yii::t('app','管理员');?></th>
 								<th><?php echo yii::t('app','订货单号');?></th>
 								<th><?php echo yii::t('app','采购商');?></th>
@@ -95,10 +95,10 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo Common::getmfrName($model->manufacturer_id);?></td>
+								<td><?php echo Common::getmfrName($model->manufacturer_id);?></td>
 								<td><?php echo Common::getuserName($model->admin_id);?></td>
 								<td><?php echo $model->purchase_account_no;?></td>
-								<td ><?php echo Common::getorgName($model->organization_id);?></td>
+								<td ><?php echo Helper::getCompanyName($model->organization_id);?></td>
 								<td><?php echo $model->organization_address;?></td>
 								<td><?php echo $model->delivery_date;?></td>
 								<td><?php echo $model->remark;?></td>

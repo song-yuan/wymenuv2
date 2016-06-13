@@ -107,7 +107,6 @@ class CommitController extends BackendController
 		$model->dpid = $this->companyId ;
         $clid = Yii::app()->request->getParam('lid');
 		$model->commit_id=$clid;
-        //var_dump($clid);exit;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('CommitDetail');
 			$se=new Sequence("commit_detail");
@@ -124,12 +123,11 @@ class CommitController extends BackendController
 		$categories = $this->getCategories();
 		$categoryId=0;
 		$materials = $this->getMaterials($categoryId);
-		$materialslist=CHtml::listData($materials, 'lid', 'material_name');
 		$this->render('detailcreate' , array(
 				'model' => $model ,
 				'categories'=>$categories,
 				'categoryId'=>$categoryId,
-				'materials'=>$materialslist
+				'materials'=>$materials
 		));
 	}
 

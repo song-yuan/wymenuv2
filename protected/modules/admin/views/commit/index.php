@@ -1,3 +1,6 @@
+<style>
+	.find form input{display: inline;width:180px;}
+</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -31,9 +34,6 @@
 	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
 
 	<!-- END PAGE HEADER-->
-	<style>
-		.find form input{display: inline;width:180px;}
-	</style>
 	<div class="find">
 		<form action="" method="post">
 			<input type="text" name="id" class="form-control" placeholder="调拨单号" value="<?php echo isset($id) && $id ?$id:'';?>" />
@@ -97,8 +97,8 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo $model->commit_account_no;?></td>
 								<td ><?php echo $model->commit_date;?></td>
-								<td><?php echo Common::getorgName($model->callout_id);?></td>
-								<td ><?php echo Common::getorgName($model->callin_id);?></td>
+								<td><?php echo Helper::getCompanyName($model->callout_id);?></td>
+								<td ><?php echo Helper::getCompanyName($model->callin_id);?></td>
 								<td ><?php echo $model->remark;?></td>
 								<td ><span style="color: red"><?php if($model->status==0) echo "未审核"; elseif($model->status==1) echo "已审核"; elseif ($model->status==2) echo "已入库";?></span></td>
 								<td class="center">
@@ -148,6 +148,7 @@
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
 		<?php $this->endWidget(); ?>
+	</div>
 	</div>
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">

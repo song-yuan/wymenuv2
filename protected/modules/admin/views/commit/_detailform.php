@@ -19,7 +19,12 @@
 		<div class="form-group <?php if($model->hasErrors('material_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'material_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'material_id', array('0' => yii::t('app','-- 请选择 --')) +$materials ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('material_id')));?>
+				<select class="form-control" name="CommitDetail[material_id]" id="CommitDetail_material_id">
+					<option value="0">-- 请选择 --</option>
+					<?php foreach ($materials as $material):?>
+					<option value="<?php echo $material['lid'];?>" salse-unit="<?php echo $material['stock_unit_id'];?>" <?php if($model->material_id==$material['lid']){echo 'selected';}?>><?php echo $material['material_name'];?></option>
+					<?php endforeach;?>
+				</select>
 				<?php echo $form->error($model, 'material_id' )?>
 			</div>
 		</div>
@@ -43,6 +48,7 @@
 				<a href="<?php echo $this->createUrl('commit/detailindex' , array('companyId' => $model->dpid,'lid'=>$model->commit_id,));?>" class="btn default"><?php echo yii::t('app','返回');?></a>
 			</div>
 		</div>
+</div>
 <?php $this->endWidget(); ?>
 <?php $this->widget('ext.kindeditor.KindEditorWidget',array(
 	'id'=>'',	//Textarea id
@@ -62,8 +68,6 @@
 	$(document).ready(function() {
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			//alert('<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid);
-			//alert($('#ProductSetDetail_product_id').html());
 			$.ajax({
 				url:'<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
 				type:'GET',
@@ -72,13 +76,20 @@
 					//alert(result.data);
 					var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
 					if(result.data.length){
-						//alert(1);
 						$.each(result.data,function(index,value){
-							str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+							str = str + '<option value="'+value.id+'" salse-unit="'+value.unit_id+'">'+value.name+'</option>';
 						});
 					}
-					//alert(str);
 					$('#CommitDetail_material_id').html(str);
+				}
+			});
+		});
+		$('#CommitDetail_material_id').change(function(){
+			var salseUnit = $(this).find('option:selected').attr('salse-unit');
+			$('#CommitDetail_unit_name').find('option').each(function(){
+				var unitId = $(this).val();
+				if(unitId!=salseUnit){
+					$(this).remove();
 				}
 			});
 		});

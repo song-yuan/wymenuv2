@@ -180,13 +180,13 @@ class StorageOrderController extends BackendController
 				foreach ($storageDetails as $detail){
 					$stock = $detail['stock'];
 					$stockCost = ($detail['stock']-$detail['free_stock'])*$detail['price'];
-					ProductMaterialStock::updateStock($this->companyId, $detail['material_id'], $stock, $stockCost);
+					ProductMaterialStock::updateStock($storage->organization_id, $detail['material_id'], $stock, $stockCost);
 					
 					//入库日志
 					$materialStockLog = new MaterialStockLog();
 					$se=new Sequence("material_stock_log");
 					$materialStockLog->lid = $se->nextval();
-					$materialStockLog->dpid = $this->companyId;
+					$materialStockLog->dpid = $storage->organization_id;
 					$materialStockLog->create_at = date('Y-m-d H:i:s',time());
 					$materialStockLog->update_at = date('Y-m-d H:i:s',time());
 					$materialStockLog->material_id = $detail['material_id'];
