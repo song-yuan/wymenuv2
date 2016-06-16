@@ -48,22 +48,45 @@ class RefundOrderController extends BackendController
 	public function actionCreate(){
 		$model = new RefundOrder();
 		$model->dpid = $this->companyId ;
-
+		
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('RefundOrder');
-			$se=new Sequence("refund_order");
-			$model->lid = $se->nextval();
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->delete_flag = '0';
-			//var_dump($model);exit;
-			if($model->save()){
+			$transaction=Yii::app()->db->beginTransaction();
+			try{
+				$model->attributes = Yii::app()->request->getPost('RefundOrder');
+				$se=new Sequence("refund_order");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->refund_account_no = date('YmdHis',time()).substr($model->lid,-4);
+				$model->save();
+				if($model->storage_account_no!=0){
+					$storage = StorageOrder::model()->find('storage_account_no=:storageNo and delete_flag=0',array(':storageNo'=>$model->storage_account_no));
+					$storageDetails = StorageOrderDetail::model()->findAll('storage_id=:storageId and dpid=:dpid and delete_flag=0',array(':storageId'=>$storage['lid'],':dpid'=>$storage['dpid']));
+					foreach ($storageDetails as $detail){
+						$refundDetail = new RefundOrderDetail();
+						$se=new Sequence("refund_order_detail");
+						$refundDetail->lid = $se->nextval();
+						$refundDetail->dpid = $this->companyId ;
+						$refundDetail->create_at = date('Y-m-d H:i:s',time());
+						$refundDetail->update_at = date('Y-m-d H:i:s',time());
+						$refundDetail->refund_id = $model->lid;
+						$refundDetail->material_id = $detail['material_id'];
+						$refundDetail->price = $detail['price'];
+						$refundDetail->stock = $detail['stock'];
+						$refundDetail->reason = '入库单退货';
+						$refundDetail->save();
+					}
+				}
+				$transaction->commit();
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+				$this->redirect(array('refundOrder/index' , 'companyId' => $this->companyId ));
+			}catch (Exception $e){
+				$transaction->rollback();
+				Yii::app()->user->setFlash('error',yii::t('app','添加失败！'));
 				$this->redirect(array('refundOrder/index' , 'companyId' => $this->companyId ));
 			}
 		}
 		$categories = $categories = RefundOrder::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
-		//var_dump($categories);exit;
 		$this->render('create' , array(
 			'model' => $model ,
 			'categories' => $categories
@@ -73,13 +96,39 @@ class RefundOrderController extends BackendController
 	public function actionUpdate(){
 		$id = Yii::app()->request->getParam('lid');
 		$model = RefundOrder::model()->find('lid=:refundId and dpid=:dpid' , array(':refundId' => $id,':dpid'=>  $this->companyId));
-		$model->dpid = $this->companyId;
+		$storageNo = $model->storage_account_no;
 		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('RefundOrder');
-			$model->update_at=date('Y-m-d H:i:s',time());
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
+			$transaction=Yii::app()->db->beginTransaction();
+			try{
+				$model->attributes = Yii::app()->request->getPost('RefundOrder');
+				$model->update_at=date('Y-m-d H:i:s',time());
+				$model->save();
+				if($model->storage_account_no!=$storageNo){
+					StorageOrderDetail::model()->update(array('delete_flag'=>1),'refund_id=:refundId and dpid=:dpid',array(':refundId'=>$model->lid,':dpid'=>$model->dpid));
+					$storage = StorageOrder::model()->find('storage_account_no=:storageNo and delete_flag=0',array(':storageNo'=>$model->storage_account_no));
+					$storageDetails = StorageOrderDetail::model()->findAll('storage_id=:storageId and dpid=:dpid and delete_flag=0',array(':storageId'=>$storage['lid'],':dpid'=>$storage['dpid']));
+					foreach ($storageDetails as $detail){
+						$refundDetail = new RefundOrderDetail();
+						$se=new Sequence("refund_order_detail");
+						$refundDetail->lid = $se->nextval();
+						$refundDetail->dpid = $this->companyId ;
+						$refundDetail->create_at = date('Y-m-d H:i:s',time());
+						$refundDetail->update_at = date('Y-m-d H:i:s',time());
+						$refundDetail->refund_id = $model->lid;
+						$refundDetail->material_id = $detail['material_id'];
+						$refundDetail->price = $detail['price'];
+						$refundDetail->stock = $detail['stock'];
+						$refundDetail->reason = '入库单退货';
+						$refundDetail->save();
+					}
+				}
+				$transaction->commit();
+				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+				$this->redirect(array('refundOrder/index' , 'companyId' => $this->companyId ));
+			}catch (Exception $e){
+				$transaction->rollback();
+				Yii::app()->user->setFlash('error',yii::t('app','添加失败！'));
 				$this->redirect(array('refundOrder/index' , 'companyId' => $this->companyId ));
 			}
 		}
@@ -103,7 +152,8 @@ class RefundOrderController extends BackendController
 	}
 	public function actionDetailIndex(){
 		$criteria = new CDbCriteria;
-		$rlid = Yii::app()->request->getParam('lid');//var_dump($rlid);exit;
+		$rlid = Yii::app()->request->getParam('lid');
+		$refund = RefundOrder::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$rlid,':dpid'=>$this->companyId));
         $criteria->condition =  't.dpid='.$this->companyId .' and t.refund_id='.$rlid;
 		$pages = new CPagination(RefundOrderDetail::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -111,6 +161,7 @@ class RefundOrderController extends BackendController
 		$models = RefundOrderDetail::model()->findAll($criteria);
 		$this->render('detailindex',array(
 				'models'=>$models,
+				'refund'=>$refund,
 				'pages'=>$pages,
 				'rlid'=>$rlid,
 		));
@@ -126,7 +177,6 @@ class RefundOrderController extends BackendController
 			$model->lid = $se->nextval();
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
-			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('refundOrder/detailindex' , 'companyId' => $this->companyId, 'lid'=>$model->refund_id));
@@ -167,6 +217,69 @@ class RefundOrderController extends BackendController
 				'categoryId'=>$categoryId,
 				'materials'=>$materialslist
 		));
+	}
+	/**
+	 * 
+	 * 获取已入库入库订单
+	 */
+	public function actionGetStorageOrder(){
+		$dpid = Yii::app()->request->getParam('dpid');
+		$storageOrder = Common::getStorageOrder($dpid);
+		Yii::app()->end(json_encode($storageOrder));
+	}
+	/**
+	 * 
+	 * 审核退货订单
+	 * 
+	 */
+	public function actionRefundVerify(){
+		$pid = Yii::app()->request->getParam('pid');
+		$type = Yii::app()->request->getParam('type');
+		$refund = RefundOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		$refund->status = $type;
+		if($refund->update()){
+			echo 'true';
+		}else{
+			echo 'false';
+		}
+		exit;
+	}
+	/**
+	 * 
+	 *确认退货 
+	 * 
+	 *
+	 */
+	public function actionRefundOrder(){
+		$pid = Yii::app()->request->getParam('pid');
+		$refund = RefundOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		if($refund){
+			$refundDetails = RefundOrderDetail::model()->findAll('dpid=:dpid and refund_id=:refundId and delete_flag=0',array(':dpid'=>$this->companyId,':refundId'=>$refund->lid));
+			$organizeId = $refund->organization_id;
+			$transaction=Yii::app()->db->beginTransaction();
+			try{
+				foreach ($refundDetails as $detail){
+					$sql = 'update nb_product_material_stock set stock = stock - '.$detail['stock'].' where material_id='.$detail['material_id'].' and dpid='.$organizeId.' and delete_flag=0';
+					Yii::app()->db->createCommand($sql)->execute();
+					
+					//出库日志
+					$materialStockLog = new MaterialStockLog();
+					$se=new Sequence("material_stock_log");
+					$materialStockLog->lid = $se->nextval();
+					$materialStockLog->dpid = $organizeId;
+					$materialStockLog->create_at = date('Y-m-d H:i:s',time());
+					$materialStockLog->update_at = date('Y-m-d H:i:s',time());
+					$materialStockLog->material_id = $detail['material_id'];
+					$materialStockLog->type = 1;
+					$materialStockLog->stock_num = $stock;
+					$materialStockLog->resean = '退货出库';
+					$materialStockLog->save();
+				}
+				$transaction->commit();
+			}catch(Exception $e){
+				$transaction->rollback();
+			}
+		}
 	}
 	private function getCategories(){
 		$criteria = new CDbCriteria;

@@ -19,28 +19,30 @@
 		<div class="form-group <?php if($model->hasErrors('manufacturer_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'manufacturer_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'manufacturer_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genMfrInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('manufacturer_id')));?>
+				<?php echo $form->dropDownList($model, 'manufacturer_id', Helper::genMfrInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('manufacturer_id')));?>
 				<?php echo $form->error($model, 'manufacturer_id' )?>
 			</div>
 		</div>
 		<div class="form-group <?php if($model->hasErrors('organization_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'organization_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'organization_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genOrgInfoname() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('organization_id')));?>
+				<?php echo $form->dropDownList($model, 'organization_id',  CHtml::listData(Helper::genOrgCompany($this->companyId), 'dpid', 'company_name'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('organization_id')));?>
 				<?php echo $form->error($model, 'organization_id' )?>
 			</div>
 		</div>
         <div class="form-group <?php if($model->hasErrors('admin_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'admin_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'admin_id', array('0' => yii::t('app','-- 请选择 --')) +Helper::genUsername() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('admin_id')));?>
+				<?php echo $form->dropDownList($model, 'admin_id', Helper::genUsername($this->companyId) ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('admin_id')));?>
 				<?php echo $form->error($model, 'admin_id' )?>
 			</div>
 		</div>
         <div class="form-group <?php if($model->hasErrors('storage_account_no')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'storage_account_no',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->textField($model, 'storage_account_no',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('storage_account_no')));?>
+				<select class="form-control" name="RefundOrder[storage_account_no]" id="RefundOrder_storage_account_no">
+					<option value="0">--请选择--</option>
+				</select>
 				<?php echo $form->error($model, 'storage_account_no' )?>
 			</div>
 		</div>
@@ -89,24 +91,42 @@
 )); ?>
 						
 <script>
-	   $('#category_container').on('change','.category_selecter',function(){
-	   		var id = $(this).val();
-	   		var $parent = $(this).parent();
-                        var sid ='0000000000';
-                        var len=$('.category_selecter').eq(1).length;
-                        if(len > 0)
-                        {
-                            sid=$('.category_selecter').eq(1).val();
-                            //alert(sid);
-                        }
-	   });
-	   $(function () {
+	   function getStorageOrder(dpid){
+		   var storageNo = <?php echo $model->storage_account_no;?>;
+			$.ajax({
+					url:"<?php echo $this->createUrl('/admin/refundOrder/getStorageOrder',array('companyId'=>$this->companyId));?>",
+					data:{dpid:dpid},
+					success:function(msg){
+						if(msg.length>0){
+							var str = '';
+							for(var i in msg){
+								if(storageNo==msg[i].storage_account_no){
+									str += '<option value="'+msg[i].storage_account_no+'" selected>'+msg[i].storage_account_no+'</option>';
+								}else{
+									str += '<option value="'+msg[i].storage_account_no+'">'+msg[i].storage_account_no+'</option>';
+								}
+							}
+							$('#RefundOrder_storage_account_no').append(str);
+						}
+					},
+					dataType:'json'
+				});
+		}
+	   $(document).ready(function () {
+		   var dpid = $('#RefundOrder_organization_id').val();
+		   getStorageOrder(dpid);
 		   $(".ui_timepicker").datetimepicker({
 			   showSecond: true,
 			   timeFormat: 'hh:mm:ss',
 			   stepHour: 1,
 			   stepMinute: 1,
 			   stepSecond: 1
-		   })
-	   });
+		   });
+		   
+		   $('#RefundOrder_organization_id').change(function(){
+			   var dpid = $('#RefundOrder_organization_id').val();
+			   getStorageOrder(dpid);
+		   });
+		   
+		});
 </script>

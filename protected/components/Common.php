@@ -53,5 +53,15 @@ class Common{
        // var_dump($sql);exit;
         return $materialname;
     }
+    /**
+     * 
+     * 获取入库单入库单
+     * 
+     */
+     public static function getStorageOrder($companyId){
+    	$sql="select * from nb_storage_order t where  t.dpid=".$companyId.' and status=3 and delete_flag=0';
+    	$result = Yii::app()->db->createCommand($sql)->queryAll();
+    	return $result;
+    }
 }
 ?>
