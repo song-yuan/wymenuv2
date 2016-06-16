@@ -75,16 +75,16 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th style="width:16%"><?php echo yii::t('app','厂商名称');?></th>
-								<th><?php echo yii::t('app','退货商名称');?></th>
+								<th style="width:16%"><?php echo yii::t('app','供应厂商');?></th>
+								<th><?php echo yii::t('app','退货组织');?></th>
 								<th><?php echo yii::t('app','退货单号');?></th>
-								<th><?php echo yii::t('app','管理员');?></th>
+								<th><?php echo yii::t('app','经办人员');?></th>
 								<th><?php echo yii::t('app','入库编号');?></th>
 								<th><?php echo yii::t('app','退货日期');?></th>
 								<th><?php echo yii::t('app','备注');?></th>
 								<th><?php echo yii::t('app','审核状态');?></th>
-								<th>&nbsp;</th>
-								<th>&nbsp;</th>
+								<th><?php echo yii::t('app','退货详情');?></th>
+								<th><?php echo yii::t('app','操作');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -93,7 +93,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo Common::getmfrName($model->manufacturer_id);?></td>
-								<td ><?php echo Common::getorgName($model->organization_id);?></td>
+								<td ><?php echo Helper::getCompanyName($model->organization_id);?></td>
 								<td><?php echo $model->refund_account_no;?></td>
 								<td><?php echo Common::getuserName($model->admin_id);?></td>
 								<td><?php echo $model->storage_account_no;?></td>

@@ -74,7 +74,7 @@
 						<?php endforeach;?>
 						<?php endif;?>
 							<tr>
-								<td colspan="20" style="text-align: right;"><?php if($purchase->status==1):?><span style="color: red">已审核</span>&nbsp;<input id="storageOrder"  type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成入库单" />&nbsp;<input type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成退货单" /><?php elseif($purchase->status==2):?><span style="color: red">已驳回</span><?php else:?><?php if(Yii::app()->user->role):?><input id="verify-pass" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;<input id="verify-nopass" purchase-id="<?php echo $polid;?>"  type="button" class="btn blue" value="驳回" /><?php else:?><span style="color:red">等待审核</span><?php endif;?><?php endif;?></td>
+								<td colspan="20" style="text-align: right;"><?php if($purchase->status==1):?><span style="color: red">已审核</span>&nbsp;<input id="storageOrder"  type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成入库单" />&nbsp;<input type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成退货单" /><?php elseif($purchase->status==2):?><span style="color: red">已驳回</span><?php else:?><?php if(Yii::app()->user->role<2):?><input id="verify-pass" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;<input id="verify-nopass" purchase-id="<?php echo $polid;?>"  type="button" class="btn blue" value="驳回" /><?php else:?><span style="color:red">等待审核</span><?php endif;?><?php endif;?></td>
 							</tr>
 						</tbody>
 					</table>
