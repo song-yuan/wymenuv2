@@ -7,51 +7,29 @@
 					<div class="sidebar-toggler hidden-phone"></div>
 					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
 				</li>
+				<!--  
 				<li class="<?php if(Yii::app()->controller->id == 'default') echo 'active';?>">
 					<a href="<?php echo $this->createUrl('default/index',array('companyId' => $this->companyId));?>">
 					<i class="fa fa-home"></i> 
 					<span class="title"><?php echo yii::t('app','首页');?></span>					
 					</a>
 				</li>
-                                <?php if(Yii::app()->user->role < '4') : ?>
+				-->
+                <?php if(Yii::app()->user->role < '4') : ?>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('company' ,'payMethod', 'companyWifi', 'user' , 'basicFee' ,'synchronous' ))) echo 'active';?>">
-					<a href="">
-                                            <i class="fa fa-cog"></i> 
-					<span class="title"><?php echo yii::t('app','基础信息');?></span>					
+					<a href="<?php echo $this->createUrl('company/list',array('companyId' => $this->companyId));?>">
+                    <i class="fa fa-cog"></i> 
+					<span class="title"><?php echo yii::t('app','店铺管理');?></span>					
 					</a>
-					<ul class="sub-menu">
-						<li class="<?php if(Yii::app()->controller->id == 'company') echo 'active';?>"><a href="<?php echo $this->createUrl('company/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','店铺管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'companyWifi') echo 'active';?>"><a href="<?php echo $this->createUrl('companyWifi/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','店铺WIFI设定');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'payMethod') echo 'active';?>""><a href="<?php echo $this->createUrl('payMethod/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','支付方式设定');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'user') echo 'active';?>"><a href="<?php echo $this->createUrl('user/index' , array('companyId' =>$this->companyId));?>"><?php echo yii::t('app','操作员管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'basicFee') echo 'active';?>"><a href="<?php echo $this->createUrl('basicFee/index' , array('companyId' =>$this->companyId));?>"><?php echo yii::t('app','基础费用设置');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'synchronous') echo 'active';?>"><a href="<?php echo $this->createUrl('synchronous/index' , array('companyId' =>$this->companyId , 'type' => "manul"));?>"><?php echo yii::t('app','基础数据同步设定');?></a></li>
-					</ul>
 				</li>
-                                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productAddition','productSet','productSim','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice', 'copyproduct'))) echo 'active';?>">
-                                        <a href="">
+                <li class="<?php if(in_array(Yii::app()->controller->id , array('product','productAddition','productSet','productSim','productImg','productCategory','retreat','productPrinter','productClean','productWeight','productSales','productSpecial', 'productTempprice', 'copyproduct'))) echo 'active';?>">
+                    <a href="<?php echo $this->createUrl('product/list',array('companyId' => $this->companyId,'type'=>0));?>">
 					<i class="fa fa-coffee"></i> 
 					<span class="title"><?php echo yii::t('app','产品管理');?></span>					
 					</a>
-					<ul class="sub-menu">
-						<li class="<?php if(Yii::app()->controller->id == 'productCategory') echo 'active';?>"><a href="<?php echo $this->createUrl('productCategory/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','产品分类');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'product') echo 'active';?>"><a href="<?php echo $this->createUrl('product/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','单品管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','套餐管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'productSim') echo 'active';?>"><a href="<?php echo $this->createUrl('productSim/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','菜品简写管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'productAddition') echo 'active';?>"><a href="<?php echo $this->createUrl('productAddition/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','加菜管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'copyproduct') echo 'active';?>"><a href="<?php echo $this->createUrl('copyproduct/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','菜品下发');?></a></li>
-						<!--<li class="<?php if(Yii::app()->controller->id == 'productSet') echo 'active';?>"><a href="<?php echo $this->createUrl('productSet/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','套餐管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'productTempprice') echo 'active';?>"><a href="<?php echo $this->createUrl('productTempprice/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','时价菜管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'productSpecial') echo 'active';?>"><a href="<?php echo $this->createUrl('productSpecial/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','特价菜管理');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'productSales') echo 'active';?>"><a href="<?php echo $this->createUrl('productSales/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','优惠活动管理');?></a></li>-->
-						<li class="<?php if(Yii::app()->controller->id == 'productClean') echo 'active';?>"><a href="<?php echo $this->createUrl('productClean/index',array('companyId' => $this->companyId,'typeId'=>'product'));?>"><?php echo yii::t('app','沽清列表');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'productImg') echo 'active';?>"><a href="<?php echo $this->createUrl('productImg/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','产品图片管理');?></a></li>
-                                                <li class="<?php if(Yii::app()->controller->id == 'productPrinter') echo 'active';?>"><a href="<?php echo $this->createUrl('productPrinter/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','单品厨打');?></a></li>
-						<li class="<?php if(Yii::app()->controller->id == 'retreat') echo 'active';?>"><a href="<?php echo $this->createUrl('retreat/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','退菜理由选项设定');?></a></li>
-					</ul>
 				</li>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('bom','productBom','productMaterial','materialCategory','materialUnit','materialUnitRatio','orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail','product','productCategory','stockSetting','materialStockLog','commit','commitDetail'))) echo 'active';?>">
-					<a href="<?php echo $this->createUrl('bom/bom',array('companyId' => $this->companyId));?>">
+					<a href="<?php echo $this->createUrl('bom/bom',array('companyId' => $this->companyId,'type'=>0));?>">
 					<i class="fa fa-coffee"></i> 
 					<span class="title"><?php echo yii::t('app','进销存管理');?></span>
 					</a>

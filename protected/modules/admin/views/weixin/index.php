@@ -1,4 +1,16 @@
-	<!-- BEGIN PAGE -->  
+	<!-- BEGIN PAGE --> 
+	<style>
+		span.tab{
+			color: black;
+			border-right:1px dashed white;
+			margin-right:10px;
+			padding-right:10px;
+			display:inline-block;
+		}
+		span.tab-active{
+			color:white;
+		}
+	</style> 
 		<div class="page-content">
 			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -29,9 +41,9 @@
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
-					<div class="portlet box blue">
+					<div class="portlet box purple">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','公众号设置');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><span class="tab tab-active"><?php echo yii::t('app','公众号设置');?></span><a href="<?php echo $this->createUrl('weixin/menu',array('companyId'=>$this->companyId));?>"><span class="tab"><?php echo yii::t('app','发布菜单');?></span></a></div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->

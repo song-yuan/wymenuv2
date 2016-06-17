@@ -1,19 +1,150 @@
 <link href="../../../../css/jxcgl.css" rel="stylesheet" type="text/css">
+<style>
+		span.tab{
+			color: black;
+			border-right:1px dashed white;
+			margin-right:10px;
+			padding-right:10px;
+			display:inline-block;
+		}
+		span.tab-active{
+			color:white;
+		}
+		.ku-item{
+			width:100px;
+			height:100px;
+			margin-right:20px;
+			margin-top:20px;
+			margin-left:20px;
+			border-radius:5px !important;
+			border:2px solid black;
+			box-shadow: 5px 5px 5px #888888;
+			vertical-align:middle;
+		}
+		.ku-item-info{
+			width:144px;
+			font-size:2em;
+			color:black;
+			text-align:center;
+		}
+		.ku-purple{
+			background-color:#852b99;
+		}
+		.ku-grey{
+			background-color:rgb(68,111,120);
+		}
+		.ku-item.kusz{
+			background-image:url(../../../../../../img/waiter/icon-kcsz.png);
+			background-position: center center;
+    		background-size: 80%;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.pxfl{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: 20px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.rkdw{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -130px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.lsdw{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -280px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.pxxx{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -430px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.dwxs{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -575px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.bomxx{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -725px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.cpfl{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: 20px -140px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.cpxx{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -130px -140px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.kcrz{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -285px -140px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.csfl{
+			background-image:url(../../../../../../img/waiter/icon-kcgl.png);
+			background-position: 15px 10px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.csxx{
+			background-image:url(../../../../../../img/waiter/icon-kcgl.png);
+			background-position: -130px 10px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.cgdd{
+			background-image:url(../../../../../../img/waiter/icon-kcgl.png);
+			background-position: -275px 10px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.rkdd{
+			background-image:url(../../../../../../img/waiter/icon-kcgl.png);
+			background-position: -420px 10px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.thdd{
+			background-image:url(../../../../../../img/waiter/icon-kcgl.png);
+			background-position: -565px 10px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.db{
+			background-image:url(../../../../../../img/waiter/icon-kcgl.png);
+			background-position: -710px 10px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.pc{
+			background-image:url(../../../../../../img/waiter/icon-kcgl.png);
+			background-position: 10px -150px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.ps{
+			background-image:url(../../../../../../img/waiter/icon-kcgl.png);
+			background-position: -135px -150px;
+    		background-repeat: no-repeat;
+		}
+	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog" style="width: 80%">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">Modal title</h4>
+					<h4 class="modal-title">关系图</h4>
 				</div>
 				<div class="modal-body">
-					Widget settings form goes here
+					关系图:
+					<img alt="" src="../../../../../../img/waiter/lcrelation.jpg" width="100%">
+					品项信息图:
+					<img alt="" src="../../../../../../img/waiter/pxrelation.jpg" width="100%">
 				</div>
 				<div class="modal-footer">
+					<!--  
 					<button type="button" class="btn blue">Save changes</button>
-					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+					-->
+					<button type="button" class="btn default" data-dismiss="modal">确定</button>
 				</div>
 			</div>
 			<!-- /.modal-content -->
@@ -22,73 +153,148 @@
 	</div>
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-
+	
 	<!-- BEGIN PAGE CONTENT-->
-	<div class="row" style="height: 700px;">
-        <div class="middle">
-            <div class="tabButton">
-                <ul>
-                    <li class="marginLeft">
-                        <a href="#" class="first">库存设置</a>
-                    </li>
-                    <li >
-                        <a href="#">品项信息</a>
-                    </li>
-                    <li>
-                        <a href="#">库存管理</a>
-                    </li>
-                </ul>
-            </div>
-            <!--库存设置-->
-            <div class="inventory">
-                <div class="one"><a href="<?php echo $this->createUrl('/admin/stockSetting/index',array('companyId'=>$this->companyId));?>"></a></div>
-            </div>
-
-            <!--品项信息-->
-            <div class="itemsMid" >
-                <div class="one"><a href="<?php echo $this->createUrl('/admin/productBom/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="two"><a href="<?php echo $this->createUrl('/admin/productMaterial/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="three"><a href="<?php echo $this->createUrl('/admin/product/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="four"><a href="<?php echo $this->createUrl('/admin/materialCategory/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="five"><a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId,'type'=>"0"));?>"></a></div>
-                <div class="six"><a href="<?php echo $this->createUrl('/admin/materialUnit/index',array('companyId'=>$this->companyId,'type'=>"1"));?>"></a></div>
-                <div class="sever"><a href="<?php echo $this->createUrl('/admin/productCategory/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="eight"><a href="<?php echo $this->createUrl('/admin/materialUnitRatio/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="nine"><a href="<?php echo $this->createUrl('/admin/materialStockLog/index',array('companyId'=>$this->companyId));?>"></a></div>
-            </div>
-
-            <!--库存管理-->
-            <div class="stockMid" >
-                <div class="one"><a href="<?php echo $this->createUrl('/admin/orgClassification/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="two"><a href="<?php echo $this->createUrl('/admin/orgInformation/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="three"><a href="<?php echo $this->createUrl('/admin/mfrInformation/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="four"><a href="<?php echo $this->createUrl('/admin/mfrClassification/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="five"><a href="<?php echo $this->createUrl('/admin/purchaseOrder/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="six"><a href="<?php echo $this->createUrl('/admin/refundOrder/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="sever"><a href="<?php echo $this->createUrl('/admin/storageOrder/index',array('companyId'=>$this->companyId));?>"></a></div>
-                <div class="eight"><a href="<?php echo $this->createUrl('/admin/commit/index',array('companyId'=>$this->companyId));?>"></a></div>
-            </div>
-        </div>
+	<?php if($type==0):?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','库存管理'),'subhead'=>yii::t('app','库存设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存设置'),'url'=>''))));?>
+	<?php elseif($type==1):?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','库存管理'),'subhead'=>yii::t('app','品项信息'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>''))));?>
+	<?php else:?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','库存管理'),'subhead'=>yii::t('app','库存管理'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>''))));?>
+	<?php endif;?>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="portlet purple box">
+				<div class="portlet-title">
+					<div class="caption"><i class="fa fa-cogs"></i><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','库存设置');?></span></a><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','品项信息');?></span></a><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>" ><?php echo yii::t('app','库存管理');?></span></a></div>
+					<div class="actions">
+						<a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>
+					</div>
+				</div>
+				<div class="portlet-body" style="min-height: 750px">
+					<?php if($type==0):?>
+					<a href="<?php echo $this->createUrl('stockSetting/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple kusz"></div>
+							<div class="ku-item-info">库存设置</div>
+						</div>
+					</a>
+					<?php elseif($type==1):?>
+					<a href="<?php echo $this->createUrl('materialCategory/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple pxfl"></div>
+							<div class="ku-item-info">品项分类</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('materialUnit/index',array('companyId'=>$this->companyId,'type'=>0));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple rkdw"></div>
+							<div class="ku-item-info">入库单位</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('materialUnit/index',array('companyId'=>$this->companyId,'type'=>1));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple lsdw"></div>
+							<div class="ku-item-info">零售单位</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('productMaterial/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple pxxx"></div>
+							<div class="ku-item-info">品项信息</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('materialUnitRatio/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple dwxs"></div>
+							<div class="ku-item-info">单位系数</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('productBom/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple bomxx"></div>
+							<div class="ku-item-info">BOM信息</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('productCategory/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-grey cpfl"></div>
+							<div class="ku-item-info">产品分类</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('product/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-grey cpxx"></div>
+							<div class="ku-item-info">产品信息</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-grey kcrz"></div>
+							<div class="ku-item-info">库存日志</div>
+						</div>
+					</a>
+					<?php elseif($type==2):?>
+					<a href="<?php echo $this->createUrl('mfrClassification/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple csfl"></div>
+							<div class="ku-item-info">厂商分类</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('mfrInformation/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple csxx"></div>
+							<div class="ku-item-info">厂商信息</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('purchaseOrder/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple cgdd"></div>
+							<div class="ku-item-info">采购订单</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('storageOrder/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple rkdd"></div>
+							<div class="ku-item-info">入库订单</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('refundOrder/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple thdd"></div>
+							<div class="ku-item-info">退货订单</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('commit/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple db"></div>
+							<div class="ku-item-info">调拨</div>
+						</div>
+					</a>
+					<!-- 
+					<a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple pc"></div>
+							<div class="ku-item-info">盘存</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left">
+							<div class="ku-item ku-purple ps"></div>
+							<div class="ku-item-info">盘损</div>
+						</div>
+					</a>
+					 -->
+					<?php endif;?>
+				</div>
+			</div>
+		</div>
 	</div>
 	<!-- END PAGE CONTENT-->
 	<script>
-        $(document).ready(function(e) {
-            $(".tabButton li a").click(function(){
-                $(".tabButton li a").css({"background":"#00b7ee"})
-                $(this).css({"background":"#fff"})
-                $(".tabButton li a").css({"color":"#fff"})
-                $(this).css({"color":"#000"})
-                var i=$(this).parent().index();
-                $(this).parents(".middle").children().not(".tabButton").hide();
-                $(this).parents(".middle").children().eq(i+1).show();
-                switch(i){
-                    case 0:
-                        $(this).parents(".middle").css("background-image","url(../../../../img/jxcgl/aqkcsz.png)");break;
-                    case 1:
-                        $(this).parents(".middle").css("background-image","url(../../../../img/jxcgl/pxxxz.png)");break;
-                    case 2:
-                        $(this).parents(".middle").css("background-image","url(../../../../img/jxcgl/kcgl.png)");break;
-                }
-            });
+        $(document).ready(function() {
+            $('.relation').click(function(){
+                $('.modal').modal();
+           });
         });
 	</script>

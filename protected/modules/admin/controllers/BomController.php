@@ -9,10 +9,9 @@ class BomController extends BackendController {
 		return true;
 	}
 	public function actionBom() {
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$type='select unit_type form material_unit where delete_flag=0';
+		$type = Yii::app()->request->getParam('type');
 			$this->render('bom',array(
-				'companyId' => $companyId,
+				'companyId' => $this->companyId,
 				'type'=>$type,
 		));
 	}

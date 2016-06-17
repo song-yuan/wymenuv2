@@ -4,6 +4,18 @@
 		<script src="metronic/plugins/bootbox/bootbox.min.js" type="text/javascript" ></script>
 		<link href="metronic/css/pages/profile.css" rel="stylesheet" type="text/css" />
 		<!-- BEGIN PAGE -->
+		<style>
+			span.tab{
+				color: black;
+				border-right:1px dashed white;
+				margin-right:10px;
+				padding-right:10px;
+				display:inline-block;
+			}
+			span.tab-active{
+				color:white;
+			}
+		</style> 
 		<div class="page-content">
 			<!-- BEGIN STYLE CUSTOMIZER -->
 			<?php $this->beginContent('//layouts/admin/styleCustomizer');?>
@@ -22,7 +34,7 @@
 								<div class="col-md-12">
 									<div class="portlet purple box">
 										<div class="portlet-title">
-											<div class="caption"><i class="fa fa-cogs"></i>添加微信菜单</div>
+											<div class="caption"><i class="fa fa-cogs"></i><a href="<?php echo $this->createUrl('weixin/menu',array('companyId'=>$this->companyId));?>"><span class="tab"><?php echo yii::t('app','公众号设置');?></span></a><span class="tab tab-active"><?php echo yii::t('app','发布菜单');?></span></div>
 										</div>
 										<div class="portlet-body">
 											<div class="table-responsive">
