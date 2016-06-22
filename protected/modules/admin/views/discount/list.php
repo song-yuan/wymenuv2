@@ -92,7 +92,7 @@
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
-					<div class="caption"><em class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-chain-broken"></em><a href="<?php echo $this->createUrl('discount/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','线下活动');?></span></a><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-chain"></em><a href="<?php echo $this->createUrl('discount/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','线上活动');?></span></a></div>
+					<div class="caption"><em class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-chain-broken">&nbsp</em><a href="<?php echo $this->createUrl('discount/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','线下活动');?></span></a><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-chain">&nbsp</em><a href="<?php echo $this->createUrl('discount/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','线上活动');?></span></a></div>
 					<div class="actions">
 						<!-- <a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>  -->
 					</div>

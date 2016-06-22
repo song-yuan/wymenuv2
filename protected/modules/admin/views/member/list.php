@@ -74,7 +74,7 @@
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
-					<div class="caption"><em class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-comments-o"></em><a href="<?php echo $this->createUrl('member/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','微信会员');?></span></a><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-credit-card"></em><a href="<?php echo $this->createUrl('member/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','传统卡会员');?></span></a></div>
+					<div class="caption"><em class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-comments-o">&nbsp</em><a href="<?php echo $this->createUrl('member/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','微信会员');?></span></a><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-credit-card">&nbsp</em><a href="<?php echo $this->createUrl('member/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','传统卡会员');?></span></a></div>
 					<div class="actions">
 						<!-- <a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>  -->
 					</div>
