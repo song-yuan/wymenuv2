@@ -88,6 +88,10 @@
 			background-position: -725px 15px;
     		background-repeat: no-repeat;
 		}
+		.margin-left-right{
+			margin-left:10px;
+			margin-right:10px;
+		}
 	</style>
 	<!-- BEGIN PAGE CONTENT-->
 		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺管理'),'subhead'=>yii::t('app','店铺管理'),'breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>''))));?>
@@ -99,33 +103,33 @@
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
 					<a href="<?php echo $this->createUrl('company/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple dpgl"></div>
 							<div class="ku-item-info">店铺管理</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('user/index',array('companyId'=>$this->companyId,'type'=>0));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple czygl"></div>
 							<div class="ku-item-info">操作员管理</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('weixin/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple wxdp"></div>
 							<div class="ku-item-info">微信设置</div>
 						</div>
 					</a>
 					<!--
 					<a href="#">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple qxsz"></div>
 							<div class="ku-item-info">权限设置</div>
 						</div>
 					</a>
 					-->
 					<a href="<?php echo $this->createUrl('synchronous/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple tbsj"></div>
 							<div class="ku-item-info">同步数据</div>
 						</div>

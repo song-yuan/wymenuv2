@@ -1,3 +1,39 @@
+
+<style>
+		span.tab{
+			color: black;
+			border-right:1px dashed white;
+			margin-right:10px;
+			padding-right:10px;
+			display:inline-block;
+		}
+		span.tab-active{
+			color:white;
+		}
+		.ku-item{
+			width:100px;
+			height:100px;
+			margin-right:20px;
+			margin-top:20px;
+			margin-left:20px;
+			border-radius:5px !important;
+			border:2px solid black;
+			box-shadow: 5px 5px 5px #888888;
+			vertical-align:middle;
+		}
+		.ku-item-info{
+			width:144px;
+			font-size:2em;
+			color:black;
+			text-align:center;
+		}
+		.ku-purple{
+			background-color:#852b99;
+		}
+		.ku-grey{
+			background-color:rgb(68,111,120);
+		}
+	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -22,8 +58,13 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','产品口味对应'),'subhead'=>yii::t('app','产品口味对应列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','产品口味对应'),'url'=>''))));?>
-	
+	<?php if($type==0):?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味设置'),'subhead'=>yii::t('app','单品口味设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','单品口味设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+	<?php elseif($type==1):?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味设置'),'subhead'=>yii::t('app','整单口味设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','整单口味设置'),'url'=>''))));?>
+	<?php else:?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味设置'),'subhead'=>yii::t('app','单品口味对应'),'breadcrumbs'=>array(array('word'=>yii::t('app','单品口味对应'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+	<?php endif;?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -31,8 +72,8 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','产品口味对应列表');?></div>
-                                        <div class="actions">						
+					<div class="caption"><i class="fa fa-cogs"></i><a href="<?php echo $this->createUrl('taste/index',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>"><?php echo yii::t('app','整单口味设置');?></span></a><a href="<?php echo $this->createUrl('taste/index',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>" ><?php echo yii::t('app','单品口味设置');?></span></a><a href="<?php echo $this->createUrl('taste/productTaste',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>" ><?php echo yii::t('app','单品口味对应');?></span></a></div>
+					                     <div class="actions">						
                                                 <div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>						

@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','品项分类管理'),'subhead'=>yii::t('app','品项分类列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项分类管理'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','品项分类管理'),'subhead'=>yii::t('app','品项分类列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项分类管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' =>'1',)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -42,7 +42,7 @@
 							<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','品项分类管理');?></div>
 							<div class="actions">
 								<a class="btn blue add_btn" pid="0" data-toggle="modal"><i class="fa fa-plus"></i> <?php echo yii::t('app','添加一级类目');?></a>
-								<a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
+								<!-- <a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a> -->
 							</div>
 						</div>
 						<div class="portlet-body">

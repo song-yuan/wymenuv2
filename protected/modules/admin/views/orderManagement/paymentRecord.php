@@ -25,7 +25,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','订单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','付款退款记录'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','订单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','付款退款记录'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('orderManagement/list' , array('companyId' => $this->companyId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -104,7 +104,7 @@
 								<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											    <!--        <button type="submit" class="btn blue">确定</button>     -->   
-											<a href="<?php echo $this->createUrl('orderManagement/notPay' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn default">返回</a>                              
+											<a href="<?php echo $this->createUrl('orderManagement/notPay' , array('companyId' => $this->companyId));?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn default">返回今日订单</a>                              
 										</div>
 									</div>
 						<?php if($pages->getItemCount()):?>

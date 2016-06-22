@@ -12,6 +12,11 @@ class orderManagementController extends BackendController
 				)
 		);
 	}
+	public function actionList(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+	
+		$this->render('list');
+	}
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId && $this->getAction()->getId() != 'upload') {

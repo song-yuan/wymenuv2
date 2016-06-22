@@ -24,6 +24,13 @@ class StatementsController extends BackendController
  * 产品销售报表
  * 
  **/
+	public function actionList() {
+		$type = Yii::app()->request->getParam('type');
+		$this->render('list',array(
+				'companyId' => $this->companyId,
+				'type'=>$type,
+		));
+	}
 	public function actionProductsalesReport(){
 		//$uid = Yii::app()->user->id;
 		$str = Yii::app()->request->getParam('str');

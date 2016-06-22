@@ -1,4 +1,4 @@
-<link href="../../../../css/jxcgl.css" rel="stylesheet" type="text/css">
+
 <style>
 		span.tab{
 			color: black;
@@ -124,6 +124,14 @@
 			background-position: -135px -150px;
     		background-repeat: no-repeat;
 		}
+		.margin-left-right{
+			margin-left:10px;
+			margin-right:10px;
+		}
+		.cf-black{
+			color: #000 !important;
+			
+		}
 	</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -166,7 +174,7 @@
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-cogs"></i><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','库存设置');?></span></a><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','品项信息');?></span></a><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>" ><?php echo yii::t('app','库存管理');?></span></a></div>
+					<div class="caption"><i class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-archive"></i><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','库存设置');?></span></a><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-calendar"></em><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','品项信息');?></span></a><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-puzzle-piece"></em><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>" ><?php echo yii::t('app','库存管理');?></span></a></div>
 					<div class="actions">
 						<a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>
 					</div>
@@ -174,112 +182,112 @@
 				<div class="portlet-body" style="min-height: 750px">
 					<?php if($type==0):?>
 					<a href="<?php echo $this->createUrl('stockSetting/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple kusz"></div>
 							<div class="ku-item-info">库存设置</div>
 						</div>
 					</a>
 					<?php elseif($type==1):?>
 					<a href="<?php echo $this->createUrl('materialCategory/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pxfl"></div>
 							<div class="ku-item-info">品项分类</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('materialUnit/index',array('companyId'=>$this->companyId,'type'=>0));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple rkdw"></div>
 							<div class="ku-item-info">入库单位</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('materialUnit/index',array('companyId'=>$this->companyId,'type'=>1));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple lsdw"></div>
 							<div class="ku-item-info">零售单位</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('productMaterial/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pxxx"></div>
 							<div class="ku-item-info">品项信息</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('materialUnitRatio/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple dwxs"></div>
 							<div class="ku-item-info">单位系数</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('productBom/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple bomxx"></div>
 							<div class="ku-item-info">BOM信息</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('productCategory/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+					<a href="<?php echo $this->createUrl('bomproductCategory/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey cpfl"></div>
 							<div class="ku-item-info">产品分类</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('product/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+					<a href="<?php echo $this->createUrl('bomproduct/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey cpxx"></div>
 							<div class="ku-item-info">产品信息</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey kcrz"></div>
 							<div class="ku-item-info">库存日志</div>
 						</div>
 					</a>
 					<?php elseif($type==2):?>
 					<a href="<?php echo $this->createUrl('mfrClassification/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple csfl"></div>
 							<div class="ku-item-info">厂商分类</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('mfrInformation/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple csxx"></div>
 							<div class="ku-item-info">厂商信息</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('purchaseOrder/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple cgdd"></div>
 							<div class="ku-item-info">采购订单</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('storageOrder/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple rkdd"></div>
 							<div class="ku-item-info">入库订单</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('refundOrder/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple thdd"></div>
 							<div class="ku-item-info">退货订单</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('commit/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple db"></div>
 							<div class="ku-item-info">调拨</div>
 						</div>
 					</a>
 					<!-- 
 					<a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pc"></div>
 							<div class="ku-item-info">盘存</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left">
+						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple ps"></div>
 							<div class="ku-item-info">盘损</div>
 						</div>

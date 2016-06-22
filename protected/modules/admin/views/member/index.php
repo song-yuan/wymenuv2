@@ -23,7 +23,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员管理'),'subhead'=>yii::t('app','会员列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','会员管理'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员中心'),'subhead'=>yii::t('app','传统卡会员列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','传统卡会员'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('member/list' , array('companyId' => $this->companyId,'type'=>1)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -64,7 +64,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','会员列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','传统卡会员列表');?></div>
 					<div class="actions">
 						<a href="javascript:;" class="btn green add_btn"><i class="fa fa-plus"></i> <?php echo yii::t('app','充 值');?></a>
 						<a href="<?php echo $this->createUrl('member/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添 加');?></a>
