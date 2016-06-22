@@ -35,7 +35,7 @@ class WeixinController extends BackendController
 	public function actionMenu() {
 		$modelExt = WeixinServiceAccount::model()->find('dpid=:brandId',array(':brandId'=>$this->companyId));
 		if(!$modelExt||($modelExt->token=="")){
-			 Yii::app()->admin->setFlash('error','请先填写微信信息！');
+			 Yii::app()->user->setFlash('error','请先填写微信信息！');
 			 $this->redirect(array('/admin/weixin/index','companyId'=>$this->companyId));
 		}
 		$menuList = Menu::getMenuList($this->companyId);

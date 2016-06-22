@@ -21,7 +21,13 @@ class DiscountController extends BackendController
     	return true;
     }
 
-    
+    public function actionList() {
+    	$type = Yii::app()->request->getParam('type');
+    	$this->render('list',array(
+    			'companyId' => $this->companyId,
+    			'type'=>$type,
+    	));
+    }
     public function actionIndex(){
     	//$brand = Yii::app()->admin->getBrand($this->companyId);
     	$criteria = new CDbCriteria;

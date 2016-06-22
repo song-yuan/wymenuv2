@@ -11,6 +11,11 @@ class CompanyController extends BackendController
 			)
 		);
 	}
+	public function actionList(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		
+		$this->render('list');
+	}
 	public function actionIndex(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 	

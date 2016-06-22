@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础费用设置'),'subhead'=>yii::t('app','基础费用列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','基础费用设置'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础费用设置'),'subhead'=>yii::t('app','基础费用列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','基础费用设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' => '3',)))));?>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -127,5 +127,6 @@
 				return false;
 			}
 			return true;
+	});
 	});
 	</script>

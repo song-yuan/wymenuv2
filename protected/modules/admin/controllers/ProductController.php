@@ -19,6 +19,11 @@ class ProductController extends BackendController
 		}
 		return true;
 	}
+	public function actionList(){
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$type = Yii::app()->request->getParam('type');
+		$this->render('list',array('type'=>$type));
+	}
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;

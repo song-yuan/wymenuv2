@@ -24,7 +24,7 @@
 		<!-- /.modal-dialog -->
             </div>         
 			<!-- BEGIN PAGE HEADER-->
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'会员列表','subhead'=>'会员列表','breadcrumbs'=>array(array('word'=>'会员管理','url'=>''),array('word'=>'会员列表','url'=>''),)));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>'会员列表','subhead'=>'会员列表','breadcrumbs'=>array(array('word'=>'会员管理','url'=>''),array('word'=>'会员列表','url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('member/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">

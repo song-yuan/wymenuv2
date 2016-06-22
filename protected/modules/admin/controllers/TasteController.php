@@ -201,6 +201,7 @@ class TasteController extends BackendController
 	}
 	public function actionProductTaste(){
                 $categoryId = Yii::app()->request->getParam('cid',0);
+                $type = Yii::app()->request->getParam('type');
 		$criteria = new CDbCriteria;
 		$criteria->with = 'productTaste';
                 if($categoryId!=0)
@@ -222,6 +223,7 @@ class TasteController extends BackendController
                                 'categories'=>$categories,
                                 'categoryId'=>$categoryId,
 				'pages' => $pages,
+				'type' => $type
 		));
 	}
 	public function actionUpdateProductTaste(){

@@ -25,7 +25,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表管理'),'subhead'=>yii::t('app','报表列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','收款统计（支付方式）报表'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','收款统计（支付方式）报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -112,7 +112,8 @@
 															case 7: echo  yii::t('app','');break;
 															case 8: echo  yii::t('app','');break;
 															case 9: echo  yii::t('app','微信代金券');break; 
-															case 10: echo  yii::t('app','微信会员余额支付');break;  }
+															case 10: echo  yii::t('app','微信会员余额支付');break;
+															case 11: echo  yii::t('app','退款');break;  }
                                                                 
 								//}elseif ($model->paytype==1){
 								//	echo yii::t('app','微信支付');
