@@ -47,7 +47,7 @@
 				
 				
 					<?php if($type=="manul") {?>
-					<div class="portlet box blue">
+					<div class="portlet purple box">
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','手动同步');?></div>
 						</div>
@@ -68,7 +68,7 @@
 						</div>
 						</div>
 					<?php }elseif ($type=="force"){?>
-					<div class="portlet box blue">
+					<div class="portlet purple box">
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','强制同步设定');?></div>
 						</div>
