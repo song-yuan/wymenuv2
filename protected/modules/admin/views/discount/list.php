@@ -41,16 +41,22 @@
 		}
 		.ku-item.ptyh{
 			background-image:url(../../../../../../img/waiter/icon-xxhd.png);
-			background-position: -185px 10px;
+			background-position: -185px 18px;
 			background-size: 500%;
     		background-repeat: no-repeat;
 		}
-		.ku-item.msmj{
-			background-image:url(../../../../../../img/waiter/icon-xxhd.png);
-			background-position: -395px 10px;
-			background-size: 500%;
+		.ku-item.msyh{
+			background-image:url(../../../../../../img/waiter/icon-msyh.png);
+			background-position: center center;
+			background-size: 80%;
     		background-repeat: no-repeat;
 		}
+		.ku-item.mjyh{
+			background-image:url(../../../../../../img/waiter/icon-mjyh.png);
+			background-position: center center;
+			background-size: 80%;
+    		background-repeat: no-repeat;
+		}		
 		.ku-item.yxpsz{
 			background-image:url(../../../../../../img/waiter/icon-xshd.png);
 			background-position: 15px 17px;
@@ -113,14 +119,27 @@
 					</a>
 					<a href="<?php echo $this->createUrl('fullSentPromotion/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple msmj"></div>
+							<div class="ku-item ku-purple msyh"></div>
 							<div class="ku-item-info">满送优惠</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('fullMinusPromotion/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple msmj"></div>
+							<div class="ku-item ku-purple mjyh"></div>
 							<div class="ku-item-info">满减优惠</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('welcome/list',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple "></div>
+							<div class="ku-item-info">首页1</div>
+						</div>
+					</a>
+					
+					<a href="<?php echo $this->createUrl('welcome/list2',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple "></div>
+							<div class="ku-item-info">首页2</div>
 						</div>
 					</a>
 					<?php elseif($type==1):?>

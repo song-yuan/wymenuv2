@@ -46,7 +46,7 @@ class LoginController extends BackendController
                                 );                            
                                 Yii::app()->db->createCommand()->insert('nb_b_login',$data);
                                //print_r ((array('default/index/companyId/'.Yii::app()->user->companyId)));exit;
-				$this->redirect(array('default/index/companyId/'.Yii::app()->user->companyId));
+				$this->redirect(array('welcome/list/companyId/'.Yii::app()->user->companyId));
 				
 			}
 		}//var_dump(Yii::app()->user->companyId);exit;
