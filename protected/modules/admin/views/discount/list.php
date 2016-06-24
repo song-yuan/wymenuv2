@@ -129,19 +129,6 @@
 							<div class="ku-item-info">满减优惠</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('welcome/list',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple "></div>
-							<div class="ku-item-info">首页1</div>
-						</div>
-					</a>
-					
-					<a href="<?php echo $this->createUrl('welcome/list2',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple "></div>
-							<div class="ku-item-info">首页2</div>
-						</div>
-					</a>
 					<?php elseif($type==1):?>
 					<a href="<?php echo $this->createUrl('cashcard/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
