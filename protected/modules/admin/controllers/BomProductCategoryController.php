@@ -20,6 +20,7 @@ class BomproductCategoryController extends BackendController
 		);
 	}
 	public function actionIndex(){
+		
 		//$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$criteria = new CDbCriteria;
 		$criteria->with = 'company';

@@ -12,6 +12,7 @@ class BomproductController extends BackendController
 		);
 	}
 	public function beforeAction($action) {
+		
 		parent::beforeAction($action);
 		if(!$this->companyId && $this->getAction()->getId() != 'upload') {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
