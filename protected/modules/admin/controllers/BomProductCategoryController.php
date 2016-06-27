@@ -1,5 +1,5 @@
 <?php
-class BomProductCategoryController extends BackendController
+class BomproductCategoryController extends BackendController
 {
 	public function beforeAction($action) {
 		parent::beforeAction($action);
