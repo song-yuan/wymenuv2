@@ -143,10 +143,13 @@
 					<h4 class="modal-title">关系图</h4>
 				</div>
 				<div class="modal-body">
-					关系图:
+					<?php if($type == 2):?>
+					库存管理流程图:
 					<img alt="" src="../../../../../../img/waiter/lcrelation.jpg" width="100%">
+					<?php elseif ($type==1):?>
 					品项信息图:
 					<img alt="" src="../../../../../../img/waiter/pxrelation.jpg" width="100%">
+					<?php endif;?>
 				</div>
 				<div class="modal-footer">
 					<!--  
@@ -164,11 +167,11 @@
 	
 	<!-- BEGIN PAGE CONTENT-->
 	<?php if($type==0):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','库存管理'),'subhead'=>yii::t('app','库存设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存设置'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','库存设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存设置'),'url'=>''))));?>
 	<?php elseif($type==1):?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','库存管理'),'subhead'=>yii::t('app','品项信息'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','品项信息'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>''))));?>
 	<?php else:?>
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','库存管理'),'subhead'=>yii::t('app','库存管理'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>''))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','库存管理'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>''))));?>
 	<?php endif;?>
 	<div class="row">
 		<div class="col-md-12">
@@ -176,7 +179,9 @@
 				<div class="portlet-title">
 					<div class="caption"><i class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-archive"></i><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','库存设置');?></span></a><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-calendar">&nbsp</em><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','品项信息');?></span></a><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-puzzle-piece">&nbsp</em><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>" ><?php echo yii::t('app','库存管理');?></span></a></div>
 					<div class="actions">
-						<a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>
+						<?php if($type == 1||$type==2):?><a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>
+						
+						<?php endif;?>
 					</div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">

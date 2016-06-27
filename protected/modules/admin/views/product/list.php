@@ -235,7 +235,7 @@
 							<div class="ku-item-info">菜品简写</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('productClean/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('productClean/index',array('companyId'=>$this->companyId,'typeId'=>'product'));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple gqlb"></div>
 							<div class="ku-item-info">估清列表</div>

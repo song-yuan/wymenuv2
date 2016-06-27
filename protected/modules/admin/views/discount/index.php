@@ -38,7 +38,7 @@
 			<!-- /.modal -->
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','折扣模板设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','活动中心'),'url'=>''),array('word'=>yii::t('app','线下活动'),'url'=>''),array('word'=>yii::t('app','折扣模板设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('discount/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','折扣模板设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','线下活动'),'url'=>$this->createUrl('discount/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','折扣模板设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('discount/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 		<div class="row">
