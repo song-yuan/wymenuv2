@@ -29,7 +29,7 @@
 			<!-- /.modal -->
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->
-		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','基础信息'),'subhead'=>'同步设定','breadcrumbs'=>array(array('word'=>'基础信息','url'=>''),array('word'=>'基础数据同步设定','url'=>''),array('word'=>'同步设定','url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,)))));?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','店铺管理'),'subhead'=>'同步设定','breadcrumbs'=>array(array('word'=>'店铺管理','url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>'基础数据同步设定','url'=>''),),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/list' , array('companyId' => $this->companyId,)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 		<div class="row">

@@ -104,19 +104,19 @@
 				<div class="portlet-body" style="min-height: 750px">
 					<a href="<?php echo $this->createUrl('orderManagement/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple dpgl"></div>
+							<div class="ku-item ku-grey dpgl"></div>
 							<div class="ku-item-info">历史订单</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('orderManagement/accountStatement',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple czygl"></div>
+							<div class="ku-item ku-grey czygl"></div>
 							<div class="ku-item-info">日结对账单</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('orderManagement/paymentRecord',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple wxdp"></div>
+							<div class="ku-item ku-grey wxdp"></div>
 							<div class="ku-item-info">退付款记录</div>
 						</div>
 					</a>

@@ -17,7 +17,8 @@
 						<?php endif;?>
 						<li>
 							<i class="fa fa-home"></i>
-							<a href="<?php echo Yii::app()->createUrl('admin/default',array('companyId'=>Yii::app()->controller->companyId));?>"><?php echo yii::t('app','首页'); ?></a> 
+							<!-- <a href="<?php echo Yii::app()->createUrl('admin/default',array('companyId'=>Yii::app()->controller->companyId));?>"><?php echo yii::t('app','首页'); ?></a> --> 
+							<a href='javescript:;'><?php echo yii::t('app','首页');?></a>
 							<i class="fa fa-angle-right"></i>
 						</li>
 						<?php for($i = 0,$count = count($breadcrumbs);$i < $count;$i++):?>

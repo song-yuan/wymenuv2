@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','品项分类管理'),'subhead'=>yii::t('app','品项分类列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项分类管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' =>'1',)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','品项分类列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','品项分类管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' =>'1',)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -61,6 +61,9 @@
 									</tr>
 									<?php endforeach;?>
 								</table>
+								<span style="color: red;"><?php echo yii::t('app','注意');?>：<br>
+								<?php echo yii::t('app','*:必须设置二级分类');?><br>
+								<?php echo yii::t('app','*:分类之间名称不能重复');?><br></span>
 								<?php echo yii::t('app','说明');?>：<br>
 								<?php echo yii::t('app','1:（）内数字是各个分类的产品在前台的显示顺序，数值越大的排在最前面。');?><br>
 								<?php echo yii::t('app','2:所有数字小于9999');?><br>

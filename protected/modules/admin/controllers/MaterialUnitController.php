@@ -33,7 +33,8 @@ class MaterialUnitController extends BackendController
 		$this->render('index',array(
 				'models'=>$models,
 				'pages'=>$pages,
-				'categoryId'=>$categoryId
+				'categoryId'=>$categoryId,
+				'type'=>$type
 		
 		));
 	}
@@ -41,6 +42,7 @@ class MaterialUnitController extends BackendController
 		
 	}
 	public function actionCreate(){
+		$type=Yii::app()->request->getParam('type',0);
 		$model = new MaterialUnit();
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
@@ -59,7 +61,8 @@ class MaterialUnitController extends BackendController
 		//var_dump($categories);exit;
 		$this->render('create' , array(
 			'model' => $model ,
-			'categories' => $categories
+			'categories' => $categories,
+			'type' => $type
 		));
 	}
 	

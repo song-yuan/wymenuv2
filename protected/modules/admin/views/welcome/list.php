@@ -23,10 +23,16 @@
 		.purple2{
 			background-color: #9D48BE;
 		}
+		.padding-right{
+			padding-right: 0px !important;
+		}
+		.row2{
+			margin-right: 0px;
+		}
 	</style>
 <div class="page-content page-content2">
-	 <div class="row">
-		<div class="col-md-12">
+	 <div class="row row2">
+		<div class="col-md-12 padding-right">
 			<div class="portlet portlet2 purple2  bg-welcome">
 			
 				<div style="height: 160px;"></div>
