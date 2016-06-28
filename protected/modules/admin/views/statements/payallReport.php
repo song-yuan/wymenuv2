@@ -112,8 +112,8 @@
 															case 7: echo  yii::t('app','');break;
 															case 8: echo  yii::t('app','');break;
 															case 9: echo  yii::t('app','微信代金券');break; 
-															case 10: echo  yii::t('app','微信会员余额支付');break;
-															case 11: echo  yii::t('app','退款');break;  }
+															case 10: echo  yii::t('app','微信会员余额支付');break;	
+															default:;break;  }
                                                                 
 								//}elseif ($model->paytype==1){
 								//	echo yii::t('app','微信支付');
