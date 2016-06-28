@@ -285,7 +285,7 @@ class DataSyncOperation {
 					'order_status' => $orderInfo->order_status,
 					'order_type' => $orderInfo->order_type,
 					'should_total' => $orderInfo->should_total,
-					'reality_total' => $orderInfo->should_total,
+					'reality_total' => isset($orderInfo->reality_total) ? $orderInfo->reality_total : $orderInfo->should_total,
 					'taste_memo' => isset ( $orderInfo->taste_memo ) ? $orderInfo->taste_memo : '',
 					'is_sync' => $isSync 
 			);
