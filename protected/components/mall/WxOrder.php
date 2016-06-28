@@ -901,7 +901,7 @@ class WxOrder
                     .$dpid." and site_id=".$siteId." and is_temp=".$isTemp
                     ." and order_status in ('1','2','3')";
             $ret=Yii::app()->db->createCommand($sql)->queryScalar();      
-            if(empty($ret) || $ret=="0000000000")
+            if($isTemp || empty($ret) || $ret=="0000000000")
             {
                 $ret=substr(date('Ymd',time()),-6).substr("0000000000".$orderId, -6);
             }
