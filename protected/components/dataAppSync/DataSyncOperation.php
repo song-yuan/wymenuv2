@@ -171,6 +171,7 @@ class DataSyncOperation {
 		$data ['member_card'] = array ();
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
+			//订单数据
 			$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status=3 and 	is_sync<>0';
 			$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			foreach ( $results as $result ) {
@@ -194,6 +195,7 @@ class DataSyncOperation {
 				$sql = 'update nb_order set is_sync=0 where dpid=' . $dpid . ' and lid=' . $result ['lid'];
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 			}
+			//会员数据
 			$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
 			$memberCard = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			foreach ( $memberCard as $card ) {
@@ -285,7 +287,7 @@ class DataSyncOperation {
 					'order_status' => $orderInfo->order_status,
 					'order_type' => $orderInfo->order_type,
 					'should_total' => $orderInfo->should_total,
-					'reality_total' => $orderInfo->should_total,
+					'reality_total' => isset($orderInfo->reality_total) ? $orderInfo->reality_total : $orderInfo->should_total,
 					'taste_memo' => isset ( $orderInfo->taste_memo ) ? $orderInfo->taste_memo : '',
 					'is_sync' => $isSync 
 			);
@@ -453,7 +455,7 @@ class DataSyncOperation {
 		if ($payPrice > $reslut ['all_money']) {
 			throw new Exception ( '余额不足！' );
 		}
-		$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid=' . $dqpi . ' and lid=' . $reslut ['lid'];
+		$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid=' . $dpid . ' and lid=' . $reslut ['lid'];
 		$reslut = Yii::app ()->db->createCommand ( $sql )->execute ();
 		if ($reslut) {
 			return json_encode ( array (
