@@ -63,7 +63,7 @@
 					<span class="title"><?php echo yii::t('app','订单管理');?></span>					
 					</a>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('member','wxlevel','wxpoint','wxpointvalid','wxcashback','wxrecharge' ))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('member','wxlevel','wxpoint','wxpointvalid','wxcashback','wxrecharge','memberWxlevel' ))) echo 'active';?>">
 					<a href="<?php echo $this->createUrl('member/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-comments"></i> 
 					<span class="title"><?php echo yii::t('app','会员中心');?></span>					

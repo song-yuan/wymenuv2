@@ -22,23 +22,19 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员中心'),'subhead'=>yii::t('app','会员等级列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('member/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','会员等级管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('member/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员中心'),'subhead'=>yii::t('app','会员等级列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','微信会员'),'url'=>$this->createUrl('member/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','会员等级管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('member/list' , array('companyId' => $this->companyId,'type'=>1)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
             <div class="col-md-12 col-sm-12">
                     <ul class="nav nav-tabs">
-                            <li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/admin/wxlevel/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">会员等级</a></li>
-                            <li><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/admin/wxpoint/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">消费积分比例模板</a></li>
-                            <li><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/admin/wxpointvalid/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">积分有效期模板</a></li>
-                            <li><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/admin/wxcashback/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">消费返现比例模板</a></li>
-                            <li><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/admin/wxrecharge/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">充值模板</a></li>
+                            <li class="active"><a href="javascript:;" onclick="location.href='<?php echo $this->createUrl('/admin/memberWxlevel/index',array('companyId'=>$this->companyId));?>'" data-toggle="tab">会员等级</a></li>
                     </ul>
             </div>
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'branduserlevel-form',
-				'action' => $this->createUrl('wxlevel/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('memberWxlevel/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -51,7 +47,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','会员等级');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('wxlevel/create' , array('companyId' => $this->companyId,'type'=>1));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('memberWxlevel/create' , array('companyId' => $this->companyId,'type'=>0));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                                                 <a href="javascript:void(0)" class="btn red" onclick="document.getElementById('branduserlevel-form').submit();"><i class="fa fa-times"></i> <?php echo yii::t('app','删除');?></a>
 					</div>
 				</div>
@@ -75,7 +71,7 @@
 								<td ><?php echo $model->min_total_points;?></td>
                                                                 <td ><?php echo $model->max_total_points;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('wxlevel/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('memberWxlevel/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
