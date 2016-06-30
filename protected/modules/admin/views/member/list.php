@@ -100,7 +100,12 @@
 							<div class="ku-item-info">会员列表</div>
 						</div>
 					</a>
-					
+					<a href="<?php echo $this->createUrl('memberWxlevel/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple wxhysz"></div>
+							<div class="ku-item-info">等级设置</div>
+						</div>
+					</a>
 					<?php endif;?>
 				</div>
 			</div>

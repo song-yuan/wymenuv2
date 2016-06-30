@@ -46,6 +46,12 @@
 					<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
 					</select>
 					 -->
+					 <div class="btn-group">
+				
+						   <div class="input-group input-large date-picker input-daterange" ">
+								<span style="color: red;" class="input-group-addon">查询时，请精确到时分秒</span>          
+						  </div>  
+					</div>
 				<div class="btn-group">
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">

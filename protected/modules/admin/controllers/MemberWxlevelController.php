@@ -1,5 +1,5 @@
 <?php
-class WxlevelController extends BackendController
+class MemberWxlevelController extends BackendController
 {
 	public function beforeAction($action) {
 		parent::beforeAction($action);
@@ -11,7 +11,7 @@ class WxlevelController extends BackendController
 	}
 	public function actionIndex() {
 		$criteria = new CDbCriteria;
-		$criteria->addCondition('t.level_type = 1 and t.dpid=:dpid and t.delete_flag=0');
+		$criteria->addCondition('t.level_type = 0 and t.dpid=:dpid and t.delete_flag=0');
 		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		
@@ -40,7 +40,7 @@ class WxlevelController extends BackendController
             
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
-				$this->redirect(array('wxlevel/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('memberWxlevel/index' , 'companyId' => $this->companyId));
 			}
 		}
         
@@ -59,7 +59,7 @@ class WxlevelController extends BackendController
                         //var_dump($model->attributes);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' , yii::t('app','修改成功'));
-				$this->redirect(array('wxlevel/index' , 'companyId' => $this->companyId));
+				$this->redirect(array('memberWxlevel/index' , 'companyId' => $this->companyId));
 			}
 		}
 		$this->render('update' , array(
@@ -77,10 +77,10 @@ class WxlevelController extends BackendController
 					$model->saveAttributes(array('delete_flag'=>1,'update_at'=>date('Y-m-d H:i:s',time())));
 				}
 			}
-			$this->redirect(array('wxlevel/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('memberWxlevel/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('wxlevel/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('memberWxlevel/index' , 'companyId' => $companyId)) ;
 		}
 	}
 	

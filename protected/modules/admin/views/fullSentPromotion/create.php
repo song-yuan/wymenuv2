@@ -57,6 +57,10 @@
 							<!-- BEGIN FORM-->
 							<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
 							<!-- END FORM--> 
+							<span style="color: red;"><?php echo yii::t('app','注意');?>：<br>
+							<?php echo yii::t('app','*:在添加一个活动后，请前往“设置活动优惠产品”中添加详细营销品。');?><br>
+							</span>
+                                                      
 						</div>
 					</div>
 				</div>
