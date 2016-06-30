@@ -84,7 +84,7 @@ class FullSentPromotionController extends BackendController
 			$model->full_type = '0';
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('fullSentPromotion/index' , 'companyId' => $this->companyId ));
+				$this->redirect(array('fullSentPromotion/detailindex','lid' => $model->lid , 'companyId' => $model->dpid ,'typeId'=>'product'));
 			}
 		}
 		
