@@ -264,7 +264,7 @@
 	         var str=new Array();
 	         var weekstr=new Array();
 	         //alert(begintime);
-	         alert(dayend);
+	         //alert(dayend);
 	         var dayendzero = "00:00";
 	         //var ss = "";
 	       // if(aa.checked){
