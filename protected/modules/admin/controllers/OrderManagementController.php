@@ -575,7 +575,7 @@ class orderManagementController extends BackendController
                 }
                 //$criteria->select = 't1.should_total';
                 //var_dump($begin_time);exit;
-				$criteria->with = array("company","order"); //连接表
+				$criteria->with = array("company","order4"); //连接表
                 //$criteria->join = 'left join nb_order t1 on (t.dpid = t1.dpid and t.order_id = t1.lid )'; //连接表
                 //var_dump();exit;
                // $criteria->join = 'left join nb_company on t.dpid = nb_company.dpid '; //连接表

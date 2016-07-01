@@ -89,7 +89,7 @@
 								 <?php echo $this->getOrderDetails($model->order_id); ?></div>
 								
                                     </td>
-                                <td><?php if(empty($model->order->should_total)) echo 0; else echo $model->order->should_total;?></td>
+                                <td><?php if(empty($model->order4->reality_total)) echo 0; else echo $model->order4->reality_total;?></td>
 								<td><?php if ($model->pay_amount > 0) echo $model->pay_amount ;else echo '--/--';?></td>
 								<td><?php if ($model->pay_amount < 0) echo -$model->pay_amount ;else echo '--/--';;?></td>
 								<td><?php echo $model->update_at;?></td>

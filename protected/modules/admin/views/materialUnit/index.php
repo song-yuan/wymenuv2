@@ -66,7 +66,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo $model->unit_name;?></td>
-								<td ><?php if($model->unit_type==0) echo "库存单位"; elseif($model->unit_type==1) echo "零售单位";?></td>
+								<td ><?php if($model->unit_type==0) echo "入库单位"; elseif($model->unit_type==1) echo "零售单位";?></td>
 								<td ><?php echo $model->unit_specifications;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('materialUnit/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
