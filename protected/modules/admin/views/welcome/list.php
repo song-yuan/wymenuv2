@@ -2,7 +2,7 @@
 <style>
 
 		.bg-welcome{
-			min-height: 760px;
+			min-height: 500px;
 			background-image:url(../../../../img/waiter/bg-welcome3.jpg);
 			background-size: 100%;
     		background-repeat: no-repeat;
@@ -16,6 +16,7 @@
 		.page-content2{
 			padding: 0px !important;
 			margin-bottom: 25px;
+			min-height: 500px !important;
 		}	
 		.portlet2{
 			margin-bottom: 0px !important; 	

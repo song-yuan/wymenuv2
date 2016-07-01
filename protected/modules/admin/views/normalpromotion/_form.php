@@ -12,7 +12,7 @@
 								<div class="form-body">
 														
 									<div class="form-group ">
-									<?php if($model->hasErrors('promotion_title')) echo 'has-error';?>
+									<em style="color: red;"><?php if($model->hasErrors('promotion_title')) echo '必填项';?></em>
 										<?php echo $form->label($model, yii::t('app','标题'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'promotion_title',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_title')));?>
@@ -20,7 +20,7 @@
 										</div>
 									</div><!-- 活动标题 -->
 									<div class="form-group">
-										<?php if($model->hasErrors('main_picture')) echo 'has-error';?>
+										<?php if($model->hasErrors('main_picture')) echo '必填项';?>
 										<?php echo $form->label($model,'main_picture',array('class'=>'control-label col-md-3')); ?>
 										<div class="col-md-9">
 										<?php
@@ -38,7 +38,7 @@
 									</div><!-- 主图片 -->
 						
 									<div class="form-group" >
-									<?php if($model->hasErrors('promotion_abstract')) echo 'has-error';?>
+									<em style="color: red;"><?php if($model->hasErrors('promotion_abstract')) echo '必填项';?></em>
 										<?php echo $form->label($model, yii::t('app','摘要'),array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'promotion_abstract',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('promotion_abstract')));?>
@@ -201,7 +201,7 @@
 									</div><!-- 图文说明 -->
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="button" id="su" class="btn blue"><?php echo yii::t('app','确定并下一步');?></button>
 											<a href="<?php echo $this->createUrl('normalpromotion/index' , array('companyId' => $model->dpid));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
@@ -264,16 +264,19 @@
 	         var str=new Array();
 	         var weekstr=new Array();
 	         //alert(begintime);
-	         //alert(endtime);
+	         alert(dayend);
+	         var dayendzero = "00:00";
 	         //var ss = "";
 	       // if(aa.checked){
 	         if(endtime<=begintime){
-	        	 alert("<?php echo yii::t('app','活动结束时间应该大于开始时间!!!');?>");
+	        	 alert("<?php echo yii::t('app','活动结束日期应该大于开始日期!!!');?>");
 	        	 return false;
 	         }
-	         if(dayend<=daybegin){
-	        	 alert("<?php echo yii::t('app','结束时间应该大于开始时间!!!');?>");
-	        	 return false;
+	         if(dayend > dayendzero){
+		         if(dayend<=daybegin){
+		        	 alert("<?php echo yii::t('app','每日优惠时段的结束时段应该大于开始时段!!!');?>");
+		        	 return false;
+		         }
 	         }
 	         if(p1=='2'){
 	         for (var i = 0; i < aa.length; i++) {

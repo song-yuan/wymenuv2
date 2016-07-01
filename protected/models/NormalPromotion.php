@@ -41,7 +41,7 @@ class NormalPromotion extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid,dpid', 'required'),
+			array('lid,dpid,promotion_title,promotion_abstract', 'required','message'=>yii::t('app','必须填写项')),
 			array('order_num', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, group_id', 'length', 'max'=>10),
 			array('promotion_title, is_sync', 'length', 'max'=>50),
