@@ -15,16 +15,49 @@ class PurchaseOrderController extends BackendController
 	public function actionIndex(){
 		$mid=0;
 		$oid=0;
+		$begintime=0;
+		$endtime=0;
+		$storage=0;
+		$purchase=0;
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
 		if(Yii::app()->request->isPostRequest){
 			$mid = Yii::app()->request->getPost('mid',0);
 			if($mid){
-				$criteria->addSearchCondition('manufacturer_id',$mid);
+				$maname = ManufacturerInformation::model()->find('manufacturer_name like "%'.$mid.'%" and dpid=:dpid and delete_flag = 0 ' , array(':dpid'=>  $this->companyId));
+				//var_dump($maname);exit;
+				if($maname){
+					$criteria->addSearchCondition('manufacturer_id',$maname->lid);
+				}else{
+					$criteria->addSearchCondition('manufacturer_id',$mid);
+				}
 			}
+			
 			$oid = Yii::app()->request->getPost('oid',0);
 			if($oid){
 				$criteria->addSearchCondition('organization_id',$oid);
+			}
+			$storage = Yii::app()->request->getPost('storage',0);
+			if($storage){
+				//echo($oid);
+				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
+				//var_dump($ogname);exit;
+				$criteria->addSearchCondition('storage_account_no',$storage);
+			}
+			$purchase = Yii::app()->request->getPost('purchase',0);
+			if($purchase){
+				//echo($oid);
+				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
+				//var_dump($ogname);exit;
+				$criteria->addSearchCondition('purchase_account_no',$purchase);
+			}
+			$begintime = Yii::app()->request->getPost('begintime',0);
+			if($begintime){
+				$criteria->addCondition('storage_date >= "'.$begintime.'" ');
+			}
+			$endtime = Yii::app()->request->getPost('endtime',0);
+			if($endtime){
+				$criteria->addCondition('storage_date <= "'.$endtime.'" ');
 			}
 		}
 		$criteria->order = ' lid desc ';
@@ -38,6 +71,10 @@ class PurchaseOrderController extends BackendController
 				'pages'=>$pages,
 				'mid'=>$mid,
 				'oid'=>$oid,
+				'begintime'=>$begintime,
+				'endtime'=>$endtime,
+				'storage'=>$storage,
+				'purchase'=>$purchase,
 		));
 	}
 	public function actionSetMealList() {
@@ -54,6 +91,7 @@ class PurchaseOrderController extends BackendController
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->purchase_account_no = date('YmdHis',time()).substr($model->lid,-4);
 			$model->delete_flag = '0';
+			$model->status = '0';
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('purchaseOrder/index' , 'companyId' => $this->companyId ));
@@ -100,7 +138,7 @@ class PurchaseOrderController extends BackendController
 	}
 	public function actionDetailIndex(){
 		$polid = Yii::app()->request->getParam('lid');
-		
+		$status = Yii::app()->request->getParam('status');
 		$purchase = PurchaseOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$polid,':dpid'=>$this->companyId));
 		$criteria = new CDbCriteria;
         $criteria->condition =  't.dpid='.$this->companyId .' and t.purchase_id='.$polid;
@@ -114,6 +152,7 @@ class PurchaseOrderController extends BackendController
 				'purchase'=>$purchase,
 				'pages'=>$pages,
 				'polid'=>$polid,
+				'status'=>$status,
 		));
 	}
 	public function actionDetailCreate(){

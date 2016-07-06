@@ -17,16 +17,47 @@ class StorageOrderController extends BackendController
 		$criteria->with = 'company';
 		$mid=0;
 		$oid=0;
+		$begintime=0;
+		$endtime=0;
+		$storage=0;
+		$purchase=0;
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
 		if(Yii::app()->request->isPostRequest){
 			$mid = Yii::app()->request->getPost('mid',0);
 			if($mid){
-				$criteria->addSearchCondition('manufacturer_id',$mid);
+				$maname = ManufacturerInformation::model()->find('manufacturer_name like "%'.$mid.'%" and dpid=:dpid and delete_flag = 0 ' , array(':dpid'=>  $this->companyId));
+				//var_dump($maname);exit;
+				$criteria->addSearchCondition('manufacturer_id',$maname->lid);
 			}
 			$oid = Yii::app()->request->getPost('oid',0);
 			if($oid){
-				$criteria->addSearchCondition('organization_id',$oid);
+				//echo($oid);
+				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
+				//var_dump($ogname);exit;
+				$criteria->addSearchCondition('organization_id',$ogname->dpid);
+			}
+			$storage = Yii::app()->request->getPost('storage',0);
+			if($storage){
+				//echo($oid);
+				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
+				//var_dump($ogname);exit;
+				$criteria->addSearchCondition('storage_account_no',$storage);
+			}
+			$purchase = Yii::app()->request->getPost('purchase',0);
+			if($purchase){
+				//echo($oid);
+				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
+				//var_dump($ogname);exit;
+				$criteria->addSearchCondition('purchase_account_no',$purchase);
+			}
+			$begintime = Yii::app()->request->getPost('begintime',0);
+			if($begintime){
+				$criteria->addCondition('storage_date >= "'.$begintime.'" ');
+			}
+			$endtime = Yii::app()->request->getPost('endtime',0);
+			if($endtime){
+				$criteria->addCondition('storage_date <= "'.$endtime.'" ');
 			}
 		}
 		$criteria->order = ' lid desc ';
@@ -40,6 +71,10 @@ class StorageOrderController extends BackendController
 				'pages'=>$pages,
 				'mid'=>$mid,
 				'oid'=>$oid,
+				'begintime'=>$begintime,
+				'endtime'=>$endtime,
+				'storage'=>$storage,
+				'purchase'=>$purchase,
 		));
 	}
 	public function actionSetMealList() {
@@ -56,11 +91,11 @@ class StorageOrderController extends BackendController
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->storage_account_no = date('YmdHis',time()).substr($model->lid,-4);
-			$model->status = 1;
+			$model->status = 0;
 
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('storageOrder/index' , 'companyId' => $this->companyId ));
+				$this->redirect(array('storageOrder/detailindex','lid' => $model->lid , 'companyId' => $model->dpid));
 			}
 		}
 		//$categories = $categories = StorageOrder::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
@@ -105,6 +140,7 @@ class StorageOrderController extends BackendController
 	public function actionDetailIndex(){
 		$criteria = new CDbCriteria;
 		$slid = Yii::app()->request->getParam('lid');
+		$status = Yii::app()->request->getParam('status');
 		$storage = StorageOrder::model()->find('lid=:id and dpid=:dpid',array(':id'=>$slid,':dpid'=>$this->companyId));
 		$criteria->condition =  't.dpid='.$this->companyId .' and t.storage_id='.$slid;
 		$pages = new CPagination(StorageOrderDetail::model()->count($criteria));
@@ -116,6 +152,7 @@ class StorageOrderController extends BackendController
 				'models'=>$models,
 				'pages'=>$pages,
 				'slid'=>$slid,
+				'status'=>$status,
 		));
 	}
 	public function actionDetailCreate(){
@@ -273,4 +310,21 @@ class StorageOrderController extends BackendController
 		$command->bindValue(":lid" , $lid);
 		return $command->queryScalar();
 	}
+	public function actionStorageVerify(){
+		$pid = Yii::app()->request->getParam('pid');
+		$type = Yii::app()->request->getParam('type');
+		$storage = StorageOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		$storage->status = $type;
+		//var_dump($storage);
+		if($storage->update()){
+			echo 'true';
+		}else{
+			echo 'false';
+		}
+		exit;
+	}
+	
+	
+	
+	
 }
