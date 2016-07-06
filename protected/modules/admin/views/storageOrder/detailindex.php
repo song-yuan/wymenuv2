@@ -42,7 +42,9 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','品项入库列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('storageOrder/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<?php if($status == 0 || $status == 2):?>
+							<a href="<?php echo $this->createUrl('storageOrder/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<?php endif;?>
 						<a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
@@ -60,6 +62,7 @@
 						</thead>
 						<tbody>
 						<?php if($models) :?>
+						<div style="display: none;" id="storagedetail" val="1"></div>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
@@ -68,13 +71,24 @@
 								<td ><?php echo $model->stock;?></td>
 								<td><?php echo $model->free_stock;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('storageOrder/detailupdate',array('lid' => $model->lid , 'slid'=>$model->storage_id,  'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php if($status == 0 || $status == 2):?>
+									<a href="<?php echo $this->createUrl('storageOrder/detailupdate',array('lid' => $model->lid , 'slid'=>$model->storage_id,  'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php endif;?>
 								</td>
 							</tr>
 						<?php endforeach;?>
+						<?php else:?>
+						<div style="display: none;" id="storagedetail" val="0"></div>
 						<?php endif;?>
 							<tr>
-								<td colspan="6" style="text-align: right;"><?php if($storage->status==1):?><input id="storage-in" type="button" class="btn blue" value="确认入库" storage-id="<?php echo $storage->lid;?>" /><?php elseif($storage->status==3):?><span style="color:red">已入库</span><?php endif;?></td>
+								<td colspan="6" style="text-align: right;">
+								<?php if($storage->status==1):?><?php if(Yii::app()->user->role<3):?><input id="storage-in" type="button" class="btn blue" value="确认入库" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待确认入库</span><?php endif;?>
+								<?php elseif($storage->status==3):?><span style="color:red">已入库</span>
+								<?php elseif($storage->status==2):?><?php if(Yii::app()->user->role<3):?><input id="status-2" type="button" class="btn blue" value="重新送审" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待重新送审</span><?php endif;?>
+								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<3):?><input id="status-0" type="button" class="btn blue" value="确认送审" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">正在编辑</span><?php endif;?>
+								<?php elseif($storage->status==4):?><?php if(Yii::app()->user->role<3):?><input id="status-4" type="button" class="btn blue" value="审核通过" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待审核</span><?php endif;?>
+								<?php endif;?>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -121,6 +135,9 @@
 	$(document).ready(function(){
 		$('#storage-in').click(function(){
 			var id = $(this).attr('storage-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
 			$.ajax({
 					url:'<?php echo $this->createUrl('storageOrder/storageIn' , array('companyId'=>$this->companyId));?>',
 					data:{sid:id},
@@ -130,9 +147,83 @@
 						}else{
 							alert('入库失败!');
 						}
-						history.go(0);
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 					},
 				});
+			}else{
+					alert('请添加需要入库的品项');
+				}
 		});
+		$('#status-0').click(function(){
+			var pid = $(this).attr('storage-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认送审该入库单')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
+					data:{type:4,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('送审成功');
+						}else{
+							alert('送审失败');
+						}
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
+					}
+				});
+			}
+			}else{
+				alert('请添加需要入库的详细品项');
+				}
+		});
+		$('#status-2').click(function(){
+			var pid = $(this).attr('storage-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认重新送审该入库单')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
+					data:{type:4,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('重新审核成功');
+						}else{
+							alert('重新审核失败');
+						}
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
+					}
+				});
+			}
+			}else{
+				alert('请添加需要入库的详细品项');
+				}
+		});
+		$('#status-4').click(function(){
+			var pid = $(this).attr('storage-id');
+			
+			if(confirm('确认审核入库单')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>1));?>',
+					data:{type:1,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('审核成功');
+						}else{
+							alert('审核失败');
+						}
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
+					}
+				});
+			}
+			
+		});
+
+		
 	});
 	</script>	

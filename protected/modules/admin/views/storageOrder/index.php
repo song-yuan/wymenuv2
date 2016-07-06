@@ -37,9 +37,11 @@
 	<div class="find">
 		<form action="" method="post">
 			<input type="text" name="mid" class="form-control" placeholder="厂商名称" value="<?php echo isset($mid) && $mid ?$mid:'';?>" />
-			<input type="text" name="oid" class="form-control" placeholder="采购商" value="<?php echo isset($oid) && $oid ?$oid:'';?>" />
-			<input type="text" class="ui_timepicker form-control" placeholder="起始日期" />
-			<input type="text" class="ui_timepicker form-control" placeholder="结束日期" />
+			<input type="text" name="storage" class="form-control" placeholder="入库单号" value="<?php echo isset($storage) && $storage ?$storage:'';?>" />
+			<input type="text" name="purchase" class="form-control" placeholder="订货单号" value="<?php echo isset($purchase) && $purchase ?$purchase:'';?>" />
+			<!-- <input type="text" name="oid" class="form-control" placeholder="组织名称" value="<?php echo isset($oid) && $oid ?$oid:'';?>" /> -->
+			<input type="text" name="begintime" class="ui_timepicker form-control" placeholder="起始日期" value="<?php echo isset($begintime) && $begintime ?$begintime:'';?>" />
+			<input type="text" name="endtime" class="ui_timepicker form-control" placeholder="结束日期" value="<?php echo isset($endtime) && $endtime ?$endtime:'';?>" />
 			<button type="submit" class="btn green">
 				查找 &nbsp;
 				<i class="m-icon-swapright m-icon-white"></i>
@@ -99,12 +101,14 @@
 								<td><?php echo $model->purchase_account_no;?></td>
 								<td><?php echo $model->storage_date;?></td>
 								<td><?php echo $model->remark;?></td>
-								<td><span style="color: red;"><?php if($model->status==1){ echo '已审核';}elseif($model->status==2){ echo '已入库';}else{ echo '等待审核';};?></span></td>
+								<td><span style="color: red;"><?php if($model->status==1){ echo '审核通过';}elseif($model->status==2){ echo '审核失败';}elseif($model->status==3){ echo '已入库';}elseif($model->status==4){ echo '送审中...';}else{ echo '正在编辑';};?></span></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('storageOrder/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','入库单详情');?></a>
+									<a href="<?php echo $this->createUrl('storageOrder/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,));?>"><?php echo yii::t('app','入库单详情');?></a>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('storageOrder/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php if($model->status == 0 || $model->status == 2):?>
+									<a href="<?php echo $this->createUrl('storageOrder/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php endif;?>
 								</td>
 							</tr>
 						<?php endforeach;?>
