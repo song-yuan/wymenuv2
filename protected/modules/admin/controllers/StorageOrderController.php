@@ -26,10 +26,23 @@ class StorageOrderController extends BackendController
 		if(Yii::app()->request->isPostRequest){
 			$mid = Yii::app()->request->getPost('mid',0);
 			if($mid){
-				$maname = ManufacturerInformation::model()->find('manufacturer_name like "%'.$mid.'%" and dpid=:dpid and delete_flag = 0 ' , array(':dpid'=>  $this->companyId));
+				$maname = ManufacturerInformation::model()->findAll('manufacturer_name like "%'.$mid.'%" and dpid=:dpid and delete_flag = 0 ' , array(':dpid'=>  $this->companyId));
 				//var_dump($maname);exit;
-				$criteria->addSearchCondition('manufacturer_id',$maname->lid);
+				if($maname){
+					$malides = '';
+					foreach ($maname as $manames){
+						$malid = $manames->lid;
+						$malides = $malid .','. $malides; 
+						//var_dump($malides);
+					}
+					$malides = substr($malides, 0,strlen($malides)-1);
+					$criteria->addCondition('manufacturer_id in ('.$malides.')');
+					//var_dump($criteria);exit;
+				}else{
+					$criteria->addSearchCondition('manufacturer_id',$mid);
+				}
 			}
+			//var_dump($criteria);exit;
 			$oid = Yii::app()->request->getPost('oid',0);
 			if($oid){
 				//echo($oid);
