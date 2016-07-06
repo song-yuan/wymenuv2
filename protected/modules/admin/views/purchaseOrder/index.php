@@ -104,7 +104,7 @@
 								<td><?php echo $model->organization_address;?></td>
 								<td><?php echo $model->delivery_date;?></td>
 								<td><?php echo $model->remark;?></td>
-								<td><span style="color: red;"><?php if($model->status==0){echo '编辑中';}elseif($model->status==1){ echo '已审核';}elseif($model->status==2){ echo '已驳回';}elseif($model->status==3){ echo '送审中';}?></span></td>
+								<td><span style="color: red;"><?php if($model->status==0){echo '编辑中。。。';}elseif($model->status==1){ echo '已审核';}elseif($model->status==2){ echo '已驳回';}elseif($model->status==3){ echo '送审中。。。';}?></span></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('purchaseOrder/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->status,));?>"><?php echo yii::t('app','订单详情');?></a>
 								</td>

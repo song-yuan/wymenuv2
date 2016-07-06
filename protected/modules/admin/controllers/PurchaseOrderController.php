@@ -24,10 +24,18 @@ class PurchaseOrderController extends BackendController
 		if(Yii::app()->request->isPostRequest){
 			$mid = Yii::app()->request->getPost('mid',0);
 			if($mid){
-				$maname = ManufacturerInformation::model()->find('manufacturer_name like "%'.$mid.'%" and dpid=:dpid and delete_flag = 0 ' , array(':dpid'=>  $this->companyId));
+				$manames = ManufacturerInformation::model()->findAll('manufacturer_name like "%'.$mid.'%" and dpid=:dpid and delete_flag = 0 ' , array(':dpid'=>  $this->companyId));
 				//var_dump($maname);exit;
-				if($maname){
-					$criteria->addSearchCondition('manufacturer_id',$maname->lid);
+				if($manames){
+					$malides = '';
+					foreach ($manames as $maname){
+						$malid = $maname->lid;
+						$malides = $malid .','. $malides; 
+						//var_dump($malides);
+					}
+					$malides = substr($malides, 0,strlen($malides)-1);
+					$criteria->addCondition('manufacturer_id in ('.$malides.')');
+					//var_dump($criteria);exit;
 				}else{
 					$criteria->addSearchCondition('manufacturer_id',$mid);
 				}
