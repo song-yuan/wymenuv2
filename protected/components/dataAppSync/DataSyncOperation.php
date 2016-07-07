@@ -313,6 +313,49 @@ class DataSyncOperation {
 						'is_sync' => DataSync::getInitSync () 
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_product', $orderProductData );
+				
+				//产品口味
+				if(isset($product->product_taste)){
+					$productTastes = $product->product_taste;
+					foreach ($productTastes as $taste){
+						$se = new Sequence ( "order_taste" );
+						$orderTasteId = $se->nextval ();
+						$orderTasteData = array (
+								'lid' => $orderTasteId,
+								'dpid' => $dpid,
+								'create_at' => date ( 'Y-m-d H:i:s', $time ),
+								'update_at' => date ( 'Y-m-d H:i:s', $time ),
+								'taste_id' => $taste->taste_id,
+								'order_id' => $orderProductId,
+								'is_order' => 0,
+								'is_sync' => DataSync::getInitSync ()
+						);
+						Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
+					}
+				}
+				//产品普通优惠
+				if(isset($product->product_promotion)){
+					$productPromotions = $product->product_promotion;
+					foreach ($productPromotions as $promotion){
+						$se = new Sequence ( "order_product_promotion" );
+						$orderPromotionId = $se->nextval ();
+						$orderPromotionData = array (
+								'lid' => $orderPromotionId,
+								'dpid' => $dpid,
+								'create_at' => date ( 'Y-m-d H:i:s', $time ),
+								'update_at' => date ( 'Y-m-d H:i:s', $time ),
+								'order_id' => $orderId,
+								'order_product_id' => $orderProductId,
+								'account_no' => $accountNo,
+								'promotion_type' => $promotion->promotion_type,
+								'promotion_id' => $promotion->promotion_id,
+								'promotion_money' => $promotion->promotion_money,
+								'is_sync' => DataSync::getInitSync ()
+						);
+						Yii::app ()->db->createCommand ()->insert ( 'nb_order_product_promotion', $orderPromotionData );
+					}
+				}
+				
 				if($isSync==0){
 					// 消耗原材料库存
 					$productBoms = self::getBom($dpid, $product->product_id);
