@@ -61,11 +61,11 @@ class PurchaseOrderController extends BackendController
 			}
 			$begintime = Yii::app()->request->getPost('begintime',0);
 			if($begintime){
-				$criteria->addCondition('storage_date >= "'.$begintime.'" ');
+				$criteria->addCondition('delivery_date >= "'.$begintime.'" ');
 			}
 			$endtime = Yii::app()->request->getPost('endtime',0);
 			if($endtime){
-				$criteria->addCondition('storage_date <= "'.$endtime.'" ');
+				$criteria->addCondition('delivery_date <= "'.$endtime.'" ');
 			}
 		}
 		$criteria->order = ' lid desc ';

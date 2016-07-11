@@ -42,7 +42,9 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','退货详情列表');?></div>
 					<div class="actions">
+					<?php if($status == 0 || $status == 3):?>
 						<a href="<?php echo $this->createUrl('refundOrder/detailcreate' , array('companyId' => $this->companyId,'lid'=>$rlid,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+					<?php endif;?>
 						<a href="<?php echo $this->createUrl('refundOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
@@ -61,6 +63,7 @@
 						</thead>
 						<tbody>
 						<?php if($models) :?>
+						<div style="display: none;" id="storagedetail" val="1"></div>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
@@ -70,13 +73,27 @@
 								<td><?php echo $model->free_stock;?></td>
 								<td><?php echo $model->reason;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('refundOrder/detailupdate',array('lid' => $model->lid , 'rlid'=>$model->refund_id, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php if($status == 0 || $status == 3):?>
+									<a href="<?php echo $this->createUrl('refundOrder/detailupdate',array('lid' => $model->lid , 'rlid'=>$model->refund_id, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php endif;?>
 								</td>
 							</tr>
 						<?php endforeach;?>
+						<?php else:?>
+							<div style="display: none;" id="storagedetail" val="0"></div>
 						<?php endif;?>
 						<tr>
-							<td colspan="20" style="text-align: right;"><?php if($refund->status==0):?><?php if(Yii::app()->user->role<2):?><input id="verify-pass" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;<input id="verify-nopass" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="驳回" /><?php else:?><span style="color:red">等待审核</span><?php endif;?>&nbsp;<?php elseif($refund->status==1):?><span style="color: red">审核通过</span>&nbsp;<input id="refund-order" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="确认退货" /><?php elseif($refund->status==2):?><span style="color: red">审核未通过</span><?php else:?><span style="color: red">已退货</span><?php endif;?></td>
+							<td colspan="20" style="text-align: right;">
+							<?php if($refund->status==0):?>
+								<?php if(Yii::app()->user->role<2):?><input id="verify-pass" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="送审" />
+								<?php else:?><span style="color:red">等待送审</span>
+								<?php endif;?>&nbsp;
+							<?php elseif($refund->status==1):?><span style="color: red">审核通过</span>&nbsp;<input id="refund-order" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="确认退货" />
+							<?php elseif($refund->status==2):?><span style="color: red">待审核</span>&nbsp;<input id="refund-order2" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;<input id="verify-nopass" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="驳回" />
+							<?php elseif($refund->status==3):?><span style="color: red">审核不通过</span><input id="verify-pass" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="送审" />
+							<?php else:?><span style="color: red">已退货</span>
+							<?php endif;?>
+							</td>
 						</tr>
 					</tbody>
 					</table>
@@ -123,20 +140,27 @@
 	$(document).ready(function(){
 		$('#verify-pass').click(function(){
 			var pid = $(this).attr('refund-id');
-			if(confirm('确认审核该退货订单')){
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认送审该退货订单')){
 				$.ajax({
 					url:'<?php echo $this->createUrl('refundOrder/refundVerify',array('companyId'=>$this->companyId));?>',
-					data:{type:1,pid:pid},
+					data:{type:2,pid:pid},
 					success:function(msg){
 						if(msg=='true'){
-							alert('审核成功');
+							alert('送审成功');
 						}else{
-							alert('审核失败');
+							alert('送审失败');
 						}
-						history.go(0);
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('refundOrder/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});
 			}
+			}else{
+				alert("请先编辑退货单的详情！");
+				}
 			
 		});
 		$('#verify-nopass').click(function(){
@@ -144,7 +168,7 @@
 			if(confirm('确认驳回该退货订单')){
 				$.ajax({
 					url:'<?php echo $this->createUrl('refundOrder/refundVerify',array('companyId'=>$this->companyId));?>',
-					data:{type:2,pid:pid},
+					data:{type:3,pid:pid},
 					success:function(msg){
 						if(msg=='true'){
 							alert('驳回成功');
@@ -164,14 +188,38 @@
 					data:{pid:pid},
 					success:function(msg){
 						if(msg=='true'){
-							alert('生成订单成功');
+							alert('退货成功');
 						}else{
-							alert('生成订单失败');
+							alert('退货失败');
 						}
 						history.go(0);
 					}
 				});
 			}
+		});
+		$('#refund-order2').click(function(){
+			var pid = $(this).attr('refund-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认审核该退货订单')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('refundOrder/refundVerify',array('companyId'=>$this->companyId));?>',
+					data:{type:1,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('审核成功');
+						}else{
+							alert('审核失败');
+						}
+						history.go(0);
+					}
+				});
+			}
+			}else{
+				alert('请先编辑退货单详情！');
+				}
+			
 		});
 	});
 	</script>	
