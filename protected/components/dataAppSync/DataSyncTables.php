@@ -61,6 +61,7 @@ class DataSyncTables
         array("name"=>"下单明细","table"=>"nb_order_product"),
         array("name"=>"订单退菜","table"=>"nb_order_retreat"),
         array("name"=>"订单口味","table"=>"nb_order_taste"),
+    	array("name"=>"订单优惠","table"=>"nb_order_product_promotion"),
         array("name"=>"排队人数","table"=>"nb_queue_persons"),
         array("name"=>"交班明细","table"=>"nb_shift_detail"),
         array("name"=>"台操作明细","table"=>"nb_site_no"),  
@@ -91,7 +92,7 @@ class DataSyncTables
     /**
      * 根据表名获取表结构
      * sync_type 表示同步类型
-     * 0 表示打印 1 同步云端
+     * 0 表示打印 1 同步云端 2 会员支付减余额
      * 
      */
     public function getTableStructure($tablename)
@@ -651,6 +652,20 @@ class DataSyncTables
         		"  `taste_id` int(10) NOT NULL DEFAULT '0',".
         		"  `order_id` int(10) NOT NULL DEFAULT '0',".
         		"  `is_order` char(1) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_order_product_promotion"=>" CREATE TABLE 'nb_order_product_promotion'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `order_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `order_product_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `account_no` varchar(20) NOT NULL,".
+        		"  `promotion_type` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `promotion_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `promotion_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
