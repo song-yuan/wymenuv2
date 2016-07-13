@@ -199,7 +199,7 @@ class RefundOrderController extends BackendController
 		$rlid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');
 		$refund = RefundOrder::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$rlid,':dpid'=>$this->companyId));
-        $criteria->condition =  't.dpid='.$this->companyId .' and t.refund_id='.$rlid;
+        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.refund_id='.$rlid;
 		$pages = new CPagination(RefundOrderDetail::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -263,6 +263,23 @@ class RefundOrderController extends BackendController
 				'categoryId'=>$categoryId,
 				'materials'=>$materialslist
 		));
+	}
+	public function actionDetailDelete(){
+		$rlid = Yii::app()->request->getParam('rlid');
+		$status = Yii::app()->request->getParam('status');
+	
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$ids = Yii::app()->request->getPost('ids');
+	
+		Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		if(!empty($ids)) {
+			Yii::app()->db->createCommand('update nb_refund_order_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId));
+			$this->redirect(array('refundOrder/detailindex' , 'companyId' => $companyId,'lid'=>$rlid,'status'=>$status, )) ;
+		} else {
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
+			$this->redirect(array('refundOrder/detailindex' , 'companyId' => $companyId,'lid'=>$rlid,'status'=>$status, )) ;
+		}
 	}
 	/**
 	 * 

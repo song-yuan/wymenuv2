@@ -28,8 +28,8 @@
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
-				//'id' => 'material-form',
-				//'action' => $this->createUrl('purchaseOrderDetail/delete' , array('companyId' => $this->companyId)),
+				'id' => 'material-form',
+				'action' => $this->createUrl('storageOrder/detailDelete' , array('companyId' => $this->companyId,'slid'=>$slid,'status'=>$status,)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -44,6 +44,9 @@
 					<div class="actions">
 						<?php if($status == 0 || $status == 2):?>
 							<a href="<?php echo $this->createUrl('storageOrder/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<div class="btn-group">
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+						</div>
 						<?php endif;?>
 						<a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>
@@ -86,7 +89,7 @@
 								<?php elseif($storage->status==3):?><span style="color:red">已入库</span>
 								<?php elseif($storage->status==2):?><?php if(Yii::app()->user->role<3):?><input id="status-2" type="button" class="btn blue" value="重新送审" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待重新送审</span><?php endif;?>
 								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<3):?><input id="status-0" type="button" class="btn blue" value="确认送审" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">正在编辑</span><?php endif;?>
-								<?php elseif($storage->status==4):?><?php if(Yii::app()->user->role<3):?><input id="status-4" type="button" class="btn blue" value="审核通过" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待审核</span><?php endif;?>
+								<?php elseif($storage->status==4):?><?php if(Yii::app()->user->role<3):?><input id="status-4" type="button" class="btn blue" value="审核通过" storage-id="<?php echo $storage->lid;?>" />&nbsp;<input id="status-1" type="button" class="btn blue" value="驳回" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待审核</span><?php endif;?>
 								<?php endif;?>
 								</td>
 							</tr>
@@ -169,6 +172,30 @@
 							alert('送审成功');
 						}else{
 							alert('送审失败');
+						}
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
+					}
+				});
+			}
+			}else{
+				alert('请添加需要入库的详细品项');
+				}
+		});
+		$('#status-1').click(function(){
+			var pid = $(this).attr('storage-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认驳回该入库单')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
+					data:{type:2,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('驳回成功');
+						}else{
+							alert('驳回失败');
 						}
 						//history.go(0);
 						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
