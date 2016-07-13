@@ -65,9 +65,9 @@
 						<div class="btn-group">
 							<?php //echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
-						<div class="btn-group">
+<!-- 						<div class="btn-group"> --
 							<button type="button"  class="btn blue" > <?php echo yii::t('app','自动生成调拨单');?></button>
-						</div>
+<!-- 						</div> -->
 						<a href="<?php echo $this->createUrl('commit/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
@@ -100,12 +100,14 @@
 								<td><?php echo Helper::getCompanyName($model->callout_id);?></td>
 								<td ><?php echo Helper::getCompanyName($model->callin_id);?></td>
 								<td ><?php echo $model->remark;?></td>
-								<td ><span style="color: red"><?php if($model->status==0) echo "未审核"; elseif($model->status==1) echo "已审核"; elseif ($model->status==2) echo "已入库";?></span></td>
+								<td ><span style="color: red"><?php if($model->status==0) echo "编辑中..."; elseif($model->status==1) echo "已审核"; elseif ($model->status==2) echo "等待审核";elseif ($model->status==3) echo "审核失败";elseif ($model->status==4) echo "已处理";?></span></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('commit/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','调拨详情');?></a>
+								<a href="<?php echo $this->createUrl('commit/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->status, ));?>"><?php echo yii::t('app','调拨详情');?></a>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('commit/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php if($model->status == 0 || $model->status == 3):?>
+									<a href="<?php echo $this->createUrl('commit/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php endif;?>
 								</td>
 							</tr>
 						<?php endforeach;?>
