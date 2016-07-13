@@ -28,8 +28,8 @@
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
-				//'id' => 'material-form',
-				//'action' => $this->createUrl('purchaseOrderDetail/delete' , array('companyId' => $this->companyId)),
+				'id' => 'material-form',
+				'action' => $this->createUrl('refundOrder/detailDelete' , array('companyId' => $this->companyId,'rlid'=>$rlid,'status'=>$status,)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -44,6 +44,9 @@
 					<div class="actions">
 					<?php if($status == 0 || $status == 3):?>
 						<a href="<?php echo $this->createUrl('refundOrder/detailcreate' , array('companyId' => $this->companyId,'lid'=>$rlid,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+					<div class="btn-group">
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+						</div>
 					<?php endif;?>
 						<a href="<?php echo $this->createUrl('refundOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>

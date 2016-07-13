@@ -155,7 +155,7 @@ class StorageOrderController extends BackendController
 		$slid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');
 		$storage = StorageOrder::model()->find('lid=:id and dpid=:dpid',array(':id'=>$slid,':dpid'=>$this->companyId));
-		$criteria->condition =  't.dpid='.$this->companyId .' and t.storage_id='.$slid;
+		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.storage_id='.$slid;
 		$pages = new CPagination(StorageOrderDetail::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -219,6 +219,23 @@ class StorageOrderController extends BackendController
 				'categoryId'=>$categoryId,
 				'materials'=>$materialslist
 		));
+	}
+	public function actionDetailDelete(){
+		$slid = Yii::app()->request->getParam('slid');
+		$status = Yii::app()->request->getParam('status');
+		
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$ids = Yii::app()->request->getPost('ids');
+		
+		Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		if(!empty($ids)) {
+			Yii::app()->db->createCommand('update nb_storage_order_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId));
+			$this->redirect(array('storageOrder/detailindex' , 'companyId' => $companyId,'lid'=>$slid,'status'=>$status, )) ;
+		} else {
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
+			$this->redirect(array('storageOrder/detailindex' , 'companyId' => $companyId,'lid'=>$slid,'status'=>$status, )) ;
+		}
 	}
 	public function actionStorageIn(){
 		$sid = Yii::app()->request->getParam('sid');
