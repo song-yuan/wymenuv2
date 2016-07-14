@@ -61,11 +61,11 @@ class PurchaseOrderController extends BackendController
 			}
 			$begintime = Yii::app()->request->getPost('begintime',0);
 			if($begintime){
-				$criteria->addCondition('storage_date >= "'.$begintime.'" ');
+				$criteria->addCondition('delivery_date >= "'.$begintime.'" ');
 			}
 			$endtime = Yii::app()->request->getPost('endtime',0);
 			if($endtime){
-				$criteria->addCondition('storage_date <= "'.$endtime.'" ');
+				$criteria->addCondition('delivery_date <= "'.$endtime.'" ');
 			}
 		}
 		$criteria->order = ' lid desc ';
@@ -149,7 +149,7 @@ class PurchaseOrderController extends BackendController
 		$status = Yii::app()->request->getParam('status');
 		$purchase = PurchaseOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$polid,':dpid'=>$this->companyId));
 		$criteria = new CDbCriteria;
-        $criteria->condition =  't.dpid='.$this->companyId .' and t.purchase_id='.$polid;
+        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.purchase_id='.$polid;
 		$pages = new CPagination(PurchaseOrderDetail::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -215,6 +215,21 @@ class PurchaseOrderController extends BackendController
 				'categoryId'=>$categoryId,
 				'materials'=>$materialslist
 		));
+	}
+	public function actionDetailDelete(){
+		$polid = Yii::app()->request->getParam('polid');
+		$status = Yii::app()->request->getParam('status');
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$ids = Yii::app()->request->getPost('ids');
+		Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		if(!empty($ids)) {
+			Yii::app()->db->createCommand('update nb_purchase_order_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId));
+			$this->redirect(array('purchaseOrder/detailindex' , 'companyId' => $companyId,'lid'=>$polid,'status'=>$status, )) ;
+		} else {
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
+			$this->redirect(array('purchaseOrder/detailindex' , 'companyId' => $companyId,'lid'=>$polid,'status'=>$status, )) ;
+		}
 	}
 	public function actionPurchaseVerify(){
 		$pid = Yii::app()->request->getParam('pid');

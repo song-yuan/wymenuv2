@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				//'action' => $this->createUrl('purchaseOrderDetail/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('purchaseOrder/detailDelete' , array('companyId' => $this->companyId,'polid'=>$polid,'status'=>$status,)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -42,11 +42,17 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','采购订单详情列表');?></div>
 					<div class="actions">
+					
 					<?php if($status == 0):?>
 						<a href="<?php echo $this->createUrl('purchaseOrder/detailcreate' , array('companyId' => $this->companyId,'lid'=>$polid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+					<div class="btn-group">
+						<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+					</div>
 					<?php endif;?>	
 						<a href="<?php echo $this->createUrl('purchaseOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
+					
 					</div>
+					
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">

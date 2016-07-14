@@ -83,9 +83,10 @@ class CommitController extends BackendController
 	public function actionDetailIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
         $clid = Yii::app()->request->getParam('lid');
+        $status = Yii::app()->request->getParam('status');
         $commit = Commit::model()->find('lid=:id and dpid=:dpid',array(':id'=>$clid,':dpid'=>$this->companyId));
 		$criteria = new CDbCriteria;
-		$criteria->condition =  't.dpid='.$this->companyId .' and t.commit_id='.$clid;
+		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.commit_id='.$clid;
 		$pages = new CPagination(CommitDetail::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -97,6 +98,7 @@ class CommitController extends BackendController
 				'pages'=>$pages,
 				'categoryId'=>$categoryId,
                 'clid'=>$clid,
+				'status'=>$status,
 		));
 	}
 	public function actionSetMealList() {
@@ -155,6 +157,23 @@ class CommitController extends BackendController
 				'materials'=>$materialslist
 		));
 	}
+	public function actionDetailDelete(){
+		$clid = Yii::app()->request->getParam('clid');
+		$status = Yii::app()->request->getParam('status');
+	
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$ids = Yii::app()->request->getPost('ids');
+	
+		Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		if(!empty($ids)) {
+			Yii::app()->db->createCommand('update nb_commit_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId));
+			$this->redirect(array('Commit/detailindex' , 'companyId' => $companyId,'lid'=>$clid,'status'=>$status, )) ;
+		} else {
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
+			$this->redirect(array('Commit/detailindex' , 'companyId' => $companyId,'lid'=>$clid,'status'=>$status, )) ;
+		}
+	}
 	public function actionCommitVerify(){
 		$pid = Yii::app()->request->getParam('pid');
 		$type = Yii::app()->request->getParam('type');
@@ -173,6 +192,8 @@ class CommitController extends BackendController
 		if($commit){
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
+				$commit->status = 4;
+				$commit->update();
 				$model = new StorageOrder();
 				$model->dpid = $this->companyId ;
 					

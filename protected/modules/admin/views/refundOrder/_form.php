@@ -91,8 +91,31 @@
 )); ?>
 						
 <script>
+$(document).ready(function () {
+	   var dpid = $('#RefundOrder_organization_id').val();
+	   getStorageOrder(dpid);
+	   $(".ui_timepicker").datetimepicker({
+		   showSecond: true,
+		   timeFormat: 'hh:mm:ss',
+		   stepHour: 1,
+		   stepMinute: 1,
+		   stepSecond: 1
+	   });
+	   
+	   $('#RefundOrder_organization_id').change(function(){
+		   var dpid = $('#RefundOrder_organization_id').val();
+		   getStorageOrder(dpid);
+	   });
+	   
+	});
+
+
+
 	   function getStorageOrder(dpid){
-		   var storageNo = <?php echo $model->storage_account_no;?>;
+		   
+			var storageNo = '<?php echo $model->storage_account_no;?>';
+			  
+		   
 			$.ajax({
 					url:"<?php echo $this->createUrl('/admin/refundOrder/getStorageOrder',array('companyId'=>$this->companyId));?>",
 					data:{dpid:dpid},
@@ -112,21 +135,5 @@
 					dataType:'json'
 				});
 		}
-	   $(document).ready(function () {
-		   var dpid = $('#RefundOrder_organization_id').val();
-		   getStorageOrder(dpid);
-		   $(".ui_timepicker").datetimepicker({
-			   showSecond: true,
-			   timeFormat: 'hh:mm:ss',
-			   stepHour: 1,
-			   stepMinute: 1,
-			   stepSecond: 1
-		   });
-		   
-		   $('#RefundOrder_organization_id').change(function(){
-			   var dpid = $('#RefundOrder_organization_id').val();
-			   getStorageOrder(dpid);
-		   });
-		   
-		});
+
 </script>

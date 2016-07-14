@@ -16,16 +16,56 @@ class RefundOrderController extends BackendController
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$mid=0;
 		$oid=0;
+		$begintime=0;
+		$endtime=0;
+		$storage=0;
+		$refund=0;
 		$criteria = new CDbCriteria;
 		$criteria->addCondition('dpid=:dpid and delete_flag=0');
 		if(Yii::app()->request->isPostRequest){
 			$mid = Yii::app()->request->getPost('mid',0);
 			if($mid){
-				$criteria->addSearchCondition('manufacturer_id',$mid);
+				$maname = ManufacturerInformation::model()->findAll('manufacturer_name like "%'.$mid.'%" and dpid=:dpid and delete_flag = 0 ' , array(':dpid'=>  $this->companyId));
+				//var_dump($maname);exit;
+				if($maname){
+					$malides = '';
+					foreach ($maname as $manames){
+						$malid = $manames->lid;
+						$malides = $malid .','. $malides;
+						//var_dump($malides);
+					}
+					$malides = substr($malides, 0,strlen($malides)-1);
+					$criteria->addCondition('manufacturer_id in ('.$malides.')');
+					//var_dump($criteria);exit;
+				}else{
+					$criteria->addSearchCondition('manufacturer_id',$mid);
+				}
 			}
 			$oid = Yii::app()->request->getPost('oid',0);
 			if($oid){
 				$criteria->addSearchCondition('organization_id',$oid);
+			}
+			$storage = Yii::app()->request->getPost('storage',0);
+			if($storage){
+				//echo($oid);
+				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
+				//var_dump($ogname);exit;
+				$criteria->addSearchCondition('storage_account_no',$storage);
+			}
+			$refund = Yii::app()->request->getPost('refund',0);
+			if($refund){
+				//echo($oid);
+				//$ogname = Company::model()->find('company_name like "%'.$oid.'%" and delete_flag = 0');
+				//var_dump($ogname);exit;
+				$criteria->addSearchCondition('refund_account_no',$refund);
+			}
+			$begintime = Yii::app()->request->getPost('begintime',0);
+			if($begintime){
+				$criteria->addCondition('refund_date >= "'.$begintime.'" ');
+			}
+			$endtime = Yii::app()->request->getPost('endtime',0);
+			if($endtime){
+				$criteria->addCondition('refund_date <= "'.$endtime.'" ');
 			}
 		}
 		$criteria->order = ' lid desc ';
@@ -40,6 +80,10 @@ class RefundOrderController extends BackendController
 				'categoryId'=>$categoryId,
 				'mid'=>$mid,
 				'oid'=>$oid,
+				'begintime'=>$begintime,
+				'endtime'=>$endtime,
+				'storage'=>$storage,
+				'refund'=>$refund,
 		));
 	}
 	public function actionSetMealList() {
@@ -153,8 +197,9 @@ class RefundOrderController extends BackendController
 	public function actionDetailIndex(){
 		$criteria = new CDbCriteria;
 		$rlid = Yii::app()->request->getParam('lid');
+		$status = Yii::app()->request->getParam('status');
 		$refund = RefundOrder::model()->find('lid=:lid and dpid=:dpid and delete_flag=0',array(':lid'=>$rlid,':dpid'=>$this->companyId));
-        $criteria->condition =  't.dpid='.$this->companyId .' and t.refund_id='.$rlid;
+        $criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.refund_id='.$rlid;
 		$pages = new CPagination(RefundOrderDetail::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -164,6 +209,7 @@ class RefundOrderController extends BackendController
 				'refund'=>$refund,
 				'pages'=>$pages,
 				'rlid'=>$rlid,
+				'status'=>$status,
 		));
 	}
 	public function actionDetailCreate(){
@@ -218,6 +264,23 @@ class RefundOrderController extends BackendController
 				'materials'=>$materialslist
 		));
 	}
+	public function actionDetailDelete(){
+		$rlid = Yii::app()->request->getParam('rlid');
+		$status = Yii::app()->request->getParam('status');
+	
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$ids = Yii::app()->request->getPost('ids');
+	
+		Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		if(!empty($ids)) {
+			Yii::app()->db->createCommand('update nb_refund_order_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId));
+			$this->redirect(array('refundOrder/detailindex' , 'companyId' => $companyId,'lid'=>$rlid,'status'=>$status, )) ;
+		} else {
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
+			$this->redirect(array('refundOrder/detailindex' , 'companyId' => $companyId,'lid'=>$rlid,'status'=>$status, )) ;
+		}
+	}
 	/**
 	 * 
 	 * 获取已入库入库订单
@@ -252,10 +315,19 @@ class RefundOrderController extends BackendController
 	 */
 	public function actionRefundOrder(){
 		$pid = Yii::app()->request->getParam('pid');
+		
 		$refund = RefundOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
 		if($refund){
 			$refundDetails = RefundOrderDetail::model()->findAll('dpid=:dpid and refund_id=:refundId and delete_flag=0',array(':dpid'=>$this->companyId,':refundId'=>$refund->lid));
 			$organizeId = $refund->organization_id;
+
+// 			$refund->status = 4;
+// 			if($refund->update()){
+// 				return;
+// 			}else{
+// 				echo 'false';
+// 				exit;
+// 			}
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
 				foreach ($refundDetails as $detail){
@@ -271,14 +343,26 @@ class RefundOrderController extends BackendController
 					$materialStockLog->update_at = date('Y-m-d H:i:s',time());
 					$materialStockLog->material_id = $detail['material_id'];
 					$materialStockLog->type = 1;
-					$materialStockLog->stock_num = $stock;
+					$materialStockLog->stock_num = $detail['stock'];
 					$materialStockLog->resean = '退货出库';
 					$materialStockLog->save();
 				}
 				$transaction->commit();
+				//var_dump($pid);exit;
+				$refund->status = 4;
+				$refund->update();
+				echo 'true';
 			}catch(Exception $e){
 				$transaction->rollback();
+				$refund->status = 2;
+				$refund->update();
+				echo 'false';
+				
+				exit;
 			}
+			
+		}else{
+			echo 'false';
 		}
 	}
 	private function getCategories(){

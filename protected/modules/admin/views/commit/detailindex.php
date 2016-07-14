@@ -28,8 +28,8 @@
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
-				//'id' => 'material-form',
-				//'action' => $this->createUrl('commitDetail/delete' , array('companyId' => $this->companyId)),
+				'id' => 'material-form',
+				'action' => $this->createUrl('commit/detailDelete' , array('companyId' => $this->companyId,'clid'=>$clid,'status'=>$status,)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -42,7 +42,12 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','调拨详情列表');?></div>
 					<div class="actions">
+					<?php if($status == 0 || $status == 3):?>
 						<a href="<?php echo $this->createUrl('commit/detailcreate' , array('companyId' => $this->companyId,'lid'=>$clid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<div class="btn-group">
+							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+						</div>
+					<?php endif;?>
 						<a href="<?php echo $this->createUrl('commit/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
@@ -59,6 +64,7 @@
 						</thead>
 						<tbody>
 						<?php if($models) :?>
+						<div style="display: none;" id="storagedetail" val="1"></div>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
@@ -66,13 +72,36 @@
 								<td><?php echo Common::getStockName($model->unit_name);?></td>
 								<td><?php echo $model->stock;?></td>
 								<td class="center">
+								<?php if($status == 0 || $status == 3):?>
 								<a href="<?php echo $this->createUrl('commit/detailupdate',array('lid' => $model->lid ,'clid'=>$model->commit_id, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<?php endif;?>
 								</td>
 							</tr>
 						<?php endforeach;?>
+						<?php else:?>
+						<div style="display: none;" id="storagedetail" val="0"></div>
 						<?php endif;?>
 							<tr>
-								<td colspan="20" style="text-align: right;"><?php if($commit->status==0):?><?php if(Yii::app()->user->role):?><input id="verify-pass" type="button" class="btn blue" value="审核通过" commit-id="<?php echo $commit->lid;?>"/>&nbsp;<input id="verify-nopass" type="button" class="btn blue" value="驳回" commit-id="<?php echo $commit->lid;?>" /><?php else:?><span style="color:red">等待审核</span><?php endif;?><?php elseif($commit->status==1):?>&nbsp;<input id="storageOrder" type="button" class="btn blue" value="生成入库单" commit-id="<?php echo $commit->lid;?>"/><?php elseif($commit->status==2):?><span style="color:red">审核未通过</span><?php else:?><span style="color:red">已入库</span><?php endif;?></td>
+								<td colspan="20" style="text-align: right;">
+								<?php if($commit->status==0):?>
+									<?php if(Yii::app()->user->role<3):?><input id="verify-pass-0" type="button" class="btn blue" value="确认送审" commit-id="<?php echo $commit->lid;?>"/>
+									<?php else:?><span style="color:red">等待审核</span>
+									<?php endif;?>
+								<?php elseif($commit->status==1):?>
+									<?php if(Yii::app()->user->role<3):?>
+										<span style="color:red">审核通过</span>&nbsp;<input id="storageOrder" type="button" class="btn blue" value="生成入库单" commit-id="<?php echo $commit->lid;?>"/>
+									<?php else:?>
+										<span style="color:red">审核通过</span>
+									<?php endif;?>
+								<?php elseif($commit->status==2):?>
+									<?php if(Yii::app()->user->role<3):?><input id="verify-pass" type="button" class="btn blue" value="审核通过" commit-id="<?php echo $commit->lid;?>"/>&nbsp;<input id="verify-nopass" type="button" class="btn blue" value="驳回" commit-id="<?php echo $commit->lid;?>" />
+									<?php else:?><span style="color:red">等待审核</span>
+									<?php endif;?>
+								<?php elseif($commit->status==3):?><span style="color:red">审核未通过</span>&nbsp;<input id="verify-pass-3" type="button" class="btn blue" value="重新送审" commit-id="<?php echo $commit->lid;?>"/>
+								<?php elseif($commit->status==4):?><span style="color:red">已处理</span>
+								<?php else:?><span style="color:red">  </span>
+								<?php endif;?>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -121,6 +150,9 @@
 
 		$('#verify-pass').click(function(){
 			var pid = $(this).attr('commit-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
 			if(confirm('确认审核该调拨订单')){
 				$.ajax({
 					url:'<?php echo $this->createUrl('commit/commitVerify',array('companyId'=>$this->companyId));?>',
@@ -131,9 +163,63 @@
 						}else{
 							alert('审核失败');
 						}
-						history.go(0);
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});
+			}
+			}else{
+				alert('请添加需要调拨的品项');
+			}
+			
+		});
+		$('#verify-pass-3').click(function(){
+			var pid = $(this).attr('commit-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认重新送审该调拨订单')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('commit/commitVerify',array('companyId'=>$this->companyId));?>',
+					data:{type:2,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('送审成功');
+						}else{
+							alert('送审失败');
+						}
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
+					}
+				});
+			}
+			}else{
+				alert('请添加需要调拨的品项');
+			}
+			
+		});
+		$('#verify-pass-0').click(function(){
+			var pid = $(this).attr('commit-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认送审该调拨订单')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('commit/commitVerify',array('companyId'=>$this->companyId));?>',
+					data:{type:2,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('送审成功');
+						}else{
+							alert('送审失败');
+						}
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
+					}
+				});
+			}
+			}else{
+				alert('请添加需要调拨的品项');
 			}
 			
 		});
@@ -142,14 +228,15 @@
 			if(confirm('确认驳回该调拨订单')){
 				$.ajax({
 					url:'<?php echo $this->createUrl('commit/commitVerify',array('companyId'=>$this->companyId));?>',
-					data:{type:2,pid:pid},
+					data:{type:3,pid:pid},
 					success:function(msg){
 						if(msg=='true'){
 							alert('驳回成功');
 						}else{
 							alert('驳回失败');
 						}
-						history.go(0);
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});
 			}
@@ -162,11 +249,12 @@
 					data:{pid:pid},
 					success:function(msg){
 						if(msg=='true'){
-							alert('生成订单成功');
+							alert('生成入库单成功');
 						}else{
-							alert('生成订单失败');
+							alert('生成入库单失败');
 						}
 						//history.go(0);
+						location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});
 			}
