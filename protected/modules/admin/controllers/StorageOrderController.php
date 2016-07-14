@@ -244,6 +244,7 @@ class StorageOrderController extends BackendController
 			$storageDetails = StorageOrderDetail::model()->findAll('storage_id=:sid and dpid=:dpid and delete_flag=0',array(':sid'=>$sid,':dpid'=>$this->companyId));
 			$transaction = Yii::app()->db->beginTransaction();
 			try{
+				
 				foreach ($storageDetails as $detail){
 					$stock = $detail['stock'];
 					$stockCost = ($detail['stock']-$detail['free_stock'])*$detail['price'];

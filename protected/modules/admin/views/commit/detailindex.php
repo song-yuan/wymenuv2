@@ -249,9 +249,9 @@
 					data:{pid:pid},
 					success:function(msg){
 						if(msg=='true'){
-							alert('生成订单成功');
+							alert('生成入库单成功');
 						}else{
-							alert('生成订单失败');
+							alert('生成入库单失败');
 						}
 						//history.go(0);
 						location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
