@@ -102,6 +102,7 @@ class DataSyncTables
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  'jobid' int(10) NOT NULL DEFAULT '0',".
         		"  `sync_type` varchar(2) NOT NULL DEFAULT '0',".
                 "  `sync_url` varchar(255) NOT NULL DEFAULT '0',".
 				"  `content` text NOT NULL,".
