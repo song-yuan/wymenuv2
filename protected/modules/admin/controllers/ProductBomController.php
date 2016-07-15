@@ -22,6 +22,7 @@ class ProductBomController extends BackendController
 	public function actionDetailIndex(){
 		$pblid = Yii::app()->request->getParam('pblid');
 		$criteria = new CDbCriteria;
+		$criteria->with = 'material';
 		$criteria->condition =  't.dpid='.$this->companyId .' and t.product_id='.$pblid.' and t.delete_flag=0';
 		$pages = new CPagination(ProductBom::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -175,7 +176,7 @@ class ProductBomController extends BackendController
 		foreach($produts as $c){
 			$tmp['name'] = $c['material_name'];
 			$tmp['id'] = $c['lid'];
-			$tmp['unit_id'] = $c['stock_unit_id'];
+			$tmp['unit_id'] = $c['sales_unit_id'];
 			$treeDataSource['data'][] = $tmp;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
