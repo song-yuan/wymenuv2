@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','BOM管理'),'subhead'=>yii::t('app','添加BOM明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','BOM管理'),'url'=>$this->createUrl('productBom/detailindex' , array('companyId'=>$this->companyId,))),array('word'=>\yii::t('app','添加BOM明细'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','BOM管理'),'subhead'=>yii::t('app','添加BOM明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','BOM管理'),'url'=>$this->createUrl('productBom/index' , array('companyId'=>$this->companyId,))),array('word'=>\yii::t('app','添加BOM明细'),'url'=>''))));?>
 
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
