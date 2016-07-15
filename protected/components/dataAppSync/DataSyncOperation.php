@@ -415,7 +415,7 @@ class DataSyncOperation {
 						'account_no' => $accountNo,
 						'discount_type' => $discount->discount_type,
 						'discount_id' => $discount->discount_id,
-						'discount_money' => $pay->discount_money,
+						'discount_money' => $discount->discount_money,
 						'is_sync' => DataSync::getInitSync () 
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_account_discount', $orderDiscountData );
