@@ -67,6 +67,7 @@ class MaterialUnitController extends BackendController
 	}
 	
 	public function actionUpdate(){
+		$type=Yii::app()->request->getParam('type',0);
 		$id = Yii::app()->request->getParam('id');
 		$model = MaterialUnit::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
@@ -82,6 +83,7 @@ class MaterialUnitController extends BackendController
 
 		$this->render('update' , array(
 				'model' => $model ,
+				'type' => $type
 		));
 	}
 	public function actionDelete(){
