@@ -59,17 +59,7 @@ class DataSyncOperation {
 	public static function getDataSyncData($dpid, $tableName) {
 		$dataBase = new DataSyncTableData ( $dpid, $tableName );
 		$tableData = $dataBase->getInitData ();
-		if ($tableData) {
-			return array (
-					'status' => true,
-					'msg' => $tableData 
-			);
-		} else {
-			return array (
-					'status' => false,
-					'msg' => '无数据' 
-			);
-		}
+		return array ('status' => true,'msg' => $tableData);
 	}
 	/**
 	 * 
