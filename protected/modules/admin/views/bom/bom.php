@@ -284,7 +284,7 @@
 							<div class="ku-item-info">调拨</div>
 						</div>
 					</a>
-					<!-- 
+					 
 					<a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pc"></div>
@@ -297,7 +297,7 @@
 							<div class="ku-item-info">盘损</div>
 						</div>
 					</a>
-					 -->
+					
 					<?php endif;?>
 				</div>
 			</div>

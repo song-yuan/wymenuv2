@@ -34,12 +34,15 @@ class CommitController extends BackendController
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Commit');
+			//var_dump($model);exit;
 			$se=new Sequence("commit");
 			$model->lid = $se->nextval();
+			$model->callout_id = '000000000';
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->commit_account_no = date('YmdHis',time()).substr($model->lid,-4);
+			$model->commit_account_no = date('YmdHis',time()).substr('0000000000'.$model->lid,-4);
 			$model->delete_flag = '0';
+			//var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
 				$this->redirect(array('Commit/index' , 'companyId' => $this->companyId ));
@@ -180,6 +183,18 @@ class CommitController extends BackendController
 		$commit = Commit::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
 		$commit->status = $type;
 		if($commit->update()){
+			echo 'true';
+		}else{
+			echo 'false';
+		}
+		exit;
+	}
+	public function actionCommitOutlid(){
+		$pid = Yii::app()->request->getParam('pid');
+		$type = Yii::app()->request->getParam('type');
+		$commit = Commit::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		$callout_id = $commit->callout_id ;
+		if($callout_id > 0){
 			echo 'true';
 		}else{
 			echo 'false';

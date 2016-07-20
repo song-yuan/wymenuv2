@@ -97,7 +97,7 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo $model->commit_account_no;?></td>
 								<td ><?php echo $model->commit_date;?></td>
-								<td><?php echo Helper::getCompanyName($model->callout_id);?></td>
+								<td><?php if($model->callout_id != 0) echo Helper::getCompanyName($model->callout_id);else echo '';?></td>
 								<td ><?php echo Helper::getCompanyName($model->callin_id);?></td>
 								<td ><?php echo $model->remark;?></td>
 								<td ><span style="color: red"><?php if($model->status==0) echo "编辑中..."; elseif($model->status==1) echo "已审核"; elseif ($model->status==2) echo "等待审核";elseif ($model->status==3) echo "审核失败";elseif ($model->status==4) echo "已处理";?></span></td>
@@ -105,7 +105,7 @@
 								<a href="<?php echo $this->createUrl('commit/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->status, ));?>"><?php echo yii::t('app','调拨详情');?></a>
 								</td>
 								<td class="center">
-								<?php if($model->status == 0 || $model->status == 3):?>
+								<?php if($model->status == 0 || $model->status == 3 || ($model->status == 2 && Yii::app()->user->role<3)):?>
 									<a href="<?php echo $this->createUrl('commit/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								<?php endif;?>
 								</td>
