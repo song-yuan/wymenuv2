@@ -69,7 +69,7 @@
 								<td ><?php if($model->unit_type==0) echo "入库单位"; elseif($model->unit_type==1) echo "零售单位";?></td>
 								<td ><?php echo $model->unit_specifications;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('materialUnit/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('materialUnit/update',array('id' => $model->lid , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

@@ -79,7 +79,7 @@
 								<td ><?php echo $model->material_private_identifier;?></td>
 								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
 								<td ><?php echo Common::getStockName($model->sales_unit_id);?></td>
-								<td ><?php echo $model->material_stock->stock;?></td>
+								<td ><?php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>
 								<!--<td ><php echo $model->stock_cost;?></td>-->
 								<td class="center">
 								<a href="<?php echo $this->createUrl('productMaterial/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>

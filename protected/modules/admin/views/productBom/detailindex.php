@@ -75,7 +75,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td><?php echo Common::getmaterialName($model->material_id) ;?></td>
+								<td><?php echo $model->material->material_name ;?></td>
                                 <td><?php echo Common::getSalesName($model->sales_unit_id);?></td>
                                 <td><?php echo $model->number;?></td>
                                 <td class="center">

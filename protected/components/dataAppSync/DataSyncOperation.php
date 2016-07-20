@@ -59,17 +59,7 @@ class DataSyncOperation {
 	public static function getDataSyncData($dpid, $tableName) {
 		$dataBase = new DataSyncTableData ( $dpid, $tableName );
 		$tableData = $dataBase->getInitData ();
-		if ($tableData) {
-			return array (
-					'status' => true,
-					'msg' => $tableData 
-			);
-		} else {
-			return array (
-					'status' => false,
-					'msg' => '无数据' 
-			);
-		}
+		return array ('status' => true,'msg' => $tableData);
 	}
 	/**
 	 * 
@@ -177,18 +167,27 @@ class DataSyncOperation {
 			foreach ( $results as $result ) {
 				$order = array ();
 				$order ['nb_order'] = $result;
-				$sql = 'select * from nb_order_product where order_id=' . $result ['lid'];
+				$sql = 'select *,"" as set_name,sum(price) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and delete_flag=0 group by set_id';
 				$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				foreach ( $orderProduct as $k => $product ) {
-					$sql = 'select * from nb_order_taste where order_id=' . $product ['lid'] . ' and is_order=0';
+					$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $product ['lid'] . ' and t.is_order=0 and t.delete_flag=0';
 					$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 					$orderProduct [$k] ['product_taste'] = $orderProductTaste;
+					if($product['set_id'] > 0){
+						$sql = 'select t.*,t1.set_name,t1.set_price from nb_order_product t,nb_product_set t1 where t.set_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t.order_id=' . $product ['lid'] . ' and t.set_id='.$product['set_id'];
+						$productSet = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+						if(!empty($productSet)){
+							$orderProduct [$k] ['set_name'] = $productSet[0]['set_name'];
+							$orderProduct [$k] ['set_price'] = $product['set_price'] + $productSet[0]['set_price'];
+							$orderProduct [$k] ['set_detail'] = $productSet;
+						}
+					}
 				}
 				$order ['nb_order_product'] = $orderProduct;
 				$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
 				$orderPay = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_pay'] = $orderPay;
-				$sql = 'select * from nb_order_taste where order_id=' . $result ['lid'] . ' and is_order=1';
+				$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $result ['lid'] . ' and t.is_order=1 and t.delete_flag=0';
 				$orderTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_taste'] = $orderTaste;
 				array_push ( $data ['order'], $order );
@@ -415,7 +414,7 @@ class DataSyncOperation {
 						'account_no' => $accountNo,
 						'discount_type' => $discount->discount_type,
 						'discount_id' => $discount->discount_id,
-						'discount_money' => $pay->discount_money,
+						'discount_money' => $discount->discount_money,
 						'is_sync' => DataSync::getInitSync () 
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_account_discount', $orderDiscountData );

@@ -75,5 +75,11 @@
                         }
                         alert(dbinfo);
                     });
+                    $(document).on('keydown',function(e){
+                    	var  keycode = e.which;
+                    	if(keycode==13){
+							$('form').submit();
+                        }
+                     });
                 </script>
                 

@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','套餐明细管理'),'subhead'=>yii::t('app','修改套餐明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','套餐明细管理'),'url'=>$this->createUrl('productSet/detailindex' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','修改套餐明细'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','BOM管理'),'subhead'=>yii::t('app','编辑BOM明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','BOM管理'),'url'=>$this->createUrl('productBom/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','编辑BOM明细'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改套餐明细');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','编辑BOM明细');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
