@@ -155,18 +155,33 @@
 			if(storagedetail == 1){
 			if(confirm('确认审核该调拨订单')){
 				$.ajax({
-					url:'<?php echo $this->createUrl('commit/commitVerify',array('companyId'=>$this->companyId));?>',
+					url:'<?php echo $this->createUrl('commit/commitOutlid',array('companyId'=>$this->companyId));?>',
 					data:{type:1,pid:pid},
 					success:function(msg){
 						if(msg=='true'){
-							alert('审核成功');
+							$.ajax({
+								url:'<?php echo $this->createUrl('commit/commitVerify',array('companyId'=>$this->companyId));?>',
+								data:{type:1,pid:pid},
+								success:function(msg){
+									if(msg=='true'){
+										alert('审核成功');
+									}else{
+										alert('审核失败');
+									}
+									//history.go(0);
+									//$this->redirect(<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>);
+									//Yii::app()->user->returnUrl = "<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
+									location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
+								}
+							});
 						}else{
-							alert('审核失败');
+							alert('请返回填写调出组织');
 						}
 						//history.go(0);
 						location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});
+				
 			}
 			}else{
 				alert('请添加需要调拨的品项');
@@ -254,6 +269,7 @@
 							alert('生成入库单失败');
 						}
 						//history.go(0);
+						
 						location.href="<?php echo $this->createUrl('commit/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});

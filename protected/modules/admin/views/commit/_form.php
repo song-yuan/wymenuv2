@@ -17,6 +17,7 @@
 	</style>
 	
 	<div class="form-body">
+		<?php if(Yii::app()->user->role<3):?>
 		<div class="form-group <?php if($model->hasErrors('callout_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'callout_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
@@ -24,6 +25,7 @@
 				<?php echo $form->error($model, 'callout_id' )?>
 			</div>
 		</div>
+		<?php endif;?>
 		<div class="form-group <?php if($model->hasErrors('callin_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'callin_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
