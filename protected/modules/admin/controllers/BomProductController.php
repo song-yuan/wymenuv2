@@ -1,7 +1,7 @@
 <?php
 class BomproductController extends BackendController
 {
-	public function actions() {
+	public function actions() {  
 		return array(
 				'upload'=>array(
 						'class'=>'application.extensions.swfupload.SWFUploadAction',
