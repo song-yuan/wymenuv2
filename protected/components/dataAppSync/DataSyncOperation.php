@@ -221,10 +221,14 @@ class DataSyncOperation {
 		$dpid = $data ['dpid'];
 		$userName = $data ['user_name'];
 		$passward = $data ['passward'];
-		if($dpid > 0){
-			$sql = 'select * from nb_user where dpid='.$dpid.' and username="' . $userName . '" and password_hash="' . Helper::genPassword ( $passward ) . '" and delete_flag=0';
-		}else{
+		if($userName=='admin'){
 			$sql = 'select * from nb_user where username="' . $userName . '" and password_hash="' . Helper::genPassword ( $passward ) . '" and delete_flag=0';
+		}else{
+			if($dpid > 0){
+				$sql = 'select * from nb_user where dpid='.$dpid.' and username="' . $userName . '" and password_hash="' . Helper::genPassword ( $passward ) . '" and delete_flag=0';
+			}else{
+				$sql = 'select * from nb_user where username="' . $userName . '" and password_hash="' . Helper::genPassword ( $passward ) . '" and delete_flag=0';
+			}
 		}
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if ($result) {
@@ -237,6 +241,29 @@ class DataSyncOperation {
 					'status' => false 
 			) );
 		}
+	}
+	/**
+	 * 
+	 * 检验是否有新数据
+	 * 有新数据返回 表名
+	 * 
+	 */
+	public static function getNewDataByTime($data) {
+		$dpid = $data['dpid'];
+		$syncTime = $data['sync_at'];
+		$results = array();
+		$diffTable = array('nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_taste','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_sync_failure');
+		$dataBase = new DataSyncTables ();
+		$allTables = $dataBase->getAllTableName ();
+		$allTable = array_diff($allTables, $diffTable);
+		foreach ($allTable as $table){
+			$sql = 'select * from '.$table.' where creata_at >='.$syncTime.' or update_at >='.$syncTime.' and delete_flag=0';
+			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+			if($result){
+				array_push($results,$table);
+			}
+		}
+		return json_encode($results);
 	}
 	/**
 	 * 
