@@ -235,7 +235,7 @@
 							<div class="ku-item-info">产品分类</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('bomproduct/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('bomProduct/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey cpxx"></div>
 							<div class="ku-item-info">产品信息</div>

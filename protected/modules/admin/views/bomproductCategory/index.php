@@ -41,8 +41,8 @@
 						<div class="portlet-title">
 							<div class="caption"><i class="fa fa-cogs"></i><?php echo yii::t('app','产品分类管理');?></div>
 							<div class="actions">
-								<a class="btn blue add_btn" pid="0" data-toggle="modal"><i class="fa fa-plus"></i> <?php echo yii::t('app','添加一级类目');?></a>
-							</div>
+								<!-- <a class="btn blue add_btn" pid="0" data-toggle="modal"><i class="fa fa-plus"></i> <?php echo yii::t('app','添加一级类目');?></a>
+							 --></div>
 						</div>
 						<div class="portlet-body">
 							<div class="table-responsive">
@@ -52,11 +52,11 @@
 										<td width="70%"><?php echo '('.$model->order_num.')'.$model->category_name;?></td>
 										<td>
 										<?php if($model->pid=='0'):?>
-										<a class="btn btn-xs green add_btn" pid="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-plus"></i></a>
-										<?php endif;?>
-										<a class="btn btn-xs blue edit_btn" id="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-edit"></i></a>
+										<!-- <a class="btn btn-xs green add_btn" pid="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-plus"></i></a>
+										 --><?php endif;?>
+										<!-- <a class="btn btn-xs blue edit_btn" id="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-edit"></i></a>
 										<a href="javascript:;" cid="<?php echo $model->lid;?>" class="btn btn-xs red btn_delete"><i class="fa fa-times"></i></a>										
-										</td>
+										 --></td>
 									</tr>
 									<?php endforeach;?>
 								</table>
