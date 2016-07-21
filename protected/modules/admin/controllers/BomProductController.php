@@ -1,5 +1,5 @@
 <?php
-class BomproductController extends BackendController
+class BomProductController extends BackendController
 {
 	public function actions() {  
 		return array(
@@ -83,7 +83,7 @@ class BomproductController extends BackendController
 				//var_dump($model);exit;
 				if($model->save()){
 					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-					$this->redirect(array('bomproduct/index' , 'companyId' => $this->companyId ));
+					$this->redirect(array('bomProduct/index' , 'companyId' => $this->companyId ));
 				}
 			}else{
 				 $model->addError('category_id','必须添加二级分类');
@@ -111,7 +111,7 @@ class BomproductController extends BackendController
 			$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-				$this->redirect(array('bomproduct/index' , 'companyId' => $this->companyId ));
+				$this->redirect(array('bomProduct/index' , 'companyId' => $this->companyId ));
 			}
 		}
 		$categories = $this->getCategoryList();
@@ -128,10 +128,10 @@ class BomproductController extends BackendController
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('bomproduct/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('bomProduct/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('bomproduct/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('bomProduct/index' , 'companyId' => $companyId)) ;
 		}
 	}
 	public function actionStatus(){

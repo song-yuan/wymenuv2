@@ -29,7 +29,7 @@
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'product-form',
-				'action' => $this->createUrl('bomproduct/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('bomProduct/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -45,8 +45,8 @@
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
-						<a href="<?php echo $this->createUrl('bomproduct/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<div class="btn-group">
+						<!-- <a href="<?php echo $this->createUrl('bomProduct/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						 --><div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
 					</div>
@@ -92,8 +92,8 @@
                                                                 <td ><?php echo $model->is_show=='0'?yii::t('app','否'):yii::t('app','是');?></td>
                                                                 
 								<td class="center">
-								<a href="<?php echo $this->createUrl('bomproduct/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
-								</td>
+								<!-- <a href="<?php echo $this->createUrl('bomProduct/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								 --></td>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
@@ -149,15 +149,15 @@
 		});
 		$('.s-btn').on('switch-change', function () {
 			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('bomproduct/status',array('companyId'=>$this->companyId));?>/id/'+id);
+		    $.get('<?php echo $this->createUrl('bomProduct/status',array('companyId'=>$this->companyId));?>/id/'+id);
 		});
 		$('.r-btn').on('switch-change', function () {
 			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('bomproduct/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
+		    $.get('<?php echo $this->createUrl('bomProduct/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('bomproduct/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+			location.href="<?php echo $this->createUrl('bomProduct/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
 	</script>	
