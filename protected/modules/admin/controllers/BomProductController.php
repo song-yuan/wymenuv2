@@ -38,7 +38,7 @@ class BomproductController extends BackendController
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Product::model()->findAll($criteria);
-		
+		var_dump($models);exit;
 		$categories = $this->getCategories();
 //                var_dump($categories);exit;
 		$this->render('index',array(
