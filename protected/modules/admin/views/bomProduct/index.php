@@ -46,9 +46,9 @@
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<!-- <a href="<?php echo $this->createUrl('bomProduct/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						 --><div class="btn-group">
+						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
