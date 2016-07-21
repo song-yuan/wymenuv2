@@ -218,9 +218,14 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function validateUser($data) {
+		$dpid = $data ['dpid'];
 		$userName = $data ['user_name'];
 		$passward = $data ['passward'];
-		$sql = 'select * from nb_user where username="' . $userName . '" and password_hash="' . Helper::genPassword ( $passward ) . '" and delete_flag=0';
+		if($dpid > 0){
+			$sql = 'select * from nb_user where dpid='.$dpid.' and username="' . $userName . '" and password_hash="' . Helper::genPassword ( $passward ) . '" and delete_flag=0';
+		}else{
+			$sql = 'select * from nb_user where username="' . $userName . '" and password_hash="' . Helper::genPassword ( $passward ) . '" and delete_flag=0';
+		}
 		$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if ($result) {
 			return json_encode ( array (
