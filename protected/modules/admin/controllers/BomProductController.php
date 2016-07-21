@@ -1,5 +1,5 @@
 <?php
-class BomProductController extends BackendController
+class BomproductController extends BackendController
 {
 	public function actions() {
 		return array(
