@@ -70,7 +70,7 @@
 							<tr class="odd gradeX">
 								<!--<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>-->
 								<td style="width:16%"><?php echo Common::getmaterialName($model->material_id);?></td>
-								<td ><?php if ($model->type==0) echo "入库"; elseif ($model->type==1) echo "出库"?></td>
+								<td ><?php if ($model->type==0) echo "入库"; elseif ($model->type==1) echo "出库";elseif ($model->type==2) echo "盘存"?></td>
 								<td><?php echo $model->stock_num;?></td>
 								<td><?php echo $model->resean;?></td>
 								<!--<td class="center">
