@@ -61,6 +61,7 @@
 								<th><?php echo yii::t('app','调整类型');?></th>
 								<th><?php echo yii::t('app','数量');?></th>
 								<th><?php echo yii::t('app','原因');?></th>
+								<th><?php echo yii::t('app','调整时间');?></th>
 								<!--<th>&nbsp;</th>-->
 							</tr>
 						</thead>
@@ -73,6 +74,7 @@
 								<td ><?php if ($model->type==0) echo "入库"; elseif ($model->type==1) echo "出库";elseif ($model->type==2) echo "盘存"?></td>
 								<td><?php echo $model->stock_num;?></td>
 								<td><?php echo $model->resean;?></td>
+								<td><?php echo $model->create_at;?></td>
 								<!--<td class="center">
 								<a href="<?php echo $this->createUrl('materialStockLog/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>-->
