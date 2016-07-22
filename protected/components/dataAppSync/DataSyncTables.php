@@ -88,7 +88,18 @@ class DataSyncTables
     {
          return array_merge($this->baseTableName,$this->otherTableName);       
     }
-    
+    /**
+     * 获取所有的数据表列表，初始化的时候用
+     */
+    public function getAllTableName()
+    {
+    	$allTables = array_merge($this->baseTableName,$this->otherTableName);
+    	$allTable = array();
+    	foreach ($allTables as $table){
+    		array_push($allTable,$table['table']);
+    	}
+    	return $allTable;
+    }
     /**
      * 根据表名获取表结构
      * sync_type 表示同步类型

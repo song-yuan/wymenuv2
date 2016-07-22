@@ -81,6 +81,16 @@ public function actionGetData(){
 }
 /**
  * 
+ * 
+ * 检验是否有新数据
+ * 
+ */
+public function actionValidateNewData(){
+	$result = DataSyncOperation::getNewDataByTime($_POST);
+	echo $result;exit;
+}
+/**
+ * 
  * 获取订单状态
  * 
  */
