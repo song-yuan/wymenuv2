@@ -261,7 +261,7 @@ class DataSyncOperation {
 			if($table=='nb_local_company'){
 				$tableName = 'nb_company';
 			}
-			$sql = 'select * from '.$tableName.' where create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'" and delete_flag=0';
+			$sql = 'select * from '.$tableName.' where (create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'") and delete_flag=0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
 				array_push($results,$table);
