@@ -285,7 +285,7 @@
 						</div>
 					</a>
 					 
-					<a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('stockInventory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pc"></div>
 							<div class="ku-item-info">盘存</div>
