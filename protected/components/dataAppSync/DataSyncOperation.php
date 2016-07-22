@@ -257,7 +257,11 @@ class DataSyncOperation {
 		$allTables = $dataBase->getAllTableName ();
 		$allTable = array_diff($allTables, $diffTable);
 		foreach ($allTable as $table){
-			$sql = 'select * from '.$table.' where creata_at >='.$syncTime.' or update_at >='.$syncTime.' and delete_flag=0';
+			$tableName = $table;
+			if($table=='nb_local_company'){
+				$tableName = 'nb_company';
+			}
+			$sql = 'select * from '.$tableName.' where create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'" and delete_flag=0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
 				array_push($results,$table);
