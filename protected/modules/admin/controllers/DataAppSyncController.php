@@ -86,7 +86,7 @@ public function actionGetData(){
  * 
  */
 public function actionValidateNewData(){
-	$result = DataSyncOperation::getNewDataByTime($_GET);
+	$result = DataSyncOperation::getNewDataByTime($_POST);
 	echo $result;exit;
 }
 /**
