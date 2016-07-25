@@ -22,8 +22,8 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','特价活动产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','特价活动产品设置'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('privatepromotion/index' , array('companyId' => $this->companyId,)))));?>
-	
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','特价优惠产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','线上活动'),'url'=>$this->createUrl('discount/list' , array('companyId' => $this->companyId,'type'=>1,))),array('word'=>yii::t('app','特价优惠活动'),'url'=>$this->createUrl('privatepromotion/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','添加特价优惠产品'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('privatepromotion/index' , array('companyId' => $this->companyId,)))));?>
+		
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">

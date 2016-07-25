@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','满惠（折）活动产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','查看已添加菜品'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('fullSentPromotion/detailindex' , array('typeId' =>'product','companyId' => $this->companyId,'promotionID'=>$promotionID)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','满送活动产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','查看已添加菜品'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('fullSentPromotion/detailindex' , array('typeId' =>'product','companyId' => $this->companyId,'promotionID'=>$promotionID)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->

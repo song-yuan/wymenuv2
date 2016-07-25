@@ -30,7 +30,7 @@
 			</div>
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','礼品'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','修改礼品'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('cupon/index' , array('companyId' => $this->companyId,)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','礼品'),'breadcrumbs'=>array(array('word'=>yii::t('app','活动中心'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','修改礼品'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('gift/index' , array('companyId' => $this->companyId,)))));?>
 		<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
