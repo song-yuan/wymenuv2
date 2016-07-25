@@ -30,7 +30,7 @@
 			</div>
 			<!-- END BEGIN STYLE CUSTOMIZER -->            
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','满减优惠查询'),'breadcrumbs'=>array(array('word'=>yii::t('app','营销管理'),'url'=>''),array('word'=>yii::t('app','营销品设置'),'url'=>''),array('word'=>yii::t('app','修改满减优惠活动'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('fullSentPromotion/index' , array('companyId' => $this->companyId,)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','修改满减优惠'),'breadcrumbs'=>array(array('word'=>yii::t('app','线下活动'),'url'=>$this->createUrl('discount/list' , array('companyId' => $this->companyId,'type'=>0,))),array('word'=>yii::t('app','满减优惠'),'url'=>$this->createUrl('fullMinusPromotion/index' , array('companyId' => $this->companyId,))),array('word'=>yii::t('app','修改满减优惠活动'),'url'=>'')),'back'=>array('word'=>'返回','url'=>$this->createUrl('fullMinusPromotion/index' , array('companyId' => $this->companyId,)))));?>
 		<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
