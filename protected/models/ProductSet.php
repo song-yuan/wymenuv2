@@ -84,7 +84,7 @@ class ProductSet extends CActiveRecord
 			'type' => yii::t('app','套餐类型'),
 			'simple_code' => 'Simple Code',
 			'main_picture' => yii::t('app','主图片'),
-			'set_price' => yii::t('app','套餐价格'),
+			'set_price' => yii::t('app','套餐基础价格'),
 			'description' => yii::t('app','描述'),
 			'rank' => yii::t('app','推荐星级'),
 			'is_member_discount' => yii::t('app','是否参与会员折扣'),

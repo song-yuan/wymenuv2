@@ -35,6 +35,8 @@
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'set_price', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('set_price')));?>
 											<?php echo $form->error($model, 'set_price' )?>
+											<span style="color: red;">套餐总价格 = 套餐基础价格 + 套餐明细里的各个菜品价格</span>
+										
 										</div>
 									</div>
                                    <div class="form-group">
