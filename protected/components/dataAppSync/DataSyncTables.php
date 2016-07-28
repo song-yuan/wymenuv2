@@ -32,7 +32,8 @@ class DataSyncTables
         array("name"=>"座位","table"=>"nb_site"),
         array("name"=>"座位人数分类","table"=>"nb_site_persons"),
         array("name"=>"座位类型","table"=>"nb_site_type"),
-        array("name"=>"渠道表","table"=>"nb_channel"),
+        array("name"=>"外卖渠道表","table"=>"nb_channel"),
+        array("name"=>"送餐员","table"=>"nb_takeaway_member"),
         array("name"=>"口味","table"=>"nb_taste"),
         array("name"=>"口味分组","table"=>"nb_taste_group"),        
     );
@@ -426,6 +427,16 @@ class DataSyncTables
         		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `channel_type` varchar(2) NOT NULL DEFAULT '0',".
         		"  `channel_name` varchar(50) NOT NULL,".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_takeaway_member"=>" CREATE TABLE 'nb_takeaway_member'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `type` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `member_name` varchar(255) NOT NULL,".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
