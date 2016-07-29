@@ -170,7 +170,7 @@ class DataSyncOperation {
 				$sql = 'select *,"" as set_name,sum(price) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and delete_flag=0 group by set_id';
 				$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				foreach ( $orderProduct as $k => $product ) {
-					$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $product ['lid'] . ' and t.is_order=0 and t.delete_flag=0';
+					$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and t.is_order=0 and t.delete_flag=0';
 					$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 					$orderProduct [$k] ['product_taste'] = $orderProductTaste;
 					if($product['set_id'] > 0){
@@ -187,9 +187,12 @@ class DataSyncOperation {
 				$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
 				$orderPay = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_pay'] = $orderPay;
-				$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $result ['lid'] . ' and t.is_order=1 and t.delete_flag=0';
+				$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and t.is_order=1 and t.delete_flag=0';
 				$orderTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_taste'] = $orderTaste;
+				$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
+				$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+				$order ['nb_order_address'] = $orderAddress;
 				array_push ( $data ['order'], $order );
 				$sql = 'update nb_order set is_sync=0 where dpid=' . $dpid . ' and lid=' . $result ['lid'];
 				Yii::app ()->db->createCommand ( $sql )->execute ();
@@ -252,7 +255,7 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$syncTime = $data['sync_at'];
 		$results = array();
-		$diffTable = array('nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_taste','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_sync_failure');
+		$diffTable = array('nb_site_type','nb_member_card','nb_member_recharge','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_sync_failure');
 		$dataBase = new DataSyncTables ();
 		$allTables = $dataBase->getAllTableName ();
 		$allTable = array_diff($allTables, $diffTable);
@@ -301,6 +304,11 @@ class DataSyncOperation {
 		} else {
 			$orderDiscount = array ();
 		}
+		if (isset ( $obj->order_address )) {
+			$orderAddress = $obj->order_address;
+		} else {
+			$orderAddress = array ();
+		}
 		
 		$time = time ();
 		$se = new Sequence ( "order" );
@@ -345,7 +353,7 @@ class DataSyncOperation {
 						'original_price' => $product->original_price,
 						'amount' => $product->amount,
 						'product_order_status' => 2,
-						'is_sync' => DataSync::getInitSync () 
+						'is_sync' => $isSync 
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_product', $orderProductData );
 				
@@ -363,7 +371,7 @@ class DataSyncOperation {
 								'taste_id' => $taste->taste_id,
 								'order_id' => $orderProductId,
 								'is_order' => 0,
-								'is_sync' => DataSync::getInitSync ()
+								'is_sync' => $isSync
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
 					}
@@ -385,7 +393,7 @@ class DataSyncOperation {
 								'promotion_type' => $promotion->promotion_type,
 								'promotion_id' => $promotion->promotion_id,
 								'promotion_money' => $promotion->promotion_money,
-								'is_sync' => DataSync::getInitSync ()
+								'is_sync' => $isSync
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_order_product_promotion', $orderPromotionData );
 					}
@@ -417,43 +425,69 @@ class DataSyncOperation {
 						'paytype' => $pay->paytype,
 						'payment_method_id' => $pay->payment_method_id,
 						'paytype_id' => $pay->paytype_id,
-						'is_sync' => DataSync::getInitSync () 
+						'is_sync' => $isSync
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
 			}
 			// 订单口味
-			foreach ( $orderTaste as $taste ) {
-				$se = new Sequence ( "order_taste" );
-				$orderTasteId = $se->nextval ();
-				$orderTasteData = array (
-						'lid' => $orderTasteId,
-						'dpid' => $dpid,
-						'create_at' => date ( 'Y-m-d H:i:s', $time ),
-						'update_at' => date ( 'Y-m-d H:i:s', $time ),
-						'taste_id' => $taste->taste_id,
-						'order_id' => $orderId,
-						'is_order' => 1,
-						'is_sync' => DataSync::getInitSync () 
-				);
-				Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
+			if(!empty($orderTaste)){
+				foreach ( $orderTaste as $taste ) {
+					$se = new Sequence ( "order_taste" );
+					$orderTasteId = $se->nextval ();
+					$orderTasteData = array (
+							'lid' => $orderTasteId,
+							'dpid' => $dpid,
+							'create_at' => date ( 'Y-m-d H:i:s', $time ),
+							'update_at' => date ( 'Y-m-d H:i:s', $time ),
+							'taste_id' => $taste->taste_id,
+							'order_id' => $orderId,
+							'is_order' => 1,
+							'is_sync' => $isSync
+					);
+					Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
+				}
 			}
+			
 			// 订单优惠
-			foreach ( $orderDiscount as $discount ) {
-				$se = new Sequence ( "order_account_discount" );
-				$orderDiscountId = $se->nextval ();
-				$orderDiscountData = array (
-						'lid' => $orderDiscountId,
-						'dpid' => $dpid,
-						'create_at' => date ( 'Y-m-d H:i:s', $time ),
-						'update_at' => date ( 'Y-m-d H:i:s', $time ),
-						'order_id' => $orderId,
-						'account_no' => $accountNo,
-						'discount_type' => $discount->discount_type,
-						'discount_id' => $discount->discount_id,
-						'discount_money' => $discount->discount_money,
-						'is_sync' => DataSync::getInitSync () 
-				);
-				Yii::app ()->db->createCommand ()->insert ( 'nb_order_account_discount', $orderDiscountData );
+			if(!empty($orderDiscount)){
+				foreach ( $orderDiscount as $discount ) {
+					$se = new Sequence ( "order_account_discount" );
+					$orderDiscountId = $se->nextval ();
+					$orderDiscountData = array (
+							'lid' => $orderDiscountId,
+							'dpid' => $dpid,
+							'create_at' => date ( 'Y-m-d H:i:s', $time ),
+							'update_at' => date ( 'Y-m-d H:i:s', $time ),
+							'order_id' => $orderId,
+							'account_no' => $accountNo,
+							'discount_type' => $discount->discount_type,
+							'discount_id' => $discount->discount_id,
+							'discount_money' => $discount->discount_money,
+							'is_sync' => $isSync
+					);
+					Yii::app ()->db->createCommand ()->insert ( 'nb_order_account_discount', $orderDiscountData );
+				}
+			}
+			
+			//订单地址
+			if(!empty($orderAddress)){
+				foreach ( $orderAddress as $address ) {
+					$se = new Sequence ( "order_address" );
+					$orderAddressId = $se->nextval ();
+					$orderAddressData = array (
+							'lid' => $orderAddressId,
+							'dpid' => $dpid,
+							'create_at' => date ( 'Y-m-d H:i:s', $time ),
+							'update_at' => date ( 'Y-m-d H:i:s', $time ),
+							'order_lid' => $orderId,
+							'consignee' => $address->consignee,
+							'street' => $address->street,
+							'mobile' => $address->mobile,
+							'tel' => $address->tel,
+							'is_sync' => $isSync
+					);
+					Yii::app ()->db->createCommand ()->insert ( 'nb_order_address', $orderAddressData );
+				}
 			}
 			
 			$transaction->commit ();
