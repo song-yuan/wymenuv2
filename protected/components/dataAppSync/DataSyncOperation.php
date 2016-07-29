@@ -201,6 +201,9 @@ class DataSyncOperation {
 			$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
 			$memberCard = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			foreach ( $memberCard as $card ) {
+				$sql = 'select * from nb_member_recharge where 	member_card_id='.$card['lid'].' and dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
+				$memberCardRecharge = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+				$card['member_recharge'] = $memberCardRecharge;
 				array_push ( $data ['member_card'], $card );
 				$sql = 'update nb_member_card set is_sync=0 where dpid=' . $dpid . ' and lid=' . $card ['lid'];
 				Yii::app ()->db->createCommand ( $sql )->execute ();
@@ -404,7 +407,7 @@ class DataSyncOperation {
 					$productBoms = self::getBom($dpid, $product->product_id);
 					if(!empty($productBoms)){
 						foreach ($productBoms as $bom){
-							$stock = $bom['number']/$bom['unit_ratio'];
+							$stock = ($bom['number']/$bom['unit_ratio'])*$product->amount;
 							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
 						}
 					}
