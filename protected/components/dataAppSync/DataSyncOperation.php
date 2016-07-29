@@ -407,7 +407,7 @@ class DataSyncOperation {
 					$productBoms = self::getBom($dpid, $product->product_id);
 					if(!empty($productBoms)){
 						foreach ($productBoms as $bom){
-							$stock = $bom['number']/$bom['unit_ratio'];
+							$stock = ($bom['number']/$bom['unit_ratio'])*$product->amount;
 							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
 						}
 					}
