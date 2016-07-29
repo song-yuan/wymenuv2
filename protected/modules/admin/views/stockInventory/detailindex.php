@@ -47,6 +47,8 @@
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
+						<?php elseif($status == 1):?>
+							<a href="<?php echo $this->createUrl('productMaterial/index' , array('companyId' => $this->companyId));?>" class=" btn blue"><i class="fa fa-fighter-jet "></i> <?php echo yii::t('app','实时库存传送门');?></a>
 						<?php endif;?>
 						<a href="<?php echo $this->createUrl('stockInventory/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>
