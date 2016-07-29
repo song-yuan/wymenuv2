@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','座位类型管理'),'subhead'=>yii::t('app','修改座位类型'),'breadcrumbs'=>array(array('word'=>yii::t('app','座位类型管理'),'url'=>$this->createUrl('siteType/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改座位类型'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改餐桌人数'),'breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','餐桌人数设置'),'url'=>$this->createUrl('sitePersons/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改餐桌人数'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('sitePersons/index' , array('companyId' => $this->companyId,)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改座位类型');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改餐桌人数');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
