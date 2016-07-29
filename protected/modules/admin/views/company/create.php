@@ -23,14 +23,14 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','企业管理'),'subhead'=>yii::t('app','添加企业'),'breadcrumbs'=>array(array('word'=>yii::t('app','添加企业'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺管理'),'subhead'=>yii::t('app','添加企业（店铺）'),'breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','店铺列表'),'url'=>$this->createUrl('company/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加店铺'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('company/index' , array('companyId' => $this->companyId,)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加企业');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加企业（店铺）');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

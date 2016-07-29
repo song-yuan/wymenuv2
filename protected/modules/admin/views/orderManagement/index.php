@@ -62,7 +62,8 @@
 								
 								<th><?php echo yii::t('app','订单号');?></th>
 								<th><?php echo yii::t('app','账单号');?></th>
-								<th><?php echo yii::t('app','订单更新时间');?></th>
+								<th><?php echo yii::t('app','订单下单时间');?></th>
+								<th><?php echo yii::t('app','订单结单时间');?></th>
 								<th><?php echo yii::t('app','订单明细');?></th>
 								<th><?php echo yii::t('app','座位');?></th>
                                 <th><?php echo yii::t('app','人数');?></th>
@@ -81,6 +82,7 @@
 								<tr class="odd gradeX">
 								<td><?php echo $model->lid%10000; ?></td>
 								<td><?php echo $model->account_no; ?></td>
+								<td><?php echo $model->create_at;?></td>
 								<td><?php echo $model->update_at;?></td>
 								<td><?php echo $this->getOrderDetails($model->lid); ?></td>
 								<td><?php if($model->is_temp=='1') echo yii::t('app','临时坐').$model->site_id%1000; else echo $this->getSiteName($model->lid);?></td>

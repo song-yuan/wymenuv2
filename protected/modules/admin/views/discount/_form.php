@@ -34,6 +34,7 @@
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'discount_num',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('discount_num')));?>
 											<?php echo $form->error($model, 'discount_num' )?>
+											<span style="color: red;">例：88折（或8.8折）在此处填写为0.88</span>
 										</div>
 									</div><!-- 活动摘要 -->
 									<div class="form-group">

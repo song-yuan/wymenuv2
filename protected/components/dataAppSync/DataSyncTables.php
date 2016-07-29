@@ -500,6 +500,7 @@ class DataSyncTables
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  'admin_id' int(10)  DEFAULT 'NULL',".
         		"  `member_card_id` int(10) NOT NULL DEFAULT '0',".
         		"  `reality_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
         		"  `give_money` decimal(10,2) NOT NULL DEFAULT '0.00',".

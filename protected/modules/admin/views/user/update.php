@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','服务员管理'),'subhead'=>yii::t('app','编辑服务员'),'breadcrumbs'=>array(array('word'=>yii::t('app','服务员管理'),'url'=>$this->createUrl('user/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改服务员'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺管理'),'subhead'=>yii::t('app','编辑服务员'),'breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','服务员列表'),'url'=>$this->createUrl('user/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改服务员'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
