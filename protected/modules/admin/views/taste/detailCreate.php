@@ -23,8 +23,8 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','口味管理'),'subhead'=>yii::t('app','添加口味'),'breadcrumbs'=>array(array('word'=>yii::t('app','口味管理'),'url'=>$this->createUrl('taste/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','添加口味'),'url'=>''))));?>
-			
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','添加单品口味明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','单品口味设置'),'url'=>$this->createUrl('taste/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','口味明细列表'),'url'=>$this->createUrl('taste/detailIndex' , array('companyId' => $model->dpid,'groupid'=>$groupid,'groupname'=>$groupname,'type'=>$type))),array('word'=>yii::t('app','添加口味明细'),'url'=>''))));?>
+	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">

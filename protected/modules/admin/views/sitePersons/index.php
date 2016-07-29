@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','座位类型列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','座位类型管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' => '1',)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','餐桌人数列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','餐桌人数管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' => '1',)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
