@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','座位管理'),'subhead'=>yii::t('app','修改座位'),'breadcrumbs'=>array(array('word'=>yii::t('app','座位管理'),'url'=>$this->createUrl('site/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改座位'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改座位信息'),'breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','座位管理'),'url'=>$this->createUrl('site/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改座位'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('site/index' , array('companyId' => $this->companyId,)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->

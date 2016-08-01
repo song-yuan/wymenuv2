@@ -278,6 +278,12 @@
 							<div class="ku-item-info">餐桌明细</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('takeawayMember/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple czmx"></div>
+							<div class="ku-item-info">外卖送餐员</div>
+						</div>
+					</a>
 					<?php elseif($type==2):?>
 					<a href="<?php echo $this->createUrl('printer/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
