@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','支付方式管理'),'subhead'=>yii::t('app','添加支付方式'),'breadcrumbs'=>array(array('word'=>yii::t('app','添加支付方式'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','添加支付方式'),'breadcrumbs'=>array(array('word'=>yii::t('app','收银设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>3,))),array('word'=>yii::t('app','支付设置'),'url'=>$this->createUrl('payMethod/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加支付方式'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('payMethod/index' , array('companyId' => $this->companyId,)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">

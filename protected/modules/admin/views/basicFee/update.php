@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础费用设置'),'subhead'=>yii::t('app','修改基础费用'),'breadcrumbs'=>array(array('word'=>yii::t('app','修改基础费'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改基础费用'),'breadcrumbs'=>array(array('word'=>yii::t('app','收银设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>3,))),array('word'=>yii::t('app','基础费用设置'),'url'=>$this->createUrl('basicFee/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改基础费'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('basicFee/index' , array('companyId' => $this->companyId,)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->

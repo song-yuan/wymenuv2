@@ -23,22 +23,21 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改PAD'),'breadcrumbs'=>array(array('word'=>yii::t('app','打印设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','PAD列表'),'url'=>$this->createUrl('pad/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改PAD'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('pad/index' , array('companyId' => $this->companyId,)))));?>
-			
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','添加送餐员'),'breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','送餐员设置'),'url'=>$this->createUrl('takeawayMember/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加送餐员'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('takeawayMember/index' , array('companyId' => $this->companyId,)))));?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改PAD');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加送餐员');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'printers'=>$printers)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>
