@@ -19,15 +19,11 @@
 		<div class="form-group <?php if($model->hasErrors('material_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'material_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<select class="form-control" name="CommitDetail[material_id]" id="CommitDetail_material_id">
-					<option value="0">-- 请选择 --</option>
-					<?php foreach ($materials as $material):?>
-					<option value="<?php echo $material['lid'];?>" salse-unit="<?php echo $material['stock_unit_id'];?>" <?php if($model->material_id==$material['lid']){echo 'selected';}?>><?php echo $material['material_name'];?></option>
-					<?php endforeach;?>
-				</select>
+				<?php echo $form->dropdownlist($model, 'material_id', array('0' => yii::t('app','-- 请选择 --')) +$materials ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('material_id')));?>
 				<?php echo $form->error($model, 'material_id' )?>
 			</div>
 		</div>
+		
         <div class="form-group <?php if($model->hasErrors('unit_name')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'unit_name',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
@@ -65,33 +61,38 @@
 )); ?>
 						
 <script>
-	$(document).ready(function() {
-		$('#selectCategory').change(function(){
-			var cid = $(this).val();
-			$.ajax({
-				url:'<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
-				type:'GET',
-				dataType:'json',
-				success:function(result){
-					//alert(result.data);
-					var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
-					if(result.data.length){
-						$.each(result.data,function(index,value){
-							str = str + '<option value="'+value.id+'" salse-unit="'+value.unit_id+'">'+value.name+'</option>';
-						});
-					}
-					$('#CommitDetail_material_id').html(str);
-				}
-			});
-		});
-		$('#CommitDetail_material_id').change(function(){
-			var salseUnit = $(this).find('option:selected').attr('salse-unit');
-			$('#CommitDetail_unit_name').find('option').each(function(){
-				var unitId = $(this).val();
-				if(unitId!=salseUnit){
-					$(this).remove();
-				}
-			});
-		});
-	});
+$('#category_container').on('change','.category_selecter',function(){
+	var id = $(this).val();
+	var $parent = $(this).parent();
+            var sid ='0000000000';
+            var len=$('.category_selecter').eq(1).length;
+            if(len > 0)
+            {
+                sid=$('.category_selecter').eq(1).val();
+                //alert(sid);
+            }
+});
+$('#selectCategory').change(function(){
+var cid = $(this).val();
+//alert('<?php echo $this->createUrl('commit/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid);
+//alert($('#ProductSetDetail_product_id').html());
+$.ajax({
+   url:'<?php echo $this->createUrl('commit/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,
+   type:'GET',
+   dataType:'json',
+   success:function(result){
+       //alert(result.data);
+       var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';
+       if(result.data.length){
+           //alert(1);
+           $.each(result.data,function(index,value){
+               str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+           });
+       }
+       //alert(str);
+       $('#CommitDetail_material_id').html(str);
+   }
+});
+});
+
 </script>

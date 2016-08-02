@@ -23,15 +23,19 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','修改品项单位'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','入库单位'),'url'=>$this->createUrl('materialUnit/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','修改入库单位'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('materialUnit/index' , array('companyId' => $this->companyId,)))));?>
-	
+			<?php if($type==0):?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','修改入库单位'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','入库单位'),'url'=>$this->createUrl('materialUnit/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','修改入库单位'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('materialUnit/index' , array('companyId' => $this->companyId,)))));?>
+			<?php else:?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','修改零售单位'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','零售单位'),'url'=>$this->createUrl('materialUnit/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','修改零售单位'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('materialUnit/index' , array('companyId' => $this->companyId,)))));?>
+			
+			<?php endif;?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改品项单位');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php if($type==0):echo yii::t('app','修改入库单位');else :echo yii::t('app','修改零售单位');endif; ?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

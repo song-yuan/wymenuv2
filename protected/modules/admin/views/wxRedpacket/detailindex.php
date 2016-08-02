@@ -22,8 +22,8 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','微信红包'),'subhead'=>yii::t('app','红包明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','微信红包管理'),'url'=>''),array('word'=>yii::t('app','红包明细管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wxRedpacket/index' , array('companyId' => $this->companyId,)))));?>
-	
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array( 'head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','微信红包明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','线上活动'),'url'=>$this->createUrl('discount/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','微信红包设置'),'url'=>$this->createUrl('wxRedpacket/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','微信红包明细'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('wxRedpacket/index' , array('companyId' => $this->companyId)))));?>
+		
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -97,7 +97,7 @@
                                                 <div class="r-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>" >
                                                 <input type="checkbox" class="toggle" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="1" <?php if(!empty($model['promotion_lid'])){ echo "checked";}else{echo "";}?>>
                                                 </div>
-                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','确定添加');?> >
+                                                <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','确定修改');?> >
                                                 </label>
 											</div>
 										</div>

@@ -23,8 +23,8 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','调拨详情管理'),'subhead'=>yii::t('app','添加调拨详情'),'breadcrumbs'=>array(array('word'=>yii::t('app','调拨详情管理'),'url'=>$this->createUrl('commitDetail/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加调拨详情'),'url'=>''))));?>
-			
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','添加调拨单详情'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','调拨单管理'),'url'=>$this->createUrl('commit/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','调拨单详情管理'),'url'=>$this->createUrl('commit/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->commit_id,))),array('word'=>yii::t('app','添加调拨单详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('commit/detailindex' , array('companyId' => $this->companyId,'lid'=>$model->commit_id,)))));?>
+	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
