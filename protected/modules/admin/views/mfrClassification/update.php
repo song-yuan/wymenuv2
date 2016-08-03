@@ -23,15 +23,15 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','厂商分类'),'subhead'=>yii::t('app','修改厂商分类'),'breadcrumbs'=>array(array('word'=>yii::t('app','厂商分类'),'url'=>$this->createUrl('orgClassification/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改厂商分类'),'url'=>''))));?>
-			
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','修改厂商类别'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','厂商类别'),'url'=>$this->createUrl('mfrClassification/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改厂商类别'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('mfrClassification/index' , array('companyId' => $this->companyId,)))));?>
+	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改厂商分类');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改厂商类别');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

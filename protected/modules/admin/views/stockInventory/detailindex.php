@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','品项盘存'),'subhead'=>yii::t('app','品项盘存列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项盘存'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','盘存单详情'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘存单管理'),'url'=>$this->createUrl('stockInventory/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','盘存单详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('stockInventory/index' , array('companyId' => $this->companyId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','品项盘存列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','盘存单详情');?></div>
 					<div class="actions">
 						<?php if($status == 0 ):?>
 							<a href="<?php echo $this->createUrl('stockInventory/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
@@ -48,9 +48,9 @@
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
 						<?php elseif($status == 1):?>
-							<a href="<?php echo $this->createUrl('productMaterial/index' , array('companyId' => $this->companyId));?>" class=" btn blue"><i class="fa fa-fighter-jet "></i> <?php echo yii::t('app','实时库存传送门');?></a>
+							<a href="<?php echo $this->createUrl('productMaterial/index' , array('companyId' => $this->companyId));?>" class=" btn blue"><i class="fa fa-fighter-jet "></i> <?php echo yii::t('app','查看实时库存');?></a>
 						<?php endif;?>
-						<a href="<?php echo $this->createUrl('stockInventory/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
+						<!-- <a href="<?php echo $this->createUrl('stockInventory/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>-->
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">

@@ -105,6 +105,12 @@
 			background-position: -585px 20px;
     		background-repeat: no-repeat;
 		}
+		.ku-item.scy{
+			background-image:url(../../../../../../img/waiter/icon-scy.png);
+			background-position: 13px 20px;
+			background-size: 80%;
+    		background-repeat: no-repeat;
+		}
 		.ku-item.dyjsz{
 			background-image:url(../../../../../../img/waiter/icon-dysz.png);
 			background-position: 20px 15px;
@@ -280,7 +286,7 @@
 					</a>
 					<a href="<?php echo $this->createUrl('takeawayMember/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple czmx"></div>
+							<div class="ku-item ku-purple scy"></div>
 							<div class="ku-item-info">外卖送餐员</div>
 						</div>
 					</a>

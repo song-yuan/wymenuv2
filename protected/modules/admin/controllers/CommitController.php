@@ -153,6 +153,7 @@ class CommitController extends BackendController
 		$categoryId=  $this->getCategoryId($lid);
 		$materials = $this->getMaterials($categoryId);
 		$materialslist=CHtml::listData($materials, 'lid', 'material_name');
+		//var_dump($materialslist);exit;
 		$this->render('detailupdate' , array(
 				'model' => $model ,
 				'categories'=>$categories,

@@ -90,7 +90,7 @@ class ManufacturerInformation extends CActiveRecord
 			'contact_fax' => '传真',
 			'email' => '电子邮箱',
 			'bank' => '开户银行',
-			'bank_account' => '开会账号',
+			'bank_account' => '开户账号',
 			'tax_account' => '纳税账号',
 			'remark' => '备注',
 			'delete_flag' => '删除 0未删除 1删除',

@@ -61,7 +61,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','入库单列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','盘损单列表');?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('inventory/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">

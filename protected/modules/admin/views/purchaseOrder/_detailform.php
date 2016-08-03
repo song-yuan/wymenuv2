@@ -79,7 +79,6 @@
 	   });
        $('#selectCategory').change(function(){
            var cid = $(this).val();
-		   //alert('<?php echo $this->createUrl('productBom/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid);
 		   //alert($('#ProductSetDetail_product_id').html());
            $.ajax({
                url:'<?php echo $this->createUrl('purchaseOrder/getChildren',array('companyId'=>$this->companyId,));?>/pid/'+cid,

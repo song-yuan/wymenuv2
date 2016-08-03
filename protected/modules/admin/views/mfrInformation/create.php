@@ -23,15 +23,15 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','厂商信息'),'subhead'=>yii::t('app','添加信息'),'breadcrumbs'=>array(array('word'=>yii::t('app','厂商信息'),'url'=>$this->createUrl('mfrInformation/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加信息'),'url'=>''))));?>
-			
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','添加产商信息'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','产商信息列表'),'url'=>$this->createUrl('mfrInformation/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','添加厂商信息'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('mfrInformation/index' , array('companyId' => $this->companyId,)))));?>
+	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加信息');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加产商信息');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>

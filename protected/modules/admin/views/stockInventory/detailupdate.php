@@ -23,15 +23,15 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','品项盘存'),'subhead'=>yii::t('app','修改品项盘存'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项盘存'),'url'=>$this->createUrl('stockInventory/detailindex' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改品项库存'),'url'=>''))));?>
-			
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','修改盘存单详情'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘存单管理'),'url'=>$this->createUrl('stockInventory/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','盘存单详情'),'url'=>$this->createUrl('stockInventory/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->stock_inventory_id, ))),array('word'=>yii::t('app','修改盘存单详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('stockInventory/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->stock_inventory_id, )))));?>
+	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改品项库存');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','修改盘存单详情');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
