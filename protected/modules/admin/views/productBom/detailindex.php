@@ -64,9 +64,10 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','品项名称');?></th>                             
+								<th><?php echo yii::t('app','品项名称');?></th> 
+								<th><?php echo yii::t('app','消耗数量');?></th>                            
                                 <th><?php echo yii::t('app','零售单位');?></th>
-                                <th><?php echo yii::t('app','消耗数量');?></th>
+                                
 								<th>&nbsp;</th>                                                                
 							</tr>
 						</thead>
@@ -76,8 +77,9 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td><?php echo $model->material->material_name ;?></td>
+								<td><?php echo $model->number;?></td>
                                 <td><?php echo Common::getSalesName($model->sales_unit_id);?></td>
-                                <td><?php echo $model->number;?></td>
+                                
                                 <td class="center">
 								<a href="<?php echo $this->createUrl('productBom/detailupdate',array('lid' => $model->lid ,'pblid'=>$model->product_id, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>             

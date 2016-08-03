@@ -20,13 +20,6 @@
 			<?php echo $form->error($model, 'material_id' )?>
 		</div>
 	</div>
-	<div class="form-group" <?php if($model->hasErrors('sales_unit_id')) echo 'has-error';?>>
-		<?php echo $form->label($model, 'sales_unit_id',array('class' => 'col-md-3 control-label'));?>
-		<div class="col-md-4">
-			<?php echo $form->dropDownList($model, 'sales_unit_id',array('0' => yii::t('app','-- 请选择 --')) +Helper::genSalesUnit() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sales_unit_id')));?>
-			<?php echo $form->error($model, 'sales_unit_id' )?>
-		</div>
-	</div>
 	<div class="form-group" <?php if($model->hasErrors('number')) echo 'has-error';?>>
 		<?php echo $form->label($model, 'number',array('class' => 'col-md-3 control-label'));?>
 		<div class="col-md-4">
@@ -34,6 +27,14 @@
 			<?php echo $form->error($model, 'number' )?>
 		</div>
 	</div>
+	<div class="form-group" <?php if($model->hasErrors('sales_unit_id')) echo 'has-error';?>>
+		<?php echo $form->label($model, 'sales_unit_id',array('class' => 'col-md-3 control-label'));?>
+		<div class="col-md-4">
+			<?php echo $form->dropDownList($model, 'sales_unit_id',array('0' => yii::t('app','-- 请选择 --')) +Helper::genSalesUnit() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sales_unit_id')));?>
+			<?php echo $form->error($model, 'sales_unit_id' )?>
+		</div>
+	</div>
+	
 	<div class="form-actions fluid">
 		<div class="col-md-offset-3 col-md-9">
 			<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
