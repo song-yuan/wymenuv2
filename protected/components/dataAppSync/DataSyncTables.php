@@ -470,8 +470,11 @@ class DataSyncTables
         		"  `level_name` varchar(50) NOT NULL,".
         		"  `level_type` varchar(1) NOT NULL DEFAULT '0',".
         		"  `level_discount` varchar(8) NOT NULL DEFAULT '1',".
+        		"  'min_charge_money' int(10) NOT NULL DEFAULT '0',".
         		"  `min_total_points` int(10) NOT NULL DEFAULT '0',".
         		"  `max_total_points` int(10) NOT NULL DEFAULT '0',".
+        		"  'card_cost' int(10) NOT NULL DEFAULT '0',".
+        		"  'enable_date' TIMESTAMP NOT NULL DEFAULT (datetime('now', 'localtime')),".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
