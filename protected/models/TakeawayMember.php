@@ -34,6 +34,7 @@ class TakeawayMember extends CActiveRecord
 		return array(
 			array('lid, dpid, update_at, member_name, cardId', 'required'),
 			array('lid, dpid', 'length', 'max'=>10),
+				array('phone_number', 'length', 'max'=>11),
 			array('type, delete_flag', 'length', 'max'=>2),
 			array('member_name', 'length', 'max'=>255),
 			array('is_sync', 'length', 'max'=>55),
@@ -41,7 +42,7 @@ class TakeawayMember extends CActiveRecord
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, type, cardId, member_name, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, type, cardId, member_name, phone_number, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -69,6 +70,7 @@ class TakeawayMember extends CActiveRecord
 			'type' => '0表示外卖送餐员，',
 			'cardId' => '送餐员编号',
 			'member_name' => '送餐员名称',
+				'phone_number' => '送餐员手机号',
 			'delete_flag' => 'Delete Flag',
 			'is_sync' => 'Is Sync',
 		);
@@ -99,6 +101,7 @@ class TakeawayMember extends CActiveRecord
 		$criteria->compare('type',$this->type,true);
 		$criteria->compare('cardId',$this->cardId,true);
 		$criteria->compare('member_name',$this->member_name,true);
+		$criteria->compare('phone_number',$this->phone_number,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
