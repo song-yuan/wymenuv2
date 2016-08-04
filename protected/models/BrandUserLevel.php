@@ -9,8 +9,13 @@
  * @property string $create_at
  * @property string $update_at
  * @property string $level_name
+ * @property string $level_type
+ * @property string $level_discount
+ * @property string $min_charge_money
+ * @property string $card_cost
  * @property integer $min_total_points
  * @property integer $max_total_points
+ * @property integer $enable_date
  * @property string $delete_flag
  * @property string $is_sync
  */
@@ -34,14 +39,17 @@ class BrandUserLevel extends CActiveRecord
 		return array(
 			array('level_type,level_name', 'required'),
 			array('min_total_points, max_total_points', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid', 'length', 'max'=>10),
+			array('lid, dpid,min_charge_money,card_cost', 'length', 'max'=>10),
 			array('level_name, is_sync', 'length', 'max'=>50),
 			array('level_type,delete_flag', 'length', 'max'=>2),
-			array('create_at,update_at', 'safe'),
-                        array('min_total_points','compare','compareAttribute'=>'max_total_points','operator'=>'<','message'=>yii::t('app','最低积分大于最高积分')),
+			array('level_discount', 'length', 'max'=>8),
+			array('create_at,update_at,enable_date', 'safe'),
+			array('level_discount','compare','compareValue'=>'1','operator'=>'<=','message'=>yii::t('app','折扣数值大于等于0小于等于1')),
+			array('level_discount','compare','compareValue'=>'0','operator'=>'>=','message'=>yii::t('app','折扣数值大于等于0小于等于1')),
+           // array('min_total_points','compare','compareAttribute'=>'max_total_points','operator'=>'<','message'=>yii::t('app','最低积分大于最高积分')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, level_name, level_type, min_total_points, is_sync, max_total_points, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, level_name, level_type, level_discount, min_charge_money, card_cost, min_total_points, is_sync, max_total_points,enable_date, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,10 +76,14 @@ class BrandUserLevel extends CActiveRecord
 			'update_at' => '最近一次的更新时间',
 			'level_name' => '等级名称',
             'level_type' => '等级类型',
+			'level_discount' => '会员折扣',
+			'min_charge_money' => '最低充值金额',
+			'card_cost' => '制卡工本费',
 			'min_total_points' => '当前等级的最低积分',
 			'max_total_points' => '当前等级的最高积分',
+			'enable_date' => '有效期',
 			'delete_flag' => '0表示存在，1表示删除',
-				'is_sync' => yii::t('app','是否同步'),
+			'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 

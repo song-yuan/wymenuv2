@@ -1,3 +1,10 @@
+	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
+    <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
+    <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>
+	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
+    <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
+
 	<!-- BEGIN PAGE -->  
 		<div class="page-content">
 			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -46,4 +53,19 @@
 			</div>
 			<!-- END PAGE CONTENT-->    
 		</div>
-		<!-- END PAGE -->  
+		<!-- END PAGE --> 
+<script type="text/javascript">
+    	$(function () {
+        	$(".ui_timepicker").datetimepicker({
+         		//showOn: "button",
+          		//buttonImage: "./css/images/icon_calendar.gif",
+           		//buttonImageOnly: true,
+            	showSecond: true,
+            	timeFormat: 'hh:mm:ss',
+            	stepHour: 1,
+           		stepMinute: 1,
+            	stepSecond: 1
+        })
+    });
+		
+</script>   
