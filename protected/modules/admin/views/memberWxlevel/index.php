@@ -57,8 +57,10 @@
                                                     <tr>
                                                         <th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
                                                         <th><?php echo yii::t('app','名称');?></th>
-                                                        <th><?php echo yii::t('app','最低积分');?></th>
-                                                        <th><?php echo yii::t('app','最高积分');?></th>
+                                                        <th><?php echo yii::t('app','会员折扣');?></th>
+                                                        <th><?php echo yii::t('app','最低充值金额');?></th>
+                                                        <th><?php echo yii::t('app','工本费');?></th>
+                                                        <th><?php echo yii::t('app','有效期');?></th>
                                                         <th>&nbsp;</th>
                                                     </tr>
 						</thead>
@@ -68,8 +70,10 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="lid[]" /></td>
 								<td ><?php echo $model->level_name;?></td>
-								<td ><?php echo $model->min_total_points;?></td>
-                                                                <td ><?php echo $model->max_total_points;?></td>
+								<td ><?php echo $model->level_discount;?></td>
+                                <td ><?php echo $model->min_charge_money;?></td>
+                                <td ><?php echo $model->card_cost;?></td>
+                                <td ><?php echo $model->enable_date;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('memberWxlevel/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>

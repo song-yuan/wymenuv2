@@ -32,17 +32,32 @@
 									</div>
                                     	
                                      <div class="form-group">
-										<?php echo $form->label($model, 'min_total_points',array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, 'level_discount',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'min_total_points',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('min_total_points')));?>
-											<?php echo $form->error($model, 'min_total_points' )?>
+											<?php echo $form->textField($model, 'level_discount',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('level_discount')));?>
+											<?php echo $form->error($model, 'level_discount' )?>
+											<span style="color: red;">例：88折（或8.8折）在此处填写为0.88</span>
 										</div>
 									</div>
                                     <div class="form-group">
-										<?php echo $form->label($model, 'max_total_points',array('class' => 'col-md-3 control-label'));?>
+										<?php echo $form->label($model, 'min_charge_money',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'max_total_points',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('max_total_points')));?>
-											<?php echo $form->error($model, 'max_total_points' )?>
+											<?php echo $form->textField($model, 'min_charge_money',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('min_charge_money')));?>
+											<?php echo $form->error($model, 'min_charge_money' )?>
+										</div>
+									</div>
+									<div class="form-group">
+										<?php echo $form->label($model, 'card_cost',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'card_cost',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('card_cost')));?>
+											<?php echo $form->error($model, 'card_cost' )?>
+										</div>
+									</div>
+									<div class="form-group">
+										<?php echo $form->label($model, 'enable_date',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'enable_date',array('class' => 'form-control ui_timepicker','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('enable_date')));?>
+											<?php echo $form->error($model, 'enable_date' )?>
 										</div>
 									</div>
 									<div class="form-actions fluid">
