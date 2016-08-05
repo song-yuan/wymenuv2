@@ -10,6 +10,7 @@
  * @property string $update_at
  * @property string $selfcode
  * @property string $rfid
+ * @property string $level_id
  * @property string $name
  * @property string $mobile
  * @property string $email
@@ -50,17 +51,17 @@ class MemberCard extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid, dpid, all_money,selfcode,rfid', 'length', 'max'=>10),
+			array('lid, dpid, all_money,selfcode,rfid,level_id', 'length', 'max'=>10),
 			array('name, mobile, ages', 'length', 'max'=>20),
 			//array('rfid', 'length', 'max'=>128),
 			array('email', 'length', 'max'=>100),
 			array('haspassword, sex, delete_flag', 'length', 'max'=>1),
 			array('password_hash', 'length', 'max'=>60),
 			array('create_at', 'safe'),
-				array('is_sync','length','max'=>50),
+			array('is_sync','length','max'=>50),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, selfcode, rfid, name, mobile, email, haspassword, password_hash, sex, ages, all_money, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, selfcode, rfid, level_id, name, mobile, email, haspassword, password_hash, sex, ages, all_money, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -87,6 +88,7 @@ class MemberCard extends CActiveRecord
 			'update_at' => 'Update At',
 			'selfcode' => '会员号',
 			'rfid' => '卡号',
+			'level_id' => '会员等级',
 			'name' => '姓名',
 			'mobile' => '联系方式',
 			'email' => '邮箱',
@@ -118,6 +120,7 @@ class MemberCard extends CActiveRecord
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('selfcode',$this->selfcode,true);
 		$criteria->compare('rfid',$this->rfid,true);
+		$criteria->compare('level_id',$this->level_id,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('mobile',$this->mobile,true);
 		$criteria->compare('email',$this->email,true);

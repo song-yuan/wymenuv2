@@ -45,6 +45,11 @@ class Helper
 		$companies = MaterialUnit::model()->findAll('unit_type=1 and delete_flag=0 and dpid='.$companyId) ;
 		return CHtml::listData($companies, 'lid', 'unit_name');
 	}
+	static public function getCardLevel() { // 传统卡等级名称
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$cardlevels = BrandUserLevel::model()->findAll('level_type=0 and delete_flag=0 and dpid='.$companyId) ;
+		return CHtml::listData($cardlevels, 'lid', 'level_name');
+	}
 	static public function genOrgClass() { // 组织类型名称
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$companies = OrganizationClassification::model()->findAll('delete_flag=0 and dpid='.$companyId) ;
