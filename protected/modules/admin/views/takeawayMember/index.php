@@ -41,7 +41,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','送餐员列表');?></div>
 					<div class="actions">
-						<?php if(Yii::app()->user->role == User::POWER_ADMIN):?>
+						<?php if(Yii::app()->user->role <= User::WAITER):?>
 						<a href="<?php echo $this->createUrl('takeawayMember/create', array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
@@ -66,6 +66,7 @@
 								<th><?php echo yii::t('app','唯一ID');?></th>
 								<th><?php echo yii::t('app','编号');?></th>
 								<th><?php echo yii::t('app','送餐员名称');?></th>
+								<th><?php echo yii::t('app','手机号码');?></th>
 								<th><?php echo yii::t('app','创建时间');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -77,6 +78,7 @@
 								<td><?php echo $model->lid;?></td>
 								<td><?php echo $model->cardId;?></td>
 								<td><?php echo $model->member_name;?></td>
+								<td><?php echo $model->phone_number;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('takeawayMember/update' , array('id' => $model->lid , 'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
