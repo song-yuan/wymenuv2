@@ -586,55 +586,57 @@ $(document).ready(function(){
 	});
 	$('#payorder').click(function(){
 		<?php if($this->type==1):?>
-		var serial = $('.serial').val();
-		var number = $('.number').val();
-		var seatingFee = $('.seatingFee').find('.price').html();
-		if(serial && number){
-			if(serial=='>'){
-				layer.msg('请输入座位号!');
-				return;
+			var serial = $('.serial').val();
+			var number = $('.number').val();
+			var seatingFee = $('.seatingFee').find('.price').html();
+			if(serial && number){
+				if(serial=='>'){
+					layer.msg('请输入座位号!');
+					return;
+				}
+				if(isNaN(number)||(parseInt(number)!=number)||number < 0){
+					layer.msg('输入人数为大于0的整数!');
+					return;
+				}
+				$('#dialog .content').html('餐位数:'+number+'人;餐位费:'+seatingFee+'元');
+				$('#dialog').show();
+			}else{
+				if(!serial||serial=='>'){
+					layer.msg('请输入座位号!');
+					return;
+				}
+				if(!number){
+					layer.msg('请输入人数!');
+					return;
+				}
 			}
-			if(isNaN(number)||(parseInt(number)!=number)||number < 0){
-				layer.msg('输入人数为大于0的整数!');
-				return;
-			}
-			$('#dialog .content').html('餐位数:'+number+'人;餐位费:'+seatingFee+'元');
-			$('#dialog').show();
-		}else{
-			if(!serial||serial=='>'){
-				layer.msg('请输入座位号!');
-				return;
-			}
-			if(!number){
-				layer.msg('请输入人数!');
-				return;
-			}
-		}
 		<?php elseif($this->type==2):?>
-		var address = $('input[name="address"]').val();
-		if(parseInt(address) < 0){
-			layer.msg('请添加收货地址!');
-			return;
-		}
-		$('form').submit();
+			var address = $('input[name="address"]').val();
+			if(parseInt(address) < 0){
+				layer.msg('请添加收货地址!');
+				return;
+			}
+			$('form').submit();
 		<?php elseif($this->type==3):?>
-		var address = $('input[name="address"]').val();
-		if(parseInt(address) < 0){
-			layer.msg('请添加预约人信息!');
-			return;
-		}
-		var orderTime = $('input[name="order_time"]').val();
-		if(!orderTime){
-			layer.msg('请选择预约时间!');
-			return;
-		}
-		var timestamp = Date.parse(today) / 1000;
-		var pointsTime = Date.parse(orderTime) / 1000;
-		if(timestamp > pointsTime){
-			layer.msg('预约时间必须大于当前时间!');
-			return;
-		}
-		$('form').submit();
+			var address = $('input[name="address"]').val();
+			if(parseInt(address) < 0){
+				layer.msg('请添加预约人信息!');
+				return;
+			}
+			var orderTime = $('input[name="order_time"]').val();
+			if(!orderTime){
+				layer.msg('请选择预约时间!');
+				return;
+			}
+			var timestamp = Date.parse(today) / 1000;
+			var pointsTime = Date.parse(orderTime) / 1000;
+			if(timestamp > pointsTime){
+				layer.msg('预约时间必须大于当前时间!');
+				return;
+			}
+			$('form').submit();
+		<?php else:?>
+			$('form').submit();
 		<?php endif;?>
 	});
 	$('#dialog .primary').click(function(){
