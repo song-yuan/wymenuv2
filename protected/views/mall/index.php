@@ -50,18 +50,18 @@
         <p>合计:<span id="total" class="total">0.00元</span><span class="nm">(<label class="share"></label>份)</span></p>
     </div>
     <?php if($this->type==2):?>
-    <?php if($start&&$start['fee_price']):?>
-    <div class="ft-rt start" start-price="<?php echo $start['fee_price'];?>">
-    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
-    </div>
-    <div class="ft-rt no-start" style="background:#6A706E" start-price="<?php echo $start['fee_price'];?>">
-    	<p><?php echo (int)$start['fee_price'];?>元起送</p>
-    </div>
-    <?php else:?>
-    <div class="ft-rt" start-price="0">
-    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
-    </div>
-    <?php endif;?>
+	    <?php if($start&&$start['fee_price']):?>
+		    <div class="ft-rt start" start-price="<?php echo $start['fee_price'];?>">
+		    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
+		    </div>
+		    <div class="ft-rt no-start" style="background:#6A706E" start-price="<?php echo $start['fee_price'];?>">
+		    	<p><?php echo (int)$start['fee_price'];?>元起送</p>
+		    </div>
+	    <?php else:?>
+		    <div class="ft-rt" start-price="0">
+		    	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>
+		    </div>
+	    <?php endif;?>
      <?php else:?>
      <div class="ft-rt">
     	<p><a href="<?php echo $this->createUrl('/mall/checkOrder',array('companyId'=>$this->companyId,'type'=>$this->type));?>">选好了</a></p>

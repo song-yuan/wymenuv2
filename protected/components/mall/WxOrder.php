@@ -4,7 +4,7 @@
  * 
  * 微信端订单类
  * //堂吃必须有siteId
- *$type 1 堂吃 2 外卖
+ *$type 0 临时座 1 堂吃 2 外卖 3 预约
  *$normalPromotionIds 菜品普通优惠id
  *
  * 
@@ -49,6 +49,9 @@ class WxOrder
 			$this->isTemp = 1;
 			$this->orderOpenSite();
 			$this->getPackingFee();
+		}else{
+			$this->isTemp = 1;
+			$this->orderOpenSite();
 		}
 	}
 	//获取购物车信息
