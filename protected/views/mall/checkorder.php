@@ -74,6 +74,7 @@
 		<?php endif;?>
 	</div>
 <?php elseif($this->type==3):?>
+	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">就餐人数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="3" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
 	<div class="address arrowright">
 		<?php if($address):?>
 		<div class="location" style="line-height: 50px;">

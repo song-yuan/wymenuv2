@@ -81,14 +81,9 @@
 	</div>
 	<?php endforeach;?>
 	<div class="ht1"></div>
-	<?php if($order['order_type']==1):?>
+	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
 		<div class="lt">餐位费:</div><div class="rt">￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
-		<div class="clear"></div>
-	</div>
-	<?php elseif($order['order_type']==3):?>
-	<div class="item">
-		<div class="lt">包装费:</div><div class="rt">￥<?php echo $packingFee?number_format($packingFee,2):'免费';?></div>
 		<div class="clear"></div>
 	</div>
 	<?php elseif($order['order_type']==2):?>
@@ -133,7 +128,7 @@
 	</div>
 	<?php endif;?>
 	<div class="item">
-		<div class="lt">合计</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['should_total'],2);?></span></div>
+		<div class="lt">合计:</div><div class="rt">￥<span style="color:#FF5151"><?php echo number_format($order['should_total'],2);?></span></div>
 		<div class="clear"></div>
 	</div>
 </div>
