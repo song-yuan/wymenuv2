@@ -94,6 +94,7 @@ class AlipayController extends Controller
     /**
      * 
      * 支付宝即时到账交易接口接口
+     * 二维码
      * 
      */
     public function actionInstantArriva(){
