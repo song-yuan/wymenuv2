@@ -22,6 +22,7 @@
 .name {
 	font-size: 0.8em;
 	color:#888;
+	margin:0 auto 5px;
 }
 .name.active{
 	color:rgb(217,35,20);
