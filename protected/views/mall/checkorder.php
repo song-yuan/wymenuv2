@@ -48,52 +48,45 @@
 <div class="order-title">确认订单</div>
 <?php if($this->type==1):?>
 <!-- 桌号 及人数 -->
-<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'].'>';}?><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteOpen){echo '0';}else{if($siteNum){ echo (int)$siteNum['max_persons'];}else{echo '3';}}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
+	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">桌号:<input type="text" class="serial" name="serial" value="<?php if($siteType){echo $siteType['name'].'>';}?><?php echo isset($site['serial'])?$site['serial']:'';?>" placeholder="输入座位号" style="background: rgb(255,255,255);"/>餐位数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteOpen){echo '0';}else{if($siteNum){ echo (int)$siteNum['max_persons'];}else{echo '3';}}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
 <?php elseif($this->type==2):?>
 <!-- 地址 -->
-<div class="address arrowright">
-	<?php if($address):?>
-		<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
-		<?php if($company['distance']*1000 > $distance):?>
-		<div class="location">
-			<span>收货人：<?php echo $address['name'];?> <?php if($address['sex']==1){echo '先生';}else{echo '女士';}?>   <?php echo $address['mobile'];?></span><br>
-			<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
-			<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
-		</div>
+	<div class="address arrowright">
+		<?php if($address):?>
+			<?php $distance = WxAddress::getDistance($company['lat'],$company['lng'],$address['lat'],$address['lng']);?>
+			<?php if($company['distance']*1000 > $distance):?>
+			<div class="location">
+				<span>收货人：<?php echo $address['name'];?> <?php if($address['sex']==1){echo '先生';}else{echo '女士';}?>   <?php echo $address['mobile'];?></span><br>
+				<span class="add">收货地址：<?php echo $address['province'].$address['city'].$address['area'].$address['street'];?></span>
+				<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
+			</div>
+			<?php else:?>
+			<div class="location" style="line-height: 50px;">
+				<span class="add">添加收货地址</span>
+				<input type="hidden" name="address" value="-1"/>
+			</div>
+			<?php endif;?>
 		<?php else:?>
 		<div class="location" style="line-height: 50px;">
 			<span class="add">添加收货地址</span>
 			<input type="hidden" name="address" value="-1"/>
 		</div>
 		<?php endif;?>
-	<?php else:?>
-	<div class="location" style="line-height: 50px;">
-		<span class="add">添加收货地址</span>
-		<input type="hidden" name="address" value="-1"/>
 	</div>
-	<?php endif;?>
-</div>
-<?php else:?>
-<!--
-<div class="order-num">
-	<div class="num-lt">预约人数</div>
-	<div class="num-rt"><input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="<?php if($siteNum){ echo (int)($siteNum['max_persons']);}else{echo '3';}?>" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
-	<div class="clear"></div>
-</div>
--->
-<div class="address arrowright">
-	<?php if($address):?>
-	<div class="location" style="line-height: 50px;">
-		<span>预约人：<?php echo $address['name'];?> <?php if($address['sex']==1){echo '先生';}else{echo '女士';}?> <?php echo $address['mobile'];?></span><br>
-		<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
+<?php elseif($this->type==3):?>
+	<div class="address arrowright">
+		<?php if($address):?>
+		<div class="location" style="line-height: 50px;">
+			<span>预约人：<?php echo $address['name'];?> <?php if($address['sex']==1){echo '先生';}else{echo '女士';}?> <?php echo $address['mobile'];?></span><br>
+			<input type="hidden" name="address" value="<?php echo $address['lid'];?>"/>
+		</div>
+		<?php else:?>
+		<div class="location" style="line-height: 50px;">
+			<span class="add">添加预约人信息</span>
+			<input type="hidden" name="address" value="-1"/>
+		</div>
+		<?php endif;?>
 	</div>
-	<?php else:?>
-	<div class="location" style="line-height: 50px;">
-		<span class="add">添加预约人信息</span>
-		<input type="hidden" name="address" value="-1"/>
-	</div>
-	<?php endif;?>
-</div>
 <!-- 地址 -->
 <?php endif;?>
 
@@ -593,55 +586,57 @@ $(document).ready(function(){
 	});
 	$('#payorder').click(function(){
 		<?php if($this->type==1):?>
-		var serial = $('.serial').val();
-		var number = $('.number').val();
-		var seatingFee = $('.seatingFee').find('.price').html();
-		if(serial && number){
-			if(serial=='>'){
-				layer.msg('请输入座位号!');
-				return;
+			var serial = $('.serial').val();
+			var number = $('.number').val();
+			var seatingFee = $('.seatingFee').find('.price').html();
+			if(serial && number){
+				if(serial=='>'){
+					layer.msg('请输入座位号!');
+					return;
+				}
+				if(isNaN(number)||(parseInt(number)!=number)||number < 0){
+					layer.msg('输入人数为大于0的整数!');
+					return;
+				}
+				$('#dialog .content').html('餐位数:'+number+'人;餐位费:'+seatingFee+'元');
+				$('#dialog').show();
+			}else{
+				if(!serial||serial=='>'){
+					layer.msg('请输入座位号!');
+					return;
+				}
+				if(!number){
+					layer.msg('请输入人数!');
+					return;
+				}
 			}
-			if(isNaN(number)||(parseInt(number)!=number)||number < 0){
-				layer.msg('输入人数为大于0的整数!');
-				return;
-			}
-			$('#dialog .content').html('餐位数:'+number+'人;餐位费:'+seatingFee+'元');
-			$('#dialog').show();
-		}else{
-			if(!serial||serial=='>'){
-				layer.msg('请输入座位号!');
-				return;
-			}
-			if(!number){
-				layer.msg('请输入人数!');
-				return;
-			}
-		}
 		<?php elseif($this->type==2):?>
-		var address = $('input[name="address"]').val();
-		if(parseInt(address) < 0){
-			layer.msg('请添加收货地址!');
-			return;
-		}
-		$('form').submit();
+			var address = $('input[name="address"]').val();
+			if(parseInt(address) < 0){
+				layer.msg('请添加收货地址!');
+				return;
+			}
+			$('form').submit();
 		<?php elseif($this->type==3):?>
-		var address = $('input[name="address"]').val();
-		if(parseInt(address) < 0){
-			layer.msg('请添加预约人信息!');
-			return;
-		}
-		var orderTime = $('input[name="order_time"]').val();
-		if(!orderTime){
-			layer.msg('请选择预约时间!');
-			return;
-		}
-		var timestamp = Date.parse(today) / 1000;
-		var pointsTime = Date.parse(orderTime) / 1000;
-		if(timestamp > pointsTime){
-			layer.msg('预约时间必须大于当前时间!');
-			return;
-		}
-		$('form').submit();
+			var address = $('input[name="address"]').val();
+			if(parseInt(address) < 0){
+				layer.msg('请添加预约人信息!');
+				return;
+			}
+			var orderTime = $('input[name="order_time"]').val();
+			if(!orderTime){
+				layer.msg('请选择预约时间!');
+				return;
+			}
+			var timestamp = Date.parse(today) / 1000;
+			var pointsTime = Date.parse(orderTime) / 1000;
+			if(timestamp > pointsTime){
+				layer.msg('预约时间必须大于当前时间!');
+				return;
+			}
+			$('form').submit();
+		<?php else:?>
+			$('form').submit();
 		<?php endif;?>
 	});
 	$('#dialog .primary').click(function(){

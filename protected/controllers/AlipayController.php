@@ -94,6 +94,7 @@ class AlipayController extends Controller
     /**
      * 
      * 支付宝即时到账交易接口接口
+     * 二维码
      * 
      */
     public function actionInstantArriva(){
@@ -138,7 +139,7 @@ class AlipayController extends Controller
                 "it_b_pay"  => $it_b_pay,
                 "extern_token"  => $extern_token,
                 'qr_pay_mode'=>4,
-                'qrcode_width'=>400,
+                'qrcode_width'=>200,
                 "_input_charset"=> trim(strtolower($this->alipay_config['input_charset']))
         );
         
