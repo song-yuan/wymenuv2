@@ -21,6 +21,7 @@ class BackendController extends CController
                 
 		return true ;
 	}
+        // $this->redirect(Yii::app()->request->urlReferrer);
         
 //        public function afterAction($action) {
 //		parent::afterAction($action);
