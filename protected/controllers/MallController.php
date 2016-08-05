@@ -4,11 +4,11 @@ class MallController extends Controller
 {
 	/**
 	 * 
-	 * type点单类型 1 堂吃 2 外卖 3 预约
+	 * type点单类型0 临时座 1 堂吃 2 外卖 3 预约
 	 * 
 	 */
 	public $companyId;
-	public $type = 1;
+	public $type = 0;
 	public $weixinServiceAccount;
 	public $brandUser;
 	public $layout = '/layouts/mallmain';
@@ -17,7 +17,7 @@ class MallController extends Controller
 	public function init() 
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
-		$type = Yii::app()->request->getParam('type',1);
+		$type = Yii::app()->request->getParam('type',0);
 		$this->companyId = $companyId;
 		$this->type = $type;
 	}

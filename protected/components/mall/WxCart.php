@@ -131,6 +131,12 @@ class WxCart
 				  ->queryAll();
 		return $results;
 	}
+	/**
+	 * @return boolean
+	 * 
+	 * 增加菜品
+	 * 
+	 */
 	public function addCart(){
 		$success = false;
 		$time = time();
@@ -166,6 +172,12 @@ class WxCart
 		}
 		return $success;
 	}
+	/**
+	 * 
+	 * @return boolean
+	 * 
+	 * 减少菜品
+	 */
 	public function deleteCart(){
 		$success = false;
 		$time = time();
