@@ -20,7 +20,7 @@
 }
 
 .name {
-	font-size: 0.6em;
+	font-size: 0.8em;
 	color:#888;
 }
 .name.active{
@@ -28,11 +28,11 @@
 }
 
 .bttnbar ul li div {
-	width:50px;
-	margin:0 auto;
+	width:30px;
+	margin:5px auto;
 }
 .bttnbar ul li img {
-	width: 50px;
+	width: 100%;
 	height: auto;
 	display: block;
 }
