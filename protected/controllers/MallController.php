@@ -174,6 +174,8 @@ class MallController extends Controller
 				WxCart::updateSiteId($userId,$this->companyId,$site['lid']);
 				$siteId = $site['lid'];
 			}
+		}elseif($this->type==3){
+			$number = Yii::app()->request->getPost('number');
 		}
 		$tastes = Yii::app()->request->getPost('taste',array());
 		

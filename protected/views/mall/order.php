@@ -43,7 +43,7 @@
 	</div>
 	<?php endif;?>
 </div>
-<?php else:?>
+<?php elseif($order['order_type']==3):?>
 <div class="address arrowright">
 	<?php if($address):?>
 	<div class="location" style="line-height: 50px;">
@@ -69,13 +69,13 @@
 	<?php endforeach;?>
 	<div class="ht1"></div>
 	<!-- 其他费用 -->
-	<?php if($order['order_type']==1):?>
+	<?php if($order['order_type']==1||$order['order_type']==3):?>
 	<div class="item">
 		<div class="lt">餐位费:</div>
 		<div class="rt">X1 ￥<?php echo $seatingFee?number_format($seatingFee,2):'免费';?></div>
 		<div class="clear"></div>
 	</div>
-	<?php else:?>
+	<?php elseif($order['order_type']==2):?>
 	<div class="item">
 		<div class="lt">包装费:</div>
 		<div class="rt">X1 ￥<?php echo $packingFee?number_format($packingFee,2):'免费';?></div>

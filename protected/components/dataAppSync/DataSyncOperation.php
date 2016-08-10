@@ -258,7 +258,7 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$syncTime = $data['sync_at'];
 		$results = array();
-		$diffTable = array('nb_site_type','nb_member_card','nb_member_recharge','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_sync_failure');
+		$diffTable = array('nb_site_type','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_account_discount','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_sync_failure');
 		$dataBase = new DataSyncTables ();
 		$allTables = $dataBase->getAllTableName ();
 		$allTable = array_diff($allTables, $diffTable);
@@ -402,6 +402,16 @@ class DataSyncOperation {
 					}
 				}
 				
+				//减库存
+				$productItem = WxProduct::getProduct($product->product_id, $dpid);
+				if($productItem['store_number']>0){
+					if($productItem['store_number'] < $product->amount){
+						$sql = 'update nb_product set store_number = 0,is_sync='.$isSync.' where lid='.$product->product_id.' and dpid='.$dpid.' and delete_flag=0';
+					}else{
+						$sql = 'update nb_product set store_number =  store_number-'.$product->amount.',is_sync='.$isSync.' where lid='.$product->product_id.' and dpid='.$dpid.' and delete_flag=0';
+					}
+					Yii::app()->db->createCommand($sql)->execute();
+				}
 				if($isSync==0){
 					// 消耗原材料库存
 					$productBoms = self::getBom($dpid, $product->product_id);

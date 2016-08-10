@@ -3,7 +3,7 @@
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/footernav.css">
 <!-- 固定按钮 -->
-	<div class="bttnbar bg_dgrey3">
+	<div class="bttnbar bg_dgrey4">
 	<?php if($this->id == 'user'&&$this->getAction()->getId()=='orderList'):?>
 		<ul>
 			<li><a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$this->companyId));?>"><div><img src="<?php echo $baseUrl;?>/img/mall/navmain.png" alt=""></div><div class="name">首页</div></a></li>

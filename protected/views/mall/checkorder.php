@@ -74,6 +74,7 @@
 		<?php endif;?>
 	</div>
 <?php elseif($this->type==3):?>
+	<div class="site_no" style="background: rgb(255,255,255);margin:10px 0;">就餐人数: <input type="button" class="num-minus"  value="-" style="background: rgb(255,255,255);"><input type="text" class="number" name="number" value="3" readonly="readonly" style="background: rgb(255,255,255);"/> <input type="button" class="num-add"  value="+" style="background: rgb(255,255,255);"></div>
 	<div class="address arrowright">
 		<?php if($address):?>
 		<div class="location" style="line-height: 50px;">
@@ -137,71 +138,62 @@
 	    <?php endif;?>
 	</div>
 	<?php endforeach;?>
-	<?php if($this->type==1):?>
-	<!-- begain餐位费 -->
-	<div class="section seatingFee" price="<?php echo $seatingFee;?>">
-		 <div class="prt">
-	        <div class="prt-lt">餐位费</div>
-	        <div class="prt-mt">x<span class="num"></span></div>
-	        <div class="prt-rt">￥<span class="price"></span></div>
-	        <div class="clear"></div>
-	    </div>
-	</div>
-	<div class="weui_cells_tips"><?php echo $seatingTips;?></div>
-	<!-- end餐位费 -->
-	<?php elseif($this->type==3):?>
-	<div class="section packingFee" price="<?php echo $packingFee;?>">
-		 <div class="prt">
-	        <div class="prt-lt">包装费</div>
-	        <div class="prt-mt">x<span class="num"></span></div>
-	        <div class="prt-rt">￥<span class="price"></span></div>
-	        <div class="clear"></div>
-	    </div>
-	</div>
-	<?php else:?>
-	<!-- begain餐位费 -->
-	<div class="section packingFee" price="<?php echo $packingFee;?>">
-		 <div class="prt">
-	        <div class="prt-lt">包装费</div>
-	        <div class="prt-mt">x<span class="num"></span></div>
-	        <div class="prt-rt">￥<span class="price"></span></div>
-	        <div class="clear"></div>
-	    </div>
-	</div>
-	<!-- end餐位费 -->
-	<!-- begain餐位费 -->
-	<div class="section freightFee" price="<?php echo $freightFee;?>">
-		 <div class="prt">
-	        <div class="prt-lt">配送费</div>
-	        <div class="prt-mt">x<span class="num">1</span></div>
-	        <div class="prt-rt">￥<span class="price"><?php echo number_format($freightFee,2);?></span></div>
-	        <div class="clear"></div>
-	    </div>
-	</div>
-	<!-- end餐位费 -->
+	<?php if($this->type==1||$this->type==3):?>
+		<!-- begain餐位费 -->
+		<div class="section seatingFee" price="<?php echo $seatingFee;?>">
+			 <div class="prt">
+		        <div class="prt-lt">餐位费</div>
+		        <div class="prt-mt">x<span class="num"></span></div>
+		        <div class="prt-rt">￥<span class="price"></span></div>
+		        <div class="clear"></div>
+		    </div>
+		</div>
+		<div class="weui_cells_tips"><?php echo $seatingTips;?></div>
+		<!-- end餐位费 -->
+	<?php elseif($this->type==2):?>
+		<!-- begain餐位费 -->
+		<div class="section packingFee" price="<?php echo $packingFee;?>">
+			 <div class="prt">
+		        <div class="prt-lt">包装费</div>
+		        <div class="prt-mt">x<span class="num"></span></div>
+		        <div class="prt-rt">￥<span class="price"></span></div>
+		        <div class="clear"></div>
+		    </div>
+		</div>
+		<!-- end餐位费 -->
+		<!-- begain餐位费 -->
+		<div class="section freightFee" price="<?php echo $freightFee;?>">
+			 <div class="prt">
+		        <div class="prt-lt">配送费</div>
+		        <div class="prt-mt">x<span class="num">1</span></div>
+		        <div class="prt-rt">￥<span class="price"><?php echo number_format($freightFee,2);?></span></div>
+		        <div class="clear"></div>
+		    </div>
+		</div>
+		<!-- end餐位费 -->
 	<?php endif;?>
 </div>
 
 <?php if($this->type==3):?>
-<div class="order-time arrowright">
-	<div class="time-lt">预约时间</div>
-	<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
-	<div class="clear"></div>
-</div>
+	<div class="order-time arrowright">
+		<div class="time-lt">预约时间</div>
+		<div class="time-rt"><input  type="text" class="" name="order_time" id="appDateTime" value="" placeholder="选择预约时间" readonly="readonly" ></div>
+		<div class="clear"></div>
+	</div>
 <?php endif;?>
 <!-- 完善资料才能使用代金券  -->
 <?php if($user['mobile_num']&&$user['user_birthday']):?>
-<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
-	<div class="copun-lt">代金券</div>
-	<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
-	<div class="clear"></div>
-</div>
+	<div class="order-copun arrowright cupon <?php if(!$isCupon) echo 'disabled';?>">
+		<div class="copun-lt">代金券</div>
+		<div class="copun-rt"><?php if($isCupon):?>选择代金券<?php else:?>无可用代金券<?php endif;?></div>
+		<div class="clear"></div>
+	</div>
 <?php else:?>
-<div class="order-copun arrowright disabled">
-	<div class="copun-lt">代金券</div>
-	<div class="copun-rt"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId));?>">去完善资料</a></div>
-	<div class="clear"></div>
-</div>
+	<div class="order-copun arrowright disabled">
+		<div class="copun-lt">代金券</div>
+		<div class="copun-rt"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId));?>">去完善资料</a></div>
+		<div class="clear"></div>
+	</div>
 <?php endif;?>
 <div class="order-remark">
 	<textarea name="taste_memo" placeholder="备注"></textarea>

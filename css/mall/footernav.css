@@ -20,19 +20,20 @@
 }
 
 .name {
-	font-size: 0.6em;
+	font-size: 0.8em;
 	color:#888;
+	margin:0 auto 5px;
 }
 .name.active{
 	color:rgb(217,35,20);
 }
 
 .bttnbar ul li div {
-	width:50px;
-	margin:0 auto;
+	width:30px;
+	margin:5px auto 0;
 }
 .bttnbar ul li img {
-	width: 50px;
+	width: 100%;
 	height: auto;
 	display: block;
 }
