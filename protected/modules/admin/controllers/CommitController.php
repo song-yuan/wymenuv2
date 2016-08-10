@@ -128,11 +128,12 @@ class CommitController extends BackendController
 		$categories = $this->getCategories();
 		$categoryId=0;
 		$materials = $this->getMaterials($categoryId);
+		$materialslist=CHtml::listData($materials, 'lid', 'material_name');
 		$this->render('detailcreate' , array(
 				'model' => $model ,
 				'categories'=>$categories,
 				'categoryId'=>$categoryId,
-				'materials'=>$materials
+				'materials'=>$materialslist
 		));
 	}
 
@@ -285,6 +286,7 @@ class CommitController extends BackendController
 		{
 			//var_dump ('2',$categoryId);exit;
 			$materials = ProductMaterial::model()->findAll('dpid=:companyId and delete_flag=0' , array(':companyId' => $this->companyId));
+			//var_dump($materials);exit;
 		}else{
 			//var_dump ('3',$categoryId);exit;
 			$materials = ProductMaterial::model()->findAll('dpid=:companyId and category_id=:categoryId and delete_flag=0' , array(':companyId' => $this->companyId,':categoryId'=>$categoryId)) ;
