@@ -85,9 +85,7 @@ class PurchaseOrderController extends BackendController
 				'purchase'=>$purchase,
 		));
 	}
-	public function actionSetMealList() {
-		
-	}
+
 	public function actionCreate(){
 		$model = new PurchaseOrder();
 		$model->dpid = $this->companyId ;
@@ -235,6 +233,19 @@ class PurchaseOrderController extends BackendController
 		$pid = Yii::app()->request->getParam('pid');
 		$type = Yii::app()->request->getParam('type');
 		$purchase = PurchaseOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		$purchase->status = $type;
+		if($purchase->update()){
+			echo 'true';
+		}else{
+			echo 'false';
+		}
+		exit;
+	}
+	public function actionPurchaseVerifyDpid(){
+		$pid = Yii::app()->request->getParam('pid');
+		$type = Yii::app()->request->getParam('type');
+		$purchase = PurchaseOrder::model()->find('lid=:id and dpid=:dpid and delete_flag=0',array(':id'=>$pid,':dpid'=>$this->companyId));
+		$purchase->status_dpid = $this->companyId;
 		$purchase->status = $type;
 		if($purchase->update()){
 			echo 'true';
