@@ -1,7 +1,7 @@
 <?php
 $now = time();
 $rand = rand(100,999);
-$orderId = $now.$rand.'-'.$dpid;
+$orderId = $now.'-'.$dpid.'-'.$rand;
 
 $company = WxCompany::get($dpid);
 if(isset($auth_code) && $auth_code != ""){
