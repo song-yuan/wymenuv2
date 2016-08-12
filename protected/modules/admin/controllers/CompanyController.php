@@ -66,19 +66,41 @@ class CompanyController extends BackendController
 				'pages'=>$pages,
 		));
 	}
+	protected function afterSave()
+	{
+		if(parent::afterSave()) {
+			if($this->isPostRequest) {
+				$this->comp_dpid = Yii::app()->db->getLastInsertID();
+			} else {
+				//$this->update_time = date("Y-m-d H:i:s");
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
 	public function actionCreate(){
 		if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role == User::ADMIN) {
 		
 		$model = new Company();
 		$model->create_at = date('Y-m-d H:i:s');
+		//var_dump($model);exit;
 		if(Yii::app()->user->role == User::POWER_ADMIN){
 			if(Yii::app()->request->isPostRequest) {
 				$model->attributes = Yii::app()->request->getPost('Company');
 	                        $model->create_at=date('Y-m-d H:i:s',time());
 	                        $model->update_at=date('Y-m-d H:i:s',time());
-	                        //$model->comp_dpid=$this->companyId;
+	                        //$model->comp_dpid=mysql_insert_id();
 	                        $model->type="0";
+	                        
+	                       // $model->comp_dpid = Yii::app()->db->getLastInsertID();
 				if($model->save()){
+					$comp_dpid = Yii::app()->db->getLastInsertID();
+					$sql = 'update nb_company set comp_dpid = '.$comp_dpid.' where delete_flag = 0 and dpid = '.$comp_dpid;
+					$command=Yii::app()->db->createCommand($sql);
+					$command->execute();
+					//$model->comp_dpid = $post->attributes['dpid'];
+					//var_dump($id);exit;
 					Yii::app()->user->setFlash('success',yii::t('app','创建成功'));
 					$this->redirect(array('company/index','companyId'=> $this->companyId));
 				} else {

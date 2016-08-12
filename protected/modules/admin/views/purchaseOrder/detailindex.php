@@ -43,7 +43,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','采购订单详情列表');?></div>
 					<div class="actions">
 					
-					<?php if($status == 0):?>
+					<?php if(in_array($status,array(0,2)) && Yii::app()->user->role >=3):?>
 						<a href="<?php echo $this->createUrl('purchaseOrder/detailcreate' , array('companyId' => $this->companyId,'lid'=>$polid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 					<div class="btn-group">
 						<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
@@ -77,7 +77,7 @@
 								<td ><?php echo $model->stock;?></td>
 								<td><?php echo $model->free_stock;?></td>
 								<td class="center">
-								<?php if($status == 0):?>
+								<?php if(in_array($status,array(0,2)) && Yii::app()->user->role >=3):?>
 								<a href="<?php echo $this->createUrl('purchaseOrder/detailupdate',array('lid' => $model->lid , 'polid'=>$model->purchase_id, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								<?php endif;?>
 								</td>
@@ -88,15 +88,27 @@
 						<?php endif;?>
 							<tr>
 								<td colspan="20" style="text-align: right;">
-								<?php if($purchase->status==1):?><span style="color: red">已审核</span>&nbsp;<input id="storageOrder"  type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成入库单" />&nbsp;<input type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成退货单" />
-								<?php elseif($purchase->status==2):?><span style="color: red">已驳回</span>
-								<?php elseif($purchase->status==3):?>
-									<?php if(Yii::app()->user->role<3):?><input id="verify-pass" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;<input id="verify-nopass" purchase-id="<?php echo $polid;?>"  type="button" class="btn blue" value="驳回" />
-									<?php else:?><span style="color:red">等待审核</span>
+								<?php if($purchase->status==1):?><span style="color: red">已审核</span>&nbsp;
+									<?php if(Yii::app()->user->role == 3 || Yii::app()->user->role == 2):?>
+									<input id="storageOrder"  type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成入库单" />&nbsp;<input type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成退货单" />
+									
 									<?php endif;?>
-								<?php elseif($purchase->status==0):?>
-									<?php if(Yii::app()->user->role<3):?><input id="verify-passing" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="确认送审" />&nbsp;
-									<?php else:?><span style="color:red">正在编辑</span>
+								<?php elseif($purchase->status == 2):?><span style="color: red">已驳回</span>
+									<?php if(Yii::app()->user->role > 2):?>
+									<input id="re-verify-passing"  type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="重新送审" />&nbsp;
+									
+									<?php endif;?>
+								<?php elseif($purchase->status == 3):?><span style="color:red">等待审核</span>
+									<?php if(Yii::app()->user->role == 3):?><input id="verify-pass" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;<input id="verify-nopass" purchase-id="<?php echo $polid;?>"  type="button" class="btn blue" value="驳回" />
+									
+									<?php endif;?>
+								<?php elseif($purchase->status == 0):?><span style="color:red">正在编辑</span>
+									<?php if(Yii::app()->user->role > 3):?><input id="verify-passing" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="确认送审" />&nbsp;
+									<?php elseif (Yii::app()->user->role == 3):?><input id="verify-passing-dpid" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="请求总部审核" />&nbsp;
+									<?php endif;?>
+								<?php elseif($purchase->status == 4):?>
+									<?php if(Yii::app()->user->role == 2):?><input id="verify-pass-2" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;
+									<?php else:?><span style="color:red">总部审核中</span>
 									<?php endif;?>
 								<?php endif;?>
 								</td>
@@ -170,6 +182,30 @@
 				alert('请添加需要采购的品项');
 			}
 		});
+		$('#verify-pass-2').click(function(){
+			var pid = $(this).attr('purchase-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认审核该采购订单')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('purchaseOrder/purchaseVerify',array('companyId'=>$this->companyId));?>',
+					data:{type:1,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('审核成功');
+						}else{
+							alert('审核失败');
+						}
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('purchaseOrder/index' , array('companyId'=>$this->companyId,));?>";
+					}
+				});
+			}
+			}else{
+				alert('请添加需要采购的品项');
+			}
+		});
 		$('#verify-passing').click(function(){
 			var pid = $(this).attr('purchase-id');
 			var storagedetail = $('#storagedetail').attr('val');
@@ -179,6 +215,54 @@
 				$.ajax({
 					url:'<?php echo $this->createUrl('purchaseOrder/purchaseVerify',array('companyId'=>$this->companyId));?>',
 					data:{type:3,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('送审成功');
+						}else{
+							alert('送审失败');
+						}
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('purchaseOrder/index' , array('companyId'=>$this->companyId,));?>";
+					}
+				});
+			}
+			}else{
+				alert('请添加需要采购的品项');
+			}
+		});
+		$('#re-verify-passing').click(function(){
+			var pid = $(this).attr('purchase-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认重新送审该采购订单')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('purchaseOrder/purchaseVerify',array('companyId'=>$this->companyId));?>',
+					data:{type:3,pid:pid},
+					success:function(msg){
+						if(msg=='true'){
+							alert('送审成功');
+						}else{
+							alert('送审失败');
+						}
+						//history.go(0);
+						location.href="<?php echo $this->createUrl('purchaseOrder/index' , array('companyId'=>$this->companyId,));?>";
+					}
+				});
+			}
+			}else{
+				alert('请添加需要采购的品项');
+			}
+		});
+		$('#verify-passing-dpid').click(function(){
+			var pid = $(this).attr('purchase-id');
+			var storagedetail = $('#storagedetail').attr('val');
+			
+			if(storagedetail == 1){
+			if(confirm('确认送审该采购订单到总部')){
+				$.ajax({
+					url:'<?php echo $this->createUrl('purchaseOrder/purchaseVerifyDpid',array('companyId'=>$this->companyId));?>',
+					data:{type:4,pid:pid},
 					success:function(msg){
 						if(msg=='true'){
 							alert('送审成功');
