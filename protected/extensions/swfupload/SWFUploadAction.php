@@ -18,6 +18,7 @@ class SWFUploadAction extends CAction
     
     public function run()
     {
+    	//var_dump($_POST);exit;
          $this->init();
          //modify by osy for map fileupload
          	$filepath = $this->upload();
@@ -41,7 +42,7 @@ class SWFUploadAction extends CAction
             Yii::app()->getRequest()->redirect(Yii::app ()->homeUrl);
             return ;
         }
-        
+        //var_dump($_POST);exit;
         $this->callbackJS = isset($_POST['callbackJS'])?$_POST['callbackJS']:'';
         $this->companyId =  isset($_POST['companyId'])?$_POST['companyId']:'0';
         $this->folder =  isset($_POST['folder'])?$_POST['folder']:'';

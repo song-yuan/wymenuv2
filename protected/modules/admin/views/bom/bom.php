@@ -278,13 +278,16 @@
 							<div class="ku-item-info">退货订单</div>
 						</div>
 					</a>
+					<?php $companyType = Helper::getcompanyType($this->companyId);
+						if(in_array($companyType,array(0,2))): 
+					?>
 					<a href="<?php echo $this->createUrl('commit/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple db"></div>
 							<div class="ku-item-info">调拨</div>
 						</div>
 					</a>
-					 
+					 <?php endif;?>
 					<a href="<?php echo $this->createUrl('stockInventory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pc"></div>
