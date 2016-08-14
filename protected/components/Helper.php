@@ -44,6 +44,16 @@ class Helper
             }
              return $models->company_name;
 	}
+
+	static public function getCompanyType($companyId) {
+		if($companyId)
+		{
+			$models = Company::model()->find('t.dpid = '.$companyId);
+		}else{
+			$models = Company::model()->find('t.dpid = '.Yii::app()->user->companyId);
+		}
+		return $models->type;
+	}
         
 	static public function genCompanyOptions() {
 		$companies = Company::model()->findAll('delete_flag=0') ;

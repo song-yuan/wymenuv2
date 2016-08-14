@@ -26,7 +26,7 @@ class BackendController extends CController
 			if(Yii::app()->user->role > User::ADMIN && $controllerId != 'login' && Yii::app()->user->companyId != $companyId){
 				//var_dump($controllerId);exit;
 				//$this->redirect(Yii::app()->request->urlReferrer);
-			}elseif(Yii::app()->user->role == User::ADMIN && $controllerId != 'login'){
+			}elseif(Yii::app()->user->role == User::ADMIN && $controllerId != 'login' && $action != 'upload'){
 				$dpids = Helper::getCompanyIds(Yii::app()->request->getParam('companyId',"0000000000"));
 				$dpids = Helper::getCompanyIds(Yii::app()->user->companyId);
 				//var_dump($dpids);exit;

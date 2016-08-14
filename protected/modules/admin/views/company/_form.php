@@ -22,7 +22,7 @@
 										$this->widget('application.extensions.swfupload.SWFUpload',array(
 											'callbackJS'=>'swfupload_callback',
 											'fileTypes'=> '*.jpg',
-											'buttonText'=> yii::t('app','上传产品图片'),
+											'buttonText'=> yii::t('app','上传图片'),
 											'imgUrlList' => array($model->logo),
 										));
 										?>
