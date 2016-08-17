@@ -11,6 +11,7 @@ class DataSyncTables
     //然后根据企业id获取数据，下载到本地后删除所有
     //原有的基础数据，然后插入新的。    
     public $baseTableName= array(
+    	array("name"=>"收银pos设置","table"=>"nb_pad_setting"),
         array("name"=>"同步失败信息","table"=>"nb_sync_failure"),
         array("name"=>"店铺信息","table"=>"nb_local_company"),
         array("name"=>"用户","table"=>"nb_user"),
@@ -111,6 +112,23 @@ class DataSyncTables
     public function getTableStructure($tablename)
     {
         $tableStructureAll=array(
+        	"nb_pad_setting"=>" CREATE TABLE IF NOT EXISTS 'nb_pad_setting'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  'jobid' int(10) NOT NULL DEFAULT '0',".
+	        	"  `pad_code` varchar(50) NOT NULL,".
+				"  `pad_sales_type` varchar(2) NOT NULL,".
+				"  `pad_type` varchar(2) NOT NULL,".
+				"  `pad_ip` varchar(20) NOT NULL,".
+				"  `pad_fip` varchar(20) NOT NULL DEFAULT '0',".
+				"  `bt_mac` varchar(20) NOT NULL,".
+				"  `is_product_free` varchar(1) NOT NULL  DEFAULT '0',".
+				"  `sync_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+				"  `delete_flag` varchar(1) NOT NULL DEFAULT '0',".
+				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
+				"	PRIMARY KEY (`lid`,`dpid`)".
+        		");",
         	"nb_sync_failure"=>" CREATE TABLE IF NOT EXISTS 'nb_sync_failure'('lid' int(10) NOT NULL,".
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
