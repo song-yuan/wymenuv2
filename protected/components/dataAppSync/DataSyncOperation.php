@@ -18,6 +18,25 @@
  */
 class DataSyncOperation {
 	/**
+	 *
+	 * 获取pos设备信息
+	 *
+	 */
+	public static function getDataSyncPosInfor($code) {
+		if($code){
+			$sql = 'select * from nb_pad_setting where pad_code="'.$code.'" and delete_flag=0';
+			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+			if($result){
+				$msg = array('status'=>true,'msg'=>$result);
+			}else{
+				$msg = array('status'=>false,'msg'=>'');
+			}
+		}else{
+			$msg = array('status'=>false,'msg'=>'');
+		}
+		return $msg;
+	}
+	/**
 	 * 
 	 * 
 	 * 获取基础数据表

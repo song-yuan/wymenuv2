@@ -21,6 +21,16 @@ public function actionServerImglist(){
 }
 /**
  * 
+ * 获取pos设备信息
+ * 
+ */
+public function actionGetSyncPosInfo(){
+	$code = Yii::app()->request->getParam('code',0);
+	$posinfo = DataSyncOperation::getDataSyncPosInfor($code);
+	echo json_encode($posinfo);exit;
+}
+/**
+ * 
  * 获取基础数据表
  * 
  */ 
