@@ -37,7 +37,7 @@ class CommitController extends BackendController
 			//var_dump($model);exit;
 			$se=new Sequence("commit");
 			$model->lid = $se->nextval();
-			$model->callout_id = '000000000';
+			//$model->callout_id = '000000000';
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->commit_account_no = date('YmdHis',time()).substr('0000000000'.$model->lid,-4);

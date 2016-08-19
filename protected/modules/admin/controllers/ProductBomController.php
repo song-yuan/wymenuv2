@@ -42,14 +42,36 @@ class ProductBomController extends BackendController
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductBom');
-			$se=new Sequence("product_bom");
-			$model->lid = $se->nextval();
-            $model->product_id = $pblid;
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->delete_flag = '0';
-            //var_dump($model);exit;
-			if($model->save()) {
-				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+			
+			$db = Yii::app()->db;
+			$sql = 'select t.* from nb_product t where t.delete_flag = 0 and t.lid = '.$pblid;
+			$command1 = $db->createCommand($sql);
+			$productCode = $command1->queryRow()['phs_code'];
+			
+			$sql = 'select t.* from nb_product_material t where t.delete_flag = 0 and t.lid = '.$model->material_id;
+			$command2 = $db->createCommand($sql);
+			$materialId = $command2->queryRow()['mphs_code'];
+			
+			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
+			$command3 = $db->createCommand($sql);
+			$salesUnitId = $command3->queryRow()['muhs_code'];
+			
+			if($productCode&&$materialId&&$salesUnitId){
+				$se=new Sequence("product_bom");
+				$model->lid = $se->nextval();
+	            $model->product_id = $pblid;
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->delete_flag = '0';
+				$model->mphs_code = $materialId;
+				$model->phs_code = $productCode;
+				$model->mushs_code = $salesUnitId;
+	            //var_dump($model);exit;
+				if($model->save()) {
+					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+					$this->redirect(array('productBom/detailindex','companyId' => $this->companyId,'pblid'=>$pblid));
+				}
+			}else{
+				Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
 				$this->redirect(array('productBom/detailindex','companyId' => $this->companyId,'pblid'=>$pblid));
 			}
 		}

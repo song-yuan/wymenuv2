@@ -48,7 +48,11 @@ class MaterialUnitController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MaterialUnit');
 			$se=new Sequence("material_unit");
-			$model->lid = $se->nextval();
+			$lid = $se->nextval();
+			$model->lid = $lid;
+			$code = new Sequence('muhs_code');
+			$muhs_code = $code->nextval();
+			$model->muhs_code = ProductCategory::getChscode($this->companyId,$lid, $muhs_code);
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';

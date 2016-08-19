@@ -82,8 +82,8 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:16%"><?php echo yii::t('app','调拨单号');?></th>
 								<th ><?php echo yii::t('app','日期');?></th>
-								<th><?php echo yii::t('app','调出组织');?></th>
 								<th><?php echo yii::t('app','调入组织');?></th>
+								<th><?php echo yii::t('app','调出组织');?></th>
 								<th><?php echo yii::t('app','备注');?></th>
 								<th><?php echo yii::t('app','审核状态');?></th>
 								<th><?php echo yii::t('app','详情');?></th>
@@ -97,15 +97,15 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo $model->commit_account_no;?></td>
 								<td ><?php echo $model->commit_date;?></td>
-								<td><?php if($model->callout_id != 0) echo Helper::getCompanyName($model->callout_id);else echo '';?></td>
 								<td ><?php echo Helper::getCompanyName($model->callin_id);?></td>
+								<td><?php if($model->callout_id != 0) echo Helper::getCompanyName($model->callout_id);else echo '';?></td>
 								<td ><?php echo $model->remark;?></td>
-								<td ><span style="color: red"><?php if($model->status==0) echo "编辑中..."; elseif($model->status==1) echo "已审核"; elseif ($model->status==2) echo "等待审核";elseif ($model->status==3) echo "审核失败";elseif ($model->status==4) echo "已处理";?></span></td>
+								<td ><span style="color: red"><?php if($model->status==0) echo "编辑中..."; elseif($model->status==1) echo "送审中..."; elseif ($model->status==2) echo "审核失败...";elseif ($model->status==3) echo "调出方审核编辑中...";elseif ($model->status==4) echo "调出方审核通过";elseif ($model->status==5) echo "调入方审核通过";elseif ($model->status==6) echo "已处理.";?></span></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('commit/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->status, ));?>"><?php echo yii::t('app','调拨详情');?></a>
 								</td>
 								<td class="center">
-								<?php if($model->status == 0 || $model->status == 3 || ($model->status == 2 && Yii::app()->user->role<3)):?>
+								<?php if($model->status == 0 || $model->status == 2 ):?>
 									<a href="<?php echo $this->createUrl('commit/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								<?php endif;?>
 								</td>
