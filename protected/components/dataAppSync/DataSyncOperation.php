@@ -18,6 +18,25 @@
  */
 class DataSyncOperation {
 	/**
+	 *
+	 * 获取pos设备信息
+	 *
+	 */
+	public static function getDataSyncPosInfor($code) {
+		if($code){
+			$sql = 'select * from nb_pad_setting where pad_code="'.$code.'" and delete_flag=0';
+			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+			if($result){
+				$msg = array('status'=>true,'msg'=>$result);
+			}else{
+				$msg = array('status'=>false,'msg'=>'');
+			}
+		}else{
+			$msg = array('status'=>false,'msg'=>'');
+		}
+		return $msg;
+	}
+	/**
 	 * 
 	 * 
 	 * 获取基础数据表
@@ -258,7 +277,7 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$syncTime = $data['sync_at'];
 		$results = array();
-		$diffTable = array('nb_site_type','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_account_discount','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_sync_failure');
+		$diffTable = array('nb_site_type','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_account_discount','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_shift_detail','nb_sync_failure');
 		$dataBase = new DataSyncTables ();
 		$allTables = $dataBase->getAllTableName ();
 		$allTable = array_diff($allTables, $diffTable);
