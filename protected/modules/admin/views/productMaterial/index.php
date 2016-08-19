@@ -66,6 +66,7 @@
 								<th><?php echo yii::t('app','实时库存');?></th>
 								<!--<th><php echo yii::t('app','库存成本');?></th>-->
 								<th>&nbsp;</th>
+								<th>&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -73,16 +74,20 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td style="width:16%"><?php echo $model->material_identifier;?></td>
+								<td><?php echo $model->material_identifier;?></td>
 								<td ><?php echo $model->material_name;?></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
 								<td ><?php echo $model->material_private_identifier;?></td>
 								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
 								<td ><?php echo Common::getStockName($model->sales_unit_id);?></td>
-								<td ><?php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>
+								<!-- <td ><php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>  -->
+								<td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td>
 								<!--<td ><php echo $model->stock_cost;?></td>-->
 								<td class="center">
 								<a href="<?php echo $this->createUrl('productMaterial/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								</td>
+								<td class="center">
+								<a href="<?php echo $this->createUrl('productMaterial/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid,));?>"><?php echo yii::t('app','查看库存详情');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

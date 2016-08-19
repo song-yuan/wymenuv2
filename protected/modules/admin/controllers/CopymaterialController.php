@@ -1,5 +1,5 @@
 <?php
-class CopyproductController extends BackendController
+class CopymaterialController extends BackendController
 {
 	public function actions() {
 		return array(

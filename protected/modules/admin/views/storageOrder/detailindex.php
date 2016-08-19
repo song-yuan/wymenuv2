@@ -60,6 +60,7 @@
 								<th><?php echo yii::t('app','入库进价');?></th>
 								<th><?php echo yii::t('app','入库库存');?></th>
 								<th><?php echo yii::t('app','赠品数量');?></th>
+								<th><?php echo yii::t('app','库存天数');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -73,6 +74,7 @@
 								<td><?php echo $model->price;?></td>
 								<td ><?php echo $model->stock;?></td>
 								<td><?php echo $model->free_stock;?></td>
+								<td><?php echo $model->stock_day;?></td>
 								<td class="center">
 								<?php if($status == 0 || $status == 2):?>
 									<a href="<?php echo $this->createUrl('storageOrder/detailupdate',array('lid' => $model->lid , 'slid'=>$model->storage_id,  'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>

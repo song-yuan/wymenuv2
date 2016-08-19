@@ -37,10 +37,12 @@ class StorageOrderDetail extends CActiveRecord
 			array('lid, dpid, material_id, price, stock, free_stock', 'length', 'max'=>10),
 			array('is_sync', 'length', 'max'=>50),
 			array('create_at', 'safe'),
+				array('mphs_code', 'length', 'max'=>12),
+				array('stock_day', 'length', 'max'=>4),
 			array('material_id', 'compare', 'compareValue'=>'0','operator'=>'>','message'=>yii::t('app','请选择品项信息')),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, material_id, price, stock, free_stock, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, material_id, mphs_code, stock_day, price, stock, free_stock, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +69,8 @@ class StorageOrderDetail extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'material_id' => '品项名称',
+			'mphs_code' => '品项编码',
+			'stock_day' => '库存天数',
 			'price' => '入库进价',
 			'stock' => '入库库存(含赠品)',
 			'free_stock' => '赠品数',
@@ -97,6 +101,8 @@ class StorageOrderDetail extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('material_id',$this->material_id,true);
+		$criteria->compare('mphs_code',$this->mphs_code,true);
+		$criteria->compare('stock_day',$this->stock_day,true);
 		$criteria->compare('price',$this->price,true);
 		$criteria->compare('stock',$this->stock,true);
 		$criteria->compare('free_stock',$this->free_stock,true);

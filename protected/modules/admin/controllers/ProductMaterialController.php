@@ -22,7 +22,7 @@ class ProductMaterialController extends BackendController
 	public function actionIndex(){
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$criteria = new CDbCriteria;
-		$criteria->with = array('company','category','material_stock');
+		$criteria->with = array('category');
 		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId;
 		if($categoryId){
 			$criteria->condition.=' and t.category_id = '.$categoryId;
@@ -48,20 +48,48 @@ class ProductMaterialController extends BackendController
 		$modelStock->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductMaterial');
-            $se=new Sequence("product_material");
-            $model->lid = $se->nextval();
-            $model->create_at = date('Y-m-d H:i:s',time());
-            $model->update_at = date('Y-m-d H:i:s',time());
-            $model->delete_flag = '0';
-            
-            $se=new Sequence("product_material_stock");
-            $modelStock->lid = $se->nextval();
-            $modelStock->create_at = date('Y-m-d H:i:s',time());
-            $modelStock->update_at = date('Y-m-d H:i:s',time());
-            $modelStock->material_id = $model->lid;
-            
-			if($model->save()&&$modelStock->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+			
+			$db = Yii::app()->db;
+			$sql = 'select t.* from nb_material_category t where t.delete_flag = 0 and t.lid = '.$model->category_id;
+			$command1 = $db->createCommand($sql);
+			$categoryCode = $command1->queryRow()['mchs_code'];
+			
+			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->stock_unit_id;
+			$command2 = $db->createCommand($sql);
+			$stockUnitId = $command2->queryRow()['muhs_code'];
+			
+			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
+			$command3 = $db->createCommand($sql);
+			$salesUnitId = $command3->queryRow()['muhs_code'];
+			//var_dump($categoryId,$stockUnitId,$salesUnitId);exit;
+			if($categoryCode&&$stockUnitId&&$salesUnitId){
+	            $se=new Sequence("product_material");
+	            $lid = $se->nextval();
+	            $model->lid = $lid;
+	            
+	            $code = new Sequence('mphs_code');
+	            $mphs_code = $code->nextval();
+	            $model->create_at = date('Y-m-d H:i:s',time());
+	            $model->update_at = date('Y-m-d H:i:s',time());
+	            $model->mphs_code = ProductCategory::getChscode($this->companyId, $lid, $mphs_code);
+	            $model->mchs_code = $categoryCode;
+	            $model->mulhs_code = $stockUnitId;
+	            $model->mushs_code = $salesUnitId;
+	            $model->delete_flag = '0';
+	            
+	            $se=new Sequence("product_material_stock");
+	            $modelStock->lid = $se->nextval();
+	            $modelStock->create_at = date('Y-m-d H:i:s',time());
+	            $modelStock->update_at = date('Y-m-d H:i:s',time());
+	            $modelStock->material_id = $model->lid;
+	            $modelStock->mphs_code = $model->mphs_code;
+	            
+				if($model->save()&&$modelStock->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+					$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
+				}
+			}else{
+				Yii::app()->user->setFlash('error',yii::t('app','添加失败'));
 				$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
 			}
 		}
@@ -104,6 +132,25 @@ class ProductMaterialController extends BackendController
 			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId)) ;
 		}
 	}
+	
+	public function actionDetailindex(){
+		$materialId = Yii::app()->request->getParam('id',0);
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId.' and t.material_id ='.$materialId;
+		//	$criteria->condition.=' and t.lid = '.$categoryId;
+		$pages = new CPagination(ProductMaterialStock::model()->count($criteria));
+		//$pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		$models = ProductMaterialStock::model()->findAll($criteria);
+		$this->render('detailindex',array(
+				'models'=>$models,
+				'pages'=>$pages,
+	
+		));
+	}
+	
+	
+	
 	private function getCategoryList(){
 		$categories = MaterialCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
