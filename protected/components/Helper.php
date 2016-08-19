@@ -104,6 +104,17 @@ class Helper
 		}
 		return $company;
 	}
+	static public function genStoreCompany($companyId) { //公司所有仓库
+		$company = Company::model()->find('delete_flag=0 and dpid='.$companyId) ;
+		if($company->type==0){
+			$company = Company::model()->findAll('dpid='.$companyId.' or comp_dpid='.$companyId.' and delete_flag=0') ;
+			return $company;
+		}else{
+			$company = Company::model()->findAll('dpid='.$companyId.' or comp_dpid='.$company->comp_dpid.' and delete_flag=0 and type=2') ;
+			return $company;
+		}
+		
+	}
 	static public function genUsername($companyId) {//管理员
 		$companies = User::model()->findAll('delete_flag=0 and dpid='.$companyId.' and status=1 and role >='.Yii::app()->user->role) ;
 		// var_dump($companies);exit;
