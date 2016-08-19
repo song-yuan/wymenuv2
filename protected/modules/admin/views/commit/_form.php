@@ -17,22 +17,24 @@
 	</style>
 	
 	<div class="form-body">
-		<?php if(Yii::app()->user->role<3):?>
-		<div class="form-group <?php if($model->hasErrors('callout_id')) echo 'has-error';?>">
-			<?php echo $form->label($model, 'callout_id',array('class' => 'col-md-3 control-label'));?>
-			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'callout_id', CHtml::listData(Helper::genOrgCompany($this->companyId), 'dpid', 'company_name'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('callout_id')));?>
-				<?php echo $form->error($model, 'callout_id' )?>
-			</div>
-		</div>
-		<?php endif;?>
+		
+		
 		<div class="form-group <?php if($model->hasErrors('callin_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'callin_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->dropDownList($model, 'callin_id', CHtml::listData(Helper::genOrgCompany($this->companyId), 'dpid', 'company_name'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('callin_id')));?>
+				<?php echo $form->dropDownList($model, 'callin_id', CHtml::listData(Helper::genStoreCompany($this->companyId), 'dpid', 'company_name'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('callin_id')));?>
 				<?php echo $form->error($model, 'callin_id' )?>
 			</div>
 		</div>
+		
+		<div class="form-group <?php if($model->hasErrors('callout_id')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'callout_id',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->dropDownList($model, 'callout_id', CHtml::listData(Helper::genStoreCompany($this->companyId), 'dpid', 'company_name'),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('callout_id')));?>
+				<?php echo $form->error($model, 'callout_id' )?>
+			</div>
+		</div>
+		
 		<div class="form-group <?php if($model->hasErrors('admin_id')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'admin_id',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">

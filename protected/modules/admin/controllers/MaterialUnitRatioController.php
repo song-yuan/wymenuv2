@@ -43,14 +43,31 @@ class MaterialUnitRatioController extends BackendController
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MaterialUnitRatio');
-			$se=new Sequence("material_unit_ratio");
-			$model->lid = $se->nextval();
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->delete_flag = '0';
-			//var_dump($model);exit;
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+			
+			$db = Yii::app()->db;
+			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->stock_unit_id;
+			$command2 = $db->createCommand($sql);
+			$stockUnitId = $command2->queryRow()['muhs_code'];
+				
+			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
+			$command3 = $db->createCommand($sql);
+			$salesUnitId = $command3->queryRow()['muhs_code'];
+			
+			if($stockUnitId&&$salesUnitId){
+				$se=new Sequence("material_unit_ratio");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->delete_flag = '0';
+				$model->mulhs_code = $stockUnitId;
+		        $model->mushs_code = $salesUnitId;
+				//var_dump($model);exit;
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+					$this->redirect(array('materialUnitRatio/index' , 'companyId' => $this->companyId ));
+				}
+			}else{
+				Yii::app()->user->setFlash('error',yii::t('app','添加失败！'));
 				$this->redirect(array('materialUnitRatio/index' , 'companyId' => $this->companyId ));
 			}
 		}

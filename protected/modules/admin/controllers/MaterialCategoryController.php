@@ -32,13 +32,18 @@ class MaterialCategoryController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('MaterialCategory');
 			$category = MaterialCategory::model()->find('dpid=:dpid and category_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->category_name));
 			if($category){
+				Yii::app()->user->setFlash('success' ,yii::t('app', '该类别已添加'));
 				$this->redirect(array('materialCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
 			}
-                        $se=new Sequence("material_category");
-                        $model->lid = $se->nextval();
-                        $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
-                        $model->update_at=date('Y-m-d H:i:s',time());
+                $se=new Sequence("material_category");
+                $lid = $se->nextval();
+                $model->lid = $lid;
+                $code=new Sequence("mchs_code");
+                $mchs_code = $code->nextval();
+                $model->mchs_code = ProductCategory::getChscode($this->companyId,$lid, $mchs_code);
+                $model->create_at = date('Y-m-d H:i:s',time());
+                $model->delete_flag = '0';
+                $model->update_at=date('Y-m-d H:i:s',time());
 
 			if($model->save()){
                               //var_dump($model);exit;

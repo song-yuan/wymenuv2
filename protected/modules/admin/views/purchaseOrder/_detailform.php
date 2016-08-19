@@ -44,6 +44,13 @@
 				<?php echo $form->error($model, 'free_stock' )?>
 			</div>
 		</div>
+		<div class="form-group <?php if($model->hasErrors('stock_day')) echo 'has-error';?>">
+			<?php echo $form->label($model, 'stock_day',array('class' => 'col-md-3 control-label'));?>
+			<div class="col-md-4">
+				<?php echo $form->textField($model, 'stock_day',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('stock_day')));?>
+				<?php echo $form->error($model, 'stock_day' )?>
+			</div>
+		</div>
 		<div class="form-actions fluid">
 			<div class="col-md-offset-3 col-md-9">
 				<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>

@@ -43,14 +43,26 @@ class StorageOrderDetailController extends BackendController
 
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('StorageOrderDetail');
-			$se=new Sequence("storage_order_detail");
-			$model->lid = $se->nextval();
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->update_at = date('Y-m-d H:i:s',time());
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+			
+			$db = Yii::app()->db;
+			$sql = 'select t.* from nb_product_material t where t.delete_flag = 0 and t.lid = '.$model->materil_id;
+			$command2 = $db->createCommand($sql);
+			$stockUnitId = $command2->queryRow()['mphs_code'];
+			var_dump($stockUnitId);exit;
+			if($stockUnitId){
+				$se=new Sequence("storage_order_detail");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->mphs_code = $stockUnitId;
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+					$this->redirect(array('StorageOrderDetail/index' , 'companyId' => $this->companyId ));
+				}
+			}else{
+				Yii::app()->user->setFlash('error',yii::t('app','添加失败！'));
 				$this->redirect(array('StorageOrderDetail/index' , 'companyId' => $this->companyId ));
-			}
+		}
 		}
 		$categories = $this->getCategories();
 		$categoryId=0;

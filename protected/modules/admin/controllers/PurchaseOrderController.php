@@ -168,14 +168,26 @@ class PurchaseOrderController extends BackendController
         $model->purchase_id=$polid;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('PurchaseOrderDetail');
-			$se=new Sequence("purchase_order_detail");
-			$model->lid = $se->nextval();
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->update_at = date('Y-m-d H:i:s',time());
-			//  $model->delete_flag = '0';
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('purchaseOrder/detailindex' , 'companyId' => $this->companyId,'lid'=>$model->purchase_id, ));
+			
+			$db = Yii::app()->db;
+			$sql = 'select t.* from nb_product_material t where t.delete_flag = 0 and t.lid = '.$model->material_id;
+			$command2 = $db->createCommand($sql);
+			$stockUnitId = $command2->queryRow()['mphs_code'];
+			
+			if($stockUnitId){
+				$se=new Sequence("purchase_order_detail");
+				$model->lid = $se->nextval();
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->mphs_code = $stockUnitId;
+				//  $model->delete_flag = '0';
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+					$this->redirect(array('purchaseOrder/detailindex' , 'companyId' => $this->companyId,'lid'=>$model->purchase_id, ));
+				}
+			}else{
+				Yii::app()->user->setFlash('error',yii::t('app','添加失败'));
+				$this->redirect(array('purchaseOrder/detailindex' , 'companyId' => $this->companyId, 'lid'=>$model->purchase_id ));
 			}
 		}
 		$categories = $this->getCategories();
@@ -289,8 +301,10 @@ class PurchaseOrderController extends BackendController
 					$modeldetail->update_at = date('Y-m-d H:i:s',time());
 					$modeldetail->storage_id = $model->lid;
 					$modeldetail->material_id = $detail->material_id;
+					$modeldetail->mphs_code = $detail->mphs_code;
 					$modeldetail->price = $detail->price;
 					$modeldetail->stock = $detail->stock;
+					$modeldetail->stock_day = $detail->stock_day;
 					$modeldetail->free_stock = $detail->free_stock;
 					$modeldetail->save();
 				}
