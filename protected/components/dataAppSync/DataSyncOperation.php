@@ -335,14 +335,15 @@ class DataSyncOperation {
 		$time = time ();
 		$se = new Sequence ( "order" );
 		$orderId = $se->nextval ();
-		$accountNo = WxOrder::getAccountNo ( $dpid, $orderInfo->site_id, $orderInfo->is_temp, $orderId );
+		$accountNo = $orderInfo->account_no;
+		$createAt = $orderInfo->creat_at;
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			$insertOrderArr = array (
 					'lid' => $orderId,
 					'dpid' => $dpid,
-					'create_at' => date ( 'Y-m-d H:i:s', $time ),
+					'create_at' => $createAt,
 					'update_at' => date ( 'Y-m-d H:i:s', $time ),
 					'account_no' => $accountNo,
 					'user_id' => '0',
