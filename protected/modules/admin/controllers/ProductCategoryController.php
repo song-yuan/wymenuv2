@@ -53,21 +53,17 @@ class ProductCategoryController extends BackendController
 				Yii::app()->user->setFlash('success' ,yii::t('app', '该类别已添加'));
 				$this->redirect(array('productCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
 			}
-
-
 				$se=new Sequence("product_category");
 				$lid = $se->nextval();
 				$model->lid = $lid;
 				$code=new Sequence("chs_code");
 				$chs_code = $code->nextval();
-				$chscode = ProductCategory::getChscode($this->companyId,$lid, $chs_code);
-				//var_dump($chs_code);exit;
-				
+				$model->chs_code = ProductCategory::getChscode($this->companyId,$lid, $chs_code);
 				$model->create_at = date('Y-m-d H:i:s',time());
 				$model->delete_flag = '0';
 				$model->update_at=date('Y-m-d H:i:s',time());
-				$model->chs_code = $chscode;
 				
+				//var_dump($model);exit;
 				if($model->save()){
 					//var_dump($model);exit;
 					$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->lid,':dpid'=>  $this->companyId));
@@ -79,8 +75,9 @@ class ProductCategoryController extends BackendController
 					}
 					//var_dump($model);exit;
 					$self->update();
-					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-					$this->redirect(array('productCategory/index' , 'id'=>$self->lid,'companyId' => $this->companyId));
+						Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+						$this->redirect(array('productCategory/index' , 'id'=>$self->lid,'companyId' => $this->companyId));
+					
 				}else{
 					Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
 					$this->redirect(array('productCategory/index' ,'companyId' => $this->companyId));
@@ -102,6 +99,7 @@ class ProductCategoryController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
                         $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
+				//var_dump($model);exit;
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('productCategory/index' , 'id'=>$model->lid,'companyId' => $this->companyId));
 			}
