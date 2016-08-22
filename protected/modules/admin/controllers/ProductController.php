@@ -127,6 +127,8 @@ class ProductController extends BackendController
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
+			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where product_id in ('.implode(',' , $ids).') and dpid = :companyId')
+			->execute(array( ':companyId' => $this->companyId));
 			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));

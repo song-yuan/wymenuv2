@@ -627,14 +627,14 @@ class NormalpromotionController extends BackendController
 	
 	public function getProductSetPrice($productSetId,$dpid){
 		$proSetPrice = '';
-		$sql = 'select sum(t.price*t.number) as all_setprice,t.set_id from nb_product_set_detail t where t.set_id ='.$productSetId.' and t.dpid ='.$dpid.' and t.delete_flag = 0 and is_select = 1 ';
+		$sql = 'select sum(t.price*t.number) as all_setprice,t.set_id,t1.set_price from nb_product_set_detail t left join nb_product_set t1 on(t1.lid ='.$productSetId.' and t1.delete_flag =0 and t1.dpid ='.$dpid.') where t.set_id ='.$productSetId.' and t.dpid ='.$dpid.' and t.delete_flag = 0 and is_select = 1 ';
 		$connect = Yii::app()->db->createCommand($sql);
 		//	$connect->bindValue(':site_id',$siteId);
 		//	$connect->bindValue(':dpid',$dpid);
 		$proSetPrice = $connect->queryRow();
 		//var_dump($proSetPrice);exit;
 		if(!empty($proSetPrice)){
-			return $proSetPrice['all_setprice'] ;
+			return $proSetPrice['all_setprice']+$proSetPrice['set_price'] ;
 		}
 		else{
 			return flse;
