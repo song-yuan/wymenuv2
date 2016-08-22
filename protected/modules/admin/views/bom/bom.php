@@ -294,6 +294,12 @@
 						</div>
 					</a>
 					 <?php endif;?>
+					 <a href="<?php echo $this->createUrl('stockTaking/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple pc"></div>
+							<div class="ku-item-info">盘点</div>
+						</div>
+					</a>
 					<a href="<?php echo $this->createUrl('stockInventory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pc"></div>

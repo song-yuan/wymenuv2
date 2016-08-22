@@ -62,10 +62,7 @@
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','历史记录');?></button>
 						</div>-->
 					</div>
-                                        <?php else :?>
-                                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐活动优惠设置');?></div>
-                                        <?php endif;?>
-                                        
+                    
                                             <div class="col-md-3 pull-right">
 												<div class="input-group">
                                                     <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
@@ -74,7 +71,12 @@
                                                         <!-- <button style="left:10px;" class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>     -->                                                    
                                                     </span>
                                                 </div>
-                                            </div>
+                                            </div> 
+                     
+                                        <?php else :?>
+                                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐活动优惠设置');?></div>
+                                        <?php endif;?>
+                                        
                                         
 				</div>
 				<div class="portlet-body" id="table-manage">

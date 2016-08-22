@@ -30,7 +30,7 @@ class ProductCategory extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lid,dpid , category_name', 'required'),
+			array('lid, dpid, ', 'required'),
 			array('pid,delete_flag', 'numerical', 'integerOnly'=>true),
 			array('category_name', 'length','min'=>2, 'max'=>45),
 			//	array('category_name' , 'unique' , 'message'=>'类别名已经存在'),

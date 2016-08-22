@@ -97,7 +97,7 @@
 								
 								<td><span style="color: red;"><?php if($model->status==1){ echo '确认盘损';}else{ echo '正在编辑';};?></span></td>
 								<td class="center">
-									<a href="<?php echo $this->createUrl('inventory/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,));?>"><?php echo yii::t('app','入库单详情');?></a>
+									<a href="<?php echo $this->createUrl('inventory/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,));?>"><?php echo yii::t('app','盘损单详情');?></a>
 								</td>
 								<td class="center">
 								<?php if($model->status == 0 ):?>
