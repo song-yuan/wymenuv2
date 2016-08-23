@@ -224,11 +224,12 @@ class NormalpromotionController extends BackendController
 					
 				if(empty($promotionID)){
 					$promotionID = Yii::app()->request->getParam('promotionID');
+					if(empty($promotionID)){
+						echo "操作有误！请点击右上角的返回继续编辑";
+						exit;
+					}
 				}
-				if(empty($promotionID)){
-					echo "操作有误！请点击右上角的返回继续编辑";
-					exit;
-				}
+				
 				//$sql = 'select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.normal_promotion_id,t.* from nb_product t left join nb_normal_promotion_detail t1 on(t.dpid = t1.dpid and t.lid = t1.product_id and t1.delete_flag = 0) where t.delete_flag = 0 and t.dpid='.$this->companyId;
 				// 			$command=$db->createCommand($sql);
 				// 			$models= $command->queryAll();
@@ -491,7 +492,7 @@ class NormalpromotionController extends BackendController
 		public function actionPromotiondetail(){
 			$sc = Yii::app()->request->getPost('csinquery');
 			$promotionID = Yii::app()->request->getParam('lid');
-			//$typeId = Yii::app()->request->getParam('typeId');
+			$typeId = Yii::app()->request->getParam('typeId');
 			$categoryId = Yii::app()->request->getParam('cid',"");
 			$fromId = Yii::app()->request->getParam('from','sidebar');
 			$csinquery=Yii::app()->request->getPost('csinquery',"");
@@ -501,31 +502,45 @@ class NormalpromotionController extends BackendController
 					
 				if(empty($promotionID)){
 					$promotionID = Yii::app()->request->getParam('promotionID');
-				}
-				if(empty($promotionID)){
-					echo "操作有误！请点击右上角的返回继续编辑";
-					exit;
+					if(empty($promotionID)){
+						echo "操作有误！请点击右上角的返回继续编辑";
+						exit;
+					}
 				}
 				
 				if(!empty($categoryId)){
-					//$criteria->condition.=' and t.category_id = '.$categoryId;
-					$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.normal_promotion_id,t1.* 
+					if($typeId=='product'){
+						//$criteria->condition.=' and t.category_id = '.$categoryId;
+						$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.normal_promotion_id,t1.* 
 							from nb_normal_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id  and t1.delete_flag = 0 ) 
 							where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.normal_promotion_id = '.$promotionID.' and t1.category_id = '.$categoryId.' ) k';
 				
-				}
-				
-				elseif(!empty($csinquery)){
-					//$criteria->condition.=' and t.simple_code like "%'.strtoupper($csinquery).'%"';
-					$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.normal_promotion_id,t1.* 
+					}
+				}elseif(!empty($csinquery)){
+					if($typeId=='product'){
+						//$criteria->condition.=' and t.simple_code like "%'.strtoupper($csinquery).'%"';
+						$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.normal_promotion_id,t1.* 
 							from nb_normal_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 ) 
 									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.normal_promotion_id = '.$promotionID.' and t1.simple_code like "%'.strtoupper($csinquery).'%" ) k';
 				
+					}else{//活动优惠套餐添加
+						$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.normal_promotion_id,t1.*
+							from nb_normal_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
+									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 1 and t.normal_promotion_id = '.$promotionID.' and t1.simple_code like "%'.strtoupper($csinquery).'%" ) k';
+						
+					}
 				}else{
-					$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.normal_promotion_id,t1.* 
+					if($typeId=='product'){
+						$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.normal_promotion_id,t1.* 
 							from nb_normal_promotion_detail t left join nb_product t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 ) 
 									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 0 and t.normal_promotion_id = '.$promotionID.') k' ;
 				
+					}else{
+						$sql = 'select k.* from(select t.promotion_money,t.promotion_discount,t.order_num,t.is_set,t.product_id,t.normal_promotion_id,t1.*
+							from nb_normal_promotion_detail t left join nb_product_set t1 on(t.dpid = t1.dpid and t1.lid = t.product_id and t1.delete_flag = 0 )
+									where t.delete_flag = 0 and t.dpid='.$this->companyId.' and t.is_set = 1 and t.normal_promotion_id = '.$promotionID.') k' ;
+						
+					}
 				}
 					//$sql = 'select k.* from(select t1.promotion_money,t1.promotion_discount,t1.order_num,t1.is_set,t1.product_id,t1.normal_promotion_id,t.* from nb_normal_promotion_detail t1  where t1.is_set = 0 and t1.normal_promotion_id ='.$promotionID.' t1.delete_flag = 0 and t1.dpid='.$this->companyId.') k' ;
 		
@@ -544,7 +559,7 @@ class NormalpromotionController extends BackendController
 						'pages'=>$pages,
 						'categories'=>$categories,
 						'categoryId'=>$categoryId,
-						//'typeId' => $typeId,
+						'typeId' => $typeId,
 						'promotionID'=>$promotionID
 				));
 			
