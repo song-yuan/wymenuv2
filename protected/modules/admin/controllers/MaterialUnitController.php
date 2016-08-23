@@ -47,18 +47,26 @@ class MaterialUnitController extends BackendController
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MaterialUnit');
-			$se=new Sequence("material_unit");
-			$lid = $se->nextval();
-			$model->lid = $lid;
-			$code = new Sequence('muhs_code');
-			$muhs_code = $code->nextval();
-			$model->muhs_code = ProductCategory::getChscode($this->companyId,$lid, $muhs_code);
-			$model->create_at = date('Y-m-d H:i:s',time());
-			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->delete_flag = '0';
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-				$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId ));
+			
+			//检测名称是否重复。。。
+			//$unitName = $model->unit_name ;
+			$unitName = MaterialUnit::model()->find('dpid=:dpid and unit_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->unit_name));
+			if($unitName){
+				Yii::app()->user->setFlash('error' ,yii::t('app', '该入库单位已添加'));
+			}else{
+				$se=new Sequence("material_unit");
+				$lid = $se->nextval();
+				$model->lid = $lid;
+				$code = new Sequence('muhs_code');
+				$muhs_code = $code->nextval();
+				$model->muhs_code = ProductCategory::getChscode($this->companyId,$lid, $muhs_code);
+				$model->create_at = date('Y-m-d H:i:s',time());
+				$model->update_at = date('Y-m-d H:i:s',time());
+				$model->delete_flag = '0';
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+					$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId ,'type'=>$type,));
+				}
 			}
 		}
 		$categories = $categories = MaterialUnit::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
