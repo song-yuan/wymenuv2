@@ -50,9 +50,9 @@ class ProductCategoryController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
 			$category = ProductCategory::model()->find('dpid=:dpid and category_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->category_name));
 			if($category){
-				Yii::app()->user->setFlash('success' ,yii::t('app', '该类别已添加'));
+				Yii::app()->user->setFlash('error' ,yii::t('app', '该类别已添加'));
 				$this->redirect(array('productCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
-			}
+			}else{
 				$se=new Sequence("product_category");
 				$lid = $se->nextval();
 				$model->lid = $lid;
@@ -83,7 +83,7 @@ class ProductCategoryController extends BackendController
 					$this->redirect(array('productCategory/index' ,'companyId' => $this->companyId));
 				}
 						
-			
+			}	
 		}
 		$this->render('_form1' , array(
 				'model' => $model,
