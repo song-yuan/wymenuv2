@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','品项库存日志'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','品项库存日志'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' => '1',)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','品项库存日志'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','品项库存日志'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' => '2',)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -71,7 +71,7 @@
 							<tr class="odd gradeX">
 								<!--<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>-->
 								<td style="width:16%"><?php echo Common::getmaterialName($model->material_id);?></td>
-								<td ><?php if ($model->type==0) echo "入库"; elseif ($model->type==1) echo "出库";elseif ($model->type==2) echo "盘存"?></td>
+								<td ><?php if ($model->type==0) echo "入库"; elseif ($model->type==1) echo "出库";elseif ($model->type==2) echo "盘存";elseif ($model->type==3) echo "盘点";?></td>
 								<td><?php echo $model->stock_num;?></td>
 								<td><?php echo $model->resean;?></td>
 								<td><?php echo $model->create_at;?></td>

@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','营销管理'),'subhead'=>yii::t('app','普通活动产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','查看已添加菜品'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('normalpromotion/detailindex' , array('typeId' =>'product','companyId' => $this->companyId,'promotionID'=>$promotionID)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','活动中心'),'subhead'=>yii::t('app','普通活动产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','查看已添加菜品'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('normalpromotion/detailindex' , array('typeId' =>'product','companyId' => $this->companyId,'promotionID'=>$promotionID,'typeId'=>$typeId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -38,36 +38,40 @@
 		)); ?>
 	<div class="col-md-12">
               
-                    <div class="tabbable tabbable-custom">
-                            <ul class="nav nav-tabs">
-                                    <li class="active"><a href="#tab_1" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/promotiondetail' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID));?>'"><?php echo yii::t('app','单品');?></a></li>
-                                    <!-- <li class="active"><a href="#tab_1_" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/detailindex' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID));?>'"><?php echo yii::t('app','套餐');?></a></li>
-                             			-->
-                            </ul>
+        <div class="tabbable tabbable-custom">
+            <ul class="nav nav-tabs">
+               <li class="<?php if($typeId=='product') echo 'active';?>"><a href="#tab_1" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/promotiondetail' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'typeId'=>'product',));?>'"><?php echo yii::t('app','单品');?></a></li>
+           
+               <li class="<?php if($typeId=='set') echo 'active';?>"><a href="#tab_1_" data-toggle="tab" onclick="location.href='<?php echo $this->createUrl('normalpromotion/promotiondetail' , array( 'companyId'=>$this->companyId,'promotionID'=>$promotionID,'typeId'=>'set',));?>'"><?php echo yii::t('app','套餐');?></a></li>
+                             			
+            
+        </ul>
    		<div class="tab-content">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
                                     
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','查看已添加菜品并设置');?></div>
-					<div class="actions">						
+					<div class="caption"><i class="fa fa-globe"></i><?php if($typeId=='product') echo yii::t('app','查看已添加菜品并设置');else echo yii::t('app','查看已添加套餐并设置');?></div>
+					<div class="actions">	
+						<?php if($typeId=='product'):?>					
                         <div style="margin-top:-5px !important;" class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
+						<?php endif;?>
 						<div class="btn-group">
 							<button type="button" id="yichu"  class="btn red" style="padding:6px 10px;margin-top:2px;" ><i class="fa fa-ban"></i> <?php echo yii::t('app','勾选批量移除');?></button>
 						</div>
 						
 					</div>
-                                            <div class="col-md-3 pull-right">
-												<div class="input-group">
-                                                    <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
-                                                    <span class="input-group-btn">
-                                                        <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
-                                                        <!-- <button style="left:10px;" class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>     -->                                                    
-                                                    </span>
-                                                </div>
-                                            </div>
+                    <div class="col-md-3 pull-right">
+						<div class="input-group">
+		                    <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
+		                    <span class="input-group-btn">
+		                    	<button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
+		                                                                   
+		                    </span>
+	                    </div>
+                    </div>
                                         
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -77,9 +81,7 @@
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:10%"><?php echo yii::t('app','名称');?></th>
 								<th ><?php echo yii::t('app','图片');?></th>
-								
-								<th><?php echo yii::t('app','原价');?></th>
-								
+								<th><?php if($typeId=='product') echo yii::t('app','原价');else echo yii::t('app','套餐默认价格');?></th>
 								<th><?php echo yii::t('app','状态');?></th>
 							</tr>
 						</thead>
@@ -88,10 +90,17 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="idchk" /></td>
-								<td style="width:10%"><?php echo $model['product_name'];?></td>
+								<td style="width:10%"><?php if($typeId=='product') echo $model['product_name'];else echo $model['set_name'];?></td>
+								
 								<td ><img width="100" src="<?php echo $model['main_picture'];?>" /></td>
 								
-								<td ><?php echo $model['original_price'];?></td>
+								<td >
+									<?php if($typeId=='product') :?>
+									<td ><?php echo $model['original_price'];?></td>
+									<?php elseif($typeId=="set") :?>
+									<td style="width:7%;"><?php echo $this->getProductSetPrice($model['lid'],$model['dpid']);?></td>
+									<?php endif;?>
+								</td>
 								
                                 <td>
 									<div class="form-group">

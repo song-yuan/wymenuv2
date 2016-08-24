@@ -55,26 +55,33 @@
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
 						<div class="btn-group" style="left:3%;">
-							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
+							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
 						</div>
 						<!--<a href="<?php echo $this->createUrl('product/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i><?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','历史记录');?></button>
 						</div>-->
 					</div>
-                                        <?php else :?>
-                                        <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐活动优惠设置');?></div>
-                                        <?php endif;?>
-                                        
-                                            <div class="col-md-3 pull-right">
-												<div class="input-group">
-                                                    <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
-                                                    <span class="input-group-btn">
-                                                        <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
-                                                        <!-- <button style="left:10px;" class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>     -->                                                    
-                                                    </span>
-                                                </div>
-                                            </div>
+                    
+                    <div class="col-md-3 pull-right">
+						<div class="input-group">
+		                    <input type="text" name="csinquery" class="form-control" placeholder="<?php echo yii::t('app','输入助记符查询');?>">
+		                    <span class="input-group-btn">
+		                    <button class="btn blue" type="submit"><?php echo yii::t('app','查询!');?></button>
+		                    <!-- <button style="left:10px;" class="btn blue" type="button" id="cancelallclean"><?php echo yii::t('app','解除全部沽清');?></button>     -->                                                    
+		                    </span>
+	                    </div>
+                    </div> 
+                     
+                    <?php else :?>
+                    <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐活动优惠设置');?></div>
+                    <div class="actions">
+                    	<div class="btn-group" style="left:3%;">
+							<a href="<?php echo $this->createUrl('normalpromotion/promotiondetail' , array('companyId' => $this->companyId ,'promotionID'=>$promotionID , 'typeId'=>$typeId));?>" class="btn blue" style="padding:7px 10px;margin-top:2px;"><?php echo yii::t('app','查看已添加菜品');?></a>
+						</div>
+                    </div>	
+                    <?php endif;?>
+                    
                                         
 				</div>
 				<div class="portlet-body" id="table-manage">

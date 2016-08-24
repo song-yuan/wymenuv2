@@ -247,12 +247,7 @@
 							<div class="ku-item-info">产品信息</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey kcrz"></div>
-							<div class="ku-item-info">库存日志</div>
-						</div>
-					</a>
+					
 					<?php elseif($type==2):?>
 					<a href="<?php echo $this->createUrl('mfrClassification/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
@@ -294,19 +289,30 @@
 						</div>
 					</a>
 					 <?php endif;?>
-					<a href="<?php echo $this->createUrl('stockInventory/index',array('companyId'=>$this->companyId));?>">
+					 <a href="<?php echo $this->createUrl('stockTaking/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple pc"></div>
+							<div class="ku-item-info">盘点</div>
+						</div>
+					</a>
+					<!-- <a href="<?php echo $this->createUrl('stockInventory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pc"></div>
 							<div class="ku-item-info">盘存</div>
 						</div>
-					</a>
+					</a> -->
 					<a href="<?php echo $this->createUrl('inventory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple ps"></div>
 							<div class="ku-item-info">盘损</div>
 						</div>
 					</a>
-					
+					<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey kcrz"></div>
+							<div class="ku-item-info">库存日志</div>
+						</div>
+					</a>
 					<?php endif;?>
 				</div>
 			</div>

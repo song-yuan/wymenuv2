@@ -148,7 +148,7 @@
 	$(document).ready(function(){
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('taste/productTaste' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+			location.href="<?php echo $this->createUrl('taste/productTaste' , array('companyId'=>$this->companyId,'type'=>2));?>/cid/"+cid;
 		});
 	});
 	</script>
