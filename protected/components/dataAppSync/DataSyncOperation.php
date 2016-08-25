@@ -745,7 +745,7 @@ class DataSyncOperation {
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 			}
 		}
-		
+		$se = new Sequence ( "material_stock_log" );
 		$materialStockLogId = $se->nextval ();
 		$materialStockLog = array (
 				'lid' => $materialStockLogId,
