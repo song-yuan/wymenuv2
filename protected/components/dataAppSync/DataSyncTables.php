@@ -455,6 +455,8 @@ class DataSyncTables
         		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `type` varchar(2) NOT NULL DEFAULT '0',".
         		"  `member_name` varchar(255) NOT NULL,".
+        		"  `phone_number` varchar(11) NOT NULL,".
+        		"  `cardId` varchar(25) NOT NULL,".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
