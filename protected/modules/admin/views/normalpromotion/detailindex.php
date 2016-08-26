@@ -116,7 +116,7 @@
 										<div class="col-md-12">
 											<div class="radio-list">
 												<label class="radio-inline">
-												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>1" value="0" checked="checked" <?php if($model['promotion_money']>'0.00') echo "checked";?> > <?php echo yii::t('app','优惠');?>
+												<input type="radio" name="optionsRadios<?php echo $model['lid'];?>" id="optionsRadios<?php echo $model['lid'];?>1" value="0" checked="checked" <?php if($model['promotion_money']>'0.00') echo "checked";?> > <?php echo yii::t('app','优惠到:');?>
 												<input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php if(!empty($model['promotion_money'])) echo $model['promotion_money']; else echo '0.00'; ?>" onfocus=" if (value =='0.00'){value = ''}" onblur="if (value ==''){value='0.00'}" >
 												</label>
 												<label class="radio-inline">

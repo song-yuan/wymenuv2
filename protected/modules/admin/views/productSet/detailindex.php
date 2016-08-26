@@ -84,7 +84,7 @@
                                                                 <td><?php echo $model->number;?></td>
                                                                 <td>
 									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>">
-										<input pid="<?php echo $model->lid;?>" <?php if($model->is_select) echo 'checked="checked"';?> type="checkbox"  class="toggle"/>
+										<input pid="<?php echo $model->lid;?>" <?php if($model->is_select) echo 'checked="checked"';?> type="checkbox" disabled="disabled" class="toggle"/>
 									</div>
 								</td>
 								<td class="center">
