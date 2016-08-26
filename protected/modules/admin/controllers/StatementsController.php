@@ -388,8 +388,8 @@ public function actionPayallReport(){
 		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$download = Yii::app()->request->getParam('d');
-		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d 00:00:00',time()));
-		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d 00:00:00',time()+24*3600));
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 		
 
 		$criteria = new CDbCriteria;
@@ -399,8 +399,8 @@ public function actionPayallReport(){
 		if($str){
 			$criteria->condition = 't.dpid in('.$str.')';
 		}
-		$criteria->addCondition("order4.create_at >='$begin_time '");
-		$criteria->addCondition("order4.create_at <='$end_time '");
+		$criteria->addCondition("order4.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("order4.create_at <='$end_time 23:59:59'");
 // 		$criteria->addCondition("order8.create_at >='$begin_time 00:00:00'");
 // 		$criteria->addCondition("order8.create_at <='$end_time 23:59:59'");
 		if($text==1){
@@ -541,7 +541,7 @@ public function actionPayallReport(){
 		//}else{
 			//$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.number) as all_number,count(distinct(t.account_no)) as all_account,sum(t1.original_price*t1.amount) as all_originalprice,sum(t1.price*t1.amount*(-(t1.is_giving-1))) as all_price,sum(t2.pay_amount) as all_realprice,t.* from nb_order t left join nb_order_product t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t1.order_id = t.lid and t1.product_order_status in(1,2) and t1.is_retreat =0) left join nb_order_pay t2 on(t.dpid = t2.dpid and t2.order_id = t.lid and t2.paytype not in(9,10))  where t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.order_status in(3,4,8) ) k';
 			//$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.number) as all_number,count(distinct(t.account_no)) as all_account,t2.pay_amount,sum(t2.pay_amount) as all_realprice,t.* from nb_order t left join nb_order_pay t2 on(t.dpid = t2.dpid and t2.order_id = t.lid and t2.paytype not in(9,10)) where t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') ) k';	
-		$sql = 'select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.')';
+		$sql = 'select k.* from(select year(create_at) as y_all,month(create_at) as m_all,day(create_at) as d_all, sum(number) as all_number,count(account_no) as all_account,sum(should_total) as all_realprice from nb_order where create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" and order_status in(3,4,8) and dpid in('.$this->companyId.') ) k';
 			//统计实付价格，客流、单数
 		//echo $sql;exit;
 		//}
