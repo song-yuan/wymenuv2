@@ -266,7 +266,11 @@ function fun()
 						alert("请选择店铺。。。");return;
 			            }
 			});
-	        
+	        $("#closeall").on('click',function(){
+		        //alert("123");
+		        layer.closeAll();
+		        layer_index_printerportlist = 0;
+		        });
 	    }else{
 			return false;
 			}
