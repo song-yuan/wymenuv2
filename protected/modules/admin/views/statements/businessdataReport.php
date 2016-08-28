@@ -89,7 +89,6 @@
 						</thead>
 						<tbody>
 						<?php if( $models) :?>
-						<?php if($moneys) :?>
 						<!--foreach-->
 						<?php $a=1;?>
 						<?php foreach ($models as $model):?>
@@ -99,9 +98,9 @@
 								
 								<td><?php echo $model['all_number'];?></td>
 								<td><?php echo $model['all_account'];?></td>
-								<td><?php echo sprintf("%.2f",$moneys['all_originalprice']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_originalprice']);?></td>
 								<td><?php echo sprintf("%.2f",$model['all_realprice']);?></td>
-								<td><?php echo sprintf("%.2f",$moneys['all_originalprice']-$model['all_realprice']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_originalprice']-$model['all_realprice']);?></td>
 								<td><?php if($model['all_number']){echo sprintf("%.2f",$model['all_realprice']/$model['all_number']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
 								<td><?php if($model['all_account']){echo sprintf("%.2f",$model['all_realprice']/$model['all_account']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
 								
@@ -123,7 +122,6 @@
 						<php endif;?>
 						<php endforeach;?>
 						<!-- end foreach-->
-						<?php endif;?>
 						<?php endif;?>
 						</tbody>
 					</table>
