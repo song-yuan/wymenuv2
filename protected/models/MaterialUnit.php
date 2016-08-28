@@ -118,4 +118,12 @@ class MaterialUnit extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+	static public function getMaterialUnitLid($dpid,$muhs_code)
+	{
+		$db = Yii::app()->db;
+		$sql = 'select * from nb_material_unit where dpid='.$dpid.' and muhs_code ='.$muhs_code.' and delete_flag=0';
+		$materialUnitLid = $db->createCommand($sql)->queryRow();
+	
+		return $materialUnitLid['lid'];
+	}
 }

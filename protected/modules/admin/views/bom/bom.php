@@ -69,6 +69,12 @@
 			background-position: -725px 20px;
     		background-repeat: no-repeat;
 		}
+		.ku-item.pxxf{
+			background-image:url(../../../../../../img/waiter/icon-pxxf.png);
+			background-position: 25px 20px;
+			background-size: 50% ;
+    		background-repeat: no-repeat;
+		}
 		.ku-item.cpfl{
 			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
 			background-position: 20px -140px;
@@ -235,6 +241,12 @@
 <!-- 							<div class="ku-item-info">品项下发</div> -->
 <!-- 						</div> -->
 <!-- 					</a> -->
+					<a href="<?php echo $this->createUrl('copymaterial/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple pxxf"></div>
+							<div class="ku-item-info">品项下发</div>
+						</div>
+					</a>
 					<a href="<?php echo $this->createUrl('bomproductCategory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey cpfl"></div>

@@ -68,70 +68,70 @@
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
-                                                        <script type="text/javascript">
-                                                            $(document).ready(function(){
-                                                                    $('#selectCategory').change(function(){
-                                                                            var cid = $(this).val();
-                                                                            //alert('<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/pid/'+cid);
-                                                                            //alert($('#ProductSetDetail_product_id').html());
-                                                                            $.ajax({
-                                                                                    url:'<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/pid/'+cid,
-                                                                                    type:'GET',
-                                                                                    dataType:'json',
-                                                                                    success:function(result){
-                                                                                            //alert(result.data);
-                                                                                            var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';                                                                                            
-                                                                                            if(result.data.length){
-                                                                                                    //alert(1);
-                                                                                                    $.each(result.data,function(index,value){
-                                                                                                            str = str + '<option value="'+value.id+'">'+value.name+'</option>';
-                                                                                                    });                                                                                                                                                                                                       
-                                                                                            }
-                                                                                            $('#ProductSetDetail_product_id').html(str); 
-                                                                                    }
-                                                                            });
-                                                                    });
-                                                                    var productVal=$('#ProductSetDetail_product_id').val();
-                                                                    $('#ProductSetDetail_product_id').change(function(){
-                                                                        var productid = $(this).val();
-                                                                        //alert(productid);
-                                                                            $.ajax({
-                                                                                    url:'<?php echo $this->createUrl('productSet/isDoubleSetDetail',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/productid/'+productid,
-                                                                                    type:'GET',
-                                                                                    dataType:'json',
-                                                                                    success:function(result){
-                                                                                            if(result.data){
-                                                                                                alert("<?php echo yii::t('app','改单品套餐内已经存在！');?>");
-                                                                                                 $('#ProductSetDetail_product_id').val(productVal);                                                                                                                                                                                                   
-                                                                                            }else{
-                                                                                                //alert(2);
-                                                                                                productVal=$('#ProductSetDetail_product_id').val();
-                                                                                                
-                                                                                            }                                                                                             
-                                                                                    }
-                                                                            });
-                                                                                                                                                     
-                                                                    });
-                                                            });
+							
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#selectCategory').change(function(){
+		var cid = $(this).val();
+		//alert('<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/pid/'+cid);
+		//alert($('#ProductSetDetail_product_id').html());
+		$.ajax({
+			url:'<?php echo $this->createUrl('productSet/getChildren',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/pid/'+cid,
+			type:'GET',
+			dataType:'json',
+			success:function(result){
+				//alert(result.data);
+				var str = '<?php echo yii::t('app','<option value="">--请选择--</option>');?>';                                                                                            
+				if(result.data.length){
+				//alert(1);
+					$.each(result.data,function(index,value){
+						str = str + '<option value="'+value.id+'">'+value.name+'</option>';
+					});                                                                                                                                                                                                       
+				}
+				$('#ProductSetDetail_product_id').html(str); 
+			}
+		});
+	});
+	var productVal=$('#ProductSetDetail_product_id').val();
+	$('#ProductSetDetail_product_id').change(function(){
+		var productid = $(this).val();
+		//alert(productid);
+		$.ajax({
+			url:'<?php echo $this->createUrl('productSet/isDoubleSetDetail',array('companyId'=>$this->companyId,'productSetId'=>$model->set_id));?>/productid/'+productid,
+			type:'GET',
+			dataType:'json',
+			success:function(result){
+				if(result.data){
+					alert("<?php echo yii::t('app','改单品套餐内已经存在！');?>");
+					$('#ProductSetDetail_product_id').val(productVal);                                                                                                                                                                                                   
+				}else{
+				//alert(2);
+					productVal=$('#ProductSetDetail_product_id').val();
+				                                                                                                
+				}                                                                                             
+			}
+		});
+	});
+});
                                                             
-                                                            $('.minus').click(function(){
-                                                                var input = $(this).siblings('input');
-                                                                var num = parseInt(input.val());
-                                                                var maxgroupno = parseInt(input.attr('maxgroupno'));
-                                                                if(num-1 > 0){
-                                                                        num = num - 1;
-                                                                }
-                                                                input.val(num);			
-                                                            });
-                                                            $('.plus').click(function(){
-                                                                var input = $(this).siblings('input');
-                                                                var num = parseInt(input.val());
-                                                                var maxgroupno = parseInt(input.attr('maxgroupno'));
-                                                                num = num + 1;
-                                                                if(num > maxgroupno){
-                                                                        num = maxgroupno+1;
-                                                                        $("#isSelectId").val('1');
-                                                                }
-                                                                input.val(num);			
-                                                            });
-                                                        </script>
+	$('.minus').click(function(){
+		var input = $(this).siblings('input');
+		var num = parseInt(input.val());
+		var maxgroupno = parseInt(input.attr('maxgroupno'));
+		if(num-1 > 0){
+			num = num - 1;
+		}
+		input.val(num);			
+	});
+	$('.plus').click(function(){
+		var input = $(this).siblings('input');
+		var num = parseInt(input.val());
+		var maxgroupno = parseInt(input.attr('maxgroupno'));
+		num = num + 1;
+		if(num > maxgroupno){
+			num = maxgroupno+1;
+			$("#isSelectId").val('1');
+		}
+		input.val(num);			
+	});
+</script>

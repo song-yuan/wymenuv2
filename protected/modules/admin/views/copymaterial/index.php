@@ -77,14 +77,14 @@ function fun()
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','产品列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','产品下发'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','品项列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','品项下发'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type'=>1)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
-				'id' => 'copyproduct-form',
-				'action' => $this->createUrl('copyproduct/storProduct' , array('companyId' => $this->companyId)),
+				'id' => 'copymaterial-form',
+				'action' => $this->createUrl('copymaterial/storMaterial' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -113,26 +113,30 @@ function fun()
 								<th style="width:10%" class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /><?php echo yii::t('app','全选');?></th>
 								<th style="width:25%"><?php echo yii::t('app','名称');?></th>
 								<th><?php echo yii::t('app','类别');?></th>
-								<th><?php echo yii::t('app','现价');?></th>
+								<th><?php echo yii::t('app','入库单位');?></th>
+								<th><?php echo yii::t('app','零售单位');?></th>
 							</tr>
 						</thead>
 						<tbody>
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input id="<?php echo $model->lid;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" phs_code="<?php echo $model->phs_code;?>" chs_code="<?php echo $model->chs_code;?>" name="ids[]" />
+								<td><input id="<?php echo $model->lid;?>" type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" mname="<?php echo $model->material_name;?>" mphs_code="<?php echo $model->mphs_code;?>" mchs_code="<?php echo $model->mchs_code;?>" mulhs_code="<?php echo $model->mulhs_code;?>" mushs_code="<?php echo $model->mushs_code;?>" name="ids[]" />
 								</td>
-								<td style="width:25%"><?php echo $model->product_name;?></td>
+								<td style="width:25%"><?php echo $model->material_name;?></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
-								<td ><?php echo $model->original_price;?></td>
+								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
+								<td ><?php echo Common::getStockName($model->sales_unit_id);?></td>
 								
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
 						</tbody>
 						<div style="display: none;">
-						<input type="hidden" id="phscode" name="phscode" value="" />
-						<input type="hidden" id="chscode" name="chscode" value="" />
+						<input type="hidden" id="mphscode" name="mphscode" value="" />
+						<input type="hidden" id="mchscode" name="mchscode" value="" />
+						<input type="hidden" id="mulhscode" name="mulhscode" value="" />
+						<input type="hidden" id="mushscode" name="mushscode" value="" />
 						<input type="hidden" id="dpids" name="dpids" value="" />
 						</div>
 					</table>
@@ -179,24 +183,10 @@ function fun()
 	<script type="text/javascript">
 	$(document).ready(function(){
 		
-		$('#product-form').submit(function(){
-			if(!$('.checkboxes:checked').length){
-				alert("<?php echo yii::t('app','请选择要删除的项');?>");
-				return false;
-			}
-			return true;
-		});
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('copyproduct/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('copyproduct/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
+	
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('copyproduct/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+			location.href="<?php echo $this->createUrl('copymaterial/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
 
@@ -206,35 +196,44 @@ function fun()
         //alert(11);
 		var aa = document.getElementsByName("ids[]");
 		//var aa = document.getElementsByName("ids[]");
-        var codep=new Array();
-        var codec=new Array();
+        var codemp=new Array();
+        var codemc=new Array();
+        var codemul=new Array();
+        var codemus=new Array();
+        var nullm=new Array();
         for (var i = 0; i < aa.length; i++) {
             if (aa[i].checked) {
                 //var str = aa[i].getAttribute("chs_code");
-                codep += aa[i].getAttribute("phs_code") +',';
+                //alert(str);
+                if(aa[i].getAttribute("mphs_code") == '' || aa[i].getAttribute("mchs_code") =='' || aa[i].getAttribute("mulhs_code") =="" || aa[i].getAttribute("mushs_code") ==''){
+                	nullm += aa[i].getAttribute("mname") +',';
+					//alert('该菜品添加时出错，请删除重新添加，否则无法下发该菜品');
+					//return false;
+                }else{
+                    codemp += aa[i].getAttribute("mphs_code") +',';
+                    codemc += aa[i].getAttribute("mchs_code") +',';
+                    codemul += aa[i].getAttribute("mulhs_code") +',';
+                    codemus += aa[i].getAttribute("mushs_code") +',';
+                }
             }
         }
-        if(codep!=''){
-        	codep = codep.substr(0,codep.length-1);//除去最后一个“，”
-        }else{
-       	 	alert("<?php echo yii::t('app','请选择要下发的菜品！！！');?>");
-       		return false;
-       	}
-        
-        for (var i = 0; i < aa.length; i++) {
-            if (aa[i].checked) {
-                //var str = aa[i].getAttribute("chs_code");
-                codec += aa[i].getAttribute("chs_code") +',';
+        if(nullm !=''){
+            alert('下列菜品在添加时出错，无法进行下发操作，如若继续下发，请重新添加下列品项：['+nullm+']');
+            return false;
+            }else{
+                if(codemp !='' && codemc !='' && codemul !='' && codemus !=''){
+                	codemp = codemp.substr(0,codemp.length-1);//除去最后一个“，”
+                	codemc = codemc.substr(0,codemc.length-1);//除去最后一个“，”
+                	codemul = codemul.substr(0,codemul.length-1);//除去最后一个“，”
+                	codemus = codemus.substr(0,codemus.length-1);//除去最后一个“，”
+                }else{
+               	 	alert("<?php echo yii::t('app','部分菜品无法下发！！！');?>");
+               		return false;
+               	}
             }
-        }
-        if(codec!=''){
-        	codec = codec.substr(0,codec.length-1);//除去最后一个“，”
-        }else{
-       	 	alert("<?php echo yii::t('app','请选择要下发的菜品！！！');?>");
-       		return false;
-       	}
-     	//alert(str);
-        
+
+
+        //进行测试，暂且屏蔽下面这段代码。。。
 		if(window.confirm("确认进行此项操作?")){
 			layer_index_printreportlist=layer.open({
 	            type: 1,
@@ -259,9 +258,11 @@ function fun()
 	            	dpids = dpids.substr(0,dpids.length-1);//除去最后一个“，”
 	            	//alert(dpids);
 	            	$("#dpids").val(dpids);
-	            	$("#chscode").val(codec);
-	            	$("#phscode").val(codep);
-	    	        $("#copyproduct-form").submit();
+	            	$("#mchscode").val(codemc);
+	            	$("#mphscode").val(codemp);
+	            	$("#mulhscode").val(codemul);
+	            	$("#mushscode").val(codemus);
+	    	        $("#copymaterial-form").submit();
 		            }else{
 						alert("请选择店铺。。。");return;
 			            }
