@@ -119,6 +119,7 @@ class DataSyncTables
         		"  'jobid' int(10) NOT NULL DEFAULT '0',".
 	        	"  `pad_code` varchar(50) NOT NULL,".
 				"  `pad_sales_type` varchar(2) NOT NULL,".
+        		"  `item_count` varchar(2) NOT NULL DEFAULT '5',".
 				"  `pad_type` varchar(2) NOT NULL,".
 				"  `pad_ip` varchar(20) NOT NULL,".
 				"  `pad_fip` varchar(20) NOT NULL DEFAULT '0',".
@@ -271,6 +272,7 @@ class DataSyncTables
                     "  `main_picture` varchar(255) NOT NULL,".
                     "  `description` text NOT NULL,".
                     "  `rank` tinyint NOT NULL DEFAULT '3',".
+        			"  `sort` int(4) NOT NULL DEFAULT '50',".
                     "  `spicy` tinyint NOT NULL DEFAULT '0',".
                     "  `is_temp_price` char(1) NOT NULL DEFAULT '0',".
                     "  `is_member_discount` char(1) NOT NULL DEFAULT '0',".
@@ -311,6 +313,7 @@ class DataSyncTables
 				"  `category_name` varchar(50) NOT NULL,".
 				"  `chs_code` varchar(12) NOT NULL,".
 				"  `type` varchar(3) NOT NULL DEFAULT '0',".
+        		"  `cate_type` tinyint NOT NULL DEFAULT '0',".
 				"  `main_picture` varchar(255) NOT NULL,".
 				"  `order_num` int(4) NOT NULL DEFAULT '0',".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
