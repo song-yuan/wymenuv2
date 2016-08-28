@@ -50,6 +50,29 @@
 											<?php echo $form->error($model, 'original_price' )?>
 										</div>
 									</div>
+									<div class="form-group" <?php if($model->hasErrors('sort')) echo 'has-error';?>>
+										<?php echo $form->label($model, 'sort',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'sort',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('sort')));?>
+											<?php echo $form->error($model, 'sort' )?>
+											<span style="color: red;">数字越小，显示越靠前。</span>
+										</div>
+									</div>
+									
+                                    <div class="form-group">
+										<?php echo $form->label($model, 'is_discount',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_discount')));?>
+											<?php echo $form->error($model, 'is_discount' )?>
+										</div>
+									</div>
+                                    <div class="form-group">
+										<?php echo $form->label($model, 'is_show',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show')));?>
+											<?php echo $form->error($model, 'is_show' )?>
+										</div>
+									</div>
 									<div class="form-group" <?php if($model->hasErrors('dabao_fee')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'dabao_fee',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -57,13 +80,7 @@
 											<?php echo $form->error($model, 'dabao_fee' )?>
 										</div>
 									</div>
-									<div class="form-group" <?php if($model->hasErrors('rank')) echo 'has-error';?>>
-										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2' , '3' => '3' , '4' => '4' , '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rank')));?>
-											<?php echo $form->error($model, 'rank' )?>
-										</div>
-									</div>
+									
 									<div class="form-group" <?php if($model->hasErrors('spicy')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'spicy',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -71,18 +88,11 @@
 											<?php echo $form->error($model, 'spicy' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group">
-										<?php echo $form->label($model, 'is_discount',array('class' => 'col-md-3 control-label'));?>
+									<div class="form-group" <?php if($model->hasErrors('rank')) echo 'has-error';?>>
+										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_discount', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_discount')));?>
-											<?php echo $form->error($model, 'is_discount' )?>
-										</div>
-									</div>
-                                                                        <div class="form-group">
-										<?php echo $form->label($model, 'is_show',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_show', array('0' => yii::t('app','否') , '1' => yii::t('app','是')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_show')));?>
-											<?php echo $form->error($model, 'is_show' )?>
+											<?php echo $form->dropDownList($model, 'rank', array('1' => '1' , '2' => '2' , '3' => '3' , '4' => '4' , '5' => '5') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rank')));?>
+											<?php echo $form->error($model, 'rank' )?>
 										</div>
 									</div>
 									<div class="form-group" <?php if($model->hasErrors('product_unit')) echo 'has-error';?>>
