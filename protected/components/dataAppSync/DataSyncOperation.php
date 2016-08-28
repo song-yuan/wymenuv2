@@ -332,11 +332,20 @@ class DataSyncOperation {
 			$orderAddress = array ();
 		}
 		
+		$accountNo = $orderInfo->account_no;
+		$createAt = $orderInfo->creat_at;
+		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no='.$accountNo;
+		$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
+		if($orderModel){
+			$msg = json_encode ( array (
+					'status' => true,
+					'orderId' => $orderModel->lid
+			) );
+			return $msg;
+		}
 		$time = time ();
 		$se = new Sequence ( "order" );
 		$orderId = $se->nextval ();
-		$accountNo = $orderInfo->account_no;
-		$createAt = $orderInfo->creat_at;
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
