@@ -42,7 +42,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->set_name ;?>-><?php echo yii::t('app','套餐明细列表');?></div>
 					<div class="actions">
-						<a href="<?php echo $this->createUrl('productSet/detailcreate' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+						<a href="<?php echo $this->createUrl('productSet/detailcreate' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid,'type'=>0,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
 							<a class="btn green" href="#" data-toggle="dropdown">
 							<i class="fa fa-cogs"></i> Tools
@@ -88,7 +88,7 @@
 									</div>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productSet/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('productSet/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid, 'type'=>'1'));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>             
 							</tr>
 						<?php endforeach;?>
