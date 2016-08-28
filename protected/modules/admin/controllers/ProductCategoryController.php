@@ -41,30 +41,51 @@ class ProductCategoryController extends BackendController
 	public function actionCreate() {
 		$this->layout = '/layouts/main_picture';
 		$pid = Yii::app()->request->getParam('pid',0);
+		$catetype = Yii::app()->request->getParam('catetype');
+		//var_dump($catetype);
+		
 		$model = new ProductCategory() ;
+		//var_dump($model);
 		$model->dpid = $this->companyId ;
 		if($pid) {
 			$model->pid = $pid;
 		}
+		if($catetype) {
+			$model->cate_type = $catetype;
+		}
+		
 		if(Yii::app()->request->isPostRequest) {
+			
+			//var_dump($catetype);var_dump($pid);var_dump($id);EXIT;
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
+			//var_dump($model);var_dump('@@@@');
 			$category = ProductCategory::model()->find('dpid=:dpid and category_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->category_name));
+			//var_dump($category);var_dump('####');
 			if($category){
+				//var_dump(123);exit;
 				Yii::app()->user->setFlash('error' ,yii::t('app', '该类别已添加'));
 				$this->redirect(array('productCategory/index' , 'id'=>$category->lid,'companyId' => $this->companyId));
-			}else{
+			}
+			else{
+				//Yii::app()->db->createCommand()->setText("lock tables {product_category} WRITE")->execute();
 				$se=new Sequence("product_category");
 				$lid = $se->nextval();
-				$model->lid = $lid;
+				
 				$code=new Sequence("chs_code");
 				$chs_code = $code->nextval();
+				
+				$model->lid = $lid;
 				$model->chs_code = ProductCategory::getChscode($this->companyId,$lid, $chs_code);
 				$model->create_at = date('Y-m-d H:i:s',time());
 				$model->delete_flag = '0';
 				$model->update_at=date('Y-m-d H:i:s',time());
 				
-				//var_dump($model);exit;
+				//$model->save();
+				//Yii::app()->db->createCommand()->setText("unlock tables")->execute();
+				//var_dump($model);var_dump('&&&&');
+				//exit;
 				if($model->save()){
+					//var_dump(456);exit;
 					//var_dump($model);exit;
 					$self = ProductCategory::model()->find('lid=:pid and dpid=:dpid' , array(':pid'=>$model->lid,':dpid'=>  $this->companyId));
 					if($self->pid!='0'){
@@ -75,27 +96,27 @@ class ProductCategoryController extends BackendController
 					}
 					//var_dump($model);exit;
 					$self->update();
-						Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-						$this->redirect(array('productCategory/index' , 'id'=>$self->lid,'companyId' => $this->companyId));
-					
-				}else{
-					Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
-					$this->redirect(array('productCategory/index' ,'companyId' => $this->companyId));
-				}
+					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
+					$this->redirect(array('productCategory/index' , 'id'=>$self->lid,'companyId' => $this->companyId));
 						
-			}	
+				}	
+				
+			}
 		}
 		$this->render('_form1' , array(
 				'model' => $model,
-				'action' => $this->createUrl('productCategory/create' , array('companyId'=>$this->companyId))
+				'action' => $this->createUrl('productCategory/create' , array('companyId'=>$this->companyId,'catetype' => $catetype,)),
+				
 		));
 	}
 	public function actionUpdate() {
 		$this->layout = '/layouts/main_picture';
 		$id = Yii::app()->request->getParam('id');
+		//var_dump($id);exit;
 		$model = ProductCategory::model()->find('lid=:id and dpid=:dpid', array(':id' => $id,':dpid'=>  $this->companyId));
                 Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
+			//var_dump($id);exit;
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
                         $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
