@@ -1,7 +1,7 @@
 			<?php $form=$this->beginWidget('CActiveForm', array(
 				'id'=>'productCategory-form',
 				'action'=>$action,
-				'enableAjaxValidation'=>true,
+				'enableAjaxValidation'=>false,
 				'enableClientValidation'=>true,
 				'clientOptions'=>array(
 					'validateOnSubmit'=>false,
@@ -55,6 +55,15 @@
                           <?php echo $form->error($model, 'type' )?>
                      </div>
                 </div>
+                <?php if($model->pid==0):?>
+                <div class="form-group">
+                     <?php echo $form->label($model, 'cate_type',array('class' => 'col-md-3 control-label'));?>
+                     <div class="col-md-4">
+                          <?php echo $form->dropDownList($model, 'cate_type', array('0' => yii::t('app','单一类别') , '1' => yii::t('app','公共类别')) , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('cate_type')));?>
+                          <?php echo $form->error($model, 'cate_type' )?>
+                     </div>
+                </div>
+                <?php endif;?>
 			</div>
 			<div class="modal-footer">
 				<button type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>

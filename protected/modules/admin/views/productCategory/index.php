@@ -52,7 +52,7 @@
 										<td width="70%"><?php echo '('.$model->order_num.')'.$model->category_name;?></td>
 										<td>
 										<?php if($model->pid=='0'):?>
-										<a class="btn btn-xs green add_btn" pid="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-plus"></i></a>
+										<a class="btn btn-xs green add_btn" pid="<?php echo $model->lid;?>" catetype="<?php echo $model->cate_type;?>" data-toggle="modal"><i class="fa fa-plus"></i></a>
 										<?php endif;?>
 										<a class="btn btn-xs blue edit_btn" id="<?php echo $model->lid;?>" data-toggle="modal"><i class="fa fa-edit"></i></a>
 										<a href="javascript:;" cid="<?php echo $model->lid;?>" class="btn btn-xs red btn_delete"><i class="fa fa-times"></i></a>										
@@ -87,7 +87,10 @@
     var $modal = $('.modal');
     $('.add_btn').on('click', function(){
     	pid = $(this).attr('pid');
-        $modal.find('.modal-content').load('<?php echo $this->createUrl('productCategory/create',array('companyId'=>$this->companyId));?>/pid/'+pid, '', function(){
+    	catetype = $(this).attr('catetype');
+    	
+    	//alert(catetype);alert(pid);
+        $modal.find('.modal-content').load('<?php echo $this->createUrl('productCategory/create',array('companyId'=>$this->companyId));?>/pid/'+pid+'/catetype/'+catetype, '', function(){
           $modal.modal();
         });
     });
