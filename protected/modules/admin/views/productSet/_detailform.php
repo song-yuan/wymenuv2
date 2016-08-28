@@ -1,5 +1,17 @@
+<style>
+	div.radio{
+		margin-bottom: 10px !important;
+	}
+	.radioclass{
+		border: 1px solid red;
+		border-radius: 6px;
+	}
+	.radioinput{
+		margin: 0px !important;
+	}
+</style>							
 							<?php $form=$this->beginWidget('CActiveForm', array(
-									'id' => 'printer-form',
+									'id' => 'ProductSetDetail-form',
 									'errorMessageCssClass' => 'help-block',
 									'htmlOptions' => array(
 										'class' => 'form-horizontal',
@@ -17,53 +29,95 @@
 									</div>
 								<?php endif;?>
                                                                         
-                                                                        <div class="form-group">
+                                    <div class="form-group">
 										<?php echo $form->label($model, 'category_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
-                                                                                </div>
-                                                                        </div>
+                                        </div>
+                                    </div>
                                                                         
-                                                                        <div class="form-group" <?php if($model->hasErrors('product_id')) echo 'has-error';?>>
+                                    <div class="form-group" <?php if($model->hasErrors('product_id')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'product_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">											
-                                                                                        <?php echo $form->dropDownList($model, 'product_id', array('0' => yii::t('app','-- 请选择 --')) +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+                                            <?php echo $form->dropDownList($model, 'product_id', array('0' => yii::t('app','-- 请选择 --')) +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
 											<?php echo $form->error($model, 'product_id' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group" <?php if($model->hasErrors('price')) echo 'has-error';?>>
+                                    <div class="form-group" <?php if($model->hasErrors('price')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'price',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'price',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('price')));?>
 											<?php echo $form->error($model, 'price' )?>
 										</div>
 									</div>
-                                                                        <div class="form-group" <?php if($model->hasErrors('group_no')) echo 'has-error';?>>
-										<?php echo $form->label($model, 'group_no',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<a class="btn green minus">&nbsp;<i class="fa fa-minus"></i>&nbsp;</a><input type="text" name="ProductSetDetail[group_no]" maxlength="5" size="5" class="additionnum" maxgroupno="<?php echo $maxgroupno;?>" value="<?php echo $model->group_no;?>" readonly="true"/><a class="btn green plus">&nbsp;<i class="fa fa-plus"></i></a>
-											
-											<?php echo $form->error($model, 'group_no' )?>
+									<div class="form-group">
+										<span class="col-md-3 control-label">是否替换其他分组菜品</span>
+										
+										<div id="czfs" class="col-md-4 ">
+	                                        <input class="radioinput" type="radio" id="RYcz" <?php if($model->is_select == 1) echo 'checked';?> name="cz" value="1" <?php if($type==1) echo 'disabled';?>>
+	                                        <label class="radioclass" name="RYcz" for="RYcz">新加分组</label>
+	                                        <input class="radioinput" type="radio" id="TCcz" <?php if($model->is_select == 0) echo 'checked';?> name="cz" value="2" <?php if($type==1) echo 'disabled';?>>
+	                                        <label class="radioclass" name="TCcz" for="TCcz">可替换菜品</label>
+                                    	</div>	
+										
+									</div>
+									<div id="xinzu" style="<?php if($model->is_select == 0) echo 'display: none';?>">
+	                                    <div class="form-group" <?php if($model->hasErrors('group_no')) echo 'has-error';?>>
+											<?php echo $form->label($model, 'group_no',array('class' => 'col-md-3 control-label'));?>
+											<div class="col-md-4">
+											<?php if($model->group_no):?>
+												<?php echo $form->textField($model, 'group_no',array('id'=>'groupnoId', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('group_no'),'readonly'=>"true"));?>
+												<?php echo $form->error($model, 'group_no' )?>
+											<?php else:?>
+												<input type="text" id="newgroupnoId" maxlength="5" size="5" class="additionnum" maxgroupno="<?php echo $maxgroupno;?>" value="<?php echo $maxgroupno+1;?>" readonly="true"/>
+											<?php endif;?>
+												
+											</div>
+										</div>
+	                                    <div class="form-group">
+											<?php echo $form->label($model, 'is_select',array('class' => 'col-md-3 control-label'));?>
+											<div class="col-md-4">
+												<?php echo $form->dropDownList($model, 'is_select', array( '1' =>yii::t('app','是')) , array('id'=>'isSelectId', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_select'),'readonly'=>'ture'));?>
+												<?php echo $form->error($model, 'is_select' )?>
+											</div>
+										</div>
+	                                    <div class="form-group" <?php if($model->hasErrors('number')) echo 'has-error';?>>
+											<?php echo $form->label($model, 'number',array('class' => 'col-md-3 control-label'));?>
+											<div class="col-md-4">
+	                                            <?php echo $form->textField($model, 'number',array('id'=>'newnumber','class' => 'form-control','placeholder'=>$model->getAttributeLabel('number')));?>
+												<?php echo $form->error($model, 'number' )?>
+											</div>
 										</div>
 									</div>
-                                                                        <div class="form-group">
-										<?php echo $form->label($model, 'is_select',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'is_select', array('0' => yii::t('app','否') , '1' =>yii::t('app','是')) , array('id'=>'isSelectId', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_select')));?>
-											<?php echo $form->error($model, 'is_select' )?>
-                                                                                    如果选择“是”，同一组中其他菜品将被强制设置成“否”
+									<div id="tihuanzu" style="<?php if($model->is_select == 1) echo 'display: none;'?>">
+	                                    <div class="form-group" <?php if($model->hasErrors('group_no')) echo 'has-error';?>>
+											<?php echo $form->label($model, '可替换分组菜品（默认）',array('class' => 'col-md-3 control-label'));?>
+											<div class="col-md-4">
+												<?php echo $form->dropDownList($model, 'group_no', $groups , array('id'=>'groupnoId1', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('group_no')));?>
+												<?php echo $form->error($model, 'group_no' )?>
+											</div>
+										</div>
+	                                    <div class="form-group">
+											<?php echo $form->label($model, 'is_select',array('class' => 'col-md-3 control-label'));?>
+											<div class="col-md-4">
+												<?php echo $form->dropDownList($model, 'is_select', array('0' => yii::t('app','否') , ) , array('id'=>'isSelectId1', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('is_select')));?>
+												<?php echo $form->error($model, 'is_select' )?>
+											</div>
+										</div>
+	                                    <div class="form-group" <?php if($model->hasErrors('number')) echo 'has-error';?>>
+											<?php echo $form->label($model, 'number',array('class' => 'col-md-3 control-label'));?>
+											<div class="col-md-4">
+	                                            <?php echo $form->textField($model, 'number',array('id'=>'number1','class' => 'form-control','placeholder'=>$model->getAttributeLabel('number')));?>
+												<?php echo $form->error($model, 'number' )?>
+											</div>
 										</div>
 									</div>
-                                                                        <div class="form-group" <?php if($model->hasErrors('number')) echo 'has-error';?>>
-										<?php echo $form->label($model, 'number',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-                                                                                        <?php echo $form->textField($model, 'number',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('number')));?>
-											<?php echo $form->error($model, 'number' )?>
-										</div>
-									</div>
+									<input type="hidden" id="groupno" name="groupno" value="" />
+									<input type="hidden" id="isselect" name="isselect" value="" />
+									<input type="hidden" id="number" name="number" value="" />
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="button" id="su"  class="btn blue"><?php echo yii::t('app','确定');?></button>
 											<a href="<?php echo $this->createUrl('productSet/detailindex' , array('companyId' => $model->dpid,'lid' => $model->set_id));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
@@ -113,7 +167,19 @@ $(document).ready(function(){
 		});
 	});
 });
-                                                            
+	$('input[name="cz"]').change(function(){
+		var type = '<?php echo $type;?>';
+		//alert(type);
+		if(type==0){
+		    if($(this).val()==1){
+		       $("#xinzu").show();
+		       $("#tihuanzu").hide();
+		    }else if($(this).val()==2){
+		       $("#tihuanzu").show();
+		      $("#xinzu").hide();
+		    }
+		}
+	 });                                                        
 	$('.minus').click(function(){
 		var input = $(this).siblings('input');
 		var num = parseInt(input.val());
@@ -134,4 +200,43 @@ $(document).ready(function(){
 		}
 		input.val(num);			
 	});
+
+
+    $("#su").on('click',function() {
+        var type = <?php echo $type;?>;
+        var isselected = <?php echo $model->is_select;?>;
+    	var val=$('input:radio[name="cz"]:checked').val();
+    	
+        var groupnoId = $('#groupnoId').val();
+        var isSelectId = $('#isSelectId').val();
+        var newnumber = $('#newnumber').val();
+        var newgroupnoId = $('#newgroupnoId').val();
+        
+        var groupnoId1 = $('#groupnoId1').val();
+        var isSelectId1 = $('#isSelectId1').val();
+        var number1 = $('#number1').val(); 
+
+        if(val==2){
+            var groupno = groupnoId1;
+            var isselect = isSelectId1;
+            var number = number1;
+        }else{
+            if(type==1){
+                var groupno = groupnoId;
+            }else{
+                var groupno = newgroupnoId;
+            }
+            var isselect = isSelectId;
+            var number = newnumber;
+            }
+
+        
+        //alert(groupno);alert(isselect);alert(number);
+        
+        $("#groupno").val(groupno);
+        $("#isselect").val(isselect);
+        $("#number").val(number);
+        $("#ProductSetDetail-form").submit();
+    });
+	
 </script>

@@ -123,14 +123,23 @@ class ProductSetController extends BackendController
 	public function actionDetailCreate(){
 		$model = new ProductSetDetail();
 		$model->dpid = $this->companyId ;
-		$pslid = Yii::app()->request->getParam('psid'); //var_dump($pslid);exit;
+		$pslid = Yii::app()->request->getParam('psid');
+		$type = Yii::app()->request->getParam('type'); //var_dump($pslid);exit;
         $model->set_id=$pslid;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
+			$groupno = Yii::app()->request->getParam('groupno');
+			$isselect = Yii::app()->request->getParam('isselect');
+			$number = Yii::app()->request->getParam('number');
+			//var_dump($model);exit;
             $se=new Sequence("porduct_set_detail");
             $model->lid = $se->nextval();
             $model->create_at = date('Y-m-d H:i:s',time());
             $model->delete_flag = '0';
+            $model->group_no = $groupno;
+            $model->is_select = $isselect;
+            $model->number = $number;
+            //var_dump($model);exit; 
             $modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$pslid.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
             //var_dump($modelsp);exit;
             if($model->is_select=="1")
@@ -149,23 +158,38 @@ class ProductSetController extends BackendController
                 $categoryId=0;
                 $products = $this->getProducts($categoryId);
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
+                
+                $groups = $this->getGroupnos($pslid);
+                $groupslist=CHtml::listData($groups, 'group_no' , 'product_name');
+                //var_dump($model);exit;
 		$this->render('detailcreate' , array(
 				'model' => $model,
 				'categories' => $categories,
 				'categoryId' => $categoryId,
 				'products' => $productslist,
-				'maxgroupno'=>$maxgroupno
+				'maxgroupno'=>$maxgroupno,
+				'groups' =>$groupslist,
+				'type'=>$type
 		));
 	}
 	public function actionDetailUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
+		$type = Yii::app()->request->getParam('type');
                 //echo 'ddd';
 		$model = ProductSetDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//var_dump($model);exit;
                 Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
+			$groupno = Yii::app()->request->getParam('groupno');
+			$isselect = Yii::app()->request->getParam('isselect');
+			$number = Yii::app()->request->getParam('number');
+			
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->group_no = $groupno;
+			$model->is_select = $isselect;
+			$model->number = $number;
+			//var_dump($model);exit;
 			//只有一个时选中，如果第一个必须选中，后续的，判断是选中，必须取消其他选中
 			$modelsp= Yii::app()->db->createCommand('select count(*) as num from nb_product_set_detail t where t.dpid='.$this->companyId.' and t.set_id='.$model->set_id.' and t.delete_flag=0 and group_no='.$model->group_no)->queryRow();
 			//var_dump($modelsp);exit;
@@ -180,12 +204,17 @@ class ProductSetController extends BackendController
                 $categoryId=  $this->getCategoryId($lid);
                 $products = $this->getProducts($categoryId);
                 $productslist=CHtml::listData($products, 'lid', 'product_name');
+                
+                $groups = $this->getGroupnos($model->set_id);
+                $groupslist=CHtml::listData($groups, 'group_no' , 'product_name');
 		$this->render('detailupdate' , array(
 				'model'=>$model,
                 'categories' => $categories,
                 'categoryId' => $categoryId,
                 'products' => $productslist,
-                'maxgroupno' => $maxgroupno
+                'maxgroupno' => $maxgroupno,
+				'groups'=>$groupslist,
+				'type'=>$type
 		));
 	}
         
@@ -285,7 +314,7 @@ class ProductSetController extends BackendController
         
         private function getMaxGroupNo($psid){
                 $db = Yii::app()->db;
-                $sql = "SELECT max(group_no) from nb_product_set_detail where dpid=:dpid and set_id=:psid";
+                $sql = "SELECT max(group_no) from nb_product_set_detail where delete_flag = 0 and dpid=:dpid and set_id=:psid";
                 $command=$db->createCommand($sql);
                 $command->bindValue(":dpid" , $this->companyId);
                 $command->bindValue(":psid" , $psid);
@@ -325,5 +354,17 @@ class ProductSetController extends BackendController
 		$categories = ProductCategory::model()->findAll('delete_flag=0 and dpid=:companyId' , array(':companyId' => $this->companyId)) ;
 		//var_dump($categories);exit;
 		return CHtml::listData($categories, 'lid', 'category_name');
+	}
+	private function getGroupnos($setid){
+		if($setid)
+		{
+			$sql = 'select t1.*,t.product_name from nb_product t left join nb_product_set_detail t1 on( t.dpid = t1.dpid and t1.delete_flag =0 and t.lid = t1.product_id and t1.set_id ='.$setid.' ) where t1.is_select = 1 and t1.lid is not null and t.dpid ='.$this->companyId.' and t.delete_flag = 0 group by t1.group_no' ;
+			//$groupnos = ProductSetDetail::model()->findAll('left join nb_product t on(t.dpid = dpid and t.delete_flag = 0)dpid=:companyId and delete_flag=0 and set_id =:setId group by group_no' , array(':companyId' => $this->companyId,':setId'=>$setid));
+			$command1 = Yii::app()->db->createCommand($sql);
+			$groupnos = $command1->queryAll();
+			//var_dump($sql);exit;
+		}
+		$groupnos = $groupnos ? $groupnos : array();
+		return $groupnos;
 	}
 }
