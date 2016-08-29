@@ -2517,13 +2517,13 @@ public function actionPayallReport(){
 		$setid = Yii::app()->request->getParam('setid');
 		if($setid == 0){
 			$setids = '=0';
-			$setname = '单品';
+			$setname = '单品、';
 		}elseif ($setid == 2){
 			$setids = '>0';
-			$setname = '套餐';
+			$setname = '套餐、';
 		}else{
 			$setids = '>=0';
-			$setname = '综合';
+			$setname = '综合、';
 		}
 		$download = Yii::app()->request->getParam('d');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
@@ -2631,7 +2631,7 @@ public function actionPayallReport(){
 			
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A1',yii::t('app','营业收入报表（产品分类）'))
-		->setCellValue('A2',yii::t('app','报表查询条件：').$setname.yii::t('app','时间段：').$begin_time.yii::t('app','00:00:00 至 ').$end_time."23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
+		->setCellValue('A2',yii::t('app','查询条件：').$setname.yii::t('app','时间段：').$begin_time.yii::t('app','00:00:00 至 ').$end_time."23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
 		->setCellValue('A3',yii::t('app','时间'))
 		->setCellValue('B3',yii::t('app','店铺名称'))
 		->setCellValue('C3',yii::t('app','产品分类'))
@@ -3273,13 +3273,13 @@ public function actionPayallReport(){
 		$setid = Yii::app()->request->getParam('setid');
 		if($setid == 0){
 			$setids = '=0';
-			$setname = '单品';
+			$setname = '单品、';
 		}elseif ($setid == 2){
 			$setids = '>0';
-			$setname = '套餐';
+			$setname = '套餐、';
 		}else{
 			$setids = '>=0';
-			$setname = '综合';
+			$setname = '综合、';
 		}
 		$ordertype = Yii::app()->request->getParam('ordertype');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
@@ -3381,7 +3381,7 @@ public function actionPayallReport(){
 		);
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A1','产品销售报表')
-		->setCellValue('A2',yii::t('app','报表查询条件：').$setname.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
+		->setCellValue('A2',yii::t('app','查询条件：').$setname.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
 		->setCellValue('A3','时间')
 		->setCellValue('B3','店铺名称')
 		->setCellValue('C3','单品名称')
