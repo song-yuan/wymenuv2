@@ -49,6 +49,11 @@
 					<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
 					<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
 					</select>
+					<select id="setid" class="btn green" >
+					<option value="1" <?php if ($setid==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','综合');?></option>
+					<option value="0" <?php if ($setid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','单品');?></option>
+					<option value="2" <?php if ($setid==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','套餐');?></option>
+					</select>
 				<div class="btn-group">
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
@@ -192,17 +197,19 @@
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
+			   var setid = $('#setid').val();
 			  // var cid = $(this).val();
 			 // alert ($('#text').val());
-			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype;
+			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid;
 			  
 	        });
 		   $('#selectUser').change(function(){
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
+			   var setid = $('#setid').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
 			});
 			$('#cx').click(function(){  
 				   // var obj = document.getElementById('accept');
@@ -224,8 +231,9 @@
 						   var end_time = $('#end_time').val();
 						   var text = $('#text').val();
 						   var cid = $(this).val();
+						   var setid = $('#setid').val();
 						   
-						 location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+						 location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
 						  
 					//alert($('#cked').val());
 //	  			    if(obj.checked) {
@@ -240,12 +248,13 @@
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				   var text = $('#text').val();
+				   var setid = $('#setid').val();
 				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 							//alert("<?php echo "然而你并没有权限！！！";?>");
 							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/ceshiproductReportExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	   location.href="<?php echo $this->createUrl('statements/ceshiproductReportExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
