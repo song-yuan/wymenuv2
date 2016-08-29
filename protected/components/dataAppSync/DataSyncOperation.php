@@ -384,6 +384,7 @@ class DataSyncOperation {
 						'price' => $product->price,
 						'original_price' => $product->original_price,
 						'amount' => $product->amount,
+						'zhiamount' => isset($product->zhiamount)?$product->zhiamount:1,
 						'product_order_status' => 2,
 						'is_sync' => $isSync 
 				);
