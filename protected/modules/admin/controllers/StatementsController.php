@@ -1002,7 +1002,7 @@ public function actionPayallReport(){
 		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
 		$db = Yii::app()->db;
-		$sql = 'select t.* from (select username,sum(reality_total) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" group by username order by lid desc)t';
+		$sql = 'select t.* from (select username,sum(should_total_total) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" group by username order by lid desc)t';
 		if($download){
 			$models = $db->createCommand($sql)->queryAll();
 			$this->exportTurnOver($models);
@@ -2517,10 +2517,13 @@ public function actionPayallReport(){
 		$setid = Yii::app()->request->getParam('setid');
 		if($setid == 0){
 			$setids = '=0';
+			$setname = '单品';
 		}elseif ($setid == 2){
 			$setids = '>0';
+			$setname = '套餐';
 		}else{
 			$setids = '>=0';
+			$setname = '综合';
 		}
 		$download = Yii::app()->request->getParam('d');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
@@ -2628,7 +2631,7 @@ public function actionPayallReport(){
 			
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A1',yii::t('app','营业收入报表（产品分类）'))
-		->setCellValue('A2',yii::t('app','报表查询时间段：').$begin_time.yii::t('app','00:00:00 至 ').$end_time."23:59:59    ".yii::t('app','报表生成时间：').date('Y-m-d h:i:s',time()))
+		->setCellValue('A2',yii::t('app','报表查询条件：').$setname.yii::t('app','时间段：').$begin_time.yii::t('app','00:00:00 至 ').$end_time."23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
 		->setCellValue('A3',yii::t('app','时间'))
 		->setCellValue('B3',yii::t('app','店铺名称'))
 		->setCellValue('C3',yii::t('app','产品分类'))
@@ -3270,10 +3273,13 @@ public function actionPayallReport(){
 		$setid = Yii::app()->request->getParam('setid');
 		if($setid == 0){
 			$setids = '=0';
+			$setname = '单品';
 		}elseif ($setid == 2){
 			$setids = '>0';
+			$setname = '套餐';
 		}else{
 			$setids = '>=0';
+			$setname = '综合';
 		}
 		$ordertype = Yii::app()->request->getParam('ordertype');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
@@ -3375,7 +3381,7 @@ public function actionPayallReport(){
 		);
 		$objPHPExcel->setActiveSheetIndex(0)
 		->setCellValue('A1','产品销售报表')
-		->setCellValue('A2',yii::t('app','报表查询时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','报表生成时间：').date('Y-m-d h:i:s',time()))
+		->setCellValue('A2',yii::t('app','报表查询条件：').$setname.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
 		->setCellValue('A3','时间')
 		->setCellValue('B3','店铺名称')
 		->setCellValue('C3','单品名称')
