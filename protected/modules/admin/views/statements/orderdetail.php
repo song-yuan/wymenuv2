@@ -66,6 +66,7 @@
 							<tr>
 								
 								<th><?php echo yii::t('app','账单号');?></th>
+								<th><?php echo yii::t('app','下单时间');?></th>
 								<th><?php echo yii::t('app','账单更新时间');?></th>
 								
 								<th><?php echo yii::t('app','座位');?></th>
@@ -84,15 +85,19 @@
 						<?php foreach ($models as $model):?>
 								<tr class="odd gradeX">
 								<td><?php echo $model->account_no; ?></td>
+								<td><?php echo $model->create_at;?></td>
 								<td><?php echo $model->update_at;?></td>
 								
 								<td><?php if($model->is_temp=='1') echo yii::t('app','临时坐').$model->site_id%1000; else echo $this->getSiteName($model->lid);?></td>
 								<td><?php echo $model->all_number;?></td>
 								<!-- <td><?php switch($model->order_status) {case 1: echo yii::t('app','未下单'); break; case 2: echo yii::t('app','已下单未支付') ; break; case 3: echo yii::t('app','已支付'); break; case 4: echo yii::t('app','已结单'); break; case 5: echo yii::t('app','被并台'); break; case 6: echo yii::t('app','被换台'); break; case 7: echo yii::t('app','被撤台'); break; case 8: echo yii::t('app','日结'); break;default :echo '';}?></td>
 								 -->
-								<td><?php echo sprintf("%.2f",$this->getOriginalMoney($model->account_no));?></td>
-								<td><?php echo  sprintf("%.2f",$this->getOriginalMoney($model->account_no)-$this->getAccountMoney($model->account_no));?></td>
-								<td><?php echo sprintf("%.2f",$this->getAccountMoney($model->account_no));?></td>
+								<td><?php echo sprintf("%.2f",$model->reality_total);?></td>
+								<td><?php echo sprintf("%.2f",$model->reality_total-$model->should_total);?></td>
+								<td><?php echo sprintf("%.2f",$model->should_total);?></td>
+								<!-- <td><php echo sprintf("%.2f",$this->getOriginalMoney($model->account_no));?></td>
+								<td><php echo  sprintf("%.2f",$this->getOriginalMoney($model->account_no)-$this->getAccountMoney($model->account_no));?></td>
+								<td><php echo sprintf("%.2f",$this->getAccountMoney($model->account_no));?></td> -->
 								</tr>
 						
 						<?php endforeach;?>	
