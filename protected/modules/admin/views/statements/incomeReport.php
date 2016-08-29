@@ -41,7 +41,14 @@
 					<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
 					<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
 					</select>
+					
+					<select id="setid" class="btn green" >
+					<option value="1" <?php if ($setid==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','综合');?></option>
+					<option value="0" <?php if ($setid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','单品');?></option>
+					<option value="2" <?php if ($setid==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','套餐');?></option>
+					</select>
 				<div class="btn-group">
+				
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
@@ -177,8 +184,9 @@
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
 			   var text = $('#text').val();
+			   var setid = $('#setid').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text    
+			   location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/setid/"+setid    
 			  
 	        });
 		   //a = new Array();
@@ -200,10 +208,10 @@
 					  var begin_time = $('#begin_time').val();
 					   var end_time = $('#end_time').val();
 					   var text = $('#text').val();
-					   
+					   var setid = $('#setid').val();
 					   //var cid = $(this).val();
 					  
-					 location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;	  
+					 location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;	  
 					 //return a; 
 			 });
 
@@ -225,14 +233,14 @@
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				   var text = $('#text').val();
-				  
+				   var setid = $('#setid').val();
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 			    	   //location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 				       
 				    	   
 
-			    	   location.href="<?php echo $this->createUrl('statements/incomeExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	   location.href="<?php echo $this->createUrl('statements/incomeExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
