@@ -108,6 +108,8 @@ class DataSyncTables
      * sync_type 表示同步类型
      * 0 表示打印 1 同步云端 2 会员支付减余额
      * 
+     * print_type 0 蓝牙 1 usb
+     * 
      */
     public function getTableStructure($tablename)
     {
@@ -123,6 +125,7 @@ class DataSyncTables
 				"  `pad_type` varchar(2) NOT NULL,".
 				"  `pad_ip` varchar(20) NOT NULL,".
 				"  `pad_fip` varchar(20) NOT NULL DEFAULT '0',".
+        		"  `print_type` varchar(2) NOT NULL DEFAULT '0',".
 				"  `bt_mac` varchar(20) NOT NULL,".
 				"  `is_product_free` varchar(1) NOT NULL  DEFAULT '0',".
 				"  `sync_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
