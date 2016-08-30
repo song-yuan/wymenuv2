@@ -113,7 +113,7 @@
 						<!--foreach-->
 						<?php $a=1;?>
 						<?php foreach ($models as $model):?>
-
+						<?php if($model->all_total == 0 || $model->all_total == null): $model->total = 1;endif;?>
 								<tr class="odd gradeX">
 								<td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
 								<td><?php echo $model->company->company_name;?></td>

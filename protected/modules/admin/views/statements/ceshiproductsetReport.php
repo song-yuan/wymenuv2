@@ -123,8 +123,8 @@
 								<td><?php echo sprintf("%.2f",$model['all_orisetprice']);?></td>
 								<td><?php echo sprintf("%.2f",$model['all_orisetprice']-$model['all_setprice']);?></td>
 								<td><?php echo sprintf("%.2f",$model['all_setprice']);?></td>
-								<td><?php echo sprintf("%.2f",$model['all_orisetprice']/$model['all_setnum']);?></td>
-								<td><?php echo sprintf("%.2f",$model['all_setprice']/$model['all_setnum']);?></td>
+								<td><?php if($model['all_setnum'])echo sprintf("%.2f",$model['all_orisetprice']/$model['all_setnum']);else echo sprintf("%.2f",$model['all_orisetprice']);?></td>
+								<td><?php if($model['all_setnum'])echo sprintf("%.2f",$model['all_setprice']/$model['all_setnum']);else echo sprintf("%.2f",$model['all_setprice']);?></td>
 								<td></td>
 								
 							</tr>
