@@ -123,29 +123,3 @@
 		<?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
-	<SCRIPT type="text/javascript">
-	var dpid = 28;
-	var cloudStr = '{"order_info":{"creat_at":"2016-08-29 18:56:53","account_no":"147246821392428253","site_id":"0","is_temp":"1","number":"1","order_status":"4","order_type":"0","should_total":"20","reality_total":"20"},"order_product":[{"is_set":"1","set_id":"82","product_id":"2248","product_name":"奥尔良鸡腿堡","original_price":"11.00","price":"6.67","amount":"1","zhiamount":"1","product_promotion":[]},{"is_set":"1","set_id":"82","product_id":"2280","product_name":"美式薯条（大）","original_price":"7.00","price":"6.67","amount":"1","zhiamount":"1","product_promotion":[]},{"is_set":"1","set_id":"82","product_id":"2318","product_name":"柳橙汁（中）","original_price":"4.00","price":"6.66","amount":"1","zhiamount":"1","product_promotion":[]}],"order_discount":[],"order_pay":[{"pay_amount":"20","paytype":"0","payment_method_id":"0","paytype_id":"0"}]}';
-	
-	$(document).ready(function(){
-		$.ajax({
-			 url : 'http://ydc.wymenu.com/wymenuv2/admin/dataAppSync/createOrder',
-             type : 'post',
-             data : {
-                   dpid : dpid,
-                   is_pos : "1",
-                   data : cloudStr,
-             },
-             success:function(msg){
-             		alert(msg.status);
-             },
-             error:function(){
-
-             },
-             dataType:'json'
-		});
-	});
-								
-
-
-	</SCRIPT>
