@@ -25,7 +25,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','单品销售报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','套餐销售报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -34,22 +34,22 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','单品销售报表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','套餐销售报表');?></div>
 				<div class="actions">
 					<select id="ordertype" class="btn yellow" >
-					<option value="0" <?php if ($ordertype==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
-					<option value="1" <?php if ($ordertype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>
-					<option value="2" <?php if ($ordertype==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信堂食');?></option>
-					<option value="3" <?php if ($ordertype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','外卖');?></option>
-					<option value="4" <?php if ($ordertype==4){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信外卖');?></option>
-					<option value="5" <?php if ($ordertype==5){?> selected="selected" <?php }?> ><?php echo yii::t('app','套餐');?></option>
+					<option value="-1" <?php if ($ordertype==-1){?> selected="selected" <?php }?> ><?php echo yii::t('app','全部');?></option>
+					<option value="0" <?php if ($ordertype==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','堂食');?></option>
+					<option value="1" <?php if ($ordertype==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信堂食');?></option>
+					<option value="4" <?php if ($ordertype==4){?> selected="selected" <?php }?> ><?php echo yii::t('app','外卖');?></option>
+					<option value="2" <?php if ($ordertype==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信外卖');?></option>
+					<option value="3" <?php if ($ordertype==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','预约');?></option>
 					</select>
 					<select id="text" class="btn yellow" >
 					<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
 					<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
 					<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
 					</select>
-					<select id="setid" class="btn green" >
+					<select id="setid" style="display: none;" class="btn green" >
 					<option value="1" <?php if ($setid==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','综合');?></option>
 					<option value="0" <?php if ($setid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','单品');?></option>
 					<option value="2" <?php if ($setid==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','套餐单品');?></option>
@@ -96,7 +96,7 @@
 									</div>
 								</th>
 								<!-- <th><div class=""><php echo CHtml::dropdownlist('selectUser',$catId,$comName,array('class'=>'form-control'));?></div></th> -->
-                                <th><?php echo yii::t('app','单品名称');?></th>
+                                <th><?php echo yii::t('app','套餐名称');?></th>
                                 <th><?php echo yii::t('app','排名');?></th>
                                 <th><?php echo yii::t('app','销量');?></th>
                                 <th><?php echo yii::t('app','销售金额');?></th>                                                        
@@ -115,16 +115,16 @@
 						<?php foreach ($models as $model):?>
 
 								<tr class="odd gradeX">
-								<td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
-								<td><?php echo $model->company->company_name;?></td>
-								<td><?php echo $model->product_name;?></td>
+								<td><?php if($text==1){echo $model['y_all'];}elseif($text==2){ echo $model['y_all'].-$model['m_all'];}else{echo $model['y_all'].-$model['m_all'].-$model['d_all'];}?></td>
+								<td><?php echo $model['company_name'];?></td>
+								<td><?php echo $model['set_name'];?></td>
 								<td><?php echo $a+$pages->getCurrentPage()*10;?></td>
-								<td><?php echo $model->all_total;?></td>
-								<td><?php echo sprintf("%.2f",$model->all_jiage);?></td>
-								<td><?php echo sprintf("%.2f",$model->all_jiage-$model->all_price);?></td>
-								<td><?php echo sprintf("%.2f",$model->all_price);?></td>
-								<td><?php echo sprintf("%.2f",$model->all_jiage/$model->all_total);?></td>
-								<td><?php echo sprintf("%.2f",$model->all_price/$model->all_total);?></td>
+								<td><?php echo $model['all_setnum'];?></td>
+								<td><?php echo sprintf("%.2f",$model['all_orisetprice']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_orisetprice']-$model['all_setprice']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_setprice']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_orisetprice']/$model['all_setnum']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_setprice']/$model['all_setnum']);?></td>
 								<td></td>
 								
 							</tr>
@@ -200,7 +200,7 @@
 			   var setid = $('#setid').val();
 			  // var cid = $(this).val();
 			 // alert ($('#text').val());
-			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid;
+			   location.href="<?php echo $this->createUrl('statements/ceshiproductsetReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/ordertype/"+ordertype+"/setid/"+setid;
 			  
 	        });
 		   $('#selectUser').change(function(){
@@ -209,7 +209,7 @@
 			   var text = $('#text').val();
 			   var setid = $('#setid').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
+			   location.href="<?php echo $this->createUrl('statements/ceshiproductsetReport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
 			});
 			$('#cx').click(function(){  
 				   // var obj = document.getElementById('accept');
@@ -233,7 +233,7 @@
 						   var cid = $(this).val();
 						   var setid = $('#setid').val();
 						   
-						 location.href="<?php echo $this->createUrl('statements/ceshiproductReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
+						 location.href="<?php echo $this->createUrl('statements/ceshiproductsetReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
 						  
 					//alert($('#cked').val());
 //	  			    if(obj.checked) {
@@ -254,7 +254,7 @@
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 							//alert("<?php echo "然而你并没有权限！！！";?>");
 							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/ceshiproductReportExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
+			    	   location.href="<?php echo $this->createUrl('statements/ceshiproductsetReportExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;

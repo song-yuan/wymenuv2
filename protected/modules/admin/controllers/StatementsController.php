@@ -825,7 +825,70 @@ public function actionPayallReport(){
 				//'catId'=>$catId
 		));
 	}
-	
+	/**
+	 * 套餐销售报表
+	 *
+	 **/
+	public function actionCeshiproductsetReport(){
+		//$uid = Yii::app()->user->id;
+		$str = Yii::app()->request->getParam('str');
+		//var_dump($str);exit();
+		$text = Yii::app()->request->getParam('text');
+		$setid = Yii::app()->request->getParam('setid');
+		$db = Yii::app()->db;
+		$setids = '>0';
+		
+		$ordertype = Yii::app()->request->getParam('ordertype');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		//$catId = Yii::app()->request->getParam('cid',0);
+		//var_dump($catId);exit;
+		//$criteria = new CDbCriteria;
+		if($ordertype=='-1'){
+			$ordertypes = '>=0';
+		}else{
+			$ordertypes = '='.$ordertype;
+		}
+		if($str){
+			$strs = $str; 
+		}else{
+			$strs = $this->companyId;
+		}
+		if($text==1){
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.y_all,k.set_id order by k.y_all,all_setnum)c';
+			
+		}elseif($text==2){
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.m_all,k.set_id order by k.y_all,k.m_all,all_setnum)c';
+			
+		}else{
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum)c';
+			
+		}
+		//$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.zhiamount) as all_num,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid = '.$this->companyId.' group by t.order_id,t.set_id) k where 1 group by k.set_id )c';
+		$count = $db->createCommand(str_replace('c.*','count(*)',$sql))->queryScalar();
+		//echo $sql;exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		
+		$comName = $this->getComName();
+
+		$this->render('ceshiproductsetReport',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'setid'=>$setid,
+				'comName'=>$comName,
+				'ordertype'=>$ordertype,
+				//'catId'=>$catId
+		));
+	}
+
 	/**
 	 *
 	 * 订单统计报表
@@ -3276,7 +3339,7 @@ public function actionPayallReport(){
 			$setname = '单品、';
 		}elseif ($setid == 2){
 			$setids = '>0';
-			$setname = '套餐、';
+			$setname = '套餐单品、';
 		}else{
 			$setids = '>=0';
 			$setname = '综合、';
