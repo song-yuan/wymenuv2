@@ -65,7 +65,7 @@
 	                                    <div class="form-group" <?php if($model->hasErrors('group_no')) echo 'has-error';?>>
 											<?php echo $form->label($model, 'group_no',array('class' => 'col-md-3 control-label'));?>
 											<div class="col-md-4">
-											<?php if($model->group_no):?>
+											<?php if($model->group_no>=0 && $model->product_id !=0):?>
 												<?php echo $form->textField($model, 'group_no',array('id'=>'groupnoId', 'class' => 'form-control','placeholder'=>$model->getAttributeLabel('group_no'),'readonly'=>"true"));?>
 												<?php echo $form->error($model, 'group_no' )?>
 											<?php else:?>
