@@ -168,10 +168,10 @@
 							<div class="ku-item-info">营业收入</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statements/recharge',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<a href="<?php echo $this->createUrl('statements/businessdataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey czjl"></div>
-							<div class="ku-item-info">充值记录</div>
+							<div class="ku-item ku-grey yysj"></div>
+							<div class="ku-item-info">营业数据</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('statements/ceshiproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
@@ -192,10 +192,11 @@
 							<div class="ku-item-info">账单详情</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statements/businessdataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					
+					<a href="<?php echo $this->createUrl('statements/recharge',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey yysj"></div>
-							<div class="ku-item-info">营业数据</div>
+							<div class="ku-item ku-grey czjl"></div>
+							<div class="ku-item-info">充值记录</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('statements/channelsproportion',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
