@@ -78,6 +78,12 @@
 			background-image:url(../../../../../../img/waiter/icon-yysj.png);
 			background-position: -443px 16px;
     		background-repeat: no-repeat;
+		}
+		.ku-item.tcxs{
+			background-image:url(../../../../../../img/waiter/icon-tcxs.png);
+			background-position: 15px 16px;
+			background-size: 70%;
+    		background-repeat: no-repeat;
 		}		
 		.ku-item.zdxq{
 			background-image:url(../../../../../../img/waiter/icon-yysj.png);
@@ -182,7 +188,7 @@
 					</a>
 					<a href="<?php echo $this->createUrl('statements/ceshiproductsetReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey cpxs"></div>
+							<div class="ku-item ku-grey tcxs"></div>
 							<div class="ku-item-info">套餐销售</div>
 						</div>
 					</a>
