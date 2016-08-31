@@ -252,9 +252,9 @@
 				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-							//alert("<?php echo "然而你并没有权限！！！";?>");
-							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/ceshiproductsetReportExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
+							alert("<?php echo "该权限未放开！请向上海物易公司申请该权限！";?>");
+							return false;
+			    	   //location.href="<?php echo $this->createUrl('statements/ceshiproductsetReportExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
