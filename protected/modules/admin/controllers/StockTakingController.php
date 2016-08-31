@@ -27,6 +27,7 @@ class StockTakingController extends BackendController
 		if($categoryId){
 			$criteria->condition.=' and t.category_id = '.$categoryId;
 		}
+		$criteria->order = 't.category_id asc,t.lid asc';
 	//	$criteria->condition.=' and t.lid = '.$categoryId;
 		//$pages = new CPagination(ProductMaterial::model()->count($criteria));
 		//$pages->setPageSize(1);
