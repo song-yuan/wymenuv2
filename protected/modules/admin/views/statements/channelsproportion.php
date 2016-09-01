@@ -81,10 +81,11 @@
 									case 0: echo yii::t('app','到店堂食');break;
 									case 1: echo yii::t('app','微信堂食');break;
 									case 2: echo yii::t('app','微信外卖');break;
-									case 3: echo yii::t('app','后台外卖');break;
+									case 3: echo yii::t('app','微信预约');break;
+									case 4: echo yii::t('app','后台外卖');break;
 									default: echo "";break;}?>
 								</td>
-								<td><?php echo $model['all_ordertype']; ?></td>
+								<td><?php echo $model['all_account']; ?></td>
 								<td><?php echo sprintf("%.2f",$model['all_amount']/$model['all_ordertype']);?></td>
 								<td><?php echo $model['all_amount'];?></td>
 								<td><?php echo sprintf("%.2f",$model['all_amount']*100/$allpay['all_payall']).'%';?></td>
