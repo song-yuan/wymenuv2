@@ -681,7 +681,7 @@ class DataSyncTables
         		"  `product_type` varchar(2) NOT NULL DEFAULT '0',".
         		"  `is_retreat` char(1) NOT NULL DEFAULT '0',".
         		"  `original_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
-        		"  `price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `price` decimal(10,4) NOT NULL DEFAULT '0.00',".
         		"  `offprice` varchar(10) NOT NULL DEFAULT '100%',".
         		"  `amount` float NOT NULL DEFAULT '1',".
         		"  `zhiamount` float NOT NULL DEFAULT '0',".
