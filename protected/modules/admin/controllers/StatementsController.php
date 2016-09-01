@@ -1065,7 +1065,7 @@ public function actionPayallReport(){
 		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
 		$db = Yii::app()->db;
-		$sql = 'select t.* from (select username,sum(should_total_total) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" group by username order by lid desc)t';
+		$sql = 'select t.* from (select username,sum(should_total) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" group by username order by lid desc)t';
 		if($download){
 			$models = $db->createCommand($sql)->queryAll();
 			$this->exportTurnOver($models);
