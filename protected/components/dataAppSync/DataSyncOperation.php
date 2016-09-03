@@ -360,9 +360,11 @@ class DataSyncOperation {
 					'is_temp' => $orderInfo->is_temp,
 					'number' => $orderInfo->number,
 					'order_status' => $orderInfo->order_status,
+					'takeout_typeid' => isset($orderInfo->takeout_typeid) ? $orderInfo->takeout_typeid : $orderInfo->takeout_typeid,
 					'order_type' => $orderInfo->order_type,
 					'should_total' => $orderInfo->should_total,
 					'reality_total' => isset($orderInfo->reality_total) ? $orderInfo->reality_total : $orderInfo->should_total,
+					'callno' => isset($orderInfo->callno) ? $orderInfo->callno : $orderInfo->callno,
 					'taste_memo' => isset ( $orderInfo->taste_memo ) ? $orderInfo->taste_memo : '',
 					'is_sync' => $isSync 
 			);
