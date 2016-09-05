@@ -559,8 +559,10 @@ class DataSyncOperation {
 		$dpid = $data ['dpid'];
 		$accountNo = $data ['account'];
 		$retreatId = $data ['retreatid'];
+		$username =  $data ['username'];
 		$pruductIds = json_decode($data ['pruductids']);
 		$memo = $data ['memo'];
+		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_status in(3,4)';
@@ -577,7 +579,10 @@ class DataSyncOperation {
 					$orderProducts =  Yii::app ()->db->createCommand ($sql)->queryAll();
 					foreach ($orderProducts as $orderproduct){
 						$orderProductDetailId = $orderproduct['lid'];
-							
+						
+						$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
+						Yii::app ()->db->createCommand ($sql)->execute();
+						
 						$se = new Sequence ( "order_retreat" );
 						$orderRetreatId = $se->nextval ();
 						$orderRetreatData = array (
@@ -588,6 +593,7 @@ class DataSyncOperation {
 								'retreat_id' => $retreatId,
 								'order_detail_id' => $orderProductDetailId,
 								'retreat_memo' => $memo,
+								'username' => $username,
 								'retreat_amount' => $productArr[2],
 								'is_sync' => 0
 						);
