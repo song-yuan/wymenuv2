@@ -564,11 +564,9 @@ class DataSyncOperation {
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_status in(3,4)';
-			echo $sql;
 			$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
 			if($order){
-				var_dump($order);exit;
-				$orderId = $order->lid;
+				$orderId = $order['lid'];
 				foreach ($pruductIds as $productId){
 					$productArr = split(',', $productId);
 				    if($productArr[0] > 0){
@@ -596,15 +594,18 @@ class DataSyncOperation {
 						Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
 					}
 				}
+				$transaction->commit ();
+				$msg = json_encode ( array (
+						'status' => true,
+				) );
+			}else{
+				throw new Exception('订单不存在');
 			}
-			$transaction->commit ();
-			$msg = json_encode ( array (
-					'status' => true,
-			) );
 		} catch ( exception $e ) {
 			$transaction->rollback ();
 			$msg = json_encode ( array (
 					'status' => false,
+					'msg'=>$e->getMessage()
 			) );
 		}
 		return $msg;
