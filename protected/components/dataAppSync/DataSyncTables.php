@@ -601,7 +601,7 @@ class DataSyncTables
         		"  `paytype` varchar(1) NOT NULL DEFAULT '0',".
         		"  `payment_method_id` int(10) NOT NULL DEFAULT '0',".
         		"  `pay_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',".
-        		"  `remark` varchar(50) NOT NULL DEFAULT '全款支付',".
+        		"  `remark` text NOT NULL DEFAULT '全款支付',".
         		"  `taste_memo` varchar(50) NOT NULL DEFAULT '0',".
         		"  `cupon_branduser_lid` int(10) NOT NULL DEFAULT '0',".
         		"  `cupon_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
