@@ -124,6 +124,16 @@ public function actionValidateNewData(){
 }
 /**
  * 
+ * 退单
+ * 按照订单详情来退
+ * 
+ */
+public function actionRetreatOrder(){
+	$result = DataSyncOperation::retreatOrder($_POST);
+	echo $result;exit;
+}
+/**
+ * 
  * 增加会员卡
  * 
  */

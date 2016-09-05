@@ -551,6 +551,64 @@ class DataSyncOperation {
 	}
 	/**
 	 * 
+	 * 退单
+	 * 
+	 */
+	public static function retreatOrder($data) {
+		$time = time();
+		$dpid = $data ['dpid'];
+		$accountNo = $data ['account'];
+		$retreatId = $data ['retreatid'];
+		$pruductIds = json_decode($data ['pruductids']);
+		$memo = $data ['memo'];
+		$transaction = Yii::app ()->db->beginTransaction ();
+		try {
+			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_status in(3,4)';
+			$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
+			if($order){
+				$orderId = $order->lid;
+				foreach ($pruductIds as $productId){
+					$productArr = split(',', $productId);
+				    if($productArr[0] > 0){
+				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0];
+				    }else{
+				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0].' and product_id='.$productArr[1];
+				    }
+					$orderProducts =  Yii::app ()->db->createCommand ($sql)->queryAll();
+					foreach ($orderProducts as $orderproduct){
+						$orderProductDetailId = $orderproduct['lid'];
+							
+						$se = new Sequence ( "order_retreat" );
+						$orderRetreatId = $se->nextval ();
+						$orderRetreatData = array (
+								'lid' => $orderRetreatId,
+								'dpid' => $dpid,
+								'create_at' => date ( 'Y-m-d H:i:s', $time ),
+								'update_at' => date ( 'Y-m-d H:i:s', $time ),
+								'retreat_id' => $retreatId,
+								'order_detail_id' => $orderProductDetailId,
+								'retreat_memo' => $memo,
+								'retreat_amount' => $productArr[2],
+								'is_sync' => 0
+						);
+						Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
+					}
+				}
+			}
+			$transaction->commit ();
+			$msg = json_encode ( array (
+					'status' => true,
+			) );
+		} catch ( exception $e ) {
+			$transaction->rollback ();
+			$msg = json_encode ( array (
+					'status' => false,
+			) );
+		}
+		return $msg;
+	}
+	/**
+	 * 
 	 * 
 	 * 
 	 * 增加会员卡
