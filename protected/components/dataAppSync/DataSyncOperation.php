@@ -561,7 +561,6 @@ class DataSyncOperation {
 		$retreatId = $data ['retreatid'];
 		$pruductIds = json_decode($data ['pruductids']);
 		$memo = $data ['memo'];
-		var_dump($data);var_dump($pruductIds);exit;
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_status in(3,4)';
@@ -570,12 +569,14 @@ class DataSyncOperation {
 				$orderId = $order->lid;
 				foreach ($pruductIds as $productId){
 					$productArr = split(',', $productId);
+					var_dump($productArr);
 				    if($productArr[0] > 0){
 				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0];
 				    }else{
 				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0].' and product_id='.$productArr[1];
 				    }
 					$orderProducts =  Yii::app ()->db->createCommand ($sql)->queryAll();
+					var_dump($pruductIds);exit;
 					foreach ($orderProducts as $orderproduct){
 						$orderProductDetailId = $orderproduct['lid'];
 							
