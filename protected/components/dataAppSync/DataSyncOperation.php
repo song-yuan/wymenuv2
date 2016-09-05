@@ -561,6 +561,7 @@ class DataSyncOperation {
 		$retreatId = $data ['retreatid'];
 		$pruductIds = json_decode($data ['pruductids']);
 		$memo = $data ['memo'];
+		var_dump($data);var_dump($pruductIds);exit;
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_status in(3,4)';
