@@ -559,6 +559,7 @@ class DataSyncOperation {
 		$dpid = $data ['dpid'];
 		$accountNo = $data ['account'];
 		$retreatId = $data ['retreatid'];
+		$retreatprice = $data ['retreatprice'];
 		$username =  $data ['username'];
 		$pruductIds = json_decode($data ['pruductids']);
 		$memo = $data ['memo'];
@@ -600,6 +601,24 @@ class DataSyncOperation {
 						Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
 					}
 				}
+				
+				$se = new Sequence ( "order_pay" );
+				$orderPayId = $se->nextval ();
+				$orderPayData = array (
+						'lid' => $orderPayId,
+						'dpid' => $dpid,
+						'create_at' => date ( 'Y-m-d H:i:s', $time ),
+						'update_at' => date ( 'Y-m-d H:i:s', $time ),
+						'order_id' => $orderId,
+						'account_no' => $accountNo,
+						'pay_amount' => -$retreatprice,
+						'paytype' => 0,
+						'payment_method_id' => 0,
+						'paytype_id' => 0,
+						'is_sync' => 0
+				);
+				Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
+				
 				$transaction->commit ();
 				$msg = json_encode ( array (
 						'status' => true,
