@@ -24,8 +24,8 @@ if (get_magic_quotes_gpc ()) {
 }
 
 // 日志记录下受到的请求
-// AlipayGatewayUnit::writeLog ( "POST: " . var_export ( $_POST, true ) );
-// AlipayGatewayUnit::writeLog ( "GET: " . var_export ( $_GET, true ) );
+AlipayGatewayUnit::writeLog ( "POST: " . var_export ( $_POST, true ) );
+AlipayGatewayUnit::writeLog ( "GET: " . var_export ( $_GET, true ) );
 
 $sign = AlipayGatewayUnit::getRequest ( "sign" );
 $sign_type = AlipayGatewayUnit::getRequest ( "sign_type" );
@@ -35,7 +35,7 @@ $charset = AlipayGatewayUnit::getRequest ( "charset" );
 
 if (empty ( $sign ) || empty ( $sign_type ) || empty ( $biz_content ) || empty ( $service ) || empty ( $charset )) {
 	echo "some parameter is empty.";
-// 	AlipayGatewayUnit::writeLog ( "some parameter is empty.");
+	AlipayGatewayUnit::writeLog ( "some parameter is empty.");
 	exit ();
 }
 
@@ -50,7 +50,7 @@ if (! $sign_verify) {
 		$gw->verifygw ( false );
 	} else {
 		echo "sign verfiy fail.";
-// 		AlipayGatewayUnit::writeLog ( "sign verfiy fail.");
+		AlipayGatewayUnit::writeLog ( "sign verfiy fail.");
 	}
 	exit ();
 }
