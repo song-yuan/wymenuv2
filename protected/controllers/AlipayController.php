@@ -4,6 +4,7 @@ class AlipayController extends Controller
 {
 	public $companyId = 0;
 	public $layout = '/layouts/mallmain';
+	public $gateway_config = array();
 	public $alipay_config = array();
 	public $f2fpay_config = array();
     public function init(){
