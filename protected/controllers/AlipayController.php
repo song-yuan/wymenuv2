@@ -5,29 +5,72 @@ class AlipayController extends Controller
 	public $companyId = 0;
 	public $layout = '/layouts/mallmain';
 	public $alipay_config = array();
+	public $f2fpay_config = array();
     public function init(){
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId;
+		//支付宝网关
+		$this->gateway_config = array(
+				//商户的私钥（后缀是.pen）文件相对路径
+				'alipay_public_key_file' => 'admin/ali_public_key.pem',
+				'merchant_private_key_file' => 'admin/rsa_merchant_private_key.pem',
+				'merchant_public_key_file' => 'admin/rsa_merchant_public_key.pem',		
+				'charset' => "GBK",
+				'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
+				'app_id' => "2015060900117633" 
+		);
+		//支付宝支付 网页支付 及时到账接口
+		$this->alipay_config = array(
+				//合作身份者id，以2088开头的16位纯数字
+				'partner'=>'2088811584894868',
+				//收款支付宝账号，一般情况下收款账号就是签约账号
+				'seller_id'=>'2088811584894868',
+				//商户的私钥（后缀是.pen）文件相对路径
+				'private_key_path'=>'admin/rsa_private_key.pem',
+				//支付宝公钥（后缀是.pen）文件相对路径
+				'ali_public_key_path'=>'admin/ali_public_key.pem',
+				//签名方式 不需修改
+				'sign_type'=>strtoupper('RSA'),
+				//字符编码格式 目前支持 gbk 或 utf-8
+				'input_charset'=>strtolower('utf-8'),
+				//ca证书路径地址，用于curl中ssl校验
+				//请保证cacert.pem文件在当前文件夹目录中
+				'cacert'=>'admin/cacert.pem',
+				//访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
+				'transport'=>'http',
+		);
 		
-		//合作身份者id，以2088开头的16位纯数字
-		$this->alipay_config['partner'] = '2088811584894868';
-		//收款支付宝账号，一般情况下收款账号就是签约账号
-		$this->alipay_config['seller_id']	= $this->alipay_config['partner'];
-		//商户的私钥（后缀是.pen）文件相对路径
-		$this->alipay_config['private_key_path'] = 'admin/rsa_private_key.pem';
-		//支付宝公钥（后缀是.pen）文件相对路径
-		$this->alipay_config['ali_public_key_path'] = 'admin/ali_public_key.pem';
-		//签名方式 不需修改 
-		$this->alipay_config['sign_type']    = strtoupper('RSA');
-		//字符编码格式 目前支持 gbk 或 utf-8
-		$this->alipay_config['input_charset'] = strtolower('utf-8');
-		//ca证书路径地址，用于curl中ssl校验
-		//请保证cacert.pem文件在当前文件夹目录中
-		$this->alipay_config['cacert']    = 'admin/cacert.pem';
-		//访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
-		$this->alipay_config['transport']    = 'http';
+		// 支付宝扫条码 面对面支付
+		$this->f2fpay_config = array(
+				//支付宝公钥
+				'alipay_public_key' => "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB",
+				//商户私钥
+				'merchant_private_key' => "此处填写开发者私钥去头去尾去回车，一行字符串",
+				//编码格式
+				'charset' => "UTF-8",
+				//支付宝网关
+				'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
+				//应用ID
+				'app_id' => "2015060900117633",
+				//异步通知地址,只有扫码支付预下单可用
+				'notify_url' => "",
+				//最大查询重试次数
+				'MaxQueryRetry' => "10",
+				//查询间隔
+				'QueryDuration' => "3"
+		);
     }
-    /*
+    /**
+     * 
+     * 支付宝网关地址
+     * 用于和服务窗通信
+     * 
+     */
+    public function actionGateway()
+    {
+    	$this->render('gateway');
+    }
+    /**
      * 一个支付宝支付按钮，
      * 其他参数都作为隐藏参数放在form里面，
      * 点击后提交到pay
@@ -148,6 +191,11 @@ class AlipayController extends Controller
         $htmlText = $alipaySubmit->buildRequestForm($parameter,"get", "确认");
         
         $this->render('instantArriva',array('htmlText'=>$htmlText));
+    }
+    // 当面付 条码支付 
+    public function actionBarPay()
+    {
+    	$this->render('barpay');
     }
    // 手机订单支付
     public function actionReturn()

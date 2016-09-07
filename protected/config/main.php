@@ -27,9 +27,13 @@ return array(
 		'application.components.mall.*',
 		'application.components.wxcard.*',
 		'application.components.alipay.*',
+		'application.components.alipay.f2fpay.*',
+		'application.components.alipay.f2fpay.service.*',
+		'application.components.alipay.f2fpay.model.builder.*',
+		'application.components.alipay.f2fpay.model.result.*',
 		'application.extensions.redis.*',
 		'application.extensions.qrcode.*',
-                'application.extensions.PHPExcel.*'
+        'application.extensions.PHPExcel.*'
 
 	),
 	
