@@ -27,11 +27,11 @@ if (get_magic_quotes_gpc ()) {
 // AlipayGatewayUnit::writeLog ( "POST: " . var_export ( $_POST, true ) );
 // AlipayGatewayUnit::writeLog ( "GET: " . var_export ( $_GET, true ) );
 
-$sign = HttpRequest::getRequest ( "sign" );
-$sign_type = HttpRequest::getRequest ( "sign_type" );
-$biz_content = HttpRequest::getRequest ( "biz_content" );
-$service = HttpRequest::getRequest ( "service" );
-$charset = HttpRequest::getRequest ( "charset" );
+$sign = AlipayGatewayUnit::getRequest ( "sign" );
+$sign_type = AlipayGatewayUnit::getRequest ( "sign_type" );
+$biz_content = AlipayGatewayUnit::getRequest ( "biz_content" );
+$service = AlipayGatewayUnit::getRequest ( "service" );
+$charset = AlipayGatewayUnit::getRequest ( "charset" );
 
 if (empty ( $sign ) || empty ( $sign_type ) || empty ( $biz_content ) || empty ( $service ) || empty ( $charset )) {
 	echo "some parameter is empty.";
@@ -45,7 +45,7 @@ $as = new AlipaySign ();
 $sign_verify = $as->rsaCheckV2 ( $_REQUEST, $config ['alipay_public_key_file'] );
 if (! $sign_verify) {
 	// 如果验证网关时，请求参数签名失败，则按照标准格式返回，方便在服务窗后台查看。
-	if (HttpRequest::getRequest ( "service" ) == "alipay.service.check") {
+	if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.service.check") {
 		$gw = new Gateway ($config,$biz_content);
 		$gw->verifygw ( false );
 	} else {
@@ -56,11 +56,11 @@ if (! $sign_verify) {
 }
 
 // 验证网关请求
-if (HttpRequest::getRequest ( "service" ) == "alipay.service.check") {
+if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.service.check") {
 	// Gateway::verifygw();
 	$gw = new Gateway ($config,$biz_content);
 	$gw->verifygw ( true );
-} else if (HttpRequest::getRequest ( "service" ) == "alipay.mobile.public.message.notify") {
+} else if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.mobile.public.message.notify") {
 	// 处理收到的消息
 	$msg = new Message ( $biz_content );
 }
