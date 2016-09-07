@@ -27,7 +27,7 @@ class Gateway {
 				$response_xml = "<success>false</success><error_code>VERIFY_FAILED</error_code><biz_content>" . $as->getPublicKeyStr ( $config ['merchant_public_key_file'] ) . "</biz_content>";
 			}
 			$return_xml = $as->sign_response ( $response_xml, $config ['charset'], $config ['merchant_private_key_file'] );
-			AlipayGatewayUnit::writeLog ( "response_xml: " . $return_xml );
+// 			AlipayGatewayUnit::writeLog ( "response_xml: " . $return_xml );
 			echo $return_xml;
 			exit ();
 		}

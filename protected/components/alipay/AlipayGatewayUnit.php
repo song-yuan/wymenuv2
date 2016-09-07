@@ -45,7 +45,7 @@ class AlipayGatewayUnit {
 		$aop->rsaPrivateKeyFilePath = $config ['merchant_private_key_file'];
 		$aop->apiVersion = "1.0";
 		$result = $aop->execute ( $request, $token );
-		writeLog("response: ".var_export($result,true));
+// 		writeLog("response: ".var_export($result,true));
 		return $result;
 	}
 }
