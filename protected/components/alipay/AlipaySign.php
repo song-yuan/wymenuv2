@@ -19,7 +19,7 @@ class AlipaySign {
 	public function rsa_verify($data, $sign, $rsaPublicKeyFilePath) {
 		// 读取公钥文件
 		$pubKey = file_get_contents ( $rsaPublicKeyFilePath );
-		
+		AlipayGatewayUnit::writeLog ( $pubKey);
 		// 转换为openssl格式密钥
 		$res = openssl_get_publickey ( $pubKey );
 		
