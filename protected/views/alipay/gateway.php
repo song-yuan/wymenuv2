@@ -32,11 +32,6 @@ $biz_content = AlipayGatewayUnit::getRequest ( "biz_content" );
 $service = AlipayGatewayUnit::getRequest ( "service" );
 $charset = AlipayGatewayUnit::getRequest ( "charset" );
 
-$pubKey = file_get_contents ( $config ['alipay_public_key_file'] );
-var_dump( $pubKey);
-// 转换为openssl格式密钥
-$res = openssl_get_publickey ( $pubKey );
-var_dump( $res);
 if (empty ( $sign ) || empty ( $sign_type ) || empty ( $biz_content ) || empty ( $service ) || empty ( $charset )) {
 	echo "some parameter is empty.";
 	AlipayGatewayUnit::writeLog ( "some parameter is empty.");
