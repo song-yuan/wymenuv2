@@ -42,11 +42,9 @@ if (empty ( $sign ) || empty ( $sign_type ) || empty ( $biz_content ) || empty (
 // 收到请求，先验证签名
 
 $as = new AlipaySign ();
-AlipayGatewayUnit::writeLog ( "sign verfiy begin.");
 $sign_verify = $as->rsaCheckV2 ( $_REQUEST, $config ['alipay_public_key_file'] );
-AlipayGatewayUnit::writeLog ( "sign verfiy end.");
+AlipayGatewayUnit::writeLog ( $config ['alipay_public_key_file'] );
 if (! $sign_verify) {
-	AlipayGatewayUnit::writeLog ( "sign verfiy fail.");
 	// 如果验证网关时，请求参数签名失败，则按照标准格式返回，方便在服务窗后台查看。
 	if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.service.check") {
 		$gw = new Gateway ($config,$biz_content);
@@ -57,7 +55,6 @@ if (! $sign_verify) {
 	}
 	exit ();
 }
-AlipayGatewayUnit::writeLog ( "sign verfiy success.");
 // 验证网关请求
 if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.service.check") {
 	// Gateway::verifygw();
