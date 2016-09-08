@@ -11,6 +11,7 @@ header ( "Content-type: text/html; charset=gbk" );
  * 次文件接收支付宝服务器发送的请求
 */
 $config = $this->gateway_config;
+var_dump($config);exit;
 if (get_magic_quotes_gpc ()) {
 	foreach ( $_POST as $key => $value ) {
 		$_POST [$key] = stripslashes ( $value );
