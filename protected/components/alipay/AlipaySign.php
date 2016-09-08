@@ -25,7 +25,9 @@ class AlipaySign {
 		
 		// 调用openssl内置方法验签，返回bool值
 		$result = ( bool ) openssl_verify ( $data, base64_decode ( $sign ), $res );
+		AlipayGatewayUnit::writeLog ( '1');
 		AlipayGatewayUnit::writeLog ( $result);
+		AlipayGatewayUnit::writeLog ( '2');
 		// 释放资源
 		openssl_free_key ( $res );
 		
