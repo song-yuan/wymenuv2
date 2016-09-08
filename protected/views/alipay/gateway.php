@@ -33,11 +33,11 @@ $biz_content = AlipayGatewayUnit::getRequest ( "biz_content" );
 $service = AlipayGatewayUnit::getRequest ( "service" );
 $charset = AlipayGatewayUnit::getRequest ( "charset" );
 
-if (empty ( $sign ) || empty ( $sign_type ) || empty ( $biz_content ) || empty ( $service ) || empty ( $charset )) {
-	echo "some parameter is empty.";
-	AlipayGatewayUnit::writeLog ( "some parameter is empty.");
-	exit ();
-}
+// if (empty ( $sign ) || empty ( $sign_type ) || empty ( $biz_content ) || empty ( $service ) || empty ( $charset )) {
+// 	echo "some parameter is empty.";
+// 	AlipayGatewayUnit::writeLog ( "some parameter is empty.");
+// 	exit ();
+// }
 
 // 收到请求，先验证签名
 
