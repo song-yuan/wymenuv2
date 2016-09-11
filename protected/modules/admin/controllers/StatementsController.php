@@ -569,6 +569,8 @@ public function actionPayallReport(){
 		//统计订单原价
 		//echo $sql;exit;
 		$money = Yii::app()->db->createCommand($sql)->queryRow();
+	 	$sql2 = 'select sum(t1.price*t.retreat_amount) as retreat_allprice,count(distinct t1.order_id) as retreat_num from nb_order_retreat t left join nb_order_product t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t.order_detail_id = t1.lid) where t.delete_flag =0 and t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.dpid='.$this->companyId;
+	 	$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
 		//var_dump($money);exit;
 // 		$criteria = new CDbCriteria;
 // 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
@@ -608,6 +610,7 @@ public function actionPayallReport(){
 				'str'=>$str,
 				'comName'=>$comName,
 				'moneys'=>$money,
+				'retreat'=>$retreat,
 				//'money'=>$money,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
@@ -809,7 +812,8 @@ public function actionPayallReport(){
 		$comName = $this->getComName();
 		//$a=array_keys($comName);
 		//var_dump($a);exit;
-		// var_dump($comName);exit;
+		 //var_dump($comName);
+		 //exit;
 	
 	
 		$this->render('ceshiproductReport',array(

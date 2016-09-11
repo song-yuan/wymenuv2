@@ -79,7 +79,7 @@
                                 <th><?php echo yii::t('app','客流');?></th>
                                 <th><?php echo yii::t('app','单数');?></th> 
                               	<th><?php echo yii::t('app','销售额');?></th>
-                                <th><?php echo yii::t('app','实收');?></th> 
+                                <th><?php echo yii::t('app','实收(退款)');?></th> 
                                 <th><?php echo yii::t('app','优惠');?></th> 
                                 <th><?php echo yii::t('app','人均');?></th>
                                 <th><?php echo yii::t('app','单均');?></th>                                                           
@@ -99,7 +99,7 @@
 								<td><?php echo $model['all_number'];?></td>
 								<td><?php echo $model['all_account'];?></td>
 								<td><?php echo sprintf("%.2f",$model['all_originalprice']);?></td>
-								<td><?php echo sprintf("%.2f",$model['all_realprice']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_realprice']-$retreat['retreat_allprice']).'('.sprintf("%.2f",$retreat['retreat_allprice']).')';?></td>
 								<td><?php echo sprintf("%.2f",$model['all_originalprice']-$model['all_realprice']);?></td>
 								<td><?php if($model['all_number']){echo sprintf("%.2f",$model['all_realprice']/$model['all_number']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
 								<td><?php if($model['all_account']){echo sprintf("%.2f",$model['all_realprice']/$model['all_account']);}else echo sprintf("%.2f",$model['all_realprice']);?></td>
