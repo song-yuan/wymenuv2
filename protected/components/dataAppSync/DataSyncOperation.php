@@ -277,7 +277,7 @@ class DataSyncOperation {
 		$dpid = $data['dpid'];
 		$syncTime = $data['sync_at'];
 		$results = array();
-		$diffTable = array('nb_site_type','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_account_discount','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_shift_detail','nb_sync_failure');
+		$diffTable = array('nb_site_type','nb_product_icache','nb_order','nb_order_product','nb_order_pay','nb_order_address','nb_order_feedback','nb_order_taste','nb_order_retreat','nb_order_account_discount','nb_order_product_promotion','nb_close_account','nb_close_account_detail','nb_shift_detail','nb_sync_failure');
 		$dataBase = new DataSyncTables ();
 		$allTables = $dataBase->getAllTableName ();
 		$allTable = array_diff($allTables, $diffTable);
@@ -360,9 +360,11 @@ class DataSyncOperation {
 					'is_temp' => $orderInfo->is_temp,
 					'number' => $orderInfo->number,
 					'order_status' => $orderInfo->order_status,
+					'takeout_typeid' => isset($orderInfo->takeout_typeid) ? $orderInfo->takeout_typeid : $orderInfo->takeout_typeid,
 					'order_type' => $orderInfo->order_type,
 					'should_total' => $orderInfo->should_total,
 					'reality_total' => isset($orderInfo->reality_total) ? $orderInfo->reality_total : $orderInfo->should_total,
+					'callno' => isset($orderInfo->callno) ? $orderInfo->callno : $orderInfo->callno,
 					'taste_memo' => isset ( $orderInfo->taste_memo ) ? $orderInfo->taste_memo : '',
 					'is_sync' => $isSync 
 			);
@@ -543,6 +545,92 @@ class DataSyncOperation {
 			$msg = json_encode ( array (
 					'status' => false,
 					'orderId' => '' 
+			) );
+		}
+		return $msg;
+	}
+	/**
+	 * 
+	 * 退单
+	 * 
+	 */
+	public static function retreatOrder($data) {
+		$time = time();
+		$dpid = $data ['dpid'];
+		$accountNo = $data ['account'];
+		$retreatId = $data ['retreatid'];
+		$retreatprice = $data ['retreatprice'];
+		$username =  $data ['username'];
+		$pruductIds = json_decode($data ['pruductids']);
+		$memo = $data ['memo'];
+		
+		$transaction = Yii::app ()->db->beginTransaction ();
+		try {
+			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_status in(3,4)';
+			$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
+			if($order){
+				$orderId = $order['lid'];
+				foreach ($pruductIds as $productId){
+					$productArr = split(',', $productId);
+				    if($productArr[0] > 0){
+				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0];
+				    }else{
+				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0].' and product_id='.$productArr[1];
+				    }
+					$orderProducts =  Yii::app ()->db->createCommand ($sql)->queryAll();
+					foreach ($orderProducts as $orderproduct){
+						$orderProductDetailId = $orderproduct['lid'];
+						
+						$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
+						Yii::app ()->db->createCommand ($sql)->execute();
+						
+						$se = new Sequence ( "order_retreat" );
+						$orderRetreatId = $se->nextval ();
+						$orderRetreatData = array (
+								'lid' => $orderRetreatId,
+								'dpid' => $dpid,
+								'create_at' => date ( 'Y-m-d H:i:s', $time ),
+								'update_at' => date ( 'Y-m-d H:i:s', $time ),
+								'retreat_id' => $retreatId,
+								'order_detail_id' => $orderProductDetailId,
+								'retreat_memo' => $memo,
+								'username' => $username,
+								'retreat_amount' => $productArr[2],
+								'is_sync' => 0
+						);
+						Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
+					}
+				}
+				
+				$se = new Sequence ( "order_pay" );
+				$orderPayId = $se->nextval ();
+				$orderPayData = array (
+						'lid' => $orderPayId,
+						'dpid' => $dpid,
+						'create_at' => date ( 'Y-m-d H:i:s', $time ),
+						'update_at' => date ( 'Y-m-d H:i:s', $time ),
+						'order_id' => $orderId,
+						'account_no' => $accountNo,
+						'pay_amount' => -$retreatprice,
+						'paytype' => 0,
+						'payment_method_id' => 0,
+						'paytype_id' => 0,
+						'is_sync' => 0
+				);
+				Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
+				
+				$transaction->commit ();
+				$msg = json_encode ( array (
+						'status' => true,
+				) );
+			}else{
+				throw new Exception('订单不存在');
+			}
+		} catch ( exception $e ) {
+			$transaction->rollback ();
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg'=>$e->getMessage()
 			) );
 		}
 		return $msg;
