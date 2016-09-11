@@ -76,7 +76,7 @@
 								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
 								<!-- <td ><php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>  -->
 								<td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td>
-								<td ><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>" name="ids[]" />
+								<td ><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>" name="idss[]" />
 								<input type="text" style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="<?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>" onfocus=" if (value =='<?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>'){value = ''}" onblur="if (value ==''){value='<?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>'}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
 								<input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
 								</td>
@@ -92,7 +92,12 @@
 						<?php endif;?>
 						</tbody>
 					</table>
-									
+					<div class="form-actions fluid">
+						<div class="col-md-offset-9 col-md-3">
+				<!--        <button type="submit" class="btn blue">确定</button>     -->   
+							<button type="button" class="btn green" id="stocktaking">一键盘点</button>                              
+						</div>
+					</div>			
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -122,6 +127,62 @@
 			location.href="<?php echo $this->createUrl('stockTaking/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
+
+	$("#stocktaking").on("click",function(){
+		//alert("123");
+		//var vid=$(this).attr("id").substr(12,10);
+        var arr=document.getElementsByName("idss[]");
+       // var chx=document.getElementById("optionsCheck"+vid);
+        var optid;
+        var optval = '';
+       // var checkvalue = '0';
+        //var cid = $(this).val();
+        //alert(cid);
+        for(var i=0;i<arr.length;i++)
+        {
+            var vid = $(arr[i]).attr("id").substr(11,10);  
+            var nownum = $("#idleftnum0"+vid).val(); 
+            var originalnum = $("#originalnum"+vid).val();
+            var difference = parseFloat(nownum) - parseFloat(originalnum);
+				difference = difference.toFixed(4);
+            if(nownum != originalnum){
+                optval = vid +','+ difference +','+ nownum +','+ originalnum +';'+ optval;
+                } 
+            //var optval=arr[i].value;
+            //alert(vid+nownum+originalnum);
+        }
+        if(optval.length >0){
+        	optval = optval.substr(0,optval.length-1);//除去最后一个“，”
+        	alert(optval);
+        }else{
+            alert('请至少盘点一项');
+            }
+        
+		var categoryId = '<?php echo $categoryId;?>';
+        $.ajax({
+            type:'GET',
+			url:"<?php echo $this->createUrl('stockTaking/allStore',array('companyId'=>$this->companyId,));?>/optval/"+optval+"/cid/"+categoryId,
+			async: false,
+			//data:"companyId="+company_id+'&padId='+pad_id,
+            cache:false,
+            dataType:'json',
+			success:function(msg){
+	            //alert(msg.status);
+	            if(msg.status=="success")
+	            {            
+		            alert("<?php echo yii::t('app','成功'); ?>");               
+		            location.reload();
+	            }else{
+		            alert("<?php echo yii::t('app','失败'); ?>"+"1");
+		            location.reload();
+	            }
+			},
+            error:function(){
+				alert("<?php echo yii::t('app','失败'); ?>"+"2");                                
+			},
+		});
+        
+		});
     
     $(".clear_btn").on("click",function(){
         var vid = $(this).attr("id").substr(12,10);
