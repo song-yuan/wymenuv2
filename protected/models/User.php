@@ -47,7 +47,7 @@ class User extends CActiveRecord
 			array('username, is_sync', 'length', 'max'=>50),
 			array('username' , 'unique' , 'message'=>'用户名已经存在'),
 			array('mobile', 'length', 'max'=>20),
-			array('password_hash', 'length','min'=>6, 'max'=>60),
+			array('password_hash', 'length','min'=>2, 'max'=>60),
 			array('password_reset_token, email, auth_key', 'length', 'max'=>255),
 			array('staff_no', 'length', 'max'=>20),
 			array('dpid, role, status', 'length', 'max'=>10),
