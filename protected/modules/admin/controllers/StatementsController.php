@@ -569,7 +569,8 @@ public function actionPayallReport(){
 		//统计订单原价
 		//echo $sql;exit;
 		$money = Yii::app()->db->createCommand($sql)->queryRow();
-	 	$sql2 = 'select sum(t1.price*t.retreat_amount) as retreat_allprice,count(distinct t1.order_id) as retreat_num from nb_order_retreat t left join nb_order_product t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t.order_detail_id = t1.lid) where t.delete_flag =0 and t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.dpid='.$this->companyId;
+	 	//$sql2 = 'select sum(t1.price*t.retreat_amount) as retreat_allprice,count(distinct t1.order_id) as retreat_num from nb_order_retreat t left join nb_order_product t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t.order_detail_id = t1.lid) where t.delete_flag =0 and t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.dpid='.$this->companyId;
+	 	$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t where t.pay_amount < 0 and t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.dpid='.$this->companyId;
 	 	$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
 		//var_dump($money);exit;
 // 		$criteria = new CDbCriteria;
