@@ -107,7 +107,7 @@
 								<td style="width:20%;"><?php echo $model['company_name']; ?></td>
 								<td><?php if (!empty($model['category_name'])){echo $model['category_name'];}else{echo "基础费（餐位费等）";} ?></td>
 								<td><?php echo $model['all_num'];?></td>
-								<td><?php echo sprintf("%.2f",$model['all_price']);?></td>
+								<td><?php echo sprintf("%.3f",$model['all_price']);?></td>
 								<td></td>
 								
 								
