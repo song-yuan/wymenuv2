@@ -25,8 +25,11 @@
 									<div class="form-group <?php if($model->hasErrors('password')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'password',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->passwordField($model, 'password',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('password')));?>
+											<span id='content' value=>
+												<input id="btcontent" type="button" value="点击修改密码" onclick='' class='form-control' style='background-color:rgb(0,238,283)'/>
+											</span>
 											<?php echo $form->error($model, 'password' )?>
+											<input type="hidden" id="hidden1" name="hidden1" value="" />
 										</div>
 									</div>
 									<div class="form-group <?php if($model->hasErrors('staff_no')) echo 'has-error';?>">
@@ -46,7 +49,7 @@
 									
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit"  class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="button" id="su"  class="btn blue"><?php echo yii::t('app','确定');?></button>
 											<a href="<?php echo $this->createUrl('user/index',array('companyId'=>$this->companyId));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
@@ -54,21 +57,26 @@
 							
 <script type="text/javascript"> 							
  $("#su").on('click',function() {
-         //alert(11);
-         //var p1 = $('#PrivatePromotion_to_group').children('option:selected').val();
-        // var username = $('#UserForm_username').val();
-         //var users = $('#username').val();
-         //alert(username.indexOf(users));
-//          if(username.indexOf(users)=="-1"){
-//              alert("用户名已存在！");
-//              return;
-//              }else{
-//                  alert(111);return;}
-         //var aa = document.getElementsById("username");
-         //alert(users);
-         //alert(username);
-        
-         $("#user-form").submit();
-     });
 
+		var pw = $('#contentpw').val();
+		if(pw){
+			$("#hidden1").val(pw);
+			alert(pw);
+			}
+	
+        $("#user-form").submit();
+     });
+ $("#btcontent").on('click',function() {
+	 if(window.confirm("确认需要修改密码?")){
+		 changeContent();
+		 }
+
+ });
+ function changeContent(){
+	 //alert(11);
+	 var o = document.getElementById("content");
+	 var c = o.innerHTML;
+	 o.innerHTML = "<input id='contentpw' type='password' type='text'  class='form-control' value=''/>"
+		 document.getElementById("contentpw").focus();
+	}
  </script>

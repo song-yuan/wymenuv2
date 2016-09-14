@@ -43,14 +43,15 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username ,mobile,role,password_hash', 'required'),
+			array('username ,role,password_hash', 'required'),
 			array('username, is_sync', 'length', 'max'=>50),
-			array('username' , 'unique' , 'message'=>'用户名已经存在'),
+			//array('username' , 'unique' , 'message'=>'用户名已经存在'),
 			array('mobile', 'length', 'max'=>20),
 			array('password_hash', 'length','min'=>2, 'max'=>60),
 			array('password_reset_token, email, auth_key', 'length', 'max'=>255),
 			array('staff_no', 'length', 'max'=>20),
 			array('dpid, role, status', 'length', 'max'=>10),
+			array('mobile', 'length', 'max'=>11),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('lid, username,mobile, password_hash, is_sync, password_reset_token, staff_no, dpid, email, auth_key, role, status, create_at, update_at', 'safe', 'on'=>'search'),
@@ -77,18 +78,18 @@ class User extends CActiveRecord
 		return array(
 			'lid' => 'lid',
 			'dpid' => 'dpid',
-			'username' => yii::t('app','用户名'),
+			'username' => yii::t('app','登陆名'),
 			'mobile' => yii::t('app','手机号'),
 			'password_hash' => yii::t('app','密码'),
 			'password_reset_token' => 'Password Reset Token',
-			'staff_no' => yii::t('app','员工号'),
+			'staff_no' => yii::t('app','姓名（工号）'),
 			'email' => yii::t('app','电子邮箱'),
 			'auth_key' => 'Auth Key',
 			'role' => yii::t('app','管理员类型'),
 			'status' => yii::t('app','状态'),
 			'create_at' => yii::t('app','创建时间'),
 			'update_at' => yii::t('app','修改时间'),
-				'is_sync' => yii::t('app','是否同步'),
+			'is_sync' => yii::t('app','是否同步'),
 		);
 	}
 
