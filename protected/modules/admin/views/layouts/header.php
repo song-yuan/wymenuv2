@@ -138,6 +138,9 @@
 						<li id="shift_logout">
                                                     <a href="<?php echo $this->createUrl('default/shiftlogout',array("companyId"=>$this->companyId));?>" ><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>
 						</li>
+						<li id="ceshi_colse">
+                                                    <a ><i class="fa fa-reply-all"></i> <?php echo yii::t('app','退出后台');?></a>
+						</li>
 					</ul>
 				</li>
 				<!-- END USER LOGIN DROPDOWN -->
@@ -214,7 +217,12 @@
                     content: $('#portlet-lockscreen1111')
                 });
             });
-            
+            $('#ceshi_colse').on(event_clicktouchstart, function(){
+//              var $modal=$('#portlet-lockscreen');
+//              $modal.modal();
+              //自定页
+            	appcan.window.close(this);
+          });
             function getnotificationnum(){
                 $.get('<?php echo $this->createUrl('default/msgnum',array('companyId'=>$this->companyId));?>',function(data){
                 if(data.status) {
