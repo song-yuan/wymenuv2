@@ -198,7 +198,12 @@
 							<div class="ku-item-info">账单详情</div>
 						</div>
 					</a>
-					
+					<a href="<?php echo $this->createUrl('statements/takeaway',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey ygyye"></div>
+							<div class="ku-item-info">送餐员业绩</div>
+						</div>
+					</a>
 					<a href="<?php echo $this->createUrl('statements/recharge',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey czjl"></div>
