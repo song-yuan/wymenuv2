@@ -1094,6 +1094,42 @@ public function actionPayallReport(){
 				'str'=>$str,
 		));
 	}
+	/**
+	 *
+	 * 员工营业额统计
+	 *
+	 */
+	public function actionTakeaway(){
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$download = Yii::app()->request->getParam('d',0);
+		$beginTime = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+	
+		$db = Yii::app()->db;
+		$sql = 'select t.* from (select t1.member_name,t1.cardId,sum(t.reality_total) as total,count(t.lid) as sum from nb_order t left join nb_takeaway_member t1 on(t.callno = t1.lid and t.dpid = t1.dpid) where t.order_status in (3,4,8) and t.order_type in(2,4) and t.dpid in ('.$str.') and t.create_at >="'.$beginTime.' 00:00:00" and t.create_at <="'.$endTime.' 23:59:59" group by t.callno order by sum desc)t';
+		if($download){
+			$models = $db->createCommand($sql)->queryAll();
+			$this->exportTurnOver($models);
+			exit;
+		}
+		$count = $db->createCommand(str_replace('t.*','count(*)',$sql))->queryScalar();
+		//var_dump($sql);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+	
+		$comName = $this->getComName();
+		$this->render('takeaway',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$beginTime,
+				'end_time'=>$endTime,
+				'comName'=>$comName,
+				'str'=>$str,
+		));
+	}
 	/*
 	 * 账单详情报表
 	 */
@@ -4956,6 +4992,166 @@ public function actionPayallReport(){
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="员工营业额报表（".date('m-d',time())."）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+	
+	
+	}
+
+	/*
+	 *
+	* 送餐员报表
+	*
+	*/
+	public function actionTakeawayReportExport(){
+		$objPHPExcel = new PHPExcel();
+		//$uid = Yii::app()->user->id;
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+	
+		$download = Yii::app()->request->getParam('d',0);
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+	
+		$db = Yii::app()->db;
+		$sql = 'select t1.member_name,t1.cardId,sum(t.reality_total) as total,count(t.lid) as sum from nb_order t left join nb_takeaway_member t1 on(t.callno = t1.lid and t.dpid = t1.dpid) where t.order_status in (3,4,8) and t.order_type in(2,4) and t.dpid in ('.$str.') and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" group by t.callno order by sum desc';
+		$models = Yii::app()->db->createCommand($sql)->queryAll();
+	
+	
+		//设置第1行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+		//设置第2行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
+		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+		//设置字体
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		$styleArray1 = array(
+				'font' => array(
+						'bold' => true,
+						'color'=>array(
+								'rgb' => '000000',
+						),
+						'size' => '20',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		$styleArray2 = array(
+				'font' => array(
+						'color'=>array(
+								'rgb' => 'ff0000',
+						),
+						'size' => '16',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		//大边框样式 边框加粗
+		$lineBORDER = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THICK,
+								'color' => array('argb' => '000000'),
+						),
+				),
+		);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+		//细边框样式
+		$linestyle = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THIN,
+								'color' => array('argb' => 'FF000000'),
+						),
+				),
+		);
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1','送餐员报表')
+		->setCellValue('A2',yii::t('app','报表查询时间段：').$begin_time.yii::t('app',' 至 ').$end_time."  ".yii::t('app','报表生成时间：').date('m-d h:i',time()))
+		->setCellValue('A3','序号')
+		->setCellValue('B3','外卖员')
+		->setCellValue('C3','营业额')
+		->setCellValue('D3','单数');
+		$i=4;
+		foreach($models as $v){
+	
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A'.$i,$i-3)
+			->setCellValue('B'.$i,$v['member_name'].'('.$v['cardId'].')')
+			->setCellValue('C'.$i,$v['total']?$v['total']:0)
+			->setCellValue('D'.$i,$v['sum']?$v['sum']:0);
+	
+			//细边框引用
+				
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':D'.$i)->applyFromArray($linestyle);
+			//设置填充颜色
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('fae9e5');
+			//设置字体靠左
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':B'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+			$objPHPExcel->getActiveSheet()->getStyle('C'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+			$objPHPExcel->getActiveSheet()->getStyle('D'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+			//$objPHPExcel->getActiveSheet()->getStyle('D'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+			//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Cell_DataType::TYPE_STRING);
+			//$objPHPExcel->getActiveSheet()->setCellValueExplicit('A'.$i,1234567890987654321,PHPExcel_Cell_DataType::TYPE_STRING);
+			$i++;
+		}
+		//冻结窗格
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		//$objPHPExcel->getActiveSheet()->freezePane('B4');
+		//$objPHPExcel->getActiveSheet()->freezePane('C4');
+		//$objPHPExcel->getActiveSheet()->freezePane('D4');
+		//$objPHPExcel->getActiveSheet()->freezePane('E4');
+		//$objPHPExcel->getActiveSheet()->freezePane('F4');
+		//$objPHPExcel->getActiveSheet()->freezePane('G4');
+		//$objPHPExcel->getActiveSheet()->freezePane('A1');
+		//$objPHPExcel->getActiveSheet()->freezePane('A2:G2');
+		//$objPHPExcel->getActiveSheet()->freezePane('A3:G3');
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:D1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:D2');
+		//单元格加粗，居中：
+		$objPHPExcel->getActiveSheet()->getStyle('A1:D'.$i)->applyFromArray($lineBORDER);//大边框格式引用
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:D2')->applyFromArray($linestyle);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->applyFromArray($linestyle);
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:D3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:D1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:C1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:C2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:C2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+	
+	
+	
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="送餐员报表（".date('m-d',time())."）.xls";
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
