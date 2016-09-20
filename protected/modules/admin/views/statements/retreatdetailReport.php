@@ -88,10 +88,9 @@
 
 								<tr class="odd gradeX">
 								<td><?php echo $model['account_no'];?></td>
-								
 								<td><?php echo $model['product_name'];?></td>
-								<td><?php echo $model['price'];?></td>
-								<td><?php echo $model['amount'];?></td>
+								<td><?php echo sprintf("%.2f",$model['price']);?></td>
+								<td><?php echo $model['retreat_amount'];?></td>
 								<td><?php echo $model['update_at'];?></td>
 								<td><?php echo $model['username'];?></td>
 								<td><?php echo $model['name']; echo '('. $model['retreat_memo'].')';?></td>

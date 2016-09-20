@@ -129,7 +129,13 @@
 			background-image:url(../../../../../../img/waiter/icon-yysj.png);
 			background-position: 14px -335px;
     		background-repeat: no-repeat;
-		}		
+		}	
+		.ku-item.scyyj{
+			background-image:url(../../../../../../img/waiter/icon-scyyj.png);
+			background-position: 14px 10px;
+			background-size: 80%;
+    		background-repeat: no-repeat;
+		}	
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -198,7 +204,12 @@
 							<div class="ku-item-info">账单详情</div>
 						</div>
 					</a>
-					
+					<a href="<?php echo $this->createUrl('statements/takeaway',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey scyyj"></div>
+							<div class="ku-item-info">送餐员业绩</div>
+						</div>
+					</a>
 					<a href="<?php echo $this->createUrl('statements/recharge',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey czjl"></div>

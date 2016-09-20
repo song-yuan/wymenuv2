@@ -138,6 +138,7 @@
 						<li id="shift_logout">
                                                     <a href="<?php echo $this->createUrl('default/shiftlogout',array("companyId"=>$this->companyId));?>" ><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>
 						</li>
+						
 					</ul>
 				</li>
 				<!-- END USER LOGIN DROPDOWN -->
@@ -214,7 +215,7 @@
                     content: $('#portlet-lockscreen1111')
                 });
             });
-            
+
             function getnotificationnum(){
                 $.get('<?php echo $this->createUrl('default/msgnum',array('companyId'=>$this->companyId));?>',function(data){
                 if(data.status) {

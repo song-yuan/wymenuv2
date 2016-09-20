@@ -66,26 +66,33 @@ class UserController extends BackendController
 		));
 	}
 	public function actionCreate() {
- 		
-// 		$sql = 'select username from nb_user where delete_flag = 0 ';
-// 		$command = $db->createCommand($sql);
-// 		$users = $command->queryAll();
-// 		if($users){
-// 			$usernames = " ";
-// 			foreach ($users as $username){
-// 				$usernames =$username['username'].','.$usernames;
-// 			}
-// 			if($usernames!=''){
-// 				$usernames = substr($usernames,0,-2);//除去最后一个“，”
-// 			}
-// 		}
-		//var_dump($usernames);exit;
+
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$model = new UserForm() ;
 		$model->dpid = $companyId ;
 		$model->status = 1;
 				if(Yii::app()->request->isPostRequest) {
 					$model->attributes = Yii::app()->request->getPost('UserForm');
+					$role = $model->role;
+					if($role <=3){
+						$username = $model->username;
+						$ordusername = User::model()->find('username=:name and delete_flag=0' , array(':name'=>$username));
+						if($ordusername){
+							Yii::app()->user->setFlash('error' ,yii::t('app', '该登陆名已存在，请重新取名！！！'));
+							$this->redirect(array('user/create' , 'companyId' => $companyId));
+							//$this->render('create' , array('model' => $model));
+							//$this->render('create' , array('model' => $model,'action' => $this->createUrl('user/create' , array('companyId'=>$this->companyId))));
+						}
+					}else{
+						$username = $model->username;
+						$ordusername = User::model()->find('dpid=:dpid and username=:name and delete_flag=0' , array(':dpid'=> $companyId,':name'=>$username));
+						if($ordusername){
+							Yii::app()->user->setFlash('error' ,yii::t('app', '该登陆名已存在，请重新取名！！！'));
+							$this->redirect(array('user/create' , 'companyId' => $companyId));
+							//$this->render('create' , array('model' => $model));
+							//$this->render('create' , array('model' => $model,'action' => $this->createUrl('user/create' , array('companyId'=>$this->companyId))));
+						}
+					}
 		                        //$model->create_at=date('Y-m-d H:i:s',time());
 		                        //$model->update_at=date('Y-m-d H:i:s',time());
 					if($model->save()){
@@ -134,6 +141,10 @@ class UserController extends BackendController
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
+			$pw = Yii::app()->request->getParam('hidden1');
+			if($pw){
+				$model->password = $pw;
+			}
                         //$model->update_at=date('Y-m-d H:i:s',time());
                         //var_dump($model->attributes);exit;
 			if($model->save()){
@@ -145,7 +156,7 @@ class UserController extends BackendController
 	}
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		if(Yii::app()->user->role > User::ADMIN) {
+		if(Yii::app()->user->role > User::WAITER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有删除权限'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
@@ -158,10 +169,10 @@ class UserController extends BackendController
 					$model->saveAttributes(array('status'=>0,'update_at'=>date('Y-m-d H:i:s',time())));
 				}
 			}
-			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('user/index' , 'companyId' => $companyId));
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('user/index' , 'companyId' => $companyId));
 		}
 	}
         

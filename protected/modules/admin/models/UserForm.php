@@ -33,11 +33,11 @@ class UserForm extends CFormModel
 	{
 		return array(
 				'lid' => 'ID',
-				'username' => yii::t('app','用户名'),
+				'username' => yii::t('app','登陆名'),
 				'password' => yii::t('app','密码'),
 				'dpid'=>yii::t('app','公司名称'),
 				'mobile' => yii::t('app','手机号'),
-				'staff_no' => yii::t('app','员工号'),
+				'staff_no' => yii::t('app','姓名（工号）'),
 				'email' => yii::t('app','电子邮箱'),
 				'role' => yii::t('app','管理员类型'),
 		);

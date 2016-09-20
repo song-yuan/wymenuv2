@@ -14,7 +14,7 @@ class PayMethodController extends BackendController {
 		$criteria = new CDbCriteria;
 		//$criteria->with = 'company' ;
 		//$criteria->condition = Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->companyId ;
-		$criteria->condition = 't.dpid='.$this->companyId ;
+		$criteria->condition = 't.delete_flag = 0 and t.dpid='.$this->companyId ;
 		$pages = new CPagination(PaymentMethod::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -68,7 +68,8 @@ class PayMethodController extends BackendController {
 				foreach ($ids as $id) {
 					$model = PaymentMethod::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId)) ;
 					if($model) {
-						$model->delete();
+						$model->delete_flag = 1;
+						$model->update();
 					}
 				}
 				$this->redirect(array('payMethod/index' , 'companyId' => $companyId)) ;

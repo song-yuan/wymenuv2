@@ -20,7 +20,7 @@ class Helper
 			$companyIds = Company::model()->findAllBySql("select dpid from nb_company where comp_dpid=:dpid",array(':dpid'=>$companyId));
 			//$companyIds = Company::model()->findAllByPk('dpid',"comp_dpid =:dpid",array(':dpid'=>$companyId));
 			//$companyIds = Company::model()->findAllByPk(array('condition'=>'comp_dpid = '.$companyId,'index'=>'dpid'));
-			$dpids = '0';
+			$dpids = $companyId;
 			if($models){
 				foreach ($companyIds as $dpid){
 					$dpids =$dpids.','.$dpid->dpid;

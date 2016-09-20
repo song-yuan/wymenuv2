@@ -1,6 +1,6 @@
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
-       <!-- BEGIN PAGE -->
+         <!-- BEGIN PAGE -->
     <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -25,8 +25,8 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','营业收入（产品分类）报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
-
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','送餐员报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
@@ -34,45 +34,29 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','营业收入报表（菜品分类）');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','送餐员业绩报表');?></div>
 				<div class="actions">
-					<select id="text" class="btn yellow" >
-					<option value="1" <?php if ($text==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','年');?></option>
-					<option value="2" <?php if ($text==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','月');?></option>
-					<option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
-					</select>
-					
-					<select id="setid" class="btn green" >
-					<option value="1" <?php if ($setid==1){?> selected="selected" <?php }?> ><?php echo yii::t('app','综合');?></option>
-					<option value="0" <?php if ($setid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','单品');?></option>
-					<option value="2" <?php if ($setid==2){?> selected="selected" <?php }?> ><?php echo yii::t('app','套餐');?></option>
-					</select>
-				<div class="btn-group">
-				
-				
+				  <div class="btn-group">
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
 								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
 								<span class="input-group-addon">~</span>
 							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
 						  </div>  
-					</div>	
+			    </div>	
 					
 					<div class="btn-group">
 							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
 							<button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-							<!-- <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/text/<?php echo $text;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
 					</div>			
-				</div>
+			    </div>
 			 </div> 
 			
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								
-							<!-- 	<th>序号</th> -->
-								<th><?php echo yii::t('app','时间');?></th>
-								<th style="width:20%;">
+								<th><?php echo yii::t('app','序号');?></th>
+								<!-- <th>
 									<div class="btn-group">
 										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
 										<button type="button" class="btn green dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
@@ -81,7 +65,7 @@
 											
 											<?php foreach($comName as $key=>$value):?>
 
-											<label><input name="accept" id="checkedCNid" class="checkedCN" value="<?php echo $key;?>" type="checkbox"><?php echo $value;?></label>
+											<label><input name="accept" id="cked" class="checkedCN" value="<?php echo $key;?>" type="checkbox"><?php echo $value;?></label>
 											  
 											<?php endforeach;?>
 											
@@ -89,36 +73,30 @@
 												
 										</div>
 									</div>
-								</th>
-                                <th><?php echo yii::t('app','产品类型');?></th> 
-                                <th><?php echo yii::t('app','数量');?></th> 
-                                <th><?php echo yii::t('app','金额统计');?></th>                                                               
-                                <th><?php echo yii::t('app','备注');?></th>
-								
+								</th> -->
+                                <th><?php echo yii::t('app','送餐员(编号)');?></th>
+                                <th><?php echo yii::t('app','单数');?></th>
+                                <th><?php echo yii::t('app','营业额');?></th>
 							</tr>
 						</thead>
 						<tbody>
-							<?php if( $models) :?>
-							<!--foreach-->
-							<?php $a=1;?>
-							<?php foreach ($models as $model):?>
-								<tr class="odd gradeX">
-								<td><?php if($text==1){echo $model['y_all'];}elseif($text==2){ echo $model['y_all'].-$model['m_all'];}else{echo $model['y_all'].-$model['m_all'].-$model['d_all'];}?></td>
-								<td style="width:20%;"><?php echo $model['company_name']; ?></td>
-								<td><?php if (!empty($model['category_name'])){echo $model['category_name'];}else{echo "基础费（餐位费等）";} ?></td>
-								<td><?php echo $model['all_num'];?></td>
-								<td><?php echo sprintf("%.3f",$model['all_price']);?></td>
-								<td></td>
-								
-								
-								
-							<?php $a++;?>
-							<?php endforeach;?>	
-							<!-- end foreach-->
-							<?php endif;?>
+						<?php if( $models) :?>
+							<?php foreach($models as $k=>$model):?>
+							<tr class="odd gradeX">
+								<td><?php echo $k+1;?></td>
+								<td><?php echo $model['member_name'].'('.$model['cardId'].')';?></td>
+								<td><?php echo $model['sum']?$model['sum']:0;?></td>
+								<td><?php echo $model['total']?$model['total']:0;?></td>
+							</tr>
+							<?php endforeach;?>
+						<?php else:?>
+						<tr>
+							<td colspan="4">没有查询到数据</td>
+						</tr>
+						<?php endif;?>
 						</tbody>
 					</table>
-						<?php if($pages->getItemCount()):?>
+					<?php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
@@ -149,7 +127,6 @@
 							</div>
 						</div>
 						<?php endif;?>
-					
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -160,7 +137,6 @@
 <!-- END PAGE -->
 
 <script>
-		//var str=new array();						
 		jQuery(document).ready(function(){
 		    if (jQuery().datepicker) {
 	            $('.date-picker').datepicker({
@@ -173,27 +149,19 @@
 	            
            }
 		});
-// 		  $('#explode1').click(function(){
-// 			  exportincomeReport($models);
-// 		  });
-  
-		   $('#btn_time_query').click(function time() {  
-			  // alert($('#begin_time').val()); 
-			  // alert($('#end_time').val()); 
-			  // alert(111);
+		 
+		       
+		   $('#btn_time_query').click(function() {  
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   var text = $('#text').val();
-			   var setid = $('#setid').val();
 			  // var cid = $(this).val();
-			   location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/setid/"+setid    
+			   location.href="<?php echo $this->createUrl('statements/takeaway' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 			  
 	        });
-		   //a = new Array();
-		   $('#cx').click(function cx(){  
+		   $('#cx').click(function(){  
 			   // var obj = document.getElementById('accept');
 			    var obj=$('.checkedCN');
-			   
+			    
 			    var str=new Array();
 					obj.each(function(){
 						if($(this).attr("checked")=="checked")
@@ -203,48 +171,31 @@
 							
 						}								
 					});
-				 str = str.substr(0,str.length-1);//除去最后一个“，”
+				str = str.substr(0,str.length-1);//除去最后一个“，”
 				//alert(str);
 					  var begin_time = $('#begin_time').val();
 					   var end_time = $('#end_time').val();
-					   var text = $('#text').val();
-					   var setid = $('#setid').val();
 					   //var cid = $(this).val();
+					   
+					 location.href="<?php echo $this->createUrl('statements/takeaway' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
 					  
-					 location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;	  
-					 //return a; 
-			 });
 
+			  });
 			  $('#excel').click(function excel(){
-// 				  var obj=$('#checkedCNid');
-// 				    alert(obj);
-// 				    var str=new Array();
-// 						obj.each(function(){
-// 							alert(1);
-// 							if($(this).attr("checked")=="checked")
-// 							{
-// 								alert(str);
-// 								str += $(this).val()+","
-								
-// 							}								
-// 						});
-// 					str = str.substr(0,str.length-1);//除去最后一个“，”
-				   var str ='<?php echo $str;?>';
+
+				  
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
-				   var text = $('#text').val();
-				   var setid = $('#setid').val();
+				  
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-			    	   //location.href="<?php echo $this->createUrl('statements/incomeReport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-				       
-				    	   
 
-			    	   location.href="<?php echo $this->createUrl('statements/incomeExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
+			    	   location.href="<?php echo $this->createUrl('statements/takeawayReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			       else{
-			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	  // location.href="<?php echo $this->createUrl('statements/turnOver' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			      
 			   });
+
 </script> 
