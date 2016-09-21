@@ -1,3 +1,8 @@
+ <style>
+ .layui-layer{
+	 background-color: rgba(228,238,280,0.8);
+ }
+ </style>
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/echarts.min.js');?>"></script>
@@ -98,16 +103,16 @@
 						<?php endif;?>
 						</tbody>
 					</table>
-					<?php if($pages->getItemCount()):?>
+					<!-- <php if($pages->getItemCount()):?>
 						<div class="row">
 							<div class="col-md-5 col-sm-12">
 								<div class="dataTables_info">
-									<?php echo yii::t('app','共 ');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> ,  <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
+									<?php echo yii::t('app','共 ');?> <php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> ,  <php echo yii::t('app','当前是第');?> <php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
 								</div>
 							</div>
 							<div class="col-md-7 col-sm-12">
 								<div class="dataTables_paginate paging_bootstrap">
-								<?php $this->widget('CLinkPager', array(
+								<php $this->widget('CLinkPager', array(
 									'pages' => $pages,
 									'header'=>'',
 									'firstPageLabel' => '<<',
@@ -128,7 +133,7 @@
 								</div>
 							</div>
 						</div>
-						<?php endif;?>
+						<php endif;?> -->
 				</div>
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
@@ -156,7 +161,8 @@ var option2 = {
         trigger: 'axis'
     },
     grid: {
-        right: '20%'
+        right: '25%',
+        left: '15%',
     },
     toolbox: {
         feature: {
@@ -233,6 +239,30 @@ var option2 = {
 };
  myChart.setOption(option2);
 
+ layer_zhexiantu=layer.open({
+     type: 1,
+     //shift:5,
+     shade: [0.1,'#fff'],
+     move:'#main2',
+     moveOut:true,
+     offset:['50px','50px'],
+     shade: false,
+     title: false, //不显示标题
+     area: ['auto', 'auto'],
+     content: $('#main2'),//$('#productInfo'), //捕获的元素
+     cancel: function(index){
+         layer.close(index);
+         layer_zhexiantu=0;
+//                        this.content.show();
+//                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+     }
+ });
+ layer.style(layer_zhexiantu, {
+	 //background-color: rgba(218,280,28,0.7),
+	}); 
+
+ 
+
  //上面用来生成折线图
 		jQuery(document).ready(function(){
 		    if (jQuery().datepicker) {
@@ -287,7 +317,7 @@ var option2 = {
 				   //alert(str);
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 
-			    	   location.href="<?php echo $this->createUrl('statements/takeawayReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
+			    	   location.href="<?php echo $this->createUrl('statements/timedataReportExport' , array('companyId'=>$this->companyId,'d'=>1));?>/begin_time/"+begin_time+"/end_time/"+end_time;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/turnOver' , array('companyId'=>$this->companyId,'d'=>1));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time;
