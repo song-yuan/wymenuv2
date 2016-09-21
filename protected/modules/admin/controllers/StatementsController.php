@@ -496,23 +496,7 @@ public function actionPayallReport(){
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
 		
-// 		$criteria = new CDbCriteria;
-// 		//$sql ='select t.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all,t1.name from nb_order_pay t left join nb_payment_method t1 on(t.dpid = t1.dpid and t.payment_method_id = t1.lid) where (t.dpid = t1.dpid ) group by t.paytype,t.payment_method_id';
-// 		$criteria->select = 't.paytype, t.payment_method_id,t.dpid, t.update_at,sum(t.pay_amount) as should_all';
-// 	    //利用Yii框架CDB语句时，聚合函数要在model的类里面进行公共变量定义，如：变量should_all在order的class里面定义为public $should_all;
-// 		//$criteria->select = 'sum(t.should_total) as should_all'; //代表了要查询的字段，默认select='*';
-// 		$criteria->with = array("order","paymentMethod"); //连接表
-	
-// 		$criteria->addCondition("t.dpid= ".$this->companyId);
-// 		$criteria->addCondition("order.update_at >='$begin_time 00:00:00'");
-// 		$criteria->addCondition("order.update_at <='$end_time 23:59:59'");
-// 		$criteria->group = "t.paytype,t.payment_method_id";
-	
-// 		$pages = new CPagination(OrderPay::model()->count($criteria));
-// 			$pages->PageSize = 20;
-// 		$pages->applyLimit($criteria);
-	
-// 		$model=  OrderPay::model()->findAll($criteria);
+
 		//var_dump($model);exit;
 		$this->render('recharge',array(
 				'models'=>$models,
@@ -526,7 +510,102 @@ public function actionPayallReport(){
 							//'categoryId'=>$categoryId
 		));
 	}
+	//var sql = '';
+	/*
+	 * 时段报表
+	*/
+	public function actionTimedataReport(){
+		$str = Yii::app()->request->getParam('str',$this->companyId);
+		$text = Yii::app()->request->getParam('text');
+		$download = Yii::app()->request->getParam('d');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
+		$db = Yii::app()->db;
+		$sql = 'select k.* from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all) k';
+		//$sql = 'select k.pay_amount from(select DATEADD(hh,DATEDIFF(hh,0,create_at),0) [Hour],sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by DATEDIFF(hh,0,create_at)) k';
+// 		$sql = '
+// SELECT 
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 0 THEN 1 ELSE 0 END),0) AS "0",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 1 THEN 1 ELSE 0 END),0) AS "1",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 2 THEN 1 ELSE 0 END),0) AS "2",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 3 THEN 1 ELSE 0 END),0) AS "3",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 4 THEN 1 ELSE 0 END),0) AS "4",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 5 THEN 1 ELSE 0 END),0) AS "5",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 6 THEN 1 ELSE 0 END),0) AS "6",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 7 THEN 1 ELSE 0 END),0) AS "7",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 8 THEN 1 ELSE 0 END),0) AS "8",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 9 THEN 1 ELSE 0 END),0) AS "9",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 10 THEN 1 ELSE 0 END),0) AS "10",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 11 THEN 1 ELSE 0 END),0) AS "11",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 12 THEN 1 ELSE 0 END),0) AS "12",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 13 THEN 1 ELSE 0 END),0) AS "13",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 14 THEN 1 ELSE 0 END),0) AS "14",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 15 THEN 1 ELSE 0 END),0) AS "15",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 16 THEN 1 ELSE 0 END),0) AS "16",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 17 THEN 1 ELSE 0 END),0) AS "17",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 18 THEN 1 ELSE 0 END),0) AS "18",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 19 THEN 1 ELSE 0 END),0) AS "19",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 20 THEN 1 ELSE 0 END),0) AS "20",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 21 THEN 1 ELSE 0 END),0) AS "21",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 22 THEN 1 ELSE 0 END),0) AS "22",
+// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 23 THEN 1 ELSE 0 END),0) AS "23"
+// 			from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" ';
+//该语句可查，但是考虑到太耗数据库资源，因此舍弃。。。
+
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//echo($sql);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		
+		$timeprice = array();
+		$timesum = array();
+		$hour = array();
+		//DATEADD(hh,DATEDIFF(hh,0,Date),0) [Hour];
+		//$sql1 = 'select k.pay_amount from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all) k';
+		for ($i =0;$i<24;$i++){
+			$timeprice[$i]='0';
+			$timesum[$i]='0';
+			foreach ($models as $model){
+				if($model['h_all'] == $i ){
+					$timeprice[$i]=$model['pay_amount'];
+					$timesum[$i]=$model['all_account'];
+				}else{
+					
+				}
+			}
+				array_push($hour,$i);
+		}
+		$maxp = array_search(max($timeprice), $timeprice);
+		$maxp = $timeprice[$maxp];
+		$maxs = array_search(max($timesum), $timesum);
+		$maxs = $timesum[$maxs];
+		$timeprice = json_encode($timeprice);
+		$hour = json_encode($hour);
+		$timesum = json_encode($timesum);
+		//var_dump($timeprice);exit;
+		$comName = $this->getComName();
+		$this->render('timedataReport',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				'timeprice'=>$timeprice,
+				'timesum'=>$timesum,
+				'hour'=>$hour,
+				'maxp'=>$maxp,
+				'maxs'=>$maxs,
+				//'money'=>$money,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}                       
 	/*
 	 * 营业数据报表
 	 */
@@ -1098,7 +1177,7 @@ public function actionPayallReport(){
 	}
 	/**
 	 *
-	 * 员工营业额统计
+	 * 送餐员营业额统计
 	 *
 	 */
 	public function actionTakeaway(){
