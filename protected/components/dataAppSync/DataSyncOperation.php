@@ -259,7 +259,8 @@ class DataSyncOperation {
 		if ($result) {
 			return json_encode ( array (
 					'status' => true,
-					'user_id' => $result ['lid'] 
+					'user_id' => $result ['lid'],
+					'staff_no' => $result ['staff_no']
 			) );
 		} else {
 			return json_encode ( array (
