@@ -61,7 +61,7 @@
 		var pw = $('#contentpw').val();
 		if(pw){
 			$("#hidden1").val(pw);
-			alert(pw);
+			//alert(pw);
 			}
 	
         $("#user-form").submit();
