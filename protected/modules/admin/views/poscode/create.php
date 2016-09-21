@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺设置'),'subhead'=>yii::t('app','添加POS'),'breadcrumbs'=>array(array('word'=>yii::t('app','收银机设置'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','POS列表'),'url'=>$this->createUrl('poscode/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加POS'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('poscode/index' , array('companyId' => $this->companyId,)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺设置'),'subhead'=>yii::t('app','添加POS'),'breadcrumbs'=>array(array('word'=>yii::t('app','收银机设置'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','POS列表'),'url'=>$this->createUrl('poscode/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加POS'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('poscode/index' , array('companyId' => $this->companyId,)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
