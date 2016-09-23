@@ -168,6 +168,8 @@ class DataSyncTables
         		"  `queuememo` text NOT NULL DEFAULT '',".
         		"  `printer_id` int(10) NOT NULL,".
                 "  `is_membercard_recharge` varchar(2) NOT NULL DEFAULT '0',".
+        		"  `membercard_code` varchar(16) NOT NULL,".
+        		"  `membercard_enable_date` int(3) NOT NULL DEFAULT '1',".
         		"  `is2_othersystem` char(1) NOT NULL DEFAULT '0',".
 				"  `is2_base_fkxx` char(1) NOT NULL DEFAULT '0',".
 				"  `is2_base_tjlb` char(1) NOT NULL DEFAULT '0',".
@@ -521,6 +523,7 @@ class DataSyncTables
 				"  `ages` varchar(20) NOT NULL DEFAULT '18-25' ,".
 				"  `all_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
 				"  `card_status` varchar(1) NOT NULL DEFAULT '0' ,".
+        		"  'enable_date' TIMESTAMP NOT NULL DEFAULT (datetime('now', 'localtime')),".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111' ,".
         		"  PRIMARY KEY (`lid`,`dpid`)".

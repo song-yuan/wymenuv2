@@ -13,9 +13,12 @@ class DataSyncTableData
     	$this->tableName = $tableName;
     }
     public function getInitData(){
-    	$sql = 'select * from ' . $this->tableName . ' where dpid=:dpid';
+    	$sql = 'select * from ' . $this->tableName . ' where dpid in (:dpid)';
     	if(!in_array($this->tableName,$this->tableArr)){
     		$sql .= ' and delete_flag = 0';
+    	}
+    	if($this->tableName=='nb_member_card'||$this->tableName=='nb_brand_user_level'){
+    		$this->dpid = WxCompany::getDpids($dpid);
     	}
     	$data = Yii::app()->db->createCommand($sql)
     							->bindValue(':dpid',$this->dpid)

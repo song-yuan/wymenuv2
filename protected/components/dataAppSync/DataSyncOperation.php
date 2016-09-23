@@ -670,6 +670,7 @@ class DataSyncOperation {
 				'mobile' => $obj->mobile,
 				'sex' => $obj->sex,
 				'ages' => $obj->ages,
+				'enable_date' => $obj->enable_date,
 				'is_sync' => $isSync 
 		);
 		$result = Yii::app ()->db->createCommand ()->insert ( 'nb_member_card', $inserMemberCardrArr );
