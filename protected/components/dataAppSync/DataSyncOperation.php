@@ -356,6 +356,8 @@ class DataSyncOperation {
 					'create_at' => $createAt,
 					'update_at' => date ( 'Y-m-d H:i:s', $time ),
 					'account_no' => $accountNo,
+					'classes' => $orderInfo->classes,
+					'username' => $orderInfo->username,
 					'user_id' => '0',
 					'site_id' => $orderInfo->site_id,
 					'is_temp' => $orderInfo->is_temp,
