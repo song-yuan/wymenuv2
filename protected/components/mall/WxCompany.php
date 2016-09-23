@@ -18,4 +18,12 @@ class WxCompany
 		}
 	    return $company;
 	}
+	public static function getDpids($dpid){
+		$coompany = self::get($dpid);
+		$memCode = $coompany['membercard_code'];
+		$sql = 'select dpid from nb_company where membercard_code="'.$memCode.'" and delete_flag=0';
+		$dpids = Yii::app()->db->createCommand($sql)->queryColumn();
+		$dpidJoin = join(',',$dpids);
+		return $dpidJoin;
+	}
 }
