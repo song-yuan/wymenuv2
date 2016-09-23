@@ -120,6 +120,12 @@
 							<div class="ku-item-info">微信设置</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('poscode/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple tbsj"></div>
+							<div class="ku-item-info">收银机设置</div>
+						</div>
+					</a>
 					<!--
 					<a href="#">
 						<div class="pull-left margin-left-right">
@@ -127,14 +133,14 @@
 							<div class="ku-item-info">权限设置</div>
 						</div>
 					</a>
-					-->
+					
 					<a href="<?php echo $this->createUrl('synchronous/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple tbsj"></div>
 							<div class="ku-item-info">同步数据</div>
 						</div>
 					</a>
-					
+					-->
 				</div>
 			</div>
 		</div>
