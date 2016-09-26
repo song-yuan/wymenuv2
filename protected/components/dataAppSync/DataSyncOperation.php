@@ -356,6 +356,8 @@ class DataSyncOperation {
 					'create_at' => $createAt,
 					'update_at' => date ( 'Y-m-d H:i:s', $time ),
 					'account_no' => $accountNo,
+					'classes' => $orderInfo->classes,
+					'username' => $orderInfo->username,
 					'user_id' => '0',
 					'site_id' => $orderInfo->site_id,
 					'is_temp' => $orderInfo->is_temp,
@@ -670,6 +672,7 @@ class DataSyncOperation {
 				'mobile' => $obj->mobile,
 				'sex' => $obj->sex,
 				'ages' => $obj->ages,
+				'enable_date' => $obj->enable_date,
 				'is_sync' => $isSync 
 		);
 		$result = Yii::app ()->db->createCommand ()->insert ( 'nb_member_card', $inserMemberCardrArr );
