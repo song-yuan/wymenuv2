@@ -88,6 +88,12 @@
 			background-position: -725px 15px;
     		background-repeat: no-repeat;
 		}
+		.ku-item.syjsz{
+			background-image:url(../../../../img/waiter/icon-syjsz.png);
+			background-position: 13px 13px;
+    		background-repeat: no-repeat;
+			background-size: 80%;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -120,12 +126,14 @@
 							<div class="ku-item-info">微信设置</div>
 						</div>
 					</a>
+					<?php if(Yii::app()->user->role <= User::ADMIN):?>
 					<a href="<?php echo $this->createUrl('poscode/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple tbsj"></div>
+							<div class="ku-item ku-purple syjsz"></div>
 							<div class="ku-item-info">收银机设置</div>
 						</div>
 					</a>
+					<?php endif;?>
 					<!--
 					<a href="#">
 						<div class="pull-left margin-left-right">

@@ -510,6 +510,65 @@ public function actionPayallReport(){
 							//'categoryId'=>$categoryId
 		));
 	}
+	/*
+	 * 办卡记录报表
+	*/
+	public function actionMembercard(){
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$text = Yii::app()->request->getParam('text');
+		$membercard = "";
+		$branduser = "";
+		$db = Yii::app()->db;
+		if($text==1){
+			$sql = 'select k.* from nb_member_card k where k.delete_flag = 0 and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" and k.dpid in('.$this->companyId.')';
+			//var_dump($sql);exit;
+		}
+		//传统卡充值
+		//$sql = 'select sum(t.reality_money) as all_money from nb_member_recharge t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		//$money = Yii::app()->db->createCommand($sql)->queryRow();
+		//var_dump($models);exit;
+		//var_dump($money);exit;
+		if($text==2){
+			$sql = 'select k.* from nb_brand_user k where k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" and k.dpid in('.$this->companyId.') ';
+			//var_dump($sql);exit;
+		}
+		if($text==3){
+			//$money = "0";
+			//传统卡充值
+			$sql = 'select k.* from(select count(t.lid) as card_num from nb_member_card t where t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" ) k';
+			$membercard = Yii::app()->db->createCommand($sql)->queryRow();
+			//微信会员卡充值
+			$sql = 'select k.* from(select count(t.lid) as brand_num from nb_brand_user t where t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59") k ';
+			$branduser = Yii::app()->db->createCommand($sql)->queryRow();
+	
+		}
+		//微信会员卡充值
+		//$sql = 'select sum(t.recharge_money) as all_recharge,sum(t.cashback_num) as all_cashback from nb_recharge_record t where t.dpid = '.$this->companyId.' and t.update_at >="'.$begin_time.' 00:00:00" and t.update_at <="'.$end_time.' 23:59:59" ';
+		//$recharge = Yii::app()->db->createCommand($sql)->queryRow();
+	
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+	
+	
+		//var_dump($model);exit;
+		$this->render('membercard',array(
+				'models'=>$models,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'membercard'=>$membercard,
+				'branduser'=>$branduser,
+				'text'=>$text,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
 	//var sql = '';
 	/*
 	 * 时段报表
@@ -1187,7 +1246,7 @@ public function actionPayallReport(){
 		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$db = Yii::app()->db;
-		$sql = 'select t.* from (select t1.member_name,t1.cardId,sum(t.reality_total) as total,count(t.lid) as sum from nb_order t left join nb_takeaway_member t1 on(t.callno = t1.lid and t.dpid = t1.dpid) where t.order_status in (3,4,8) and t.order_type in(2,4) and t.dpid in ('.$str.') and t.create_at >="'.$beginTime.' 00:00:00" and t.create_at <="'.$endTime.' 23:59:59" group by t.callno order by sum desc)t';
+		$sql = 'select t.* from (select t1.member_name,t1.cardId,sum(t.should_total) as total,count(t.lid) as sum from nb_order t left join nb_takeaway_member t1 on(t.callno = t1.lid and t.dpid = t1.dpid) where t.order_status in (3,4,8) and t.order_type in(2,4) and t.dpid in ('.$str.') and t.create_at >="'.$beginTime.' 00:00:00" and t.create_at <="'.$endTime.' 23:59:59" group by t.callno order by sum desc)t';
 		if($download){
 			$models = $db->createCommand($sql)->queryAll();
 			$this->exportTurnOver($models);

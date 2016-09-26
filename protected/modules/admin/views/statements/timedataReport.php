@@ -1,6 +1,6 @@
  <style>
  .layui-layer{
-	 background-color: rgba(228,238,280,0.8);
+	 background-color: rgba(128,238,280,0.4);
  }
  </style>
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
@@ -28,7 +28,7 @@
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
-	<div id="main2" style="width: 600px;height:400px;"></div>
+	<div id="main2" style="width: 600px;height:400px;" onMouseOver="this.style.background='#fff'" onmouseout="this.style.background=''"></div>
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
@@ -257,9 +257,7 @@ var option2 = {
 //                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
      }
  });
- layer.style(layer_zhexiantu, {
-	 //background-color: rgba(218,280,28,0.7),
-	}); 
+
 
  
 

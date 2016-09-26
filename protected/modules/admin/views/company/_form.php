@@ -52,6 +52,27 @@
 											<?php echo $form->error($model, 'is_membercard_recharge' )?>
 										</div> 
 									</div>
+									<div class="form-group"> 
+										<?php echo $form->label($model, 'membercard_code',array('class' => 'col-md-3 control-label'));?>
+ 										<div class="col-md-4"> 
+											<?php echo $form->textField($model, 'membercard_code' ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('membercard_code')));?>
+											<?php echo $form->error($model, 'membercard_code' )?>
+										</div> 
+									</div>
+									<div class="form-group"> 
+										<?php echo $form->label($model, 'membercard_enable_date',array('class' => 'col-md-3 control-label'));?>
+ 										<div class="col-md-4"> 
+											<?php echo $form->textField($model, 'membercard_enable_date' ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('membercard_enable_date'),'onkeyup'=>"if(isNaN(value))execCommand('undo')", 'onafterpaste'=>"if(isNaN(value))execCommand('undo')" ));?>
+											<?php echo $form->error($model, 'membercard_enable_date' )?>
+										</div> 
+									</div>
+									<div class="form-group"> 
+										<?php echo $form->label($model, 'membercard_points_type',array('class' => 'col-md-3 control-label'));?>
+ 										<div class="col-md-4"> 
+											<?php echo $form->dropDownList($model, 'membercard_points_type' ,array( '0' => yii::t('app','不积分') , '1' => yii::t('app','按订单原价积分') , '2' => yii::t('app','按订单实收价积分')),array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('membercard_points_type')));?>
+											<?php echo $form->error($model, 'membercard_points_type' )?>
+										</div> 
+									</div>
 									<?php endif;?>
 									
 									<div class="form-group">
