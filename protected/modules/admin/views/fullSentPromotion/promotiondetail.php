@@ -218,7 +218,7 @@
             var chx=document.getElementById("optionsCheck"+vid);
             var optid;
             var optvalue;
-            var checkvalue = '0';
+            var checkvalue = '1';
             var cid = $(this).val();
             //alert(chx);
 			var promotionID='<?php echo $promotionID;?>';

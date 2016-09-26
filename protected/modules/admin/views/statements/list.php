@@ -52,7 +52,19 @@
 			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
 			background-position: -440px 15px;
     		background-repeat: no-repeat;
-		}		
+		}	
+		.ku-item.sdbb{
+			background-image:url(../../../../../../img/waiter/icon-sdbb.png);
+			background-position: 13px 15px;
+    		background-repeat: no-repeat;
+			background-size: 80%;
+		}
+		.ku-item.bkjl{
+			background-image:url(../../../../../../img/waiter/icon-bkjl.png);
+			background-position: 12px 13px;
+    		background-repeat: no-repeat;
+			background-size: 80%;
+		}	
 		.ku-item.sskc{
 			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
 			background-position: -590px 15px;
@@ -212,7 +224,7 @@
 					</a>
 					<a href="<?php echo $this->createUrl('statements/timedataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey scyyj"></div>
+							<div class="ku-item ku-grey sdbb"></div>
 							<div class="ku-item-info">时段报表</div>
 						</div>
 					</a>
@@ -220,6 +232,12 @@
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey czjl"></div>
 							<div class="ku-item-info">充值记录</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('statements/membercard',array('companyId' => $this->companyId,'text'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey bkjl"></div>
+							<div class="ku-item-info">办卡记录</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('statements/channelsproportion',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">

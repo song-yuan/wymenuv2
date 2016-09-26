@@ -115,8 +115,8 @@
 												<a style="color: red;"><?php echo yii::t('app','例：88折填写为0.88');?></a>
 												</label>
                                                 <label class="radio-inline">
-                                                <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['number'])) echo "checked";?>> <?php echo yii::t('app','数量限制');?>
-                                                <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['number'])) echo $model['number']; else echo '无限制'; ?>" onfocus=" if (value =='无限制'){value = ''}" onblur="if (value ==''){value='无限制'}" >
+                                                <input type="checkbox" name="optionsCheck<?php echo $model['lid'];?>" id="optionsCheck<?php echo $model['lid'];?>" value="0" <?php if(!empty($model['number'])) echo "checked";else echo "checked";?>> <?php echo yii::t('app','数量限制');?>
+                                                <input type="text" style="width:60px;" name="leftnum<?php echo $model['lid'];?>" id="checknum<?php echo $model['lid'];?>" value="<?php if(!empty($model['number'])) echo $model['number']; else echo '1'; ?>" onfocus=" if (value =='1'){value = ''}" onblur="if (value ==''){value='1'}" >
                                                 <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value=<?php echo yii::t('app','保存');?> >
                                                  <input type="button" name="delete<?php echo $model['lid'];?>" id="delete<?php echo $model['lid'];?>" class="clear_red" value=<?php echo yii::t('app','移除');?> >
                                                 
@@ -211,7 +211,7 @@
             var chx=document.getElementById("optionsCheck"+vid);
             var optid;
             var optvalue;
-            var checkvalue = '0';
+            var checkvalue = '1';
             var cid = $(this).val();
             //alert(chx);
 			var promotionID='<?php echo $promotionID;?>';
@@ -237,10 +237,10 @@
               	return false;
                   }
                 }
-			if(chx.checked)
-				{
+			//if(chx.checked)
+			//	{
 				checkvalue= $("#checknum"+vid).val();
-				}
+			//	}
 			//alert(optid);
 			//alert(optvalue);
             //alert(checkvalue);
@@ -261,7 +261,7 @@
                                 
                                 location.reload();
                             }else{
-                                alert("<?php echo yii::t('app','失败'); ?>"+"1")
+                                alert("<?php echo yii::t('app','失败'); ?>"+"1");
                                 location.reload();
                             }
  			},
@@ -290,7 +290,7 @@
                                 
                                 location.reload();
                             }else{
-                                alert("<?php echo yii::t('app','失败'); ?>"+"1")
+                                alert("<?php echo yii::t('app','失败'); ?>"+"1");
                                 location.reload();
                             }
  			},
