@@ -53,10 +53,10 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','名字');?></th>
+								<th><?php echo yii::t('app','登录名');?></th>
 								<th><?php echo yii::t('app','公司');?></th>
 								<th><?php echo yii::t('app','类型');?></th>
-								<th ><?php echo yii::t('app','员工号');?></th>
+								<th ><?php echo yii::t('app','姓名');?></th>
 								<th><?php echo yii::t('app','手机');?></th>
 								<th >email</th>								
                                                                 <th>&nbsp;</th>

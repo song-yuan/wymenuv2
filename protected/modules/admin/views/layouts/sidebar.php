@@ -16,7 +16,7 @@
 				</li>
 				-->
                 <?php if(Yii::app()->user->role < '4') : ?>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('company', 'companyWifi', 'user' ,'synchronous','weixin' ))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('company', 'companyWifi', 'user' ,'synchronous','weixin','poscode' ))) echo 'active';?>">
 					<a href="<?php echo $this->createUrl('company/list',array('companyId' => $this->companyId));?>">
                     <i class="fa fa-home"></i> 
 					<span class="title"><?php echo yii::t('app','店铺管理');?></span>					

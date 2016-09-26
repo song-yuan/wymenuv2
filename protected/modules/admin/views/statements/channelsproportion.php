@@ -1,4 +1,10 @@
-    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
+ <style>
+ .layui-layer{
+	 background-color: rgba(128,238,280,0.4);
+ }
+ </style>
+    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/echarts.min.js');?>"></script>
+	<script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
     <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
   
 
@@ -23,6 +29,7 @@
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
+	<div id="main2" style="width: 700px;height:400px;display:none;" onMouseOver="this.style.background='#fff'" onmouseout="this.style.background=''"></div>
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
@@ -86,7 +93,7 @@
 									default: echo "";break;}?>
 								</td>
 								<td><?php echo $model['all_account']; ?></td>
-								<td><?php echo sprintf("%.2f",$model['all_amount']/$model['all_ordertype']);?></td>
+								<td><?php echo sprintf("%.2f",$model['all_amount']/$model['all_account']);?></td>
 								<td><?php echo $model['all_amount'];?></td>
 								<td><?php echo sprintf("%.2f",$model['all_amount']*100/$allpay['all_payall']).'%';?></td>
 								<td><?php ?></td>
@@ -154,6 +161,65 @@
 	            
            }
 		});
+		var myChart = echarts.init(document.getElementById('main2'));
+		var option2 = {
+			    title : {
+			        text: '渠道占比图',
+			        subtext: '',
+			        x:'center'
+			    },
+			    tooltip : {
+			        trigger: 'item',
+			        formatter: "{a} <br/>{b} : {c} ({d}%)"
+			    },
+			    legend: {
+			        orient: 'vertical',
+			        left: 'left',
+			        data: ['直接访问','邮件营销']
+			    },
+			    series : [
+			        {
+			            name: '访问来源',
+			            type: 'pie',
+			            radius : '55%',
+			            center: ['50%', '60%'],
+			            data:[
+			                {value:31, name:'直接访问'},
+			                {value:442, name:'邮件营销'}
+			            ],
+			            itemStyle: {
+			                emphasis: {
+			                    shadowBlur: 10,
+			                    shadowOffsetX: 0,
+			                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+			                }
+			            }
+			        }
+			    ]
+			};
+			 //myChart.setOption(option2);
+
+// 			 layer_zhexiantu=layer.open({
+// 			     type: 1,
+// 			     //shift:5,
+// 			     shade: [0.1,'#fff'],
+// 			     move:'#main2',
+// 			     moveOut:true,
+// 			     offset:['50px','50px'],
+// 			     shade: false,
+// 			     title: false, //不显示标题
+// 			     area: ['auto', 'auto'],
+// 			     content: $('#main2'),//$('#productInfo'), //捕获的元素
+// 			     cancel: function(index){
+// 			         layer.close(index);
+// 			         layer_zhexiantu=0;
+// //			                        this.content.show();
+// //			                        layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构',{time: 5000});
+// 			     }
+// 			 });
+		
+
+
 		
 		function MM_over(mmObj) {
 			var mSubObj = mmObj.getElementsByTagName("div")[0];
