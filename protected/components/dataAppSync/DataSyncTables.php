@@ -170,6 +170,7 @@ class DataSyncTables
                 "  `is_membercard_recharge` varchar(2) NOT NULL DEFAULT '0',".
         		"  `membercard_code` varchar(16) NOT NULL,".
         		"  `membercard_enable_date` int(3) NOT NULL DEFAULT '1',".
+        		"  `membercard_points_type` varchar(2) NOT NULL DEFAULT '0',".
         		"  `is2_othersystem` char(1) NOT NULL DEFAULT '0',".
 				"  `is2_base_fkxx` char(1) NOT NULL DEFAULT '0',".
 				"  `is2_base_tjlb` char(1) NOT NULL DEFAULT '0',".
