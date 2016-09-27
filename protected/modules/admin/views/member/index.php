@@ -65,10 +65,10 @@
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','传统卡会员列表');?></div>
-					<div class="actions">
+					<!-- <div class="actions">
 						<a href="javascript:;" class="btn green add_btn"><i class="fa fa-plus"></i> <?php echo yii::t('app','充 值');?></a>
 						<a href="<?php echo $this->createUrl('member/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添 加');?></a>
-					</div>
+					</div> -->
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -80,6 +80,7 @@
 								<th><?php echo yii::t('app','年龄');?></th>
 								<th><?php echo yii::t('app','联系方式');?></th>
 								<th><?php echo yii::t('app','金额');?></th>
+								<th><?php echo yii::t('app','积分');?></th>
 								<th><?php echo yii::t('app','时间');?></th>
 								<th>&nbsp;</th>
 							</tr>
@@ -94,12 +95,13 @@
 								<td ><?php echo $model->ages;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->all_money;?></td>
+								<td ><?php echo $model->all_points;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/consumerRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','消费记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
-                                    <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a>
+                                    <!-- <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a> -->
 								</td>
 							</tr>
 						<?php endforeach;?>
