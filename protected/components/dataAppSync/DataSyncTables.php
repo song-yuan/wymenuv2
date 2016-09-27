@@ -535,7 +535,7 @@ class DataSyncTables
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
         		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
-        		"  `member_card_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `member_card_rfid` varchar(10) NOT NULL DEFAULT '0',".
         		"  `order_id` int(10) NOT NULL DEFAULT '0',".
         		"  `points` int(10) NOT NULL DEFAULT '0',".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
