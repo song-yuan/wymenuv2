@@ -332,6 +332,11 @@ class DataSyncOperation {
 		} else {
 			$orderAddress = array ();
 		}
+		if (isset ( $obj->member_points )) {
+			$memberPoints = $obj->member_points;
+		} else {
+			$memberPoints = array ();
+		}
 		
 		$accountNo = $orderInfo->account_no;
 		$createAt = $orderInfo->creat_at;
@@ -538,6 +543,24 @@ class DataSyncOperation {
 				}
 			}
 			
+			//会员卡积分
+			if(!empty($memberPoints)){
+				$se = new Sequence ( "member_points" );
+				$memberPointId = $se->nextval ();
+				$memberPointData = array (
+						'lid' => $memberPointId,
+						'dpid' => $dpid,
+						'create_at' => date ( 'Y-m-d H:i:s', $time ),
+						'update_at' => date ( 'Y-m-d H:i:s', $time ),
+						'member_card_rfid' => $memberPoints->member_card_rfid,
+						'order_id' => $orderId,
+						'points' => $memberPoints->receive_points,
+						'is_sync' => $isSync
+				);
+				Yii::app ()->db->createCommand ()->insert ( 'nb_member_points', $memberPointData );
+				$sql = 'update nb_member_card set all_points = all_points+'.$memberPoints->receive_points.' where rfid='.$memberPoints->member_card_rfid.' and dpid='.$dpid;
+				Yii::app ()->db->createCommand ($sql)->execute();
+			}
 			$transaction->commit ();
 			$msg = json_encode ( array (
 					'status' => true,
