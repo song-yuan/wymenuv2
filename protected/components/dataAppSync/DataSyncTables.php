@@ -51,6 +51,7 @@ class DataSyncTables
     public $otherTableName=array(
         array("name"=>"会员等级","table"=>"nb_brand_user_level"),
         array("name"=>"本店会员","table"=>"nb_member_card"),
+    	array("name"=>"本店会员积分","table"=>"nb_member_points"),
         array("name"=>"本店会员充值","table"=>"nb_member_recharge"),
         array("name"=>"折扣表","table"=>"nb_discount"),
        // array("name"=>"本店活动","table"=>"nb_local_activity"),//这张表云端暂时没有
@@ -523,10 +524,22 @@ class DataSyncTables
 				"  `sex` varchar(1) NOT NULL DEFAULT 'm' ,".
 				"  `ages` varchar(20) NOT NULL DEFAULT '18-25' ,".
 				"  `all_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `all_points` int(10) NOT NULL DEFAULT '0',".
 				"  `card_status` varchar(1) NOT NULL DEFAULT '0' ,".
         		"  'enable_date' TIMESTAMP NOT NULL DEFAULT (datetime('now', 'localtime')),".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111' ,".
+        		"  PRIMARY KEY (`lid`,`dpid`)".
+        		");",
+        	"nb_member_points"=>" CREATE TABLE 'nb_member_points'('lid' int(10) NOT NULL,".
+        		"  'dpid' int(10) NOT NULL,".
+        		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
+        		"  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `member_card_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `order_id` int(10) NOT NULL DEFAULT '0',".
+        		"  `points` int(10) NOT NULL DEFAULT '0',".
+        		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
+        		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
         		");",
         	"nb_member_recharge"=>" CREATE TABLE 'nb_member_recharge'('lid' int(10) NOT NULL,".
