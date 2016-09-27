@@ -92,7 +92,7 @@
 								</th>
                                 <th><?php echo yii::t('app','产品类型');?></th> 
                                 <th><?php echo yii::t('app','数量');?></th> 
-                                <th><?php echo yii::t('app','金额统计');?></th>                                                               
+                                <th><?php echo yii::t('app','金额统计(退款)');?></th>                                                               
                                 <th><?php echo yii::t('app','备注');?></th>
 								
 							</tr>
@@ -107,7 +107,7 @@
 								<td style="width:20%;"><?php echo $model['company_name']; ?></td>
 								<td><?php if (!empty($model['category_name'])){echo $model['category_name'];}else{echo "基础费（餐位费等）";} ?></td>
 								<td><?php echo $model['all_num'];?></td>
-								<td><?php echo sprintf("%.3f",$model['all_price']);?></td>
+								<td><?php echo sprintf("%.3f",$model['all_price']-$model['retreat_all']).'(-'.sprintf("%.3f",$model['retreat_all']).')';?></td>
 								<td></td>
 								
 								
