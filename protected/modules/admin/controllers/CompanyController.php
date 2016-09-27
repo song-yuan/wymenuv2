@@ -80,6 +80,7 @@ class CompanyController extends BackendController
 		}
 	}
 	public function actionCreate(){
+		$type = '-1';
 		if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role == User::ADMIN) {
 		
 		$model = new Company();
@@ -130,7 +131,8 @@ class CompanyController extends BackendController
 				'model' => $model,
 				'printers'=>$printers,
 				'role'=>$role,
-                'companyId'=>  $this->companyId
+                'companyId'=>  $this->companyId,
+				'type'=> $type
 		));
 		
 		
@@ -141,6 +143,7 @@ class CompanyController extends BackendController
 	public function actionUpdate(){
 		$role = Yii::app()->user->role;
 		$dpid = Helper::getCompanyId(Yii::app()->request->getParam('dpid'));
+		$type = Yii::app()->request->getParam('type');
 		$model = Company::model()->find('dpid=:companyId' , array(':companyId' => $dpid)) ;
 		if(Yii::app()->request->isPostRequest) {
                         Until::isUpdateValid(array(0),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -160,7 +163,8 @@ class CompanyController extends BackendController
 				'model'=>$model,
 				'printers'=>$printers,
 				'role'=>$role,
-                'companyId'=>$this->companyId
+                'companyId'=>$this->companyId,
+				'type'=>$type,
 		));
 	}
 	public function actionDelete(){
