@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员管理'),'subhead'=>yii::t('app','会员消费列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','会员管理'),'url'=>''))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员中心'),'subhead'=>yii::t('app','消费记录'),'breadcrumbs'=>array(array('word'=>yii::t('app','传统卡会员'),'url'=>$this->createUrl('member/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','传统卡会员列表'),'url'=>$this->createUrl('member/index' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','消费记录'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('member/index' , array('companyId' => $this->companyId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
