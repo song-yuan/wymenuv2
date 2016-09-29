@@ -100,6 +100,7 @@
 								<td class="center">
 									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/consumerRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','消费记录');?></a>&nbsp;
+									<a href="<?php echo $this->createUrl('member/pointsRecord',array('rfid' => $model->rfid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','积分记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>&nbsp;
                                     <!-- <a class="deletememberid" data-id="<?php echo $model->lid;?>" href="javascript:;"><?php echo yii::t('app','删除');?></a> -->
 								</td>
