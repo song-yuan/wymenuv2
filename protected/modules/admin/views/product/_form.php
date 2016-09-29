@@ -9,6 +9,7 @@
 								<style>
 								#category_container select {display:block;float:left;margin-right:3px;max-width:200px;overflow:hidden;}
 								</style>
+								<?php  if($istempp){ $a = true;}else{$a=false;}?>
 								<div class="form-body">
 									<div class="form-group  <?php if($model->hasErrors('category_id')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'category_id',array('class' => 'col-md-3 control-label'));?>
@@ -18,12 +19,23 @@
 										</div>
 										<?php echo $form->hiddenField($model,'category_id',array('class'=>'form-control')); ?>
 									</div>
-								
+								<?php if($istempp){ echo '<script>
+															$(".category_selecter").each(function(){
+																$(this).attr("disabled",true)
+																//document.querySelector(".category_selecter").setAttribute("disabled",true);
+															});
+															//var btn=document.querySelector(".category_selecter");
+															//for(var i;i<=btn.length;i++){
+																//$("#test").attr("test","aaa")
+															//	}
+															//btn.disabled=true;
+																				</script>';}?>
 									<div class="form-group <?php if($model->hasErrors('product_name')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'product_name',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->textField($model, 'product_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('product_name')));?>
+											<?php echo $form->textField($model, 'product_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('product_name'),'disabled'=>$a,));?>
 											<?php echo $form->error($model, 'product_name' )?>
+											<?php if($istempp):?><span style="color: red;">来自总部下发菜品，无法修改以上选项</span><?php endif;?>
 										</div>
 									</div>
 									<div class="form-group <?php if($model->hasErrors('main_picture')) echo 'has-error';?>">
@@ -171,7 +183,7 @@
 	   			dataType:'json',
 	   			success:function(result){
 	   				if(result.data.length){
-	   					var str = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter">'+
+	   					var str = '<select class="form-control category_selecter" tabindex="-1" name="category_id_selecter" ,<?php if ($a) echo 'disabled = true';else echo '';?>>'+
 	   					'<option value="">--'+"<?php echo yii::t('app','请选择');?>"+'--</option>';
 	   					$.each(result.data,function(index,value){
 	   						str = str + '<option value="'+value.id+'">'+value.name+'</option>';
@@ -179,6 +191,7 @@
 	   					str = str + '</select>';
 	   					$parent.append(str);
 	   					$('#Product_category_id').val('');
+	   					
 	   					$parent.find('span').remove();
 	   				}else{
                                                 //if(selname == 'category_id_selecter2')
@@ -186,8 +199,12 @@
 	   				}
 	   			}
 	   		});
+	   		
 	   });
-	
+		function a(){
+			alert('wodaole');
+			document.getElementByName("category_id_selecter").setAttribute("disabled","true");
+			}
 		function swfupload_callback(name,path,oldname)  {
 			$("#Product_main_picture").val(name);
 			$("#thumbnails_1").html("<img src='"+name+"?"+(new Date()).getTime()+"' />"); 

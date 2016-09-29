@@ -37,7 +37,7 @@ class ProductController extends BackendController
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 		$models = Product::model()->findAll($criteria);
-		
+		//var_dump($models);exit;
 		$categories = $this->getCategories();
 //                var_dump($categories);exit;
 		$this->render('index',array(
@@ -52,6 +52,7 @@ class ProductController extends BackendController
 	}
 	public function actionCreate(){
 		$model = new Product();
+		$istempp = Yii::app()->request->getParam('istempp',0);
 		$model->dpid = $this->companyId ;
 		//$model->create_time = time();
 		
@@ -96,12 +97,15 @@ class ProductController extends BackendController
                 //echo 'ss';exit;
 		$this->render('create' , array(
 			'model' => $model ,
-			'categories' => $categories
+			'categories' => $categories,
+			'istempp' => $istempp,
 		));
 	}
 	
 	public function actionUpdate(){
 		$id = Yii::app()->request->getParam('id');
+		$istempp = Yii::app()->request->getParam('istempp');
+		//var_dump($istempp);exit;
 		$model = Product::model()->find('lid=:productId and dpid=:dpid' , array(':productId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
 		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -119,7 +123,8 @@ class ProductController extends BackendController
 		//$departments = $this->getDepartments();
 		$this->render('update' , array(
 				'model' => $model ,
-				'categories' => $categories
+				'categories' => $categories,
+				'istempp' => $istempp,
 		));
 	}
 	public function actionDelete(){
@@ -131,6 +136,7 @@ class ProductController extends BackendController
 			->execute(array( ':companyId' => $this->companyId));
 			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where product_id in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
+			Yii::app()->user->setFlash('success' , yii::t('app','删除成功'));
 			$this->redirect(array('product/index' , 'companyId' => $companyId)) ;
 		} else {
 			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
