@@ -85,6 +85,13 @@ class CopyproductController extends BackendController
         			foreach($catep1 as $category){
         				$catep = ProductCategory::model()->find('chs_code=:ccode and dpid=:companyId and delete_flag =0' , array(':ccode'=>$category['chs_code'],':companyId'=>$dpid));
         				if($catep){
+        					$catep->update_at = date('Y-m-d H:i:s',time());
+        					$catep->category_name = $category['category_name'];
+        					$catep->type = $category['type'];
+        					$catep->chs_code = $category['chs_code'];
+        					$catep->main_picture = $category['main_picture'];
+        					$catep->order_num = $category['order_num'];
+        					$catep->update();
 //         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
 // 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
         				}else{//var_dump($catep);exit;
@@ -141,6 +148,13 @@ class CopyproductController extends BackendController
         					
         					//var_dump($cateptree,$sqltree);exit;
         					if($catep){
+        						$catep->update_at = date('Y-m-d H:i:s',time());
+        						$catep->category_name = $category['category_name'];
+        						$catep->type = $category['type'];
+        						$catep->chs_code = $category['chs_code'];
+        						$catep->main_picture = $category['main_picture'];
+        						$catep->order_num = $category['order_num'];
+        						$catep->update();
         						//         					Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
         						// 	                        $this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
         					}else{//var_dump($catep);exit;
@@ -214,20 +228,20 @@ class CopyproductController extends BackendController
         							'description'=>$product['description'],
         							'rank'=>$product['rank'],
         							'spicy'=>$product['spicy'],
-        							'is_temp_price'=>$product['is_temp_price'],
+        							'is_temp_price'=>'1',
         							'is_member_discount'=>$product['is_member_discount'],
         							'is_special'=>$product['is_special'],
         							'status'=>$product['status'],
         							'dabao_fee'=>$product['dabao_fee'],
         							'is_discount'=>$product['is_discount'],
         							'original_price'=>$product['original_price'],
+        							'member_price'=>$product['member_price'],
         							'product_unit'=>$product['product_unit'],
         							'weight_unit'=>$product['weight_unit'],
         							'is_weight_confirm'=>$product['is_weight_confirm'],
         							'store_number'=>$product['store_number'],
         							'order_number'=>$product['order_number'],
         							'favourite_number'=>$product['favourite_number'],
-        							//'printer_way_id'=>,
         							'is_show'=>$product['is_show'],
         							'delete_flag'=>'0',
         							'is_sync'=>$is_sync,
@@ -235,8 +249,37 @@ class CopyproductController extends BackendController
         					//var_dump($dataprod);exit;
         					$command = $db->createCommand()->insert('nb_product',$dataprod);
         					
-        				}else{
-        					//var_dump($product);exit;
+        				}elseif((!empty($product))&&(!empty($producto))&&(!empty($categoryId))){
+	        					
+	        					$producto->update_at = date('Y-m-d H:i:s',time());
+	        					$producto->category_id = $categoryId['lid'];
+	        					$producto->phs_code = $product['phs_code'];
+	        					$producto->chs_code = $product['chs_code'];
+	        					$producto->product_name = $product['product_name'];
+	        					$producto->simple_code = $product['simple_code'];
+	        					$producto->main_picture = $product['main_picture'];
+	        					$producto->description = $product['description'];
+	        					$producto->rank = $product['rank'];
+	        					$producto->spicy = $product['spicy'];
+	        					$producto->is_temp_price = '1';
+	        					$producto->is_member_discount = $product['is_member_discount'];
+	        					$producto->is_special = $product['is_special'];
+	        					$producto->status = $product['status'];
+	        					$producto->dabao_fee = $product['dabao_fee'];
+	        					$producto->is_discount = $product['is_discount'];
+	        					$producto->original_price = $product['original_price'];
+	        					$producto->member_price = $product['member_price'];
+	        					$producto->product_unit = $product['product_unit'];
+	        					$producto->weight_unit = $product['weight_unit'];
+	        					$producto->is_weight_confirm = $product['is_weight_confirm'];
+	        					$producto->store_number = $product['store_number'];
+	        					$producto->order_number = $product['order_number'];
+	        					$producto->favourite_number = $product['favourite_number'];
+	        					$producto->is_show = $product['is_show'];
+	        					$producto->delete_flag = '0';
+	        					$producto->is_sync = $is_sync;
+	        					$producto->save();
+        					//var_dump($producto);exit;
         				}
         			}
         		}
