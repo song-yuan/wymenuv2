@@ -142,7 +142,7 @@ class MemberController extends BackendController
 		$criteria->addCondition('member_card_id=:memberCardId');
 		$criteria->order = ' lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
-		$criteria->params[':memberCardId']=$member->selfcode;
+		$criteria->params[':memberCardId']=$member->rfid;
 		
 		$pages = new CPagination(MemberConsumer::model()->count($criteria));
 		//$pages->setPageSize(1);
@@ -151,6 +151,37 @@ class MemberController extends BackendController
 		$this->render('consumerrecord',array(
 				'models'=>$models,
 				'pages' => $pages,
+		));
+	}
+	/*
+	 * 
+	 * 查询会员卡积分记录。
+	 * 
+	 * 
+	 */
+	public function actionPointsRecord() {
+		$rfid = Yii::app()->request->getParam('rfid');
+		$member = MemberCard::model()->find('rfid=:rfid and dpid=:dpid',array(':rfid'=>$rfid,':dpid'=>$this->companyId));
+		
+		$criteria = new CDbCriteria;
+		//$criteria->params[':dpid']=$this->companyId;
+		//$criteria->params[':memberCardRfid']=$rfid;
+		
+		$criteria->addCondition(' t.delete_flag=0');
+		$criteria->addCondition(' t.dpid = '.$this->companyId);
+		$criteria->addCondition(' t.member_card_rfid='.$rfid);
+		$criteria->with = array("order");
+		$criteria->order = ' t.lid desc ';
+		
+	
+		$pages = new CPagination(MemberPoints::model()->count($criteria));
+		//$pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		$models = MemberPoints::model()->findAll($criteria);
+		$this->render('pointsrecord',array(
+				'models'=>$models,
+				'pages' => $pages,
+				'member' => $member,
 		));
 	}
 	public function actionCharge() {
