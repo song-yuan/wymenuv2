@@ -43,7 +43,7 @@ class ProductSet extends CActiveRecord
 		return array(
 			array('set_name, lid', 'required'),
 			array('rank, order_number, favourite_number', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid, set_price', 'length', 'max'=>10),
+			array('lid, dpid, set_price, member_price', 'length', 'max'=>10),
 			array('set_name, is_sync', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('main_picture', 'length', 'max'=>255),
@@ -52,7 +52,7 @@ class ProductSet extends CActiveRecord
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, set_name, type, simple_code, main_picture, set_price, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, set_name, type, simple_code, main_picture, set_price, member_price, description, rank, is_member_discount, is_special, is_discount, status,store_number, order_number, favourite_number, delete_flag, is_sync', 'safe', 'on'=>'search'),
 
 		);
 	}
@@ -85,6 +85,7 @@ class ProductSet extends CActiveRecord
 			'simple_code' => 'Simple Code',
 			'main_picture' => yii::t('app','主图片'),
 			'set_price' => yii::t('app','套餐基础价格'),
+			'member_price' => yii::t('app','套餐基础价格（会员）'),
 			'description' => yii::t('app','描述'),
 			'rank' => yii::t('app','推荐星级'),
 			'is_member_discount' => yii::t('app','是否参与会员折扣'),
@@ -126,6 +127,7 @@ class ProductSet extends CActiveRecord
 		$criteria->compare('simple_code',$this->simple_code,true);
 		$criteria->compare('main_picture',$this->main_picture,true);
 		$criteria->compare('set_price',$this->set_price,true);
+		$criteria->compare('member_price',$this->member_price,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('rank',$this->rank);
 		$criteria->compare('is_member_discount',$this->is_member_discount,true);

@@ -65,7 +65,9 @@ class ProductController extends BackendController
 				$command = $db->createCommand($sql);
 				$categoryId = $command->queryRow();
 				//var_dump($categoryId['chs_code']);exit;
-				
+				if(empty($model->member_price)){
+					$model->member_price = $model->original_price;
+				}
 				$se=new Sequence("product");
 				$lid = $se->nextval();
 				$model->lid = $lid;

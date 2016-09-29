@@ -22,6 +22,7 @@
  * @property string $is_discount
  * @property string $status
  * @property string $original_price
+ * @property string $member_price
  * @property string $dabao_fee
  * @property string $product_unit
  * @property string $weight_unit
@@ -54,7 +55,7 @@ class Product extends CActiveRecord
 		return array(
 			array('product_name, simple_code, main_picture, category_id', 'required'),
 			array('rank, spicy, order_number,category_id, favourite_number', 'numerical', 'integerOnly'=>true),
-			array('lid, dpid, category_id, original_price, dabao_fee, product_unit, weight_unit, printer_way_id', 'length', 'max'=>10),
+			array('lid, dpid, category_id, original_price, member_price, dabao_fee, product_unit, weight_unit, printer_way_id', 'length', 'max'=>10),
 			array('product_name, is_sync', 'length', 'max'=>50),
 			array('simple_code', 'length', 'max'=>25),
 			array('chs_code, phs_code', 'length', 'max'=>12),
@@ -65,7 +66,7 @@ class Product extends CActiveRecord
 			array('create_at,description', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, category_id,chs_code,phs_code, product_name, simple_code, main_picture, description, rank, sort, spicy, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, dabao_fee, product_unit, weight_unit, is_weight_confirm, store_number, order_number, favourite_number, printer_way_id, is_show, delete_flag, is_sync', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, category_id,chs_code,phs_code, product_name, simple_code, main_picture, description, rank, sort, spicy, is_temp_price, is_member_discount, is_special, is_discount, status, original_price, member_price, dabao_fee, product_unit, weight_unit, is_weight_confirm, store_number, order_number, favourite_number, printer_way_id, is_show, delete_flag, is_sync', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -115,12 +116,13 @@ class Product extends CActiveRecord
 			'is_discount' =>yii::t('app', '可折'),
 			'status' =>yii::t('app', '状态'),
 			'original_price' =>yii::t('app', '价格'),
+			'member_price' =>yii::t('app', '会员价格'),
 			'dabao_fee' =>yii::t('app', '打包费'),
 			'product_unit' =>yii::t('app', '默认单位'),
 			'weight_unit' =>yii::t('app', '重量单位'),
 			'is_weight_confirm' =>yii::t('app', '是否需要确认重量'),
 			'store_number' =>yii::t('app', '库存数量'),
-                        'order_number' =>yii::t('app', '总下单次数'),
+            'order_number' =>yii::t('app', '总下单次数'),
 			'favourite_number' =>yii::t('app', '总点赞次数'),
 			'printer_way_id' => '打印方案id',
 			'is_show' =>yii::t('app', '可售'),
@@ -167,6 +169,7 @@ class Product extends CActiveRecord
 		$criteria->compare('is_discount',$this->is_discount,true);
 		$criteria->compare('status',$this->status,true);
 		$criteria->compare('original_price',$this->original_price,true);
+		$criteria->compare('member_price',$this->member_price,true);
 		$criteria->compare('dabao_fee',$this->dabao_fee,true);
 		$criteria->compare('product_unit',$this->product_unit,true);
 		$criteria->compare('weight_unit',$this->weight_unit,true);

@@ -39,6 +39,14 @@
 											<span style="color: red;">例：88折（或8.8折）在此处填写为0.88</span>
 										</div>
 									</div>
+									<div class="form-group">
+										<?php echo $form->label($model, 'birthday_discount',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'birthday_discount',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('birthday_discount')));?>
+											<?php echo $form->error($model, 'birthday_discount' )?>
+											<span style="color: red;">例：88折（或8.8折）在此处填写为0.88</span>
+										</div>
+									</div>
                                     <div class="form-group">
 										<?php echo $form->label($model, 'min_charge_money',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
@@ -51,13 +59,6 @@
 										<div class="col-md-4">
 											<?php echo $form->textField($model, 'card_cost',array('class' => 'form-control','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('card_cost')));?>
 											<?php echo $form->error($model, 'card_cost' )?>
-										</div>
-									</div>
-									<div class="form-group">
-										<?php echo $form->label($model, 'enable_date',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->textField($model, 'enable_date',array('class' => 'form-control ui_timepicker','maxLength'=>9,'placeholder'=>$model->getAttributeLabel('enable_date')));?>
-											<?php echo $form->error($model, 'enable_date' )?>
 										</div>
 									</div>
 									<div class="form-actions fluid">

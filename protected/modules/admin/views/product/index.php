@@ -71,6 +71,7 @@
                                 <th><?php echo yii::t('app','点赞数');?></th>
 								<th><?php echo yii::t('app','可折');?></th>
                                 <th><?php echo yii::t('app','可售');?></th>
+                                <th><?php echo yii::t('app','来源');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -94,6 +95,7 @@
                                 <td ><?php echo $model->favourite_number;?></td>
 								<td ><?php echo $model->is_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
                                 <td ><?php echo $model->is_show=='0'?yii::t('app','否'):yii::t('app','是');?></td>
+                                <td ><?php echo $model->is_temp_price;?></td>
                                                                 
 								<td class="center">
 								<a href="<?php echo $this->createUrl('product/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
