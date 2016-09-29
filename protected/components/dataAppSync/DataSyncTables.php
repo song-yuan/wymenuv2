@@ -288,6 +288,7 @@ class DataSyncTables
                     "  `status` char(1) NOT NULL DEFAULT '0',".
                     "  `dabao_fee` decimal(10,2) NOT NULL DEFAULT '0.00',".
                     "  `original_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        			"  `member_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
                     "  `product_unit` varchar(10) NOT NULL,".
                     "  `weight_unit` varchar(10) NOT NULL,".
                     "  `is_weight_confirm` char(1) NOT NULL DEFAULT '0',".
@@ -358,6 +359,7 @@ class DataSyncTables
 				"  `type` varchar(2) NOT NULL DEFAULT '0',".
 				"  `main_picture` varchar(255) NOT NULL,".
         		"  `set_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `member_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
 				"  `description` text NOT NULL,".
 				"  `rank` tinyint(3) NOT NULL DEFAULT '3',".
 				"  `is_member_discount` char(1) NOT NULL DEFAULT '0',".
@@ -500,6 +502,7 @@ class DataSyncTables
         		"  `level_name` varchar(50) NOT NULL,".
         		"  `level_type` varchar(1) NOT NULL DEFAULT '0',".
         		"  `level_discount` varchar(8) NOT NULL DEFAULT '1',".
+        		"  `birthday_discount` varchar(8) NOT NULL DEFAULT '1',".
         		"  'min_charge_money' int(10) NOT NULL DEFAULT '0',".
         		"  `min_total_points` int(10) NOT NULL DEFAULT '0',".
         		"  `max_total_points` int(10) NOT NULL DEFAULT '0',".
@@ -521,6 +524,7 @@ class DataSyncTables
 				"  `email` varchar(100) NOT NULL DEFAULT '',".
 				"  `haspassword` varchar(1) NOT NULL DEFAULT '0',".
 				"  `password_hash` varchar(60) NOT NULL DEFAULT '',".
+        		"  `birthday` varchar(16) NOT NULL DEFAULT '01.01',".
 				"  `sex` varchar(1) NOT NULL DEFAULT 'm' ,".
 				"  `ages` varchar(20) NOT NULL DEFAULT '18-25' ,".
 				"  `all_money` decimal(10,2) NOT NULL DEFAULT '0.00',".
