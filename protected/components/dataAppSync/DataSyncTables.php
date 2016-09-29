@@ -288,6 +288,7 @@ class DataSyncTables
                     "  `status` char(1) NOT NULL DEFAULT '0',".
                     "  `dabao_fee` decimal(10,2) NOT NULL DEFAULT '0.00',".
                     "  `original_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        			"  `member_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
                     "  `product_unit` varchar(10) NOT NULL,".
                     "  `weight_unit` varchar(10) NOT NULL,".
                     "  `is_weight_confirm` char(1) NOT NULL DEFAULT '0',".
@@ -358,6 +359,7 @@ class DataSyncTables
 				"  `type` varchar(2) NOT NULL DEFAULT '0',".
 				"  `main_picture` varchar(255) NOT NULL,".
         		"  `set_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
+        		"  `member_price` decimal(10,2) NOT NULL DEFAULT '0.00',".
 				"  `description` text NOT NULL,".
 				"  `rank` tinyint(3) NOT NULL DEFAULT '3',".
 				"  `is_member_discount` char(1) NOT NULL DEFAULT '0',".
