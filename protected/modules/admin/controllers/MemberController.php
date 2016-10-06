@@ -18,7 +18,7 @@ class MemberController extends BackendController
 		));
 	}
 	public function actionIndex() {
-                if(Yii::app()->user->role > '2')
+                if(Yii::app()->user->role > '3')
                 {
                     $this->redirect(array('default/error2',
                                      'companyId'=>$this->companyId,
