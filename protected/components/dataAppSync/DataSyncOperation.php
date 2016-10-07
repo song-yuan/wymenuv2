@@ -601,7 +601,7 @@ class DataSyncOperation {
 				    if($productArr[0] > 0){
 				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0];
 				    }else{
-				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0].' and product_id='.$productArr[1];
+				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0].' and product_id='.$productArr[1].' and price='.$productArr[3];
 				    }
 					$orderProducts =  Yii::app ()->db->createCommand ($sql)->queryAll();
 					foreach ($orderProducts as $orderproduct){
@@ -695,6 +695,7 @@ class DataSyncOperation {
 				'mobile' => $obj->mobile,
 				'sex' => $obj->sex,
 				'ages' => $obj->ages,
+				'birthday' => $obj->birthday,
 				'enable_date' => $obj->enable_date,
 				'is_sync' => $isSync 
 		);
