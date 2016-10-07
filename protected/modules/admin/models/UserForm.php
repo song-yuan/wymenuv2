@@ -11,7 +11,7 @@ class UserForm extends CFormModel
 	public $email ;
 	public $role ;
 	public $status = 1;
-	
+	public $delete_flag = 0;
 	public function tableName() {
 		return 'nb_user';
 	}
@@ -62,7 +62,7 @@ class UserForm extends CFormModel
                         $se=new Sequence("user");
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
-                        $model->delete_flag = '0';
+                        
 			//$model->lid = $this->getPkValue();
 		}
 		$model->username = $this->username;
@@ -72,7 +72,8 @@ class UserForm extends CFormModel
 		$model->role = $this->role ;
 		$model->dpid = $this->dpid ;
 		$model->status = 1;
-                
+		$model->delete_flag = '0';
+		
 		if($this->password_old != $this->password) {
 			$model->password_hash = $this->password ;
 		}

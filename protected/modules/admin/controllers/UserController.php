@@ -53,7 +53,7 @@ class UserController extends BackendController
 		$criteria = new CDbCriteria;
 		//$criteria->with = 'company' ;
 		//$criteria->condition = (Yii::app()->user->role == User::POWER_ADMIN ? '' : 't.dpid='.Yii::app()->user->companyId.' and ').'t.status=1 and t.role >='.Yii::app()->user->role ;
-		$criteria->condition = 't.dpid='.$this->companyId.' and t.status=1 and t.role >='.Yii::app()->user->role ;
+		$criteria->condition = 't.dpid='.$this->companyId.' and t.status=1 and t.delete_flag = 0 and t.role >='.Yii::app()->user->role ;
 		$pages = new CPagination(User::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -71,6 +71,7 @@ class UserController extends BackendController
 		$model = new UserForm() ;
 		$model->dpid = $companyId ;
 		$model->status = 1;
+		$model->delete_flag = 0;
 				if(Yii::app()->request->isPostRequest) {
 					$model->attributes = Yii::app()->request->getPost('UserForm');
 					$role = $model->role;
@@ -137,7 +138,7 @@ class UserController extends BackendController
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
 		$model = new UserForm();
-		$model->find('lid=:id and dpid=:dpid and status=1', array(':id' => $id,':dpid'=>$companyId));
+		$model->find('lid=:id and dpid=:dpid and delete_flag=0 and status =1', array(':id' => $id,':dpid'=>$companyId));
 		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('UserForm');
@@ -166,7 +167,7 @@ class UserController extends BackendController
 			foreach ($ids as $id) {
 				$model = User::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id,':companyId'=>$companyId)) ;
 				if($model) {
-					$model->saveAttributes(array('status'=>0,'update_at'=>date('Y-m-d H:i:s',time())));
+					$model->saveAttributes(array('delete_flag'=>1,'status'=>0,'update_at'=>date('Y-m-d H:i:s',time())));
 				}
 			}
 			$this->redirect(array('user/index' , 'companyId' => $companyId));

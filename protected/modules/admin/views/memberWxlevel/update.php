@@ -30,8 +30,8 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','微信会员设置'),'subhead'=>yii::t('app','修改会员等级'),'breadcrumbs'=>array(array('word'=>yii::t('app','微信会员设置'),'url'=>$this->createUrl('memberWxlevel/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改微信会员等级'),'url'=>''))));?>
-			
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','会员中心'),'subhead'=>yii::t('app','会员等级列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','传统卡会员'),'url'=>$this->createUrl('member/list' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','会员等级管理'),'url'=>$this->createUrl('memberWxlevel/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','修改会员等级'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('memberWxlevel/index' , array('companyId' => $this->companyId,)))));?>
+	
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">

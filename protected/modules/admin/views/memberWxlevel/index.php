@@ -60,7 +60,6 @@
                                                         <th><?php echo yii::t('app','会员折扣');?></th>
                                                         <th><?php echo yii::t('app','最低充值金额');?></th>
                                                         <th><?php echo yii::t('app','工本费');?></th>
-                                                        <th><?php echo yii::t('app','有效期');?></th>
                                                         <th>&nbsp;</th>
                                                     </tr>
 						</thead>
@@ -73,7 +72,6 @@
 								<td ><?php echo $model->level_discount;?></td>
                                 <td ><?php echo $model->min_charge_money;?></td>
                                 <td ><?php echo $model->card_cost;?></td>
-                                <td ><?php echo $model->enable_date;?></td>
 								<td class="center">
 								<a href="<?php echo $this->createUrl('memberWxlevel/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>

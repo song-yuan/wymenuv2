@@ -39,6 +39,15 @@
 										
 										</div>
 									</div>
+									<div class="form-group">
+										<?php echo $form->label($model, 'member_price',array('class' => 'col-md-3 control-label'));?>
+										<div class="col-md-4">
+											<?php echo $form->textField($model, 'member_price', array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('member_price')));?>
+											<?php echo $form->error($model, 'member_price' )?>
+											<span style="color: red;">设置改价格只针对会员进行优惠</span>
+										
+										</div>
+									</div>
                                    <div class="form-group">
 										<?php echo $form->label($model, 'rank',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
