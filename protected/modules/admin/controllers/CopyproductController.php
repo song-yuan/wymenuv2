@@ -227,6 +227,7 @@ class CopyproductController extends BackendController
         							'main_picture'=>$product['main_picture'],
         							'description'=>$product['description'],
         							'rank'=>$product['rank'],
+        							'sort'=>$product['sort'],
         							'spicy'=>$product['spicy'],
         							'is_temp_price'=>'1',
         							'is_member_discount'=>$product['is_member_discount'],
@@ -260,6 +261,7 @@ class CopyproductController extends BackendController
 	        					$producto->main_picture = $product['main_picture'];
 	        					$producto->description = $product['description'];
 	        					$producto->rank = $product['rank'];
+	        					$producto->sort = $product['sort'];
 	        					$producto->spicy = $product['spicy'];
 	        					$producto->is_temp_price = '1';
 	        					$producto->is_member_discount = $product['is_member_discount'];
