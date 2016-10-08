@@ -235,6 +235,12 @@
 							<div class="ku-item-info">菜品下发</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('muchupdateProd/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple cpxf"></div>
+							<div class="ku-item-info">批量修改</div>
+						</div>
+					</a>
 					<a href="<?php echo $this->createUrl('productSim/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple cpjx"></div>

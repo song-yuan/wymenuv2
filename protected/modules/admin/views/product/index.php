@@ -67,10 +67,10 @@
                                 <th><?php echo yii::t('app','星级');?></th>
                                 <!-- 
                                 <th><?php echo yii::t('app','称重');?></th>
-                                <th><?php echo yii::t('app','重量单位');?></th>                                                             
-                                
+                                <th><?php echo yii::t('app','重量单位');?></th>
                                 <th><?php echo yii::t('app','点单数');?></th>
                                 <th><?php echo yii::t('app','点赞数');?></th>   --> 
+                                <th><?php echo yii::t('app','参与会员折扣');?></th>
 								<th><?php echo yii::t('app','可折');?></th>
                                 <th><?php echo yii::t('app','可售');?></th>
                                 <th><?php echo yii::t('app','来源');?></th>
@@ -97,6 +97,7 @@
                                 
                                 <td ><?php echo $model->order_number;?></td>
                                 <td ><?php echo $model->favourite_number;?></td> -->
+                                <td ><?php echo $model->is_member_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
 								<td ><?php echo $model->is_discount=='0'?yii::t('app','否'):yii::t('app','是');?></td>
                                 <td ><?php echo $model->is_show=='0'?yii::t('app','否'):yii::t('app','是');?></td>
                                 <td ><?php switch($model->is_temp_price) {case 0 :echo '自建';break;case 1:echo '总部下发';break;default: echo '';break;}?></td>
