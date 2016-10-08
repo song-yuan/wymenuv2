@@ -587,7 +587,7 @@ class DataSyncOperation {
 		$retreatId = $data ['retreatid'];
 		$retreatprice = $data ['retreatprice'];
 		$username =  $data ['username'];
-		$pruductIds = json_decode($data ['pruductids']);
+		$pruductIds = split('==',$data ['pruductids']);
 		$memo = $data ['memo'];
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
