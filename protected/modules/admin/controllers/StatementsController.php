@@ -355,7 +355,7 @@ class StatementsController extends BackendController
 			}}elseif ($text==3){
 			if ($str){
 				$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.amount) as all_num,
-							t.lid,t.dpid,t.create_at,t.product_id,t.price,sum(t.t.price*t.amount*(-(t.is_giving-1))) as all_price,t1.category_id,t2.category_name,t3.company_name,
+							t.lid,t.dpid,t.create_at,t.product_id,t.price,sum(t.price*t.amount*(-(t.is_giving-1))) as all_price,t1.category_id,t2.category_name,t3.company_name,
 							ifnull (sum(t.price*t5.retreat_amount),0) as retreat_all
 							from nb_order_product t left join nb_product t1 on(t.dpid = t1.dpid and t.product_id = t1.lid ) left join nb_product_category t2 on(t1.dpid = t2.dpid and t1.category_id = t2.lid) left join nb_company t3 on(t.dpid = t3.dpid ) left join nb_order t4 on(t.dpid = t4.dpid and t.order_id = t4.lid)
 							left join nb_order_retreat t5 on(t.lid = t5.order_detail_id and t.dpid = t5.dpid)
