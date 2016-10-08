@@ -141,15 +141,15 @@ function fun()
 		});
 		$('.s-btn').on('switch-change', function () {
 			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('muchprinterprod/status',array('companyId'=>$this->companyId));?>/id/'+id);
+		    $.get('<?php echo $this->createUrl('muchprinterProd/status',array('companyId'=>$this->companyId));?>/id/'+id);
 		});
 		$('.r-btn').on('switch-change', function () {
 			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('muchprinterprod/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
+		    $.get('<?php echo $this->createUrl('muchprinterProd/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('muchprinterprod/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+			location.href="<?php echo $this->createUrl('muchprinterProd/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
 
