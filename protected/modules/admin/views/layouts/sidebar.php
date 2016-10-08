@@ -78,7 +78,7 @@
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('statements',))) echo 'active';?>">
 					<a href="<?php echo $this->createUrl('statements/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-bar-chart-o"></i> 
-					<span class="title"><?php echo yii::t('app','数据中心');?></span>					
+					<span class="title"><?php echo yii::t('app','报表中心');?></span>					
 					</a>
 				</li>
 				<!-- 
