@@ -67,7 +67,7 @@ function fun()
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'muchprinterProd-form',
-				'action' => $this->createUrl('muchprinterprod/storProduct' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('muchprinterProd/storProduct' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
