@@ -70,7 +70,7 @@ class MuchupdateProdController extends BackendController
 		
 		//var_dump($catep1,$catep2,$products);exit;
                 Until::isUpdateValid($pids,$companyId,$this);//0,表示企业任何时候都在云端更新。
-        if((!empty($pids))&&(!empty($prodids))&&(Yii::app()->user->role < User::WAITER)){
+        if((!empty($pids))&&(!empty($prodids))&&(Yii::app()->user->role < User::USER)){
         	foreach ($nums as $num){
         		$prodid = array();
         		$prodnums = explode('@',$num);
