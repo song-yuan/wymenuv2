@@ -321,6 +321,12 @@
 							<div class="ku-item-info">单品厨打对应</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('muchprinterProd/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple dpdy"></div>
+							<div class="ku-item-info">厨打批量设置</div>
+						</div>
+					</a>
 					<?php elseif($type==3):?>
 					<a href="<?php echo $this->createUrl('payMethod/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
