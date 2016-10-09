@@ -20,6 +20,7 @@ class DataSyncTableData
     	if($this->tableName=='nb_member_card'||$this->tableName=='nb_brand_user_level'){
     		$this->dpid = WxCompany::getDpids($this->dpid);
     	}
+    	echo $this->dpid;
     	echo $sql;
     	$data = Yii::app()->db->createCommand($sql)
     							->bindValue(':dpid',$this->dpid)
