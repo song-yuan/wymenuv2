@@ -88,6 +88,7 @@ class CopyproductController extends BackendController
         					$catep->update_at = date('Y-m-d H:i:s',time());
         					$catep->category_name = $category['category_name'];
         					$catep->type = $category['type'];
+        					$catep->cate_type = $category['cate_type'];
         					$catep->chs_code = $category['chs_code'];
         					$catep->main_picture = $category['main_picture'];
         					$catep->order_num = $category['order_num'];
@@ -106,6 +107,7 @@ class CopyproductController extends BackendController
 	                        		'category_name'=>$category['category_name'],
 	                        		'pid'=>"0",
 	                        		'type'=>$category['type'],
+	                        		'cate_type'=>$category['cate_type'],
 	                        		'chs_code'=> $category['chs_code'],
 	                        		'main_picture'=>$category['main_picture'],
 	                        		'order_num'=>$category['order_num'],
@@ -151,6 +153,7 @@ class CopyproductController extends BackendController
         						$catep->update_at = date('Y-m-d H:i:s',time());
         						$catep->category_name = $category['category_name'];
         						$catep->type = $category['type'];
+        						$catep->cate_type = $category['cate_type'];
         						$catep->chs_code = $category['chs_code'];
         						$catep->main_picture = $category['main_picture'];
         						$catep->order_num = $category['order_num'];
@@ -169,6 +172,7 @@ class CopyproductController extends BackendController
         								'category_name'=>$category['category_name'],
         								'pid'=>$cateptree['lid'],
         								'type'=>$category['type'],
+        								'cate_type'=>$category['cate_type'],
         								'chs_code'=> $category['chs_code'],
         								'main_picture'=>$category['main_picture'],
         								'order_num'=>$category['order_num'],
