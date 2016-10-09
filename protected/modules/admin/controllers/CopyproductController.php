@@ -34,7 +34,7 @@ class CopyproductController extends BackendController
 		$models = Product::model()->findAll($criteria);
 		
 		$db = Yii::app()->db;
-		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 and t.comp_dpid = '.$this->companyId;
+		$sql = 'select t.dpid,t.company_name from nb_company t where t.delete_flag = 0 ';//and t.comp_dpid = '.$this->companyId
 		$command = $db->createCommand($sql);
 		$dpids = $command->queryAll();
 		//var_dump($dpids);exit;
