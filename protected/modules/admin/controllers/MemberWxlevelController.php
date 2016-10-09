@@ -28,7 +28,7 @@ class MemberWxlevelController extends BackendController
 	public function actionCreate() {
 		$model = new BrandUserLevel ;
 		$model->dpid = $this->companyId ;
-        
+		$is_sync = DataSync::getInitSync();
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('BrandUserLevel');
                         
@@ -37,7 +37,7 @@ class MemberWxlevelController extends BackendController
                         $model->create_at=date('Y-m-d H:i:s',time());
                         $model->update_at=date('Y-m-d H:i:s',time());
 			$model->delete_flag = '0';
-            
+            $model->is_sync = $is_sync;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' , yii::t('app','添加成功'));
 				$this->redirect(array('memberWxlevel/index' , 'companyId' => $this->companyId));
