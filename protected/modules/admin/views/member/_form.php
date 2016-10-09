@@ -39,7 +39,7 @@
 			<div class="form-group">
 				<?php echo $form->label($model, 'selfcode',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
-					<?php echo $form->textField($model, 'selfcode',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('selfcode'),'disabled'=>'disabled'));?>
+					<?php echo $form->textField($model, 'selfcode',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('selfcode')));?>
 					<?php echo $form->error($model, 'selfcode' )?>
 				</div>
 			</div>
