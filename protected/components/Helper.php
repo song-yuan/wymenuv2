@@ -79,6 +79,15 @@ class Helper
 		$cardlevels = BrandUserLevel::model()->findAll('level_type=0 and delete_flag=0 and dpid='.$companyId) ;
 		return CHtml::listData($cardlevels, 'lid', 'level_name');
 	}
+	static public function getCardLevels() { // 传统卡等级名称
+		$db = Yii::app()->db;
+		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
+		$sql = 'select CONVERT(t.lid,SIGNED) as lids,t.lid,t.level_name from nb_brand_user_level t where t.level_type = 0 and t.delete_flag =0 and t.dpid='.$companyId;
+		$cardlevels = Yii::app()->db->createCommand($sql)->queryAll();
+		//var_dump($cardlevels);exit;
+		//$cardlevels = BrandUserLevel::model()->findAll('level_type=0 and delete_flag=0 and dpid='.$companyId) ;
+		return CHtml::listData($cardlevels, 'lids', 'level_name');
+	}
 	static public function genOrgClass() { // 组织类型名称
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$companies = OrganizationClassification::model()->findAll('delete_flag=0 and dpid='.$companyId) ;

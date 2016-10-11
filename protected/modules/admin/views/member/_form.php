@@ -39,7 +39,7 @@
 			<div class="form-group">
 				<?php echo $form->label($model, 'selfcode',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
-					<?php echo $form->textField($model, 'selfcode',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('selfcode'),'disabled'=>'disabled'));?>
+					<?php echo $form->textField($model, 'selfcode',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('selfcode')));?>
 					<?php echo $form->error($model, 'selfcode' )?>
 				</div>
 			</div>
@@ -47,7 +47,7 @@
 			<div class="form-group" <?php if($model->hasErrors('level_id')) echo 'has-error';?>>
 				<?php echo $form->label($model, 'level_id',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
-					<?php echo $form->dropDownList($model, 'level_id',array('0' => yii::t('app','-- 请选择 --')) +Helper::getCardLevel() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('level_id')));?>
+					<?php echo $form->dropDownList($model, 'level_id',array('0' => yii::t('app','-- 请选择 --')) +Helper::getCardLevels() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('level_id')));?>
 					<?php echo $form->error($model, 'level_id' )?>
 				</div>
 			</div>
