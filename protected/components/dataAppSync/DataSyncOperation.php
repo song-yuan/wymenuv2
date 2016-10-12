@@ -703,6 +703,14 @@ class DataSyncOperation {
 		$obj = json_decode ( $orderData );
 		
 		$time = time ();
+		$sql = 'select * from nb_member_card where rfid="'.$obj->rfid.'" and delete_flag=0';
+		$memberCard = Yii::app ()->db->createCommand ($sql)->queryRow();
+		if($memberCard){
+			$msg = json_encode ( array (
+					'status' => false,
+			) );
+			return $msg;
+		}
 		$se = new Sequence ( "member_card" );
 		$memberCardId = $se->nextval ();
 		$inserMemberCardrArr = array (
@@ -730,7 +738,7 @@ class DataSyncOperation {
 				) );
 		} else {
 			$msg = json_encode ( array (
-					'status' => true,
+					'status' => false,
 				) );
 		}
 		return $msg;
