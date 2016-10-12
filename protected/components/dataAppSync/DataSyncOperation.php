@@ -349,7 +349,7 @@ class DataSyncOperation {
 		if($orderModel){
 			$msg = json_encode ( array (
 					'status' => true,
-					'orderId' => $orderModel->lid,
+					'orderId' => $orderModel['lid'],
 					'syncLid' => $syncLid,
 					'content' => $orderData
 			) );
