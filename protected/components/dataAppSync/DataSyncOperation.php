@@ -303,6 +303,10 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function operateOrder($data) {
+		$syncLid = 0;
+		if(isset($data ['sync_lid'])){
+			$syncLid = $data ['sync_lid'];
+		}
 		$dpid = $data ['dpid'];
 		$orderData = $data ['data'];
 		$obj = json_decode ( $orderData );
@@ -345,7 +349,9 @@ class DataSyncOperation {
 		if($orderModel){
 			$msg = json_encode ( array (
 					'status' => true,
-					'orderId' => $orderModel->lid
+					'orderId' => $orderModel['lid'],
+					'syncLid' => $syncLid,
+					'content' => $orderData
 			) );
 			return $msg;
 		}
@@ -384,7 +390,7 @@ class DataSyncOperation {
 				$orderProductData = array (
 						'lid' => $orderProductId,
 						'dpid' => $dpid,
-						'create_at' => date ( 'Y-m-d H:i:s', $time ),
+						'create_at' => $createAt,
 						'update_at' => date ( 'Y-m-d H:i:s', $time ),
 						'order_id' => $orderId,
 						'set_id' => $product->set_id,
@@ -409,7 +415,7 @@ class DataSyncOperation {
 						$orderTasteData = array (
 								'lid' => $orderTasteId,
 								'dpid' => $dpid,
-								'create_at' => date ( 'Y-m-d H:i:s', $time ),
+								'create_at' => $createAt,
 								'update_at' => date ( 'Y-m-d H:i:s', $time ),
 								'taste_id' => $taste->taste_id,
 								'order_id' => $orderProductId,
@@ -428,7 +434,7 @@ class DataSyncOperation {
 						$orderPromotionData = array (
 								'lid' => $orderPromotionId,
 								'dpid' => $dpid,
-								'create_at' => date ( 'Y-m-d H:i:s', $time ),
+								'create_at' => $createAt,
 								'update_at' => date ( 'Y-m-d H:i:s', $time ),
 								'order_id' => $orderId,
 								'order_product_id' => $orderProductId,
@@ -470,7 +476,7 @@ class DataSyncOperation {
 				$orderPayData = array (
 						'lid' => $orderPayId,
 						'dpid' => $dpid,
-						'create_at' => date ( 'Y-m-d H:i:s', $time ),
+						'create_at' => $createAt,
 						'update_at' => date ( 'Y-m-d H:i:s', $time ),
 						'order_id' => $orderId,
 						'account_no' => $accountNo,
@@ -490,7 +496,7 @@ class DataSyncOperation {
 					$orderTasteData = array (
 							'lid' => $orderTasteId,
 							'dpid' => $dpid,
-							'create_at' => date ( 'Y-m-d H:i:s', $time ),
+							'create_at' => $createAt,
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'taste_id' => $taste->taste_id,
 							'order_id' => $orderId,
@@ -509,7 +515,7 @@ class DataSyncOperation {
 					$orderDiscountData = array (
 							'lid' => $orderDiscountId,
 							'dpid' => $dpid,
-							'create_at' => date ( 'Y-m-d H:i:s', $time ),
+							'create_at' => $createAt,
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'order_id' => $orderId,
 							'account_no' => $accountNo,
@@ -530,7 +536,7 @@ class DataSyncOperation {
 					$orderAddressData = array (
 							'lid' => $orderAddressId,
 							'dpid' => $dpid,
-							'create_at' => date ( 'Y-m-d H:i:s', $time ),
+							'create_at' =>$createAt,
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'order_lid' => $orderId,
 							'consignee' => $address->consignee,
@@ -550,7 +556,7 @@ class DataSyncOperation {
 				$memberPointData = array (
 						'lid' => $memberPointId,
 						'dpid' => $dpid,
-						'create_at' => date ( 'Y-m-d H:i:s', $time ),
+						'create_at' => $createAt,
 						'update_at' => date ( 'Y-m-d H:i:s', $time ),
 						'member_card_rfid' => $memberPoints->member_card_rfid,
 						'order_id' => $orderId,
@@ -564,7 +570,9 @@ class DataSyncOperation {
 			$transaction->commit ();
 			$msg = json_encode ( array (
 					'status' => true,
-					'orderId' => $orderId 
+					'orderId' => $orderId,
+					'syncLid' => $syncLid,
+					'content' => $orderData
 			) );
 		} catch ( exception $e ) {
 			$transaction->rollback ();
@@ -582,6 +590,10 @@ class DataSyncOperation {
 	 */
 	public static function retreatOrder($data) {
 		$time = time();
+		$syncLid = 0;
+		if(isset($data ['sync_lid'])){
+			$syncLid = $data ['sync_lid'];
+		}
 		$dpid = $data ['dpid'];
 		$accountNo = $data ['account'];
 		$retreatId = $data ['retreatid'];
@@ -589,6 +601,10 @@ class DataSyncOperation {
 		$username =  $data ['username'];
 		$pruductIds = split('==',$data ['pruductids']);
 		$memo = $data ['memo'];
+		$content = '';
+		if(isset($data ['data'])){
+			$content = $data ['data'];
+		}
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
@@ -648,6 +664,8 @@ class DataSyncOperation {
 				$transaction->commit ();
 				$msg = json_encode ( array (
 						'status' => true,
+						'syncLid' => $syncLid,
+						'content' => $content
 				) );
 			}else{
 				throw new Exception('订单不存在');
@@ -671,6 +689,10 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function addMemberCard($data) {
+		$syncLid = 0;
+		if(isset($data ['sync_lid'])){
+			$syncLid = $data ['sync_lid'];
+		}
 		$dpid = $data ['dpid'];
 		$orderData = $data ['data'];
 		if (isset ( $data ['is_pos'] ) && $data ['is_pos'] == 1) {
@@ -681,6 +703,14 @@ class DataSyncOperation {
 		$obj = json_decode ( $orderData );
 		
 		$time = time ();
+		$sql = 'select * from nb_member_card where rfid="'.$obj->rfid.'" and delete_flag=0';
+		$memberCard = Yii::app ()->db->createCommand ($sql)->queryRow();
+		if($memberCard){
+			$msg = json_encode ( array (
+					'status' => false,
+			) );
+			return $msg;
+		}
 		$se = new Sequence ( "member_card" );
 		$memberCardId = $se->nextval ();
 		$inserMemberCardrArr = array (
@@ -701,10 +731,17 @@ class DataSyncOperation {
 		);
 		$result = Yii::app ()->db->createCommand ()->insert ( 'nb_member_card', $inserMemberCardrArr );
 		if ($result) {
-			return true;
+			$msg = json_encode ( array (
+						'status' => true,
+						'syncLid' => $syncLid,
+						'content' => $orderData
+				) );
 		} else {
-			return false;
+			$msg = json_encode ( array (
+					'status' => false,
+				) );
 		}
+		return $msg;
 	}
 	/**
 	 * 
@@ -714,10 +751,19 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function payMemberCard($data) {
+		$syncLid = 0;
+		if(isset($data ['sync_lid'])){
+			$syncLid = $data ['sync_lid'];
+		}
 		$dpid = $data ['dpid'];
 		$rfid = $data ['rfid'];
 		$password = $data ['password'];
 		$payPrice = $data ['pay_price'];
+		
+		$content = '';
+		if(isset($data ['data'])){
+			$content = $data ['data'];
+		}
 		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and rfid=' . $rfid . ' and delete_flag=0';
 		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $reslut) {
@@ -730,7 +776,9 @@ class DataSyncOperation {
 		$reslut = Yii::app ()->db->createCommand ( $sql )->execute ();
 		if ($reslut) {
 			return json_encode ( array (
-					'status' => true 
+					'status' => true,
+					'syncLid' => $syncLid,
+					'content' => $content
 			) );
 		} else {
 			return json_encode ( array (
