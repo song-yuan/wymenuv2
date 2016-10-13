@@ -92,7 +92,7 @@
                                 <td><?php if(empty($model->order4->reality_total)) echo 0; else echo $model->order4->reality_total;?></td>
 								<td><?php if ($model->pay_amount > 0) echo $model->pay_amount ;else echo '--/--';?></td>
 								<td><?php if ($model->pay_amount < 0) echo -$model->pay_amount ;else echo '--/--';;?></td>
-								<td><?php echo $model->update_at;?></td>
+								<td><?php echo $model->create_at;?></td>
                                 <td><?php if($model->pay_amount > 0):?><a href="<?php echo $this->createUrl('orderManagement/refund' , array('companyId' => $this->companyId));?>/orderID/<?php echo $model->order_id;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green"><i class="fa fa-pencil"></i> <?php echo yii::t('app','退款');?></a><?php endif;?></td>
 							</tr>
 					    <?php $a++;?>

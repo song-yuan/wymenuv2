@@ -32,14 +32,14 @@ class orderManagementController extends BackendController
 		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
 		$criteria->select = 't.*';
 		$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
-		$criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		//$criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->with = array("company","paymentMethod");
 		
 		//$connect = Yii::app()->db->createCommand($sql);
 		//$model = $connect->queryAll();
-		$criteria->order = 't.lid ASC' ;
+		$criteria->order = 't.create_at asc,t.lid ASC' ;
 		$criteria->distinct = TRUE;
 	
 		//$categoryId = Yii::app()->request->getParam('cid',0);
@@ -567,9 +567,9 @@ class orderManagementController extends BackendController
                // if ($Did > 0){
                // $criteria->addCondition("t.order_id = '$Did'");}
                 
-                $criteria->addCondition("t.update_at >='$begin_time 00:00:00'");
+                $criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
                 
-                $criteria->addCondition("t.update_at <='$end_time 23:59:59'");
+                $criteria->addCondition("t.create_at <='$end_time 23:59:59'");
                 if($orderID){
                 	$criteria->addCondition("t.order_id= ".$orderID);
                 }
@@ -579,7 +579,7 @@ class orderManagementController extends BackendController
                 //$criteria->join = 'left join nb_order t1 on (t.dpid = t1.dpid and t.order_id = t1.lid )'; //连接表
                 //var_dump();exit;
                // $criteria->join = 'left join nb_company on t.dpid = nb_company.dpid '; //连接表
-                $criteria->order = 't.order_id ASC' ;//排序条件    
+                $criteria->order = 't.create_at ASC,t.order_id ASC' ;//排序条件    
                // var_dump($begin_time);exit;
                 //$criteria->group = 'group 条件';    
                 //$criteria->having = 'having 条件 ';    
