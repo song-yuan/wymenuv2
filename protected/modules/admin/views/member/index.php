@@ -77,7 +77,7 @@
 								<th><?php echo yii::t('app','会员卡号');?></th>
 								<th><?php echo yii::t('app','姓名');?></th>
 								<th><?php echo yii::t('app','性别');?></th>
-								<th><?php echo yii::t('app','年龄');?></th>
+								<th><?php echo yii::t('app','生日');?></th>
 								<th><?php echo yii::t('app','联系方式');?></th>
 								<th><?php echo yii::t('app','金额');?></th>
 								<th><?php echo yii::t('app','积分');?></th>
@@ -92,7 +92,7 @@
 								<td ><?php echo $model->selfcode;?></td>
 								<td ><?php echo $model->name;?></td>
 								<td ><?php if($model->sex=='m') echo '男';else echo '女';?></td>
-								<td ><?php echo $model->ages;?></td>
+								<td ><?php echo $model->birthday;?></td>
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->all_money;?></td>
 								<td ><?php echo $model->all_points;?></td>
