@@ -1,8 +1,8 @@
-<!--  陈廷峰增加中文资源包 (ceo@vmeitime.com)  -->
+<!--  陈廷峰增加中文资源包 (曹方修改版)  -->
 (function ($) {
     $.mobiscroll.i18n.zh = $.extend($.mobiscroll.i18n.zh, {
-        dateFormat: 'yyyy-mm-dd',
-        dateOrder: 'yymmdd',
+        dateFormat: 'mm-dd',//格式可随意修改
+        dateOrder: 'mmdd',
         dayNames: ['周日', '周一;', '周二;', '周三', '周四', '周五', '周六'],
 		dayNamesShort: ['日', '一', '二', '三', '四', '五', '六'],
         dayText: '日',

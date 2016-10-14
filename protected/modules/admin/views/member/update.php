@@ -63,13 +63,13 @@
             var currYear = (new Date()).getFullYear();
             var opt = {};
             opt.date = {
-                preset : 'date'
+                preset : 'birthday'
             };
             opt.datetime = {
-                preset : 'datetime'
+                preset : 'birthday'
             };
             opt.time = {
-                preset : 'time'
+                preset : 'birthday'
             };
             opt.default = {
                 theme : 'android-ics light', //皮肤样式
@@ -78,7 +78,7 @@
                 dateFormat : 'mm.dd',
                 //width : cHeight / 1.2,
                 //height : cHeight / 1.6,
-                width:120,
+                width:100,
                 height:40,
                 circular:true,
                 showScrollArrows:true,
