@@ -52,6 +52,9 @@
                 case 'time':
                     format = 'HH:ii:ss';
                     break;
+                case 'birthday':
+                    format = 'mm-dd';
+                    break;
                 }
                 // Check for min/max attributes
                 var min = that.attr('min'),
