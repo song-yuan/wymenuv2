@@ -1,4 +1,4 @@
-<script src="plugins/bootbox/bootbox.min.js" type="text/javascript" ></script>
+
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
