@@ -66,6 +66,14 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<?php echo $form->label($model, 'birthday',array('class' => 'col-md-3 control-label'));?>
+				<div class="col-md-4">
+					<?php echo $form->textField($model, 'birthday',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('birthday')));?>
+					<?php echo $form->error($model, 'birthday' )?>
+					<span style="color: red;">会员生日的格式必须填写为xx.xx形式，否则无法生效。</span>
+				</div>
+			</div>
+			<div class="form-group">
 				<?php echo $form->label($model, 'email',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
 					<?php echo $form->textField($model, 'email',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('email')));?>
