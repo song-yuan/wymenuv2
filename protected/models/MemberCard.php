@@ -59,9 +59,10 @@ class MemberCard extends CActiveRecord
 			array('password_hash', 'length', 'max'=>60),
 			array('create_at', 'safe'),
 			array('is_sync','length','max'=>50),
+			array('birthday','length','max'=>16),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, selfcode, rfid, level_id, name, mobile, email, haspassword, password_hash, sex, ages, all_money, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, selfcode, rfid, level_id, name, mobile, birthday, email, haspassword, password_hash, sex, ages, all_money, delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -91,6 +92,7 @@ class MemberCard extends CActiveRecord
 			'level_id' => '会员等级',
 			'name' => '姓名',
 			'mobile' => '联系方式',
+			'birthday' => '会员生日',
 			'email' => '邮箱',
 			'haspassword' => 'Haspassword',
 			'password_hash' => '支付密码',
@@ -123,6 +125,7 @@ class MemberCard extends CActiveRecord
 		$criteria->compare('level_id',$this->level_id,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('mobile',$this->mobile,true);
+		$criteria->compare('birthday',$this->birthday,true);
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('haspassword',$this->haspassword,true);
 		$criteria->compare('password_hash',$this->password_hash,true);
