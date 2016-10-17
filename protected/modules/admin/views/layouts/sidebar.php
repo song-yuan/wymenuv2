@@ -56,13 +56,14 @@
 						<li class="<?php if(Yii::app()->controller->id == 'feedback' &&(!isset($_GET['allflag'])||(isset($_GET['allflag'])&&$_GET['allflag']==0))) echo 'active';?>"><a href="<?php echo $this->createUrl('feedback/index',array('companyId' => $this->companyId));?>"><?php echo yii::t('app','单品反馈选项');?></a></li>
 					</ul>
 				</li>
-				 -->
+				 
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('orderManagement',  ))) echo 'active';?>">
 					<a href="<?php echo $this->createUrl('orderManagement/list',array('companyId' => $this->companyId));?>">
                     <i class="fa fa-tasks"></i> 
 					<span class="title"><?php echo yii::t('app','订单管理');?></span>					
 					</a>
 				</li>
+				-->
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('member','wxlevel','wxpoint','wxpointvalid','wxcashback','wxrecharge','memberWxlevel' ))) echo 'active';?>">
 					<a href="<?php echo $this->createUrl('member/list',array('companyId' => $this->companyId,'type'=>1));?>">
                     <i class="fa fa-comments"></i> 
@@ -75,7 +76,7 @@
 					<span class="title"><?php echo yii::t('app','活动中心');?></span>					
 					</a>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('statements',))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('statements','orderManagement'))) echo 'active';?>">
 					<a href="<?php echo $this->createUrl('statements/list',array('companyId' => $this->companyId,'type'=>0));?>">
                     <i class="fa fa-bar-chart-o"></i> 
 					<span class="title"><?php echo yii::t('app','报表中心');?></span>					

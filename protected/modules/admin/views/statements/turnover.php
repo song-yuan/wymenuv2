@@ -74,8 +74,10 @@
 										</div>
 									</div>
 								</th> -->
-                                <th><?php echo yii::t('app','店员名');?></th>
-                                 <th><?php echo yii::t('app','营业额');?></th>
+                                <th><?php echo yii::t('app','登陆名');?></th>
+                                <th><?php echo yii::t('app','姓名');?></th>
+                                <th><?php echo yii::t('app','类型');?></th>
+                                <th><?php echo yii::t('app','营业额');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -84,6 +86,8 @@
 							<tr class="odd gradeX">
 								<td><?php echo $k+1;?></td>
 								<td><?php echo $model['username'];?></td>
+								<td><?php echo $model['staff_no'];?></td>
+								<td><?php switch ($model['role']) {case 0: echo '超级管理员';break;case 1:echo '总部管理员';break;case 2:echo '店长';break;case 3:echo '收银员';break;case 4:echo '服务员';break;default:break;}?></td>
 								<td><?php echo $model['total']?$model['total']:0;?></td>
 							</tr>
 							<?php endforeach;?>

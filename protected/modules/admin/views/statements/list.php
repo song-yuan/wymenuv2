@@ -33,6 +33,11 @@
 		.ku-grey{
 			background-color:rgb(68,111,120);
 		}
+		.ku-item.dpgl{
+			background-image:url(../../../../../../img/waiter/icon-dpjcsz.png);
+			background-position: 15px 15px;
+    		background-repeat: no-repeat;
+		}
 		.ku-item.cgzh{
 			background-image:url(../../../../../../img/waiter/icon-kcsj.png);
 			background-position: 15px 15px;
@@ -280,6 +285,12 @@
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey ygyye"></div>
 							<div class="ku-item-info">员工营业额</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('orderManagement/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey dpgl"></div>
+							<div class="ku-item-info">订单报表</div>
 						</div>
 					</a>
 					<?php elseif($type==1):?>
