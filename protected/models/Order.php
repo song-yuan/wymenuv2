@@ -215,7 +215,7 @@ class Order extends CActiveRecord
             $ret=Yii::app()->db->createCommand($sql)->queryScalar();      
             if(empty($ret) || $ret=="0000000000")
             {
-                $ret=substr(date('Ymd',time()),-6).substr("0000000000".$orderid, -6);
+                $ret=substr(date('Ymd',time()),-6).substr("000".$dpid, -3).substr("0000000000".$orderid, -6);
             }
             return $ret;
         }
