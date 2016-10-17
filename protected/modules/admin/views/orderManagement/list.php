@@ -108,6 +108,7 @@
 							<div class="ku-item-info">历史订单</div>
 						</div>
 					</a>
+					<!--
 					<a href="<?php echo $this->createUrl('orderManagement/accountStatement',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey czygl"></div>
@@ -120,7 +121,7 @@
 							<div class="ku-item-info">退付款记录</div>
 						</div>
 					</a>
-					<!--
+					
 					<a href="#">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple qxsz"></div>

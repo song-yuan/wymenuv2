@@ -26,7 +26,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','订单管理'),'subhead'=>yii::t('app','订单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','订单管理'),'url'=>$this->createUrl('orderManagement/list' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','历史订单查询'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('orderManagement/list' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','报表中心'),'subhead'=>yii::t('app','订单列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0))),array('word'=>yii::t('app','订单报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -59,8 +59,6 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								
-								<th><?php echo yii::t('app','订单号');?></th>
 								<th><?php echo yii::t('app','账单号');?></th>
 								<th><?php echo yii::t('app','订单下单时间');?></th>
 								<th><?php echo yii::t('app','订单结单时间');?></th>
@@ -80,7 +78,6 @@
 					
 						<?php foreach ($models as $model):?>
 								<tr class="odd gradeX">
-								<td><?php echo $model->lid%10000; ?></td>
 								<td><?php echo $model->account_no; ?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td><?php echo $model->update_at;?></td>
