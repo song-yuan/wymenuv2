@@ -208,36 +208,42 @@ class UserController extends Controller
 			}
 		};
 	}
+	// 未使用现金券
 	public function actionCupon()
 	{
 		$userId = Yii::app()->session['userId'];
 		$cupons = WxCupon::getUserNotUseCupon($userId,$this->companyId);
 		$this->render('cupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
+	// 已使用现金券
 	public function actionUsedCupon()
 	{
 		$userId = Yii::app()->session['userId'];
 		$cupons = WxCupon::getUserUseCupon($userId,$this->companyId);
 		$this->render('usedcupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
+	// 已过期现金券
 	public function actionExpireCupon()
 	{
 		$userId = Yii::app()->session['userId'];
 		$cupons = WxCupon::getUserExpireCupon($userId,$this->companyId);
 		$this->render('expirecupon',array('companyId'=>$this->companyId,'cupons'=>$cupons));
 	}
+	// 未使用礼品券
 	public function actionGift()
 	{
 		$userId = Yii::app()->session['userId'];
 		$gifts = WxGiftCard::getUserAvailableGift($userId,$this->companyId);
 		$this->render('gift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
 	}
+	// 已使用礼品券
 	public function actionUsedGift()
 	{
 		$userId = Yii::app()->session['userId'];
 		$gifts = WxGiftCard::getUserUsedGift($userId,$this->companyId);
 		$this->render('usedgift',array('companyId'=>$this->companyId,'gifts'=>$gifts));
 	}
+	// 已过期礼品券
 	public function actionExpireGift()
 	{
 		$userId = Yii::app()->session['userId'];
@@ -329,6 +335,38 @@ class UserController extends Controller
 			echo 0;
 		}
 		exit;
+	}
+	/**
+	 * 
+	 * 获取会员二维码
+	 * 
+	 */
+	public function actionAjaxGetUserCard()
+	{
+		$userId = Yii::app()->request->getParam('userId');
+		
+		$user = WxBrandUser::get($userId,$this->companyId);
+		if($user){
+			$imgurl = './uploads';
+			$imgurl .= '/company_'.$this->companyId;
+			if(!is_dir($imgurl)){
+				mkdir($imgurl, 0777,true);
+			}
+			$imgurl .= '/qrcode';
+			if(!is_dir($imgurl)){
+				mkdir($imgurl, 0777,true);
+			}
+			$imgurl .= '/usercard-'.$this->companyId.'-'.$userId.'.png';
+			
+			if(!file_exists($imgurl)){
+				$code=new QRCode($user['card_id']);
+				$code->create($imgurl);
+			}
+			$msg = array('status'=>true,'url'=>$imgurl);
+		}else{
+			$msg = array('status'=>false,'url'=>$imgurl);
+		}
+		return json_encode($msg);
 	}
 	/**
 	 * 
