@@ -417,7 +417,7 @@ public function actionPayallReport(){
 		$criteria = new CDbCriteria;
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
 		$criteria->with = array('company','order4','paymentMethod');
-		$criteria->condition = ' t.dpid='.$this->companyId ;
+		$criteria->condition = 't.paytype != "11" and t.dpid='.$this->companyId ;
 		if($str){
 			$criteria->condition = 't.dpid in('.$str.')';
 		}
@@ -593,36 +593,9 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by h_all) k';
+		$sql = 'select k.* from(select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where paytype !=11 and dpid in('.$str.') and create_at >="'.$begin_time.' 00:00:00" and create_at <="'.$end_time.' 23:59:59" group by h_all) k';
 		//$sql = 'select k.pay_amount from(select DATEADD(hh,DATEDIFF(hh,0,create_at),0) [Hour],sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by DATEDIFF(hh,0,create_at)) k';
-// 		$sql = '
-// SELECT 
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 0 THEN 1 ELSE 0 END),0) AS "0",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 1 THEN 1 ELSE 0 END),0) AS "1",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 2 THEN 1 ELSE 0 END),0) AS "2",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 3 THEN 1 ELSE 0 END),0) AS "3",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 4 THEN 1 ELSE 0 END),0) AS "4",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 5 THEN 1 ELSE 0 END),0) AS "5",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 6 THEN 1 ELSE 0 END),0) AS "6",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 7 THEN 1 ELSE 0 END),0) AS "7",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 8 THEN 1 ELSE 0 END),0) AS "8",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 9 THEN 1 ELSE 0 END),0) AS "9",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 10 THEN 1 ELSE 0 END),0) AS "10",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 11 THEN 1 ELSE 0 END),0) AS "11",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 12 THEN 1 ELSE 0 END),0) AS "12",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 13 THEN 1 ELSE 0 END),0) AS "13",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 14 THEN 1 ELSE 0 END),0) AS "14",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 15 THEN 1 ELSE 0 END),0) AS "15",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 16 THEN 1 ELSE 0 END),0) AS "16",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 17 THEN 1 ELSE 0 END),0) AS "17",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 18 THEN 1 ELSE 0 END),0) AS "18",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 19 THEN 1 ELSE 0 END),0) AS "19",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 20 THEN 1 ELSE 0 END),0) AS "20",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 21 THEN 1 ELSE 0 END),0) AS "21",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 22 THEN 1 ELSE 0 END),0) AS "22",
-// IFNULL(SUM(CASE HOUR(FROM_UNIXTIME(create_at,"%Y-%m-%d %H:%i:%s")) WHEN 23 THEN 1 ELSE 0 END),0) AS "23"
-// 			from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" ';
-//该语句可查，但是考虑到太耗数据库资源，因此舍弃。。。
+
 
 		//$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//echo($sql);exit;
@@ -767,6 +740,13 @@ public function actionPayallReport(){
 				//'categoryId'=>$categoryId
 		));
 	}
+	public function actionAccountDetail(){
+		$orderid = Yii::app()->request->getParam('orderid',"0");
+		$db = Yii::app()->db;
+		$sql = 'select sum(t.zhiamount*t.amount) as all_amount,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) where t.dpid='.$this->companyId.' and t.order_id='.$orderid.' group by t.lid';
+		$allmoney = Yii::app()->db->createCommand($sql)->queryAll();
+		Yii::app()->end(json_encode(array('status'=>true,'msg'=>$allmoney)));
+	}
 	/*
 	 * 退菜明细报表
 	 */
@@ -819,7 +799,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select sum(t.number) as all_number, count(distinct t.account_no) as all_account, sum(t2.pay_amount) as all_paymoney, t3.name, t.* from nb_order t left join nb_site t1 on(t.site_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_order_pay t2 on(t.lid = t2.order_id and t.dpid = t2.dpid) left join nb_site_type t3 on(t1.type_id = t3.lid and t3.dpid = t.dpid ) where t.dpid ='.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) group by t1.type_id) k';//区域名称报表
+		$sql = 'select k.* from(select sum(t.number) as all_number, count(distinct t.account_no) as all_account, sum(t2.pay_amount) as all_paymoney, t3.name, t.* from nb_order t left join nb_site t1 on(t.site_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_order_pay t2 on(t.lid = t2.order_id and t.dpid = t2.dpid and t2.paytype != 11) left join nb_site_type t3 on(t1.type_id = t3.lid and t3.dpid = t.dpid ) where t.dpid ='.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) group by t1.type_id) k';//区域名称报表
 		//echo $sql;exit;
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -829,7 +809,7 @@ public function actionPayallReport(){
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
 		//var_dump($model);exit;
-		$sql = 'select sum(t.number) as all_number, count(t.account_no) as all_account, sum(t2.pay_amount) as all_money, t3.name, t.* from nb_order t left join nb_site t1 on(t.site_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_order_pay t2 on(t.lid = t2.order_id and t.dpid = t2.dpid) left join nb_site_type t3 on(t1.type_id = t3.lid and t3.dpid = t.dpid ) where t.dpid ='.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) ';//区域名称报表
+		$sql = 'select sum(t.number) as all_number, count(t.account_no) as all_account, sum(t2.pay_amount) as all_money, t3.name, t.* from nb_order t left join nb_site t1 on(t.site_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_order_pay t2 on(t.lid = t2.order_id and t.dpid = t2.dpid and t2.paytype != 11) left join nb_site_type t3 on(t1.type_id = t3.lid and t3.dpid = t.dpid ) where t.dpid ='.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) ';//区域名称报表
 		$allmoney = Yii::app()->db->createCommand($sql)->queryRow();
 		//echo $sql;exit;
 		
@@ -1333,7 +1313,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select count(distinct t.account_no) as all_account ,count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id ) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) k';
+		$sql = 'select k.* from(select count(distinct t.account_no) as all_account ,count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id and t1.paytype != 11) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) k';
 		//var_dump($sql);exit;
 		
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -1344,7 +1324,7 @@ public function actionPayallReport(){
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
 		
-		$sql = 'select sum(j.all_amount) as all_payall from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id ) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) j';
+		$sql = 'select sum(j.all_amount) as all_payall from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id and t1.paytype !=11) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) j';
 		$connect = Yii::app()->db->createCommand($sql);
 		$allpay = $connect->queryRow();
 // 		$model=  Order::model()->findAll($criteria);
@@ -1364,7 +1344,7 @@ public function actionPayallReport(){
 	public function getAccountMoney($account_no){
 		$accountMoney = '';
 		if($account_no){
-		$sql = 'select sum(t.pay_amount) as all_zhifu,t.* from nb_order_pay t where t.paytype not in(9,10) and t.order_id in(select t1.lid from nb_order t1 where t1.account_no = '.$account_no.')';
+		$sql = 'select sum(t.pay_amount) as all_zhifu,t.* from nb_order_pay t where t.paytype not in(9,10,11) and t.order_id in(select t1.lid from nb_order t1 where t1.account_no = '.$account_no.')';
 		$connect = Yii::app()->db->createCommand($sql);
 		$money = $connect->queryRow();
 		$accountMoney = $money['all_zhifu'];
@@ -3783,7 +3763,7 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.number) as all_number,count(distinct(t.account_no)) as all_account,t2.pay_amount,sum(t2.pay_amount) as all_realprice,t.* from nb_order t left join nb_order_pay t2 on(t.dpid = t2.dpid and t2.order_id = t.lid and t2.paytype not in(9,10)) where t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') ) k';	
+		$sql = 'select k.* from(select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,sum(t.number) as all_number,count(distinct(t.account_no)) as all_account,t2.pay_amount,sum(t2.pay_amount) as all_realprice,t.* from nb_order t left join nb_order_pay t2 on(t.dpid = t2.dpid and t2.order_id = t.lid and t2.paytype not in(9,10,11)) where t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') ) k';	
 		
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -4168,7 +4148,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id ) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) k';
+		$sql = 'select k.* from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id and t1.paytype !=11) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) k';
 		//var_dump($sql);exit;
 		
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
@@ -4179,7 +4159,7 @@ public function actionPayallReport(){
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
 		
-		$sql = 'select sum(j.all_amount) as all_payall from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id ) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) j';
+		$sql = 'select sum(j.all_amount) as all_payall from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id and t1.paytype !=11) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) j';
 		$connect = Yii::app()->db->createCommand($sql);
 		$allpay = $connect->queryRow();
 		//$models = OrderProduct::model()->findAll($criteria);
@@ -5339,7 +5319,7 @@ public function actionPayallReport(){
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 	
 		$db = Yii::app()->db;
-		$sql = 'select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all';
+		$sql = 'select DATE_FORMAT(create_at,"%H") as h_all,sum(pay_amount) as pay_amount,count(distinct order_id) as all_account from nb_order_pay where paytype != 11 and  dpid in('.$str.') and create_at >="'.$begin_time.'" and create_at <="'.$end_time.'" group by h_all';
 		$models = Yii::app()->db->createCommand($sql)->queryAll();
 	
 	
@@ -5642,7 +5622,7 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select sum(t.number) as all_number, count(t.account_no) as all_account, sum(t2.pay_amount) as all_paymoney, t3.name, t.* from nb_order t left join nb_site t1 on(t.site_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_order_pay t2 on(t.lid = t2.order_id and t.dpid = t2.dpid) left join nb_site_type t3 on(t1.type_id = t3.lid and t3.dpid = t.dpid ) where t.dpid ='.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) group by t1.type_id) k';//区域名称报表
+		$sql = 'select k.* from(select sum(t.number) as all_number, count(t.account_no) as all_account, sum(t2.pay_amount) as all_paymoney, t3.name, t.* from nb_order t left join nb_site t1 on(t.site_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_order_pay t2 on(t.lid = t2.order_id and t.dpid = t2.dpid and t2.paytype !=11) left join nb_site_type t3 on(t1.type_id = t3.lid and t3.dpid = t.dpid ) where t.dpid ='.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) group by t1.type_id) k';//区域名称报表
 		//echo $sql;exit;
 		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
@@ -5652,7 +5632,7 @@ public function actionPayallReport(){
 		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
 		$models = $pdata->queryAll();
 		//var_dump($model);exit;
-		$sql = 'select sum(t.number) as all_number, count(t.account_no) as all_account, sum(t2.pay_amount) as all_money, t3.name, t.* from nb_order t left join nb_site t1 on(t.site_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_order_pay t2 on(t.lid = t2.order_id and t.dpid = t2.dpid) left join nb_site_type t3 on(t1.type_id = t3.lid and t3.dpid = t.dpid ) where t.dpid ='.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) ';//区域名称报表
+		$sql = 'select sum(t.number) as all_number, count(t.account_no) as all_account, sum(t2.pay_amount) as all_money, t3.name, t.* from nb_order t left join nb_site t1 on(t.site_id = t1.lid and t.dpid = t1.dpid and t1.delete_flag =0) left join nb_order_pay t2 on(t.lid = t2.order_id and t.dpid = t2.dpid and t2.paytype !=11) left join nb_site_type t3 on(t1.type_id = t3.lid and t3.dpid = t.dpid ) where t.dpid ='.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" and t.order_status in(3,4,8) ';//区域名称报表
 		$allmoney = Yii::app()->db->createCommand($sql)->queryRow();
 		//$models = OrderProduct::model()->findAll($criteria);
 		//var_dump($models);exit();
