@@ -80,7 +80,7 @@
                             type: 1,
                             //shade: false,
                             title: false, //不显示标题
-                            area: ['232px', '232px'],
+                            area: ['400px', '400px'],
                             shadeClose: true,
                             closeBtn:0,
                             skin: 'layui-layer-demo',
