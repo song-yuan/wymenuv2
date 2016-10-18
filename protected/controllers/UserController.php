@@ -364,9 +364,10 @@ class UserController extends Controller
 			}
 			$msg = array('status'=>true,'url'=>$imgurl);
 		}else{
-			$msg = array('status'=>false,'url'=>$imgurl);
+			$msg = array('status'=>false,'url'=>'');
 		}
-		return json_encode($msg);
+		echo json_encode($msg);
+		exit;
 	}
 	/**
 	 * 
