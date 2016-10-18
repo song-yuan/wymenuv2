@@ -21,6 +21,16 @@ public function actionServerImglist(){
 }
 /**
  * 
+ * 获取服务器时间
+ * 
+ */
+public function actionGetServerTime(){
+	$now = time();
+	$date = date('Y-m-d H:i:s');
+	return $date;
+}
+/**
+ * 
  * 获取pos设备信息
  * 
  */

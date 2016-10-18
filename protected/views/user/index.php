@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/common.css">
 <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl;?>/css/mall/members.css">
 <script type="text/javascript" src="<?php echo $baseUrl;?>/js/mall/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl;?>/js/layer/layer.js"></script>
 <body class="members bg_lgrey2">
 	<div class="toparea">
 		<div class="maininfo">
@@ -43,6 +44,7 @@
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/gift',array('companyId'=>$this->companyId));?>">礼品券</a></div>
 	</div>
 	<div class="listset">
+		<div class="arrowright"><a id="user-card" href="javascript:;">我的会员卡</a></div>
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/address',array('companyId'=>$this->companyId));?>">收货地址管理</a></div>
 		<div class="arrowright"><a href="<?php echo $this->createUrl('/user/setUserInfo',array('companyId'=>$this->companyId));?>">完善个人资料</a></div>
 	</div>
@@ -65,6 +67,30 @@
 						$('.headImg').find('img').attr('src',msg);
 					}
 				}
+			});
+		});
+		$('#user-card').click(function(){
+			$.ajax({
+				url:'<?php echo $this->createUrl('/user/ajaxGetUserCard',array('companyId'=>$this->companyId));?>',
+				data:{userId:<?php echo $user['lid'];?>},
+				success:function(msg){
+					if(msg.status){
+						var content = '<img src="'+msg.url+'" style="width:100%;height:100%;"/>';
+						layer.open({
+                            type: 1,
+                            //shade: false,
+                            title: false, //不显示标题
+                            area: ['400px', '400px'],
+                            shadeClose: true,
+                            closeBtn:0,
+                            skin: 'layui-layer-demo',
+                            content: content,
+                       });
+					}else{
+						layer.msg('不存在该会员');
+					}
+				},
+				dataType:'json'
 			});
 		});
 	});
