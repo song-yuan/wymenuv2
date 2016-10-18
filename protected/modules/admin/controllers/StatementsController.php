@@ -720,9 +720,9 @@ public function actionPayallReport(){
 		//echo $sql;exit;
 		$money = Yii::app()->db->createCommand($sql)->queryRow();
 	 	//$sql2 = 'select sum(t1.price*t.retreat_amount) as retreat_allprice,count(distinct t1.order_id) as retreat_num from nb_order_retreat t left join nb_order_product t1 on(t.dpid = t1.dpid and t1.delete_flag = 0 and t.order_detail_id = t1.lid) where t.delete_flag =0 and t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.dpid='.$this->companyId;
-	 	$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t where t.pay_amount < 0 and t.create_at >="'.$begin_time.'" and t.create_at <="'.$end_time.'" and t.dpid='.$this->companyId;
+	 	$sql2 = 'select sum(t.pay_amount) as retreat_allprice,count(distinct t.order_id) as retreat_num from nb_order_pay t right join nb_order t2 on(t.dpid = t2.dpid and t.order_id = t2.lid and t2.create_at >="'.$begin_time.'" and t2.create_at <="'.$end_time.'" ) where t.pay_amount < 0 and t.dpid='.$this->companyId;
 	 	$retreat = Yii::app()->db->createCommand($sql2)->queryRow();
-		//var_dump($money);exit;
+		//var_dump($sql2);exit;
 // 		$criteria = new CDbCriteria;
 // 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
 // 		$criteria->with = array('company','order8','paymentMethod');
@@ -1222,13 +1222,13 @@ public function actionPayallReport(){
 		$endTime = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		
 		$db = Yii::app()->db;
-		$sql = 'select t.* from (select username,sum(should_total) as total from nb_order where order_status in (3,4,8) and dpid in ('.$str.') and create_at >="'.$beginTime.' 00:00:00" and create_at <="'.$endTime.' 23:59:59" group by username order by lid desc)t';
+		$sql = 'select k.* from (select t.username,sum(t.should_total) as total,t1.staff_no,t1.role from nb_order t left join nb_user t1 on(t1.dpid = t.dpid and t1.username = t.username ) where t.order_status in (3,4,8) and t.dpid in ('.$str.') and t.create_at >="'.$beginTime.' 00:00:00" and t.create_at <="'.$endTime.' 23:59:59" group by t.username order by t.lid desc)k';
 		if($download){
 			$models = $db->createCommand($sql)->queryAll();
 			$this->exportTurnOver($models);
 			exit;
 		}
-		$count = $db->createCommand(str_replace('t.*','count(*)',$sql))->queryScalar();
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
 		//var_dump($count);exit;
 		$pages = new CPagination($count);
 		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
