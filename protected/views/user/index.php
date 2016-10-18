@@ -75,12 +75,12 @@
 				data:{userId:<?php echo $user['lid'];?>},
 				success:function(msg){
 					if(msg.status){
-						var content = '<img src="<?php echo $baseUrl;?>'+msg.url+'" style="width:100%;height:100%;"/>';
+						var content = '<img src="<?php echo $baseUrl;?>/'+msg.url+'" style="width:100%;height:100%;"/>';
 						layer.open({
                             type: 1,
                             //shade: false,
                             title: false, //不显示标题
-                            area: ['400px', '400px'],
+                            area: ['232px', '232px'],
                             shadeClose: true,
                             closeBtn:0,
                             skin: 'layui-layer-demo',
