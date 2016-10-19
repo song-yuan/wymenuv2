@@ -19,7 +19,15 @@ class WxCompany
 		}
 	    return $company;
 	}
-	// 获取总部的 dpid
+	// 获取总部的字店铺
+	public static function getCompanyChildren($dpid){
+		$sql = 'select * from nb_company where comp_dpid=:dpid';
+		$companys = Yii::app()->db->createCommand($sql)
+				  ->bindValue(':dpid',$dpid)
+				  ->queryAll();
+		return $companys;
+	}
+	//  获取总部的 dpid
 	public static function getCompanyDpid($dpid){
 		$company = self::get($dpid);
 		return $company['comp_dpid'];
