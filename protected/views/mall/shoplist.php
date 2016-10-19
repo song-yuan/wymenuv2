@@ -21,8 +21,9 @@
 	</div>
 	-->
 	<div class="shops">
+		<!--  
 		<div class="search"><input type="text" value=""></div>
-
+		-->
 		<div class="shopcontainer">
 			<!-- 全部门店 -->
 			<ul id="allshop" class="shown">
