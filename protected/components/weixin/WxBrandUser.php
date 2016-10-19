@@ -27,6 +27,10 @@ class WxBrandUser {
 	 */
 	public static function openId($userId,$dpid) {
 		$brandUser = self:: get($userId,$dpid);
+		if(empty($brandUser)){
+			$companyId = WxCompany::getCompanyDpid($dpid);
+			$brandUser = self:: get($userId,$companyId);
+		}
 		return $brandUser['openid'];
 	}
 	/**
