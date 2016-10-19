@@ -12,6 +12,10 @@ class WxBrandUser {
 	public static function get($userId,$dpid) {
 		$sql = 'SELECT * FROM nb_brand_user WHERE lid = ' .$userId .' and dpid = '.$dpid;
 		$brandUser = Yii::app()->db->createCommand($sql)->queryRow();
+		if(empty($brandUser)){
+			$companyId = WxCompany::getCompanyDpid($dpid);
+			$brandUser = self:: get($userId,$companyId);
+		}
 		return $brandUser;
 	}
 	/**

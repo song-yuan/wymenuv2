@@ -13,6 +13,7 @@ class UserController extends Controller
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId;
+		$company = WxCompany::get($this->companyId);
 	}
 	
 	public function beforeAction($actin){
@@ -25,7 +26,7 @@ class UserController extends Controller
 				$openid = $userInfo['openid'];
 				$this->brandUser($openid);
 				if(!$this->brandUser){
-					$newBrandUser = new NewBrandUser($openid, $this->companyId);
+					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['appid']);
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
 				$userId = $this->brandUser['lid'];
