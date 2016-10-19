@@ -761,6 +761,7 @@ public function actionPayallReport(){
 		}
 		Yii::app()->end(json_encode(array('status'=>true,'msg'=>$allmoney,'change'=>$change,'money'=>$money,'allpayment'=>$allpayment)));
 	}
+
 	/*
 	 * 退菜明细报表
 	 */

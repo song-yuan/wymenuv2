@@ -128,6 +128,8 @@
                                 <th><?php echo yii::t('app','原价');?></th>
                                 <th><?php echo yii::t('app','优惠');?></th>                                                                
                                 <th><?php echo yii::t('app','实收');?></th>
+                                <th><?php echo yii::t('app','现金收款');?></th>
+                                <th><?php echo yii::t('app','找零');?></th>
 								
 							</tr>
 						</thead>
@@ -148,6 +150,8 @@
 								<td><?php echo sprintf("%.2f",$model->reality_total);?></td>
 								<td><?php echo sprintf("%.2f",$model->reality_total-$model->should_total);?></td>
 								<td><?php echo sprintf("%.2f",$model->should_total);?></td>
+								<td><?php echo sprintf("%.2f",OrderProduct::getMoney($this->companyId,$model->lid));?></td>
+								<td><?php echo sprintf("%.2f",OrderProduct::getChange($this->companyId,$model->lid));?></td>
 								</tr>
 						
 						<?php endforeach;?>	
@@ -251,7 +255,8 @@ $(function () {
 							var proDetailBodyEnd = '<div class="font20 detaildivtip">账单详情</div>'
 													+'<div class="detailcontent font18"><div class="detaildiv">原价:<span>'+originalp+'</span></div><div class="detaildiv">折后价:<span>'+shouldp+'</span></div><div class="detaildiv">优惠:<span>'+youhuip+'</span></div><div class="clear"></div></div>'
 													+'<div class="detailcontent font18"><div class="detaildiv">收款现金:<span>'+money+'</span></div><div class="detaildiv">找零:<span>'+change+'</span></div><div class="clear"></div></div>';
-							var proDetailDiv = prodDetailDivAll+proDetailBodyEnd;
+							//var proDetailDiv = prodDetailDivAll+proDetailBodyEnd;
+							var proDetailDiv = prodDetailDivAll;//去掉账单收支详情
 							if(data.allpayment){
 								var proDetailpayHead = '<div class="font20 detaildivtip">其他支付方式:</div>'
 								var allpayment = data.allpayment;
@@ -265,15 +270,20 @@ $(function () {
 										var proDetailpayment = '<div class="detailcontent font18"><div class="detaildiv">'+name+':<span>'+nameprice+'</span></div><div class="clear"></div></div>';
 											
 										}else if(paytype){
-											alert(paytype);
+											//alert(paytype);
 											var paytypename = '';
-											switch (paytype){
-												case 1: var paytypename = '微信支付';break;
-												case 2: var paytypename = '支付宝支付';break;
-												case 4: var paytypename = '会员卡支付';break;
-												case 5: var paytypename = '银联支付';break;
-												case 9: var paytypename = '微信代金券';break;
-												case 10: var paytypename = '微信余额支付';break;
+											if (paytype==1){
+												paytypename = '微信支付';
+											}else if(paytype==2){
+												paytypename = '支付宝支付';
+											}else if(paytype==3){
+												paytypename = '会员卡支付';
+											}else if(paytype==5){
+												paytypename = '银联支付';
+											}else if(paytype==9){
+												paytypename = '微信代金券';
+											}else if(paytype==10){
+												paytypename = '微信余额支付';
 											}
 											var proDetailpayment = '<div class="detailcontent font18"><div class="detaildiv">'+paytypename+':<span>'+nameprice+'</span></div><div class="clear"></div></div>';
 											}
