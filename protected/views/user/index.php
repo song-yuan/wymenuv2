@@ -75,7 +75,7 @@
 				data:{userId:<?php echo $user['lid'];?>},
 				success:function(msg){
 					if(msg.status){
-						var content = '<img src="'+msg.url+'" style="width:100%;height:100%;"/>';
+						var content = '<img src="<?php echo $baseUrl;?>/'+msg.url+'" style="width:100%;height:100%;"/>';
 						layer.open({
                             type: 1,
                             //shade: false,
