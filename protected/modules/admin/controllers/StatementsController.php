@@ -745,7 +745,21 @@ public function actionPayallReport(){
 		$db = Yii::app()->db;
 		$sql = 'select sum(t.zhiamount*t.amount) as all_amount,t1.set_name,t.* from nb_order_product t left join nb_product_set t1 on(t.dpid = t1.dpid and t.set_id = t1.lid) where t.dpid='.$this->companyId.' and t.order_id='.$orderid.' group by t.lid';
 		$allmoney = Yii::app()->db->createCommand($sql)->queryAll();
-		Yii::app()->end(json_encode(array('status'=>true,'msg'=>$allmoney)));
+		
+		$sql1 = 'select t.pay_amount from nb_order_pay t where t.paytype =11 and t.dpid ='.$this->companyId.' and t.order_id ='.$orderid;
+		$model = Yii::app()->db->createCommand($sql1)->queryRow();
+		$change = $model['pay_amount']?$model['pay_amount']:0;
+		//var_dump($models);exit; 
+		$sql2 = 'select sum(t.pay_amount) as all_money from nb_order_pay t where t.paytype in(0,11) and t.dpid ='.$this->companyId.' and t.order_id ='.$orderid;
+		$models = Yii::app()->db->createCommand($sql2)->queryRow();
+		$money = $models['all_money']?$models['all_money']:0;
+		
+		$sql3 = 'select t1.name,t.* from nb_order_pay t left join nb_payment_method t1 on(t.dpid = t1.dpid and t.payment_method_id = t1.lid) where t.paytype not in (0,11) and t.dpid='.$this->companyId.' and t.order_id='.$orderid.' group by t.payment_method_id,t.paytype';
+		$allpayment = Yii::app()->db->createCommand($sql3)->queryAll();
+		if(empty($allpayment)){
+			$allpayment = false;
+		}
+		Yii::app()->end(json_encode(array('status'=>true,'msg'=>$allmoney,'change'=>$change,'money'=>$money,'allpayment'=>$allpayment)));
 	}
 	/*
 	 * 退菜明细报表
