@@ -460,6 +460,7 @@ public function actionPayallReport(){
 	public function actionPaymentReport(){
 		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
+		$userid = Yii::app()->request->getParam('userid');
 		$download = Yii::app()->request->getParam('d');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
@@ -472,19 +473,37 @@ public function actionPayallReport(){
 		if($str){
 			$criteria->condition = 't.dpid in('.$str.')';
 		}
+		if($userid != '0' && $userid != '-1'){
+			$criteria->addCondition ('order4.username ="'.$userid.'"');
+		}
 		$criteria->addCondition("order4.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("order4.create_at <='$end_time 23:59:59'");
 // 		$criteria->addCondition("order8.create_at >='$begin_time 00:00:00'");
 // 		$criteria->addCondition("order8.create_at <='$end_time 23:59:59'");
 		if($text==1){
-			$criteria->group ='t.dpid,year(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			if($userid != '0'){
+				$criteria->group ='t.dpid,year(t.create_at),order4.username';
+				$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}else{
+				$criteria->group ='t.dpid,year(t.create_at)';
+				$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}
 		}elseif($text==2){
-			$criteria->group ='t.dpid,year(t.create_at),month(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			if($userid != '0' ){
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),order4.username';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}else{
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at)';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}
 		}elseif($text==3){
-			$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
-			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			if($userid != '0'){
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),order4.username';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}else{
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}
 		}
 		$pages = new CPagination(OrderPay::model()->count($criteria));
 		//	    $pages->setPageSize(1);
@@ -493,6 +512,7 @@ public function actionPayallReport(){
 	    $model = OrderPay::model()->findAll($criteria);
 	   	//var_dump($model);exit;
 	   	$payments = $this->getPayment($this->companyId);
+	   	$username = $this->getUsername($this->companyId);
 	    $comName = $this->getComName();
 		$this->render('paymentReport',array(
 				'models'=>$model,
@@ -503,16 +523,20 @@ public function actionPayallReport(){
 				'str'=>$str,
 				'comName'=>$comName,
 				'payments'=>$payments,
+				'username'=>$username,
+				'userid'=>$userid,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));
 	}
-	public function getPaymentPrice($dpid,$type,$num,$text,$y_all,$m_all,$d_all){
+	public function getPaymentPrice($dpid,$type,$num,$text,$y_all,$m_all,$d_all,$usertype,$userid){
 		$criteria = new CDbCriteria;
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
 		$criteria->with = array('company','order4');
 		$criteria->condition = 't.paytype != "11" and t.dpid='.$dpid ;
-		
+		if($usertype != '0'){
+			$criteria->addCondition ('order4.username ="'.$userid.'"');
+		}
 		if($text==1){
 			$criteria->addCondition("year(order4.create_at) ='$y_all'");
 		}elseif($text==2){
@@ -1613,6 +1637,28 @@ public function actionPayallReport(){
 		
 		//var_dump($name);exit;
 		return $name;
+	}
+	public function getUsername($dpid){
+		$name='';
+		$sql = 'select t.* from nb_user t where t.delete_flag = 0 and t.dpid='.$dpid;
+		$connect = Yii::app()->db->createCommand($sql);
+		$model = $connect->queryAll();
+		if(!empty($model)){
+			return $model;
+		}else{
+			return $name;
+		}
+	}
+	public function getUserstaffno($dpid,$username){
+		$name='XX';
+		$sql = 'select t.staff_no from nb_user t where t.delete_flag = 0 and t.dpid='.$dpid.' and t.username="'.$username.'"';
+		$connect = Yii::app()->db->createCommand($sql);
+		$model = $connect->queryRow();
+		if(!empty($model)){
+			return $model['staff_no'];
+		}else{
+			return $name;
+		}
 	}
 	
 	public function getComName(){
