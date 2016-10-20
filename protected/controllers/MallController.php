@@ -20,6 +20,12 @@ class MallController extends Controller
 		$type = Yii::app()->request->getParam('type',0);
 		$this->companyId = $companyId;
 		$this->type = $type;
+		$company = WxCompany::get($this->companyId);
+		if($company['type']=='0'){
+			$children = WxCompany::getCompanyChildren($this->companyId);
+			$this->render('shoplist',array('companyId'=>$this->companyId,'children'=>$children));
+			exit;
+		}
 	}
 	
 	public function beforeAction($actin){
@@ -32,7 +38,7 @@ class MallController extends Controller
 				$openid = $userInfo['openid'];
 				$this->brandUser($openid);
 				if(!$this->brandUser){
-					$newBrandUser = new NewBrandUser($openid, $this->companyId);
+					$newBrandUser = new NewBrandUser($openid, $this->weixinServiceAccount['dpid']);
 		    		$this->brandUser = $newBrandUser->brandUser;
 				}
 				$userId = $this->brandUser['lid'];

@@ -26,10 +26,9 @@ class AccessToken {
 	 * 获取服务号的appid和appsecret
 	 */
 	public function weixinServiceAccount() {	
-		$sql = 'select * from nb_weixin_service_account where dpid = '.$this->brandId;
-		$this->weixinServiceAccount = Yii::app()->db->createCommand($sql)->queryRow();
+		$this->weixinServiceAccount = WxAccount::get($this->brandId);
 		if(!$this->weixinServiceAccount){
-			throw Exception('请先填写公众号信息!');
+			throw new Exception('请先填写公众号信息!');
 		}
 	}
 	

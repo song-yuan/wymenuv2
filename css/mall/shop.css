@@ -1,0 +1,299 @@
+.shop_area {
+	height: 100%;
+	overflow: hidden;
+	height: 53px;
+}
+
+.shop_area input[type="text"] {
+	border: 0px !important;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.citylist {
+	height: 100%;
+	position: fixed;
+	top: 53px;
+	width: 100%;
+}
+
+.cities {
+	width: 90%;
+	height:100%;
+	left: 0px;
+	font-size: 15px;
+	font-weight: bold;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-bottom: 53px;
+}
+
+.cities li {
+	padding: 12px 15px;
+	background-color: white;
+	border-bottom: 1px solid #ededed;
+}
+
+.cities li a{
+	display: block;
+}
+
+.cities li:last-child {
+	border-bottom: 0px;
+}
+
+.cities h1 {
+	padding: 2px 15px;
+	background-color: #f9f9f9;
+}
+
+.cities li.current {
+	background-color: #e0e0e0;
+}
+
+.letter {
+	width: 30px;
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.letter span {
+	display: block;
+	font-size: 0.8em;
+	font-family: Arial;
+	font-weight: bold;
+	
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.letter span a {
+	color: #1094fc;
+	display: block;
+	padding: 7px 5px;
+}
+
+
+.padding {
+	height: 53px;
+}
+
+
+
+
+
+#topbar {
+	position: fixed;
+	height: 25px;
+	text-align: center;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	font-size: 0.9em;
+	border-bottom: 1px #ededed solid;
+	z-index: 101;
+}
+
+#topbar > span {
+	vertical-align: middle;
+	display: inline-block;
+	height: 25px;
+	line-height: 25px;
+	margin: 0px 15px;
+}
+
+#topbar span.tabset {	
+	height: 24px;
+	padding: 0px;
+}
+
+#topbar span.tabset span {
+	padding: 5px;
+	height: 14px;
+	margin: 0px !important;
+	line-height: 14px;
+	float: left;
+}
+
+#topbar span.tabset > span.current {
+	background-color: black;
+	color: white;
+}
+
+#topbar span.tabset > span.allshop {
+	border: 1px solid black;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+#topbar span.tabset > span.actshop {
+	border: 1px solid black;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+
+}
+
+.shop_list input {
+	background-color: white;
+	border-radius: 5px;
+	padding: 5px;
+	padding-left: 30px;
+	background-image: url(../../../images/member2.0/icon_search2.png);
+	background-size: 20px auto;
+	background-repeat: no-repeat;
+	background-position: left 5px center;
+	border: 1px solid black;
+	font-size: 1em;
+	width: 80%;
+}
+
+
+.shops {
+	padding-top: 10px;
+}
+
+
+.shop_detail .shops {
+	padding: 0px;
+}
+
+.search {
+	text-align: center;
+	padding: 10px 0px;
+}
+
+
+.shops ul {
+	padding: 5px;
+	position: absolute;
+}
+
+.shop_detail .shops ul {
+	position: relative;
+}
+
+.shops ul li {
+	padding: 10px 0px;
+	border-bottom: 1px #CCCCCC solid;
+	overflow: hidden;
+	position: relative;
+}
+
+
+
+.shops ul li:last-child {
+	border-bottom: 0px;
+
+}
+
+.shops div.left {
+	width: 30%;
+}
+
+.shops div.right {
+	width: 67%;
+	overflow: hidden;
+}
+
+.shops .left img {
+	width: 100%;
+	height: auto;
+}
+
+
+.shops h1 {
+	font-size: 1em;
+	margin-bottom: 5px;
+}
+
+.shops h1 img {
+	width: 1em;
+	height: 1em;
+	vertical-align: middle;
+	margin: 0px 3px;
+}
+
+.shops {
+	line-height: 1em;
+}
+
+.shops .misinfo {
+	position: absolute;
+	bottom: 14px;
+	overflow: hidden;
+	width: 65%;
+
+}
+
+.misinfo span.left {
+	width: 70%;
+}
+
+.misinfo span.right {
+	width: 25%;
+	text-align: right;
+}
+
+
+.shopcontainer {
+	position: relative;
+}
+
+.shopcontainer > ul {
+	display: none;
+}
+
+.shopcontainer > ul.shown {
+	display: block;
+}
+
+
+.shop_detail #detail {
+	background-color: white;
+	-webkit-box-shadow: 0px 0px 3px 0px rgba(50, 50, 50, 0.3);
+	-moz-box-shadow:    0px 0px 3px 0px rgba(50, 50, 50, 0.3);
+	box-shadow:         0px 0px 3px 0px rgba(50, 50, 50, 0.3);
+}
+
+
+.shop_detail .controls {
+	top: 8px;
+}
+
+.shop_detail .acttitle {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	 right: 0px;
+	 padding: 10px;
+	 background-color: rgba(0,0,0,0.5);
+	 height: 15px;
+	 color: white;
+	 text-align: center;
+}
+
+.shop_detail .prolist {
+	padding-bottom: 60px;
+}
+
+.shop_detail button{
+	margin: 0px 20px;
+}
+
+.shop_list .area {
+	padding: 0px 20px 0px 0px;
+	
+	margin: 0px !important;
+	background-image: url(../../../images/member2.0/arrowdownblk.png);
+	background-size: 10px auto;
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+
+.shop_list .nearby {
+	padding: 0px 0px 0px 20px;
+	margin: 0px !important;
+	text-align: right;
+}
