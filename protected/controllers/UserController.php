@@ -13,7 +13,6 @@ class UserController extends Controller
 	{
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId;
-		$company = WxCompany::get($this->companyId);
 	}
 	
 	public function beforeAction($actin){
