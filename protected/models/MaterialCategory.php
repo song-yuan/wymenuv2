@@ -73,7 +73,7 @@ class MaterialCategory extends CActiveRecord
 			'update_at' => '更新时间',
 			'pid' => '打印机id',
 			'tree' => 'Tree',
-			'category_name' => '品项类别',
+			'category_name' => '原料类别',
 			'main_picture' => '图片',
 			'order_num' => '显示顺序',
 			'delete_flag' => '删除 0未删除 1删除',

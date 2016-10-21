@@ -402,7 +402,7 @@
 					<a href="<?php echo $this->createUrl('materialCategory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pxfl"></div>
-							<div class="ku-item-info">品项分类</div>
+							<div class="ku-item-info">原料分类</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('materialUnit/index',array('companyId'=>$this->companyId,'type'=>0));?>">
@@ -420,7 +420,7 @@
 					<a href="<?php echo $this->createUrl('productMaterial/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pxxx"></div>
-							<div class="ku-item-info">品项信息</div>
+							<div class="ku-item-info">原料信息</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('materialUnitRatio/index',array('companyId'=>$this->companyId));?>">
