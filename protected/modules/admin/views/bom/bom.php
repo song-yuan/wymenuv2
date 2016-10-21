@@ -183,7 +183,8 @@
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
-					<div class="caption"><i class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-archive"></i><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','库存设置');?></span></a><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-calendar">&nbsp</em><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','品项信息');?></span></a><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-puzzle-piece">&nbsp</em><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>" ><?php echo yii::t('app','库存管理');?></span></a></div>
+				<!-- <em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-calendar">&nbsp</em><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app','品项信息');?></span></a> -->
+					<div class="caption"><i class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-archive"></i><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','库存设置');?></span></a><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-puzzle-piece">&nbsp</em><a href="<?php echo $this->createUrl('bom/bom',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>" ><?php echo yii::t('app','库存管理');?></span></a></div>
 					<div class="actions">
 						<?php if($type == 1||$type==2):?><a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>
 						
@@ -232,7 +233,7 @@
 					<a href="<?php echo $this->createUrl('productBom/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple bomxx"></div>
-							<div class="ku-item-info">BOM信息</div>
+							<div class="ku-item-info">产品配方</div>
 						</div>
 					</a>
 <!-- 					<a href="<?php echo $this->createUrl('copymaterial/index',array('companyId'=>$this->companyId));?>"> -->

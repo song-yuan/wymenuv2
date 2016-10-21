@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','BOM明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','品项信息'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>1,))),array('word'=>yii::t('app','BOM列表'),'url'=>$this->createUrl('productBom/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','BOM明细管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productBom/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','配方明细列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','原料信息'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>4,))),array('word'=>yii::t('app','配方列表'),'url'=>$this->createUrl('productBom/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','配方明细管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productBom/index' , array('companyId' => $this->companyId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
