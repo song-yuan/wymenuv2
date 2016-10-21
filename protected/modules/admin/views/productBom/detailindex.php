@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','品项明细列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','原料明细列表');?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('productBom/detailcreate' , array('companyId' => $this->companyId,'lid'=>$pblid,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
@@ -64,7 +64,7 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','品项名称');?></th> 
+								<th><?php echo yii::t('app','原料名称');?></th> 
 								<th><?php echo yii::t('app','消耗数量');?></th>                            
                                 <th><?php echo yii::t('app','零售单位');?></th>
                                 

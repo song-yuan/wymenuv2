@@ -54,7 +54,7 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th ><?php echo yii::t('app','入库时间');?></th>
-								<th ><?php echo yii::t('app','品项名称');?></th>
+								<th ><?php echo yii::t('app','原料名称');?></th>
 								<th><?php echo yii::t('app','库存成本');?></th>
 								<th><?php echo yii::t('app','入库库存（含赠品）');?></th>
 								<th><?php echo yii::t('app','赠品数量');?></th>

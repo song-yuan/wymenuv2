@@ -8,7 +8,7 @@
 )); ?>
 <div class="form-body">
 	<div class="form-group">
-		<?php echo $form->label($model, '品项分类',array('class' => 'col-md-3 control-label'));?>
+		<?php echo $form->label($model, '原料分类',array('class' => 'col-md-3 control-label'));?>
 		<div class="col-md-4">
 			<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 		</div>
