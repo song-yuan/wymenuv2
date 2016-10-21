@@ -21,7 +21,8 @@ if(isset($auth_code) && $auth_code != ""){
 }else{
 	$msg = array('status'=>false);
 }
-echo json_encode($msg);
+// echo json_encode($msg);
+echo json_encode($result);
 exit;
 ?>
 
