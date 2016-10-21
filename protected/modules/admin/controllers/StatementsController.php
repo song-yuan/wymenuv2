@@ -423,26 +423,16 @@ public function actionPayallReport(){
 		}
 		$criteria->addCondition("order4.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("order4.create_at <='$end_time 23:59:59'");
-// 		$criteria->addCondition("order8.create_at >='$begin_time 00:00:00'");
-// 		$criteria->addCondition("order8.create_at <='$end_time 23:59:59'");
 		if($text==1){
 			$criteria->group ='t.payment_method_id,t.paytype,t.dpid,year(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
 		}elseif($text==2){
-			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,month(t.create_at)';
+			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,year(t.create_at),month(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
 		}elseif($text==3){
-			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,day(t.create_at)';
+			$criteria->group ='t.paytype,t.payment_method_id,t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
 			$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
 		}
-		//$criteria->order = 't.create_at asc,t.dpid asc';
-		//$criteria->group = 't.paytype,t.payment_method_id';
-// 		if($download){
-// 			//$model = OrderPay::model()->findAll($criteria);
-// 			//var_dump($models);exit;
-// 			$this->actionPayallExport($criteria,$text);
-// 			exit;
-// 		}
 		$pages = new CPagination(OrderPay::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -463,6 +453,115 @@ public function actionPayallReport(){
 				//'categoryId'=>$categoryId
 		));
 	}
+
+	/*
+	 * 支付方式报表（支付方式）
+	*/
+	public function actionPaymentReport(){
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$userid = Yii::app()->request->getParam('userid');
+		$download = Yii::app()->request->getParam('d');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
+		
+
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
+		$criteria->with = array('company','order4');
+		$criteria->condition = 't.paytype != "11" and t.dpid='.$this->companyId ;
+		if($str){
+			$criteria->condition = 't.dpid in('.$str.')';
+		}
+		if($userid != '0' && $userid != '-1'){
+			$criteria->addCondition ('order4.username ="'.$userid.'"');
+		}
+		$criteria->addCondition("order4.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("order4.create_at <='$end_time 23:59:59'");
+// 		$criteria->addCondition("order8.create_at >='$begin_time 00:00:00'");
+// 		$criteria->addCondition("order8.create_at <='$end_time 23:59:59'");
+		if($text==1){
+			if($userid != '0'){
+				$criteria->group ='t.dpid,year(t.create_at),order4.username';
+				$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}else{
+				$criteria->group ='t.dpid,year(t.create_at)';
+				$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}
+		}elseif($text==2){
+			if($userid != '0' ){
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),order4.username';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}else{
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at)';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}
+		}elseif($text==3){
+			if($userid != '0'){
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),order4.username';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}else{
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}
+		}
+		$pages = new CPagination(OrderPay::model()->count($criteria));
+		//	    $pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		//var_dump($criteria);exit;
+	    $model = OrderPay::model()->findAll($criteria);
+	   	//var_dump($model);exit;
+	   	$payments = $this->getPayment($this->companyId);
+	   	$username = $this->getUsername($this->companyId);
+	    $comName = $this->getComName();
+		$this->render('paymentReport',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'text'=>$text,
+				'str'=>$str,
+				'comName'=>$comName,
+				'payments'=>$payments,
+				'username'=>$username,
+				'userid'=>$userid,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
+	public function getPaymentPrice($dpid,$type,$num,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
+		$criteria->with = array('company','order4');
+		$criteria->condition = 't.paytype != "11" and t.dpid='.$dpid ;
+		if($usertype != '0'){
+			$criteria->addCondition ('order4.username ="'.$userid.'"');
+		}
+		if($text==1){
+			$criteria->addCondition("year(order4.create_at) ='$y_all'");
+		}elseif($text==2){
+			$criteria->addCondition("year(order4.create_at) ='$y_all'");
+			$criteria->addCondition("month(order4.create_at) ='$m_all'");
+		}elseif($text==3){
+			$criteria->addCondition("year(order4.create_at) ='$y_all'");
+			$criteria->addCondition("month(order4.create_at) ='$m_all'");
+			$criteria->addCondition("day(order4.create_at) ='$d_all'");
+		}
+		if($type==3){
+			$criteria->addCondition("t.paytype =3 and t.payment_method_id ='$num'");
+		}else{
+			$criteria->addCondition("t.paytype ='$num'");
+		}
+		$model = OrderPay::model()->findAll($criteria);
+		$price = '';
+		if(!empty($model)){
+			foreach ($model as $models){
+				$price = $models->all_reality?$models->all_reality:0;
+			}
+		}
+		return $price;
+	}
+	
 	/*
 	 * 充值记录报表
 	 */
@@ -1539,6 +1638,28 @@ public function actionPayallReport(){
 		//var_dump($name);exit;
 		return $name;
 	}
+	public function getUsername($dpid){
+		$name='';
+		$sql = 'select t.* from nb_user t where t.delete_flag = 0 and t.dpid='.$dpid;
+		$connect = Yii::app()->db->createCommand($sql);
+		$model = $connect->queryAll();
+		if(!empty($model)){
+			return $model;
+		}else{
+			return $name;
+		}
+	}
+	public function getUserstaffno($dpid,$username){
+		$name='XX';
+		$sql = 'select t.staff_no from nb_user t where t.delete_flag = 0 and t.dpid='.$dpid.' and t.username="'.$username.'"';
+		$connect = Yii::app()->db->createCommand($sql);
+		$model = $connect->queryRow();
+		if(!empty($model)){
+			return $model['staff_no'];
+		}else{
+			return $name;
+		}
+	}
 	
 	public function getComName(){
 		$uid = Yii::app()->user->id;
@@ -1562,6 +1683,18 @@ public function actionPayallReport(){
 		
 		//var_dump($optionsReturn);exit;
 		return $optionsReturn;	
+	}
+	public function getPayment($dpid){
+		$sql = 'select t.lid,t.dpid,t.name from nb_payment_method t where t.delete_flag = 0 and t.dpid ='.$dpid;
+		$connect = Yii::app()->db->createCommand($sql);
+		$models = $connect->queryAll();
+// 		$optionsReturn = array();
+// 		if($models) {
+// 			foreach ($models as $model) {
+// 				$optionsReturn[$model['lid']] = $model['name'];
+// 			}
+// 		}
+		return $models;
 	}
  		public function getCatName($CategoryId){
 		$Catname = "";

@@ -293,6 +293,12 @@
 							<div class="ku-item-info">订单报表</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey sktj"></div>
+							<div class="ku-item-info">支付方式</div>
+						</div>
+					</a>
 					<?php elseif($type==1):?>
 					<a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>">
 						<div class="pull-left margin-left-right">
