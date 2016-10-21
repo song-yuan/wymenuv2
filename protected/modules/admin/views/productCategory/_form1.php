@@ -38,7 +38,7 @@
 					<div class="col-md-9">
 						<?php echo $form->hiddenField($model,'pid'); ?>
 						<?php echo $form->textField($model,'category_name',array('class'=>'form-control','placeholder'=>$model->getAttributeLabel('category_name'))); ?>
-						<?php echo $form->error($model,'category_name'); ?>
+						<?php echo $form->error($model,'category_name',array('class'=>'errorMessage')); ?>
 					</div>
 				</div>
                 <div class="form-group">

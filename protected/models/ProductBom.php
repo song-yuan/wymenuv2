@@ -71,7 +71,7 @@ class ProductBom extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'product_id' => '产品名称',
-			'material_id' => '品项名称',
+			'material_id' => '原料名称',
 			'number' => '消耗数量',
 			'sales_unit_id' => '零售单位',
 			'delete_flag' => '删除 0未删除 1删除',

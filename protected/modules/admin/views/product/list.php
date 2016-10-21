@@ -146,6 +146,42 @@
 			background-position: -270px 20px;
     		background-repeat: no-repeat;
 		}
+		.ku-item.pxfl{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: 20px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.rkdw{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -130px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.lsdw{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -280px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.pxxx{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -430px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.dwxs{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -575px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.bomxx{
+			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
+			background-position: -725px 20px;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.pxxf{
+			background-image:url(../../../../../../img/waiter/icon-pxxf.png);
+			background-position: 25px 20px;
+			background-size: 50% ;
+    		background-repeat: no-repeat;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -165,10 +201,13 @@
 					<h4 class="modal-title">关系图</h4>
 				</div>
 				<div class="modal-body">
-					关系图:
+					<?php if($type == 2):?>
+					库存管理流程图:
 					<img alt="" src="../../../../../../img/waiter/lcrelation.jpg" width="100%">
+					<?php elseif ($type==4):?>
 					品项信息图:
 					<img alt="" src="../../../../../../img/waiter/pxrelation.jpg" width="100%">
+					<?php endif;?>
 				</div>
 				<div class="modal-footer">
 					<!--  
@@ -191,16 +230,20 @@
 		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','餐桌设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','餐桌设置'),'url'=>''))));?>
 	<?php elseif($type==2):?>
 		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','打印设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','打印设置'),'url'=>''))));?>
-	<?php else:?>
+	<?php elseif($type==3):?>
 		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','收银设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','收银设置'),'url'=>''))));?>
+	<?php elseif($type==4):?>
+		<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','配方设置'),'breadcrumbs'=>array(array('word'=>yii::t('app','配方设置'),'url'=>''))));?>
 	<?php endif;?>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="portlet purple box">
 				<div class="portlet-title">
-					<div class="caption"><i class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-edit"></i><a href="<?php echo $this->createUrl('product/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','菜品设置');?></span></a><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-wheelchair">&nbsp</em><a href="<?php echo $this->createUrl('product/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app',' 餐桌设置');?></span></a><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-print">&nbsp</em><a href="<?php echo $this->createUrl('product/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>" ><?php echo yii::t('app',' 打印设置');?></span></a><em class=" fa <?php if($type==3){echo '';}else{echo 'cf-black';}?> fa-cny">&nbsp</em><a href="<?php echo $this->createUrl('product/list',array('companyId'=>$this->companyId,'type'=>3));?>"><span class="tab <?php if($type==3){ echo 'tab-active';}?>"><?php echo yii::t('app',' 收银设置');?></span></a></div>
+					<div class="caption"><i class=" fa <?php if($type==0){echo '';}else{echo 'cf-black';}?> fa-edit"></i><a href="<?php echo $this->createUrl('product/list',array('companyId'=>$this->companyId,'type'=>0));?>"><span class="tab <?php if($type==0){ echo 'tab-active';}?>"><?php echo yii::t('app','菜品设置');?></span></a><em class=" fa <?php if($type==1){echo '';}else{echo 'cf-black';}?> fa-wheelchair">&nbsp</em><a href="<?php echo $this->createUrl('product/list',array('companyId'=>$this->companyId,'type'=>1));?>"><span class="tab <?php if($type==1){ echo 'tab-active';}?>" ><?php echo yii::t('app',' 餐桌设置');?></span></a><em class=" fa <?php if($type==2){echo '';}else{echo 'cf-black';}?> fa-print">&nbsp</em><a href="<?php echo $this->createUrl('product/list',array('companyId'=>$this->companyId,'type'=>2));?>"><span class="tab <?php if($type==2){ echo 'tab-active';}?>" ><?php echo yii::t('app',' 打印设置');?></span></a><em class=" fa <?php if($type==3){echo '';}else{echo 'cf-black';}?> fa-cny">&nbsp</em><a href="<?php echo $this->createUrl('product/list',array('companyId'=>$this->companyId,'type'=>3));?>"><span class="tab <?php if($type==3){ echo 'tab-active';}?>"><?php echo yii::t('app',' 收银设置');?></span></a><em class=" fa <?php if($type==4){echo '';}else{echo 'cf-black';}?> fa-calendar">&nbsp</em><a href="<?php echo $this->createUrl('product/list',array('companyId'=>$this->companyId,'type'=>4));?>"><span class="tab <?php if($type==4){ echo 'tab-active';}?>" ><?php echo yii::t('app','配方设置');?></span></a></div>
 					<div class="actions">
-						<!-- <a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>-->
+						<?php if($type == 4):?><a class="btn blue relation" href="javascript:;"> <?php echo yii::t('app','查看关系图');?></a>
+						
+						<?php endif;?>
 					</div>
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
@@ -352,6 +395,69 @@
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple ps"></div>
 							<div class="ku-item-info">盘损</div>
+						</div>
+					</a>
+					 -->
+					 <?php elseif($type==4):?>
+					<a href="<?php echo $this->createUrl('materialCategory/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple pxfl"></div>
+							<div class="ku-item-info">原料分类</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('materialUnit/index',array('companyId'=>$this->companyId,'type'=>0));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple rkdw"></div>
+							<div class="ku-item-info">入库单位</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('materialUnit/index',array('companyId'=>$this->companyId,'type'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple lsdw"></div>
+							<div class="ku-item-info">零售单位</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('productMaterial/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple pxxx"></div>
+							<div class="ku-item-info">原料信息</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('materialUnitRatio/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple dwxs"></div>
+							<div class="ku-item-info">单位系数</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('productBom/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple bomxx"></div>
+							<div class="ku-item-info">产品配方</div>
+						</div>
+					</a>
+<!-- 					<a href="<?php echo $this->createUrl('copymaterial/index',array('companyId'=>$this->companyId));?>"> -->
+<!-- 						<div class="pull-left margin-left-right"> -->
+<!-- 							<div class="ku-item ku-purple bomxx"></div> -->
+<!-- 							<div class="ku-item-info">品项下发</div> -->
+<!-- 						</div> -->
+<!-- 					</a> -->
+					<a href="<?php echo $this->createUrl('copymaterial/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple pxxf"></div>
+							<div class="ku-item-info">品项下发</div>
+						</div>
+					</a>
+					<!-- 
+					<a href="<?php echo $this->createUrl('bomproductCategory/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey cpfl"></div>
+							<div class="ku-item-info">产品分类</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('bomProduct/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey cpxx"></div>
+							<div class="ku-item-info">产品信息</div>
 						</div>
 					</a>
 					 -->

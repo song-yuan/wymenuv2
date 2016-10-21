@@ -22,7 +22,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','品项库存详情'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','采购订单管理'),'url'=>$this->createUrl('productMaterial/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','品项库存详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productMaterial/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','原料库存详情'),'breadcrumbs'=>array(array('word'=>yii::t('app','原料信息'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>4,))),array('word'=>yii::t('app','原料管理'),'url'=>$this->createUrl('productMaterial/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','原料库存详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productMaterial/index' , array('companyId' => $this->companyId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
@@ -54,7 +54,7 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th ><?php echo yii::t('app','入库时间');?></th>
-								<th ><?php echo yii::t('app','品项名称');?></th>
+								<th ><?php echo yii::t('app','原料名称');?></th>
 								<th><?php echo yii::t('app','库存成本');?></th>
 								<th><?php echo yii::t('app','入库库存（含赠品）');?></th>
 								<th><?php echo yii::t('app','赠品数量');?></th>
