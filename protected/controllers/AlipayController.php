@@ -13,7 +13,7 @@ class AlipayController extends Controller
 		//支付宝网关
 		$this->gateway_config = array(
 				//商户的私钥（后缀是.pen）文件相对路径
-				'alipay_public_key_file' => 'admin/ali_public_key.pem',
+				'alipay_public_key_file' => 'admin/alipay_public_key_file.pem',
 				'merchant_private_key_file' => 'admin/rsa_merchant_private_key.pem',
 				'merchant_public_key_file' => 'admin/rsa_merchant_public_key.pem',		
 				'charset' => "GBK",
