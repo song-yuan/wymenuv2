@@ -13,7 +13,7 @@ class AlipayController extends Controller
 		//支付宝网关
 		$this->gateway_config = array(
 				//商户的私钥（后缀是.pen）文件相对路径
-				'alipay_public_key_file' => 'admin/ali_public_key.pem',
+				'alipay_public_key_file' => 'admin/alipay_public_key_file.pem',
 				'merchant_private_key_file' => 'admin/rsa_merchant_private_key.pem',
 				'merchant_public_key_file' => 'admin/rsa_merchant_public_key.pem',		
 				'charset' => "GBK",
@@ -46,7 +46,7 @@ class AlipayController extends Controller
 				//支付宝公钥
 				'alipay_public_key' => "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB",
 				//商户私钥
-				'merchant_private_key' => "此处填写开发者私钥去头去尾去回车，一行字符串",
+				'merchant_private_key' => "MIICXQIBAAKBgQD1cud3GAErGMGnxQoZhQchrH4xITJaTs5HnaDCc49Na3+8AI20GxJIzuXfwtkUK68TBk5cVneHpp4vhYfc44+l07XhhVvojn4oZUXlGzmc8I0JIq3/hBoioHPsX160DyulmTHo6kwPE02cgc+SPLWWGWbbJX6GZCl0bXsVBV3CNQIDAQABAoGAWUoInBF2c1gZMtACQZBcLMrUSUkbSTD755+XGMXzLqXZnOnSot9qQmRJyaHXWHgfw1r67Kpj50wcpYr9BsUdvu4iEtC11lxAv4kgmYszjAxxHG+rLIxpyBMtlTevLxQuw5PFnqFQjY6Hzz3CnefFnDorDTXvZXq/qGMWcdbmY+ECQQD/JXtOSsNdwZL5VCsy6XFfFO0ZLZx7QKKKAVSnmTIwgrgs5zR2ExDOJrsrvE/ibP6Agk3dakUpgnToBfp3DaBpAkEA9kUd+TXQahjKnjpZeS/IQ+BHPNfYDIH15H/AwT+pwbvh2kbrvmA9xclueoKXo42EpbtxiQPMzusgx26sLaYZ7QJBAPT5O+b0CZhfX4pcsg1z7hJouS1PicsdR/JRTMKOaI4DNGqIouorbBtDPLrFV74DAGjKs5A/lKBCTZTpCI5+WuECQEWW3FRqf30rij3R8SyMcwOzIY4w0+0c4DX0X6x75+VFyRlcBwuhuHLma6CUvHLL75rBb+CuwTYLPRT90guILzUCQQDQrG6nrmRMaa9mMu6G4I+1IDBMpntUwmJ/Gm7RYBt9CDjE54I1ho9wdz0OScE/1c5JPOoTNC4eoQ4K2lZBL3h6",
 				//编码格式
 				'charset' => "UTF-8",
 				//支付宝网关
