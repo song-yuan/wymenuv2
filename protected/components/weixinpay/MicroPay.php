@@ -15,7 +15,6 @@ class MicroPay
 	public function pay($microPayInput)
 	{
 		$result = WxPayApi::micropay($microPayInput, 10);
-		return $result;
 		//如果返回成功
 		if(!array_key_exists("return_code", $result)
 			|| !array_key_exists("out_trade_no", $result)
