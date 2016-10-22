@@ -17,7 +17,6 @@ class MicroPay
 		$result = WxPayApi::micropay($microPayInput, 10);
 		//如果返回成功
 		if(!array_key_exists("return_code", $result)
-			|| !array_key_exists("out_trade_no", $result)
 			|| !array_key_exists("result_code", $result))
 		{
 			throw new WxPayException("接口调用失败！");
