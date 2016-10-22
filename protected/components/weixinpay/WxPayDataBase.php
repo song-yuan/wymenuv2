@@ -103,8 +103,8 @@ class WxPayDataBase
 	public function MakeSign()
 	{
 		$key = '';
-		if(isset($_GET['companyId'])||isset($_POST['companyId'])){
-			$dpid = isset($_GET['companyId'])?$_GET['companyId']:$_POST['companyId'];
+		if(isset($_GET['companyId'])){
+			$dpid = $_GET['companyId'];
 			$account = WxAccount::get($dpid);
 			if(WxPayConfig::ISSUBMCH){
 				$key = WxPayConfig::KEY;
