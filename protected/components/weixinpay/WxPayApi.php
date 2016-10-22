@@ -378,16 +378,8 @@ class WxPayApi
 		
 		$inputObj->SetSign();//签名
 		$xml = $inputObj->ToXml();
-		
-		$myfile = fopen( dirname ( __FILE__ ) ."/testfile.txt", "w");
-		fwrite($myfile, $xml);
-		
 		$startTimeStamp = self::getMillisecond();//请求开始时间
 		$response = self::postXmlCurl($xml, $url, false, $timeOut);
-		
-		fwrite($myfile, $response);
-		fclose($myfile);
-		
 		$result = WxPayResults::Init($response);
 		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
 		
