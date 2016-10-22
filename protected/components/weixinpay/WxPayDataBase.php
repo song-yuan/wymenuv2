@@ -103,8 +103,8 @@ class WxPayDataBase
 	public function MakeSign()
 	{
 		$key = '';
-		if(isset($_GET['companyId'])){
-			$dpid = $_GET['companyId'];
+		if(isset($_GET['companyId'])||isset($_POST['companyId'])){
+			$dpid = isset($_GET['companyId'])?$_GET['companyId']:$_POST['companyId'];
 			$account = WxAccount::get($dpid);
 			if(WxPayConfig::ISSUBMCH){
 				$key = WxPayConfig::KEY;
@@ -125,10 +125,6 @@ class WxPayDataBase
 		ksort($this->values);
 		$string = $this->ToUrlParams();
 		//签名步骤二：在string后加入KEY
-		$string = $string . "&key=".$key;
-		$myfile = fopen( dirname ( __FILE__ ) ."/testfile1.txt", "w");
-		fwrite($myfile, $string);
-		fclose($myfile);
 		//签名步骤三：MD5加密
 		$string = md5($string);
 		//签名步骤四：所有字符转为大写

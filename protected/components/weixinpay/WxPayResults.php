@@ -18,10 +18,6 @@ class WxPayResults extends WxPayDataBase
 		}
 		
 		$sign = $this->MakeSign();
-		$myfile = fopen( dirname ( __FILE__ ) ."/testfile.txt", "w");
-		fwrite($myfile, $sign.'-');
-		fwrite($myfile, $this->GetSign());
-		fclose($myfile);
 		if($this->GetSign() == $sign){
 			return true;
 		}
