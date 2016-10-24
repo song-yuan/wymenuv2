@@ -15,10 +15,8 @@ class MicroPay
 	public function pay($microPayInput)
 	{
 		$result = WxPayApi::micropay($microPayInput, 10);
-		
 		//如果返回成功
 		if(!array_key_exists("return_code", $result)
-			|| !array_key_exists("out_trade_no", $result)
 			|| !array_key_exists("result_code", $result))
 		{
 			throw new WxPayException("接口调用失败！");
@@ -35,11 +33,11 @@ class MicroPay
 		{
 			return false;
 		}
-
 		//确认10次
 		$queryTimes = 10;
 		while($queryTimes > 0)
 		{
+			$queryTimes--;
 			$succResult = 0;
 			$queryResult = $this->query($out_trade_no, $succResult);
 			//如果需要等待1s后继续
@@ -52,13 +50,11 @@ class MicroPay
 				return false;
 			}
 		}
-		
 		//10次确认失败，则撤销订单
 		if(!$this->cancel($out_trade_no))
 		{
 			throw new WxpayException("撤销单失败！");
 		}
-
 		return false;
 	}
 	
@@ -123,7 +119,7 @@ class MicroPay
 		}
 		
 		//如果结果为success且不需要重新调用撤销，则表示撤销成功
-		if($result["result_code"] != "SUCCESS" 
+		if($result["result_code"] == "SUCCESS" 
 			&& $result["recall"] == "N"){
 			return true;
 		} else if($result["recall"] == "Y") {

@@ -409,7 +409,9 @@ class WxPayApi
 		$account = WxAccount::get($dpid);
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
-			
+		$certpem = Yii::app()->basePath.'/'.$account['certificate'];
+		$keypem = Yii::app()->basePath.'/'.$account['apiclient_key'];
+		
 		if(WxPayConfig::ISSUBMCH){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
@@ -426,7 +428,7 @@ class WxPayApi
 		$xml = $inputObj->ToXml();
 		
 		$startTimeStamp = self::getMillisecond();//请求开始时间
-		$response = self::postXmlCurl($xml, $url, true, $timeOut);
+		$response = self::postXmlCurl($xml, $url, true, $timeOut, $certpem, $keypem);
 		$result = WxPayResults::Init($response);
 		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
 		
@@ -650,7 +652,7 @@ class WxPayApi
 	 * @param int $second   url执行超时时间，默认30s
 	 * @throws WxPayException
 	 */
-	private static function postXmlCurl($xml, $url, $useCert = false, $second = 30)
+	private static function postXmlCurl($xml, $url, $useCert = false, $second = 30, $certpem = '', $keypem = '')
 	{		
 		$ch = curl_init();
 		//设置超时
@@ -674,9 +676,9 @@ class WxPayApi
 			//设置证书
 			//使用证书：cert 与 key 分别属于两个.pem文件
 			curl_setopt($ch,CURLOPT_SSLCERTTYPE,'PEM');
-			curl_setopt($ch,CURLOPT_SSLCERT, WxPayConfig::SSLCERT_PATH);
+			curl_setopt($ch,CURLOPT_SSLCERT, $certpem);
 			curl_setopt($ch,CURLOPT_SSLKEYTYPE,'PEM');
-			curl_setopt($ch,CURLOPT_SSLKEY, WxPayConfig::SSLKEY_PATH);
+			curl_setopt($ch,CURLOPT_SSLKEY, $keypem);
 		}
 		//post提交方式
 		curl_setopt($ch, CURLOPT_POST, TRUE);
