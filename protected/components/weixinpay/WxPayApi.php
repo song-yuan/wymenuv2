@@ -409,8 +409,8 @@ class WxPayApi
 		$account = WxAccount::get($dpid);
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
-		$certpem = Yii::app()->baseUrl.'/'.$account['certificate'];
-		$keypem = Yii::app()->baseUrl.'/'.$account['apiclient_key'];
+		$certpem = Yii::app()->basePath.'/../'.$account['certificate'];
+		$keypem = Yii::app()->basePath.'/../'.$account['apiclient_key'];
 		$myfile = fopen(dirname(__FILE__)."/newfile.txt", "w") or die("Unable to open file!");
 		fwrite($myfile, $certpem);
 		fwrite($myfile, $keypem);
