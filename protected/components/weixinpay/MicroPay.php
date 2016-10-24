@@ -113,17 +113,13 @@ class MicroPay
 		$clostOrder->SetOut_trade_no($out_trade_no);
 		$result = WxPayApi::reverse($clostOrder);
 		
-		$myfile = fopen(dirname(__FILE__)."/newfile.txt", "w") or die("Unable to open file!");
-		fwrite($myfile, json_encode($result));
-		fclose($myfile);
-		
 		//接口调用失败
 		if($result["return_code"] != "SUCCESS"){
 			return false;
 		}
 		
 		//如果结果为success且不需要重新调用撤销，则表示撤销成功
-		if($result["result_code"] != "SUCCESS" 
+		if($result["result_code"] == "SUCCESS" 
 			&& $result["recall"] == "N"){
 			return true;
 		} else if($result["recall"] == "Y") {
