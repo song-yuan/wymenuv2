@@ -33,7 +33,6 @@ class MicroPay
 		{
 			return false;
 		}
-		$myfile = fopen(dirname(__FILE__)."/newfile.txt", "w") or die("Unable to open file!");
 		//确认10次
 		$queryTimes = 10;
 		while($queryTimes > 0)
@@ -41,7 +40,6 @@ class MicroPay
 			$queryTimes--;
 			$succResult = 0;
 			$queryResult = $this->query($out_trade_no, $succResult);
-			fwrite($myfile, $queryTimes);
 			//如果需要等待1s后继续
 			if($succResult == 2){
 				sleep(2);
@@ -57,8 +55,6 @@ class MicroPay
 		{
 			throw new WxpayException("撤销单失败！");
 		}
-		fwrite($myfile, 'cancel');
-		fclose($myfile);
 		return false;
 	}
 	
