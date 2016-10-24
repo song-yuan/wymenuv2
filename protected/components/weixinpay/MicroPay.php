@@ -38,6 +38,7 @@ class MicroPay
 		$queryTimes = 10;
 		while($queryTimes > 0)
 		{
+			$queryTimes--;
 			$succResult = 0;
 			$queryResult = $this->query($out_trade_no, $succResult);
 			//如果需要等待1s后继续
