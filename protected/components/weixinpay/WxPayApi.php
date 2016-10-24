@@ -411,10 +411,7 @@ class WxPayApi
 		$mchId = $account['partner_id'];
 		$certpem = Yii::app()->basePath.'/'.$account['certificate'];
 		$keypem = Yii::app()->basePath.'/'.$account['apiclient_key'];
-		$myfile = fopen(dirname(__FILE__)."/newfile.txt", "w") or die("Unable to open file!");
-		fwrite($myfile, $certpem);
-		fwrite($myfile, $keypem);
-		fclose($myfile);
+		
 		if(WxPayConfig::ISSUBMCH){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
