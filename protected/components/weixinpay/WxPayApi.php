@@ -409,7 +409,12 @@ class WxPayApi
 		$account = WxAccount::get($dpid);
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
-			
+		$certpem = Yii::app()->baseUrl.'/'.$account['certificate'];
+		$keypem = Yii::app()->baseUrl.'/'.$account['apiclient_key'];
+		$myfile = fopen(dirname(__FILE__)."/newfile.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, $certpem);
+		fwrite($myfile, $keypem);
+		fclose($myfile);
 		if(WxPayConfig::ISSUBMCH){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
@@ -426,7 +431,7 @@ class WxPayApi
 		$xml = $inputObj->ToXml();
 		
 		$startTimeStamp = self::getMillisecond();//请求开始时间
-		$response = self::postXmlCurl($xml, $url, true, $timeOut, $account['certificate'], $account['apiclient_key']);
+		$response = self::postXmlCurl($xml, $url, true, $timeOut, $certpem, $keypem);
 		$result = WxPayResults::Init($response);
 		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
 		
