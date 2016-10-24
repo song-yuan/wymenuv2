@@ -425,6 +425,11 @@ class WxPayApi
 		$inputObj->SetSign();//签名
 		$xml = $inputObj->ToXml();
 		
+		$myfile = fopen(dirname(__FILE__)."/newfile.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, $xml);
+		fwrite($myfile, 'cancel');
+		fclose($myfile);
+		
 		$startTimeStamp = self::getMillisecond();//请求开始时间
 		$response = self::postXmlCurl($xml, $url, true, $timeOut);
 		$result = WxPayResults::Init($response);
