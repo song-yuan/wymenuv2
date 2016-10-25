@@ -13,9 +13,9 @@ class AlipayController extends Controller
 		//支付宝网关
 		$this->gateway_config = array(
 				//商户的私钥（后缀是.pen）文件相对路径
-				'alipay_public_key_file' => 'admin/alipay_public_key_file.pem',
-				'merchant_private_key_file' => 'admin/rsa_merchant_private_key.pem',
-				'merchant_public_key_file' => 'admin/rsa_merchant_public_key.pem',		
+				'alipay_public_key_file' => Yii::app()->basePath.'/cert/ali/alipay_public_key_file.pem',
+				'merchant_private_key_file' => Yii::app()->basePath.'/cert/ali/rsa_merchant_private_key.pem',
+				'merchant_public_key_file' => Yii::app()->basePath.'/cert/ali/rsa_merchant_public_key.pem',		
 				'charset' => "GBK",
 				'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
 				'app_id' => "2015060900117633" 
@@ -27,9 +27,9 @@ class AlipayController extends Controller
 				//收款支付宝账号，一般情况下收款账号就是签约账号
 				'seller_id'=>'2088811584894868',
 				//商户的私钥（后缀是.pen）文件相对路径
-				'private_key_path'=>'admin/rsa_private_key.pem',
+				'private_key_path'=>Yii::app()->basePath.'/cert/ali/rsa_private_key.pem',
 				//支付宝公钥（后缀是.pen）文件相对路径
-				'ali_public_key_path'=>'admin/ali_public_key.pem',
+				'ali_public_key_path'=>Yii::app()->basePath.'/cert/ali/ali_public_key.pem',
 				//签名方式 不需修改
 				'sign_type'=>strtoupper('RSA'),
 				//字符编码格式 目前支持 gbk 或 utf-8
