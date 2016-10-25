@@ -281,12 +281,14 @@
 							<div class="ku-item-info">聚餐人数</div>
 						</div>
 					</a>
+					<!-- 
 					<a href="<?php echo $this->createUrl('statements/turnOver',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey ygyye"></div>
 							<div class="ku-item-info">员工营业额</div>
 						</div>
 					</a>
+					 -->
 					<a href="<?php echo $this->createUrl('orderManagement/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey dpgl"></div>
@@ -296,7 +298,7 @@
 					<a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">支付方式</div>
+							<div class="ku-item-info">支付方式(员工营业额)</div>
 						</div>
 					</a>
 					<?php elseif($type==1):?>
