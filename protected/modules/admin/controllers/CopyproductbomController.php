@@ -133,11 +133,11 @@ class CopyproductbomController extends BackendController
         	}
         	//Yii::app()->user->setFlash('success' , $msgmate);
         	Yii::app()->user->setFlash('success' , yii::t('app','配方下发成功！！！'));
-        	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId)) ;
+        	$this->redirect(array('copyproductbom/index' , 'companyId' => $companyId)) ;
         	
         }else{
         	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
-        	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId)) ;
+        	$this->redirect(array('copyproductbom/index' , 'companyId' => $companyId)) ;
         }        
 
 	}
