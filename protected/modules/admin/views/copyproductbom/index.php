@@ -37,6 +37,7 @@ function fun()
 	<div id="printRsultListdetail" style="margin:0;padding:0;display:none;width:96%;height:96%;">		                
          <div class="modal-header">
          	<h4 class="modal-title">选择需要下发菜品配方的店铺</h4>
+         	<span style="color:red;">配方下发之前请先确认是否下发相应菜品及原料，否则，配方下发会出现不可预知的错误！！！</span>
          </div>
          <div class="modal-body">
 	         <div class="portlet-body" id="table-manage">  
@@ -200,7 +201,7 @@ function fun()
        	}
      	//alert(str);
         
-		if(window.confirm("确认进行此项操作?")){
+		if(window.confirm("确认进行此项操作?配方下发之前请先确认是否下发相应菜品及原料，否则，配方下发会出现不可预知的错误！！！")){
 			layer_index_printreportlist=layer.open({
 	            type: 1,
 	            shade: false,
