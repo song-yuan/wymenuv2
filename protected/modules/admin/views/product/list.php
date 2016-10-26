@@ -435,16 +435,17 @@
 							<div class="ku-item-info">产品配方</div>
 						</div>
 					</a>
-<!-- 					<a href="<?php echo $this->createUrl('copymaterial/index',array('companyId'=>$this->companyId));?>"> -->
-<!-- 						<div class="pull-left margin-left-right"> -->
-<!-- 							<div class="ku-item ku-purple bomxx"></div> -->
-<!-- 							<div class="ku-item-info">品项下发</div> -->
-<!-- 						</div> -->
-<!-- 					</a> -->
+
 					<a href="<?php echo $this->createUrl('copymaterial/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple pxxf"></div>
 							<div class="ku-item-info">品项下发</div>
+						</div>
+					</a>
+					<a href="<?php echo $this->createUrl('copyproductbom/index',array('companyId'=>$this->companyId));?>"> 
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple bomxx"></div>
+							<div class="ku-item-info">配方下发</div>
 						</div>
 					</a>
 					<!-- 
