@@ -40,7 +40,7 @@
 				<div class="bg-logo"></div>
 				<div style="height: 100px;"></div>
 				<div style="height: 40px;text-align: center;font-size: 16px;"><SPAN style="font-size: 20px;font-weight: bold;">壹点吃</SPAN>致力于为用户提供SaaS+智能硬件+移动互联网的智慧餐饮物联网解决方案</div>
-				<div style="height: 16px;text-align: center;">上海物易网络科技有限公司</div>
+				<div style="height: 16px;text-align: center;">上海物易网络科技有限公司提供技术支持</div>
 			</div>
 		</div>
 	</div> 
