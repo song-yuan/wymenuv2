@@ -1,15 +1,15 @@
 <?php 
-if(isset($_POST)){
+if(isset($_GET)){
 	
 	$now = time();
 	$rand = rand(100,999);
-	$orderId = $now.'-'.$this->companyId.'-'.$rand;
+	$outTradeNo = $now.'-'.$this->companyId.'-'.$rand;
 	
 	$company = WxCompany::get($this->companyId);
 	
 	$subject = $company['company_name']."消费";
-	$totalAmount = $_POST['total'];
-	$authCode = $_POST['authcode'];
+	$totalAmount = $_GET['total'];
+	$authCode = $_GET['authcode'];
 	
 	$undiscountableAmount = "0.01";
 	$sellerId = $this->alipay_config['seller_id'];
@@ -22,16 +22,24 @@ if(isset($_POST)){
 	$storeId = "store_id_".$this->companyId;
 	
 	$goodsDetailList = array();
-	$goodsArr = json_decode($_POST['goods']);
-	foreach ($goodsArr as $goods){
-		$goodsDetai = new GoodsDetail();
-		$goodsDetai->setGoodsId($goods['product_id']);
-		$goodsDetai->setGoodsName($goods['product_name']);
-		$goodsDetai->setPrice($goods['product_price']);
-		$goodsDetai->setQuantity($goods['amount']);
-		//得到商品1明细数组
-		array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
-	}
+// 	$goodsArr = json_decode($_POST['goods']);
+// 	foreach ($goodsArr as $goods){
+// 		$goodsDetai = new GoodsDetail();
+// 		$goodsDetai->setGoodsId($goods['product_id']);
+// 		$goodsDetai->setGoodsName($goods['product_name']);
+// 		$goodsDetai->setPrice($goods['product_price']);
+// 		$goodsDetai->setQuantity($goods['amount']);
+// 		//得到商品1明细数组
+// 		array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
+// 	}
+
+	$goodsDetai = new GoodsDetail();
+	$goodsDetai->setGoodsId(1232);
+	$goodsDetai->setGoodsName('测试');
+	$goodsDetai->setPrice('10');
+	$goodsDetai->setQuantity(2);
+	//得到商品1明细数组
+	array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
 	
 	// 支付宝的店铺编号
 	$alipayStoreId = "alipay_store_id_".$this->companyId;
