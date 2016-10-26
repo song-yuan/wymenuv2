@@ -9,23 +9,17 @@ class AlipayGateway {
 	public $config = array();
 	public $biz_content = '';
 	public function __construct($config,$biz_content){
-		AlipayGatewayUnit::writeLog ( "gateway: contruct begin"  );
 		$this->config = $config;
 		$this->biz_content = $biz_content;
-		AlipayGatewayUnit::writeLog ( "gateway: contruct end"  );
 	}
 	public function verifygw($is_sign_success) {
-		AlipayGatewayUnit::writeLog ( "config: config"  );
 		$config = $this->config;
 		$biz_content = $this->biz_content;
-		AlipayGatewayUnit::writeLog ( "gateway: " . $biz_content );
 		$as = new AlipaySign ();
 		$xml = simplexml_load_string ( $biz_content );
-		AlipayGatewayUnit::writeLog ( "xml: " . $xml );
 		// print_r($xml);
 		$EventType = ( string ) $xml->EventType;
 		// echo $EventType;
-		AlipayGatewayUnit::writeLog ( "response_xml: " . $EventType );
 		if ($EventType == "verifygw") {
 			if ($is_sign_success) {
 				$response_xml = "<success>true</success><biz_content>" . $as->getPublicKeyStr ( $config ['merchant_public_key_file'] ) . "</biz_content>";
