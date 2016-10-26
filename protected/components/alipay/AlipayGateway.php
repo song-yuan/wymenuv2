@@ -6,11 +6,13 @@
  *
  */
 class Gateway {
-	public $config;
-	public $biz_content;
+	public $config = array();
+	public $biz_content = '';
 	public function __construct($config,$biz_content){
+		AlipayGatewayUnit::writeLog ( "gateway: contruct begin"  );
 		$this->config = $config;
 		$this->biz_content = $biz_content;
+		AlipayGatewayUnit::writeLog ( "gateway: contruct end"  );
 	}
 	public function verifygw($is_sign_success) {
 		AlipayGatewayUnit::writeLog ( "config: config"  );
