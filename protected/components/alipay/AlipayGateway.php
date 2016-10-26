@@ -13,7 +13,7 @@ class Gateway {
 		$this->biz_content = $biz_content;
 	}
 	public function verifygw($is_sign_success) {
-		AlipayGatewayUnit::writeLog ( "config: " . $this->config );
+		AlipayGatewayUnit::writeLog ( "config: config"  );
 		$config = $this->config;
 		$biz_content = $this->biz_content;
 		AlipayGatewayUnit::writeLog ( "gateway: " . $biz_content );
