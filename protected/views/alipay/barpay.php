@@ -19,7 +19,7 @@ if(isset($_GET)){
 	$operatorId = isset($_POST['operator'])?$_POST['operator']:'admin';
 	
 	// (必填) 商户门店编号
-	$storeId = "store_id_".$this->companyId;
+// 	$storeId = "store_id_".$this->companyId;
 	
 	$goodsDetailList = array();
 // 	$goodsArr = json_decode($_POST['goods']);
@@ -33,16 +33,16 @@ if(isset($_GET)){
 // 		array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
 // 	}
 
-	$goodsDetai = new GoodsDetail();
-	$goodsDetai->setGoodsId(1232);
-	$goodsDetai->setGoodsName('测试');
-	$goodsDetai->setPrice('10');
-	$goodsDetai->setQuantity(2);
-	//得到商品1明细数组
-	array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
+// 	$goodsDetai = new GoodsDetail();
+// 	$goodsDetai->setGoodsId(1232);
+// 	$goodsDetai->setGoodsName('测试');
+// 	$goodsDetai->setPrice('10');
+// 	$goodsDetai->setQuantity(2);
+// 	//得到商品1明细数组
+// 	array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
 	
 	// 支付宝的店铺编号
-	$alipayStoreId = "alipay_store_id_".$this->companyId;
+// 	$alipayStoreId = "alipay_store_id_".$this->companyId;
 	
 	// 业务扩展参数，目前可添加由支付宝分配的系统商编号(通过setSysServiceProviderId方法)
 	$providerId = "2088811584894868"; //系统商pid,作为系统商返佣数据提取的依据
