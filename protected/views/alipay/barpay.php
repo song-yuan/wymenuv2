@@ -67,9 +67,9 @@ if(isset($_GET)){
 	$barPayRequestBuilder->setUndiscountableAmount($undiscountableAmount);
 	$barPayRequestBuilder->setExtendParams($extendParamsArr);
 	$barPayRequestBuilder->setGoodsDetailList($goodsDetailList);
-	$barPayRequestBuilder->setStoreId($storeId);
+// 	$barPayRequestBuilder->setStoreId($storeId);
 	$barPayRequestBuilder->setOperatorId($operatorId);
-	$barPayRequestBuilder->setAlipayStoreId($alipayStoreId);
+// 	$barPayRequestBuilder->setAlipayStoreId($alipayStoreId);
 	
 	$barPayRequestBuilder->setAppAuthToken($appAuthToken);
 	
