@@ -76,6 +76,7 @@ if(isset($_GET)){
 	// 调用barPay方法获取当面付应答
 	$barPay = new AlipayTradeService($this->f2fpay_config);
 	$barPayResult = $barPay->barPay($barPayRequestBuilder);
+	var_dump($barPayResult);exit;
 	switch ($barPayResult->getTradeStatus()) {
 		case "SUCCESS":
 			echo json_encode(array('status'=>true,'msg'=>''));
