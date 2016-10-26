@@ -15,8 +15,10 @@ class Gateway {
 	public function verifygw($is_sign_success) {
 		$config = $this->config;
 		$biz_content = $this->biz_content;
+		AlipayGatewayUnit::writeLog ( "gateway: " . $biz_content );
 		$as = new AlipaySign ();
 		$xml = simplexml_load_string ( $biz_content );
+		AlipayGatewayUnit::writeLog ( "xml: " . $xml );
 		// print_r($xml);
 		$EventType = ( string ) $xml->EventType;
 		// echo $EventType;

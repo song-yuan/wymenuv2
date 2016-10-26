@@ -56,11 +56,8 @@ if (! $sign_verify) {
 }
 // 验证网关请求
 if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.service.check") {
-	AlipayGatewayUnit::writeLog ( "alipay.service.check");
-	AlipayGatewayUnit::writeLog ( "biz_content".$biz_content);
 	$gw = new Gateway ($config,$biz_content);
 	$gw->verifygw ( true );
-	AlipayGatewayUnit::writeLog ( "alipay.service.end");
 } else if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.mobile.public.message.notify") {
 	// 处理收到的消息
 	$msg = new Message ( $biz_content );
