@@ -46,7 +46,7 @@ $sign_verify = $as->rsaCheckV2 ( $_REQUEST, $config ['alipay_public_key_file'] )
 if (! $sign_verify) {
 	// 如果验证网关时，请求参数签名失败，则按照标准格式返回，方便在服务窗后台查看。
 	if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.service.check") {
-		$gw = new Gateway ($config,$biz_content);
+		$gw = new AlipayGateway ($config,$biz_content);
 		$gw->verifygw ( false );
 	} else {
 		echo "sign verfiy fail.";
@@ -56,7 +56,7 @@ if (! $sign_verify) {
 }
 // 验证网关请求
 if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.service.check") {
-	$gw = new Gateway ($config,$biz_content);
+	$gw = new AlipayGateway ($config,$biz_content);
 	AlipayGatewayUnit::writeLog ( "check:middle");
 	$gw->verifygw ( true );
 } else if (AlipayGatewayUnit::getRequest ( "service" ) == "alipay.mobile.public.message.notify") {
