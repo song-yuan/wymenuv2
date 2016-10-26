@@ -5,7 +5,7 @@
  * 支付宝网关 公共函数
  *
  */
-class Gateway {
+class AlipayGateway {
 	public $config = array();
 	public $biz_content = '';
 	public function __construct($config,$biz_content){
