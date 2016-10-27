@@ -1,5 +1,5 @@
 <?php 
-if(isset($_GET)){
+if(isset($_POST)){
 	
 	$now = time();
 	$rand = rand(100,999);
@@ -7,9 +7,9 @@ if(isset($_GET)){
 	
 	$company = WxCompany::get($this->companyId);
 	
-	$subject = $company['company_name']."消费";
-	$totalAmount = $_GET['total'];
-	$authCode = $_GET['authcode'];
+	$subject = $company['company_name']."-当面付";
+	$totalAmount = $_POST['pay_price'];
+	$authCode = $_POST['auth_code'];
 	
 	$undiscountableAmount = "0.01";
 	$sellerId = $this->alipay_config['seller_id'];
@@ -22,8 +22,8 @@ if(isset($_GET)){
 	$storeId = "wy_".$this->companyId;
 	
 	$goodsDetailList = array();
-	if(isset($_GET['goods'])&&$_GET['goods']!=''){
-		$goodsArr = json_decode($_GET['goods']);
+	if(isset($_POST['goods'])&&$_POST['goods']!=''){
+		$goodsArr = json_decode($_POST['goods']);
 		foreach ($goodsArr as $goods){
 			$goodsDetai = new GoodsDetail();
 			$goodsDetai->setGoodsId($goods['product_id']);
