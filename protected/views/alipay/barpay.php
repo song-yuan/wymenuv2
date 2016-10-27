@@ -19,7 +19,7 @@ if(isset($_POST)){
 	$operatorId = isset($_POST['operator'])?$_POST['operator']:'admin';
 	
 	// (必填) 商户门店编号
-// 	$storeId = "store_id_".$this->companyId;
+	$storeId = "wy_".$this->companyId;
 	
 	$goodsDetailList = array();
 	$goodsArr = json_decode($_POST['goods']);
@@ -34,7 +34,7 @@ if(isset($_POST)){
 	}
 
 	// 支付宝的店铺编号
-// 	$alipayStoreId = "alipay_store_id_".$this->companyId;
+	$alipayStoreId = "";
 	
 	// 业务扩展参数，目前可添加由支付宝分配的系统商编号(通过setSysServiceProviderId方法)
 	$providerId = "2088811584894868"; //系统商pid,作为系统商返佣数据提取的依据
@@ -59,9 +59,9 @@ if(isset($_POST)){
 	$barPayRequestBuilder->setUndiscountableAmount($undiscountableAmount);
 	$barPayRequestBuilder->setExtendParams($extendParamsArr);
 	$barPayRequestBuilder->setGoodsDetailList($goodsDetailList);
-// 	$barPayRequestBuilder->setStoreId($storeId);
+	$barPayRequestBuilder->setStoreId($storeId);
 	$barPayRequestBuilder->setOperatorId($operatorId);
-// 	$barPayRequestBuilder->setAlipayStoreId($alipayStoreId);
+	$barPayRequestBuilder->setAlipayStoreId($alipayStoreId);
 	
 	$barPayRequestBuilder->setAppAuthToken($appAuthToken);
 	
