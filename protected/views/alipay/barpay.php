@@ -37,7 +37,6 @@ if(isset($_GET)){
 
 	// 支付宝的店铺编号
 	$alipayStoreId = "";
-	
 	// 业务扩展参数，目前可添加由支付宝分配的系统商编号(通过setSysServiceProviderId方法)
 	$providerId = "2088811584894868"; //系统商pid,作为系统商返佣数据提取的依据
 	$extendParams = new ExtendParams();
@@ -68,7 +67,6 @@ if(isset($_GET)){
 	$barPayRequestBuilder->setAppAuthToken($appAuthToken);
 	
 	// 调用barPay方法获取当面付应答
-	var_dump($this->f2fpay_config);exit;
 	$barPay = new AlipayTradeService($this->f2fpay_config);
 	$barPayResult = $barPay->barPay($barPayRequestBuilder);
 	
