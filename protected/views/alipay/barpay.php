@@ -68,6 +68,7 @@ if(isset($_GET)){
 	$barPayRequestBuilder->setAppAuthToken($appAuthToken);
 	
 	// 调用barPay方法获取当面付应答
+	var_dump($this->f2fpay_config);exit;
 	$barPay = new AlipayTradeService($this->f2fpay_config);
 	$barPayResult = $barPay->barPay($barPayRequestBuilder);
 	
