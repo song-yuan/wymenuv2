@@ -1,5 +1,5 @@
 <?php 
-if(isset($_GET)){
+if(isset($_POST)){
 	
 	$now = time();
 	$rand = rand(100,999);
@@ -8,8 +8,8 @@ if(isset($_GET)){
 	$company = WxCompany::get($this->companyId);
 	
 	$subject = $company['company_name']."消费";
-	$totalAmount = $_GET['total'];
-	$authCode = $_GET['authcode'];
+	$totalAmount = $_POST['total'];
+	$authCode = $_POST['authcode'];
 	
 	$undiscountableAmount = "0.01";
 	$sellerId = $this->alipay_config['seller_id'];
@@ -22,25 +22,17 @@ if(isset($_GET)){
 // 	$storeId = "store_id_".$this->companyId;
 	
 	$goodsDetailList = array();
-// 	$goodsArr = json_decode($_POST['goods']);
-// 	foreach ($goodsArr as $goods){
-// 		$goodsDetai = new GoodsDetail();
-// 		$goodsDetai->setGoodsId($goods['product_id']);
-// 		$goodsDetai->setGoodsName($goods['product_name']);
-// 		$goodsDetai->setPrice($goods['product_price']);
-// 		$goodsDetai->setQuantity($goods['amount']);
-// 		//得到商品1明细数组
-// 		array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
-// 	}
+	$goodsArr = json_decode($_POST['goods']);
+	foreach ($goodsArr as $goods){
+		$goodsDetai = new GoodsDetail();
+		$goodsDetai->setGoodsId($goods['product_id']);
+		$goodsDetai->setGoodsName($goods['product_name']);
+		$goodsDetai->setPrice($goods['product_price']);
+		$goodsDetai->setQuantity($goods['amount']);
+		//得到商品1明细数组
+		array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
+	}
 
-// 	$goodsDetai = new GoodsDetail();
-// 	$goodsDetai->setGoodsId(1232);
-// 	$goodsDetai->setGoodsName('测试');
-// 	$goodsDetai->setPrice('10');
-// 	$goodsDetai->setQuantity(2);
-// 	//得到商品1明细数组
-// 	array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
-	
 	// 支付宝的店铺编号
 // 	$alipayStoreId = "alipay_store_id_".$this->companyId;
 	
@@ -76,8 +68,7 @@ if(isset($_GET)){
 	// 调用barPay方法获取当面付应答
 	$barPay = new AlipayTradeService($this->f2fpay_config);
 	$barPayResult = $barPay->barPay($barPayRequestBuilder);
-	echo '<meta charset="utf8"/>';
-	var_dump($barPayResult);exit;
+	
 	switch ($barPayResult->getTradeStatus()) {
 		case "SUCCESS":
 			echo json_encode(array('status'=>true,'msg'=>''));

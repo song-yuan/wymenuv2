@@ -24,8 +24,8 @@ if (get_magic_quotes_gpc ()) {
 }
 
 // 日志记录下受到的请求
-AlipayGatewayUnit::writeLog ( "POST: " . var_export ( $_POST, true ) );
-AlipayGatewayUnit::writeLog ( "GET: " . var_export ( $_GET, true ) );
+// AlipayGatewayUnit::writeLog ( "POST: " . var_export ( $_POST, true ) );
+// AlipayGatewayUnit::writeLog ( "GET: " . var_export ( $_GET, true ) );
 $sign = AlipayGatewayUnit::getRequest ( "sign" );
 $sign_type = AlipayGatewayUnit::getRequest ( "sign_type" );
 $biz_content = AlipayGatewayUnit::getRequest ( "biz_content" );
