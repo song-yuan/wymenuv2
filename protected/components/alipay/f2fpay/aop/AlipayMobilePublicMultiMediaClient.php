@@ -8,8 +8,6 @@
 
 //namespace alipay\api ;
 
-include("AlipayMobilePublicMultiMediaExecute.php");
-
 
 class AlipayMobilePublicMultiMediaClient{
 

@@ -10,7 +10,7 @@ class AlipayGatewayUnit {
 	public static function writeLog($text) {
 		// $text=iconv("GBK", "UTF-8//IGNORE", $text);
 		$text = self::characet ( $text );
-		file_put_contents ( dirname ( __FILE__ ) . "/log.txt", date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
+		file_put_contents ( Yii::app()->basePath . "/data/log.txt", date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
 	}
 	
 	//转换编码
