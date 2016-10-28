@@ -9,7 +9,7 @@
  * @property string $create_at
  * @property string $update_at
  * @property string $token
- * @property string $original_id
+ * @property string check_txt
  * @property string $appid
  * @property string $appsecret
  * @property integer $expire
@@ -56,7 +56,7 @@ class WeixinServiceAccount extends CActiveRecord
 			array('update_at, appid, appsecret', 'required'),
 			array('expire, multi_customer_service_status, ticket_expire', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid', 'length', 'max'=>10),
-			array('token, original_id', 'length', 'max'=>45),
+			array('token, check_txt', 'length', 'max'=>45),
 			array('appid, appsecret, certificate, rootca, apiclient_key, ticket', 'length', 'max'=>255),
 			array('access_token', 'length', 'max'=>1000),
 			array('partner_id, is_sync', 'length', 'max'=>50),
@@ -65,7 +65,7 @@ class WeixinServiceAccount extends CActiveRecord
 			array('create_at', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, token, original_id, appid, appsecret, expire, access_token, partner_id, key, operator, certificate, rootca, apiclient_key, multi_customer_service_status, ticket, ticket_expire', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, token, check_txt, appid, appsecret, expire, access_token, partner_id, key, operator, certificate, rootca, apiclient_key, multi_customer_service_status, ticket, ticket_expire', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -91,7 +91,7 @@ class WeixinServiceAccount extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => 'Update At',
 			'token' => 'Token',
-			'original_id' => 'Original',
+			'check_txt' => 'Check Txt',
 			'appid' => 'Appid',
 			'appsecret' => 'Appsecret',
 			'expire' => 'Expire',
@@ -125,7 +125,7 @@ class WeixinServiceAccount extends CActiveRecord
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('update_at',$this->update_at,true);
 		$criteria->compare('token',$this->token,true);
-		$criteria->compare('original_id',$this->original_id,true);
+		$criteria->compare('check_txt',$this->check_txt,true);
 		$criteria->compare('appid',$this->appid,true);
 		$criteria->compare('appsecret',$this->appsecret,true);
 		$criteria->compare('expire',$this->expire);

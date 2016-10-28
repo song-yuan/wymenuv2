@@ -1,7 +1,5 @@
 <?php
 
-require_once 'AopEncrypt.php';
-
 class AopClient {
 	//应用ID
 	public $appId;

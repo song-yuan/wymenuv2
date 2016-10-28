@@ -10,15 +10,16 @@ class AlipayController extends Controller
     public function init(){
 		$companyId = Yii::app()->request->getParam('companyId');
 		$this->companyId = $companyId;
+		$alipayAccount = AlipayAccount::get($this->companyId);
 		//支付宝网关
 		$this->gateway_config = array(
 				//商户的私钥（后缀是.pen）文件相对路径
-				'alipay_public_key_file' => Yii::app()->basePath.'/cert/ali/alipay_public_key_file.pem',
-				'merchant_private_key_file' => Yii::app()->basePath.'/cert/ali/rsa_merchant_private_key.pem',
-				'merchant_public_key_file' => Yii::app()->basePath.'/cert/ali/rsa_merchant_public_key.pem',		
+				'alipay_public_key_file' => Yii::app()->basePath.'/'.$alipayAccount['alipay_public_key_file'],
+				'merchant_private_key_file' => Yii::app()->basePath.'/'.$alipayAccount['merchant_private_key_file'],
+				'merchant_public_key_file' => Yii::app()->basePath.'/'.$alipayAccount['merchant_public_key_file'],		
 				'charset' => "GBK",
 				'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
-				'app_id' => "2015060900117633" 
+				'app_id' => $alipayAccount['appid'] 
 		);
 		//支付宝支付 网页支付 及时到账接口
 		$this->alipay_config = array(
@@ -36,7 +37,7 @@ class AlipayController extends Controller
 				'input_charset'=>strtolower('utf-8'),
 				//ca证书路径地址，用于curl中ssl校验
 				//请保证cacert.pem文件在当前文件夹目录中
-				'cacert'=>'admin/cacert.pem',
+				'cacert'=>Yii::app()->basePath.'/cert/ali/cacert.pem',
 				//访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
 				'transport'=>'http',
 		);
@@ -44,15 +45,15 @@ class AlipayController extends Controller
 		// 支付宝扫条码 面对面支付
 		$this->f2fpay_config = array(
 				//支付宝公钥
-				'alipay_public_key' => "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB",
+				'alipay_public_key' => $alipayAccount['alipay_public_key'],
 				//商户私钥
-				'merchant_private_key' => "MIICXQIBAAKBgQD1cud3GAErGMGnxQoZhQchrH4xITJaTs5HnaDCc49Na3+8AI20GxJIzuXfwtkUK68TBk5cVneHpp4vhYfc44+l07XhhVvojn4oZUXlGzmc8I0JIq3/hBoioHPsX160DyulmTHo6kwPE02cgc+SPLWWGWbbJX6GZCl0bXsVBV3CNQIDAQABAoGAWUoInBF2c1gZMtACQZBcLMrUSUkbSTD755+XGMXzLqXZnOnSot9qQmRJyaHXWHgfw1r67Kpj50wcpYr9BsUdvu4iEtC11lxAv4kgmYszjAxxHG+rLIxpyBMtlTevLxQuw5PFnqFQjY6Hzz3CnefFnDorDTXvZXq/qGMWcdbmY+ECQQD/JXtOSsNdwZL5VCsy6XFfFO0ZLZx7QKKKAVSnmTIwgrgs5zR2ExDOJrsrvE/ibP6Agk3dakUpgnToBfp3DaBpAkEA9kUd+TXQahjKnjpZeS/IQ+BHPNfYDIH15H/AwT+pwbvh2kbrvmA9xclueoKXo42EpbtxiQPMzusgx26sLaYZ7QJBAPT5O+b0CZhfX4pcsg1z7hJouS1PicsdR/JRTMKOaI4DNGqIouorbBtDPLrFV74DAGjKs5A/lKBCTZTpCI5+WuECQEWW3FRqf30rij3R8SyMcwOzIY4w0+0c4DX0X6x75+VFyRlcBwuhuHLma6CUvHLL75rBb+CuwTYLPRT90guILzUCQQDQrG6nrmRMaa9mMu6G4I+1IDBMpntUwmJ/Gm7RYBt9CDjE54I1ho9wdz0OScE/1c5JPOoTNC4eoQ4K2lZBL3h6",
+				'merchant_private_key' => $alipayAccount['merchant_private_key'],
 				//编码格式
 				'charset' => "UTF-8",
 				//支付宝网关
 				'gatewayUrl' => "https://openapi.alipay.com/gateway.do",
-				//应用ID
-				'app_id' => "2015060900117633",
+				//应用ID 
+				'app_id' => $alipayAccount['appid'],
 				//异步通知地址,只有扫码支付预下单可用
 				'notify_url' => "",
 				//最大查询重试次数

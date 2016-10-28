@@ -28,6 +28,8 @@ return array(
 		'application.components.wxcard.*',
 		'application.components.alipay.*',
 		'application.components.alipay.f2fpay.*',
+		'application.components.alipay.f2fpay.aop.*',
+		'application.components.alipay.f2fpay.aop.request.*',
 		'application.components.alipay.f2fpay.service.*',
 		'application.components.alipay.f2fpay.model.builder.*',
 		'application.components.alipay.f2fpay.model.result.*',

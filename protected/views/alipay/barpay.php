@@ -3,39 +3,40 @@ if(isset($_POST)){
 	
 	$now = time();
 	$rand = rand(100,999);
-	$orderId = $now.'-'.$this->companyId.'-'.$rand;
+	$outTradeNo = $now.'-'.$this->companyId.'-'.$rand;
 	
 	$company = WxCompany::get($this->companyId);
 	
-	$subject = $company['company_name']."消费";
-	$totalAmount = $_POST['total'];
-	$authCode = $_POST['authcode'];
+	$subject = $company['company_name']."-当面付";
+	$totalAmount = $_POST['pay_price'];
+	$authCode = $_POST['auth_code'];
 	
 	$undiscountableAmount = "0.01";
 	$sellerId = $this->alipay_config['seller_id'];
 	$body = "购买商品共花费".$totalAmount."元";
 	
 	//商户操作员编号，添加此参数可以为商户操作员做销售统计
-	$operatorId = isset($_POST['operator'])?$_POST['operator']:'admin';
+	$operatorId = '';
 	
 	// (必填) 商户门店编号
-	$storeId = "store_id_".$this->companyId;
+	$storeId = "wy_".$this->companyId;
 	
 	$goodsDetailList = array();
-	$goodsArr = json_decode($_POST['goods']);
-	foreach ($goodsArr as $goods){
-		$goodsDetai = new GoodsDetail();
-		$goodsDetai->setGoodsId($goods['product_id']);
-		$goodsDetai->setGoodsName($goods['product_name']);
-		$goodsDetai->setPrice($goods['product_price']);
-		$goodsDetai->setQuantity($goods['amount']);
-		//得到商品1明细数组
-		array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
+	if(isset($_POST['goods'])&&$_POST['goods']!=''){
+		$goodsArr = json_decode($_POST['goods']);
+		foreach ($goodsArr as $goods){
+			$goodsDetai = new GoodsDetail();
+			$goodsDetai->setGoodsId($goods[0]);
+			$goodsDetai->setGoodsName($goods[1]);
+			$goodsDetai->setPrice($goods[2]);
+			$goodsDetai->setQuantity($goods[3]);
+			//得到商品1明细数组
+			array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
+		}
 	}
-	
+
 	// 支付宝的店铺编号
-	$alipayStoreId = "alipay_store_id_".$this->companyId;
-	
+	$alipayStoreId = "";
 	// 业务扩展参数，目前可添加由支付宝分配的系统商编号(通过setSysServiceProviderId方法)
 	$providerId = "2088811584894868"; //系统商pid,作为系统商返佣数据提取的依据
 	$extendParams = new ExtendParams();
@@ -68,6 +69,7 @@ if(isset($_POST)){
 	// 调用barPay方法获取当面付应答
 	$barPay = new AlipayTradeService($this->f2fpay_config);
 	$barPayResult = $barPay->barPay($barPayRequestBuilder);
+	
 	switch ($barPayResult->getTradeStatus()) {
 		case "SUCCESS":
 			echo json_encode(array('status'=>true,'msg'=>''));
