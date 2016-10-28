@@ -32,7 +32,7 @@ class ProductController extends BackendController
 		if($categoryId){
 			$criteria->condition.=' and t.category_id = '.$categoryId;
 		}
-		
+		$criteria->order = 't.sort asc,t.lid asc';
 		$pages = new CPagination(Product::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
@@ -47,9 +47,7 @@ class ProductController extends BackendController
 				'categoryId'=>$categoryId
 		));
 	}
-	public function actionSetMealList() {
-		
-	}
+
 	public function actionCreate(){
 		$model = new Product();
 		$istempp = Yii::app()->request->getParam('istempp',0);
