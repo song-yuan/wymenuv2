@@ -16,7 +16,7 @@ if(isset($_POST)){
 	$body = "购买商品共花费".$totalAmount."元";
 	
 	//商户操作员编号，添加此参数可以为商户操作员做销售统计
-	$operatorId = isset($_POST['operator'])?$_POST['operator']:'admin';
+	$operatorId = '';
 	
 	// (必填) 商户门店编号
 	$storeId = "wy_".$this->companyId;
@@ -26,10 +26,10 @@ if(isset($_POST)){
 		$goodsArr = json_decode($_POST['goods']);
 		foreach ($goodsArr as $goods){
 			$goodsDetai = new GoodsDetail();
-			$goodsDetai->setGoodsId($goods['product_id']);
-			$goodsDetai->setGoodsName($goods['product_name']);
-			$goodsDetai->setPrice($goods['product_price']);
-			$goodsDetai->setQuantity($goods['amount']);
+			$goodsDetai->setGoodsId($goods[0]);
+			$goodsDetai->setGoodsName($goods[1]);
+			$goodsDetai->setPrice($goods[2]);
+			$goodsDetai->setQuantity($goods[3]);
 			//得到商品1明细数组
 			array_push($goodsDetailList,$goodsDetai->getGoodsDetail());
 		}
