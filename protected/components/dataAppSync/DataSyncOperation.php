@@ -906,18 +906,22 @@ class DataSyncOperation {
 		$materialStocks = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ($materialStocks as $k=>$materialStock){
 			$realityStock = $materialStock['stock'];
-			$temStock -= $realityStock;
+			if($realityStock==0){
+				continue;
+			}
+			$temStock = $temStock - $realityStock;
 			if($temStock > 0){
 				if($K+1==count($materialStocks)){
-					$sql = 'update nb_product_material_stock set stock=stock-'.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and material_id='.$materialId.' and delete_flag=0';
+					$sql = 'update nb_product_material_stock set stock = stock - '.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
 					Yii::app ()->db->createCommand ( $sql )->execute ();
 				}else{
-					$sql = 'update nb_product_material_stock set stock= 0 where lid='.$materialStock['lid'].' and dpid='.$dpid.' and material_id='.$materialId.' and delete_flag=0';
+					$sql = 'update nb_product_material_stock set stock= 0 where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
 					Yii::app ()->db->createCommand ( $sql )->execute ();
 				}
 			}else{
-				$sql = 'update nb_product_material_stock set stock=stock-'.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and material_id='.$materialId.' and delete_flag=0';
+				$sql = 'update nb_product_material_stock set stock = stock - '.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
+				break;
 			}
 		}
 		$se = new Sequence ( "material_stock_log" );
