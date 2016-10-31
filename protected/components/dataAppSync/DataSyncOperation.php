@@ -484,7 +484,7 @@ class DataSyncOperation {
 						'paytype' => $pay->paytype,
 						'payment_method_id' => $pay->payment_method_id,
 						'paytype_id' => $pay->paytype_id,
-						'remark' => $pay->remark,
+						'remark' => isset($pay->remark)?$pay->remark:'',
 						'is_sync' => $isSync
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
