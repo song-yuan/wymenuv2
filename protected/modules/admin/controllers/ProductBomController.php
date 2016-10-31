@@ -1,24 +1,64 @@
 <?php
 class ProductBomController extends BackendController
 {
+	public function beforeAction($action) {
+		parent::beforeAction($action);
+		if(!$this->companyId && $this->getAction()->getId() != 'upload') {
+			Yii::app()->user->setFlash('error' , yii::t('app','请选择公司'));
+			$this->redirect(array('company/index'));
+		}
+		return true;
+	}
 	public function actionIndex(){
+		$categoryId = Yii::app()->request->getParam('cid',0);
 		//$pbId=Yii::app()->request->getParam('lid');
 		$criteria = new CDbCriteria;
 		//$criteria->with=array('product');
 		$criteria->order='t.dpid desc';
 		$criteria->condition =  't.dpid='.$this->companyId .' and t.delete_flag=0 ';
+		if($categoryId){
+			$criteria->condition.=' and t.category_id = '.$categoryId;
+		}
 		$pages = new CPagination(Product::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
 
 		$models = Product::model()->findAll($criteria);
 		//var_dump($models);
+		$categories = $this->getProductCategories();
 		$this->render('index',array(
 				'models'=>$models,
-				'pages'=>$pages
+				'pages'=>$pages,
+				'categories'=>$categories,
+				'categoryId'=>$categoryId
 		));
 	}
 
+	public function actionCreate() {
+		$this->layout = '/layouts/main_picture';
+		$pid = Yii::app()->request->getParam('pid',0);
+		$phscode = Yii::app()->request->getParam('phscode',0);
+		$prodname = Yii::app()->request->getParam('prodname',0);
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.pid != 0 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$models = MaterialCategory::model()->findAll($criteria);
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition =  ' t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$materials = ProductMaterial::model()->findAll($criteria);
+		//var_dump($categories);exit;
+		$this->render('create' , array(
+				'models' => $models,
+				'prodname' => $prodname,
+				'pid' => $pid,
+				'phscode' => $phscode,
+				'materials' => $materials,
+				'action' => $this->createUrl('productbom/create' , array('companyId'=>$this->companyId))
+		));
+	}
 	public function actionDetailIndex(){
 		$pblid = Yii::app()->request->getParam('pblid');
 		$criteria = new CDbCriteria;
@@ -55,7 +95,7 @@ class ProductBomController extends BackendController
 			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
 			$command3 = $db->createCommand($sql);
 			$salesUnitId = $command3->queryRow()['muhs_code'];
-			
+			//var_dump($productCode);var_dump($materialId);var_dump($salesUnitId);exit;
 			if($productCode&&$materialId&&$salesUnitId){
 				$se=new Sequence("product_bom");
 				$model->lid = $se->nextval();
@@ -69,9 +109,12 @@ class ProductBomController extends BackendController
 				if($model->save()) {
 					Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
 					$this->redirect(array('productBom/detailindex','companyId' => $this->companyId,'pblid'=>$pblid));
+				}else{
+					Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
+					$this->redirect(array('productBom/detailindex','companyId' => $this->companyId,'pblid'=>$pblid));
 				}
 			}else{
-				Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
+				Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败(包含无编码产品)'));
 				$this->redirect(array('productBom/detailindex','companyId' => $this->companyId,'pblid'=>$pblid));
 			}
 		}
@@ -141,6 +184,34 @@ class ProductBomController extends BackendController
 			$treeDataSource['data'][] = $tmp;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
+	}
+	private function getProductCategories(){
+		$criteria = new CDbCriteria;
+		$criteria->with = 'company';
+		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' tree,t.lid asc ';
+	
+		$models = ProductCategory::model()->findAll($criteria);
+	
+		//return CHtml::listData($models, 'lid', 'category_name','pid');
+		$options = array();
+		$optionsReturn = array(yii::t('app','--请选择分类--'));
+		if($models) {
+			foreach ($models as $model) {
+				if($model->pid == '0') {
+					$options[$model->lid] = array();
+				} else {
+					$options[$model->pid][$model->lid] = $model->category_name;
+				}
+			}
+			//var_dump($options);exit;
+		}
+		foreach ($options as $k=>$v) {
+			//var_dump($k,$v);exit;
+			$model = ProductCategory::model()->find('t.lid = :lid and dpid=:dpid',array(':lid'=>$k,':dpid'=>  $this->companyId));
+			$optionsReturn[$model->category_name] = $v;
+		}
+		return $optionsReturn;
 	}
 	private function getCategories(){
 		$criteria = new CDbCriteria;
@@ -213,5 +284,68 @@ class ProductBomController extends BackendController
 			$treeDataSource['data'] = TRUE;
 		}
 		Yii::app()->end(json_encode($treeDataSource));
+	}
+	public function actionStorProductBom(){
+		
+		$is_sync = DataSync::getInitSync();
+		//var_dump($companyId);exit;
+		$ids = Yii::app()->request->getPost('ids');
+		$matids = Yii::app()->request->getParam('matids');
+		$prodid = Yii::app()->request->getParam('prodid');
+		$prodcode = Yii::app()->request->getParam('prodcode');
+		$tasteid = Yii::app()->request->getParam('tasteid');
+		$dpid = $this->companyId;
+		$materialnums = array();
+		$materialnums = explode(';',$matids);
+		
+		$db = Yii::app()->db;
+		//var_dump($dpids,$phscodes);exit;
+		$transaction = $db->beginTransaction();
+		try{
+			//var_dump($materialnums);exit;
+			foreach ($materialnums as $materialnum){
+				$materials = array();
+				$materials = explode(',',$materialnum);
+				$mateid = $materials[0];
+				$matenum = $materials[1];
+				$prodmaterials = ProductMaterial::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$mateid,':companyId'=>$this->companyId));
+				
+				if(!empty($prodmaterials)&&!empty($mateid)){
+					$se = new Sequence("product_bom");
+					$id = $se->nextval();
+					//Yii::app()->end(json_encode(array('status'=>true,'msg'=>'成功','matids'=>$prodmaterials['material_name'],'prodid'=>$matenum,'tasteid'=>$tasteid)));
+					$dataprodbom = array(
+							'lid'=>$id,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+							'product_id'=>$prodid,
+							'material_id'=>$mateid,
+							'number'=>$matenum,
+							'sales_unit_id'=>$prodmaterials['sales_unit_id'],
+							'mphs_code'=>$prodmaterials['mphs_code'],
+							'phs_code'=>$prodcode,
+							'mushs_code'=>$prodmaterials['mushs_code'],
+							'delete_flag'=>'0',
+							'is_sync'=>$is_sync,
+					);
+					$msg = $prodid.'@@'.$mateid.'@@'.$prodmaterials['sales_unit_id'].'@@'.$prodmaterials['mphs_code'].'@@'.$prodcode.'@@'.$prodmaterials['mushs_code'];
+					//var_dump($dataprod);exit;
+					$command = $db->createCommand()->insert('nb_product_bom',$dataprodbom);
+					
+				}
+				
+			}
+			//Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
+			$transaction->commit(); //提交事务会真正的执行数据库操作
+			Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
+			
+		} catch (Exception $e) {
+				$transaction->rollback(); //如果操作失败, 数据回滚
+				Yii::app()->end(json_encode(array('status'=>false,'msg'=>'保存失败',)));
+			}  
+		
+		
+	
 	}
 }
