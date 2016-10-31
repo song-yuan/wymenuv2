@@ -178,8 +178,8 @@ class DataSyncOperation {
 		$data = array ();
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
-		$transaction = Yii::app ()->db->beginTransaction ();
-		try {
+// 		$transaction = Yii::app ()->db->beginTransaction ();
+// 		try {
 			//订单数据
 			$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status=3 and is_sync<>0';
 			$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
@@ -227,12 +227,12 @@ class DataSyncOperation {
 				$sql = 'update nb_member_card set is_sync=0 where dpid=' . $dpid . ' and lid=' . $card ['lid'];
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 			}
-			$transaction->commit (); // 事物结束
-		} catch ( Exception $e ) {
-			$transaction->rollback (); // 回滚函数
-			$data ['order'] = array ();
-			$data ['member_card'] = array ();
-		}
+// 			$transaction->commit (); // 事物结束
+// 		} catch ( Exception $e ) {
+// 			$transaction->rollback (); // 回滚函数
+// 			$data ['order'] = array ();
+// 			$data ['member_card'] = array ();
+// 		}
 		return json_encode ( $data );
 	}
 	/**
