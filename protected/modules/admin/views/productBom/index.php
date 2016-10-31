@@ -68,7 +68,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td ><?php echo $model->product_name ;?></td>
-								<td class="add_btn" pid="<?php echo $model->lid;?>" compid="<?php echo $model->dpid;?>" prodname="<?php echo $model->product_name;?>" phscode="<?php echo $model->phs_code;?>" data-toggle="modal"> </td>
+								<td class="add_btn" pid="<?php echo $model->lid;?>" compid="<?php echo $model->dpid;?>" prodname="<?php echo $model->product_name;?>" phscode="<?php echo $model->phs_code;?>" data-toggle="modal"> <?php echo yii::t('app','批量添加配方');?></td>
                                 <td class="center">
 								<a href="<?php echo $this->createUrl('productBom/detailindex',array('pblid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑配方');?></a>
 								</td>
@@ -136,7 +136,7 @@
     	compid = $(this).attr('compid');
     	prodname = $(this).attr('prodname');
     	phscode = $(this).attr('phscode');
-        $modal.find('.modal-content').load('<?php echo $this->createUrl('productbom/create',array('companyId'=>$this->companyId));?>/pid/'+pid+'/prodname/'+prodname+'/phscode/'+phscode, '', function(){
+        $modal.find('.modal-content').load('<?php echo $this->createUrl('productBom/create',array('companyId'=>$this->companyId));?>/pid/'+pid+'/prodname/'+prodname+'/phscode/'+phscode, '', function(){
           $modal.modal();
         });
     });
