@@ -206,7 +206,7 @@ class DataSyncOperation {
 				$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
 				$orderPay = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_pay'] = $orderPay;
-				$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and t.is_order=1 and t.delete_flag=0';
+				$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $result ['lid'] . ' and t.dpid='.$dpid.' and t.is_order=1 and t.delete_flag=0';
 				$orderTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_taste'] = $orderTaste;
 				$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
