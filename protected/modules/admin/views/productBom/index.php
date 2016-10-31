@@ -136,7 +136,7 @@
     	compid = $(this).attr('compid');
     	prodname = $(this).attr('prodname');
     	phscode = $(this).attr('phscode');
-        $modal.find('.modal-content').load('<?php echo $this->createUrl('productbom/create',array('companyId'=>$this->companyId));?>/pid/'+pid+'/prodname/'+prodname+'/phscode/'+phscode, '', function(){
+        $modal.find('.modal-content').load('<?php echo $this->createUrl('productBom/create',array('companyId'=>$this->companyId));?>/pid/'+pid+'/prodname/'+prodname+'/phscode/'+phscode, '', function(){
           $modal.modal();
         });
     });
