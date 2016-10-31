@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','原料明细列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','原料明细列表（*带括号的则为产品规格的原料）');?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('productBom/detailcreate' , array('companyId' => $this->companyId,'lid'=>$pblid,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
@@ -64,7 +64,7 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
-								<th><?php echo yii::t('app','原料名称');?></th> 
+								<th><?php echo yii::t('app','原料名称（规格）');?></th> 
 								<th><?php echo yii::t('app','消耗数量');?></th>                            
                                 <th><?php echo yii::t('app','零售单位');?></th>
                                 
@@ -75,13 +75,13 @@
 
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
-								<td><?php echo $model->material->material_name ;?></td>
-								<td><?php echo $model->number;?></td>
-                                <td><?php echo Common::getSalesName($model->sales_unit_id);?></td>
+								<td><input type="checkbox" class="checkboxes" value="<?php echo $model['lid'];?>" name="ids[]" /></td>
+								<td><?php echo $model['material_name'] ;?><?php if($model['name']) echo '  ( '.$model['name'].' )';?></td>
+								<td><?php echo $model['number'];?></td>
+                                <td><?php echo Common::getSalesName($model['sales_unit_id']);?></td>
                                 
                                 <td class="center">
-								<a href="<?php echo $this->createUrl('productBom/detailupdate',array('lid' => $model->lid ,'pblid'=>$model->product_id, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('productBom/detailupdate',array('lid' => $model['lid'] ,'pblid'=>$model['product_id'], 'companyId' => $model['dpid']));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>             
 							</tr>
 						<?php endforeach;?>

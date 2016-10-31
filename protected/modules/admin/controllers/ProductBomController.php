@@ -44,11 +44,20 @@ class ProductBomController extends BackendController
 		$criteria->condition =  't.pid != 0 and t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.lid asc ';
 		$models = MaterialCategory::model()->findAll($criteria);
+		//查询原料分类
 		
 		$criteria = new CDbCriteria;
 		$criteria->condition =  ' t.delete_flag=0 and t.dpid='.$this->companyId ;
 		$criteria->order = ' t.lid asc ';
 		$materials = ProductMaterial::model()->findAll($criteria);
+		//查询原料信息
+		
+		$db = Yii::app()->db;
+		$sql = 'select t.* from nb_taste t where t.taste_group_id in(select t1.taste_group_id from nb_product_taste t1 where t1.delete_flag = 0 and t1.product_id='.$pid.' and t1.dpid='.$this->companyId.') and t.delete_flag = 0 and t.dpid ='.$this->companyId ;
+		$command1 = $db->createCommand($sql);
+		$prodTastes = $command1->queryAll();
+		//查询产品口味
+		
 		//var_dump($categories);exit;
 		$this->render('create' , array(
 				'models' => $models,
@@ -56,18 +65,30 @@ class ProductBomController extends BackendController
 				'pid' => $pid,
 				'phscode' => $phscode,
 				'materials' => $materials,
-				'action' => $this->createUrl('productbom/create' , array('companyId'=>$this->companyId))
+				'prodTastes' => $prodTastes,
+				'action' => $this->createUrl('productBom/create' , array('companyId'=>$this->companyId))
 		));
 	}
 	public function actionDetailIndex(){
 		$pblid = Yii::app()->request->getParam('pblid');
-		$criteria = new CDbCriteria;
-		$criteria->with = 'material';
-		$criteria->condition =  't.dpid='.$this->companyId .' and t.product_id='.$pblid.' and t.delete_flag=0';
-		$pages = new CPagination(ProductBom::model()->count($criteria));
+		//$criteria = new CDbCriteria;
+		//$criteria->with = array('material','taste');
+		//$criteria->condition =  't.dpid='.$this->companyId .' and t.product_id='.$pblid.' and t.delete_flag=0';
+		$db = Yii::app()->db;
+		$sql = 'select k.* from(select t2.material_name,t1.name,t.* from nb_product_bom t left join nb_taste t1 on(t.taste_id = t1.lid and t.dpid = t1.dpid) left join nb_product_material t2 on(t.material_id=t2.lid and t.dpid=t2.dpid and t2.delete_flag=0) where t.delete_flag = 0 and t.product_id='.$pblid.' and t.dpid ='.$this->companyId.' order by t.taste_id asc,t.lid asc) k ';
+		$recharge = Yii::app()->db->createCommand($sql)->queryRow();
+		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
+		//var_dump($count);exit;
+		$pages = new CPagination($count);
+		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
+		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
+		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
+		$models = $pdata->queryAll();
+		
+		//$pages = new CPagination(ProductBom::model()->count($criteria));
 		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$models = ProductBom::model()->findAll($criteria); //var_dump($models);exit;
+		//$pages->applyLimit($criteria);
+		//$models = ProductBom::model()->findAll($criteria); //var_dump($models);exit;
 		$this->render('detailindex',array(
 				'models'=>$models,
 				'pages'=>$pages,
@@ -320,6 +341,7 @@ class ProductBomController extends BackendController
 							'create_at'=>date('Y-m-d H:i:s',time()),
 							'update_at'=>date('Y-m-d H:i:s',time()),
 							'product_id'=>$prodid,
+							'taste_id'=>$tasteid,
 							'material_id'=>$mateid,
 							'number'=>$matenum,
 							'sales_unit_id'=>$prodmaterials['sales_unit_id'],

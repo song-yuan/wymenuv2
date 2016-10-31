@@ -185,6 +185,16 @@
 		line-height: 30px;
 		text-align: center;		
 	}
+	.pageend {
+		margin-bottom: 10px;
+	}
+	.pageend .closediv {
+		float: right;
+		margin-right: 10px;
+	}
+	.pageend .closediv button{
+		border: 1px solid silver;
+	}
 	.width40{
 		width: 40% !important;
 	}
@@ -214,6 +224,14 @@
 							<div class="pbom">
 								<div class="pbomhead">
 									<div class="pbomheadtitle mataction" tasteid="0000000000">基础配方</div>
+									<?php if($prodTastes):?>
+									<div id="prodtaste" value="1" class="uhide"></div>
+									<?php foreach ($prodTastes as $prodTaste):?>
+										<div class="pbomheadtitle " tasteid="<?php echo $prodTaste['lid'];?>"><?php echo $prodTaste['name'];?></div>
+									<?php endforeach;?>
+									<?php else:?>
+									<div id="prodtaste" value="0" class="uhide"></div>
+									<?php endif;?>
 									<!-- <div class="pbomheadtitle">西米</div>
 									<div class="pbomheadtitle">珍珠</div>
 									<div class="pbomheadtitle">大</div>
@@ -269,8 +287,13 @@
 							</div>
 							
 						</div>
-						</div><button id="close_modal" type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','取 消');?></button>
-				
+						</div>
+						<div class="pageend">
+							<div class="closediv">
+								<button id="close_modal" type="button" data-dismiss="modal" class="btn default"><?php echo yii::t('app','关 闭');?></button>
+							</div>
+							<div class="clear"></div>
+						</div>
 					</div>
 							
 			</div>
@@ -280,9 +303,13 @@
 $(document).ready(function(){
 	var prodid = '<?php echo $pid;?>';
 	var prodcode = '<?php echo $phscode;?>';
+	var prodtaste = $('#prodtaste').attr('value');
+	//alert(prodtaste);
     $('.pbomheadtitle').on('click',function(){
         $('.pbomheadtitle').removeClass('mataction');
         $(this).addClass('mataction');
+        $('.checkboxes').removeAttr('checked');
+        $('.bombody > div').remove();
      });
     $(".matcatbody").on("click",".pbommaterial",function(){
         $(".pbommaterial").removeClass("mataction");
@@ -379,7 +406,12 @@ $(document).ready(function(){
 		                       if(data.status){
 			                       alert("保存成功");
 			                       //$("#close_modal").trigger(click);
-			                       document.getElementById("close_modal").click(); 
+			                       if(prodtaste == 0){
+				                       //alert(prodtaste);
+			                       		document.getElementById("close_modal").click();
+			                       }else{
+				                       layer.msg("请添加口味配方；或者点击右下角关闭页面！");
+				                       }
 								//alert(data.matids);
 								//alert(data.prodid);  
 		                       }else{

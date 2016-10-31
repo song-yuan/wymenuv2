@@ -56,6 +56,7 @@ class ProductBom extends CActiveRecord
 			'company' => array(self::BELONGS_TO , 'Company' , 'dpid'),
 			'product' => array(self::BELONGS_TO , 'Product' , '' , 'on' => ' t.product_id=product.lid and t.dpid=product.dpid and product.delete_flag=0'),
 			'material' => array(self::BELONGS_TO , 'ProductMaterial' , '' , 'on' => ' t.material_id=material.lid and t.dpid=material.dpid and material.delete_flag=0'),
+			'taste' => array(self::BELONGS_TO , 'Taste' , '' , 'on' => ' t.taste_id=taste.lid and t.dpid=taste.dpid and taste.delete_flag=0'),
 			//'unit'=>array(self::BELONGS_TO, 'MaterialUnit' , '' ,'on'=>'t.sales_unit_id=unit.lid and t.dpid=unit.dpid and unit.delete_flag=0'),
 		);
 	}
