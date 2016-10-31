@@ -458,16 +458,16 @@ class DataSyncOperation {
 					}
 					Yii::app()->db->createCommand($sql)->execute();
 				}
-				if($isSync==0){
-					// 消耗原材料库存
-					$productBoms = self::getBom($dpid, $product->product_id);
-					if(!empty($productBoms)){
-						foreach ($productBoms as $bom){
-							$stock = ($bom['number']/$bom['unit_ratio'])*$product->amount;
-							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
-						}
-					}
-				}
+// 				if($isSync==0){
+// 					// 消耗原材料库存
+// 					$productBoms = self::getBom($dpid, $product->product_id);
+// 					if(!empty($productBoms)){
+// 						foreach ($productBoms as $bom){
+// 							$stock = $bom['number']*$product->amount;
+// 							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
+// 						}
+// 					}
+// 				}
 			}
 			// 支付方式
 			foreach ( $orderPay as $pay ) {
@@ -887,7 +887,8 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function getBom($dpid, $productId) {
-		$sql = 'select m.*,n.unit_ratio from (select t.product_id, t.material_id, t.number, t1.stock_unit_id, t1.sales_unit_id from nb_product_bom t,nb_product_material t1 where t.material_id=t1.lid and t.dpid=t1.dpid and t.dpid=' . $dpid . ' and t.product_id=' . $productId . ' and t.delete_flag=0 and t1.delete_flag=0)m,nb_material_unit_ratio n where m.stock_unit_id=n.stock_unit_id and m.sales_unit_id=n.sales_unit_id and n.delete_flag=0';
+// 		$sql = 'select m.*,n.unit_ratio from (select t.product_id, t.material_id, t.number, t1.stock_unit_id, t1.sales_unit_id from nb_product_bom t,nb_product_material t1 where t.material_id=t1.lid and t.dpid=t1.dpid and t.dpid=' . $dpid . ' and t.product_id=' . $productId . ' and t.delete_flag=0 and t1.delete_flag=0)m,nb_material_unit_ratio n where m.stock_unit_id=n.stock_unit_id and m.sales_unit_id=n.sales_unit_id and n.delete_flag=0';
+		$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and delete_flag=0';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		return $results;
 	}
@@ -906,18 +907,22 @@ class DataSyncOperation {
 		$materialStocks = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		foreach ($materialStocks as $k=>$materialStock){
 			$realityStock = $materialStock['stock'];
-			$temStock -= $realityStock;
+			if($realityStock==0){
+				continue;
+			}
+			$temStock = $temStock - $realityStock;
 			if($temStock > 0){
 				if($K+1==count($materialStocks)){
-					$sql = 'update nb_product_material_stock set stock=stock-'.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and material_id='.$materialId.' and delete_flag=0';
+					$sql = 'update nb_product_material_stock set stock = stock - '.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
 					Yii::app ()->db->createCommand ( $sql )->execute ();
 				}else{
-					$sql = 'update nb_product_material_stock set stock= 0 where lid='.$materialStock['lid'].' and dpid='.$dpid.' and material_id='.$materialId.' and delete_flag=0';
+					$sql = 'update nb_product_material_stock set stock= 0 where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
 					Yii::app ()->db->createCommand ( $sql )->execute ();
 				}
 			}else{
-				$sql = 'update nb_product_material_stock set stock=stock-'.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and material_id='.$materialId.' and delete_flag=0';
+				$sql = 'update nb_product_material_stock set stock = stock - '.$stock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
+				break;
 			}
 		}
 		$se = new Sequence ( "material_stock_log" );
