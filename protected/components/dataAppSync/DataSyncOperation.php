@@ -203,6 +203,7 @@ class DataSyncOperation {
 					}
 				}
 				$order ['nb_order_product'] = $orderProduct;
+				var_dump($order);exit;
 				$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
 				$orderPay = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_pay'] = $orderPay;
@@ -215,7 +216,6 @@ class DataSyncOperation {
 				$sql = 'update nb_order set is_sync=0 where dpid=' . $dpid . ' and lid=' . $result ['lid'];
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 				array_push ( $data ['order'], $order );
-				var_dump($order);exit;
 			}
 			//会员数据
 			$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
