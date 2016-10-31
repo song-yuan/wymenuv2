@@ -182,9 +182,7 @@ class DataSyncOperation {
 		try {
 			//订单数据
 			$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status=3 and is_sync<>0';
-			echo $sql;
 			$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-			var_dump($results);exit;
 			foreach ( $results as $result ) {
 				$order = array ();
 				$order ['nb_order'] = $result;
@@ -214,10 +212,11 @@ class DataSyncOperation {
 				$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
 				$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_address'] = $orderAddress;
-				array_push ( $data ['order'], $order );
 				$sql = 'update nb_order set is_sync=0 where dpid=' . $dpid . ' and lid=' . $result ['lid'];
 				Yii::app ()->db->createCommand ( $sql )->execute ();
+				array_push ( $data ['order'], $order );
 			}
+			var_dump($data);exit;
 			//会员数据
 			$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
 			$memberCard = Yii::app ()->db->createCommand ( $sql )->queryAll ();
