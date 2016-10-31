@@ -458,16 +458,16 @@ class DataSyncOperation {
 					}
 					Yii::app()->db->createCommand($sql)->execute();
 				}
-// 				if($isSync==0){
-// 					// 消耗原材料库存
-// 					$productBoms = self::getBom($dpid, $product->product_id);
-// 					if(!empty($productBoms)){
-// 						foreach ($productBoms as $bom){
-// 							$stock = $bom['number']*$product->amount;
-// 							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
-// 						}
-// 					}
-// 				}
+				if($isSync==0){
+					// 消耗原材料库存
+					$productBoms = self::getBom($dpid, $product->product_id);
+					if(!empty($productBoms)){
+						foreach ($productBoms as $bom){
+							$stock = $bom['number']*$product->amount;
+							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
+						}
+					}
+				}
 			}
 			// 支付方式
 			foreach ( $orderPay as $pay ) {
@@ -484,7 +484,7 @@ class DataSyncOperation {
 						'paytype' => $pay->paytype,
 						'payment_method_id' => $pay->payment_method_id,
 						'paytype_id' => $pay->paytype_id,
-						'remark' => $pay->remark,
+						'remark' => isset($pay->remark)?$pay->remark:'',
 						'is_sync' => $isSync
 				);
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
