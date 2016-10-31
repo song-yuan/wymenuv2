@@ -215,8 +215,8 @@ class DataSyncOperation {
 				$sql = 'update nb_order set is_sync=0 where dpid=' . $dpid . ' and lid=' . $result ['lid'];
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 				array_push ( $data ['order'], $order );
+				var_dump($order);exit;
 			}
-			var_dump($data);exit;
 			//会员数据
 			$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
 			$memberCard = Yii::app ()->db->createCommand ( $sql )->queryAll ();
