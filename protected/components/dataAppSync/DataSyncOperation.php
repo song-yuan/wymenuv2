@@ -184,11 +184,11 @@ class DataSyncOperation {
 			$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status=3 and is_sync<>0';
 			$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			foreach ( $results as $result ) {
-				var_dump($result);exit;
 				$order = array ();
 				$order ['nb_order'] = $result;
 				$sql = 'select *,"" as set_name,sum(price) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and delete_flag=0 group by set_id';
 				$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+				var_dump($orderProduct);exit;
 				foreach ( $orderProduct as $k => $product ) {
 					$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and t.is_order=0 and t.delete_flag=0';
 					$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
