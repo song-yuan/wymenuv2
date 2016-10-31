@@ -463,7 +463,7 @@ class DataSyncOperation {
 					$productBoms = self::getBom($dpid, $product->product_id);
 					if(!empty($productBoms)){
 						foreach ($productBoms as $bom){
-							$stock = ($bom['number']/$bom['unit_ratio'])*$product->amount;
+							$stock = $bom['number']*$product->amount;
 							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
 						}
 					}
@@ -887,7 +887,8 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function getBom($dpid, $productId) {
-		$sql = 'select m.*,n.unit_ratio from (select t.product_id, t.material_id, t.number, t1.stock_unit_id, t1.sales_unit_id from nb_product_bom t,nb_product_material t1 where t.material_id=t1.lid and t.dpid=t1.dpid and t.dpid=' . $dpid . ' and t.product_id=' . $productId . ' and t.delete_flag=0 and t1.delete_flag=0)m,nb_material_unit_ratio n where m.stock_unit_id=n.stock_unit_id and m.sales_unit_id=n.sales_unit_id and n.delete_flag=0';
+// 		$sql = 'select m.*,n.unit_ratio from (select t.product_id, t.material_id, t.number, t1.stock_unit_id, t1.sales_unit_id from nb_product_bom t,nb_product_material t1 where t.material_id=t1.lid and t.dpid=t1.dpid and t.dpid=' . $dpid . ' and t.product_id=' . $productId . ' and t.delete_flag=0 and t1.delete_flag=0)m,nb_material_unit_ratio n where m.stock_unit_id=n.stock_unit_id and m.sales_unit_id=n.sales_unit_id and n.delete_flag=0';
+		$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and delete_flag=0';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		return $results;
 	}
