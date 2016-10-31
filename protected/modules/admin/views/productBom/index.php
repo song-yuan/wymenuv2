@@ -68,8 +68,8 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td ><?php echo $model->product_name ;?></td>
-								<td class="add_btn" pid="<?php echo $model->lid;?>" compid="<?php echo $model->dpid;?>" prodname="<?php echo $model->product_name;?>" phscode="<?php echo $model->phs_code;?>" data-toggle="modal"> <?php echo yii::t('app','批量添加配方');?></td>
-                                <td class="center">
+								<td style="width:10%" class="add_btn" pid="<?php echo $model->lid;?>" compid="<?php echo $model->dpid;?>" prodname="<?php echo $model->product_name;?>" phscode="<?php echo $model->phs_code;?>" data-toggle="modal"> <a href="" ><?php echo yii::t('app','批量添加配方');?></a></td>
+                                <td style="width:10%" class="center">
 								<a href="<?php echo $this->createUrl('productBom/detailindex',array('pblid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑配方');?></a>
 								</td>
 							</tr>
@@ -127,7 +127,7 @@
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('productbom/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+			location.href="<?php echo $this->createUrl('productBom/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
 	var $modal = $('.modal');
