@@ -920,7 +920,7 @@ class DataSyncOperation {
 					Yii::app ()->db->createCommand ( $sql )->execute ();
 				}
 			}else{
-				$sql = 'update nb_product_material_stock set stock = stock - '.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+				$sql = 'update nb_product_material_stock set stock = stock - '.$stock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 				break;
 			}
