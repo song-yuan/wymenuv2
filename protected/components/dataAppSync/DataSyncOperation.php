@@ -178,8 +178,8 @@ class DataSyncOperation {
 		$data = array ();
 		$data ['order'] = array ();
 		$data ['member_card'] = array ();
-// 		$transaction = Yii::app ()->db->beginTransaction ();
-// 		try {
+		$transaction = Yii::app ()->db->beginTransaction ();
+		try {
 			//订单数据
 			$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status=3 and is_sync<>0';
 			$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
@@ -189,7 +189,7 @@ class DataSyncOperation {
 				$sql = 'select *,"" as set_name,sum(price) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and delete_flag=0 group by set_id';
 				$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				foreach ( $orderProduct as $k => $product ) {
-					$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and t.is_order=0 and t.delete_flag=0';
+					$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $product ['lid'] . ' and t.dpid='.$dpid.' and t.is_order=0 and t.delete_flag=0';
 					$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 					$orderProduct [$k] ['product_taste'] = $orderProductTaste;
 					if($product['set_id'] > 0){
@@ -202,7 +202,6 @@ class DataSyncOperation {
 						}
 					}
 				}
-				var_dump($orderProduct);exit;
 				$order ['nb_order_product'] = $orderProduct;
 				$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
 				$orderPay = Yii::app ()->db->createCommand ( $sql )->queryAll ();
@@ -229,11 +228,11 @@ class DataSyncOperation {
 				Yii::app ()->db->createCommand ( $sql )->execute ();
 			}
 			$transaction->commit (); // 事物结束
-// 		} catch ( Exception $e ) {
-// 			$transaction->rollback (); // 回滚函数
-// 			$data ['order'] = array ();
-// 			$data ['member_card'] = array ();
-// 		}
+		} catch ( Exception $e ) {
+			$transaction->rollback (); // 回滚函数
+			$data ['order'] = array ();
+			$data ['member_card'] = array ();
+		}
 		return json_encode ( $data );
 	}
 	/**
