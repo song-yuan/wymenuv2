@@ -181,15 +181,16 @@ class DataSyncOperation {
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
 			//订单数据
-			$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status=3 and 	is_sync<>0';
+			$sql = 'select * from nb_order where dpid=' . $dpid . ' and order_status=3 and is_sync<>0';
 			$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 			foreach ( $results as $result ) {
 				$order = array ();
 				$order ['nb_order'] = $result;
-				$sql = 'select *,"" as set_name,sum(price) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and delete_flag=0 group by set_id';
+				$sql = 'select *,"" as set_name,sum(price) as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id > 0 and delete_flag=0 group by set_id'.
+					   ' union select *,"" as set_name,"0.00" as set_price from nb_order_product where order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and set_id = 0 and delete_flag=0';
 				$orderProduct = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				foreach ( $orderProduct as $k => $product ) {
-					$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $product ['lid'] . ' and dpid='.$dpid.' and t.is_order=0 and t.delete_flag=0';
+					$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $product ['lid'] . ' and t.dpid='.$dpid.' and t.is_order=0 and t.delete_flag=0';
 					$orderProductTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 					$orderProduct [$k] ['product_taste'] = $orderProductTaste;
 					if($product['set_id'] > 0){
@@ -206,15 +207,15 @@ class DataSyncOperation {
 				$sql = 'select * from nb_order_pay where order_id=' . $result ['lid'];
 				$orderPay = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_pay'] = $orderPay;
-				$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $result ['lid'] . ' and dpid='.$dpid.' and t.is_order=1 and t.delete_flag=0';
+				$sql = 'select t.*,t1.name from nb_order_taste t,nb_taste t1 where t.taste_id=t1.lid and t.order_id=' . $result ['lid'] . ' and t.dpid='.$dpid.' and t.is_order=1 and t.delete_flag=0';
 				$orderTaste = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_taste'] = $orderTaste;
 				$sql = 'select * from nb_order_address where dpid='.$dpid.' and order_lid=' . $result ['lid'].' and delete_flag=0';
 				$orderAddress = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 				$order ['nb_order_address'] = $orderAddress;
-				array_push ( $data ['order'], $order );
 				$sql = 'update nb_order set is_sync=0 where dpid=' . $dpid . ' and lid=' . $result ['lid'];
 				Yii::app ()->db->createCommand ( $sql )->execute ();
+				array_push ( $data ['order'], $order );
 			}
 			//会员数据
 			$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and delete_flag=0 and is_sync<>0';
@@ -407,6 +408,7 @@ class DataSyncOperation {
 				Yii::app ()->db->createCommand ()->insert ( 'nb_order_product', $orderProductData );
 				
 				//产品口味
+				$productTasteArr = array(); // 口味id 组成的数组
 				if(isset($product->product_taste)){
 					$productTastes = $product->product_taste;
 					foreach ($productTastes as $taste){
@@ -423,6 +425,7 @@ class DataSyncOperation {
 								'is_sync' => $isSync
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_order_taste', $orderTasteData );
+						array_push($productTasteArr, $taste->taste_id);
 					}
 				}
 				//产品普通优惠
@@ -460,7 +463,7 @@ class DataSyncOperation {
 				}
 				if($isSync==0){
 					// 消耗原材料库存
-					$productBoms = self::getBom($dpid, $product->product_id);
+					$productBoms = self::getBom($dpid, $product->product_id, $productTasteArr);
 					if(!empty($productBoms)){
 						foreach ($productBoms as $bom){
 							$stock = $bom['number']*$product->amount;
@@ -886,9 +889,10 @@ class DataSyncOperation {
 	 * 
 	 * 
 	 */
-	public static function getBom($dpid, $productId) {
-// 		$sql = 'select m.*,n.unit_ratio from (select t.product_id, t.material_id, t.number, t1.stock_unit_id, t1.sales_unit_id from nb_product_bom t,nb_product_material t1 where t.material_id=t1.lid and t.dpid=t1.dpid and t.dpid=' . $dpid . ' and t.product_id=' . $productId . ' and t.delete_flag=0 and t1.delete_flag=0)m,nb_material_unit_ratio n where m.stock_unit_id=n.stock_unit_id and m.sales_unit_id=n.sales_unit_id and n.delete_flag=0';
-		$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and delete_flag=0';
+	public static function getBom($dpid, $productId, $tasteArr) {
+		$tasteStr = join(',', $tasteArr);
+		$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id=0 and delete_flag=0'.
+			   ' union select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id in('.$tasteStr.') and delete_flag=0';
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		return $results;
 	}
