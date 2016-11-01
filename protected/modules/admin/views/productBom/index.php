@@ -70,7 +70,7 @@
 								<td ><?php echo $model->product_name ;?></td>
 								<td style="width:10%" class="add_btn" pid="<?php echo $model->lid;?>" compid="<?php echo $model->dpid;?>" prodname="<?php echo $model->product_name;?>" phscode="<?php echo $model->phs_code;?>" data-toggle="modal"> <a href="" ><?php echo yii::t('app','批量添加配方');?></a></td>
                                 <td style="width:10%" class="center">
-								<a href="<?php echo $this->createUrl('productBom/detailindex',array('pblid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑配方');?></a>
+								<a href="<?php echo $this->createUrl('productBom/detailindex',array('pblid' => $model->lid , 'companyId' => $model->dpid , 'prodname'=>$model->product_name));?>"><?php echo yii::t('app','编辑修改配方');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

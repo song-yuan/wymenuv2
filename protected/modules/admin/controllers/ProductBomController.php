@@ -71,6 +71,7 @@ class ProductBomController extends BackendController
 	}
 	public function actionDetailIndex(){
 		$pblid = Yii::app()->request->getParam('pblid');
+		$prodname = Yii::app()->request->getParam('prodname');
 		//$criteria = new CDbCriteria;
 		//$criteria->with = array('material','taste');
 		//$criteria->condition =  't.dpid='.$this->companyId .' and t.product_id='.$pblid.' and t.delete_flag=0';
@@ -93,6 +94,7 @@ class ProductBomController extends BackendController
 				'models'=>$models,
 				'pages'=>$pages,
 				'pblid'=>$pblid,
+				'prodname'=>$prodname
 		));
 	}
 	public function actionDetailCreate(){
@@ -153,6 +155,8 @@ class ProductBomController extends BackendController
 	}
 	public function actionDetailUpdate(){
         $pblid = Yii::app()->request->getParam('pblid');
+        $prodname = Yii::app()->request->getParam('prodname');
+        $tastename = Yii::app()->request->getParam('tastename');
         $lid = Yii::app()->request->getParam('lid');
 		$model = ProductBom::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -173,7 +177,9 @@ class ProductBomController extends BackendController
             'pblid'=>$pblid,
             'categories'=>$categories,
             'categoryId'=>$categoryId,
-            'materials'=>$materialslist
+            'materials'=>$materialslist,
+			'prodname'=>$prodname,
+			'tastename'=>$tastename
 		));
 	}
 
