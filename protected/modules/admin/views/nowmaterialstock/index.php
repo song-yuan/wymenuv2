@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','原料列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','原料信息'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>4,))),array('word'=>yii::t('app','原料管理'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('product/list' , array('companyId' => $this->companyId,'type' =>'4',)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','实时库存列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','实时库存列表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('bom/bom' , array('companyId' => $this->companyId,'type' =>'2',)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				'action' => $this->createUrl('productMaterial/delete' , array('companyId' => $this->companyId)),
+				'action' => $this->createUrl('nowmaterialstock/delete' , array('companyId' => $this->companyId)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,15 +40,12 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','原料列表');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','实时库存列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
 							<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
 						</div>
-						<a href="<?php echo $this->createUrl('productMaterial/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
-						</div>
+						
 						<!-- <a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a> -->
 					</div>
 				</div>
@@ -60,13 +57,9 @@
 								<th style="width:16%"><?php echo yii::t('app','原料编号');?></th>
 								<th ><?php echo yii::t('app','原料名称');?></th>
 								<th ><?php echo yii::t('app','类型');?></th>
-								<th><?php echo yii::t('app','店内码');?></th>
-								<th><?php echo yii::t('app','库存单位');?></th>
-								<th><?php echo yii::t('app','零售单位');?></th>
-								<!--<th><?php echo yii::t('app','实时库存');?></th>
-								<th><php echo yii::t('app','库存成本');?></th>-->
+								<th><?php echo yii::t('app','实时库存');?></th>
+								<th><?php echo yii::t('app','单位');?></th>
 								<th>&nbsp;</th>
-								
 							</tr>
 						</thead>
 						<tbody>
@@ -77,18 +70,13 @@
 								<td><?php echo $model->material_identifier;?></td>
 								<td ><?php echo $model->material_name;?></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
-								<td ><?php echo $model->material_private_identifier;?></td>
-								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
+								 
+								<td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td>
 								<td ><?php echo Common::getStockName($model->sales_unit_id);?></td>
-								<!-- <td ><php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>  -->
-								<!-- <td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td> -->
-								<!--<td ><php echo $model->stock_cost;?></td>-->
+								
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productMaterial/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('nowmaterialstock/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid,));?>"><?php echo yii::t('app','查看库存详情');?></a>
 								</td>
-								<!-- <td class="center">
-								<a href="<?php echo $this->createUrl('productMaterial/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid,));?>"><?php echo yii::t('app','查看库存详情');?></a>
-								</td> -->
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
@@ -143,15 +131,15 @@
 		});
 		$('.s-btn').on('switch-change', function () {
 			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('productMaterial/status',array('companyId'=>$this->companyId));?>/id/'+id);
+		    $.get('<?php echo $this->createUrl('nowmaterialstock/status',array('companyId'=>$this->companyId));?>/id/'+id);
 		});
 		$('.r-btn').on('switch-change', function () {
 			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('productMaterial/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
+		    $.get('<?php echo $this->createUrl('nowmaterialstock/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
 		});
 		$('#selectCategory').change(function(){
 			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('productMaterial/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
+			location.href="<?php echo $this->createUrl('nowmaterialstock/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
 	</script>	
