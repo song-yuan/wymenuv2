@@ -360,8 +360,8 @@ class DataSyncOperation {
 		$se = new Sequence ( "order" );
 		$orderId = $se->nextval ();
 		
-		$transaction = Yii::app ()->db->beginTransaction ();
-		try {
+// 		$transaction = Yii::app ()->db->beginTransaction ();
+// 		try {
 			$insertOrderArr = array (
 					'lid' => $orderId,
 					'dpid' => $dpid,
@@ -578,13 +578,13 @@ class DataSyncOperation {
 					'syncLid' => $syncLid,
 					'content' => $orderData
 			) );
-		} catch ( exception $e ) {
-			$transaction->rollback ();
-			$msg = json_encode ( array (
-					'status' => false,
-					'orderId' => '' 
-			) );
-		}
+// 		} catch ( exception $e ) {
+// 			$transaction->rollback ();
+// 			$msg = json_encode ( array (
+// 					'status' => false,
+// 					'orderId' => '' 
+// 			) );
+// 		}
 		return $msg;
 	}
 	/**
