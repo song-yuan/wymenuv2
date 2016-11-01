@@ -40,7 +40,7 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','原料明细列表（*带括号的则为产品规格的原料）');?></div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo $prodname;?><?php echo yii::t('app','  原料明细列表（*带括号的则为产品口味或规格的原料）');?></div>
 					<div class="actions">
 						<a href="<?php echo $this->createUrl('productBom/detailcreate' , array('companyId' => $this->companyId,'lid'=>$pblid,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<!-- <div class="btn-group">
@@ -81,7 +81,7 @@
                                 <td><?php echo Common::getSalesName($model['sales_unit_id']);?></td>
                                 
                                 <td class="center">
-								<a href="<?php echo $this->createUrl('productBom/detailupdate',array('lid' => $model['lid'] ,'pblid'=>$model['product_id'], 'companyId' => $model['dpid']));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('productBom/detailupdate',array('lid' => $model['lid'] ,'pblid'=>$model['product_id'], 'companyId' => $model['dpid'],'prodname'=>$model['material_name'],'tastename'=>$model['name']));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>             
 							</tr>
 						<?php endforeach;?>
