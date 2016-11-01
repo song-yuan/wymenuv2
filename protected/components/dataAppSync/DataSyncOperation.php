@@ -891,8 +891,12 @@ class DataSyncOperation {
 	 */
 	public static function getBom($dpid, $productId, $tasteArr) {
 		$tasteStr = join(',', $tasteArr);
-		$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id=0 and delete_flag=0'.
-			   ' union select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id in('.$tasteStr.') and delete_flag=0';
+		if($tasteStr!=''){
+			$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id=0 and delete_flag=0'.
+					' union select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id in('.$tasteStr.') and delete_flag=0';
+		}else{
+			$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id=0 and delete_flag=0';
+		}
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		return $results;
 	}
