@@ -28,7 +28,7 @@
 					<span class="title"><?php echo yii::t('app','基础设置');?></span>					
 					</a>
 				</li>
-				<li class="<?php if(in_array(Yii::app()->controller->id , array('bom','nowmaterialstock','copymaterial','orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail','bomProduct','bomproductCategory','stockSetting','materialStockLog','commit','commitDetail','inventory','stockInventory','stockTaking'))) echo 'active';?>">
+				<li class="<?php if(in_array(Yii::app()->controller->id , array('bom','stocktakinglog','nowmaterialstock','copymaterial','orgClassification','orgInformation','purchaseOrder','purchaseOrderDetail','storageOrder','storageOrderDetail','mfrClassification','mfrInformation','refundOrder','refundOrderDetail','bomProduct','bomproductCategory','stockSetting','materialStockLog','commit','commitDetail','inventory','stockInventory','stockTaking'))) echo 'active';?>">
 					<a href="<?php echo $this->createUrl('bom/bom',array('companyId' => $this->companyId,'type'=>0));?>">
 					<i class="fa fa-coffee"></i> 
 					<span class="title"><?php echo yii::t('app','进销存管理');?></span>

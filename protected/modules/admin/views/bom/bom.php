@@ -326,6 +326,12 @@
 							<div class="ku-item-info">实时库存</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey kcrz"></div>
+							<div class="ku-item-info">盘点日志</div>
+						</div>
+					</a>
 					<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey kcrz"></div>

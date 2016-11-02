@@ -22,14 +22,14 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','入库单详情列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','入库单管理'),'url'=>$this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','入库单详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('storageOrder/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','盘点记录详情列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘点记录'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','盘点记录详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId' => $this->companyId,)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 				'id' => 'material-form',
-				'action' => $this->createUrl('storageOrder/detailDelete' , array('companyId' => $this->companyId,'slid'=>$slid,'status'=>$status,)),
+				//'action' => $this->createUrl('storageOrder/detailDelete' , array('companyId' => $this->companyId,'slid'=>$slid,'status'=>$status,)),
 				'errorMessageCssClass' => 'help-block',
 				'htmlOptions' => array(
 					'class' => 'form-horizontal',
@@ -40,16 +40,8 @@
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
-					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','入库单详情列表');?></div>
-					<div class="actions">
-						<?php if($status == 0 || $status == 2):?>
-							<a href="<?php echo $this->createUrl('storageOrder/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
-						</div>
-						<?php endif;?>
-						<a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
-					</div>
+					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','盘点记录详情列表');?></div>
+					
 				</div>
 				<div class="portlet-body" id="table-manage">
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
@@ -57,10 +49,10 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th style="width:16%"><?php echo yii::t('app','品项名称');?></th>
-								<th><?php echo yii::t('app','入库价格');?></th>
-								<th><?php echo yii::t('app','入库数量');?></th>
-								<th><?php echo yii::t('app','赠品数量');?></th>
-								<th><?php echo yii::t('app','库存天数');?></th>
+								<th><?php echo yii::t('app','原始库存');?></th>
+								<th><?php echo yii::t('app','盘点库存');?></th>
+								<th><?php echo yii::t('app','盈亏差值');?></th>
+								<th><?php echo yii::t('app','原因备注');?></th>
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -71,63 +63,21 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo Common::getmaterialName($model->material_id);?></td>
-								<td><?php echo $model->price;?></td>
-								<td ><?php echo $model->stock;?></td>
-								<td><?php echo $model->free_stock;?></td>
-								<td><?php echo $model->stock_day;?></td>
+								<td><?php echo $model->reality_stock;?></td>
+								<td ><?php echo $model->taking_stock;?></td>
+								<td><?php echo $model->number;?></td>
+								<td><?php echo $model->reasion;?></td>
 								<td class="center">
-								<?php if($status == 0 || $status == 2):?>
-									<a href="<?php echo $this->createUrl('storageOrder/detailupdate',array('lid' => $model->lid , 'slid'=>$model->storage_id,  'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
-								<?php endif;?>
+								
 								</td>
 							</tr>
 						<?php endforeach;?>
 						<?php else:?>
 						<div style="display: none;" id="storagedetail" val="0"></div>
 						<?php endif;?>
-							<tr>
-								<td colspan="6" style="text-align: right;">
-								<?php if($storage->status==1):?><?php if(Yii::app()->user->role<3):?><input id="storage-in" type="button" class="btn blue" value="确认入库" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待确认入库</span><?php endif;?>
-								<?php elseif($storage->status==3):?><span style="color:red">已入库</span>
-								<?php elseif($storage->status==2):?><?php if(Yii::app()->user->role<3):?><input id="status-2" type="button" class="btn blue" value="重新送审" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待重新送审</span><?php endif;?>
-								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<3):?><input id="status-0" type="button" class="btn blue" value="确认送审" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">正在编辑</span><?php endif;?>
-								<?php elseif($storage->status==4):?><?php if(Yii::app()->user->role<3):?><input id="status-4" type="button" class="btn blue" value="审核通过" storage-id="<?php echo $storage->lid;?>" />&nbsp;<input id="status-1" type="button" class="btn blue" value="驳回" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">等待审核</span><?php endif;?>
-								<?php endif;?>
-								</td>
-							</tr>
 						</tbody>
 					</table>
-					<?php if($pages->getItemCount()):?>
-						<div class="row">
-							<div class="col-md-5 col-sm-12">
-								<div class="dataTables_info">
-									<?php echo yii::t('app','共');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?> , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> , <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
-								</div>
-							</div>
-							<div class="col-md-7 col-sm-12">
-								<div class="dataTables_paginate paging_bootstrap">
-								<?php $this->widget('CLinkPager', array(
-									'pages' => $pages,
-									'header'=>'',
-									'firstPageLabel' => '<<',
-									'lastPageLabel' => '>>',
-									'firstPageCssClass' => '',
-									'lastPageCssClass' => '',
-									'maxButtonCount' => 8,
-									'nextPageCssClass' => '',
-									'previousPageCssClass' => '',
-									'prevPageLabel' => '<',
-									'nextPageLabel' => '>',
-									'selectedPageCssClass' => 'active',
-									'internalPageCssClass' => '',
-									'hiddenPageCssClass' => 'disabled',
-									'htmlOptions'=>array('class'=>'pagination pull-right')
-								));
-								?>
-								</div>
-							</div>
-						</div>
-						<?php endif;?>					
+					
 					
 				</div>
 			</div>
