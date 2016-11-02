@@ -151,6 +151,8 @@ class StockTakingController extends BackendController
 	}
 
 	public function actionAllStore(){
+
+		$username = Yii::app()->user->username;
 		$optvals = Yii::app()->request->getParam('optval');
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$optval = array();
@@ -161,6 +163,20 @@ class StockTakingController extends BackendController
 		$transaction = $db->beginTransaction();
 		try
 		{
+			$is_sync = DataSync::getInitSync();
+			//盘点日志
+			$stocktaking = new StockTaking();
+			$se=new Sequence("stock_taking");
+			$logid = $stocktaking->lid = $se->nextval();
+			$stocktaking->dpid = $dpid;
+			$stocktaking->create_at = date('Y-m-d H:i:s',time());
+			$stocktaking->update_at = date('Y-m-d H:i:s',time());
+			$stocktaking->username = $username ;
+			$stocktaking->title =''.date('m月d日 H时i分',time()).' 盘点操作记录';
+			$stocktaking->status = 0;
+			$stocktaking->is_sync = $is_sync;
+			$stocktaking->save();
+			
 			foreach ($optval as $opts){
 				$opt = array();
 				$opt = explode(',',$opts); 
@@ -168,63 +184,71 @@ class StockTakingController extends BackendController
 				$difference = $opt[1];
 				$nowNum = $opt[2];
 				$originalNum = $opt[3];
-				$is_sync = DataSync::getInitSync();
-				//盘点日志
-				$materialStockLog = new MaterialStockLog();
-				$se=new Sequence("material_stock_log");
-				$logid = $materialStockLog->lid = $se->nextval();
-				$materialStockLog->dpid = $dpid;
-				$materialStockLog->create_at = date('Y-m-d H:i:s',time());
-				$materialStockLog->update_at = date('Y-m-d H:i:s',time());
-				$materialStockLog->material_id = $id;
-				$materialStockLog->type = 3;
-				$materialStockLog->stock_num = $difference;
-				$materialStockLog->original_num = $originalNum;
-				$materialStockLog->resean = '盘点修改总记录{和原始库存差值：'.$difference.'/原始库存：'.$originalNum.'/盘点库存：'.$nowNum.'/盘点模型：先进先出}';
-				$materialStockLog->is_sync = $is_sync;
-				$materialStockLog->save();
+				
+				$stocks = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and t.create_at =(select max(t1.create_at) from nb_product_material_stock t1 where t1.delete_flag = 0 and t1.dpid='.$this->companyId.' and t1.material_id ='.$id.' )',array(':sid'=>$id,':dpid'=>$this->companyId,));
+					
+				//对该次盘点进行日志保存
+				$stocktakingdetail = new StockTakingDetail();
+				$se=new Sequence("stock_taking_detail");
+				$detailid = $stocktakingdetail->lid = $se->nextval();
+				$stocktakingdetail->dpid = $dpid;
+				$stocktakingdetail->create_at = date('Y-m-d H:i:s',time());
+				$stocktakingdetail->update_at = date('Y-m-d H:i:s',time());
+				$stocktakingdetail->logid = $logid;
+				$stocktakingdetail->material_id = $id;
+				$stocktakingdetail->material_stock_id = $stocks->lid;
+				$stocktakingdetail->reality_stock = $originalNum;
+				$stocktakingdetail->taking_stock = $nowNum;
+				$stocktakingdetail->number = $difference;
+				$stocktakingdetail->reasion = '';
+				$stocktakingdetail->status = 0;
+				$stocktakingdetail->is_sync = $is_sync;
+				$stocktakingdetail->save();
+				
+				
 		
 				if($difference > 0 ){
 					//盘点操作，当盘点的库存比理论库存多时，直接在后进的库存批次上加上此次的盘点的差值。。。
-					$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and t.create_at =(select max(t1.create_at) from nb_product_material_stock t1 where t1.delete_flag = 0 and t1.dpid='.$this->companyId.' and t1.material_id ='.$id.' )',array(':sid'=>$id,':dpid'=>$this->companyId,));
 						
-					//对该次盘点进行日志保存
-					$materialStockLog = new MaterialStockLog();
-					$se=new Sequence("material_stock_log");
-					$materialStockLog->lid = $se->nextval();
-					$materialStockLog->dpid = $dpid;
-					$materialStockLog->create_at = date('Y-m-d H:i:s',time());
-					$materialStockLog->update_at = date('Y-m-d H:i:s',time());
-					$materialStockLog->logid = $logid;
-					$materialStockLog->material_id = $id;
-					$materialStockLog->type = 3;
-					$materialStockLog->stock_num = $difference;
-					$materialStockLog->original_num = $stock->stock;
-					$materialStockLog->resean = '盘点修改批次{和原始库存差值：'.$difference.'/原始库存：'.$stock->stock.'/盘点模型：先进先出}';
-					$materialStockLog->is_sync = $is_sync;
-					$materialStockLog->save();
-		
+					//对该次盘点进行批次日志保存
+// 					$stocktakingdetail = new StockTakingDetail();
+// 					$se=new Sequence("stock_taking_detail");
+// 					$stocktakingdetail->lid = $se->nextval();
+// 					$stocktakingdetail->dpid = $dpid;
+// 					$stocktakingdetail->create_at = date('Y-m-d H:i:s',time());
+// 					$stocktakingdetail->update_at = date('Y-m-d H:i:s',time());
+// 					$stocktakingdetail->logid = $detailid;
+// 					$stocktakingdetail->material_id = $id;
+// 					$stocktakingdetail->material_stock_id = $stocks->lid;
+// 					$stocktakingdetail->reality_stock = $originalNum;
+// 					$stocktakingdetail->taking_stock = $nowNum;
+// 					$stocktakingdetail->number = $difference;
+// 					$stocktakingdetail->reasion = '';
+// 					$stocktakingdetail->status = 1;
+// 					$stocktakingdetail->is_sync = $is_sync;
+// 					$stocktakingdetail->save();
+					//var_dump($stocktakingdetail);exit;
 					//下面是对该次盘点进行的操作。。。
-					$stock->stock = $stock->stock + $difference;
-					$stock->update_at = date('Y-m-d H:i:s',time());
-					$stock->update();
+					$stocks->stock = $stocks->stock + $difference;
+					$stocks->update_at = date('Y-m-d H:i:s',time());
+					$stocks->update();
 						
 				}else{
 					$sql = 'select t.* from nb_product_material_stock t where t.delete_flag = 0 and t.dpid ='.$dpid.' and t.material_id = '.$id.' order by t.create_at asc';
 					$command = $db->createCommand($sql);
-					$stock = $command->queryAll();
+					$stock2 = $command->queryAll();
 					$minusnum = -$difference;
-					//var_dump($minusnum.'1');
-					//var_dump($stock);
-					foreach ($stock as $stockid){
-						//var_dump($stockid);
+					//var_dump($minusnum.'@');
+					//var_dump($stock2);
+					foreach ($stock2 as $stockid){
+						//var_dump($stockid.'#');
 						$stockori = $stockid['stock'];
 						if($minusnum >= 0 && $stockori > 0){
 							$minusnums = $minusnum - $stockori ;
 							//var_dump($stockori.'@@');
 							//var_dump($minusnums.'2');
 							if($minusnums <= 0 ) {
-								//var_dump($minusnums.'3');
+								//var_dump($minusnums.'@3');
 								$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and lid=:lid',array(':sid'=>$id,':dpid'=>$this->companyId,':lid'=>$stockid['lid'],));
 								$changestock = $stock->stock - $minusnum;
 								$sql1 = 'update nb_product_material_stock set stock = '.$changestock. ' where delete_flag = 0 and material_id ='.$id.' and dpid ='.$this->companyId.' and lid='.$stockid['lid'];
@@ -236,40 +260,27 @@ class StockTakingController extends BackendController
 								//$stock->update();
 		
 								//对该次盘点进行日志保存
-								$materialStockLog = new MaterialStockLog();
-								$se=new Sequence("material_stock_log");
-								$materialStockLog = array(
+								$stocktakingdetails = new StockTakingDetail();
+								$se=new Sequence("stock_taking_detail");
+								$stocktakingdetails = array(
 										'lid'=>$se->nextval(),
 										'dpid'=>$dpid,
 										'create_at'=>date('Y-m-d H:i:s',time()),
 										'update_at'=>date('Y-m-d H:i:s',time()),
-										'logid'=>$logid,
+										'logid'=>$detailid,
 										'material_id'=>$id,
-										'type'=>"3",
-										'stock_num'=>'-'.$minusnum,
-										'original_num'=>$stock->stock,
-										'resean'=>'盘点修改批次{和原始库存差值：'.-$minusnum.'/原始库存：'.$stock->stock.'/盘点模型：先进先出}',
+										'material_stock_id' => $stock->lid,
+										'reality_stock' => $stock->stock,
+										'taking_stock' => ''.$changestock,
+										'number'=>'-'.$minusnum,
+										'reasion'=>'',
+										'status' => 1,
 										'is_sync'=>$is_sync,
 								);
-								$command = $db->createCommand()->insert('nb_material_stock_log',$materialStockLog);
+								//var_dump($stocktakingdetails);
+								$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetails);
 								
-// 								$materialStockLog = new MaterialStockLog();
-// 								$se=new Sequence("material_stock_log");
-// 								$materialStockLog->lid = $se->nextval();
-// 								$materialStockLog->dpid = $dpid;
-// 								$materialStockLog->create_at = date('Y-m-d H:i:s',time());
-// 								$materialStockLog->update_at = date('Y-m-d H:i:s',time());
-// 								$materialStockLog->logid = $logid;
-// 								$materialStockLog->material_id = $id;
-// 								$materialStockLog->type = 3;
-// 								$materialStockLog->stock_num = -$minusnum;
-// 								$materialStockLog->original_num = $stock->stock;
-// 								$materialStockLog->resean = '盘点修改{和原始库存差值：'.-$minusnum.'/原始库存：'.$stock->stock.'/盘点模型：先进先出}';
-// 								$materialStockLog->is_sync = $is_sync;
-// 								$materialStockLog->save();
-		
 								$minusnum = -1;
-		
 							}else{
 								//var_dump($minusnums.'4');
 								$minusnum = $minusnums;
@@ -289,32 +300,30 @@ class StockTakingController extends BackendController
 										'dpid'=>$dpid,
 										'create_at'=>date('Y-m-d H:i:s',time()),
 										'update_at'=>date('Y-m-d H:i:s',time()),
-										'logid'=>$logid,
+										'logid'=>$detailid,
 										'material_id'=>$id,
-										'type'=>"3",
-										'stock_num'=>'-'.$stockori,
-										'original_num'=>$stockori,
-										'resean'=>'盘点修改批次{和原始库存差值：'.-$stockori.'/原始库存：'.$stockori.'/盘点模型：先进先出}',
+										'material_stock_id' => $stock->lid,
+										'reality_stock' => $stock->stock,
+										'taking_stock' => $stockori,
+										'number'=>'-'.$stockori,
+										'resean'=>'',
+										'status' => 1,
 										'is_sync'=>$is_sync,
+										
+// 										'lid'=>$se->nextval(),
+// 										'dpid'=>$dpid,
+// 										'create_at'=>date('Y-m-d H:i:s',time()),
+// 										'update_at'=>date('Y-m-d H:i:s',time()),
+// 										'logid'=>$logid,
+// 										'material_id'=>$id,
+// 										'type'=>"3",
+// 										'stock_num'=>'-'.$stockori,
+// 										'original_num'=>$stockori,
+// 										'resean'=>'盘点修改批次{和原始库存差值：'.-$stockori.'/原始库存：'.$stockori.'/盘点模型：先进先出}',
+// 										'is_sync'=>$is_sync,
 								);
-								$command = $db->createCommand()->insert('nb_material_stock_log',$materialStockLog);
+								$command = $db->createCommand()->insert('nb_stock_taking_detail',$materialStockLog);
 								
-// 								//对该次盘点进行日志保存
-// 								$materialStockLog = new MaterialStockLog();
-// 								$se=new Sequence("material_stock_log");
-// 								$materialStockLog->lid = $se->nextval();
-// 								$materialStockLog->dpid = $dpid;
-// 								$materialStockLog->create_at = date('Y-m-d H:i:s',time());
-// 								$materialStockLog->update_at = date('Y-m-d H:i:s',time());
-// 								$materialStockLog->logid = $logid;
-// 								$materialStockLog->material_id = $id;
-// 								$materialStockLog->type = 3;
-// 								$materialStockLog->stock_num = -$stockori;
-// 								$materialStockLog->original_num = $stockori;
-// 								$materialStockLog->resean = '盘点修改{和原始库存差值：'.-$stockori.'/原始库存：'.$stockori.'/盘点模型：先进先出}';
-// 								$materialStockLog->is_sync = $is_sync;
-// 								$materialStockLog->save();
-		
 							}
 						}
 					}
@@ -323,10 +332,9 @@ class StockTakingController extends BackendController
 			}
 			$transaction->commit();
 			Yii::app()->end(json_encode(array("status"=>"success")));
-			//var_dump($stock);exit;
 				
 			return true;
-		}catch (Exception $se) {
+		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
 			Yii::app()->end(json_encode(array("status"=>"fail")));
 			return false;
