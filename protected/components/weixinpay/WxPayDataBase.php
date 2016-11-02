@@ -106,7 +106,7 @@ class WxPayDataBase
 		if(isset($_GET['companyId'])){
 			$dpid = $_GET['companyId'];
 			$account = WxAccount::get($dpid);
-			if(WxPayConfig::ISSUBMCH){
+			if($account['multi_customer_service_status'] == 1){
 				$key = WxPayConfig::KEY;
 			}else{
 				$key = $account['key'];
@@ -115,7 +115,7 @@ class WxPayDataBase
 			$orderIdArr = explode('-',$this->values['out_trade_no']);
 			$dpid = $orderIdArr[1];
 			$account = WxAccount::get($dpid);
-			if(WxPayConfig::ISSUBMCH){
+			if($account['multi_customer_service_status'] == 1){
 				$key = WxPayConfig::KEY;
 			}else{
 				$key = $account['key'];

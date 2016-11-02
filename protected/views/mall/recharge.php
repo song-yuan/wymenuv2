@@ -20,6 +20,7 @@
 		try{
 			$tools = new JsApiPay();
 			$openId = WxBrandUser::openId($userId,$this->companyId);
+			$account = WxAccount::get($this->companyId);
 			//②、统一下单
 			$input = new WxPayUnifiedOrder();
 			$input->SetBody("点餐订单");
@@ -31,7 +32,7 @@
 			$input->SetGoods_tag("充值订单");
 			$input->SetNotify_url($notifyUrl);
 			$input->SetTrade_type("JSAPI");
-			if(WxPayConfig::ISSUBMCH){
+			if($account['multi_customer_service_status'] == 1){
 				$input->SetSubOpenid($openId);
 			}else{
 				$input->SetOpenid($openId);
