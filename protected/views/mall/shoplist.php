@@ -53,6 +53,11 @@
 	     * @param {Object} lng2
 	     */
 	    var EARTH_RADIUS = 6378137.0;    //单位M
+	    var PI = Math.PI;
+	    
+	    function getRad(d){
+	        return d*PI/180.0;
+	    }
 	    function getFlatternDistance(lat1,lng1,lat2,lng2){
 	        var f = getRad((lat1 + lat2)/2);
 	        var g = getRad((lat1 - lat2)/2);
@@ -92,10 +97,8 @@
 			        $('#allshop').find('li').each(function(){
 						var lat = $(this).attr('lat');
 						var lng = $(this).attr('lng');
-						alert(lat);alert(lng);
 						var distance = getFlatternDistance(latitude,longitude,lat,lng);
-						alert(distance);
-						$(this).find('span.right').html(parseInt(distance)+'米');
+						$(this).find('span.right').html(parseFloat(distance).toFixed(2)+'米');
 				    });
 			    }
 			});
