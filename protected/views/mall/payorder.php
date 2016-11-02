@@ -21,6 +21,7 @@
 	try{
 		$tools = new JsApiPay();
 		$openId = WxBrandUser::openId($userId,$this->companyId);
+		$account = WxAccount::get($this->companyId);
 		//②、统一下单
 		$input = new WxPayUnifiedOrder();
 		$input->SetBody("点餐订单");
@@ -32,7 +33,7 @@
 		$input->SetGoods_tag("点餐订单");
 		$input->SetNotify_url($notifyUrl);
 		$input->SetTrade_type("JSAPI");
-		if(WxPayConfig::ISSUBMCH){
+		if($account['multi_customer_service_status'] == 1){
 			$input->SetSubOpenid($openId);
 		}else{
 			$input->SetOpenid($openId);
@@ -76,7 +77,7 @@
 <div class="order-info">
 	<?php foreach($orderProducts as $product):?>
 	<div class="item">
-		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo $product['price'];?></div>
+		<div class="lt"><?php echo $product['product_name'];?><?php if($product['is_retreat']):?><span style="color:red">(已退)</span><?php endif;?></div><div class="rt">X<?php echo $product['amount'];?> ￥<?php echo number_format($product['price'],2);?></div>
 		<div class="clear"></div>
 	</div>
 	<?php endforeach;?>

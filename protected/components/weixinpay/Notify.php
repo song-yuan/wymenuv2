@@ -52,11 +52,8 @@ class Notify extends WxPayNotify
 	}
 	public function insertNotify($data){
 		$orderIdArr = explode('-',$data["out_trade_no"]);
-		if(WxPayConfig::ISSUBMCH){
-			$openId = $data['sub_openid'];
-		}else{
-			$openId = $data['openid'];
-		}
+		$openId = isset($data['sub_openid'])?$data['sub_openid']:$data['openid'];
+		
 		$brandUser = WxBrandUser::getFromOpenId($openId);
 		
 		$se = new Sequence("notify");

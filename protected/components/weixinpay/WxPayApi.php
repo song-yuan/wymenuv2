@@ -31,12 +31,18 @@ class WxPayApi
 			throw new WxPayException("缺少统一支付接口必填参数trade_type！");
 		}
 		
+		$orderId = $inputObj->GetOut_trade_no();
+		
+		$orderIdArr = explode('-',$orderId);
+		$dpid = $orderIdArr[1];
+		$account = WxAccount::get($dpid);
+		
 		//关联参数
-		if($inputObj->GetTrade_type() == "JSAPI" && WxPayConfig::ISSUBMCH == 1 && !$inputObj->IsSubOpenidSet()){
+		if($inputObj->GetTrade_type() == "JSAPI" && $account['multi_customer_service_status'] == 1 && !$inputObj->IsSubOpenidSet()){
 			throw new WxPayException("统一支付接口中，缺少必填参数openid！trade_type为JSAPI时，sub_openid为必填参数！");
 		}
 		
-		if($inputObj->GetTrade_type() == "JSAPI" && WxPayConfig::ISSUBMCH == 0 && !$inputObj->IsOpenidSet()){
+		if($inputObj->GetTrade_type() == "JSAPI" && $account['multi_customer_service_status'] == 0 && !$inputObj->IsOpenidSet()){
 			throw new WxPayException("统一支付接口中，缺少必填参数openid！trade_type为JSAPI时，openid为必填参数！");
 		}
 		
@@ -44,21 +50,11 @@ class WxPayApi
 			throw new WxPayException("统一支付接口中，缺少必填参数product_id！trade_type为JSAPI时，product_id为必填参数！");
 		}
 		
-		//异步通知url未设置，则使用配置文件中的url
-		if(!$inputObj->IsNotify_urlSet()){
-			$inputObj->SetNotify_url(WxPayConfig::NOTIFY_URL);//异步通知url
-		}
-		
-		$orderId = $inputObj->GetOut_trade_no();
-		
-		$orderIdArr = explode('-',$orderId);
-		$dpid = $orderIdArr[1];
-		$account = WxAccount::get($dpid);
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 		
 		
-		if(WxPayConfig::ISSUBMCH){
+		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
 			
@@ -108,7 +104,7 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 			
-		if(WxPayConfig::ISSUBMCH){
+		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
 			
@@ -155,7 +151,7 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 			
-		if(WxPayConfig::ISSUBMCH){
+		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
 			
@@ -212,7 +208,7 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 			
-		if(WxPayConfig::ISSUBMCH){
+		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
 			
@@ -264,7 +260,7 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 			
-		if(WxPayConfig::ISSUBMCH){
+		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
 			
@@ -310,7 +306,7 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 			
-		if(WxPayConfig::ISSUBMCH){
+		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
 			
@@ -364,7 +360,7 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 	    
-		if(WxPayConfig::ISSUBMCH){
+		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
 			
@@ -412,7 +408,7 @@ class WxPayApi
 		$certpem = Yii::app()->basePath.'/'.$account['certificate'];
 		$keypem = Yii::app()->basePath.'/'.$account['apiclient_key'];
 		
-		if(WxPayConfig::ISSUBMCH){
+		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
 			
