@@ -97,7 +97,9 @@
 			        $('#allshop').find('li').each(function(){
 						var lat = $(this).attr('lat');
 						var lng = $(this).attr('lng');
+						alert(latitude);alert(longitude);alert(lat);alert(lng);
 						var distance = getFlatternDistance(latitude,longitude,lat,lng);
+						alert(distance);
 						$(this).find('span.right').html(parseFloat(distance).toFixed(2)+'米');
 				    });
 			    }
