@@ -31,7 +31,7 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','编辑配方明细');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php echo $prodname;?><?php if($tastename)echo '  ('.$tastename.')';?><?php echo yii::t('app','明细编辑');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
