@@ -58,7 +58,7 @@
 								<th ><?php echo yii::t('app','品项名称');?></th>
 								<th ><?php echo yii::t('app','类型');?></th>
 								<th><?php echo yii::t('app','库存单位');?></th>
-								<th><?php echo yii::t('app','实时库存');?></th>
+								<!-- <th><?php echo yii::t('app','实时库存');?></th> -->
 								<th><?php echo yii::t('app','盘点库存');?></th>
 								<!--<th><php echo yii::t('app','库存成本');?></th>-->
 								<th>&nbsp;</th>
@@ -75,11 +75,11 @@
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
 								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
 								<!-- <td ><php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>  -->
-								<td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td>
+								<!-- <td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td> -->
 								<td ><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>" name="idss[]" />
 								<input type="text" style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
-								<input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
-								</td>
+								<!-- <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
+								 --></td>
 								<!--<td ><php echo $model->stock_cost;?></td>-->
 								<td class="center">
 								<!-- <a href="<?php echo $this->createUrl('productMaterial/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
@@ -154,7 +154,7 @@
         }
         if(optval.length >0){
         	optval = optval.substr(0,optval.length-1);//除去最后一个“，”
-        	alert(optval);
+        	//alert(optval);
         }else{
             alert('请至少盘点一项');
             }
