@@ -86,6 +86,8 @@
 	        
 	        return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
 	    }
+// 	    var distance = getFlatternDistance(31.21521,121.3126,31.246968,121.329995);
+// 		alert(distance);
 	    wx.ready(function () {
 	    	wx.getLocation({
 			    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
@@ -95,12 +97,10 @@
 			        var speed = res.speed; // 速度，以米/每秒计
 			        var accuracy = res.accuracy; // 位置精度
 			        $('#allshop').find('li').each(function(){
-						var lat = $(this).attr('lat');
-						var lng = $(this).attr('lng');
-						alert(latitude);alert(longitude);alert(lat);alert(lng);
+						var lat = parseFloat($(this).attr('lat'));
+						var lng = parseFloat($(this).attr('lng'));
 						var distance = getFlatternDistance(latitude,longitude,lat,lng);
-						alert(distance);
-						$(this).find('span.right').html(parseFloat(distance).toFixed(2)+'米');
+						$(this).find('span.right').html(distance.toFixed(2)+'米');
 				    });
 			    }
 			});
