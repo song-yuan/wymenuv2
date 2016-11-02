@@ -467,7 +467,7 @@ class DataSyncOperation {
 					if(!empty($productBoms)){
 						foreach ($productBoms as $bom){
 							$stock = $bom['number']*$product->amount;
-							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
+							self::updateMaterialStock($dpid, $orderId, $bom['material_id'], $stock);
 						}
 					}
 				}
@@ -908,7 +908,7 @@ class DataSyncOperation {
 	 * 
 	 * 
 	 */
-	public static function updateMaterialStock($dpid, $materialId, $stock) {
+	public static function updateMaterialStock($dpid, $logId, $materialId, $stock) {
 		$temStock = $stock;
 		$time = time ();
 		$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and delete_flag=0 order by create_at asc';
@@ -940,6 +940,7 @@ class DataSyncOperation {
 				'dpid' => $dpid,
 				'create_at' => date ( 'Y-m-d H:i:s', $time ),
 				'update_at' => date ( 'Y-m-d H:i:s', $time ),
+				'logid' => $logId,
 				'material_id' => $materialId,
 				'type' => 1,
 				'stock_num' => $stock,
