@@ -28,16 +28,16 @@
 			<!-- 全部门店 -->
 			<ul id="allshop" class="shown">
 				<?php foreach ($children as $child):?>
+				<a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid']));?>">	
 				<li lat="<?php echo $child['lat'];?>" lng="<?php echo $child['lng'];?>">
-					<a href="<?php echo $this->createUrl('/mall/index',array('companyId'=>$child['dpid']));?>">	
 					<div class="left"><img src="<?php echo $child['logo'];?>"></div>
 					<div class="right">
 						<h1><?php echo $child['company_name'];?></h1>
 						<div class="info small font_l">地址: <?php echo $child['address'];?></div>
 						<div class="misinfo small font_l"><span class="left">电话: <?php echo $child['telephone'];?></span><span class="right"></span></div>
 					</div>
-					</a>
 				</li>
+				</a>
 				<?php endforeach;?>
 			</ul>
 			<!-- 全部门店 -->
@@ -87,7 +87,7 @@
 		        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
 		        var speed = res.speed; // 速度，以米/每秒计
 		        var accuracy = res.accuracy; // 位置精度
-		        alert
+		        alert(accuracy);
 		        $('#allshop').find('li').each(function(){
 					var lat = $(this).attr('lat');
 					var lng = $(this).attr('lng');
