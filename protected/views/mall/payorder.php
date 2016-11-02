@@ -18,7 +18,7 @@
 	$orderId = $order['lid'].'-'.$order['dpid'];
 	//①、获取用户openid
 	$canpWxpay = true;
-	try{
+// 	try{
 		$tools = new JsApiPay();
 		$openId = WxBrandUser::openId($userId,$this->companyId);
 		$account = WxAccount::get($this->companyId);
@@ -39,14 +39,14 @@
 			$input->SetOpenid($openId);
 		}
 		$orderInfo = WxPayApi::unifiedOrder($input);
-//		echo '<meta charset=utf8 />';
-//		var_dump($orderInfo);exit;
+		echo '<meta charset=utf8 />';
+		var_dump($orderInfo);exit;
 		$jsApiParameters = $tools->GetJsApiParameters($orderInfo);
 		
-	}catch(Exception $e){
-		$canpWxpay = false;
-		$jsApiParameters = $e->getMessage();
-	}
+// 	}catch(Exception $e){
+// 		$canpWxpay = false;
+// 		$jsApiParameters = $e->getMessage();
+// 	}
 	
 ?>
 
