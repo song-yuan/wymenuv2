@@ -138,17 +138,19 @@
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
 	$(document).ready(function(){
+		var a = 0;
 		$('#storage-in').click(function(){
 			var id = $(this).attr('storage-id');
 			var storagedetail = $('#storagedetail').attr('val');
 			
-			if(storagedetail == 1){
+			if(storagedetail == 1 && a == 0){
 			$.ajax({
 					url:'<?php echo $this->createUrl('storageOrder/storageIn' , array('companyId'=>$this->companyId));?>',
 					data:{sid:id},
 					success:function(msg){
 						if(msg=='true'){
-						   alert('入库成功!');		
+						   alert('入库成功!');	
+						   	a = 1 ;
 						}else{
 							alert('入库失败!');
 						}
