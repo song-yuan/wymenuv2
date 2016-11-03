@@ -505,9 +505,9 @@ public function actionPayallReport(){
 				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
 			}
 		}
-		$pages = new CPagination(OrderPay::model()->count($criteria));
+		//$pages = new CPagination(OrderPay::model()->count($criteria));
 		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
+		//$pages->applyLimit($criteria);
 		//var_dump($criteria);exit;
 	    $model = OrderPay::model()->findAll($criteria);
 	   	//var_dump($model);exit;
@@ -516,7 +516,7 @@ public function actionPayallReport(){
 	    $comName = $this->getComName();
 		$this->render('paymentReport',array(
 				'models'=>$model,
-				'pages'=>$pages,
+				//'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'text'=>$text,
@@ -529,6 +529,42 @@ public function actionPayallReport(){
 				//'categoryId'=>$categoryId
 		));
 	}
+	
+	//gross profit 毛利润计算
+	public function getGrossProfit($dpid,$type,$num,$text,$y_all,$m_all,$d_all,$usertype,$userid){
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.should_total) as should_all,sum(t.reality_total) as reality_all,count(*) as all_num';//array_count_values()
+		//$criteria->with = array('company','order4');
+		$criteria->condition = 't.paytype != "11" and t.dpid='.$dpid ;
+		if($usertype != '0'){
+			$criteria->addCondition ('t.username ="'.$userid.'"');
+		}
+		if($text==1){
+			$criteria->addCondition("year(t.create_at) ='$y_all'");
+		}elseif($text==2){
+			$criteria->addCondition("year(t.create_at) ='$y_all'");
+			$criteria->addCondition("month(t.create_at) ='$m_all'");
+		}elseif($text==3){
+			$criteria->addCondition("year(t.create_at) ='$y_all'");
+			$criteria->addCondition("month(t.create_at) ='$m_all'");
+			$criteria->addCondition("day(t.create_at) ='$d_all'");
+		}
+// 		if($type==3){
+// 			$criteria->addCondition("t.paytype =3 and t.payment_method_id ='$num'");
+// 		}else{
+// 			$criteria->addCondition("t.paytype ='$num'");
+// 		}
+		$model = Order::model()->findAll($criteria);
+		$price = '';
+		//var_dump($model);exit;
+		if(!empty($model)){
+			foreach ($model as $models){
+				$price = $models->reality_all?$models->reality_all:0;
+			}
+		}
+		return $price;
+	}
+	
 	public function getPaymentPrice($dpid,$type,$num,$text,$y_all,$m_all,$d_all,$usertype,$userid){
 		$criteria = new CDbCriteria;
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
