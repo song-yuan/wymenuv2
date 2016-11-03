@@ -192,7 +192,7 @@ class StorageOrderController extends BackendController
 					$this->redirect(array('StorageOrder/detailindex' , 'companyId' => $this->companyId, 'lid'=>$model->storage_id ));
 				}
 			}else{
-				Yii::app()->user->setFlash('error',yii::t('app','添加失败'));
+				Yii::app()->user->setFlash('error',yii::t('app','添加失败--'));
 				$this->redirect(array('StorageOrder/detailindex' , 'companyId' => $this->companyId, 'lid'=>$model->storage_id ));
 			}
 		}
@@ -258,36 +258,44 @@ class StorageOrderController extends BackendController
 			try{
 				
 				foreach ($storageDetails as $detail){
+					$prodmaterial = ProductMaterial::model()->find('lid=:mid and dpid=:dpid and delete_flag=0',array(':mid'=>$detail['material_id'],':dpid'=>$this->companyId));
+					$unitratio = MaterialUnitRatio::model()->find('stock_unit_id=:stockid and sales_unit_id=:salesid and delete_flag=0 and dpid=:dpid',array(':stockid'=>$prodmaterial->stock_unit_id,':salesid'=>$prodmaterial->sales_unit_id,':dpid'=>$this->companyId));
+					//var_dump($unitratio);exit;
 					//$stock = $detail['stock'];
 					//$stockCost = ($detail['stock']-$detail['free_stock'])*$detail['price'];
 					//ProductMaterialStock::updateStock($storage->organization_id, $detail['material_id'], $stock, $stockCost);
 					//入库批次记录.
-					$model = new ProductMaterialStock();
-					$pms = new Sequence("product_material_stock");
-					$model->lid = $pms->nextval(); 
-					$model->dpid = $storage->organization_id;
-					$model->create_at = date('Y-m-d H:i:s',time());
-					$model->update_at = date('Y-m-d H:i:s',time());
-					$model->material_id = $detail['material_id'];
-					$model->mphs_code = $detail['mphs_code'];
-					$model->stock_day = $detail['stock_day'];
-					$model->batch_stock = $detail['stock'];
-					$model->stock = $detail['stock'];
-					$model->free_stock = $detail['free_stock'];
-					$model->stock_cost = $detail['price'];
-					$model->save();
-					//入库日志
-					$materialStockLog = new MaterialStockLog();
-					$se=new Sequence("material_stock_log");
-					$materialStockLog->lid = $se->nextval();
-					$materialStockLog->dpid = $storage->organization_id;
-					$materialStockLog->create_at = date('Y-m-d H:i:s',time());
-					$materialStockLog->update_at = date('Y-m-d H:i:s',time());
-					$materialStockLog->material_id = $detail['material_id'];
-					$materialStockLog->type = 0;
-					$materialStockLog->stock_num = $detail['stock'];
-					$materialStockLog->resean = '入库单入库';
-					$materialStockLog->save();
+					if($unitratio){
+						$num = $detail['stock'] * $unitratio->unit_ratio;
+						$model = new ProductMaterialStock();
+						$pms = new Sequence("product_material_stock");
+						$model->lid = $pms->nextval(); 
+						$model->dpid = $storage->organization_id;
+						$model->create_at = date('Y-m-d H:i:s',time());
+						$model->update_at = date('Y-m-d H:i:s',time());
+						$model->material_id = $detail['material_id'];
+						$model->mphs_code = $detail['mphs_code'];
+						$model->stock_day = $detail['stock_day'];
+						$model->batch_stock = $num;
+						$model->stock = $num;
+						$model->free_stock = $detail['free_stock'];
+						$model->stock_cost = $detail['price'];
+						$model->save();
+						//入库日志
+						$materialStockLog = new MaterialStockLog();
+						$se=new Sequence("material_stock_log");
+						$materialStockLog->lid = $se->nextval();
+						$materialStockLog->dpid = $storage->organization_id;
+						$materialStockLog->create_at = date('Y-m-d H:i:s',time());
+						$materialStockLog->update_at = date('Y-m-d H:i:s',time());
+						$materialStockLog->material_id = $detail['material_id'];
+						$materialStockLog->type = 0;
+						$materialStockLog->stock_num = $detail['stock'];
+						$materialStockLog->resean = '入库单入库';
+						$materialStockLog->save();
+					}else{
+						exit;
+					}
 				}
 				StorageOrder::updateStatus($this->companyId, $sid);
 				$transaction->commit();
