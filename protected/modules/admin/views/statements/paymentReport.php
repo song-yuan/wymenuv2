@@ -103,20 +103,20 @@
 								<tr class="odd gradeX">
 								<td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
 								<td><?php echo $model->all_num;?></td>
-								<td><?php echo $reality_all = $this->getGrossProfit($model->dpid,0,0,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
+								<td><?php echo $reality_all = $this->getGrossProfit($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
 								<td><?php echo sprintf("%.2f",$reality_all-$model->all_reality);?></td>
 								<td><?php echo $model->all_reality;?></td>
 								<?php if($userid != '0'): ?>
                               	<td><?php echo $model->order4->username.'('.$this->getUserstaffno($this->companyId,$model->order4->username).')';?></td>
                               	<?php endif;?>
-								<td><?php echo $this->getPaymentPrice($model->dpid,0,0,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
-								<td><?php echo $this->getPaymentPrice($model->dpid,0,1,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
-								<td><?php echo $this->getPaymentPrice($model->dpid,0,2,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
-								<td><?php echo $this->getPaymentPrice($model->dpid,0,5,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
-								<td><?php echo $this->getPaymentPrice($model->dpid,0,4,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
+								<td><?php echo $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,0,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
+								<td><?php echo $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,1,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
+								<td><?php echo $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,2,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
+								<td><?php echo $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,5,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
+								<td><?php echo $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,4,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
 								 <?php if($payments):?>
                                 <?php foreach ($payments as $payment):?>
-                                <td><?php echo $this->getPaymentPrice($model->dpid,3,$payment['lid'],$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
+                                <td><?php echo $this->getPaymentPrice($model->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
                                 <?php endforeach;?>
                                 <?php endif;?> 
 								<td><?php ?></td>
