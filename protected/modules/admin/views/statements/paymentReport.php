@@ -74,7 +74,9 @@
 							<!-- 	<th>序号</th> -->
 								<th><?php echo yii::t('app','时间');?></th>
                                 <th><?php echo yii::t('app','总单数');?></th> 
-                              	<th><?php echo yii::t('app','总计');?></th>
+                                <th><?php echo yii::t('app','毛利润');?></th> 
+                                <th><?php echo yii::t('app','优惠');?></th>
+                              	<th><?php echo yii::t('app','实收款');?></th>
                               	<?php if($userid != '0'): ?>
                               	<th><?php echo yii::t('app','营业员');?></th>
                               	<?php endif;?>
@@ -101,6 +103,8 @@
 								<tr class="odd gradeX">
 								<td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
 								<td><?php echo $model->all_num;?></td>
+								<td><?php echo $reality_all = $this->getGrossProfit($model->dpid,0,0,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);?></td>
+								<td><?php echo sprintf("%.2f",$reality_all-$model->all_reality);?></td>
 								<td><?php echo $model->all_reality;?></td>
 								<?php if($userid != '0'): ?>
                               	<td><?php echo $model->order4->username.'('.$this->getUserstaffno($this->companyId,$model->order4->username).')';?></td>
@@ -124,37 +128,7 @@
 						<?php endif;?>
 						</tbody>
 					</table>
-						<?php if($pages->getItemCount()):?>
-						<div class="row">
-							<div class="col-md-5 col-sm-12">
-								<div class="dataTables_info">
-									<?php echo yii::t('app','共 ');?> <?php echo $pages->getPageCount();?> <?php echo yii::t('app','页');?>  , <?php echo $pages->getItemCount();?> <?php echo yii::t('app','条数据');?> ,  <?php echo yii::t('app','当前是第');?> <?php echo $pages->getCurrentPage()+1;?> <?php echo yii::t('app','页');?>
-								</div>
-							</div>
-							<div class="col-md-7 col-sm-12">
-								<div class="dataTables_paginate paging_bootstrap">
-								<?php $this->widget('CLinkPager', array(
-									'pages' => $pages,
-									'header'=>'',
-									'firstPageLabel' => '<<',
-									'lastPageLabel' => '>>',
-									'firstPageCssClass' => '',
-									'lastPageCssClass' => '',
-									'maxButtonCount' => 8,
-									'nextPageCssClass' => '',
-									'previousPageCssClass' => '',
-									'prevPageLabel' => '<',
-									'nextPageLabel' => '>',
-									'selectedPageCssClass' => 'active',
-									'internalPageCssClass' => '',
-									'hiddenPageCssClass' => 'disabled',
-									'htmlOptions'=>array('class'=>'pagination pull-right')
-								));
-								?>
-								</div>
-							</div>
-						</div>
-						<?php endif;?>
+
 					
 				</div>
 			</div>
