@@ -42,7 +42,7 @@ class ManufacturerInformation extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, classification_id, manufacturer_code, manufacturer_name, address, contact_name, contact_tel,', 'required'),
+			array('update_at, classification_id, manufacturer_code, manufacturer_name, contact_name, contact_tel,', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, classification_id', 'length', 'max'=>10),
 			array('manufacturer_code, manufacturer_name, address, contact_name, email, remark', 'length', 'max'=>255),
