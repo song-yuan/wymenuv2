@@ -917,7 +917,7 @@ class DataSyncOperation {
 		if(!empty($materialStocks)){
 			foreach ($materialStocks as $k=>$materialStock){
 				$realityStock = $materialStock['stock'];
-				if($realityStock < 0||$realityStock == 0){
+				if($realityStock == 0){
 					continue;
 				}
 				$temStock = $temStock - $realityStock;
