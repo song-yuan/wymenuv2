@@ -40,7 +40,7 @@
 		<div class="form-group <?php if($model->hasErrors('storage_date')) echo 'has-error';?>">
 			<?php echo $form->label($model, 'storage_date',array('class' => 'col-md-3 control-label'));?>
 			<div class="col-md-4">
-				<?php echo $form->textField($model, 'storage_date',array('class' => 'form-control ui_timepicker','placeholder'=>$model->getAttributeLabel('storage_date')));?>
+				<?php echo $form->textField($model, 'storage_date',array('class' => 'form-control ui_timepicker','placeholder'=>$model->getAttributeLabel('storage_date'),'disabled'=>true,));?>
 				<?php echo $form->error($model, 'storage_date' )?>
 			</div>
 		</div>
