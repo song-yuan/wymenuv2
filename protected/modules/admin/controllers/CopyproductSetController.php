@@ -132,18 +132,18 @@ class CopyproductSetController extends BackendController
         		$transaction->commit();
         		//Yii::app()->user->setFlash('success' , $msgmate);
         		Yii::app()->user->setFlash('success' , yii::t('app','套餐下发成功！！！'));
-        		$this->redirect(array('copyproductset/index' , 'companyId' => $companyId)) ;
+        		$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId)) ;
         		//echo 'true';exit;
         	}catch (Exception $e){
         		$transaction->rollback();
         		//echo 'false';exit;
         		Yii::app()->user->setFlash('eror' , yii::t('app','套餐下发失败！！！'));
-        		$this->redirect(array('copyproductset/index' , 'companyId' => $companyId)) ;
+        		$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId)) ;
         	}
         	
         }else{
         	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
-        	$this->redirect(array('copyproductset/index' , 'companyId' => $companyId)) ;
+        	$this->redirect(array('copyproductSet/index' , 'companyId' => $companyId)) ;
         }        
 
 	}
