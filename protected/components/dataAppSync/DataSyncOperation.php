@@ -467,7 +467,7 @@ class DataSyncOperation {
 					if(!empty($productBoms)){
 						foreach ($productBoms as $bom){
 							$stock = $bom['number']*$product->amount;
-							self::updateMaterialStock($dpid, $orderId, $bom['material_id'], $stock);
+							self::updateMaterialStock($dpid,$bom['material_id'],$stock);
 						}
 					}
 				}
@@ -890,13 +890,14 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function getBom($dpid, $productId, $tasteArr) {
-		$tasteStr = join(',', $tasteArr);
-		if($tasteStr!=''){
+		if(empty($tasteArr)){
+			$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id=0 and delete_flag=0';
+		}else{
+			$tasteStr = join(',', $tasteArr);
 			$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id=0 and delete_flag=0'.
 					' union select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id in('.$tasteStr.') and delete_flag=0';
-		}else{
-			$sql = 'select * from nb_product_bom where dpid='.$dpid.' and product_id='.$productId.' and taste_id=0 and delete_flag=0';
 		}
+		
 		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		return $results;
 	}
@@ -908,47 +909,47 @@ class DataSyncOperation {
 	 * 
 	 * 
 	 */
-	public static function updateMaterialStock($dpid, $logId, $materialId, $stock) {
+	public static function updateMaterialStock($dpid, $materialId, $stock) {
 		$temStock = $stock;
 		$time = time ();
 		$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and delete_flag=0 order by create_at asc';
 		$materialStocks = Yii::app ()->db->createCommand ( $sql )->queryAll ();
-		foreach ($materialStocks as $k=>$materialStock){
-			$realityStock = $materialStock['stock'];
-			if($realityStock==0){
-				continue;
-			}
-			$temStock = $temStock - $realityStock;
-			if($temStock > 0){
-				if($K+1==count($materialStocks)){
-					$sql = 'update nb_product_material_stock set stock = stock - '.$temStock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
-					Yii::app ()->db->createCommand ( $sql )->execute ();
-				}else{
-					$sql = 'update nb_product_material_stock set stock= 0 where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
-					Yii::app ()->db->createCommand ( $sql )->execute ();
+		if(!empty($materialStocks)){
+			foreach ($materialStocks as $k=>$materialStock){
+				$realityStock = $materialStock['stock'];
+				if($realityStock == 0){
+					continue;
 				}
-			}else{
-				$sql = 'update nb_product_material_stock set stock = stock - '.$stock.' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
-				Yii::app ()->db->createCommand ( $sql )->execute ();
-				break;
+				$temStock = $temStock - $realityStock;
+				if($temStock > 0){
+					if($k+1 == count($materialStocks)){
+						$sql = 'update nb_product_material_stock set stock = stock - '.($temStock + $realityStock).' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+						Yii::app ()->db->createCommand ( $sql )->execute ();
+					}else{
+						$sql = 'update nb_product_material_stock set stock= 0 where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+						Yii::app ()->db->createCommand ( $sql )->execute ();
+					}
+				}else{
+					$sql = 'update nb_product_material_stock set stock = stock - '.($temStock + $realityStock).' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
+					Yii::app ()->db->createCommand ( $sql )->execute ();
+					break;
+				}
 			}
+			$se = new Sequence ( "material_stock_log" );
+			$materialStockLogId = $se->nextval ();
+			$materialStockLog = array (
+					'lid' => $materialStockLogId,
+					'dpid' => $dpid,
+					'create_at' => date ( 'Y-m-d H:i:s', $time ),
+					'update_at' => date ( 'Y-m-d H:i:s', $time ),
+					'material_id' => $materialId,
+					'type' => 1,
+					'stock_num' => $stock,
+					'resean' => '正常消耗',
+					'is_sync' => DataSync::getInitSync ()
+			);
+			Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
 		}
-		$se = new Sequence ( "material_stock_log" );
-		$materialStockLogId = $se->nextval ();
-		$materialStockLog = array (
-				'lid' => $materialStockLogId,
-				'dpid' => $dpid,
-				'create_at' => date ( 'Y-m-d H:i:s', $time ),
-				'update_at' => date ( 'Y-m-d H:i:s', $time ),
-				'logid' => $logId,
-				'material_id' => $materialId,
-				'type' => 1,
-				'stock_num' => $stock,
-				'resean' => '正常消耗',
-				'is_sync' => DataSync::getInitSync ()
-		);
-		Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
-		
 	}
 }
 
