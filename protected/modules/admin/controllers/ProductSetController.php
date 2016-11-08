@@ -63,14 +63,15 @@ class ProductSetController extends BackendController
 	}
 	public function actionUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
+		$status = Yii::app()->request->getParam('status');
                 //echo 'ddd';
 		$model = ProductSet::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
-                        $py=new Pinyin();
-                        $model->simple_code = $py->py($model->set_name);
-                        $model->update_at=date('Y-m-d H:i:s',time());
+            $py=new Pinyin();
+            $model->simple_code = $py->py($model->set_name);
+            $model->update_at=date('Y-m-d H:i:s',time());
                         
                         //var_dump($model->attributes);var_dump(Yii::app()->request->getPost('ProductSet'));exit;
 			if($model->save()){
@@ -80,6 +81,7 @@ class ProductSetController extends BackendController
 		}
 		$this->render('update' , array(
 				'model'=>$model,
+				'status'=>$status,
 		));
 	}
         
@@ -101,13 +103,16 @@ class ProductSetController extends BackendController
 	}
         
         public function actionDetailIndex(){
-		$pwlid = Yii::app()->request->getParam('lid');// var_dump($pwlid);exit;
-                $criteria = new CDbCriteria;
-                $criteria->with = array('product');
-                $criteria->order =  't.group_no';
-                //$criteria->with = 'printer';
+		$pwlid = Yii::app()->request->getParam('lid');
+		$status = Yii::app()->request->getParam('status');// var_dump($pwlid);exit;
+        
+		$criteria = new CDbCriteria;
+        $criteria->with = array('product');
+        $criteria->order =  't.group_no';
+        //$criteria->with = 'printer';
 		$criteria->condition =  't.dpid='.$this->companyId .' and t.set_id='.$pwlid.' and t.delete_flag=0 and product.delete_flag=0';
-                $criteria2 = new CDbCriteria;
+        
+		$criteria2 = new CDbCriteria;
 		$criteria2->condition =  't.dpid='.$this->companyId .' and t.lid='.$pwlid.' and t.delete_flag=0';
                 
 		$pages = new CPagination(ProductSetDetail::model()->count($criteria));
@@ -121,7 +126,8 @@ class ProductSetController extends BackendController
 		$this->render('detailindex',array(
 			'models'=>$models,
             'psmodel'=>$psmodel,
-			'pages'=>$pages
+			'pages'=>$pages,
+			'status'=>$status,
 		));
 	}
 
@@ -180,7 +186,8 @@ class ProductSetController extends BackendController
 	public function actionDetailUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
 		$type = Yii::app()->request->getParam('type');
-                //echo 'ddd';
+		$status = Yii::app()->request->getParam('status');
+        
 		$model = ProductSetDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//var_dump($model);exit;
                 Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -200,7 +207,7 @@ class ProductSetController extends BackendController
 			//var_dump($modelsp);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
-				$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id));
+				$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id ,'status'=>$status));
 			}
 		}
                 $maxgroupno=$this->getMaxGroupNo($model->set_id);
@@ -219,7 +226,8 @@ class ProductSetController extends BackendController
                 'products' => $productslist,
                 'maxgroupno' => $maxgroupno,
 				'groups'=>$groupslist,
-				'type'=>$type
+				'type'=>$type,
+				'status'=>$status,
 		));
 	}
         

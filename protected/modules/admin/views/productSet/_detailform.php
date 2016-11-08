@@ -19,11 +19,14 @@
 									),
 							)); ?>
 								<div class="form-body">
+								<?php if($status):?>
+								<?php $status=true;else:$status=false;?>
+								<?php endif;?>
 								<?php if(!$model->dpid):?>
 									<div class="form-group">
 										<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'dpid', array('0' => yii::t('app','-- 请选择 --')) +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->dropDownList($model, 'dpid', array('0' => yii::t('app','-- 请选择 --')) +Helper::genCompanyOptions() ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid') , 'disabled'=>$status,));?>
 											<?php echo $form->error($model, 'dpid' )?>
 										</div>
 									</div>
@@ -32,14 +35,14 @@
                                     <div class="form-group">
 										<?php echo $form->label($model, 'category_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control'));?>
+											<?php echo CHtml::dropDownList('selectCategory', $categoryId, $categories , array('class'=>'form-control', 'disabled'=>$status,));?>
                                         </div>
                                     </div>
                                                                         
                                     <div class="form-group" <?php if($model->hasErrors('product_id')) echo 'has-error';?>>
 										<?php echo $form->label($model, 'product_id',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">											
-                                            <?php echo $form->dropDownList($model, 'product_id', array('0' => yii::t('app','-- 请选择 --')) +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+                                            <?php echo $form->dropDownList($model, 'product_id', array('0' => yii::t('app','-- 请选择 --')) +$products ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid'), 'disabled'=>$status,));?>
 											<?php echo $form->error($model, 'product_id' )?>
 										</div>
 									</div>
@@ -118,7 +121,7 @@
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
 											<button type="button" id="su"  class="btn blue"><?php echo yii::t('app','确定');?></button>
-											<a href="<?php echo $this->createUrl('productSet/detailindex' , array('companyId' => $model->dpid,'lid' => $model->set_id));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
+											<a href="<?php echo $this->createUrl('productSet/detailindex' , array('companyId' => $model->dpid,'lid' => $model->set_id ,'status'=>$status));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
 							<?php $this->endWidget(); ?>
@@ -156,7 +159,7 @@ $(document).ready(function(){
 			dataType:'json',
 			success:function(result){
 				if(result.data){
-					alert("<?php echo yii::t('app','改单品套餐内已经存在！');?>");
+					alert("<?php echo yii::t('app','该单品套餐内已经存在！');?>");
 					$('#ProductSetDetail_product_id').val(productVal);                                                                                                                                                                                                   
 				}else{
 				//alert(2);

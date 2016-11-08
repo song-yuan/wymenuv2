@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改套餐明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','套餐列表'),'url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','套餐明细列表'),'url'=>$this->createUrl('productSet/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->set_id))),array('word'=>yii::t('app','修改套餐明细'),'url'=>''))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改套餐明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','套餐列表'),'url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId,))),array('word'=>yii::t('app','套餐明细列表'),'url'=>$this->createUrl('productSet/detailindex' , array('companyId'=>$this->companyId,'lid'=>$model->set_id,'status'=>$status))),array('word'=>yii::t('app','修改套餐明细'),'url'=>''))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -38,7 +38,7 @@
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_detailform', array('model'=>$model, 'categories' => $categories,'categoryId'=>$categoryId,'products'=>$products,'maxgroupno'=>$maxgroupno,'groups'=>$groups,'type'=>$type,)); ?>
+							<?php echo $this->renderPartial('_detailform', array('model'=>$model, 'categories' => $categories,'categoryId'=>$categoryId,'products'=>$products,'maxgroupno'=>$maxgroupno,'groups'=>$groups,'type'=>$type,'status'=>$status)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>
