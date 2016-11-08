@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <script src="jquery-1.10.2.min.js"></script>
+    </head>
+    <style>
+        html,body,ul{
+            margin: 0;
+            padding: 0;
+        }
+        .page{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            background: rgb(255,255,255);
+        }
+        ul li{
+            padding: 10px;
+            list-style: none;
+        }
+        li .item-name{
+            width: 50%;
+            line-height: 1.0em;
+            text-align: center;
+            overflow: hidden;
+        }
+        li .item-num{
+            width: 25%;
+            line-height: 1.0em;
+            text-align: center;
+        }
+        li .item-price{
+            width: 25%;
+            line-height: 1.0em;
+            text-align: center;
+        }
+        .content-left{
+            width: 65%;
+            height: 100%;
+        }
+        .content-left img{
+            width: 100%;
+            height: 100%;
+        }
+        .content-right{
+            width: 35%;
+            height: 100%;
+        }
+        .cart-head{
+            font-size: 2.0em;
+            font-weight: bold;
+            text-align: center;
+            padding: 0.25em;
+        }
+        .cart-bottom{
+            right: 0;
+            bottom: 0;
+            font-size: 1.8em;
+            font-weight: bold;
+            padding: 0.25em 1em 1em;
+            position: absolute;
+            z-index: 5;
+        }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .bold{
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .clear{
+            clear: both;
+        }
+    </style>
+    <body>
+        <div class="page">
+            <div class="content-left left">
+                <img src="addvice.png" />
+            </div>
+            <div class="content-right left"">
+                <div class="cart-head">订单信息</div>
+                <ul id="orderlist">
+                    <li class="prod-head">
+                        <div class="item-name bold left">名称</div>
+                        <div class="item-num bold left">数量</div>
+                        <div class="item-price bold left">价格</div>
+                        <div class="clear"></div>
+                    </li>
+                    <li class="prod">
+                        <div class="item-name left">快乐鸡腿堡</div>
+                        <div class="item-num left">2</div>
+                        <div class="item-price left">100.00</div>
+                        <div class="clear"></div>
+                    </li>
+                </ul>
+                <div class="cart-bottom"><div class="right">总计:￥<span class="cart-price">0.00</span></div></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <script>
+            function cacl_price(){
+                var price = 0;
+                $('li.prod').each(function(){
+                    var proNum = parseInt($(this).find('.item-num').html());
+                    var proPrice = parseFloat($(this).find('.item-price').html());
+                    price +=proNum*proPrice;
+                });
+                $('.cart-price').html(price.toFixed(2));
+            }
+            function wvtojs_setContent(content,type){
+                //webpage//开头的直接加载
+                if(type.indexOf("webpage")==0)
+                {
+                    $("#mainframe").attr("src",content);
+                    $("#mainpic").hide();
+                    $("#mainframe").show();
+                }else{
+                    //否则,根据类型加载其他形式，如：图片，我就不一一写了
+                    $("#mainpic").attr("src",content);
+                    $("#mainpic").show();
+                    $("#mainframe").hide();         
+                    
+                }
+            }
+            
+            function wvtojs_orderDel(pid,pprice){
+                var obj=$("#orderlist").find("li[pid='"+pid+"'][pprice='"+pprice+"']");
+                var objnum=parseInt(obj.find(".item-num").text());
+                if(objnum > 0 ){
+                   obj.find(".item-num").text(objnum-1)
+                }else{
+                   obj.remove();   
+                }
+                cacl_price();    
+            }
+            // pname
+            function wvtojs_orderAdd(pid,pname,pnum,pprice){
+                var obj=$("#orderlist").find("li[pid='"+pid+"'][pprice='"+pprice+"']");
+                if(obj.length>0)
+                {
+                    var objnum=obj.find(".item-num").text(pnum);
+                }else{  
+                    var str = '<li class="prod" pid="'+pid+'" pprice="'+pprice+'">'
+                        +'<div class="item-name left">'+pname+'</div>'
+                        +'<div class="item-num left">'+pnum+'</div>'
+                        +'<div class="item-price left">'+ppic+'</div>'
+                        +'<div class="clear"></div>'
+                    +'</li>';
+                    $(".prod-head").after(str);
+                }
+                cacl_price();
+            }
+        </script>
+    </body>
+</html>
