@@ -41,9 +41,13 @@ class ProductSetController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
 			$se=new Sequence("porduct_set");
-			$model->lid = $se->nextval();
+			$model->lid = $lid = $se->nextval();
+			$code=new Sequence("phs_code");
+			$pshs_code = $code->nextval();
+			
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
+			$model->pshs_code = ProductCategory::getChscode($this->companyId, $lid, $pshs_code);
 			$model->delete_flag = '0';
 			$py=new Pinyin();
 			$model->simple_code = $py->py($model->set_name);
@@ -67,6 +71,7 @@ class ProductSetController extends BackendController
                         $py=new Pinyin();
                         $model->simple_code = $py->py($model->set_name);
                         $model->update_at=date('Y-m-d H:i:s',time());
+                        
                         //var_dump($model->attributes);var_dump(Yii::app()->request->getPost('ProductSet'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));

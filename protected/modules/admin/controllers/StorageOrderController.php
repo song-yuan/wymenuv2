@@ -96,7 +96,7 @@ class StorageOrderController extends BackendController
 	public function actionCreate(){
 		$model = new StorageOrder();
 		$model->dpid = $this->companyId ;
-
+		$model->storage_date = date('Y-m-d H:i:s',time());
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('StorageOrder');
 			$se=new Sequence("storage_order");
@@ -239,7 +239,7 @@ class StorageOrderController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
 		
-		Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_storage_order_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
@@ -290,7 +290,7 @@ class StorageOrderController extends BackendController
 						$materialStockLog->update_at = date('Y-m-d H:i:s',time());
 						$materialStockLog->material_id = $detail['material_id'];
 						$materialStockLog->type = 0;
-						$materialStockLog->stock_num = $detail['stock'];
+						$materialStockLog->stock_num = $num;
 						$materialStockLog->resean = '入库单入库';
 						$materialStockLog->save();
 					}else{

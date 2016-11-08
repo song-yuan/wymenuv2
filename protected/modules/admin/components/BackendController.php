@@ -4,6 +4,7 @@ class BackendController extends CController
 	public $layout = '/layouts/main_admin';
 	public $companyId = 0;
 	public function beforeAction($action) {
+		date_default_timezone_set('PRC');
 		parent::beforeAction($action);
 		$controllerId = Yii::app()->controller->getId();
 		$action = Yii::app()->controller->getAction()->getId();   
