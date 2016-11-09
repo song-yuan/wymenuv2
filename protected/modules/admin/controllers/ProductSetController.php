@@ -47,7 +47,7 @@ class ProductSetController extends BackendController
 			
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
-			$model->pshs_code = ProductCategory::getChscode($this->companyId, $lid, $pshs_code);
+			//$model->pshs_code = ProductCategory::getChscode($this->companyId, $lid, $pshs_code);
 			$model->delete_flag = '0';
 			$py=new Pinyin();
 			$model->simple_code = $py->py($model->set_name);
