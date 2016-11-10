@@ -915,14 +915,15 @@ class DataSyncOperation {
 		$sql = 'select * from nb_product_material_stock where dpid='.$dpid.' and  material_id='.$materialId.' and delete_flag=0 order by create_at asc';
 		$materialStocks = Yii::app ()->db->createCommand ( $sql )->queryAll ();
 		if(!empty($materialStocks)){
+			$count = count($materialStocks);
 			foreach ($materialStocks as $k=>$materialStock){
 				$realityStock = $materialStock['stock'];
-				if($realityStock == 0){
+				if($realityStock == 0 && $k+1 != $count){
 					continue;
 				}
 				$temStock = $temStock - $realityStock;
 				if($temStock > 0){
-					if($k+1 == count($materialStocks)){
+					if($k+1 == $count){
 						$sql = 'update nb_product_material_stock set stock = stock - '.($temStock + $realityStock).' where lid='.$materialStock['lid'].' and dpid='.$dpid.' and delete_flag=0';
 						Yii::app ()->db->createCommand ( $sql )->execute ();
 					}else{
