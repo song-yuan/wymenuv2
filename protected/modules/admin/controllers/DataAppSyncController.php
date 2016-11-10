@@ -170,5 +170,15 @@ public function actionAddMemberCard(){
  	$result = DataSyncOperation::operateCloseAccount($dpid,$userId);
  	echo $result;exit;
 }
- 
+/**
+ * 
+ * 获取双屏活动
+ * 
+ */
+public function actionDoubleScreen(){
+ 	$dpid = Yii::app()->request->getParam('dpid');
+ 	$result = DataSyncOperation::getDoubleScreen($dpid);
+ 	echo $result;exit;
+}
+
 }
