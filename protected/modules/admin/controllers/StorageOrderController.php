@@ -152,19 +152,23 @@ class StorageOrderController extends BackendController
 	}
 	public function actionDetailIndex(){
 		$criteria = new CDbCriteria;
-		$slid = Yii::app()->request->getParam('lid');
+		$slid = Yii::app()->request->getParam('lid');   //此处lid为StorageOrder表的lid
 		$status = Yii::app()->request->getParam('status');
 		$storage = StorageOrder::model()->find('lid=:id and dpid=:dpid',array(':id'=>$slid,':dpid'=>$this->companyId));
 		$criteria->condition =  't.delete_flag = 0 and t.dpid='.$this->companyId .' and t.storage_id='.$slid;
-		$pages = new CPagination(StorageOrderDetail::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		$pages->applyLimit($criteria);
+		
+                $pages = new CPagination(StorageOrderDetail::model()->count($criteria));
+		
+               //$pages->setPageSize(1);
+		
+                $pages->applyLimit($criteria);
 		$models = StorageOrderDetail::model()->findAll($criteria);
 		$this->render('detailindex',array(
 				'storage'=>$storage,
 				'models'=>$models,
 				'pages'=>$pages,
 				'slid'=>$slid,
+				'dpid'=>$this->companyId,
 				'status'=>$status,
 		));
 	}
@@ -179,7 +183,8 @@ class StorageOrderController extends BackendController
 			$db = Yii::app()->db;
 			$sql = 'select t.* from nb_product_material t where t.delete_flag = 0 and t.lid = '.$model->material_id;
 			$command2 = $db->createCommand($sql);
-			$stockUnitId = $command2->queryRow()['mphs_code'];
+			$stockUnitId = $command2->queryRow();
+                        $stockUnitId = $stockUnitId['mphs_code'];
 			//var_dump($stockUnitId);exit;
 			if($stockUnitId){
 				$se=new Sequence("storage_order_detail");
@@ -207,7 +212,97 @@ class StorageOrderController extends BackendController
 				'materials'=>$materialslist
 		));
 	}
+        
+        public function actionBatchSave(){
+                $is_sync = DataSync::getInitSync();
+		
+		$matids = Yii::app()->request->getParam('matids');
+		$storage_id = Yii::app()->request->getParam('lid');     // storage_id
+		$dpid = Yii::app()->request->getParam('companyId'); // dpid
+		$materialnums = array();
+		$materialnums = explode(';',$matids);
+		
+		$db = Yii::app()->db;
+		//var_dump($dpids,$phscodes);exit;
+		$transaction = $db->beginTransaction();
+		try{
+			//var_dump($materialnums);exit;
+			foreach ($materialnums as $materialnum){
+				$materials = array();
+				$materials = explode(',',$materialnum);
+				$mateid = $materials[0];   // material_id
+				$matenum = $materials[1];  // stock
+				$price = $materials[2];  // price
+				$prodmaterials = ProductMaterial::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$mateid,':companyId'=>$this->companyId));
+				
+				if(!empty($prodmaterials)&&!empty($mateid)){
+					$se = new Sequence("storage_order_detail");
+					$id = $se->nextval();
+					//Yii::app()->end(json_encode(array('status'=>true,'msg'=>'成功','matids'=>$prodmaterials['material_name'],'prodid'=>$matenum,'tasteid'=>$tasteid)));
+					$dataprodbom = array(
+							'lid'=>$id,
+							'dpid'=>$dpid,
+							'create_at'=>date('Y-m-d H:i:s',time()),
+							'update_at'=>date('Y-m-d H:i:s',time()),
+                                                        'storage_id'=>$storage_id,
+							'material_id'=>$mateid,
+							'stock'=>$matenum,
+							'price'=>$price,
+                                                        'mphs_code'=>$prodmaterials['mphs_code'],
+                                                        'delete_flag'=>'0',
+							'is_sync'=>$is_sync,
+					);
+                                
+					$command = $db->createCommand()->insert('nb_storage_order_detail',$dataprodbom);	
+				}
+				
+			}
+			//Yii::app()->end(json_encode(array('status'=>true,'msg'=>$msg)));
+			$transaction->commit(); //提交事务会真正的执行数据库操作
+			Yii::app()->end(json_encode(array('status'=>true)));
+			
+		} catch (Exception $e) {
+				$transaction->rollback(); //如果操作失败, 数据回滚
+				Yii::app()->end(json_encode(array('status'=>false)));
+			}  
+        }
+        /*
+         * 入库单批量添加
+         */
+        public function actionBatchCreate(){
+            	$this->layout = '/layouts/main_picture';
+		$pid = Yii::app()->request->getParam('pid',0);
+		$phscode = Yii::app()->request->getParam('phscode',0);
+		$prodname = Yii::app()->request->getParam('prodname',0);
+		
+		$criteria = new CDbCriteria;
+		$criteria->condition =  't.pid != 0 and t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$models = MaterialCategory::model()->findAll($criteria);
+		//查询原料分类
+		
+		$criteria = new CDbCriteria;
+            
+		$criteria->condition =  ' t.delete_flag=0 and t.dpid='.$this->companyId ;
+		$criteria->order = ' t.lid asc ';
+		$materials = ProductMaterial::model()->findAll($criteria);
+               
+		//查询原料信息
 
+		
+		//var_dump($categories);exit;
+		$this->render('batchcreate' , array(
+				'models' => $models,
+				'prodname' => $prodname,
+				'pid' => $pid,
+				'phscode' => $phscode,
+				'materials' => $materials,
+                                'action' => $this->createUrl('productBom/create' , array('companyId'=>$this->companyId))
+		));
+            
+        }
+		
+		
 	public function actionDetailUpdate(){
 		$lid = Yii::app()->request->getParam('lid');
 		$model = StorageOrderDetail::model()->find('lid=:storagedetailId and dpid=:dpid' , array(':storagedetailId' => $lid,':dpid'=>  $this->companyId));

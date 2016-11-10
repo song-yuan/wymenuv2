@@ -1,3 +1,9 @@
+<style>
+	.modal-dialog{
+		width: 1024px;
+		height: 80%;
+	}
+</style>
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -5,14 +11,13 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					<h4 class="modal-title">Modal title</h4>
+					<h4 class="modal-title">未找到连接</h4>
 				</div>
 				<div class="modal-body">
 					Widget settings form goes here
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn blue">Save changes</button>
-					<button type="button" class="btn default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn default" data-dismiss="modal">关闭</button>
 				</div>
 			</div>
 			<!-- /.modal-content -->
@@ -42,13 +47,14 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','入库单详情列表');?></div>
 					<div class="actions">
-						<?php if($status == 0 || $status == 2):?>
-							<a href="<?php echo $this->createUrl('storageOrder/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
-						</div>
-						<?php endif;?>
-						<a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
+                                                                            <!--   'lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,-->
+                                            <a href="javascript:void(0);" class="btn blue add_btn " pid="<?php echo $slid;?>" compid="<?php echo $dpid;?>"><i class="fa fa-pencil"></i> <?php echo yii::t('app','批量添加');?></a>
+                                           <a href="<?php echo $this->createUrl('storageOrder/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
+                                           <div class="btn-group">
+                                                   <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
+                                           </div>
+
+                                           <a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -136,7 +142,7 @@
 		<?php $this->endWidget(); ?>
 	</div>
 	<!-- END PAGE CONTENT-->
-	<script type="text/javascript">
+<script type="text/javascript">
 	$(document).ready(function(){
 		var a = 0;
 		$('#storage-in').click(function(){
@@ -292,7 +298,17 @@
 			}
 			
 		});
+    var $modal = $('.modal');
+    $('.add_btn').on('click', function(){
+    	pid = $(this).attr('pid');
+    	compid = $(this).attr('compid');
+    	
+        $modal.find('.modal-content').load('<?php echo $this->createUrl('storageOrder/batchcreate',array('companyId'=>$this->companyId));?>/pid/'+pid,'' , function(){
+          $modal.modal();
+        });
+    });
 
 		
 	});
-	</script>	
+    
+</script>	
