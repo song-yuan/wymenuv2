@@ -67,8 +67,9 @@
                                 <th><?php echo yii::t('app','主图片');?></th>
                                 <th><?php echo yii::t('app','套餐价格');?></th>
                                 <th><?php echo yii::t('app','星级');?></th>
-                                <th><?php echo yii::t('app','下单数');?></th>
-								<th><?php echo yii::t('app','点赞数');?></th>
+                                <!-- <th><?php echo yii::t('app','下单数');?></th>
+								<th><?php echo yii::t('app','点赞数');?></th> -->
+								<th><?php echo yii::t('app','来源');?></th>
 								<th>&nbsp;</th>
                                                                 <th>&nbsp;</th>
 							</tr>
@@ -82,13 +83,14 @@
 								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
 								<td><?php echo $model->set_price;?></td>
                                 <td><?php echo $model->rank;?></td>
-								<td ><?php echo $model->order_number ;?></td>
-								<td><?php echo $model->favourite_number;?></td>
+								<!-- <td ><?php echo $model->order_number ;?></td>
+								<td><?php echo $model->favourite_number;?></td> -->
+								<td><?php switch ($model->source){case 0: echo yii::t('app','自建');break;case 1: echo yii::t('app','总部下发');break;default: echo '';break;}?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
+									<a href="<?php echo $this->createUrl('productSet/update',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
-                                                                <td class="center">
-								<a href="<?php echo $this->createUrl('productSet/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
+                                <td class="center">
+									<a href="<?php echo $this->createUrl('productSet/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source));?>"><?php echo yii::t('app','编辑明细');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>

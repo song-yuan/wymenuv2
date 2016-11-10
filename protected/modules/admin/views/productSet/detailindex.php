@@ -42,19 +42,12 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo $psmodel->set_name ;?>-><?php echo yii::t('app','套餐明细列表');?></div>
 					<div class="actions">
+					<?php if($status==0):?>
 						<a href="<?php echo $this->createUrl('productSet/detailcreate' , array('companyId' => $this->companyId,'psid'=>$psmodel->lid,'type'=>0,));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
-						<!-- <div class="btn-group">
-							<a class="btn green" href="#" data-toggle="dropdown">
-							<i class="fa fa-cogs"></i> Tools
-							<i class="fa fa-angle-down"></i>
-							</a>
-							<ul class="dropdown-menu pull-right">
-								<li><a href="#"><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></a></li>
-							</ul>
-						</div> -->
-                                                <div class="btn-group">
+						<div class="btn-group">
 							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
 						</div>
+					<?php endif;?>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -64,11 +57,11 @@
 							<tr>
 								<th class="table-checkbox"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" /></th>
 								<th><?php echo yii::t('app','单品名称');?></th>
-                                                                <th><?php echo yii::t('app','图片');?></th>
-                                                                <th><?php echo yii::t('app','套餐内价格');?></th>
-                                                                <th><?php echo yii::t('app','分组号');?></th>
-                                                                <th><?php echo yii::t('app','数量');?></th>
-                                                                <th><?php echo yii::t('app','默认选择');?></th>
+                                <th><?php echo yii::t('app','图片');?></th>
+                                <th><?php echo yii::t('app','套餐内价格');?></th>
+                                <th><?php echo yii::t('app','分组号');?></th>
+                                <th><?php echo yii::t('app','数量');?></th>
+                                <th><?php echo yii::t('app','默认选择');?></th>
 								<th>&nbsp;</th>                                                                
 							</tr>
 						</thead>
@@ -79,16 +72,16 @@
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td ><?php echo $model->product->product_name ;?></td>
 								<td ><img width="100" src="<?php echo $model->product->main_picture ;?>" /></td>
-                                                                <td><?php echo $model->price;?></td>
-                                                                <td><?php echo $model->group_no;?></td>
-                                                                <td><?php echo $model->number;?></td>
-                                                                <td>
+                                <td><?php echo $model->price;?></td>
+                                <td><?php echo $model->group_no;?></td>
+                                <td><?php echo $model->number;?></td>
+                                <td>
 									<div class="s-btn make-switch switch-small" data-on="success" data-off="danger" data-on-label="<?php echo yii::t('app','是');?>" data-off-label="<?php echo yii::t('app','否');?>">
 										<input pid="<?php echo $model->lid;?>" <?php if($model->is_select) echo 'checked="checked"';?> type="checkbox" disabled="disabled" class="toggle"/>
 									</div>
 								</td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('productSet/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid, 'type'=>'1'));?>"><?php echo yii::t('app','编辑');?></a>
+								<a href="<?php echo $this->createUrl('productSet/detailupdate',array('lid' => $model->lid , 'companyId' => $model->dpid, 'type'=>'1' , 'status'=>$status,));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>             
 							</tr>
 						<?php endforeach;?>

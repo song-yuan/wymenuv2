@@ -7,6 +7,11 @@
 									),
 							)); ?>
 								<div class="form-body">
+								
+								<?php if($status):?>
+								<?php $status=true;?>
+								<?php else: $status=false;?>
+								<?php endif;?>
 								<?php if(!$model->dpid):?>
 									<div class="form-group">
 										<?php echo $form->label($model, 'dpid',array('class' => 'col-md-3 control-label'));?>
@@ -19,14 +24,14 @@
 									<div class="form-group">
 										<?php echo $form->label($model, 'type',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'type', array('0' => '套餐' , '1' => '自由组合') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type')));?>
+											<?php echo $form->dropDownList($model, 'type', array('0' => '套餐' , '1' => '自由组合') , array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('type'),'disabled'=>$status));?>
 											<?php echo $form->error($model, 'type' )?>
 										</div>
 									</div>
                                     <div class="form-group">
                                             <?php echo $form->label($model, 'set_name',array('class' => 'col-md-3 control-label'));?>
                                             <div class="col-md-4">
-                                                    <?php echo $form->textField($model, 'set_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('set_name')));?>
+                                                    <?php echo $form->textField($model, 'set_name',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('set_name'),'disabled'=>$status));?>
                                                     <?php echo $form->error($model, 'set_name' )?>
                                             </div>
                                     </div>
