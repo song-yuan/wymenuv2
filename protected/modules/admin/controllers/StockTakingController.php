@@ -157,7 +157,7 @@ class StockTakingController extends BackendController
 		$categoryId = Yii::app()->request->getParam('cid',0);
 		$optval = array();
 		$optval = explode(';',$optvals);
-		//var_dump($optval);exit;
+		//var_dump($optval);
 		$dpid = $this->companyId;
 		$db = Yii::app()->db;
 		$transaction = $db->beginTransaction();
@@ -227,29 +227,31 @@ class StockTakingController extends BackendController
 // 					$stocktakingdetail->status = 1;
 // 					$stocktakingdetail->is_sync = $is_sync;
 // 					$stocktakingdetail->save();
-					//var_dump($stocktakingdetail);exit;
+					//var_dump($stocks);exit;
 					//下面是对该次盘点进行的操作。。。
 					$stocks->stock = $stocks->stock + $difference;
 					$stocks->update_at = date('Y-m-d H:i:s',time());
 					$stocks->update();
 						
 				}else{
-					$sql = 'select t.* from nb_product_material_stock t where t.delete_flag = 0 and t.dpid ='.$dpid.' and t.material_id = '.$id.' order by t.create_at asc';
+					
+					$sql = 'select t.* from nb_product_material_stock t where t.stock != "0.00" and t.delete_flag = 0 and t.dpid ='.$dpid.' and t.material_id = '.$id.' order by t.create_at asc';
 					$command = $db->createCommand($sql);
 					$stock2 = $command->queryAll();
 					$minusnum = -$difference;
 					//var_dump($minusnum.'@');
-					//var_dump($stock2);
 					foreach ($stock2 as $stockid){
-						//var_dump($stockid.'#');
+						//print_r($stockid);exit;
+						//var_dump($stockid);
 						$stockori = $stockid['stock'];
 						if($minusnum >= 0 && $stockori > 0){
 							$minusnums = $minusnum - $stockori ;
 							//var_dump($stockori.'@@');
-							//var_dump($minusnums.'2');
+							//var_dump($minusnums);exit;
+							$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and lid=:lid',array(':sid'=>$id,':dpid'=>$this->companyId,':lid'=>$stockid['lid'],));
+							
 							if($minusnums <= 0 ) {
 								//var_dump($minusnums.'@3');
-								$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and lid=:lid',array(':sid'=>$id,':dpid'=>$this->companyId,':lid'=>$stockid['lid'],));
 								$changestock = $stock->stock - $minusnum;
 								$sql1 = 'update nb_product_material_stock set stock = '.$changestock. ' where delete_flag = 0 and material_id ='.$id.' and dpid ='.$this->companyId.' and lid='.$stockid['lid'];
 								//var_dump($sql1);
@@ -293,8 +295,8 @@ class StockTakingController extends BackendController
 								// 								$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and lid=:lid',array(':sid'=>$id,':dpid'=>$this->companyId,':lid'=>$stockid['lid'],));
 		
 								//对该次盘点进行日志保存
-								$materialStockLog = new MaterialStockLog();
-								$se=new Sequence("material_stock_log");
+								$materialStockLog = new StockTakingDetail();
+								$se=new Sequence("stock_taking_detail");
 								$materialStockLog = array(
 										'lid'=>$se->nextval(),
 										'dpid'=>$dpid,
@@ -306,11 +308,12 @@ class StockTakingController extends BackendController
 										'reality_stock' => $stock->stock,
 										'taking_stock' => $stockori,
 										'number'=>'-'.$stockori,
-										'resean'=>'',
+										'reasion'=>'',
 										'status' => 1,
 										'is_sync'=>$is_sync,
 
 								);
+								//var_dump($materialStockLog);
 								$command = $db->createCommand()->insert('nb_stock_taking_detail',$materialStockLog);
 								
 							}
@@ -325,6 +328,7 @@ class StockTakingController extends BackendController
 			return true;
 		}catch (Exception $e) {
 			$transaction->rollback(); //如果操作失败, 数据回滚
+			exit;
 			Yii::app()->end(json_encode(array("status"=>"fail")));
 			return false;
 		}

@@ -75,7 +75,7 @@
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>
 								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
 								<!-- <td ><php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>  -->
-								<!-- <td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td> -->
+								<td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td> 
 								<td ><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>" name="idss[]" />
 								<input type="text" style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
 								<!-- <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
@@ -145,7 +145,7 @@
             //alert(nownum);return false;
             var originalnum = $("#originalnum"+vid).val();
             var difference = parseFloat(nownum) - parseFloat(originalnum);
-				difference = difference.toFixed(4);
+				difference = difference.toFixed(2);
             if(nownum != ''){
                 optval = vid +','+ difference +','+ nownum +','+ originalnum +';'+ optval;
                 } 
