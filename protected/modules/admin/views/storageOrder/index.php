@@ -92,7 +92,8 @@
 						<tbody>
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
-							<tr class="odd gradeX">
+							<tr class="odd gradeX">                                       
+                                                                             <!--此处$model是指StorageOrder表，原本是models，此处别名为model-->
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo Common::getmfrName($model->manufacturer_id);?></td>
 								<td ><?php echo Helper::getCompanyName($model->organization_id);?></td>
