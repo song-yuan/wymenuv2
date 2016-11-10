@@ -951,5 +951,16 @@ class DataSyncOperation {
 			Yii::app ()->db->createCommand ()->insert ( 'nb_material_stock_log', $materialStockLog );
 		}
 	}
+	
+	/**
+	 * 
+	 * 获取双屏信息
+	 * 
+	 */
+	public static function getDoubleScreen($dpid) {
+		$sql = 'select t.lid,t.dpid,t.url as main_picture,if(t.type=0,3,4) as is_set from nb_double_screen_detail t,nb_double_screen t1 where t.double_screen_id=t1.lid and t.dpid=t1.dpid and t.dpid='.$dpid.' and t1.is_able=1 and t.delete_flag=0 and t1.delete_flag=0';
+		$results = Yii::app ()->db->createCommand ( $sql )->queryAll ();
+		return json_decode($results);
+	}
 }
 
