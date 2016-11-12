@@ -301,7 +301,7 @@ class DataSyncOperation {
 					'lid' => $lid,
 					'dpid' => $dpid,
 					'create_at' => date ( 'Y-m-d H:i:s', time () ),
-					'postable_sync_id' => $result['lid'],
+					'postable_sync_id' => $result['maxid'],
 					'poscode' => $poscode,
 					'is_sync' => $isSync
 			);
