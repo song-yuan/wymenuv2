@@ -122,7 +122,7 @@ class DataSyncTables
         		"  'jobid' int(10) NOT NULL DEFAULT '0',".
 	        	"  `pad_code` varchar(50) NOT NULL,".
 				"  `pad_sales_type` varchar(2) NOT NULL,".
-        		"  `item_count` varchar(2) NOT NULL DEFAULT '5',".
+        		"  `item_count` varchar(2) NOT NULL DEFAULT '4',".
 				"  `pad_type` varchar(2) NOT NULL,".
 				"  `pad_ip` varchar(20) NOT NULL,".
 				"  `pad_fip` varchar(20) NOT NULL DEFAULT '0',".

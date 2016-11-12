@@ -270,6 +270,49 @@ class DataSyncOperation {
 		}
 	}
 	/**
+	 *
+	 * 检验是否有新表结构数据
+	 * 有新数据返回 更新详情到最大id
+	 *
+	 */
+	public static function getNewPosTableData($data) {
+		$dpid = $data['dpid'];
+		$poscode = $data['poscode'];
+		$sql = 'select * from nb_postable_sync_detail where dpid='.$dpid.' and poscode="'.$poscode.'" and delete_flag=0 order by postable_sync_id desc limit 1';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		if ($result){
+			$maxPosTableId = $result['postable_sync_id'];
+		}else{
+			$maxPosTableId = 0;
+		}
+		
+		$sql = 'select max(lid) as maxid from nb_postable_sync where dpid='.$dpid.' and lid > '.$maxPosTableId.' and delete_flag=0';
+		$result = Yii::app()->db->createCommand($sql)->queryRow();
+		
+		if($result){
+			$sql = 'select * from nb_postable_sync where dpid='.$dpid.' and lid > '.$maxPosTableId.' and delete_flag=0';
+			$results = Yii::app()->db->createCommand($sql)->queryAll();
+			
+			$isSync = DataSync::getInitSync ();
+			
+			$se = new Sequence ( "postable_sync_detail" );
+			$lid = $se->nextval ();
+			$data = array (
+					'lid' => $lid,
+					'dpid' => $dpid,
+					'create_at' => date ( 'Y-m-d H:i:s', time () ),
+					'postable_sync_id' => $result['lid'],
+					'poscode' => $poscode,
+					'is_sync' => $isSync
+			);
+			$res = Yii::app()->db->createCommand ()->insert ( 'nb_postable_sync_detail', $data );
+			if($res){
+				return json_encode($results);
+			}
+		}
+		return json_encode(array());
+	}
+	/**
 	 * 
 	 * 检验是否有新数据
 	 * 有新数据返回 表名

@@ -101,6 +101,15 @@ public function actionGetData(){
 }
 /**
  * 
+ * 检验是否有新的表结构数据
+ * 
+ */
+public function actionValidateNewPosTableData(){
+	$result = DataSyncOperation::getNewPosTableData($_POST);
+	echo $result;exit;
+}
+/**
+ * 
  * 
  * 检验是否有新数据
  * 
