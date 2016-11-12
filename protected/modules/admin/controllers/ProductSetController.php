@@ -37,7 +37,7 @@ class ProductSetController extends BackendController
 	public function actionCreate(){
 		$model = new ProductSet();
 		$model->dpid = $this->companyId ;
-		
+		$status = '';
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
 			$se=new Sequence("porduct_set");
@@ -58,7 +58,8 @@ class ProductSetController extends BackendController
 			}
 		}
 		$this->render('create' , array(
-				'model' => $model 
+				'model' => $model,
+				'status'=> $status,
 		));
 	}
 	public function actionUpdate(){
@@ -136,6 +137,7 @@ class ProductSetController extends BackendController
 		$model->dpid = $this->companyId ;
 		$pslid = Yii::app()->request->getParam('psid');
 		$type = Yii::app()->request->getParam('type'); //var_dump($pslid);exit;
+		$status = '';
         $model->set_id=$pslid;
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
@@ -180,7 +182,8 @@ class ProductSetController extends BackendController
 				'products' => $productslist,
 				'maxgroupno'=>$maxgroupno,
 				'groups' =>$groupslist,
-				'type'=>$type
+				'type'=>$type,
+				'status'=>$status,
 		));
 	}
 	public function actionDetailUpdate(){

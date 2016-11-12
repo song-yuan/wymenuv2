@@ -23,7 +23,7 @@
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->   
-			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','添加套餐'),'breadcrumbs'=>array(array('word'=>yii::t('app','菜品设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','套餐设置'),'url'=>$this->createUrl('productSet/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','添加套餐'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('productSet/index' , array('companyId' => $this->companyId,'type' => '0',)))));?>
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','店铺管理'),'subhead'=>yii::t('app','添加双屏'),'breadcrumbs'=>array(array('word'=>yii::t('app','店铺管理'),'url'=>$this->createUrl('company/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','双屏设置'),'url'=>$this->createUrl('doubleScreen/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','添加双屏'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('doubleScreen/index' , array('companyId'=>$this->companyId,'type'=>$type)))));?>
 			
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
@@ -31,14 +31,14 @@
 				<div class="col-md-12">
 					<div class="portlet box blue">
 						<div class="portlet-title">
-							<div class="caption"><i class="fa fa-reorder"></i><?php echo yii::t('app','添加套餐');?></div>
+							<div class="caption"><i class="fa fa-reorder"></i><?php if($type) echo yii::t('app','添加整单口味分组');else echo yii::t('app','添加双屏');?></div>
 							<div class="tools">
 								<a href="javascript:;" class="collapse"></a>
 							</div>
 						</div>
 						<div class="portlet-body form">
 							<!-- BEGIN FORM-->
-							<?php echo $this->renderPartial('_form', array('model'=>$model,'status'=>$status,)); ?>
+							<?php echo $this->renderPartial('_form', array('model'=>$model,'type'=>$type)); ?>
 							<!-- END FORM--> 
 						</div>
 					</div>
