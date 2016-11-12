@@ -1,6 +1,16 @@
 <?php
 class DoubleScreenController extends BackendController
 {
+	public function actions() {
+		return array(
+				'upload'=>array(
+						'class'=>'application.extensions.swfupload.SWFUploadAction',
+						//注意这里是绝对路径,.EXT是文件后缀名替代符号
+						'filepath'=>Helper::genFileName().'.EXT',
+						//'onAfterUpload'=>array($this,'saveFile'),
+				)
+		);
+	}
 	public function beforeAction($action) {
 		parent::beforeAction($action);
 		if(!$this->companyId) {
@@ -38,6 +48,7 @@ class DoubleScreenController extends BackendController
                         $model->lid = $se->nextval();
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->update_at = date('Y-m-d H:i:s',time());
+                        $model->is_able = '1';
                         $model->delete_flag = '0';
                         
 //                        var_dump($model);exit;
@@ -119,6 +130,12 @@ class DoubleScreenController extends BackendController
 		$model->dpid = $this->companyId ;		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('DoubleScreenDetail');
+						$url2 = Yii::app()->request->getParam('url2');
+						$types = $model->type;
+						if($types == 1){
+							$model->url = $url2;
+						}
+						//var_dump($model);exit;
                         $se=new Sequence("double_screen_detail");
                         $model->lid = $se->nextval();
                         $model->double_screen_id = $groupid ;
@@ -133,8 +150,8 @@ class DoubleScreenController extends BackendController
 		}
 		$this->render('detailCreate' , array(
 				'model' => $model , 
-                                'groupid'=>$groupid,
-                                'groupname'=>$groupname,
+                'groupid'=>$groupid,
+                'groupname'=>$groupname,
 				'type' => $type
 		));
 	}
@@ -148,9 +165,13 @@ class DoubleScreenController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			//$otherprice = $_POST['other_price'];
 			$model->attributes = Yii::app()->request->getPost('DoubleScreenDetail');
-			//$model->other_price = $otherprice;
-                        $model->update_at=date('Y-m-d H:i:s',time());
-                        //var_dump($model);exit;
+			$url2 = Yii::app()->request->getParam('url2');
+			$types = $model->type;
+			if($types == 1){
+				$model->url = $url2;
+			}
+            $model->update_at=date('Y-m-d H:i:s',time());
+            //var_dump($model);exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('doubleScreen/detailIndex' , 'type'=>$type,'groupname'=>$groupname,'groupid'=>$model->double_screen_id, 'companyId' => $this->companyId));

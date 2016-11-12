@@ -66,7 +66,7 @@ class DoubleScreenDetail extends CActiveRecord
 			'create_at' => 'Create At',
 			'update_at' => '更新时间',
 			'double_screen_id' => '双屏设置表id',
-			'type' => '资源类型 0 图片 1 视频',
+			'type' => '资源类型',
 			'url' => '资源地址',
 			'delete_flag' => '是否删除 0 否 1 是',
 			'is_sync' => '同步标志',

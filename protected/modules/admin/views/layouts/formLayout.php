@@ -15,10 +15,14 @@ AppAsset::register($this);
 <html lang="<?= Yii::$app->language ?>">
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if lt IE 9]>
+ <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+ <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="<?= Yii::$app->charset ?>"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
