@@ -47,13 +47,13 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','入库单详情列表');?></div>
 					<div class="actions">
-                                                                            <!--   'lid' => $model->lid , 'companyId' => $model->dpid,'status' => $model->status,-->
+                                            <?php if($storage->status!=3):?>
                                             <a href="javascript:void(0);" class="btn blue add_btn " pid="<?php echo $slid;?>" compid="<?php echo $dpid;?>"><i class="fa fa-pencil"></i> <?php echo yii::t('app','批量添加');?></a>
                                            <a href="<?php echo $this->createUrl('storageOrder/detailcreate' , array('companyId' => $this->companyId, 'lid'=>$slid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
                                            <div class="btn-group">
                                                    <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
                                            </div>
-
+											<?php endif;?>
                                            <a href="<?php echo $this->createUrl('storageOrder/index' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a>
 					</div>
 				</div>

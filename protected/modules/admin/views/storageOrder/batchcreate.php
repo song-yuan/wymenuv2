@@ -246,7 +246,7 @@
 											<div id="<?php echo $material->lid;?>" catid="<?php echo $material->category_id;?>" class="bodymaterial">
 												<div class="div1"><span><?php echo $a;?></span></div>
                                                                                                 <div class="div2">
-                                                                                                    <input id="check<?php echo $material->lid;?>" type="checkbox" stockname="<?php echo Common::getStockName($material->sales_unit_id);?>" matename="<?php echo $material->material_name;?>" class="checkboxes" value="<?php echo $material->lid;?>"  name="ids[]" />
+                                                                                                    <input id="check<?php echo $material->lid;?>" type="checkbox" stockname="<?php echo Common::getStockName($material->stock_unit_id);?>" matename="<?php echo $material->material_name;?>" class="checkboxes" value="<?php echo $material->lid;?>"  name="ids[]" />
                                                                                                 </div>
 												<div class="matename ">
 												<label for="check<?php echo $material->lid; ?>"><?php echo $material->material_name;?></label>
