@@ -69,7 +69,7 @@ class DoubleScreen extends CActiveRecord
 			'title' => '双屏标题',
 			'type' => '客户界面类型',
 			'desc' => '双屏说明',
-			'is_able' => '是否有效 0 不生效 1 生效',
+			'is_able' => '是否有效 ',
 			'delete_flag' => '是否删除 0 否 1 是',
 			'is_sync' => '同步标志',
 		);
