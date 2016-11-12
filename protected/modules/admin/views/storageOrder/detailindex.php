@@ -1,6 +1,6 @@
 <style>
 	.modal-dialog{
-		width: 1024px;
+		width: 1124px;
 		height: 80%;
 	}
 </style>
@@ -77,7 +77,7 @@
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td style="width:16%"><?php echo Common::getmaterialName($model->material_id);?></td>
-								<td><?php echo $model->price;?></td>
+								<td class="price"><?php echo $model->price;?></td>
 								<td ><?php echo $model->stock;?></td>
 								<td><?php echo $model->free_stock;?></td>
 								<td><?php echo $model->stock_day;?></td>
@@ -171,9 +171,27 @@
 		$('#status-0').click(function(){
 			var pid = $(this).attr('storage-id');
 			var storagedetail = $('#storagedetail').attr('val');
-			
+			var prices = 1;
+			$(".price").each(function(){
+				var price = $(this).text();
+				if(price == '0.00'){
+					prices = 0;
+				}
+			});
+			if(prices == 0){
+				if(confirm("有原料入库价格为零，确认继续入库？")){
+					
+				}else{
+					return false;
+				}
+			}else{
+				if(confirm("确认入库？")){
+					
+				}else{
+					return false;
+				}
+			}
 			if(storagedetail == 1 && a == 0){
-			if(confirm('确认入库')){
 				$.ajax({
 					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>1));?>',
 					data:{type:1,pid:pid},
@@ -201,35 +219,12 @@
 						//location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
 					}
 				});
-			}
+			
 			}else{
 				alert('请添加需要入库的详细品项');
 				}
 		});
-// 		$('#status-0').click(function(){
-// 			var pid = $(this).attr('storage-id');
-// 			var storagedetail = $('#storagedetail').attr('val');
-			
-// 			if(storagedetail == 1){
-// 			if(confirm('确认送审该入库单')){
-// 				$.ajax({
-//					url:'<?php echo $this->createUrl('storageOrder/storageVerify',array('companyId'=>$this->companyId,'status'=>4));?>',
-// 					data:{type:4,pid:pid},
-// 					success:function(msg){
-// 						if(msg=='true'){
-// 							alert('送审成功');
-// 						}else{
-// 							alert('送审失败');
-// 						}
-// 						//history.go(0);
-//						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
-// 					}
-// 				});
-// 			}
-// 			}else{
-// 				alert('请添加需要入库的详细品项');
-// 				}
-// 		});
+
 		$('#status-1').click(function(){
 			var pid = $(this).attr('storage-id');
 			var storagedetail = $('#storagedetail').attr('val');
