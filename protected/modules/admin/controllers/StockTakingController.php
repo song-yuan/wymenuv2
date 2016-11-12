@@ -80,26 +80,28 @@ class StockTakingController extends BackendController
 				$originalNum = $opt[3];
 				
 				$stocks = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and t.create_at =(select max(t1.create_at) from nb_product_material_stock t1 where t1.delete_flag = 0 and t1.dpid='.$this->companyId.' and t1.material_id ='.$id.' )',array(':sid'=>$id,':dpid'=>$this->companyId,));
-					
+				
 				//对该次盘点进行日志保存
 				$stocktakingdetail = new StockTakingDetail();
 				$se=new Sequence("stock_taking_detail");
-				$detailid = $stocktakingdetail->lid = $se->nextval();
-				$stocktakingdetail->dpid = $dpid;
-				$stocktakingdetail->create_at = date('Y-m-d H:i:s',time());
-				$stocktakingdetail->update_at = date('Y-m-d H:i:s',time());
-				$stocktakingdetail->logid = $logid;
-				$stocktakingdetail->material_id = $id;
-				$stocktakingdetail->material_stock_id = $stocks->lid;
-				$stocktakingdetail->reality_stock = $originalNum;
-				$stocktakingdetail->taking_stock = $nowNum;
-				$stocktakingdetail->number = $difference;
-				$stocktakingdetail->reasion = '';
-				$stocktakingdetail->status = 0;
-				$stocktakingdetail->is_sync = $is_sync;
-				$stocktakingdetail->save();
-				
-				
+				$detailid = $se->nextval();
+				$stocktakingdetail = array(
+						'lid'=>$detailid,
+						'dpid'=>$dpid,
+						'create_at'=>date('Y-m-d H:i:s',time()),
+						'update_at'=>date('Y-m-d H:i:s',time()),
+						'logid'=>$logid,
+						'material_id'=>$id,
+						'material_stock_id' => $stocks->lid,
+						'reality_stock' => $originalNum,
+						'taking_stock' => $nowNum,
+						'number'=>$difference,
+						'reasion'=>'',
+						'status' => 0,
+						'is_sync'=>$is_sync,
+				);
+				//var_dump($stocktakingdetails);
+				$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
 		
 				if($difference > 0 ){
 					//盘点操作，当盘点的库存比理论库存多时，直接在后进的库存批次上加上此次的盘点的差值。。。
