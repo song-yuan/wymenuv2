@@ -42,113 +42,7 @@ class StockTakingController extends BackendController
 
 		));
 	}
-	public function actionCreate(){
-		$model = new ProductMaterial();
-		$modelStock = new ProductMaterialStock();
-		$model->dpid = $this->companyId ;
-		$modelStock->dpid = $this->companyId ;
-		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('ProductMaterial');
-			
-			$db = Yii::app()->db;
-			$sql = 'select t.* from nb_material_category t where t.delete_flag = 0 and t.lid = '.$model->category_id;
-			$command1 = $db->createCommand($sql);
-			$categoryCode = $command1->queryRow()['mchs_code'];
-			
-			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->stock_unit_id;
-			$command2 = $db->createCommand($sql);
-			$stockUnitId = $command2->queryRow()['muhs_code'];
-			
-			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
-			$command3 = $db->createCommand($sql);
-			$salesUnitId = $command3->queryRow()['muhs_code'];
-			//var_dump($categoryId,$stockUnitId,$salesUnitId);exit;
-			if($categoryCode&&$stockUnitId&&$salesUnitId){
-	            $se=new Sequence("product_material");
-	            $lid = $se->nextval();
-	            $model->lid = $lid;
-	            
-	            $code = new Sequence('mphs_code');
-	            $mphs_code = $code->nextval();
-	            $model->create_at = date('Y-m-d H:i:s',time());
-	            $model->update_at = date('Y-m-d H:i:s',time());
-	            $model->mphs_code = ProductCategory::getChscode($this->companyId, $lid, $mphs_code);
-	            $model->mchs_code = $categoryCode;
-	            $model->mulhs_code = $stockUnitId;
-	            $model->mushs_code = $salesUnitId;
-	            $model->delete_flag = '0';
-	            
-	            $se=new Sequence("product_material_stock");
-	            $modelStock->lid = $se->nextval();
-	            $modelStock->create_at = date('Y-m-d H:i:s',time());
-	            $modelStock->update_at = date('Y-m-d H:i:s',time());
-	            $modelStock->material_id = $model->lid;
-	            $modelStock->mphs_code = $model->mphs_code;
-	            
-				if($model->save()&&$modelStock->save()){
-					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-					$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
-				}
-			}else{
-				Yii::app()->user->setFlash('error',yii::t('app','添加失败'));
-				$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
-			}
-		}
-		$categories = $this->getCategoryList();
- 		$this->render('create' , array(
-			'model' => $model ,
-			'categories' => $categories
-		));
-	}
-	
-	public function actionUpdate(){
-		$id = Yii::app()->request->getParam('id');
-		$model = ProductMaterial::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $id,':dpid'=>  $this->companyId));
-		$model->dpid = $this->companyId;
-		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(Yii::app()->request->isPostRequest) {
-			$model->attributes = Yii::app()->request->getPost('ProductMaterial');
-         	$model->update_at=date('Y-m-d H:i:s',time());
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-				$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
-			}
-		}
-		$categories = $this->getCategoryList();//var_dump($categories);exit;
-		$this->render('update' , array(
-				'model' => $model ,
-				'categories' => $categories
-		));
-	}
-	public function actionDelete(){
-		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(!empty($ids)) {
-			Yii::app()->db->createCommand('update nb_product_material set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
-			->execute(array( ':companyId' => $this->companyId));
-			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId)) ;
-		} else {
-			Yii::app()->user->setFlash('error' , yii::t('app','请选择要删除的项目'));
-			$this->redirect(array('productMaterial/index' , 'companyId' => $companyId)) ;
-		}
-	}
-	
-	public function actionDetailindex(){
-		$materialId = Yii::app()->request->getParam('id',0);
-		$criteria = new CDbCriteria;
-		$criteria->condition =  't.delete_flag=0 and t.dpid='.$this->companyId.' and t.material_id ='.$materialId;
-		//	$criteria->condition.=' and t.lid = '.$categoryId;
-		$pages = new CPagination(ProductMaterialStock::model()->count($criteria));
-		//$pages->setPageSize(1);
-		$pages->applyLimit($criteria);
-		$models = ProductMaterialStock::model()->findAll($criteria);
-		$this->render('detailindex',array(
-				'models'=>$models,
-				'pages'=>$pages,
-	
-		));
-	}
+
 
 	public function actionAllStore(){
 
@@ -186,26 +80,28 @@ class StockTakingController extends BackendController
 				$originalNum = $opt[3];
 				
 				$stocks = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and t.create_at =(select max(t1.create_at) from nb_product_material_stock t1 where t1.delete_flag = 0 and t1.dpid='.$this->companyId.' and t1.material_id ='.$id.' )',array(':sid'=>$id,':dpid'=>$this->companyId,));
-					
+				
 				//对该次盘点进行日志保存
 				$stocktakingdetail = new StockTakingDetail();
 				$se=new Sequence("stock_taking_detail");
-				$detailid = $stocktakingdetail->lid = $se->nextval();
-				$stocktakingdetail->dpid = $dpid;
-				$stocktakingdetail->create_at = date('Y-m-d H:i:s',time());
-				$stocktakingdetail->update_at = date('Y-m-d H:i:s',time());
-				$stocktakingdetail->logid = $logid;
-				$stocktakingdetail->material_id = $id;
-				$stocktakingdetail->material_stock_id = $stocks->lid;
-				$stocktakingdetail->reality_stock = $originalNum;
-				$stocktakingdetail->taking_stock = $nowNum;
-				$stocktakingdetail->number = $difference;
-				$stocktakingdetail->reasion = '';
-				$stocktakingdetail->status = 0;
-				$stocktakingdetail->is_sync = $is_sync;
-				$stocktakingdetail->save();
-				
-				
+				$detailid = $se->nextval();
+				$stocktakingdetail = array(
+						'lid'=>$detailid,
+						'dpid'=>$dpid,
+						'create_at'=>date('Y-m-d H:i:s',time()),
+						'update_at'=>date('Y-m-d H:i:s',time()),
+						'logid'=>$logid,
+						'material_id'=>$id,
+						'material_stock_id' => $stocks->lid,
+						'reality_stock' => $originalNum,
+						'taking_stock' => $nowNum,
+						'number'=>$difference,
+						'reasion'=>'',
+						'status' => 0,
+						'is_sync'=>$is_sync,
+				);
+				//var_dump($stocktakingdetails);
+				$command = $db->createCommand()->insert('nb_stock_taking_detail',$stocktakingdetail);
 		
 				if($difference > 0 ){
 					//盘点操作，当盘点的库存比理论库存多时，直接在后进的库存批次上加上此次的盘点的差值。。。
@@ -292,7 +188,7 @@ class StockTakingController extends BackendController
 								$command=$db->createCommand($sql2);
 								$command->execute();
 								//Yii::app()->db->createCommand($sql)->execute();
-								// 								$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and lid=:lid',array(':sid'=>$id,':dpid'=>$this->companyId,':lid'=>$stockid['lid'],));
+								//$stock = ProductMaterialStock::model()->find('material_id=:sid and dpid=:dpid and delete_flag=0 and lid=:lid',array(':sid'=>$id,':dpid'=>$this->companyId,':lid'=>$stockid['lid'],));
 		
 								//对该次盘点进行日志保存
 								$materialStockLog = new StockTakingDetail();

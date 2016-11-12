@@ -157,8 +157,9 @@
         	//alert(optval);
         }else{
             alert('请至少盘点一项');
+            return false;
             }
-        //return false;
+        //
 		var categoryId = '<?php echo $categoryId;?>';
         $.ajax({
             type:'GET',

@@ -2,12 +2,15 @@
 <html lang="en">
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+ <html lang="en" class="ie8 no-js"> 
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit" /> 
     <title><?php echo yii::t('app','我要点单 - 后台管理系统');?></title>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+	<meta http-equiv="X-UA-Compatible" content="IE=IE8">
+	<meta name="renderer" content="webkit" /> 
+	<!-- <meta content="width=device-width, initial-scale=1.0" name="viewport" /> -->
 	<meta content="" name="description" />
 	<meta content="" name="author" />
 	<meta name="MobileOptimized" content="320">

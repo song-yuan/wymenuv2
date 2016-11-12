@@ -23,7 +23,7 @@
 		border-top: none;
 	}
 	.pbombody .matcat{
-		width: 20%;
+		width: 15%;
 		height: 100%;
 		float: left;
 		border-right: 1px solid silver;
@@ -48,15 +48,12 @@
 		width: 100%;
 	}
 	.pbombody .material{
-		width: 35%;
+		width: 32%;
 		height: 100%;
 		float: left;
 		border-right: 1px solid silver;
 	}
-	.pbombody .material{
-		width: 35%;
-		float: left;
-	}
+
 	.pbombody .material .materialhead{
 		font-size: 18px;
 		text-align: center;
@@ -84,7 +81,7 @@
 		padding: 4px 6px;
 	}
 	.pbombody .bom{
-		width: 45%;
+		width: 53%;
 		height: 100%;
 		float: left;
 		border-right: 1px solid silver;
@@ -97,10 +94,10 @@
 		border-bottom: 1px solid silver;
 	}
 	.pbombody .bom .bombody{
-		width: 94%;
+		width: 96%;
 		height: 70%;
-		font-size: 16px;
-		margin-left: 3%;
+		font-size: 14px;
+		margin-left: 2%;
 		overflow: auto;		
 	}
 	.pbombody .bom .bomend{
@@ -142,11 +139,12 @@
 		margin-left: 10px;
 	}
 	.bommaterial .matename {
-		width: 55%;
+		width: 25%;
 		height: 30px;
+		font-size: 12px;
 		line-height: 30px;
 		float: left;	
-		margin-left: 10px;		
+		margin-left: 0px;		
 	}
 	.bommaterial .div1{
 		width: 30px;
@@ -159,32 +157,42 @@
 		float: left;
 		margin-left: 10px;
 	}
-	.bommaterial .div3{
-		width: 25%;
-		float: left;
-		margin-left: 10px;
-	}
+	
+	
 	.bommaterial .div4{
-		width: 15%;
+		width: 10%;
 		float: left;
-		margin-left: 10px;
+		
 	}
 	.bommaterial .div4 input{
 		width: 100%;
 		float: left;
-		margin-left: 10px;
+		
 	}
-	.bommaterial .div3 input{
-		width: 75%;
+	.bommaterial  input{
+		width: 15%;
 		float: left;
 	}
-	.bommaterial .div3 span{
-		width: 23%;
+        .amoount{
+             margin:0px;
+             padding:0px; 
+        }
+	.bommaterial .amount span{
+		width: 27%;
 		float: left;
-		font-size: 18px;
+		height: 30px;
+		font-size: 12px;
+		line-height: 30px;
+		text-align: center;
+              
+	}
+       .bommaterial .price span{
+		width: 9%;
+		float: left;
+		font-size: 14px;
 		line-height: 30px;
 		text-align: center;		
-	}
+	} 
 	.pageend {
 		margin-bottom: 10px;
 	}
@@ -196,7 +204,7 @@
 		border: 1px solid silver;
 	}
 	.width40{
-		width: 22% !important;
+		width: 23% !important;
 	}
 	.clear{
 		clear: both;
@@ -245,9 +253,9 @@
 											<?php foreach ($materials as $material):?>
 											<div id="<?php echo $material->lid;?>" catid="<?php echo $material->category_id;?>" class="bodymaterial">
 												<div class="div1"><span><?php echo $a;?></span></div>
-                                                                                                <div class="div2">
-                                                                                                    <input id="check<?php echo $material->lid;?>" type="checkbox" stockname="<?php echo Common::getStockName($material->sales_unit_id);?>" matename="<?php echo $material->material_name;?>" class="checkboxes" value="<?php echo $material->lid;?>"  name="ids[]" />
-                                                                                                </div>
+                                                <div class="div2">
+                                                     <input id="check<?php echo $material->lid;?>" type="checkbox" stockname="<?php echo Common::getStockName($material->stock_unit_id);?>" matename="<?php echo $material->material_name;?>" class="checkboxes" value="<?php echo $material->lid;?>"  name="ids[]" />
+                                                </div>
 												<div class="matename ">
 												<label for="check<?php echo $material->lid; ?>"><?php echo $material->material_name;?></label>
 												</div>
@@ -316,6 +324,7 @@ $(document).ready(function(){
                 //alert(aa[i].getAttribute("value"));
                 var materialid = aa[i].getAttribute("value");
                 var matename = aa[i].getAttribute("matename");
+                //
                 var stockname = aa[i].getAttribute("stockname");
                 codep += materialid +','+ matename + ';';
                 var bommatif = $('#bommat'+materialid).attr('bommatif');
@@ -328,8 +337,8 @@ $(document).ready(function(){
 								+'<div class="matename width40">'
 								+matename
 								+'</div>'
-								+'<div class="div3"><input type="text" id="bommatnum'+materialid+'" placeholder="数量"/><span>'+stockname+'</span></div>'
-								+'<div class="div3"><input type="text" id="bommatprice'+materialid+'" placeholder="价格"/><span> 元</span></div>'
+								+'<div class="amount"><input type="text" id="bommatnum'+materialid+'" placeholder="数量"/><span>'+stockname+'</span></div>'
+								+'<div class="price"><input type="text" id="bommatprice'+materialid+'" placeholder="价格"/><span> 元</span></div>'
 								+'<div class="div4"><input type="button" class="bommatdet" materialid="'+materialid+'" value="移除"/></input></div>'
 								+'</div>';
                 bombodydiv = bombodydiv + bombodyhead;
@@ -358,9 +367,13 @@ $(document).ready(function(){
     	var tasteid = $(".pbomhead").find(".mataction").attr("tasteid");
     	
     	$(".bommaterial").each(function(){
+                //var materialid = aa[i].getAttribute("value");
+                //bommatid="'+materialid+'"
     		var bommatid = $(this).attr("bommatid");
     		var matename = $(this).attr("matename");
     		var bommatnum = $("#bommatnum"+bommatid).val();
+                //id="bommatprice'+materialid+'" placeholder="价格" 
+                //即bommatprice是获取价格input框中的值
     		var bommatprice = $("#bommatprice"+bommatid).val();
     		if(bommatnum == ''){
     			matenames = matenames + matename +',';
@@ -372,9 +385,11 @@ $(document).ready(function(){
     		matids = matids + bommatid +','+ bommatnum +','+ bommatprice +';';
     		
     		});
-		if(mateprice){
-                  alert('下列原料价格未填写，请填写完整后再保存：'+mateprice);  
-                }else{
+        /*      if(mateprice){
+                  
+                  alert('下列原料价格未填写，请填写完整后再保存：'+mateprice);
+                  
+                }else{    */
 		if(matenames ){
 			alert('下列原料数量未填写，请填写完整后再保存：'+matenames);
 			}else{
@@ -385,7 +400,7 @@ $(document).ready(function(){
 					matids = matids.substr(0,matids.length-1);//除去最后一个“；”
 					var url = "<?php echo $this->createUrl('storageOrder/batchsave',array('companyId'=>$this->companyId));?>/matids/"+matids+"/lid/"+prodid;
                                         console.log(url);
-    $.ajax({
+    					$.ajax({
 		                   url:url,
 		                   type:'POST',
 		                   data:matids,//CF
@@ -394,7 +409,7 @@ $(document).ready(function(){
 		                   success:function(msg){
 		                       var data=msg;
 		                       if(data.status){
-			                       alert("success");
+			                       alert("成功!");
 			                       $("#close_modal").click();
                                                window.location.reload();
 			               /*        if(prodtaste == 0){
@@ -418,7 +433,7 @@ $(document).ready(function(){
 		               });
 					}
 				}
-                }
+               
      });
 
 });       
