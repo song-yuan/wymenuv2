@@ -36,6 +36,8 @@ class StocktakinglogController extends BackendController
 	}
 	public function actionDetailindex(){
 		$stockTakingId = Yii::app()->request->getParam('id',0);
+		$begin_time = Yii::app()->request->getParam('begin_time');
+		$end_time = Yii::app()->request->getParam('end_time');
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.status = 0 and t.delete_flag=0 and t.dpid='.$this->companyId.' and t.logid ='.$stockTakingId;
 		//	$criteria->condition.=' and t.lid = '.$categoryId;
@@ -45,6 +47,8 @@ class StocktakinglogController extends BackendController
 		$models = StockTakingDetail::model()->findAll($criteria);
 		$this->render('detailindex',array(
 				'models'=>$models,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
 				//'pages'=>$pages,
 	
 		));

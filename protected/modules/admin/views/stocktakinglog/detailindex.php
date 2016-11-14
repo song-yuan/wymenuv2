@@ -91,7 +91,7 @@
 	<!-- /.modal -->
 	<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 	<!-- BEGIN PAGE HEADER-->
-	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','盘点记录详情列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘点记录'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId))),array('word'=>yii::t('app','盘点记录详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId' => $this->companyId,)))));?>
+	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','进销存管理'),'subhead'=>yii::t('app','盘点记录详情列表'),'breadcrumbs'=>array(array('word'=>yii::t('app','库存管理'),'url'=>$this->createUrl('bom/bom' , array('companyId'=>$this->companyId,'type'=>2,))),array('word'=>yii::t('app','盘点记录'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId'=>$this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time))),array('word'=>yii::t('app','盘点记录详情'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('stocktakinglog/index' , array('companyId' => $this->companyId,'begin_time'=>$begin_time,'end_time'=>$end_time)))));?>
 	
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
