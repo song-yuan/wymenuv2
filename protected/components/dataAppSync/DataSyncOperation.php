@@ -286,11 +286,11 @@ class DataSyncOperation {
 			$maxPosTableId = 0;
 		}
 		
-		$sql = 'select max(lid) as maxid from nb_postable_sync where dpid='.$dpid.' and lid > '.$maxPosTableId.' and delete_flag=0';
+		$sql = 'select max(lid) as maxid from nb_postable_sync where lid > '.$maxPosTableId.' and delete_flag=0';
 		$result = Yii::app()->db->createCommand($sql)->queryRow();
 		
-		if($result){
-			$sql = 'select * from nb_postable_sync where dpid='.$dpid.' and lid > '.$maxPosTableId.' and delete_flag=0';
+		if($result['maxid']!=null){
+			$sql = 'select * from nb_postable_sync where lid > '.$maxPosTableId.' and delete_flag=0';
 			$results = Yii::app()->db->createCommand($sql)->queryAll();
 			
 			$isSync = DataSync::getInitSync ();
@@ -301,7 +301,7 @@ class DataSyncOperation {
 					'lid' => $lid,
 					'dpid' => $dpid,
 					'create_at' => date ( 'Y-m-d H:i:s', time () ),
-					'postable_sync_id' => $result['lid'],
+					'postable_sync_id' => $result['maxid'],
 					'poscode' => $poscode,
 					'is_sync' => $isSync
 			);
