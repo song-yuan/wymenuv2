@@ -354,7 +354,9 @@ class DataSyncTables
         		"  'dpid' int(10) NOT NULL,".
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
+        		"  `pshs_code` varchar(25) NOT NULL DEFAULT '',".
         		"  `set_name` varchar(50) NOT NULL,".
+        		"  `source` varchar(2) NOT NULL DEFAULT '0',".
 				"  `simple_code` varchar(25) NOT NULL,".
 				"  `type` varchar(2) NOT NULL DEFAULT '0',".
 				"  `main_picture` varchar(255) NOT NULL,".
