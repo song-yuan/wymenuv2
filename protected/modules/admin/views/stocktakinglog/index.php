@@ -73,7 +73,7 @@
 								<td><?php echo $model->username;?></td>
 								<td><?php echo $model->title;?></td>
 								<td class="center">
-								<a href="<?php echo $this->createUrl('stocktakinglog/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','查看详情');?></a>
+								<a href="<?php echo $this->createUrl('stocktakinglog/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid , 'begin_time'=>$begin_time , 'end_time'=>$end_time));?>"><?php echo yii::t('app','查看详情');?></a>
 								</td>
 							</tr>
 						<?php endforeach;?>
