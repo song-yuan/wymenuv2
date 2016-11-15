@@ -126,17 +126,18 @@
 					<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
-                                               <!--<li>
-                                                    <a href="javascript:;" id="queueindex"><i class="fa fa-move"></i> <?php echo yii::t('app','排队取号');?></a>
+                        <!--<li>
+                        	<a href="javascript:;" id="queueindex"><i class="fa fa-move"></i> <?php echo yii::t('app','排队取号');?></a>
 						</li>-->
 						<li>
-                                                    <a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> <?php echo yii::t('app','全屏显示');?></a>
+                        	<a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> <?php echo yii::t('app','全屏显示');?></a>
 						</li>
-                                                <li id="lock_screen">
-                                                    <a href="javascript:;" ><i class="fa fa-key"></i> <?php echo yii::t('app','锁定屏幕');?></a>
+                        <li id="lock_screen">
+                        	<a href="javascript:;" ><i class="fa fa-key"></i> <?php echo yii::t('app','锁定屏幕');?></a>
 						</li>
 						<li id="shift_logout">
-                                                    <a href="<?php echo $this->createUrl('default/shiftlogout',array("companyId"=>$this->companyId));?>" ><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a>
+                        	<!-- <a href="<?php echo $this->createUrl('default/shiftlogout',array("companyId"=>$this->companyId));?>" ><i class="fa fa-key"></i> <?php echo yii::t('app','交班退出');?></a> -->
+							<a href="<?php echo $this->createUrl('login/logout');?>"><i class="fa fa-key"></i>直接退出</a>
 						</li>
 						
 					</ul>
