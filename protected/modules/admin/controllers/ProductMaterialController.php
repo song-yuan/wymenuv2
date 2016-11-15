@@ -49,48 +49,72 @@ class ProductMaterialController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductMaterial');
 			
-			$db = Yii::app()->db;
-			$sql = 'select t.* from nb_material_category t where t.delete_flag = 0 and t.lid = '.$model->category_id;
-			$command1 = $db->createCommand($sql);
-			$categoryCode = $command1->queryRow()['mchs_code'];
-			
-			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->stock_unit_id;
-			$command2 = $db->createCommand($sql);
-			$stockUnitId = $command2->queryRow()['muhs_code'];
-			
-			$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
-			$command3 = $db->createCommand($sql);
-			$salesUnitId = $command3->queryRow()['muhs_code'];
-			//var_dump($categoryId,$stockUnitId,$salesUnitId);exit;
-			if($categoryCode&&$stockUnitId&&$salesUnitId){
-	            $se=new Sequence("product_material");
-	            $lid = $se->nextval();
-	            $model->lid = $lid;
-	            
-	            $code = new Sequence('mphs_code');
-	            $mphs_code = $code->nextval();
-	            $model->create_at = date('Y-m-d H:i:s',time());
-	            $model->update_at = date('Y-m-d H:i:s',time());
-	            $model->mphs_code = ProductCategory::getChscode($this->companyId, $lid, $mphs_code);
-	            $model->mchs_code = $categoryCode;
-	            $model->mulhs_code = $stockUnitId;
-	            $model->mushs_code = $salesUnitId;
-	            $model->delete_flag = '0';
-	            
-	            $se=new Sequence("product_material_stock");
-	            $modelStock->lid = $se->nextval();
-	            $modelStock->create_at = date('Y-m-d H:i:s',time());
-	            $modelStock->update_at = date('Y-m-d H:i:s',time());
-	            $modelStock->material_id = $model->lid;
-	            $modelStock->mphs_code = $model->mphs_code;
-	            
-				if($model->save()&&$modelStock->save()){
-					Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-					$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
-				}
+			$productMaterial = ProductMaterial::model()->find('dpid=:dpid and material_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->material_name));
+			//var_dump($category);var_dump('####');
+			if($productMaterial){
+				//var_dump($productMaterial);exit;
+				Yii::app()->user->setFlash('error' ,yii::t('app', '该原料已添加'));
 			}else{
-				Yii::app()->user->setFlash('error',yii::t('app','添加失败'));
-				$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
+				if($model->category_id&&$model->stock_unit_id&&$model->sales_unit_id&&$model->material_identifier){
+			
+					$db = Yii::app()->db;
+					$sql = 'select t.* from nb_material_category t where t.delete_flag = 0 and t.lid = '.$model->category_id;
+					$command1 = $db->createCommand($sql);
+					$categoryCode = $command1->queryRow()['mchs_code'];
+					
+					$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->stock_unit_id;
+					$command2 = $db->createCommand($sql);
+					$stockUnitId = $command2->queryRow()['muhs_code'];
+					
+					$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
+					$command3 = $db->createCommand($sql);
+					$salesUnitId = $command3->queryRow()['muhs_code'];
+					//var_dump($categoryCode,$stockUnitId,$salesUnitId);exit;
+					if($categoryCode&&$stockUnitId&&$salesUnitId){
+			            $se=new Sequence("product_material");
+			            $lid = $se->nextval();
+			            $model->lid = $lid;
+			            
+			            $code = new Sequence('mphs_code');
+			            $mphs_code = $code->nextval();
+			            $model->create_at = date('Y-m-d H:i:s',time());
+			            $model->update_at = date('Y-m-d H:i:s',time());
+			            $model->mphs_code = ProductCategory::getChscode($this->companyId, $lid, $mphs_code);
+			            $model->mchs_code = $categoryCode;
+			            $model->mulhs_code = $stockUnitId;
+			            $model->mushs_code = $salesUnitId;
+			            $model->delete_flag = '0';
+			            
+			            $se=new Sequence("product_material_stock");
+			            $modelStock->lid = $se->nextval();
+			            $modelStock->create_at = date('Y-m-d H:i:s',time());
+			            $modelStock->update_at = date('Y-m-d H:i:s',time());
+			            $modelStock->material_id = $model->lid;
+			            $modelStock->mphs_code = $model->mphs_code;
+			            //var_dump($model);exit;
+						if($model->save()&&$modelStock->save()){
+							Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+							$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
+						}
+					}
+					else{
+						$msg = '';
+						if(empty($categoryCode)){
+							$msg = $msg.'该类别编码信息有误，请删除该类别再重新添加！';
+						}
+						if(empty($stockUnitId)){
+							$msg = $msg.';'.'该库存单位信息有误，请删除该库存单位再重新添加！';
+						}
+						if(empty($salesUnitId)){
+							$msg = $msg.';'.'该零售单位信息有误，请删除该零售单位再重新添加！';
+						}
+						Yii::app()->user->setFlash('error',yii::t('app',$msg));
+						
+					}
+				}
+				else{
+					Yii::app()->user->setFlash('error',yii::t('app','请完善信息！'));
+				}
 			}
 		}
 		$categories = $this->getCategoryList();

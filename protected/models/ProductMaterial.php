@@ -37,7 +37,7 @@ class ProductMaterial extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('update_at, material_name, material_identifier, ', 'required'),
+			array('update_at, material_name, material_identifier, category_id, ', 'required'),
 			array('delete_flag', 'numerical', 'integerOnly'=>true),
 			array('lid, dpid, category_id, stock_unit_id, sales_unit_id', 'length', 'max'=>10),
 			array('material_name, material_identifier, material_private_identifier', 'length', 'max'=>255),
