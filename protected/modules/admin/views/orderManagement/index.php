@@ -66,6 +66,7 @@
 								<th><?php echo yii::t('app','座位');?></th>
                                 <th><?php echo yii::t('app','人数');?></th>
                                 <th><?php echo yii::t('app','状态');?></th>
+                                <th><?php echo yii::t('app','类型');?></th>
                                 <!--<th><?php echo yii::t('app','支付方式');?></th>-->
                                 <th><?php echo yii::t('app','应付');?></th>                                                                
                                 <th><?php echo yii::t('app','实付');?></th>
@@ -85,6 +86,7 @@
 								<td><?php if($model->is_temp=='1') echo yii::t('app','临时坐').$model->site_id%1000; else echo $this->getSiteName($model->lid);?></td>
 								<td><?php echo $model->number;?></td>
 								<td><?php switch($model->order_status) {case 1: echo yii::t('app','未下单'); break; case 2: echo yii::t('app','已下单未支付') ; break; case 3: echo yii::t('app','已支付'); break; case 4: echo yii::t('app','已结单'); break; case 5: echo yii::t('app','被并台'); break; case 6: echo yii::t('app','被换台'); break; case 7: echo yii::t('app','被撤台'); break; case 8: echo yii::t('app','日结'); break;default :echo '';}?></td>
+								<td><?php switch($model->order_type) {case 0: echo yii::t('app','堂吃'); break; case 1: echo yii::t('app','微信堂吃') ; break; case 2: echo yii::t('app','微信外卖'); break; case 3: echo yii::t('app','微信预约'); break; case 4: if($model->takeout_typeid) echo $model->channel->channel_name?$model->channel->channel_name:'外卖';else echo '外卖'; break; case 5: echo yii::t('app','自助点单'); break; default :echo '';}?></td>
 								<!--<td><?php if($model->payment_method_id!='0000000000') echo $model->paymentMethod->name; else switch($model->paytype) {case 0: echo  yii::t('app','现金支付');break; case 1: echo  yii::t('app','微信支付');break; case 2: echo  yii::t('app','支付宝支付');break; case 3: echo  yii::t('app','后台手动支付');break;  default :echo ''; }?></td>-->
 								<td><?php echo $model->reality_total;?></td>
 								<td><?php echo $model->should_total;?></td>
