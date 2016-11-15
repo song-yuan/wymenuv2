@@ -48,13 +48,14 @@ class ProductSetController extends BackendController
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			//$model->pshs_code = ProductCategory::getChscode($this->companyId, $lid, $pshs_code);
+			//$model->source = 0;
 			$model->delete_flag = '0';
 			$py=new Pinyin();
 			$model->simple_code = $py->py($model->set_name);
 			//var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('productSet/detailindex','lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->source));
+				$this->redirect(array('productSet/detailindex','lid' => $model->lid , 'companyId' => $model->dpid , 'status' => ''));
 			}
 		}
 		$this->render('create' , array(
