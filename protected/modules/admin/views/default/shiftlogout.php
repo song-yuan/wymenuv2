@@ -96,9 +96,11 @@
 					</table>
 					<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<a id="shiftandout" class="btn red">交接班并退出</a>
-                                                                                        <a style="margin-left: 20px;" href="<?php echo $this->createUrl('login/logout');?>" class="btn red">直接退出</a>
+											<!-- <a id="shiftandout" class="btn red">交接班并退出</a> -->
+                                            <a style="margin-left: 20px;" href="<?php echo $this->createUrl('login/logout');?>" class="btn red">直接退出</a>
+											<?php if(Yii::app()->user->role < 2):?>
 											<a style="margin-left: 20px;" href="<?php echo $this->createUrl('default/index', array('companyId' => $this->companyId));?>" class="btn default">返回</a>                              
+											<?php endif;?>
 										</div>
 									</div>
 						
