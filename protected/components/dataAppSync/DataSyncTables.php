@@ -492,6 +492,8 @@ class DataSyncTables
         		"  'create_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')) ,".
                 "  'update_at' TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
         		"  `name` varchar(50) NOT NULL,".
+        		"  `tghs_code` varchar(12) NOT NULL DEFAULT '',".
+        		"  `source` varchar(2) NOT NULL DEFAULT '0',".
         		"  `allflae` char(1) NOT NULL DEFAULT '0',".
         		"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
         		"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
