@@ -45,6 +45,9 @@ class ProductSetController extends BackendController
 			$code=new Sequence("phs_code");
 			$pshs_code = $code->nextval();
 			
+			if($model->member_price==''){
+				$model->member_price = $model->set_price;
+			}
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			//$model->pshs_code = ProductCategory::getChscode($this->companyId, $lid, $pshs_code);
