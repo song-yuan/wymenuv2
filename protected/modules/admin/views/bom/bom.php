@@ -332,7 +332,7 @@
 							<div class="ku-item-info">盘点日志</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId));?>">
+					<a href="<?php echo $this->createUrl('materialStockLog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey kcrz"></div>
 							<div class="ku-item-info">库存日志</div>

@@ -31,11 +31,12 @@ class orderManagementController extends BackendController
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.update_at >=0 and t.dpid= '.$this->companyId;
 		$criteria->select = 't.*';
+		//$criteria->with = array("channel");
 		$criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		//$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->with = array("company","paymentMethod");
+		$criteria->with = array("company","paymentMethod","channel");
 		
 		//$connect = Yii::app()->db->createCommand($sql);
 		//$model = $connect->queryAll();

@@ -1,3 +1,6 @@
+    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js');?>"></script>
+    <script type="text/javascript" src="<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js');?>"></script>
+
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -27,30 +30,24 @@
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
-	<?php $form=$this->beginWidget('CActiveForm', array(
-				'id' => 'material-form',
-				//'action' => $this->createUrl('materialStockLog/delete' , array('companyId' => $this->companyId)),
-				'errorMessageCssClass' => 'help-block',
-				'htmlOptions' => array(
-					'class' => 'form-horizontal',
-					'enctype' => 'multipart/form-data'
-				),
-		)); ?>
 	<div class="col-md-12">
 			<!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet box purple">
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','日常库存消耗日志');?></div>
 					<div class="actions">
-						<!-- <div class="btn-group">
-							<input type="text" class="" value="" /> <input type="button" class="" value="搜索" />
-						</div>
-						 -->
-						<!--<a href="<?php echo $this->createUrl('materialStockLog/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
-							<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
-						</div>-->
-						<!-- <a href="<?php echo $this->createUrl('bom/bom' , array('companyId' => $this->companyId));?>" class="btn blue"> <?php echo yii::t('app','返回');?></a> -->
+				
+						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+								<input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+								<span class="input-group-addon">~</span>
+							    <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+						  </div>  
+					</div>	
+					
+					<div class="btn-group">
+							<button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
+					</div>
 					</div>
 				</div>
 				<div class="portlet-body" id="table-manage">
@@ -76,9 +73,7 @@
 								<td><?php echo $model->stock_num;?></td>
 								<td><?php echo $model->resean;?></td>
 								<td><?php echo $model->create_at;?></td>
-								<!--<td class="center">
-								<a href="<?php echo $this->createUrl('materialStockLog/update',array('id' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
-								</td>-->
+								
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
@@ -120,29 +115,28 @@
 			</div>
 			<!-- END EXAMPLE TABLE PORTLET-->
 		</div>
-		<?php $this->endWidget(); ?>
+		
 	</div>
 	<!-- END PAGE CONTENT-->
-	<script type="text/javascript">
-	$(document).ready(function(){
-		$('#material-form').submit(function(){
-			if(!$('.checkboxes:checked').length){
-				alert("<?php echo yii::t('app','请选择要删除的项');?>");
-				return false;
-			}
-			return true;
+<script type="text/javascript">
+$(document).ready(function(){
+
+	if (jQuery().datepicker) {
+		$('.date-picker').datepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			rtl: App.isRTL(),
+			autoclose: true
 		});
-		$('.s-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('materialStockLog/status',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('.r-btn').on('switch-change', function () {
-			var id = $(this).find('input').attr('pid');
-		    $.get('<?php echo $this->createUrl('materialStockLog/recommend',array('companyId'=>$this->companyId));?>/id/'+id);
-		});
-		$('#selectCategory').change(function(){
-			var cid = $(this).val();
-			location.href="<?php echo $this->createUrl('materialStockLog/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
-		});
+		$('body').removeClass("modal-open"); // fix bug when inline picker is used in modal  
+	};
+	
+	$('#btn_time_query').click(function time() {  
+		var begin_time = $('#begin_time').val();
+		var end_time = $('#end_time').val();
+		location.href="<?php echo $this->createUrl('materialStockLog/index' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time   
+			  
 	});
-	</script>	
+});
+	   
+</script>	

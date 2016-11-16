@@ -45,16 +45,20 @@ class ProductSetController extends BackendController
 			$code=new Sequence("phs_code");
 			$pshs_code = $code->nextval();
 			
+			if($model->member_price==''){
+				$model->member_price = $model->set_price;
+			}
 			$model->create_at = date('Y-m-d H:i:s',time());
 			$model->update_at = date('Y-m-d H:i:s',time());
 			//$model->pshs_code = ProductCategory::getChscode($this->companyId, $lid, $pshs_code);
+			//$model->source = 0;
 			$model->delete_flag = '0';
 			$py=new Pinyin();
 			$model->simple_code = $py->py($model->set_name);
 			//var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
-				$this->redirect(array('productSet/index','companyId' => $this->companyId));
+				$this->redirect(array('productSet/detailindex','lid' => $model->lid , 'companyId' => $model->dpid , 'status' => ''));
 			}
 		}
 		$this->render('create' , array(
@@ -67,7 +71,7 @@ class ProductSetController extends BackendController
 		$status = Yii::app()->request->getParam('status');
                 //echo 'ddd';
 		$model = ProductSet::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		//Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSet');
             $py=new Pinyin();
@@ -89,7 +93,7 @@ class ProductSetController extends BackendController
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid(array($ids),$companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($ids),$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_set set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
@@ -193,7 +197,7 @@ class ProductSetController extends BackendController
         
 		$model = ProductSetDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
 		//var_dump($model);exit;
-                Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+        //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
 			$groupno = Yii::app()->request->getParam('groupno');
@@ -238,7 +242,7 @@ class ProductSetController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 $printset = Yii::app()->request->getParam('psid');                
 		$ids = Yii::app()->request->getPost('ids');
-                Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
+                //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
 			->execute(array( ':companyId' => $this->companyId));
