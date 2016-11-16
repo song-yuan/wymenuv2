@@ -36,11 +36,18 @@ class TasteController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('TasteGroup');
                         $se=new Sequence("taste_group");
-                        $model->lid = $se->nextval();
+                        $lid = $se->nextval();
+
+                        $code=new Sequence("phs_code");
+                        $tghs_code = $code->nextval();
+                        
+                        $model->lid = $lid;
                         $model->allflae = $type;
                         $model->create_at = date('Y-m-d H:i:s',time());
                         $model->update_at = date('Y-m-d H:i:s',time());
                         $model->delete_flag = '0';
+
+                        $model->tghs_code = ProductCategory::getChscode($this->companyId, $lid, $tghs_code);
 //                        var_dump($model);exit;
 			if($model->save()) {
 				Yii::app()->user->setFlash('success' ,yii::t('app', '添加成功'));
