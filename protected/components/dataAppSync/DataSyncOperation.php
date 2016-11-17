@@ -792,6 +792,22 @@ class DataSyncOperation {
 	}
 	/**
 	 * 
+	 * 会员卡余额
+	 * 
+	 */
+	public static function getMemberCardYue($data) {
+		$dpid = $data ['dpid'];
+		$rfid = $data ['rfid'];
+		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and rfid=' . $rfid . ' and delete_flag=0';
+		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $reslut) {
+			return '0.00';
+		}else{
+			return number_format($reslut['all_money'],2);
+		}
+	}
+	/**
+	 * 
 	 * 
 	 * 会员卡支付
 	 * 
