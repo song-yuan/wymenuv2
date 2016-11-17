@@ -162,6 +162,15 @@ public function actionAddMemberCard(){
 }
 /**
  * 
+ * 获取会员卡余额
+ * 
+ */
+public function actionGetMemberCardYue(){
+	$result = DataSyncOperation::getMemberCardYue($_POST);
+	echo $result;exit;
+}
+/**
+ * 
  *会员卡支付 
  * 
  */
