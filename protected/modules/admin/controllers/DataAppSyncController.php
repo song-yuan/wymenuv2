@@ -179,6 +179,15 @@ public function actionGetMemberCardYue(){
  	echo $result;exit;
 }
 /**
+ * 
+ * 会员卡退款
+ * 
+ */
+public function actionRefundMemberCard(){
+	$result = DataSyncOperation::refundMemberCard($_POST);
+	echo $result;exit;
+}
+/**
  * 日结订单
  * 
  */
