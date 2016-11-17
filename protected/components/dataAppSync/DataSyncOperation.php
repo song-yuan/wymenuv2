@@ -798,38 +798,35 @@ class DataSyncOperation {
 	 * 
 	 */
 	public static function payMemberCard($data) {
-		$syncLid = 0;
-		if(isset($data ['sync_lid'])){
-			$syncLid = $data ['sync_lid'];
-		}
 		$dpid = $data ['dpid'];
 		$rfid = $data ['rfid'];
 		$password = $data ['password'];
 		$payPrice = $data ['pay_price'];
 		
-		$content = '';
-		if(isset($data ['data'])){
-			$content = $data ['data'];
-		}
 		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and rfid=' . $rfid . ' and delete_flag=0';
 		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $reslut) {
-			throw new Exception ( '不存在该会员信息！' );
+			return json_encode ( array (
+					'status' => false,
+					'msg' => '不存在该会员信息' 
+			) );
 		}
 		if ($payPrice > $reslut ['all_money']) {
-			throw new Exception ( '余额不足！' );
+			return json_encode ( array (
+					'status' => false,
+					'msg' => '余额不足' 
+			) );
 		}
 		$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid=' . $dpid . ' and lid=' . $reslut ['lid'];
 		$reslut = Yii::app ()->db->createCommand ( $sql )->execute ();
 		if ($reslut) {
 			return json_encode ( array (
 					'status' => true,
-					'syncLid' => $syncLid,
-					'content' => $content
 			) );
 		} else {
 			return json_encode ( array (
-					'status' => false 
+					'status' => false,
+					'msg' => '支付失败'
 			) );
 		}
 	}
