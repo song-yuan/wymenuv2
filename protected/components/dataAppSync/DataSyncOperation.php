@@ -388,23 +388,25 @@ class DataSyncOperation {
 		
 		$accountNo = $orderInfo->account_no;
 		$createAt = $orderInfo->creat_at;
-		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
-		$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
-		if($orderModel){
-			$msg = json_encode ( array (
-					'status' => true,
-					'orderId' => $orderModel['lid'],
-					'syncLid' => $syncLid,
-					'content' => $orderData
-			) );
-			return $msg;
-		}
+		
 		$time = time ();
 		$se = new Sequence ( "order" );
 		$orderId = $se->nextval ();
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
+			$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
+			$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
+			if($orderModel){
+				$msg = json_encode ( array (
+						'status' => true,
+						'orderId' => $orderModel['lid'],
+						'syncLid' => $syncLid,
+						'content' => $orderData
+				) );
+				return $msg;
+			}
+			
 			$insertOrderArr = array (
 					'lid' => $orderId,
 					'dpid' => $dpid,
