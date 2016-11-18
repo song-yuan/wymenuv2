@@ -388,23 +388,25 @@ class DataSyncOperation {
 		
 		$accountNo = $orderInfo->account_no;
 		$createAt = $orderInfo->creat_at;
-		$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
-		$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
-		if($orderModel){
-			$msg = json_encode ( array (
-					'status' => true,
-					'orderId' => $orderModel['lid'],
-					'syncLid' => $syncLid,
-					'content' => $orderData
-			) );
-			return $msg;
-		}
+		
 		$time = time ();
 		$se = new Sequence ( "order" );
 		$orderId = $se->nextval ();
 		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
+			$sql = 'select * from nb_order where dpid='.$dpid.' and create_at="'.$createAt.'" and account_no="'.$accountNo.'"';
+			$orderModel = Yii::app ()->db->createCommand ($sql)->queryRow();
+			if($orderModel){
+				$msg = json_encode ( array (
+						'status' => true,
+						'orderId' => $orderModel['lid'],
+						'syncLid' => $syncLid,
+						'content' => $orderData
+				) );
+				return $msg;
+			}
+			
 			$insertOrderArr = array (
 					'lid' => $orderId,
 					'dpid' => $dpid,
@@ -792,44 +794,112 @@ class DataSyncOperation {
 	}
 	/**
 	 * 
+	 * 会员卡余额
+	 * 
+	 */
+	public static function getMemberCardYue($data) {
+		$dpid = $data ['dpid'];
+		$rfid = $data ['rfid'];
+		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and rfid=' . $rfid . ' and delete_flag=0';
+		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $reslut) {
+			return '0.00';
+		}else{
+			return number_format($reslut['all_money'],2);
+		}
+	}
+	/**
+	 * 
 	 * 
 	 * 会员卡支付
 	 * 
 	 * 
 	 */
 	public static function payMemberCard($data) {
-		$syncLid = 0;
-		if(isset($data ['sync_lid'])){
-			$syncLid = $data ['sync_lid'];
-		}
 		$dpid = $data ['dpid'];
 		$rfid = $data ['rfid'];
+		$adminId = $data ['admin_id'];
 		$password = $data ['password'];
 		$payPrice = $data ['pay_price'];
 		
-		$content = '';
-		if(isset($data ['data'])){
-			$content = $data ['data'];
+		$sql = 'select * from nb_user where dpid=' . $dpid . ' and lid=' . $adminId . ' and delete_flag=0';
+		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $reslut) {
+			return json_encode ( array (
+					'status' => false,
+					'msg' => '不存在该管理员'
+			) );
 		}
+		
 		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and rfid=' . $rfid . ' and delete_flag=0';
 		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $reslut) {
-			throw new Exception ( '不存在该会员信息！' );
+			return json_encode ( array (
+					'status' => false,
+					'msg' => '不存在该会员信息' 
+			) );
 		}
+		
 		if ($payPrice > $reslut ['all_money']) {
-			throw new Exception ( '余额不足！' );
+			return json_encode ( array (
+					'status' => false,
+					'msg' => '余额不足' 
+			) );
 		}
+		
 		$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid=' . $dpid . ' and lid=' . $reslut ['lid'];
 		$reslut = Yii::app ()->db->createCommand ( $sql )->execute ();
 		if ($reslut) {
 			return json_encode ( array (
 					'status' => true,
-					'syncLid' => $syncLid,
-					'content' => $content
 			) );
 		} else {
 			return json_encode ( array (
-					'status' => false 
+					'status' => false,
+					'msg' => '支付失败'
+			) );
+		}
+	}
+	/**
+	 * 
+	 * 会员卡 退款
+	 * 
+	 */
+	public static function refundMemberCard($data) {
+		$dpid = $data ['dpid'];
+		$rfid = $data ['rfid'];
+		$adminId = $data ['admin_id'];
+		$password = $data ['password'];
+		$refundPrice = $data ['refund_price'];
+		
+		$sql = 'select * from nb_user where dpid=' . $dpid . ' and lid=' . $adminId . ' and delete_flag=0';
+		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $reslut) {
+			return json_encode ( array (
+					'status' => false,
+					'msg' => '不存在该管理员'
+			) );
+		}
+		
+		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and rfid=' . $rfid . ' and delete_flag=0';
+		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
+		if (! $reslut) {
+			return json_encode ( array (
+					'status' => false,
+					'msg' => '不存在该会员信息'
+			) );
+		}
+		
+		$sql = 'update nb_member_card set all_money=all_money+' . $refundPrice . ' where dpid=' . $dpid . ' and lid=' . $reslut ['lid'];
+		$reslut = Yii::app ()->db->createCommand ( $sql )->execute ();
+		if ($reslut) {
+			return json_encode ( array (
+					'status' => true,
+			) );
+		} else {
+			return json_encode ( array (
+					'status' => false,
+					'msg' => '退款失败'
 			) );
 		}
 	}
