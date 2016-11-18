@@ -74,6 +74,8 @@ class MemberCard extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+				'brandUserLevel' => array(self::BELONGS_TO , 'BrandUserLevel' ,'','on'=> 't.level_id=brandUserLevel.lid and brandUserLevel.dpid=t.dpid and brandUserLevel.delete_flag=0'),
+				
 		);
 	}
 

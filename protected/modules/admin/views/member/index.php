@@ -83,7 +83,9 @@
 								<th><?php echo yii::t('app','联系方式');?></th>
 								<th><?php echo yii::t('app','金额');?></th>
 								<th><?php echo yii::t('app','积分');?></th>
-								<th><?php echo yii::t('app','时间');?></th>
+								<th><?php echo yii::t('app','状态');?></th>
+								<th><?php echo yii::t('app','折扣（生日折扣）');?></th>
+								<!-- <th><?php echo yii::t('app','时间');?></th> -->
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
@@ -98,7 +100,9 @@
 								<td ><?php echo $model->mobile;?></td>
 								<td ><?php echo $model->all_money;?></td>
 								<td ><?php echo $model->all_points;?></td>
-								<td><?php echo $model->create_at;?></td>
+								<td ><?php switch($model->card_status){case 0:echo '正常';break;case 1: echo "挂失";break;case 2: echo '注销';break;default:echo '';break;}?></td>
+								<td ><?php echo sprintf("%.2f",$model->brandUserLevel->level_discount).'('.sprintf("%.2f",$model->brandUserLevel->birthday_discount).')';?></td>
+								<!-- <td><?php echo $model->create_at;?></td> -->
 								<td class="center">
 									<a href="<?php echo $this->createUrl('member/chargeRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','充值记录');?></a>&nbsp;
 									<a href="<?php echo $this->createUrl('member/consumerRecord',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','消费记录');?></a>&nbsp;
