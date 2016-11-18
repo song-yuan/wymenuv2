@@ -27,20 +27,21 @@ class MemberController extends BackendController
                 }
 		$id = 0;
 		$criteria = new CDbCriteria;
-		$criteria->addCondition('dpid=:dpid and delete_flag=0');
+		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
+		$criteria->with = 'brandUserLevel';
 		if(Yii::app()->request->isPostRequest){
 			$id = Yii::app()->request->getPost('id',0);
 			if($id){
 				//$criteria->addSearchCondition('selfcode',$id);
-				$criteria->addCondition('rfid=:card');
-				$criteria->addCondition('selfcode=:card','OR');
-				$criteria->addCondition('name=:card','OR');
-				$criteria->addCondition('mobile=:card','OR');
+				$criteria->addCondition('t.rfid=:card');
+				$criteria->addCondition('t.selfcode=:card','OR');
+				$criteria->addCondition('t.name=:card','OR');
+				$criteria->addCondition('t.mobile=:card','OR');
 				$criteria->params[':card']=$id;
 			}
 		}
 		
-		$criteria->order = ' lid desc ';
+		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
 		
 		$pages = new CPagination(MemberCard::model()->count($criteria));
