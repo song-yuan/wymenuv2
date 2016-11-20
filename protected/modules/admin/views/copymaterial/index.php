@@ -44,18 +44,18 @@ function fun()
 			         <ul style="margin:0;padding:0;list-style:none;"><?php $a=1;?>
 			         <?php if($dpids):?>
 			         <?php foreach($dpids as $dpid):?>
-				         <li>
+				         <li style="width:50%;float:left;">
 					         <div style="width:10%;float:left;"><?php echo $a++;?></div>
-					         <div style="width:25%;float:left;"><?php echo $dpid['company_name'];?></div>
-					         <div style="width:14%;float:left;">
+					         <div style="width:70%;float:left;"><?php echo $dpid['company_name'];?></div>
+					         <div style="width:10%;float:left;">
 					         	<input style="height:20px;" type="checkbox" class="checkdpids" value="<?php echo $dpid['dpid'];?>" name="reportlist[]" />
 					         </div>
 				         </li>
 				     <?php endforeach;?>
 				     <?php endif;?>
-				         <li>
+				         <li style="width:100%;">
 					         <div style="width:10%;float:left;"></div>
-					         <div style="width:25%;float:left;"></div>
+					         <div style="width:60%;float:left;"></div>
 					         <div style="width:14%;float:right;">
 					         	<input style="height:20px;" type="checkbox" class="group-checkable" data-set="#reportlistdiv .checkdpids" />
 					         	全选
