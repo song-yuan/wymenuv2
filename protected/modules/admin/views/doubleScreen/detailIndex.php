@@ -62,7 +62,7 @@
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="lid[]" /></td>
-								<td ><?php echo $model->type;?></td>
+								<td ><?php switch ($model->type){case 0:echo '图片';break;case 1: echo '视频';break;default:echo '其他';break;}?></td>
 								<td><?php echo $model->url;?></td>
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">

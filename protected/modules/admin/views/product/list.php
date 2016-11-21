@@ -278,14 +278,14 @@
 							<div class="ku-item-info">菜品下发</div>
 						</div>
 					</a>
-					<!-- 
+					
 					<a href="<?php echo $this->createUrl('copyproductSet/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple tcsz"></div>
 							<div class="ku-item-info">套餐下发</div>
 						</div>
 					</a>
-					 -->
+					
 					<a href="<?php echo $this->createUrl('copytaste/index',array('companyId'=>$this->companyId,'type'=>'0'));?>">
 						<div id="kwxf" class="pull-left margin-left-right">
 							<div class="ku-item ku-purple kwsz"></div>
