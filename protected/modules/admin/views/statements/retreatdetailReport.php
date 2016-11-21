@@ -149,7 +149,7 @@
 								<td><?php echo sprintf("%.2f",$model['reality_total']);?></td>
 								<td><?php echo sprintf("%.2f",$model['reality_total']-$model['should_total']);?></td>
 								<td><?php echo sprintf("%.2f",$model['should_total']);?></td>
-								<td><?php echo $model['pay_amount'];?></td>
+								<td><?php echo $model['pay_all'];?></td>
 								<td><?php echo $model['create_at'];?></td>
 								<td><?php echo $model['username'];?></td>
 								<td><?php echo '';?></td>
