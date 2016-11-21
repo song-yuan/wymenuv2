@@ -52,7 +52,7 @@
 	}
 	.fileupload .thumbnail {
 		float:left;
-		width: 300px;
+		width: 330px;
 	}
 	</style>
 	<div class="cl"></div>
