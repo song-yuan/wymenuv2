@@ -126,6 +126,12 @@
 							<div class="ku-item-info">微信设置</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('alipay/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple wxdp"></div>
+							<div class="ku-item-info">支付宝设置</div>
+						</div>
+					</a>
 					<?php if(Yii::app()->user->role <= User::ADMIN):?>
 					<a href="<?php echo $this->createUrl('poscode/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
@@ -133,10 +139,18 @@
 							<div class="ku-item-info">收银机设置</div>
 						</div>
 					</a>
+					<?php endif;?>
 					<a href="<?php echo $this->createUrl('doubleScreen/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple syjsz"></div>
 							<div class="ku-item-info">双屏设置</div>
+						</div>
+					</a>
+					<?php if(Yii::app()->user->role < User::ADMIN):?>
+					<a href="<?php echo $this->createUrl('postable/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple syjsz"></div>
+							<div class="ku-item-info">表更新</div>
 						</div>
 					</a>
 					<?php endif;?>
