@@ -45,12 +45,12 @@
 						<thead>
 							<tr>
 								<th class="table-checkbox">
-                                                                    <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
-                                                                </th>
+                                   <input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes" />
+                                </th>
 								<th><?php echo yii::t('app','创建时间');?></th>
 								<th><?php echo yii::t('app','更新时间');?></th>
 								<th><?php echo yii::t('app','内容');?></th>
-								
+								<th><?php echo yii::t('app','');?></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -61,6 +61,9 @@
 								<td><?php echo $model->create_at;?></td>
 								<td><?php echo $model->update_at;?></td>
 								<td><?php echo $model->content;?></td>
+								<td class="center">
+									<a class="btn btn-sm blue" href="<?php echo $this->createUrl('postable/update' , array('lid' => $model->lid , 'companyId' => $this->companyId));?>"><?php echo yii::t('app','编辑');?></a>
+								</td>
 							</tr>
 						<?php endforeach;?>
 						<?php endif;?>
