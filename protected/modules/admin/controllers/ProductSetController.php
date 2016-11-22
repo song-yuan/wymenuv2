@@ -78,10 +78,6 @@ class ProductSetController extends BackendController
             $model->simple_code = $py->py($model->set_name);
             $model->update_at=date('Y-m-d H:i:s',time());
 
-            $code=new Sequence("phs_code");
-            $pshs_code = $code->nextval();
-            $model->pshs_code = ProductCategory::getChscode($this->companyId, $lid, $pshs_code);
-            $model->source = 0;
                         //var_dump($model->attributes);var_dump(Yii::app()->request->getPost('ProductSet'));exit;
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
