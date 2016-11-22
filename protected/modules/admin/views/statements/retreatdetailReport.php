@@ -258,9 +258,10 @@ $('.accountno').click(function() {
 					for (var i in model){
 						prodName = model[i].product_name;
 						prodNum = model[i].all_amount;
-						prodZhiNum = model[i].all_zhiamount;
+						allprodZhiNum = model[i].all_zhiamount;
+						prodZhiNum = model[i].zhiamount;
 						prodReNums = model[i].retreat_num;
-						num = prodNum/prodZhiNum;
+						num = prodNum/allprodZhiNum;
 						renum = prodReNums/prodZhiNum;
 						setName = model[i].set_name;
 						var sets = '';
