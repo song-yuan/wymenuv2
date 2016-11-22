@@ -461,11 +461,9 @@ public function actionPayallReport(){
 		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$userid = Yii::app()->request->getParam('userid');
-		$download = Yii::app()->request->getParam('d');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
 		
-
 		$criteria = new CDbCriteria;
 		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
 		$criteria->with = array('company','order4');
@@ -478,8 +476,6 @@ public function actionPayallReport(){
 		}
 		$criteria->addCondition("order4.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("order4.create_at <='$end_time 23:59:59'");
-// 		$criteria->addCondition("order8.create_at >='$begin_time 00:00:00'");
-// 		$criteria->addCondition("order8.create_at <='$end_time 23:59:59'");
 		if($text==1){
 			if($userid != '0'){
 				$criteria->group ='t.dpid,year(t.create_at),order4.username';
@@ -505,10 +501,6 @@ public function actionPayallReport(){
 				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
 			}
 		}
-		//$pages = new CPagination(OrderPay::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		//$pages->applyLimit($criteria);
-		//var_dump($criteria);exit;
 	    $model = OrderPay::model()->findAll($criteria);
 	   	//var_dump($model);exit;
 	   	$payments = $this->getPayment($this->companyId);
@@ -516,7 +508,6 @@ public function actionPayallReport(){
 	    $comName = $this->getComName();
 		$this->render('paymentReport',array(
 				'models'=>$model,
-				//'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'text'=>$text,
@@ -525,8 +516,6 @@ public function actionPayallReport(){
 				'payments'=>$payments,
 				'username'=>$username,
 				'userid'=>$userid,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
 		));
 	}
 	
@@ -3257,6 +3246,291 @@ public function actionPayallReport(){
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="营业收入报表（产品分类）（".date('m-d',time())."）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+	
+	}
+	//导出支付方式员工营业额的报表
+	public function actionPaymentExport(){
+		date_default_timezone_set('PRC');
+		$objPHPExcel = new PHPExcel();
+		$str = Yii::app()->request->getParam('str');
+		$text = Yii::app()->request->getParam('text');
+		$userid = Yii::app()->request->getParam('userid');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d ',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d ',time()));
+		
+		$criteria = new CDbCriteria;
+		$criteria->select = 'year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.dpid,t.create_at,sum(t.pay_amount) as all_reality,t.paytype,t.payment_method_id,count(*) as all_num';//array_count_values()
+		$criteria->with = array('company','order4');
+		$criteria->condition = 't.paytype != "11" and t.dpid='.$this->companyId ;
+		if($str){
+			$criteria->condition = 't.dpid in('.$str.')';
+		}
+		if($userid != '0' && $userid != '-1'){
+			$criteria->addCondition ('order4.username ="'.$userid.'"');
+		}
+		$criteria->addCondition("order4.create_at >='$begin_time 00:00:00'");
+		$criteria->addCondition("order4.create_at <='$end_time 23:59:59'");
+		if($text==1){
+			if($userid != '0'){
+				$criteria->group ='t.dpid,year(t.create_at),order4.username';
+				$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}else{
+				$criteria->group ='t.dpid,year(t.create_at)';
+				$criteria->order = 'year(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}
+		}elseif($text==2){
+			if($userid != '0' ){
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),order4.username';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}else{
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at)';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}
+		}elseif($text==3){
+			if($userid != '0'){
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at),order4.username';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}else{
+				$criteria->group ='t.dpid,year(t.create_at),month(t.create_at),day(t.create_at)';
+				$criteria->order = 'year(t.create_at) asc,month(t.create_at) asc,day(t.create_at) asc,sum(t.pay_amount) desc,t.dpid asc';
+			}
+		}
+	    $model = OrderPay::model()->findAll($criteria);
+	   	//var_dump($model);exit;
+	   	$payments = $this->getPayment($this->companyId);
+	   	$username = $this->getUsername($this->companyId);
+	    $comName = $this->getComName();
+			
+			
+			
+		//设置第1行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+		//设置第2行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(17);
+		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+		//设置字体
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		$styleArray1 = array(
+				'font' => array(
+						'bold' => true,
+						'color'=>array(
+								'rgb' => '000000',
+						),
+						'size' => '20',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		$styleArray2 = array(
+				'font' => array(
+						'color'=>array(
+								'rgb' => 'ff0000',
+						),
+						'size' => '16',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		//大边框样式 边框加粗
+		$lineBORDER = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THICK,
+								'color' => array('argb' => '000000'),
+						),
+				),
+		);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+		//细边框样式
+		$linestyle = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THIN,
+								'color' => array('argb' => 'FF000000'),
+						),
+				),
+		);
+			
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1',yii::t('app','支付方式（员工营业额）报表'))
+		->setCellValue('A2',yii::t('app','报表查询时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59   ".yii::t('app','报表生成时间：').date('Y-m-d h:i:s',time()))
+		->setCellValue('A3',yii::t('app','时间'))
+		->setCellValue('B3',yii::t('app','总单数'))
+		->setCellValue('C3',yii::t('app','毛利润'))
+		->setCellValue('D3',yii::t('app','优惠'))
+		->setCellValue('E3',yii::t('app','实收款'))
+		->setCellValue('F3',yii::t('app','营业员'))
+		->setCellValue('G3',yii::t('app','现金'))
+		->setCellValue('H3',yii::t('app','微信'))
+		->setCellValue('I3',yii::t('app','支付宝'))
+		->setCellValue('J3',yii::t('app','银联'))
+		->setCellValue('K3',yii::t('app','会员卡'));
+		if($payments){
+			$let = '0';
+			$letter='';
+			$letternext= 'L';
+			foreach ($payments as $payment){
+				$paymentname = $payment['name'];
+				$let++;
+				switch ($let){
+					case 1: $letter = 'L3';$letternext = 'M';break;
+					case 2: $letter = 'M3';$letternext = 'N';break;
+					case 3: $letter = 'N3';$letternext = 'O';break;
+					case 4: $letter = 'O3';$letternext = 'P';break;
+					case 5: $letter = 'P3';$letternext = 'Q';break;
+					case 6: $letter = 'Q3';$letternext = 'R';break;
+					case 7: $letter = 'R3';$letternext = 'S';break;
+					case 8: $letter = 'S3';$letternext = 'T';break;
+					case 9: $letter = 'T3';$letternext = 'U';break;
+					case 10: $letter = 'U3';$letternext = 'V';break;
+					default:break;
+				}
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letter,yii::t('app',$paymentname));
+			}
+		}
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letternext.'3',yii::t('app','备注'));
+		$j=4;
+		foreach($model as $v){
+			//print_r($v);
+			
+			if ($text==1){
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v->y_all);
+			}elseif($text==2){
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all);
+			}else{
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all);
+			}
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('B'.$j,$v->all_num)
+				->setCellValue('C'.$j,$reality_all = $this->getGrossProfit($v->dpid,$begin_time,$end_time,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
+				->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v->all_reality))
+				->setCellValue('E'.$j,$v->all_reality)
+				->setCellValue('F'.$j,$v->order4->username.'('.$this->getUserstaffno($this->companyId,$v->order4->username).')')
+				->setCellValue('G'.$j,$cash = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,0,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
+				->setCellValue('H'.$j,$wechat = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,1,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
+				->setCellValue('I'.$j,$alipay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,2,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
+				->setCellValue('J'.$j,$unionpay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,5,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
+				->setCellValue('K'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,4,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username));
+				if($payments){
+					$let = '0';
+					$letters='';
+					$letternexts= 'L3';
+					foreach ($payments as $payment){
+						$paymentname = $payment['name'];
+						$let++;
+						switch ($let){
+							case 1: $letters = 'L';$letternexts = 'M3';break;
+							case 2: $letters = 'M';$letternexts = 'N3';break;
+							case 3: $letters = 'N';$letternexts = 'O3';break;
+							case 4: $letters = 'O';$letternexts = 'P3';break;
+							case 5: $letters = 'P';$letternexts = 'Q3';break;
+							case 6: $letters = 'Q';$letternexts = 'R3';break;
+							case 7: $letters = 'R';$letternexts = 'S3';break;
+							case 8: $letters = 'S';$letternexts = 'T3';break;
+							case 9: $letters = 'T';$letternexts = 'U3';break;
+							case 10: $letters = 'U';$letternexts = 'V3';break;
+							default:break;
+						}
+						$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username));
+					}
+				}
+		
+					//细边框引用
+					$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->applyFromArray($linestyle);
+					$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->applyFromArray($linestyle);
+					$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':'.$letternext.$j)->applyFromArray($linestyle);
+					//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+					//单元格高度自适应
+					//$objPHPExcel->getActiveSheet()->getDefaultRowDimension('A'.$i.':N'.$j)->setRowHeight(-1);
+					//单元格换行
+					//            $objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setWrapText(true);
+					//            $objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
+					//长度不够显示的时候换行
+					//$objPHPExcel->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setShrinkToFit(true);
+					//$objPHPExcel->getActiveSheet()->getStyle('H'.$j.':I'.$j)->getAlignment()->setWrapText(true);
+					//使用数组定义L列的样式
+					//$objPHPExcel->getActiveSheet()->getStyle('L'.$j)->applyFromArray($styleArray2);
+					//设置字体垂直居中
+					//$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+					//设置字体水平居中
+					//$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					//$objPHPExcel->getActiveSheet()->getStyle('J'.$i.':M'.$i)->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					//设置填充颜色
+					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+					$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->getFill()->getStartColor()->setARGB('fae9e5');
+					//设置字体靠左、靠右
+					$objPHPExcel->getActiveSheet()->getStyle('B'.$j.':'.$letternext.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+						
+					//$objPHPExcel->getActiveSheet()->getStyle('E'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,PHPExcel_Cell_DataType::TYPE_NUMERIC);
+					//$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':D'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+					//$objPHPExcel->getActiveSheet()->getStyle('N'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+					$objPHPExcel->getActiveSheet()->getStyle('C'.$j.':'.$letters.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+					//$objPHPExcel->getActiveSheet()->setCellValueExplicit("D".$j,PHPExcel_Cell_DataType::TYPE_NUMERIC);
+					//细边框样式引用
+					//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
+					$j++;
+		}
+		//冻结窗格
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.$j)->applyFromArray($lineBORDER);
+		//大边框样式引用
+		//$objPHPExcel->getActiveSheet()->getStyle('A2:E'.$j)->applyFromArray($linestyle);
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:'.$letternext.'1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:'.$letternext.'2');
+		//单元格加粗，居中：
+	
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+	
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//$objPHPExcel->getActiveSheet()->getStyle('D4')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:'.$letternext.'3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.'1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:'.$letternext.'1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:'.$letternext.'2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(8);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('N')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('S')->setWidth(12);
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="支付方式（员工营业额）报表（".date('y-m-d H:i',time())."）.xls";
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
