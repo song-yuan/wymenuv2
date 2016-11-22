@@ -69,9 +69,6 @@ class TasteController extends BackendController
 			$model->attributes = Yii::app()->request->getPost('TasteGroup');
                         $model->update_at = date('Y-m-d H:i:s',time());
                         
-                        $code=new Sequence("phs_code");
-                        $tghs_code = $code->nextval();
-                        $model->tghs_code = ProductCategory::getChscode($this->companyId, $lid, $tghs_code);
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('taste/index' , 'type'=>$type, 'companyId' => $this->companyId));
