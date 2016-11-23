@@ -206,6 +206,9 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 		
+		$certpem = Yii::app()->basePath.'/'.$account['certificate'];
+		$keypem = Yii::app()->basePath.'/'.$account['apiclient_key'];
+		
 		$inputObj->SetOp_user_id($mchId);
 		
 		if($account['multi_customer_service_status'] == 1){
@@ -223,7 +226,7 @@ class WxPayApi
 		$inputObj->SetSign();//签名
 		$xml = $inputObj->ToXml();
 		$startTimeStamp = self::getMillisecond();//请求开始时间
-		$response = self::postXmlCurl($xml, $url, true, $timeOut);
+		$response = self::postXmlCurl($xml, $url, true, $timeOut,$certpem,$keypem);
 		$result = WxPayResults::Init($response);
 		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
 		
