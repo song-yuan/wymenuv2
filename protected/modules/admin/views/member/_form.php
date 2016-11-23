@@ -17,7 +17,7 @@
 			<div class="form-group">
 				<?php echo $form->label($model, 'rfid',array('class' => 'col-md-3 control-label'));?>
 				<div class="col-md-4">
-					<?php echo $form->textField($model, 'rfid',array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('rfid')));?>
+					<?php echo $form->textField($model, 'rfid',array('class' => 'form-control','placeholder'=>'请使用读卡器刷卡'));?>
 					<?php echo $form->error($model, 'rfid' )?>
 				</div>
 			</div>
