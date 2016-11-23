@@ -206,7 +206,7 @@ class WxPayApi
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
 		
-		$input->SetOp_user_id($mchId);
+		$inputObj->SetOp_user_id($mchId);
 		
 		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID

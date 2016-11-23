@@ -3,12 +3,11 @@ $now = time();
 $rand = rand(100,999);
 $out_refund_no = $now.'-'.$dpid.'-'.$rand;
 
-$company = WxCompany::get($dpid);
 if(isset($out_trade_no) && $out_trade_no != ""){
 	$input = new WxPayRefund();
 	$input->SetOut_trade_no($out_trade_no);
-	$input->SetTotal_fee($total_fee);
-	$input->SetRefund_fee($refund_fee);
+	$input->SetTotal_fee($total_fee*100);
+	$input->SetRefund_fee($refund_fee*100);
     $input->SetOut_refund_no($out_refund_no);
    
 	$result = WxPayApi::refund($input);
