@@ -52,4 +52,18 @@ class WeixinController extends Controller
 		
 		$this->render('singlemicropay',array('dpid'=>$companyId,'auth_code'=>$auth_code,'should_total'=>$should_total));
 	}
+	/**
+	 * 
+	 * 退款
+	 * 
+	 */
+	 public function actionRefund()
+	 {
+		$companyId = Yii::app()->request->getParam('companyId');
+		$outTradeNo = Yii::app()->request->getParam('out_trade_no');
+		$totalFee = Yii::app()->request->getParam('total_fee');
+		$refundFee = Yii::app()->request->getParam('refund_fee');
+	
+		$this->render('refund',array('dpid'=>$companyId,'out_trade_no'=>$outTradeNo,'total_fee'=>$totalFee,'refund_fee'=>$refundFee));
+	 }
 }
