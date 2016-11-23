@@ -25,7 +25,7 @@
     <!-- /.modal -->
     <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
     <!-- BEGIN PAGE HEADER-->
-    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','收款统计（支付方式）报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
+    <?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','支付方式（员工营业额）报表'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 
     <!-- END PAGE HEADER-->
     <!-- BEGIN PAGE CONTENT-->
@@ -34,7 +34,7 @@
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet box purple">
             <div class="portlet-title">
-                <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','收款统计（支付方式）报表');?></div>
+                <div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','支付方式（员工营业额）报表');?></div>
             <div class="actions">
                     <select id="userid" class="btn yellow" >
                             <option value="0" <?php if ($userid==0){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择服务员--');?></option>
@@ -51,184 +51,179 @@
                             <option value="3" <?php if ($text==3){?> selected="selected" <?php }?> ><?php echo yii::t('app','日');?></option>
                     </select>
                     <div class="btn-group">
-                               <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-                                            <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
-                                            <span class="input-group-addon">~</span>
-                                        <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
-                              </div>  
+	                    <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+	                         <input type="text" class="form-control" name="begtime" id="begin_time" placeholder="<?php echo yii::t('app','起始时间');?>" value="<?php echo $begin_time; ?>">  
+	                         <span class="input-group-addon">~</span>
+	                         <input type="text" class="form-control" name="endtime" id="end_time" placeholder="<?php echo yii::t('app','终止时间');?>"  value="<?php echo $end_time;?>">           
+	                    </div>  
                     </div>	
 					
                     <div class="btn-group">
                                     <button type="submit" id="btn_time_query" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','查 询');?></button>
-                                    <!-- <button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
-                                    <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/text/<?php echo $text;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
+                                    <button type="submit" id="excel"  class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel');?></button>				
+                                    <!-- <a href="<?php echo $this->createUrl('statements/export' , array('companyId' => $this->companyId));?>/text/<?php echo $text;?>/begin_time/<?php echo $begin_time;?>/end_time/<?php echo $end_time;?>" class="btn green" ><i class="fa fa-pencial"></i><?php echo yii::t('app','导出Excel2');?></a> -->
                     </div>			
                 </div>
             </div> 
 			
-<div class="portlet-body" id="table-manage">
-<table class="table table-striped table-bordered table-hover" id="sample_1">
-        <thead>
-            <tr>
-                <?php  $grouppay_item = 0;?>
-                <!-- 	<th>序号</th> -->
-               <th><?php echo yii::t('app','时间');?></th>
-               <th><?php echo yii::t('app','总单数');?></th> 
-               <th><?php echo yii::t('app','毛利润');?></th> 
-               <th><?php echo yii::t('app','优惠');?></th>
-               <th><?php echo yii::t('app','实收款');?></th>
-               <?php if($userid != '0'): ?>
-               <th><?php echo yii::t('app','营业员');?></th>
-               <?php endif;?>
-               <th><?php echo yii::t('app','现金');?></th>
-               <th><?php echo yii::t('app','微信');?></th>
-               <th><?php echo yii::t('app','支付宝');?></th>
-               <th><?php echo yii::t('app','银联');?></th>
-               <th><?php echo yii::t('app','会员卡');?></th>
-               <?php if($payments):?>
-                    <?php foreach ($payments as $payment):?>
-                         <th><?php echo $payment['name'];
-                            $grouppay_item ++;
-                         ?></th>
-                    <?php endforeach;?>
-               <?php endif;?>                                                              
-               <th><?php echo yii::t('app','备注');?></th>
-
-            </tr>
-        </thead>
-<tbody>
-    
-        <?php if( $models) :?>
-        <!--foreach-->
-        <?php $a=1;?>
-        <?php 
-         $orders_total=0;      // 总单数
-         $grossprofit_total=0; // 总毛利润
-         $discount_total=0;    // 总优惠
-         $gather_total=0;      // 实收款 
-         $cash_total=0;        // 现金
-         $wechat_total = 0;    // 微信
-         $alipay_total = 0;    // 支付宝
-         $unionpay_total=0;    // 银联
-         $vipcard_total = 0;   // 会员卡 
-         $grouppay_arr = array();   //支付宝/美团
-        for($i =0;$i<$grouppay_item;$i++){
-           $grouppay_arr[$i] =0; 
-           // $grouppay.$i =0;
-        }
-        foreach ($models as $model): ?>
-
-        <tr class="odd gradeX">
-            <td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
-            <td><?php 
-                $orders_total = $orders_total+$model->all_num;    //总单数
-                echo $model->all_num;?></td>
-             <td><?php 
-                $reality_all = $this->getGrossProfit($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
-                $grossprofit_total+=$reality_all;
-                echo $reality_all;
-                ?></td>
-            <!--%.2f 的意思是 小数点前面的 全部保留 ,
-            小数点后面的取前两位 , f 的意思是 针对的是float类型的数,即小数
-            OrderPay::
-            sum(t.pay_amount) as all_reality
-            -->
-            <td><?php 
-                $discount=sprintf("%.2f",$reality_all-$model->all_reality);
-                $discount_total += $discount;
-                echo $discount;
-            ?></td>
-            <td><?php 
-                $gather=$model->all_reality;
-                $gather_total += $gather;
-                echo $gather;
-            ?></td>
-            <?php if($userid != '0'): ?>
-            <td><?php 
-                echo $model->order4->username.'('.$this->getUserstaffno($this->companyId,$model->order4->username).')';
-             ?></td>
-            <?php endif;?>
-            <td><?php  
-                $cash = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,0,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
-                $cash_total += $cash;
-                echo $cash;
-            ?></td>
-            <td><?php 
-                $wechat = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,1,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
-                $wechat_total +=$wechat;
-                echo $wechat;
-            ?></td>
-            <td><?php
-                $alipay=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,2,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
-                $alipay_total += $alipay;
-                echo $alipay; 
-            ?></td>
-            <td><?php 
-                $unionpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,5,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
-                $unionpay_total += $unionpay;
-                echo $unionpay;
-                ?>
-            </td>
-            <td id="alipay4"><?php 
-                $vipcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,4,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
-                $vipcard_total += $vipcard;
-                echo $vipcard; 
-                ?>
-            </td>
-             <?php if($payments):?>
-                
-                <?php $j = 0;foreach ($payments as $payment):?>
-                    <td><?php 
-                           $pay_item =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username); 
-                           $grouppay_arr[$j] +=$pay_item;
-                          // $grouppay.$i +=$pay_item;
-                            
-                            $j++;
-                            echo $pay_item;
-                            ?>
-                    </td>
-                <?php endforeach;?>
-            <?php endif;?> 
-            <td><?php ?></td>
-								
-        </tr>
-       
-        <?php endforeach;?>	
-      
-        <tr>
-            <td><?php echo "总计";?></td>
-            <td><?php echo $orders_total; ?></td>
-            <td><?php  echo $grossprofit_total;?></td>
-            <td><?php echo $discount_total; ?></td>
-            <td><?php  echo $gather_total;?></td>
-            <?php if($userid != '0'): ?>
-                <td><?php   
-                       // echo $model->order4->username.'('.$this->getUserstaffno($this->companyId,$model->order4->username).')';
-                    ?>
-                </td>
-            <?php endif;?>
-            <td><?php  echo $cash_total; ?></td>
-            <td><?php  echo $wechat_total;?></td>
-            <td><?php  echo $alipay_total;?></td>
-            <td><?php  echo $unionpay_total;?></td>
-            <td><?php  echo $vipcard_total; ?></td>
-            <?php if($payments):?>
-                <?php  $j =0;foreach ($payments as $payment):?>
-                    <td><?php  echo $grouppay_arr[$j++];
-                   // echo $grouppay.$i;
-                   // $i++;
-                    ?></td>
-                    
-                <?php endforeach;?>
-            <?php endif;?> 
-            <td><?php ?></td>
-								
-        </tr>
-      <?php endif;?> 
-       
-        
-        </tbody>
-    </table>
+			<div class="portlet-body" id="table-manage">
+			<table class="table table-striped table-bordered table-hover" id="sample_1">
+		        <thead>
+		            <tr>
+		                <?php  $grouppay_item = 0;?>
+		                <!-- 	<th>序号</th> -->
+		               <th><?php echo yii::t('app','时间');?></th>
+		               <th><?php echo yii::t('app','总单数');?></th> 
+		               <th><?php echo yii::t('app','毛利润');?></th> 
+		               <th><?php echo yii::t('app','优惠');?></th>
+		               <th><?php echo yii::t('app','实收款');?></th>
+		               <?php if($userid != '0'): ?>
+		               <th><?php echo yii::t('app','营业员');?></th>
+		               <?php endif;?>
+		               <th><?php echo yii::t('app','现金');?></th>
+		               <th><?php echo yii::t('app','微信');?></th>
+		               <th><?php echo yii::t('app','支付宝');?></th>
+		               <th><?php echo yii::t('app','银联');?></th>
+		               <th><?php echo yii::t('app','会员卡');?></th>
+		               <?php if($payments):?>
+		                    <?php foreach ($payments as $payment):?>
+		                         <th><?php echo $payment['name'];
+		                            $grouppay_item ++;
+		                         ?></th>
+		                    <?php endforeach;?>
+		               <?php endif;?>                                                              
+		               <th><?php echo yii::t('app','备注');?></th>
+		
+		            </tr>
+		        </thead>
+				<tbody>
+		        <?php if( $models) :?>
+		        <!--foreach-->
+		        <?php $a=1;?>
+		        <?php 
+		         $orders_total=0;      // 总单数
+		         $grossprofit_total=0; // 总毛利润
+		         $discount_total=0;    // 总优惠
+		         $gather_total=0;      // 实收款 
+		         $cash_total=0;        // 现金
+		         $wechat_total = 0;    // 微信
+		         $alipay_total = 0;    // 支付宝
+		         $unionpay_total=0;    // 银联
+		         $vipcard_total = 0;   // 会员卡 
+		         $grouppay_arr = array();   //支付宝/美团
+		        for($i =0;$i<$grouppay_item;$i++){
+		           $grouppay_arr[$i] =0; 
+		           // $grouppay.$i =0;
+		        }
+		        foreach ($models as $model): ?>
+		
+		        <tr class="odd gradeX">
+		            <td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
+		            <td><?php 
+		                $orders_total = $orders_total+$model->all_num;    //总单数
+		                echo $model->all_num;?></td>
+		             <td><?php 
+		                $reality_all = $this->getGrossProfit($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $grossprofit_total+=$reality_all;
+		                echo $reality_all;
+		                ?></td>
+		            
+		            <td><?php 
+		                $discount=sprintf("%.2f",$reality_all-$model->all_reality);
+		                $discount_total += $discount;
+		                echo $discount;
+		            ?></td>
+		            <td><?php 
+		                $gather=$model->all_reality;
+		                $gather_total += $gather;
+		                echo $gather;
+		            ?></td>
+		            <?php if($userid != '0'): ?>
+		            <td><?php 
+		                echo $model->order4->username.'('.$this->getUserstaffno($this->companyId,$model->order4->username).')';
+		             ?></td>
+		            <?php endif;?>
+		            <td><?php  
+		                $cash = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,0,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $cash_total += $cash;
+		                echo $cash;
+		            ?></td>
+		            <td><?php 
+		                $wechat = $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,1,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $wechat_total +=$wechat;
+		                echo $wechat;
+		            ?></td>
+		            <td><?php
+		                $alipay=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,2,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $alipay_total += $alipay;
+		                echo $alipay; 
+		            ?></td>
+		            <td><?php 
+		                $unionpay =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,5,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $unionpay_total += $unionpay;
+		                echo $unionpay;
+		                ?>
+		            </td>
+		            <td id="alipay4"><?php 
+		                $vipcard=$this->getPaymentPrice($model->dpid,$begin_time,$end_time,0,4,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
+		                $vipcard_total += $vipcard;
+		                echo $vipcard; 
+		                ?>
+		            </td>
+		             <?php if($payments):?>
+		                
+		                <?php $j = 0;foreach ($payments as $payment):?>
+		                    <td><?php 
+		                           $pay_item =  $this->getPaymentPrice($model->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username); 
+		                           $grouppay_arr[$j] +=$pay_item;
+		                          // $grouppay.$i +=$pay_item;
+		                            
+		                            $j++;
+		                            echo $pay_item;
+		                            ?>
+		                    </td>
+		                <?php endforeach;?>
+		            <?php endif;?> 
+		            <td><?php ?></td>
+										
+		        </tr>
+		       
+		        <?php endforeach;?>	
+		      
+		        <tr>
+		            <td><?php echo "总计";?></td>
+		            <td><?php echo $orders_total; ?></td>
+		            <td><?php  echo $grossprofit_total;?></td>
+		            <td><?php echo $discount_total; ?></td>
+		            <td><?php  echo $gather_total;?></td>
+		            <?php if($userid != '0'): ?>
+		                <td><?php   
+		                       // echo $model->order4->username.'('.$this->getUserstaffno($this->companyId,$model->order4->username).')';
+		                    ?>
+		                </td>
+		            <?php endif;?>
+		            <td><?php  echo $cash_total; ?></td>
+		            <td><?php  echo $wechat_total;?></td>
+		            <td><?php  echo $alipay_total;?></td>
+		            <td><?php  echo $unionpay_total;?></td>
+		            <td><?php  echo $vipcard_total; ?></td>
+		            <?php if($payments):?>
+		                <?php  $j =0;foreach ($payments as $payment):?>
+		                    <td><?php  echo $grouppay_arr[$j++];
+		                   // echo $grouppay.$i;
+		                   // $i++;
+		                    ?></td>
+		                    
+		                <?php endforeach;?>
+		            <?php endif;?> 
+		            <td><?php ?></td>
+										
+		        </tr>
+		      <?php endif;?> 
+		       
+		        
+		        </tbody>
+    	</table>
 
 					
     </div>
@@ -240,74 +235,39 @@
 <!-- END PAGE -->
 
 <script>
-        //var str=new array();						
-        jQuery(document).ready(function(){
-            if (jQuery().datepicker) {
-            $('.date-picker').datepicker({
-                format: 'yyyy-mm-dd',
-                language: 'zh-CN',
-                rtl: App.isRTL(),
-                autoclose: true
-            });
-            $('body').removeClass("modal-open");
+//var str=new array();						
+jQuery(document).ready(function(){
+	if (jQuery().datepicker) {
+		$('.date-picker').datepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			rtl: App.isRTL(),
+			autoclose: true
+		});
+		$('body').removeClass("modal-open");
+	}
+});
+     $('#btn_time_query').click(function time() {  
 
-   }
-        
-        
-        });
-        
+     	var begin_time = $('#begin_time').val();
+     	var end_time = $('#end_time').val();
+     	var text = $('#text').val();
+     	var userid = $('#userid').val();
+     	location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid     
 
-           $('#btn_time_query').click(function time() {  
+	});
+	
+	$('#excel').click(function excel(){
 
-                   var begin_time = $('#begin_time').val();
-                   var end_time = $('#end_time').val();
-                   var text = $('#text').val();
-                   var userid = $('#userid').val();
-                   location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid     
+		var begin_time = $('#begin_time').val();
+		var end_time = $('#end_time').val();
+		var text = $('#text').val();
+		var userid = $('#userid').val();
+		if(confirm('确认导出并且下载Excel文件吗？')){
+			location.href="<?php echo $this->createUrl('statements/paymentExport' , array('companyId'=>$this->companyId));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text+"/userid/"+userid;
+		}else{
+			// location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+		}
+	});
 
-        });
-           a = new Array();
-           $('#cx').click(function cx(){
-                    var obj=$('.checkedCN');
-
-                    var str=new Array();
-                                obj.each(function(){
-                                        if($(this).attr("checked")=="checked")
-                                        {
-
-                                                str += $(this).val()+","
-
-                                        }								
-                                });
-                        a = str = str.substr(0,str.length-1);//除去最后一个“，”
-                        //alert(str);
-                                  var begin_time = $('#begin_time').val();
-                                   var end_time = $('#end_time').val();
-                                   var text = $('#text').val();
-
-                                   //var cid = $(this).val();
-
-                                 location.href="<?php echo $this->createUrl('statements/paymentReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;	  
-                                 return a; 
-                 });
-
-                  $('#excel').click(function excel(){
-
-                           var str ='<?php echo $str;?>';
-                   var begin_time = $('#begin_time').val();
-                           var end_time = $('#end_time').val();
-                           var text = $('#text').val();
-
-                           //alert(str);
-                       if(confirm('确认导出并且下载Excel文件吗？')){
-
-                           location.href="<?php echo $this->createUrl('statements/payallExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-                       }
-                       else{
-                          // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
-                       }
-
-                   });
-                     excel();
-                     cx();
 </script> 

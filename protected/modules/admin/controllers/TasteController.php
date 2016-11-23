@@ -68,6 +68,7 @@ class TasteController extends BackendController
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('TasteGroup');
                         $model->update_at = date('Y-m-d H:i:s',time());
+                        
 			if($model->save()){
 				Yii::app()->user->setFlash('success' ,yii::t('app', '修改成功'));
 				$this->redirect(array('taste/index' , 'type'=>$type, 'companyId' => $this->companyId));

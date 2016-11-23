@@ -186,24 +186,26 @@
 				</div>
 				<div class="portlet-body" style="min-height: 750px">
 					<?php if($type==0):?>
-					<a href="<?php echo $this->createUrl('statements/payallReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<!-- <a href="<?php echo $this->createUrl('statements/payallReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey sktj"></div>
 							<div class="ku-item-info">收款统计</div>
 						</div>
 					</a>
+					 -->
 					<a href="<?php echo $this->createUrl('statements/incomeReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey yysr"></div>
 							<div class="ku-item-info">营业收入</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statements/businessdataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<a href="<?php echo $this->createUrl('statements/businessdataReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey yysj"></div>
 							<div class="ku-item-info">营业数据</div>
 						</div>
 					</a>
+					
 					<a href="<?php echo $this->createUrl('statements/ceshiproductReport',array('companyId' => $this->companyId,'text'=>'3','setid'=>'1','ordertype'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey cpxs"></div>
@@ -258,7 +260,7 @@
 							<div class="ku-item-info">台桌区域</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statements/retreatdetailReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+					<a href="<?php echo $this->createUrl('statements/retreatdetailReport',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey tcmx"></div>
 							<div class="ku-item-info">退菜明细</div>
@@ -282,6 +284,12 @@
 							<div class="ku-item-info">聚餐人数</div>
 						</div>
 					</a>
+					<a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-grey sktj"></div>
+							<div class="ku-item-info">支付方式(员工营业额)</div>
+						</div>
+					</a>
 					<!-- 
 					<a href="<?php echo $this->createUrl('statements/turnOver',array('companyId' => $this->companyId,'text'=>'3','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
@@ -289,19 +297,16 @@
 							<div class="ku-item-info">员工营业额</div>
 						</div>
 					</a>
-					 -->
+					
 					<a href="<?php echo $this->createUrl('orderManagement/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-grey dpgl"></div>
 							<div class="ku-item-info">订单报表</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('statements/paymentReport',array('companyId' => $this->companyId,'text'=>'3','userid'=>'0','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
-							<div class="ku-item-info">支付方式(员工营业额)</div>
-						</div>
-					</a>
+					 -->
+					
+					
 					<?php elseif($type==1):?>
 					<a href="<?php echo $this->createUrl('statements/list',array('companyId'=>$this->companyId,'type'=>1));?>">
 						<div class="pull-left margin-left-right">

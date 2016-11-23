@@ -229,7 +229,7 @@
 			  
 			   //alert(str);
 		       if(confirm('确认导出并且下载Excel文件吗？')){
-		    	   location.href="<?php echo $this->createUrl('statements/membercardExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+		    	   //location.href="<?php echo $this->createUrl('statements/membercardExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 		       }
 		       else{
 		    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;

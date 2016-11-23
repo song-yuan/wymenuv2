@@ -149,7 +149,7 @@
 								<td><?php echo sprintf("%.2f",$model['reality_total']);?></td>
 								<td><?php echo sprintf("%.2f",$model['reality_total']-$model['should_total']);?></td>
 								<td><?php echo sprintf("%.2f",$model['should_total']);?></td>
-								<td><?php echo $model['pay_amount'];?></td>
+								<td><?php echo $model['pay_all'];?></td>
 								<td><?php echo $model['create_at'];?></td>
 								<td><?php echo $model['username'];?></td>
 								<td><?php echo '';?></td>
@@ -258,9 +258,10 @@ $('.accountno').click(function() {
 					for (var i in model){
 						prodName = model[i].product_name;
 						prodNum = model[i].all_amount;
-						prodZhiNum = model[i].all_zhiamount;
+						allprodZhiNum = model[i].all_zhiamount;
+						prodZhiNum = model[i].zhiamount;
 						prodReNums = model[i].retreat_num;
-						num = prodNum/prodZhiNum;
+						num = prodNum/allprodZhiNum;
 						renum = prodReNums/prodZhiNum;
 						setName = model[i].set_name;
 						var sets = '';
@@ -355,46 +356,10 @@ $('.accountno').click(function() {
 			   location.href="<?php echo $this->createUrl('statements/retreatdetailReport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/text/"+text    
 			  
 	        });
-		   a = new Array();
-		   $('#cx').click(function cx(){  
-			   // var obj = document.getElementById('accept');
-			    var obj=$('.checkedCN');
-			   
-			    var str=new Array();
-					obj.each(function(){
-						if($(this).attr("checked")=="checked")
-						{
-							
-							str += $(this).val()+","
-							
-						}								
-					});
-				a = str = str.substr(0,str.length-1);//除去最后一个“，”
-				//alert(str);
-					  var begin_time = $('#begin_time').val();
-					   var end_time = $('#end_time').val();
-					   var text = $('#text').val();
-					   
-					   //var cid = $(this).val();
-					  
-					 location.href="<?php echo $this->createUrl('statements/retreatdetailReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;	  
-					 return a; 
-			 });
+		  
 
 			  $('#excel').click(function excel(){
-// 				  var obj=$('#checkedCNid');
-// 				    alert(obj);
-// 				    var str=new Array();
-// 						obj.each(function(){
-// 							alert(1);
-// 							if($(this).attr("checked")=="checked")
-// 							{
-// 								alert(str);
-// 								str += $(this).val()+","
-								
-// 							}								
-// 						});
-// 					str = str.substr(0,str.length-1);//除去最后一个“，”
+
 				  
 		    	   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
@@ -404,13 +369,11 @@ $('.accountno').click(function() {
 			       if(confirm('确认导出并且下载Excel文件吗？')){
 							//alert("<?php echo "sorry,您目前暂无权限！！！";?>")
 							//return false;
-			    	   location.href="<?php echo $this->createUrl('statements/retreatdetailReportExport' , array('companyId'=>$this->companyId,'d'=>1 ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
+			    	   location.href="<?php echo $this->createUrl('statements/retreatdetailReportExport' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			       else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			      
 			   });
-			     excel();
-			     cx();
 </script> 
