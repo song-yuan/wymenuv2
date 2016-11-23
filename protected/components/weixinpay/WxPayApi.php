@@ -196,8 +196,6 @@ class WxPayApi
 			throw new WxPayException("退款申请接口中，缺少必填参数total_fee！");
 		}else if(!$inputObj->IsRefund_feeSet()){
 			throw new WxPayException("退款申请接口中，缺少必填参数refund_fee！");
-		}else if(!$inputObj->IsOp_user_idSet()){
-			throw new WxPayException("退款申请接口中，缺少必填参数op_user_id！");
 		}
 		
 		$orderId = $inputObj->GetOut_trade_no();
@@ -207,7 +205,9 @@ class WxPayApi
 		$account = WxAccount::get($dpid);
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
-			
+		
+		$input->SetOp_user_id($mchId);
+		
 		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
