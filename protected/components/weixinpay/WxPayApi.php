@@ -196,8 +196,6 @@ class WxPayApi
 			throw new WxPayException("退款申请接口中，缺少必填参数total_fee！");
 		}else if(!$inputObj->IsRefund_feeSet()){
 			throw new WxPayException("退款申请接口中，缺少必填参数refund_fee！");
-		}else if(!$inputObj->IsOp_user_idSet()){
-			throw new WxPayException("退款申请接口中，缺少必填参数op_user_id！");
 		}
 		
 		$orderId = $inputObj->GetOut_trade_no();
@@ -207,7 +205,12 @@ class WxPayApi
 		$account = WxAccount::get($dpid);
 		$appId = $account['appid'];
 		$mchId = $account['partner_id'];
-			
+		
+		$certpem = Yii::app()->basePath.'/'.$account['certificate'];
+		$keypem = Yii::app()->basePath.'/'.$account['apiclient_key'];
+		
+		$inputObj->SetOp_user_id($mchId);
+		
 		if($account['multi_customer_service_status'] == 1){
 			$inputObj->SetAppid(WxPayConfig::APPID);//公众账号ID
 			$inputObj->SetMch_id(WxPayConfig::MCHID);//商户号
@@ -223,7 +226,7 @@ class WxPayApi
 		$inputObj->SetSign();//签名
 		$xml = $inputObj->ToXml();
 		$startTimeStamp = self::getMillisecond();//请求开始时间
-		$response = self::postXmlCurl($xml, $url, true, $timeOut);
+		$response = self::postXmlCurl($xml, $url, true, $timeOut,$certpem,$keypem);
 		$result = WxPayResults::Init($response);
 		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
 		
