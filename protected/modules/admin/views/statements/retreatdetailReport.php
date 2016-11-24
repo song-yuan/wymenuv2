@@ -158,19 +158,6 @@
 							</tr>
 						<?php $a++;?>
 						<?php endforeach;?>	
-						<!--<php foreach ($money as $moneys):?>
-						<php 
-						if(!empty($moneys)):?>
-						<tr class="odd gradeX">
-						<td><php if($text==1){echo $moneys['y_all'];}elseif($text==2){ echo $moneys['y_all'].-$moneys['m_all'];}else{echo $moneys['y_all'].-$moneys['m_all'].-$moneys['d_all'];}?></td>
-						<td><php echo $moneys['company_name'];?></td>
-						<td><php echo yii::t('app','会员卡支付');?></td>
-						<td><php echo $moneys['all_huiyuan'];?></td>
-						<td><php echo yii::t('app','请注意这是会员卡支付（每一页的数据都是一样的）');?></td>
-						</tr>
-						<php endif;?>
-						<php endforeach;?>
-						<!-- end foreach-->
 						<?php endif;?>
 						</tbody>
 					</table>
