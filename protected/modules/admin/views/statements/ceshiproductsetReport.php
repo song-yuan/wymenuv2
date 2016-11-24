@@ -219,10 +219,7 @@
 						obj.each(function(){
 							if($(this).attr("checked")=="checked")
 							{
-								//$(this).parent().parent().remove();
-								str += $(this).val()+","
-								//alert($(this).val());
-								//var cked=$(this).val();
+								str += $(this).val()+",";
 							}								
 						});
 					str = str.substr(0,str.length-1);//除去最后一个“，”
@@ -234,29 +231,18 @@
 						   var setid = $('#setid').val();
 						   
 						 location.href="<?php echo $this->createUrl('statements/ceshiproductsetReport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
-						  
-					//alert($('#cked').val());
-//	  			    if(obj.checked) {
-//	 			      alert(obj.value);
-//	  			    } else {
-//	  			      alert('未选中');
-//	  			    }
 				  });
 			  $('#excel').click(function excel(){
 
 				   var str ='<?php echo $str;?>';
-		    	   var begin_time = $('#begin_time').val();
+                   var begin_time = $('#begin_time').val();
 				   var end_time = $('#end_time').val();
 				   var text = $('#text').val();
 				   var setid = $('#setid').val();
-				  
-				   //alert(str);
+                   var ordertype =$("#ordertype").val();
 			       if(confirm('确认导出并且下载Excel文件吗？')){
-							alert("<?php echo "该权限未放开！请向上海物易公司申请该权限！";?>");
-							return false;
-			    	   //location.href="<?php echo $this->createUrl('statements/ceshiproductsetReportExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid;
-			       }
-			       else{
+			    	   location.href="<?php echo $this->createUrl('statements/ceshiproductsetReportExport' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text+"/setid/"+setid+"/ordertype/"+ordertype;
+			       }else{
 			    	  // location.href="<?php echo $this->createUrl('statements/export' , array('companyId'=>$this->companyId ));?>/str/"+str+"/begin_time/"+begin_time+"/end_time/"+end_time +"/text/"+text;
 			       }
 			      

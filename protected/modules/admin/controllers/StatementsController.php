@@ -4260,6 +4260,199 @@ public function actionPayallReport(){
 	
 	}
 	
+
+	//套餐销售报表
+	public function actionCeshiproductsetReportExport(){
+		$objPHPExcel = new PHPExcel();
+		//$uid = Yii::app()->user->id;
+		$str = Yii::app()->request->getParam('str');
+		//var_dump($str);exit();
+		$text = Yii::app()->request->getParam('text');
+		$setid = Yii::app()->request->getParam('setid');
+		$db = Yii::app()->db;
+		$setids = '>0';
+	
+		$ordertype = Yii::app()->request->getParam('ordertype');
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		
+		if($ordertype=='-1'){
+			$ordertypes = '>=0';
+		}else{
+			$ordertypes = '='.$ordertype;
+		}
+		if($str){
+			$strs = $str;
+		}else{
+			$strs = $this->companyId;
+		}
+		if($text==1){   //年
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.y_all,k.set_id order by k.y_all,all_setnum desc,all_setprice desc)c';
+				
+		}elseif($text==2){ //月
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.m_all,k.set_id order by k.y_all,k.m_all,all_setnum desc,all_setprice desc)c';
+				
+		}else{
+			$sql = 'select c.* from(select k.*,sum(k.zhiamount) as all_setnum,sum(k.zhiamount*k.all_price) as all_setprice,sum(k.zhiamount*k.all_oriprice) as all_orisetprice  from (select year(t.create_at) as y_all,month(t.create_at) as m_all,day(t.create_at) as d_all,t.create_at,t.lid,t.dpid,t1.set_name,t.price,t.amount,t.zhiamount,t.order_id,t.set_id,t2.company_name,sum(t.price*t.amount) as all_price,sum(t.original_price*t.amount) as all_oriprice,count(distinct t.order_id,set_id) from nb_order_product t left join nb_product_set t1 on(t1.lid = t.set_id and t.dpid = t1.dpid ) left join nb_company t2 on(t2.dpid = t.dpid ) right join nb_order t3 on(t3.dpid = t.dpid and t3.lid = t.order_id and t3.order_type '.$ordertypes.' ) where t.delete_flag=0 and t1.delete_flag = 0 and t.product_order_status=2 and t.set_id >0 and t.create_at >="'.$begin_time.' 00:00:00 " and t.create_at <= "'.$end_time.' 23:59:59" and t.dpid in('.$strs.') group by t.order_id,t.set_id) k where 1 group by k.d_all,k.set_id order by k.y_all,m_all,k.d_all,all_setnum desc,all_setprice desc)c';
+				
+		}
+		$models =  $db->createCommand($sql)->queryAll();
+		// $models = OrderProduct::model()->findAllBySql($sql);
+		//  exit();
+		//设置第1行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+		//设置第2行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
+		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+		//设置字体
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		$styleArray1 = array(
+				'font' => array(
+						'bold' => true,
+						'color'=>array(
+								'rgb' => '000000',
+						),
+						'size' => '20',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		$styleArray2 = array(
+				'font' => array(
+						'color'=>array(
+								'rgb' => 'ff0000',
+						),
+						'size' => '16',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		//大边框样式 边框加粗
+		$lineBORDER = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THICK,
+								'color' => array('argb' => '000000'),
+						),
+				),
+		);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+		//细边框样式
+		$linestyle = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THIN,
+								'color' => array('argb' => 'FF000000'),
+						),
+				),
+		);
+		$objPHPExcel->setActiveSheetIndex(0)
+		->setCellValue('A1','套餐销售报表')
+		->setCellValue('A2',yii::t('app','查询条件：').yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d H:i',time()))
+		->setCellValue('A3','时间')
+		->setCellValue('B3','店铺名称')
+		->setCellValue('C3','套餐名称')
+		->setCellValue('D3','排名')
+		->setCellValue('E3','销量')
+		->setCellValue('F3','销售金额')
+		->setCellValue('G3','折扣金额')
+		->setCellValue('H3','实收金额')
+		->setCellValue('I3','原始均价')
+		->setCellValue('J3','折后均价');
+		$i=4;
+		foreach($models as $v){
+			//print_r($v);
+			if ($text==1){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$i,$v['y_all']);
+			}elseif ($text==2){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$i,$v['y_all'].-$v['m_all']);
+			}elseif ($text==3){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$i,$v['y_all'].-$v['m_all'].-$v['d_all']);
+			}
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('B'.$i,$v['company_name'])
+			->setCellValue('C'.$i,$v['set_name'])
+			->setCellValue('D'.$i,$i-3)
+			->setCellValue('E'.$i,$v['all_setnum'])
+			->setCellValue('F'.$i,$v['all_orisetprice'])
+			->setCellValue('G'.$i,$v['all_orisetprice']-$v['all_setprice'])
+			->setCellValue('H'.$i,$v['all_setprice'])
+			->setCellValue('I'.$i,$v['all_orisetprice']/$v['all_setnum'])
+			->setCellValue('J'.$i,$v['all_setprice']/$v['all_setnum']);
+			
+			$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i)->applyFromArray($linestyle);
+			//设置填充颜色
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('fae9e5');
+			//设置字体靠左
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':C'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			$objPHPExcel->getActiveSheet()->getStyle('F'.$i.':J'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+			$i++;
+		}
+		//冻结窗格
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:J1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:J2');
+		//单元格加粗，居中：
+		$objPHPExcel->getActiveSheet()->getStyle('A1:J'.$i)->applyFromArray($lineBORDER);//大边框格式引用
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+	
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+		//设置填充颜色
+		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:J3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:J1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:J1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:J2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(6);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(6);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+	
+	
+	
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="产品销售报表（".date('m月d日 H时i分',time())."）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+	
+	
+	}
+	
+	
 	/*
 	 * 
 	 * 营业数据报表
