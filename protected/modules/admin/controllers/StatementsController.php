@@ -4910,7 +4910,7 @@ public function actionPayallReport(){
 				->setCellValue('E'.$i,sprintf("%.2f",$v['should_total']))
 				->setCellValue('F'.$i,$v['pay_all'])
 				->setCellValue('G'.$i,$v['create_at'])
-				->setCellValue('H'.$i,$v['username'])
+				->setCellValue('H'.$i,$v['username'],PHPExcel_Cell_DataType::TYPE_STRING)
 				->setCellValue('I'.$i)
 				->setCellValue('J'.$i);
 			
