@@ -128,7 +128,9 @@ class DataSyncTables
 				"  `pad_fip` varchar(20) NOT NULL DEFAULT '0',".
         		"  `print_type` varchar(2) NOT NULL DEFAULT '0',".
 				"  `bt_mac` varchar(20) NOT NULL,".
+        		"  `serial_number` TINYINT(2) NOT NULL DEFAULT '0',".
 				"  `is_product_free` varchar(1) NOT NULL  DEFAULT '0',".
+        		"  `order_number` TINYINT(2) NOT NULL  DEFAULT '1',".
 				"  `sync_at` TIMESTAMP NOT NULL default (datetime('now', 'localtime')),".
 				"  `delete_flag` varchar(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
