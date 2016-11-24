@@ -29,7 +29,7 @@ class PostableSync extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array(' content', 'required'),
+			array('content', 'required'),
 			array('lid', 'length', 'max'=>10),
 			array('delete_flag', 'length', 'max'=>2),
 			array('is_sync', 'length', 'max'=>50),
