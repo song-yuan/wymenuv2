@@ -7,7 +7,7 @@ if(isset($_POST)){
 	
 	$company = WxCompany::get($this->companyId);
 	
-	$subject = $company['company_name']."-当面付";
+	$subject = $company['company_name']."-扫码";
 	$totalAmount = $_POST['pay_price'];
 	$authCode = $_POST['auth_code'];
 	
