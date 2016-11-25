@@ -55,7 +55,7 @@ class AlipayController extends Controller
 				//应用ID 
 				'app_id' => $alipayAccount['appid'],
 				//异步通知地址,只有扫码支付预下单可用
-				'notify_url' => "",
+				'notify_url' =>  "",
 				//最大查询重试次数
 				'MaxQueryRetry' => "10",
 				//查询间隔
@@ -194,10 +194,26 @@ class AlipayController extends Controller
         
         $this->render('instantArriva',array('htmlText'=>$htmlText));
     }
+    // 手机网站支付
+    public function actionWapPay()
+    {
+    	$orderId = Yii::app()->request->getParam('orderId');
+    	$this->render('wappay',array('orderId'=>$orderId));
+    }
     // 当面付 条码支付 
     public function actionBarPay()
     {
     	$this->render('barpay');
+    }
+    // 退款
+    public function actionRefund()
+    {
+    	$companyId = Yii::app()->request->getParam('companyId');
+		$adminId = Yii::app()->request->getParam('admin_id');
+		$outTradeNo = Yii::app()->request->getParam('out_trade_no');
+		$refundAmount = Yii::app()->request->getParam('refund_fee');
+	
+		$this->render('refund',array('dpid'=>$companyId,'admin_id'=>$adminId,'out_trade_no'=>$outTradeNo,'refund_amount'=>$refundAmount));
     }
    // 手机订单支付
     public function actionReturn()
