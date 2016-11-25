@@ -60,10 +60,11 @@ class WeixinController extends Controller
 	 public function actionRefund()
 	 {
 		$companyId = Yii::app()->request->getParam('companyId');
+		$adminId = Yii::app()->request->getParam('admin_id');
 		$outTradeNo = Yii::app()->request->getParam('out_trade_no');
 		$totalFee = Yii::app()->request->getParam('total_fee');
 		$refundFee = Yii::app()->request->getParam('refund_fee');
 	
-		$this->render('refund',array('dpid'=>$companyId,'out_trade_no'=>$outTradeNo,'total_fee'=>$totalFee,'refund_fee'=>$refundFee));
+		$this->render('refund',array('dpid'=>$companyId,'admin_id'=>$adminId,'out_trade_no'=>$outTradeNo,'total_fee'=>$totalFee,'refund_fee'=>$refundFee));
 	 }
 }
