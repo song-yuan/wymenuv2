@@ -373,6 +373,7 @@ class DataSyncTables
 				"  `store_number` int(10) NOT NULL DEFAULT '-1',".
 				"  `order_number` int(10) NOT NULL DEFAULT '0',".
 				"  `favourite_number` int(10) NOT NULL DEFAULT '0',".
+        		"  `is_show` varchar(2) NOT NULL DEFAULT '1',".
 				"  `delete_flag` char(1) NOT NULL DEFAULT '0',".
 				"  `is_sync` varchar(50) NOT NULL DEFAULT '11111',".
         		"  PRIMARY KEY (`lid`,`dpid`)".
