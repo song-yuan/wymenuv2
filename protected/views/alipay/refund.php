@@ -30,8 +30,6 @@ if(isset($out_trade_no) && $out_trade_no != ""){
 	$refundResponse = new AlipayTradeService($this->f2fpay_config);
 	$refundResult =	$refundResponse->refund($refundRequestBuilder);
 	//根据交易状态进行处理
-	echo '<meta charset="utf8"/>';
-	var_dump($refundResult);exit;
 	switch ($refundResult->getTradeStatus()){
 		case "SUCCESS":
 			$msg = array('status'=>true, 'trade_no'=>$out_request_no);
