@@ -109,6 +109,10 @@ class ProductController extends BackendController
 		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
+			if($model->category_id){
+				$categoryId = ProductCategory::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->category_id,':companyId'=>$this->companyId));
+				$model->chs_code = $categoryId['chs_code'];
+			}
                         $py=new Pinyin();
                         $model->simple_code = $py->py($model->product_name);
 			$model->update_at=date('Y-m-d H:i:s',time());
