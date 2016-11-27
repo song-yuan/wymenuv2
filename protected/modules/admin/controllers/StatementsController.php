@@ -1991,7 +1991,7 @@ public function actionPayallReport(){
 		
 	}
 		public function actionOrderExport(){
-			$objPHPExcel = new PHPExcel();
+		$objPHPExcel = new PHPExcel();
 		$str = Yii::app()->request->getParam('str');
 		$text = Yii::app()->request->getParam('text');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
@@ -4821,27 +4821,15 @@ public function actionPayallReport(){
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		$db = Yii::app()->db;
-		$sql = 'select k.* from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id and t1.paytype !=11) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) k';
-		//var_dump($sql);exit;
-		
-		$count = $db->createCommand(str_replace('k.*','count(*)',$sql))->queryScalar();
-		//var_dump($count);exit;
-		$pages = new CPagination($count);
-		$pdata =$db->createCommand($sql." LIMIT :offset,:limit");
-		$pdata->bindValue(':offset', $pages->getCurrentPage()*$pages->getPageSize());
-		$pdata->bindValue(':limit', $pages->getPageSize());//$pages->getLimit();
-		$models = $pdata->queryAll();
-		
+		$sql = 'select k.* from(select count(distinct t.account_no) as all_account ,count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id and t1.paytype != 11) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) k';
+        $models =  $db->createCommand($sql)->queryAll();		
 		$sql = 'select sum(j.all_amount) as all_payall from(select count(t.order_type) as all_ordertype,t.order_type,sum(t1.pay_amount) as all_amount from nb_order t left join nb_order_pay t1 on(t.dpid = t1.dpid and t.lid = t1.order_id and t1.paytype !=11) where t.create_at>="'.$begin_time.' 00:00:00" and t.create_at<="'.$end_time.' 23:59:59"  and t.order_status in(3,4,8) and t.dpid in('.$this->companyId.') group by t.order_type order by t.create_at asc) j';
 		$connect = Yii::app()->db->createCommand($sql);
 		$allpay = $connect->queryRow();
-		//$models = OrderProduct::model()->findAll($criteria);
-		//var_dump($models);exit();
-	
 		//设置第1行的行高
 		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
 		//设置第2行的行高
-		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(15);
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(30);
 		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
 		//设置字体
 		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
@@ -4897,109 +4885,101 @@ public function actionPayallReport(){
 		->setCellValue('B3','单数')
 		->setCellValue('C3','单均')
 		->setCellValue('D3','金额')
-		->setCellValue('E3','占比(%)');
+		->setCellValue('E3','占比(%)')
+                ->setCellValue('F3','备注');
 		$i=4;
 		foreach($models as $v){
+                    
+                     $destion_string = '';
 			switch($v['order_type']){
 				case 0:
-					$objPHPExcel->setActiveSheetIndex(0)
-					->setCellValue('A'.$i,yii::t('app','到店堂食'))
-					->setCellValue('B'.$i,$v['all_ordertype'])
-					->setCellValue('C'.$i,$v['all_amount']/$v['all_ordertype'])
-					->setCellValue('D'.$i,$v['all_amount'])
-					->setCellValue('E'.$i,$v['all_amount']*100/$allpay['all_payall'])
-					->setCellValue('F'.$i);
+                     $destion_string = yii::t('app','到店堂食');
 					break;
 				case 1:
-					$objPHPExcel->setActiveSheetIndex(0)
-					->setCellValue('A'.$i,yii::t('app','微信堂食'))
-					->setCellValue('B'.$i,$v['all_ordertype'])
-					->setCellValue('C'.$i,$v['all_amount']/$v['all_ordertype'])
-					->setCellValue('D'.$i,$v['all_amount'])
-					->setCellValue('E'.$i,$v['all_amount']*100/$allpay['all_payall'])
-					->setCellValue('F'.$i);
+					$destion_string = yii::t('app','微信堂食');
 					break;
 				case 2:
-					$objPHPExcel->setActiveSheetIndex(0)
-					->setCellValue('A'.$i,yii::t('app','微信外卖'))
-					->setCellValue('B'.$i,$v['all_ordertype'])
-					->setCellValue('C'.$i,$v['all_amount']/$v['all_ordertype'])
-					->setCellValue('D'.$i,$v['all_amount'])
-					->setCellValue('E'.$i,$v['all_amount']*100/$allpay['all_payall'])
-					->setCellValue('F'.$i);
+					$destion_string =yii::t('app','微信外卖');
 					break;
 				case 3:
-					$objPHPExcel->setActiveSheetIndex(0)
-					->setCellValue('A'.$i,yii::t('app','后台外卖'))
-					->setCellValue('B'.$i,$v['all_ordertype'])
-					->setCellValue('C'.$i,$v['all_amount']/$v['all_ordertype'])
-					->setCellValue('D'.$i,$v['all_amount'])
-					->setCellValue('E'.$i,$v['all_amount']*100/$allpay['all_payall'])
-					->setCellValue('F'.$i);
+					$destion_string = yii::t('app','微信预约');
 					break;
-				default:
-					$objPHPExcel->setActiveSheetIndex(0)
-					->setCellValue('A'.$i,yii::t('app',''))
-					->setCellValue('B'.$i,$v['all_number'])
-					->setCellValue('C'.$i,$v['all_account'])
-					->setCellValue('D'.$i,$money['all_originalprice'])
-					->setCellValue('E'.$i,$v['all_realprice'])
-					->setCellValue('F'.$i);
+				case 4:
+					$destion_string =yii::t('app','后台外卖');
 					break;
-			}	
-			
-			$objPHPExcel->getActiveSheet()->getStyle('A2:E2')->applyFromArray($linestyle);
-			$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->applyFromArray($linestyle);
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':E'.$i)->applyFromArray($linestyle);
+                        }	
+                        $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A'.$i,$destion_string)
+                        ->setCellValue('B'.$i,$v['all_account'])
+                        ->setCellValue('C'.$i,$v['all_amount']/$v['all_account'])
+                        ->setCellValue('D'.$i,$v['all_amount'])
+                        ->setCellValue('E'.$i,sprintf("%.2f",$v['all_amount']*100/$allpay['all_payall']).'%')
+                        ->setCellValue('F'.$i);
+                        
+
+
+			$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':F'.$i)->applyFromArray($linestyle);
 			//设置填充颜色
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
 			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('fae9e5');
 			//设置字体靠左
-			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':C'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$objPHPExcel->getActiveSheet()->getStyle('N'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-			$objPHPExcel->getActiveSheet()->getStyle('C'.$i.':E'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':F'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+			
+			$objPHPExcel->getActiveSheet()->getStyle('C'.$i.':F'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
+
 			$i++;
 		}
 		//冻结窗格
 		$objPHPExcel->getActiveSheet()->freezePane('A4');
 		//合并单元格
-		$objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
-		$objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
 		//单元格加粗，居中：
-		$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$i)->applyFromArray($lineBORDER);//大边框格式引用
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F'.$i)->applyFromArray($lineBORDER);//大边框格式引用
 		// 将A1单元格设置为加粗，居中
 		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
 	
 		//加粗字体
-		$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFont()->setBold(true);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
 		//设置字体垂直居中
-		$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-		//设置字体水平居中
-		$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		//字体靠左
-		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-		//设置填充颜色
-		$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFill()->getStartColor()->setARGB('fdfc8d');
-		$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A3:E3')->getFill()->getStartColor()->setARGB('fdfc8d');
-		$objPHPExcel->getActiveSheet()->getStyle('A1:E1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A1:E1')->getFill()->getStartColor()->setARGB('FFB848');
-		$objPHPExcel->getActiveSheet()->getStyle('A2:E2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
-		$objPHPExcel->getActiveSheet()->getStyle('A2:E2')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置字体靠左
+
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+		//A2字体水平居中
+
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//A2字体垂直居中
+
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                //设置填充颜色
+
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->getStartColor()->setARGB('FFB848');
 		//设置每列宽度
 		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+
 		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(12);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+
+
 	
 	
 	
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-		$filename="渠道占比报表（".date('m-d',time())."）.xls";
+		$filename="渠道占比报表（".date('m月d日 H时i分',time())."）.xls";
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
@@ -5007,6 +4987,7 @@ public function actionPayallReport(){
 	
 	
 	}
+	
 	
 	/*
 	 * 
@@ -6582,6 +6563,236 @@ public function actionPayallReport(){
 		//输出
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 		$filename="代金券使用情况报表（".date('m-d',time())."）.xls";
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
+		$objWriter->save('php://output');
+	
+	
+	}
+
+
+	//办卡记录excel
+	public function actionMembercardExport(){
+		$objPHPExcel = new PHPExcel();
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		$text = Yii::app()->request->getParam('text');
+		$membercard = "";
+		$branduser = "";
+		$db = Yii::app()->db;
+		if($text==1){
+			$set_name="传统卡";
+			$checked_name="传统卡号";
+			$sql = 'select k.* from nb_member_card k where k.delete_flag = 0 and k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" and k.dpid in('.$this->companyId.')';
+			//var_dump($sql);exit;
+		}
+
+		if($text==2){
+			$set_name="微信会员卡";
+			$checked_name="会员卡号";
+			$sql = 'select k.* from nb_brand_user k where k.create_at >="'.$begin_time.' 00:00:00" and k.create_at <="'.$end_time.' 23:59:59" and k.dpid in('.$this->companyId.') ';
+			//var_dump($sql);exit;
+		}
+		if($text==3){
+			//$money = "0";
+			//传统卡充值
+			$set_name="统计";
+	
+			$sql = 'select k.* from(select count(t.lid) as card_num from nb_member_card t where t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59" ) k';
+			$membercard = Yii::app()->db->createCommand($sql)->queryRow();
+
+			//微信会员卡充值
+			$sql = 'select k.* from(select count(t.lid) as brand_num from nb_brand_user t where t.dpid = '.$this->companyId.' and t.create_at >="'.$begin_time.' 00:00:00" and t.create_at <="'.$end_time.' 23:59:59") k';
+			$branduser = Yii::app()->db->createCommand($sql)->queryRow();
+	 
+		}
+
+		 
+		$models =  $db->createCommand($sql)->queryAll();
+	
+		//设置第1行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('1')->setRowHeight(30);
+		//设置第2行的行高
+		$objPHPExcel->getActiveSheet()->getRowDimension('2')->setRowHeight(30);
+		$objPHPExcel->getActiveSheet()->getRowDimension('3')->setRowHeight(30);
+		//设置字体
+		$objPHPExcel->getDefaultStyle()->getFont()->setName('宋体');
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(16);
+		$styleArray1 = array(
+				'font' => array(
+						'bold' => true,
+						'color'=>array(
+								'rgb' => '000000',
+						),
+						'size' => '20',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		$styleArray2 = array(
+				'font' => array(
+						'color'=>array(
+								'rgb' => 'ff0000',
+						),
+						'size' => '16',
+				),
+				'alignment' => array(
+						'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+						'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+				),
+		);
+		//大边框样式 边框加粗
+		$lineBORDER = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THICK,
+								'color' => array('argb' => '000000'),
+						),
+				),
+		);
+		//$objPHPExcel->getActiveSheet()->getStyle('A1:E'.$j)->applyFromArray($lineBORDER);
+		//细边框样式
+		$linestyle = array(
+				'borders' => array(
+						'outline' => array(
+								'style' => PHPExcel_Style_Border::BORDER_THIN,
+								'color' => array('argb' => 'FF000000'),
+						),
+				),
+		);
+	
+	
+	
+		if ($text==1){
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A1','办卡记录报表')
+			->setCellValue('A2',yii::t('app','查询条件：').$set_name.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
+			->setCellValue('A3',$checked_name)
+			->setCellValue('B3','名称')
+			->setCellValue('C3','手机号')
+			->setCellValue('D3','卡状态')
+			->setCellValue('E3','办卡时间')
+			->setCellValue('F3','备注');
+	
+		}elseif ($text==2){
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A1','办卡记录报表')
+			->setCellValue('A2',yii::t('app','查询条件：').$set_name.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
+			->setCellValue('A3',$checked_name)
+			->setCellValue('B3','名称')
+			->setCellValue('C3','手机号')
+			->setCellValue('D3','办卡时间')
+			->setCellValue('E3','备注');
+		}elseif ($text==3){
+			$objPHPExcel->setActiveSheetIndex(0)
+			->setCellValue('A1','办卡记录报表')
+			->setCellValue('A2',yii::t('app','查询条件：').$set_name.yii::t('app','时间段：').$begin_time.yii::t('app',' 00:00:00 至 ').$end_time." 23:59:59    ".yii::t('app','生成时间：').date('m-d h:i',time()))
+			->setCellValue('A3','会员卡类型')
+			->setCellValue('B3','办卡数量')
+			->setCellValue('C3','备注')
+			->setCellValue('A4','传统卡')
+			->setCellValue('B4',$membercard['card_num'])
+			->setCellValue('C4','')
+			->setCellValue('A5','会员卡')
+			->setCellValue('B5',$branduser['brand_num'])
+			->setCellValue('C5','');
+	
+		}
+	
+		$i=4;
+		foreach($models as $v){
+			//print_r($v);
+			if ($text==1){
+				$card_status ='';
+				switch($v['card_status']){
+					case 0:
+						$card_status = '正常';
+						break;
+					case 1:
+						$card_status = '挂失';
+						break;
+					case 2:
+						$card_status = '注销';
+						break;
+					default:
+						$card_status = '';
+						break;
+				}
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$i,$v['selfcode'])
+				->setCellValue('B'.$i,$v['name'])
+				->setCellValue('C'.$i,$v['mobile'])
+				->setCellValue('D'.$i,$card_status)
+				->setCellValue('E'.$i,$v['create_at'])
+				->setCellValue('F'.$i,"");
+	
+			}elseif ($text==2){
+				$objPHPExcel->setActiveSheetIndex(0)
+				->setCellValue('A'.$i,$v['card_id'])
+				->setCellValue('B'.$i,$v['user_name'].'('.$v['nickname'].')')
+				->setCellValue('C'.$i,$v['mobile_num'])
+				->setCellValue('D'.$i,$v['create_at'])
+				->setCellValue('E'.$i,"");
+			}
+			$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->applyFromArray($linestyle);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':F'.$i)->applyFromArray($linestyle);
+			//设置填充颜色
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i)->getFill()->getStartColor()->setARGB('fae9e5');
+			//设置字体靠左
+			$objPHPExcel->getActiveSheet()->getStyle('A'.$i.':F'.$i)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+				
+			$objPHPExcel->getActiveSheet()->getStyle('F'.$i.':F'.$i)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+			$i++;
+		}
+		 
+		 
+		//冻结窗格
+		$objPHPExcel->getActiveSheet()->freezePane('A4');
+		//合并单元格
+		$objPHPExcel->getActiveSheet()->mergeCells('A1:F1');
+		$objPHPExcel->getActiveSheet()->mergeCells('A2:F2');
+		//单元格加粗，居中：
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F'.$i)->applyFromArray($lineBORDER);//大边框格式引用
+		// 将A1单元格设置为加粗，居中
+		$objPHPExcel->getActiveSheet()->getStyle('A1')->applyFromArray($styleArray1);
+	
+		//加粗字体
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFont()->setBold(true);
+		//设置字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置字体靠左
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+		//A2字体水平居中
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+		//A2字体垂直居中
+		$objPHPExcel->getActiveSheet()->getStyle('A2')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		//设置填充颜色
+	
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A3:F3')->getFill()->getStartColor()->setARGB('fdfc8d');
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:F1')->getFill()->getStartColor()->setARGB('FFB848');
+		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID);
+		$objPHPExcel->getActiveSheet()->getStyle('A2:F2')->getFill()->getStartColor()->setARGB('FFB848');
+		//设置每列宽度
+		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(18);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(15);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(23);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(23);
+		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+	
+	
+	
+	
+		//输出
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+		$filename="办卡记录报表（".date('m-d',time())."）.xls";
 		header('Content-Type: application/vnd.ms-excel');
 		header('Content-Disposition: attachment;filename="'.$filename.'"');
 		header('Cache-Control: max-age=0');
