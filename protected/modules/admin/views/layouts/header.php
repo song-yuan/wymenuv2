@@ -16,7 +16,7 @@
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<ul class="nav navbar-nav pull-right">
 				<!-- BEGIN NOTIFICATION DROPDOWN -->
-				<li class="dropdown" id="header_notification_bar">
+				<li style="display: none;" class="dropdown" id="header_notification_bar">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" id="notification_banner_id"
 						data-close-others="true">
 					<i class="fa fa-warning"></i>
@@ -141,6 +141,12 @@
 						</li>
 						
 					</ul>
+				</li>
+				<li class="dropdown user">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+					<img alt="" style="width:29px;height:29px;" src="<?php echo Yii::app()->request->baseUrl;?>/img/help_book_question.png"/>
+                    <span class="username"><?php echo '&nbsp'; ?></span>
+					</a>
 				</li>
 				<!-- END USER LOGIN DROPDOWN -->
 			</ul>
