@@ -3341,10 +3341,11 @@ public function actionPayallReport(){
 		->setCellValue('I3',yii::t('app','支付宝'))
 		->setCellValue('J3',yii::t('app','银联'))
 		->setCellValue('K3',yii::t('app','会员卡'));
+		$letternext= 'L';
 		if($payments){
 			$let = '0';
 			$letter='';
-			$letternext= 'L';
+			
 			foreach ($payments as $payment){
 				$paymentname = $payment['name'];
 				$let++;
@@ -3387,9 +3388,10 @@ public function actionPayallReport(){
 				->setCellValue('I'.$j,$alipay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,2,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
 				->setCellValue('J'.$j,$unionpay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,5,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
 				->setCellValue('K'.$j,$vipcard = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,4,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username));
+				$letters='';
 				if($payments){
 					$let = '0';
-					$letters='';
+					
 					$letternexts= 'L3';
 					foreach ($payments as $payment){
 						$paymentname = $payment['name'];
@@ -3409,6 +3411,8 @@ public function actionPayallReport(){
 						}
 						$objPHPExcel->setActiveSheetIndex(0)->setCellValue($letters.$j,$pay_item =  $this->getPaymentPrice($v->dpid,$begin_time,$end_time,3,$payment['lid'],$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username));
 					}
+					$objPHPExcel->getActiveSheet()->getStyle('C'.$j.':'.$letters.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+						
 				}
 		
 					//细边框引用
@@ -3440,7 +3444,6 @@ public function actionPayallReport(){
 					//$objPHPExcel->getActiveSheet()->getStyle('E'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,PHPExcel_Cell_DataType::TYPE_NUMERIC);
 					//$objPHPExcel->getActiveSheet()->getStyle('A'.$j.':D'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
 					//$objPHPExcel->getActiveSheet()->getStyle('N'.$j)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-					$objPHPExcel->getActiveSheet()->getStyle('C'.$j.':'.$letters.$j)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 					//$objPHPExcel->getActiveSheet()->setCellValueExplicit("D".$j,PHPExcel_Cell_DataType::TYPE_NUMERIC);
 					//细边框样式引用
 					//$objPHPExcel->getActiveSheet()->getStyle('A'.$j)->applyFromArray($linestyle);
