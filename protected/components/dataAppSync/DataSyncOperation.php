@@ -331,7 +331,10 @@ class DataSyncOperation {
 			if($table=='nb_local_company'){
 				$tableName = 'nb_company';
 			}
-			$sql = 'select * from '.$tableName.' where (create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'") and is_sync<>0';
+			if($table=='nb_member_card'||$table=='nb_brand_user_level'){
+				$dpid = WxCompany::getDpids($dpid);
+			}
+			$sql = 'select * from '.$tableName.' where dpid in ('.$dpid.') and (create_at >="'.$syncTime.'" or update_at >="'.$syncTime.'") and is_sync<>0';
 			$result = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 			if($result){
 				array_push($results,$table);
@@ -800,7 +803,9 @@ class DataSyncOperation {
 	public static function getMemberCardYue($data) {
 		$dpid = $data ['dpid'];
 		$rfid = $data ['rfid'];
-		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and rfid=' . $rfid . ' and delete_flag=0';
+		
+		$dpid = WxCompany::getDpids($dpid);
+		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid=' . $rfid . ' and delete_flag=0';
 		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $reslut) {
 			return '0.00';
@@ -830,8 +835,9 @@ class DataSyncOperation {
 					'msg' => '不存在该管理员'
 			) );
 		}
+		$dpid = WxCompany::getDpids($dpid);
 		
-		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and rfid=' . $rfid . ' and delete_flag=0';
+		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid=' . $rfid . ' and delete_flag=0';
 		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $reslut) {
 			return json_encode ( array (
@@ -847,7 +853,7 @@ class DataSyncOperation {
 			) );
 		}
 		
-		$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid=' . $dpid . ' and lid=' . $reslut ['lid'];
+		$sql = 'update nb_member_card set all_money=all_money-' . $payPrice . ' where dpid in (' . $dpid . ') and lid=' . $reslut ['lid'] . ' and rfid=' . $rfid;
 		$reslut = Yii::app ()->db->createCommand ( $sql )->execute ();
 		if ($reslut) {
 			return json_encode ( array (
@@ -881,7 +887,9 @@ class DataSyncOperation {
 			) );
 		}
 		
-		$sql = 'select * from nb_member_card where dpid=' . $dpid . ' and rfid=' . $rfid . ' and delete_flag=0';
+		$dpid = WxCompany::getDpids($dpid);
+		
+		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid=' . $rfid . ' and delete_flag=0';
 		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $reslut) {
 			return json_encode ( array (
@@ -890,7 +898,7 @@ class DataSyncOperation {
 			) );
 		}
 		
-		$sql = 'update nb_member_card set all_money=all_money+' . $refundPrice . ' where dpid=' . $dpid . ' and lid=' . $reslut ['lid'];
+		$sql = 'update nb_member_card set all_money=all_money+' . $refundPrice . ' where dpid in (' . $dpid . ') and lid=' . $reslut ['lid'] . ' and rfid=' . $rfid;
 		$reslut = Yii::app ()->db->createCommand ( $sql )->execute ();
 		if ($reslut) {
 			return json_encode ( array (
