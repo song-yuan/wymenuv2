@@ -3377,12 +3377,16 @@ public function actionPayallReport(){
 			}else{
 				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$j,$v->y_all.'-'.$v->m_all.'-'.$v->d_all);
 			}
+			if($userid !='0' && $userid != '-1'){
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j,$v->order4->username.'('.$this->getUserstaffno($this->companyId,$v->order4->username).')');
+			}elseif($userid =='0' || $userid == '-1'){
+				$objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$j);
+			}
 				$objPHPExcel->setActiveSheetIndex(0)
 				->setCellValue('B'.$j,$v->all_num)
 				->setCellValue('C'.$j,$reality_all = $this->getGrossProfit($v->dpid,$begin_time,$end_time,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
 				->setCellValue('D'.$j,sprintf("%.2f",$reality_all-$v->all_reality))
 				->setCellValue('E'.$j,$v->all_reality)
-				->setCellValue('F'.$j,$v->order4->username.'('.$this->getUserstaffno($this->companyId,$v->order4->username).')')
 				->setCellValue('G'.$j,$cash = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,0,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
 				->setCellValue('H'.$j,$wechat = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,1,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
 				->setCellValue('I'.$j,$alipay = $this->getPaymentPrice($v->dpid,$begin_time,$end_time,0,2,$text,$v->y_all,$v->m_all,$v->d_all,$userid,$v->order4->username))
