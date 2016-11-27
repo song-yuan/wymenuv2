@@ -55,7 +55,7 @@ class SWFUploadAction extends CAction
 	         throw new Exception('文件路径没有指定');
 	    }
 	    $this->filepath = $this->genDir().'/'.Yii::app()->user->companyId.'#'.$filename;//这里并没有使用随机生成码，而是沿用了文件本身的文件名，因为防止多次上传造成文件过多，增加服务器压力。
-	    //var_dump($this->genDir());exit;
+	    //var_dump($filename);exit;
 	    //删除上一个临时文件
 	    /*if(isset($_SESSION['temp_file'])&&is_file($_SESSION['temp_file'])&&(intval($_POST['fileQuenueLimit']) == 1))
         {
@@ -63,7 +63,7 @@ class SWFUploadAction extends CAction
         }  */
    }
    public function genDir(){
-   		$path = Yii::app()->basePath.'/cert/ali/';
+   		$path = Yii::app()->basePath.'/../protected/cert/ali/';
    		if($this->companyId){
    			//$path .= $this->companyId;
    			if(!is_dir($path)){
