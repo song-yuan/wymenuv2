@@ -696,7 +696,7 @@ class DataSyncOperation {
 					}
 				}
 				
-				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.dpid.' and pay_amount < 0';
+				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0';
 				$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
 				if($orderPay && empty($orderPay['total'])){
 					if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
