@@ -208,8 +208,8 @@ class TasteController extends BackendController
 		}
 	}
 	public function actionProductTaste(){
-                $categoryId = Yii::app()->request->getParam('cid',0);
-                $type = Yii::app()->request->getParam('type');
+        $categoryId = Yii::app()->request->getParam('cid',0);
+        $type = Yii::app()->request->getParam('type',2);
 		$criteria = new CDbCriteria;
 		$criteria->with = 'productTaste';
                 if($categoryId!=0)
@@ -228,8 +228,8 @@ class TasteController extends BackendController
 //		var_dump($models[0]);exit;
 		$this->render('productTaste',array(
 				'models'=>$models,
-                                'categories'=>$categories,
-                                'categoryId'=>$categoryId,
+                'categories'=>$categories,
+                'categoryId'=>$categoryId,
 				'pages' => $pages,
 				'type' => $type
 		));
