@@ -108,7 +108,7 @@
 								<td class="center">
 								<a href="<?php echo $this->createUrl('taste/update',array('lid' => $model->lid , 'companyId' => $model->dpid,'type'=>$type));?>"><?php echo yii::t('app','编辑');?></a>
 								</td>
-                                                                <td class="center">
+                                <td class="center">
 								<a href="<?php echo $this->createUrl('taste/detailIndex',array('groupid' => $model->lid,'groupname'=>$model->name ,'type'=>$type, 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑明细');?></a>
 								</td>
 							</tr>
