@@ -38,7 +38,7 @@ if(isset($_POST)){
 	// 支付宝的店铺编号
 	$alipayStoreId = "";
 	// 业务扩展参数，目前可添加由支付宝分配的系统商编号(通过setSysServiceProviderId方法)
-	$providerId = "2088811584894868"; //系统商pid,作为系统商返佣数据提取的依据
+	$providerId = ""; //系统商pid,作为系统商返佣数据提取的依据
 	$extendParams = new ExtendParams();
 	$extendParams->setSysServiceProviderId($providerId);
 	$extendParamsArr = $extendParams->getExtendParams();
