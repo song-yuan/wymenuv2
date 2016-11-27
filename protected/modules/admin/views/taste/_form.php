@@ -16,7 +16,7 @@
 									</div>
 									<div class="form-actions fluid">
 										<div class="col-md-offset-3 col-md-9">
-											<button type="submit" class="btn blue"><?php echo yii::t('app','确定');?></button>
+											<button type="submit" class="btn blue" onclick="javascript:{this.disabled=true;document.taste-form.submit();}"><?php echo yii::t('app','确定');?></button>
 											<a href="<?php echo $this->createUrl('taste/index' , array('companyId' => $model->dpid,'type'=>$type));?>" class="btn default"><?php echo yii::t('app','返回');?></a>                              
 										</div>
 									</div>
