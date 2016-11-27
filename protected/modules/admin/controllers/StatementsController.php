@@ -3341,10 +3341,11 @@ public function actionPayallReport(){
 		->setCellValue('I3',yii::t('app','支付宝'))
 		->setCellValue('J3',yii::t('app','银联'))
 		->setCellValue('K3',yii::t('app','会员卡'));
+		$letternext= 'L';
 		if($payments){
 			$let = '0';
 			$letter='';
-			$letternext= 'L';
+			
 			foreach ($payments as $payment){
 				$paymentname = $payment['name'];
 				$let++;
