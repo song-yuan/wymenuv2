@@ -27,12 +27,12 @@ if(isset($out_trade_no) && $out_trade_no != ""){
 	$refundRequestBuilder->setAppAuthToken($appAuthToken);
 
 	//初始化类对象,调用refund获取退款应答
-	$refundResponse = new AlipayTradeService($config);
+	$refundResponse = new AlipayTradeService($this->f2fpay_config);
 	$refundResult =	$refundResponse->refund($refundRequestBuilder);
 	//根据交易状态进行处理
 	switch ($refundResult->getTradeStatus()){
 		case "SUCCESS":
-			$msg = array('status'=>true, 'trade_no'=>$out_refund_no);
+			$msg = array('status'=>true, 'trade_no'=>$out_request_no);
 			break;
 		case "FAILED":
 			$msg = array('status'=>false,'msg'=>'支付宝退款失败!!!');

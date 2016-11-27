@@ -85,7 +85,7 @@ class AlipayTradeService {
 
 		$appAuthToken = $req->getAppAuthToken();
 
-		$this->writeLog($bizContent);
+		// 		$this->writeLog($bizContent);
 
 		//echo $bizContent;
 		
@@ -155,7 +155,7 @@ class AlipayTradeService {
 	// 当面付2.0消费退款,$req为对象变量
 	public function refund($req) {
 		$bizContent = $req->getBizContent();
-		$this->writeLog($bizContent);
+// 		$this->writeLog($bizContent);
 		$request = new AlipayTradeRefundRequest();
 		$request->setBizContent ( $bizContent );
 		$response = $this->aopclientRequestExecute ( $request , NULL ,$req->getAppAuthToken());
@@ -178,7 +178,7 @@ class AlipayTradeService {
 	public function qrPay($req) {
 
 		$bizContent = $req->getBizContent();
-		$this->writeLog($bizContent);
+// 		$this->writeLog($bizContent);
 
 		$request = new AlipayTradePrecreateRequest();
 		$request->setBizContent ( $bizContent );
@@ -204,7 +204,7 @@ class AlipayTradeService {
 
 	public function query($queryContentBuilder) {
 		$biz_content = $queryContentBuilder->getBizContent();
-		$this->writeLog($biz_content);
+// 		$this->writeLog($biz_content);
 		$request = new AlipayTradeQueryRequest();
 		$request->setBizContent ( $biz_content );
 		$response = $this->aopclientRequestExecute ( $request , NULL, $queryContentBuilder->getAppAuthToken() );
@@ -299,7 +299,7 @@ class AlipayTradeService {
 	
 	public function cancel($cancelContentBuilder) {
 		$biz_content= $cancelContentBuilder->getBizContent();
-		$this->writeLog($biz_content);
+// 		$this->writeLog($biz_content);
 		$request = new AlipayTradeCancelRequest();
 		$request->setBizContent ( $biz_content );
 		$response = $this->aopclientRequestExecute ( $request ,NULL ,$cancelContentBuilder->getAppAuthToken() );
