@@ -705,7 +705,7 @@ class DataSyncOperation {
 						'update_at' => date ( 'Y-m-d H:i:s', $time ),
 						'order_id' => $orderId,
 						'account_no' => $accountNo,
-						'pay_amount' => -$retreatprice,
+						'pay_amount' => $retreatprice,
 						'paytype' => 0,
 						'payment_method_id' => 0,
 						'paytype_id' => 0,
