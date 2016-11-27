@@ -143,7 +143,7 @@
 					</ul>
 				</li>
 				<li class="dropdown user">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+					<a class="dropdown-toggle" href="javascript:void(0);" onclick="window.open('http://www.wymenu.com/net/HelperHTML/index.html');">
 					<img alt="" style="width:29px;height:29px;" src="<?php echo Yii::app()->request->baseUrl;?>/img/help_book_question.png"/>
                     <span class="username"><?php echo '&nbsp'; ?></span>
 					</a>
