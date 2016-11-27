@@ -58,7 +58,11 @@ class ProductCategoryController extends BackendController
 			
 			//var_dump($catetype);var_dump($pid);var_dump($id);EXIT;
 			$model->attributes = Yii::app()->request->getPost('ProductCategory');
-			//var_dump($model);var_dump('@@@@');
+			//var_dump($model);var_dump('@@@@');exit;
+			if(empty($model->category_name)){
+				Yii::app()->user->setFlash('error' ,yii::t('app', '类别名不能为空'));
+				$this->redirect(array('productCategory/index' , 'companyId' => $this->companyId));
+			}else{
 			$category = ProductCategory::model()->find('dpid=:dpid and category_name=:name and delete_flag=0' , array(':dpid'=>  $this->companyId,':name'=>$model->category_name));
 			//var_dump($category);var_dump('####');
 			if($category){
@@ -102,7 +106,7 @@ class ProductCategoryController extends BackendController
 				}	
 				
 			}
-		}
+		}}
 		$this->render('_form1' , array(
 				'model' => $model,
 				'action' => $this->createUrl('productCategory/create' , array('companyId'=>$this->companyId,'catetype' => $catetype,)),
