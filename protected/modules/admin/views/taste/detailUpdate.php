@@ -22,9 +22,12 @@
 			</div>
 			<!-- /.modal -->
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<!-- BEGIN PAGE HEADER-->   
+			<!-- BEGIN PAGE HEADER--> 
+			<?php if($type):?>  
+			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改整单口味明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','整单口味设置'),'url'=>$this->createUrl('taste/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','口味明细列表'),'url'=>$this->createUrl('taste/detailIndex' , array('companyId' => $model->dpid,'groupid'=>$groupid,'groupname'=>$groupname,'type'=>$type))),array('word'=>yii::t('app','修改口味明细'),'url'=>''))));?>
+			<?php else:?>
 			<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','基础设置'),'subhead'=>yii::t('app','修改单品口味明细'),'breadcrumbs'=>array(array('word'=>yii::t('app','基础设置'),'url'=>$this->createUrl('product/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','单品口味设置'),'url'=>$this->createUrl('taste/index' , array('companyId'=>$this->companyId,'type'=>$type))),array('word'=>yii::t('app','口味明细列表'),'url'=>$this->createUrl('taste/detailIndex' , array('companyId' => $model->dpid,'groupid'=>$groupid,'groupname'=>$groupname,'type'=>$type))),array('word'=>yii::t('app','修改口味明细'),'url'=>''))));?>
-	
+			<?php endif;?>
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
