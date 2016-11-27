@@ -62,7 +62,7 @@ class MemberCard extends CActiveRecord
 			array('birthday','length','max'=>16),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('lid, dpid, create_at, update_at, is_sync, selfcode, rfid, level_id, name, mobile, birthday, email, haspassword, password_hash, sex, ages, all_money, delete_flag', 'safe', 'on'=>'search'),
+			array('lid, dpid, create_at, update_at, is_sync, selfcode, rfid, level_id, name, mobile, birthday, email, haspassword, password_hash, sex, ages, all_money, all_points, card_status, enable_date,delete_flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -102,6 +102,9 @@ class MemberCard extends CActiveRecord
 			'sex' => '性别',
 			'ages' => '年龄',
 			'all_money' => '总金额',
+				'all_points' => '总积分',
+				'card_status' => '卡状态',
+				'enable_date' => '有效期',
 			'delete_flag' => 'Delete Flag',
 				'is_sync' => yii::t('app','是否同步'),
 		);
@@ -134,6 +137,9 @@ class MemberCard extends CActiveRecord
 		$criteria->compare('sex',$this->sex,true);
 		$criteria->compare('ages',$this->ages,true);
 		$criteria->compare('all_money',$this->all_money,true);
+		$criteria->compare('all_points',$this->all_points,true);
+		$criteria->compare('card_status',$this->card_status,true);
+		$criteria->compare('enable_date',$this->enable_date,true);
 		$criteria->compare('delete_flag',$this->delete_flag,true);
 		$criteria->compare('is_sync',$this->is_sync,true);
 
