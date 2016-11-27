@@ -131,6 +131,18 @@ class ProductMaterialController extends BackendController
 		//Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductMaterial');
+			if($model->category_id){
+				$categoryId = MaterialCategory::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->category_id,':companyId'=>$this->companyId));
+				$model->mchs_code = $categoryId['mchs_code'];
+			}
+			if($model->stock_unit_id){
+				$unitId = MaterialUnit::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->stock_unit_id,':companyId'=>$this->companyId));
+				$model->mulhs_code = $unitId['muhs_code'];
+			}
+			if($model->sales_unit_id){
+				$unitId = MaterialUnit::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->sales_unit_id,':companyId'=>$this->companyId));
+				$model->mushs_code = $unitId['muhs_code'];
+			}
          	$model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));

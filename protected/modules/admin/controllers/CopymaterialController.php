@@ -364,8 +364,19 @@ class CopymaterialController extends BackendController
         					//var_dump($dataprod);exit;
         					
         					
-        				}else{
-        					//var_dump($product);exit;
+        				}elseif((!empty($material))&&(!empty($materialo))&&(!empty($categoryId))){
+        					$materialo->update_at = date('Y-m-d H:i:s',time());
+        					$materialo->category_id = $categoryId['lid'];
+        					$materialo->material_name = $material['material_name'];
+        					$materialo->material_identifier = $material['material_identifier'];
+        					$materialo->material_private_identifier = $material['material_private_identifier'];
+        					$materialo->stock_unit_id = MaterialUnit::getMaterialUnitLid($dpid,$material['mulhs_code']);
+        					$materialo->sales_unit_id = MaterialUnit::getMaterialUnitLid($dpid,$material['mushs_code']);
+        					$materialo->mchs_code = $material['mchs_code'];
+        					$materialo->mphs_code = $material['mphs_code'];
+        					$materialo->mulhs_code = $material['mulhs_code'];
+        					$materialo->mushs_code = $material['mushs_code'];
+        					$materialo->save();
         				}
         			}
         		}
