@@ -154,6 +154,25 @@ class MemberController extends BackendController
 				'pages' => $pages,
 		));
 	}
+	public function actionConsumersRecord() {
+		$id = Yii::app()->request->getParam('lid');
+		$member = MemberCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
+	
+		$criteria = new CDbCriteria;
+		$criteria->addCondition('t.paytype = "4" ');
+		$criteria->addCondition('t.paytype_id=:memberCardId');
+		$criteria->order = ' t.lid desc ';
+		$criteria->params[':memberCardId']=$member->rfid;
+	
+		$pages = new CPagination(OrderPay::model()->count($criteria));
+		//$pages->setPageSize(1);
+		$pages->applyLimit($criteria);
+		$models = OrderPay::model()->findAll($criteria);
+		$this->render('consumerrecord',array(
+				'models'=>$models,
+				'pages' => $pages,
+		));
+	}
 	/*
 	 * 
 	 * 查询会员卡积分记录。
