@@ -400,7 +400,7 @@ class StorageOrderController extends BackendController
 				echo 'false';exit;
 			}
 		}
-		echo 'false';
+		//echo 'false';
 		exit;
 	}
 	private function getCategories(){
