@@ -101,27 +101,29 @@ class CopyproductSetController extends BackendController
 	        					$prodsetdetails = ProductSetDetail::model()->findAll('set_id=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$prodsets->lid,':companyId'=>$this->companyId));
 	        					foreach ($prodsetdetails as $prodsetdetail){
 	        						$producto = Product::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$prodsetdetail->product_id,':companyId'=>$this->companyId));
-	        						$product = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$producto->phs_code,'companyId'=>$dpid));
-	        						//var_dump($product);exit;
-	        						if(!empty($product)){
-		        						$se = new Sequence("porduct_set_detail");
-		        						$psdlid = $se->nextval();
-		        						$dataprodsetdetail = array(
-		        								'lid'=>$psdlid,
-		        								'dpid'=>$dpid,
-		        								'create_at'=>date('Y-m-d H:i:s',time()),
-		        								'update_at'=>date('Y-m-d H:i:s',time()),
-		        								'set_id'=>$pslid,
-		        								'product_id'=>$product->lid,
-		        								'price'=>$prodsetdetail->price,
-		        								'group_no'=>$prodsetdetail->group_no,
-		        								'number'=>$prodsetdetail->number,
-		        								'is_select'=>$prodsetdetail->is_select,
-		        								'delete_flag'=>'0',
-		        								'is_sync'=>$is_sync,
-		        						);
-		        						//var_dump($dataprodsetdetail);exit;
-		        						$command = $db->createCommand()->insert('nb_product_set_detail',$dataprodsetdetail);
+	        						if(!empty($producto)){
+		        						$product = Product::model()->find('phs_code=:pcode and dpid=:companyId and delete_flag=0' , array(':pcode'=>$producto->phs_code,'companyId'=>$dpid));
+		        						//var_dump($product);exit;
+		        						if(!empty($product)){
+			        						$se = new Sequence("porduct_set_detail");
+			        						$psdlid = $se->nextval();
+			        						$dataprodsetdetail = array(
+			        								'lid'=>$psdlid,
+			        								'dpid'=>$dpid,
+			        								'create_at'=>date('Y-m-d H:i:s',time()),
+			        								'update_at'=>date('Y-m-d H:i:s',time()),
+			        								'set_id'=>$pslid,
+			        								'product_id'=>$product->lid,
+			        								'price'=>$prodsetdetail->price,
+			        								'group_no'=>$prodsetdetail->group_no,
+			        								'number'=>$prodsetdetail->number,
+			        								'is_select'=>$prodsetdetail->is_select,
+			        								'delete_flag'=>'0',
+			        								'is_sync'=>$is_sync,
+			        						);
+			        						//var_dump($dataprodsetdetail);exit;
+			        						$command = $db->createCommand()->insert('nb_product_set_detail',$dataprodsetdetail);
+		        						}
 	        						}
 	        					}
 	        					//var_dump($prodsetdetails);exit;
