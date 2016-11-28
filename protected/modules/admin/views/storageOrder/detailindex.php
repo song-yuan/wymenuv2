@@ -158,7 +158,7 @@
 						   alert('入库成功!');	
 						   	a = 1 ;
 						}else{
-							alert('入库失败!');
+							alert('入库失败1!');
 						}
 						//history.go(0);
 						location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
@@ -205,7 +205,7 @@
 									   alert('入库成功!');	
 									   	a = 1 ;
 									}else{
-										alert('入库失败!');
+										alert('入库失败2!');
 									}
 									//history.go(0);
 									location.href="<?php echo $this->createUrl('storageOrder/index' , array('companyId'=>$this->companyId,));?>";
