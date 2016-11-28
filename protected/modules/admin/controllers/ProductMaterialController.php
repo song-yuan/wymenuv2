@@ -69,47 +69,55 @@ class ProductMaterialController extends BackendController
 					$sql = 'select t.* from nb_material_unit t where t.delete_flag = 0 and t.lid = '.$model->sales_unit_id;
 					$command3 = $db->createCommand($sql);
 					$salesUnitId = $command3->queryRow()['muhs_code'];
-					//var_dump($categoryCode,$stockUnitId,$salesUnitId);exit;
-					if($categoryCode&&$stockUnitId&&$salesUnitId){
-			            $se=new Sequence("product_material");
-			            $lid = $se->nextval();
-			            $model->lid = $lid;
-			            
-			            $code = new Sequence('mphs_code');
-			            $mphs_code = $code->nextval();
-			            $model->create_at = date('Y-m-d H:i:s',time());
-			            $model->update_at = date('Y-m-d H:i:s',time());
-			            $model->mphs_code = ProductCategory::getChscode($this->companyId, $lid, $mphs_code);
-			            $model->mchs_code = $categoryCode;
-			            $model->mulhs_code = $stockUnitId;
-			            $model->mushs_code = $salesUnitId;
-			            $model->delete_flag = '0';
-			            
-			            $se=new Sequence("product_material_stock");
-			            $modelStock->lid = $se->nextval();
-			            $modelStock->create_at = date('Y-m-d H:i:s',time());
-			            $modelStock->update_at = date('Y-m-d H:i:s',time());
-			            $modelStock->material_id = $model->lid;
-			            $modelStock->mphs_code = $model->mphs_code;
-			            //var_dump($model);exit;
-						if($model->save()&&$modelStock->save()){
-							Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
-							$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
+					
+					$sql = 'select t.* from nb_material_unit_ratio t where t.delete_flag = 0 and t.sales_unit_id = '.$model->sales_unit_id.' and t.stock_unit_id = '.$model->stock_unit_id;
+					$command4 = $db->createCommand($sql);
+					$UnitRatio = $command4->queryRow();
+					if(empty($UnitRatio)){
+						Yii::app()->user->setFlash('error',yii::t('app','选择的库存单位和林寿单位不对应，请重新选择！'));
+					}else{
+						//var_dump($categoryCode,$stockUnitId,$salesUnitId);exit;
+						if($categoryCode&&$stockUnitId&&$salesUnitId){
+				            $se=new Sequence("product_material");
+				            $lid = $se->nextval();
+				            $model->lid = $lid;
+				            
+				            $code = new Sequence('mphs_code');
+				            $mphs_code = $code->nextval();
+				            $model->create_at = date('Y-m-d H:i:s',time());
+				            $model->update_at = date('Y-m-d H:i:s',time());
+				            $model->mphs_code = ProductCategory::getChscode($this->companyId, $lid, $mphs_code);
+				            $model->mchs_code = $categoryCode;
+				            $model->mulhs_code = $stockUnitId;
+				            $model->mushs_code = $salesUnitId;
+				            $model->delete_flag = '0';
+				            
+				            $se=new Sequence("product_material_stock");
+				            $modelStock->lid = $se->nextval();
+				            $modelStock->create_at = date('Y-m-d H:i:s',time());
+				            $modelStock->update_at = date('Y-m-d H:i:s',time());
+				            $modelStock->material_id = $model->lid;
+				            $modelStock->mphs_code = $model->mphs_code;
+				            //var_dump($model);exit;
+							if($model->save()&&$modelStock->save()){
+								Yii::app()->user->setFlash('success',yii::t('app','添加成功！'));
+								$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
+							}
 						}
-					}
-					else{
-						$msg = '';
-						if(empty($categoryCode)){
-							$msg = $msg.'该类别编码信息有误，请删除该类别再重新添加！';
+						else{
+							$msg = '';
+							if(empty($categoryCode)){
+								$msg = $msg.'该类别编码信息有误，请删除该类别再重新添加！';
+							}
+							if(empty($stockUnitId)){
+								$msg = $msg.';'.'该库存单位信息有误，请删除该库存单位再重新添加！';
+							}
+							if(empty($salesUnitId)){
+								$msg = $msg.';'.'该零售单位信息有误，请删除该零售单位再重新添加！';
+							}
+							Yii::app()->user->setFlash('error',yii::t('app',$msg));
+							
 						}
-						if(empty($stockUnitId)){
-							$msg = $msg.';'.'该库存单位信息有误，请删除该库存单位再重新添加！';
-						}
-						if(empty($salesUnitId)){
-							$msg = $msg.';'.'该零售单位信息有误，请删除该零售单位再重新添加！';
-						}
-						Yii::app()->user->setFlash('error',yii::t('app',$msg));
-						
 					}
 				}
 				else{
@@ -143,11 +151,20 @@ class ProductMaterialController extends BackendController
 				$unitId = MaterialUnit::model()->find('lid=:lid and dpid=:companyId and delete_flag=0' , array(':lid'=>$model->sales_unit_id,':companyId'=>$this->companyId));
 				$model->mushs_code = $unitId['muhs_code'];
 			}
-         	$model->update_at=date('Y-m-d H:i:s',time());
-			if($model->save()){
-				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-				$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
+			$db = Yii::app()->db;
+			$sql = 'select t.* from nb_material_unit_ratio t where t.delete_flag = 0 and t.sales_unit_id = '.$model->sales_unit_id.' and t.stock_unit_id = '.$model->stock_unit_id;
+			$command4 = $db->createCommand($sql);
+			$UnitRatio = $command4->queryRow();
+			if(!empty($UnitRatio)){
+				$model->update_at=date('Y-m-d H:i:s',time());
+				if($model->save()){
+					Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
+					$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId ));
+				}
+			}else{
+				Yii::app()->user->setFlash('error',yii::t('app','库存单位和零售单位不对应！！'));
 			}
+         	
 		}
 		$categories = $this->getCategoryList();//var_dump($categories);exit;
 		$this->render('update' , array(
