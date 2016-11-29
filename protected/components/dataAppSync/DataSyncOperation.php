@@ -720,7 +720,7 @@ class DataSyncOperation {
 				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
 				
 				$allOrderRetreat = false; // 是否整单退
-				if($order['should_total'] == $retreatprice){
+				if($order['should_total'] == -$retreatprice){
 					// 整单全退
 					$allOrderRetreat = true;
 				}
@@ -772,7 +772,7 @@ class DataSyncOperation {
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'order_id' => $orderId,
 							'account_no' => $accountNo,
-							'pay_amount' => $retreatprice,
+							'pay_amount' => $refund_fee,
 							'paytype' => $pay['paytype'],
 							'payment_method_id' => $pay['payment_method_id'],
 							'paytype_id' => $pay['paytype_id'],
