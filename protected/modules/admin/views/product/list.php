@@ -182,6 +182,24 @@
 			background-size: 50% ;
     		background-repeat: no-repeat;
 		}
+		.ku-item.kwxf{
+			background-image:url(../../../../../../img/waiter/icon-kwxf.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.plxg{
+			background-image:url(../../../../../../img/waiter/icon-cpplxg.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.cdplsz{
+			background-image:url(../../../../../../img/waiter/icon-cdplsz.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -288,13 +306,13 @@
 					
 					<a href="<?php echo $this->createUrl('copytaste/index',array('companyId'=>$this->companyId,'type'=>'0'));?>">
 						<div id="kwxf" class="pull-left margin-left-right">
-							<div class="ku-item ku-purple kwsz"></div>
+							<div class="ku-item ku-purple kwxf"></div>
 							<div class="ku-item-info">口味下发</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('muchupdateProd/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple cpxf"></div>
+							<div class="ku-item ku-purple plxg"></div>
 							<div class="ku-item-info">批量修改</div>
 						</div>
 					</a>
@@ -380,7 +398,7 @@
 					</a>
 					<a href="<?php echo $this->createUrl('muchprinterProd/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple dpdy"></div>
+							<div class="ku-item ku-purple cdplsz"></div>
 							<div class="ku-item-info">厨打批量设置</div>
 						</div>
 					</a>
