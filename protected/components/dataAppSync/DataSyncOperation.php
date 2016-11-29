@@ -729,7 +729,7 @@ class DataSyncOperation {
 					if($allOrderRetreat){
 						$refund_fee = $pay['pay_amount'];
 					}else{
-						$refund_fee = $retreatprice;
+						$refund_fee = -$retreatprice;
 					}
 					if($pay['paytype']==1){
 						// 微信支付
@@ -772,7 +772,7 @@ class DataSyncOperation {
 							'update_at' => date ( 'Y-m-d H:i:s', $time ),
 							'order_id' => $orderId,
 							'account_no' => $accountNo,
-							'pay_amount' => $refund_fee,
+							'pay_amount' => -$refund_fee,
 							'paytype' => $pay['paytype'],
 							'payment_method_id' => $pay['payment_method_id'],
 							'paytype_id' => $pay['paytype_id'],
