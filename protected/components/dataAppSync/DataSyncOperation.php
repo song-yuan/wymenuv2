@@ -743,6 +743,7 @@ class DataSyncOperation {
 						// 支付宝支付
 						$url = Yii::app()->request->hostInfo.'/wymenuv2/alipay/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&refund_fee='.$refund_fee;
 						$result = Curl::httpsRequest($url);
+						var_dump($result);exit;
 						$resArr = json_decode($result);
 						if(!$result['status']){
 							throw new Exception('支付宝退款失败');
