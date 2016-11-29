@@ -788,7 +788,7 @@ class DataSyncOperation {
 						'content' => $content
 				) );
 			}else{
-				throw new Exception('订单不存在');
+				throw new Exception('订单不存在1');
 			}
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
