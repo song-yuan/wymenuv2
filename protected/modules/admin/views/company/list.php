@@ -60,6 +60,12 @@
 			background-position: -575px 15px;
     		background-repeat: no-repeat;
 		}
+		.ku-item.zfbsz{
+			background-image:url(../../../../img/waiter/icon-zfbsz.png);
+			background-position: 15px 15px;
+			background-size: 76%;
+    		background-repeat: no-repeat;
+		}
 		.ku-item.tbsj{
 			background-image:url(../../../../img/waiter/icon-dpjcsz.png);
 			background-position: -725px 15px;
@@ -67,6 +73,18 @@
 		}
 		.ku-item.syjsz{
 			background-image:url(../../../../img/waiter/icon-syjsz.png);
+			background-position: 13px 13px;
+    		background-repeat: no-repeat;
+			background-size: 80%;
+		}
+		.ku-item.spsz{
+			background-image:url(../../../../img/waiter/icon-spsz.png);
+			background-position: 13px 13px;
+    		background-repeat: no-repeat;
+			background-size: 80%;
+		}
+		.ku-item.bgx{
+			background-image:url(../../../../img/waiter/icon-bgx.png);
 			background-position: 13px 13px;
     		background-repeat: no-repeat;
 			background-size: 80%;
@@ -128,7 +146,7 @@
 					</a>
 					<a href="<?php echo $this->createUrl('alipay/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple wxdp"></div>
+							<div class="ku-item ku-purple zfbsz"></div>
 							<div class="ku-item-info">支付宝设置</div>
 						</div>
 					</a>
@@ -142,14 +160,14 @@
 					<?php endif;?>
 					<a href="<?php echo $this->createUrl('doubleScreen/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple syjsz"></div>
+							<div class="ku-item ku-purple spsz"></div>
 							<div class="ku-item-info">双屏设置</div>
 						</div>
 					</a>
 					<?php if(Yii::app()->user->role < User::ADMIN):?>
 					<a href="<?php echo $this->createUrl('postable/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple syjsz"></div>
+							<div class="ku-item ku-purple bgx"></div>
 							<div class="ku-item-info">表更新</div>
 						</div>
 					</a>
