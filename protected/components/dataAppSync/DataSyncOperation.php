@@ -735,6 +735,7 @@ class DataSyncOperation {
 						// 微信支付
 						$url = Yii::app()->request->hostInfo.'/wymenuv2/weixin/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&total_fee='.$pay['pay_amount'].'&refund_fee='.$refund_fee;
 						$result = Curl::httpsRequest($url);
+						echo $result;exit;
 						$resArr = json_decode($result);
 						if(!$result['status']){
 							throw new Exception('微信退款失败');
