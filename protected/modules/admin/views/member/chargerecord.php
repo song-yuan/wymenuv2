@@ -48,7 +48,7 @@
 						<?php if($models):?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td ><?php echo $model->member_card_id;?></td>
+								<td ><?php echo $model->MemberCard->selfcode;?></td>
 								<td ><?php echo $model->reality_money;?></td>
 								<td ><?php echo $model->give_money;?></td>
 								<td><?php echo $model->create_at;?></td>

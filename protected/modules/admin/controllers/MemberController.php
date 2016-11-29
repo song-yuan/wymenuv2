@@ -119,11 +119,12 @@ class MemberController extends BackendController
 		$member = MemberCard::model()->find('lid=:lid and dpid=:dpid',array(':lid'=>$id,':dpid'=>$this->companyId));
 		
 		$criteria = new CDbCriteria;
-		$criteria->addCondition('dpid=:dpid and delete_flag=0');
-		$criteria->addCondition('member_card_id=:memberCardId');
-		$criteria->order = ' lid desc ';
+		$criteria->addCondition('t.dpid=:dpid and t.delete_flag=0');
+		$criteria->addCondition('t.member_card_id=:memberCardId');
+		$criteria->with = 'MemberCard';
+		$criteria->order = ' t.lid desc ';
 		$criteria->params[':dpid']=$this->companyId;
-		$criteria->params[':memberCardId']=$member->selfcode;
+		$criteria->params[':memberCardId']=$member->rfid;
 		
 		$pages = new CPagination(MemberRecharge::model()->count($criteria));
 		//$pages->setPageSize(1);
@@ -214,15 +215,17 @@ class MemberController extends BackendController
 			$transaction=Yii::app()->db->beginTransaction();
 			try{
 				$member = MemberCard::model()->find('rfid=:rfid and selfcode=:selfcode and dpid=:dpid',array(':rfid'=>$rfid,':selfcode'=>$model->member_card_id,':dpid'=>$this->companyId));
-                                Until::validOperate($member->lid, $this);
+                                //Until::validOperate($member->lid, $this);
                                 //var_dump($member);exit;
-                                $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
+                $member->all_money = $member->all_money + $model->reality_money + $model->give_money;
 	          
 	            $se = new Sequence("member_recharge");
+	            $model->member_card_id = $rfid;
 	            $model->lid = $se->nextval();
 	            $model->update_at = date('Y-m-d H:i:s',time());
 	            $model->create_at = date('Y-m-d H:i:s',time());
 	            $model->delete_flag = '0';
+	            //var_dump($model);exit;
 	           if($model->save()&&$member->update()) {
 	           		$transaction->commit();
 					Yii::app()->user->setFlash('success',yii::t('app', '充值成功'));
