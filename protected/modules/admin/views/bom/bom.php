@@ -85,7 +85,7 @@
 			background-position: -130px -140px;
     		background-repeat: no-repeat;
 		}
-		.ku-item.kcrz{
+		.ku-item.pdrz{
 			background-image:url(../../../../../../img/waiter/icon-pxxx.png);
 			background-position: -285px -140px;
     		background-repeat: no-repeat;
@@ -133,6 +133,18 @@
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
+		}
+		.ku-item.sskc{
+			background-image:url(../../../../../../img/waiter/icon-sskc.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.kcrz{
+			background-image:url(../../../../../../img/waiter/icon-kcrz.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
 		}
 		.cf-black{
 			color: #000 !important;
@@ -322,13 +334,13 @@
 					</a> -->
 					<a href="<?php echo $this->createUrl('nowmaterialstock/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey kcrz"></div>
+							<div class="ku-item ku-grey sskc"></div>
 							<div class="ku-item-info">实时库存</div>
 						</div>
 					</a>
 					<a href="<?php echo $this->createUrl('stocktakinglog/index',array('companyId'=>$this->companyId,'begin_time'=>date('Y-m-d 00:00:00',time()),'end_time'=>date('Y-m-d 23:59:59',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey kcrz"></div>
+							<div class="ku-item ku-grey pdrz"></div>
 							<div class="ku-item-info">盘点日志</div>
 						</div>
 					</a>

@@ -37,7 +37,7 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								<th><?php echo yii::t('app','会员卡号');?></th>
+								<th><?php echo yii::t('app','账单号');?></th>
 								<th><?php echo yii::t('app','消费金额');?></th>
 								<th><?php echo yii::t('app','时间');?></th>
 								<th>&nbsp;</th>
@@ -47,8 +47,8 @@
 						<?php if($models):?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td ><?php echo $model->member_card_id;?></td>
-								<td ><?php echo $model->consumer_money;?></td>
+								<td ><?php echo $model->account_no;?></td><!-- <td > echo $model->member_card_id;?></td><td > echo $model->consumer_money;?></td> -->
+								<td ><?php echo $model->pay_amount;?></td>
 								<td><?php echo $model->create_at;?></td>
 							</tr>
 						<?php endforeach;?>

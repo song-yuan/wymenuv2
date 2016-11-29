@@ -360,7 +360,7 @@ class StorageOrderController extends BackendController
 					//$stockCost = ($detail['stock']-$detail['free_stock'])*$detail['price'];
 					//ProductMaterialStock::updateStock($storage->organization_id, $detail['material_id'], $stock, $stockCost);
 					//入库批次记录.
-					if($unitratio){
+					if(!empty($unitratio)){
 						$num = $detail['stock'] * $unitratio->unit_ratio;
 						$model = new ProductMaterialStock();
 						$pms = new Sequence("product_material_stock");
@@ -388,8 +388,6 @@ class StorageOrderController extends BackendController
 						$materialStockLog->stock_num = $num;
 						$materialStockLog->resean = '入库单入库';
 						$materialStockLog->save();
-					}else{
-						exit;
 					}
 				}
 				StorageOrder::updateStatus($this->companyId, $sid);

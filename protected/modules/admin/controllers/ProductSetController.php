@@ -23,6 +23,7 @@ class ProductSetController extends BackendController
 	public function actionIndex(){
 		$criteria = new CDbCriteria;
 		$criteria->condition =  't.dpid='.$this->companyId .' and delete_flag=0';
+		$criteria->order = 't.lid asc';
 		$pages = new CPagination(ProductSet::model()->count($criteria));
 		//	    $pages->setPageSize(1);
 		$pages->applyLimit($criteria);
