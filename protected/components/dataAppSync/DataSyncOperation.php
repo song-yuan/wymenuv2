@@ -672,7 +672,7 @@ class DataSyncOperation {
 		}
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
-			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_status in(3,4)';
+			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4)';
 			$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
 			if($order){
 				$orderId = $order['lid'];
