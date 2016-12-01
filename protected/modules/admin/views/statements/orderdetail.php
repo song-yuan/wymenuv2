@@ -274,7 +274,7 @@ $(function () {
 												paytypename = '微信支付';
 											}else if(paytype==2){
 												paytypename = '支付宝支付';
-											}else if(paytype==3){
+											}else if(paytype==4){
 												paytypename = '会员卡支付';
 											}else if(paytype==5){
 												paytypename = '银联支付';
