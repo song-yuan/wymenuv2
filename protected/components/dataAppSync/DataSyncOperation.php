@@ -114,7 +114,7 @@ class DataSyncOperation {
 			$dbcloud = Yii::app ()->dbcloud;
 			$dbcloud->createCommand ( $sql )->execute ();
 			return true;
-		} catch ( exception $e ) {
+		} catch ( Exception $e ) {
 			$dblocal = Yii::app ()->dblocal;
 			$se = new Sequence ( "sqlcmd_sync" );
 			$lid = $se->nextval ();
@@ -161,7 +161,7 @@ class DataSyncOperation {
 			$dblocal->createCommand ( "delete from nb_sqlcmd_sync where dpid=" . $dpid . " and lid in " . $dellist )->execute ();
 			$transactioncloud->commit ();
 			return true;
-		} catch ( exception $ex ) {
+		} catch ( Exception $ex ) {
 			// osy//echo $ex->getMessage();
 			$transactioncloud->rollback ();
 			return false;
@@ -626,7 +626,7 @@ class DataSyncOperation {
 					'syncLid' => $syncLid,
 					'content' => $orderData
 			) );
-		} catch ( exception $e ) {
+		} catch ( Exception $e ) {
 			$transaction->rollback ();
 			$msg = json_encode ( array (
 					'status' => false,
@@ -650,6 +650,7 @@ class DataSyncOperation {
 		$accountNo = $data ['account'];
 		$retreatId = $data ['retreatid'];
 		$retreatprice = $data ['retreatprice'];
+		$adminId = $data ['admin_id'];
 		$username =  $data ['username'];
 		$pruductIds = split('==',$data ['pruductids']);
 		$memo = $data ['memo'];
@@ -657,10 +658,21 @@ class DataSyncOperation {
 		if(isset($data ['data'])){
 			$content = $data ['data'];
 		}
-		
+		if(isset($adminId) && $adminId != "" ){
+			$admin = WxAdminUser::get($dpid, $adminId);
+			if(!$admin){
+				$msg = array('status'=>false,'msg'=>'不存在该服务员');
+				echo json_encode($msg);
+				exit;
+			}
+		}else{
+			$msg = array('status'=>false,'msg'=>'不存在该服务员');
+			echo json_encode($msg);
+			exit;
+		}
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
-			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no='.$accountNo.' and order_status in(3,4)';
+			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4)';
 			$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
 			if($order){
 				$orderId = $order['lid'];
@@ -704,22 +716,70 @@ class DataSyncOperation {
 					}
 				}
 				
-				$se = new Sequence ( "order_pay" );
-				$orderPayId = $se->nextval ();
-				$orderPayData = array (
-						'lid' => $orderPayId,
-						'dpid' => $dpid,
-						'create_at' => date ( 'Y-m-d H:i:s', $time ),
-						'update_at' => date ( 'Y-m-d H:i:s', $time ),
-						'order_id' => $orderId,
-						'account_no' => $accountNo,
-						'pay_amount' => $retreatprice,
-						'paytype' => 0,
-						'payment_method_id' => 0,
-						'paytype_id' => 0,
-						'is_sync' => 0
-				);
-				Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
+				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0';
+				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
+				
+				$allOrderRetreat = false; // 是否整单退
+				if($order['should_total'] == -$retreatprice){
+					// 整单全退
+					$allOrderRetreat = true;
+				}
+				
+				foreach ($orderPayArr as $pay){
+					if($allOrderRetreat){
+						$refund_fee = $pay['pay_amount'];
+					}else{
+						$refund_fee = -$retreatprice;
+					}
+					if($pay['paytype']==1){
+						// 微信支付
+						$url = Yii::app()->request->hostInfo.'/wymenuv2/weixin/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&total_fee='.$pay['pay_amount'].'&refund_fee='.$refund_fee;
+						$result = Curl::httpsRequest($url);
+						$resArr = json_decode($result);
+						if(!$resArr['status']){
+							throw new Exception('微信退款失败');
+						}
+					}elseif($pay['paytype']==2){
+						// 支付宝支付
+						$url = Yii::app()->request->hostInfo.'/wymenuv2/alipay/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&refund_fee='.$refund_fee;
+						$result = Curl::httpsRequest($url);
+						$resArr = json_decode($result);
+						if(!$resArr['status']){
+							throw new Exception('支付宝退款失败');
+						}	
+					}elseif($pay['paytype']==4){
+						// 会员卡支付
+						$url = Yii::app()->request->hostInfo.'/wymenuv2/admin/dataAppSync/refundMemberCard';
+						$data = array(
+								'dpid'=>$dpid,
+								'rfid'=>$pay['paytype_id'],
+								'admin_id'=>$adminId,
+								'password'=>'',
+								'refund_price'=>$refund_fee,
+								);
+						$result = Curl::httpsRequest($url,$data);
+						$resArr = json_decode($result);
+						if(!$resArr['status']){
+							throw new Exception('支付宝退款失败');
+						}
+					}
+					$se = new Sequence ( "order_pay" );
+					$orderPayId = $se->nextval ();
+					$orderPayData = array (
+							'lid' => $orderPayId,
+							'dpid' => $dpid,
+							'create_at' => date ( 'Y-m-d H:i:s', $time ),
+							'update_at' => date ( 'Y-m-d H:i:s', $time ),
+							'order_id' => $orderId,
+							'account_no' => $accountNo,
+							'pay_amount' => -$refund_fee,
+							'paytype' => $pay['paytype'],
+							'payment_method_id' => $pay['payment_method_id'],
+							'paytype_id' => $pay['paytype_id'],
+							'is_sync' => 0
+					);
+					Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
+				}
 				
 				$transaction->commit ();
 				$msg = json_encode ( array (
@@ -728,9 +788,9 @@ class DataSyncOperation {
 						'content' => $content
 				) );
 			}else{
-				throw new Exception('订单不存在');
+				throw new Exception('订单不存在1');
 			}
-		} catch ( exception $e ) {
+		} catch ( Exception $e ) {
 			$transaction->rollback ();
 			$msg = json_encode ( array (
 					'status' => false,
@@ -1003,7 +1063,7 @@ class DataSyncOperation {
 					'status' => true,
 					'closeAccountId' => $closeAccountId 
 			) );
-		} catch ( exception $e ) {
+		} catch ( Exception $e ) {
 			$transaction->rollback ();
 			$msg = json_encode ( array (
 					'status' => false,
