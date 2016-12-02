@@ -735,16 +735,16 @@ class DataSyncOperation {
 						// 微信支付
 						$url = Yii::app()->request->hostInfo.'/wymenuv2/weixin/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&total_fee='.$pay['pay_amount'].'&refund_fee='.$refund_fee;
 						$result = Curl::httpsRequest($url);
-						$resArr = json_decode($result);
-						if(!$resArr['status']){
+						$resObj = json_decode($result);
+						if(!$resObj->status){
 							throw new Exception('微信退款失败');
 						}
 					}elseif($pay['paytype']==2){
 						// 支付宝支付
 						$url = Yii::app()->request->hostInfo.'/wymenuv2/alipay/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&refund_fee='.$refund_fee;
 						$result = Curl::httpsRequest($url);
-						$resArr = json_decode($result);
-						if(!$resArr['status']){
+						$resObj = json_decode($result);
+						if(!$resObj->status){
 							throw new Exception('支付宝退款失败');
 						}	
 					}elseif($pay['paytype']==4){
@@ -759,13 +759,10 @@ class DataSyncOperation {
 								);
 						$result = Curl::httpsRequest($url,$data);
 						$resObj = json_decode($result);
-						var_dump($resObj->status);exit;
-						if(!$resArr['status']){
+						if(!$resObj->status){
 							throw new Exception('会员卡退款失败');
 						}
-						var_dump($pay);exit;
 					}
-					var_dump($pay);exit;
 					$se = new Sequence ( "order_pay" );
 					$orderPayId = $se->nextval ();
 					$orderPayData = array (
