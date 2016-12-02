@@ -708,7 +708,7 @@ class DataSyncOperation {
 					}
 				}
 				
-				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0';
+				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
 				$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
 				if($orderPay && empty($orderPay['total'])){
 					if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
@@ -716,7 +716,7 @@ class DataSyncOperation {
 					}
 				}
 				
-				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0';
+				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype < 11';
 				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
 				
 				$allOrderRetreat = false; // 是否整单退
@@ -760,7 +760,7 @@ class DataSyncOperation {
 						$result = Curl::httpsRequest($url,$data);
 						$resArr = json_decode($result);
 						if(!$resArr['status']){
-							throw new Exception('支付宝退款失败');
+							throw new Exception('会员卡退款失败');
 						}
 					}
 					$se = new Sequence ( "order_pay" );
@@ -878,7 +878,7 @@ class DataSyncOperation {
 		if (! $reslut) {
 			return '0.00';
 		}else{
-			return number_format($reslut['all_money'],2);
+			return $reslut['all_money'];
 		}
 	}
 	/**
