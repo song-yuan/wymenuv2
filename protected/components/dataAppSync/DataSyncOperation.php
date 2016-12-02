@@ -758,9 +758,7 @@ class DataSyncOperation {
 								'refund_price'=>$refund_fee,
 								);
 						$result = Curl::httpsRequest($url,$data);
-						var_dump($result);
 						$resArr = json_decode($result);
-						var_dump($resArr);exit;
 						if(!$resArr['status']){
 							throw new Exception('会员卡退款失败');
 						}
@@ -780,6 +778,7 @@ class DataSyncOperation {
 							'paytype_id' => $pay['paytype_id'],
 							'is_sync' => 0
 					);
+					var_dump($orderPayData);exit;
 					Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
 				}
 				
