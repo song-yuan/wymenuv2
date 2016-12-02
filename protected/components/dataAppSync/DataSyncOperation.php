@@ -758,7 +758,9 @@ class DataSyncOperation {
 								'refund_price'=>$refund_fee,
 								);
 						$result = Curl::httpsRequest($url,$data);
+						var_dump($result);
 						$resArr = json_decode($result);
+						var_dump($resArr);exit;
 						if(!$resArr['status']){
 							throw new Exception('会员卡退款失败');
 						}
@@ -788,7 +790,7 @@ class DataSyncOperation {
 						'content' => $content
 				) );
 			}else{
-				throw new Exception('订单不存在1');
+				throw new Exception('订单不存在');
 			}
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
