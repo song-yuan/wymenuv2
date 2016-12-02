@@ -759,10 +759,11 @@ class DataSyncOperation {
 								);
 						$result = Curl::httpsRequest($url,$data);
 						$resArr = json_decode($result);
+						var_dump($resArr['status']);exit;
 						if(!$resArr['status']){
 							throw new Exception('会员卡退款失败');
 						}
-						var_dump($pay);
+						var_dump($pay);exit;
 					}
 					var_dump($pay);exit;
 					$se = new Sequence ( "order_pay" );
