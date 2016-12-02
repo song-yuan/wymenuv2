@@ -758,8 +758,8 @@ class DataSyncOperation {
 								'refund_price'=>$refund_fee,
 								);
 						$result = Curl::httpsRequest($url,$data);
-						$resArr = json_decode($result);
-						var_dump($resArr['status']);exit;
+						$resObj = json_decode($result);
+						var_dump($resObj->status);exit;
 						if(!$resArr['status']){
 							throw new Exception('会员卡退款失败');
 						}
