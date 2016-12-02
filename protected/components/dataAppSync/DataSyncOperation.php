@@ -762,7 +762,9 @@ class DataSyncOperation {
 						if(!$resArr['status']){
 							throw new Exception('会员卡退款失败');
 						}
+						var_dump($pay);
 					}
+					var_dump($pay);exit;
 					$se = new Sequence ( "order_pay" );
 					$orderPayId = $se->nextval ();
 					$orderPayData = array (
@@ -778,7 +780,6 @@ class DataSyncOperation {
 							'paytype_id' => $pay['paytype_id'],
 							'is_sync' => 0
 					);
-					var_dump($orderPayData);exit;
 					Yii::app ()->db->createCommand ()->insert ( 'nb_order_pay', $orderPayData );
 				}
 				
