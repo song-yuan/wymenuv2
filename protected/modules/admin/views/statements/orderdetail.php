@@ -55,6 +55,15 @@
 	.clear{
 		clear: both;
 	}
+       
+    .accountno1{
+        display: inline;
+        width:429px;
+        margin-left: 300px;        
+     }   
+    .find{
+        margin-bottom: 20px;
+     }
 </style>  
 
 <div class="page-content">
@@ -85,6 +94,15 @@
 	<!-- BEGIN PAGE HEADER-->
 	<?php $this->widget('application.modules.admin.components.widgets.PageHeader', array('head'=>yii::t('app','数据中心'),'subhead'=>yii::t('app','营业数据'),'breadcrumbs'=>array(array('word'=>yii::t('app','营业数据'),'url'=>$this->createUrl('statements/list' , array('companyId'=>$this->companyId,'type'=>0,))),array('word'=>yii::t('app','账单详情查询'),'url'=>'')),'back'=>array('word'=>yii::t('app','返回'),'url'=>$this->createUrl('statements/list' , array('companyId' => $this->companyId,'type'=>0)))));?>
 
+	            <form action="" method="post" class="find">
+
+
+                    <input type="text"  name="accountno1" class="accountno1 form-control" placeholder="账单号" value="<?php echo isset($accountno) && $accountno ?$accountno:'';?>" />     
+                       <button type="submit" class="btn green">
+                               查找 &nbsp;
+                               <i class="m-icon-swapright m-icon-white"></i>
+                       </button>
+                </form>
 	<!-- END PAGE HEADER-->
 	<!-- BEGIN PAGE CONTENT-->
 	<div class="row">
