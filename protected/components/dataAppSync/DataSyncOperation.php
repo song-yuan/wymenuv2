@@ -676,6 +676,20 @@ class DataSyncOperation {
 			$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
 			if($order){
 				$orderId = $order['lid'];
+				
+				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
+				$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
+				if($orderPay && !empty($orderPay['total'])){
+					if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
+						$msg = json_encode ( array (
+											'status' => true,
+											'syncLid' => $syncLid,
+											'content' => $content
+									) );
+						return $msg;
+					}
+				}
+				
 				foreach ($pruductIds as $productId){
 					$productArr = split(',', $productId);
 					$psetId = $productArr[0];
@@ -696,11 +710,21 @@ class DataSyncOperation {
 						if($orderRetreat && !empty($orderRetreat['total'])){
 							if($psetId > 0){
 								if($orderRetreat['total'] >= $orderproduct['zhiamount']){
-									throw new Exception('退款数量超过总数量');
+									$msg = json_encode ( array (
+											'status' => true,
+											'syncLid' => $syncLid,
+											'content' => $content
+									) );
+									return $msg;
 								}
 							}else{
 								if($orderRetreat['total'] >= $orderproduct['amount']){
-									throw new Exception('退款数量超过总数量');
+									$msg = json_encode ( array (
+											'status' => true,
+											'syncLid' => $syncLid,
+											'content' => $content
+									) );
+									return $msg;
 								}
 							}
 						}
@@ -722,14 +746,6 @@ class DataSyncOperation {
 								'is_sync' => 0
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
-					}
-				}
-				
-				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
-				$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
-				if($orderPay && !empty($orderPay['total'])){
-					if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
-						throw new Exception('退款金额超过总金额');
 					}
 				}
 				
