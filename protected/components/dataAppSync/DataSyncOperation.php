@@ -678,15 +678,32 @@ class DataSyncOperation {
 				$orderId = $order['lid'];
 				foreach ($pruductIds as $productId){
 					$productArr = split(',', $productId);
-				    if($productArr[0] > 0){
-				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0];
+					$psetId = $productArr[0];
+					$pproductId = $productArr[1];
+					$pamount = $productArr[2];
+					$pprice = $productArr[3];
+				    if($psetId > 0){
+				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId;
 				    }else{
-				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$productArr[0].' and product_id='.$productArr[1].' and price='.$productArr[3];
+				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId.' and product_id='.$pproductId.' and price='.$pprice;
 				    }
 					$orderProducts =  Yii::app ()->db->createCommand ($sql)->queryAll();
 					foreach ($orderProducts as $orderproduct){
 						$orderProductDetailId = $orderproduct['lid'];
 						
+						$sql = 'select sum(retreat_amount) as total from nb_order_retreat where order_detail_id='.$orderProductDetailId.' and dpid='.$dpid;
+						$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
+						if($orderRetreat && !empty($orderRetreat['total'])){
+							if($psetId > 0){
+								if($orderRetreat['total'] >= $orderproduct['zhiamount']){
+									throw new Exception('退款数量超过总数量');
+								}
+							}else{
+								if($orderRetreat['total'] >= $orderproduct['amount']){
+									throw new Exception('退款数量超过总数量');
+								}
+							}
+						}
 						$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
 						Yii::app ()->db->createCommand ($sql)->execute();
 						
@@ -701,7 +718,7 @@ class DataSyncOperation {
 								'order_detail_id' => $orderProductDetailId,
 								'retreat_memo' => $memo,
 								'username' => $username,
-								'retreat_amount' => $productArr[2],
+								'retreat_amount' => $pamount,
 								'is_sync' => 0
 						);
 						Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
@@ -710,7 +727,7 @@ class DataSyncOperation {
 				
 				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
 				$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
-				if($orderPay && empty($orderPay['total'])){
+				if($orderPay && !empty($orderPay['total'])){
 					if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
 						throw new Exception('退款金额超过总金额');
 					}
