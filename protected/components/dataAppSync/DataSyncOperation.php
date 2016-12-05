@@ -708,7 +708,7 @@ class DataSyncOperation {
 					}
 				}
 				
-				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0';
+				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
 				$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
 				if($orderPay && empty($orderPay['total'])){
 					if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
@@ -716,7 +716,7 @@ class DataSyncOperation {
 					}
 				}
 				
-				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0';
+				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype < 11';
 				$orderPayArr =  Yii::app ()->db->createCommand ($sql)->queryAll();
 				
 				$allOrderRetreat = false; // 是否整单退
@@ -735,16 +735,16 @@ class DataSyncOperation {
 						// 微信支付
 						$url = Yii::app()->request->hostInfo.'/wymenuv2/weixin/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&total_fee='.$pay['pay_amount'].'&refund_fee='.$refund_fee;
 						$result = Curl::httpsRequest($url);
-						$resArr = json_decode($result);
-						if(!$resArr['status']){
+						$resObj = json_decode($result);
+						if(!$resObj->status){
 							throw new Exception('微信退款失败');
 						}
 					}elseif($pay['paytype']==2){
 						// 支付宝支付
 						$url = Yii::app()->request->hostInfo.'/wymenuv2/alipay/refund?companyId='.$dpid.'&admin_id='.$adminId.'&out_trade_no='.$pay['remark'].'&refund_fee='.$refund_fee;
 						$result = Curl::httpsRequest($url);
-						$resArr = json_decode($result);
-						if(!$resArr['status']){
+						$resObj = json_decode($result);
+						if(!$resObj->status){
 							throw new Exception('支付宝退款失败');
 						}	
 					}elseif($pay['paytype']==4){
@@ -758,9 +758,9 @@ class DataSyncOperation {
 								'refund_price'=>$refund_fee,
 								);
 						$result = Curl::httpsRequest($url,$data);
-						$resArr = json_decode($result);
-						if(!$resArr['status']){
-							throw new Exception('支付宝退款失败');
+						$resObj = json_decode($result);
+						if(!$resObj->status){
+							throw new Exception('会员卡退款失败');
 						}
 					}
 					$se = new Sequence ( "order_pay" );
@@ -788,7 +788,7 @@ class DataSyncOperation {
 						'content' => $content
 				) );
 			}else{
-				throw new Exception('订单不存在1');
+				throw new Exception('订单不存在');
 			}
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
@@ -878,7 +878,7 @@ class DataSyncOperation {
 		if (! $reslut) {
 			return '0.00';
 		}else{
-			return number_format($reslut['all_money'],2);
+			return $reslut['all_money'];
 		}
 	}
 	/**
