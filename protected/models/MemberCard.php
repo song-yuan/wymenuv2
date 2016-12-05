@@ -57,7 +57,7 @@ class MemberCard extends CActiveRecord
 			array('email', 'length', 'max'=>100),
 			array('haspassword, sex, delete_flag', 'length', 'max'=>1),
 			array('password_hash', 'length', 'max'=>60),
-			array('create_at', 'safe'),
+			array('create_at ,enable_date', 'safe'),
 			array('is_sync','length','max'=>50),
 			array('birthday','length','max'=>16),
 			// The following rule is used by search().
