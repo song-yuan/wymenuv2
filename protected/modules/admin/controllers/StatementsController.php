@@ -1460,6 +1460,7 @@ public function actionPayallReport(){
 	 */
 	public function actionOrderdetail(){
 		$criteria = new CDbCriteria;
+		$accountno = '';
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
 		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.create_at >=0 and t.dpid= '.$this->companyId;
@@ -1469,6 +1470,13 @@ public function actionPayallReport(){
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
 		//$criteria->addCondition("t.dpid= ".$this->companyId);
+		
+		if(Yii::app()->request->isPostRequest){
+			$accountno = Yii::app()->request->getPost('accountno1',0);
+			if($accountno){
+				$criteria->addSearchCondition('account_no',$accountno);
+			}
+		}
 		$criteria->with = array("company","paymentMethod");
 	
 		//$connect = Yii::app()->db->createCommand($sql);
@@ -1492,7 +1500,7 @@ public function actionPayallReport(){
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
-	
+				'accountno'=>$accountno,
 				//'categories'=>$categories,
 				//'categoryId'=>$categoryId
 		));
@@ -4663,6 +4671,13 @@ public function actionPayallReport(){
 		$criteria->addCondition("t.order_status in(3,4,8) ");//只要付款了的账单都进行统计
 		$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
 		$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+		
+		if(Yii::app()->request->isPostRequest){
+			$accountno = Yii::app()->request->getPost('accountno1',0);
+			if($accountno){
+				$criteria->addSearchCondition('account_no',$accountno);
+			}
+		}
 		//$criteria->addCondition("t.dpid= ".$this->companyId);
 		$criteria->with = array("company","paymentMethod");
 	
