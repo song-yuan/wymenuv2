@@ -698,55 +698,101 @@ class DataSyncOperation {
 					$pprice = $productArr[3];
 				    if($psetId > 0){
 				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId;
+				    	$orderProducts =  Yii::app ()->db->createCommand ($sql)->queryAll();
+				    	foreach ($orderProducts as $orderproduct){
+				    		$orderProductDetailId = $orderproduct['lid'];
+				    	
+				    		$sql = 'select sum(retreat_amount) as total from nb_order_retreat where order_detail_id='.$orderProductDetailId.' and dpid='.$dpid;
+				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
+				    		if($orderRetreat && !empty($orderRetreat['total'])){
+				    			if($psetId > 0){
+				    				if($orderRetreat['total'] >= $orderproduct['zhiamount']){
+				    					$msg = json_encode ( array (
+				    							'status' => true,
+				    							'syncLid' => $syncLid,
+				    							'content' => $content
+				    					) );
+				    					return $msg;
+				    				}
+				    			}else{
+				    				if($orderRetreat['total'] >= $orderproduct['amount']){
+				    					$msg = json_encode ( array (
+				    							'status' => true,
+				    							'syncLid' => $syncLid,
+				    							'content' => $content
+				    					) );
+				    					return $msg;
+				    				}
+				    			}
+				    		}
+				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
+				    		Yii::app ()->db->createCommand ($sql)->execute();
+				    	
+				    		$se = new Sequence ( "order_retreat" );
+				    		$orderRetreatId = $se->nextval ();
+				    		$orderRetreatData = array (
+				    				'lid' => $orderRetreatId,
+				    				'dpid' => $dpid,
+				    				'create_at' => date ( 'Y-m-d H:i:s', $time ),
+				    				'update_at' => date ( 'Y-m-d H:i:s', $time ),
+				    				'retreat_id' => $retreatId,
+				    				'order_detail_id' => $orderProductDetailId,
+				    				'retreat_memo' => $memo,
+				    				'username' => $username,
+				    				'retreat_amount' => $pamount,
+				    				'is_sync' => 0
+				    		);
+				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
+				    	}
 				    }else{
 				    	$sql = 'select * from nb_order_product where order_id='.$orderId.' and dpid='.$dpid.' and set_id='.$psetId.' and product_id='.$pproductId.' and price='.$pprice;
+				    	$orderProduct =  Yii::app ()->db->createCommand ($sql)->queryRow();
+				    	if($orderProduct){
+				    		$orderProductDetailId = $orderProduct['lid'];
+				    		 
+				    		$sql = 'select sum(retreat_amount) as total from nb_order_retreat where order_detail_id='.$orderProductDetailId.' and dpid='.$dpid;
+				    		$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
+				    		if($orderRetreat && !empty($orderRetreat['total'])){
+				    			if($psetId > 0){
+				    				if($orderRetreat['total'] >= $orderProduct['zhiamount']){
+				    					$msg = json_encode ( array (
+				    							'status' => true,
+				    							'syncLid' => $syncLid,
+				    							'content' => $content
+				    					) );
+				    					return $msg;
+				    				}
+				    			}else{
+				    				if($orderRetreat['total'] >= $orderProduct['amount']){
+				    					$msg = json_encode ( array (
+				    							'status' => true,
+				    							'syncLid' => $syncLid,
+				    							'content' => $content
+				    					) );
+				    					return $msg;
+				    				}
+				    			}
+				    		}
+				    		$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
+				    		Yii::app ()->db->createCommand ($sql)->execute();
+				    		 
+				    		$se = new Sequence ( "order_retreat" );
+				    		$orderRetreatId = $se->nextval ();
+				    		$orderRetreatData = array (
+				    				'lid' => $orderRetreatId,
+				    				'dpid' => $dpid,
+				    				'create_at' => date ( 'Y-m-d H:i:s', $time ),
+				    				'update_at' => date ( 'Y-m-d H:i:s', $time ),
+				    				'retreat_id' => $retreatId,
+				    				'order_detail_id' => $orderProductDetailId,
+				    				'retreat_memo' => $memo,
+				    				'username' => $username,
+				    				'retreat_amount' => $pamount,
+				    				'is_sync' => 0
+				    		);
+				    		Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
+				    	}
 				    }
-					$orderProducts =  Yii::app ()->db->createCommand ($sql)->queryAll();
-					foreach ($orderProducts as $orderproduct){
-						$orderProductDetailId = $orderproduct['lid'];
-						
-						$sql = 'select sum(retreat_amount) as total from nb_order_retreat where order_detail_id='.$orderProductDetailId.' and dpid='.$dpid;
-						$orderRetreat = Yii::app ()->db->createCommand ($sql)->queryRow();
-						if($orderRetreat && !empty($orderRetreat['total'])){
-							if($psetId > 0){
-								if($orderRetreat['total'] >= $orderproduct['zhiamount']){
-									$msg = json_encode ( array (
-											'status' => true,
-											'syncLid' => $syncLid,
-											'content' => $content
-									) );
-									return $msg;
-								}
-							}else{
-								if($orderRetreat['total'] >= $orderproduct['amount']){
-									$msg = json_encode ( array (
-											'status' => true,
-											'syncLid' => $syncLid,
-											'content' => $content
-									) );
-									return $msg;
-								}
-							}
-						}
-						$sql = 'update nb_order_product set is_retreat=1 where lid='.$orderProductDetailId.' and dpid='.$dpid;
-						Yii::app ()->db->createCommand ($sql)->execute();
-						
-						$se = new Sequence ( "order_retreat" );
-						$orderRetreatId = $se->nextval ();
-						$orderRetreatData = array (
-								'lid' => $orderRetreatId,
-								'dpid' => $dpid,
-								'create_at' => date ( 'Y-m-d H:i:s', $time ),
-								'update_at' => date ( 'Y-m-d H:i:s', $time ),
-								'retreat_id' => $retreatId,
-								'order_detail_id' => $orderProductDetailId,
-								'retreat_memo' => $memo,
-								'username' => $username,
-								'retreat_amount' => $pamount,
-								'is_sync' => 0
-						);
-						Yii::app ()->db->createCommand ()->insert ( 'nb_order_retreat', $orderRetreatData );
-					}
 				}
 				
 				$sql = 'select * from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount > 0 and paytype < 11';
