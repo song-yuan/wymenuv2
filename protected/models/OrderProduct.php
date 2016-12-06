@@ -718,7 +718,7 @@ class OrderProduct extends CActiveRecord
 	}
 	static public function getMoney($companyId,$orderid){
 		$db = Yii::app()->db;
-		$sql2 = 'select sum(t.pay_amount) as all_money from nb_order_pay t where t.paytype in(0,11) and t.dpid ='.$companyId.' and t.order_id ='.$orderid;
+		$sql2 = 'select sum(t.pay_amount) as all_money from nb_order_pay t where t.paytype in(0,11) and t.pay_amount >0 and t.dpid ='.$companyId.' and t.order_id ='.$orderid;
 		$models = Yii::app()->db->createCommand($sql2)->queryRow();
 		$money = $models['all_money']?$models['all_money']:0;
 		return $money;
