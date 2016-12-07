@@ -42,7 +42,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','店铺列表');?></div>
 					<div class="actions">
                                             <?php if(Yii::app()->params->master_slave=='m') : ?>
-						<?php if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role == User::ADMIN):?>
+						<?php if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role <= User::ADMIN_AREA):?>
 							<a href="<?php echo $this->createUrl('company/create', array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 							<div class="btn-group">
 	                            <button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>
@@ -81,7 +81,7 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><?php if(Yii::app()->user->role == User::ADMIN&&$model->type=="0"):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /><?php endif;?></td>
+								<td><?php if(Yii::app()->user->role >= User::POWER_ADMIN_VICE && Yii::app()->user->role <= User::ADMIN_AREA&&$model->type=="0"):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->dpid;?>" name="companyIds[]" /><?php endif;?></td>
 								<td ><?php echo $model->dpid;?></td>
 								<td><a href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId));?>" ><?php echo $model->company_name;?></a></td>
 								<td ><img width="100" src="<?php echo $model->logo;?>" /></td>
@@ -92,7 +92,7 @@
 								<td><?php echo $model->create_at;?></td>
 								<td class="center">
 									<div class="actions">
-                                        <?php if(Yii::app()->user->role < User::USER) : ?><!-- Yii::app()->params->master_slave=='m' -->
+                                        <?php if(Yii::app()->user->role < User::SHOPKEEPER) : ?><!-- Yii::app()->params->master_slave=='m' -->
                                             <a  class='btn green' style="margin-top: 5px;" href="<?php echo $this->createUrl('company/update',array('dpid' => $model->dpid,'companyId' => $this->companyId,'type' => $model->type));?>"><?php echo yii::t('app','编辑');?></a>
                                          <?php endif; ?>
                                             <a  class='btn green' style="margin-top: 5px;"  href="<?php echo $this->createUrl('company/index' , array('companyId' => $model->dpid));?>"><?php echo yii::t('app','选择');?></a>

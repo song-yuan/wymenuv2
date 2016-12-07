@@ -91,7 +91,7 @@
 								<td colspan="6" style="text-align: right;">
 								<?php if($storage->status==1):?><span style="color:red">已经盘存</span>
 								
-								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<3):?><input id="storage-in" type="button" class="btn blue" value="确认盘存" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">正在编辑</span><?php endif;?>
+								<?php elseif($storage->status==0):?><?php if(Yii::app()->user->role<=13):?><input id="storage-in" type="button" class="btn blue" value="确认盘存" storage-id="<?php echo $storage->lid;?>" /><?php else:?><span style="color:red">正在编辑</span><?php endif;?>
 								<?php endif;?>
 								</td>
 							</tr>

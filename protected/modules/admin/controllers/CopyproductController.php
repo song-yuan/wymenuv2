@@ -27,10 +27,7 @@ class CopyproductController extends BackendController
 		if($categoryId){
 			$criteria->condition.=' and t.category_id = '.$categoryId;
 		}
-		
-		//$pages = new CPagination(Product::model()->count($criteria));
-		//	    $pages->setPageSize(1);
-		//$pages->applyLimit($criteria);
+
 		$models = Product::model()->findAll($criteria);
 		
 		$db = Yii::app()->db;
@@ -79,7 +76,7 @@ class CopyproductController extends BackendController
 		$products = $command->queryAll();
 		//var_dump($catep1,$catep2,$products);exit;
                 Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
-        if((!empty($dpids))&&(Yii::app()->user->role < User::WAITER)){
+        if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
         	foreach ($dpids as $dpid){
         		if(!empty($catep1)){
         			foreach($catep1 as $category){
@@ -126,15 +123,7 @@ class CopyproductController extends BackendController
 	                        	} else {
 	                        		$self->tree = '0,'.$self->lid;
 	                        	}
-	                        	$self->update();
-// 	                        	//var_dump($model);exit;
-// 	                        	
-	                        	//Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
-	                        	//$this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
-	                        //}else{var_dump(mysql_query($command));exit;
-	                        //	Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
-	                        	//$this->redirect(array('copyproduct/index' ,'companyId' => $this->companyId));
-	                        
+	                        	$self->update();    
         				}
         			}
         			if($catep2){
@@ -191,15 +180,7 @@ class CopyproductController extends BackendController
         						} else {
         							$self->tree = '0,'.$self->lid;
         						}
-        						$self->update();
-        						// 	                        	//var_dump($model);exit;
-        						//
-        						//Yii::app()->user->setFlash('success' ,yii::t('app', '菜单下发成功'));
-        						//$this->redirect(array('copyproduct/index' , 'companyId' => $this->companyId));
-        						//}else{var_dump(mysql_query($command));exit;
-        						//	Yii::app()->user->setFlash('error' ,yii::t('app', '添加失败'));
-        						//$this->redirect(array('copyproduct/index' ,'companyId' => $this->companyId));
-        				
+        						$self->update();        				
         					}
         				}
         			}
@@ -297,17 +278,7 @@ class CopyproductController extends BackendController
         	Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
         	$this->redirect(array('copyproduct/index' , 'companyId' => $companyId)) ;
         }        
-                
-                
-// 		if((!empty($ids))&&(Yii::app()->user->role < User::WAITER)) {
-			
-// 			//Yii::app()->db->createCommand('update nb_product set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')
-// 			//->execute(array( ':companyId' => $this->companyId));
-// 			$this->redirect(array('copyproduct/index' , 'companyId' => $companyId)) ;
-// 		} else {
-// 			Yii::app()->user->setFlash('error' , yii::t('app','无权限进行此项操作！！！'));
-// 			$this->redirect(array('copyproduct/index' , 'companyId' => $companyId)) ;
-// 		}
+
 	}
 	public function actionStatus(){
 		$id = Yii::app()->request->getParam('id');

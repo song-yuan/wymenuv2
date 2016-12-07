@@ -37,7 +37,7 @@
 											<?php echo $form->error($model, 'contact_name' )?>
 										</div>
 									</div>
-									<?php if($role=="2"){?>
+									<?php if($role<="9"&&$role>="3"){?>
 									<?php if($type=='-1'):?>
 									<div class="form-group"> 
 										<?php echo $form->label($model, 'type',array('class' => 'col-md-3 control-label'));?>

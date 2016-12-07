@@ -4,39 +4,79 @@ class UserController extends BackendController
 	public $roles ;
 	public $roles2;
 	public $roles3;
-	public $roles4;
+	public $roles5;
+	public $roles7;
+	public $roles9;
+	public $roles11;
+	public $roles13;
+	public $roles15;
+	public $roles17;
 	public function init(){
 		$this->roles = array(
-			'2' => yii::t('app','总部管理员'),
-			//'3' => yii::t('app','服务员'),
+			'1' => yii::t('app','超级管理员'),
+			'2' => yii::t('app','超级管理员2'),
+			'3' => yii::t('app','超级副管理员'),
+			'4' => yii::t('app','超级副管理员4'),
+			'5' => yii::t('app','总部管理员'),
+			'7' => yii::t('app','总部副管理员'),
+			'9' => yii::t('app','区域管理员'),
+			'11' => yii::t('app','店长'),
+			'13' => yii::t('app','副店长'),
+			'15' => yii::t('app','组长'),
+			'17' => yii::t('app','收银员'),
+			'19' => yii::t('app','服务员'),
 		) ;
-		
-		$this->roles2 = array(
-				'1' => yii::t('app','超级管理员'),
-				'2' => yii::t('app','总部管理员'),
-				'3' => yii::t('app','店长'),
-				'4' => yii::t('app','收银员'),
-				'5' => yii::t('app','服务员'),
-		) ;
+		//超级管理员的权限
 		$this->roles3 = array(
-				//'1' => yii::t('app','超级管理员'),
-				//'2' => yii::t('app','总部管理员'),
-				'3' => yii::t('app','店长'),
-				'4' => yii::t('app','收银员'),
-				'5' => yii::t('app','服务员'),
+			'5' => yii::t('app','总部管理员'),
 		) ;
-		$this->roles4 = array(
-				//'1' => yii::t('app','超级管理员'),
-				//'2' => yii::t('app','总部管理员'),
-				//'3' => yii::t('app','店长'),
-				'4' => yii::t('app','收银员'),
-				'5' => yii::t('app','服务员'),
+		//超级副管理员的权限
+		$this->roles5 = array(
+			//'7' => yii::t('app','总部副管理员'),
+			//'9' => yii::t('app','区域管理员'),
+			'11' => yii::t('app','店长'),
+			'13' => yii::t('app','副店长'),
+			//'15' => yii::t('app','组长'),
+			'17' => yii::t('app','收银员'),
+			'19' => yii::t('app','服务员'),
 		) ;
-		if(Yii::app()->user->role == User::POWER_ADMIN) {
-                    
-			$this->roles = array('1' => yii::t('app','超级管理员')) +$this->roles;
-                        //var_dump($this->roles);exit;
-		}
+		//总部管理员的权限
+		$this->roles7 = array(
+			//'9' => yii::t('app','区域管理员'),
+			'11' => yii::t('app','店长'),
+			'13' => yii::t('app','副店长'),
+			//'15' => yii::t('app','组长'),
+			'17' => yii::t('app','收银员'),
+			'19' => yii::t('app','服务员'),
+		) ;
+		//总部副管理员的权限
+		$this->roles9 = array(
+				'11' => yii::t('app','店长'),
+				'13' => yii::t('app','副店长'),
+				'15' => yii::t('app','组长'),
+				'17' => yii::t('app','收银员'),
+				'19' => yii::t('app','服务员'),
+		) ;
+		//区域管理员的权限
+		$this->roles11 = array(
+				'13' => yii::t('app','副店长'),
+				//'15' => yii::t('app','组长'),
+				'17' => yii::t('app','收银员'),
+				'19' => yii::t('app','服务员'),
+		) ;
+		//店长的权限
+		$this->roles13 = array(
+				//'15' => yii::t('app','组长'),
+				'17' => yii::t('app','收银员'),
+				'19' => yii::t('app','服务员'),
+		) ;
+		//副店长的权限
+		$this->roles15 = array(
+				'17' => yii::t('app','收银员'),
+				'19' => yii::t('app','服务员'),
+		) ;
+		//组长的权限
+		
 		$this->roles = array('' => yii::t('app','-- 请选择 --' )) +$this->roles;
 	}
 	
@@ -75,7 +115,7 @@ class UserController extends BackendController
 				if(Yii::app()->request->isPostRequest) {
 					$model->attributes = Yii::app()->request->getPost('UserForm');
 					$role = $model->role;
-					if($role <=3){
+					if($role <=15){
 						$username = $model->username;
 						$ordusername = User::model()->find('username=:name and delete_flag=0' , array(':name'=>$username));
 						if($ordusername){
@@ -90,40 +130,16 @@ class UserController extends BackendController
 						if($ordusername){
 							Yii::app()->user->setFlash('error' ,yii::t('app', '该登陆名已存在，请重新取名！！！'));
 							$this->redirect(array('user/create' , 'companyId' => $companyId));
-							//$this->render('create' , array('model' => $model));
-							//$this->render('create' , array('model' => $model,'action' => $this->createUrl('user/create' , array('companyId'=>$this->companyId))));
 						}
 					}
-		                        //$model->create_at=date('Y-m-d H:i:s',time());
-		                        //$model->update_at=date('Y-m-d H:i:s',time());
 					if($model->save()){
 						Yii::app()->user->setFlash('success',yii::t('app','添加成功'));
 						$this->redirect(array('user/index' , 'companyId' => $companyId));
 					}
 				}
-// 		if(Yii::app()->request->isPostRequest) {
-				
-// 			$model->attributes = Yii::app()->request->getPost('UserForm');
-// 			if($model->username){
-// 				$db = Yii::app()->db;
-// 				$sqls = 'select t.dpid from nb_user t where t.delete_flag = 0 and t.username ="'.$model->username.'"';
-// 				$command = $db->createCommand($sqls);
-// 				$a = $command->queryAll();
-// 				if(!empty($a)){
-// 					Yii::app()->user->setFlash('error' , yii::t('app','该用户名已存在！！'));
-// 					//$this->render('create' , array('model' => $model));
-		
-// 				}else{
-// 					if($model->save()){
-// 						Yii::app()->user->setFlash('success',yii::t('app','添加成功'));
-// 						$this->redirect(array('user/index' , 'companyId' => $companyId));
-// 					}
-// 				}
-// 			}
-// 		}
+
 		$this->render('create' , array(
 				'model' => $model
-				//'usernames' =>$usernames
 				
 		));
 
@@ -133,7 +149,7 @@ class UserController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));		
 		$id = Yii::app()->request->getParam('id');
                 Until::isUpdateValid(array($id),$companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(Yii::app()->user->role > User::WAITER && Yii::app()->user->userId != $id) {
+		if(Yii::app()->user->role > User::GROUPER && Yii::app()->user->userId != $id) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限修改'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
@@ -157,9 +173,9 @@ class UserController extends BackendController
 	}
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		if(Yii::app()->user->role > User::WAITER) {
+		if(Yii::app()->user->role > User::GROUPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有删除权限'));
-			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
+			$this->redirect(array('user/index' , 'companyId' => $companyId));
 		}
 		$ids = Yii::app()->request->getPost('ids');
                 Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。

@@ -84,17 +84,17 @@
 							<tr>
 								<td colspan="20" style="text-align: right;">
 								<?php if($commit->status==0):?>
-									<?php if(Yii::app()->user->role<3):?><input id="verify-pass-0" type="button" class="btn blue" value="确认送审" commit-id="<?php echo $commit->lid;?>"/>
+									<?php if(Yii::app()->user->role<13):?><input id="verify-pass-0" type="button" class="btn blue" value="确认送审" commit-id="<?php echo $commit->lid;?>"/>
 									<?php else:?><span style="color:red">等待审核</span>
 									<?php endif;?>
 								<?php elseif($commit->status==1):?>
-									<?php if(Yii::app()->user->role<3):?>
+									<?php if(Yii::app()->user->role<13):?>
 										<span style="color:red">审核通过</span>&nbsp;<input id="storageOrder" type="button" class="btn blue" value="生成入库单" commit-id="<?php echo $commit->lid;?>"/>
 									<?php else:?>
 										<span style="color:red">审核通过</span>
 									<?php endif;?>
 								<?php elseif($commit->status==2):?>
-									<?php if(Yii::app()->user->role<3):?><input id="verify-pass" type="button" class="btn blue" value="审核通过" commit-id="<?php echo $commit->lid;?>"/>&nbsp;<input id="verify-nopass" type="button" class="btn blue" value="驳回" commit-id="<?php echo $commit->lid;?>" />
+									<?php if(Yii::app()->user->role<13):?><input id="verify-pass" type="button" class="btn blue" value="审核通过" commit-id="<?php echo $commit->lid;?>"/>&nbsp;<input id="verify-nopass" type="button" class="btn blue" value="驳回" commit-id="<?php echo $commit->lid;?>" />
 									<?php else:?><span style="color:red">等待审核</span>
 									<?php endif;?>
 								<?php elseif($commit->status==3):?><span style="color:red">审核未通过</span>&nbsp;<input id="verify-pass-3" type="button" class="btn blue" value="重新送审" commit-id="<?php echo $commit->lid;?>"/>

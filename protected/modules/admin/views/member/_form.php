@@ -1,4 +1,18 @@
-	<style>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-1.8.17.custom.css');?>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/jquery-ui-timepicker-addon.css');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-1.8.17.custom.min.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-addon.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-ui-timepicker-zh-CN.js');?>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_002.css');?>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll.css');?>
+<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_003.css');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_002.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_004.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_003.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_005.js');?>      
+        <style>
 	.none {
 		display:none;
 	}
@@ -162,18 +176,62 @@
 		return true;
 	}
 	jQuery(document).ready(function() {
-		   $('input[type="radio"]').change(function(){
-		   	  if($(this).val()==0){
-		   	  	 $('.password').hide();
-		   	  }else{
-		   	  	 $('.password').show();
-		   	  }
-		   });
-		   $('form input').keypress(function(e){
-            if(e.keyCode==13){
-                e.preventDefault();
-            }
-		});
+                 var currYear = (new Date()).getFullYear();
+                var opt = {};
+                opt.date = {
+                    preset : 'birthday'
+                };
+                opt.datetime = {
+                    preset : 'birthday'
+                };
+                opt.time = {
+                    preset : 'birthday'
+                };
+                opt.default = {
+                theme : 'android-ics light', //皮肤样式
+                display : 'modal', //显示方式
+                mode : 'scroller', //日期选择模式
+                dateFormat : 'mm.dd',
+                //width : cHeight / 1.2,
+                //height : cHeight / 1.6,
+                width:100,
+                height:40,
+                circular:true,
+                showScrollArrows:true,
+                lang : 'zh',
+                showNow : true,
+                nowText : "今天",
+                startYear : currYear , //开始年份
+                endYear : currYear  //结束年份
+            };
+
+                var optDateTime = $.extend(opt['datetime'], opt['default']);
+                // var optTime = $.extend(opt['time'], opt['default']);
+                $("#MemberCard_birthday").mobiscroll(optDateTime).date(optDateTime);
+
+                
+                $(".ui_timepicker").datetimepicker({
+                         //showOn: "button",
+                         //buttonImage: "./css/images/icon_calendar.gif",
+                         //buttonImageOnly: true,
+                         showSecond: true,
+                         timeFormat: 'hh:mm:ss',
+                         stepHour: 1,
+                         stepMinute: 1,
+                         stepSecond: 1
+                 });
+                $('input[type="radio"]').change(function(){
+                       if($(this).val()==0){
+                              $('.password').hide();
+                       }else{
+                              $('.password').show();
+                       }
+                });
+                $('form input').keypress(function(e){
+                     if(e.keyCode==13){
+                         e.preventDefault();
+                     }
+                });
 	});
 	</script>
 	<?php $this->endWidget(); ?>

@@ -43,7 +43,7 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','采购订单详情列表');?></div>
 					<div class="actions">
 					
-					<?php if(in_array($status,array(0,2)) && Yii::app()->user->role >=3):?>
+					<?php if(in_array($status,array(0,2)) && Yii::app()->user->role >=11):?>
 						<a href="<?php echo $this->createUrl('purchaseOrder/detailcreate' , array('companyId' => $this->companyId,'lid'=>$polid));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 					<div class="btn-group">
 						<button type="submit"  class="btn red" ><i class="fa fa-ban"></i> <?php echo yii::t('app','删除');?></button>

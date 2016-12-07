@@ -16,30 +16,26 @@
 										</div>
 									</div>
 								<?php endif;?>
-								<?php if(Yii::app()->user->role == User::POWER_ADMIN):?>
+								<?php switch(Yii::app()->user->role){
+									case 1: $roles = $this->roles;break;
+									case 3: $roles = $this->roles3;break;
+									case 5: $roles = $this->roles5;break;
+									case 7: $roles = $this->roles7;break;
+									case 9: $roles = $this->roles9;break;
+									case 11: $roles = $this->roles11;break;
+									case 13: $roles = $this->roles13;break;
+									case 15: $roles = $this->roles15;break;
+									default: $roles = '';break;
+								}?>
+								<?php if(Yii::app()->user->role <= 15):?>
 									<div class="form-group <?php if($model->hasErrors('role')) echo 'has-error';?>">
 										<?php echo $form->label($model, 'role',array('class' => 'col-md-3 control-label'));?>
 										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'role', $this->roles ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
+											<?php echo $form->dropDownList($model, 'role', $roles ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
 											<?php echo $form->error($model, 'role' )?>
 										</div>
 									</div>
-								<?php elseif(Yii::app()->user->role == User::ADMIN):?>
-									<div class="form-group <?php if($model->hasErrors('role')) echo 'has-error';?>">
-										<?php echo $form->label($model, 'role',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'role', $this->roles3 ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
-											<?php echo $form->error($model, 'role' )?>
-										</div>
-									</div>
-								<?php elseif(Yii::app()->user->role == User::WAITER):?>
-									<div class="form-group <?php if($model->hasErrors('role')) echo 'has-error';?>">
-										<?php echo $form->label($model, 'role',array('class' => 'col-md-3 control-label'));?>
-										<div class="col-md-4">
-											<?php echo $form->dropDownList($model, 'role', $this->roles4 ,array('class' => 'form-control','placeholder'=>$model->getAttributeLabel('dpid')));?>
-											<?php echo $form->error($model, 'role' )?>
-										</div>
-									</div>
+								
 								<?php endif;?>
 								
 									<div class="form-group <?php if($model->hasErrors('username')) echo 'has-error';?>">
