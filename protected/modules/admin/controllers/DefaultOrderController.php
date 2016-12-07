@@ -795,7 +795,7 @@ class DefaultOrderController extends BackendController
                 {
                     Yii::app()->end(json_encode(array('status'=>false,'msg'=>"云端不能操作本地数据")));                    
                 }
-                if(Yii::app()->user->role > '2')
+                if(Yii::app()->user->role > '9')
                 {
                     Yii::app()->end(json_encode(array('status'=>false,'msg'=>"您没有权限操作此功能")));  
                 }

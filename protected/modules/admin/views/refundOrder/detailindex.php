@@ -88,7 +88,7 @@
 						<tr>
 							<td colspan="20" style="text-align: right;">
 							<?php if($refund->status==0):?>
-								<?php if(Yii::app()->user->role<2):?><input id="verify-pass" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="送审" />
+								<?php if(Yii::app()->user->role<13):?><input id="verify-pass" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="送审" />
 								<?php else:?><span style="color:red">等待送审</span>
 								<?php endif;?>&nbsp;
 							<?php elseif($refund->status==1):?><span style="color: red">审核通过</span>&nbsp;<input id="refund-order" refund-id="<?php echo $refund->lid;?>" type="button" class="btn blue" value="确认退货" />

@@ -20,10 +20,10 @@ class CompanyController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 	
 		$criteria = new CDbCriteria;
-		if(Yii::app()->user->role == User::POWER_ADMIN)
+		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE)
 		{
 			$criteria->condition =' delete_flag=0 ';
-		}else if(Yii::app()->user->role == '2')
+		}else if(Yii::app()->user->role >= '5' && Yii::app()->user->role <= '9')
 		{
 			$criteria->condition =' delete_flag=0 and dpid in (select tt.dpid from nb_company tt where tt.comp_dpid='.Yii::app()->user->companyId.' and tt.delete_flag=0 ) or dpid='.Yii::app()->user->companyId;
 		}else{
@@ -81,12 +81,12 @@ class CompanyController extends BackendController
 	}
 	public function actionCreate(){
 		$type = '-1';
-		if(Yii::app()->user->role == User::POWER_ADMIN||Yii::app()->user->role == User::ADMIN) {
+		if(Yii::app()->user->role <= User::ADMIN_AREA) {
 		
 		$model = new Company();
 		$model->create_at = date('Y-m-d H:i:s');
 		//var_dump($model);exit;
-		if(Yii::app()->user->role == User::POWER_ADMIN){
+		if(Yii::app()->user->role <= User::POWER_ADMIN_VICE){
 			if(Yii::app()->request->isPostRequest) {
 				$model->attributes = Yii::app()->request->getPost('Company');
 	                        $model->create_at=date('Y-m-d H:i:s',time());
@@ -109,7 +109,7 @@ class CompanyController extends BackendController
 				}
 			}
 		}
-		elseif(Yii::app()->user->role == User::ADMIN){
+		elseif(Yii::app()->user->role > 3 && Yii::app()->user->role <= 9){
 			if(Yii::app()->request->isPostRequest) {
 				$model->attributes = Yii::app()->request->getPost('Company');
 				$model->create_at=date('Y-m-d H:i:s',time());

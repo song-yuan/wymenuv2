@@ -66,7 +66,9 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','采购订单列表');?></div>
 					<div class="actions">
 						<div class="btn-group">
+						<!-- 
 							<button type="button"  class="btn blue" > <?php echo yii::t('app','自动生成采购单');?></button>
+						 -->
 						</div>
 						<a href="<?php echo $this->createUrl('purchaseOrder/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添加');?></a>
 						<div class="btn-group">
@@ -109,7 +111,7 @@
 								<a href="<?php echo $this->createUrl('purchaseOrder/detailindex',array('lid' => $model->lid , 'companyId' => $model->dpid , 'status' => $model->status,));?>"><?php echo yii::t('app','订单详情');?></a>
 								</td>
 								<td class="center">
-								<?php if(in_array($model->status,array(0,2)) && Yii::app()->user->role >= 2):?>
+								<?php if(in_array($model->status,array(0,2)) && Yii::app()->user->role >= 5):?>
 								<a href="<?php echo $this->createUrl('purchaseOrder/update',array('lid' => $model->lid , 'companyId' => $model->dpid));?>"><?php echo yii::t('app','编辑');?></a>
 								<?php endif;?>
 								</td>

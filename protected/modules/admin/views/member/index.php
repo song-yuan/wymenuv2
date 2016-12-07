@@ -66,7 +66,7 @@
 				<div class="portlet-title">
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','传统卡会员列表');?></div>
 					<div class="actions">
-					<?php if(Yii::app()->user->role<3):?>
+					<?php if(Yii::app()->user->role<9):?>
 						<a href="javascript:;" class="btn green add_btn"><i class="fa fa-plus"></i> <?php echo yii::t('app','充 值');?></a>
 						<a href="<?php echo $this->createUrl('member/create' , array('companyId' => $this->companyId));?>" class="btn blue"><i class="fa fa-pencil"></i> <?php echo yii::t('app','添 加');?></a>
 					<?php endif;?>
