@@ -84,7 +84,8 @@
 							$('form').submit();
                         }
                      });
-                    
+                    $(".logo").css("margin-top","0px");
+                    $(".content").css("margin-top","-100px");
                     function IsPC()  
                     {  
                         var userAgentInfo = navigator.userAgent;  
