@@ -9,7 +9,7 @@
     <meta charset="utf-8"/>
     <meta name="renderer" content="webkit" />
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE"> 
-    <title><?php echo yii::t('app','我要点单管理系统');?></title>
+    <title><?php echo yii::t('app','壹点吃管理系统');?></title>
 	<meta name="MobileOptimized" content="320">
 	<!-- BEGIN GLOBAL MANDATORY STYLES -->
 	<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/plugins/font-awesome/css/font-awesome.min.css');?>
