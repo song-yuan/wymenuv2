@@ -96,8 +96,18 @@
                         return flag;  
                     } 
                     if(!IsPC()){
-                    	$(".logo").css("margin-top","0px");
+                    $('#LoginForm_username').focus( function(){
+                		$(".logo").css("margin-top","0px");
                         $(".content").css("margin-top","-100px");
-                    	};
+                    	});
+                    $('#LoginForm_password').focus( function(){
+                		$(".logo").css("margin-top","0px");
+                        $(".content").css("margin-top","-100px");
+                    	});
+                    $('#LoginForm_password').blur( function(){
+                		$(".logo").css("margin-top",null);
+                        $(".content").css("margin-top",null);
+                    	});
+                    };
                 </script>
                 
