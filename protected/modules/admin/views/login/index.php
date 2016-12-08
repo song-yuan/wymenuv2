@@ -96,6 +96,7 @@
                         return flag;  
                     } 
                     if(!IsPC()){
-                    	$("#login-form-div").css("margin-top","-100px");};
+                    	$(".content").css("margin-top","-100px");
+                    	};
                 </script>
                 
