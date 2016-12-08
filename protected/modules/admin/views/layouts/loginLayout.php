@@ -7,6 +7,7 @@
     <meta charset="utf-8"/>
     <meta name="renderer" content="webkit" /> 
     <title><?php echo yii::t('app','壹点吃 - 后台管理系统');?></title>
+    <link rel='icon' href='../img/yidianchilogo.ico' type='image/x-ico' /> 
 	<meta http-equiv="X-UA-Compatible" content="IE=IE8">
 	<meta name="renderer" content="webkit" /> 
 	<!-- <meta content="width=device-width, initial-scale=1.0" name="viewport" /> -->
