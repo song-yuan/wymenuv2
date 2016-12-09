@@ -4,16 +4,30 @@ class WebUser extends CWebUser
 	public $role2ModuleId = array(
 		'1' => array('admin','waiter',''),
 		'2' => array('admin' , 'waiter',''),
-		'3' => array('admin' , 'waiter',''),//waiter 服务员
+		'3' => array('admin' , 'waiter',''),
 		'4' => array('admin' ,'waiter',''),
-		'5' =>array(),
+		'5' =>array('admin'),
+		'7' =>array('admin'),
+		'9' =>array('admin'),
+		'11' =>array('admin'),
+		'13' =>array('admin'),
+		'15' =>array('admin'),
+		'17' =>array(''),
+		'19' =>array(''),
 	);
         public $role2ControllerId = array(
-		'1' => array('','',''),// system admin all
-		'2' => array('' , '',''),// admin all
-		'3' => array('','' ,'' ),//waiter 服务员 //
-		'4' => array('login','default' , 'defaultSite','defaultController','order'),
+		'1' => array('','',''),
+		'2' => array('' , '',''),
+		'3' => array('','' ,'' ),
+		'4' => array('','' , '','',''),
         '5' => array(''),
+        '7' =>array(),
+        '9' =>array(),
+        '11' =>array(),
+        '13' =>array(),
+        '15' =>array(),
+        '17' =>array(),
+        '19' =>array(),
 	);
         
         //public static $loginrole="0";
@@ -50,7 +64,7 @@ class WebUser extends CWebUser
 		$module = Yii::app()->controller->module;
 		if(!$module) return true ;
                 //echo Yii::app()->controller->id;exit;
-		if($role==5)
+		if($role>=15)
                 {
                     return true;
                     return in_array(Yii::app()->controller->id , $this->role2ControllerId[$role]);

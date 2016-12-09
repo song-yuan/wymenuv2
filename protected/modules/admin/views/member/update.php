@@ -1,11 +1,4 @@
-	<?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_002.css');?>
-    <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll.css');?>
-    <?php Yii::app()->clientScript->registerCssFile( Yii::app()->request->baseUrl.'/css/mobiscroll_003.css');?>
-    <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_002.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_004.js');?>
-	<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll.js');?>
-    <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_003.js');?>
-    <?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/mobiscroll_005.js');?>
+
 	<!-- BEGIN PAGE -->  
 		<div class="page-content">
 			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
@@ -55,43 +48,11 @@
 			<!-- END PAGE CONTENT-->    
 		</div>
 		<!-- END PAGE -->  
-	<script>
+<script>
 
     
     $(function() {
             //var cHeight = Zepto('#blank').offset().height;
-            var currYear = (new Date()).getFullYear();
-            var opt = {};
-            opt.date = {
-                preset : 'birthday'
-            };
-            opt.datetime = {
-                preset : 'birthday'
-            };
-            opt.time = {
-                preset : 'birthday'
-            };
-            opt.default = {
-                theme : 'android-ics light', //皮肤样式
-                display : 'modal', //显示方式
-                mode : 'scroller', //日期选择模式
-                dateFormat : 'mm.dd',
-                //width : cHeight / 1.2,
-                //height : cHeight / 1.6,
-                width:100,
-                height:40,
-                circular:true,
-                showScrollArrows:true,
-                lang : 'zh',
-                showNow : true,
-                nowText : "今天",
-                startYear : currYear , //开始年份
-                endYear : currYear  //结束年份
-            };
-
-            var optDateTime = $.extend(opt['datetime'], opt['default']);
-            // var optTime = $.extend(opt['time'], opt['default']);
-            $("#MemberCard_birthday").mobiscroll(optDateTime).date(optDateTime);
-
+           
         });	
-	</script>
+</script>

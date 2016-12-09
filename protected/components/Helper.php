@@ -6,7 +6,7 @@ class Helper
 			return md5(md5($password).Yii::app()->params['salt']);
 	}
 	static public function getCompanyId($companyId) {
-            if(Yii::app()->user->role=='1' || Yii::app()->user->role=='2')
+            if(Yii::app()->user->role <= '9')
             {
 		return $companyId;
             }else{
@@ -14,7 +14,7 @@ class Helper
             }
 	}
 	static public function getCompanyIds($companyId) {
-		if(Yii::app()->user->role=='2')
+		if(Yii::app()->user->role=='5')
 		{
 			$models = Company::model()->findAll('t.dpid = '.$companyId);
 			$companyIds = Company::model()->findAllBySql("select dpid from nb_company where comp_dpid=:dpid",array(':dpid'=>$companyId));

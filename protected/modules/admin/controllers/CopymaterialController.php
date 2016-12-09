@@ -148,7 +148,7 @@ class CopymaterialController extends BackendController
 		
 		//var_dump($materialunitratio);exit;
                 Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
-        if((!empty($dpids))&&(Yii::app()->user->role < User::WAITER)){
+        if((!empty($dpids))&&(Yii::app()->user->role < User::SHOPKEEPER)){
         	foreach ($dpids as $dpid){
         		if(!empty($catep1)){
         			foreach($catep1 as $category){

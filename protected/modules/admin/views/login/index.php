@@ -5,6 +5,7 @@
 					
 				),
 		)); ?>
+		<div id="login-form-div">
 			<h3 class="form-title"><?php echo yii::t('app','管理员系统')?></h3>
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
@@ -39,6 +40,7 @@
                             <!--<a href="<?php echo Yii::app()->request->baseUrl."/padbind/login" ?>"  target="view_frame"  id="bindbutton" class="blue" target="_blank" ><?php echo yii::t('app','解除绑定');?></a>
                             <a href="http://menu.wymenu.com/wymenuv2/padbind/login"  id="bindbutton" class="blue" ><?php echo yii::t('app','解除绑定');?></a>-->
 			</div>
+			</div>
                         <!--<iframe style="width:600px;height: 300px;" src="http://www.baidu.com" name="view_frame">
                             
                           </iframe>
@@ -58,6 +60,7 @@
 			</div>
 			 -->
 		<?php $this->endWidget(); ?>
+
 		<!-- END LOGIN FORM -->
                 <script language="JavaScript" type="text/JavaScript">
                     $('#bindbutton').click(function(){
@@ -81,5 +84,30 @@
 							$('form').submit();
                         }
                      });
+                    
+                    function IsPC()  
+                    {  
+                        var userAgentInfo = navigator.userAgent;  
+                        var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");  
+                        var flag = true;  
+                        for (var v = 0; v < Agents.length; v++) {  
+                            if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; }  
+                        }  
+                        return flag;  
+                    } 
+                    if(!IsPC()){
+                    $('#LoginForm_username').focus( function(){
+                		$(".logo").css("margin-top","0px");
+                        $(".content").css("margin-top","-100px");
+                    	});
+                    $('#LoginForm_password').focus( function(){
+                		$(".logo").css("margin-top","0px");
+                        $(".content").css("margin-top","-100px");
+                    	});
+                    $('#LoginForm_password').blur( function(){
+                		$(".logo").css("margin-top",null);
+                        $(".content").css("margin-top",null);
+                    	});
+                    };
                 </script>
                 

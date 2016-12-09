@@ -1505,6 +1505,52 @@ public function actionPayallReport(){
 				//'categoryId'=>$categoryId
 		));
 	}
+	/*
+	 * 账单支付方式
+	*/
+	public function actionOrderpaytype(){
+		$criteria = new CDbCriteria;
+		$accountno = '';
+		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
+		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
+		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.create_at >=0 and t.dpid= '.$this->companyId;
+		$criteria->select = 't.*';
+		$criteria->with = array("paymentMethod","order4");
+		$criteria->addCondition("t.dpid= ".$this->companyId);
+		$criteria->addCondition("t.paytype !='11' ");
+		//$criteria->addCondition("order4.order_status in(3,4,8) ");//只要付款了的账单都进行统计
+		
+	
+		if(Yii::app()->request->isPostRequest){
+			$accountno = Yii::app()->request->getPost('accountno1',0);
+			if($accountno){
+				$criteria->addSearchCondition('t.account_no',$accountno);
+			}
+		}else{
+			$criteria->addCondition("t.create_at >='$begin_time 00:00:00'");
+			$criteria->addCondition("t.create_at <='$end_time 23:59:59'");
+		}
+		
+		//$criteria->group = 't.payment_method_id,t.paytype,t.pay_amount' ;
+		$criteria->order = 't.order_id ASC,t.create_at ASC' ;
+		//$criteria->distinct = TRUE;
+
+		$pages = new CPagination(OrderPay::model()->count($criteria));
+		//$pages->PageSize = 10;
+		$pages->applyLimit($criteria);
+	
+		$model=  OrderPay::model()->findAll($criteria);
+		//var_dump($model);exit;
+		$this->render('orderpaytype',array(
+				'models'=>$model,
+				'pages'=>$pages,
+				'begin_time'=>$begin_time,
+				'end_time'=>$end_time,
+				'accountno'=>$accountno,
+				//'categories'=>$categories,
+				//'categoryId'=>$categoryId
+		));
+	}
 	
 /*
  * 渠道占比报表

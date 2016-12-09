@@ -81,7 +81,7 @@
 						<?php if($models) :?>
 						<?php foreach ($models as $model):?>
 							<tr class="odd gradeX">
-								<td><?php if($model->is_temp_price && Yii::app()->user->role >=3):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /><?php endif;?></td>
+								<td><?php if($model->is_temp_price && Yii::app()->user->role >=13):?><?php else:?><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /><?php endif;?></td>
 								<td style="width:16%"><?php echo $model->product_name;?></td>
 								<td ><img width="100" src="<?php echo $model->main_picture;?>" /></td>
 								<td><?php if(!empty($model->category->category_name)) echo $model->category->category_name;?></td>

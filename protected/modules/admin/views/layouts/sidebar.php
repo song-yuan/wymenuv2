@@ -15,7 +15,7 @@
 					</a>
 				</li>
 				-->
-                <?php if(Yii::app()->user->role < '4') : ?>
+                <?php if(Yii::app()->user->role <= '15') : ?>
 				<li class="<?php if(in_array(Yii::app()->controller->id , array('company', 'companyWifi', 'user' ,'synchronous','weixin','poscode','postable' ))) echo 'active';?>">
 					<a href="<?php echo $this->createUrl('company/list',array('companyId' => $this->companyId));?>">
                     <i class="fa fa-home"></i> 
