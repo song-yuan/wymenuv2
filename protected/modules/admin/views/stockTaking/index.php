@@ -124,7 +124,7 @@
 								<!-- <td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td>  -->
 								                               
                                 <td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>" name="idss[]" />
-								<input type="text"   style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
+								<input class="kucundiv" type="text"   style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
 								<!-- <input type="button"   onclick ="demo(this)" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
 								 --></td>
 								<!--<td ><php echo $model->stock_cost;?></td>-->
@@ -172,12 +172,11 @@
         }
            if(!IsPC()){
             $("input[type='text']").each(function(event){
-            	//document.activeElement.blur();
-            	//event.preventDefault();
                 $(this).focus(function(event){
+                	$(".kucundiv").css("background-color",'');
+                	$(this).css("background-color","rgba(241,8,8,0.6)");
                 	document.activeElement.blur();
-                	event.preventDefault(); 
-                   new KeyBoard(this);  
+                   	new KeyBoard(this);  
                 });
             });
            }  
