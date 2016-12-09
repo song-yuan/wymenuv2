@@ -172,7 +172,7 @@
         }
            if(!IsPC()){
             $("input[type='text']").each(function(event){
-            	document.activeElement.blur();
+            	//document.activeElement.blur();
             	//event.preventDefault();
                 $(this).focus(function(event){
                 	document.activeElement.blur();
