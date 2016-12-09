@@ -46,6 +46,10 @@ class PayMethodController extends BackendController {
 		$this->render('create' , array('model' => $model));
 	}
 	public function actionUpdate(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('payMethod/index' , 'companyId' => $this->companyId)) ;
+		}
 		$id = Yii::app()->request->getParam('id');
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$model = PaymentMethod::model()->find('lid=:id and dpid=:companyId' , array(':id' => $id , ':companyId' => $companyId));
@@ -61,6 +65,10 @@ class PayMethodController extends BackendController {
 		$this->render('update' , array('model' => $model ));
 	}
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('payMethod/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
                 Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。

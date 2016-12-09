@@ -86,18 +86,30 @@
 	});
     var $modal = $('.modal');
     $('.add_btn').on('click', function(){
+        <?php if(Yii::app()->user->role >User::SHOPKEEPER):?>
+        alert('您没有权限！');
+        return false;
+        <?php endif;?>
     	pid = $(this).attr('pid');
         $modal.find('.modal-content').load('<?php echo $this->createUrl('materialCategory/create',array('companyId'=>$this->companyId));?>/pid/'+pid, '', function(){
           $modal.modal();
         });
     });
     $('.edit_btn').on('click', function(){
+    	<?php if(Yii::app()->user->role >User::SHOPKEEPER):?>
+        alert('您没有权限！');
+        return false;
+        <?php endif;?>
     	id = $(this).attr('id');
         $modal.find('.modal-content').load('<?php echo $this->createUrl('materialCategory/update',array('companyId'=>$this->companyId));?>/id/'+id, '', function(){
           $modal.modal();
         });
     });
     $('.btn_delete').click(function(){
+    	<?php if(Yii::app()->user->role >User::SHOPKEEPER):?>
+        alert('您没有权限！');
+        return false;
+        <?php endif;?>
     	var cid = $(this).attr('cid');
         msg ="<?php echo yii::t('app','你确定要删除该类目吗?');?>";
         if($(this).parent().parent().hasClass('treegrid-collapsed') || $(this).parent().parent().hasClass('treegrid-expanded')){

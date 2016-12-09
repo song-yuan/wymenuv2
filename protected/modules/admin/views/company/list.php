@@ -138,6 +138,7 @@
 							<div class="ku-item-info">操作员管理</div>
 						</div>
 					</a>
+					<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
 					<a href="<?php echo $this->createUrl('weixin/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple wxdp"></div>
@@ -150,6 +151,7 @@
 							<div class="ku-item-info">支付宝设置</div>
 						</div>
 					</a>
+					<?php endif;?>
 					<?php if(Yii::app()->user->role <= User::ADMIN_AREA):?>
 					<a href="<?php echo $this->createUrl('poscode/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
