@@ -172,6 +172,7 @@
         }
            if(!IsPC()){
             $("input[type='text']").each(function(event){
+            	document.activeElement.blur();
             	//event.preventDefault();
                 $(this).focus(function(event){
                 	event.preventDefault(); 
