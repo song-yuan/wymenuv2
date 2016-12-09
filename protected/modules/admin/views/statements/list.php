@@ -152,7 +152,13 @@
 			background-position: 14px 10px;
 			background-size: 80%;
     		background-repeat: no-repeat;
-		}	
+		}
+		.ku-item.zdzffs{
+			background-image:url(../../../../../../img/waiter/icon-zdzffs.png);
+			background-position: 14px 20px;
+			background-size: 70%;
+    		background-repeat: no-repeat;
+		}		
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -292,7 +298,7 @@
 					</a>
 					<a href="<?php echo $this->createUrl('statements/orderpaytype',array('companyId' => $this->companyId,'text'=>'3','paymentid'=>'0','paytype'=>'-1','begin_time'=>date('Y-m-d',time()),'end_time'=>date('Y-m-d',time()),'page'=>1));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-grey sktj"></div>
+							<div class="ku-item ku-grey zdzffs"></div>
 							<div class="ku-item-info">账单支付方式</div>
 						</div>
 					</a>
