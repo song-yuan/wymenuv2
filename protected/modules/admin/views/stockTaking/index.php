@@ -172,7 +172,7 @@
         }
            if(!IsPC()){
             $("input[type='text']").each(function(event){
-            	event.preventDefault();
+            	//event.preventDefault();
                 $(this).focus(function(event){
                 	event.preventDefault(); 
                    new KeyBoard(this);  
