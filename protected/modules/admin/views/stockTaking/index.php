@@ -1,3 +1,46 @@
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/jquery-1.7.1.min.js');?>
+<?php Yii::app()->clientScript->registerScriptFile( Yii::app()->request->baseUrl.'/js/keyboard1.js');?>
+
+<!--<style>
+    .keyboard{
+       width:485px; 
+       padding-bottom: 15px;
+       position: fixed;
+       top:200px;
+       left:450px;
+       display:none;
+      background-color:#FFFFFF;
+      -webkit-border-radius: 6px;
+      -moz-border-radius: 6px;
+      border-radius: 6px; 
+      -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+       -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); 
+      
+    }
+    .keyboard-active{
+        display:block;
+    }
+    button{
+        width:100px;
+        height:60px;
+        margin:15px 0 0px 15px;
+        background-color: #AAAAAA;
+        border:0px;
+        font-size:25px;
+        font-weight:bold;
+        -webkit-border-radius: 6px;
+      -moz-border-radius: 6px;
+      border-radius: 6px; 
+    }
+    
+</style>-->
+
+<style>
+  
+</style>
+
+
 <div class="page-content">
 	<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->               
 	<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -66,8 +109,11 @@
 							</tr>
 						</thead>
 						<tbody>
+                                                 
 						<?php if($models) :?>
+                                                 
 						<?php foreach ($models as $model):?>
+
 							<tr class="odd gradeX">
 								<td><input type="checkbox" class="checkboxes" value="<?php echo $model->lid;?>" name="ids[]" /></td>
 								<td><?php echo $model->material_identifier;?></td>
@@ -76,9 +122,10 @@
 								<td ><?php echo Common::getStockName($model->stock_unit_id);?></td>
 								<!-- <td ><php echo isset($model->material_stock)?$model->material_stock->stock:0;?></td>  -->
 								<!-- <td ><?php echo ProductMaterial::getJitStock($model->lid,$model->dpid);?></td>  -->
-								<td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>" name="idss[]" />
-								<input type="tel" style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
-								<!-- <input type="button" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
+								                               
+                                <td><input style="display: none;" type="text" class="checkboxes" id="originalnum<?php echo $model['lid'];?>" value="<?php  echo ProductMaterial::getJitStock($model->lid,$model->dpid);?>" name="idss[]" />
+								<input type="text"   style="width:100px;" name="leftnum<?php echo $model['lid'];?>" id="idleftnum0<?php echo $model['lid'];?>" value="" onfocus=" if (value =='0.00'){value = '0.00'}" onblur="if (value ==''){value=''}"  onkeyup="if(isNaN(value))execCommand('undo')" onafterpaste="if(isNaN(value))execCommand('undo')" >
+								<!-- <input type="button"   onclick ="demo(this)" name="leftbutton<?php echo $model['lid'];?>" id="idleftbutton<?php echo $model['lid'];?>" class="clear_btn" value="<?php echo yii::t('app','保存');?>">
 								 --></td>
 								<!--<td ><php echo $model->stock_cost;?></td>-->
 								<td class="center">
@@ -88,10 +135,14 @@
 								<!-- <a href="<?php echo $this->createUrl('productMaterial/detailindex',array('id' => $model->lid , 'companyId' => $model->dpid,));?>"><?php echo yii::t('app','查看库存详情');?></a>
 								 --></td>
 							</tr>
+                                             <?php   ;?>
+                                                      
+                                                   
 						<?php endforeach;?>
 						<?php endif;?>
 						</tbody>
 					</table>
+                       
 					<div class="form-actions fluid">
 						<div class="col-md-offset-9 col-md-3">
 				<!--        <button type="submit" class="btn blue">确定</button>     -->   
@@ -106,7 +157,54 @@
 	</div>
 	<!-- END PAGE CONTENT-->
 	<script type="text/javascript">
+         
 	$(document).ready(function(){
+        
+        
+         /*   $("input[type='text']").focus(function(){
+                var input_id = $(this).attr("id");
+                $(".keyboard").addClass("keyboard-active");
+                $(".keyboard button").click(function(){
+                   var button_type = $(this).attr("bt-type");
+                    var btn_arr = button_type.split("-");
+                    console.log(btn_arr);
+                    var btn_type= btn_arr[0];
+                    var btn_val=btn_arr[1];
+                var con=$("#"+input_id).val(); 
+                if(btn_type==1){ 
+                    $("#"+input_id).val(con+btn_val);
+                }else if(btn_type==2){
+                  $("#"+input_id).val('');
+                }else if(btn_type==3){
+                    $("#"+input_id).val(con.slice(0,-1));
+                }
+                    
+                });    
+                  
+               
+            });
+            */
+		function IsPC()  
+        {  
+            var userAgentInfo = navigator.userAgent;  
+            var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");  
+            var flag = true;  
+            for (var v = 0; v < Agents.length; v++) {  
+                if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; }  
+            }  
+            return flag;  
+        }
+           if(!IsPC()){
+            $("input[type='text']").each(function(){ 
+                $(this).click(function(){
+                 //   var position =$(this).offset();
+                   new KeyBoard(this);  
+                });
+            });
+           }  
+            
+            
+
 		$('#material-form').submit(function(){
 			if(!$('.checkboxes:checked').length){
 				alert("<?php echo yii::t('app','请选择要删除的项');?>");
@@ -127,7 +225,8 @@
 			location.href="<?php echo $this->createUrl('stockTaking/index' , array('companyId'=>$this->companyId));?>/cid/"+cid;
 		});
 	});
-
+          
+                    
 	$("#stocktaking").on("click",function(){
 		//alert("123");
 		//var vid=$(this).attr("id").substr(12,10);
@@ -220,4 +319,7 @@
 			},
 		});
     });
+    
+ 
+    
 	</script>	
