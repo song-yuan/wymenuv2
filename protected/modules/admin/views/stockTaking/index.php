@@ -159,31 +159,7 @@
 	<script type="text/javascript">
          
 	$(document).ready(function(){
-        
-        
-         /*   $("input[type='text']").focus(function(){
-                var input_id = $(this).attr("id");
-                $(".keyboard").addClass("keyboard-active");
-                $(".keyboard button").click(function(){
-                   var button_type = $(this).attr("bt-type");
-                    var btn_arr = button_type.split("-");
-                    console.log(btn_arr);
-                    var btn_type= btn_arr[0];
-                    var btn_val=btn_arr[1];
-                var con=$("#"+input_id).val(); 
-                if(btn_type==1){ 
-                    $("#"+input_id).val(con+btn_val);
-                }else if(btn_type==2){
-                  $("#"+input_id).val('');
-                }else if(btn_type==3){
-                    $("#"+input_id).val(con.slice(0,-1));
-                }
-                    
-                });    
-                  
-               
-            });
-            */
+       
 		function IsPC()  
         {  
             var userAgentInfo = navigator.userAgent;  
@@ -195,9 +171,9 @@
             return flag;  
         }
            if(!IsPC()){
-            $("input[type='text']").each(function(){ 
-                $(this).click(function(){
-                 //   var position =$(this).offset();
+            $("input[type='text']").each(function(){
+                $(this).click(function(event){
+                	event.preventDefault(); 
                    new KeyBoard(this);  
                 });
             });
