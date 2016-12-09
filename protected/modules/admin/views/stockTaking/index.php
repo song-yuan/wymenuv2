@@ -175,6 +175,7 @@
             	document.activeElement.blur();
             	//event.preventDefault();
                 $(this).focus(function(event){
+                	document.activeElement.blur();
                 	event.preventDefault(); 
                    new KeyBoard(this);  
                 });
