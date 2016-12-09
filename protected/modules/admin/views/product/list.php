@@ -200,6 +200,18 @@
 			background-size: 60% ;
     		background-repeat: no-repeat;
 		}
+		.ku-item.tcxf{
+			background-image:url(../../../../../../img/waiter/icon-tcxf.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.pfxf{
+			background-image:url(../../../../../../img/waiter/icon-pfxf.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -299,7 +311,7 @@
 					
 					<a href="<?php echo $this->createUrl('copyproductSet/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple tcsz"></div>
+							<div class="ku-item ku-purple tcxf"></div>
 							<div class="ku-item-info">套餐下发</div>
 						</div>
 					</a>
@@ -476,7 +488,7 @@
 					</a>
 					<a href="<?php echo $this->createUrl('copyproductbom/index',array('companyId'=>$this->companyId));?>"> 
 						<div id="pfxfs" class="pull-left margin-left-right pfxfs">
-							<div class="ku-item ku-purple bomxx"></div>
+							<div class="ku-item ku-purple pfxf"></div>
 							<div class="ku-item-info">配方下发</div>
 						</div>
 					</a>
