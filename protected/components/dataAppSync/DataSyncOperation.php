@@ -762,21 +762,11 @@ class DataSyncOperation {
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
 				    			if($psetId > 0){
 				    				if($orderRetreat['total'] >= $orderProduct['zhiamount']){
-				    					$msg = json_encode ( array (
-				    							'status' => true,
-				    							'syncLid' => $syncLid,
-				    							'content' => $content
-				    					) );
-				    					return $msg;
+				    					throw new Exception('超过退款数量');
 				    				}
 				    			}else{
 				    				if($orderRetreat['total'] >= $orderProduct['amount']){
-				    					$msg = json_encode ( array (
-				    							'status' => true,
-				    							'syncLid' => $syncLid,
-				    							'content' => $content
-				    					) );
-				    					return $msg;
+				    					throw new Exception('超过退款数量');
 				    				}
 				    			}
 				    		}

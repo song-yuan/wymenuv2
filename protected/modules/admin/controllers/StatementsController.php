@@ -1511,16 +1511,23 @@ public function actionPayallReport(){
 	public function actionOrderpaytype(){
 		$criteria = new CDbCriteria;
 		$accountno = '';
+		$paymentid = Yii::app()->request->getParam('paymentid',1);
+		$paytype = Yii::app()->request->getParam('paytype','-1');
 		$begin_time = Yii::app()->request->getParam('begin_time',date('Y-m-d',time()));
 		$end_time = Yii::app()->request->getParam('end_time',date('Y-m-d',time()));
-		//$sql = 'select t1.name, t.* from nb_order t left join  nb_payment_method t1 on( t.payment_method_id = t1.lid and t.dpid = t1.dpid ) where t.create_at >=0 and t.dpid= '.$this->companyId;
 		$criteria->select = 't.*';
 		$criteria->with = array("paymentMethod","order4");
 		$criteria->addCondition("t.dpid= ".$this->companyId);
-		$criteria->addCondition("t.paytype !='11' ");
-		//$criteria->addCondition("order4.order_status in(3,4,8) ");//只要付款了的账单都进行统计
 		
-	
+		if($paymentid==1){
+			$criteria->addCondition('t.paytype = '.$paytype);
+		}elseif($paymentid==3){
+			$criteria->addCondition('t.paytype = "3" and t.payment_method_id = "'.$paytype.'"');
+		}else{
+			$criteria->addCondition("t.paytype !='11' ");
+		}
+		//var_dump($criteria);
+		//$criteria->addCondition("order4.order_status in(3,4,8) ");//只要付款了的账单都进行统计
 		if(Yii::app()->request->isPostRequest){
 			$accountno = Yii::app()->request->getPost('accountno1',0);
 			if($accountno){
@@ -1540,18 +1547,35 @@ public function actionPayallReport(){
 		$pages->applyLimit($criteria);
 	
 		$model=  OrderPay::model()->findAll($criteria);
-		//var_dump($model);exit;
+		//var_dump($model);
+		//var_dump($paymentid,$paytype);exit;
+		$payments = $this->getPayments($this->companyId);
 		$this->render('orderpaytype',array(
 				'models'=>$model,
 				'pages'=>$pages,
 				'begin_time'=>$begin_time,
 				'end_time'=>$end_time,
 				'accountno'=>$accountno,
-				//'categories'=>$categories,
-				//'categoryId'=>$categoryId
+				'payments'=>$payments,
+				'paymentid'=>$paymentid,
+				'paytype'=>$paytype,
 		));
 	}
-	
+	//获取店铺的支付方式....
+	public function getPayments($dpid){
+		$model =  '';
+		if($dpid){
+			$sql = 'select t.* from nb_payment_method t where t.delete_flag = 0 and t.dpid='.$dpid;
+			$connect = Yii::app()->db->createCommand($sql);
+			$models = $connect->queryAll();
+			//$accountMoney = $money['all_zhifu'];
+		}
+		if(!empty($models)){
+				return $models;
+			}else{
+				return $model;
+			}
+	}
 /*
  * 渠道占比报表
  */

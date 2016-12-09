@@ -113,8 +113,29 @@
 					<div class="caption"><i class="fa fa-globe"></i><?php echo yii::t('app','账单支付详情');?></div>
 					<div class="actions">
 					<div class="btn-group">
-							 <input type="text" class="form-control" name="订单号" id="Did" placeholder="" value="<?php echo yii::t('app','店铺：');?><?php echo Helper::getCompanyName($this->companyId);?>"  onfocus=this.blur()> 
-						</div>
+					<select id="paymentid" class="form-control btn yellow" >
+							
+                            <option paymentid="0" value="-1" <?php if ($paymentid=='0' && $paytype=='-1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','--请选择支付方式--');?></option>
+                            <option paymentid="1" value="0" <?php if ($paymentid=='1' && $paytype=='0'){?> selected="selected" <?php }?> ><?php echo yii::t('app','现金');?></option>
+                            <option paymentid="1" value="1" <?php if ($paymentid=='1' && $paytype=='1'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信');?></option>
+                            <option paymentid="1" value="2" <?php if ($paymentid=='1' && $paytype=='2'){?> selected="selected" <?php }?> ><?php echo yii::t('app','支付宝');?></option>
+                            <option paymentid="1" value="4" <?php if ($paymentid=='1' && $paytype=='4'){?> selected="selected" <?php }?> ><?php echo yii::t('app','会员卡');?></option>
+                            <option paymentid="1" value="5" <?php if ($paymentid=='1' && $paytype=='5'){?> selected="selected" <?php }?> ><?php echo yii::t('app','银联卡');?></option>
+                            <option paymentid="1" value="9" <?php if ($paymentid=='1' && $paytype=='9'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信代金券');?></option>
+                            <option paymentid="1" value="10" <?php if ($paymentid=='1'&& $paytype=='10'){?> selected="selected" <?php }?> ><?php echo yii::t('app','微信余额');?></option>
+                           
+                            <?php if($payments):?>
+                            <?php foreach ($payments as $payment):?>
+                            <option paymentid="3" value="<?php echo $payment['lid'];?>" <?php if ($paymentid=='3' && $paytype==$payment['lid']){?> selected="selected" <?php }?> ><?php echo $payment['name'];?></option>
+                            <?php endforeach;?>
+                            <?php endif;?>
+                    </select>
+                    </div>
+					<div class="btn-group">
+						<!-- 
+						<input type="text" class="form-control" name="订单号" id="Did" placeholder="" value="<?php echo yii::t('app','店铺：');?><?php echo Helper::getCompanyName($this->companyId);?>"  onfocus=this.blur()> 
+						 -->
+					</div>
                         <div class="btn-group">
 				
 						   <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
@@ -338,7 +359,11 @@ $(function () {
 		   $('#btn_time_query').click(function() {
 			   var begin_time = $('#begin_time').val();
 			   var end_time = $('#end_time').val();
-			   location.href="<?php echo $this->createUrl('statements/orderpaytype' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"    
+			   var paytype = $('#paymentid').val();
+			   //var paymentid = $('#paymentid').attr('paymentid');
+			   var paymentid = $("#paymentid").find("option:selected").attr("paymentid");
+			   //alert(paytype);alert(paymentid);
+			   location.href="<?php echo $this->createUrl('statements/orderpaytype' , array('companyId'=>$this->companyId ));?>/begin_time/"+begin_time+"/end_time/"+end_time+"/page/"+"/paymentid/"+paymentid+"/paytype/"+paytype;  
 			  
 	        });
 		   $('excel').click(function excel(){
