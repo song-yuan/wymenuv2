@@ -670,26 +670,33 @@ class DataSyncOperation {
 			echo json_encode($msg);
 			exit;
 		}
+		$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4)';
+		$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
+		
+		if($order){	
+			$orderId = $order['lid'];
+			$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
+			$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
+			if($orderPay && !empty($orderPay['total'])){
+				if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
+					$msg = json_encode ( array (
+							'status' => true,
+							'syncLid' => $syncLid,
+							'content' => $content
+					) );
+					return $msg;
+				}
+			}
+		}else{
+			$msg = json_encode ( array (
+					'status' => false,
+					'msg'=>'订单不存在'
+			) );
+			return $msg;
+		}
+		
 		$transaction = Yii::app ()->db->beginTransaction ();
 		try {
-			$sql = 'select * from nb_order where dpid='.$dpid.' and account_no="'.$accountNo.'" and order_status in (3,4)';
-			$order =  Yii::app ()->db->createCommand ($sql)->queryRow();
-			if($order){
-				$orderId = $order['lid'];
-				
-				$sql = 'select sum(pay_amount) as total from nb_order_pay where order_id='.$orderId.' and dpid='.$dpid.' and pay_amount < 0 and paytype < 11';
-				$orderPay =  Yii::app ()->db->createCommand ($sql)->queryRow();
-				if($orderPay && !empty($orderPay['total'])){
-					if($order['should_total'] + $orderPay['total'] + $retreatprice < 0){
-						$msg = json_encode ( array (
-											'status' => true,
-											'syncLid' => $syncLid,
-											'content' => $content
-									) );
-						return $msg;
-					}
-				}
-				
 				foreach ($pruductIds as $productId){
 					$productArr = split(',', $productId);
 					$psetId = $productArr[0];
@@ -755,21 +762,11 @@ class DataSyncOperation {
 				    		if($orderRetreat && !empty($orderRetreat['total'])){
 				    			if($psetId > 0){
 				    				if($orderRetreat['total'] >= $orderProduct['zhiamount']){
-				    					$msg = json_encode ( array (
-				    							'status' => true,
-				    							'syncLid' => $syncLid,
-				    							'content' => $content
-				    					) );
-				    					return $msg;
+				    					throw new Exception('超过退款数量');
 				    				}
 				    			}else{
 				    				if($orderRetreat['total'] >= $orderProduct['amount']){
-				    					$msg = json_encode ( array (
-				    							'status' => true,
-				    							'syncLid' => $syncLid,
-				    							'content' => $content
-				    					) );
-				    					return $msg;
+				    					throw new Exception('超过退款数量');
 				    				}
 				    			}
 				    		}
@@ -866,9 +863,6 @@ class DataSyncOperation {
 						'syncLid' => $syncLid,
 						'content' => $content
 				) );
-			}else{
-				throw new Exception('订单不存在');
-			}
 		} catch ( Exception $e ) {
 			$transaction->rollback ();
 			$msg = json_encode ( array (
