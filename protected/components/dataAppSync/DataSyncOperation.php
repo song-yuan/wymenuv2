@@ -878,13 +878,12 @@ class DataSyncOperation {
 			$adminId = $_POST['admin_id'];
 			$data = $_POST['data'];
 			$dataArr = json_decode($data);
-			var_dump($dataArr);exit;
-			foreach ($dataArr as $arr){
-				$lid = $arr['lid'];
-				$dpid = $arr['dpid'];
-				$type = $arr['sync_type'];
-				$syncurl = $arr['sync_url'];
-				$content = $arr['content'];
+			foreach ($dataArr as $obj){
+				$lid = $obj->lid;
+				$dpid = $obj->dpid;
+				$type = $obj->sync_type;
+				$syncurl = $obj->sync_url;
+				$content = $obj->content;
 				$url = Yii::app()->request->hostInfo.'/wymenuv2/'.$syncurl;
 				if($type==2){
 					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
