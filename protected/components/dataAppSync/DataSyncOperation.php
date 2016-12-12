@@ -872,6 +872,52 @@ class DataSyncOperation {
 		}
 		return $msg;
 	}
+	public static function batchSync($data) {
+		if(isset($data) && !empty($data['data'])){
+			$lidArr = array();
+			$adminId = $_POST['admin_id'];
+			$data = $_POST['data'];
+			$dataArr = json_decode($data);
+			foreach ($dataArr as $obj){
+				$lid = $obj->lid;
+				$dpid = $obj->dpid;
+				$type = $obj->sync_type;
+				$syncurl = $obj->sync_url;
+				$content = $obj->content;
+				$url = Yii::app()->request->hostInfo.'/wymenuv2/'.$syncurl;
+				if($type==2){
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'is_pos'=>1,'data'=>$content);
+					$result = Curl::httpsRequest($url,$pData);
+					$resObj = json_decode($result);
+					if($resObj->status){
+						array_push($lidArr, $lid);
+					}
+				}elseif($type==4){
+					$contentArr = split('::', $content);
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'admin_id'=>$adminId,'account'=>$contentArr[1],'username'=>$contentArr[2],'retreatid'=>$contentArr[3],'retreatprice'=>$contentArr[4],'pruductids'=>$contentArr[5],'memo'=>$contentArr[6],'data'=>$content);
+					$result = Curl::httpsRequest($url,$pData);
+					$resObj = json_decode($result);
+					if($resObj->status){
+						array_push($lidArr, $lid);
+					}
+				}else{
+					$contentArr = split(':', $content);
+					$pData = array('sync_lid'=>$lid,'dpid'=>$dpid,'rfid'=>$contentArr[1],'password'=>$contentArr[2],'pay_price'=>$contentArr[3],'data'=>$content);
+					$result = Curl::httpsRequest($url,$pData);
+					$resObj = json_decode($result);
+					if($resObj->status){
+						array_push($lidArr, $lid);
+					}
+				}
+			}
+			$count = count($lidArr);
+			$lidStr = join(',', $lidArr);
+			$msg = json_encode(array('status'=>true,'count'=>$count,'msg'=>$lidStr));
+		}else{
+			$msg = json_encode(array('status'=>false,'msg'=>''));
+		}
+		return $msg;
+	}
 	/**
 	 * 
 	 * 
@@ -1030,7 +1076,7 @@ class DataSyncOperation {
 		
 		$dpid = WxCompany::getDpids($dpid);
 		
-		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid=' . $rfid . ' and delete_flag=0';
+		$sql = 'select * from nb_member_card where dpid in (' . $dpid . ') and rfid="' . $rfid . '" and delete_flag=0';
 		$reslut = Yii::app ()->db->createCommand ( $sql )->queryRow ();
 		if (! $reslut) {
 			return json_encode ( array (

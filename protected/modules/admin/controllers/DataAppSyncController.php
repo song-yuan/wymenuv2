@@ -180,6 +180,15 @@ public function actionGetMemberCardYue(){
 }
 /**
  * 
+ * 批量同步
+ * 
+ */
+public function actionBatchSync(){
+	$result = DataSyncOperation::batchSync($_POST);
+	echo $result;exit;
+}
+/**
+ * 
  * 会员卡退款
  * 
  */
