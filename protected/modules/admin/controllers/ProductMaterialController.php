@@ -42,6 +42,10 @@ class ProductMaterialController extends BackendController
 		));
 	}
 	public function actionCreate(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId)) ;
+		}
 		$model = new ProductMaterial();
 		$modelStock = new ProductMaterialStock();
 		$model->dpid = $this->companyId ;
@@ -133,6 +137,10 @@ class ProductMaterialController extends BackendController
 	}
 	
 	public function actionUpdate(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId)) ;
+		}
 		$id = Yii::app()->request->getParam('id');
 		$model = ProductMaterial::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
@@ -173,6 +181,10 @@ class ProductMaterialController extends BackendController
 		));
 	}
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('productMaterial/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
                 Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。

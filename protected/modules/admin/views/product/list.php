@@ -200,6 +200,18 @@
 			background-size: 60% ;
     		background-repeat: no-repeat;
 		}
+		.ku-item.tcxf{
+			background-image:url(../../../../../../img/waiter/icon-tcxf.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
+		.ku-item.pfxf{
+			background-image:url(../../../../../../img/waiter/icon-pfxf.png);
+			background-position: 22px 20px;
+			background-size: 60% ;
+    		background-repeat: no-repeat;
+		}
 		.margin-left-right{
 			margin-left:10px;
 			margin-right:10px;
@@ -290,6 +302,7 @@
 							<div class="ku-item-info">口味设置</div>
 						</div>
 					</a>
+					<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
 					<a href="<?php echo $this->createUrl('copyproduct/index',array('companyId'=>$this->companyId));?>">
 						<div id="cpxf" class="pull-left margin-left-right">
 							<div class="ku-item ku-purple cpxf"></div>
@@ -299,7 +312,7 @@
 					
 					<a href="<?php echo $this->createUrl('copyproductSet/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple tcsz"></div>
+							<div class="ku-item ku-purple tcxf"></div>
 							<div class="ku-item-info">套餐下发</div>
 						</div>
 					</a>
@@ -316,18 +329,20 @@
 							<div class="ku-item-info">批量修改</div>
 						</div>
 					</a>
-					<a href="<?php echo $this->createUrl('productSim/index',array('companyId'=>$this->companyId));?>">
-						<div class="pull-left margin-left-right">
-							<div class="ku-item ku-purple cpjx"></div>
-							<div class="ku-item-info">菜品简写</div>
-						</div>
-					</a>
 					<a href="<?php echo $this->createUrl('productClean/index',array('companyId'=>$this->companyId,'typeId'=>'product'));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple gqlb"></div>
 							<div class="ku-item-info">估清列表</div>
 						</div>
 					</a>
+					<?php endif;?>
+					<a href="<?php echo $this->createUrl('productSim/index',array('companyId'=>$this->companyId));?>">
+						<div class="pull-left margin-left-right">
+							<div class="ku-item ku-purple cpjx"></div>
+							<div class="ku-item-info">菜品简写</div>
+						</div>
+					</a>
+					
 					<a href="<?php echo $this->createUrl('productImg/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple cptp"></div>
@@ -372,6 +387,7 @@
 						</div>
 					</a>
 					<?php elseif($type==2):?>
+					<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
 					<a href="<?php echo $this->createUrl('printer/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple dyjsz"></div>
@@ -402,6 +418,7 @@
 							<div class="ku-item-info">厨打批量设置</div>
 						</div>
 					</a>
+					<?php endif;?>
 					<?php elseif($type==3):?>
 					<a href="<?php echo $this->createUrl('payMethod/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
@@ -461,13 +478,15 @@
 							<div class="ku-item-info">单位系数</div>
 						</div>
 					</a>
+					<?php if(Yii::app()->user->role <= User::SHOPKEEPER):?>
 					<a href="<?php echo $this->createUrl('productBom/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">
 							<div class="ku-item ku-purple bomxx"></div>
 							<div class="ku-item-info">产品配方</div>
 						</div>
 					</a>
-
+					<?php endif;?>
+					<?php if(Yii::app()->user->role < User::SHOPKEEPER):?>
 					<a href="<?php echo $this->createUrl('copymaterial/index',array('companyId'=>$this->companyId));?>">
 						<div id="ylxfs" class="pull-left margin-left-right ylxfs">
 							<div class="ku-item ku-purple pxxf"></div>
@@ -476,10 +495,11 @@
 					</a>
 					<a href="<?php echo $this->createUrl('copyproductbom/index',array('companyId'=>$this->companyId));?>"> 
 						<div id="pfxfs" class="pull-left margin-left-right pfxfs">
-							<div class="ku-item ku-purple bomxx"></div>
+							<div class="ku-item ku-purple pfxf"></div>
 							<div class="ku-item-info">配方下发</div>
 						</div>
 					</a>
+					<?php endif;?>
 					<!-- 
 					<a href="<?php echo $this->createUrl('bomproductCategory/index',array('companyId'=>$this->companyId));?>">
 						<div class="pull-left margin-left-right">

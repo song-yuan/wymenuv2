@@ -36,6 +36,10 @@ class ProductSetController extends BackendController
 		));
 	}
 	public function actionCreate(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId)) ;
+		}
 		$model = new ProductSet();
 		$model->dpid = $this->companyId ;
 		$status = '';
@@ -68,6 +72,10 @@ class ProductSetController extends BackendController
 		));
 	}
 	public function actionUpdate(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId)) ;
+		}
 		$lid = Yii::app()->request->getParam('lid');
 		$status = Yii::app()->request->getParam('status');
                 //echo 'ddd';
@@ -92,6 +100,10 @@ class ProductSetController extends BackendController
 	}
         
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('productSet/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
         //Until::isUpdateValid(array($ids),$companyId,$this);//0,表示企业任何时候都在云端更新。
@@ -138,12 +150,17 @@ class ProductSetController extends BackendController
 	}
 
 	public function actionDetailCreate(){
+		
 		$model = new ProductSetDetail();
 		$model->dpid = $this->companyId ;
 		$pslid = Yii::app()->request->getParam('psid');
 		$type = Yii::app()->request->getParam('type'); //var_dump($pslid);exit;
 		$status = '';
         $model->set_id=$pslid;
+        if(Yii::app()->user->role > User::SHOPKEEPER) {
+        	Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+        	$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $pslid)) ;
+        }
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
 			$groupno = Yii::app()->request->getParam('groupno');
@@ -192,12 +209,16 @@ class ProductSetController extends BackendController
 		));
 	}
 	public function actionDetailUpdate(){
+		
 		$lid = Yii::app()->request->getParam('lid');
 		$type = Yii::app()->request->getParam('type');
 		$status = Yii::app()->request->getParam('status');
-        
+		
 		$model = ProductSetDetail::model()->find('lid=:lid and dpid=:dpid', array(':lid' => $lid,':dpid'=> $this->companyId));
-		//var_dump($model);exit;
+	if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid' => $model->set_id)) ;
+		}
         //Until::isUpdateValid(array($lid),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('ProductSetDetail');
@@ -240,9 +261,14 @@ class ProductSetController extends BackendController
 	}
         
 	public function actionDetailDelete(){
+		
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
                 $printset = Yii::app()->request->getParam('psid');                
 		$ids = Yii::app()->request->getPost('ids');
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('productSet/detailindex' , 'companyId' => $this->companyId,'lid'=>$printset)) ;
+		}
                 //Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
 		if(!empty($ids)) {
 			Yii::app()->db->createCommand('update nb_product_set_detail set delete_flag=1 where lid in ('.implode(',' , $ids).') and dpid = :companyId')

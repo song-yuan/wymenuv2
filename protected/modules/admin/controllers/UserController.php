@@ -149,7 +149,7 @@ class UserController extends BackendController
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));		
 		$id = Yii::app()->request->getParam('id');
                 Until::isUpdateValid(array($id),$companyId,$this);//0,表示企业任何时候都在云端更新。
-		if(Yii::app()->user->role > User::GROUPER && Yii::app()->user->userId != $id) {
+		if(Yii::app()->user->role > User::SHOPKEEPER && Yii::app()->user->userId != $id) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限修改'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId)) ;
 		}
@@ -173,7 +173,7 @@ class UserController extends BackendController
 	}
 	public function actionDelete(){
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
-		if(Yii::app()->user->role > User::GROUPER) {
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
 			Yii::app()->user->setFlash('error' , yii::t('app','你没有删除权限'));
 			$this->redirect(array('user/index' , 'companyId' => $companyId));
 		}

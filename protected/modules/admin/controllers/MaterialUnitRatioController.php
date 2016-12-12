@@ -39,6 +39,10 @@ class MaterialUnitRatioController extends BackendController
 
 	}
 	public function actionCreate(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('materialUnitRatio/index' , 'companyId' => $this->companyId)) ;
+		}
 		$model = new MaterialUnitRatio();
 		$model->dpid = $this->companyId ;
 		if(Yii::app()->request->isPostRequest) {
@@ -77,6 +81,10 @@ class MaterialUnitRatioController extends BackendController
 	}
 
 	public function actionUpdate(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('materialUnitRatio/index' , 'companyId' => $this->companyId)) ;
+		}
 		$id = Yii::app()->request->getParam('id');
 		$model = MaterialUnitRatio::model()->find('lid=:unitId and dpid=:dpid' , array(':unitId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
@@ -95,6 +103,10 @@ class MaterialUnitRatioController extends BackendController
 		));
 	}
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('materialUnitRatio/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
 		Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
