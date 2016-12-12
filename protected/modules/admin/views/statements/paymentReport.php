@@ -120,8 +120,8 @@
 		        <tr class="odd gradeX">
 		            <td><?php if($text==1){echo $model->y_all;}elseif($text==2){ echo $model->y_all.-$model->m_all;}else{echo $model->y_all.-$model->m_all.-$model->d_all;}?></td>
 		            <td><?php 
-		                $orders_total = $orders_total+$model->all_num;    //总单数
-		                echo $model->all_num;?></td>
+		                $orders_total = $orders_total+$model->all_nums;    //总单数
+		                echo $model->all_nums;?></td>
 		             <td><?php 
 		                $reality_all = $this->getGrossProfit($model->dpid,$begin_time,$end_time,$text,$model->y_all,$model->m_all,$model->d_all,$userid,$model->order4->username);
 		                $grossprofit_total+=$reality_all;
