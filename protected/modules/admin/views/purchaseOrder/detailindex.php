@@ -89,25 +89,25 @@
 							<tr>
 								<td colspan="20" style="text-align: right;">
 								<?php if($purchase->status==1):?><span style="color: red">已审核</span>&nbsp;
-									<?php if(Yii::app()->user->role == 3 || Yii::app()->user->role == 2):?>
+									<?php if(Yii::app()->user->role == 11 || Yii::app()->user->role == 5):?>
 									<input id="storageOrder"  type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成入库单" />&nbsp;<input type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="生成退货单" />
 									
 									<?php endif;?>
 								<?php elseif($purchase->status == 2):?><span style="color: red">已驳回</span>
-									<?php if(Yii::app()->user->role > 2):?>
+									<?php if(Yii::app()->user->role > 5):?>
 									<input id="re-verify-passing"  type="button" class="btn blue" purchase-id="<?php echo $polid;?>" value="重新送审" />&nbsp;
 									
 									<?php endif;?>
 								<?php elseif($purchase->status == 3):?><span style="color:red">等待审核</span>
-									<?php if(Yii::app()->user->role == 3):?><input id="verify-pass" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;<input id="verify-nopass" purchase-id="<?php echo $polid;?>"  type="button" class="btn blue" value="驳回" />
+									<?php if(Yii::app()->user->role == 11):?><input id="verify-pass" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;<input id="verify-nopass" purchase-id="<?php echo $polid;?>"  type="button" class="btn blue" value="驳回" />
 									
 									<?php endif;?>
 								<?php elseif($purchase->status == 0):?><span style="color:red">正在编辑</span>
-									<?php if(Yii::app()->user->role > 3):?><input id="verify-passing" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="确认送审" />&nbsp;
-									<?php elseif (Yii::app()->user->role == 3):?><input id="verify-passing-dpid" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="请求总部审核" />&nbsp;
+									<?php if(Yii::app()->user->role > 11):?><input id="verify-passing" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="确认送审" />&nbsp;
+									<?php elseif (Yii::app()->user->role == 11):?><input id="verify-passing-dpid" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="请求总部审核" />&nbsp;
 									<?php endif;?>
 								<?php elseif($purchase->status == 4):?>
-									<?php if(Yii::app()->user->role == 2):?><input id="verify-pass-2" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;
+									<?php if(Yii::app()->user->role == 5):?><input id="verify-pass-2" purchase-id="<?php echo $polid;?>" type="button" class="btn blue" value="审核通过" />&nbsp;
 									<?php else:?><span style="color:red">总部审核中</span>
 									<?php endif;?>
 								<?php endif;?>

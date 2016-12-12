@@ -53,7 +53,10 @@ class ProductController extends BackendController
 		$istempp = Yii::app()->request->getParam('istempp',0);
 		$model->dpid = $this->companyId ;
 		//$model->create_time = time();
-		
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('product/index' , 'companyId' => $this->companyId)) ;
+		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('Product');
 			
@@ -101,6 +104,10 @@ class ProductController extends BackendController
 	}
 	
 	public function actionUpdate(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('product/index' , 'companyId' => $this->companyId)) ;
+		}
 		$id = Yii::app()->request->getParam('id');
 		$istempp = Yii::app()->request->getParam('istempp');
 		//var_dump($istempp);exit;
@@ -130,6 +137,10 @@ class ProductController extends BackendController
 		));
 	}
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('product/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
                 Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。

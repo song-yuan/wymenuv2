@@ -42,9 +42,14 @@ class MaterialUnitController extends BackendController
 		
 	}
 	public function actionCreate(){
+		
 		$type=Yii::app()->request->getParam('type',0);
 		$model = new MaterialUnit();
 		$model->dpid = $this->companyId ;
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId,'type'=>$type,)) ;
+		}
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MaterialUnit');
 			
@@ -79,17 +84,22 @@ class MaterialUnitController extends BackendController
 	}
 	
 	public function actionUpdate(){
+		
 		$type=Yii::app()->request->getParam('type',0);
 		$id = Yii::app()->request->getParam('id');
 		$model = MaterialUnit::model()->find('lid=:materialId and dpid=:dpid' , array(':materialId' => $id,':dpid'=>  $this->companyId));
 		$model->dpid = $this->companyId;
-		Until::isUpdateValid(array($id),$this->companyId,$this);//0,表示企业任何时候都在云端更新。
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId,'type'=>$type)) ;
+		}
+		
 		if(Yii::app()->request->isPostRequest) {
 			$model->attributes = Yii::app()->request->getPost('MaterialUnit');
             $model->update_at=date('Y-m-d H:i:s',time());
 			if($model->save()){
 				Yii::app()->user->setFlash('success',yii::t('app','修改成功！'));
-				$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId ));
+				$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId,'type'=>$type ));
 			}
 		}
 
@@ -99,6 +109,10 @@ class MaterialUnitController extends BackendController
 		));
 	}
 	public function actionDelete(){
+		if(Yii::app()->user->role > User::SHOPKEEPER) {
+			Yii::app()->user->setFlash('error' , yii::t('app','你没有权限'));
+			$this->redirect(array('materialUnit/index' , 'companyId' => $this->companyId)) ;
+		}
 		$companyId = Helper::getCompanyId(Yii::app()->request->getParam('companyId'));
 		$ids = Yii::app()->request->getPost('ids');
                 Until::isUpdateValid($ids,$companyId,$this);//0,表示企业任何时候都在云端更新。
