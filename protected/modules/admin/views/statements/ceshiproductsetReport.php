@@ -74,26 +74,9 @@
 					<table class="table table-striped table-bordered table-hover" id="sample_1">
 						<thead>
 							<tr>
-								
-								
 								<th><?php echo yii::t('app','时间');?></th>
 								<th>
-									<div class="btn-group">
-										<button type="button" class="btn blue"><?php echo yii::t('app','请选择店铺');?></button>
-										<button type="button" class="btn blue dropdown-toggle" data-toggle="dropdown"><i class="fa fa-angle-down"></i></button>
-										<div class="dropdown-menu hold-on-click dropdown-checkboxes" role="menu">
-											
-											
-											<?php foreach($comName as $key=>$value):?>
-
-											<label><input name="accept" id="cked" class="checkedCN" value="<?php echo $key;?>" type="checkbox"><?php echo $value;?></label>
-											  
-											<?php endforeach;?>
-											
-											 <button type="submit" id="cx" class="btn red" ><i class="fa fa-pencial"></i><?php echo yii::t('app','确定');?></button> 
-												
-										</div>
-									</div>
+									<?php echo yii::t('app','店铺');?>
 								</th>
 								<!-- <th><div class=""><php echo CHtml::dropdownlist('selectUser',$catId,$comName,array('class'=>'form-control'));?></div></th> -->
                                 <th><?php echo yii::t('app','套餐名称');?></th>
