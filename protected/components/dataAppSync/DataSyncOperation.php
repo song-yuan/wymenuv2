@@ -877,7 +877,6 @@ class DataSyncOperation {
 			$lidArr = array();
 			$adminId = $_POST['admin_id'];
 			$data = $_POST['data'];
-			var_dump($data);exit;
 			$dataArr = json_decode($data);
 			foreach ($dataArr as $arr){
 				$lid = $arr['lid'];
