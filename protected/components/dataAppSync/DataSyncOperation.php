@@ -898,7 +898,7 @@ class DataSyncOperation {
 					$result = Curl::httpsRequest($url,$pData);
 					echo '<meta charset="utf8" />';
 					$resObj = json_decode($result);
-					var_dump($resObj->msg);exit;
+					 echo $resObj->msg;exit;
 					if($resObj->status){
 						array_push($lidArr, $lid);
 					}
